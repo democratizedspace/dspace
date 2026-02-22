@@ -73,7 +73,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
     - `start` → "Gear ready." — planisphere star chart ×1, red flashlight ×1
-    - `search` → "Galaxy in sight." — basic telescope ×1
+    - `search` → "I have a candidate smudge to verify." — constellation sketch set ×1
+    - `recover` → "Reset complete. Re-running the star hop with safer pacing." — planisphere star chart ×1, red flashlight ×1
+    - `verify` → "Match confirmed in my sketch and telescope view." — constellation sketch set ×1, red flashlight ×1
+    - `finish` → "Logging observations." — constellation sketch set ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -119,8 +122,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Pass time noted, gear set." — smartphone ×1, camera tripod ×1
-    - `capture` → "Photo saved and logged." — mission logbook ×1
+    - `plan` → "Pass time noted, gear set." — smartphone ×1, mission logbook ×1, ISS pass window ×1
+    - `capture` → "Photo saved and telemetry logged." — ISS pass log ×1, mission logbook ×1
+    - `interpret` → "Pass criteria met: continuous streak and matched timing." — ISS pass log ×1, ISS pass window ×1
+    - `corrective` → "Corrections applied. Running another capture pass." — smartphone ×1, mission logbook ×1
+    - `finish` → "Can't wait for the next pass." — ISS pass log ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -131,6 +137,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: smartphone ×1, mission logbook ×1
         - Consumes: none
         - Creates: ISS pass window ×1
+    - [log-iss-pass](/processes/log-iss-pass)
+        - Requires: ISS spotting station ×1, ISS pass window ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: ISS pass log ×1
 
 ## 6) Track Jupiter's Moons (`astronomy/jupiter-moons`)
 
@@ -216,8 +226,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/light-pollution`
 - Dialogue `requiresItems` gates:
     - `forecast` → "Window picked—what should I pack?" — aurora viewing plan ×1
+    - `delay` → "Alert is set. Re-checking forecast in the next window." — mission logbook ×1
     - `kit` → "Kit is ready—let's step outside." — dark-sky kit packed ×1
     - `observe` → "Entry written with colors and timestamps." — aurora sighting log ×1
+    - `troubleshoot` → "Relocated and warmed up. Running another observation block." — dark-sky kit packed ×1
+    - `interpret` → "Interpretation recorded with a clear aurora confidence note." — aurora sighting log ×1, mission logbook ×1
+    - `finish` → "I'll watch again soon." — aurora sighting log ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

@@ -19,7 +19,7 @@
         },
         {
             "id": "forecast",
-            "text": "Check an aurora app for Kp, clouds, and a clear hour. Pick a dark spot with safe footing.",
+            "text": "Check an aurora app for Kp, clouds, and a clear hour. Pick a dark spot with safe footing and a warm indoor fallback nearby.",
             "options": [
                 {
                     "type": "process",
@@ -29,10 +29,32 @@
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Window picked\u2014what should I pack?",
+                    "text": "Kp 4+ with clear gaps in the next hour. Pack me in.",
                     "requiresItems": [
                         {
                             "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "delay",
+                    "text": "Cloud cover or Kp is weak. I need a fallback plan."
+                }
+            ]
+        },
+        {
+            "id": "delay",
+            "text": "Good call. If Kp is below 3 or clouds exceed half the sky, postpone and set a follow-up alert. Safety first: no icy road rushes for low-probability windows.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "forecast",
+                    "text": "Alert is set. Re-checking forecast in the next window.",
+                    "requiresItems": [
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
                             "count": 1
                         }
                     ]
@@ -51,7 +73,7 @@
                 {
                     "type": "goto",
                     "goto": "observe",
-                    "text": "Kit is ready\u2014let's step outside.",
+                    "text": "Kit is ready—let's step outside.",
                     "requiresItems": [
                         {
                             "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
@@ -72,7 +94,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Entry written with colors and timestamps.",
                     "requiresItems": [
                         {
@@ -80,6 +102,59 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "No visible arc yet. I need to troubleshoot this session."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "If glare or haze blocks detail, relocate to a darker horizon edge, warm up, and retry in a fresh 20-minute window instead of pushing through cold stress.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Relocated and warmed up. Running another observation block.",
+                    "requiresItems": [
+                        {
+                            "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "delay",
+                    "text": "Conditions still poor. Deferring to the next alert window."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret your log before closing: note whether movement, color shifts, and duration match a real aurora event rather than city light spill.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Interpretation recorded with a clear aurora confidence note.",
+                    "requiresItems": [
+                        {
+                            "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Confidence is weak. I need another observation cycle."
                 }
             ]
         },
@@ -89,7 +164,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll watch again soon."
+                    "text": "I'll watch again soon.",
+                    "requiresItems": [
+                        {
+                            "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -104,7 +185,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-15",

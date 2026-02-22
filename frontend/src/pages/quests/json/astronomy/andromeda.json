@@ -29,23 +29,75 @@
         },
         {
             "id": "search",
-            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge\u2014that's Andromeda. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
+            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Following the chart."
+                    "text": "Following the chart and logging the star hop."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "I have a candidate smudge to verify.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
                         }
-                    ],
-                    "text": "Galaxy in sight."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I lost the pattern and need a recovery check."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "No stress. Re-level the tripod, dim the flashlight again, and reset your eyes for two minutes before a shorter sweep. If clouds move in, pause instead of forcing unsafe footing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "search",
+                    "text": "Reset complete. Re-running the star hop with safer pacing.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Cross-check shape and position: Andromeda should appear as a stable oval haze and not blink like aircraft lights. Confirm against your sketch before calling it done.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Match confirmed in my sketch and telescope view.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Uncertain match. I need another alignment pass."
                 }
             ]
         },
@@ -55,7 +107,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Logging observations."
+                    "text": "Logging observations.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -70,7 +128,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-06",
