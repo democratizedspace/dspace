@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Venus is bright tonight; let's watch its phase change.",
+            "text": "Nova here. Venus is bright tonight, but phase work needs timing, steady setup, and clean interpretation.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Ready to aim.",
+                    "text": "Ready to plan the session.",
                     "requiresItems": [
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
@@ -29,7 +29,7 @@
         },
         {
             "id": "plan",
-            "text": "Use the planisphere and an app to pick a time when Venus is high enough for a crisp view and your path is well lit.",
+            "text": "Use the planisphere and forecast app to choose a window when Venus is high enough for stable focus and your path is well lit.",
             "options": [
                 {
                     "type": "process",
@@ -39,7 +39,7 @@
                 {
                     "type": "goto",
                     "goto": "view",
-                    "text": "Timing locked\u2014let's observe.",
+                    "text": "Timing locked\u2014set up for capture.",
                     "requiresItems": [
                         {
                             "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
@@ -51,20 +51,47 @@
         },
         {
             "id": "view",
-            "text": "Set up the telescope on stable ground, center Venus, and adjust focus until the phase edge is sharp.",
+            "text": "Set up on stable ground, center Venus, and focus until the terminator edge is sharp. Avoid rooftop heat plumes and never track near the Sun.",
             "options": [
                 {
                     "type": "process",
                     "process": "sketch-venus-phase",
-                    "text": "Sketching the illuminated slice."
+                    "text": "Sketch the illuminated fraction."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Phase recorded with date and time.",
+                    "goto": "interpret",
+                    "text": "Sketch and timestamp recorded.",
                     "requiresItems": [
                         {
                             "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Edge is too soft or phase estimate is inconsistent."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Out-of-range handling: if seeing is unstable or alignment drifted, pause, re-level the tripod, and pick a calmer re-test window before accepting data.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plan-venus-window",
+                    "text": "Schedule a cleaner re-test window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "view",
+                    "text": "Re-test window ready; repeat the capture workflow.",
+                    "requiresItems": [
+                        {
+                            "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
                             "count": 1
                         }
                     ]
@@ -72,8 +99,30 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpretation gate: classify the observed phase shape (crescent, quarter-ish, or gibbous) and confirm your notes match expected geometry for the date.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Interpretation passed with consistent sketch + notes.",
+                    "requiresItems": [
+                        {
+                            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "My interpretation is uncertain; rerun the observation."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great observation! Tracking phases helps practice precision focusing.",
+            "text": "Great observation. You now have a measurement artifact, interpretation record, and re-test protocol for the next phase change.",
             "options": [
                 {
                     "type": "finish",
@@ -88,7 +137,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/saturn-rings"],
+    "requiresQuests": [
+        "astronomy/saturn-rings"
+    ],
     "hardening": {
         "passes": 1,
         "score": 100,

@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Gather a 50 mm lens, 20 mm lens, mailing tube, masking tape, and a camera tripod. Inspect for chips, work in shade, wear eye protection, and keep the tube away from the Sun. Ready?",
+            "text": "Nova here. Gather a 50 mm lens, 20 mm lens, mailing tube, masking tape, and a camera tripod. Inspect for chips, work in shade, wear eye protection, and never point any optic toward the Sun.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "build",
-                    "text": "I'm ready.",
+                    "goto": "assembly-plan",
+                    "text": "All core parts are staged and safe to handle.",
                     "requiresItems": [
                         {
                             "id": "0254a829-9002-4a75-8af2-03cd961601da",
@@ -40,18 +40,94 @@
             ]
         },
         {
-            "id": "build",
-            "text": "Tape the 50 mm lens to the front as the objective and the 20 mm lens at the back as the eyepiece. Mount the tube securely on the tripod, verify stability, handle glass edges carefully, and never aim at the Sun.",
+            "id": "assembly-plan",
+            "text": "Choose your assembly path: full tripod setup for stability, or bench-test the tube first before mounting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Full mount first: stable tripod, then lens alignment."
+                },
+                {
+                    "type": "goto",
+                    "goto": "bench-test",
+                    "text": "Bench-test first: verify lens orientation before mounting."
+                }
+            ]
+        },
+        {
+            "id": "bench-test",
+            "text": "On a table indoors, verify the objective/eyepiece orientation and tape tension before touching the tripod.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-basic-telescope",
-                    "text": "Putting it together."
+                    "text": "Run a controlled bench assembly check."
                 },
                 {
                     "type": "goto",
+                    "goto": "build",
+                    "text": "Bench check looks good; mount to tripod now.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Tape the 50 mm lens to the front as the objective and the 20 mm lens at the back as the eyepiece. Mount the tube securely on the tripod, then test focus on a distant ground target before night observing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-basic-telescope",
+                    "text": "Assemble and focus-check the telescope."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Image is blurry or drifting; I need a correction pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Focus is crisp and alignment is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshoot safely: re-seat tape, re-center lenses, and rebalance the tripod. If stability still fails, step back and repeat the bench test before observing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "bench-test",
+                    "text": "Return to bench-test workflow before another mount attempt."
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "I corrected alignment and want to re-run the focus check."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Lock in a verification artifact: confirm Jupiter's disk and at least one moon are visible before declaring success.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "I can see Jupiter!",
+                    "text": "Verification complete: Jupiter and a moon are clearly visible.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -63,7 +139,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent craftsmanship. Regular stargazing sharpens navigation. Cap both lenses before storing and keep the telescope away from heat and direct sunlight.",
+            "text": "Excellent craftsmanship. Cap both lenses before storing, keep optics dry, and repeat this verification after any transport bump.",
             "options": [
                 {
                     "type": "finish",
@@ -78,7 +154,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/observe-moon"],
+    "requiresQuests": [
+        "astronomy/observe-moon"
+    ],
     "hardening": {
         "passes": 5,
         "score": 96,

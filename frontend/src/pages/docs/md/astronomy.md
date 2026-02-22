@@ -53,8 +53,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/observe-moon`
 - Dialogue `requiresItems` gates:
-    - `start` → "I'm ready." — 50 mm magnifying lens ×1, 20 mm magnifying lens ×1, cardboard mailing tube ×1, camera tripod ×1, masking tape ×1
-    - `build` → "I can see Jupiter!" — basic telescope ×1
+    - `start` → "All core parts are staged and safe to handle." — 50 mm magnifying lens ×1, 20 mm magnifying lens ×1, cardboard mailing tube ×1, camera tripod ×1, masking tape ×1
+    - `bench-test` → "Bench check looks good; mount to tripod now." — basic telescope ×1
+    - `build` → "Focus is crisp and alignment is stable." — basic telescope ×1
+    - `verify` → "Verification complete: Jupiter and a moon are clearly visible." — basic telescope ×1
+- Branches/troubleshooting:
+    - Non-linear split at `assembly-plan` (full mount path vs bench-test-first path)
+    - Recovery loop through `troubleshoot` back to `bench-test` or `build`
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -215,9 +220,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/light-pollution`
 - Dialogue `requiresItems` gates:
-    - `forecast` → "Window picked—what should I pack?" — aurora viewing plan ×1
-    - `kit` → "Kit is ready—let's step outside." — dark-sky kit packed ×1
-    - `observe` → "Entry written with colors and timestamps." — aurora sighting log ×1
+    - `forecast` → "Forecast captured—choose an observation plan." — aurora viewing plan ×1
+    - `fallback` → "Fallback plan documented and safe route confirmed." — aurora viewing plan ×1
+    - `kit` → "Kit is ready—start the observation session." — dark-sky kit packed ×1
+    - `observe` → "I captured a full log entry." — aurora sighting log ×1
+    - `interpret` → "Interpretation complete: sustained auroral structure confirmed." — aurora sighting log ×1
+- Branches/troubleshooting:
+    - Weather/light-pollution fallback branch at `window-decision`
+    - Failed-session recovery loop from `failed-session` back to `fallback` or `observe`
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -429,9 +439,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/saturn-rings`
 - Dialogue `requiresItems` gates:
-    - `start` → "Ready to aim." — planisphere star chart ×1, basic telescope ×1
-    - `plan` → "Timing locked—let's observe." — Venus observation window ×1
-    - `view` → "Phase recorded with date and time." — Venus phase sketch ×1
+    - `start` → "Ready to plan the session." — planisphere star chart ×1, basic telescope ×1
+    - `plan` → "Timing locked—set up for capture." — Venus observation window ×1
+    - `view` → "Sketch and timestamp recorded." — Venus phase sketch ×1
+    - `out-of-range` → "Re-test window ready; repeat the capture workflow." — Venus observation window ×1
+    - `interpret` → "Interpretation passed with consistent sketch + notes." — Venus phase sketch ×1
+- Branches/troubleshooting:
+    - Out-of-range branch from `view` to `out-of-range` for unstable seeing/alignment drift
+    - Interpretation retry path from `interpret` back to `out-of-range` before closure
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

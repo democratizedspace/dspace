@@ -8,28 +8,66 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Solar winds may trigger auroras tonight. Let's plan before stepping into the cold.",
+            "text": "Solar winds may trigger auroras tonight. We'll plan for safety first, then choose a clear-window strategy.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "forecast",
-                    "text": "I'll check the numbers before bundling up."
+                    "text": "Let's check Kp, cloud cover, and travel safety."
                 }
             ]
         },
         {
             "id": "forecast",
-            "text": "Check an aurora app for Kp, clouds, and a clear hour. Pick a dark spot with safe footing.",
+            "text": "Check an aurora app for Kp, clouds, and a clear hour. Pick a dark site with safe footing and a warm shelter nearby.",
             "options": [
                 {
                     "type": "process",
                     "process": "check-aurora-forecast",
-                    "text": "Forecast locked in and written down."
+                    "text": "Forecast logged with target hour."
+                },
+                {
+                    "type": "goto",
+                    "goto": "window-decision",
+                    "text": "Forecast captured\u2014choose an observation plan.",
+                    "requiresItems": [
+                        {
+                            "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "window-decision",
+            "text": "If skies are clean, go now. If clouds or city glow dominate, run a fallback plan and schedule a second window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Clear enough now\u2014proceed with tonight's session."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "Conditions are poor\u2014run fallback planning first."
+                }
+            ]
+        },
+        {
+            "id": "fallback",
+            "text": "Fallback: relocate to a darker horizon, delay to the next forecasted gap, and message your buddy with updated timing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-aurora-forecast",
+                    "text": "Re-check forecast for a better window."
                 },
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Window picked\u2014what should I pack?",
+                    "text": "Fallback plan documented and safe route confirmed.",
                     "requiresItems": [
                         {
                             "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
@@ -41,7 +79,7 @@
         },
         {
             "id": "kit",
-            "text": "Layer up, clip the red flashlight, text a buddy with your spot, and keep the logbook dry.",
+            "text": "Layer up, clip the red flashlight, and keep the logbook dry. Confirm battery warmth and emergency transport before leaving.",
             "options": [
                 {
                     "type": "process",
@@ -51,7 +89,7 @@
                 {
                     "type": "goto",
                     "goto": "observe",
-                    "text": "Kit is ready\u2014let's step outside.",
+                    "text": "Kit is ready\u2014start the observation session.",
                     "requiresItems": [
                         {
                             "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
@@ -63,17 +101,55 @@
         },
         {
             "id": "observe",
-            "text": "Let eyes adjust, sweep the northern horizon for arcs or curtains, and note color and time while staying aware of your footing.",
+            "text": "Let eyes adjust, scan low to high in the north, and log color bands plus start/end timestamps.",
             "options": [
                 {
                     "type": "process",
                     "process": "log-aurora-sighting",
-                    "text": "Logging the shimmering curtains."
+                    "text": "Record visible arcs and timing."
                 },
                 {
                     "type": "goto",
+                    "goto": "interpret",
+                    "text": "I captured a full log entry.",
+                    "requiresItems": [
+                        {
+                            "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "failed-session",
+                    "text": "No visible arc yet; I need a troubleshooting pass."
+                }
+            ]
+        },
+        {
+            "id": "failed-session",
+            "text": "Troubleshoot before quitting: re-check cloud motion, reduce local light glare, warm up, and retry only if conditions improve.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "Conditions are still poor\u2014schedule a follow-up window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Conditions improved\u2014retry the observation sweep."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation checkpoint: confirm whether the log shows sustained auroral structure versus brief cloud glow before closure.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Entry written with colors and timestamps.",
+                    "text": "Interpretation complete: sustained auroral structure confirmed.",
                     "requiresItems": [
                         {
                             "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
@@ -85,7 +161,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice catch! Your notes help track storms. Warm up, check in with your buddy, and reuse dark sites.",
+            "text": "Nice catch. Your time-stamped log and fallback notes make the next watch more reliable. Warm up and check in with your buddy.",
             "options": [
                 {
                     "type": "finish",
@@ -100,7 +176,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/light-pollution"],
+    "requiresQuests": [
+        "astronomy/light-pollution"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
