@@ -39,7 +39,7 @@
                 {
                     "type": "goto",
                     "goto": "view",
-                    "text": "Timing locked\u2014let's observe.",
+                    "text": "Timing locked—let's observe.",
                     "requiresItems": [
                         {
                             "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
@@ -51,7 +51,7 @@
         },
         {
             "id": "view",
-            "text": "Set up the telescope on stable ground, center Venus, and adjust focus until the phase edge is sharp.",
+            "text": "Set up the telescope on stable ground, center Venus, and adjust focus until the phase edge is sharp. Keep both feet planted and avoid aiming near the horizon glare.",
             "options": [
                 {
                     "type": "process",
@@ -60,14 +60,47 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Phase recorded with date and time.",
+                    "goto": "interpret",
+                    "text": "Phase measurement recorded.",
                     "requiresItems": [
                         {
                             "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the sketch: a clean crescent edge and timestamp match count as pass criteria. If the edge is smeared by haze or misfocus, classify it out-of-range and retest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Sketch passes clarity and timing thresholds.",
+                    "requiresItems": [
+                        {
+                            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Out-of-range: haze, glare, or poor focus hid the phase edge."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective loop: wait for steadier air, shield local lights, and re-check tripod tension before taking another sketch. Pause if dew makes footing slick.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "view",
+                    "text": "Re-test with corrected setup."
                 }
             ]
         },
@@ -92,7 +125,7 @@
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-18",

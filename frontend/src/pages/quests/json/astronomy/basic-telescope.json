@@ -12,7 +12,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "build",
+                    "goto": "choose-build",
                     "text": "I'm ready.",
                     "requiresItems": [
                         {
@@ -40,24 +40,95 @@
             ]
         },
         {
-            "id": "build",
-            "text": "Tape the 50 mm lens to the front as the objective and the 20 mm lens at the back as the eyepiece. Mount the tube securely on the tripod, verify stability, handle glass edges carefully, and never aim at the Sun.",
+            "id": "choose-build",
+            "text": "Pick a build path: objective-first for precise centering, or dry-fit first if your tube fit is tight. Both paths still require a stability check before sky use.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build-objective-first",
+                    "text": "Objective-first assembly"
+                },
+                {
+                    "type": "goto",
+                    "goto": "build-dry-fit",
+                    "text": "Dry-fit then tape"
+                }
+            ]
+        },
+        {
+            "id": "build-objective-first",
+            "text": "Tape the 50 mm objective lens to the front first, then seat the 20 mm eyepiece. Keep lens edges pointed away from your face while adjusting tape tension.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-basic-telescope",
-                    "text": "Putting it together."
+                    "text": "Objective-first assembly complete."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "I can see Jupiter!",
+                    "goto": "verify",
+                    "text": "Move to stability verification.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "build-dry-fit",
+            "text": "Dry-fit both lenses to check spacing, then tape the objective and eyepiece after alignment marks are set. Re-cap lenses between adjustments to avoid scratches.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-basic-telescope",
+                    "text": "Dry-fit path complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Move to stability verification.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Mount the tube on the tripod and check wobble. If the image jitters or the tube slips, stop and re-tape before observing. Never test toward the Sun.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stable image confirmed on a distant ground target.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I found lens blur or wobble during setup."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Good catch. Re-seat loose tape, shorten the tube overlap if slipping, and retighten tripod joints before retrying. If glass is chipped, pause and replace that lens.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-build",
+                    "text": "Rebuild and re-verify."
                 }
             ]
         },
@@ -82,7 +153,7 @@
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-basic-telescope-2025-08-03",

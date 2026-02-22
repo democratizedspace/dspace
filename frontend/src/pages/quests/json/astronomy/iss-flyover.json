@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 4,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",
@@ -68,7 +68,7 @@
         },
         {
             "id": "setup",
-            "text": "Level the tripod, cap the telescope, clear a safe path, and keep the red flashlight dim for night vision.",
+            "text": "Level the tripod, cap the telescope until the pass starts, clear a safe path, and keep the red flashlight dim for night vision.",
             "options": [
                 {
                     "type": "process",
@@ -77,7 +77,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "observe",
+                    "goto": "session-check",
                     "text": "Station is ready for the pass.",
                     "requiresItems": [
                         {
@@ -85,6 +85,22 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "session-check",
+            "text": "Final pre-pass check: clouds below half coverage, no bright floodlight in your line of sight, and a clear walking path.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Conditions are safe enough to observe now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "Clouds or glare make this session unreliable."
                 }
             ]
         },
@@ -99,14 +115,47 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Entry complete with time and direction.",
+                    "goto": "interpret",
+                    "text": "Observation artifact captured.",
                     "requiresItems": [
                         {
                             "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Review your log: if time offset is under two minutes and direction notes match the prediction, the session passes. If not, classify it as a miss and schedule a retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log quality passes and safety notes are complete.",
+                    "requiresItems": [
+                        {
+                            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "This log is incomplete or timing drifted."
+                }
+            ]
+        },
+        {
+            "id": "fallback",
+            "text": "Fallback mode: move to a darker view line or pick the next predicted pass, then rerun planning before another attempt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Schedule another pass window and retry."
                 }
             ]
         },

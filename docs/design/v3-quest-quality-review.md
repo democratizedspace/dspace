@@ -326,9 +326,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #3676)
   - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #3676)
 - `astronomy/basic-telescope`
-  - [ ] Observed issue: `astronomy/basic-telescope` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue: `astronomy/basic-telescope` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #0)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0)
 - `astronomy/binary-star`
   - [ ] Observed issue: `astronomy/binary-star` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -342,9 +342,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/iss-flyover`
-  - [ ] Observed issue: `astronomy/iss-flyover` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
-  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
-  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
+  - [x] Observed issue: `astronomy/iss-flyover` is observation-heavy but fallback handling for seeing/weather constraints is typically thin. (PR #0)
+  - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #0)
+  - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #0)
 - `astronomy/iss-photo`
   - [ ] Observed issue: `astronomy/iss-photo` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3660)
@@ -398,9 +398,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/venus-phases`
-  - [ ] Observed issue: `astronomy/venus-phases` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `astronomy/venus-phases` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #0)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0)
 
 ### chemistry (10 quests)
 
