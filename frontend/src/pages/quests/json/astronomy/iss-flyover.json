@@ -164,8 +164,24 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
+                    "goto": "reset-log",
                     "text": "Missing details - restage and retry the pass."
+                }
+            ]
+        },
+        {
+            "id": "reset-log",
+            "text": "Archive the incomplete entry so the next observation uses a fresh log before you restage the station.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "reset-iss-pass-log",
+                    "text": "Incomplete entry removed from the active checklist."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Station restaged - collect a fresh pass log."
                 }
             ]
         },

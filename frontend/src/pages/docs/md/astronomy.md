@@ -105,7 +105,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` → "Log has all three fields and conditions notes." — ISS pass log ×1
 - Troubleshooting and safety flow:
     - `plan`, `setup`, and `observe` all branch to `weather-delay` for cloud/haze/glare recovery instead of allowing a dead-end session.
-    - `interpret` enforces a complete observation artifact (time + direction + duration) and loops back to setup for missing fields.
+    - `interpret` enforces a complete observation artifact (time + direction + duration) and routes incomplete entries through `reset-log` to consume the stale log before setup restarts.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -124,6 +124,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: ISS spotting station ×1, ISS pass window ×1, mission logbook ×1
         - Consumes: none
         - Creates: ISS pass log ×1
+    - [reset-iss-pass-log](/processes/reset-iss-pass-log)
+        - Requires: ISS pass log ×1
+        - Consumes: ISS pass log ×1
+        - Creates: none
 
 ## 5) Photograph the ISS (`astronomy/iss-photo`)
 
@@ -454,12 +458,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/saturn-rings`
 - Dialogue `requiresItems` gates:
     - `start` → "Ready to aim." — planisphere star chart ×1, basic telescope ×1
-    - `plan` → "Timing locked - let's observe." — Venus observation window ×1
+    - `plan` → "Timing locked—let's observe." — Venus observation window ×1
     - `view` → "Phase recorded with date and time." — Venus phase sketch ×1
     - `interpret` → "Measured fraction is within the 20%-60% target band." — Venus phase sketch ×1
 - Troubleshooting and safety flow:
     - `view` now branches to `recheck` when seeing is unstable.
-    - `interpret` enforces pass/fail bounds (20%-60% illuminated fraction) and routes out-of-range results through a corrective re-test loop.
+    - `interpret` enforces pass/fail bounds (20%-60% illuminated fraction) and routes out-of-range results through `reset-sketch` so stale evidence is consumed before corrective re-test loops.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -474,6 +478,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: Venus observation window ×1, basic telescope ×1, mission logbook ×1
         - Consumes: none
         - Creates: Venus phase sketch ×1
+    - [reset-venus-phase-sketch](/processes/reset-venus-phase-sketch)
+        - Requires: Venus phase sketch ×1
+        - Consumes: Venus phase sketch ×1
+        - Creates: none
 
 ## QA flow notes
 
