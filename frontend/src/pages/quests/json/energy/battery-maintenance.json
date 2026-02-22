@@ -12,8 +12,30 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "cycle",
+                    "goto": "prep-log",
                     "text": "Let's give it some exercise."
+                }
+            ]
+        },
+        {
+            "id": "prep-log",
+            "text": "Before you cycle, capture a baseline: pack voltage, cable temperature, and connector condition. That log gives us something to compare after charging.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-battery-voltage",
+                    "text": "Record baseline pack voltage"
+                },
+                {
+                    "type": "goto",
+                    "goto": "cycle",
+                    "text": "Baseline recorded, proceed to charge cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -28,14 +50,58 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Battery cycled",
+                    "goto": "verify-log",
+                    "text": "Cycle complete; compare post-cycle reading to baseline.",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly-response",
+                    "text": "Charge stalled or cable temperature keeps climbing."
+                }
+            ]
+        },
+        {
+            "id": "anomaly-response",
+            "text": "Good catch. Stop charging, inspect connectors for corrosion, re-seat the fuse, and verify ventilation. Resume only if the next reading is stable and hardware stays cool.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cycle",
+                    "text": "Corrective action complete; retry controlled cycle.",
                     "requiresItems": [
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "verify-log",
+            "text": "Interpret your maintenance log: if voltage recovered and connector temps remained in-range, the pack passes this cycle. If not, loop back through troubleshooting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log review passed: healthy charge profile confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly-response",
+                    "text": "Log flags an anomaly; run corrective loop first."
                 }
             ]
         },
