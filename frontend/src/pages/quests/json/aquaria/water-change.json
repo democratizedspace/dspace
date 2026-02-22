@@ -45,7 +45,7 @@
         },
         {
             "id": "prep",
-            "text": "Condition replacement water and match temperature within 2 °C before it enters the tank.",
+            "text": "Condition replacement water and match temperature within 2 \u00b0C before it enters the tank.",
             "options": [
                 {
                     "type": "process",
@@ -160,11 +160,22 @@
                     "text": "Recovery steps complete; re-log before finishing.",
                     "requiresItems": [
                         {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Fish behavior is improving; conclude with the current log and monitor again tomorrow.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
                             "count": 1
                         },
                         {
-                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
                             "count": 1
                         }
                     ]
@@ -188,7 +199,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/guppy"],
+    "requiresQuests": [
+        "aquaria/guppy"
+    ],
     "hardening": {
         "passes": 4,
         "score": 100,

@@ -141,9 +141,16 @@
                     "text": "Recovery completed; return to stability verification.",
                     "requiresItems": [
                         {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
                             "count": 1
-                        },
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cloudiness is improving; hold livestock and continue passive settling checks.",
+                    "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
                             "count": 1

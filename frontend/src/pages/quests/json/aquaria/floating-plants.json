@@ -132,11 +132,30 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "place",
+                    "text": "I trimmed and redistributed the existing mat; re-check placement before verifying.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "rinse",
                     "text": "I replaced the water and tools; return to standard rinse checks.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
                             "count": 1
                         }
                     ]

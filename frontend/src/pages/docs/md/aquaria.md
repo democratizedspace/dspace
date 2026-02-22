@@ -38,7 +38,8 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `build` → "Build complete; substrate cap stayed intact." — Walstad aquarium (80 L) ×1
     - `verify` → "Tank is stable enough to begin cycling with no livestock." — Walstad aquarium (80 L) ×1
     - `verify` → "Cloudy surge or uprooted plants detected; run recovery staging." — Walstad aquarium (80 L) ×1
-    - `recovery` → "Recovery completed; return to stability verification." — 5 gallon bucket of dechlorinated tap water ×1, Walstad aquarium (80 L) ×1
+    - `recovery` → "Recovery completed; return to stability verification." — Walstad aquarium (80 L) ×1
+    - `recovery` → "Cloudiness is improving; hold livestock and continue passive settling checks." — Walstad aquarium (80 L) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -411,7 +412,9 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `strategy` → "I found hitchhikers or mushy stems; do a recovery rinse." — 5 gallon bucket of dechlorinated tap water ×1
     - `rinse` → "Rinse and inspect the plants." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1
     - `rinse` → "Rinsed bundle is clean and ready for placement." — Rinsed guppy grass ×1
-    - `troubleshoot` → "I replaced the water and tools; return to standard rinse checks." — 5 gallon bucket of dechlorinated tap water ×1
+    - `troubleshoot` → "Run a second rinse after trimming contaminated stems." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1
+    - `troubleshoot` → "I trimmed and redistributed the existing mat; re-check placement before verifying." — Floating plant mat ×1
+    - `troubleshoot` → "I replaced the water and tools; return to standard rinse checks." — 5 gallon bucket of dechlorinated tap water ×1, Guppy grass starter ×1, aquarium net ×1
     - `place` → "Float and spread the guppy grass mat." — Rinsed guppy grass ×1, aquarium LED light (20 W) ×1
     - `place` → "Mat is floating and the intake lane stays open." — Floating plant mat ×1
     - `verify` → "Coverage and flow are balanced; fry still have open surface access." — Floating plant mat ×1
@@ -531,7 +534,8 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `verify` → "Temperature log already captured." — Aquarium temperature reading ×1
     - `review` → "Log is stable and fish behavior is calm." — Freshly changed aquarium (80 L) ×1, Aquarium temperature reading ×1
     - `review` → "Temperature swing or stress signs detected; run recovery protocol." — Freshly changed aquarium (80 L) ×1
-    - `recover` → "Recovery steps complete; re-log before finishing." — 5 gallon bucket of dechlorinated tap water ×1, Freshly changed aquarium (80 L) ×1
+    - `recover` → "Recovery steps complete; re-log before finishing." — Freshly changed aquarium (80 L) ×1
+    - `recover` → "Fish behavior is improving; conclude with the current log and monitor again tomorrow." — Freshly changed aquarium (80 L) ×1, Aquarium temperature reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
