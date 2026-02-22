@@ -54,7 +54,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/observe-moon`
 - Dialogue `requiresItems` gates:
     - `start` → "I'm ready." — 50 mm magnifying lens ×1, 20 mm magnifying lens ×1, cardboard mailing tube ×1, camera tripod ×1, masking tape ×1
-    - `build` → "I can see Jupiter!" — basic telescope ×1
+    - `build`/`alternate-build` → "Assembly complete; verify image quality." / "Staged build done; start verification." — basic telescope ×1
+    - `verify` → "Verified: stable tripod and clear moon points." — basic telescope ×1
+- Troubleshooting and safety flow:
+    - `build` now branches into a direct assembly path and an alternate staged pre-mount path before verification.
+    - `verify` routes to `troubleshoot` on blurry/drifting optics, then loops back to rebuild or re-verify with explicit stop criteria for chipped/loose glass.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -95,8 +99,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/observe-moon`
 - Dialogue `requiresItems` gates:
     - `plan` → "Details logged. How do I stage the scope?" — ISS pass window ×1
+    - `weather-delay` → "Sky is clear enough now; proceed to setup." — ISS pass window ×1
     - `setup` → "Station is ready for the pass." — ISS spotting station ×1
     - `observe` → "Entry complete with time and direction." — ISS pass log ×1
+    - `interpret` → "Log has all three fields and conditions notes." — ISS pass log ×1
+- Troubleshooting and safety flow:
+    - `plan`, `setup`, and `observe` all branch to `weather-delay` for cloud/haze/glare recovery instead of allowing a dead-end session.
+    - `interpret` enforces a complete observation artifact (time + direction + duration) and loops back to setup for missing fields.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -445,8 +454,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/saturn-rings`
 - Dialogue `requiresItems` gates:
     - `start` → "Ready to aim." — planisphere star chart ×1, basic telescope ×1
-    - `plan` → "Timing locked—let's observe." — Venus observation window ×1
+    - `plan` → "Timing locked - let's observe." — Venus observation window ×1
     - `view` → "Phase recorded with date and time." — Venus phase sketch ×1
+    - `interpret` → "Measured fraction is within the 20%-60% target band." — Venus phase sketch ×1
+- Troubleshooting and safety flow:
+    - `view` now branches to `recheck` when seeing is unstable.
+    - `interpret` enforces pass/fail bounds (20%-60% illuminated fraction) and routes out-of-range results through a corrective re-test loop.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
