@@ -59,7 +59,10 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
-    - `cycle` → "Battery cycled" — 200 Wh battery pack ×1
+    - `prep` → "Safety check complete." — 200 Wh battery pack ×1, Solar charge controller ×1
+    - `cycle` → "Log shows at least 200 Wh harvested." — dSolar ×200
+    - `interpret` → "Readings are stable and safe." — 200 Wh battery pack ×1
+    - `anomaly` → "Corrective actions done; run a re-test cycle." — Solar charge controller ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -77,7 +80,10 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
-    - `install` → "All set" — 200 Wh battery pack ×1
+    - `full-install` → "Full install complete." — Solar setup (1 kWh) ×1
+    - `staged-install` → "Staged install complete." — Solar setup (1 kWh) ×1
+    - `commission` → "Commissioning passed." — Solar setup (1 kWh) ×1, 200 Wh battery pack ×1
+    - `recover` → "Repairs complete; retry the upgrade plan." — Solar charge controller ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -97,8 +103,10 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Dialogue `requiresItems` gates:
     - `layout` → "Polarity checked; fuse still out." — Solar charge controller ×1, portable solar panel ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - `wire` → "Controller powers up without sparks." — portable solar kit (wired) ×1
+    - `rollback` → "Fault corrected; re-run wire verification." — 8 AWG fused cable kit ×1
     - `configure` → "Settings saved and fuse seated." — charge controller profile set ×1
-    - `charge` → "Controller shows a happy, full pack." — dSolar ×200
+    - `charge` → "Controller reached target energy." — dSolar ×200
+    - `verify` → "Verification passed." — charge controller profile set ×1, portable solar kit (wired) ×1
 - Grants:
     - `layout` → "Borrow my kit" — Solar charge controller ×1, portable solar panel ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None

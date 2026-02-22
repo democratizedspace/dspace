@@ -8,31 +8,91 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A battery lasts longer when you cycle it occasionally. Ready for a quick health check?",
+            "text": "A battery lasts longer when you cycle it with intent. We'll log one maintenance window and only close once the numbers look safe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Open a maintenance log."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Set the pack on a dry surface, check cables for nicks, and confirm the charge controller is in LiFePO4 mode before charging.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "cycle",
-                    "text": "Let's give it some exercise."
+                    "text": "Safety check complete.",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "cycle",
-            "text": "Discharge your pack a bit, then hook it to the solar kit and top it off.",
+            "text": "Run one solar charging cycle, then record harvested energy and cable temperature notes.",
             "options": [
                 {
                     "type": "process",
                     "process": "charge-battery-pack-solar",
-                    "text": "Charge with solar"
+                    "text": "Run the maintenance cycle"
                 },
                 {
                     "type": "goto",
+                    "goto": "interpret",
+                    "text": "Log shows at least 200 Wh harvested.",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the log: stable voltage and cool cables means pass. Any heat spike, voltage sag, or connector smell means stop and troubleshoot.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Battery cycled",
+                    "text": "Readings are stable and safe.",
                     "requiresItems": [
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "I detected a heat or voltage anomaly."
+                }
+            ]
+        },
+        {
+            "id": "anomaly",
+            "text": "Good catch. Pause charging, reseat terminals, and move the pack to shade before attempting another cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cycle",
+                    "text": "Corrective actions done; run a re-test cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                             "count": 1
                         }
                     ]
@@ -41,11 +101,11 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Your pack is ready for more adventures.",
+            "text": "Nice work! You didn't just cycle the pack—you validated that it can run safely.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Power up!"
+                    "text": "Maintenance logged."
                 }
             ]
         }
@@ -60,7 +120,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

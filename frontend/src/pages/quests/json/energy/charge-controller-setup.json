@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A charge controller keeps your battery safe. Ready to wire and program one for LiFePO4?",
+            "text": "A charge controller keeps your battery safe. We will stage, wire, verify, and keep a rollback path if anything behaves oddly.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "layout",
-                    "text": "Let's do it!"
+                    "text": "Start staged install."
                 }
             ]
         },
         {
             "id": "layout",
-            "text": "Lay out the panel, controller, 200 Wh pack, and fused leads on a dry surface. Keep the fuse pulled until you double-check polarity.",
+            "text": "Lay out panel, controller, 200 Wh pack, and fused leads on a dry surface. Keep the fuse pulled until polarity is confirmed.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -70,7 +70,7 @@
         },
         {
             "id": "wire",
-            "text": "Connect battery first, then panel MC4s, keeping red to positive (+) and black to negative (\u2212). Torque ring terminals, seat the fuse, and tuck the controller off the ground.",
+            "text": "Connect battery first, then panel MC4s. Torque ring terminals, insert fuse, and keep one hand clear so you can disconnect fast if needed.",
             "options": [
                 {
                     "type": "process",
@@ -87,12 +87,34 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "I saw sparks or unstable boot behavior."
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Rollback: pull fuse, disconnect panel, then battery. Inspect polarity and damaged insulation before trying again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Fault corrected; re-run wire verification.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "configure",
-            "text": "Select LiFePO4 mode, set absorb to 14.4 V and float to 13.6 V, then record the settings so you can rebuild this later.",
+            "text": "Select LiFePO4 mode, set absorb 14.4 V and float 13.6 V, and save the profile so you can audit settings later.",
             "options": [
                 {
                     "type": "process",
@@ -114,7 +136,7 @@
         },
         {
             "id": "charge",
-            "text": "Point the panel at the sun and let it soak up 200 Wh. Check the controller display after 10 minutes\u2014cool cables and steady voltage mean you're good.",
+            "text": "Run a 200 Wh charge window. Keep cables cool and confirm the controller display stays steady for at least one check interval.",
             "options": [
                 {
                     "type": "process",
@@ -123,8 +145,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Controller shows a happy, full pack.",
+                    "goto": "verify",
+                    "text": "Controller reached target energy.",
                     "requiresItems": [
                         {
                             "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
@@ -135,8 +157,34 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Final verification: profile present, kit still wired cleanly, no connector heat, and 200 Wh harvested.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification passed.",
+                    "requiresItems": [
+                        {
+                            "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Verification failed; perform rollback and re-verify."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice work! The controller will guard your battery while sun fills it up.",
+            "text": "Nice work! You completed an install with an explicit rollback and verification trail.",
             "options": [
                 {
                     "type": "finish",
@@ -155,7 +203,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -8,31 +8,112 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your first panel works well. To store more energy, let's install a 1 kWh battery and matching enclosure.",
+            "text": "Your first panel works well. We'll upgrade to 1 kWh storage with a verified install path and a recovery path if commissioning fails.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "install",
-                    "text": "Let's do it."
+                    "goto": "plan",
+                    "text": "Plan the upgrade"
                 }
             ]
         },
         {
-            "id": "install",
-            "text": "Mount the new battery and controller in the enclosure, then connect your existing panel to start charging the bigger pack.",
+            "id": "plan",
+            "text": "Choose your strategy: full enclosure rebuild for clean cable routing, or staged swap if you need faster turnaround.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "full-install",
+                    "text": "Do a full enclosure rebuild"
+                },
+                {
+                    "type": "goto",
+                    "goto": "staged-install",
+                    "text": "Do a staged battery swap"
+                }
+            ]
+        },
+        {
+            "id": "full-install",
+            "text": "Power down, mount the 1 kWh pack and controller in the enclosure, then re-terminate panel leads with strain relief.",
             "options": [
                 {
                     "type": "process",
                     "process": "setup-solar-enclosure-1kWh",
-                    "text": "Installing."
+                    "text": "Run full upgrade install"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "All set",
+                    "goto": "commission",
+                    "text": "Full install complete.",
                     "requiresItems": [
                         {
+                            "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "staged-install",
+            "text": "Swap the battery first, verify polarity and fusing, then fold the final wiring into the enclosure.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "setup-solar-enclosure-1kWh",
+                    "text": "Run staged install"
+                },
+                {
+                    "type": "goto",
+                    "goto": "commission",
+                    "text": "Staged install complete.",
+                    "requiresItems": [
+                        {
+                            "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "commission",
+            "text": "Commissioning check: enclosure sealed, fuse seated, and no heat buildup on first charge cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Commissioning passed.",
+                    "requiresItems": [
+                        {
+                            "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
+                            "count": 1
+                        },
+                        {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Commissioning failed; cables warmed or output sagged."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: isolate the battery, retighten terminals, recheck cable routing, and repeat commissioning before live operation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Repairs complete; retry the upgrade plan.",
+                    "requiresItems": [
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
                             "count": 1
                         }
                     ]
@@ -41,7 +122,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! With more storage you can run equipment longer into the night.",
+            "text": "Excellent! With verified 1 kWh storage, you can run equipment longer into the night with less risk.",
             "options": [
                 {
                     "type": "finish",
@@ -60,7 +141,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
