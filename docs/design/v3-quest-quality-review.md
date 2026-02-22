@@ -938,7 +938,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
 
 ### programming (18 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, welcome/run-tests (fallback: no checked programming quests yet)
+Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature, hydroponics/nutrient-check (fallback: no checked programming quests yet)
+
+Rubric assignment rule: first keyword match wins (`measurement/check` => threshold rubric; otherwise thin-shell rubric), and each quest checklist below uses only its assigned rubric structure.
 
 - `programming/avg-temp`
   - [x] Observed issue: `programming/avg-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3650)
