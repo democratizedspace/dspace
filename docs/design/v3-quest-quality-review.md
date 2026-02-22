@@ -182,7 +182,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 - `3dprinting/benchy_100`
   - [ ] Observed issue: `3dprinting/benchy_100` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3660)
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3676)
 - `3dprinting/benchy_25`
   - [x] Observed issue (addressed): `3dprinting/benchy_25` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3608)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3608)
@@ -193,7 +193,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3613)
 - `3dprinting/cable-clip`
   - [ ] Observed issue: `3dprinting/cable-clip` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3676)
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/calibration-cube`
   - [ ] Observed issue: `3dprinting/calibration-cube` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
@@ -318,13 +318,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring, composting/check-temperature (fallback: no checked astronomy quests yet)
 
 - `astronomy/andromeda`
-  - [ ] Observed issue: `astronomy/andromeda` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `astronomy/andromeda` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3676)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3676)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3676)
 - `astronomy/aurora-watch`
-  - [ ] Observed issue: `astronomy/aurora-watch` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
-  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
-  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
+  - [x] Observed issue (addressed): `astronomy/aurora-watch` was observation-heavy with thin fallback handling for seeing/weather constraints; this was hardened in this pass. (PR #3676)
+  - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #3676)
+  - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #3676)
 - `astronomy/basic-telescope`
   - [ ] Observed issue: `astronomy/basic-telescope` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -358,9 +358,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/lunar-eclipse`
-  - [ ] Observed issue: `astronomy/lunar-eclipse` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue (addressed): `astronomy/lunar-eclipse` previously centered on a measurement/check action with thin acceptance thresholds and out-of-range handling; this was hardened in this pass. (PR #3676)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3676)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3676)
 - `astronomy/meteor-shower`
   - [ ] Observed issue: `astronomy/meteor-shower` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
   - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
