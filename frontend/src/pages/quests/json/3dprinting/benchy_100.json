@@ -224,8 +224,8 @@
     "requiresQuests": ["3dprinting/benchy_25"],
     "hardening": {
         "passes": 0,
-        "score": 85,
-        "emoji": "🛠️",
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

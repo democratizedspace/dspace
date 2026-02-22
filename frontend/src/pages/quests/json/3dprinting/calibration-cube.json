@@ -58,7 +58,7 @@
         },
         {
             "id": "baseline",
-            "text": "Measure X/Y/Z and log values. Pass target is 20.00 mm ±0.10 mm. If any axis drifts beyond tolerance, tune steps or flow before retesting.",
+            "text": "Measure X/Y/Z and log values. Pass target is 20.00 mm \u00b10.10 mm. If any axis drifts beyond tolerance, tune steps or flow before retesting.",
             "options": [
                 {
                     "type": "process",
@@ -157,8 +157,8 @@
     "requiresQuests": ["3dprinting/bed-leveling"],
     "hardening": {
         "passes": 3,
-        "score": 90,
-        "emoji": "💯",
+        "score": 95,
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-07",
