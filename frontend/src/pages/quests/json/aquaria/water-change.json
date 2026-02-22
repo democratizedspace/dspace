@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug heater and filter to prevent shocks. Wear safety goggles and nitrile gloves, then load a utility cart with a gravel vacuum, bucket, conditioner, and the tank you're about to service.",
+            "text": "Before opening the tank: unplug heater and filter, put on goggles and nitrile gloves, and keep cords below outlet height for drip safety.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Gear gathered and tank is safe to work",
+                    "text": "Safety checks complete and tools staged.",
                     "requiresItems": [
                         {
                             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
@@ -45,17 +45,18 @@
         },
         {
             "id": "prep",
-            "text": "Fill the bucket with tap water, add conditioner, and match the temperature within 2 \u00b0C before you touch the tank. Keep cords dripped below outlets.",
+            "text": "Condition replacement water and match temperature within 2 °C before it enters the tank.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Condition replacement water"
+                    "text": "Condition replacement water.",
+                    "goto": "change"
                 },
                 {
                     "type": "goto",
-                    "goto": "remove",
-                    "text": "Replacement water is conditioned and matched",
+                    "goto": "change",
+                    "text": "Replacement water is conditioned and temperature-matched.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -66,18 +67,19 @@
             ]
         },
         {
-            "id": "remove",
-            "text": "Use the gravel vacuum to siphon into the bucket. Lift fish gear out of the way, keep outlets dry, and stop after ~25% of the volume is in the bucket.",
+            "id": "change",
+            "text": "Vacuum debris while removing ~25% of water, then refill gradually to avoid stressing fish or kicking substrate into the filter.",
             "options": [
                 {
                     "type": "process",
                     "process": "partial-water-change",
-                    "text": "Vacuum and refill with conditioned water"
+                    "text": "Run the partial water change.",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Water swapped and heater restarted",
+                    "goto": "verify",
+                    "text": "Swap complete and systems restarted.",
                     "requiresItems": [
                         {
                             "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
@@ -88,12 +90,94 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Log a post-change reading after the heater recovers. If fish gasp, clamp fins, or the temp drifts hard, branch to recovery.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-freshly-changed-walstad-temperature",
+                    "text": "Record the post-change temperature log.",
+                    "goto": "review"
+                },
+                {
+                    "type": "goto",
+                    "goto": "review",
+                    "text": "Temperature log already captured.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "review",
+            "text": "Review the log and fish behavior together: stable range means proceed; unstable range means pause feeding and troubleshoot before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log is stable and fish behavior is calm.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Temperature swing or stress signs detected; run recovery protocol.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: dim lights, confirm flow, and prep a fresh conditioned top-off before taking another log.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Prepare recovery top-off water.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery steps complete; re-log before finishing.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Heater and filter are back on, fish are calm, and you logged the swap. Rinse the bucket so conditioner residue doesn't dry on the walls.",
+            "text": "Water change complete with evidence logged. Rinse tools, restore normal lighting, and keep tomorrow's reading for trend checks.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Water change complete"
+                    "text": "Change verified and logged."
                 }
             ]
         }
