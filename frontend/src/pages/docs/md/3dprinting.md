@@ -50,8 +50,8 @@ slug: '3dprinting'
     - `requiresQuests`: `3dprinter/start`
 - Dialogue `requiresItems` gates:
     - `baseline` → "Record baseline and run the first leveling pass." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
-    - `baseline` → "Baseline notes captured; ready to adjust corners." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
-    - `adjust` → "Post-adjust pass is within tolerance at all five points." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
+    - `baseline` → "Baseline notes captured; ready to adjust corners." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
+    - `adjust` → "Post-adjust pass is within tolerance at all five points." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
     - `adjust` → "Readings drift after homing or one corner keeps wandering." — entry-level FDM 3D printer (leveled bed) ×1
     - `drift` → "Rollback complete; rerun baseline and adjustment sequence." — sheet of printer paper ×1
     - `verify` → "Skirt is even and post-heat drag still meets tolerance." — entry-level FDM 3D printer (leveled bed) ×1, sheet of printer paper ×1
@@ -77,7 +77,7 @@ slug: '3dprinting'
     - `baseline` → "Baseline logged and tuning adjustments applied." — mission log entry ×1
     - `baseline` → "One axis is still out of tolerance after adjustments." — mission log entry ×1
     - `recover` → "Rollback complete. Run a fresh baseline cube." — entry-level FDM 3D printer ×1, safety goggles ×1
-    - `retest` → "Retest passed and measurements are documented." — mission log entry ×1
+    - `retest` → "Retest passed and measurements are documented." — mission log entry ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -179,13 +179,14 @@ slug: '3dprinting'
 - Unlock prerequisite:
     - `requiresQuests`: `3dprinting/benchy_25`
 - Dialogue `requiresItems` gates:
-    - `strategy` → "Main path: steady batches with scheduled checks." — entry-level FDM 3D printer (leveled bed) ×1
-    - `strategy` → "Alternate path: sprint windows and cooldown buffers." — entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1
+    - `strategy` → "Main path: steady batches with scheduled checks." — entry-level FDM 3D printer (green PLA loaded) ×1
+    - `strategy` → "Alternate path: sprint windows and cooldown buffers." — entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1
     - `steady` → "Quality checkpoints logged and fleet reached 100." — Benchy ×100, mission log entry ×1
     - `steady` → "I found recurring warping, layer shifts, or weak bridges." — Benchy ×40
     - `sprint` → "Sprint logs are complete and 100 prints pass inspection." — Benchy ×100, mission log entry ×1
     - `sprint` → "Defect rate spiked during sprint blocks." — Benchy ×40
-    - `recover` → "Verification batch passed; resume steady production." — entry-level FDM 3D printer (leveled bed) ×1, mission log entry ×1
+    - `recover` → "Verification batch passed; resume steady production." — entry-level FDM 3D printer (green PLA loaded) ×1, mission log entry ×1
+    - `recover` → "Verification batch passed; resume sprint production." — entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1, mission log entry ×1
     - `evidence` → "Evidence complete: 100 Benchies plus corrective notes logged." — Benchy ×100, mission log entry ×1
 - Grants:
     - Dialogue options/steps grantsItems: None

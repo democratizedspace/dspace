@@ -78,7 +78,7 @@
                             "count": 100
                         },
                         {
-                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]
@@ -125,7 +125,7 @@
                             "count": 100
                         },
                         {
-                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]
@@ -157,7 +157,26 @@
                             "count": 1
                         },
                         {
-                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "sprint",
+                    "text": "Verification batch passed; resume sprint production.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]
@@ -178,7 +197,7 @@
                             "count": 100
                         },
                         {
-                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]

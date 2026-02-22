@@ -71,7 +71,7 @@
                     "text": "Baseline logged and tuning adjustments applied.",
                     "requiresItems": [
                         {
-                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]
@@ -82,7 +82,7 @@
                     "text": "One axis is still out of tolerance after adjustments.",
                     "requiresItems": [
                         {
-                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]
@@ -120,13 +120,18 @@
                     "text": "Run post-adjust retest print."
                 },
                 {
+                    "type": "process",
+                    "process": "measure-calibration-cube",
+                    "text": "Log post-adjust retest measurements."
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Retest passed and measurements are documented.",
                     "requiresItems": [
                         {
-                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
-                            "count": 1
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 2
                         }
                     ]
                 }
