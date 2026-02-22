@@ -39,7 +39,7 @@
                 {
                     "type": "goto",
                     "goto": "view",
-                    "text": "Timing locked\u2014let's observe.",
+                    "text": "Timing locked—let's observe.",
                     "requiresItems": [
                         {
                             "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
@@ -60,7 +60,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Phase recorded with date and time.",
                     "requiresItems": [
                         {
@@ -68,6 +68,49 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recheck",
+                    "text": "Seeing is unstable or the phase edge is smeared."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the sketch against tonight's expected crescent. Pass if your observed illuminated fraction is between 20% and 60%; otherwise treat it as out-of-range and recheck optics/time.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Measured fraction is within the 20%-60% target band.",
+                    "requiresItems": [
+                        {
+                            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recheck",
+                    "text": "Out-of-range result - run corrective checks and retest."
+                }
+            ]
+        },
+        {
+            "id": "recheck",
+            "text": "Pause and recover: confirm tripod level, refocus, and wait for steadier air. If glare persists near the horizon, delay to a safer, higher-altitude window before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Shift to a better observation window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "view",
+                    "text": "Optics corrected - collect a new sketch."
                 }
             ]
         },

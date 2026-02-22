@@ -41,23 +41,93 @@
         },
         {
             "id": "build",
-            "text": "Tape the 50 mm lens to the front as the objective and the 20 mm lens at the back as the eyepiece. Mount the tube securely on the tripod, verify stability, handle glass edges carefully, and never aim at the Sun.",
+            "text": "Choose your assembly path: direct tube build or pre-mount both lenses before seating the tube. Keep fingers clear of glass edges and keep the scope capped until night use.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-basic-telescope",
-                    "text": "Putting it together."
+                    "text": "Build the direct tube assembly."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "I can see Jupiter!",
+                    "goto": "alternate-build",
+                    "text": "Use the staged pre-mount method first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Assembly complete; verify image quality.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "alternate-build",
+            "text": "Pre-seat each lens with light tape, then secure both ends after checking the optical axis. If wobble appears, return to direct build and retighten before field use.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-basic-telescope",
+                    "text": "Run staged pre-mount assembly now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Staged build done; start verification.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "The mount still shifts - back to direct build checks."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Point at Jupiter only after sunset. Confirm moons are distinct points and the tripod stays stable for a full minute.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verified: stable tripod and clear moon points.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Image is blurry or the mount drifts."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Pause observing. Re-cap the objective, retension tripod joints, and re-seat the eyepiece. If glass is chipped or loose, stop and rebuild before any further viewing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Rebuild safely from the assembly step."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Hardware corrected - re-run verification."
                 }
             ]
         },
