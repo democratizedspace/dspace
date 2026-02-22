@@ -8,24 +8,76 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place a 5 mm LED, a digital multimeter, and safety goggles on a dry, non-conductive surface. Put on the goggles and confirm all power sources are disconnected.\nWe'll switch the meter to diode mode to find the anode.",
+            "text": "Place a loose 5 mm LED, digital multimeter, and safety goggles on a dry non-conductive surface. Confirm all external power sources are disconnected before testing.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "test",
-                    "text": "Let's test it."
+                    "goto": "method-select",
+                    "text": "Bench is safe. Choose a polarity identification method.",
+                    "requiresItems": [
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "I still need to isolate power and prep PPE."
                 }
             ]
         },
         {
-            "id": "test",
-            "text": "Set the multimeter to diode mode and insert the red probe into the V\u03a9mA port and the black probe into COM, keeping fingers behind the guards.\nTouch the red probe to the LED's long leg (anode) and the black probe to the short leg (cathode) without letting probes or leads touch.\nThe LED should glow faintly or read about 1.8 V. Reverse the probes; it should stay dark or display OL. Stop immediately if the LED warms, smokes, or sparks, and don't apply external power while testing.",
+            "id": "method-select",
+            "text": "Main path: diode-mode verification. Alternate path: visual pre-check (long leg = likely anode, flat edge = likely cathode) followed by diode-mode confirmation.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "It lights one way only.",
+                    "goto": "diode-test",
+                    "text": "Use diode-mode as primary test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "visual-check",
+                    "text": "Start with visual cues, then confirm electrically."
+                }
+            ]
+        },
+        {
+            "id": "visual-check",
+            "text": "Inspect the LED body for flat-edge/cathode marks and leg length mismatch. Record your hypothesis before touching probes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "diode-test",
+                    "text": "Hypothesis logged. Confirm with diode-mode measurement.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "diode-test",
+            "text": "Set the meter to diode mode, keep fingers behind probe guards, and touch red to suspected anode / black to cathode. Pass expectation: LED glows faintly or reads ~1.8–3.3V in one direction, and shows OL/no glow when reversed.",
+            "options": [
+                {
+                    "type": "process",
                     "process": "check-led-polarity",
+                    "text": "Run diode-mode confirmation."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "One-way conduction confirmed and polarity documented.",
                     "requiresItems": [
                         {
                             "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
@@ -40,16 +92,48 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Reading is ambiguous or fails expectations."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshoot: verify diode mode (not continuity), reseat probes, then retest with a known-good LED to confirm meter behavior. Safety stop if LED heats, smokes, or sparks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "diode-test",
+                    "text": "Meter and probes verified. Retry polarity test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Component damage detected; stop and isolate it."
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good call. Remove power sources, isolate damaged parts, and replace the LED before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Replacement LED ready. Restart safely."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! The glowing orientation marks the anode.\nTurn off the meter, remove the probes, and store the LED for your next circuit.",
+            "text": "Nice work. You confirmed polarity with evidence and followed a safe troubleshooting loop.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Orion!"
+                    "text": "LED polarity verified."
                 }
             ]
         }
@@ -64,7 +148,7 @@
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-10",

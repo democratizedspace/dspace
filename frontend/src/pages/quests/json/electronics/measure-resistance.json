@@ -8,31 +8,15 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into V\u03a9mA, then set the meter to resistance (\u03a9) mode at a range above the resistor's expected value.",
+            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry non-conductive surface. Put goggles on, remove jewelry, and keep the resistor isolated from any powered circuit.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "Ready."
-                }
-            ]
-        },
-        {
-            "id": "measure",
-            "text": "Hold the resistor by its body so fingers stay off the leads. Grip the probes by their insulated handles, touching the black probe to one lead and the red to the other without the probes or your fingers touching.\nWait for the reading to stabilize near the color-band value; stop if the resistor warms, the reading spikes, or the probes slip.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "It reads about what the color bands predicted.",
-                    "process": "measure-resistance",
+                    "goto": "baseline",
+                    "text": "Bench is safe. Capture baseline reading.",
                     "requiresItems": [
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
-                            "count": 1
-                        },
-                        {
-                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
                             "count": 1
                         },
                         {
@@ -40,16 +24,102 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "I need to de-energize the work area first."
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Set black probe to COM, red to VΩmA, and select a resistance range above the expected value. Measure without touching exposed metal and log the stabilized reading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-resistance",
+                    "text": "Capture resistance measurement artifact."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading captured. Check tolerance.",
+                    "requiresItems": [
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Compare measured value to color-band expectation. Pass if inside ±5% (or component tolerance spec). If out of range, treat as fail and run corrective checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Within tolerance and documented.",
+                    "requiresItems": [
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Outside tolerance or unstable reading."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective loop: clean probe tips, increase meter range if clipping, re-seat resistor leads, then re-measure. Safety stop if resistor is hot, cracked, or discolored.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Corrective action done. Re-test now.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Component damage observed; stop testing."
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Pause the task. Quarantine the suspect resistor, verify the bench is de-energized, and restart only with a known-good component.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Known-good resistor ready. Restart measurement flow."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Label the resistor's value, turn off the meter, unplug the probes, and store everything.",
+            "text": "Great work. You validated resistance with explicit tolerance bounds and a corrective re-test path.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Orion!"
+                    "text": "Resistor value confirmed."
                 }
             ]
         }
@@ -64,7 +134,7 @@
     "hardening": {
         "passes": 2,
         "score": 80,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-refine-2025-08-12",

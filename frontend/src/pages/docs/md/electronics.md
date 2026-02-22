@@ -105,7 +105,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/check-battery-voltage`
 - Dialogue `requiresItems` gates:
-    - `test` → "It lights one way only." — 5 mm LED ×1, digital multimeter ×1, safety goggles ×1
+    - `start` → "Bench is safe. Choose a polarity identification method." — 5 mm LED ×1, digital multimeter ×1
+    - Optional alternate path: `visual-check` logs a visual hypothesis before diode-mode confirmation.
+    - `diode-test` → "One-way conduction confirmed and polarity documented." — 5 mm LED ×1, digital multimeter ×1, safety goggles ×1
+    - Troubleshooting/safety: ambiguous readings route through `troubleshoot` and can hard-stop to `safety-stop` before retry.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -221,7 +224,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/resistor-color-check`
 - Dialogue `requiresItems` gates:
-    - `measure` → "It reads about what the color bands predicted." — digital multimeter ×1, 220 Ohm Resistor ×1, safety goggles ×1
+    - `start` → "Bench is safe. Capture baseline reading." — digital multimeter ×1, safety goggles ×1
+    - `baseline` → "Reading captured. Check tolerance." — 220 Ohm Resistor ×1
+    - Interpretation enforces explicit ±5% pass bounds before finish.
+    - Out-of-range readings branch to `corrective` with mandatory re-test loop and `safety-stop` option for damaged/hot components.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -398,7 +404,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/solder-wire`
 - Dialogue `requiresItems` gates:
-    - `probe` → "It beeped and read near zero ohms." — digital multimeter ×1, USB Cable ×1, safety goggles ×1, wire cutters ×1, electrical tape ×1
+    - `start` → "Cable isolated and PPE on. Begin baseline continuity sweep." — digital multimeter ×1, safety goggles ×1
+    - `probe` → "Sweep complete. Interpret the result." — electrical tape ×1
+    - `interpret` pass path requires USB Cable ×1 + wire cutters ×1 evidence items; fail path forces `troubleshoot` and re-test before finish.
+    - Safety branch: damaged insulation routes to `safety-stop` quarantine/restart flow.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
