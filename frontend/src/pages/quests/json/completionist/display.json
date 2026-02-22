@@ -56,8 +56,57 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
                     "text": "Award is staged with lighting",
+                    "requiresItems": [
+                        {
+                            "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Do a final safety pass: no wobble, no edge overhang, and cords tucked so nobody snags the shelf while walking by.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stable and safe, locking in the display",
+                    "requiresItems": [
+                        {
+                            "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "It wobbles or catches glare, I need to re-stage"
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Nice spot-check. Use a microfiber touch-up and adjust the base/lighting while it stays on the shelf, then run verification again.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "touchup-displayed-completionist-award",
+                    "text": "Touch up fingerprints without unmounting"
+                },
+                {
+                    "type": "process",
+                    "process": "restage-displayed-completionist-award",
+                    "text": "Re-stage with safer placement and softer light"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Adjustments done, re-run verification",
                     "requiresItems": [
                         {
                             "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
