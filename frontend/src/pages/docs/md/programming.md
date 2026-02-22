@@ -144,8 +144,10 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/graph-temp`
 - Dialogue `requiresItems` gates:
-    - `start` → "Show me how." — temperature line chart ×1
-    - `script` → "Graph generated!" — annotated temperature graph ×1
+    - `start` → "I'll stage the cleanup run." — temperature line chart ×1, temperature log CSV ×1
+    - `prep` → "Annotated graph exported" — annotated temperature graph ×1
+    - `interpret` → "Graph is in-range and cadence is stable" — annotated temperature graph ×1, temperature line chart ×1
+    - `triage` → "Wiring corrected; rerun annotated graph" — temperature line chart ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -156,6 +158,10 @@ Programming quests build practical progression through the programming skill tre
         - Requires: temperature line chart ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: annotated temperature graph ×1
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
 
 ## 6) Compute Median Temperature (`programming/median-temp`)
 
@@ -182,14 +188,24 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/avg-temp`
 - Dialogue `requiresItems` gates:
-    - `code` → "Moving average computed!" — Raspberry Pi 5 board ×1
+    - `start` → "Use the latest logger export." — temperature log CSV ×1
+    - `prep` → "Baseline plot ready" — temperature line chart ×1
+    - `interpret` → "Trend is smooth and in-bounds" — aquarium thermometer (0–50°C) ×1, temperature line chart ×1
+    - `retest` → "Re-test corrected output" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
+    - [refine-temperature-graph](/processes/refine-temperature-graph)
+        - Requires: temperature line chart ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: annotated temperature graph ×1
 
 ## 8) Plot Temperature Data via CLI (`programming/plot-temp-cli`)
 
@@ -254,9 +270,10 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/hello-sensor`
 - Dialogue `requiresItems` gates:
-    - `start` → "I'll prep the page assets" — temperature log CSV ×1, Laptop Computer ×1
-    - `prep` → "Chart exported beside index.html" — temperature line chart ×1
-    - `serve` → "Page serves without console errors" — temperature line chart ×1, Raspberry Pi 5 board ×1
+    - `start` → "I'll prep static assets and dependencies." — temperature log CSV ×1, Laptop Computer ×1
+    - `prep` → "Assets ready for server launch" — temperature line chart ×1
+    - `deploy` → "Service passes remote checks" — temperature line chart ×1, Raspberry Pi 5 board ×1
+    - `recover` → "Patched config; re-run remote checks" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -267,6 +284,10 @@ Programming quests build practical progression through the programming skill tre
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: temperature line chart ×1
+    - [refine-temperature-graph](/processes/refine-temperature-graph)
+        - Requires: temperature line chart ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: annotated temperature graph ×1
 
 ## 12) Serve JSON Data (`programming/json-endpoint`)
 
@@ -389,14 +410,24 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/temp-graph`
 - Dialogue `requiresItems` gates:
-    - `script` → "Alert works!" — aquarium thermometer (0–50°C) ×1
+    - `start` → "I'll define the alert thresholds." — temperature log CSV ×1
+    - `prep` → "Validation log captured" — temperature log CSV ×1
+    - `interpret` → "Alert behavior matches policy" — aquarium thermometer (0–50°C) ×1, temperature log CSV ×1
+    - `tune` → "Policy tuned; rerun alert validation" — temperature line chart ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
 
 ## 18) Email Temperature Alert (`programming/temp-email`)
 

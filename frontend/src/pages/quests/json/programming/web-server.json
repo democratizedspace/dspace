@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's share your temperature log over the network with a friendly status page instead of raw files.",
+            "text": "Let's publish your temperature dashboard with an operational checklist instead of a one-shot demo.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "I'll prep the page assets",
+                    "text": "I'll prep static assets and dependencies.",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -29,17 +29,17 @@
         },
         {
             "id": "prep",
-            "text": "Drop the CSV next to a minimal HTML template. Add a short blurb that explains what the page shows and when the data was last updated.",
+            "text": "Build index.html plus a health endpoint and capture a chart artifact so operators can verify fresh data at a glance.",
             "options": [
                 {
                     "type": "process",
                     "process": "plot-temperature-data",
-                    "text": "Render the temperature chart"
+                    "text": "Render dashboard chart"
                 },
                 {
                     "type": "goto",
-                    "goto": "serve",
-                    "text": "Chart exported beside index.html",
+                    "goto": "deploy",
+                    "text": "Assets ready for server launch",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -50,13 +50,13 @@
             ]
         },
         {
-            "id": "serve",
-            "text": "Start a small HTTP server (Python, Node, or BusyBox) from that folder. Confirm the page loads on another device and that refreshes pick up new CSV data without caching glitches.",
+            "id": "deploy",
+            "text": "Start the web server and verify from a second device: home page loads, health path returns 200, and log refresh updates within one cycle.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Page serves without console errors",
+                    "text": "Service passes remote checks",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -67,16 +67,43 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Remote check failed"
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: if port conflicts or stale caches appear, stop the server, clear cache headers, bind to a safe port, and retry verification.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Regenerate dashboard bundle after fixes"
+                },
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Patched config; re-run remote checks",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent! A clean landing page makes it easy to share logs and spot problems at a glance.",
+            "text": "Excellent. You now have deploy, verification, and rollback-style recovery documented in quest flow.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Cool!"
+                    "text": "Web service validated."
                 }
             ]
         }
@@ -87,11 +114,19 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["programming/hello-sensor"],
+    "requiresQuests": [
+        "programming/hello-sensor"
+    ],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 96,
+        "emoji": "\u2705",
+        "history": [
+            {
+                "task": "codex-hardening-2026-02-22",
+                "date": "2026-02-22",
+                "score": 96
+            }
+        ]
     }
 }
