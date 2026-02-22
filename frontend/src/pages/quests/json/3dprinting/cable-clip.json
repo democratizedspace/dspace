@@ -1,25 +1,25 @@
 {
     "id": "3dprinting/cable-clip",
     "title": "Print a Cable Clip",
-    "description": "Reduce clutter by 3D printing a simple cable clip.",
+    "description": "Reduce clutter by printing cable clips with setup evidence, fit checks, and a recovery loop.",
     "image": "/assets/quests/cable_clip_print.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. Let's print tidy cable clips, but we'll prep the printer first so they snap cleanly. Goggles on and keep fingers away from the hotend.",
+            "text": "Sydney here. We'll print cable clips that actually snap without cracking. Goggles on, hotend clear, and no hands near moving axes.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Walk me through the setup."
+                    "text": "Walk me through setup and checks."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Level the bed with paper, swap to white PLA, and wipe the plate with isopropyl. Slice four clips with 0.2 mm layers and a small brim for grip.",
+            "text": "Prep path: level the bed, purge to white PLA, and confirm your first-layer test before committing material to the full batch.",
             "options": [
                 {
                     "type": "process",
@@ -48,7 +48,7 @@
                 {
                     "type": "goto",
                     "goto": "print",
-                    "text": "Bed leveled and white PLA loaded.",
+                    "text": "First-layer line is smooth and white PLA is flowing cleanly.",
                     "requiresItems": [
                         {
                             "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
@@ -64,17 +64,32 @@
         },
         {
             "id": "print",
-            "text": "Preheat, lay down a first-layer test line, then start the clip print. Watch for clean perimeters and pause if stringing appears so you can adjust retraction later.",
+            "text": "Choose a print strategy: controlled perimeter-first settings, or faster draft settings with extra monitoring for stringing and brittle clips.",
             "options": [
                 {
                     "type": "process",
                     "process": "3dprint-cable-clips",
-                    "text": "Print four cable clips."
+                    "text": "Main path: controlled print settings for clean snap-fit clips."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Clips cooled and edges deburred.",
+                    "goto": "evidence",
+                    "text": "Batch printed, cooled, and deburred.",
+                    "requiresItems": [
+                        {
+                            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Clips stringed, cracked, or failed to snap onto cable.",
                     "requiresItems": [
                         {
                             "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
@@ -85,12 +100,54 @@
             ]
         },
         {
+            "id": "troubleshoot",
+            "text": "Recovery path: lower nozzle temp, slow outer walls, and trim sharp edges before running a verification print. If brittleness persists, dry filament before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Adjustments made; run another clip batch with monitoring.",
+                    "requiresItems": [
+                        {
+                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: confirm the clips pass a real cable fit test and record at least one note about tension, flex, or edge cleanup in your log.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Fit test passed and notes are logged.",
+                    "requiresItems": [
+                        {
+                            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Snap the clips on a desk edge, route USB cables, and note any elephant's foot to tweak Z offset before the next print.",
+            "text": "Workspace tidy and repeatable. You now have a print profile plus a recovery playbook for future clips.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Workspace tidy!"
+                    "text": "Cable chaos handled."
                 }
             ]
         }
@@ -105,7 +162,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -1,40 +1,40 @@
 {
     "id": "3dprinting/calibration-cube",
     "title": "Print a Calibration Cube",
-    "description": "Print and measure a 20 mm calibration cube to verify your printer's accuracy.",
+    "description": "Print a 20 mm calibration cube with baseline measurements, tuning adjustments, and retest evidence.",
     "image": "/assets/quests/calibration_cube_measure.jpg",
     "npc": "/assets/npc/sydney.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's dial in your entry-level FDM 3D printer with a quick 20 mm calibration cube.",
+            "text": "Let's harden your printer accuracy. We'll capture baseline measurements, tune offsets, and prove the retest lands within tolerance before closing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "print",
-                    "text": "Ready to print."
+                    "text": "Ready to run baseline print."
                 },
                 {
                     "type": "process",
                     "process": "measure-filament-diameter",
-                    "text": "How do I measure filament?"
+                    "text": "How do I check filament diameter first?"
                 }
             ]
         },
         {
             "id": "print",
-            "text": "Level the build plate, preheat to PLA temps, load 15 g of green PLA filament, slice, and start the print. Wear safety goggles, keep hands clear of the moving nozzle, ensure ventilation, stay nearby, let the cube cool, then lift it off the plate with a print removal scraper.",
+            "text": "Safety pass first: goggles on, ventilation running, and hands clear of moving rails. Print a baseline cube, let it cool fully, then remove it with a scraper.",
             "options": [
                 {
                     "type": "process",
                     "process": "print-calibration-cube",
-                    "text": "Need printing steps?"
+                    "text": "Run the baseline cube print."
                 },
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "Cube cooled and removed.",
+                    "goto": "baseline",
+                    "text": "Baseline cube is cooled and ready to measure.",
                     "requiresItems": [
                         {
                             "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
@@ -57,18 +57,72 @@
             ]
         },
         {
-            "id": "measure",
-            "text": "Use digital calipers to measure each side; each axis should read 20.00 mm. If dimensions are off, adjust steps per millimeter before reprinting.",
+            "id": "baseline",
+            "text": "Measure X/Y/Z and log values. Pass target is 20.00 mm ±0.10 mm. If any axis drifts beyond tolerance, tune steps or flow before retesting.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-calibration-cube",
-                    "text": "Need measuring steps?"
+                    "text": "Record baseline measurements."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Baseline logged and tuning adjustments applied.",
+                    "requiresItems": [
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "One axis is still out of tolerance after adjustments.",
+                    "requiresItems": [
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery loop: re-check belt tension, confirm extrusion multiplier, and rerun a single-axis test print. If drift persists, roll back to last-known-good profile and repeat baseline.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Rollback complete. Run a fresh baseline cube.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Print and measure the post-adjust cube. Completion requires a retest log that shows all axes in tolerance and notes what changed.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-calibration-cube",
+                    "text": "Run post-adjust retest print."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Dimensions noted.",
+                    "text": "Retest passed and measurements are documented.",
                     "requiresItems": [
                         {
                             "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
@@ -80,11 +134,11 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! Record the measurements and tweak firmware or slicer settings as needed before your next print.",
+            "text": "Accuracy locked. You now have baseline + retest evidence and a rollback path for future drift.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All set."
+                    "text": "Calibration protocol complete."
                 }
             ]
         }
@@ -99,7 +153,7 @@
     "hardening": {
         "passes": 3,
         "score": 90,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-07",
