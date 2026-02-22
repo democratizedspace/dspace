@@ -147,7 +147,7 @@ Programming quests build practical progression through the programming skill tre
     - `start` → "I'll stage the cleanup run." — temperature line chart ×1, temperature log CSV ×1
     - `prep` → "Annotated graph exported" — annotated temperature graph ×1
     - `interpret` → "Graph is in-range and cadence is stable" — annotated temperature graph ×1, temperature line chart ×1
-    - `triage` → "Wiring corrected; rerun annotated graph" — temperature line chart ×1
+    - `triage` → "Wiring corrected; rerun annotated graph" — temperature line chart ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -411,7 +411,7 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/temp-graph`
 - Dialogue `requiresItems` gates:
     - `start` → "I'll define the alert thresholds." — temperature log CSV ×1
-    - `prep` → "Validation log captured" — temperature log CSV ×1
+    - `prep` → "Validation log captured" — temperature log CSV ×2
     - `interpret` → "Alert behavior matches policy" — aquarium thermometer (0–50°C) ×1, temperature log CSV ×1
     - `tune` → "Policy tuned; rerun alert validation" — temperature line chart ×1
 - Grants:
