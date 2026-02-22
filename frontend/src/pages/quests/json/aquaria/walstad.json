@@ -1,19 +1,19 @@
 {
     "id": "aquaria/walstad",
     "title": "Set up a Walstad tank",
-    "description": "Create a low-tech planted aquarium using the Walstad method.",
+    "description": "Build a staged Walstad setup with evidence checkpoints and a recovery loop before introducing livestock.",
     "image": "/assets/quests/walstad_setup.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Vega here. We'll build balance first: soil, cap, plants, then patience before livestock.",
+            "text": "Vega here. Walstad works when we prove each stage: prep, build, stabilization, then safety re-check before any fish move in.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "stage",
-                    "text": "Yes\u2014show me the steps",
+                    "text": "Yes—show me the staged plan.",
                     "requiresItems": [
                         {
                             "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
@@ -53,17 +53,17 @@
         },
         {
             "id": "stage",
-            "text": "Level the stand, place the tank, and stage soil, gravel, plants, light, and conditioner with a clean bucket. Keep cords dry.",
+            "text": "Level stand, stage dry electrical routing, and prep dechlorinated fill water before substrate work. Keep every power loop below the outlet.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Prep dechlorinated fill water"
+                    "text": "Prep dechlorinated fill water."
                 },
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "Bucket is dechlorinated and tools are staged",
+                    "text": "Prep stage complete; build can start.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -75,17 +75,17 @@
         },
         {
             "id": "build",
-            "text": "Add soil, cap with rinsed gravel, tuck in guppy grass and duckweed, then fill gently with dechlorinated water. Set the light to an 8-hour timer.",
+            "text": "Add soil, cap with rinsed gravel, plant densely, and fill gently to avoid substrate cloud bursts.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-walstad-tank",
-                    "text": "Layer and plant the Walstad tank"
+                    "text": "Assemble planted Walstad layers."
                 },
                 {
                     "type": "goto",
-                    "goto": "thermo",
-                    "text": "Substrate settled and plants look secure",
+                    "goto": "stabilize",
+                    "text": "Build artifact is present and the substrate is settled.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
@@ -96,13 +96,41 @@
             ]
         },
         {
-            "id": "thermo",
-            "text": "Dry the glass and mark a spot for the strip thermometer so you can track swings without dunking probes.",
+            "id": "stabilize",
+            "text": "Set an 8-hour light schedule and wait through an observation window. If water clouds hard, stems uproot, or odor spikes, recover before finishing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Placement marked and glass is dry",
+                    "text": "Water is clear, plants are rooted, and electrical routing remains dry.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Clouding or instability detected; run a recovery pass.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Pause livestock plans, trim loose stems, re-seat floating plants, and run a partial settle cycle before reassessing stability.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stabilize",
+                    "text": "Recovery complete; re-check stabilization window.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
@@ -114,11 +142,11 @@
         },
         {
             "id": "finish",
-            "text": "Good start. Let it settle, test often, and add fish only after ammonia and nitrite hold at zero.",
+            "text": "Strong foundation. You validated setup and stabilization with a recovery loop, so the tank is ready for controlled cycling.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll let it cycle cleanly"
+                    "text": "Walstad baseline established."
                 }
             ]
         }
@@ -133,7 +161,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

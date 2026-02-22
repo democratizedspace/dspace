@@ -1,25 +1,25 @@
 {
     "id": "aquaria/floating-plants",
     "title": "Add Floating Plants",
-    "description": "Rinse guppy grass in dechlorinated water, then float it so it soaks up excess nutrients and shelters fry.",
+    "description": "Stage clean floating plants, establish fry cover, and recover from rot or intake clog risk before closing.",
     "image": "/assets/quests/floating_plants.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your shrimp are thriving, but nutrient levels creep up fast. Let's rinse some guppy grass and float it to act like a natural nutrient sponge and fry nursery.",
+            "text": "Your shrimp are thriving, but nutrients are climbing. We'll stage this as setup evidence first, then outcome evidence after placement.",
             "options": [
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "Prep a bucket of dechlorinated water for rinsing.",
+                    "text": "Prep a dechlorinated rinse bucket.",
                     "goto": "rinse"
                 },
                 {
                     "type": "goto",
                     "goto": "rinse",
-                    "text": "Bucket, net, and guppy grass ready.",
+                    "text": "Bucket, net, and guppy grass are staged.",
                     "requiresItems": [
                         {
                             "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
@@ -43,7 +43,7 @@
         },
         {
             "id": "rinse",
-            "text": "Swirl the guppy grass in dechlorinated water, pick off snails or eggs, and toss any brown stems. Keep the rinsed bundle wet until it hits the tank.",
+            "text": "Swirl and inspect the plants. Remove snails, eggs, and mushy stems so only healthy strands move forward.",
             "options": [
                 {
                     "type": "process",
@@ -72,7 +72,7 @@
                 {
                     "type": "goto",
                     "goto": "place",
-                    "text": "Rinsed bundle ready for the tank.",
+                    "text": "Rinsed bundle is verified and ready.",
                     "requiresItems": [
                         {
                             "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
@@ -84,13 +84,13 @@
         },
         {
             "id": "place",
-            "text": "Float the rinsed stems under the light, keep them away from the filter intake, and leave a gap so shrimp can reach the surface. Thin them weekly to keep the mat breathable.",
+            "text": "Float stems under the light, keep intake lanes open, and leave a breathing lane at the surface so fish can gulp air safely.",
             "options": [
                 {
                     "type": "process",
                     "process": "place-floating-plants",
-                    "text": "Float and spread the guppy grass.",
-                    "goto": "finish",
+                    "text": "Place and spread the floating mat.",
+                    "goto": "verify",
                     "requiresItems": [
                         {
                             "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
@@ -104,8 +104,53 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "Mat is floating and not blocking the intake.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Outcome check: fry cover should be dense but breathable. If leaves melt, trap food film, or drift into the filter throat, run recovery before closing.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Mat is floating and clear of the intake.",
+                    "text": "Cover is stable and livestock movement stays calm.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Melt, clogging, or surface crowding is visible.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Thin one-third of the mat, remove decaying stems, and re-open intake and surface breathing lanes before re-checking.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery pass complete; verify again.",
                     "requiresItems": [
                         {
                             "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
@@ -117,11 +162,11 @@
         },
         {
             "id": "finish",
-            "text": "Perfect. That mat will soak up nutrients, cast dappled shade, and give future fry a safe ceiling to hide in.",
+            "text": "Excellent. You proved a clean setup and a stable habitat outcome, with a clear recovery loop for drift.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep it thinned and happy."
+                    "text": "Floating canopy stabilized."
                 }
             ]
         }
@@ -136,7 +181,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

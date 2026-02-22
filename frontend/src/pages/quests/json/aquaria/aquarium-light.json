@@ -1,30 +1,24 @@
 {
     "id": "aquaria/aquarium-light",
     "title": "Install an aquarium light",
-    "description": "Add LED lighting to support plant growth and fish health.",
+    "description": "Mount the light safely, verify stable photoperiod setup, and recover if heat or glare stresses livestock.",
     "image": "/assets/quests/aquarium_light.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your Walstad tank is cycling, but plants need steady light. Ready to install the lamp?",
+            "text": "Your Walstad tank needs a consistent day-night cycle. We'll do this in stages: safe mount, verify timer behavior, then stress check before we call it done.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mount",
-                    "text": "Let's mount the light."
-                }
-            ]
-        },
-        {
-            "id": "mount",
-            "text": "Clip the light to the rim and route the cable so it stays dry.",
-            "options": [
+                    "text": "Stage tools and start the install plan."
+                },
                 {
                     "type": "goto",
-                    "goto": "schedule",
-                    "text": "Light secured.",
+                    "goto": "mount",
+                    "text": "I already staged a dry cable route and splash loop.",
                     "requiresItems": [
                         {
                             "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
@@ -35,23 +29,74 @@
             ]
         },
         {
-            "id": "schedule",
-            "text": "Plug it in and set a timer for eight hours of gentle daylight.",
+            "id": "mount",
+            "text": "Clip the light above open water, keep the power strip above flood level, and leave a drip loop so condensation cannot run into the outlet.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Mount is stable and cable routing is dry.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run one timer cycle check. Confirm light on/off behavior and watch fish for darting, surface gasping, or intense glare zones.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Timer set and lamp glowing."
+                    "text": "Cycle check passed and livestock behavior is calm.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "There is glare, excess heat, or stressed behavior to correct.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Raise or angle the fixture, reduce photoperiod to 6 hours for 48 hours, and re-check temperature drift before returning to the full schedule.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Adjusted and ready for a new cycle check.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Your plants will thrive under consistent lighting.",
+            "text": "Perfect. You installed with electrical safety, validated the schedule, and closed the loop on stress checks before finishing.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Enjoy the glow."
+                    "text": "Lighting baseline locked in."
                 }
             ]
         }
@@ -66,7 +111,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

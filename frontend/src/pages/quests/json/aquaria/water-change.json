@@ -1,19 +1,19 @@
 {
     "id": "aquaria/water-change",
     "title": "Perform a partial water change",
-    "description": "Swap out a quarter of the tank water for conditioned tap water to keep fish healthy.",
+    "description": "Run a safe partial swap, verify post-change stability, and execute a recovery loop if fish stress or equipment faults appear.",
     "image": "/assets/quests/goldfish_partial_water_change.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug heater and filter to prevent shocks. Wear safety goggles and nitrile gloves, then load a utility cart with a gravel vacuum, bucket, conditioner, and the tank you're about to service.",
+            "text": "First rule: power safety and PPE. Unplug heater/filter, keep cords dry, and stage everything before siphoning.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Gear gathered and tank is safe to work",
+                    "text": "Gear gathered and tank is safe to work.",
                     "requiresItems": [
                         {
                             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
@@ -45,17 +45,17 @@
         },
         {
             "id": "prep",
-            "text": "Fill the bucket with tap water, add conditioner, and match the temperature within 2 \u00b0C before you touch the tank. Keep cords dripped below outlets.",
+            "text": "Condition replacement water and match temperature within 2°C before the siphon starts.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Condition replacement water"
+                    "text": "Condition replacement water."
                 },
                 {
                     "type": "goto",
                     "goto": "remove",
-                    "text": "Replacement water is conditioned and matched",
+                    "text": "Replacement water is conditioned and matched.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -67,17 +67,67 @@
         },
         {
             "id": "remove",
-            "text": "Use the gravel vacuum to siphon into the bucket. Lift fish gear out of the way, keep outlets dry, and stop after ~25% of the volume is in the bucket.",
+            "text": "Vacuum detritus and swap about 25% volume. Refill slowly to avoid shocking fish or stirring substrate clouds.",
             "options": [
                 {
                     "type": "process",
                     "process": "partial-water-change",
-                    "text": "Vacuum and refill with conditioned water"
+                    "text": "Run partial water change cycle."
                 },
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "Water swapped and equipment restarted.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification window: observe fish behavior and confirm heater/filter stability after restart before you close the ticket.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Water swapped and heater restarted",
+                    "text": "Flow is stable, fish are calm, and post-change state is clean.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Clouding, gasping, or weak flow detected after refill.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery branch: pause feeding, reduce light for one cycle, confirm intake isn't blocked, and run a smaller corrective swap before re-verifying.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run a reduced corrective swap."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Corrective swap complete; run verification again.",
                     "requiresItems": [
                         {
                             "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
@@ -89,11 +139,11 @@
         },
         {
             "id": "finish",
-            "text": "Heater and filter are back on, fish are calm, and you logged the swap. Rinse the bucket so conditioner residue doesn't dry on the walls.",
+            "text": "Water change complete. You closed safety checks, captured a stable post-change state, and handled the fallback loop.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Water change complete"
+                    "text": "Maintenance cycle complete."
                 }
             ]
         }
@@ -108,7 +158,7 @@
     "hardening": {
         "passes": 4,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-15",
