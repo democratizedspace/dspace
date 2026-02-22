@@ -113,8 +113,8 @@
     "requiresQuests": ["electronics/solder-wire"],
     "hardening": {
         "passes": 3,
-        "score": 80,
-        "emoji": "✅",
+        "score": 95,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-desolder-component-hardening-2025-08-13",
