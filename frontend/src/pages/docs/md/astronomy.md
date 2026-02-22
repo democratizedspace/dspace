@@ -250,11 +250,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/observe-moon`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Plan is logged and tripod is stable." — mission log entry ×1, camera tripod ×1
+    - `prep` → "Plan is logged and tripod is stable." — mission log entry ×1, camera tripod ×1, mission logbook ×1, feather quill ×1
     - `capture` → "Shots captured—ready for review." — basic telescope ×1, digital camera ×1
 - Troubleshooting and safety flow:
     - `review` branches to `retake` when images fail sharpness/exposure criteria.
-    - `retake` loops back to capture with correction guidance and explicit cold/surface safety pause conditions.
+    - `retake` loops back to capture with correction guidance and explicit cold/surface safety pause conditions; recapture still requires basic telescope ×1 and digital camera ×1.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
