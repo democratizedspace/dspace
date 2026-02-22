@@ -29,7 +29,7 @@
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Window picked\u2014what should I pack?",
+                    "text": "Window picked—what should I pack?",
                     "requiresItems": [
                         {
                             "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
@@ -50,11 +50,49 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "observe",
-                    "text": "Kit is ready\u2014let's step outside.",
+                    "goto": "session-check",
+                    "text": "Kit is ready—let's step outside.",
                     "requiresItems": [
                         {
                             "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "session-check",
+            "text": "Final call before observing: if cloud cover rises or roads ice over, switch to fallback mode instead of taking risks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Conditions are safe and clear enough to observe."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "Clouded out or unsafe tonight—use the fallback plan."
+                }
+            ]
+        },
+        {
+            "id": "fallback",
+            "text": "Good call. Log the aborted attempt, keep your kit staged, and schedule the next clear-hour window. Safety beats forcing a bad session.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-aurora-forecast",
+                    "text": "Re-check forecasts and pick a safer window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "session-check",
+                    "text": "Updated forecast ready—re-evaluate conditions.",
+                    "requiresItems": [
+                        {
+                            "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
                             "count": 1
                         }
                     ]
@@ -72,7 +110,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify-log",
                     "text": "Entry written with colors and timestamps.",
                     "requiresItems": [
                         {
@@ -80,6 +118,22 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "verify-log",
+            "text": "Before closing, verify your log includes time, color, and horizon direction. Missing fields mean no reproducible observation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All fields are complete and readable."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "A field is missing—I'll re-log this session."
                 }
             ]
         },
@@ -104,7 +158,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-15",

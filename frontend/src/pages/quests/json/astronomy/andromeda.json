@@ -12,7 +12,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "search",
+                    "goto": "align",
                     "text": "Gear ready.",
                     "requiresItems": [
                         {
@@ -28,24 +28,51 @@
             ]
         },
         {
-            "id": "search",
-            "text": "Shield the red flashlight to avoid glare and trace Cassiopeia's W on the star chart. From the midpoint, sweep the basic telescope slowly at low magnification toward a faint smudge\u2014that's Andromeda. Keep footing sure, mind your surroundings and never aim near the Sun or aircraft.",
+            "id": "align",
+            "text": "First, orient using Cassiopeia's W and your chart. Keep one eye on hazards: no rooftops, no roads, and never sweep near aircraft paths.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Following the chart."
+                    "text": "Run a constellation alignment sweep."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
+                    "text": "Alignment notes are in my log.",
                     "requiresItems": [
                         {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
                             "count": 1
                         }
-                    ],
-                    "text": "Galaxy in sight."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Good. Is the core haze stable in averted vision for at least three slow sweeps?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes—the smudge holds across repeated sweeps."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "No, it fades or blurs when I re-check."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Troubleshoot before forcing it: reduce magnification, shield stray lights, and reset to the Cassiopeia anchor. If clouds thicken or footing feels unsafe, pause and retry another night.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "align",
+                    "text": "Retry with lower magnification and better light discipline."
                 }
             ]
         },
@@ -70,7 +97,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-06",
