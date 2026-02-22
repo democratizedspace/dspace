@@ -19,17 +19,17 @@
         },
         {
             "id": "probe",
-            "text": "Set the multimeter to continuity mode. Touch one probe to a pin on one end and the other probe to the matching pin on the opposite end. Keep fingers behind the probe guards and avoid touching other contacts.",
+            "text": "Set the multimeter to continuity mode. Test each conductor one-by-one (VBUS, D-, D+, GND) and write down either \"beep / <2 Ω\" or \"open / no beep\" for every pin pair. Keep fingers behind probe guards and never test a plugged-in cable.",
             "options": [
                 {
                     "type": "process",
                     "process": "test-cable-continuity",
-                    "text": "Run the continuity test."
+                    "text": "Run and log the continuity sweep."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "It beeped and read near zero ohms.",
+                    "goto": "interpret",
+                    "text": "All four conductors are logged.",
                     "requiresItems": [
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
@@ -56,8 +56,40 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpret your log. Pass criteria: all four conductors beep and read under 2 Ω. If any line is open or above 2 Ω, treat the cable as failed and isolate it from service.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All readings are <2 Ω and stable."
+                },
+                {
+                    "type": "goto",
+                    "goto": "repair-check",
+                    "text": "At least one conductor failed continuity."
+                }
+            ]
+        },
+        {
+            "id": "repair-check",
+            "text": "Troubleshoot safely: inspect both connectors for bent pins or contamination, trim obviously damaged jacket sections with wire cutters, and retest with clean probes. If repeated failure persists, permanently retire and recycle the cable.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-cable-continuity",
+                    "text": "Retest after corrective action."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "I logged the second test cycle."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Turn off the meter. If every conductor beeps, coil the cable loosely and store it dry. If a conductor fails, cut the cable into short pieces with wire cutters and wrap the ends in electrical tape before recycling. Remove your goggles and take this GFCI outlet tester for future wiring checks.",
+            "text": "Turn off the meter and archive your continuity notes with the cable label. Serviceable cables get coiled and stored dry; failed cables are cut, taped, and recycled so nobody plugs them in by accident. Remove your goggles and take this GFCI outlet tester for future wiring checks.",
             "options": [
                 {
                     "type": "finish",

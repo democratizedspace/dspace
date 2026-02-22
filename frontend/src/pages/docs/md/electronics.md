@@ -310,7 +310,8 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/data-logger`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Log file copied." — USB Cable ×1, Raspberry Pi 5 board ×1
+    - `prep` → "Log file copied and backed up." — USB Cable ×1, Raspberry Pi 5 board ×1
+    - `plot` → "Chart exported with metrics notes." — USB Cable ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -398,7 +399,7 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/solder-wire`
 - Dialogue `requiresItems` gates:
-    - `probe` → "It beeped and read near zero ohms." — digital multimeter ×1, USB Cable ×1, safety goggles ×1, wire cutters ×1, electrical tape ×1
+    - `probe` → "All four conductors are logged." — digital multimeter ×1, USB Cable ×1, safety goggles ×1, wire cutters ×1, electrical tape ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -416,7 +417,8 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/solder-wire`
 - Dialogue `requiresItems` gates:
-    - `desolder` → "Component removed." — soldering iron kit ×1, safety goggles ×1, desoldering pump ×1, solder wick ×1, flux pen ×1
+    - `wick-first` → "Primary solder is reduced; switch to the pump for cleanup." — solder wick ×1, flux pen ×1
+    - `desolder` → "Component removed and pads look intact." — soldering iron kit ×1, safety goggles ×1, desoldering pump ×1, solder wick ×1, flux pen ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

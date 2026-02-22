@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've been logging temperatures with your Pi. Let's turn that data into a chart.",
+            "text": "You've been logging temperatures with your Pi. Let's turn that data into a chart you can use for decisions, not just pretty lines.",
             "options": [
                 {
                     "type": "goto",
@@ -19,12 +19,12 @@
         },
         {
             "id": "prep",
-            "text": "Copy the log file to your computer and install matplotlib. Keep a backup of the data.",
+            "text": "Copy the log file, confirm timestamps are consistent, and keep a backup before editing. We need a complete dataset for the full review window.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "plot",
-                    "text": "Log file copied.",
+                    "text": "Log file copied and backed up.",
                     "requiresItems": [
                         {
                             "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
@@ -35,28 +35,75 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "repair-data",
+                    "text": "Some rows are missing timestamps or look corrupted."
+                }
+            ]
+        },
+        {
+            "id": "repair-data",
+            "text": "Troubleshoot the dataset: remove duplicate timestamps, mark sensor dropouts, and rerun one short capture cycle so anomalies are explainable. Do not overwrite the original backup.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Run a test parse to confirm the CSV is usable."
+                },
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Dataset cleaned and test parse succeeded."
                 }
             ]
         },
         {
             "id": "plot",
-            "text": "Run a short Python script to read the CSV and render a line chart of temperature over time.",
+            "text": "Generate a plot and record checkpoint metrics: average temperature, max-min spread, and any period above 35\u00b0C. These values are your evidence artifact.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Generate chart and metrics snapshot."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Chart exported with metrics notes.",
+                    "requiresItems": [
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: pass when spread stays within your expected range and no unexplained >35\u00b0C spikes appear. If spikes exist, classify likely cause and verify with a rerun.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Chart looks good.",
-                    "process": "plot-temperature-data"
+                    "text": "Metrics are within range and anomalies explained."
+                },
+                {
+                    "type": "goto",
+                    "goto": "repair-data",
+                    "text": "Out-of-range spike detected; run corrective logging pass."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Visualizing trends will help you spot anomalies quickly.",
+            "text": "Nice work. Save the chart and notes with date/time so future troubleshooting can compare trends. Structured evidence beats memory every time.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Cool!"
+                    "text": "Temperature trends documented."
                 }
             ]
         }
@@ -67,11 +114,19 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/data-logger"],
+    "requiresQuests": [
+        "electronics/data-logger"
+    ],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 90,
+        "emoji": "\u2705",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2026-02-22",
+                "date": "2026-02-22",
+                "score": 90
+            }
+        ]
     }
 }

@@ -19,23 +19,65 @@
         },
         {
             "id": "prep",
-            "text": "Gather the soldering iron kit, desoldering pump, solder wick, flux pen and safety goggles. Keep the iron on its stand and cords clear.",
+            "text": "Gather the soldering iron kit, desoldering pump, solder wick, flux pen and safety goggles. Keep the iron on its stand, cords clear, and a heat-safe tray ready for removed parts.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "desolder",
+                    "goto": "plan",
                     "text": "Tools ready."
                 }
             ]
         },
         {
-            "id": "desolder",
-            "text": "Apply a little flux, heat one lead, trigger the desoldering pump to pull molten solder, repeat on the other lead, then use solder wick to clear residue and gently wiggle the resistor free.",
+            "id": "plan",
+            "text": "Choose your first removal strategy. If solder blobs are large, start with the desoldering pump. If pads are delicate, wick-first can reduce pad lift risk.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Component removed.",
+                    "goto": "desolder",
+                    "text": "Use pump first for bulk solder."
+                },
+                {
+                    "type": "goto",
+                    "goto": "wick-first",
+                    "text": "Use wick first for sensitive pads."
+                }
+            ]
+        },
+        {
+            "id": "wick-first",
+            "text": "Apply flux and place solder wick on each joint. Heat through the wick briefly, then lift straight up. Stop immediately if pad adhesive softens or fiberglass darkens.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "desolder",
+                    "text": "Primary solder is reduced; switch to the pump for cleanup.",
+                    "requiresItems": [
+                        {
+                            "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+                            "count": 1
+                        },
+                        {
+                            "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Pad started to lift or board discolored."
+                }
+            ]
+        },
+        {
+            "id": "desolder",
+            "text": "Apply flux, heat one lead, trigger the desoldering pump to pull molten solder, repeat on the other lead, then use solder wick to clear residue and gently wiggle the resistor free.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Component removed and pads look intact.",
                     "process": "desolder-through-hole",
                     "requiresItems": [
                         {
@@ -59,12 +101,49 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Solder keeps bridging or the lead won't release."
+                }
+            ]
+        },
+        {
+            "id": "cooldown",
+            "text": "Recovery path: park the iron, let the board cool for 60 seconds, add a tiny amount of fresh solder plus flux, then retry extraction. Abort if pads lift further or smoke appears.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "desolder",
+                    "text": "Board cooled; retry desoldering with fresh flux."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Abort safely and document board damage."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: inspect for lifted pads, solder bridges, or scorched substrate. If any defect is found, rework before closure; if clean, proceed to shutdown.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pads are clean and isolated."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Found damage or bridge; run recovery rework."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Clean the tip, unplug the iron, let it cool, and recycle the scrap PCB.",
+            "text": "Nice work! Clean the tip, unplug the iron, let it cool fully in the stand, and log whether the PCB was recovered or retired before recycling scrap.",
             "options": [
                 {
                     "type": "finish",
