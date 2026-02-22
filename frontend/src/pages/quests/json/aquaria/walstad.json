@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Vega here. We'll build balance first: soil, cap, plants, then patience before livestock.",
+            "text": "Vega here. We'll build a Walstad system in stages: prep materials, build the substrate stack, then run a stability pause before livestock.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "stage",
-                    "text": "Yes\u2014show me the steps",
+                    "text": "I'm ready for the staged setup.",
                     "requiresItems": [
                         {
                             "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
@@ -53,17 +53,18 @@
         },
         {
             "id": "stage",
-            "text": "Level the stand, place the tank, and stage soil, gravel, plants, light, and conditioner with a clean bucket. Keep cords dry.",
+            "text": "Level the stand, dry the floor, and set a drip loop on power cords before opening any water containers.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Prep dechlorinated fill water"
+                    "text": "Prep dechlorinated fill water.",
+                    "goto": "build"
                 },
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "Bucket is dechlorinated and tools are staged",
+                    "text": "Bucket is already dechlorinated and the station is dry.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -75,17 +76,18 @@
         },
         {
             "id": "build",
-            "text": "Add soil, cap with rinsed gravel, tuck in guppy grass and duckweed, then fill gently with dechlorinated water. Set the light to an 8-hour timer.",
+            "text": "Add soil, cap with rinsed gravel, plant guppy grass and duckweed, then fill gently to avoid a substrate storm.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-walstad-tank",
-                    "text": "Layer and plant the Walstad tank"
+                    "text": "Assemble and plant the Walstad tank.",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
-                    "goto": "thermo",
-                    "text": "Substrate settled and plants look secure",
+                    "goto": "verify",
+                    "text": "Build complete; substrate cap stayed intact.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
@@ -96,13 +98,58 @@
             ]
         },
         {
-            "id": "thermo",
-            "text": "Dry the glass and mark a spot for the strip thermometer so you can track swings without dunking probes.",
+            "id": "verify",
+            "text": "Verification checkpoint: water should be only lightly hazy and plants should remain rooted. If roots float up or water turns opaque, branch to recovery.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Placement marked and glass is dry",
+                    "text": "Tank is stable enough to begin cycling with no livestock.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Cloudy surge or uprooted plants detected; run recovery staging.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Pause stocking, re-seat uprooted stems, and top off slowly with conditioned water only after sediment settles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Prepare a clean top-off bucket for recovery.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery completed; return to stability verification.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cloudiness is improving; hold livestock and continue passive settling checks.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
@@ -114,11 +161,11 @@
         },
         {
             "id": "finish",
-            "text": "Good start. Let it settle, test often, and add fish only after ammonia and nitrite hold at zero.",
+            "text": "Walstad base is stable. Keep lights moderate, test during the first week, and add fish only after ammonia and nitrite remain at zero.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll let it cycle cleanly"
+                    "text": "I'll complete a no-fish cycle before stocking."
                 }
             ]
         }

@@ -33,10 +33,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - `start` → "Yes—show me the steps" — aquarium (150 L) ×1, aquarium stand (80 L) ×1, aquarium gravel (1 kg) ×3, aquarium LED light (20 W) ×1, Guppy grass starter ×1, Duckweed portion ×1, 5 gallon bucket ×1, Water conditioner ×1
-    - `stage` → "Bucket is dechlorinated and tools are staged" — 5 gallon bucket of dechlorinated tap water ×1
-    - `build` → "Substrate settled and plants look secure" — Walstad aquarium (80 L) ×1
-    - `thermo` → "Placement marked and glass is dry" — Walstad aquarium (80 L) ×1
+    - `start` → "I'm ready for the staged setup." — aquarium (150 L) ×1, aquarium stand (80 L) ×1, aquarium gravel (1 kg) ×3, aquarium LED light (20 W) ×1, Guppy grass starter ×1, Duckweed portion ×1, 5 gallon bucket ×1, Water conditioner ×1
+    - `stage` → "Bucket is already dechlorinated and the station is dry." — 5 gallon bucket of dechlorinated tap water ×1
+    - `build` → "Build complete; substrate cap stayed intact." — Walstad aquarium (80 L) ×1
+    - `verify` → "Tank is stable enough to begin cycling with no livestock." — Walstad aquarium (80 L) ×1
+    - `verify` → "Cloudy surge or uprooted plants detected; run recovery staging." — Walstad aquarium (80 L) ×1
+    - `recovery` → "Recovery completed; return to stability verification." — Walstad aquarium (80 L) ×1
+    - `recovery` → "Cloudiness is improving; hold livestock and continue passive settling checks." — Walstad aquarium (80 L) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -404,11 +407,18 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/shrimp`
 - Dialogue `requiresItems` gates:
-    - `start` → "Bucket, net, and guppy grass ready." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1, nitrile gloves (pair) ×1
-    - `rinse` → "Rinse and inspect the plants." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1, nitrile gloves (pair) ×1
-    - `rinse` → "Rinsed bundle ready for the tank." — Rinsed guppy grass ×1
-    - `place` → "Float and spread the guppy grass." — Rinsed guppy grass ×1, aquarium LED light (20 W) ×1
-    - `place` → "Mat is floating and clear of the intake." — Floating plant mat ×1
+    - `start` → "I'll use the bucket that's already dechlorinated." — 5 gallon bucket of dechlorinated tap water ×1, 5 gallon bucket ×1, Guppy grass starter ×1, nitrile gloves (pair) ×1
+    - `strategy` → "Use the standard rinse path." — 5 gallon bucket of dechlorinated tap water ×1
+    - `strategy` → "I found hitchhikers or mushy stems; do a recovery rinse." — 5 gallon bucket of dechlorinated tap water ×1
+    - `rinse` → "Rinse and inspect the plants." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1
+    - `rinse` → "Rinsed bundle is clean and ready for placement." — Rinsed guppy grass ×1
+    - `troubleshoot` → "Run a second rinse after trimming contaminated stems." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1
+    - `troubleshoot` → "I trimmed and redistributed the existing mat; re-check placement before verifying." — Floating plant mat ×1
+    - `troubleshoot` → "I replaced the water and tools; return to standard rinse checks." — 5 gallon bucket of dechlorinated tap water ×1, Guppy grass starter ×1, aquarium net ×1
+    - `place` → "Float and spread the guppy grass mat." — Rinsed guppy grass ×1, aquarium LED light (20 W) ×1
+    - `place` → "Mat is floating and the intake lane stays open." — Floating plant mat ×1
+    - `verify` → "Coverage and flow are balanced; fry still have open surface access." — Floating plant mat ×1
+    - `verify` → "Flow is blocked or plants are melting; troubleshoot and re-rinse before retrying." — Floating plant mat ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -518,9 +528,14 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/guppy`
 - Dialogue `requiresItems` gates:
-    - `start` → "Gear gathered and tank is safe to work" — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, Water conditioner ×1, nitrile gloves (pair) ×1, utility cart ×1
-    - `prep` → "Replacement water is conditioned and matched" — 5 gallon bucket of dechlorinated tap water ×1
-    - `remove` → "Water swapped and heater restarted" — Freshly changed aquarium (80 L) ×1
+    - `start` → "Safety checks complete and tools staged." — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, Water conditioner ×1, nitrile gloves (pair) ×1, utility cart ×1
+    - `prep` → "Replacement water is conditioned and temperature-matched." — 5 gallon bucket of dechlorinated tap water ×1
+    - `change` → "Swap complete and systems restarted." — Freshly changed aquarium (80 L) ×1
+    - `verify` → "Temperature log already captured." — Aquarium temperature reading ×1
+    - `review` → "Log is stable and fish behavior is calm." — Freshly changed aquarium (80 L) ×1, Aquarium temperature reading ×1
+    - `review` → "Temperature swing or stress signs detected; run recovery protocol." — Freshly changed aquarium (80 L) ×1
+    - `recover` → "Recovery steps complete; re-log before finishing." — Freshly changed aquarium (80 L) ×1
+    - `recover` → "Fish behavior is improving; conclude with the current log and monitor again tomorrow." — Freshly changed aquarium (80 L) ×1, Aquarium temperature reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -535,6 +550,10 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
         - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
         - Consumes: 5 gallon bucket of dechlorinated tap water ×0.25
         - Creates: Freshly changed aquarium (80 L) ×1
+    - [log-freshly-changed-walstad-temperature](/processes/log-freshly-changed-walstad-temperature)
+        - Requires: Freshly changed aquarium (80 L) ×1
+        - Consumes: none
+        - Creates: Aquarium temperature reading ×1
 
 ## 18) Catch a fish with a net (`aquaria/net-fish`)
 
