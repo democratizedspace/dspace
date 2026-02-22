@@ -1,57 +1,216 @@
 {
     "id": "3dprinting/benchy_100",
     "title": "3D Print 100 Benchies",
-    "description": "Show off your 3D printing prowess! To complete this quest, print at least 100 Benchies.",
+    "description": "Scale to a 100-Benchy fleet with production evidence, quality checkpoints, and recovery loops.",
     "image": "/assets/quests/benchy_100.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You've truly mastered the art of 3D printing Benchies. Now, let's take things to the next level. I want to see a fleet of 100 Benchies. Are you ready for this grand voyage?",
+            "text": "Phoenix here. One hundred Benchies is factory work. We'll choose a production strategy, log checkpoints, and only close once the fleet survives inspection.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "progress",
-                    "text": "Let's embark on this journey!"
+                    "goto": "strategy",
+                    "text": "Let's design the print campaign."
                 }
             ]
         },
         {
-            "id": "progress",
-            "text": "This is a marathon print session. Keep your machines running until a hundred Benchies line your shelves like a tiny armada.",
+            "id": "strategy",
+            "text": "Main path runs steady batches with fixed quality pauses. Alternate path uses sprint windows for throughput, but requires extra anomaly tracking.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "congrats",
-                    "text": "I have enough!",
+                    "goto": "steady",
+                    "text": "Main path: steady batches with scheduled checks.",
                     "requiresItems": [
                         {
-                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
-                            "count": 100
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "sprint",
+                    "text": "Alternate path: sprint windows and cooldown buffers.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
                 }
             ]
         },
         {
-            "id": "congrats",
-            "text": "One hundred Benchies! The print farm is in full swing and you've proven your dedication.",
+            "id": "steady",
+            "text": "Run repeatable batches and stop every 20 prints for hull/bridge checks. Log failures immediately so drift does not contaminate the full run.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Run a controlled batch.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 15
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Quality checkpoints logged and fleet reached 100.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 100
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I found recurring warping, layer shifts, or weak bridges.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 40
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "sprint",
+            "text": "Sprint windows can lift throughput but demand safety discipline: watch nozzle buildup, keep ventilation active, and pause if defect rate spikes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-benchy",
+                    "text": "Run sprint production blocks.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 15
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Sprint logs are complete and 100 prints pass inspection.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 100
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Defect rate spiked during sprint blocks.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 40
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery loop: reduce speed 10%, dry filament, and run a 10-print verification batch before returning to full output. If nozzle contamination persists, service the hotend before restart.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "steady",
+                    "text": "Verification batch passed; resume steady production.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "sprint",
+                    "text": "Verification batch passed; resume sprint production.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Before finish, interpret the run log: record at least two anomalies, the corrective action used, and the retest result so your next 100-run is reproducible.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "That was intense!"
+                    "text": "Evidence complete: 100 Benchies plus corrective notes logged.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 100
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Incredible! You've constructed a formidable fleet of Benchies. Your 3D printing skills are truly remarkable. Remember, every Benchy is a testament to your growing capabilities. I'll be back with another challenge soon. Until then, keep printing!",
+            "text": "Fleet secured. You proved volume, quality, and recovery discipline under load.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Bring on the next challenge!"
+                    "text": "Production protocol locked."
                 }
             ]
         }
@@ -65,7 +224,7 @@
     "requiresQuests": ["3dprinting/benchy_25"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
