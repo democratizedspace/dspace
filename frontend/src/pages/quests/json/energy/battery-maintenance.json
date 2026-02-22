@@ -11,9 +11,73 @@
             "text": "A battery lasts longer when you cycle it occasionally. Ready for a quick health check?",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Loan me a safe diagnostics + charging kit."
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep-log",
+                    "text": "Let's give it some exercise.",
+                    "requiresItems": [
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep-log",
+            "text": "Before you cycle, capture a baseline: pack voltage, cable temperature, and connector condition. That log gives us something to compare after charging.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-battery-voltage",
+                    "text": "Record baseline pack voltage"
+                },
+                {
                     "type": "goto",
                     "goto": "cycle",
-                    "text": "Let's give it some exercise."
+                    "text": "Baseline recorded, proceed to charge cycle."
                 }
             ]
         },
@@ -28,14 +92,52 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Battery cycled",
+                    "goto": "verify-log",
+                    "text": "Cycle complete; compare post-cycle reading to baseline.",
                     "requiresItems": [
                         {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly-response",
+                    "text": "Charge stalled or cable temperature keeps climbing."
+                }
+            ]
+        },
+        {
+            "id": "anomaly-response",
+            "text": "Good catch. Stop charging, inspect connectors for corrosion, re-seat the fuse, and verify ventilation. Resume only if the next reading is stable and hardware stays cool.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cycle",
+                    "text": "Corrective action complete; retry controlled cycle."
+                }
+            ]
+        },
+        {
+            "id": "verify-log",
+            "text": "Interpret your maintenance log: if voltage recovered and connector temps remained in-range, the pack passes this cycle. If not, loop back through troubleshooting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log review passed: healthy charge profile confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly-response",
+                    "text": "Log flags an anomaly; run corrective loop first."
                 }
             ]
         },

@@ -98,18 +98,78 @@
                     ],
                     "goto": "charge",
                     "text": "Everything's all set up! What now?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup-troubleshoot",
+                    "text": "The frame wobbles and one cable run looks exposed."
+                }
+            ]
+        },
+        {
+            "id": "setup-troubleshoot",
+            "text": "Great catch. Pause before energizing: re-level the enclosure, tighten panel screws, and re-route any cable that can rub on metal edges. If anything still looks sketchy, keep the panel disconnected until it's fixed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Safety sweep complete; retry setup verification."
                 }
             ]
         },
         {
             "id": "charge",
-            "text": "Now all that's left is starting the charging process! Push the big button and energy will flow from the Sun into that battery! Isn't technology amazing? Once you've started the charge, feel free to finish the quest! You'll get a reward for your hard work!",
+            "text": "Now start a controlled charging cycle. Push the big button and energy will flow from the Sun into that battery. Once charge is underway, verify stable output before finishing the quest.",
             "options": [
                 {
                     "type": "process",
                     "process": "solar-200Wh",
                     "text": "Let there be light!"
                 },
+                {
+                    "type": "goto",
+                    "goto": "verify-charge",
+                    "text": "Charging started. Let's verify output before we celebrate.",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 100
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge-troubleshoot",
+                    "text": "The controller shows no gain and cables are warming up."
+                }
+            ]
+        },
+        {
+            "id": "charge-troubleshoot",
+            "text": "Nice stop-call. Shut down input, check polarity and fuse seating, and clear shade from the panel. No hot connectors, no burnt smell, and no bypassing the fuse—then run another charge cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 50
+                        }
+                    ],
+                    "goto": "charge",
+                    "text": "Wiring fixed and trickle production resumed; retry full charge."
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Step back and re-check setup before charging again."
+                }
+            ]
+        },
+        {
+            "id": "verify-charge",
+            "text": "Now read the controller: if the charge current is stable and the enclosure stayed dry, record the run as good. If not, branch back and fix before declaring victory.",
+            "options": [
                 {
                     "type": "goto",
                     "requiresItems": [
@@ -119,7 +179,12 @@
                         }
                     ],
                     "goto": "fin",
-                    "text": "You've made my day, Orion! Thanks so much!!"
+                    "text": "Verified: 200 dSolar harvested safely."
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge-troubleshoot",
+                    "text": "Readings are unstable; loop through troubleshooting."
                 }
             ]
         },

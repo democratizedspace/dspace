@@ -37,7 +37,9 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Dialogue `requiresItems` gates:
     - `materials` → "Alright, what's next?" — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, Small solar enclosure ×1
     - `setup` → "Everything's all set up! What now?" — Solar setup (200 Wh) ×1
-    - `charge` → "You've made my day, Orion! Thanks so much!!" — dSolar ×200
+    - `charge` → "Charging started. Let's verify output before we celebrate." — dSolar ×100
+    - `charge-troubleshoot` → "Wiring fixed and trickle production resumed; retry full charge." — dSolar ×50
+    - `verify-charge` → "Verified: 200 dSolar harvested safely." — dSolar ×200
 - Grants:
     - `materials` → "Wow, no charge? You're too kind!" — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, Small solar enclosure ×1
     - Quest-level `grantsItems`: None
@@ -59,13 +61,19 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
-    - `cycle` → "Battery cycled" — 200 Wh battery pack ×1
+    - `start` → "Let's give it some exercise." — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+    - `cycle` → "Cycle complete; compare post-cycle reading to baseline." — dSolar ×200
+    - `verify-log` → "Log review passed: healthy charge profile confirmed." — dSolar ×200
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - `start` → "Loan me a safe diagnostics + charging kit." — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [measure-battery-voltage](/processes/measure-battery-voltage)
+        - Requires: 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
+        - Consumes: none
+        - Creates: none
     - [charge-battery-pack-solar](/processes/charge-battery-pack-solar)
         - Requires: portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1
         - Consumes: none
@@ -96,9 +104,11 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
     - `layout` → "Polarity checked; fuse still out." — Solar charge controller ×1, portable solar panel ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
+    - `rollback-safe` → "Rollback complete, wiring rechecked. Retry controlled power-up." — portable solar kit (wired) ×1
     - `wire` → "Controller powers up without sparks." — portable solar kit (wired) ×1
     - `configure` → "Settings saved and fuse seated." — charge controller profile set ×1
-    - `charge` → "Controller shows a happy, full pack." — dSolar ×200
+    - `charge` → "Controller reports stable charging. Verify before finish." — dSolar ×200
+    - `verify` → "Verified: profile + charge output are both in spec." — charge controller profile set ×1, dSolar ×200
 - Grants:
     - `layout` → "Borrow my kit" — Solar charge controller ×1, portable solar panel ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
