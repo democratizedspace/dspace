@@ -1,19 +1,19 @@
 {
     "id": "aquaria/water-change",
     "title": "Perform a partial water change",
-    "description": "Swap out a quarter of the tank water for conditioned tap water to keep fish healthy.",
+    "description": "Run a controlled 25% water change with prep evidence, post-change verification, and a troubleshooting loop for stressed fish or unstable readings.",
     "image": "/assets/quests/goldfish_partial_water_change.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Unplug heater and filter to prevent shocks. Wear safety goggles and nitrile gloves, then load a utility cart with a gravel vacuum, bucket, conditioner, and the tank you're about to service.",
+            "text": "Safety first: unplug heater/filter, keep hands dry, and stage PPE plus siphon gear before opening the tank.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Gear gathered and tank is safe to work",
+                    "goto": "prep-water",
+                    "text": "Tank is electrically safe and gear is staged.",
                     "requiresItems": [
                         {
                             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
@@ -44,18 +44,30 @@
             ]
         },
         {
-            "id": "prep",
-            "text": "Fill the bucket with tap water, add conditioner, and match the temperature within 2 \u00b0C before you touch the tank. Keep cords dripped below outlets.",
+            "id": "prep-water",
+            "text": "Condition replacement water and match temperature within 2 °C before siphoning. If mismatch persists, do not continue.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Condition replacement water"
+                    "text": "Condition and temperature-match replacement water.",
+                    "goto": "change"
                 },
                 {
                     "type": "goto",
-                    "goto": "remove",
-                    "text": "Replacement water is conditioned and matched",
+                    "goto": "change",
+                    "text": "Replacement water is matched and ready.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Temperature mismatch or equipment issue detected; pause for recovery.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -66,18 +78,19 @@
             ]
         },
         {
-            "id": "remove",
-            "text": "Use the gravel vacuum to siphon into the bucket. Lift fish gear out of the way, keep outlets dry, and stop after ~25% of the volume is in the bucket.",
+            "id": "change",
+            "text": "Siphon ~25% while vacuuming debris, then refill slowly with conditioned water and restart heater/filter only when the waterline is stable.",
             "options": [
                 {
                     "type": "process",
                     "process": "partial-water-change",
-                    "text": "Vacuum and refill with conditioned water"
+                    "text": "Run the partial water change sequence.",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Water swapped and heater restarted",
+                    "goto": "verify",
+                    "text": "Water swap complete and equipment restarted.",
                     "requiresItems": [
                         {
                             "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
@@ -88,12 +101,65 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Verification gate: fish should breathe normally and flow should remain steady for a full observation window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Post-change stability confirmed; no stress signs observed.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Fish are stressed or flow is unstable; run corrective branch.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Stop feeding, aerate, and re-check temperature before repeating any swap. Abort if fish show severe distress and restore baseline flow before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-water",
+                    "text": "Conditions stabilized; restart prep and re-verify.",
+                    "requiresItems": [
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Heater and filter are back on, fish are calm, and you logged the swap. Rinse the bucket so conditioner residue doesn't dry on the walls.",
+            "text": "Excellent control. You proved safe prep, validated outcome stability, and used a recovery protocol instead of forcing through risk.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Water change complete"
+                    "text": "Partial water change complete."
                 }
             ]
         }
@@ -108,7 +174,7 @@
     "hardening": {
         "passes": 4,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-15",

@@ -1,19 +1,19 @@
 {
     "id": "aquaria/walstad",
     "title": "Set up a Walstad tank",
-    "description": "Create a low-tech planted aquarium using the Walstad method.",
+    "description": "Build a low-tech Walstad system with staged setup and outcome proofs, including a contingency loop when cycle health is unstable.",
     "image": "/assets/quests/walstad_setup.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Vega here. We'll build balance first: soil, cap, plants, then patience before livestock.",
+            "text": "Vega here. We build stability in stages: materials first, controlled build second, then proof that the system settles safely before livestock.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "stage",
-                    "text": "Yes\u2014show me the steps",
+                    "text": "Materials staged and safety gear ready.",
                     "requiresItems": [
                         {
                             "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
@@ -53,17 +53,18 @@
         },
         {
             "id": "stage",
-            "text": "Level the stand, place the tank, and stage soil, gravel, plants, light, and conditioner with a clean bucket. Keep cords dry.",
+            "text": "Setup evidence gate: dechlorinate fill water before substrate work so roots and bacteria avoid chlorine shock.",
             "options": [
                 {
                     "type": "process",
                     "process": "condition-bucket-water",
-                    "text": "Prep dechlorinated fill water"
+                    "text": "Prepare dechlorinated fill water.",
+                    "goto": "build"
                 },
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "Bucket is dechlorinated and tools are staged",
+                    "text": "Water is conditioned and build station is staged.",
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
@@ -75,17 +76,18 @@
         },
         {
             "id": "build",
-            "text": "Add soil, cap with rinsed gravel, tuck in guppy grass and duckweed, then fill gently with dechlorinated water. Set the light to an 8-hour timer.",
+            "text": "Outcome gate one: layer soil and cap, plant densely, fill gently, then set the light schedule.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-walstad-tank",
-                    "text": "Layer and plant the Walstad tank"
+                    "text": "Assemble and plant the Walstad build.",
+                    "goto": "stability-check"
                 },
                 {
                     "type": "goto",
-                    "goto": "thermo",
-                    "text": "Substrate settled and plants look secure",
+                    "goto": "stability-check",
+                    "text": "Substrate settled and planted layout is stable.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
@@ -96,16 +98,49 @@
             ]
         },
         {
-            "id": "thermo",
-            "text": "Dry the glass and mark a spot for the strip thermometer so you can track swings without dunking probes.",
+            "id": "stability-check",
+            "text": "Outcome gate two: verify a stable first-day state—clear water column, secure stems, and no exposed soil plumes. If cloudy or uprooted, branch to recovery before cycling onward.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Placement marked and glass is dry",
+                    "text": "System is stable and ready for monitored cycling.",
                     "requiresItems": [
                         {
                             "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        },
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Clouding or uprooted plants detected; run recovery pass.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Pause stocking. Re-seat uprooted stems, top off slowly with conditioned water, and cut light intensity for a day if algae bloom starts. Resume only after clarity recovers.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Condition recovery top-off water.",
+                    "goto": "build",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 1
                         }
                     ]
@@ -114,11 +149,11 @@
         },
         {
             "id": "finish",
-            "text": "Good start. Let it settle, test often, and add fish only after ammonia and nitrite hold at zero.",
+            "text": "Strong start. You provided setup proof, verified outcome stability, and handled failure criteria before calling the tank cycle-ready.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll let it cycle cleanly"
+                    "text": "Walstad setup stabilized."
                 }
             ]
         }
@@ -133,7 +168,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

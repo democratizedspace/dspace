@@ -1,30 +1,44 @@
 {
     "id": "aquaria/aquarium-light",
     "title": "Install an aquarium light",
-    "description": "Add LED lighting to support plant growth and fish health.",
+    "description": "Mount lighting safely, verify coverage on a timer, and recover from glare or heat issues before closing out.",
     "image": "/assets/quests/aquarium_light.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your Walstad tank is cycling, but plants need steady light. Ready to install the lamp?",
+            "text": "Plants need stable light, but we keep water and mains separated. Stage a timer, dry hands, and a drip loop before we mount anything.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mount",
-                    "text": "Let's mount the light."
+                    "text": "Bench is dry and install gear is staged.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "mount",
-            "text": "Clip the light to the rim and route the cable so it stays dry.",
+            "text": "Mount the lamp high enough to avoid splash zones and route the cable below the outlet to keep a drip loop.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "schedule",
-                    "text": "Light secured.",
+                    "goto": "verify",
+                    "text": "Light is mounted and cable routing is safe.",
                     "requiresItems": [
                         {
                             "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
@@ -35,23 +49,65 @@
             ]
         },
         {
-            "id": "schedule",
-            "text": "Plug it in and set a timer for eight hours of gentle daylight.",
+            "id": "verify",
+            "text": "Choose your verification path: run an 8-hour timer cycle and confirm even coverage, or stop and fix hotspot/glare issues first.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Timer set and lamp glowing."
+                    "text": "Timer cycle completed and plant zone is evenly lit.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        },
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I see glare, heat, or splash risk; pause and correct it.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Good catch. Power down first, dry all contact points, then raise the fixture or diffuse output before retrying. If splash risk remains, abort and re-route cables before power-on.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Mount adjusted and safety checks passed; remount and retry.",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Your plants will thrive under consistent lighting.",
+            "text": "Nice work. You installed safely, verified coverage, and handled failure conditions before calling it done.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Enjoy the glow."
+                    "text": "Lighting is stable."
                 }
             ]
         }
@@ -66,7 +122,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

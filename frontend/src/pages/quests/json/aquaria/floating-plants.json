@@ -1,25 +1,25 @@
 {
     "id": "aquaria/floating-plants",
     "title": "Add Floating Plants",
-    "description": "Rinse guppy grass in dechlorinated water, then float it so it soaks up excess nutrients and shelters fry.",
+    "description": "Add floating plants with staged setup and outcome evidence, plus a recovery path for rot or intake block issues.",
     "image": "/assets/quests/floating_plants.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your shrimp are thriving, but nutrient levels creep up fast. Let's rinse some guppy grass and float it to act like a natural nutrient sponge and fry nursery.",
+            "text": "Floating plants help export nutrients, but only if we start clean. Stage your dechlorinated rinse bucket, net, and trim tools first.",
             "options": [
                 {
                     "type": "process",
                     "process": "bucket-water-dechlorinated",
-                    "text": "Prep a bucket of dechlorinated water for rinsing.",
-                    "goto": "rinse"
+                    "text": "Prep a bucket of dechlorinated water.",
+                    "goto": "setup-proof"
                 },
                 {
                     "type": "goto",
-                    "goto": "rinse",
-                    "text": "Bucket, net, and guppy grass ready.",
+                    "goto": "setup-proof",
+                    "text": "Gear is staged and rinse water is ready.",
                     "requiresItems": [
                         {
                             "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
@@ -42,37 +42,19 @@
             ]
         },
         {
-            "id": "rinse",
-            "text": "Swirl the guppy grass in dechlorinated water, pick off snails or eggs, and toss any brown stems. Keep the rinsed bundle wet until it hits the tank.",
+            "id": "setup-proof",
+            "text": "First evidence gate: rinse and inspect every stem. Remove hitchhikers and dead tissue so we do not seed pests.",
             "options": [
                 {
                     "type": "process",
                     "process": "rinse-floating-plants",
-                    "text": "Rinse and inspect the plants.",
-                    "goto": "place",
-                    "requiresItems": [
-                        {
-                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
-                            "count": 1
-                        },
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        },
-                        {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Rinse and inspect floating plants.",
+                    "goto": "place"
                 },
                 {
                     "type": "goto",
                     "goto": "place",
-                    "text": "Rinsed bundle ready for the tank.",
+                    "text": "Clean rinsed bundle is ready for placement.",
                     "requiresItems": [
                         {
                             "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
@@ -84,13 +66,13 @@
         },
         {
             "id": "place",
-            "text": "Float the rinsed stems under the light, keep them away from the filter intake, and leave a gap so shrimp can reach the surface. Thin them weekly to keep the mat breathable.",
+            "text": "Second evidence gate: float plants under light while keeping a clear intake lane and open surface gap for gas exchange.",
             "options": [
                 {
                     "type": "process",
                     "process": "place-floating-plants",
-                    "text": "Float and spread the guppy grass.",
-                    "goto": "finish",
+                    "text": "Place and spread floating plants.",
+                    "goto": "monitor",
                     "requiresItems": [
                         {
                             "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
@@ -104,8 +86,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Mat is floating and clear of the intake.",
+                    "goto": "monitor",
+                    "text": "Placement complete and intake lane is clear.",
                     "requiresItems": [
                         {
                             "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
@@ -116,12 +98,62 @@
             ]
         },
         {
+            "id": "monitor",
+            "text": "Check after a full light cycle: plants should stay buoyant and green without choking the filter intake.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Plants are healthy and flow remains unobstructed.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        },
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I see rot, pests, or intake blockage; run recovery.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Trim failing stems, clear the intake lane, and re-rinse survivors in dechlorinated water before re-placing. Pause if fish gasp at the surface and restore circulation first.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-floating-plants",
+                    "text": "Run recovery rinse and trim cycle.",
+                    "goto": "place",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Perfect. That mat will soak up nutrients, cast dappled shade, and give future fry a safe ceiling to hide in.",
+            "text": "Good discipline. You proved both setup quality and stable outcome before declaring success.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep it thinned and happy."
+                    "text": "Floating plant habitat stabilized."
                 }
             ]
         }
@@ -136,7 +168,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

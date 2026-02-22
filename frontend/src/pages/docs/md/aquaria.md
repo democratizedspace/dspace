@@ -33,10 +33,12 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - `start` → "Yes—show me the steps" — aquarium (150 L) ×1, aquarium stand (80 L) ×1, aquarium gravel (1 kg) ×3, aquarium LED light (20 W) ×1, Guppy grass starter ×1, Duckweed portion ×1, 5 gallon bucket ×1, Water conditioner ×1
-    - `stage` → "Bucket is dechlorinated and tools are staged" — 5 gallon bucket of dechlorinated tap water ×1
-    - `build` → "Substrate settled and plants look secure" — Walstad aquarium (80 L) ×1
-    - `thermo` → "Placement marked and glass is dry" — Walstad aquarium (80 L) ×1
+    - `start` → "Materials staged and safety gear ready." — aquarium (150 L) ×1, aquarium stand (80 L) ×1, aquarium gravel (1 kg) ×3, aquarium LED light (20 W) ×1, Guppy grass starter ×1, Duckweed portion ×1, 5 gallon bucket ×1, Water conditioner ×1
+    - `stage` → "Water is conditioned and build station is staged." — 5 gallon bucket of dechlorinated tap water ×1
+    - `build` → "Substrate settled and planted layout is stable." — Walstad aquarium (80 L) ×1
+    - `stability-check` → "System is stable and ready for monitored cycling." — Walstad aquarium (80 L) ×1, aquarium LED light (20 W) ×1
+    - `stability-check` → "Clouding or uprooted plants detected; run recovery pass." — Walstad aquarium (80 L) ×1
+    - `recovery` → "Condition recovery top-off water." — 5 gallon bucket of dechlorinated tap water ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -144,7 +146,11 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/sponge-filter`
 - Dialogue `requiresItems` gates:
-    - `mount` → "Light secured." — aquarium LED light (20 W) ×1
+    - `start` → "Bench is dry and install gear is staged." — aquarium LED light (20 W) ×1, 5 gallon bucket ×1, Water conditioner ×1
+    - `mount` → "Light is mounted and cable routing is safe." — aquarium LED light (20 W) ×1
+    - `verify` → "Timer cycle completed and plant zone is evenly lit." — aquarium LED light (20 W) ×1, Floating plant mat ×1
+    - `verify` → "I see glare, heat, or splash risk; pause and correct it." — aquarium LED light (20 W) ×1
+    - `troubleshoot` → "Mount adjusted and safety checks passed; remount and retry." — 5 gallon bucket ×1, Water conditioner ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -404,11 +410,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/shrimp`
 - Dialogue `requiresItems` gates:
-    - `start` → "Bucket, net, and guppy grass ready." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1, nitrile gloves (pair) ×1
-    - `rinse` → "Rinse and inspect the plants." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1, nitrile gloves (pair) ×1
-    - `rinse` → "Rinsed bundle ready for the tank." — Rinsed guppy grass ×1
-    - `place` → "Float and spread the guppy grass." — Rinsed guppy grass ×1, aquarium LED light (20 W) ×1
-    - `place` → "Mat is floating and clear of the intake." — Floating plant mat ×1
+    - `start` → "Gear is staged and rinse water is ready." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1, nitrile gloves (pair) ×1
+    - `setup-proof` → "Clean rinsed bundle is ready for placement." — Rinsed guppy grass ×1
+    - `place` → "Place and spread floating plants." — Rinsed guppy grass ×1, aquarium LED light (20 W) ×1
+    - `place` → "Placement complete and intake lane is clear." — Floating plant mat ×1
+    - `monitor` → "Plants are healthy and flow remains unobstructed." — Floating plant mat ×1, aquarium LED light (20 W) ×1
+    - `monitor` → "I see rot, pests, or intake blockage; run recovery." — Floating plant mat ×1
+    - `recovery` → "Run recovery rinse and trim cycle." — aquarium net ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -518,9 +526,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/guppy`
 - Dialogue `requiresItems` gates:
-    - `start` → "Gear gathered and tank is safe to work" — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, Water conditioner ×1, nitrile gloves (pair) ×1, utility cart ×1
-    - `prep` → "Replacement water is conditioned and matched" — 5 gallon bucket of dechlorinated tap water ×1
-    - `remove` → "Water swapped and heater restarted" — Freshly changed aquarium (80 L) ×1
+    - `start` → "Tank is electrically safe and gear is staged." — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, Water conditioner ×1, nitrile gloves (pair) ×1, utility cart ×1
+    - `prep-water` → "Replacement water is matched and ready." — 5 gallon bucket of dechlorinated tap water ×1
+    - `prep-water` → "Temperature mismatch or equipment issue detected; pause for recovery." — 5 gallon bucket of dechlorinated tap water ×1
+    - `change` → "Water swap complete and equipment restarted." — Freshly changed aquarium (80 L) ×1
+    - `verify` → "Post-change stability confirmed; no stress signs observed." — Freshly changed aquarium (80 L) ×1, gravel vacuum ×1
+    - `verify` → "Fish are stressed or flow is unstable; run corrective branch." — Freshly changed aquarium (80 L) ×1
+    - `recovery` → "Conditions stabilized; restart prep and re-verify." — gravel vacuum ×1, 5 gallon bucket ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
