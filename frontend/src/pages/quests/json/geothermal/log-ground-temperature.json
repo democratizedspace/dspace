@@ -1,31 +1,35 @@
 {
     "id": "geothermal/log-ground-temperature",
     "title": "Log Ground Temperature",
-    "description": "Use a buried thermistor with Arduino to monitor ground temperature over time.",
+    "description": "Produce an annotated baseline log with explicit cadence and anomaly-handling before closing the task.",
     "image": "/assets/quests/geothermal_log_ground_temperature_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Tie back hair, don gloves, and mark where utilities run before you dig. Want to log a clean ground temperature baseline?",
+            "text": "Tie back hair, glove up, and confirm utility marks before digging. Ready to capture a baseline we can compare month to month?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Site is marked and safe."
+                    "text": "Site is marked and safe"
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Review the safety prep checklist"
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Dust and moisture kill logs. Weatherproof the thermistor leads, leave a drip loop, and tape the USB connector so soil can't wick water inside.",
+            "text": "Weatherproof the thermistor leads, leave a drip loop, and seal the USB end. A leaky harness invalidates long-run data.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "bury",
-                    "text": "Logger is built and sealed",
-                    "process": "assemble-thermistor-logger"
+                    "type": "process",
+                    "process": "assemble-thermistor-logger",
+                    "text": "Assemble and seal logging rig"
                 },
                 {
                     "type": "goto",
@@ -42,12 +46,12 @@
         },
         {
             "id": "bury",
-            "text": "Dig to 1 m, tamp the probe against undisturbed soil, and backfill tight so air pockets don't skew readings. Let's capture a full-day baseline.",
+            "text": "Bury at 1 m in undisturbed soil and log hourly for 24 h. Required fields: timestamp, temp, weather note, soil moisture note, and probe depth.",
             "options": [
                 {
                     "type": "process",
                     "process": "capture-hourly-temperature-log",
-                    "text": "Start a buried 24 h log",
+                    "text": "Capture buried 24 h log",
                     "requiresItems": [
                         {
                             "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -61,7 +65,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "chart",
+                    "goto": "analyze",
                     "text": "Baseline log exported",
                     "requiresItems": [
                         {
@@ -73,13 +77,13 @@
             ]
         },
         {
-            "id": "chart",
-            "text": "Plot the buried probe data and mark sunrise, irrigation, or rain so you know which blips are weather and which are loop effects.",
+            "id": "analyze",
+            "text": "Pass window for this baseline: daily swing <=2°C and no unexplained spikes >1°C in consecutive samples. Annotate every suspect segment before classifying.",
             "options": [
                 {
                     "type": "process",
                     "process": "plot-temperature-data",
-                    "text": "Plot the baseline curve",
+                    "text": "Plot baseline curve",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -94,7 +98,7 @@
                 {
                     "type": "process",
                     "process": "refine-temperature-graph",
-                    "text": "Annotate weather notes",
+                    "text": "Annotate weather and irrigation events",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -109,23 +113,44 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Baseline chart saved",
+                    "text": "Annotated log meets baseline thresholds",
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "Spikes or drift need investigation"
+                }
+            ]
+        },
+        {
+            "id": "anomaly",
+            "text": "Classify anomaly source (probe depth shift, moisture ingress, or weather burst), apply one correction, then run a fresh 24 h window before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "bury",
+                    "text": "Correction applied, capture a follow-up log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and repeat safety setup"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Store that baseline plot with notes on soil type and depth. It'll anchor every seasonal check and heat-pump sizing run you do next.",
+            "text": "Archive the annotated baseline with depth, soil type, and weather context. That gives operations a repeatable monitor for seasonal drift.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ground curve logged",
+                    "text": "Ground baseline logged",
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
@@ -145,8 +170,8 @@
     "requiresQuests": ["geothermal/check-loop-pressure"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 96,
+        "emoji": "🛠️",
         "history": []
     }
 }

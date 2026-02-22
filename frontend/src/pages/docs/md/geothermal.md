@@ -29,14 +29,29 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I've got the tool ready." — aquarium thermometer (0–50°C) ×1
+    - `materials` → "Survey kit is staged" — aquarium thermometer (0–50°C) ×1, thermistor logging rig ×1
+    - `measure` → "Capture the 24 h baseline log" — thermistor logging rig ×1, Laptop Computer ×1
+    - `measure` → "Baseline log exported" — temperature log CSV ×1
+    - `interpret` → "Plot and review the survey log" — temperature log CSV ×1, Laptop Computer ×1
+    - `interpret` → "Readings meet geothermal baseline bounds" — temperature line chart ×1
+    - `finish` → "Survey baseline approved" — temperature line chart ×1
 - Grants:
-    - `materials` → "Thanks for the thermometer!" — aquarium thermometer (0–50°C) ×1
+    - `materials` → "Issue thermometer and logging rig" — aquarium thermometer (0–50°C) ×1, thermistor logging rig ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Solarpunk Award ×1
 - Processes used:
-    - None
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
+- QA notes:
+    - Completion requires a plotted baseline artifact and interpretation against 10–14°C median with ≤1.5°C daily swing.
+    - Out-of-range surveys must follow the corrective branch (probe reseat, soil repack, re-log) before finish can unlock.
 
 ## 2) Calibrate Ground Sensor (`geothermal/calibrate-ground-sensor`)
 
@@ -149,10 +164,11 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `plot` → "Plot both runs" — temperature log CSV ×1, Laptop Computer ×1
     - `plot` → "Plot looks clean" — temperature line chart ×1
     - `annotate` → "Add notes to the overlay" — temperature line chart ×1, Laptop Computer ×1, live temperature JSON endpoint ×1
-    - `annotate` → "Notes are logged" — annotated temperature graph ×1
-    - `publish` → "Push a live delta dashboard" — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
-    - `publish` → "Dashboard is live" — live temperature dashboard ×1
-    - `finish` → "Delta is monitored" — live temperature dashboard ×1
+    - `plot` → "Annotate stage changes and weather context" — temperature line chart ×1, Laptop Computer ×1, live temperature JSON endpoint ×1
+    - `plot` → "Annotated chart is ready" — annotated temperature graph ×1
+    - `interpret` → "Publish verified delta dashboard" — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
+    - `interpret` → "Delta passes threshold and dashboard is live" — live temperature dashboard ×1
+    - `finish` → "Delta benchmark verified" — live temperature dashboard ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -175,6 +191,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: live temperature dashboard ×1
+- QA notes:
+    - Completion requires annotated inlet/outlet evidence plus interpretation against the 3–8°C delta and ≤1°C stability bounds.
+    - Out-of-range or unstable runs must take the corrective branch (valves, purge, probe contact) and re-log before closure.
 
 ## 7) Install Backup Thermistor (`geothermal/install-backup-thermistor`)
 
@@ -207,10 +226,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `prep` → "Rig is already sealed" — thermistor logging rig ×1
     - `bury` → "Start a buried 24 h log" — thermistor logging rig ×1, Laptop Computer ×1
     - `bury` → "Baseline log exported" — temperature log CSV ×1
-    - `chart` → "Plot the baseline curve" — temperature log CSV ×1, Laptop Computer ×1
-    - `chart` → "Annotate weather notes" — temperature line chart ×1, Laptop Computer ×1
-    - `chart` → "Baseline chart saved" — annotated temperature graph ×1
-    - `finish` → "Ground curve logged" — annotated temperature graph ×1
+    - `analyze` → "Plot baseline curve" — temperature log CSV ×1, Laptop Computer ×1
+    - `analyze` → "Annotate weather and irrigation events" — temperature line chart ×1, Laptop Computer ×1
+    - `analyze` → "Annotated log meets baseline thresholds" — annotated temperature graph ×1
+    - `finish` → "Ground baseline logged" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -233,6 +252,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: temperature line chart ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: annotated temperature graph ×1
+- QA notes:
+    - Completion is gated on an annotated monitoring artifact that meets the swing/spike thresholds (≤2°C daily swing, no unexplained >1°C consecutive spikes).
+    - Anomaly handling is mandatory: classify source, apply one correction, and capture a fresh 24 h follow-up before finish.
 
 ## 9) Compare Depth Ground Temps (`geothermal/compare-depth-ground-temps`)
 

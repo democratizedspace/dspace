@@ -1,19 +1,19 @@
 {
     "id": "geothermal/check-loop-temp-delta",
     "title": "Check Loop Temperature Delta",
-    "description": "Use two thermistors with an Arduino to compare loop inlet and outlet temps.",
+    "description": "Compare inlet/outlet traces against explicit delta-T thresholds and recover safely when readings drift.",
     "image": "/assets/quests/geothermal_check_loop_temp_delta_dual_thermistors.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Time to see how much heat the loop really moves. We'll combine inlet plots with a live outlet feed to watch the delta in real time.",
+            "text": "Before we chase numbers: verify probe clamps are tight, keep manifold insulation closed, and confirm no one changed pump speed mid-test.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "align",
-                    "text": "Both probes are mounted",
+                    "text": "Safety and rig checks complete",
                     "requiresItems": [
                         {
                             "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -28,18 +28,18 @@
                 {
                     "type": "goto",
                     "goto": "align",
-                    "text": "Need a quick walkthrough"
+                    "text": "Give me the staging checklist"
                 }
             ]
         },
         {
             "id": "align",
-            "text": "Secure both probes, purge bubbles, and balance the leads so readings don't drift. Capture a fresh paired trace before we compare it to the live outlet stream.",
+            "text": "Capture a synchronized inlet/outlet run with stable circulation for at least 15 minutes so the delta reflects loop behavior, not startup noise.",
             "options": [
                 {
                     "type": "process",
                     "process": "capture-hourly-temperature-log",
-                    "text": "Capture the paired trace",
+                    "text": "Capture paired inlet/outlet trace",
                     "requiresItems": [
                         {
                             "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -54,7 +54,7 @@
                 {
                     "type": "goto",
                     "goto": "plot",
-                    "text": "Trace is saved",
+                    "text": "Paired log exported",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -66,12 +66,12 @@
         },
         {
             "id": "plot",
-            "text": "Plot inlet versus outlet for this run so you can catch lag or odd spikes. We'll annotate before pushing it to the live dashboard.",
+            "text": "Plot inlet vs outlet and annotate pump stage transitions. Acceptable heating-mode delta is 3–8°C with <=1°C swing over the final five minutes.",
             "options": [
                 {
                     "type": "process",
                     "process": "plot-temperature-data",
-                    "text": "Plot both runs",
+                    "text": "Generate delta chart",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -84,26 +84,9 @@
                     ]
                 },
                 {
-                    "type": "goto",
-                    "goto": "annotate",
-                    "text": "Plot looks clean",
-                    "requiresItems": [
-                        {
-                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "annotate",
-            "text": "Mark pump start, circulator speed changes, and outdoor temp in the notes. That context makes the delta meaningful when you automate alerts.",
-            "options": [
-                {
                     "type": "process",
                     "process": "refine-temperature-graph",
-                    "text": "Add notes to the overlay",
+                    "text": "Annotate stage changes and weather context",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -121,8 +104,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "publish",
-                    "text": "Notes are logged",
+                    "goto": "interpret",
+                    "text": "Annotated chart is ready",
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
@@ -133,13 +116,13 @@
             ]
         },
         {
-            "id": "publish",
-            "text": "Now pair your annotated inlet plot with the live outlet endpoint so you can watch the delta-T as the heat pump cycles.",
+            "id": "interpret",
+            "text": "Interpretation gate: pass if delta stays inside 3–8°C and trend is stable. Fail if delta collapses (<3°C), overshoots (>8°C), or chatters more than 1°C.",
             "options": [
                 {
                     "type": "process",
                     "process": "publish-live-temperature-graph",
-                    "text": "Push a live delta dashboard",
+                    "text": "Publish verified delta dashboard",
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
@@ -158,23 +141,44 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Dashboard is live",
+                    "text": "Delta passes threshold and dashboard is live",
                     "requiresItems": [
                         {
                             "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Delta is out of bounds or unstable"
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Troubleshoot safely: verify valves fully open, purge loop air, and confirm probe contact paste. After one fix, capture a new paired run and re-interpret.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "align",
+                    "text": "Corrective action applied, re-log the pair"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and repeat pre-test safety checks"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Pin that delta-T dashboard to your maintenance list. Trends will call out air in the loop or fouled exchangers long before you feel it indoors.",
+            "text": "Pin the dashboard with your threshold notes. Stable delta history gives early warning for air ingress and exchanger fouling.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Delta is monitored",
+                    "text": "Delta benchmark verified",
                     "requiresItems": [
                         {
                             "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
@@ -194,8 +198,8 @@
     "requiresQuests": ["geothermal/check-loop-inlet-temp", "geothermal/check-loop-outlet-temp"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 96,
+        "emoji": "🛠️",
         "history": []
     }
 }
