@@ -25,7 +25,7 @@
         },
         {
             "id": "prep",
-            "text": "Set the trophy on a clear surface and grab your logbook so the entry shows the serial and where it's displayed.",
+            "text": "Set the trophy on a clear surface and grab your logbook so the entry shows the serial, location, and date stamp.",
             "options": [
                 {
                     "type": "process",
@@ -34,13 +34,57 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Entry saved with serial and placement noted",
+                    "goto": "review",
+                    "text": "I have an entry ready for review",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
                             "count": 1
                         },
+                        {
+                            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "review",
+            "text": "Review the note before filing it. A valid log must include the trophy serial, display location, and today's date so audits are reproducible.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Entry has serial + location + date, filing it now",
+                    "requiresItems": [
+                        {
+                            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fix-entry",
+                    "text": "Missing fields or blurry photo, I need to correct it"
+                }
+            ]
+        },
+        {
+            "id": "fix-entry",
+            "text": "Good catch. Re-shoot the entry in steady light and avoid posting full serials in public channels; keep detailed proof in your private log.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "record-completionist-award-entry",
+                    "text": "Re-record the entry with complete details"
+                },
+                {
+                    "type": "goto",
+                    "goto": "review",
+                    "text": "Retake complete, review again",
+                    "requiresItems": [
                         {
                             "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
                             "count": 1

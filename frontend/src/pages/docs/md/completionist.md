@@ -53,7 +53,9 @@ Completionist quests build practical progression through the completionist skill
     - `requiresQuests`: `completionist/v2`
 - Dialogue `requiresItems` gates:
     - `start` → "Yeah, let's catalog it" — Completionist Award II ×1
-    - `prep` → "Entry saved with serial and placement noted" — Completionist Award II ×1, completionist trophy log entry ×1
+    - `prep` → "I have an entry ready for review" — Completionist Award II ×1, completionist trophy log entry ×1
+    - `review` → "Entry has serial + location + date, filing it now" — completionist trophy log entry ×1
+    - `fix-entry` → "Retake complete, review again" — completionist trophy log entry ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -74,6 +76,8 @@ Completionist quests build practical progression through the completionist skill
     - `start` → "Let's find the perfect spot" — Completionist Award II ×1
     - `dust` → "Shelf is dusted and trophy gleams" — Completionist Award II (polished) ×1
     - `place` → "Award is staged with lighting" — Completionist Award II (displayed) ×1
+    - `verify` → "Stable and safe, locking in the display" — Completionist Award II (displayed) ×1
+    - `recover` → "Restaged and ready for verification" — Completionist Award II (displayed) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -96,7 +100,9 @@ Completionist quests build practical progression through the completionist skill
     - `requiresQuests`: `completionist/v2`
 - Dialogue `requiresItems` gates:
     - `start` → "Absolutely, let's polish it" — Completionist Award II ×1
-    - `prep` → "Here it is, sparkling" — Completionist Award II (polished) ×1
+    - `prep` → "First polish pass complete" — Completionist Award II (polished) ×1
+    - `inspect` → "Surface is clear and dry, done" — Completionist Award II (polished) ×1
+    - `recovery` → "Second pass done, re-inspect" — Completionist Award II (polished) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -131,4 +137,7 @@ Completionist quests build practical progression through the completionist skill
 
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
+- Catalog QA: `completionist/catalog` now requires a review checkpoint (serial + location + date) and supports a re-record loop when the log artifact is incomplete.
+- Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
+- Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
