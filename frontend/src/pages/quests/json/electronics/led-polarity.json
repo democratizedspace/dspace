@@ -8,24 +8,75 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place a 5 mm LED, a digital multimeter, and safety goggles on a dry, non-conductive surface. Put on the goggles and confirm all power sources are disconnected.\nWe'll switch the meter to diode mode to find the anode.",
+            "text": "Place a 5 mm LED, a digital multimeter, and safety goggles on a dry, non-conductive surface. Put on the goggles and confirm all power sources are disconnected.\nWe'll use diode mode to identify the anode safely.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "test",
-                    "text": "Let's test it."
+                    "goto": "setup-check",
+                    "text": "Start polarity check."
                 }
             ]
         },
         {
-            "id": "test",
-            "text": "Set the multimeter to diode mode and insert the red probe into the V\u03a9mA port and the black probe into COM, keeping fingers behind the guards.\nTouch the red probe to the LED's long leg (anode) and the black probe to the short leg (cathode) without letting probes or leads touch.\nThe LED should glow faintly or read about 1.8 V. Reverse the probes; it should stay dark or display OL. Stop immediately if the LED warms, smokes, or sparks, and don't apply external power while testing.",
+            "id": "setup-check",
+            "text": "Set the meter to diode mode. Red probe goes to VΩmA, black to COM. Keep fingers behind probe guards and avoid pressing hard enough to bend LED legs.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "diode-test",
+                    "text": "Meter is configured."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup-recovery",
+                    "text": "Meter setup is unclear."
+                }
+            ]
+        },
+        {
+            "id": "setup-recovery",
+            "text": "If leads are in the wrong ports, remove probes with meter off and reseat them. If the meter battery icon is flashing, replace the meter battery before testing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup-check",
+                    "text": "Setup corrected. Re-verify."
+                }
+            ]
+        },
+        {
+            "id": "diode-test",
+            "text": "Touch red to the long leg and black to the short leg. A correct orientation should glow faintly or read around 1.7-2.2 V. Reverse probes; it should show OL or no glow.\nStop immediately if the LED warms, smokes, or sparks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify-anode",
                     "text": "It lights one way only.",
                     "process": "check-led-polarity",
+                    "requiresItems": [
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-no-glow",
+                    "text": "No glow or OL both directions."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "I noticed heat/smell/smoke and stopped.",
                     "requiresItems": [
                         {
                             "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
@@ -44,8 +95,59 @@
             ]
         },
         {
+            "id": "troubleshoot-no-glow",
+            "text": "Troubleshoot in order: confirm diode mode (not resistance mode), confirm probe ports, try a second known-good LED, and inspect bent or oxidized legs.\nAfter corrections, repeat the diode test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "diode-test",
+                    "text": "Retry diode test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Results are still unsafe or inconclusive.",
+                    "requiresItems": [
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good stop. Power stays disconnected. Bag and label this LED as unverified before returning to circuit work.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Pause and replace parts before continuing."
+                }
+            ]
+        },
+        {
+            "id": "verify-anode",
+            "text": "Great. The glowing orientation marks the anode. Record the orientation in your notes so the next wiring step is deterministic.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Documented and ready to store."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! The glowing orientation marks the anode.\nTurn off the meter, remove the probes, and store the LED for your next circuit.",
+            "text": "Turn off the meter, remove probes, and store the LED with the anode marked.",
             "options": [
                 {
                     "type": "finish",
@@ -64,7 +166,7 @@
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-10",

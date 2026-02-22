@@ -8,23 +8,50 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into V\u03a9mA, then set the meter to resistance (\u03a9) mode at a range above the resistor's expected value.",
+            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into VΩmA, then set the meter to resistance (Ω) mode at a range above the resistor's expected value.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Safety check complete."
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Short the probes together first. Your meter should read near 0 Ω. If it does not, clean probe tips and reseat leads before touching the resistor.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Ready."
+                    "text": "Baseline looks good."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline-fix",
+                    "text": "Baseline is unstable or high."
+                }
+            ]
+        },
+        {
+            "id": "baseline-fix",
+            "text": "Power down nearby electronics, wipe probe tips, and make sure your fingers stay behind insulation guards. Re-check probe short before measuring.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Recheck baseline now."
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Hold the resistor by its body so fingers stay off the leads. Grip the probes by their insulated handles, touching the black probe to one lead and the red to the other without the probes or your fingers touching.\nWait for the reading to stabilize near the color-band value; stop if the resistor warms, the reading spikes, or the probes slip.",
+            "text": "Hold the resistor by its body so fingers stay off the leads. Touch black probe to one lead and red to the other. Record the stable reading and compare against 220 Ω ±5% (209-231 Ω).\nStop immediately if the resistor warms, the reading spikes wildly, or probes slip.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "It reads about what the color bands predicted.",
+                    "goto": "pass-window",
+                    "text": "Reading is inside 209-231 Ω.",
                     "process": "measure-resistance",
                     "requiresItems": [
                         {
@@ -40,6 +67,68 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Reading is outside 209-231 Ω or keeps drifting.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Troubleshoot before retry: isolate the resistor from any circuit, change to a higher range if auto-range is off, and confirm you are measuring the correct resistor body.\nIf instability continues after cleanup, quarantine the part as suspect.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "I corrected setup. Re-test now.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safe-stop",
+                    "text": "I cannot stabilize readings safely."
+                }
+            ]
+        },
+        {
+            "id": "safe-stop",
+            "text": "Good call. Label this component as unverified and do not install it into a powered build until you can test with known-good tools.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Pause here and replace the resistor later."
+                }
+            ]
+        },
+        {
+            "id": "pass-window",
+            "text": "Nice. You captured a stable reading inside tolerance and verified the value with proper safety discipline.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log and store the part."
                 }
             ]
         },
@@ -63,8 +152,8 @@
     "requiresQuests": ["electronics/resistor-color-check"],
     "hardening": {
         "passes": 2,
-        "score": 80,
-        "emoji": "\u2705",
+        "score": 90,
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-refine-2025-08-12",
