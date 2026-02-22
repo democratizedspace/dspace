@@ -11,9 +11,57 @@
             "text": "A battery lasts longer when you cycle it occasionally. Ready for a quick health check?",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Loan me a safe diagnostics + charging kit."
+                },
+                {
                     "type": "goto",
                     "goto": "prep-log",
-                    "text": "Let's give it some exercise."
+                    "text": "Let's give it some exercise.",
+                    "requiresItems": [
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -29,13 +77,7 @@
                 {
                     "type": "goto",
                     "goto": "cycle",
-                    "text": "Baseline recorded, proceed to charge cycle.",
-                    "requiresItems": [
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Baseline recorded, proceed to charge cycle."
                 }
             ]
         },
@@ -73,13 +115,7 @@
                 {
                     "type": "goto",
                     "goto": "cycle",
-                    "text": "Corrective action complete; retry controlled cycle.",
-                    "requiresItems": [
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Corrective action complete; retry controlled cycle."
                 }
             ]
         },

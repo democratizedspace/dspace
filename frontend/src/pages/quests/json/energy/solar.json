@@ -113,19 +113,13 @@
                 {
                     "type": "goto",
                     "goto": "setup",
-                    "text": "Safety sweep complete; retry setup verification.",
-                    "requiresItems": [
-                        {
-                            "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Safety sweep complete; retry setup verification."
                 }
             ]
         },
         {
             "id": "charge",
-            "text": "Now all that's left is starting the charging process! Push the big button and energy will flow from the Sun into that battery! Isn't technology amazing? Once you've started the charge, feel free to finish the quest! You'll get a reward for your hard work!",
+            "text": "Now start a controlled charging cycle. Push the big button and energy will flow from the Sun into that battery. Once charge is underway, verify stable output before finishing the quest.",
             "options": [
                 {
                     "type": "process",
@@ -164,6 +158,11 @@
                     ],
                     "goto": "charge",
                     "text": "Wiring fixed and trickle production resumed; retry full charge."
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Step back and re-check setup before charging again."
                 }
             ]
         },
