@@ -73,7 +73,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
     - `start` → "Gear ready." — planisphere star chart ×1, red flashlight ×1
-    - `search` → "Galaxy in sight." — basic telescope ×1
+    - `align` → "Alignment notes are in my log." — constellation sketch set ×1, basic telescope ×1
+- Troubleshooting and safety flow:
+    - `interpret` branches to `recover` when the target cannot be stably re-acquired.
+    - `recover` loops back through alignment and includes explicit stop conditions for unsafe footing and poor sky conditions.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -218,6 +221,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `forecast` → "Window picked—what should I pack?" — aurora viewing plan ×1
     - `kit` → "Kit is ready—let's step outside." — dark-sky kit packed ×1
     - `observe` → "Entry written with colors and timestamps." — aurora sighting log ×1
+- Troubleshooting and safety flow:
+    - `session-check` branches between live observing and `fallback` when weather or site safety degrades.
+    - `fallback` re-runs forecast planning before returning to session readiness.
+    - `verify-log` enforces a complete observation record before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -243,13 +250,21 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/observe-moon`
 - Dialogue `requiresItems` gates:
-    - `capture` → "Got my shots" — basic telescope ×1
+    - `prep` → "Plan is logged and tripod is stable." — mission log entry ×1, camera tripod ×1
+    - `capture` → "Shots captured—ready for review." — basic telescope ×1, digital camera ×1
+- Troubleshooting and safety flow:
+    - `review` branches to `retake` when images fail sharpness/exposure criteria.
+    - `retake` loops back to capture with correction guidance and explicit cold/surface safety pause conditions.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
     - [photograph-lunar-eclipse](/processes/photograph-lunar-eclipse)
         - Requires: basic telescope ×1, digital camera ×1, camera tripod ×1
         - Consumes: none

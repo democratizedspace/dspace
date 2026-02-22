@@ -8,44 +8,101 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A total lunar eclipse is visible tonight. Let's document it for the record.",
+            "text": "A total lunar eclipse is visible tonight. We'll run this like an observation drill: prep, capture, review, then decide whether to re-shoot.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "capture",
+                    "goto": "prep",
                     "text": "I'll set up my gear."
                 }
             ]
         },
         {
+            "id": "prep",
+            "text": "Level the tripod, lock focus manually, and write your target exposure bracket in the mission logbook before first contact.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Exposure plan logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Plan is logged and tripod is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "capture",
-            "text": "Attach your camera to the telescope and photograph each stage of the eclipse.",
+            "text": "Attach your camera to the telescope and photograph each eclipse phase with the planned bracket.",
             "options": [
                 {
                     "type": "process",
                     "process": "photograph-lunar-eclipse",
-                    "text": "Taking photos"
+                    "text": "Running the capture sequence."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "review",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
+                        },
+                        {
+                            "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                            "count": 1
                         }
                     ],
-                    "text": "Got my shots"
+                    "text": "Shots captured—ready for review."
+                }
+            ]
+        },
+        {
+            "id": "review",
+            "text": "Quality check: are crater edges sharp, highlights not clipped, and at least one umbral-phase frame usable?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes—usable set confirmed and logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retake",
+                    "text": "No—blurred, clipped, or missing umbral detail."
+                }
+            ]
+        },
+        {
+            "id": "retake",
+            "text": "Troubleshoot safely: shorten shutter if trails smear, re-check focus with magnified live view, and pause if frost or unstable footing makes operation unsafe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Apply corrections and retake the sequence."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent work! We'll compare these images with your earlier sketches to track your progress.",
+            "text": "Excellent work! Preserve the best frame notes in your logbook so the next eclipse setup starts from proven settings.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait!"
+                    "text": "Capture set archived."
                 }
             ]
         }
@@ -60,7 +117,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
