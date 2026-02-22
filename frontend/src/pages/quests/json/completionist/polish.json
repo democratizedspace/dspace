@@ -73,7 +73,7 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "polish-completionist-award",
+                    "process": "touchup-polished-completionist-award",
                     "text": "Run a gentler second polish pass"
                 },
                 {
