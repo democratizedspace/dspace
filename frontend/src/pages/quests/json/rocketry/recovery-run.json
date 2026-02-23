@@ -154,7 +154,7 @@
     "requiresQuests": ["rocketry/parachute"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }
