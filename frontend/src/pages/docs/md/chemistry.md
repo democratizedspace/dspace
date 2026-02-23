@@ -165,6 +165,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `precision-setup` → "Extraction evidence captured; evaluate extract clarity." — stevia extract ×1
     - `pilot-setup` → "Pilot indicates viable extraction; check outcome evidence." — stevia extract ×1
     - `outcome-check` → "Outcome passes quality check; extract is ready." — stevia extract ×1
+    - `contamination-recovery` → "Paused safely after documenting a valid extract and logged deferred extraction for maintenance." — stevia extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
