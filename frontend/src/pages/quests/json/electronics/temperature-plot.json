@@ -54,10 +54,14 @@
             "text": "Run a short Python script to read the CSV and render a line chart of temperature over time.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Run the plotting process."
+                },
+                {
                     "type": "goto",
                     "goto": "interpret",
-                    "text": "Chart generated.",
-                    "process": "plot-temperature-data"
+                    "text": "Chart generated."
                 }
             ]
         },
@@ -118,7 +122,7 @@
     "requiresQuests": ["electronics/data-logger"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 85,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

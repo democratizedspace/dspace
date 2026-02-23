@@ -98,7 +98,7 @@
     "requiresQuests": ["electronics/thermistor-reading"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 85,
         "emoji": "🛠️",
         "history": []
     }
