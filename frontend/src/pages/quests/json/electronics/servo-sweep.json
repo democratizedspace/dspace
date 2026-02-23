@@ -1,30 +1,30 @@
 {
     "id": "electronics/servo-sweep",
     "title": "Sweep a Servo",
-    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0\u00b0 to 180\u00b0.",
+    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0° to 180°.",
     "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to move beyond LEDs? Gather an Arduino Uno, USB cable, servo motor, jumper wires, and a 5\u202fV supply to sweep a servo arm back and forth.",
+            "text": "Ready to move beyond LEDs? Gather an Arduino Uno, USB cable, servo motor, jumper wires, and a 5 V supply. Keep the horn clear of fingers before any power-up.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wire",
-                    "text": "What do I connect?"
+                    "goto": "plan-path",
+                    "text": "Let's set it up."
                 }
             ]
         },
         {
-            "id": "wire",
-            "text": "Disconnect the USB cable before wiring. Connect the servo signal to digital pin\u202f9, red to 5\u202fV, and brown or black to GND. If it draws over 500\u202fmA, power it from an external 5\u202fV supply and tie the grounds together to avoid brownouts.",
+            "id": "plan-path",
+            "text": "Choose your wiring strategy. If your servo is low-current and light load, use the bench setup. If it may draw high startup current, use an external 5 V rail with common ground for stability.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Wired up!",
+                    "goto": "wire-bench",
+                    "text": "Use the bench wiring path.",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -35,8 +35,23 @@
                             "count": 3
                         },
                         {
-                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
                             "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire-external",
+                    "text": "Use the external-supply path for safer current headroom.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 3
                         },
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -51,8 +66,56 @@
             ]
         },
         {
+            "id": "wire-bench",
+            "text": "Bench path: with USB disconnected, wire signal to pin 9, red to 5 V, and brown/black to GND. Keep the servo horn free so it cannot strike nearby tools during motion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify-safe-state",
+                    "text": "Bench wiring complete."
+                }
+            ]
+        },
+        {
+            "id": "wire-external",
+            "text": "External path: keep signal on pin 9, feed servo power from the external 5 V supply, and tie Arduino GND to supply GND. This avoids USB brownouts under load.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify-safe-state",
+                    "text": "External wiring complete."
+                }
+            ]
+        },
+        {
+            "id": "verify-safe-state",
+            "text": "Safety checkpoint: confirm no reversed polarity, no loose leads, and at least 10 cm clearance for servo travel. If any check fails, keep power disconnected and return to wiring.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Safety checks passed.",
+                    "requiresItems": [
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I found a wiring or clearance risk."
+                }
+            ]
+        },
+        {
             "id": "code",
-            "text": "Reconnect the USB cable, open the Arduino IDE, and load File > Examples > Servo > Sweep. If it's not installed, run the 'Install the Arduino IDE' process. Select the correct board and port, then upload. Secure the servo and keep fingers clear as it sweeps between 0\u00b0 and 180\u00b0.",
+            "text": "Reconnect USB, open File > Examples > Servo > Sweep, and upload after selecting the correct board and port. Monitor movement through two full sweeps and listen for grinding or jitter.",
             "options": [
                 {
                     "type": "process",
@@ -60,16 +123,47 @@
                     "text": "Install the Arduino IDE"
                 },
                 {
+                    "type": "process",
+                    "process": "arduino-servo-sweep",
+                    "text": "Run the detailed servo sweep process"
+                },
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Uploaded and moving."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Jitter, resets, or binding detected."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery branch: disconnect power, re-center the horn mechanically, inspect ground continuity, and reduce load. If jitter persists, switch to the external-supply path before retrying upload.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify-safe-state",
+                    "text": "Corrections made; re-run safety verification."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: confirm two consecutive full sweeps from 0° to 180° without reset, stall, or abnormal heating. Record which power path you used.",
+            "options": [
+                {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Servo is moving.",
-                    "process": "arduino-servo-sweep"
+                    "text": "Two stable sweeps recorded."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Servos unlock all kinds of robotics projects.",
+            "text": "Nice work! You used structured safety checks, a recovery loop, and proof of stable motion before closing the quest.",
             "options": [
                 {
                     "type": "finish",
@@ -88,7 +182,7 @@
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-02",
