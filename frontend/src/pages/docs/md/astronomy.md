@@ -140,8 +140,8 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
     - `plan` → "Pass window confirmed, gear is staged." — smartphone ×1, camera tripod ×1, ISS pass window ×1
-    - `capture` → "Photo saved and metadata logged." — mission logbook ×1, ISS pass window ×1
-    - `interpret` → "Pass: continuous streak and timing error <15s." — mission logbook ×1
+    - `capture` → "Photo saved and metadata logged." — mission logbook ×1, ISS pass window ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Pass: continuous streak and timing error <15s." — mission logbook ×1, mission log entry ×1, feather quill ×1
 - Troubleshooting/safety branches:
     - `interpret` fail path forces `retest` before completion.
     - `recovery` allows weather/footing aborts and safe rescheduling.
@@ -156,9 +156,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Consumes: none
         - Creates: ISS pass window ×1
     - [write-mission-log-entry](/processes/write-mission-log-entry)
-        - Requires: mission logbook ×1
-        - Consumes: none
-        - Creates: mission logbook ×1
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 6) Track Jupiter's Moons (`astronomy/jupiter-moons`)
 
@@ -206,9 +206,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/constellations`
 - Dialogue `requiresItems` gates:
-    - `chart-route` → "I can resolve two stars and distinct colors." — basic telescope ×1, planisphere star chart ×1
-    - `focus-route` → "Focus lock achieved; I see gold and blue." — basic telescope ×1
-    - `log-evidence` → "Observation logged with color notes." — mission logbook ×1, basic telescope ×1
+    - `chart-route` → "I can resolve two stars and distinct colors." — basic telescope ×1, planisphere star chart ×1, constellation sketch set ×1
+    - `focus-route` → "Focus lock achieved; I see gold and blue." — basic telescope ×1, constellation sketch set ×1
+    - `log-evidence` → "Observation logged with color notes." — mission logbook ×1, basic telescope ×1, mission log entry ×1, feather quill ×1
 - Troubleshooting/safety branches:
     - `recovery` loops back to route selection after tripod/footing/glare safety checks.
     - Unsafe conditions can be logged with caution and end the run without forced completion.
@@ -223,9 +223,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Consumes: none
         - Creates: constellation sketch set ×1
     - [write-mission-log-entry](/processes/write-mission-log-entry)
-        - Requires: mission logbook ×1
-        - Consumes: none
-        - Creates: mission logbook ×1
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 9) Measure Light Pollution (`astronomy/light-pollution`)
 
@@ -397,11 +397,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/meteor-shower`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Plan recorded and route is clear." — mission logbook ×1, basic telescope ×1
+    - `plan` → "Plan recorded and route is clear." — mission logbook ×1, basic telescope ×1, seasonal star hop plan ×1
     - `weather-hold` → "Sky cleared enough—resume setup." — basic telescope ×1
-    - `setup` → "Setup is stable and ready." — basic telescope ×1
-    - `observe` → "Pass observed with full notes." — mission logbook ×1
-    - `interpret` → "All fields logged and coherent." — mission logbook ×1
+    - `setup` → "Setup is stable and ready." — basic telescope ×1, constellation sketch set ×1
+    - `observe` → "Pass observed with full notes." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "All fields logged and coherent." — mission logbook ×1, mission log entry ×1, feather quill ×1
 - Troubleshooting/safety branches:
     - `weather-hold` provides seeing/weather fallback and rescheduling path.
     - `troubleshoot` enforces a realignment retry loop before completion.
@@ -420,9 +420,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Consumes: none
         - Creates: constellation sketch set ×1
     - [write-mission-log-entry](/processes/write-mission-log-entry)
-        - Requires: mission logbook ×1
-        - Consumes: none
-        - Creates: mission logbook ×1
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 18) Spot Saturn's Rings (`astronomy/saturn-rings`)
 

@@ -54,6 +54,10 @@
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
                             "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
                         }
                     ]
                 },
@@ -80,6 +84,10 @@
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
                             "count": 1
                         }
                     ]
@@ -127,6 +135,14 @@
                         },
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
                             "count": 1
                         }
                     ]
