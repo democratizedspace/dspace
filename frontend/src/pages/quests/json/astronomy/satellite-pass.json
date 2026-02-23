@@ -67,6 +67,10 @@
                     "text": "Sky cleared enough\u2014resume setup.",
                     "requiresItems": [
                         {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
                         }
@@ -203,9 +207,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/meteor-shower"
-    ],
+    "requiresQuests": ["astronomy/meteor-shower"],
     "hardening": {
         "passes": 0,
         "score": 90,

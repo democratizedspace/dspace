@@ -398,7 +398,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/meteor-shower`
 - Dialogue `requiresItems` gates:
     - `plan` → "Plan recorded and route is clear." — mission logbook ×1, basic telescope ×1, seasonal star hop plan ×1
-    - `weather-hold` → "Sky cleared enough—resume setup." — basic telescope ×1
+    - `weather-hold` → "Sky cleared enough—resume setup." — seasonal star hop plan ×1, basic telescope ×1
     - `setup` → "Setup is stable and ready." — basic telescope ×1, constellation sketch set ×1
     - `observe` → "Pass observed with full notes." — mission logbook ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "All fields logged and coherent." — mission logbook ×1, mission log entry ×1, feather quill ×1
