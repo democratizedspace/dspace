@@ -92,7 +92,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Consumes: none
         - Creates: temperature line chart ×1
 - QA notes:
-    - Added an interpretation gate with explicit pass bounds (3-9°C and <±1°C oscillation) before finish unlocks.
+    - Added an interpretation gate with explicit pass bounds (3-9°C and within ±1°C oscillation) before finish unlocks.
     - Out-of-range readings branch into corrective reseat/re-bleed actions and require a full re-log loop.
 
 ## 4) Check Loop Outlet Temperature (`geothermal/check-loop-outlet-temp`)

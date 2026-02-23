@@ -133,7 +133,7 @@
         },
         {
             "id": "evaluate",
-            "text": "Acceptance band is 3-9°C with less than ±1°C oscillation during steady flow. Does the chart meet that standard?",
+            "text": "Acceptance band is 3-9°C with oscillation within ±1°C during steady flow. Does the chart meet that standard?",
             "options": [
                 {
                     "type": "goto",
