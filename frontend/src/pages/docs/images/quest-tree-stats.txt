@@ -6,7 +6,7 @@ aquaria: 19 quests, 3658 lines
 programming: 18 quests, 2402 lines
 3dprinting: 16 quests, 3047 lines
 devops: 15 quests, 1554 lines
-geothermal: 15 quests, 2031 lines
+geothermal: 15 quests, 2217 lines
 firstaid: 13 quests, 1126 lines
 robotics: 13 quests, 1258 lines
 chemistry: 10 quests, 858 lines
