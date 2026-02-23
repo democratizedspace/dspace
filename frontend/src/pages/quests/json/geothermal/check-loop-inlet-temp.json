@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Lock out the pump, wipe the manifold dry, and keep your hands clear of live mains. Ready to clip a probe to the inlet?",
+            "text": "Lock out the pump, wipe the manifold dry, and keep hands clear of live mains. Ready to stage an inlet probe?",
             "options": [
                 {
                     "type": "goto",
@@ -40,13 +40,13 @@
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "Walk me through the steps."
+                    "text": "Walk me through the setup."
                 }
             ]
         },
         {
             "id": "build",
-            "text": "Seat the thermistor securely on the inlet barb and add strain relief to the leads. Build the logger so the probe can't slip when the pump starts.",
+            "text": "Seat the thermistor on the inlet barb with strain relief so vibration cannot pull it loose.",
             "options": [
                 {
                     "type": "goto",
@@ -69,7 +69,7 @@
         },
         {
             "id": "log",
-            "text": "Purged flow? Good. Clamp the probe, bleed any bubbles, then let the inlet run for ten minutes while you log a stable trace.",
+            "text": "Run ten minutes at normal flow and capture the inlet trace. Record target range 5-18\u00b0C with <2\u00b0C swing.",
             "options": [
                 {
                     "type": "process",
@@ -88,7 +88,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "plot",
+                    "goto": "interpret",
                     "text": "Trace saved",
                     "requiresItems": [
                         {
@@ -100,8 +100,47 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpret the trace: pass if median inlet temp is 5-18\u00b0C and oscillation stays below 2\u00b0C. Otherwise choose corrective action.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Within bounds: proceed to chart.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Out of bounds or noisy trace."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: bleed trapped air, re-seat probe insulation, and confirm pump speed. Then retest before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Corrective action complete; run mandatory retest.",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "plot",
-            "text": "Label the inlet curve and flag any spikes when the pump cycles. Let's make a quick chart you can compare to outlet data later.",
+            "text": "Generate a labeled chart and attach pass/fail notes so future outlet comparisons are auditable.",
             "options": [
                 {
                     "type": "process",
@@ -121,7 +160,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Chart reviewed",
+                    "text": "Chart reviewed and annotated",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -133,7 +172,7 @@
         },
         {
             "id": "finish",
-            "text": "Save that inlet plot with the date and pump speed. It'll make spotting seasonal drift and clogged filters much easier.",
+            "text": "Store the inlet chart with bounds check notes and timestamp for maintenance parity.",
             "options": [
                 {
                     "type": "finish",
@@ -154,7 +193,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "requiresQuests": [
+        "geothermal/survey-ground-temperature"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

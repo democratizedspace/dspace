@@ -8,18 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Flow dropped? Let's rinse that filter clean.",
+            "text": "Flow dropped? Lock out the pump breaker, verify pressure is bled down, and stage towels before touching fittings.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "What do I need?"
+                    "text": "Safety lockout complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "What gear do I need?"
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "A small pump pushes water backward through the filter.",
+            "text": "Use a submersible pump, clean bucket, and clear hose so debris does not re-enter the loop.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,39 +34,103 @@
                             "count": 1
                         }
                     ],
-                    "text": "Take this pump."
+                    "text": "Issue a submersible pump."
                 },
                 {
                     "type": "goto",
-                    "goto": "flush",
+                    "goto": "baseline",
                     "requiresItems": [
                         {
                             "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
                             "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
                         }
                     ],
-                    "text": "I have a pump ready."
+                    "text": "Pump and logger are staged."
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Before flushing, grab a 2-minute pressure baseline so we can prove improvement after cleanup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "flush",
+                    "text": "Baseline noted: unstable flow and visible debris.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "flush",
-            "text": "Disconnect the filter and run water backward until clear.",
+            "text": "Backflush in 30-second bursts. If water stays cloudy after three bursts, stop and inspect the housing seal before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Water is clear and pressure normalized."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Still cloudy or pressure is erratic."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Good catch. Check for collapsed hose, clogged impeller, or mis-seated gasket. Re-seat parts and run one short flush before re-verifying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "flush",
+                    "text": "Corrected and ready to retry flush."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Need a new baseline before retry."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Record post-flush pressure and confirm the manifold stays dry for five minutes with the pump running.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Filter runs clear."
+                    "text": "Post-flush check passed; no leaks observed.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Pressure still drifts or moisture appears."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Debris flushed. Flow should improve now.",
+            "text": "Filter backflush is complete with before/after evidence. Tag the service log with flow result and date.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Back to the manifold."
+                    "text": "Return loop to normal operation."
                 }
             ]
         }
@@ -76,7 +145,7 @@
     "hardening": {
         "passes": 0,
         "score": 85,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

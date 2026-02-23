@@ -69,8 +69,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `build` → "Rig is already built" — thermistor logging rig ×1
     - `log` → "Capture the inlet trace" — thermistor logging rig ×1, Laptop Computer ×1
     - `log` → "Trace saved" — temperature log CSV ×1
+    - `interpret` → "Within bounds: proceed to chart." — temperature log CSV ×1
+    - `corrective` → "Corrective action complete; run mandatory retest." — thermistor logging rig ×1
     - `plot` → "Plot the inlet run" — temperature log CSV ×1, Laptop Computer ×1
-    - `plot` → "Chart reviewed" — temperature line chart ×1
+    - `plot` → "Chart reviewed and annotated" — temperature line chart ×1
     - `finish` → "Inlet trend logged" — temperature line chart ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -90,6 +92,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: temperature line chart ×1
+- QA notes:
+    - Measurement interpretation is explicit: pass requires median inlet temp 5-18°C and oscillation below 2°C.
+    - Out-of-range results must complete corrective action and a mandatory retest loop before finish is available.
 
 ## 4) Check Loop Outlet Temperature (`geothermal/check-loop-outlet-temp`)
 
@@ -207,9 +212,11 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `prep` → "Rig is already sealed" — thermistor logging rig ×1
     - `bury` → "Start a buried 24 h log" — thermistor logging rig ×1, Laptop Computer ×1
     - `bury` → "Baseline log exported" — temperature log CSV ×1
+    - `review` → "Log looks healthy and complete." — temperature log CSV ×1
+    - `anomaly` → "Fixes applied; rerun logging window." — thermistor logging rig ×1
     - `chart` → "Plot the baseline curve" — temperature log CSV ×1, Laptop Computer ×1
     - `chart` → "Annotate weather notes" — temperature line chart ×1, Laptop Computer ×1
-    - `chart` → "Baseline chart saved" — annotated temperature graph ×1
+    - `chart` → "Baseline chart saved with anomaly status" — annotated temperature graph ×1
     - `finish` → "Ground curve logged" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -355,14 +362,19 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/purge-loop-air`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I have a pump ready." — submersible water pump ×1
+    - `materials` → "Pump and logger are staged." — submersible water pump ×1, Arduino Uno ×1
+    - `baseline` → "Baseline noted: unstable flow and visible debris." — Arduino Uno ×1
+    - `verify` → "Post-flush check passed; no leaks observed." — Arduino Uno ×1
 - Grants:
-    - `materials` → "Take this pump." — submersible water pump ×1
+    - `materials` → "Issue a submersible pump." — submersible water pump ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Completion now requires a before/after evidence path: baseline pressure note before flush, then post-flush stability verification.
+    - Troubleshooting branch enforces safe retry when cloudy output, pressure drift, or manifold moisture is observed.
 
 ## 15) Replace Faulty Thermistor (`geothermal/replace-faulty-thermistor`)
 
