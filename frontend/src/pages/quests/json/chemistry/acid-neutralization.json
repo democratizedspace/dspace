@@ -1,63 +1,132 @@
 {
     "id": "chemistry/acid-neutralization",
     "title": "Neutralize an Acid Spill",
-    "description": "Use basic chemistry to make a workspace safe again.",
+    "description": "Neutralize an acid spill with staged evidence gates, safe escalation, and a verified re-check.",
     "image": "/assets/quests/acid_spill_neutralization_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Oops, a bit of acid dripped on the bench. Let's neutralize it before it causes trouble.",
+            "text": "Acid spill on bench. Choose your approach, but do not rush: isolate the area, PPE on, and keep ignition sources and unprotected hands away.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "neutralize",
-                    "text": "I'll handle it."
+                    "goto": "choose-path",
+                    "text": "Area isolated and PPE confirmed."
                 }
             ]
         },
         {
-            "id": "neutralize",
-            "text": "Sprinkle baking soda until fizzing stops, then check the area with a pH strip.",
+            "id": "choose-path",
+            "text": "Pick a response path. Main path uses a structured spill kit run; alternate path is manual neutralization with tighter checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit-response",
+                    "text": "Main path: use spill kit workflow."
+                },
+                {
+                    "type": "goto",
+                    "goto": "manual-response",
+                    "text": "Alternate path: manual neutralization and strip checks."
+                }
+            ]
+        },
+        {
+            "id": "kit-response",
+            "text": "Deploy absorbent perimeter, add neutralizer in small increments, and watch reaction intensity. Stop immediately if vapor or heat spikes.",
             "options": [
                 {
                     "type": "process",
                     "process": "neutralize-acid",
-                    "goto": "verify",
-                    "text": "Use the spill cleanup kit."
+                    "text": "Run `neutralize-acid` simulation log before manual verification."
                 },
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Sprinkling baking soda."
-                }
-            ]
-        },
-        {
-            "id": "verify",
-            "text": "Now check the area with a pH strip to confirm the spill is neutralized.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "The spill is neutralized.",
+                    "text": "Kit run complete; verify with pH strip.",
                     "requiresItems": [
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Unexpected fizzing/heat—need recovery protocol."
+                }
+            ]
+        },
+        {
+            "id": "manual-response",
+            "text": "Sprinkle baking soda slowly from the edge inward and avoid splashing. Keep containment in place until fizzing slows, then proceed to verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Manual neutralization complete; proceed to pH verification.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Manual approach unstable—switch to recovery."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Interpret the verification reading. Pass only when strip indicates near-neutral range and no active reaction remains.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification passed: spill zone is neutral and controlled.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Verification failed: still acidic/basic or active fizzing."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery branch: back out, refresh PPE, re-contain the zone, and re-run neutralization in smaller doses. If instability persists after one retry, escalate to supervisor and lock the station.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-path",
+                    "text": "Recovery complete—retry with selected path."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Escalated and locked out bench safely pending review."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! A safe lab is a productive lab.",
+            "text": "Bench safety restored. You used evidence-backed verification and followed a stop-work recovery path instead of forcing a risky finish.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All cleaned up."
+                    "text": "Neutralization protocol complete."
                 }
             ]
         }
@@ -71,8 +140,8 @@
     "requiresQuests": ["chemistry/ph-test"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }

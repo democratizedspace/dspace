@@ -1,35 +1,127 @@
 {
     "id": "chemistry/stevia-extraction",
     "title": "Extract Stevia Sweetener",
-    "description": "Use simple chemistry to make a sweet extract from stevia leaves.",
+    "description": "Produce stevia extract through staged setup and outcome evidence, with contamination recovery safeguards.",
     "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. We'll turn those stevia leaves into clean sweetener with low waste. Ready?",
+            "text": "Phoenix here. We are extracting sweetness, not cooking sludge. Choose a prep strategy and prove setup before we call any outcome valid.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "extract",
-                    "text": "Show me how!"
+                    "goto": "setup-branch",
+                    "text": "Ready to stage the extraction plan."
                 }
             ]
         },
         {
-            "id": "extract",
-            "text": "Dry the leaves, crush them, steep below boiling, then filter. Keep the heat gentle to protect the compounds.",
+            "id": "setup-branch",
+            "text": "Two valid extraction routes: precision prep (measured batches) or low-tech prep (small pilot steep). Both routes must produce extraction evidence before outcome review.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "precision-setup",
+                    "text": "Main path: precision prep and measured steep."
+                },
+                {
+                    "type": "goto",
+                    "goto": "pilot-setup",
+                    "text": "Alternate path: pilot steep for quick viability check."
+                }
+            ]
+        },
+        {
+            "id": "precision-setup",
+            "text": "Dry and crush leaves, label containers, and stage clean filter media. Keep temperature below a full boil to protect glycosides.",
             "options": [
                 {
                     "type": "process",
                     "process": "extract-stevia",
-                    "text": "Begin extraction"
+                    "text": "Run controlled extraction pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "outcome-check",
+                    "text": "Extraction evidence captured; evaluate extract clarity.",
+                    "requiresItems": [
+                        {
+                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination-recovery",
+                    "text": "Cloudy or scorched notes detected—trigger recovery."
+                }
+            ]
+        },
+        {
+            "id": "pilot-setup",
+            "text": "Run a short pilot steep with a small batch to validate heat and filter pace before full volume.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "extract-stevia",
+                    "text": "Run pilot extraction."
+                },
+                {
+                    "type": "goto",
+                    "goto": "outcome-check",
+                    "text": "Pilot indicates viable extraction; check outcome evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination-recovery",
+                    "text": "Pilot failed or contaminated—enter recovery."
+                }
+            ]
+        },
+        {
+            "id": "outcome-check",
+            "text": "Outcome gate: accept only if extract is clear-to-amber, aromatic, and free of burnt particulates. If not, you must recover and rerun.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Outcome passes quality check; extract is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination-recovery",
+                    "text": "Outcome fails quality gate; rerun required."
+                }
+            ]
+        },
+        {
+            "id": "contamination-recovery",
+            "text": "Recovery protocol: discard compromised batch, sanitize vessels, reduce heat input, and restart with fresh leaves. If two attempts fail, pause production and log equipment inspection.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup-branch",
+                    "text": "Recovery actions done—retry setup path."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "The extract looks ready!",
+                    "text": "Paused safely after documenting a valid extract and logged deferred extraction for maintenance.",
                     "requiresItems": [
                         {
                             "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
@@ -41,11 +133,11 @@
         },
         {
             "id": "finish",
-            "text": "Nice work. Sweetener without sugar, and minimal waste. Next up: crystals.",
+            "text": "Well done. You proved setup and outcome evidence separately, and you followed contamination controls instead of forcing an unsafe batch.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Phoenix!"
+                    "text": "Extraction complete."
                 }
             ]
         }
@@ -59,8 +151,8 @@
     "requiresQuests": ["hydroponics/stevia", "chemistry/safe-reaction"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }

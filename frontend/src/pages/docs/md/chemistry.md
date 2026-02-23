@@ -48,7 +48,8 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/safe-reaction`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Result logged" — pH strip ×1, nitrile gloves (pair) ×1, safety goggles ×1, lab coat ×1
+    - `measure` → "I logged a stable reading and kept PPE on." — hydroponic pH reading ×1, nitrile gloves (pair) ×1, safety goggles ×1, lab coat ×1
+    - `interpret` → "Reading is in-range (6.0–7.5); safe to proceed." — hydroponic pH reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -59,6 +60,9 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
         - Consumes: pH strip ×1
         - Creates: hydroponic pH reading ×1
+- QA notes:
+    - Explicit interpretation gate enforces a pass window (pH 6.0–7.5) before finish.
+    - Out-of-range/ambiguous readings must route through troubleshooting, then re-test or safe escalation.
 
 ## 3) Dilute Hydrochloric Acid Safely (`chemistry/acid-dilution`)
 
@@ -84,17 +88,19 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/ph-test`
 - Dialogue `requiresItems` gates:
-    - `verify` → "The spill is neutralized." — pH strip ×1
+    - `kit-response` → "Kit run complete; verify with pH strip." — pH strip ×1
+    - `manual-response` → "Manual neutralization complete; proceed to pH verification." — pH strip ×1
+    - `verify` → "Verification passed: spill zone is neutral and controlled." — pH strip ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [neutralize-acid](/processes/neutralize-acid)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - None (quest gates rely on PPE + pH-strip verification evidence in dialogue branches).
+- QA notes:
+    - Flow is now non-linear (spill-kit path vs manual path) with a shared verification node.
+    - Recovery branch enforces stop-work behavior, re-containment, and retry/escalation before closure.
 
 ## 5) Prepare a Buffer Solution (`chemistry/buffer-solution`)
 
@@ -156,7 +162,10 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/stevia`, `chemistry/safe-reaction`
 - Dialogue `requiresItems` gates:
-    - `extract` → "The extract looks ready!" — stevia extract ×1
+    - `precision-setup` → "Extraction evidence captured; evaluate extract clarity." — stevia extract ×1
+    - `pilot-setup` → "Pilot indicates viable extraction; check outcome evidence." — stevia extract ×1
+    - `outcome-check` → "Outcome passes quality check; extract is ready." — stevia extract ×1
+    - `contamination-recovery` → "Paused safely after documenting a valid extract and logged deferred extraction for maintenance." — stevia extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -167,6 +176,9 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: none
         - Consumes: bundle of stevia leaves ×10
         - Creates: stevia extract ×1
+- QA notes:
+    - Staged evidence is split between extraction-route evidence and an outcome quality gate before finish.
+    - Contamination recovery includes sanitize-and-rerun workflow plus safe pause/escalation path.
 
 ## 9) Refine Stevia Crystals (`chemistry/stevia-crystals`)
 
