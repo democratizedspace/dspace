@@ -8,28 +8,54 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's protect your work by backing up the cluster.",
+            "text": "Let's protect your work with backups you can actually restore, not just cron lines that look busy.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Good plan."
+                    "goto": "policy",
+                    "text": "Define retention and restore objectives.",
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        },
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "script",
-            "text": "Plug an external SSD into the control plane and create a cron job that runs `docker exec dspace-postgres pg_dumpall > /mnt/backup/dspace.sql` each night.",
+            "id": "policy",
+            "text": "Set policy first: nightly schedule, 7-day retention, checksum verification, and one weekly restore drill target.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "configure",
+                    "text": "Policy documented. Configure backup job."
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Need to confirm SSD mount path and free space first."
+                }
+            ]
+        },
+        {
+            "id": "configure",
+            "text": "Configure cron for `pg_dumpall`, rotate dumps daily, and keep checksums beside each archive.",
             "options": [
                 {
                     "type": "process",
                     "process": "configure-daily-backups",
-                    "text": "Cron job added."
+                    "text": "Backup and retention job applied."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Backup script running.",
+                    "goto": "verify",
+                    "text": "Job installed. Capture backup evidence.",
                     "requiresItems": [
                         {
                             "id": "849eb5e1-9f63-488b-80d3-913492049090",
@@ -40,8 +66,63 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Capture backup evidence with timestamp, archive size, checksum status, and restore-test result from a sampled dump.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Export backup run report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Evidence complete and restore drill passed.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Backup missing fields, checksum mismatch, or restore failed.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: do not prune old archives until verification passes. Fix mount/permissions, regenerate dump, and rerun restore test.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Log backup incident and remediation."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Corrections applied. Re-run backup verification.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Backups are running daily. Store them off-site for extra safety.",
+            "text": "Backups are now auditable and restorable, with a recovery loop for bad dumps before data-loss risk grows.",
             "options": [
                 {
                     "type": "finish",

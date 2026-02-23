@@ -8,26 +8,118 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Now that your services are online, attackers may try brute-force SSH logins.",
+            "text": "Now that SSH is hardened, let's add Fail2ban with a safe rollout so we do not lock out trusted admins.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "baseline",
+                    "text": "Capture baseline auth behavior first.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Record a short baseline window: failed-attempt rate, trusted admin IP range, and current sshd responsiveness.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Export baseline auth report."
+                },
+                {
+                    "type": "goto",
                     "goto": "install",
-                    "text": "How do I stop them?"
+                    "text": "Baseline captured. Apply Fail2ban jail settings.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "install",
-            "text": "Install Fail2ban and configure a jail for the SSH service.",
+            "text": "Install Fail2ban with explicit thresholds (`maxretry`, `findtime`, `bantime`) and keep one verified admin session open for rollback.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Bans configured",
+                    "goto": "verify",
+                    "text": "Rules applied. Validate ban + allow behavior.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Need to adjust thresholds before enabling enforcement."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: test that repeated bad logins are banned while trusted-key login remains available; capture journal evidence for both outcomes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture Fail2ban verification report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Ban/allow behavior verified with evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "False positives or admin access instability detected.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: whitelist trusted admin ranges, shorten ban window if needed, and restore access before reenabling strict thresholds.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Log false-positive incident and tuning actions."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Tuning applied. Re-run verification window.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
                             "count": 1
                         }
                     ]
@@ -36,7 +128,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your node now blocks repeated SSH attempts automatically.",
+            "text": "Great. Fail2ban is enforced with measured thresholds, evidence logs, and a recovery path for false-positive lockouts.",
             "options": [
                 {
                     "type": "finish",
@@ -55,7 +147,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

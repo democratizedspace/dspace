@@ -149,9 +149,11 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/monitoring`
 - Dialogue `requiresItems` gates:
-    - `start` → "Prep the nodes." — Pi cluster node ×1, Laptop Computer ×1
-    - `stage` → "Config pushed across the cluster." — Pi cluster node ×1, Laptop Computer ×1
-    - `verify` → "Health check logged." — Pi cluster node ×1, unattended-upgrades config ×1
+    - `start` → "Draft a rollout plan and maintenance window." — Pi cluster node ×1, Laptop Computer ×1
+    - `plan` → "Plan approved. Configure canary node first." — Pi cluster node ×1, Laptop Computer ×1
+    - `canary` → "Canary passed with clean logs." — Pi cluster node ×1, auto-update health report ×1
+    - `fleet` → "Fleet verification logged with stable cadence." — Pi cluster node ×1, unattended-upgrades config ×1
+    - `rollback` → "Rollback complete. Re-run canary verification." — Pi cluster node ×1
     - `finish` → "Queue the next maintenance window." — auto-update health report ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -174,7 +176,11 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/monitoring`
 - Dialogue `requiresItems` gates:
-    - `script` → "Backup script running." — external backup SSD ×1
+    - `start` → "Define retention and restore objectives." — external backup SSD ×1, Pi cluster node ×1
+    - `configure` → "Job installed. Capture backup evidence." — external backup SSD ×1
+    - `verify` → "Evidence complete and restore drill passed." — journalctl report ×1
+    - `verify` → "Backup missing fields, checksum mismatch, or restore failed." — journalctl report ×1
+    - `recovery` → "Corrections applied. Re-run backup verification." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -185,6 +191,14 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Pi cluster node ×1, external backup SSD ×1
         - Consumes: none
         - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 9) Secure the Cluster with HTTPS (`devops/enable-https`)
 
@@ -342,14 +356,26 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/ssh-hardening`
 - Dialogue `requiresItems` gates:
-    - `install` → "Bans configured" — Pi cluster node ×1
+    - `start` → "Capture baseline auth behavior first." — Pi cluster node ×1, Laptop Computer ×1
+    - `baseline` → "Baseline captured. Apply Fail2ban jail settings." — journalctl report ×1
+    - `install` → "Rules applied. Validate ban + allow behavior." — Pi cluster node ×1
+    - `verify` → "Ban/allow behavior verified with evidence." — journalctl report ×1
+    - `verify` → "False positives or admin access instability detected." — journalctl report ×1
+    - `recovery` → "Tuning applied. Re-run verification window." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## QA flow notes
 
