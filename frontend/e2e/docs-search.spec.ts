@@ -74,14 +74,14 @@ test.describe('Docs search', () => {
         await waitForHydration(page);
 
         const searchInput = page.getByRole('searchbox', { name: /search docs/i });
-        await searchInput.fill('github');
+        await searchInput.fill('docssearchsnippettokenwithoutbreakpoints');
 
         const docLink = page.getByRole('link', { name: 'Docs search', exact: true });
         await expect(docLink).toBeVisible();
 
         const snippet = docLink.locator('..').locator('.doc-snippet');
         await expect(snippet).toBeVisible();
-        await expect(snippet).toHaveAttribute('title', /https:\/\/github\.com/);
+        await expect(snippet).toHaveAttribute('title', /docssearchsnippettokenwithoutbreakpoints/i);
 
         const overflowWrap = await snippet.evaluate((el) => getComputedStyle(el).overflowWrap);
         expect(overflowWrap).toMatch(/anywhere|break-word/);
