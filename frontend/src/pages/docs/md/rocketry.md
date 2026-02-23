@@ -267,9 +267,9 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/preflight-check`
 - Dialogue `requiresItems` gates:
-    - `reading-one` → "Reading #1 logged. Capture the second sample now." — parachute ×1
-    - `reading-two` → "Reading #2 logged and trend noted." — parachute ×1
-    - `retest-window` → "Retest stayed stable. Launch conditions verified." — parachute ×1
+    - `reading-one` → "Reading #1 logged. Capture the second sample now." — wind log ×1
+    - `reading-two` → "Reading #2 logged and trend noted." — wind log ×1
+    - `retest-window` → "Retest stayed stable. Launch conditions verified." — wind log ×1
 - Troubleshooting/safety branches:
     - `setup` + `safety-hold` add a mandatory pad/perimeter safety hold before taking readings.
     - `interpret`, `corrective`, and `scrub` enforce out-of-range handling with retest and explicit no-launch outcomes.

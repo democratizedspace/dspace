@@ -43,7 +43,7 @@
                     "text": "Reading #1 logged. Capture the second sample now.",
                     "requiresItems": [
                         {
-                            "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
                             "count": 1
                         }
                     ]
@@ -60,7 +60,7 @@
                     "text": "Reading #2 logged and trend noted.",
                     "requiresItems": [
                         {
-                            "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
                             "count": 1
                         }
                     ]
@@ -109,7 +109,7 @@
                     "text": "Retest stayed stable. Launch conditions verified.",
                     "requiresItems": [
                         {
-                            "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
                             "count": 1
                         }
                     ]

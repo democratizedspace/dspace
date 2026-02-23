@@ -158,8 +158,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "inventory-check",
-                    "text": "Corrections done. Restart checklist from inventory gate."
+                    "goto": "verify-install",
+                    "text": "Corrections done. Re-run the verification gate."
                 }
             ]
         },

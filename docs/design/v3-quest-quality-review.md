@@ -1093,17 +1093,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, sysadmin/re
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/parachute`
-  - [x] Observed issue (addressed): `rocketry/parachute` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #0)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0)
+  - [x] Observed issue (addressed): `rocketry/parachute` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3688)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3688)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3688)
 - `rocketry/preflight-check`
   - [x] Observed issue (addressed): `rocketry/preflight-check` previously centered on a measurement/check action but acceptance thresholds and out-of-range handling were thin; this was hardened in this pass. (PR #3646)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3646)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3646)
 - `rocketry/recovery-run`
-  - [x] Observed issue (addressed): `rocketry/recovery-run` previously centered on a measurement/check action but acceptance thresholds and out-of-range handling were thin; this was hardened in this pass. (PR #0)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0)
+  - [x] Observed issue (addressed): `rocketry/recovery-run` previously centered on a measurement/check action but acceptance thresholds and out-of-range handling were thin; this was hardened in this pass. (PR #3688)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3688)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3688)
 - `rocketry/static-test`
   - [x] Observed issue (addressed): `rocketry/static-test` previously centered on a measurement/check action but acceptance thresholds and out-of-range handling were thin; this was hardened in this pass. (PR #3646)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3646)
@@ -1113,9 +1113,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, sysadmin/re
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/wind-check`
-  - [x] Observed issue (addressed): `rocketry/wind-check` previously centered on a measurement/check action but acceptance thresholds and out-of-range handling were thin; this was hardened in this pass. (PR #0)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0)
+  - [x] Observed issue (addressed): `rocketry/wind-check` previously centered on a measurement/check action but acceptance thresholds and out-of-range handling were thin; this was hardened in this pass. (PR #3688)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3688)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3688)
 
 ### ubi (3 quests)
 
