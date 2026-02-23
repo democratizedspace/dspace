@@ -1,34 +1,51 @@
 {
     "id": "astronomy/binary-star",
     "title": "Split a Binary Star",
-    "description": "Use a basic telescope and planisphere to find Albireo and note its colors.",
+    "description": "Use charting and focus checks to split Albireo, log color evidence, and recover if seeing is poor.",
     "image": "/assets/quests/binary_star_albireo_observation.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Albireo is a colorful binary in Cygnus. Ready to track it down?",
+            "text": "Albireo is a colorful binary in Cygnus. Want a fast star-hop route or a careful calibration-first setup?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "locate",
-                    "text": "Point me to it."
+                    "goto": "choose-route",
+                    "text": "Give me the two route options."
                 }
             ]
         },
         {
-            "id": "locate",
-            "text": "Trace Cygnus on a planisphere and aim the telescope at Albireo to split them.",
+            "id": "choose-route",
+            "text": "Both routes work. Pick one, then prove the split with a mission-log entry before we call it complete.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart-route",
+                    "text": "Use planisphere star-hop (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "focus-route",
+                    "text": "Do a focus-first sweep (alternate path)."
+                }
+            ]
+        },
+        {
+            "id": "chart-route",
+            "text": "Trace Cygnus on the planisphere, then center Albireo with low magnification before zooming in.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Aligning with Cygnus."
+                    "text": "Cygnus traced and Albireo centered."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "log-evidence",
+                    "text": "I can resolve two stars and distinct colors.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -37,15 +54,104 @@
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
                             "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
                         }
-                    ],
-                    "text": "I see gold and blue!"
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Still a blurry single point\u2014need troubleshooting."
+                }
+            ]
+        },
+        {
+            "id": "focus-route",
+            "text": "Start with lower power, refocus slowly, and let the scope settle before trying to split the pair.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Focus sweep complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "Focus lock achieved; I see gold and blue.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Colors are washed out or stars still merge."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Pause and run a safety check: steady tripod, no rushing in darkness, and no looking near bright horizon glare. Then retry with lower magnification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Safety check done\u2014retry one of the routes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Conditions are unsafe tonight; reschedule and finish with a caution note."
+                }
+            ]
+        },
+        {
+            "id": "log-evidence",
+            "text": "Record the observed color contrast and timestamp so another observer could repeat your result.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Mission log entry drafted."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Observation logged with color notes.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great split! Jot the colors in your mission log for future observers.",
+            "text": "Great split. You proved the observation with logged evidence and used a safe recovery plan when seeing conditions shifted.",
             "options": [
                 {
                     "type": "finish",
@@ -63,7 +169,7 @@
     "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 100,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

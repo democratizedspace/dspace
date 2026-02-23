@@ -1,36 +1,75 @@
 {
     "id": "astronomy/satellite-pass",
     "title": "Track a Satellite Pass",
-    "description": "Nova helps you follow an overhead satellite using your telescope.",
+    "description": "Plan and track a satellite pass with weather fallback, logged evidence, and a troubleshooting retry loop.",
     "image": "/assets/quests/satellite_pass_tracking_scope.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A bright satellite is passing tonight. Let's try to track it across the sky.",
+            "text": "A bright satellite is passing tonight. We'll plan first, then track with a fallback if visibility collapses.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "observe",
-                    "text": "I'll set up."
+                    "goto": "plan",
+                    "text": "Let's plan the pass."
                 }
             ]
         },
         {
-            "id": "observe",
-            "text": "Point your telescope at the predicted path and use slow movements to keep it in view.",
+            "id": "plan",
+            "text": "Use your chart and app to note expected path, altitude, and safe observation spot before setup.",
             "options": [
                 {
                     "type": "process",
-                    "process": "identify-constellations",
-                    "text": "Following now"
+                    "process": "draft-seasonal-star-plan",
+                    "text": "Pass plan drafted in the logbook."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "I kept it in sight",
+                    "goto": "setup",
+                    "text": "Plan recorded and route is clear.",
                     "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Cloud deck or glare may block this pass."
+                }
+            ]
+        },
+        {
+            "id": "weather-hold",
+            "text": "Fallback branch: hold position, keep lights low, and check the next visible pass window instead of forcing a bad session.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Recheck the next pass and update the plan."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Sky cleared enough\u2014resume setup.",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
@@ -40,8 +79,120 @@
             ]
         },
         {
+            "id": "setup",
+            "text": "Level the tripod, verify clear footing, and start with low magnification to acquire the target smoothly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Reference stars confirmed for the tracking corridor."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Setup is stable and ready.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Tripod drift or alignment error detected."
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Track across the sky and record entry azimuth, peak altitude estimate, and exit direction in your mission log.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Tracking notes recorded."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Pass observed with full notes.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Lost the satellite mid-pass."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: reset to low magnification, realign using reference stars, and retry only if paths are safe and unobstructed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Realigned\u2014retry the pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Visibility degraded; defer to next pass window."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: complete only when all three fields (entry, peak, exit) are logged; otherwise run troubleshooting and retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All fields logged and coherent.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "One or more fields missing\u2014retry with recovery steps."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great tracking! Recording the time and path helps refine its orbit.",
+            "text": "Great tracking run. You handled weather fallback, logged evidence, and used the recovery loop instead of guessing.",
             "options": [
                 {
                     "type": "finish",
@@ -59,7 +210,7 @@
     "requiresQuests": ["astronomy/meteor-shower"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 100,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
