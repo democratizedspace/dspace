@@ -191,7 +191,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/arduino-blink`
 - Dialogue `requiresItems` gates:
-    - `materials` → "Parts ready!" — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, 5 mm LED ×1, 220 Ohm Resistor ×1, Potentiometer ×1, USB Cable ×1, Laptop Computer ×1
+    - `materials` → "Parts ready." — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, 5 mm LED ×1, 220 Ohm Resistor ×1, Potentiometer ×1, USB Cable ×1, Laptop Computer ×1
+    - `evidence-check` → "Evidence captured. System is stable." — Potentiometer ×1
+    - Branching flow: choose a standard AnalogInOutSerial path or a custom smoothing path.
+    - Troubleshooting loops: wiring faults and unstable output route back to strategy selection before completion.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -213,7 +216,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/measure-led-current`
 - Dialogue `requiresItems` gates:
-    - `check` → "Confirmed 220 Ω." — 220 Ohm Resistor ×1, resistor color chart ×1
+    - `decode-bands` → "Bands decoded. Time to meter-check." — 220 Ohm Resistor ×1, resistor color chart ×1
+    - `meter-check` → "Measured value is 209–231 Ω." — resistor color chart ×1
+    - Measurement gate: completion requires both color-band decoding and meter verification within 220 Ω ±5% (209-231 Ω).
+    - Troubleshooting loop: ambiguous stripes or out-of-range readings force orientation recovery + retest before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -252,7 +258,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/arduino-blink`
 - Dialogue `requiresItems` gates:
-    - `wire` → "Wired up!" — Arduino Uno ×1, Jumper Wires ×3, USB Cable ×1, Servo Motor ×1, 5 V Power Supply ×1
+    - `power-plan` → "Use external 5V supply (higher stability)." — 5 V Power Supply ×1
+    - `evidence` → "Evidence captured and stable." — Servo Motor ×1
+    - Branching flow: choose USB-only or external-supply wiring paths before upload.
+    - Troubleshooting loops: wiring-recovery and runtime-recovery nodes enforce safe retry when jitter, stalls, or brownouts occur.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

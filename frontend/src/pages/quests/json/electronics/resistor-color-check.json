@@ -8,23 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Need to confirm this resistor's value? Power down the circuit and hold off on soldering until we read its stripes.",
+            "text": "Need to confirm this resistor's value? Power down the circuit and keep soldering irons unplugged while we verify the part. We'll decode colors, validate with a meter, then decide if the resistor is safe to install.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "check",
-                    "text": "Show me."
+                    "goto": "decode-bands",
+                    "text": "Let's decode it safely."
                 }
             ]
         },
         {
-            "id": "check",
-            "text": "Orient the gold tolerance band to the right. Compare the remaining stripes against a resistor color chart or run verify-resistor-color-code. Red-red-brown-gold equals 220 \u03a9 \u00b15%.",
+            "id": "decode-bands",
+            "text": "Orient the gold tolerance band to the right. Red-red-brown-gold should decode to 220 Ω ±5%. Use the resistor chart and run verify-resistor-color-code so you have a repeatable artifact before installing anything.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Confirmed 220 \u03a9.",
+                    "goto": "meter-check",
+                    "text": "Bands decoded. Time to meter-check.",
                     "process": "verify-resistor-color-code",
                     "requiresItems": [
                         {
@@ -36,12 +36,77 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery-orientation",
+                    "text": "I can't identify the tolerance band yet."
+                }
+            ]
+        },
+        {
+            "id": "meter-check",
+            "text": "Set the multimeter to resistance mode and measure across the resistor leads while it's isolated from the circuit. Record a reading artifact and compare against the expected 220 Ω ±5% window (209 Ω to 231 Ω).",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "in-range",
+                    "text": "Measured value is 209–231 Ω.",
+                    "requiresItems": [
+                        {
+                            "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Measured value is outside tolerance."
+                }
+            ]
+        },
+        {
+            "id": "recovery-orientation",
+            "text": "Recovery step: improve lighting, rotate the resistor, and compare each stripe one at a time against the chart. If paint is damaged or ambiguous, do not install it yet—confirm with the meter first.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "meter-check",
+                    "text": "Ready to verify with a meter."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Out-of-range means stop and troubleshoot before use. Clean probe tips, re-seat meter clips, and retest. If the reading still fails tolerance, quarantine this resistor and swap in a known-good 220 Ω component.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "meter-check",
+                    "text": "Retest after troubleshooting."
+                },
+                {
+                    "type": "goto",
+                    "goto": "decode-bands",
+                    "text": "Use a replacement resistor and re-run decoding."
+                }
+            ]
+        },
+        {
+            "id": "in-range",
+            "text": "Nice verification discipline. The resistor passed decode + meter evidence, so it's safe to label and stage for installation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log complete. Finish quest."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great. Label the resistor or store it for later use.",
+            "text": "Great. Label the resistor value and tolerance so your next build starts with verified parts.",
             "options": [
                 {
                     "type": "finish",
@@ -58,9 +123,9 @@
     ],
     "requiresQuests": ["electronics/measure-led-current"],
     "hardening": {
-        "passes": 2,
-        "score": 85,
-        "emoji": "\u2705",
+        "passes": 3,
+        "score": 93,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-refine-2025-08-07",
@@ -71,6 +136,11 @@
                 "task": "codex-refine-2025-08-11",
                 "date": "2025-08-11",
                 "score": 78
+            },
+            {
+                "task": "codex-v3-quest-quality-hardening-2026-02-23",
+                "date": "2026-02-23",
+                "score": 93
             }
         ]
     }

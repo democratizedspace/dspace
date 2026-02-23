@@ -1,47 +1,36 @@
 {
     "id": "electronics/servo-sweep",
     "title": "Sweep a Servo",
-    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0\u00b0 to 180\u00b0.",
+    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0° to 180°.",
     "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to move beyond LEDs? Gather an Arduino Uno, USB cable, servo motor, jumper wires, and a 5\u202fV supply to sweep a servo arm back and forth.",
+            "text": "Ready to move beyond LEDs? Gather an Arduino Uno, USB cable, servo motor, jumper wires, and a 5V supply. Keep fingers clear of the horn path and secure the servo before applying power.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wire",
-                    "text": "What do I connect?"
+                    "goto": "power-plan",
+                    "text": "Let's plan power and wiring."
                 }
             ]
         },
         {
-            "id": "wire",
-            "text": "Disconnect the USB cable before wiring. Connect the servo signal to digital pin\u202f9, red to 5\u202fV, and brown or black to GND. If it draws over 500\u202fmA, power it from an external 5\u202fV supply and tie the grounds together to avoid brownouts.",
+            "id": "power-plan",
+            "text": "Choose your power strategy before wiring: USB-only for light loads, or external 5V for servos that spike current. Both routes require a shared ground and a clean signal path on pin 9.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Wired up!",
+                    "goto": "wire-usb",
+                    "text": "Use USB-only power (light-load test)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire-external",
+                    "text": "Use external 5V supply (higher stability).",
                     "requiresItems": [
-                        {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
-                            "count": 1
-                        },
-                        {
-                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
-                            "count": 3
-                        },
-                        {
-                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
-                            "count": 1
-                        },
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 1
-                        },
                         {
                             "id": "828d6c3b-66a5-4064-b221-97630274502b",
                             "count": 1
@@ -51,8 +40,40 @@
             ]
         },
         {
+            "id": "wire-usb",
+            "text": "Disconnect USB first. Connect servo signal to D9, red to 5V, and brown/black to GND. Keep wire runs short and verify the horn area is clear before reconnecting power.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "USB route wired."
+                },
+                {
+                    "type": "goto",
+                    "goto": "wiring-recovery",
+                    "text": "I spotted a wiring risk."
+                }
+            ]
+        },
+        {
+            "id": "wire-external",
+            "text": "Disconnect USB first. Connect servo signal to D9, servo red to the external 5V rail, and servo ground to supply ground. Tie Arduino GND to supply ground to avoid control drift.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "External route wired."
+                },
+                {
+                    "type": "goto",
+                    "goto": "wiring-recovery",
+                    "text": "Need to correct shared-ground wiring."
+                }
+            ]
+        },
+        {
             "id": "code",
-            "text": "Reconnect the USB cable, open the Arduino IDE, and load File > Examples > Servo > Sweep. If it's not installed, run the 'Install the Arduino IDE' process. Select the correct board and port, then upload. Secure the servo and keep fingers clear as it sweeps between 0\u00b0 and 180\u00b0.",
+            "text": "Reconnect USB, open Arduino IDE, and load File > Examples > Servo > Sweep. If IDE is missing, install it first. Upload and watch for smooth 0°↔180° travel without buzzing stalls.",
             "options": [
                 {
                     "type": "process",
@@ -61,19 +82,68 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Servo is moving.",
+                    "goto": "evidence",
+                    "text": "Servo sweeps end-to-end.",
                     "process": "arduino-servo-sweep"
+                },
+                {
+                    "type": "goto",
+                    "goto": "runtime-recovery",
+                    "text": "Servo jitters, resets, or stalls."
+                }
+            ]
+        },
+        {
+            "id": "wiring-recovery",
+            "text": "Recovery path: power off, verify D9 signal pin, reseat grounds, and remove mechanical obstructions. Do not test with loose horns or unsecured brackets.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "power-plan",
+                    "text": "Wiring corrected. Re-select a power strategy."
+                }
+            ]
+        },
+        {
+            "id": "runtime-recovery",
+            "text": "Troubleshoot runtime faults by reducing servo load, confirming shared ground, and trying the external 5V route if USB browns out. Re-test after each change until motion is stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "power-plan",
+                    "text": "Apply fix and retry sweep."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: verify at least three full sweeps with no collisions, no power resets, and repeatable end stops. If any criterion fails, route back to troubleshooting before finish.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Evidence captured and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "runtime-recovery",
+                    "text": "Need to fix reliability issues first."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Servos unlock all kinds of robotics projects.",
+            "text": "Nice work! You proved repeatable servo control with safety checks and recovery discipline in place.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait!"
+                    "text": "Can't wait to build more motion systems!"
                 }
             ]
         }
@@ -86,9 +156,9 @@
     ],
     "requiresQuests": ["electronics/arduino-blink"],
     "hardening": {
-        "passes": 4,
-        "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "passes": 5,
+        "score": 97,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-02",
@@ -109,6 +179,11 @@
                 "task": "codex-quest-refinement-2025-08-06",
                 "date": "2025-08-06",
                 "score": 95
+            },
+            {
+                "task": "codex-v3-quest-quality-hardening-2026-02-23",
+                "date": "2026-02-23",
+                "score": 97
             }
         ]
     }
