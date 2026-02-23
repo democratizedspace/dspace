@@ -8,22 +8,49 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready for some after-hours rocketry? The night sky is the perfect backdrop for a glowing plume!",
+            "text": "Night ops can be gorgeous, but they punish sloppy prep. We'll run this launch like a checklist discipline drill.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range-brief",
+                    "text": "I'm in. Walk me through the plan."
+                }
+            ]
+        },
+        {
+            "id": "range-brief",
+            "text": "First gate: range lighting, perimeter markers, and a clear recovery lane. If visibility is weak, we hold.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Sounds awesome! What do I need?"
+                    "text": "Range lights and markers are set."
+                },
+                {
+                    "type": "goto",
+                    "goto": "hold",
+                    "text": "Visibility is sketchy. Initiate hold."
+                }
+            ]
+        },
+        {
+            "id": "hold",
+            "text": "Good call. Night launch abort criteria matter: no countdown until observers can track ascent and descent end-to-end.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range-brief",
+                    "text": "Visibility restored. Resume briefing."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "We'll need the launchpad, controller, igniter, and your rocket with a parachute. Make sure everything is prepped and visible in the dark.",
+            "text": "Stage launchpad, controller, igniter, parachute-equipped rocket, plus fresh wadding to protect recovery at night.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "launch",
+                    "goto": "checklist",
                     "requiresItems": [
                         {
                             "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
@@ -40,15 +67,46 @@
                         {
                             "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
                             "count": 1
+                        },
+                        {
+                            "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
+                            "count": 1
                         }
                     ],
-                    "text": "Gear's ready to go."
+                    "text": "Night gear staged with recovery consumables."
+                }
+            ]
+        },
+        {
+            "id": "checklist",
+            "text": "Run a dry countdown and continuity check. If the igniter or line-of-sight check fails, branch to troubleshooting before we arm.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "text": "Checklist passed. We are green."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Continuity or visibility check failed."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Swap igniter, re-aim launch rod, and relocate the observation spot if glare blocks tracking. Then rerun checklist from the top.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "checklist",
+                    "text": "Corrections applied. Re-run checklist."
                 }
             ]
         },
         {
             "id": "launch",
-            "text": "Set up the pad, watch your surroundings, and let's send it!",
+            "text": "Launch window is open. Keep callouts loud and track the descent arc all the way to touchdown.",
             "options": [
                 {
                     "type": "process",
@@ -57,7 +115,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "debrief",
                     "requiresItems": [
                         {
                             "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
@@ -65,20 +123,20 @@
                         },
                         {
                             "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
-                            "count": 1
+                            "count": 2
                         }
                     ],
-                    "text": "Rocket recovered!"
+                    "text": "Rocket recovered with confirmed night-flight log."
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "What a sight! A bright streak across the stars and a safe touchdown. Nicely done!",
+            "id": "debrief",
+            "text": "Excellent discipline. You launched safely, recovered cleanly, and captured enough data to repeat this under tighter windows.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "That was stellar!"
+                    "text": "Night launch complete with safety margins intact."
                 }
             ]
         }
@@ -93,7 +151,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -197,7 +197,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/calibration-cube`
   - [ ] Observed issue: `3dprinting/calibration-cube` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/filament-change`
   - [x] Observed issue (addressed): `3dprinting/filament-change` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3590. (PR #3590)
@@ -413,7 +413,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature,
 - `chemistry/acid-neutralization`
   - [ ] Observed issue: `chemistry/acid-neutralization` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0000)
 - `chemistry/buffer-solution`
   - [ ] Observed issue: `chemistry/buffer-solution` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -1077,21 +1077,21 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run
 Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, sysadmin/resource-monitoring (fallback: no checked rocketry quests yet)
 
 - `rocketry/firstlaunch`
-  - [ ] Observed issue: `rocketry/firstlaunch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `rocketry/firstlaunch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0000)
 - `rocketry/fuel-mixture`
-  - [ ] Observed issue: `rocketry/fuel-mixture` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `rocketry/fuel-mixture` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0000)
 - `rocketry/guided-rocket-build`
   - [x] Observed issue (addressed): `rocketry/guided-rocket-build` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3646)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3646)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3646)
 - `rocketry/night-launch`
-  - [ ] Observed issue: `rocketry/night-launch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `rocketry/night-launch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #0000)
 - `rocketry/parachute`
   - [x] Observed issue: `rocketry/parachute` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3688)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3688)

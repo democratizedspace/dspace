@@ -25,9 +25,12 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - `requiresQuests`: `3dprinter/start`
 - Dialogue `requiresItems` gates:
     - `components` → "Alright, all 4 components are now printed! What's next?" — 3D printed nosecone ×1, 3D printed body tube ×1, 3D printed fincan ×1, 3D printed nosecone coupler ×1
-    - `assemble` → "The rocket's assembled! Are we ready for launch?" — launch-capable model rocket ×1
-    - `launch` → "We are go for launch!!! Right?" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
-    - `go` → "Whoa! I can't believe I launched a rocket!! It didn't survive the landing, though, unfortunately." — damaged model rocket ×1
+    - `assemble` → "Assembly complete. Start pre-pad verification." — launch-capable model rocket ×1
+    - `launch-kit` → "Launch kit and checklist are staged." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1, rocket launch checklist ×1
+    - `go` → "Flight logged and rocket recovered in training condition." — damaged model rocket ×1
+- Troubleshooting/safety branches:
+    - `verification` can route to `repair-loop`, requiring assembly repair and re-verification before launch staging.
+    - `range-check` can route to `weather-hold`, enforcing a launch hold loop until perimeter and wind checks pass.
 - Grants:
     - `launch` → "Oh cool, I'll never turn down free stuff!" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
     - Quest-level `grantsItems`: None
@@ -65,7 +68,11 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/firstlaunch`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Scale ready, mixture measured." — parachute ×1
+    - `measure` → "Baseline logged with scale + ballast mass." — parachute ×1, rocket launch checklist ×1
+    - `verify` → "Validation launch logged. Calibration is stable." — dLaunch ×1
+- Troubleshooting/safety branches:
+    - `prep` can route into `safety-hold` and blocks progression until the grounded bench/PPE setup is restored.
+    - `mix-strategy` adds alternate correction paths (`fine-adjust` vs `reset-batch`) and `troubleshoot` loops back to re-measurement.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -196,8 +203,11 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/recovery-run`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Gear's ready to go." — Model rocket launchpad ×1, launch controller ×1, rocket igniter ×1, launch-capable model rocket (parachute) ×1
-    - `launch` → "Rocket recovered!" — launch-capable model rocket (parachute) ×1, dLaunch ×1
+    - `prep` → "Night gear staged with recovery consumables." — Model rocket launchpad ×1, launch controller ×1, rocket igniter ×1, launch-capable model rocket (parachute) ×1, flame-resistant recovery wadding ×1
+    - `launch` → "Rocket recovered with confirmed night-flight log." — launch-capable model rocket (parachute) ×1, dLaunch ×2
+- Troubleshooting/safety branches:
+    - `range-brief` can route to `hold` and requires visibility/perimeter recovery controls before launch prep is allowed.
+    - `checklist` can route to `troubleshoot` for continuity or line-of-sight failures and loops back through checklist verification.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

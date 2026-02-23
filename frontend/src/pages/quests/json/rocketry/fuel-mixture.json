@@ -3,55 +3,151 @@
     "title": "Fuel Mixture Calibration",
     "description": "Dial in a safe oxidizer-to-fuel ratio for a hobbyist model rocket before launch.",
     "image": "/assets/quests/rocket_fuel_mixture_calibration.jpg",
-    "npc": "/assets/npc/phoenix.jpg",
+    "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. We'll dial in a hobbyist propellant mix with precision and minimal waste.",
+            "text": "Nova here. We'll tune a conservative training mix and log every measurement before anything goes near a motor casing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Copy that. What's the setup?"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Work clean and grounded: anti-static mat down, safety glasses on, and only small-batch ingredients on the bench.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Absolutely, let's measure it."
+                    "text": "Bench is staged and PPE is on."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-hold",
+                    "text": "I still have clutter and no grounded mat."
+                }
+            ]
+        },
+        {
+            "id": "safety-hold",
+            "text": "Hard stop. No mixing with static risk or loose hardware nearby. Clear the bench, ground the station, then re-open the prep checklist.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Bench is now grounded and clear. Restart prep."
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "We'll weigh fuel and oxidizer. Grab a scale and tare the canister before dosing.",
+            "text": "Record a baseline batch weight and verify parachute ballast mass before calibration so your flight profile stays predictable.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "adjust",
+                    "goto": "mix-strategy",
                     "requiresItems": [
                         {
                             "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
                             "count": 1
+                        },
+                        {
+                            "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
+                            "count": 1
                         }
                     ],
-                    "text": "Scale ready, mixture measured."
+                    "text": "Baseline logged with scale + ballast mass."
                 }
             ]
         },
         {
-            "id": "adjust",
-            "text": "The mix is a tad rich. Add binder in small increments until the ratio is on target.",
+            "id": "mix-strategy",
+            "text": "Choose your correction plan: fine-step binder tuning for precision, or a fresh reset batch if the first reading drifted badly.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "fine-adjust",
+                    "text": "Take the precision route with small binder steps."
+                },
+                {
+                    "type": "goto",
+                    "goto": "reset-batch",
+                    "text": "Start a clean reset batch to eliminate drift."
+                }
+            ]
+        },
+        {
+            "id": "fine-adjust",
+            "text": "Add binder in tiny increments, remix, and re-weigh. If the ratio lands in your safe window, capture the reading in the log.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Fine adjustment complete. Let's verify."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "The ratio keeps drifting outside tolerance."
+                }
+            ]
+        },
+        {
+            "id": "reset-batch",
+            "text": "Good call. Dump the suspect batch, tare again, and rebuild from the baseline recipe before another tolerance check.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Reset batch mixed and re-measured."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "If drift persists, check humidity, scale zero, and scoop contamination. Fix one variable at a time, then rerun measurement.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Issue isolated. Re-run baseline measurement."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final gate: confirm the calibrated mix supports a stable launch profile and generate a logged launch token before sign-off.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "launch-rocket-parachute",
+                    "text": "Run a controlled validation launch."
+                },
+                {
+                    "type": "goto",
                     "goto": "done",
-                    "text": "Blend complete, looks perfect."
+                    "requiresItems": [
+                        {
+                            "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Validation launch logged. Calibration is stable."
                 }
             ]
         },
         {
             "id": "done",
-            "text": "Nice work. This hobby-class mix should burn steady and clean for launch.",
+            "text": "Great work. You produced a safer, repeatable mix plan with evidence instead of vibes. That's real rocketry discipline.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to see it fly."
+                    "text": "Logbook updated. Ready for the next test window."
                 }
             ]
         }
@@ -66,7 +162,7 @@
     "hardening": {
         "passes": 0,
         "score": 85,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
