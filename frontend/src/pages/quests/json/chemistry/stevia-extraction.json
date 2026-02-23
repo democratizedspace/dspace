@@ -56,7 +56,7 @@
                 {
                     "type": "goto",
                     "goto": "contamination-recovery",
-                    "text": "Cloudy or scorched notes detected\u2014trigger recovery."
+                    "text": "Cloudy or scorched notes detected—trigger recovery."
                 }
             ]
         },
@@ -83,7 +83,7 @@
                 {
                     "type": "goto",
                     "goto": "contamination-recovery",
-                    "text": "Pilot failed or contaminated\u2014enter recovery."
+                    "text": "Pilot failed or contaminated—enter recovery."
                 }
             ]
         },
@@ -116,7 +116,7 @@
                 {
                     "type": "goto",
                     "goto": "setup-branch",
-                    "text": "Recovery actions done\u2014retry setup path."
+                    "text": "Recovery actions done—retry setup path."
                 },
                 {
                     "type": "goto",
@@ -148,14 +148,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/stevia",
-        "chemistry/safe-reaction"
-    ],
+    "requiresQuests": ["hydroponics/stevia", "chemistry/safe-reaction"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }
