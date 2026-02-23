@@ -1,30 +1,30 @@
 {
     "id": "rocketry/recovery-run",
     "title": "Practice Rocket Recovery",
-    "description": "Launch with a parachute and retrieve the rocket intact.",
+    "description": "Run a full parachute flight recovery drill with evidence capture, anomaly handling, and go/no-go checks.",
     "image": "/assets/quests/model_rocket_recovery_run_field.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Our last flight was great. Let's practice recovering the rocket so we can reuse it.",
+            "text": "Great flights are repeatable flights. We'll prep recovery gear, run launch-and-retrieve, and verify condition before declaring the rocket reusable.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "I'm ready."
+                    "text": "Ready to run the recovery drill."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Pack the recovery wadding and fold the parachute carefully.",
+            "text": "Pack flame-resistant wadding, fold the chute, and verify shock cord routing with motor removed.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "launch",
-                    "text": "Parachute packed",
+                    "goto": "range-check",
+                    "text": "Recovery stack prepped and motor is still out.",
                     "requiresItems": [
                         {
                             "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
@@ -35,22 +35,43 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Chute fold looked wrong or cord snagged."
+                }
+            ]
+        },
+        {
+            "id": "range-check",
+            "text": "Operational safety gate: clear a 5 m perimeter, verify launch rod tilt, and assign one person to call abort.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "text": "Pad is clear and abort caller is assigned."
+                },
+                {
+                    "type": "goto",
+                    "goto": "hold",
+                    "text": "Range setup is not safe yet. Hold."
                 }
             ]
         },
         {
             "id": "launch",
-            "text": "Set up the pad and controller, then send it skyward.",
+            "text": "Run the parachute launch and watch for full canopy deployment and drift direction.",
             "options": [
                 {
                     "type": "process",
                     "process": "launch-rocket-parachute",
-                    "text": "Launching!"
+                    "text": "Launch and track descent."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Rocket recovered!",
+                    "goto": "inspect",
+                    "text": "Rocket recovered. Begin post-flight inspection.",
                     "requiresItems": [
                         {
                             "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
@@ -61,16 +82,65 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Recovery looked unstable. Enter troubleshooting branch."
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Excellent! Smooth recoveries mean we can iterate faster on designs.",
+            "id": "inspect",
+            "text": "Evidence gate: inspect chute canopy, shock cord, and body tube. Only pass if no tears, burns, or loose knots are found.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Inspection passed. Rocket is reusable for next iteration.",
+                    "requiresItems": [
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Damage found. Fix and re-run recovery workflow."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshooting flow: repack chute with looser folds, re-seat knots, and replace scorched wadding before attempting another launch.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Fixes complete. Restart prep and verify again."
+                }
+            ]
+        },
+        {
+            "id": "hold",
+            "text": "Hold accepted. Keep igniter disconnected, clear non-essential crew, and resume only when the pad passes range safety checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range-check",
+                    "text": "Range corrected. Continue."
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Excellent recovery discipline. You validated reuse with launch evidence and a full troubleshooting loop.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait for the next launch!"
+                    "text": "Recovery run verified."
                 }
             ]
         }
@@ -85,7 +155,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

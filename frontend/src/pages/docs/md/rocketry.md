@@ -80,9 +80,12 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/firstlaunch`
 - Dialogue `requiresItems` gates:
-    - `parachute` → "Let's assemble the parachute system!" — launch-capable model rocket ×1, parachute ×1, kevlar shock cord ×1, flame-resistant recovery wadding ×1, parachute harness kit ×1
-    - `parachute` → "Great! Once the parachute system is ready, are we good to go for another launch?" — launch-capable model rocket (parachute) ×1
-    - `launch` → "Congratulations on another successful launch! How did the rocket fare with the parachute?" — dLaunch ×2
+    - `inventory-check` → "All parts staged and motor removed." — launch-capable model rocket ×1, parachute ×1, kevlar shock cord ×1, flame-resistant recovery wadding ×1, parachute harness kit ×1
+    - `install` → "Install complete. Verify continuity and packing." — launch-capable model rocket (parachute) ×1
+    - `launch` → "Flight complete. Assess recovery outcome." — dLaunch ×2
+- Troubleshooting/safety branches:
+    - `verify-install` and `assess` force explicit pass/fail checks with a `troubleshoot-install` rework loop.
+    - `safety-brief` and `hold` enforce a no-ignite range safety hold before launch is allowed.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -170,8 +173,12 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/parachute`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Parachute packed" — launch-capable model rocket (parachute) ×1, flame-resistant recovery wadding ×1
-    - `launch` → "Rocket recovered!" — launch-capable model rocket (parachute) ×1, dLaunch ×1
+    - `prep` → "Recovery stack prepped and motor is still out." — launch-capable model rocket (parachute) ×1, flame-resistant recovery wadding ×1
+    - `launch` → "Rocket recovered. Begin post-flight inspection." — launch-capable model rocket (parachute) ×1, dLaunch ×1
+    - `inspect` → "Inspection passed. Rocket is reusable for next iteration." — launch-capable model rocket (parachute) ×1
+- Troubleshooting/safety branches:
+    - `range-check` + `hold` add an operational hold loop before launch when perimeter/abort setup is unsafe.
+    - `launch` and `inspect` can route into `troubleshoot` for repack and re-run before completion.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -260,7 +267,12 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/preflight-check`
 - Dialogue `requiresItems` gates:
-    - None
+    - `reading-one` → "Reading #1 logged. Capture the second sample now." — parachute ×1
+    - `reading-two` → "Reading #2 logged and trend noted." — parachute ×1
+    - `retest-window` → "Retest stayed stable. Launch conditions verified." — parachute ×1
+- Troubleshooting/safety branches:
+    - `setup` + `safety-hold` add a mandatory pad/perimeter safety hold before taking readings.
+    - `interpret`, `corrective`, and `scrub` enforce out-of-range handling with retest and explicit no-launch outcomes.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
