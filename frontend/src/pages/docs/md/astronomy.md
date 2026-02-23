@@ -183,8 +183,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/jupiter-moons`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Plan is ready—let's star hop." — seasonal star hop plan ×1
-    - `chart` → "I can spot them easily now!" — constellation sketch set ×1
+    - `plan` → "Plan is ready—use the main star-hop path." — red flashlight ×1, planisphere star chart ×1
+    - `plan` → "Try an alternate north-to-south sweep." — red flashlight ×1
+    - `chart-main` → "All three patterns are sketched." — constellation sketch set ×1, basic telescope ×1
+    - `chart-alt` → "Alternate sweep gave me all three sketches." — constellation sketch set ×1
+    - `verify-sketch` → "Sketch set is complete and readable." — constellation sketch set ×1, mission logbook ×1
+- Troubleshooting/safety branches:
+    - `troubleshoot` loops to `plan` after low-magnification reset and red-light safety checks.
+    - Session can end safely when cloud/footing conditions are no longer acceptable.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -325,16 +331,31 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/meteor-shower`
 - Dialogue `requiresItems` gates:
-    - `observe` → "Path recorded" — basic telescope ×1
+    - `plan` → "Plan is set and the site is safe." — mission logbook ×1, planisphere star chart ×1, basic telescope ×1
+    - `observe` → "Comet found and position sketched." — constellation sketch set ×1, basic telescope ×1
+    - `log-evidence` → "Evidence logged for comparison." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `verify` → "All fields captured and consistent." — mission logbook ×1, mission log entry ×1, feather quill ×1
+- Troubleshooting/safety branches:
+    - `troubleshoot` loops back to `observe` after stability and footing checks.
+    - `weather-hold` provides a defer-and-replan branch when visibility is unsafe.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [observe-meteor-shower](/processes/observe-meteor-shower)
-        - Requires: basic telescope ×1
+    - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
+        - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
         - Consumes: none
+        - Creates: seasonal star hop plan ×1
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 14) Locate the North Star (`astronomy/north-star`)
 
@@ -430,14 +451,32 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
-    - `start` → "Where do I point?" — planisphere star chart ×1, basic telescope ×1
+    - `start` → "Copy that—show me the plan workflow." — planisphere star chart ×1, basic telescope ×1
+    - `plan` → "Plan confirmed—run the main observation path." — red flashlight ×1, planisphere star chart ×1
+    - `observe-main` → "Ring outline is stable and clearly separated." — basic telescope ×1, constellation sketch set ×1
+    - `log-proof` → "Log entry captured with ring notes." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `verify` → "All required fields are complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
+- Troubleshooting/safety branches:
+    - `troubleshoot` loops to `observe-main` with low-power re-acquisition instructions.
+    - `weather-hold` supports safe pause/reschedule when cloud cover or footing risk rises.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
+        - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: seasonal star hop plan ×1
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 19) Capture Star Trails (`astronomy/star-trails`)
 

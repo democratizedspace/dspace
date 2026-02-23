@@ -1,19 +1,19 @@
 {
     "id": "astronomy/saturn-rings",
     "title": "Spot Saturn's Rings",
-    "description": "Use a planisphere and your basic telescope to find Saturn and resolve its rings.",
+    "description": "Plan a safe Saturn session, verify ring detail in a mission log artifact, and recover through a weather fallback loop.",
     "image": "/assets/quests/saturn_rings_planisphere_setup.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Saturn is up tonight\u2014let's aim your scope and catch those rings.",
+            "text": "Saturn is up tonight, but we do this methodically: plan the window, verify the ring split, then log proof.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "locate",
-                    "text": "Where do I point?",
+                    "goto": "plan",
+                    "text": "Copy that—show me the plan workflow.",
                     "requiresItems": [
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
@@ -28,19 +28,162 @@
             ]
         },
         {
-            "id": "locate",
-            "text": "Use the planisphere to spot Saturn near Aquarius. Center it and gently focus until the rings separate from the planet's disk.",
+            "id": "plan",
+            "text": "Mark Saturn's position on your chart, check footing, and keep red light ready so setup stays safe.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "draft-seasonal-star-plan",
+                    "text": "Plan drafted with Saturn's corridor."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe-main",
+                    "text": "Plan confirmed—run the main observation path.",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Clouds are closing in; hold for fallback."
+                }
+            ]
+        },
+        {
+            "id": "observe-main",
+            "text": "Center Saturn at low power first, then refine focus slowly until the ring gap becomes distinct.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Reference stars confirmed around Saturn."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-proof",
+                    "text": "Ring outline is stable and clearly separated.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Image is soft or wobbling."
+                }
+            ]
+        },
+        {
+            "id": "log-proof",
+            "text": "Write a mission log entry with ring shape, seeing quality, and timestamp so another session can reproduce it.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Observation details recorded."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Log entry captured with ring notes.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Acceptance gate: finish only when your log includes ring separation, seeing conditions, and timestamp. Otherwise retry.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "I see the rings!"
+                    "text": "All required fields are complete.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Notes are incomplete or uncertain."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery branch: steady the tripod, drop magnification, and re-run focus checks before another attempt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe-main",
+                    "text": "Stabilized—retry ring observation."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Conditions are degrading—switch to fallback."
+                }
+            ]
+        },
+        {
+            "id": "weather-hold",
+            "text": "Fallback path: pause if cloud cover or footing risk rises, then either re-plan on clear skies or end safely.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Sky reopened—refresh the plan and continue."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Session ended safely; retry another night."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Log the observation and give the scope a rest.",
+            "text": "Great job. You captured a reproducible rings observation with explicit safety checks and fallback handling.",
             "options": [
                 {
                     "type": "finish",
@@ -58,8 +201,8 @@
     "requiresQuests": ["astronomy/basic-telescope"],
     "hardening": {
         "passes": 0,
-        "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 100,
+        "emoji": "🛠️",
         "history": []
     }
 }

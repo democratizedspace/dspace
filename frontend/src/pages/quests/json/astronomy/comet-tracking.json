@@ -1,38 +1,112 @@
 {
     "id": "astronomy/comet-tracking",
     "title": "Track a Visiting Comet",
-    "description": "Use your telescope to plot a comet's path across several nights.",
+    "description": "Plan a multi-night comet session, log positional evidence, and use a fallback loop when seeing fails.",
     "image": "/assets/quests/comet_tracking_observation_log.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A bright comet is passing by. Let's chart its position each evening.",
+            "text": "A bright comet is passing through. We'll run a real tracking session: plan, observe, log, and re-check if clouds interfere.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "plan",
+                    "text": "Let's draft tonight's plan."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Mark the comet's expected position against nearby stars and pick a safe observing spot before you begin.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "draft-seasonal-star-plan",
+                    "text": "Plan drafted in my logbook."
+                },
+                {
+                    "type": "goto",
                     "goto": "observe",
-                    "text": "I'll set up."
+                    "text": "Plan is set and the site is safe.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Cloud bands or glare are getting worse."
                 }
             ]
         },
         {
             "id": "observe",
-            "text": "Sketch the comet's location relative to nearby stars so we can see how it moves.",
+            "text": "Acquire the comet at low magnification, then sketch the tail angle relative to nearby guide stars.",
             "options": [
                 {
                     "type": "process",
-                    "process": "observe-meteor-shower",
-                    "text": "Observing"
+                    "process": "identify-constellations",
+                    "text": "Guide stars and comet position marked."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Path recorded",
+                    "goto": "log-evidence",
+                    "text": "Comet found and position sketched.",
                     "requiresItems": [
                         {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        },
+                        {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I lost the comet in haze or vibration."
+                }
+            ]
+        },
+        {
+            "id": "log-evidence",
+            "text": "Record timestamp, tail direction, and nearest reference star so tomorrow's run can verify movement.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Tracking notes saved."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Evidence logged for comparison.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
                             "count": 1
                         }
                     ]
@@ -40,12 +114,74 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Quality gate: finish only if the log includes position reference + tail direction + timestamp. Missing fields require a retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All fields captured and consistent.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Something is missing or inconsistent."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery path: reset to low magnification, re-check footing and tripod stability, and retry only if visibility is safe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Stability restored; retry observation."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Visibility unsafe—defer to the next clear window."
+                }
+            ]
+        },
+        {
+            "id": "weather-hold",
+            "text": "Fallback branch: pause the session, log weather constraints, and return when cloud cover drops and your path remains safe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Conditions improved; refresh the plan."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Session closed safely with a deferral note."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Excellent observations! Comparing notes over multiple nights reveals its orbit.",
+            "text": "Excellent tracking run. You logged reproducible comet evidence and used a safe recovery loop when conditions shifted.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Fascinating!"
+                    "text": "I'll compare this against tomorrow's track."
                 }
             ]
         }
@@ -59,8 +195,8 @@
     "requiresQuests": ["astronomy/meteor-shower"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 100,
+        "emoji": "🛠️",
         "history": []
     }
 }

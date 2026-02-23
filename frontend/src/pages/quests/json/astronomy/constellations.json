@@ -1,35 +1,50 @@
 {
     "id": "astronomy/constellations",
     "title": "Map the Constellations",
-    "description": "Identify key star patterns to aid celestial navigation.",
+    "description": "Build a seasonal star-hop plan, verify a three-constellation sketch set, and recover safely when orientation fails.",
     "image": "/assets/quests/constellation_mapping_logbook.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Great progress so far! Next let's learn the constellations visible this season.",
+            "text": "Great progress so far. Tonight we'll map Orion, Ursa Major, and Cassiopeia with evidence you can reuse later.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "I'm excited to learn!"
+                    "text": "Let's build the map plan."
                 }
             ]
         },
         {
             "id": "plan",
-            "text": "Mark this season's guide stars on the planisphere and keep red light low so you can move safely.",
+            "text": "Mark guide stars on the planisphere and run a red-light safety sweep so your path stays clear.",
             "options": [
                 {
                     "type": "process",
                     "process": "draft-seasonal-star-plan",
-                    "text": "Sketching arrows from guide stars."
+                    "text": "Plan drafted with guide stars."
                 },
                 {
                     "type": "goto",
-                    "goto": "chart",
-                    "text": "Plan is ready\u2014let's star hop.",
+                    "goto": "chart-main",
+                    "text": "Plan is ready—use the main star-hop path.",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "chart-alt",
+                    "text": "Try an alternate north-to-south sweep.",
                     "requiresItems": [
                         {
                             "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
@@ -40,30 +55,108 @@
             ]
         },
         {
-            "id": "chart",
-            "text": "Find Orion, Ursa Major, and Cassiopeia, then sketch their bright stars and orientation without stepping into hazards.",
+            "id": "chart-main",
+            "text": "Main path: lock Orion first, then hop to Ursa Major and Cassiopeia while keeping tripod footing stable.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Charting patterns..."
+                    "text": "Main-path chart complete."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "I can spot them easily now!",
+                    "goto": "verify-sketch",
+                    "text": "All three patterns are sketched.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I lost orientation after the second hop."
+                }
+            ]
+        },
+        {
+            "id": "chart-alt",
+            "text": "Alternate path: start with Cassiopeia as the anchor, then triangulate Orion and Ursa Major from there.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Alternate sweep complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-sketch",
+                    "text": "Alternate sweep gave me all three sketches.",
                     "requiresItems": [
                         {
                             "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Cloud break ruined one segment of the sweep."
+                }
+            ]
+        },
+        {
+            "id": "verify-sketch",
+            "text": "Verification gate: only finish when the sketch set is complete and reference arrows are readable for a follow-up session.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Sketch set is complete and readable.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Sketch lacks one pattern or clear guide arrows."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: return to low magnification, re-check your red-light path, and restart from a stable anchor constellation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Reset done—retry with a fresh plan."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Session ended safely; I'll resume another night."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent! These patterns guide spacecraft spotting and future sessions. Keep the sketches handy.",
+            "text": "Excellent. You now have a reusable constellation sketch set with a clear recovery path when the sky gets messy.",
             "options": [
                 {
                     "type": "finish",
@@ -81,8 +174,8 @@
     "requiresQuests": ["astronomy/jupiter-moons"],
     "hardening": {
         "passes": 1,
-        "score": 95,
-        "emoji": "\ud83c\udf00",
+        "score": 100,
+        "emoji": "🛠️",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-16",
