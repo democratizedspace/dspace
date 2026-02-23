@@ -29,14 +29,26 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I've got the tool ready." — aquarium thermometer (0–50°C) ×1
+    - `materials` → "Survey tools staged" — aquarium thermometer (0–50°C) ×1, thermistor logging rig ×1, Laptop Computer ×1
+    - `materials` → "Assemble and stage a sealed logging rig" — runs `assemble-thermistor-logger`
+    - `capture` → "Capture survey log" — thermistor logging rig ×1, Laptop Computer ×1
+    - `capture` → "Survey log exported" — temperature log CSV ×1, aquarium thermometer (0–50°C) ×1
+    - `interpret` → "Readings are in-band and stable" — temperature log CSV ×1
+    - `corrective` → "Site corrected, run another survey capture" — aquarium thermometer (0–50°C) ×1
+    - `finish` → "Ground survey validated" — temperature log CSV ×1
 - Grants:
-    - `materials` → "Thanks for the thermometer!" — aquarium thermometer (0–50°C) ×1
+    - `materials` → "Issue thermometer" — aquarium thermometer (0–50°C) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Solarpunk Award ×1
 - Processes used:
-    - None
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+- QA notes:
+    - Pass band is 8–15°C with <1°C drift over the survey window.
+    - Out-of-band readings must run the corrective branch (depth/contact/location fixes) and a mandatory retest.
 
 ## 2) Calibrate Ground Sensor (`geothermal/calibrate-ground-sensor`)
 
@@ -70,8 +82,11 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `log` → "Capture the inlet trace" — thermistor logging rig ×1, Laptop Computer ×1
     - `log` → "Trace saved" — temperature log CSV ×1
     - `plot` → "Plot the inlet run" — temperature log CSV ×1, Laptop Computer ×1
-    - `plot` → "Chart reviewed" — temperature line chart ×1
-    - `finish` → "Inlet trend logged" — temperature line chart ×1
+    - `plot` → "Annotate startup and steady-state windows" — temperature line chart ×1, Laptop Computer ×1
+    - `plot` → "Annotated chart reviewed" — annotated temperature graph ×1
+    - `interpret` → "Inlet run is in-band and stable" — annotated temperature graph ×1
+    - `corrective` → "Applied corrective action, retest now" — thermistor logging rig ×1
+    - `finish` → "Inlet trend logged" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -90,6 +105,13 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: temperature line chart ×1
+    - [refine-temperature-graph](/processes/refine-temperature-graph)
+        - Requires: temperature line chart ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: annotated temperature graph ×1
+- QA notes:
+    - Inlet pass band is 6–18°C with ≤1.5°C adjacent-sample jitter.
+    - Any out-of-band or unstable trace must route through corrective actions and a fresh capture before finish.
 
 ## 4) Check Loop Outlet Temperature (`geothermal/check-loop-outlet-temp`)
 
@@ -355,14 +377,27 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/purge-loop-air`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I have a pump ready." — submersible water pump ×1
+    - `materials` → "Pump and logger staged" — submersible water pump ×1, thermistor logging rig ×1, Laptop Computer ×1
+    - `baseline` → "Baseline trace archived" — temperature log CSV ×1, submersible water pump ×1
+    - `flush` → "Used pulse backflush sequence" — submersible water pump ×1
+    - `flush` → "Used continuous rinse sequence" — submersible water pump ×1
+    - `verify` → "Post-flush trace archived" — temperature log CSV ×2
+    - `interpret` → "Flow stabilized and within target" — temperature log CSV ×2
+    - `recovery` → "Corrective step complete, rerun flush" — submersible water pump ×1
+    - `finish` → "Backflush verified with evidence" — temperature log CSV ×2
 - Grants:
-    - `materials` → "Take this pump." — submersible water pump ×1
+    - `materials` → "Issue purge pump" — submersible water pump ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+- QA notes:
+    - Completion requires paired pre/post traces to prove recovery.
+    - Residual cavitation or jitter above 1.5°C must route through recovery and rerun before closure.
 
 ## 15) Replace Faulty Thermistor (`geothermal/replace-faulty-thermistor`)
 

@@ -1,25 +1,30 @@
 {
     "id": "geothermal/survey-ground-temperature",
     "title": "Survey for Geothermal Heat",
-    "description": "Measure the ground temperature to see if a heat pump will work.",
+    "description": "Survey ground temperature with explicit pass bands, documented evidence, and a corrective retest loop.",
     "image": "/assets/quests/geothermal_ground_temperature_probe.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey explorer! Want to tap the earth's warmth for energy? Let's start by surveying the site.",
+            "text": "Before digging, mark utilities, glove up, and keep the probe lead clear of standing water. Ready to map geothermal potential?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Absolutely, show me how."
+                    "text": "Safety and site marking complete"
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Show me the safety checklist first"
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "You'll need a thermometer to check the ground temperature about a meter down.",
+            "text": "You'll need a thermometer and a logging rig so the survey can be verified later.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,39 +34,128 @@
                             "count": 1
                         }
                     ],
-                    "text": "Thanks for the thermometer!"
+                    "text": "Issue thermometer"
                 },
                 {
                     "type": "goto",
+                    "goto": "capture",
+                    "text": "Assemble and stage a sealed logging rig",
+                    "process": "assemble-thermistor-logger"
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Survey tools staged",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        },
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Measure at 1 m depth for at least 10 minutes. Export a log so we can distinguish stable ground heat from short weather swings.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture survey log",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Survey log exported",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Pass band: 8\u201315\u00b0C with drift under 1\u00b0C over the capture window. Below 8\u00b0C suggests poor exchange for this loop depth; above 15\u00b0C suggests shallow/solar-biased readings.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Readings are in-band and stable",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Out-of-band or drifting readings"
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: verify probe depth, tamp soil contact, and move at least 2 m from recent irrigation lines before retesting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Site corrected, run another survey capture",
                     "requiresItems": [
                         {
                             "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                             "count": 1
                         }
-                    ],
-                    "goto": "measure",
-                    "text": "I've got the tool ready."
-                }
-            ]
-        },
-        {
-            "id": "measure",
-            "text": "Dig a small hole and measure the temperature. Consistent warmth means good geothermal potential.",
-            "options": [
+                    ]
+                },
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "The ground is a steady 12\u00b0C."
+                    "goto": "start",
+                    "text": "Pause and restart safety/site checks"
                 }
             ]
         },
         {
-            "id": "fin",
-            "text": "Great! Your site is ready for a ground loop. We'll use this heat in the next quest.",
+            "id": "finish",
+            "text": "Excellent. Archive the survey log with depth and soil notes so loop sizing has defensible baseline data.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to build the system."
+                    "text": "Ground survey validated",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -72,10 +166,12 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/solar"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
