@@ -324,6 +324,8 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/data-logger`
 - Dialogue `requiresItems` gates:
     - `prep` → "Log file copied." — USB Cable ×1, Raspberry Pi 5 board ×1
+    - `interpret` → "In-band and stable (>=90% inside 18-30 C, no >5 C jumps)." — repeats logging hardware as completion evidence.
+    - Troubleshooting branch: out-of-band data routes through corrective wiring/timestamp checks and a mandatory re-plot loop.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -342,6 +344,8 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/thermistor-reading`
 - Dialogue `requiresItems` gates:
     - `start` → "Thermometer ready" — aquarium thermometer (0–50°C) ×1
+    - `interpret-pass` → "Calibration evidence captured." — thermometer evidence required at closeout.
+    - Troubleshooting branch: out-of-tolerance bath readings require corrective adjustments and full re-test loop before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -357,6 +361,8 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/resistor-color-check`
 - Dialogue `requiresItems` gates:
     - `start` → "Iron is heating up." — soldering iron kit ×1, helping hands ×1, silicone soldering mat ×1, brass tip cleaner ×1
+    - `verify-tip` → "Verified: stable tinning achieved." — repeats station/tool evidence for closeout proof.
+    - Troubleshooting branches: unsafe station setup and oxidized/pitted tip paths now force recovery + re-verify loops.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -451,7 +457,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/continuity-test`
 - Dialogue `requiresItems` gates:
-    - `plug` → "Outlet passed." — GFCI outlet tester ×1
+    - `prep-check` → "Thresholds noted; begin test cycle." — GFCI outlet tester ×1
+    - `interpret-pass` → "Verification logged with tester evidence." — GFCI outlet tester ×1
+    - Troubleshooting branch: fail/no-trip/reset-instability routes through breaker-off corrective flow and mandatory full retest.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
