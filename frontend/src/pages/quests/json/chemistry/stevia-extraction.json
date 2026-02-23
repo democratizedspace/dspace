@@ -121,7 +121,13 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Paused safely and logged deferred extraction for maintenance."
+                    "text": "Paused safely after documenting a valid extract and logged deferred extraction for maintenance.",
+                    "requiresItems": [
+                        {
+                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

@@ -54,7 +54,7 @@
                     "text": "I logged a stable reading and kept PPE on.",
                     "requiresItems": [
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
                             "count": 1
                         },
                         {
@@ -88,7 +88,7 @@
                     "text": "Reading is in-range (6.0\u20137.5); safe to proceed.",
                     "requiresItems": [
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
                             "count": 1
                         }
                     ]
