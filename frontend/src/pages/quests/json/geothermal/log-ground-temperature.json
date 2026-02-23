@@ -1,7 +1,7 @@
 {
     "id": "geothermal/log-ground-temperature",
     "title": "Log Ground Temperature",
-    "description": "Use a buried thermistor with Arduino to monitor ground temperature over time.",
+    "description": "Capture a 24-hour buried baseline, classify anomalies, and verify corrections before closing.",
     "image": "/assets/quests/geothermal_log_ground_temperature_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -108,7 +108,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "evaluate",
                     "text": "Baseline chart saved",
                     "requiresItems": [
                         {
@@ -120,8 +120,46 @@
             ]
         },
         {
+            "id": "evaluate",
+            "text": "Pass criteria: overnight drift stays within ±1.5°C and anomaly notes explain every spike. Does your chart satisfy that baseline standard?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes, baseline is stable and explained",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recheck",
+                    "text": "No, drift or unexplained spikes remain"
+                }
+            ]
+        },
+        {
+            "id": "recheck",
+            "text": "Anomaly branch: re-seat probe depth, pack soil to remove air gaps, and verify weather notes before rerunning the 24-hour capture.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "bury",
+                    "text": "Corrections applied, rerun baseline capture"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Restart from utility marking and safety prep"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Store that baseline plot with notes on soil type and depth. It'll anchor every seasonal check and heat-pump sizing run you do next.",
+            "text": "Store that baseline plot with soil type, depth, and pass/fail notes. It'll anchor every seasonal check and heat-pump sizing run that follows.",
             "options": [
                 {
                     "type": "finish",
@@ -145,8 +183,8 @@
     "requiresQuests": ["geothermal/check-loop-pressure"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }
