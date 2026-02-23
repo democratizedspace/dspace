@@ -61,8 +61,8 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Dialogue `requiresItems` gates:
     - `start` → "I'm ready." — 50 mm magnifying lens ×1, 20 mm magnifying lens ×1, cardboard mailing tube ×1, camera tripod ×1, masking tape ×1
     - `build`/`alternate-build` → "Assembly complete; verify image quality." / "Staged build done; start verification." — basic telescope ×1
-    - `verify` → "Verified: stable tripod and clear moon points logged." — mission log entry ×1, basic telescope ×1
-    - `verify-safety` → "Safety checklist complete; telescope is stored safely." — mission log entry ×1, basic telescope ×1
+    - `verify` → "Verified: stable tripod and clear moon points logged." — mission log entry ×1, basic telescope ×1, mission logbook ×1, feather quill ×1
+    - `verify-safety` → "Safety checklist complete; telescope is stored safely." — mission log entry ×1, basic telescope ×1, mission logbook ×1, feather quill ×1
 - Troubleshooting and safety flow:
     - `build` branches into a direct assembly path and an alternate staged pre-mount path before verification.
     - `verify` now gates advancement on the mission log entry artifact from `write-mission-log-entry` before safety sign-off.
