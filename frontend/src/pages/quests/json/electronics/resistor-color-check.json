@@ -118,7 +118,7 @@
     "requiresQuests": ["electronics/measure-led-current"],
     "hardening": {
         "passes": 2,
-        "score": 85,
+        "score": 95,
         "emoji": "✅",
         "history": [
             {
