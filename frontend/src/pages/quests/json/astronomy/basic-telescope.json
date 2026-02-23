@@ -108,6 +108,10 @@
                     "text": "Verified: stable tripod and clear moon points logged.",
                     "requiresItems": [
                         {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
                         }
@@ -129,6 +133,10 @@
                     "goto": "finish",
                     "text": "Safety checklist complete; telescope is stored safely.",
                     "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1

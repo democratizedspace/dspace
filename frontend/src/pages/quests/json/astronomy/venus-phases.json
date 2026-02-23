@@ -110,12 +110,24 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Shift to a better observation window."
+                    "text": "Sketch reset complete - shift to a better observation window.",
+                    "requiresItems": [
+                        {
+                            "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "view",
-                    "text": "Optics corrected - collect a new sketch."
+                    "text": "Sketch reset complete - optics corrected, collect a new sketch.",
+                    "requiresItems": [
+                        {
+                            "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

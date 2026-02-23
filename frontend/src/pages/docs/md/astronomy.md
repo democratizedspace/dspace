@@ -37,7 +37,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Dialogue `requiresItems` gates:
     - `start` → "Kit is staged and sunset has started." — basic telescope ×1, mission logbook ×1, feather quill ×1, bottle of black ink ×1, red flashlight ×1
     - `record` → "Observation and sketch are complete." — basic telescope ×1, mission logbook ×1, feather quill ×1, bottle of black ink ×1, red flashlight ×1
-    - `verify` → "All three fields are complete and readable." — basic telescope ×1, mission logbook ×1, feather quill ×1, bottle of black ink ×1, red flashlight ×1
+    - `verify` → "All three fields are complete and readable." — mission log entry ×1, basic telescope ×1, mission logbook ×1, feather quill ×1, bottle of black ink ×1, red flashlight ×1
 - Troubleshooting and safety flow:
     - `session-check` branches to either `record` for a safe observing window or `recovery` when conditions are unsafe.
     - `verify` enforces a complete observation artifact (time + crater notes + seeing note) before completion.
@@ -61,11 +61,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Dialogue `requiresItems` gates:
     - `start` → "I'm ready." — 50 mm magnifying lens ×1, 20 mm magnifying lens ×1, cardboard mailing tube ×1, camera tripod ×1, masking tape ×1
     - `build`/`alternate-build` → "Assembly complete; verify image quality." / "Staged build done; start verification." — basic telescope ×1
-    - `verify` → "Verified: stable tripod and clear moon points logged." — basic telescope ×1
-    - `verify-safety` → "Safety checklist complete; telescope is stored safely." — basic telescope ×1
+    - `verify` → "Verified: stable tripod and clear moon points logged." — mission log entry ×1, basic telescope ×1
+    - `verify-safety` → "Safety checklist complete; telescope is stored safely." — mission log entry ×1, basic telescope ×1
 - Troubleshooting and safety flow:
     - `build` branches into a direct assembly path and an alternate staged pre-mount path before verification.
-    - `verify` now requires a mission-log evidence step via `write-mission-log-entry` before safety sign-off.
+    - `verify` now gates advancement on the mission log entry artifact from `write-mission-log-entry` before safety sign-off.
     - `verify-safety` adds a hard safety gate (lens cap + fault scan + no sun alignment) and routes faults to `troubleshoot` before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
