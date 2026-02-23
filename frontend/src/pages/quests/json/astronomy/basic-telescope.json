@@ -95,15 +95,32 @@
         },
         {
             "id": "verify",
-            "text": "Point at Jupiter only after sunset. Confirm moons are distinct points and the tripod stays stable for a full minute.",
+            "text": "Point at Jupiter only after sunset. Confirm moons are distinct points, tripod stability holds for one full minute, and record the verification in your mission logbook.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Record the verification notes in the logbook."
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Verified: stable tripod and clear moon points.",
+                    "goto": "verify-safety",
+                    "text": "Verified: stable tripod and clear moon points logged.",
                     "requiresItems": [
                         {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
                             "count": 1
                         }
                     ]
@@ -112,6 +129,40 @@
                     "type": "goto",
                     "goto": "troubleshoot",
                     "text": "Image is blurry or the mount drifts."
+                }
+            ]
+        },
+        {
+            "id": "verify-safety",
+            "text": "Final safety gate: cap both optics, confirm no lens chips/loose tape, and ensure the tube is never aligned with dawn/sunrise while packed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Safety checklist complete; telescope is stored safely.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I found a safety fault; return to troubleshooting."
                 }
             ]
         },

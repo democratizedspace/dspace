@@ -8,28 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here! Stable telescope, logbook, quill, ink and red flashlight ready? Sun below horizon?",
+            "text": "Nova here! Before we observe, confirm a stable telescope, mission logbook, quill, ink, and red flashlight. Keep your route clear, avoid roofs, and only begin after sunset.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "record",
-                    "text": "I'm ready"
-                }
-            ]
-        },
-        {
-            "id": "record",
-            "text": "Aim at the Moon only. Keep red light dim, watch footing and sketch craters with quill and ink.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "write-mission-log-entry",
-                    "text": "Log the observation"
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Sketch completed",
+                    "goto": "session-check",
+                    "text": "Kit is staged and sunset has started.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -52,6 +36,118 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "session-check",
+            "text": "How are conditions at your observing spot? If clouds, glare, or slippery footing show up, pause and reset before using optics.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "record",
+                    "text": "Sky and footing are safe - begin crater sketching."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Conditions are unsafe or too bright to continue."
+                }
+            ]
+        },
+        {
+            "id": "record",
+            "text": "Aim at the Moon only. Keep red light dim, then write the date/time and crater notes in your mission log before sketching.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Log observation details first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Observation and sketch are complete.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        },
+                        {
+                            "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification check: your entry must include time, crater feature notes, and a simple seeing note (clear/hazy). If any field is missing, treat it as incomplete.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All three fields are complete and readable.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        },
+                        {
+                            "id": "4729b96d-5057-40d8-83a4-25a4fa122d98",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "My notes are incomplete or conditions degraded."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Stand down safely: cap the telescope, move to stable ground, and wait for clearer conditions. Restart only when your light discipline and footing are under control.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "session-check",
+                    "text": "Conditions improved - re-check session safety."
+                },
+                {
+                    "type": "goto",
+                    "goto": "record",
+                    "text": "I can resume and rebuild my observation notes."
                 }
             ]
         },

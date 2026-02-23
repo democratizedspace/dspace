@@ -35,7 +35,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - `record` → "Sketch completed" — basic telescope ×1, mission logbook ×1, feather quill ×1, bottle of black ink ×1, red flashlight ×1
+    - `start` → "Kit is staged and sunset has started." — basic telescope ×1, mission logbook ×1, feather quill ×1, bottle of black ink ×1, red flashlight ×1
+    - `record` → "Observation and sketch are complete." — basic telescope ×1, mission logbook ×1, feather quill ×1, bottle of black ink ×1, red flashlight ×1
+    - `verify` → "All three fields are complete and readable." — mission log entry ×1, basic telescope ×1, mission logbook ×1, feather quill ×1, bottle of black ink ×1, red flashlight ×1
+- Troubleshooting and safety flow:
+    - `session-check` branches to either `record` for a safe observing window or `recovery` when conditions are unsafe.
+    - `verify` enforces a complete observation artifact (time + crater notes + seeing note) before completion.
+    - `recovery` requires capping optics and re-validating footing/light discipline before looping back.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -55,10 +61,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Dialogue `requiresItems` gates:
     - `start` → "I'm ready." — 50 mm magnifying lens ×1, 20 mm magnifying lens ×1, cardboard mailing tube ×1, camera tripod ×1, masking tape ×1
     - `build`/`alternate-build` → "Assembly complete; verify image quality." / "Staged build done; start verification." — basic telescope ×1
-    - `verify` → "Verified: stable tripod and clear moon points." — basic telescope ×1
+    - `verify` → "Verified: stable tripod and clear moon points logged." — mission log entry ×1, basic telescope ×1, mission logbook ×1, feather quill ×1
+    - `verify-safety` → "Safety checklist complete; telescope is stored safely." — mission log entry ×1, basic telescope ×1, mission logbook ×1, feather quill ×1
 - Troubleshooting and safety flow:
-    - `build` now branches into a direct assembly path and an alternate staged pre-mount path before verification.
-    - `verify` routes to `troubleshoot` on blurry/drifting optics, then loops back to rebuild or re-verify with explicit stop criteria for chipped/loose glass.
+    - `build` branches into a direct assembly path and an alternate staged pre-mount path before verification.
+    - `verify` now gates advancement on the mission log entry artifact from `write-mission-log-entry` before safety sign-off.
+    - `verify-safety` adds a hard safety gate (lens cap + fault scan + no sun alignment) and routes faults to `troubleshoot` before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -456,6 +464,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Troubleshooting and safety flow:
     - `view` now branches to `recheck` when seeing is unstable.
     - `interpret` enforces pass/fail bounds (20%-60% illuminated fraction) and routes out-of-range results to corrective re-test loops (`recheck` → `plan`/`view`).
+    - `recheck` archives failed evidence with `reset-venus-phase-sketch` before retesting to keep final proof deterministic.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -470,6 +479,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: Venus observation window ×1, basic telescope ×1, mission logbook ×1
         - Consumes: none
         - Creates: Venus phase sketch ×1
+    - [reset-venus-phase-sketch](/processes/reset-venus-phase-sketch)
+        - Requires: Venus phase sketch ×1
+        - Consumes: Venus phase sketch ×1
+        - Creates: none
 
 ## QA flow notes
 
