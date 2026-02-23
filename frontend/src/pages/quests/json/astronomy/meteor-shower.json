@@ -1,18 +1,12 @@
 {
     "id": "astronomy/meteor-shower",
     "title": "Document a Meteor Shower",
-    "description": "Track meteors during a peak shower using a basic telescope, planisphere, red flashlight and mission logbook.",
+    "description": "Capture a meteor shower observation log with weather/visibility fallback handling and safety-first reattempts.",
     "hardening": {
-        "passes": 1,
-        "score": 95,
-        "emoji": "\ud83c\udf00",
-        "history": [
-            {
-                "task": "codex-quest-hardening-2025-08-17",
-                "date": "2025-08-17",
-                "score": 60
-            }
-        ]
+        "passes": 0,
+        "score": 97,
+        "emoji": "🛠️",
+        "history": []
     },
     "image": "/assets/quests/meteor_shower_observation_log.jpg",
     "npc": "/assets/npc/nova.jpg",
@@ -20,27 +14,108 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The Perseids are active tonight. Grab a planisphere star chart to locate the radiant and use a red flashlight so you don't lose night vision. Let's log as many meteors as we can.",
+            "text": "The Perseids are active tonight. We'll use one of two observation plans and only close after a logged session with interpretation notes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "dark-site-plan",
+                    "text": "Use the dark-site plan (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "quick-window-plan",
+                    "text": "Use the quick window plan (alternate path)."
+                }
+            ]
+        },
+        {
+            "id": "dark-site-plan",
+            "text": "Main path: choose a dark location, set a safe walking boundary, and prepare red-light-only conditions.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "observe",
-                    "text": "Let's watch the sky."
+                    "text": "Dark-site plan staged.",
+                    "requiresItems": [
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "quick-window-plan",
+            "text": "Alternate path: if time is tight, run a shorter observation window but still log radiant direction and brightness counts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Short-window plan ready.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "observe",
-            "text": "Find a clear, dark spot away from traffic. Set up your basic telescope or lie back with your eyes, orient with the planisphere, and jot each meteor's direction and brightness in your mission logbook. Keep paths clear and avoid white lights.",
+            "text": "Run the session, record each meteor direction/brightness, and note whether sky quality supports confidence in the count.",
             "options": [
                 {
                     "type": "process",
                     "process": "observe-meteor-shower",
-                    "text": "Recording meteors."
+                    "text": "Record meteor session."
                 },
                 {
                     "type": "goto",
+                    "goto": "interpret",
+                    "text": "Observation log captured.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "Clouds, haze, or glare made the session unreliable."
+                }
+            ]
+        },
+        {
+            "id": "fallback",
+            "text": "Fallback branch: if seeing fails, halt safely, document why data quality is poor, and schedule a new window instead of forcing bad counts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "New window scheduled; retry observation."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: classify the session as high confidence or low confidence and include that classification in your notes.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
+                    "text": "Confidence level noted and log complete.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -51,25 +126,20 @@
                             "count": 1
                         },
                         {
-                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
-                            "count": 1
-                        },
-                        {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
                             "count": 1
                         }
-                    ],
-                    "text": "Observation complete."
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great work! Comparing notes with others helps confirm the shower's peak. Pack up your gear and watch your footing in the dark.",
+            "text": "Great work. You produced an observation artifact, interpreted data quality, and handled failed seeing conditions with a safe reattempt loop.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll share my data."
+                    "text": "Meteor session documented."
                 }
             ]
         }

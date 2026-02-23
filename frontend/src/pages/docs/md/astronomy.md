@@ -183,8 +183,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/jupiter-moons`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Plan is ready—let's star hop." — seasonal star hop plan ×1
-    - `chart` → "I can spot them easily now!" — constellation sketch set ×1
+    - `planisphere-route` → "Planisphere route ready." — seasonal star hop plan ×1, planisphere star chart ×1
+    - `reference-route` → "Reference route ready." — planisphere star chart ×1
+    - `chart` → "All three constellations mapped and noted." — constellation sketch set ×1, planisphere star chart ×1
+- Troubleshooting/safety branches:
+    - `chart` branches to `recovery` when cloud cover or orientation confidence is poor.
+    - `recovery` enforces a safety pause and loops back into `chart` only after conditions improve.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -308,7 +312,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/jupiter-moons`
 - Dialogue `requiresItems` gates:
-    - `observe` → "Observation complete." — basic telescope ×1, mission logbook ×1, red flashlight ×1, planisphere star chart ×1
+    - `dark-site-plan` → "Dark-site plan staged." — red flashlight ×1, planisphere star chart ×1
+    - `quick-window-plan` → "Short-window plan ready." — mission logbook ×1
+    - `observe` → "Observation log captured." — basic telescope ×1, mission logbook ×1
+    - `interpret` → "Confidence level noted and log complete." — basic telescope ×1, mission logbook ×1, planisphere star chart ×1
+- Troubleshooting/safety branches:
+    - `observe` branches to `fallback` when clouds/haze/glare make data unreliable.
+    - `fallback` requires safe abort + rescheduling before retrying `observe`.
+    - `interpret` adds confidence classification before `finish` can unlock.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -325,7 +336,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/meteor-shower`
 - Dialogue `requiresItems` gates:
-    - `observe` → "Path recorded" — basic telescope ×1
+    - `baseline-route` → "Baseline marked and ready for night one." — planisphere star chart ×1, mission logbook ×1
+    - `visual-route` → "Visual reference map prepared." — planisphere star chart ×1
+    - `night-one` → "Night-one log captured with timestamp." — basic telescope ×1, mission logbook ×1, red flashlight ×1
+    - `night-two` → "Two-night drift logged and interpreted." — basic telescope ×1, mission logbook ×1, planisphere star chart ×1
+- Troubleshooting/safety branches:
+    - `night-one` branches to `recovery` when seeing conditions or site safety degrade.
+    - `recovery` enforces safe abort/reschedule and loops back for a clean reattempt.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

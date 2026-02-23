@@ -1,38 +1,135 @@
 {
     "id": "astronomy/comet-tracking",
     "title": "Track a Visiting Comet",
-    "description": "Use your telescope to plot a comet's path across several nights.",
+    "description": "Track a comet over multiple nights, log directional drift, and recover safely when visibility fails.",
     "image": "/assets/quests/comet_tracking_observation_log.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A bright comet is passing by. Let's chart its position each evening.",
+            "text": "A bright comet is passing by. We need repeatable evidence, not a one-night guess. Do you want the strict baseline workflow or the fast visual route first?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "observe",
-                    "text": "I'll set up."
+                    "goto": "baseline-route",
+                    "text": "Use the baseline workflow (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "visual-route",
+                    "text": "Use the fast visual route (alternate path)."
                 }
             ]
         },
         {
-            "id": "observe",
-            "text": "Sketch the comet's location relative to nearby stars so we can see how it moves.",
+            "id": "baseline-route",
+            "text": "Main path: mark a reference star pattern, note start time, and lock your viewing position before observations begin.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "night-one",
+                    "text": "Baseline marked and ready for night one.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "visual-route",
+            "text": "Alternate path: use nearby bright stars and a simple sketch to estimate movement if you are short on setup time.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "night-one",
+                    "text": "Visual reference map prepared.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "night-one",
+            "text": "Night one: observe the comet and record direction relative to reference stars. Keep red light only and maintain safe footing.",
             "options": [
                 {
                     "type": "process",
                     "process": "observe-meteor-shower",
-                    "text": "Observing"
+                    "text": "Capture night-one observation."
+                },
+                {
+                    "type": "goto",
+                    "goto": "night-two",
+                    "text": "Night-one log captured with timestamp.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Clouds, glare, or unsafe conditions blocked the session."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Troubleshooting branch: if clouds or glare dominate, abort safely, move to a darker site, and reschedule the attempt rather than forcing a bad log.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "night-one",
+                    "text": "Conditions improved; retry night one with safety checks complete."
+                }
+            ]
+        },
+        {
+            "id": "night-two",
+            "text": "Night two: repeat from the same window and compare drift. If movement is inconsistent, annotate uncertainty before closure.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "observe-meteor-shower",
+                    "text": "Capture night-two observation."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Path recorded",
+                    "text": "Two-night drift logged and interpreted.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
                             "count": 1
                         }
                     ]
@@ -41,11 +138,11 @@
         },
         {
             "id": "finish",
-            "text": "Excellent observations! Comparing notes over multiple nights reveals its orbit.",
+            "text": "Excellent tracking. You produced repeatable evidence across sessions and used an operational fallback when conditions failed.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Fascinating!"
+                    "text": "Comet path documented."
                 }
             ]
         }
@@ -59,8 +156,8 @@
     "requiresQuests": ["astronomy/meteor-shower"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 97,
+        "emoji": "🛠️",
         "history": []
     }
 }

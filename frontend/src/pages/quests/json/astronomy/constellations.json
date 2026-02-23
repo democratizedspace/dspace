@@ -1,38 +1,64 @@
 {
     "id": "astronomy/constellations",
     "title": "Map the Constellations",
-    "description": "Identify key star patterns to aid celestial navigation.",
+    "description": "Identify seasonal constellations with a repeatable chart workflow, safety checks, and a re-attempt branch for poor visibility.",
     "image": "/assets/quests/constellation_mapping_logbook.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Great progress so far! Next let's learn the constellations visible this season.",
+            "text": "Great progress so far. We will map Orion, Ursa Major, and Cassiopeia with evidence you can repeat later. Choose your route.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plan",
-                    "text": "I'm excited to learn!"
+                    "goto": "planisphere-route",
+                    "text": "Use planisphere star-hop (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "reference-route",
+                    "text": "Use landmark reference route (alternate path)."
                 }
             ]
         },
         {
-            "id": "plan",
-            "text": "Mark this season's guide stars on the planisphere and keep red light low so you can move safely.",
+            "id": "planisphere-route",
+            "text": "Mark this season's guide stars on the planisphere and verify your red light is dim enough to preserve night vision.",
             "options": [
                 {
                     "type": "process",
                     "process": "draft-seasonal-star-plan",
-                    "text": "Sketching arrows from guide stars."
+                    "text": "Draft the guide-star plan."
                 },
                 {
                     "type": "goto",
                     "goto": "chart",
-                    "text": "Plan is ready\u2014let's star hop.",
+                    "text": "Planisphere route ready.",
                     "requiresItems": [
                         {
                             "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "reference-route",
+            "text": "Alternate route: use horizon landmarks to anchor your sweep order, then cross-check with the planisphere before claiming a match.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart",
+                    "text": "Reference route ready.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
                             "count": 1
                         }
                     ]
@@ -41,33 +67,53 @@
         },
         {
             "id": "chart",
-            "text": "Find Orion, Ursa Major, and Cassiopeia, then sketch their bright stars and orientation without stepping into hazards.",
+            "text": "Identify the three constellations and sketch orientation arrows. Keep clear walk paths and stop if visibility or footing becomes unsafe.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Charting patterns..."
+                    "text": "Run the constellation identification pass."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "I can spot them easily now!",
+                    "text": "All three constellations mapped and noted.",
                     "requiresItems": [
                         {
                             "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
                             "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Cloud cover or poor orientation blocked a reliable map."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Troubleshooting branch: pause, re-check cardinal directions, reduce glare sources, and schedule a second pass when visibility improves.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart",
+                    "text": "Conditions improved; retry mapping pass."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent! These patterns guide spacecraft spotting and future sessions. Keep the sketches handy.",
+            "text": "Excellent. Your chart now supports navigation to deeper targets and reflects a safe, repeatable observation workflow.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Nova!"
+                    "text": "Constellation map completed."
                 }
             ]
         }
@@ -80,15 +126,9 @@
     ],
     "requiresQuests": ["astronomy/jupiter-moons"],
     "hardening": {
-        "passes": 1,
-        "score": 95,
-        "emoji": "\ud83c\udf00",
-        "history": [
-            {
-                "task": "codex-quest-hardening-2025-02-16",
-                "date": "2025-02-16",
-                "score": 95
-            }
-        ]
+        "passes": 0,
+        "score": 97,
+        "emoji": "🛠️",
+        "history": []
     }
 }
