@@ -39,7 +39,7 @@
                 {
                     "type": "goto",
                     "goto": "view",
-                    "text": "Timing locked—let's observe.",
+                    "text": "Timing locked\u2014let's observe.",
                     "requiresItems": [
                         {
                             "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
@@ -100,8 +100,13 @@
         },
         {
             "id": "recheck",
-            "text": "Pause and recover: confirm tripod level, refocus, and wait for steadier air. If glare persists near the horizon, delay to a safer, higher-altitude window before retrying.",
+            "text": "Pause and recover: confirm tripod level, refocus, and wait for steadier air. If glare persists near the horizon, delay to a safer, higher-altitude window before retrying. Reset the previous sketch so only corrected evidence is submitted.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "reset-venus-phase-sketch",
+                    "text": "Archive the failed sketch and clear for a fresh measurement."
+                },
                 {
                     "type": "goto",
                     "goto": "plan",
@@ -131,7 +136,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/saturn-rings"],
+    "requiresQuests": [
+        "astronomy/saturn-rings"
+    ],
     "hardening": {
         "passes": 1,
         "score": 100,
