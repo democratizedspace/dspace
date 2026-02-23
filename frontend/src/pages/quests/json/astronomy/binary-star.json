@@ -166,12 +166,10 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/constellations"
-    ],
+    "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 100,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
