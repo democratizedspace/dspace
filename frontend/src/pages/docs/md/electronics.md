@@ -192,7 +192,7 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/arduino-blink`
 - Dialogue `requiresItems` gates:
     - `materials` → "Parts ready for the standard wiring path." — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, 5 mm LED ×1, 220 Ohm Resistor ×1, Potentiometer ×1, USB Cable ×1, Laptop Computer ×1
-    - `materials` → "Potentiometer pins are cramped; show me a safer alternate layout." — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3
+    - `materials` → "Potentiometer pins are cramped; show me a safer alternate layout." — Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, 5 mm LED ×1, 220 Ohm Resistor ×1, Potentiometer ×1, USB Cable ×1, Laptop Computer ×1
     - `verify-wiring` → "Checklist passed; safe to power up." — 5 mm LED ×1, 220 Ohm Resistor ×1
     - Branching/troubleshooting: main and fallback wiring paths both converge to a safety checklist; faults route through `troubleshoot` and mandatory re-verification.
     - Evidence gate: completion now requires a low/medium/high brightness demonstration before `finish`.
@@ -218,7 +218,7 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/measure-led-current`
 - Dialogue `requiresItems` gates:
     - `prepare` → "Tools ready and resistor isolated." — 220 Ohm Resistor ×1, resistor color chart ×1
-    - `measure` → "Measurement recorded." — resistor color chart ×1
+    - `measure` → "Measurement recorded." — digital multimeter ×1
     - Measurement gate: decode expected tolerance first, then interpret measured evidence against a 209-231 Ω pass window.
     - Corrective loop: out-of-range or unstable readings route through `corrective` and must re-test before closure.
 - Grants:
