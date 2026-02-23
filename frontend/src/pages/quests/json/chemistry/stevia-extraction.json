@@ -19,7 +19,7 @@
         },
         {
             "id": "setup-branch",
-            "text": "Two valid setup routes: precision prep (measured batches) or low-tech prep (small pilot steep). Both must produce a setup artifact before extraction.",
+            "text": "Two valid extraction routes: precision prep (measured batches) or low-tech prep (small pilot steep). Both routes must produce extraction evidence before outcome review.",
             "options": [
                 {
                     "type": "goto",
@@ -45,7 +45,7 @@
                 {
                     "type": "goto",
                     "goto": "outcome-check",
-                    "text": "Setup artifact captured; evaluate extract clarity.",
+                    "text": "Extraction evidence captured; evaluate extract clarity.",
                     "requiresItems": [
                         {
                             "id": "a7cb182c-f491-4f49-8d36-964886d0d055",

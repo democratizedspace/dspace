@@ -48,7 +48,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/safe-reaction`
 - Dialogue `requiresItems` gates:
-    - `measure` → "I logged a stable reading and kept PPE on." — hydroponic pH reading ×1, pH strip ×1, safety goggles ×1, lab coat ×1
+    - `measure` → "I logged a stable reading and kept PPE on." — hydroponic pH reading ×1, nitrile gloves (pair) ×1, safety goggles ×1, lab coat ×1
     - `interpret` → "Reading is in-range (6.0–7.5); safe to proceed." — hydroponic pH reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -162,7 +162,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/stevia`, `chemistry/safe-reaction`
 - Dialogue `requiresItems` gates:
-    - `precision-setup` → "Setup artifact captured; evaluate extract clarity." — stevia extract ×1
+    - `precision-setup` → "Extraction evidence captured; evaluate extract clarity." — stevia extract ×1
     - `pilot-setup` → "Pilot indicates viable extraction; check outcome evidence." — stevia extract ×1
     - `outcome-check` → "Outcome passes quality check; extract is ready." — stevia extract ×1
 - Grants:
@@ -176,7 +176,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Consumes: bundle of stevia leaves ×10
         - Creates: stevia extract ×1
 - QA notes:
-    - Staged evidence is split into setup proof and outcome quality gate before finish.
+    - Staged evidence is split between extraction-route evidence and an outcome quality gate before finish.
     - Contamination recovery includes sanitize-and-rerun workflow plus safe pause/escalation path.
 
 ## 9) Refine Stevia Crystals (`chemistry/stevia-crystals`)
