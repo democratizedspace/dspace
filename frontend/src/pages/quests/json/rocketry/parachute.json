@@ -1,30 +1,30 @@
 {
     "id": "rocketry/parachute",
     "title": "Add a parachute",
-    "description": "Upgrade your rocket with a nylon parachute for gentle landings and possible reuse.",
+    "description": "Install and validate a parachute recovery system with safety checks, verification evidence, and retry paths.",
     "image": "/assets/quests/model_rocket_parachute_installation.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your first launch went great. Let's add a parachute so the rocket returns in one piece and can fly again.",
+            "text": "Your first launch proved the design. Now let's make it reusable by installing a parachute system and proving it works under controlled checks.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "parachute",
-                    "text": "Sounds like a plan! How do we go about adding a parachute?"
+                    "goto": "inventory-check",
+                    "text": "Let's run the install checklist."
                 }
             ]
         },
         {
-            "id": "parachute",
-            "text": "A parachute slows descent so the rocket survives landing. Gather a launch-capable model rocket, parachute, kevlar shock cord, parachute harness kit and flame-resistant recovery wadding. The wadding shields the parachute from the motor's ejection charge. Wear eye protection and keep the motor removed while assembling.",
+            "id": "inventory-check",
+            "text": "Gather the launch-capable rocket, parachute, Kevlar shock cord, harness kit, and flame-resistant wadding. Motor stays out during install.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "assemble-rocket-parachute",
-                    "text": "Let's assemble the parachute system!",
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "All parts staged and motor removed.",
                     "requiresItems": [
                         {
                             "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
@@ -50,46 +50,137 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "troubleshoot-install",
+                    "text": "Missing parts or unclear fit. Troubleshoot before installation."
+                }
+            ]
+        },
+        {
+            "id": "install",
+            "text": "Run the install process and seat the harness so the chute can deploy without snagging.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-rocket-parachute",
+                    "text": "Assemble parachute recovery stack."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-install",
+                    "text": "Install complete. Verify continuity and packing.",
                     "requiresItems": [
                         {
                             "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
                             "count": 1
                         }
-                    ],
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-install",
+            "text": "Verification gate: check knot security, chute fold, and body-tube clearance. If any bind appears, do not arm for launch.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-brief",
+                    "text": "Verification passed. Proceed to launch safety brief."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-install",
+                    "text": "Snag or loose knot found. Rework the install."
+                }
+            ]
+        },
+        {
+            "id": "safety-brief",
+            "text": "Safety branch: keep bystanders 5 m away, verify launch controller continuity, and confirm an abort caller before ignition.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "launch",
-                    "text": "Great! Once the parachute system is ready, are we good to go for another launch?"
+                    "text": "Safety brief complete and range is clear."
+                },
+                {
+                    "type": "goto",
+                    "goto": "hold",
+                    "text": "Range not ready. Hold and reset the launch lane."
                 }
             ]
         },
         {
             "id": "launch",
-            "text": "With the parachute fitted, set the rocket on a model rocket launchpad. Insert a rocket igniter, hook it to the launch controller and keep everyone at least 5 m away. Follow the rocket launch checklist, then press the button and watch it fly!",
+            "text": "Run a controlled launch to validate deployment. Track canopy opening and touchdown behavior.",
             "options": [
                 {
                     "type": "process",
                     "process": "launch-rocket-parachute",
-                    "text": "This feels so exhilarating!!"
+                    "text": "Execute parachute validation launch."
                 },
                 {
                     "type": "goto",
-                    "goto": "success",
+                    "goto": "assess",
+                    "text": "Flight complete. Assess recovery outcome.",
                     "requiresItems": [
                         {
                             "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
                             "count": 2
                         }
-                    ],
-                    "text": "Congratulations on another successful launch! How did the rocket fare with the parachute?"
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-install",
+                    "text": "Deployment looked unstable. Return to troubleshooting."
+                }
+            ]
+        },
+        {
+            "id": "assess",
+            "text": "Outcome gate: pass only when descent was controlled and no recovery hardware damage appears. Otherwise repair and re-test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "success",
+                    "text": "Descent and hardware condition both passed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-install",
+                    "text": "Recovery failed checks. Repack and run another validation launch."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot-install",
+            "text": "Troubleshooting/recovery loop: replace scorched wadding, loosen chute folds, and re-seat the harness anchor before rerunning verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify-install",
+                    "text": "Corrections done. Re-run the verification gate."
+                }
+            ]
+        },
+        {
+            "id": "hold",
+            "text": "Hold acknowledged. Keep igniter disconnected and maintain cold motor handling until range control confirms safe conditions.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-brief",
+                    "text": "Conditions corrected. Resume safety brief."
                 }
             ]
         },
         {
             "id": "success",
-            "text": "The parachute deployed and the rocket touched down softly. Nice work upgrading the design!",
+            "text": "Excellent work. You installed, verified, and flight-tested the parachute system with a real corrective path.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thank you, Nova! I'm thrilled with the progress we've made!"
+                    "text": "Parachute recovery system validated."
                 }
             ]
         }
@@ -112,7 +203,7 @@
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-23",
