@@ -71,6 +71,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `log` → "Trace saved" — temperature log CSV ×1
     - `plot` → "Plot the inlet run" — temperature log CSV ×1, Laptop Computer ×1
     - `plot` → "Chart reviewed" — temperature line chart ×1
+    - `evaluate` → "Yes, inlet is in range and stable" — temperature line chart ×1
     - `finish` → "Inlet trend logged" — temperature line chart ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -90,6 +91,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: temperature line chart ×1
+- QA notes:
+    - Added an interpretation gate with explicit pass bounds (3-9°C and <±1°C oscillation) before finish unlocks.
+    - Out-of-range readings branch into corrective reseat/re-bleed actions and require a full re-log loop.
 
 ## 4) Check Loop Outlet Temperature (`geothermal/check-loop-outlet-temp`)
 
@@ -210,6 +214,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `chart` → "Plot the baseline curve" — temperature log CSV ×1, Laptop Computer ×1
     - `chart` → "Annotate weather notes" — temperature line chart ×1, Laptop Computer ×1
     - `chart` → "Baseline chart saved" — annotated temperature graph ×1
+    - `evaluate` → "Yes, baseline is stable and explained" — annotated temperature graph ×1
     - `finish` → "Ground curve logged" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -233,6 +238,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: temperature line chart ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: annotated temperature graph ×1
+- QA notes:
+    - Added an interpretation gate that checks overnight drift (±1.5°C) and requires anomaly explanations before finish.
+    - Unexplained spikes route through a correction branch (probe-depth reseat + soil repack) and a mandatory re-capture loop.
 
 ## 9) Compare Depth Ground Temps (`geothermal/compare-depth-ground-temps`)
 
@@ -355,14 +363,24 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/purge-loop-air`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I have a pump ready." — submersible water pump ×1
+    - `materials` → "Pump and hose routing staged" — submersible water pump ×1
+    - `baseline` → "Baseline trace saved" — temperature log CSV ×1, submersible water pump ×1
+    - `flush` → "Post-backflush trace saved" — temperature log CSV ×2, submersible water pump ×1
+    - `verify` → "Yes, flow is stable now" — temperature log CSV ×2
+    - `finish` → "Backflush benchmark logged" — temperature log CSV ×2
 - Grants:
-    - `materials` → "Take this pump." — submersible water pump ×1
+    - `materials` → "Issue backflush pump" — submersible water pump ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+- QA notes:
+    - Completion now requires pre/post evidence (two temperature log CSV artifacts) and an explicit flow-stability verification decision.
+    - Failed verification routes into a recovery branch (mesh inspection + O-ring reseat) before re-running the flush path.
 
 ## 15) Replace Faulty Thermistor (`geothermal/replace-faulty-thermistor`)
 

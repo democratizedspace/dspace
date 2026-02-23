@@ -1,7 +1,7 @@
 {
     "id": "geothermal/check-loop-inlet-temp",
     "title": "Check Loop Inlet Temperature",
-    "description": "Use an Arduino to log the water temperature entering the heat pump.",
+    "description": "Log inlet temperature, classify against bounds, and run corrective re-test loops when readings drift.",
     "image": "/assets/quests/geothermal_check_loop_inlet_temp_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -101,7 +101,7 @@
         },
         {
             "id": "plot",
-            "text": "Label the inlet curve and flag any spikes when the pump cycles. Let's make a quick chart you can compare to outlet data later.",
+            "text": "Label the inlet curve and flag any spikes when the pump cycles. Let's make a chart before we score it against the target band.",
             "options": [
                 {
                     "type": "process",
@@ -120,7 +120,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "evaluate",
                     "text": "Chart reviewed",
                     "requiresItems": [
                         {
@@ -132,8 +132,46 @@
             ]
         },
         {
+            "id": "evaluate",
+            "text": "Acceptance band is 3-9°C with less than ±1°C oscillation during steady flow. Does the chart meet that standard?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes, inlet is in range and stable",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "No, out of range or unstable"
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Recovery branch: stop the pump, reseat the probe, re-bleed trapped air, and check for line insulation gaps before capturing a fresh trace.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Corrective work complete, re-log inlet"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Reset to full lockout and setup"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Save that inlet plot with the date and pump speed. It'll make spotting seasonal drift and clogged filters much easier.",
+            "text": "Save that inlet chart with date, pump speed, and pass-band notes. It'll make seasonal drift and clogged filters easier to spot.",
             "options": [
                 {
                     "type": "finish",
@@ -157,8 +195,8 @@
     "requiresQuests": ["geothermal/survey-ground-temperature"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }

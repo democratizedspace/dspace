@@ -741,17 +741,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, compos
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked geothermal quests yet)
 
 - `geothermal/backflush-loop-filter`
-  - [ ] Observed issue: `geothermal/backflush-loop-filter` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue: `geothermal/backflush-loop-filter` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #TBD)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #TBD)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #TBD)
 - `geothermal/calibrate-ground-sensor`
   - [x] Observed issue (addressed): `geothermal/calibrate-ground-sensor` previously implied calibration work, but baseline/adjust/retest tolerance handling was under-specified; this was hardened in PR #3628. (PR #3628)
   - [x] Structure progression as baseline → adjust → re-test with a tolerance target and artifacts captured at baseline and post-adjust states. (PR #3628)
   - [x] Add a drift/variance follow-up branch that rolls back to last-known-good settings when readings do not hold. (PR #3628)
 - `geothermal/check-loop-inlet-temp`
-  - [ ] Observed issue: `geothermal/check-loop-inlet-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `geothermal/check-loop-inlet-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #TBD)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #TBD)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #TBD)
 - `geothermal/check-loop-outlet-temp`
   - [ ] Observed issue: `geothermal/check-loop-outlet-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
@@ -777,9 +777,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3628)
   - [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3628)
 - `geothermal/log-ground-temperature`
-  - [ ] Observed issue: `geothermal/log-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `geothermal/log-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #TBD)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #TBD)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #TBD)
 - `geothermal/log-heat-pump-warmup`
   - [x] Observed issue: `geothermal/log-heat-pump-warmup` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3653)
   - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3653)
