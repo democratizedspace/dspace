@@ -1,35 +1,35 @@
 {
     "id": "astronomy/iss-photo",
     "title": "Photograph the ISS",
-    "description": "Use a tracking app and tripod phone to capture the ISS streak and log it.",
+    "description": "Plan an ISS imaging window, capture a streak photo with safety controls, and recover from failed captures before logging completion.",
     "image": "/assets/quests/iss_long_exposure_phone_photo.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You spotted the ISS before. Ready to capture its trail with a long exposure?",
+            "text": "A sharp ISS photo starts with prep, not luck. Confirm tripod placement, clear your walking path, and check weather before opening the shutter.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Let's plan the shot."
+                    "text": "Site is safe and I'm ready to plan."
                 }
             ]
         },
         {
             "id": "plan",
-            "text": "Mount your smartphone on a tripod and check an app for the next pass.",
+            "text": "Use the tracking app to lock the pass time and direction, then set camera mode before stepping away from bright lights.",
             "options": [
                 {
                     "type": "process",
                     "process": "check-iss-pass",
-                    "text": "Checking the pass time."
+                    "text": "Record the pass window."
                 },
                 {
                     "type": "goto",
                     "goto": "capture",
-                    "text": "Pass time noted, gear set.",
+                    "text": "Pass details logged and camera staged.",
                     "requiresItems": [
                         {
                             "id": "82577af7-6724-4cb2-8922-f7140e550145",
@@ -38,22 +38,88 @@
                         {
                             "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
                             "count": 1
+                        },
+                        {
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                            "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-delay",
+                    "text": "Clouds or glare make this pass risky."
+                }
+            ]
+        },
+        {
+            "id": "weather-delay",
+            "text": "Hold position and re-check the app for the next pass. No rushing in darkness: keep the red light on and restart planning when conditions improve.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Conditions improved; re-plan the session."
                 }
             ]
         },
         {
             "id": "capture",
-            "text": "Start a 10-second exposure as the ISS rises and jot the timestamp.",
+            "text": "Run a 10-second exposure as the ISS crosses the field, then verify streak clarity before ending the session.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Photo saved and logged.",
+                    "goto": "interpret",
+                    "text": "Exposure complete and timestamp noted.",
                     "requiresItems": [
                         {
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retake",
+                    "text": "Image blurred, overexposed, or ISS trail missing."
+                }
+            ]
+        },
+        {
+            "id": "retake",
+            "text": "Troubleshooting branch: tighten tripod, shorten exposure slightly, and verify focus lock before retrying on the next pass window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Adjusted settings; queue the next pass and retake."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Completion requires both artifacts: pass details and a saved photo session note in the mission log.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Write the ISS photo entry in the mission log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pass data and photo notes are both logged.",
+                    "requiresItems": [
+                        {
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
                             "count": 1
                         }
                     ]
@@ -62,11 +128,11 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! You captured humanity's outpost in motion.",
+            "text": "Excellent capture cycle. You handled safety, recovery, and evidence logging like mission control.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait for the next pass."
+                    "text": "ISS photo session complete."
                 }
             ]
         }
@@ -79,9 +145,15 @@
     ],
     "requiresQuests": ["astronomy/iss-flyover"],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2026-02-23",
+                "date": "2026-02-23",
+                "score": 90
+            }
+        ]
     }
 }

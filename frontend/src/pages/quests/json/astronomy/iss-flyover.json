@@ -3,7 +3,7 @@
     "title": "Spot the ISS",
     "description": "Use a satellite-tracking app and a basic telescope to plan, spot, and log an ISS flyover safely.",
     "hardening": {
-        "passes": 4,
+        "passes": 5,
         "score": 100,
         "emoji": "\ud83d\udcaf",
         "history": [
@@ -25,6 +25,11 @@
             {
                 "task": "codex-quest-upgrade-2025-08-14",
                 "date": "2025-08-14",
+                "score": 95
+            },
+            {
+                "task": "codex-quest-hardening-2026-02-23",
+                "date": "2026-02-23",
                 "score": 95
             }
         ]
@@ -122,7 +127,7 @@
         },
         {
             "id": "observe",
-            "text": "Watch the ISS on the predicted path, sweep once it's above trees, and log brightness and duration without blocking paths.",
+            "text": "Watch the ISS on the predicted path, sweep once it's above trees, and log brightness and duration without blocking paths or tripping cables.",
             "options": [
                 {
                     "type": "process",
@@ -149,12 +154,12 @@
         },
         {
             "id": "interpret",
-            "text": "Check your log: if pass time, direction, and duration are all recorded, the session counts. If any field is missing, rerun setup and observe again.",
+            "text": "Check your log: pass time, direction, duration, and a weather note are required. Missing fields trigger a recovery loop and scheduled follow-up pass.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Log has all three fields and conditions notes.",
+                    "text": "Log has all required fields and session notes.",
                     "requiresItems": [
                         {
                             "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
@@ -164,8 +169,30 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "followup",
+                    "text": "Missing details or interrupted visibility; schedule a follow-up pass."
+                }
+            ]
+        },
+        {
+            "id": "followup",
+            "text": "Troubleshooting: restage the station, check the next ISS window, and rerun observation before closing this quest.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "Schedule the next pass window."
+                },
+                {
+                    "type": "goto",
                     "goto": "setup",
-                    "text": "Missing details - restage and retry the pass."
+                    "text": "Follow-up pass scheduled; rerun setup and observation.",
+                    "requiresItems": [
+                        {
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -186,5 +213,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/observe-moon"]
+    "requiresQuests": [
+        "astronomy/observe-moon"
+    ]
 }

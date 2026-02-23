@@ -110,10 +110,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `weather-delay` → "Sky is clear enough now; proceed to setup." — ISS pass window ×1
     - `setup` → "Station is ready for the pass." — ISS spotting station ×1
     - `observe` → "Entry complete with time and direction." — ISS pass log ×1
-    - `interpret` → "Log has all three fields and conditions notes." — ISS pass log ×1
+    - `interpret` → "Log has all required fields and session notes." — ISS pass log ×1
+    - `followup` → "Follow-up pass scheduled; rerun setup and observation." — ISS pass window ×1
 - Troubleshooting and safety flow:
     - `plan`, `setup`, and `observe` all branch to `weather-delay` for cloud/haze/glare recovery instead of allowing a dead-end session.
-    - `interpret` enforces a complete observation artifact (time + direction + duration) and routes incomplete entries back through setup so the pass can be restaged and re-observed.
+    - `interpret` enforces a complete observation artifact (time + direction + duration + weather notes) and routes incomplete entries to `followup`.
+    - `followup` requires a scheduled next pass via `check-iss-pass` before looping back to `setup`, ensuring a deterministic recovery path.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -139,8 +141,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Pass time noted, gear set." — smartphone ×1, camera tripod ×1
-    - `capture` → "Photo saved and logged." — mission logbook ×1
+    - `plan` → "Pass details logged and camera staged." — smartphone ×1, camera tripod ×1, ISS pass window ×1
+    - `capture` → "Exposure complete and timestamp noted." — mission logbook ×1, ISS pass window ×1
+    - `interpret` → "Pass data and photo notes are both logged." — ISS pass window ×1, mission log entry ×1
+- Troubleshooting and safety flow:
+    - `plan` can branch to `weather-delay`, forcing a safe reschedule for poor visibility.
+    - `capture` branches to `retake` when blur/overexposure occurs, then loops back through `plan` for a controlled retry on the next pass window.
+    - `interpret` requires paired evidence (pass window + mission log entry) before `finish`.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -198,7 +205,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/constellations`
 - Dialogue `requiresItems` gates:
-    - `locate` → "I see gold and blue!" — basic telescope ×1, planisphere star chart ×1
+    - `start` → "Site and gear are ready for alignment." — basic telescope ×1, planisphere star chart ×1
+    - `align` → "Alignment artifact captured; ready to inspect the split." — constellation sketch set ×1
+    - `observe` → "I can clearly resolve the gold and blue pair." — constellation sketch set ×1
+    - `troubleshoot` → "Conditions improved; retry the split check." — constellation sketch set ×1
+    - `log` → "Mission log entry saved." — mission log entry ×1
+- Troubleshooting and safety flow:
+    - `observe` branches to `troubleshoot` for unstable seeing, then loops back through a controlled re-check.
+    - `log` adds a mechanics-backed evidence gate via `write-mission-log-entry` before `finish`.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -209,6 +223,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
         - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 9) Measure Light Pollution (`astronomy/light-pollution`)
 

@@ -1,34 +1,19 @@
 {
     "id": "astronomy/binary-star",
     "title": "Split a Binary Star",
-    "description": "Use a basic telescope and planisphere to find Albireo and note its colors.",
+    "description": "Plan an Albireo session, capture an observation artifact, and log a verified color split with troubleshooting for poor seeing.",
     "image": "/assets/quests/binary_star_albireo_observation.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Albireo is a colorful binary in Cygnus. Ready to track it down?",
+            "text": "Albireo rewards patience. Before we observe, confirm the scope is cooled down, your star map is ready, and your viewing spot is free of trip hazards.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "locate",
-                    "text": "Point me to it."
-                }
-            ]
-        },
-        {
-            "id": "locate",
-            "text": "Trace Cygnus on a planisphere and aim the telescope at Albireo to split them.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "identify-constellations",
-                    "text": "Aligning with Cygnus."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
+                    "goto": "align",
+                    "text": "Site and gear are ready for alignment.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -38,18 +23,100 @@
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
                             "count": 1
                         }
-                    ],
-                    "text": "I see gold and blue!"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "align",
+            "text": "Use Cygnus as your anchor and align carefully before raising magnification.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Run alignment and find Albireo."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Alignment artifact captured; ready to inspect the split.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Check star images at low then medium power. If diffraction spikes or shimmer block the color split, branch to troubleshooting before we claim success.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "I can clearly resolve the gold and blue pair.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Seeing is unstable or the stars still blur together."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-center, wait for steadier air, and reduce magnification one step. Keep observers behind the tripod line to avoid accidental bumps.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Conditions improved; retry the split check.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Capture evidence in the mission log with color notes and session conditions before completion.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Write a binary-star entry in the mission log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Mission log entry saved.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great split! Jot the colors in your mission log for future observers.",
+            "text": "Great split. Your log now has reproducible evidence and a safe setup protocol for the next observer.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Logged and ready for the next target."
+                    "text": "Albireo confirmed and logged."
                 }
             ]
         }
@@ -62,9 +129,15 @@
     ],
     "requiresQuests": ["astronomy/constellations"],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2026-02-23",
+                "date": "2026-02-23",
+                "score": 90
+            }
+        ]
     }
 }
