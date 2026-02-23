@@ -607,7 +607,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydr
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/soldering-intro`
   - [x] Observed issue: `electronics/soldering-intro` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3689)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3689)
+  - [x] Add at least one non-linear branch with a main path plus alternate strategy and gate advancement on mechanics-backed evidence from `requiresItems`, `launchesProcess`, or logged output. (PR #3689)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3689)
 - `electronics/temperature-plot`
   - [x] Observed issue: `electronics/temperature-plot` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3689)
@@ -623,7 +623,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydr
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3660)
 - `electronics/thermometer-calibration`
   - [x] Observed issue: `electronics/thermometer-calibration` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3689)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3689)
+  - [x] Add at least one non-linear branch with a main path plus alternate strategy and gate advancement on mechanics-backed evidence from `requiresItems`, `launchesProcess`, or logged output. (PR #3689)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3689)
 - `electronics/voltage-divider`
   - [ ] Observed issue: `electronics/voltage-divider` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
