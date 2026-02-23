@@ -8,11 +8,11 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Good to see you progressing! Before soldering, lay out a silicone mat, secure your work in helping hands, plug in your station, keep a brass tip cleaner nearby, and have a damp sponge ready.",
+            "text": "Good to see you progressing! Before soldering, lay out a silicone mat, secure your work in helping hands, plug in your station, keep a brass tip cleaner nearby, and have a damp sponge ready. Ventilation and eye protection are mandatory before heat-up.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "tin",
+                    "goto": "prep-station",
                     "text": "Iron is heating up.",
                     "requiresItems": [
                         {
@@ -36,13 +36,85 @@
             ]
         },
         {
+            "id": "prep-station",
+            "text": "Confirm your safety setup: goggles on, extractor running, iron parked on its stand, and no loose scraps near the hot tip.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tin",
+                    "text": "Safety checks complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-station",
+                    "text": "Something is unsafe or unstable."
+                }
+            ]
+        },
+        {
             "id": "tin",
             "text": "Once the tip is hot, melt a little solder across it, then wipe on the damp sponge to leave a thin, shiny layer that resists oxidation.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify-tip",
                     "text": "Tip looks shiny."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-tip",
+                    "text": "Tip looks dull, blackened, or solder won't wet."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot-station",
+            "text": "Pause before continuing. Unplug the iron, clear clutter, re-seat the stand, and restart only after ventilation and PPE are confirmed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-station",
+                    "text": "Station corrected; re-check safety."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot-tip",
+            "text": "Recover the tip: wipe on brass wool, add fresh solder and a touch of flux, then re-tin. If the tip pits or flakes, stop and replace the tip before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tin",
+                    "text": "I recovered or replaced the tip; re-test tinning."
+                }
+            ]
+        },
+        {
+            "id": "verify-tip",
+            "text": "Verification checkpoint: the tip should hold a smooth silver film and transfer heat quickly to a scrap lead without smoke spikes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verified: stable tinning achieved.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+                            "count": 1
+                        },
+                        {
+                            "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+                            "count": 1
+                        },
+                        {
+                            "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -66,7 +138,7 @@
     "requiresQuests": ["electronics/resistor-color-check"],
     "hardening": {
         "passes": 3,
-        "score": 75,
+        "score": 85,
         "emoji": "\u2705",
         "history": [
             {

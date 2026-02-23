@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've been logging temperatures with your Pi. Let's turn that data into a chart.",
+            "text": "You've been logging temperatures with your Pi. Let's turn that data into a chart and verify whether it stays inside a safe operating band.",
             "options": [
                 {
                     "type": "goto",
@@ -19,11 +19,11 @@
         },
         {
             "id": "prep",
-            "text": "Copy the log file to your computer and install matplotlib. Keep a backup of the data.",
+            "text": "Copy the log file to your computer and install matplotlib. Keep a backup of the data and confirm your CSV has timestamp,temp_c headers.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plot",
+                    "goto": "define-thresholds",
                     "text": "Log file copied.",
                     "requiresItems": [
                         {
@@ -39,20 +39,72 @@
             ]
         },
         {
+            "id": "define-thresholds",
+            "text": "Use this threshold policy before plotting: expected temp range is 18-30 C. A run passes only if at least 90% of points are inside range and there are no sudden jumps over 5 C between adjacent points.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Threshold policy documented."
+                }
+            ]
+        },
+        {
             "id": "plot",
             "text": "Run a short Python script to read the CSV and render a line chart of temperature over time.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Run the plotting process."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Chart generated."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the chart against the thresholds. If data is in-band and stable, you can close the task. If not, classify the issue and collect a corrected run. Stop and investigate immediately if sensor wiring warms up or readings flatline unexpectedly.",
+            "options": [
+                {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Chart looks good.",
-                    "process": "plot-temperature-data"
+                    "text": "In-band and stable (>=90% inside 18-30 C, no >5 C jumps).",
+                    "requiresItems": [
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly-response",
+                    "text": "Out-of-band points or unstable jumps detected."
+                }
+            ]
+        },
+        {
+            "id": "anomaly-response",
+            "text": "Corrective branch: verify thermistor seating, inspect jumper connections, and confirm timestamps are monotonic. Re-run logging for at least 10 rows before plotting again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Applied fixes; generate a new chart."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Visualizing trends will help you spot anomalies quickly.",
+            "text": "Nice! You generated a chart, interpreted it with explicit limits, and closed only after stable evidence.",
             "options": [
                 {
                     "type": "finish",
@@ -70,7 +122,7 @@
     "requiresQuests": ["electronics/data-logger"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
