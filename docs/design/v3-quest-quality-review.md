@@ -738,7 +738,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, compos
 
 ### geothermal (15 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback: no checked geothermal quests yet)
+Exemplar anchors (verified checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature (fallback used because no geothermal quests are checked yet)
 
 - `geothermal/backflush-loop-filter`
   - [x] Observed issue: `geothermal/backflush-loop-filter` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3694)
