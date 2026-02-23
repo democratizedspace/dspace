@@ -19,7 +19,7 @@
         },
         {
             "id": "plan",
-            "text": "Mount your smartphone on a tripod and check an app for the next pass.",
+            "text": "Mount your smartphone on a tripod and check an app for the next pass. Target a 10-15 second exposure with a stable horizon line.",
             "options": [
                 {
                     "type": "process",
@@ -40,16 +40,47 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "delay",
+                    "text": "Clouds or glare may ruin this pass."
+                }
+            ]
+        },
+        {
+            "id": "delay",
+            "text": "If transparency is poor or nearby lights flare the lens, delay capture. Keep your route lit safely, then re-check the next visible pass window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Re-planning for the next clear pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Skies cleared; proceed with the current setup.",
+                    "requiresItems": [
+                        {
+                            "id": "82577af7-6724-4cb2-8922-f7140e550145",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "capture",
-            "text": "Start a 10-second exposure as the ISS rises and jot the timestamp.",
+            "text": "Start a 10-15 second exposure as the ISS rises, then record timestamp, direction, and whether the streak is continuous.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Photo saved and logged.",
                     "requiresItems": [
                         {
@@ -57,6 +88,44 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "The trail is blurred or broken."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: accept only if the trail is continuous and aligned with the predicted pass path. Reject frames with heavy blur or obvious shake.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Frame meets criteria and notes are complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "This frame fails the quality check."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Corrective loop: stabilize tripod legs, reduce touch vibration with a timer, and wait for the next pass before retesting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Apply corrections and schedule a new pass window."
                 }
             ]
         },

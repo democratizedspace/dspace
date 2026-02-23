@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-17",
@@ -20,27 +20,48 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The Perseids are active tonight. Grab a planisphere star chart to locate the radiant and use a red flashlight so you don't lose night vision. Let's log as many meteors as we can.",
+            "text": "The Perseids are active tonight. Grab a planisphere star chart, preserve night vision with a dim red flashlight, and pick a safe station before we start logging.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "observe",
-                    "text": "Let's watch the sky."
+                    "text": "Let's begin the watch session."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-delay",
+                    "text": "Clouds and haze look risky right now."
+                }
+            ]
+        },
+        {
+            "id": "weather-delay",
+            "text": "Fallback plan: if cloud cover, glare, or unsafe footing appears, delay the session. Re-check conditions and schedule another watch window instead of forcing a poor run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Conditions improved, restart the session safely."
+                },
+                {
+                    "type": "goto",
+                    "goto": "follow-up",
+                    "text": "Log this as a failed session and plan a follow-up."
                 }
             ]
         },
         {
             "id": "observe",
-            "text": "Find a clear, dark spot away from traffic. Set up your basic telescope or lie back with your eyes, orient with the planisphere, and jot each meteor's direction and brightness in your mission logbook. Keep paths clear and avoid white lights.",
+            "text": "Find a clear dark spot away from traffic, orient with the planisphere, and record each meteor's direction and brightness in your mission logbook.",
             "options": [
                 {
                     "type": "process",
                     "process": "observe-meteor-shower",
-                    "text": "Recording meteors."
+                    "text": "Recording meteors now."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -59,7 +80,45 @@
                             "count": 1
                         }
                     ],
-                    "text": "Observation complete."
+                    "text": "I captured and logged the shower run."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-delay",
+                    "text": "Visibility dropped mid-session."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: classify the session as pass only if the log contains timestamps, directions, and at least one brightness note. Otherwise schedule a recovery run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Log is complete and ready to share."
+                },
+                {
+                    "type": "goto",
+                    "goto": "follow-up",
+                    "text": "Log is incomplete; schedule a follow-up run."
+                }
+            ]
+        },
+        {
+            "id": "follow-up",
+            "text": "Recovery branch: rest eyes for 20 minutes, re-check safety around your station, then retry on the next clear pass window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Ready for the next attempt."
                 }
             ]
         },
@@ -80,5 +139,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/jupiter-moons"]
+    "requiresQuests": [
+        "astronomy/jupiter-moons"
+    ]
 }

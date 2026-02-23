@@ -140,7 +140,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
     - `plan` → "Pass time noted, gear set." — smartphone ×1, camera tripod ×1
+    - `delay` → "Skies cleared; proceed with the current setup." — smartphone ×1, camera tripod ×1
     - `capture` → "Photo saved and logged." — mission logbook ×1
+    - `interpret` → "Frame meets criteria and notes are complete." — mission logbook ×1
+- Troubleshooting and safety flow:
+    - `plan` can branch to `delay` for cloud/glare conditions instead of forcing a low-quality pass.
+    - `interpret` enforces pass/fail criteria (continuous trail and predicted path alignment) before completion.
+    - Failed captures route to `retest`, which loops through stabilization corrections and a new pass schedule.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -198,7 +204,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/constellations`
 - Dialogue `requiresItems` gates:
-    - `locate` → "I see gold and blue!" — basic telescope ×1, planisphere star chart ×1
+    - `locate` → "Sketch complete. I'm ready to split Albireo." — constellation sketch set ×1
+    - `split` → "I can resolve both stars now." — basic telescope ×1, planisphere star chart ×1
+    - `interpret` → "Color notes and conditions logged in my mission logbook." — mission logbook ×1
+- Troubleshooting and safety flow:
+    - `start` offers a dedicated `safety-check` branch before dark-sky work.
+    - `locate` and `split` branch to `recover` when orientation/focus fails; `recover` loops through mount/focus correction before retry.
+    - Recovery can return to `safety-check` when footing or visibility degrades.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -291,7 +303,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/jupiter-moons`
 - Dialogue `requiresItems` gates:
-    - `observe` → "Observation complete." — basic telescope ×1, mission logbook ×1, red flashlight ×1, planisphere star chart ×1
+    - `observe` → "I captured and logged the shower run." — basic telescope ×1, mission logbook ×1, red flashlight ×1, planisphere star chart ×1
+    - `interpret` → "Log is complete and ready to share." — mission logbook ×1
+- Troubleshooting and safety flow:
+    - `start` and `observe` can route to `weather-delay` when visibility/safety degrades.
+    - `weather-delay` explicitly supports a failed-session log and hands off to `follow-up` scheduling.
+    - `interpret` enforces required log fields; incomplete logs go through `follow-up` before another attempt.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
