@@ -149,7 +149,13 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Session aborted safely; follow-up logged for next pass."
+                    "text": "Session aborted safely; follow-up logged for next pass.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

@@ -111,8 +111,8 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `observe-quick` → "Quick note complete with direction and duration." — mission logbook ×1
     - `observe` → "Entry complete with time and direction." — ISS pass log ×1
     - `interpret` → "Log has all fields with condition notes." — ISS pass log ×1
-    - `interpret-quick` → "Quick note has all fields with conditions logged." — ISS pass window ×1, mission logbook ×1
-    - `follow-up-window` → "Follow-up scheduled and safety note recorded." — mission logbook ×1
+    - `interpret-quick` → "Quick note has all fields with conditions logged." — ISS pass window ×1, mission logbook ×1, mission log entry ×1
+    - `follow-up-window` → "Follow-up scheduled and safety note recorded." — mission logbook ×1, mission log entry ×1
 - Troubleshooting and safety flow:
     - `choose-observation-mode` adds a non-linear branch between full station setup and a naked-eye fallback lane.
     - `weather-delay` can schedule a deferred follow-up window (`follow-up-window`) when no safe viewing window exists.
@@ -152,7 +152,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Troubleshooting/safety branches:
     - `interpret` fail path forces `retest` when timing, heading, or framing are out of range.
     - `retest` requires corrective stabilization + heading checks before rerunning capture.
-    - `recovery` enforces a safety stop/reschedule path for weather or footing risk.
+    - `recovery` enforces a safety stop/reschedule path for weather or footing risk and requires a logged follow-up note before completion.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -194,7 +194,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `plan-route` → "Plan is ready—let's star hop." — seasonal star hop plan ×1
     - `sweep-route` → "Anchor confirmed—continue to full mapping." — constellation sketch set ×1
     - `chart` → "Patterns are clear—ready to log evidence." — constellation sketch set ×1
-    - `log-evidence` → "Logged with conditions and constellation list." — mission logbook ×1, constellation sketch set ×1
+    - `log-evidence` → "Logged with conditions and constellation list." — mission logbook ×1, constellation sketch set ×1, mission log entry ×1
 - Troubleshooting/safety branches:
     - `choose-route` creates main and alternate mapping paths before charting.
     - `plan-route`, `sweep-route`, and `chart` all branch to `recovery` for haze/glare disorientation.
