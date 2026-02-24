@@ -11,7 +11,7 @@ firstaid: 13 quests, 1126 lines
 robotics: 13 quests, 1258 lines
 chemistry: 10 quests, 1062 lines
 rocketry: 10 quests, 1961 lines
-woodworking: 10 quests, 1784 lines
+woodworking: 10 quests, 2010 lines
 completionist: 5 quests, 604 lines
 welcome: 5 quests, 778 lines
 composting: 4 quests, 809 lines
