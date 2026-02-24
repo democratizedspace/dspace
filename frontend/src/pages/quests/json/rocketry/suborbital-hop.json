@@ -28,8 +28,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "range",
-                    "text": "Simulator shows acceptable drift and apogee.",
+                    "goto": "sim-review",
+                    "text": "Simulator run complete. Review drift and apogee against bounds.",
                     "requiresItems": [
                         {
                             "id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
@@ -40,12 +40,39 @@
             ]
         },
         {
+            "id": "sim-review",
+            "text": "Target window: drift <= 12 m and apogee between 70-95 m. If we miss either bound, tune before heading to the range.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range",
+                    "text": "Telemetry is in family. Proceed to range staging."
+                },
+                {
+                    "type": "goto",
+                    "goto": "sim-tune",
+                    "text": "Telemetry is out of bounds. Enter tuning loop."
+                }
+            ]
+        },
+        {
+            "id": "sim-tune",
+            "text": "Adjust PID gains, re-seat guidance connectors, and rerun the simulator until drift and apogee both pass.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "simulate",
+                    "text": "Apply tuning changes and rerun the simulation."
+                }
+            ]
+        },
+        {
             "id": "range",
             "text": "Great! Pack the rocket, guidance stack, camera, and launch gear. We'll run the guided pad checklist before arming anything.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "pad",
+                    "goto": "range-safety",
                     "text": "Gear staged at the pad.",
                     "requiresItems": [
                         {
@@ -81,6 +108,33 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "range-safety",
+            "text": "Night or day, guided flights need hard stops. Verify exclusion zone tape, spotter comms, and clear no-fly sectors before arming.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pad",
+                    "text": "Range is clear and comms checks passed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "range-hold",
+                    "text": "Comms or perimeter failed. Hold and reset the range."
+                }
+            ]
+        },
+        {
+            "id": "range-hold",
+            "text": "Hold position, disarm the controller key, and re-brief spotters. Resume only after every station confirms green.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range-safety",
+                    "text": "All stations now report green. Re-run safety gate."
                 }
             ]
         },
@@ -139,7 +193,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "recovery",
+                    "goto": "recovery-review",
                     "text": "Rocket recovered with clean data capsule.",
                     "requiresItems": [
                         {
@@ -147,11 +201,71 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "Guidance wandered or recovery data is incomplete. Trigger anomaly response."
                 }
             ]
         },
         {
-            "id": "recovery",
+            "id": "anomaly",
+            "text": "Classify anomaly source: guidance drift, ignition lag, or camera dropout. Apply correction, then rerun simulation before any relaunch.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "simulate-recheck",
+                    "text": "Corrections applied. Start the simulator requalification loop."
+                }
+            ]
+        },
+        {
+            "id": "simulate-recheck",
+            "text": "Invalidate the previous run and execute a fresh simulator pass so the retry is backed by new telemetry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "suborbital-hop",
+                    "text": "Run a fresh guided hop simulation"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sim-review",
+                    "text": "Fresh telemetry logged. Re-review drift and apogee bounds.",
+                    "requiresItems": [
+                        {
+                            "id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery-review",
+            "text": "Telemetry and footage are in. Verify data continuity and note any off-nominal events before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "60a1e598-084e-4325-9c2c-fb5d95d19f41",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Logs are complete and within expected envelope."
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "Data review flagged anomalies. Route through corrective loop."
+                }
+            ]
+        },
+        {
+            "id": "finish",
             "text": "Telemetry looks fantastic and the onboard footage is going to be a hit. We'll archive the log and plan the next hop soon.",
             "options": [
                 {
@@ -175,7 +289,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
