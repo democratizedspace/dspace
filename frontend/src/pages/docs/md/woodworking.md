@@ -38,6 +38,7 @@ Woodworking quests build practical progression through the woodworking skill tre
         - Consumes: Pine board ×4, Wood glue ×1, Sandpaper pack ×1
         - Creates: Pine planter box ×1
 - Troubleshooting/safety branches:
+    - `drainage` now routes back through `gather` so players always stage tools/materials before entering `fit-choice` and `build`.
     - `fit-choice` adds alternate dry-fit vs pre-drill assembly strategies.
     - `troubleshoot` loops split-corner recovery back into verified assembly steps and routes unsafe conditions to `safety`.
 

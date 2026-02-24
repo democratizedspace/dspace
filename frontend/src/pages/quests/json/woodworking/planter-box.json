@@ -103,8 +103,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "fit-choice",
-                    "text": "Drainage pattern ready"
+                    "goto": "gather",
+                    "text": "Drainage pattern ready, gather the full kit"
                 },
                 {
                     "type": "goto",
