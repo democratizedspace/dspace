@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey explorer! Want to tap the earth's warmth for energy? Let's start by surveying the site.",
+            "text": "Before we dig, call utility locate and mark safe probe spots. Once the site is clear, we can record a defensible baseline.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Absolutely, show me how."
+                    "text": "Utility locate is confirmed and PPE is ready."
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "You'll need a thermometer to check the ground temperature about a meter down.",
+            "text": "We'll take repeated readings at a meter depth. Grab a reliable thermometer and a notebook so this survey becomes evidence, not guesswork.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,7 +29,7 @@
                             "count": 1
                         }
                     ],
-                    "text": "Thanks for the thermometer!"
+                    "text": "Issue survey thermometer"
                 },
                 {
                     "type": "goto",
@@ -40,28 +40,85 @@
                         }
                     ],
                     "goto": "measure",
-                    "text": "I've got the tool ready."
+                    "text": "Thermometer staged; begin the survey log."
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Dig a small hole and measure the temperature. Consistent warmth means good geothermal potential.",
+            "text": "Capture two readings 30 minutes apart from the same depth and note soil moisture. A stable baseline should land around 8-14\u00b0C with less than 1\u00b0C drift.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Measurements logged",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Interpret the log before committing to loop design.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "The ground is a steady 12\u00b0C."
+                    "text": "Baseline is in range and stable",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Readings drifted or landed out of range",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Pause and troubleshoot: verify probe depth, improve soil contact, and avoid waterlogged pockets. If you hit unexpected piping or wiring, stop excavation and relocate before retesting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Apply corrections and re-measure",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "fin",
-            "text": "Great! Your site is ready for a ground loop. We'll use this heat in the next quest.",
+            "text": "Great survey discipline. With a stable ground baseline recorded, we can calibrate sensors and size the loop with confidence.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to build the system."
+                    "text": "Baseline accepted",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }

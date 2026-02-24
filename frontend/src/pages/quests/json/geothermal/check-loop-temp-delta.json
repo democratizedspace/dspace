@@ -121,12 +121,72 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "publish",
+                    "goto": "interpret",
                     "text": "Notes are logged",
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
                             "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the annotated run: healthy loops usually hold a 3-9\u00b0C delta with cycle-to-cycle jitter under 1.5\u00b0C. If you are outside those bounds, do not publish alerts yet.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "publish",
+                    "text": "Delta is within bounds and stable",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Delta is out of bounds or noisy",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Troubleshoot before retry: verify probe contact, purge suspected air, and confirm pump speed setpoint. If the compressor short-cycles or discharge temp spikes, abort the run and inspect equipment before a retest.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture a corrective paired trace",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Corrective trace captured; re-plot and re-interpret",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
                         }
                     ]
                 }

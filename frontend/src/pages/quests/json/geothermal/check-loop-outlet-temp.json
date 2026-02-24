@@ -53,12 +53,72 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "stream",
+                    "goto": "evaluate",
                     "text": "Outlet trace captured",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
                             "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evaluate",
+            "text": "Read the captured trace before publishing anything: target a steady 8-15\u00b0C outlet window with less than \u00b11\u00b0C swing over the sample. If it misses, hold deployment and diagnose first.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stream",
+                    "text": "Trace is in range and stable",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Trace is drifting or out of range",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Pause the stream rollout. Check insulation, reseat the probe, and bleed trapped air before another run. If lines are too hot to handle safely, power down and wait before retrying.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Run a corrective re-log",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "evaluate",
+                    "text": "Corrective trace captured; re-evaluate",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3
                         }
                     ]
                 }
