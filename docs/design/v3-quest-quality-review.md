@@ -484,6 +484,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, sysa
   - [x] Observed issue: `devops/ci-pipeline` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3719)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3719)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3719)
+  - Evidence check: `policy` safety stop, `verify`↔`recover` retry loop, and workflow-run item gate (`306793ac-e420-4859-9742-9076fff6ab57`) are present in `frontend/src/pages/quests/json/devops/ci-pipeline.json`.
 - `devops/daily-backups`
   - [x] Observed issue: `devops/daily-backups` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3704)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3704)
@@ -492,6 +493,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, sysa
   - [x] Observed issue: `devops/docker-compose` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3719)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3719)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3719)
+  - Evidence check: `preflight` safety stop, `tunnel` decision split, and `recover` rollback/redeploy loop are present with tunnel evidence gates in `frontend/src/pages/quests/json/devops/docker-compose.json`.
 - `devops/enable-https`
   - [x] Observed issue: `devops/enable-https` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3619)
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3619)
@@ -500,6 +502,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, sysa
   - [x] Observed issue: `devops/fail2ban` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3719)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3719)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3719)
+  - Evidence check: `stage` safety stop, `verify` decision split, and `recover` incident-extract retry loop are present in `frontend/src/pages/quests/json/devops/fail2ban.json`.
 - `devops/firewall-rules`
   - [x] Observed issue: `devops/firewall-rules` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3619)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3619)
