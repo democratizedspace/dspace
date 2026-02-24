@@ -1,21 +1,15 @@
 {
     "id": "astronomy/iss-flyover",
     "title": "Spot the ISS",
-    "description": "Use a satellite-tracking app and a basic telescope to plan, spot, and log an ISS flyover safely.",
+    "description": "Plan an ISS pass, capture an observation artifact, and use weather/glare recovery with a scheduled follow-up when needed.",
     "hardening": {
-        "passes": 4,
-        "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "passes": 3,
+        "emoji": "💯",
         "history": [
             {
-                "task": "codex-hardening-2025-08-05",
-                "date": "2025-08-05",
-                "score": 60
-            },
-            {
-                "task": "codex-quest-refinement-2025-08-06",
-                "date": "2025-08-06",
-                "score": 80
+                "task": "codex-quest-hardening-2025-02-14",
+                "date": "2025-02-14",
+                "score": 90
             },
             {
                 "task": "codex-quest-refresh-2025-02-14",
@@ -27,7 +21,8 @@
                 "date": "2025-08-14",
                 "score": 95
             }
-        ]
+        ],
+        "score": 95
     },
     "image": "/assets/quests/iss_flyover_backyard_observation.jpg",
     "npc": "/assets/npc/nova.jpg",
@@ -35,18 +30,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The ISS crosses the sky a few times each week. Let's plan tonight's pass before heading out.",
+            "text": "The ISS crosses the sky a few times each week. Want the standard station setup or a lighter naked-eye fallback route?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "When should I look?"
+                    "text": "Let's plan tonight's pass."
                 }
             ]
         },
         {
             "id": "plan",
-            "text": "Open a tracking app, allow location, and jot the pass time and direction in your logbook.",
+            "text": "Open a tracking app, allow location, and log pass time plus direction. This pass window is your proof gate.",
             "options": [
                 {
                     "type": "process",
@@ -55,8 +50,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Details logged. How do I stage the scope?",
+                    "goto": "choose-observation-mode",
+                    "text": "Details logged. Pick an observation mode.",
                     "requiresItems": [
                         {
                             "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
@@ -67,13 +62,29 @@
                 {
                     "type": "goto",
                     "goto": "weather-delay",
-                    "text": "Cloud cover or haze may block the pass."
+                    "text": "Cloud cover or haze may block this pass."
+                }
+            ]
+        },
+        {
+            "id": "choose-observation-mode",
+            "text": "Main path uses the full station. Alternate path uses a safe naked-eye lane when setup time is short.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Main path: stage the spotting station."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe-quick",
+                    "text": "Fallback path: run a naked-eye observation lane."
                 }
             ]
         },
         {
             "id": "weather-delay",
-            "text": "If visibility is poor, stay put and avoid rushing in low light. Re-check the app for the next pass and confirm your route is still clear.",
+            "text": "If visibility is poor, avoid rushing in low light. Re-check the app for the next pass and confirm your walking lane is still clear.",
             "options": [
                 {
                     "type": "goto",
@@ -82,20 +93,14 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Sky is clear enough now; proceed to setup.",
-                    "requiresItems": [
-                        {
-                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "follow-up-window",
+                    "text": "No clear window tonight—schedule a follow-up pass."
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Level the tripod, cap the telescope, clear a safe path, and keep the red flashlight dim for night vision.",
+            "text": "Level the tripod, cap the telescope between checks, clear a safe path, and keep the red flashlight dim for night vision.",
             "options": [
                 {
                     "type": "process",
@@ -121,8 +126,69 @@
             ]
         },
         {
+            "id": "observe-quick",
+            "text": "Fallback lane: use naked-eye tracking from a clear horizon and log when the ISS enters and exits your field of view.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Quick observation note captured with start/end direction."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret-quick",
+                    "text": "Quick note complete with direction and duration.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-delay",
+                    "text": "Lost the ISS in haze or light pollution."
+                }
+            ]
+        },
+        {
+            "id": "interpret-quick",
+            "text": "Quick-lane quality gate: confirm pass time, direction, and duration were captured in the mission note before completion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Quick note has all fields with conditions logged.",
+                    "requiresItems": [
+                        {
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "choose-observation-mode",
+                    "text": "Missing details—retry with explicit mode selection."
+                }
+            ]
+        },
+        {
             "id": "observe",
-            "text": "Watch the ISS on the predicted path, sweep once it's above trees, and log brightness and duration without blocking paths.",
+            "text": "Watch the ISS on the predicted path, sweep once it is above trees, and log brightness plus duration without blocking walkways.",
             "options": [
                 {
                     "type": "process",
@@ -149,12 +215,12 @@
         },
         {
             "id": "interpret",
-            "text": "Check your log: if pass time, direction, and duration are all recorded, the session counts. If any field is missing, rerun setup and observe again.",
+            "text": "Quality gate: pass time, direction, and duration must all be logged. If any field is missing, classify the miss and rerun setup or fallback mode.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Log has all three fields and conditions notes.",
+                    "text": "Log has all fields with condition notes.",
                     "requiresItems": [
                         {
                             "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
@@ -164,14 +230,40 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Missing details - restage and retry the pass."
+                    "goto": "choose-observation-mode",
+                    "text": "Missing details—retry with explicit mode selection."
+                }
+            ]
+        },
+        {
+            "id": "follow-up-window",
+            "text": "Record a follow-up target window before closing. Safety note: avoid dark-site travel when visibility and footing are both poor.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Follow-up window logged in mission notes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Follow-up scheduled and safety note recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Awesome! Cap the telescope, close the app, pack your gear, and watch your footing in the dark.",
+            "text": "Awesome. You captured or deferred the pass with explicit evidence, fallback handling, and safe night operations.",
             "options": [
                 {
                     "type": "finish",

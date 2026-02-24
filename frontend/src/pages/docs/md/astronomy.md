@@ -106,14 +106,17 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/observe-moon`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Details logged. How do I stage the scope?" — ISS pass window ×1
-    - `weather-delay` → "Sky is clear enough now; proceed to setup." — ISS pass window ×1
+    - `plan` → "Details logged. Pick an observation mode." — ISS pass window ×1
     - `setup` → "Station is ready for the pass." — ISS spotting station ×1
+    - `observe-quick` → "Quick note complete with direction and duration." — mission logbook ×1, mission log entry ×1
     - `observe` → "Entry complete with time and direction." — ISS pass log ×1
-    - `interpret` → "Log has all three fields and conditions notes." — ISS pass log ×1
+    - `interpret` → "Log has all fields with condition notes." — ISS pass log ×1
+    - `interpret-quick` → "Quick note has all fields with conditions logged." — ISS pass window ×1, mission logbook ×1, mission log entry ×1
+    - `follow-up-window` → "Follow-up scheduled and safety note recorded." — mission logbook ×1, mission log entry ×1
 - Troubleshooting and safety flow:
-    - `plan`, `setup`, and `observe` all branch to `weather-delay` for cloud/haze/glare recovery instead of allowing a dead-end session.
-    - `interpret` enforces a complete observation artifact (time + direction + duration) and routes incomplete entries back through setup so the pass can be restaged and re-observed.
+    - `choose-observation-mode` adds a non-linear branch between full station setup and a naked-eye fallback lane.
+    - `weather-delay` can schedule a deferred follow-up window (`follow-up-window`) when no safe viewing window exists.
+    - `interpret` enforces a complete observation artifact (time + direction + duration) and routes incomplete entries back to mode selection for deterministic retries.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -132,6 +135,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: ISS spotting station ×1, ISS pass window ×1, mission logbook ×1
         - Consumes: none
         - Creates: ISS pass log ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 5) Photograph the ISS (`astronomy/iss-photo`)
 
@@ -141,10 +148,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Dialogue `requiresItems` gates:
     - `plan` → "Pass window confirmed, gear is staged." — smartphone ×1, camera tripod ×1, ISS pass window ×1
     - `capture` → "Photo saved and metadata logged." — mission logbook ×1, ISS pass window ×1, mission log entry ×1, feather quill ×1
-    - `interpret` → "Pass: continuous streak and timing error <15s." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Pass: streak continuous, timing <15s, heading matches plan." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `recovery` → "Session aborted safely; follow-up logged for next pass." — mission log entry ×1
 - Troubleshooting/safety branches:
-    - `interpret` fail path forces `retest` before completion.
-    - `recovery` allows weather/footing aborts and safe rescheduling.
+    - `interpret` fail path forces `retest` when timing, heading, or framing are out of range.
+    - `retest` requires corrective stabilization + heading checks before rerunning capture.
+    - `recovery` enforces a safety stop/reschedule path for weather or footing risk and requires a logged follow-up note before completion.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -183,8 +192,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/jupiter-moons`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Plan is ready—let's star hop." — seasonal star hop plan ×1
-    - `chart` → "I can spot them easily now!" — constellation sketch set ×1
+    - `plan-route` → "Plan is ready—let's star hop." — seasonal star hop plan ×1
+    - `sweep-route` → "Anchor confirmed—continue to full mapping." — constellation sketch set ×1
+    - `chart` → "Patterns are clear—ready to log evidence." — constellation sketch set ×1
+    - `log-evidence` → "Logged with conditions and constellation list." — mission logbook ×1, constellation sketch set ×1, mission log entry ×1
+- Troubleshooting/safety branches:
+    - `choose-route` creates main and alternate mapping paths before charting.
+    - `plan-route`, `sweep-route`, and `chart` all branch to `recovery` for haze/glare disorientation.
+    - `recovery` loops back to route selection after a safety reset and prevents completion bypasses.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -199,6 +214,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
         - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 8) Split a Binary Star (`astronomy/binary-star`)
 
