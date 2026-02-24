@@ -38,7 +38,7 @@
                     "text": "Email alert arrived with timestamp",
                     "requiresItems": [
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
                             "count": 1
                         }
                     ]
@@ -54,10 +54,6 @@
                     "goto": "finish",
                     "text": "Alert timing and threshold behavior are correct",
                     "requiresItems": [
-                        {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-                            "count": 1
-                        },
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
                             "count": 1
@@ -85,10 +81,6 @@
                     "goto": "interpret",
                     "text": "Re-validate email behavior",
                     "requiresItems": [
-                        {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-                            "count": 2
-                        },
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
                             "count": 2

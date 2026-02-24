@@ -452,9 +452,9 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/temp-alert`
 - Dialogue `requiresItems` gates:
     - `start` → "Configure alert thresholds" — temperature log CSV ×1
-    - `prep` → "Email alert arrived with timestamp" — Email temperature alert confirmation ×1
-    - `interpret` → "Alert timing and threshold behavior are correct" — Email temperature alert confirmation ×1, temperature log CSV ×1
-    - `retest` → "Re-validate email behavior" — Email temperature alert confirmation ×2, temperature log CSV ×2
+    - `prep` → "Email alert arrived with timestamp" — temperature log CSV ×1
+    - `interpret` → "Alert timing and threshold behavior are correct" — temperature log CSV ×1
+    - `retest` → "Re-validate email behavior" — temperature log CSV ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
