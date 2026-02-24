@@ -1,108 +1,177 @@
 {
     "id": "woodworking/bookshelf",
     "title": "Build a small bookshelf",
-    "description": "Apply your skills to assemble a functional bookshelf.",
+    "description": "Cut, dry-fit, and square a small bookshelf with safety checks and a wobble-recovery loop.",
     "image": "/assets/quests/woodworking_small_bookshelf_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "For a final challenge we'll make a bookshelf. It's larger than the stool but uses the same techniques you've learned.",
+            "text": "For your bookshelf, we do this like a shop build: prep safely, pick a joinery plan, verify square, then claim it.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "gather",
-                    "text": "Let's do it"
+                    "text": "Walk me through the build plan."
                 }
             ]
         },
         {
             "id": "gather",
-            "text": "You'll need several pine boards plus glue and your trusty handsaw. Measure everything carefully so the shelves fit snugly.",
+            "text": "Stage pine boards, glue, handsaw, tape measure, and safety goggles before any cuts.",
             "options": [
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        {
-                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
-                            "count": 4
-                        },
-                        {
-                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
-                            "count": 1
-                        },
-                        {
-                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
-                            "count": 1
-                        }
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
                     ],
-                    "text": "Buy lumber"
+                    "text": "Issue the bookshelf kit."
                 },
                 {
                     "type": "goto",
-                    "goto": "assemble",
+                    "goto": "choose-joinery",
                     "requiresItems": [
-                        {
-                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
-                            "count": 4
-                        },
-                        {
-                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
-                            "count": 1
-                        },
-                        {
-                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
-                            "count": 1
-                        }
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
                     ],
-                    "text": "All materials ready"
+                    "text": "Kit staged with PPE and measuring tools."
                 }
             ]
         },
         {
-            "id": "assemble",
-            "text": "Cut the side panels and shelves, glue and clamp everything square, then let it dry. Finish by sanding the surfaces smooth.",
+            "id": "choose-joinery",
+            "text": "Choose your approach: fewer cuts with wider shelves, or narrower shelves with more supports.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wide-shelves",
+                    "text": "Main path: wide-shelf layout."
+                },
+                {
+                    "type": "goto",
+                    "goto": "narrow-shelves",
+                    "text": "Alternate path: narrow-shelf layout."
+                }
+            ]
+        },
+        {
+            "id": "wide-shelves",
+            "text": "Mark two side panels and two shelf cuts. Dry-fit before glue-up so edges meet cleanly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "square-check",
+                    "requiresItems": [
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ],
+                    "text": "Cuts complete and dry-fit done."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "One shelf rocks or a cut wandered."
+                }
+            ]
+        },
+        {
+            "id": "narrow-shelves",
+            "text": "Cut a center support and shorter shelves. Keep board orientation consistent to reduce twist.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "square-check",
+                    "requiresItems": [
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ],
+                    "text": "Alternate layout cut and dry-fit complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Support fit is off or shelves bind."
+                }
+            ]
+        },
+        {
+            "id": "square-check",
+            "text": "Evidence gate: confirm equal diagonal measurements and a stable dry-fit before final glue.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Bookshelf built"
+                    "requiresItems": [
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 }
+                    ],
+                    "text": "Square verified; glue-up cured safely."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Diagonals mismatch or frame twists under load."
                 }
             ]
         },
         {
+            "id": "troubleshoot",
+            "text": "Recovery loop: stop cutting, re-mark from a single reference edge, and clamp a dry-fit before retrying. Keep goggles on while recutting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-joinery",
+                    "text": "Re-cut done; retry chosen layout."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safe-pause",
+                    "text": "Unsafe light or fatigue tonight—pause and finish with a safety note."
+                }
+            ]
+        },
+        {
+            "id": "safe-pause",
+            "text": "Good call stopping here. Resume when conditions improve and pass square-check before claiming the bookshelf.",
+            "options": [{ "type": "finish", "text": "Pause for now." }]
+        },
+        {
             "id": "finish",
-            "text": "Fantastic job! You've progressed from basic carpentry to a piece of furniture you can proudly use at home.",
+            "text": "Clean build. You proved prep, branch selection, square verification, and safe recovery handling.",
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "619d485d-803f-4875-a048-157ce28d31c4",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Take the bookshelf"
+                    "grantsItems": [{ "id": "619d485d-803f-4875-a048-157ce28d31c4", "count": 1 }],
+                    "text": "Take the bookshelf."
                 },
                 {
                     "type": "finish",
-                    "text": "Thank you, Cedar"
+                    "text": "On to the coffee table build."
                 }
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
-            "count": 1
-        }
-    ],
+    "rewards": [{ "id": "b281360b-2ecc-4fea-a248-36a61c5f7399", "count": 1 }],
     "requiresQuests": ["woodworking/step-stool"],
     "hardening": {
-        "passes": 0,
-        "score": 85,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 94,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-harden-bookshelf-2026-02-24",
+                "date": "2026-02-24",
+                "score": 94
+            }
+        ]
     }
 }

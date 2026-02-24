@@ -72,14 +72,19 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `requiresQuests`: `woodworking/birdhouse`, `woodworking/planter-box`
 - Dialogue `requiresItems` gates:
     - `gather` → "Parts ready" — Pine board ×2, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
+    - `frame-first` / `step-first` → "...verified" — tape measure ×1, safety goggles ×1
+    - `wobble-check` → "No wobble and edges are safe to touch" — tape measure ×1, safety goggles ×1
 - Grants:
     - `gather` → "Gather parts" — Pine board ×2, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
-    - `finish` → "Take the stool" — Step stool ×1
+    - `claim` → "Take the stool" — Step stool ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
     - None
+- Troubleshooting/safety branches:
+    - `fix-loop` enforces re-square/trim correction and retries before final claim.
+    - Explicit stop condition for degraded tool control routes to `safe-pause`, which ends the session without granting the stool.
 
 ## 4) Build a small bookshelf (`woodworking/bookshelf`)
 
@@ -87,15 +92,20 @@ Woodworking quests build practical progression through the woodworking skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `woodworking/step-stool`
 - Dialogue `requiresItems` gates:
-    - `gather` → "All materials ready" — Pine board ×4, Wood glue ×1, Handsaw ×1
+    - `gather` → "Kit staged with PPE and measuring tools" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
+    - `wide-shelves` / `narrow-shelves` → "...dry-fit..." — tape measure ×1, safety goggles ×1
+    - `square-check` → "Square verified; glue-up cured safely" — Wood glue ×1, tape measure ×1, safety goggles ×1
 - Grants:
-    - `gather` → "Buy lumber" — Pine board ×4, Wood glue ×1, Handsaw ×1
+    - `gather` → "Issue the bookshelf kit" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - `finish` → "Take the bookshelf" — Bookshelf ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
     - None
+- Troubleshooting/safety branches:
+    - `choose-joinery` introduces main/alternate build strategies before square validation.
+    - `troubleshoot` requires a re-mark/re-cut loop and routes unsafe conditions to `safe-pause`, which ends without granting the bookshelf.
 
 ## 5) Build a coffee table (`woodworking/coffee-table`)
 
@@ -103,14 +113,19 @@ Woodworking quests build practical progression through the woodworking skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `woodworking/bookshelf`
 - Dialogue `requiresItems` gates:
-    - `gather` → "Materials ready" — Pine board ×6, Wood glue ×1, Handsaw ×1
+    - `gather` → "Materials staged and safety checks complete" — Pine board ×6, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
+    - `apron-frame` / `top-panel` → "...complete" — tape measure ×1, safety goggles ×1
+    - `stability-check` → "No wobble, no rack, and glue joints look sound" — Wood glue ×1, tape measure ×1, safety goggles ×1
 - Grants:
-    - `gather` → "Gather materials" — Pine board ×6, Wood glue ×1, Handsaw ×1
+    - `gather` → "Issue table materials and PPE" — Pine board ×6, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
     - None
+- Troubleshooting/safety branches:
+    - `strategy` adds main/alternate assembly plans before the stability gate.
+    - `rework` loops through re-square + retest and includes an unsafe-conditions stop path.
 
 ## 6) Finish Sand Your Project (`woodworking/finish-sanding`)
 
