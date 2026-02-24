@@ -149,9 +149,12 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/monitoring`
 - Dialogue `requiresItems` gates:
-    - `start` → "Prep the nodes." — Pi cluster node ×1, Laptop Computer ×1
-    - `stage` → "Config pushed across the cluster." — Pi cluster node ×1, Laptop Computer ×1
-    - `verify` → "Health check logged." — Pi cluster node ×1, unattended-upgrades config ×1
+    - `start` → "Define maintenance constraints." — Pi cluster node ×1, Laptop Computer ×1
+    - `window` → "Window documented; stage config." — Pi cluster node ×1, Laptop Computer ×1
+    - `stage` → "Config staged; run verification dry run." — Pi cluster node ×1, unattended-upgrades config ×1
+    - `verify` → "Dry run reports held packages or unsafe reboot timing." — auto-update health report ×1
+    - `verify` → "Verification evidence is clean." — auto-update health report ×1
+    - `recovery` → "Mitigation applied; re-run verification window." — auto-update health report ×1
     - `finish` → "Queue the next maintenance window." — auto-update health report ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -174,7 +177,12 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/monitoring`
 - Dialogue `requiresItems` gates:
-    - `script` → "Backup script running." — external backup SSD ×1
+    - `start` → "Plan backup cadence and retention." — external backup SSD ×1, Pi cluster node ×1
+    - `stage` → "Backup job staged; run verification." — external backup SSD ×1
+    - `verify` → "Restore test failed or logs show checksum mismatch." — journalctl report ×1
+    - `verify` → "Restore drill passed with complete evidence." — journalctl report ×1
+    - `recover` → "Corrected. Re-run backup + restore verification." — incident log extract ×1
+    - `finish` → "Lock in the backup SOP." — journalctl report ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -185,6 +193,10 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Pi cluster node ×1, external backup SSD ×1
         - Consumes: none
         - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
 
 ## 9) Secure the Cluster with HTTPS (`devops/enable-https`)
 
@@ -256,10 +268,6 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: journalctl report ×1
-    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
-        - Requires: journalctl report ×1
-        - Consumes: none
-        - Creates: incident log extract ×1
 
 ## 12) Run a Private Docker Registry (`devops/private-registry`)
 
@@ -267,7 +275,13 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/docker-compose`
 - Dialogue `requiresItems` gates:
-    - `deploy` → "Images pushed." — Pi cluster node ×1
+    - `start` → "Define storage and access policy." — Pi cluster node ×1, Laptop Computer ×1
+    - `plan` → "Policy documented. Deploy registry stack." — Pi cluster node ×1
+    - `deploy` → "Service running. Validate push/pull and persistence." — Pi cluster node ×1
+    - `verify` → "Push/pull failed or image disappeared after restart." — journalctl report ×1
+    - `verify` → "Verification passed with retained image state." — journalctl report ×1
+    - `recovery` → "Mitigation in place. Re-run push/pull validation." — incident log extract ×1
+    - `finish` → "Publish the cluster image policy." — journalctl report ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -278,6 +292,10 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Pi cluster node ×1
         - Consumes: none
         - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
 
 ## 13) Boot from SSD (`devops/ssd-boot`)
 
@@ -331,10 +349,6 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: journalctl report ×1
-    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
-        - Requires: journalctl report ×1
-        - Consumes: none
-        - Creates: incident log extract ×1
 
 ## 15) Block SSH Brute Force (`devops/fail2ban`)
 

@@ -8,28 +8,38 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's protect your work by backing up the cluster.",
+            "text": "Backups only count if restore works. We'll stage a schedule, verify backup integrity, then handle failures before sign-off.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Good plan."
+                    "goto": "stage",
+                    "text": "Plan backup cadence and retention.",
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        },
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "script",
-            "text": "Plug an external SSD into the control plane and create a cron job that runs `docker exec dspace-postgres pg_dumpall > /mnt/backup/dspace.sql` each night.",
+            "id": "stage",
+            "text": "Create a nightly cron backup to the external SSD and define retention plus checksum verification. Safety stop: if free space drops under 20%, clear room before continuing.",
             "options": [
                 {
                     "type": "process",
                     "process": "configure-daily-backups",
-                    "text": "Cron job added."
+                    "text": "Apply backup job and retention policy."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Backup script running.",
+                    "goto": "verify",
+                    "text": "Backup job staged; run verification.",
                     "requiresItems": [
                         {
                             "id": "849eb5e1-9f63-488b-80d3-913492049090",
@@ -40,12 +50,73 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Execute a backup and capture logs proving timestamp, archive size, and successful checksum. Then test a restore drill on a safe target.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture backup execution evidence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Restore test failed or logs show checksum mismatch.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Restore drill passed with complete evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Branch the failure: permissions, missing mount, or corrupted archive. Fix the root cause, document the incident, and rerun the verification drill.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Log corrective actions for the failed backup test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Corrected. Re-run backup + restore verification.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Backups are running daily. Store them off-site for extra safety.",
+            "text": "Backups are now operationally safe: scheduled, validated, and paired with a recovery loop when restore checks fail.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Lock in the backup SOP.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -60,7 +131,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
