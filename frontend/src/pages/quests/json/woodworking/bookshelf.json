@@ -165,7 +165,13 @@
     "hardening": {
         "passes": 1,
         "score": 94,
-        "emoji": "🛠️",
-        "history": []
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-harden-bookshelf-2026-02-24",
+                "date": "2026-02-24",
+                "score": 94
+            }
+        ]
     }
 }

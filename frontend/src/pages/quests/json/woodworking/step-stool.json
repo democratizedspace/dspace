@@ -9,7 +9,9 @@
         {
             "id": "start",
             "text": "Atlas here. Step stools fail fast if we skip verification, so we're doing this with clear checks.",
-            "options": [{ "type": "goto", "goto": "gather", "text": "I'm ready for the checklist." }]
+            "options": [
+                { "type": "goto", "goto": "gather", "text": "I'm ready for the checklist." }
+            ]
         },
         {
             "id": "gather",
@@ -44,8 +46,16 @@
             "id": "build-path",
             "text": "Choose your assembly order.",
             "options": [
-                { "type": "goto", "goto": "frame-first", "text": "Main path: build side frames first." },
-                { "type": "goto", "goto": "step-first", "text": "Alternate path: cut and mount step first." }
+                {
+                    "type": "goto",
+                    "goto": "frame-first",
+                    "text": "Main path: build side frames first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "step-first",
+                    "text": "Alternate path: cut and mount step first."
+                }
             ]
         },
         {
@@ -100,8 +110,16 @@
             "id": "fix-loop",
             "text": "Recovery branch: re-square legs, trim high spots, and retry the wobble check. Stop immediately if tool control degrades.",
             "options": [
-                { "type": "goto", "goto": "build-path", "text": "Rework done, retry assembly path." },
-                { "type": "goto", "goto": "safe-pause", "text": "Paused safely and logged corrective work." }
+                {
+                    "type": "goto",
+                    "goto": "build-path",
+                    "text": "Rework done, retry assembly path."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safe-pause",
+                    "text": "Paused safely and logged corrective work."
+                }
             ]
         },
         {
@@ -127,12 +145,17 @@
     "hardening": {
         "passes": 2,
         "score": 93,
-        "emoji": "🛠️",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-refine-step-stool-2025-08-19",
                 "date": "2025-08-19",
                 "score": 65
+            },
+            {
+                "task": "codex-harden-step-stool-2026-02-24",
+                "date": "2026-02-24",
+                "score": 93
             }
         ]
     }
