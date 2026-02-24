@@ -197,6 +197,10 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 9) Secure the Cluster with HTTPS (`devops/enable-https`)
 
@@ -296,6 +300,10 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 13) Boot from SSD (`devops/ssd-boot`)
 
