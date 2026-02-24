@@ -134,6 +134,11 @@
             "text": "If glare, haze, or path hazards rise, pause immediately. Re-check your path lighting and retry only when the site is safe.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Safety abort reason and site conditions logged."
+                },
+                {
                     "type": "goto",
                     "goto": "choose-site",
                     "text": "Safety reset complete; choose a route again."
@@ -141,7 +146,21 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Abort for safety and log why the session was skipped."
+                    "text": "Abort for safety and log why the session was skipped.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -162,11 +181,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 4,
         "score": 96,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-light-pollution-2025-08-05",

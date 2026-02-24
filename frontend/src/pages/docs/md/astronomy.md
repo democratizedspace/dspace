@@ -239,6 +239,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Troubleshooting/safety branches:
     - `choose-site` provides a main path and alternate darker-site path before interpretation.
     - `recovery` enforces glare/haze/footing safety pauses and explicit abort-or-retry handling.
+    - Safety abort completion requires a mission-log entry describing why the run was skipped.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -322,7 +323,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` → "Observation artifact and interpretation complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
 - Troubleshooting/safety branches:
     - `weather-fallback` handles cloud/haze failures and loops through a re-plan cycle before retry.
-    - Fallback path supports safe postponement with a follow-up note when conditions stay unsafe.
+    - Safe postponement now requires a logged follow-up note before completion to preserve evidence continuity.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -349,15 +350,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Troubleshooting/safety branches:
     - `choose-route` introduces main and alternate setup paths before log evidence.
     - `recovery` enforces dark-path footing and glare safety checks with retry or safe-reschedule exits.
+    - Safe-reschedule completion requires existing mission-log evidence, preventing bypass of the comet track record gate.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [observe-meteor-shower](/processes/observe-meteor-shower)
-        - Requires: basic telescope ×1
-        - Consumes: none
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
