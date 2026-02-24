@@ -133,7 +133,9 @@ Woodworking quests build practical progression through the woodworking skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `woodworking/finish-sanding`
 - Dialogue `requiresItems` gates:
-    - `gather` → "Ready to apply" — paintbrush ×1
+    - `gather` → "Start first coat" — paintbrush ×1, Sandpaper pack ×1
+    - `inspect-coat` → "Surface passed inspection" — paintbrush ×1, Sandpaper pack ×1
+    - `second-coat` → "Second coat cured and dry to touch" — paintbrush ×1
 - Grants:
     - `gather` → "Take the brush" — paintbrush ×1
     - Quest-level `grantsItems`: None
@@ -141,6 +143,9 @@ Woodworking quests build practical progression through the woodworking skill tre
     - Wood glue ×1, Sandpaper pack ×1
 - Processes used:
     - None
+- Troubleshooting/safety branches:
+    - `safety-reset` handles solvent buildup and oily-rag fire-risk mitigation before finish work resumes.
+    - `fix-runs` routes drips/sags into a repair loop before second-coat verification.
 
 ## 8) Build a simple workbench (`woodworking/workbench`)
 
@@ -148,15 +153,21 @@ Woodworking quests build practical progression through the woodworking skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `woodworking/step-stool`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I've got everything ready." — Pine board ×4, Wood glue ×1
+    - `materials` → "I've got the tools and stock" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1
+    - `build-top` → "Top frame cured and square" — Pine board ×4, Wood glue ×1
+    - `leg-fit` → "Frame stands without wobble" — tape measure ×1, Handsaw ×1
+    - `level-check` → "Level checks passed and structure feels solid" — Handsaw ×1
 - Grants:
-    - `materials` → "Thanks for the supplies!" — Pine board ×4, Wood glue ×1
-    - `finish` → "Claim my new workbench." — Workbench ×1
+    - `materials` → "Issue me the starter kit" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1
+    - `claim` → "Claim my new workbench" — Workbench ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
     - None
+- Troubleshooting/safety branches:
+    - `glue-recovery` re-squares a drifted top frame before leg assembly.
+    - `wobble-fix` and `level-check` enforce a stable, level bench before completion.
 
 ## 9) Build a Tool Rack (`woodworking/tool-rack`)
 
@@ -181,6 +192,8 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `requiresQuests`: `woodworking/tool-rack`
 - Dialogue `requiresItems` gates:
     - `assemble` → "Miters are clamped" — Pine board ×1, Wood glue ×1, Handsaw ×1, Sandpaper pack ×1
+    - `verify-square` → "Diagonals match and glue is set" — Pine board ×1, Handsaw ×1
+    - `surface-prep` → "Surface is smooth" — Sandpaper pack ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -188,6 +201,9 @@ Woodworking quests build practical progression through the woodworking skill tre
     - paintbrush ×1, Wood glue ×1
 - Processes used:
     - None
+- Troubleshooting/safety branches:
+    - `miter-repair` handles open-corner recovery before square verification.
+    - `hardware-fix` and `hang-check` verify hanger integrity with a safe load test before finish.
 
 ## QA flow notes
 

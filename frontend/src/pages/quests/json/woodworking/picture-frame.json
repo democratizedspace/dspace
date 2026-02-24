@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Frames make memories pop. Let's craft one with crisp miters and a snug backing.",
+            "text": "Frames make memories pop. We'll pick a style, prove square assembly, and verify hanging safety before sign-off.",
             "options": [
                 {
                     "type": "goto",
@@ -18,33 +18,33 @@
                 {
                     "type": "goto",
                     "goto": "assemble",
-                    "text": "Let's build it!"
+                    "text": "I already planned dimensions"
                 }
             ]
         },
         {
             "id": "style",
-            "text": "Pick a 20\u00d725 cm opening with a 3 cm rail. Decide between a natural finish or a painted accent.",
+            "text": "Use a 20\u00d725 cm opening with 3 cm rails. Choose a natural finish or painted accent before cutting.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "assemble",
-                    "text": "Natural grain sounds right"
+                    "text": "Natural grain route"
                 },
                 {
                     "type": "goto",
-                    "goto": "backer",
-                    "text": "I want a painted accent"
+                    "goto": "assemble",
+                    "text": "Painted accent route"
                 }
             ]
         },
         {
             "id": "assemble",
-            "text": "Cut four strips, miter the ends, then glue and clamp square. Check diagonals match before glue sets.",
+            "text": "Cut four rails, miter the ends, then glue and clamp. Confirm equal diagonals so the frame stays square.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "sanding",
+                    "goto": "verify-square",
                     "text": "Miters are clamped",
                     "requiresItems": [
                         {
@@ -67,46 +67,126 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "miter-repair",
+                    "text": "My corners show visible gaps"
+                }
+            ]
+        },
+        {
+            "id": "miter-repair",
+            "text": "Troubleshoot by recutting one rail at a time and dry-fitting before glue. Small errors compound fast on frames.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Recut complete, reassemble"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-square",
+                    "text": "Gaps corrected, verify square"
+                }
+            ]
+        },
+        {
+            "id": "verify-square",
+            "text": "Evidence gate: both diagonal measurements must match before moving to backing and hardware.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "backer",
-                    "text": "How do I add hardware?"
+                    "text": "Diagonals match and glue is set",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "miter-repair",
+                    "text": "Diagonals are still off"
                 }
             ]
         },
         {
             "id": "backer",
-            "text": "Cut a thin backer and add sawtooth hangers 5 cm from the top. Pre-drill so nothing splits.",
+            "text": "Cut a thin backer and add sawtooth hangers 5 cm from the top. Pre-drill to prevent splitting.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "sanding",
-                    "text": "Backer attached"
+                    "goto": "surface-prep",
+                    "text": "Backer and hangers installed"
                 },
                 {
                     "type": "goto",
-                    "goto": "assemble",
-                    "text": "Returning to miters"
+                    "goto": "hardware-fix",
+                    "text": "Hardware feels loose"
                 }
             ]
         },
         {
-            "id": "sanding",
-            "text": "Feather corners with 180 grit so seams disappear, then hit 220 grit to prep for finish or paint.",
+            "id": "hardware-fix",
+            "text": "Remove loose fasteners, pre-drill slightly smaller pilot holes, and re-seat hardware flush to the rail.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "backer",
+                    "text": "Retry hardware install"
+                },
+                {
+                    "type": "goto",
+                    "goto": "surface-prep",
+                    "text": "Hardware is secure now"
+                }
+            ]
+        },
+        {
+            "id": "surface-prep",
+            "text": "Feather corners with 180 grit then 220 grit so seams disappear before finish or paint.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "hang-check",
+                    "text": "Surface is smooth",
+                    "requiresItems": [
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "miter-repair",
+                    "text": "Seams are still visible"
+                }
+            ]
+        },
+        {
+            "id": "hang-check",
+            "text": "Safety check: confirm hanger screws are seated and test-hang over a soft surface before wall mounting.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Surface is smooth"
+                    "text": "Load test passed"
                 },
                 {
                     "type": "goto",
-                    "goto": "backer",
-                    "text": "Need another hardware check"
+                    "goto": "hardware-fix",
+                    "text": "Load test failed"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! Drop in the print, slide the backer on, and let glue cure for an hour before hanging.",
+            "text": "Great job. Your frame is square, sanded, and safe to hang with your print installed.",
             "options": [
                 {
                     "type": "finish",
@@ -125,7 +205,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/tool-rack"],
+    "requiresQuests": [
+        "woodworking/tool-rack"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
