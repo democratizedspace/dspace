@@ -29,7 +29,8 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I've got the tool ready." — aquarium thermometer (0–50°C) ×1
+    - `materials` → "Tools are ready" — aquarium thermometer (0–50°C) ×1
+    - `interpret` → "Baseline passes and notes are complete" — aquarium thermometer (0–50°C) ×1
 - Grants:
     - `materials` → "Thanks for the thermometer!" — aquarium thermometer (0–50°C) ×1
     - Quest-level `grantsItems`: None
@@ -37,6 +38,11 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Solarpunk Award ×1
 - Processes used:
     - None
+- QA notes:
+    - Measurement now requires a two-reading survey with explicit pass bounds (8–15°C and <=1°C
+      variance between readings).
+    - Out-of-range or unstable readings branch into corrective site relocation/contact fixes and a
+      mandatory re-test loop.
 
 ## 2) Calibrate Ground Sensor (`geothermal/calibrate-ground-sensor`)
 
@@ -101,12 +107,11 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/check-loop-inlet-temp`
 - Dialogue `requiresItems` gates:
-    - `start` → "Rig is already staged on the outlet" — thermistor logging rig ×1, temperature log CSV ×1
-    - `reposition` → "Log the outlet run" — thermistor logging rig ×1, Laptop Computer ×1
+    - `reposition` → "Capture an outlet temperature run" — thermistor logging rig ×1, Laptop Computer ×1
     - `reposition` → "Outlet trace captured" — temperature log CSV ×2
-    - `stream` → "Publish the outlet endpoint" — thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
-    - `stream` → "Endpoint is live" — live temperature JSON endpoint ×1
-    - `finish` → "Outlet stream pinned" — live temperature JSON endpoint ×1
+    - `publish` → "Publish the outlet endpoint" — thermistor logging rig ×1, temperature log CSV ×2, Raspberry Pi 5 board ×1
+    - `publish` → "Endpoint is live" — live temperature JSON endpoint ×1
+    - `finish` → "Outlet temperature verified" — live temperature JSON endpoint ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -121,6 +126,11 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
         - Consumes: none
         - Creates: live temperature JSON endpoint ×1
+- QA notes:
+    - Added an interpretation gate before publish; players must classify outlet readings as stable
+      or out-of-range before completion can advance.
+    - Added corrective branch for condensation/probe-seating issues with lockout reset fallback and
+      re-log loop.
 
 ## 5) Check Loop Pressure (`geothermal/check-loop-pressure`)
 
@@ -149,14 +159,13 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Dialogue `requiresItems` gates:
     - `start` → "Both probes are mounted" — thermistor logging rig ×1, live temperature JSON endpoint ×1
     - `align` → "Capture the paired trace" — thermistor logging rig ×1, Laptop Computer ×1
-    - `align` → "Trace is saved" — temperature log CSV ×1
-    - `plot` → "Plot both runs" — temperature log CSV ×1, Laptop Computer ×1
-    - `plot` → "Plot looks clean" — temperature line chart ×1
-    - `annotate` → "Add notes to the overlay" — temperature line chart ×1, Laptop Computer ×1, live temperature JSON endpoint ×1
-    - `annotate` → "Notes are logged" — annotated temperature graph ×1
-    - `publish` → "Push a live delta dashboard" — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
+    - `align` → "Trace is saved" — temperature log CSV ×2
+    - `plot` → "Generate delta plot" — temperature log CSV ×2, Laptop Computer ×1
+    - `plot` → "Delta plot generated" — temperature line chart ×1
+    - `publish` → "Annotate verified run" — temperature line chart ×1, live temperature JSON endpoint ×1
+    - `publish` → "Publish live delta dashboard" — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
     - `publish` → "Dashboard is live" — live temperature dashboard ×1
-    - `finish` → "Delta is monitored" — live temperature dashboard ×1
+    - `finish` → "Delta verified and monitored" — live temperature dashboard ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -179,6 +188,11 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: live temperature dashboard ×1
+- QA notes:
+    - Added explicit delta interpretation bounds (pass window 3–8°C under steady operation) before
+      publish can proceed.
+    - Added troubleshooting branch for probe/flow faults with mandatory re-capture and re-plot loop
+      before completion.
 
 ## 7) Install Backup Thermistor (`geothermal/install-backup-thermistor`)
 

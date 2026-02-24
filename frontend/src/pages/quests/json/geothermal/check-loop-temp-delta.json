@@ -1,19 +1,19 @@
 {
     "id": "geothermal/check-loop-temp-delta",
     "title": "Check Loop Temperature Delta",
-    "description": "Use two thermistors with an Arduino to compare loop inlet and outlet temps.",
+    "description": "Compare inlet/outlet readings, confirm delta-T stays in bounds, and recover when mismatch appears.",
     "image": "/assets/quests/geothermal_check_loop_temp_delta_dual_thermistors.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Time to see how much heat the loop really moves. We'll combine inlet plots with a live outlet feed to watch the delta in real time.",
+            "text": "Time to confirm heat transfer, not just collect pretty graphs. Verify both probes are mounted and moisture-protected before we calculate delta-T.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "align",
-                    "text": "Both probes are mounted",
+                    "text": "Probes are mounted and insulated",
                     "requiresItems": [
                         {
                             "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -28,18 +28,18 @@
                 {
                     "type": "goto",
                     "goto": "align",
-                    "text": "Need a quick walkthrough"
+                    "text": "Walk me through dual-probe setup"
                 }
             ]
         },
         {
             "id": "align",
-            "text": "Secure both probes, purge bubbles, and balance the leads so readings don't drift. Capture a fresh paired trace before we compare it to the live outlet stream.",
+            "text": "Capture a synchronized inlet/outlet trace after flow stabilizes. Record at least one full cycle before interpreting delta-T.",
             "options": [
                 {
                     "type": "process",
                     "process": "capture-hourly-temperature-log",
-                    "text": "Capture the paired trace",
+                    "text": "Capture synchronized trace",
                     "requiresItems": [
                         {
                             "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
@@ -58,7 +58,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }
@@ -66,16 +66,16 @@
         },
         {
             "id": "plot",
-            "text": "Plot inlet versus outlet for this run so you can catch lag or odd spikes. We'll annotate before pushing it to the live dashboard.",
+            "text": "Plot inlet versus outlet and compute delta-T. A stable 3–8°C spread during steady operation is acceptable for this training rig.",
             "options": [
                 {
                     "type": "process",
                     "process": "plot-temperature-data",
-                    "text": "Plot both runs",
+                    "text": "Generate delta plot",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 2
                         },
                         {
                             "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
@@ -85,8 +85,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "annotate",
-                    "text": "Plot looks clean",
+                    "goto": "interpret",
+                    "text": "Delta plot generated",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -97,20 +97,48 @@
             ]
         },
         {
-            "id": "annotate",
-            "text": "Mark pump start, circulator speed changes, and outdoor temp in the notes. That context makes the delta meaningful when you automate alerts.",
+            "id": "interpret",
+            "text": "Interpret results: steady 3–8°C passes. Below 3°C can indicate weak heat extraction; above 8°C or unstable swings suggest flow restriction or sensor error.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "publish",
+                    "text": "Delta is in-range and stable"
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Delta is out-of-range or unstable"
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Troubleshoot by re-seating probes, checking insulation, and confirming circulator flow state. Re-run capture and plotting after each adjustment.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "align",
+                    "text": "Apply corrections and retest"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Stop and redo safety staging before retry"
+                }
+            ]
+        },
+        {
+            "id": "publish",
+            "text": "Annotate the verified run and publish the live delta dashboard so maintenance can catch drift early.",
             "options": [
                 {
                     "type": "process",
                     "process": "refine-temperature-graph",
-                    "text": "Add notes to the overlay",
+                    "text": "Annotate verified run",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
                             "count": 1
                         },
                         {
@@ -120,26 +148,9 @@
                     ]
                 },
                 {
-                    "type": "goto",
-                    "goto": "publish",
-                    "text": "Notes are logged",
-                    "requiresItems": [
-                        {
-                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
-                            "count": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "publish",
-            "text": "Now pair your annotated inlet plot with the live outlet endpoint so you can watch the delta-T as the heat pump cycles.",
-            "options": [
-                {
                     "type": "process",
                     "process": "publish-live-temperature-graph",
-                    "text": "Push a live delta dashboard",
+                    "text": "Publish live delta dashboard",
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
@@ -170,11 +181,11 @@
         },
         {
             "id": "finish",
-            "text": "Pin that delta-T dashboard to your maintenance list. Trends will call out air in the loop or fouled exchangers long before you feel it indoors.",
+            "text": "Delta-T is now operationally tracked with thresholds and a recovery playbook. Keep the baseline notes with the graph export for future audits.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Delta is monitored",
+                    "text": "Delta verified and monitored",
                     "requiresItems": [
                         {
                             "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
@@ -194,8 +205,8 @@
     "requiresQuests": ["geothermal/check-loop-inlet-temp", "geothermal/check-loop-outlet-temp"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }

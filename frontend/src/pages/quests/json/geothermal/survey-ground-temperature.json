@@ -1,25 +1,30 @@
 {
     "id": "geothermal/survey-ground-temperature",
     "title": "Survey for Geothermal Heat",
-    "description": "Measure the ground temperature to see if a heat pump will work.",
+    "description": "Measure ground temperature with repeatable evidence and resolve out-of-range site readings.",
     "image": "/assets/quests/geothermal_ground_temperature_probe.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey explorer! Want to tap the earth's warmth for energy? Let's start by surveying the site.",
+            "text": "Before we trust the earth as a battery, we collect evidence. Mark utility lines, wear gloves, and keep the probe cable dry before taking readings.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Absolutely, show me how."
+                    "text": "Safety prep is complete"
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Show me the safe survey setup"
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "You'll need a thermometer to check the ground temperature about a meter down.",
+            "text": "You need a thermometer and a logging notebook so today's measurement can be compared later.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,39 +34,83 @@
                             "count": 1
                         }
                     ],
-                    "text": "Thanks for the thermometer!"
+                    "text": "Issue me the survey thermometer"
                 },
                 {
                     "type": "goto",
+                    "goto": "measure",
+                    "text": "Tools are ready",
                     "requiresItems": [
                         {
                             "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                             "count": 1
                         }
-                    ],
-                    "goto": "measure",
-                    "text": "I've got the tool ready."
+                    ]
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Dig a small hole and measure the temperature. Consistent warmth means good geothermal potential.",
+            "text": "Take two readings at ~1 m depth, five minutes apart, and record weather notes. A stable 8–15°C range is the pass window for this starter site.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Readings recorded in the target range"
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Readings are outside range or unstable"
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Recovery branch: relocate away from sun-baked spots, improve probe contact, and wait for temperature stabilization before repeating both readings.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Retry survey after corrections"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Stop and re-check dig safety before retrying"
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: if both readings are within 8–15°C and within 1°C of each other, the site baseline is credible for loop planning.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "The ground is a steady 12\u00b0C."
+                    "text": "Baseline passes and notes are complete",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "fin",
-            "text": "Great! Your site is ready for a ground loop. We'll use this heat in the next quest.",
+            "text": "Great. You now have a documented baseline with thresholds and retry logic, so later loop diagnostics have trustworthy context.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to build the system."
+                    "text": "Survey baseline archived",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -75,8 +124,8 @@
     "requiresQuests": ["energy/solar"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }
