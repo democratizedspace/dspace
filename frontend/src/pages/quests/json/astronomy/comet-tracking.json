@@ -1,38 +1,124 @@
 {
     "id": "astronomy/comet-tracking",
     "title": "Track a Visiting Comet",
-    "description": "Use your telescope to plot a comet's path across several nights.",
+    "description": "Build a repeatable observing plan, log comet position across nights, and recover safely when visibility drops.",
     "image": "/assets/quests/comet_tracking_observation_log.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A bright comet is passing by. Let's chart its position each evening.",
+            "text": "A bright comet is visiting. Want a chart-first route or a quick setup route before we begin the nightly log?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "observe",
-                    "text": "I'll set up."
+                    "goto": "choose-route",
+                    "text": "Show me both routes."
                 }
             ]
         },
         {
-            "id": "observe",
-            "text": "Sketch the comet's location relative to nearby stars so we can see how it moves.",
+            "id": "choose-route",
+            "text": "Either route works, but we only finish after a timestamped mission log entry proves the track.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart-route",
+                    "text": "Chart-first route (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "quick-route",
+                    "text": "Quick setup route (alternate path)."
+                }
+            ]
+        },
+        {
+            "id": "chart-route",
+            "text": "Use the planisphere to mark nearby stars, then point the telescope along the comet's current heading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Star field identified."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-track",
+                    "text": "Comet path is clear; ready to log.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Clouds or haze hide the tail."
+                }
+            ]
+        },
+        {
+            "id": "quick-route",
+            "text": "Set tripod and telescope quickly, then confirm the radiant reference before sketching movement.",
             "options": [
                 {
                     "type": "process",
                     "process": "observe-meteor-shower",
-                    "text": "Observing"
+                    "text": "Initial scan complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-track",
+                    "text": "I can place the comet relative to fixed stars.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Tripod shake or glare ruined the reference."
+                }
+            ]
+        },
+        {
+            "id": "log-track",
+            "text": "Write timestamp, direction, and nearby reference stars so tomorrow's session can verify movement.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Mission log entry drafted."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Path recorded",
+                    "text": "Track logged with timestamp and star references.",
                     "requiresItems": [
                         {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
                             "count": 1
                         }
                     ]
@@ -40,12 +126,28 @@
             ]
         },
         {
+            "id": "recovery",
+            "text": "Safety check first: stable footing, no rushing in dark paths, and no direct bright-light exposure. Retry when conditions improve.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Conditions improved; retry a route."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Unsafe tonight; reschedule and finish with caution notes."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Excellent observations! Comparing notes over multiple nights reveals its orbit.",
+            "text": "Excellent. Your comet track now has repeatable evidence and a clear safety-aware recovery plan.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Fascinating!"
+                    "text": "I'll compare tomorrow's position."
                 }
             ]
         }
@@ -58,9 +160,15 @@
     ],
     "requiresQuests": ["astronomy/meteor-shower"],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": [
+            {
+                "task": "codex-quest-quality-parity-2026-02-24",
+                "date": "2026-02-24",
+                "score": 95
+            }
+        ]
     }
 }
