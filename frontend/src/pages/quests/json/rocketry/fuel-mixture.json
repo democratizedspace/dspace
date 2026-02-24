@@ -12,46 +12,95 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "safety-brief",
+                    "text": "Absolutely, let's prep the calibration bench."
+                }
+            ]
+        },
+        {
+            "id": "safety-brief",
+            "text": "Before weighing anything: clear ignition sources, run ventilation, and keep emergency rinse nearby. No shortcuts around energetic materials.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "measure",
-                    "text": "Absolutely, let's measure it."
+                    "text": "Bench is clear, PPE is on, and ventilation is running."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "I spot loose tools and clutter. We should reset the bench first."
+                }
+            ]
+        },
+        {
+            "id": "safety-reset",
+            "text": "Good catch. Sweep the bench, cap all containers, and restart only after confirming the scale and containment tray are stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Bench reset complete. Resume controlled measurements."
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "We'll weigh fuel and oxidizer. Grab a scale and tare the canister before dosing.",
+            "text": "We'll weigh fuel and oxidizer. Grab a scale and tare the canister before dosing. Record the first ratio target as 68:32.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "adjust",
+                    "goto": "verify-ratio",
                     "requiresItems": [
                         {
                             "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
                             "count": 1
                         }
                     ],
-                    "text": "Scale ready, mixture measured."
+                    "text": "Scale ready, mixture measured to the first ratio target."
                 }
             ]
         },
         {
-            "id": "adjust",
-            "text": "The mix is a tad rich. Add binder in small increments until the ratio is on target.",
+            "id": "verify-ratio",
+            "text": "Cross-check the ratio against your tolerance band (+/- 1%). If the blend drifts, branch into correction before we seal the batch.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "done",
-                    "text": "Blend complete, looks perfect."
+                    "requiresItems": [
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Ratio verified in tolerance and test hardware is staged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "correction",
+                    "text": "Ratio is out of band. Enter correction loop before launch prep."
+                }
+            ]
+        },
+        {
+            "id": "correction",
+            "text": "Add binder in tiny increments, remix, then re-weigh. If drift persists twice, discard the batch and restart from safe tare.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Re-run measurement with corrected dosing."
                 }
             ]
         },
         {
             "id": "done",
-            "text": "Nice work. This hobby-class mix should burn steady and clean for launch.",
+            "text": "Nice work. This hobby-class mix should burn steady and clean for launch when paired with your verified hardware stack.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to see it fly."
+                    "text": "Calibration logged and ready for flight prep."
                 }
             ]
         }
@@ -66,7 +115,7 @@
     "hardening": {
         "passes": 0,
         "score": 85,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
