@@ -30,15 +30,17 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
     - `safety` → "Safety check complete and thermometer staged." — aquarium thermometer (0–50°C) ×1
-    - `measure` → "Readings recorded and stable near 10-14°C." — aquarium thermometer (0–50°C) ×1
-    - `interpret` → "Baseline accepted and logged." — aquarium thermometer (0–50°C) ×1
+    - `measure` → "Seal the three-point baseline log." — aquarium thermometer (0–50°C) ×1
+    - `measure` → "Readings recorded and stable near 10-14°C." — temperature log CSV ×1, aquarium thermometer (0–50°C) ×1
+    - `interpret` → "Baseline accepted and logged." — temperature log CSV ×1, aquarium thermometer (0–50°C) ×1
 - Grants:
     - `safety` → "Issue me the ground thermometer." — aquarium thermometer (0–50°C) ×1
+    - `measure` → "Seal the three-point baseline log." — temperature log CSV ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Solarpunk Award ×1
 - Processes used:
-    - None
+    - None (baseline evidence is granted via the measurement logging step in dialogue).
 - QA notes:
     - Added explicit safety-first staging and a three-point measurement interpretation gate before finish.
     - Added a troubleshooting branch for >2°C spot drift that requires reseat + timed retest before completion.
@@ -109,7 +111,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `start` → "Rig is already staged on the outlet" — thermistor logging rig ×1, temperature log CSV ×1
     - `reposition` → "Log the outlet run" — thermistor logging rig ×1, Laptop Computer ×1
     - `reposition` → "Outlet trace captured" — temperature log CSV ×2
+    - `reposition-retest` → "Log corrective outlet run" — thermistor logging rig ×1, Laptop Computer ×1
+    - `reposition-retest` → "Corrective trace captured" — temperature log CSV ×3
     - `interpret` → "Trace is in range and stable" — temperature log CSV ×2
+    - `interpret-retest` → "Corrective trace is now stable and in range" — temperature log CSV ×3
     - `stream` → "Publish the outlet endpoint" — thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
     - `stream` → "Endpoint is live" — live temperature JSON endpoint ×1
     - `finish` → "Outlet stream validated" — live temperature JSON endpoint ×1
@@ -129,7 +134,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Creates: live temperature JSON endpoint ×1
 - QA notes:
     - Added an interpretation node that enforces 28-45°C and ±2°C drift acceptance thresholds before publish/finish.
-    - Added a corrective reseat/dry/bleed loop for unstable traces with mandatory re-log before re-evaluation.
+    - Added a corrective reseat/dry/bleed loop that routes through a dedicated retest capture + interpretation path before publish can resume.
 
 ## 5) Check Loop Pressure (`geothermal/check-loop-pressure`)
 
@@ -145,7 +150,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - None (baseline evidence is granted via the measurement logging step in dialogue).
 - QA notes:
     - Completion requires a captured pressure snapshot plus interpretation against the 20–35 psi and <2 psi oscillation targets.
     - Out-of-range pressure must follow corrective branch (bleed air / inspect fittings) and a mandatory retest loop before finish.
@@ -264,6 +269,12 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `plot` → "Chart ready for interpretation" — temperature line chart ×1
     - `interpret` → "Annotate accepted spread and archive evidence" — temperature line chart ×1, Laptop Computer ×1
     - `interpret` → "Spread confirmed and annotated" — annotated temperature graph ×1
+    - `stage-retest` → "Capture corrective paired depth log" — thermistor logging rig ×1, Laptop Computer ×1
+    - `stage-retest` → "Corrective paired log exported" — temperature log CSV ×2
+    - `plot-retest` → "Plot corrective depth comparison" — temperature log CSV ×2, Laptop Computer ×1
+    - `plot-retest` → "Corrective chart ready for interpretation" — temperature line chart ×2
+    - `interpret-retest` → "Annotate corrected spread and archive evidence" — temperature line chart ×2, Laptop Computer ×1
+    - `interpret-retest` → "Corrected spread confirmed and annotated" — annotated temperature graph ×2
     - `finish` → "Depth survey validated" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -285,7 +296,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Creates: annotated temperature graph ×1
 - QA notes:
     - Added explicit pass criteria (deep trace within ±1.5°C while shallow trace swings more) before finish unlock.
-    - Added corrective branch for crossed/noisy curves requiring probe-depth reseat and full re-log loop.
+    - Added corrective branch for crossed/noisy curves that now enforces a fresh log + re-plot + re-annotation cycle before completion.
 
 ## 10) Compare Seasonal Ground Temps (`geothermal/compare-seasonal-ground-temps`)
 

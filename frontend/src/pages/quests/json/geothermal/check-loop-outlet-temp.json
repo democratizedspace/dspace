@@ -92,8 +92,62 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "reposition",
+                    "goto": "reposition-retest",
                     "text": "Corrective steps done, re-log outlet trace."
+                }
+            ]
+        },
+        {
+            "id": "reposition-retest",
+            "text": "Run a fresh outlet capture after corrective work so the interpretation step uses post-fix evidence, not the earlier trace.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Log corrective outlet run",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret-retest",
+                    "text": "Corrective trace captured",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret-retest",
+            "text": "Re-interpret using the fresh corrective capture: pass only if outlet stays 28-45°C with drift under ±2°C during a steady cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stream",
+                    "text": "Corrective trace is now stable and in range",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Still unstable, run another corrective loop"
                 }
             ]
         },

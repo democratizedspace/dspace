@@ -753,9 +753,9 @@ Exemplar anchors (verified checked in docs/qa/v3.md §4.5): hydroponics/nutrient
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3694)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3694)
 - `geothermal/check-loop-outlet-temp`
-  - [x] Observed issue: `geothermal/check-loop-outlet-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #TBD)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #TBD)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #TBD)
+  - [x] Observed issue: `geothermal/check-loop-outlet-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3713)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3713)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3713)
 - `geothermal/check-loop-pressure`
   - [x] Observed issue: `geothermal/check-loop-pressure` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3653)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3653)
@@ -765,9 +765,9 @@ Exemplar anchors (verified checked in docs/qa/v3.md §4.5): hydroponics/nutrient
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
 - `geothermal/compare-depth-ground-temps`
-  - [x] Observed issue: `geothermal/compare-depth-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #TBD)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #TBD)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #TBD)
+  - [x] Observed issue: `geothermal/compare-depth-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3713)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3713)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3713)
 - `geothermal/compare-seasonal-ground-temps`
   - [ ] Observed issue: `geothermal/compare-seasonal-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
@@ -797,9 +797,9 @@ Exemplar anchors (verified checked in docs/qa/v3.md §4.5): hydroponics/nutrient
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3653)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3653)
 - `geothermal/survey-ground-temperature`
-  - [x] Observed issue: `geothermal/survey-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #TBD)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #TBD)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #TBD)
+  - [x] Observed issue: `geothermal/survey-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3713)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3713)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3713)
 
 ### hydroponics (21 quests)
 

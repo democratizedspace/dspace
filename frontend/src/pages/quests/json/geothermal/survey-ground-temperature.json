@@ -54,10 +54,30 @@
             "text": "Take three readings around 1 m depth at least 2 m apart. Record each value and the timestamp so we can confirm the soil is stable, not just lucky.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Seal the three-point baseline log.",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
                     "goto": "interpret",
                     "text": "Readings recorded and stable near 10-14°C.",
                     "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
                         {
                             "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                             "count": 1
@@ -90,6 +110,10 @@
                     "type": "finish",
                     "text": "Baseline accepted and logged.",
                     "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
                         {
                             "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                             "count": 1
