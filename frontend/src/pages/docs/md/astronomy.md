@@ -108,7 +108,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Dialogue `requiresItems` gates:
     - `plan` → "Details logged. Pick an observation mode." — ISS pass window ×1
     - `setup` → "Station is ready for the pass." — ISS spotting station ×1
-    - `observe-quick` → "Quick note complete with direction and duration." — mission logbook ×1
+    - `observe-quick` → "Quick note complete with direction and duration." — mission logbook ×1, mission log entry ×1
     - `observe` → "Entry complete with time and direction." — ISS pass log ×1
     - `interpret` → "Log has all fields with condition notes." — ISS pass log ×1
     - `interpret-quick` → "Quick note has all fields with conditions logged." — ISS pass window ×1, mission logbook ×1, mission log entry ×1
@@ -149,6 +149,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `plan` → "Pass window confirmed, gear is staged." — smartphone ×1, camera tripod ×1, ISS pass window ×1
     - `capture` → "Photo saved and metadata logged." — mission logbook ×1, ISS pass window ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "Pass: streak continuous, timing <15s, heading matches plan." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `recovery` → "Session aborted safely; follow-up logged for next pass." — mission log entry ×1
 - Troubleshooting/safety branches:
     - `interpret` fail path forces `retest` when timing, heading, or framing are out of range.
     - `retest` requires corrective stabilization + heading checks before rerunning capture.
