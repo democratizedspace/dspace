@@ -215,8 +215,30 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "simulate",
-                    "text": "Corrections applied. Re-qualify in simulation."
+                    "goto": "simulate-recheck",
+                    "text": "Corrections applied. Start the simulator requalification loop."
+                }
+            ]
+        },
+        {
+            "id": "simulate-recheck",
+            "text": "Invalidate the previous run and execute a fresh simulator pass so the retry is backed by new telemetry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "suborbital-hop",
+                    "text": "Run a fresh guided hop simulation"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sim-review",
+                    "text": "Fresh telemetry logged. Re-review drift and apogee bounds.",
+                    "requiresItems": [
+                        {
+                            "id": "5873d7b0-dd0f-436f-b942-286aedd253d0",
+                            "count": 2
+                        }
+                    ]
                 }
             ]
         },

@@ -242,6 +242,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - `requiresQuests`: `rocketry/recovery-run`, `rocketry/preflight-check`, `rocketry/guided-rocket-build`
 - Dialogue `requiresItems` gates:
     - `simulate` → "Simulator run complete. Review drift and apogee against bounds." — guided hop telemetry ×1
+    - `simulate-recheck` → "Fresh telemetry logged. Re-review drift and apogee bounds." — guided hop telemetry ×2
     - `range` → "Gear staged at the pad." — launch-capable model rocket (parachute) ×1, Model rocket launchpad ×1, launch controller ×1, rocket igniter ×1, flame-resistant recovery wadding ×1, guided flight stack ×1, stability firmware ×1, nosecone camera module ×1
     - `pad` → "Checklist complete and servos passed the wiggle test." — guided launch pad checklist ×1
     - `countdown` → "Countdown finished at T-0 without holds." — guided countdown card ×1
@@ -250,7 +251,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Troubleshooting/safety branches:
     - `sim-review` and `sim-tune` enforce drift/apogee thresholds with a mandatory tuning loop before range travel.
     - `range-safety` and `range-hold` add explicit no-go handling for perimeter/comms failures.
-    - `anomaly` classifies off-nominal events and routes recovery back to simulator qualification before retry.
+    - `anomaly` routes recovery through `simulate-recheck`, which enforces a fresh simulator run before returning to bounds review.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
