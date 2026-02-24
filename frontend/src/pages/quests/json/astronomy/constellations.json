@@ -1,58 +1,137 @@
 {
     "id": "astronomy/constellations",
     "title": "Map the Constellations",
-    "description": "Identify key star patterns to aid celestial navigation.",
+    "description": "Build a seasonal star-hop map, verify pattern recognition with evidence, and recover safely when visibility drops.",
     "image": "/assets/quests/constellation_mapping_logbook.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Great progress so far! Next let's learn the constellations visible this season.",
+            "text": "Great progress so far. Want the quick classic route or a safety-first orientation sweep before charting?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plan",
-                    "text": "I'm excited to learn!"
+                    "goto": "choose-route",
+                    "text": "Show me both mapping routes."
                 }
             ]
         },
         {
-            "id": "plan",
-            "text": "Mark this season's guide stars on the planisphere and keep red light low so you can move safely.",
+            "id": "choose-route",
+            "text": "Both routes work if you finish with a verified sketch set and location notes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan-route",
+                    "text": "Main path: build a guide-star plan first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "sweep-route",
+                    "text": "Alternate path: run a low-light orientation sweep first."
+                }
+            ]
+        },
+        {
+            "id": "plan-route",
+            "text": "Mark this season's guide stars on the planisphere and keep red light low so your footing stays safe.",
             "options": [
                 {
                     "type": "process",
                     "process": "draft-seasonal-star-plan",
-                    "text": "Sketching arrows from guide stars."
+                    "text": "Guide-star map drafted."
                 },
                 {
                     "type": "goto",
                     "goto": "chart",
-                    "text": "Plan is ready\u2014let's star hop.",
+                    "text": "Plan is ready—let's star hop.",
                     "requiresItems": [
                         {
                             "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Clouds are rolling in and I need a fallback."
+                }
+            ]
+        },
+        {
+            "id": "sweep-route",
+            "text": "Do a short orientation sweep: confirm north, clear your path, and identify one bright anchor before full charting.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Orientation sweep complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "chart",
+                    "text": "Anchor confirmed—continue to full mapping.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Glare and haze are too strong for safe charting."
                 }
             ]
         },
         {
             "id": "chart",
-            "text": "Find Orion, Ursa Major, and Cassiopeia, then sketch their bright stars and orientation without stepping into hazards.",
+            "text": "Find Orion, Ursa Major, and Cassiopeia, then sketch orientation and timestamp so another observer can reproduce your map.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Charting patterns..."
+                    "text": "Constellation sketches updated."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "Patterns are clear—ready to log evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I lost orientation and need to reset safely."
+                }
+            ]
+        },
+        {
+            "id": "log-evidence",
+            "text": "Write a mission-log note with visible constellations, sky conditions, and route used before closing the session.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Mission log evidence recorded."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "I can spot them easily now!",
+                    "text": "Logged with conditions and constellation list.",
                     "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
                         {
                             "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
                             "count": 1
@@ -62,8 +141,24 @@
             ]
         },
         {
+            "id": "recovery",
+            "text": "Safety stop: if visibility or footing is poor, pause, relight your path with red light only, and retry with shorter scans.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Conditions improved—retry a route."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Unsafe tonight—log a defer note and close safely."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Excellent! These patterns guide spacecraft spotting and future sessions. Keep the sketches handy.",
+            "text": "Excellent. You mapped constellations with reproducible evidence and used a safe fallback when conditions shifted.",
             "options": [
                 {
                     "type": "finish",
@@ -82,7 +177,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-16",
