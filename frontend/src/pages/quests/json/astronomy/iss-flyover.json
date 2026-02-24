@@ -4,7 +4,7 @@
     "description": "Plan an ISS pass, capture an observation artifact, and use weather/glare recovery with a scheduled follow-up when needed.",
     "hardening": {
         "passes": 3,
-        "emoji": "🛠️",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-14",
@@ -278,7 +278,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/observe-moon"
-    ]
+    "requiresQuests": ["astronomy/observe-moon"]
 }
