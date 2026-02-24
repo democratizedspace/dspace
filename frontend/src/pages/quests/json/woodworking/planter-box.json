@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready for another project? Let's make a pine planter box for your balcony or hydroponics rig.",
+            "text": "Ready for another project? We'll build a planter box that can survive wet soil without twisting out of square.",
             "options": [
                 {
                     "type": "goto",
@@ -17,14 +17,30 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "gather",
-                    "text": "Just tell me what to grab"
+                    "goto": "safety",
+                    "text": "Start with safety checks"
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Wear eye protection before cutting, keep the board clamped while sawing, and stop if cuts wander near your support hand.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "layout",
+                    "text": "Safety checks done"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Reset my work area first"
                 }
             ]
         },
         {
             "id": "layout",
-            "text": "Cut four pine boards for a 60\u00d725\u00d720 cm box. Bevel the base to shed water and keep corners square.",
+            "text": "Cut four pine boards for a 60×25×20 cm box. Mark a reference edge so each corner can be checked against the same face.",
             "options": [
                 {
                     "type": "goto",
@@ -40,7 +56,7 @@
         },
         {
             "id": "gather",
-            "text": "Grab four pine boards, waterproof glue, your handsaw, and a fresh sandpaper pack for smoothing the edges. I'll loan the 16 oz claw hammer.",
+            "text": "Grab four pine boards, waterproof glue, your handsaw, and a fresh sandpaper pack. I'll loan the 16 oz claw hammer.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -50,11 +66,11 @@
                             "count": 1
                         }
                     ],
-                    "text": "Gather materials"
+                    "text": "Issue the hammer"
                 },
                 {
                     "type": "goto",
-                    "goto": "build",
+                    "goto": "fit-choice",
                     "text": "Materials ready",
                     "requiresItems": [
                         {
@@ -83,75 +99,135 @@
         },
         {
             "id": "drainage",
-            "text": "Drill 8 mm holes every 10 cm and leave 2 mm gaps between slats. Fabric or a liner helps soil stay put while it drains.",
+            "text": "Drill 8 mm holes every 10 cm and leave 2 mm gaps between slats. Keep the bottom flat so water exits instead of pooling.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "gather",
-                    "text": "Okay, let's get the wood"
+                    "goto": "fit-choice",
+                    "text": "Drainage pattern ready"
                 },
                 {
                     "type": "goto",
+                    "goto": "layout",
+                    "text": "Re-check my cut marks"
+                }
+            ]
+        },
+        {
+            "id": "fit-choice",
+            "text": "Choose your assembly order: dry-fit first for squareness, or pre-drill first for cleaner nail lines in hard grain.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "dryfit",
-                    "text": "I've already drilled drainage"
+                    "text": "Dry-fit corners first"
+                },
+                {
+                    "type": "goto",
+                    "goto": "predrill",
+                    "text": "Pre-drill and mark fasteners"
                 }
             ]
         },
         {
             "id": "dryfit",
-            "text": "Dry-fit the pieces like a picture frame so corners align. Keep diagonals within 3 mm before gluing.",
+            "text": "Dry-fit the pieces like a frame and keep diagonal difference under 3 mm before adding glue.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "Alignment looks good"
+                    "text": "Square confirmed, start glue-up"
                 },
                 {
                     "type": "goto",
-                    "goto": "layout",
-                    "text": "Revisit layout"
+                    "goto": "troubleshoot",
+                    "text": "Corners keep drifting"
+                }
+            ]
+        },
+        {
+            "id": "predrill",
+            "text": "Mark two nails per corner and pre-drill pilot holes to prevent splits. Keep nails offset so the tips do not collide.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Pilot holes complete"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Board edge started cracking"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery: back out the fastener, trim the split edge, and clamp the corner before retrying. Re-check diagonal spread before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fit-choice",
+                    "text": "Retry assembly with corrections"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Pause for a safety reset"
                 }
             ]
         },
         {
             "id": "build",
-            "text": "Glue edges, clamp lightly if you have them, and drive two 40 mm nails per corner from the kit. Wipe squeeze-out and keep it flat.",
+            "text": "Glue edges, clamp lightly, and drive two 40 mm nails per corner from the kit. Wipe squeeze-out and keep the base flat while curing.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-planter-box",
-                    "text": "Cut, glue, and nail the planter box"
+                    "text": "Run assembly process"
                 },
                 {
                     "type": "goto",
                     "goto": "seal",
-                    "text": "Can I add a liner?"
+                    "text": "Assembly done, move to liner check",
+                    "requiresItems": [
+                        {
+                            "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "seal",
-            "text": "Optionally add a liner or staple fabric so the wood can breathe. Keep bottom gaps open so water escapes.",
+            "text": "Optional liner path: add fabric without blocking drainage holes, then confirm the box sits level and does not rack when lifted.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Liner added, ready to fill"
+                    "text": "Drainage and stability verified",
+                    "requiresItems": [
+                        {
+                            "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "build",
-                    "text": "Skipping liner, back to assembly"
+                    "goto": "troubleshoot",
+                    "text": "It twists or leaks at one corner"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! This planter can hold soil or a small hydroponic tub. Let the glue cure 8 hours first.",
+            "text": "Great build. Let the glue cure eight hours before loading soil or hydroponic gear so the joints stay tight.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Looks sturdy!"
+                    "text": "Planter complete"
                 }
             ]
         }
@@ -170,7 +246,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -25,6 +25,8 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
     - `gather` → "Materials ready" — Pine board ×4, Wood glue ×1, claw hammer (16 oz) ×1, Handsaw ×1, Sandpaper pack ×1
+    - `build` → "Assembly done, move to liner check" — Pine planter box ×1
+    - `seal` → "Drainage and stability verified" — Pine planter box ×1
 - Grants:
     - `gather` → "Gather materials" — claw hammer (16 oz) ×1
     - Quest-level `grantsItems`: None
@@ -35,6 +37,9 @@ Woodworking quests build practical progression through the woodworking skill tre
         - Requires: Handsaw ×1, claw hammer (16 oz) ×1
         - Consumes: Pine board ×4, Wood glue ×1, Sandpaper pack ×1
         - Creates: Pine planter box ×1
+- Troubleshooting/safety branches:
+    - `fit-choice` adds alternate dry-fit vs pre-drill assembly strategies.
+    - `troubleshoot` loops split-corner recovery back into verified assembly steps and routes unsafe conditions to `safety`.
 
 ## 2) Build a birdhouse (`woodworking/birdhouse`)
 
@@ -133,7 +138,9 @@ Woodworking quests build practical progression through the woodworking skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `woodworking/step-stool`
 - Dialogue `requiresItems` gates:
-    - `sand` → "Surface looks even" — Sandpaper pack ×1
+    - `strategy` → "Hand-block edges first" / "Panel passes first" — Sandpaper pack ×1
+    - `scratch-check` → "Grain-aligned scratch pattern confirmed" — Sandpaper pack ×1
+    - `dust` → "Surface is dust-free and ready" — Sandpaper pack ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -141,6 +148,9 @@ Woodworking quests build practical progression through the woodworking skill tre
     - paintbrush ×1, Sandpaper pack ×1
 - Processes used:
     - None
+- Troubleshooting/safety branches:
+    - `strategy` adds main/alternate sanding approaches before acceptance gates.
+    - `troubleshoot` enforces rework + retry loops and can route through `safety` before progress resumes.
 
 ## 7) Apply a Wood Finish (`woodworking/apply-finish`)
 
@@ -191,7 +201,8 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `requiresQuests`: `woodworking/workbench`
 - Dialogue `requiresItems` gates:
     - `gather` → "Materials ready" — Pine board ×1, Handsaw ×1, Wood glue ×1, wood chisel ×1, Sandpaper pack ×1
-    - `cut` → "Slots look good" — Pine board ×1, Handsaw ×1, wood chisel ×1, Sandpaper pack ×1
+    - `slot-first` / `hook-first` → "...verified" — Pine board ×1, Handsaw ×1, wood chisel ×1, Sandpaper pack ×1
+    - `mount-prep` → "Rack is mounted and level" — Wood glue ×1, Sandpaper pack ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -199,6 +210,9 @@ Woodworking quests build practical progression through the woodworking skill tre
     - Wood glue ×1, Sandpaper pack ×1
 - Processes used:
     - None
+- Troubleshooting/safety branches:
+    - `cut-strategy` adds slot-first and hook-first build paths.
+    - `troubleshoot` forces spacing/load corrections and can route to `safety` for wall-hazard resets before reattempting mount verification.
 
 ## 10) Craft a Picture Frame (`woodworking/picture-frame`)
 

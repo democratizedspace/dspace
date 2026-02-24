@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your bench is buried under clamps and screwdrivers. Let's build a wall rack so every tool has a hook.",
+            "text": "Your bench is buried under loose tools. We'll build a rack with repeatable spacing so each tool returns to the same slot.",
             "options": [
                 {
                     "type": "goto",
@@ -17,14 +17,30 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "gather",
-                    "text": "I just need a cut list"
+                    "goto": "safety",
+                    "text": "Start with mounting safety"
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Before drilling, scan for wires or pipes and verify your wall can support the loaded rack. If uncertain, stop and re-check anchors.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "design",
+                    "text": "Wall safety checked"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "I need to inspect the wall first"
                 }
             ]
         },
         {
             "id": "design",
-            "text": "Measure wall space, mark studs 40 cm apart, and leave 2 cm between slots so chisels slide in.",
+            "text": "Measure wall space, mark studs 40 cm apart, and leave 2 cm between slots so chisels slide in without binding.",
             "options": [
                 {
                     "type": "goto",
@@ -33,18 +49,18 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "mounting",
+                    "goto": "mounting-plan",
                     "text": "How do I hang this on masonry?"
                 }
             ]
         },
         {
             "id": "gather",
-            "text": "Grab a pine board, handsaw, glue, chisel, and sandpaper. Predrill for screws or anchors before hanging.",
+            "text": "Grab pine board, handsaw, glue, chisel, and sandpaper. Predrill for screws or anchors before hanging.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "cut",
+                    "goto": "cut-strategy",
                     "text": "Materials ready",
                     "requiresItems": [
                         {
@@ -71,18 +87,34 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "mounting",
-                    "text": "Walk me through anchors"
+                    "goto": "mounting-plan",
+                    "text": "Walk me through anchor choices"
                 }
             ]
         },
         {
-            "id": "cut",
-            "text": "Cut to 60 cm, plane rough edges, and chisel shallow slots. Dry-fit tools to confirm spacing.",
+            "id": "cut-strategy",
+            "text": "Pick a cut strategy: slot-first for maximum capacity, or hook-first for mixed tool sizes. Both need spacing verification.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "mount",
+                    "goto": "slot-first",
+                    "text": "Cut slots first"
+                },
+                {
+                    "type": "goto",
+                    "goto": "hook-first",
+                    "text": "Cut hook blocks first"
+                }
+            ]
+        },
+        {
+            "id": "slot-first",
+            "text": "Cut to 60 cm, mark slot centers, and chisel shallow grooves. Dry-fit tools to confirm grip and clearance.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount-prep",
                     "text": "Slots look good",
                     "requiresItems": [
                         {
@@ -105,50 +137,126 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "design",
-                    "text": "I want to adjust spacing"
+                    "goto": "troubleshoot",
+                    "text": "Slots are too tight or chipped"
                 }
             ]
         },
         {
-            "id": "mounting",
-            "text": "Use 6 mm anchors in masonry or 70 mm screws into studs. Keep a level so the rack sits straight.",
+            "id": "hook-first",
+            "text": "Cut small hook blocks, smooth edges, and glue-test their spacing before committing to wall holes.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "cut",
-                    "text": "Back to carving slots"
+                    "goto": "mount-prep",
+                    "text": "Hook spacing verified",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
-                    "goto": "mount",
-                    "text": "Ready to mount"
+                    "goto": "troubleshoot",
+                    "text": "Hook blocks shifted during dry-fit"
                 }
             ]
         },
         {
-            "id": "mount",
-            "text": "Clamp, mark holes, then predrill and fasten. Add a thin glue bead before driving screws.",
+            "id": "mounting-plan",
+            "text": "Use 6 mm anchors in masonry or 70 mm screws into studs. Keep top and bottom fasteners on the same vertical line.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cut-strategy",
+                    "text": "Back to cutting"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mount-prep",
+                    "text": "Fastener plan confirmed"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: recut damaged slots, re-check spacing, and test one tool from each weight group before mounting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cut-strategy",
+                    "text": "Retry with corrected spacing"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Pause and re-check wall safety"
+                }
+            ]
+        },
+        {
+            "id": "mount-prep",
+            "text": "Clamp, mark holes, then predrill and fasten. Add a thin glue bead only after the first dry mount confirms level.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Rack is mounted and level",
+                    "requiresItems": [
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Rack leans or flexes"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Load tools from lightest to heaviest and confirm no anchor creep. Final gate: all tools return to stable slots without rubbing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Rack is secured"
+                    "text": "Load test passed"
                 },
                 {
                     "type": "goto",
-                    "goto": "mounting",
-                    "text": "Check anchor choice"
+                    "goto": "troubleshoot",
+                    "text": "One anchor started to pull"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Space your tools by category and leave a blank slot for the one that always goes missing.",
+            "text": "Nice work. Your tool wall now supports daily use and safer cleanup because every tool has a known home.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Everything in its place!"
+                    "text": "Rack complete"
                 }
             ]
         }
@@ -167,7 +275,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
