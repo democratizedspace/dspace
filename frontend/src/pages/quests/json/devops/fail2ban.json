@@ -34,7 +34,7 @@
                 {
                     "type": "process",
                     "process": "configure-ufw-firewall",
-                    "text": "Apply baseline firewall + fail2ban host policy."
+                    "text": "Apply baseline firewall host policy."
                 },
                 {
                     "type": "goto",

@@ -481,25 +481,25 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, sysa
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3704)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3704)
 - `devops/ci-pipeline`
-  - [x] Observed issue: `devops/ci-pipeline` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3713)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3713)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3713)
+  - [x] Observed issue: `devops/ci-pipeline` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3719)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3719)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3719)
 - `devops/daily-backups`
   - [x] Observed issue: `devops/daily-backups` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3704)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3704)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3704)
 - `devops/docker-compose`
-  - [x] Observed issue: `devops/docker-compose` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3713)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3713)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3713)
+  - [x] Observed issue: `devops/docker-compose` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3719)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3719)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3719)
 - `devops/enable-https`
   - [x] Observed issue: `devops/enable-https` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3619)
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3619)
   - [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3619)
 - `devops/fail2ban`
-  - [x] Observed issue: `devops/fail2ban` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3713)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3713)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3713)
+  - [x] Observed issue: `devops/fail2ban` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3719)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3719)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3719)
 - `devops/firewall-rules`
   - [x] Observed issue: `devops/firewall-rules` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3619)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3619)
