@@ -213,8 +213,10 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/temp-logger`
 - Dialogue `requiresItems` gates:
-    - `start` → "Show me the script" — temperature log CSV ×1
-    - `script` → "The chart is rendered" — temperature line chart ×1
+    - `start` → "Stage the CLI run" — temperature log CSV ×1
+    - `prep` → "Baseline chart exported" — temperature line chart ×1
+    - `interpret` → "Plot is stable and in expected range" — temperature line chart ×1
+    - `retest` → "Re-check regenerated chart" — temperature log CSV ×2, temperature line chart ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -225,6 +227,10 @@ Programming quests build practical progression through the programming skill tre
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: temperature line chart ×1
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
 
 ## 9) Compute Temperature Standard Deviation (`programming/stddev-temp`)
 
@@ -232,14 +238,24 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/median-temp`
 - Dialogue `requiresItems` gates:
-    - `code` → "Deviation computed!" — Raspberry Pi 5 board ×1
+    - `start` → "Load the latest dataset" — temperature log CSV ×1
+    - `prep` → "Deviation report generated" — temperature line chart ×1
+    - `interpret` → "Deviation is in expected band and documented" — temperature line chart ×1
+    - `retest` → "Re-test with the new log" — temperature log CSV ×2, temperature line chart ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
 
 ## 10) Calibrate a Thermistor (`programming/thermistor-calibration`)
 
@@ -435,14 +451,20 @@ Programming quests build practical progression through the programming skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `programming/temp-alert`
 - Dialogue `requiresItems` gates:
-    - `code` → "Email sent!" — aquarium thermometer (0–50°C) ×1
+    - `start` → "Configure alert thresholds" — temperature log CSV ×1
+    - `prep` → "Email alert arrived with timestamp" — temperature log CSV ×1
+    - `interpret` → "Alert timing and threshold behavior are correct" — temperature log CSV ×1
+    - `retest` → "Re-validate email behavior" — temperature log CSV ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
 
 ## QA flow notes
 
