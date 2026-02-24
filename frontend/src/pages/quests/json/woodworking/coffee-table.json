@@ -1,98 +1,124 @@
 {
     "id": "woodworking/coffee-table",
     "title": "Build a coffee table",
-    "description": "Craft a low table to anchor your living space.",
+    "description": "Build a coffee table with alternate assembly plans, stability proof, and a corrective rework loop.",
     "image": "/assets/quests/woodworking_coffee_table_build.jpg",
     "npc": "/assets/npc/atlas.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your bookshelf looks great! Ready for something that ties the room together?",
+            "text": "Good bookshelf work. For the coffee table, we verify load stability before we call it finished.",
             "options": [
-                {
-                    "type": "goto",
-                    "goto": "gather",
-                    "text": "Let's build a coffee table."
-                }
+                { "type": "goto", "goto": "gather", "text": "Let's build it to shop standard." }
             ]
         },
         {
             "id": "gather",
-            "text": "We'll need pine boards, wood glue, and your trusty handsaw. Lay everything out before we begin.",
+            "text": "Gather pine boards, glue, handsaw, tape measure, and safety goggles. We'll pick a frame strategy after prep.",
             "options": [
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        {
-                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
-                            "count": 6
-                        },
-                        {
-                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
-                            "count": 1
-                        },
-                        {
-                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
-                            "count": 1
-                        }
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 6 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
                     ],
-                    "text": "Gather materials"
+                    "text": "Issue table materials and PPE."
                 },
                 {
                     "type": "goto",
-                    "goto": "assemble",
+                    "goto": "strategy",
                     "requiresItems": [
-                        {
-                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
-                            "count": 6
-                        },
-                        {
-                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
-                            "count": 1
-                        },
-                        {
-                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
-                            "count": 1
-                        }
+                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 6 },
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
                     ],
-                    "text": "Materials ready"
+                    "text": "Materials staged and safety checks complete."
                 }
             ]
         },
         {
-            "id": "assemble",
-            "text": "Cut the boards to size, glue a rectangular frame, and add a top. Clamp it tight and let it cure.",
+            "id": "strategy",
+            "text": "Choose a build strategy based on your stock: apron frame first, or top panel first.",
+            "options": [
+                { "type": "goto", "goto": "apron-frame", "text": "Main path: apron frame first." },
+                { "type": "goto", "goto": "top-panel", "text": "Alternate path: top panel first." }
+            ]
+        },
+        {
+            "id": "apron-frame",
+            "text": "Cut legs and aprons, dry-clamp, then check for racking before attaching the top.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stability-check",
+                    "requiresItems": [
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ],
+                    "text": "Frame is clamped, square, and ready for top install."
+                },
+                { "type": "goto", "goto": "rework", "text": "Frame racks when weight is applied." }
+            ]
+        },
+        {
+            "id": "top-panel",
+            "text": "Glue the top panel first, then trim and attach legs after the top cures flat.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stability-check",
+                    "requiresItems": [
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ],
+                    "text": "Top cured flat and leg fit complete."
+                },
+                { "type": "goto", "goto": "rework", "text": "Top cupped or leg fit drifted." }
+            ]
+        },
+        {
+            "id": "stability-check",
+            "text": "Evidence gate: table must stand without wobble and survive a gentle push test before finish.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Table assembled"
-                }
+                    "requiresItems": [
+                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
+                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
+                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                    ],
+                    "text": "No wobble, no rack, and glue joints look sound."
+                },
+                { "type": "goto", "goto": "rework", "text": "Wobble detected or joints creak under load." }
+            ]
+        },
+        {
+            "id": "rework",
+            "text": "Recovery loop: back out the failed joint, re-square from one corner, and retest after reglue. Stop if footing or lighting is unsafe.",
+            "options": [
+                { "type": "goto", "goto": "strategy", "text": "Rework complete; retry with a strategy." },
+                { "type": "goto", "goto": "finish", "text": "Paused safely for a better work session." }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent work! This coffee table will be the centerpiece of many conversations.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "Enjoy the new table"
-                }
-            ]
+            "text": "Excellent work. You selected a path, proved stability, and handled faults with safe recovery.",
+            "options": [{ "type": "finish", "text": "Enjoy the new table." }]
         }
     ],
-    "rewards": [
-        {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
-            "count": 1
-        }
-    ],
+    "rewards": [{ "id": "b281360b-2ecc-4fea-a248-36a61c5f7399", "count": 1 }],
     "requiresQuests": ["woodworking/bookshelf"],
     "hardening": {
-        "passes": 0,
-        "score": 85,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "passes": 1,
+        "score": 94,
+        "emoji": "🛠️",
         "history": []
     }
 }
