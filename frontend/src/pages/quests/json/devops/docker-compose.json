@@ -30,7 +30,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "On your Pi, run `docker compose up -d --build` to start containers. Stop with `docker compose down`.",
+            "text": "We'll stage Docker Compose with a safety checklist, then verify service health before exposing anything publicly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Preflight complete. Start containers.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "deploy",
+            "text": "Run `docker compose up -d --build`, confirm expected services, and keep a shell ready for `docker compose down` rollback if resources spike.",
             "options": [
                 {
                     "type": "process",
@@ -39,11 +60,44 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "tunnel",
-                    "text": "Container running.",
+                    "goto": "verify",
+                    "text": "Containers running. Capture health evidence.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Capture journal evidence for container uptime, restart count, and app readiness. Safety stop: if services crash-loop, do not open a tunnel yet.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Export container health report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Health report shows restart loops or readiness failures.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "tunnel",
+                    "text": "Health report is stable. Proceed to tunnel setup.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
                             "count": 1
                         }
                     ]
@@ -62,7 +116,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Tunnel online.",
+                    "text": "Tunnel online with stable backend.",
                     "requiresItems": [
                         {
                             "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
@@ -77,8 +131,30 @@
             ]
         },
         {
+            "id": "recovery",
+            "text": "Troubleshoot compose health: inspect env values, service dependencies, and disk pressure. Apply one fix, log it, then rerun verification.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Capture incident extract and fix notes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Mitigation applied; rerun health verification.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Everything is running! Keep the Cloudflare token secret. For multi-node setups, see the k3s guide.",
+            "text": "Everything is running with documented health evidence. Keep the Cloudflare token secret and keep rollback commands close.",
             "options": [
                 {
                     "type": "finish",

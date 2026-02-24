@@ -63,8 +63,12 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/prepare-first-node`
 - Dialogue `requiresItems` gates:
-    - `start` → "Container running." — Pi cluster node ×1
-    - `tunnel` → "Tunnel online." — PoE+ switch ×1, Ethernet cable ×1
+    - `start` → "Preflight complete. Start containers." — Pi cluster node ×1, Laptop Computer ×1
+    - `deploy` → "Containers running. Capture health evidence." — Pi cluster node ×1
+    - `verify` → "Health report shows restart loops or readiness failures." — journalctl report ×1
+    - `verify` → "Health report is stable. Proceed to tunnel setup." — journalctl report ×1
+    - `tunnel` → "Tunnel online with stable backend." — PoE+ switch ×1, Ethernet cable ×1
+    - `recovery` → "Mitigation applied; rerun health verification." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -75,10 +79,18 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Pi cluster node ×1
         - Consumes: none
         - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
     - [create-cloudflare-tunnel](/processes/create-cloudflare-tunnel)
         - Requires: PoE+ switch ×1, Ethernet cable ×1
         - Consumes: none
         - Creates: none
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 4) Set Up a CI Pipeline (`devops/ci-pipeline`)
 
@@ -86,7 +98,11 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/docker-compose`
 - Dialogue `requiresItems` gates:
-    - `edit` → "Workflow added." — CI workflow file ×1
+    - `start` → "Walk me through a safe rollout." — Laptop Computer ×1, Pi cluster node ×1
+    - `plan` → "Workflow added. Verify a real run and artifact." — CI workflow file ×1
+    - `verify` → "Run failed or report is incomplete." — journalctl report ×1
+    - `verify` → "Run passed and evidence is complete." — journalctl report ×1
+    - `recovery` → "Fix applied; rerun verification." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -97,6 +113,14 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: GitHub repository ×1
         - Consumes: none
         - Creates: CI workflow file ×1
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 5) Deploy with k3s (`devops/k3s-deploy`)
 
@@ -372,14 +396,25 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/ssh-hardening`
 - Dialogue `requiresItems` gates:
-    - `install` → "Bans configured" — Pi cluster node ×1
+    - `start` → "Start with a safe baseline." — Pi cluster node ×1, Laptop Computer ×1
+    - `install` → "Jail configured. Verify with logs." — Pi cluster node ×1
+    - `verify` → "No ban evidence or trusted access is unstable." — journalctl report ×1
+    - `verify` → "Ban policy verified with evidence." — journalctl report ×1
+    - `recovery` → "Mitigation complete; verify again." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## QA flow notes
 

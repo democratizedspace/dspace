@@ -20,18 +20,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Automation keeps your code reliable. Let's add a CI workflow.",
+            "text": "Automation keeps your code reliable. We'll stage a workflow, verify evidence from a real run, and keep a rollback plan if secrets leak.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "edit",
-                    "text": "Walk me through it."
+                    "goto": "plan",
+                    "text": "Walk me through a safe rollout.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "edit",
-            "text": "Create a `.github/workflows/ci.yml` that installs dependencies and runs `npm run test:pr`. Keep tokens secret and grant minimal permissions.",
+            "id": "plan",
+            "text": "Draft `.github/workflows/ci.yml` with least-privilege permissions and explicit secret boundaries before enabling branch protection.",
             "options": [
                 {
                     "type": "process",
@@ -40,8 +50,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Workflow added.",
+                    "goto": "verify",
+                    "text": "Workflow added. Verify a real run and artifact.",
                     "requiresItems": [
                         {
                             "id": "306793ac-e420-4859-9742-9076fff6ab57",
@@ -52,8 +62,63 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Run one pipeline and export a journal report with pass/fail status, runtime, and failing stage details. Safety stop: if any credential appears in logs, revoke it before retrying.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture CI run evidence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Run failed or report is incomplete.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Run passed and evidence is complete.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Classify the failure (runner setup, flaky tests, or secret exposure), apply one fix, and rerun verification before finishing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Log the incident and corrective action."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Fix applied; rerun verification.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Every push will now trigger tests automatically.",
+            "text": "Excellent. Your CI pipeline now has evidence-based verification and a repeatable recovery loop.",
             "options": [
                 {
                     "type": "finish",

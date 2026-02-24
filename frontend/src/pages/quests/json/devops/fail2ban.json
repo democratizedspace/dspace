@@ -8,23 +8,33 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Now that your services are online, attackers may try brute-force SSH logins.",
+            "text": "Now that services are online, brute-force SSH attempts are inevitable. We'll deploy Fail2ban, verify ban events, and keep a safe recovery path.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "install",
-                    "text": "How do I stop them?"
+                    "text": "Start with a safe baseline.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "install",
-            "text": "Install Fail2ban and configure a jail for the SSH service.",
+            "text": "Install Fail2ban, create an `sshd` jail, and keep one trusted session open while testing to avoid self-lockout.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Bans configured",
+                    "goto": "verify",
+                    "text": "Jail configured. Verify with logs.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
@@ -35,8 +45,63 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Capture journal evidence showing jail status, ban threshold, and at least one simulated failed-login event. Safety stop: if trusted admin access fails, roll back immediately.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Export Fail2ban verification report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "No ban evidence or trusted access is unstable.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Ban policy verified with evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Classify the issue (regex mismatch, jail not enabled, or over-aggressive ban settings), adjust one parameter, and re-run verification.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Record lockout risk and corrective action."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Mitigation complete; verify again.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Your node now blocks repeated SSH attempts automatically.",
+            "text": "Great! Your node now blocks repeated SSH attempts with verification evidence and a tested recovery plan.",
             "options": [
                 {
                     "type": "finish",
@@ -53,9 +118,15 @@
     ],
     "requiresQuests": ["devops/ssh-hardening"],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 92,
+        "emoji": "🛠️",
+        "history": [
+            {
+                "task": "codex-hardening-2026-02-24",
+                "date": "2026-02-24",
+                "score": 75
+            }
+        ]
     }
 }
