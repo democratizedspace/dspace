@@ -151,8 +151,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Unsafe tonight—log a defer note and close safely."
+                    "goto": "choose-route",
+                    "text": "Unsafe tonight—defer and retry when visibility improves."
                 }
             ]
         },

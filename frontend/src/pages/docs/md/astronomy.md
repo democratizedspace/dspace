@@ -108,9 +108,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Dialogue `requiresItems` gates:
     - `plan` → "Details logged. Pick an observation mode." — ISS pass window ×1
     - `setup` → "Station is ready for the pass." — ISS spotting station ×1
-    - `observe-quick` → "Quick log complete with direction and duration." — ISS pass log ×1
+    - `observe-quick` → "Quick note complete with direction and duration." — mission logbook ×1
     - `observe` → "Entry complete with time and direction." — ISS pass log ×1
-    - `interpret` → "Log has all three fields and conditions notes." — ISS pass log ×1
+    - `interpret` → "Log has all fields with condition notes." — ISS pass log ×1
+    - `interpret-quick` → "Quick note has all fields with conditions logged." — ISS pass window ×1, mission logbook ×1
     - `follow-up-window` → "Follow-up scheduled and safety note recorded." — mission logbook ×1
 - Troubleshooting and safety flow:
     - `choose-observation-mode` adds a non-linear branch between full station setup and a naked-eye fallback lane.
@@ -134,6 +135,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: ISS spotting station ×1, ISS pass window ×1, mission logbook ×1
         - Consumes: none
         - Creates: ISS pass log ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 5) Photograph the ISS (`astronomy/iss-photo`)
 
@@ -193,7 +198,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Troubleshooting/safety branches:
     - `choose-route` creates main and alternate mapping paths before charting.
     - `plan-route`, `sweep-route`, and `chart` all branch to `recovery` for haze/glare disorientation.
-    - `recovery` loops back to route selection after a safety reset or exits with a deferred note.
+    - `recovery` loops back to route selection after a safety reset and prevents completion bypasses.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
