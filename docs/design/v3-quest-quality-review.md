@@ -194,10 +194,10 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 - `3dprinting/cable-clip`
   - [ ] Observed issue: `3dprinting/cable-clip` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3676)
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0000)
 - `3dprinting/calibration-cube`
   - [ ] Observed issue: `3dprinting/calibration-cube` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `3dprinting/filament-change`
   - [x] Observed issue (addressed): `3dprinting/filament-change` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3590. (PR #3590)
@@ -338,17 +338,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3710)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3710)
 - `astronomy/constellations`
-  - [ ] Observed issue: `astronomy/constellations` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `astronomy/constellations` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0000)
 - `astronomy/iss-flyover`
   - [ ] Observed issue: `astronomy/iss-flyover` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
   - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
   - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
 - `astronomy/iss-photo`
-  - [ ] Observed issue: `astronomy/iss-photo` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
+  - [x] Observed issue (addressed): `astronomy/iss-photo` previously centered on a measurement/check action with thin acceptance thresholds and out-of-range handling; this was hardened in this pass. (PR #0000)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3660)
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0000)
 - `astronomy/jupiter-moons`
   - [ ] Observed issue: `astronomy/jupiter-moons` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -374,9 +374,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #3691)
   - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #3691)
 - `astronomy/orion-nebula`
-  - [ ] Observed issue: `astronomy/orion-nebula` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
-  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
-  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
+  - [x] Observed issue (addressed): `astronomy/orion-nebula` was observation-heavy with thin fallback handling for seeing/weather constraints; this was hardened in this pass. (PR #0000)
+  - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #0000)
+  - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #0000)
 - `astronomy/planetary-alignment`
   - [ ] Observed issue: `astronomy/planetary-alignment` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -928,13 +928,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
 8. **Checklist box updates (quote each modified checklist line verbatim with final checkbox state + appended PR tags)**
    - ``- [x] Observed issue: `hydroponics/ph-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3626)``
    - ``- [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3626)``
-   - ``- [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3626)``
+   - `- [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3626)`
    - ``- [x] Observed issue: `hydroponics/pump-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3626)``
-   - ``- [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3626)``
-   - ``- [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3626)``
+   - `- [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3626)`
+   - `- [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3626)`
    - ``- [x] Observed issue: `hydroponics/root-rinse` describes a cleaning cycle without a measurable before/after success definition. (PR #3626)``
-   - ``- [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)``
-   - ``- [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)``
+   - `- [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)`
+   - `- [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)`
 
 ### programming (18 quests)
 

@@ -1,19 +1,51 @@
 {
     "id": "astronomy/orion-nebula",
     "title": "Observe the Orion Nebula",
-    "description": "Use a planisphere, red flashlight and basic telescope to find the Orion Nebula.",
+    "description": "Use weather-aware observation planning to find M42, log evidence, and recover safely when visibility drops.",
     "image": "/assets/quests/orion_nebula_backyard_observation.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. With Orion high in the sky, let's hunt for the nebula in his sword.",
+            "text": "Nova here. With Orion high in the sky, let's hunt for the nebula in his sword. Want a fast window check or a cautious setup-first run?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-approach",
+                    "text": "Ready to plan the session."
+                }
+            ]
+        },
+        {
+            "id": "choose-approach",
+            "text": "Pick your approach: start with a weather/light check first, or go direct to charting if the sky is already stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "weather-check",
+                    "text": "Do weather and light check first (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "search",
+                    "text": "Sky looks good\u2014go direct to charting (alternate)."
+                }
+            ]
+        },
+        {
+            "id": "weather-check",
+            "text": "Check cloud cover and local glare. If either is unstable, defer movement until footing and visibility are safe.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "search",
-                    "text": "Ready to scan."
+                    "text": "Visibility is stable enough to proceed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "Clouds or glare are too high\u2014use fallback plan."
                 }
             ]
         },
@@ -28,7 +60,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "requiresItems": [
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
@@ -43,13 +75,65 @@
                             "count": 1
                         }
                     ],
-                    "text": "The nebula glows!"
+                    "text": "Nebula identified\u2014ready to record and interpret."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback",
+                    "text": "I lost the target in haze or skyglow."
+                }
+            ]
+        },
+        {
+            "id": "fallback",
+            "text": "Fallback branch: switch to a brighter reference star, wait for a clearer window, and log why the first session failed before retrying.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Failure note and follow-up window logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-check",
+                    "text": "Follow-up window open\u2014re-check conditions."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Session ended safely; follow-up scheduled."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: note core brightness, surrounding haze, and timestamp so another observer can reproduce your view.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Observation notes logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Observation artifact is complete and reproducible.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Record the view, cap the scope and keep the chart for your next night out.",
+            "text": "Nice work! Record the view, cap the scope, and keep the chart for your next night out.",
             "options": [
                 {
                     "type": "finish",

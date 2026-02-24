@@ -1,7 +1,7 @@
 {
     "id": "astronomy/constellations",
     "title": "Map the Constellations",
-    "description": "Identify key star patterns to aid celestial navigation.",
+    "description": "Identify seasonal constellations through either a star-hop or compass route, then log verified pattern evidence.",
     "image": "/assets/quests/constellation_mapping_logbook.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
@@ -28,8 +28,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "chart",
-                    "text": "Plan is ready\u2014let's star hop.",
+                    "goto": "choose-route",
+                    "text": "Plan is ready\u2014show me route options.",
                     "requiresItems": [
                         {
                             "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
@@ -40,8 +40,24 @@
             ]
         },
         {
-            "id": "chart",
-            "text": "Find Orion, Ursa Major, and Cassiopeia, then sketch their bright stars and orientation without stepping into hazards.",
+            "id": "choose-route",
+            "text": "Choose one route: the classic star-hop chain or a compass-bearing scan from Polaris.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart-starhop",
+                    "text": "Use star-hop chain (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "chart-compass",
+                    "text": "Use compass bearings from Polaris (alternate path)."
+                }
+            ]
+        },
+        {
+            "id": "chart-starhop",
+            "text": "Star-hop from bright guide stars to Orion, Ursa Major, and Cassiopeia, then sketch orientation without stepping into hazards.",
             "options": [
                 {
                     "type": "process",
@@ -50,9 +66,83 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "I can spot them easily now!",
+                    "goto": "log-evidence",
+                    "text": "All three patterns confirmed via star-hop.",
                     "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Clouds or glare broke my star-hop chain."
+                }
+            ]
+        },
+        {
+            "id": "chart-compass",
+            "text": "Start from Polaris, sweep fixed bearings, and verify each target pattern before sketching its orientation.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Compass sweep complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "All three patterns confirmed via compass route.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Bearing checks drifted\u2014need a reset."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Troubleshooting: pause movement, recheck footing and red-light discipline, then restart from your route selector.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Safety reset complete\u2014retry a route."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Conditions unsafe tonight\u2014close with a safety note."
+                }
+            ]
+        },
+        {
+            "id": "log-evidence",
+            "text": "Before closure, write a mission log entry with timestamp, sky condition, and orientation notes for all three constellations.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Mission log drafted with orientation notes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Evidence logged and reproducible.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
                         {
                             "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
                             "count": 1
@@ -63,7 +153,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! These patterns guide spacecraft spotting and future sessions. Keep the sketches handy.",
+            "text": "Excellent! These patterns guide spacecraft spotting and future sessions. Your logged notes make this repeatable.",
             "options": [
                 {
                     "type": "finish",

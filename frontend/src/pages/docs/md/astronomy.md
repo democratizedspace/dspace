@@ -141,9 +141,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Dialogue `requiresItems` gates:
     - `plan` → "Pass window confirmed, gear is staged." — smartphone ×1, camera tripod ×1, ISS pass window ×1
     - `capture` → "Photo saved and metadata logged." — mission logbook ×1, ISS pass window ×1, mission log entry ×1, feather quill ×1
-    - `interpret` → "Pass: continuous streak and timing error <15s." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Pass: continuous streak + timing error <15s + heading drift <10°." — mission logbook ×1, mission log entry ×1, feather quill ×1
 - Troubleshooting/safety branches:
-    - `interpret` fail path forces `retest` before completion.
+    - `interpret` fail path forces a corrective `retest` loop before completion.
+    - `retest` re-runs `check-iss-pass` to confirm an updated pass vector before retrying capture.
     - `recovery` allows weather/footing aborts and safe rescheduling.
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -183,8 +184,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/jupiter-moons`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Plan is ready—let's star hop." — seasonal star hop plan ×1
-    - `chart` → "I can spot them easily now!" — constellation sketch set ×1
+    - `plan` → "Plan is ready—show me route options." — seasonal star hop plan ×1
+    - `chart-starhop` → "All three patterns confirmed via star-hop." — constellation sketch set ×1
+    - `chart-compass` → "All three patterns confirmed via compass route." — constellation sketch set ×1
+    - `log-evidence` → "Evidence logged and reproducible." — mission logbook ×1, constellation sketch set ×1
+- Troubleshooting/safety branches:
+    - `choose-route` provides main (star-hop) and alternate (compass) routes.
+    - `recovery` enforces a safety reset and supports safe abort when conditions are unsafe.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -391,7 +397,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/andromeda`
 - Dialogue `requiresItems` gates:
-    - `search` → "The nebula glows!" — planisphere star chart ×1, red flashlight ×1, basic telescope ×1
+    - `search` → "Nebula identified—ready to record and interpret." — planisphere star chart ×1, red flashlight ×1, basic telescope ×1
+    - `interpret` → "Observation artifact is complete and reproducible." — mission logbook ×1, red flashlight ×1
+- Troubleshooting/safety branches:
+    - `choose-approach` supports direct charting or a weather-first route.
+    - `fallback` logs failed-session conditions, schedules follow-up windows, and loops to `weather-check` before retry.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

@@ -93,7 +93,7 @@
         },
         {
             "id": "interpret",
-            "text": "Quality gate: accept only if streak is continuous and timing error is under 15 seconds. If out of range, retune and retest before completion.",
+            "text": "Quality gate: accept only if streak is continuous, start-time error is under 15 seconds, and heading drift is under 10\u00b0. If out of range, retune and retest before completion.",
             "options": [
                 {
                     "type": "goto",
@@ -117,7 +117,7 @@
                 {
                     "type": "goto",
                     "goto": "retest",
-                    "text": "Fail: timing or framing out of range\u2014run corrective loop."
+                    "text": "Fail: timing/drift out of bounds\u2014run corrective loop and retest."
                 }
             ]
         },
@@ -125,6 +125,11 @@
             "id": "retest",
             "text": "Corrective branch: stabilize tripod, lower vibration, and re-check pass direction before trying again.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "Updated pass vector confirmed before retest."
+                },
                 {
                     "type": "goto",
                     "goto": "capture",
@@ -139,7 +144,7 @@
         },
         {
             "id": "recovery",
-            "text": "Safety first: if clouds or footing risk increases, stop and schedule the next pass. Resume only after conditions are safe.",
+            "text": "Safety first: if clouds or footing risk increases, stop and schedule the next pass. Resume only after conditions are safe and route lighting is checked.",
             "options": [
                 {
                     "type": "goto",
