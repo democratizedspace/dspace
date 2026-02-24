@@ -17,7 +17,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "choose-finish",
+                    "goto": "prep-area",
                     "text": "I know my finish, let's choose it"
                 }
             ]

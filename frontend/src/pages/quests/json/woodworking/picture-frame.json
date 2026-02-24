@@ -84,7 +84,25 @@
                 {
                     "type": "goto",
                     "goto": "verify-square",
-                    "text": "Gaps corrected, verify square"
+                    "text": "Gaps corrected, verify square",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
