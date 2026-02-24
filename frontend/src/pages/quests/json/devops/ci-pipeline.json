@@ -20,28 +20,106 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Automation keeps your code reliable. Let's add a CI workflow.",
+            "text": "Automation only helps when the checks are trustworthy. We'll stage a CI workflow, verify artifact evidence, and rehearse incident recovery before sign-off.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "edit",
-                    "text": "Walk me through it."
+                    "goto": "policy",
+                    "text": "Define CI safety policy first.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "edit",
-            "text": "Create a `.github/workflows/ci.yml` that installs dependencies and runs `npm run test:pr`. Keep tokens secret and grant minimal permissions.",
+            "id": "policy",
+            "text": "Scope workflow permissions to read-only where possible, protect default branches, and never commit secrets. Safety stop: if repository secrets are plaintext in history, rotate keys before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "author",
+                    "text": "Policy documented; author the workflow.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and clean up repo security first."
+                }
+            ]
+        },
+        {
+            "id": "author",
+            "text": "Create `.github/workflows/ci.yml` that installs dependencies and runs `npm run test:ci`, then enforce status checks on pull requests.",
             "options": [
                 {
                     "type": "process",
                     "process": "create-ci-workflow",
-                    "text": "Write the workflow file."
+                    "text": "Write and commit the CI workflow."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Workflow added; collect first run evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Open the workflow run and verify lint, type-check, and test jobs completed. Pass only if required checks are enforced and failure notifications route to the team.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Run failed or branch protections are missing.",
+                    "requiresItems": [
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Workflow added.",
+                    "text": "Checks are enforced and green.",
+                    "requiresItems": [
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Classify the failure: missing dependency cache, flaky test, or permission denial. Apply the smallest fix, re-run CI, and only continue after a clean rerun.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-ci-workflow",
+                    "text": "Patch workflow config and rerun pipeline."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Fix applied; verify the rerun evidence.",
                     "requiresItems": [
                         {
                             "id": "306793ac-e420-4859-9742-9076fff6ab57",
@@ -53,11 +131,17 @@
         },
         {
             "id": "finish",
-            "text": "Great! Every push will now trigger tests automatically.",
+            "text": "Nice work. Your CI now has enforceable evidence gates, a recovery playbook, and security guardrails instead of a one-click checklist.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Nice!"
+                    "text": "Ship with confidence.",
+                    "requiresItems": [
+                        {
+                            "id": "306793ac-e420-4859-9742-9076fff6ab57",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
