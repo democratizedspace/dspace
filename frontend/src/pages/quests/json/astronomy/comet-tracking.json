@@ -176,7 +176,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-quality-parity-2026-02-24",
