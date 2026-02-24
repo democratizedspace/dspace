@@ -348,7 +348,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
 - `astronomy/iss-photo`
   - [ ] Observed issue: `astronomy/iss-photo` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3660)
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0000)
 - `astronomy/jupiter-moons`
   - [ ] Observed issue: `astronomy/jupiter-moons` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -420,7 +420,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature,
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/ph-adjustment`
   - [ ] Observed issue: `chemistry/ph-adjustment` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3660)
 - `chemistry/ph-test`
   - [x] Observed issue: `chemistry/ph-test` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3703)
@@ -428,7 +428,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature,
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3703)
 - `chemistry/precipitation-reaction`
   - [ ] Observed issue: `chemistry/precipitation-reaction` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
   - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/safe-reaction`
   - [ ] Observed issue: `chemistry/safe-reaction` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
@@ -761,17 +761,17 @@ Exemplar anchors (verified checked in docs/qa/v3.md §4.5): hydroponics/nutrient
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3653)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3653)
 - `geothermal/check-loop-temp-delta`
-  - [ ] Observed issue: `geothermal/check-loop-temp-delta` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `geothermal/check-loop-temp-delta` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #0000)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0000)
 - `geothermal/compare-depth-ground-temps`
-  - [ ] Observed issue: `geothermal/compare-depth-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `geothermal/compare-depth-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #0000)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0000)
 - `geothermal/compare-seasonal-ground-temps`
-  - [ ] Observed issue: `geothermal/compare-seasonal-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `geothermal/compare-seasonal-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #0000)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0000)
 - `geothermal/install-backup-thermistor`
   - [x] Observed issue (addressed): `geothermal/install-backup-thermistor` previously read like a one-pass install task, with verify/rollback state changes not clearly represented; this was hardened in PR #3628. (PR #3628)
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3628)
@@ -797,9 +797,9 @@ Exemplar anchors (verified checked in docs/qa/v3.md §4.5): hydroponics/nutrient
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3653)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3653)
 - `geothermal/survey-ground-temperature`
-  - [ ] Observed issue: `geothermal/survey-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `geothermal/survey-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #0000)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #0000)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #0000)
 
 ### hydroponics (21 quests)
 

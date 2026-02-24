@@ -1,31 +1,80 @@
 {
     "id": "geothermal/compare-seasonal-ground-temps",
     "title": "Compare Seasonal Ground Temps",
-    "description": "Use a second thermistor to log ground temperatures in different seasons.",
+    "description": "Log ground temperatures across seasonal snapshots and classify whether swings stay inside planning limits.",
     "image": "/assets/quests/geothermal_compare_seasonal_ground_temps.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You've already logged ground temps. Want to see how they shift over the year?",
+            "text": "You've logged one baseline already. Now we compare seasonal snapshots so capacity planning is grounded in evidence, not assumptions.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "deploy",
-                    "text": "Yes, let's gather more data."
+                    "text": "Let's gather seasonal checkpoints."
                 }
             ]
         },
         {
             "id": "deploy",
-            "text": "Bury a second thermistor and record readings for a few months.",
+            "text": "Reuse the thermistor setup, capture a seasonal checkpoint, and note frost, rainfall, or dry spells for context.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Capture seasonal reading set",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Seasonal checkpoint logged",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the seasonal delta: pass when variance remains within ±4°C of baseline or is fully explained by site notes. Otherwise we need a corrective follow-up sample.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Sensor logging",
-                    "process": "arduino-thermistor-read",
+                    "text": "Variance is within ±4°C or fully explained",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Variance is unexplained or exceeds limits"
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: verify probe calibration, retake at the same depth/time-of-day window, and avoid energized trench tools until utility marks are reconfirmed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Calibration and safety checks done; retake checkpoint",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -37,11 +86,11 @@
         },
         {
             "id": "finish",
-            "text": "Great! Comparing seasons reveals how stable your geothermal source is.",
+            "text": "Great! Seasonal comparison now has thresholds and a repeatable recovery path for anomalies.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to analyze."
+                    "text": "Seasonal profile validated"
                 }
             ]
         }
@@ -56,7 +105,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

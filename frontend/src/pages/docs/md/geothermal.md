@@ -29,14 +29,24 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I've got the tool ready." — aquarium thermometer (0–50°C) ×1
+    - `materials` → "Gear is staged" — aquarium thermometer (0–50°C) ×1, Arduino Uno ×1
+    - `capture` → "Capture baseline sample" — Arduino Uno ×1, aquarium thermometer (0–50°C) ×1
+    - `capture` → "Baseline log captured" — Arduino Uno ×1
+    - `interpret` → "Reading is in range (8°C-18°C) and stable (<2°C drift)" — Arduino Uno ×1
+    - `troubleshoot` → "Corrections done; re-capture baseline" — aquarium thermometer (0–50°C) ×1, Arduino Uno ×1
 - Grants:
-    - `materials` → "Thanks for the thermometer!" — aquarium thermometer (0–50°C) ×1
+    - `materials` → "Issue thermometer probe" — aquarium thermometer (0–50°C) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Solarpunk Award ×1
 - Processes used:
-    - None
+    - [arduino-thermistor-read](/processes/arduino-thermistor-read)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+        - Consumes: none
+        - Creates: none
+- QA notes:
+    - Added a measurement interpretation gate with explicit pass bounds (8°C-18°C and <2°C drift).
+    - Out-of-range or drifting results route through a troubleshooting branch and mandatory re-capture loop.
 
 ## 2) Calibrate Ground Sensor (`geothermal/calibrate-ground-sensor`)
 
@@ -156,6 +166,8 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `annotate` → "Notes are logged" — annotated temperature graph ×1
     - `publish` → "Push a live delta dashboard" — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
     - `publish` → "Dashboard is live" — live temperature dashboard ×1
+    - `evaluate` → "Delta stays in the 3°C-7°C band and no >8°C spikes persist" — live temperature dashboard ×1
+    - `corrective` → "Corrections complete; recapture and re-evaluate" — thermistor logging rig ×1, live temperature JSON endpoint ×1
     - `finish` → "Delta is monitored" — live temperature dashboard ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -179,6 +191,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: live temperature dashboard ×1
+- QA notes:
+    - Added an interpretation node with explicit pass bounds (steady-state delta 3°C-7°C, no persistent >8°C spikes).
+    - Out-of-band runs now branch into a corrective loop (bubble purge / sensor-contact check / pump-step normalization) before re-verification.
 
 ## 7) Install Backup Thermistor (`geothermal/install-backup-thermistor`)
 
@@ -248,7 +263,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/log-ground-temperature`
 - Dialogue `requiresItems` gates:
-    - `deploy` → "Logs collected" — Arduino Uno ×2
+    - `deploy` → "Capture paired depth readings" — Arduino Uno ×2
+    - `deploy` → "Paired logs are captured" — Arduino Uno ×2
+    - `interpret` → "Gradient is plausible and within threshold" — Arduino Uno ×2
+    - `troubleshoot` → "Corrections applied; rerun paired capture" — Arduino Uno ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -259,6 +277,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
         - Consumes: none
         - Creates: none
+- QA notes:
+    - Added interpretation criteria requiring a stable depth gradient (deep probe at least 1°C steadier, spread under 6°C unless explained).
+    - Added a troubleshooting branch for depth-marker correction, probe reseat, and mandatory retest loop.
 
 ## 10) Compare Seasonal Ground Temps (`geothermal/compare-seasonal-ground-temps`)
 
@@ -266,7 +287,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/log-ground-temperature`
 - Dialogue `requiresItems` gates:
-    - `deploy` → "Sensor logging" — Arduino Uno ×1
+    - `deploy` → "Capture seasonal reading set" — Arduino Uno ×1
+    - `deploy` → "Seasonal checkpoint logged" — Arduino Uno ×1
+    - `interpret` → "Variance is within ±4°C or fully explained" — Arduino Uno ×1
+    - `recover` → "Calibration and safety checks done; retake checkpoint" — Arduino Uno ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -277,6 +301,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
         - Consumes: none
         - Creates: none
+- QA notes:
+    - Added an interpretation gate requiring seasonal variance within ±4°C of baseline unless notes fully explain the swing.
+    - Added a safety-aware recovery branch (recalibrate + same-window retake) before completion can unlock.
 
 ## 11) Log Heat Pump Warmup (`geothermal/log-heat-pump-warmup`)
 

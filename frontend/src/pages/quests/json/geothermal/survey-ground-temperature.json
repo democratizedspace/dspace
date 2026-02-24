@@ -1,25 +1,25 @@
 {
     "id": "geothermal/survey-ground-temperature",
     "title": "Survey for Geothermal Heat",
-    "description": "Measure the ground temperature to see if a heat pump will work.",
+    "description": "Measure baseline ground temperature and verify the site stays in-range before loop planning.",
     "image": "/assets/quests/geothermal_ground_temperature_probe.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey explorer! Want to tap the earth's warmth for energy? Let's start by surveying the site.",
+            "text": "Hey explorer! Before we size a loop, we need a defensible baseline. We'll measure, log, and classify the site instead of trusting one lucky reading.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "materials",
-                    "text": "Absolutely, show me how."
+                    "text": "Let's run the baseline survey."
                 }
             ]
         },
         {
             "id": "materials",
-            "text": "You'll need a thermometer to check the ground temperature about a meter down.",
+            "text": "Stage a probe, logging rig, and notes sheet. We need one baseline capture plus a confirmation reading after backfilling.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,39 +29,113 @@
                             "count": 1
                         }
                     ],
-                    "text": "Thanks for the thermometer!"
+                    "text": "Issue thermometer probe"
                 },
                 {
                     "type": "goto",
+                    "goto": "capture",
+                    "text": "Gear is staged",
                     "requiresItems": [
                         {
                             "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                             "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
                         }
-                    ],
-                    "goto": "measure",
-                    "text": "I've got the tool ready."
+                    ]
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Dig a small hole and measure the temperature. Consistent warmth means good geothermal potential.",
+            "id": "capture",
+            "text": "Log a 10-minute baseline at 1 m depth. Record soil condition and weather so we can explain anomalies.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Capture baseline sample",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Baseline log captured",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret against a practical band: 8°C to 18°C with drift under 2°C over the sample window. If out-of-band, correct placement and re-test.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "The ground is a steady 12\u00b0C."
+                    "goto": "finish",
+                    "text": "Reading is in range (8°C-18°C) and stable (<2°C drift)",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Reading is out of range or drifting"
                 }
             ]
         },
         {
-            "id": "fin",
-            "text": "Great! Your site is ready for a ground loop. We'll use this heat in the next quest.",
+            "id": "troubleshoot",
+            "text": "Troubleshoot safely: reseat the probe, repack soil for better contact, and keep clear of buried services before another capture.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Corrections done; re-capture baseline",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work. You now have a measured, explainable baseline to justify geothermal loop planning.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to build the system."
+                    "text": "Baseline survey validated",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -76,7 +150,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

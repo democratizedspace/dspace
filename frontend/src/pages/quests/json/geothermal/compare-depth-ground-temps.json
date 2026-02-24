@@ -1,31 +1,80 @@
 {
     "id": "geothermal/compare-depth-ground-temps",
     "title": "Compare Depth Ground Temps",
-    "description": "Bury two thermistors at different depths and log their readings for a day.",
+    "description": "Bury two thermistors at different depths, log both, and verify the depth gradient is stable.",
     "image": "/assets/quests/geothermal_compare_depth_ground_temps.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Curious how ground temperature changes with depth? Let's find out.",
+            "text": "Curious how ground temperature changes with depth? We'll capture shallow and deep traces, then confirm the gradient is believable before we call it done.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "deploy",
-                    "text": "How do we measure that?"
+                    "text": "Let's map the depth gradient."
                 }
             ]
         },
         {
             "id": "deploy",
-            "text": "Wire two sensors using arduino-thermistor-read. Bury one shallow, one deep, and log both.",
+            "text": "Wire two sensors with arduino-thermistor-read. Place one shallow and one deep, keep spacing fixed, and start a synchronized run.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Capture paired depth readings",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Paired logs are captured",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret with thresholds: deep probe should be at least 1°C steadier than shallow, and absolute spread should stay below 6°C unless weather notes justify it.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Logs collected",
-                    "process": "arduino-thermistor-read",
+                    "text": "Gradient is plausible and within threshold",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Gradient is noisy or out-of-range"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshoot before retry: confirm depth markers, reseat loose probe contacts, and wait for thermal settle time so transient spikes do not fake the result.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Corrections applied; rerun paired capture",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -37,11 +86,11 @@
         },
         {
             "id": "finish",
-            "text": "Awesome! Compare the logs to see how quickly the soil cools with depth.",
+            "text": "Awesome. You now have a verified depth profile to guide loop depth decisions.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Analyze data"
+                    "text": "Analyze depth profile"
                 }
             ]
         }
@@ -56,7 +105,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
