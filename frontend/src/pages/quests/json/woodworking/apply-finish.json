@@ -202,9 +202,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "woodworking/finish-sanding"
-    ],
+    "requiresQuests": ["woodworking/finish-sanding"],
     "hardening": {
         "passes": 0,
         "score": 95,
