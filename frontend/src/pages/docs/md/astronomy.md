@@ -233,7 +233,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/constellations`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Count noted in my mission logbook." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+    - `local-site` → "Count logged from current location." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+    - `relocate-site` → "Backup count logged for comparison." — planisphere star chart ×1, mission logbook ×1
+    - `interpret` → "Band recorded with site notes and timestamp." — mission logbook ×1, mission log entry ×1, feather quill ×1
+- Troubleshooting/safety branches:
+    - `choose-site` provides a main path and alternate darker-site path before interpretation.
+    - `recovery` enforces glare/haze/footing safety pauses and explicit abort-or-retry handling.
+    - Safety abort completion requires a mission-log entry describing why the run was skipped.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -244,6 +250,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
         - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 10) Watch the Aurora (`astronomy/aurora-watch`)
 
@@ -308,7 +318,12 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/jupiter-moons`
 - Dialogue `requiresItems` gates:
-    - `observe` → "Observation complete." — basic telescope ×1, mission logbook ×1, red flashlight ×1, planisphere star chart ×1
+    - `session-plan` → "Sky is clear enough for live observing." — mission logbook ×1, mission log entry ×1
+    - `observe-live` → "Observation run complete." — basic telescope ×1, mission logbook ×1, red flashlight ×1, planisphere star chart ×1
+    - `interpret` → "Observation artifact and interpretation complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
+- Troubleshooting/safety branches:
+    - `weather-fallback` handles cloud/haze failures and loops through a re-plan cycle before retry.
+    - Safe postponement now requires a logged follow-up note before completion to preserve evidence continuity.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -318,6 +333,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - [observe-meteor-shower](/processes/observe-meteor-shower)
         - Requires: basic telescope ×1
         - Consumes: none
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 13) Track a Visiting Comet (`astronomy/comet-tracking`)
 
@@ -325,16 +344,27 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/meteor-shower`
 - Dialogue `requiresItems` gates:
-    - `observe` → "Path recorded" — basic telescope ×1
+    - `chart-route` → "Comet path is clear; ready to log." — basic telescope ×1, planisphere star chart ×1
+    - `quick-route` → "I can place the comet relative to fixed stars." — basic telescope ×1, camera tripod ×1
+    - `log-track` → "Track logged with timestamp and star references." — mission logbook ×1, mission log entry ×1, feather quill ×1
+- Troubleshooting/safety branches:
+    - `choose-route` introduces main and alternate setup paths before log evidence.
+    - `recovery` enforces dark-path footing and glare safety checks with retry or safe-reschedule exits.
+    - Safe-reschedule completion requires existing mission-log evidence, preventing bypass of the comet track record gate.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [observe-meteor-shower](/processes/observe-meteor-shower)
-        - Requires: basic telescope ×1
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 14) Locate the North Star (`astronomy/north-star`)
 

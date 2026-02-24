@@ -1,35 +1,51 @@
 {
     "id": "astronomy/light-pollution",
     "title": "Measure Light Pollution",
-    "description": "Count Orion's stars with a planisphere and red flashlight. Log the count.",
+    "description": "Run an Orion star-count baseline, interpret visibility bands, and recover with safer fallback locations.",
     "image": "/assets/quests/orion_light_pollution_count.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Find a dark spot away from traffic. Let eyes adjust. Buddy or phone ready?",
+            "text": "We'll compare Orion visibility to a simple baseline. Start at your current site or relocate first?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "measure",
-                    "text": "Let's do it."
+                    "goto": "choose-site",
+                    "text": "Let's choose a site plan."
                 }
             ]
         },
         {
-            "id": "measure",
-            "text": "Use a planisphere to find Orion. Count and log stars. Keep red light low.",
+            "id": "choose-site",
+            "text": "Pick your route. Both need a mission-log record before completion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "local-site",
+                    "text": "Use current location (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "relocate-site",
+                    "text": "Relocate to a darker backup site (alternate path)."
+                }
+            ]
+        },
+        {
+            "id": "local-site",
+            "text": "Let your eyes adapt for 15 minutes and use the planisphere to frame Orion before counting stars.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Referencing the star chart."
+                    "text": "Orion framed with chart support."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Count noted in my mission logbook.",
+                    "goto": "interpret",
+                    "text": "Count logged from current location.",
                     "requiresItems": [
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
@@ -44,16 +60,117 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Vehicle glare keeps resetting night vision."
+                }
+            ]
+        },
+        {
+            "id": "relocate-site",
+            "text": "Move to your backup site, confirm clear footing, then repeat the Orion count for a cleaner baseline.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Backup site count complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Backup count logged for comparison.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Haze or unsafe footing at the backup site."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the log: 7+ stars means low skyglow, 4-6 moderate, 3 or fewer high pollution. Record which band you observed.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Pollution band documented in mission log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Band recorded with site notes and timestamp.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "If glare, haze, or path hazards rise, pause immediately. Re-check your path lighting and retry only when the site is safe.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Safety abort reason and site conditions logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "choose-site",
+                    "text": "Safety reset complete; choose a route again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Abort for safety and log why the session was skipped.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Logbook counts track skyglow trends. Pack up and leave no trace.",
+            "text": "Great work. You captured a reproducible star-count baseline and handled visibility failures safely.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep tracking."
+                    "text": "I'll track this monthly."
                 }
             ]
         }
@@ -66,8 +183,8 @@
     ],
     "requiresQuests": ["astronomy/constellations"],
     "hardening": {
-        "passes": 3,
-        "score": 90,
+        "passes": 4,
+        "score": 96,
         "emoji": "\ud83d\udcaf",
         "history": [
             {
@@ -84,6 +201,11 @@
                 "task": "codex-light-pollution-harden-2025-08-06",
                 "date": "2025-08-06",
                 "score": 90
+            },
+            {
+                "task": "codex-quest-quality-parity-2026-02-24",
+                "date": "2026-02-24",
+                "score": 96
             }
         ]
     }
