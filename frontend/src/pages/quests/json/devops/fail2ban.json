@@ -8,23 +8,38 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Now that your services are online, attackers may try brute-force SSH logins.",
+            "text": "Now that SSH is hardened, we'll add Fail2ban with explicit evidence: configure jail policy, validate ban telemetry, and rehearse safe recovery.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "install",
-                    "text": "How do I stop them?"
+                    "goto": "stage",
+                    "text": "Stage a fail2ban policy.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "install",
-            "text": "Install Fail2ban and configure a jail for the SSH service.",
+            "id": "stage",
+            "text": "Set jail thresholds (`maxretry`, `findtime`, `bantime`) and maintain one out-of-band admin path. Safety stop: if this node is your only remote entrypoint, do not enable bans until console fallback is confirmed.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "configure-ufw-firewall",
+                    "text": "Apply baseline firewall + fail2ban host policy."
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Bans configured",
+                    "goto": "verify",
+                    "text": "Policy staged; capture ban evidence.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
@@ -35,12 +50,73 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Trigger controlled failed logins from a test source and export logs that show ban action plus unban timing. Pass only when legitimate admin access still works.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Export fail2ban verification report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Ban evidence missing or admin access degraded.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Ban telemetry and admin access both pass.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Classify the failure (clock skew, over-aggressive ban window, missing log backend), capture incident notes, relax thresholds safely, then re-run verification.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Record mitigation and rollback details."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Mitigation applied; verify again.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Your node now blocks repeated SSH attempts automatically.",
+            "text": "Great. SSH brute-force attempts are now monitored with measurable ban evidence, safe fallback access, and a tested recovery loop.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Stay secure"
+                    "text": "Keep fail2ban metrics in weekly ops review.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }

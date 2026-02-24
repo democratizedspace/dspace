@@ -63,8 +63,14 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/prepare-first-node`
 - Dialogue `requiresItems` gates:
-    - `start` → "Container running." — Pi cluster node ×1
-    - `tunnel` → "Tunnel online." — PoE+ switch ×1, Ethernet cable ×1
+    - `start` → "Run preflight before launching." — Pi cluster node ×1, Laptop Computer ×1
+    - `preflight` → "Preflight complete; launch containers." — Pi cluster node ×1
+    - `launch` → "Services are healthy locally; configure tunnel." — Pi cluster node ×1
+    - `tunnel` → "Tunnel fails health check or leaks origin." — PoE+ switch ×1, Ethernet cable ×1
+    - `tunnel` → "Tunnel is healthy and origin access is restricted." — PoE+ switch ×1,
+      Ethernet cable ×1
+    - `recover` → "Remediation complete; rerun tunnel validation." — Pi cluster node ×1
+    - `finish` → "Document this deployment runbook." — PoE+ switch ×1, Ethernet cable ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -86,7 +92,13 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/docker-compose`
 - Dialogue `requiresItems` gates:
-    - `edit` → "Workflow added." — CI workflow file ×1
+    - `start` → "Define CI safety policy first." — Laptop Computer ×1
+    - `policy` → "Policy documented; author the workflow." — Laptop Computer ×1
+    - `author` → "Workflow added; collect first run evidence." — CI workflow file ×1
+    - `verify` → "Run failed or branch protections are missing." — CI workflow file ×1
+    - `verify` → "Checks are enforced and green." — CI workflow file ×1
+    - `recover` → "Fix applied; verify the rerun evidence." — CI workflow file ×1
+    - `finish` → "Ship with confidence." — CI workflow file ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -372,14 +384,30 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/ssh-hardening`
 - Dialogue `requiresItems` gates:
-    - `install` → "Bans configured" — Pi cluster node ×1
+    - `start` → "Stage a fail2ban policy." — Pi cluster node ×1, Laptop Computer ×1
+    - `stage` → "Policy staged; capture ban evidence." — Pi cluster node ×1
+    - `verify` → "Ban evidence missing or admin access degraded." — journalctl report ×1
+    - `verify` → "Ban telemetry and admin access both pass." — journalctl report ×1
+    - `recover` → "Mitigation applied; verify again." — incident log extract ×1
+    - `finish` → "Keep fail2ban metrics in weekly ops review." — journalctl report ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [configure-ufw-firewall](/processes/configure-ufw-firewall)
+        - Requires: Laptop Computer ×1, Pi cluster node ×1
+        - Consumes: none
+        - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## QA flow notes
 
