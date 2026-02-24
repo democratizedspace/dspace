@@ -29,14 +29,19 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
-    - `materials` → "I've got the tool ready." — aquarium thermometer (0–50°C) ×1
+    - `safety` → "Safety check complete and thermometer staged." — aquarium thermometer (0–50°C) ×1
+    - `measure` → "Readings recorded and stable near 10-14°C." — aquarium thermometer (0–50°C) ×1
+    - `interpret` → "Baseline accepted and logged." — aquarium thermometer (0–50°C) ×1
 - Grants:
-    - `materials` → "Thanks for the thermometer!" — aquarium thermometer (0–50°C) ×1
+    - `safety` → "Issue me the ground thermometer." — aquarium thermometer (0–50°C) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Solarpunk Award ×1
 - Processes used:
     - None
+- QA notes:
+    - Added explicit safety-first staging and a three-point measurement interpretation gate before finish.
+    - Added a troubleshooting branch for >2°C spot drift that requires reseat + timed retest before completion.
 
 ## 2) Calibrate Ground Sensor (`geothermal/calibrate-ground-sensor`)
 
@@ -104,9 +109,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `start` → "Rig is already staged on the outlet" — thermistor logging rig ×1, temperature log CSV ×1
     - `reposition` → "Log the outlet run" — thermistor logging rig ×1, Laptop Computer ×1
     - `reposition` → "Outlet trace captured" — temperature log CSV ×2
+    - `interpret` → "Trace is in range and stable" — temperature log CSV ×2
     - `stream` → "Publish the outlet endpoint" — thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
     - `stream` → "Endpoint is live" — live temperature JSON endpoint ×1
-    - `finish` → "Outlet stream pinned" — live temperature JSON endpoint ×1
+    - `finish` → "Outlet stream validated" — live temperature JSON endpoint ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -121,6 +127,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
         - Consumes: none
         - Creates: live temperature JSON endpoint ×1
+- QA notes:
+    - Added an interpretation node that enforces 28-45°C and ±2°C drift acceptance thresholds before publish/finish.
+    - Added a corrective reseat/dry/bleed loop for unstable traces with mandatory re-log before re-evaluation.
 
 ## 5) Check Loop Pressure (`geothermal/check-loop-pressure`)
 
@@ -248,17 +257,35 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/log-ground-temperature`
 - Dialogue `requiresItems` gates:
-    - `deploy` → "Logs collected" — Arduino Uno ×2
+    - `start` → "Run setup checklist." — thermistor logging rig ×1
+    - `stage` → "Capture a paired depth log" — thermistor logging rig ×1, Laptop Computer ×1
+    - `stage` → "Paired log exported" — temperature log CSV ×1
+    - `plot` → "Plot the depth comparison" — temperature log CSV ×1, Laptop Computer ×1
+    - `plot` → "Chart ready for interpretation" — temperature line chart ×1
+    - `interpret` → "Annotate accepted spread and archive evidence" — temperature line chart ×1, Laptop Computer ×1
+    - `interpret` → "Spread confirmed and annotated" — annotated temperature graph ×1
+    - `finish` → "Depth survey validated" — annotated temperature graph ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [arduino-thermistor-read](/processes/arduino-thermistor-read)
-        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
         - Consumes: none
-        - Creates: none
+        - Creates: temperature log CSV ×1
+    - [plot-temperature-data](/processes/plot-temperature-data)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature line chart ×1
+    - [refine-temperature-graph](/processes/refine-temperature-graph)
+        - Requires: temperature line chart ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: annotated temperature graph ×1
+- QA notes:
+    - Added explicit pass criteria (deep trace within ±1.5°C while shallow trace swings more) before finish unlock.
+    - Added corrective branch for crossed/noisy curves requiring probe-depth reseat and full re-log loop.
 
 ## 10) Compare Seasonal Ground Temps (`geothermal/compare-seasonal-ground-temps`)
 

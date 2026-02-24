@@ -1,19 +1,19 @@
 {
     "id": "geothermal/check-loop-outlet-temp",
     "title": "Check Loop Outlet Temperature",
-    "description": "Log the water temperature leaving the heat pump with an Arduino thermistor.",
+    "description": "Log the water temperature leaving the heat pump, apply pass/fail bounds, and recover from unstable traces.",
     "image": "/assets/quests/geothermal_check_loop_outlet_temp_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Outlet lines run warmer and wetter. Kill power, put on gloves, and have towels ready. Ready to move the probe to the outlet side?",
+            "text": "Outlet lines run warmer and wetter than inlet. Kill power before touching fittings, glove up, and stage towels so we can log safely.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "reposition",
-                    "text": "Pump is safe to touch."
+                    "text": "Safety checks complete, begin outlet setup."
                 },
                 {
                     "type": "goto",
@@ -34,7 +34,7 @@
         },
         {
             "id": "reposition",
-            "text": "Strap the thermistor at the outlet barb, insulate the leads from condensation, and purge a minute to clear bubbles before logging.",
+            "text": "Strap the thermistor at the outlet barb, insulate leads from condensation, and purge one minute to clear bubbles before logging.",
             "options": [
                 {
                     "type": "process",
@@ -53,7 +53,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "stream",
+                    "goto": "interpret",
                     "text": "Outlet trace captured",
                     "requiresItems": [
                         {
@@ -65,8 +65,41 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpret before publish: pass when outlet remains 28-45°C and drift is under ±2°C during a steady pump cycle. Any sharp sawtooth usually means bad contact or trapped air.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stream",
+                    "text": "Trace is in range and stable",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Out-of-range or unstable, run corrective loop"
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Recovery path: reseat the probe, dry connectors, and bleed trapped air from the outlet section. Then repeat a full outlet logging pass before re-evaluating.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "reposition",
+                    "text": "Corrective steps done, re-log outlet trace."
+                }
+            ]
+        },
+        {
             "id": "stream",
-            "text": "Let's keep that outlet temp live. Drop the logger on a Pi, export JSON, and sanity check against the inlet graph before you leave.",
+            "text": "Now deploy the outlet stream. Export JSON and compare against inlet history so maintenance alerts can catch fouling early.",
             "options": [
                 {
                     "type": "process",
@@ -102,11 +135,11 @@
         },
         {
             "id": "finish",
-            "text": "Great! With a live outlet feed you can watch flow, compare to inlet plots, and spot fouling before it tanks efficiency.",
+            "text": "Great! With a validated outlet trace plus live endpoint, you can spot drift early and plan maintenance before efficiency tanks.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Outlet stream pinned",
+                    "text": "Outlet stream validated",
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
@@ -127,7 +160,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -1,25 +1,30 @@
 {
     "id": "geothermal/survey-ground-temperature",
     "title": "Survey for Geothermal Heat",
-    "description": "Measure the ground temperature to see if a heat pump will work.",
+    "description": "Measure baseline ground temperature and verify the site is stable enough for a loop design.",
     "image": "/assets/quests/geothermal_ground_temperature_probe.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey explorer! Want to tap the earth's warmth for energy? Let's start by surveying the site.",
+            "text": "Hey explorer—before we plan trenches, we need a clean baseline. We'll stage tools, log readings, and verify stability so we don't size the loop on bad data.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "materials",
-                    "text": "Absolutely, show me how."
+                    "goto": "safety",
+                    "text": "Run the safety brief first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "I already scoped the site, let's confirm safety gates."
                 }
             ]
         },
         {
-            "id": "materials",
-            "text": "You'll need a thermometer to check the ground temperature about a meter down.",
+            "id": "safety",
+            "text": "Keep power disconnected while wiring probes, wear gloves for digging, and avoid buried utility lines. We'll only log once the site check is complete.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,39 +34,67 @@
                             "count": 1
                         }
                     ],
-                    "text": "Thanks for the thermometer!"
+                    "text": "Issue me the ground thermometer."
                 },
                 {
                     "type": "goto",
+                    "goto": "measure",
+                    "text": "Safety check complete and thermometer staged.",
                     "requiresItems": [
                         {
                             "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
                             "count": 1
                         }
-                    ],
-                    "goto": "measure",
-                    "text": "I've got the tool ready."
+                    ]
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Dig a small hole and measure the temperature. Consistent warmth means good geothermal potential.",
+            "text": "Take three readings around 1 m depth at least 2 m apart. Record each value and the timestamp so we can confirm the soil is stable, not just lucky.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "The ground is a steady 12\u00b0C."
+                    "goto": "interpret",
+                    "text": "Readings recorded and stable near 10-14°C.",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Readings drifted more than 2°C between spots."
                 }
             ]
         },
         {
-            "id": "fin",
-            "text": "Great! Your site is ready for a ground loop. We'll use this heat in the next quest.",
+            "id": "troubleshoot",
+            "text": "Big swings usually mean poor probe contact or surface-biased depth. Re-pack the hole wall, wait 5 minutes for thermal settling, then re-measure all three points.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Probe reseated, rerunning the survey."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Great. Stable readings in that band indicate usable geothermal potential for this training setup. Save the baseline so downstream loop quests can compare against it.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Can't wait to build the system."
+                    "text": "Baseline accepted and logged.",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -76,7 +109,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
