@@ -76,7 +76,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `wobble-check` → "No wobble and edges are safe to touch" — tape measure ×1, safety goggles ×1
 - Grants:
     - `gather` → "Gather parts" — Pine board ×2, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
-    - `finish` → "Take the stool" — Step stool ×1
+    - `claim` → "Take the stool" — Step stool ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
@@ -84,7 +84,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - None
 - Troubleshooting/safety branches:
     - `fix-loop` enforces re-square/trim correction and retries before final claim.
-    - Explicit stop condition for degraded tool control routes to a safe pause option.
+    - Explicit stop condition for degraded tool control routes to `safe-pause`, which ends the session without granting the stool.
 
 ## 4) Build a small bookshelf (`woodworking/bookshelf`)
 
@@ -105,7 +105,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - None
 - Troubleshooting/safety branches:
     - `choose-joinery` introduces main/alternate build strategies before square validation.
-    - `troubleshoot` requires a re-mark/re-cut loop and supports a safe stop when conditions are poor.
+    - `troubleshoot` requires a re-mark/re-cut loop and routes unsafe conditions to `safe-pause`, which ends without granting the bookshelf.
 
 ## 5) Build a coffee table (`woodworking/coffee-table`)
 

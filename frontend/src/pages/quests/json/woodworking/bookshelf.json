@@ -134,10 +134,15 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "safe-pause",
                     "text": "Unsafe light or fatigue tonight—pause and finish with a safety note."
                 }
             ]
+        },
+        {
+            "id": "safe-pause",
+            "text": "Good call stopping here. Resume when conditions improve and pass square-check before claiming the bookshelf.",
+            "options": [{ "type": "finish", "text": "Pause for now." }]
         },
         {
             "id": "finish",

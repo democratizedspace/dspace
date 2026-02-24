@@ -101,8 +101,13 @@
             "text": "Recovery branch: re-square legs, trim high spots, and retry the wobble check. Stop immediately if tool control degrades.",
             "options": [
                 { "type": "goto", "goto": "build-path", "text": "Rework done, retry assembly path." },
-                { "type": "goto", "goto": "claim", "text": "Paused safely and logged corrective work." }
+                { "type": "goto", "goto": "safe-pause", "text": "Paused safely and logged corrective work." }
             ]
+        },
+        {
+            "id": "safe-pause",
+            "text": "Good stop. Resume later and pass the wobble check before claiming the stool.",
+            "options": [{ "type": "finish", "text": "Pause for now." }]
         },
         {
             "id": "claim",
