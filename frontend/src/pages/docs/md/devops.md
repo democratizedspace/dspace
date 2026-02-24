@@ -272,6 +272,10 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 12) Run a Private Docker Registry (`devops/private-registry`)
 
@@ -357,6 +361,10 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Laptop Computer ×1
         - Consumes: none
         - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 15) Block SSH Brute Force (`devops/fail2ban`)
 
