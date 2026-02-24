@@ -1,31 +1,131 @@
 {
     "id": "geothermal/compare-depth-ground-temps",
     "title": "Compare Depth Ground Temps",
-    "description": "Bury two thermistors at different depths and log their readings for a day.",
+    "description": "Capture shallow/deep probes, compare the depth delta against target bounds, and correct setup drift before sign-off.",
     "image": "/assets/quests/geothermal_compare_depth_ground_temps.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Curious how ground temperature changes with depth? Let's find out.",
+            "text": "Depth comparison only works if placement is controlled. Mark probe depths and keep both cable splices sealed before burial.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "deploy",
-                    "text": "How do we measure that?"
+                    "text": "Depth marks and seals are ready",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 2
+                        },
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Walk me through depth setup"
                 }
             ]
         },
         {
             "id": "deploy",
-            "text": "Wire two sensors using arduino-thermistor-read. Bury one shallow, one deep, and log both.",
+            "text": "Run a synchronized logging window with one shallow and one deep thermistor.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture depth log pair",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Depth logs exported",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plot",
+            "text": "Plot both depth traces and annotate weather/watering events that could skew the surface probe.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Plot depth traces",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "evaluate",
+                    "text": "Depth chart reviewed",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evaluate",
+            "text": "Expected deep-minus-shallow delta is 1-5°C with no inversion longer than two samples. Does the chart satisfy this?",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Logs collected",
-                    "process": "arduino-thermistor-read",
+                    "text": "Yes, depth delta is stable",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "No, depth delta looks suspicious"
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Re-seat the shallow probe to original depth, repack soil to remove air gaps, and rerun the synchronized log window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Probe placement corrected; rerun depth logging",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -37,11 +137,17 @@
         },
         {
             "id": "finish",
-            "text": "Awesome! Compare the logs to see how quickly the soil cools with depth.",
+            "text": "Great dataset. Your depth survey now has reproducible thresholds and a correction path instead of guesswork.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Analyze data"
+                    "text": "Depth comparison validated",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -56,7 +162,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
