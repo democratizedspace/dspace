@@ -118,7 +118,7 @@
     "requiresQuests": ["programming/median-temp"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

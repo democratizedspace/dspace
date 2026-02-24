@@ -109,7 +109,7 @@
     "requiresQuests": ["programming/temp-alert"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
