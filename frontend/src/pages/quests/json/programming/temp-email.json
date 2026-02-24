@@ -8,23 +8,34 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've set up a local alert. Let's send yourself an email when things get too warm.",
+            "text": "You've built local alerts. Now wire up email so anomalies reach you off-device.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Sounds useful."
+                    "goto": "prep",
+                    "text": "Configure alert thresholds",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Use a mail API to send a message when the script detects high temperature.",
+            "id": "prep",
+            "text": "Send a controlled test alert and record both trigger temperature and delivery timestamp so you can verify SLA expectations.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture an alert test log window"
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Email sent!",
+                    "goto": "interpret",
+                    "text": "Email alert arrived with timestamp",
                     "requiresItems": [
                         {
                             "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
@@ -35,8 +46,60 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpret reliability before closing: alerts should trigger only when thresholds are exceeded and should arrive within your response window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Alert timing and threshold behavior are correct",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Late email, duplicate sends, or false positives detected"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Recovery path: pause noisy notifications, tune threshold + debounce settings, and re-run a controlled alert test before re-enabling normal routing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture a fresh validation log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Re-validate email behavior",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 2
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Remote notifications keep you informed wherever you are.",
+            "text": "Nice! Remote notifications keep you informed and reduce surprise equipment failures.",
             "options": [
                 {
                     "type": "finish",
@@ -55,7 +118,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You've gathered plenty of readings. Let's transform them into a picture.",
+            "text": "You've gathered plenty of readings. Let's transform them into a chart you can trust in automation.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "script",
-                    "text": "Show me the script",
+                    "goto": "prep",
+                    "text": "Stage the CLI run",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -24,18 +24,18 @@
             ]
         },
         {
-            "id": "script",
-            "text": "Run a Python script to read the log and draw a line graph with Matplotlib. Aim for a CLI you can cron without opening a notebook.",
+            "id": "prep",
+            "text": "Dry-run the script path and confirm your CSV has timestamps and no missing rows before graphing.",
             "options": [
                 {
                     "type": "process",
                     "process": "plot-temperature-data",
-                    "text": "Running the plot script"
+                    "text": "Generate baseline CLI chart"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "The chart is rendered",
+                    "goto": "interpret",
+                    "text": "Baseline chart exported",
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
@@ -46,8 +46,61 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpret the chart before shipping it: acceptable runs keep values in expected room range and avoid sudden single-point spikes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Plot is stable and in expected range",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Spikes or range drift detected"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "When the CLI plot looks wrong, fix logger cadence or CSV formatting, capture a fresh sample, and regenerate the chart before review.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture a replacement temperature log"
+                },
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Re-run CLI plotting on the replacement log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Re-check regenerated chart",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        },
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Visualizing data makes patterns jump out.",
+            "text": "Nice! Visualizing data this way makes trend audits much easier.",
             "options": [
                 {
                     "type": "finish",
@@ -66,7 +119,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
