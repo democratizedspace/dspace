@@ -979,21 +979,21 @@ Rubric assignment rule: first keyword match wins (`measurement/check` => thresho
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3675)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3675)
 - `programming/plot-temp-cli`
-  - [x] Observed issue: `programming/plot-temp-cli` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (commit 7e6d76c)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (commit 7e6d76c)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (commit 7e6d76c)
+  - [x] Observed issue: `programming/plot-temp-cli` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3712)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3712)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3712)
 - `programming/stddev-temp`
-  - [x] Observed issue: `programming/stddev-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (commit 7e6d76c)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (commit 7e6d76c)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (commit 7e6d76c)
+  - [x] Observed issue: `programming/stddev-temp` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3712)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3712)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3712)
 - `programming/temp-alert`
   - [x] Observed issue: `programming/temp-alert` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3675)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3675)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3675)
 - `programming/temp-email`
-  - [x] Observed issue: `programming/temp-email` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (commit 7e6d76c)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (commit 7e6d76c)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (commit 7e6d76c)
+  - [x] Observed issue: `programming/temp-email` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3712)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3712)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3712)
 - `programming/temp-graph`
   - [ ] Observed issue: `programming/temp-graph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
