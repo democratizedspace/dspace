@@ -1139,9 +1139,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): ubi/basicincome
 Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/howtodoquests (fallback: no checked woodworking quests yet)
 
 - `woodworking/apply-finish`
-  - [x] Observed issue (addressed): `woodworking/apply-finish` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `woodworking/apply-finish` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3707)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3707)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3707)
 - `woodworking/birdhouse`
   - [ ] Observed issue: `woodworking/birdhouse` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -1159,9 +1159,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/how
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/picture-frame`
-  - [x] Observed issue (addressed): `woodworking/picture-frame` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `woodworking/picture-frame` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3707)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3707)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3707)
 - `woodworking/planter-box`
   - [ ] Observed issue: `woodworking/planter-box` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -1175,9 +1175,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/how
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/workbench`
-  - [x] Observed issue (addressed): `woodworking/workbench` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `woodworking/workbench` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3707)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3707)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3707)
 
 ## Documentation improvements needed for quest authoring
 
