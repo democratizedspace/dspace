@@ -391,14 +391,28 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/constellations`
 - Dialogue `requiresItems` gates:
-    - `start` → "Show me the steps." — constellation sketch set ×1
-    - `locate` → "Polaris spotted." — Polaris alignment note ×1
+    - `start` → "Show both routes." — red flashlight ×1
+    - `pointer-route` → "Polaris confirmed and stable." — constellation sketch set ×1, basic telescope ×1
+    - `tripod-route` → "Polaris reacquired on the stable setup." — constellation sketch set ×1, basic telescope ×1
+    - `recovery` → "Unsafe visibility tonight; end with a caution note." — mission logbook ×1
+    - `log-proof` → "Logged and repeatable navigation reference complete." — Polaris alignment note ×1, mission logbook ×1, mission log entry ×1
+- Troubleshooting/safety branches:
+    - `route-select` provides main-path pointer-star and alternate tripod-first strategies.
+    - `recovery` enforces visibility/footing safety checks and loops back before retry.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - Polaris alignment note ×1
 - Processes used:
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
     - [mark-polaris-alignment](/processes/mark-polaris-alignment)
         - Requires: constellation sketch set ×1, basic telescope ×1, camera tripod ×1, red flashlight ×1, mission logbook ×1
         - Consumes: none
@@ -410,17 +424,32 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/andromeda`
 - Dialogue `requiresItems` gates:
-    - `search` → "The nebula glows!" — planisphere star chart ×1, red flashlight ×1, basic telescope ×1
+    - `plan-window` → "Plan logged; proceed to setup." — seasonal star hop plan ×1, planisphere star chart ×1
+    - `weather-hold` → "Window reopened; resume setup." — seasonal star hop plan ×1
+    - `setup` → "Scope stable and sword region centered." — constellation sketch set ×1, basic telescope ×1, red flashlight ×1
+    - `observe` → "Observation logged; ready to validate." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Complete log recorded with all evidence fields." — mission logbook ×1, mission log entry ×1, feather quill ×1
+- Troubleshooting/safety branches:
+    - `weather-hold` creates a deterministic seeing/weather fallback before setup.
+    - `troubleshoot` loops to setup or fallback based on safety and visibility recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
+        - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: seasonal star hop plan ×1
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
         - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 16) Planetary Alignment (`astronomy/planetary-alignment`)
 
@@ -479,14 +508,33 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
-    - `start` → "Where do I point?" — planisphere star chart ×1, basic telescope ×1
+    - `start` → "Plan the session before we point the scope." — planisphere star chart ×1, basic telescope ×1
+    - `plan` → "Plan ready; move to setup." — seasonal star hop plan ×1, red flashlight ×1
+    - `weather-fallback` → "Conditions improved; resume setup." — seasonal star hop plan ×1
+    - `setup` → "Target acquired and stable." — basic telescope ×1, constellation sketch set ×1
+    - `observe` → "Observation captured with notes." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Evidence complete and consistent." — mission logbook ×1, mission log entry ×1, feather quill ×1
+- Troubleshooting/safety branches:
+    - `weather-fallback` provides seeing/light-pollution contingency and scheduled retry.
+    - `troubleshoot` enforces magnification reset, tripod safety checks, and deterministic re-entry.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
+        - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: seasonal star hop plan ×1
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 19) Capture Star Trails (`astronomy/star-trails`)
 
@@ -523,14 +571,32 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/saturn-rings`
 - Dialogue `requiresItems` gates:
-    - `project` → "Sunspots sketched in my logbook." — basic telescope ×1, mission logbook ×1
+    - `quick-setup` → "Safety checks complete; begin projection." — seasonal star hop plan ×1, basic telescope ×1
+    - `calibration-setup` → "Calibration stable; begin sketch run." — constellation sketch set ×1, basic telescope ×1
+    - `project` → "Sketch and notes captured." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `recovery` → "Unsafe conditions persist; log cancellation and stand down." — mission logbook ×1
+    - `verify` → "Complete sketch evidence recorded." — mission logbook ×1, mission log entry ×1, feather quill ×1
+- Troubleshooting/safety branches:
+    - `route-select` supports quick safety and calibration-first branches before projection.
+    - `recovery` enforces no-direct-viewing reset and deterministic retry before closure.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
+        - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: seasonal star hop plan ×1
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 21) Observe Venus's Phases (`astronomy/venus-phases`)
 

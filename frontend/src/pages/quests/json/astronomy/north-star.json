@@ -1,19 +1,19 @@
 {
     "id": "astronomy/north-star",
     "title": "Locate the North Star",
-    "description": "Use the Big Dipper to spot Polaris for navigation practice.",
+    "description": "Use the Big Dipper to locate Polaris, log a navigation artifact, and recover safely when horizon conditions fail.",
     "image": "/assets/quests/north_star_polaris_location.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. Polaris anchors the night sky. Let's find it and get oriented.",
+            "text": "Nova here. Polaris is your northern anchor. Want a quick pointer-star route or a tripod-first setup route?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Show me the steps.",
+                    "goto": "route-select",
+                    "text": "Show both routes.",
                     "requiresItems": [
                         {
                             "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
@@ -24,41 +24,138 @@
             ]
         },
         {
-            "id": "setup",
-            "text": "Pick a stable spot with a clear northern view, keep your red light low, and steady the tripod.",
+            "id": "route-select",
+            "text": "Either route works, but completion only unlocks after a logged azimuth note you can repeat tomorrow night.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "locate",
-                    "text": "Ready to trace from the Big Dipper."
+                    "goto": "pointer-route",
+                    "text": "Use Big Dipper pointer stars (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "tripod-route",
+                    "text": "Stabilize tripod first, then trace Polaris (alternate path)."
                 }
             ]
         },
         {
-            "id": "locate",
-            "text": "Use sketches to find the Big Dipper, follow its pointers to Polaris, and keep the tripod steady.",
+            "id": "pointer-route",
+            "text": "Find the Big Dipper bowl, extend the pointer stars, and confirm Polaris before marking your horizon reference.",
             "options": [
                 {
                     "type": "process",
-                    "process": "mark-polaris-alignment",
-                    "text": "Tracing to Polaris and noting azimuth."
+                    "process": "identify-constellations",
+                    "text": "Big Dipper traced and pointer direction confirmed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-proof",
+                    "text": "Polaris confirmed and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Haze or glare made the pointer stars unreliable."
+                }
+            ]
+        },
+        {
+            "id": "tripod-route",
+            "text": "Level tripod legs, check footing, then reacquire the pointer stars with low magnification.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Tripod stabilized and reference stars reacquired."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-proof",
+                    "text": "Polaris reacquired on the stable setup.",
+                    "requiresItems": [
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Tripod drift or blocked northern horizon."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery first: lower magnification, dim lights, and only retry if footing and horizon visibility are safe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "route-select",
+                    "text": "Safety checks passed; retry one route."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
+                    "text": "Unsafe visibility tonight; end with a caution note.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log-proof",
+            "text": "Record Polaris azimuth and one nearby landmark in your mission log so the alignment is reproducible.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Azimuth note written in the logbook."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logged and repeatable navigation reference complete.",
                     "requiresItems": [
                         {
                             "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
                             "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
                         }
-                    ],
-                    "text": "Polaris spotted."
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent. Polaris now anchors your orientation. Keep scans short so you don't wander off-trail.",
+            "text": "Nice work. You used a safe setup, handled recovery, and left evidence another navigator can verify.",
             "options": [
                 {
                     "type": "finish",
@@ -77,7 +174,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-17",

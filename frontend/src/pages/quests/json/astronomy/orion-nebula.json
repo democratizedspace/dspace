@@ -1,39 +1,89 @@
 {
     "id": "astronomy/orion-nebula",
     "title": "Observe the Orion Nebula",
-    "description": "Use a planisphere, red flashlight and basic telescope to find the Orion Nebula.",
+    "description": "Run a planned Orion session with seeing fallback, logged nebula evidence, and recovery loops when visibility collapses.",
     "image": "/assets/quests/orion_nebula_backyard_observation.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Nova here. With Orion high in the sky, let's hunt for the nebula in his sword.",
+            "text": "Nova here. Orion's sword is up, but we'll only run if seeing and site safety are good.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "search",
-                    "text": "Ready to scan."
+                    "goto": "plan-window",
+                    "text": "Let's plan the observation window."
                 }
             ]
         },
         {
-            "id": "search",
-            "text": "Use the star chart, then point your basic telescope at the fuzzy patch under Orion's belt.",
+            "id": "plan-window",
+            "text": "Draft a short star-hop plan with timing, glare checks, and a fallback slot in case clouds roll in.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "draft-seasonal-star-plan",
+                    "text": "Observation plan drafted with fallback timing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Plan logged; proceed to setup.",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Seeing forecast is unstable; use fallback."
+                }
+            ]
+        },
+        {
+            "id": "weather-hold",
+            "text": "Fallback branch: preserve dark adaptation, avoid slippery routes, and wait for the next usable interval.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan-window",
+                    "text": "Update timing and retry planning."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Window reopened; resume setup.",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Trace Orion, stabilize the tripod, and keep low power until the field is centered.",
             "options": [
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Tracking the constellation."
+                    "text": "Orion alignment verified."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "observe",
+                    "text": "Scope stable and sword region centered.",
                     "requiresItems": [
-                        {
-                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
-                            "count": 1
-                        },
                         {
                             "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
                             "count": 1
@@ -41,15 +91,104 @@
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
                         }
-                    ],
-                    "text": "The nebula glows!"
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Field drift or glare is too strong."
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Log brightness, shape, and nearby stars so the observation has reproducible evidence.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Nebula notes entered in mission log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Observation logged; ready to validate.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Nebula details are too faint to trust."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: return to low magnification, re-check footing and glare, then retry only when safety and seeing both recover.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Recovered conditions; retry capture."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Still unstable; defer and reschedule."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: close only when the log contains brightness + shape + reference-star notes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Complete log recorded with all evidence fields.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Log incomplete; re-observe after recovery."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Record the view, cap the scope and keep the chart for your next night out.",
+            "text": "Clean run. You handled fallback windows, captured reproducible evidence, and avoided unsafe forced observing.",
             "options": [
                 {
                     "type": "finish",
@@ -68,7 +207,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

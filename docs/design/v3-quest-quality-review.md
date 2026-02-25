@@ -366,17 +366,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #3710)
   - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #3710)
 - `astronomy/north-star`
-  - [ ] Observed issue: `astronomy/north-star` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `astronomy/north-star` now includes explicit route branching, evidence logging, and deterministic recovery handling. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0000)
 - `astronomy/observe-moon`
   - [x] Observed issue (addressed): `astronomy/observe-moon` now separates session readiness, artifact verification, and recovery handling for degraded observing conditions. (PR #3691)
   - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #3691)
   - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #3691)
 - `astronomy/orion-nebula`
-  - [ ] Observed issue: `astronomy/orion-nebula` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
-  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
-  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
+  - [x] Observed issue (addressed): `astronomy/orion-nebula` now includes deterministic weather fallback, evidence logging, and retry-safe troubleshooting before completion. (PR #0000)
+  - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #0000)
+  - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #0000)
 - `astronomy/planetary-alignment`
   - [ ] Observed issue: `astronomy/planetary-alignment` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -386,17 +386,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
   - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
 - `astronomy/saturn-rings`
-  - [ ] Observed issue: `astronomy/saturn-rings` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
-  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
-  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
+  - [x] Observed issue (addressed): `astronomy/saturn-rings` now includes planned fallback windows, logged ring-detail evidence, and retry-safe troubleshooting loops. (PR #0000)
+  - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #0000)
+  - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #0000)
 - `astronomy/star-trails`
   - [ ] Observed issue: `astronomy/star-trails` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/sunspot-sketch`
-  - [ ] Observed issue: `astronomy/sunspot-sketch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `astronomy/sunspot-sketch` now enforces route branching, process-backed evidence gates, and safety-first recovery before closure. (PR #0000)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #0000)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #0000)
 - `astronomy/venus-phases`
   - [x] Observed issue (addressed): `astronomy/venus-phases` now enforces deterministic out-of-range recovery by resetting failed measurements before re-test loops. (PR #3691)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3691)
@@ -933,13 +933,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
 8. **Checklist box updates (quote each modified checklist line verbatim with final checkbox state + appended PR tags)**
    - ``- [x] Observed issue: `hydroponics/ph-check` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3626)``
    - ``- [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3626)``
-   - ``- [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3626)``
+   - `- [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3626)`
    - ``- [x] Observed issue: `hydroponics/pump-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3626)``
-   - ``- [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3626)``
-   - ``- [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3626)``
+   - `- [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3626)`
+   - `- [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3626)`
    - ``- [x] Observed issue: `hydroponics/root-rinse` describes a cleaning cycle without a measurable before/after success definition. (PR #3626)``
-   - ``- [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)``
-   - ``- [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)``
+   - `- [x] Gate completion on paired pre/post artifacts that prove the state change (flow, residue, clarity, or equivalent). (PR #3626)`
+   - `- [x] Add a contamination/failure branch with a safe re-entry checkpoint and repeat-until-pass loop. (PR #3626)`
 
 ### programming (18 quests)
 
