@@ -29,8 +29,8 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `sysadmin/basic-commands`
 - Dialogue `requiresItems` gates:
-    - `start` → "Start the parts and risk review." — PoE+ switch ×1
-    - `bom` → "All required parts are staged." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1
+    - `start` → "Start the parts and risk review." — no item gate (planning/procurement step)
+    - `bom` → "All required parts are staged." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1, hardware worksheet artifact (`journalctl report` ×1)
     - `strategy` → both strategy options require a hardware worksheet artifact (`journalctl report` ×1)
     - `troubleshoot` → "Updated BOM ready. Re-check hardware readiness." — incident log extract ×1
     - `verify`/`finish` → worksheet artifact (`journalctl report` ×1)
@@ -58,7 +58,8 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `start` → "Begin preflight and flash workflow." — 64GB microSD card ×1, Raspberry Pi 5 board ×1
     - `preflight` → "Card flashed and first boot complete." — flashed microSD card ×1
     - `update` → both update paths require Raspberry Pi 5 board ×1
-    - `docker`/`verify`/`finish` → Docker verification artifact (`journalctl report` ×1)
+    - `docker` → Docker verification artifact (`journalctl report` ×1)
+    - `verify`/`finish` → Docker verification artifact (`journalctl report` ×1), flashed microSD card ×1
     - `recover` → "System stabilized; re-run update and install path." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -349,7 +350,7 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/prepare-first-node`
 - Dialogue `requiresItems` gates:
-    - `start` → "Begin SSD migration plan." — 64GB microSD card ×1, 1TB 2230 M.2 SSD ×1
+    - `start` → "Begin SSD migration plan." — flashed microSD card ×1, 1TB 2230 M.2 SSD ×1
     - `baseline` → "Baseline captured; start clone." — journalctl report ×1
     - `clone` → "Clone complete; prep hardware cutover." — bootable 1TB SSD ×1
     - `mount` → "Node is online; verify root device and performance." — Pi cluster node ×1

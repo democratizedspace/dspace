@@ -13,13 +13,7 @@
                 {
                     "type": "goto",
                     "goto": "bom",
-                    "text": "Start the parts and risk review.",
-                    "requiresItems": [
-                        {
-                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Start the parts and risk review."
                 }
             ]
         },
@@ -63,6 +57,10 @@
                         },
                         {
                             "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
+                            "count": 1
+                        },
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
                             "count": 1
                         }
                     ]
