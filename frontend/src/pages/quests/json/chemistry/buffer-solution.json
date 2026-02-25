@@ -1,38 +1,45 @@
 {
     "id": "chemistry/buffer-solution",
     "title": "Prepare a Buffer Solution",
-    "description": "Mix vinegar and baking soda to resist pH swings.",
+    "description": "Mix and verify a buffer using staged setup, evidence checks, and recovery handling.",
     "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. We'll mix a gentle buffer. Gather vinegar, baking soda, a beaker, gloves, goggles, and a lab coat.",
+            "text": "Phoenix here. A buffer only counts if your setup is safe and your stability check is repeatable.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "mix",
-                    "text": "Ready to mix."
+                    "goto": "setup-check",
+                    "text": "Ready to stage tools and PPE."
                 }
             ]
         },
         {
-            "id": "mix",
-            "text": "Dissolve a teaspoon of baking soda in water. Stir in vinegar dropwise and check pH as you go.",
+            "id": "setup-check",
+            "text": "Stage gloves, goggles, beaker, and cylinder before adding reagents. Label the vessel so no one mistakes it for drinking water.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "measure-ph",
-                    "text": "Testing the solution."
-                },
-                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "pH is stable around 7.",
+                    "goto": "mix-strategy",
+                    "text": "Safety and tools are staged.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                            "count": 1
+                        },
+                        {
+                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
                             "count": 1
                         }
                     ]
@@ -40,8 +47,116 @@
             ]
         },
         {
+            "id": "mix-strategy",
+            "text": "Choose your mixing strategy. Both routes must produce a pH reading before we accept the batch.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "small-batch",
+                    "text": "Main path: small measured additions."
+                },
+                {
+                    "type": "goto",
+                    "goto": "staged-neutralization",
+                    "text": "Alternate path: staged neutralization passes."
+                }
+            ]
+        },
+        {
+            "id": "small-batch",
+            "text": "Dissolve baking soda first, then add vinegar dropwise while stirring. Pause after each addition and measure instead of guessing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Run pH measurement for the batch."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stability-gate",
+                    "text": "Measurement captured; evaluate stability.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Foaming spiked or readings jumped; enter recovery."
+                }
+            ]
+        },
+        {
+            "id": "staged-neutralization",
+            "text": "Run a tiny pilot neutralization first, then scale once readings stay steady. Keep splash risk low by avoiding large pours.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Run pilot pH verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stability-gate",
+                    "text": "Pilot stayed stable; move to final gate.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Pilot drifted out of range; enter recovery."
+                }
+            ]
+        },
+        {
+            "id": "stability-gate",
+            "text": "Acceptance gate: document two consecutive in-range checks (around neutral) before storage. If drift appears, reroute to recovery.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Buffer is stable and documented.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Readings drifted; recover and retest."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery protocol: stop additions, neutralize residues, wash exposed skin, and reset glassware before retrying. Escalate if repeated drift persists.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Run contamination cleanup."
+                },
+                {
+                    "type": "goto",
+                    "goto": "mix-strategy",
+                    "text": "Recovery complete; retry with controlled additions."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Label the buffer and store it sealed. Small, clean batches beat waste.",
+            "text": "Good work. You proved setup, measurement stability, and recovery discipline before calling the buffer ready.",
             "options": [
                 {
                     "type": "finish",
@@ -59,8 +174,8 @@
     "requiresQuests": ["chemistry/ph-test"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }

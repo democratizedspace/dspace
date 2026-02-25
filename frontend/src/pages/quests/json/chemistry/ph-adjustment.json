@@ -1,38 +1,46 @@
 {
     "id": "chemistry/ph-adjustment",
     "title": "Adjust Solution pH",
-    "description": "Bring a nutrient solution into range using acid or base.",
+    "description": "Bring a nutrient solution into range using measured corrections, interpretation, and retry loops.",
     "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Once you know the current pH, we can tweak it to the ideal level.",
+            "text": "Once we have readings, we adjust in small moves and verify every correction. No blind dosing.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "adjust",
-                    "text": "Let's balance it."
+                    "goto": "baseline",
+                    "text": "Capture baseline and PPE checks."
                 }
             ]
         },
         {
-            "id": "adjust",
-            "text": "Add a few drops of acid or base, stir, and recheck. Protective gear keeps splashes harmless.",
+            "id": "baseline",
+            "text": "Baseline gate: confirm PPE and collect a fresh pH reading before choosing an adjustment strategy.",
             "options": [
                 {
                     "type": "process",
-                    "process": "adjust-ph",
-                    "text": "Carefully adding and stirring."
+                    "process": "measure-ph",
+                    "text": "Measure current pH."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "The pH is on target.",
+                    "goto": "strategy",
+                    "text": "Baseline reading logged and PPE confirmed.",
                     "requiresItems": [
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
                     ]
@@ -40,8 +48,116 @@
             ]
         },
         {
+            "id": "strategy",
+            "text": "Choose a correction route: direct dose for minor drift, or buffered correction if readings keep overshooting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "direct-dose",
+                    "text": "Main path: direct micro-dose correction."
+                },
+                {
+                    "type": "goto",
+                    "goto": "buffered-correction",
+                    "text": "Alternate path: buffered correction for unstable swings."
+                }
+            ]
+        },
+        {
+            "id": "direct-dose",
+            "text": "Add tiny acid/base increments, stir fully, then re-measure. Stop if readings swing more than expected.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Run direct correction pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Correction applied; interpret the new reading.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Overshoot or unknown contamination detected."
+                }
+            ]
+        },
+        {
+            "id": "buffered-correction",
+            "text": "Use a diluted correction mix to reduce overshoot risk, then re-check after full circulation.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Run buffered correction pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Buffered pass complete; interpret reading.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Reading still unstable; recover before retry."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: accept only if pH is in target range and trend is stable across repeat checks. Otherwise trigger corrective recovery.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is in range and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Out of range or drifting; run recovery loop."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: halt dosing, flush stirring tools, and confirm reagent labels before any retry. If the second pass still fails, escalate and pause the batch.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Run cleanup and reset procedure."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Reset complete; take a fresh baseline measurement."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great, the solution is balanced and safe to use.",
+            "text": "Great. You logged baseline evidence, interpreted retest data, and used recovery controls instead of forcing the chemistry.",
             "options": [
                 {
                     "type": "finish",
@@ -59,8 +175,8 @@
     "requiresQuests": ["chemistry/buffer-solution"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }

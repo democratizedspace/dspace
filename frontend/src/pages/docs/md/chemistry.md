@@ -108,7 +108,10 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/ph-test`
 - Dialogue `requiresItems` gates:
-    - `mix` → "pH is stable around 7." — pH strip ×1
+    - `setup-check` → "Safety and tools are staged." — nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
+    - `small-batch` → "Measurement captured; evaluate stability." — pH strip ×1
+    - `staged-neutralization` → "Pilot stayed stable; move to final gate." — pH strip ×1
+    - `stability-gate` → "Buffer is stable and documented." — pH strip ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -119,6 +122,13 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
         - Consumes: pH strip ×1
         - Creates: hydroponic pH reading ×1
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Flow now branches between measured small-batch additions and staged neutralization, then converges on a stability gate.
+    - Recovery path enforces contamination cleanup and retry sequencing before finish.
 
 ## 6) Adjust Solution pH (`chemistry/ph-adjustment`)
 
@@ -126,17 +136,31 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/buffer-solution`
 - Dialogue `requiresItems` gates:
-    - `adjust` → "The pH is on target." — pH strip ×1
+    - `baseline` → "Baseline reading logged and PPE confirmed." — pH strip ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `direct-dose` → "Correction applied; interpret the new reading." — pH strip ×1
+    - `buffered-correction` → "Buffered pass complete; interpret reading." — pH strip ×1
+    - `interpret` → "Reading is in range and stable." — pH strip ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [measure-ph](/processes/measure-ph)
+        - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
+        - Consumes: pH strip ×1
+        - Creates: hydroponic pH reading ×1
     - [adjust-ph](/processes/adjust-ph)
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
         - Consumes: pH down solution (500 mL) ×0.05, pH up solution (potassium carbonate) ×0.05
         - Creates: none
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Branches now separate direct micro-dose correction from buffered correction and require interpretation before completion.
+    - Out-of-range handling routes through a safety stop and mandatory baseline re-measure loop.
 
 ## 7) Form a Precipitate (`chemistry/precipitation-reaction`)
 
@@ -186,7 +210,9 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/stevia-extraction`
 - Dialogue `requiresItems` gates:
-    - `purify` → "I see white crystals!" — stevia crystals ×1
+    - `controlled-setup` → "Setup evidence complete; evaluate crystal outcome." — stevia extract ×1
+    - `pilot-setup` → "Pilot setup produced extract evidence; inspect outcome." — stevia extract ×1
+    - `outcome-gate` → "Outcome passes; crystals are ready." — stevia crystals ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -197,6 +223,13 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: none
         - Consumes: stevia extract ×1
         - Creates: stevia crystals ×1
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Lifecycle progression now stages setup-evidence gates before the crystal outcome gate.
+    - Failed outcomes route through contamination recovery, cleanup, and replayable setup branching.
 
 ## 10) Taste Test Stevia Crystals (`chemistry/stevia-tasting`)
 

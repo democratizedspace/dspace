@@ -1,51 +1,137 @@
 {
     "id": "chemistry/stevia-crystals",
     "title": "Refine Stevia Crystals",
-    "description": "Purify your extract into concentrated crystals",
+    "description": "Refine extract into crystals with staged evidence gates and contamination contingency handling.",
     "image": "/assets/quests/stevia_crystal_refinement.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to step up purity? We'll separate the sweet compounds with a small, controlled alcohol wash.",
+            "text": "Ready to step up purity? We will prove setup quality first, then prove crystal outcome before we close this batch.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "purify",
-                    "text": "Let's refine it."
+                    "goto": "setup-branch",
+                    "text": "Plan the refinement route."
                 }
             ]
         },
         {
-            "id": "purify",
-            "text": "Add a splash of food-grade ethanol and let the solution evaporate. Crystals form as it dries\u2014slow is fine.",
+            "id": "setup-branch",
+            "text": "Choose a route: controlled evaporation for precision, or low-volume pilot trays for safer troubleshooting. Both must show extract evidence.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "controlled-setup",
+                    "text": "Main path: controlled evaporation setup."
+                },
+                {
+                    "type": "goto",
+                    "goto": "pilot-setup",
+                    "text": "Alternate path: pilot-tray setup."
+                }
+            ]
+        },
+        {
+            "id": "controlled-setup",
+            "text": "Filter particulates, label trays, and keep airflow low to avoid contamination. Run refinement only after extract looks clean.",
             "options": [
                 {
                     "type": "process",
                     "process": "purify-stevia",
-                    "text": "Begin purification"
+                    "text": "Run controlled purification pass."
                 },
                 {
                     "type": "goto",
+                    "goto": "outcome-gate",
+                    "text": "Setup evidence complete; evaluate crystal outcome.",
+                    "requiresItems": [
+                        {
+                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Cloudiness or residue spotted; enter recovery."
+                }
+            ]
+        },
+        {
+            "id": "pilot-setup",
+            "text": "Run a pilot tray with reduced volume to validate crystal growth rate before scaling the full batch.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "purify-stevia",
+                    "text": "Run pilot purification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "outcome-gate",
+                    "text": "Pilot setup produced extract evidence; inspect outcome.",
+                    "requiresItems": [
+                        {
+                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Pilot failed to clarify; recover before scaling."
+                }
+            ]
+        },
+        {
+            "id": "outcome-gate",
+            "text": "Outcome gate: crystals must be dry, white-to-clear, and free of burnt residue. If not, run contamination recovery and re-attempt.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "I see white crystals!",
+                    "text": "Outcome passes; crystals are ready.",
                     "requiresItems": [
                         {
                             "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Outcome fails quality gate; recover and retry."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery path: stop heat, discard compromised residue, sanitize trays, and restart at lower heat. If two runs fail, pause and log equipment inspection.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Run contamination cleanup."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup-branch",
+                    "text": "Recovery complete; choose a setup route again."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. These crystals are potent and store well. Seal them and label the batch.",
+            "text": "Excellent. You separated setup evidence from outcome evidence and used safe recovery controls when quality drifted.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks for the guidance!"
+                    "text": "Crystals refined."
                 }
             ]
         }
@@ -59,8 +145,8 @@
     "requiresQuests": ["chemistry/stevia-extraction"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }
