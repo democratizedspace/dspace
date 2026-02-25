@@ -1,29 +1,19 @@
 {
     "id": "astronomy/sunspot-sketch",
     "title": "Sketch Sunspots",
-    "description": "Project the Sun onto paper with a basic telescope and sketch sunspots in your mission logbook without looking through the eyepiece.",
+    "description": "Use safe solar projection, log a sunspot sketch artifact, and recover from glare or cloud interruptions.",
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Sunspots show the Sun's activity. We'll use projection for safety.",
+            "text": "Sunspots are worth tracking, but eye safety is non-negotiable. Want the quick projection setup or the checklist-first route?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "project",
-                    "text": "Set up the projection."
-                }
-            ]
-        },
-        {
-            "id": "project",
-            "text": "Aim your basic telescope at the Sun and project the image onto a white card. Never look through the eyepiece.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
+                    "goto": "pick-route",
+                    "text": "Walk me through both routes.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -33,14 +23,144 @@
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
                             "count": 1
                         }
-                    ],
-                    "text": "Sunspots sketched in my logbook."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "pick-route",
+            "text": "Safety stop: never look through the eyepiece at the Sun. Keep bystanders clear of the optical path and project only onto card.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quick-project",
+                    "text": "Quick route: align and project now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "checklist-route",
+                    "text": "Checklist route: log safety checks first."
+                }
+            ]
+        },
+        {
+            "id": "quick-project",
+            "text": "Align shadow first, then project the solar disk onto white card and mark sunspot clusters with time/date.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Sketch captured with two or more sunspot marks.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Glare or drift ruined the projection."
+                }
+            ]
+        },
+        {
+            "id": "checklist-route",
+            "text": "Write a short safety note, then project and sketch. This gives you a repeatable baseline if clouds interrupt.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Safety note logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Checklist complete and sketch captured.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Clouds blocked the session before sketching."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery: re-level the mount, reduce projection distance for contrast, and restart only if everyone remains clear of direct sun viewing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pick-route",
+                    "text": "Setup corrected—retry safely."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Too much haze—pause and reschedule."
+                }
+            ]
+        },
+        {
+            "id": "weather-hold",
+            "text": "Log a hold note with the next safe time window and return when seeing improves.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Hold note logged with retry plan."
+                },
+                {
+                    "type": "goto",
+                    "goto": "pick-route",
+                    "text": "Conditions improved—resume."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Evidence gate: finish only after logging sketch timestamp and a short interpretation of sunspot placement.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Interpretation logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Sketch + interpretation recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great work! Sunspot sketches help track solar cycles. Store your telescope and logbook safely.",
+            "text": "Great work—safe projection, troubleshooting discipline, and clear solar evidence logged.",
             "options": [
                 {
                     "type": "finish",
@@ -59,7 +179,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

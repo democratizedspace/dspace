@@ -479,14 +479,24 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
-    - `start` → "Where do I point?" — planisphere star chart ×1, basic telescope ×1
+    - `start` → "Give me both routes." — planisphere star chart ×1, basic telescope ×1
+    - `quick-track` → "I can resolve the ring shape and orientation." — basic telescope ×1, planisphere star chart ×1
+    - `prep-route` → "Plan complete and rings now resolved." — mission logbook ×1, basic telescope ×1
+    - `log-proof` → "Log includes ring tilt and timestamp." — mission logbook ×1, mission log entry ×1
+- Troubleshooting and safety flow:
+    - `pick-route` offers quick-track and prep-first branches before completion.
+    - `troubleshoot` enforces a recovery loop (lower magnification + tripod/glare checks) before retry.
+    - `weather-hold` logs a deferred retry window through `write-mission-log-entry` before resuming.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 19) Capture Star Trails (`astronomy/star-trails`)
 
@@ -494,10 +504,15 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/planetary-alignment`
 - Dialogue `requiresItems` gates:
-    - `start` → "Plot the hop and gear." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
-    - `plan` → "Tripod leveled and azimuth marked." — seasonal star hop plan ×1, red flashlight ×1, digital camera ×1, camera tripod ×1
+    - `start` → "Standard route: plan and align." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+    - `start` → "Fallback route: build a short weather-aware plan first." — mission logbook ×1
+    - `plan-main` / `plan-fallback` → align options require polar-aligned camera rig inputs (seasonal star hop plan ×1, red flashlight ×1, digital camera ×1, camera tripod ×1).
     - `setup` → "Stack captured and color-balanced." — polar-aligned camera rig ×1, Laptop Computer ×1
-    - `finish` → "Save to the observing log." — stacked star trail photo ×1
+    - `interpret` → "Evidence log complete and coherent." — stacked star trail photo ×1, mission log entry ×1
+- Troubleshooting and safety flow:
+    - Non-linear planning includes a weather-first branch (`plan-fallback`) and a main planning branch (`plan-main`).
+    - `troubleshoot` requires tripod/focus recovery before retrying capture.
+    - `weather-hold` logs interruption + retry timing before resuming, and `interpret` enforces an evidence interpretation gate.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -523,14 +538,24 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/saturn-rings`
 - Dialogue `requiresItems` gates:
-    - `project` → "Sunspots sketched in my logbook." — basic telescope ×1, mission logbook ×1
+    - `start` → "Walk me through both routes." — basic telescope ×1, mission logbook ×1
+    - `quick-project` → "Sketch captured with two or more sunspot marks." — basic telescope ×1, mission logbook ×1
+    - `checklist-route` → "Checklist complete and sketch captured." — mission logbook ×1, basic telescope ×1
+    - `interpret` → "Sketch + interpretation recorded." — mission logbook ×1, mission log entry ×1
+- Troubleshooting and safety flow:
+    - `pick-route` branches between quick setup and checklist-first setup while enforcing explicit solar safety constraints.
+    - `troubleshoot` handles glare/drift and routes to safe retry or weather defer.
+    - `weather-hold` logs deferred sessions before re-entry, and `interpret` adds mandatory evidence interpretation before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 21) Observe Venus's Phases (`astronomy/venus-phases`)
 

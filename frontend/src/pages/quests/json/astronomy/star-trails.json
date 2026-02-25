@@ -1,19 +1,19 @@
 {
     "id": "astronomy/star-trails",
     "title": "Capture Star Trails",
-    "description": "Use long-exposure photography to show the Earth's rotation.",
+    "description": "Capture a reproducible star-trail stack with route choices, evidence logging, and recovery loops.",
     "image": "/assets/quests/star_trails_long_exposure_tripod.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You've mapped constellations; now let's capture their motion. We need a plan before we open the shutter.",
+            "text": "You've mapped constellations; now let's prove Earth rotation with a clean trail stack. Want the standard route or a weather-first fallback route?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "plan",
-                    "text": "Plot the hop and gear.",
+                    "goto": "plan-main",
+                    "text": "Standard route: plan and align.",
                     "process": "draft-seasonal-star-plan",
                     "requiresItems": [
                         {
@@ -29,12 +29,24 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "plan-fallback",
+                    "text": "Fallback route: build a short weather-aware plan first.",
+                    "process": "write-mission-log-entry",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "plan",
-            "text": "Mark Polaris on your chart and note your exposure window so you avoid passing planes and neighbor lights.",
+            "id": "plan-main",
+            "text": "Mark Polaris and define your exposure window so aircraft and neighborhood lights are excluded.",
             "options": [
                 {
                     "type": "goto",
@@ -62,18 +74,53 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Cloud banks moved in before setup locked."
+                }
+            ]
+        },
+        {
+            "id": "plan-fallback",
+            "text": "Great. With weather windows logged, align quickly when the sky opens so you do not rush setup safety.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Window opened—aligning now.",
+                    "process": "align-star-trail-rig",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "start",
-                    "text": "Recheck my sky window."
+                    "text": "Need to rework the weather window notes."
                 }
             ]
         },
         {
             "id": "setup",
-            "text": "Dial in a 20\u201330 second base exposure, use your red light to frame foreground, and lock focus on a bright star.",
+            "text": "Dial in base exposures, keep pathways clear in darkness, and check tripod stability before starting the capture run.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Stack captured and color-balanced.",
                     "process": "capture-star-trail-stack",
                     "requiresItems": [
@@ -89,24 +136,76 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "plan",
-                    "text": "I bumped the tripod\u2014realign."
+                    "goto": "troubleshoot",
+                    "text": "I bumped the tripod or lost focus."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-level tripod, relock focus on a bright star, and rerun only if the foreground is still safe to navigate.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Rig corrected—retry capture."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Wind and clouds are too unstable—pause session."
+                }
+            ]
+        },
+        {
+            "id": "weather-hold",
+            "text": "Log the interruption with next attempt timing; this keeps your data trail deterministic instead of guesswork.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Interruption logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Conditions improved—resume capture."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: confirm trail arc direction and exposure duration in the mission log before finish unlocks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Arc direction and duration logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Evidence log complete and coherent.",
+                    "requiresItems": [
+                        {
+                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Beautiful! That spiral proves Earth's steady spin and your methodical setup.",
+            "text": "Beautiful capture. You proved the rotation with documented evidence and a solid recovery workflow.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Save to the observing log.",
-                    "requiresItems": [
-                        {
-                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Save to the observing log."
                 }
             ]
         }
@@ -121,7 +220,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
