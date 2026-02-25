@@ -90,7 +90,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `troubleshoot` → "Polarity and torque rechecked; retry install." — 200 Wh battery pack ×1
     - `verify` → "Verified: storage upgrade is stable and producing." — Solar setup (1 kWh) ×1, dSolar ×200
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - `prep` → "Loan me the upgraded battery pack." — 200 Wh battery pack ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
@@ -99,6 +99,10 @@ Energy quests build practical progression through the energy skill tree. This pa
         - Requires: none
         - Consumes: portable solar panel ×1, 1 kWh battery pack ×1, Solar charge controller ×1, Small solar enclosure ×1
         - Creates: Solar setup (1 kWh) ×1
+    - [solar-1000Wh](/processes/solar-1000Wh)
+        - Requires: Solar setup (1 kWh) ×1
+        - Consumes: none
+        - Creates: dWatt ×1000, dSolar ×1000
 
 ## 4) Configure a Solar Charge Controller (`energy/charge-controller-setup`)
 

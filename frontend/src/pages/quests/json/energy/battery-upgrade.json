@@ -64,7 +64,7 @@
                     "text": "Installation completed; let's verify charging behavior.",
                     "requiresItems": [
                         {
-                            "id": "5f152996-466f-4f1a-b3f6-5b8f983b65f0",
+                            "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
                             "count": 1
                         }
                     ]
@@ -113,7 +113,7 @@
                     "text": "Verified: storage upgrade is stable and producing.",
                     "requiresItems": [
                         {
-                            "id": "5f152996-466f-4f1a-b3f6-5b8f983b65f0",
+                            "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
                             "count": 1
                         },
                         {

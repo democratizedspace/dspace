@@ -59,7 +59,7 @@
                     "text": "Fermentation run complete; verify output and safety checks.",
                     "requiresItems": [
                         {
-                            "id": "09f93589-9613-4f6d-a607-7dd144646f18",
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                             "count": 50
                         }
                     ]
@@ -103,7 +103,7 @@
                     "text": "Verified: output + safety log both pass.",
                     "requiresItems": [
                         {
-                            "id": "09f93589-9613-4f6d-a607-7dd144646f18",
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                             "count": 50
                         }
                     ]
