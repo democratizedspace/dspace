@@ -8,34 +8,124 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your first panel works well. To store more energy, let's install a 1 kWh battery and matching enclosure.",
+            "text": "Your first panel works well. To store more energy, let's install a 1 kWh battery and matching enclosure. We stage the swap with the breaker open and gloves on.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "install",
-                    "text": "Let's do it."
+                    "goto": "prep",
+                    "text": "Let's plan the upgrade safely."
                 }
             ]
         },
         {
-            "id": "install",
-            "text": "Mount the new battery and controller in the enclosure, then connect your existing panel to start charging the bigger pack.",
+            "id": "prep",
+            "text": "Gather the upgraded battery pack, enclosure parts, and insulated tools. Confirm the old pack is disconnected before touching any terminals.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "setup-solar-enclosure-1kWh",
-                    "text": "Installing."
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Loan me the upgraded battery pack."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "All set",
+                    "goto": "install",
+                    "text": "Pack isolated, PPE on, and upgrade kit staged.",
                     "requiresItems": [
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I noticed heat at the terminals or damaged insulation."
+                }
+            ]
+        },
+        {
+            "id": "install",
+            "text": "Mount the larger battery and controller in the enclosure, then reconnect panel leads with strain relief.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "setup-solar-enclosure-1kWh",
+                    "text": "Install the 1 kWh enclosure setup."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Installation completed; let's verify charging behavior.",
+                    "requiresItems": [
+                        {
+                            "id": "5f152996-466f-4f1a-b3f6-5b8f983b65f0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Controller faults or charging won't start."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Pause the upgrade. Open the breaker, inspect polarity labels, and reseat ring terminals before retrying. Do not continue if cables are warm.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Polarity and torque rechecked; retry install.",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Need to restage the workspace before another attempt."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: confirm the 1 kWh setup item exists and observe a stable 200 dSolar charge window without alarms before sign-off.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solar-1000Wh",
+                    "text": "Run a full verification charge."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verified: storage upgrade is stable and producing.",
+                    "requiresItems": [
+                        {
+                            "id": "5f152996-466f-4f1a-b3f6-5b8f983b65f0",
+                            "count": 1
+                        },
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Output unstable; return to troubleshooting."
                 }
             ]
         },
@@ -56,11 +146,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/solar"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
