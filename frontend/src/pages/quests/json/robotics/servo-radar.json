@@ -8,12 +8,55 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to give your bot awareness? We'll sweep an ultrasonic sensor on a pan-tilt rig. Strap on ESD protection, keep fingers away from the horns, and stage the laptop nearby.",
+            "text": "Ready to give your bot awareness? We'll sweep an ultrasonic sensor on a pan-tilt rig. Strap on ESD protection, keep fingers away from moving horns, and pick a scan strategy before power-up.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "build",
-                    "text": "Parts staged and strapped in.",
+                    "text": "Run a fast coarse sweep first, then refine hotspots.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        },
+                        {
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+                            "count": 1
+                        },
+                        {
+                            "id": "f22293ab-0553-4f6f-8377-093f2a1351c8",
+                            "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 6
+                        },
+                        {
+                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Run a slower high-resolution sweep for cleaner maps.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -57,7 +100,7 @@
         },
         {
             "id": "build",
-            "text": "Bolt the two servos into the pan-tilt bracket, mount the ultrasonic sensor on top, then route jumpers so they won't snag during sweeps. Double-check ground shares between servos and the Arduino.",
+            "text": "Bolt the servos into the pan-tilt bracket, mount the ultrasonic sensor, and route jumpers with enough slack to prevent sweep snags.",
             "options": [
                 {
                     "type": "process",
@@ -66,7 +109,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "code",
+                    "goto": "safety-check",
                     "text": "Rig moves smoothly with no pinched wires.",
                     "requiresItems": [
                         {
@@ -74,12 +117,39 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Rig stutters, binds, or wiring snags during dry motion."
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Load a sweep sketch, cap the max angle so cables stay loose, and log a full rotation to map walls and obstacles. Kill power if the servos chatter or the sensor drops out.",
+            "id": "safety-check",
+            "text": "Safety gate: cap sweep range below hard stops, verify kill-power access, and keep a 30 cm exclusion zone while first scans run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scan",
+                    "text": "Safety checks complete; start mapped scans.",
+                    "requiresItems": [
+                        {
+                            "id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Safety setup failed; pause and correct before scanning."
+                }
+            ]
+        },
+        {
+            "id": "scan",
+            "text": "Run at least two full sweeps and annotate dead zones, nearest obstacle distance, and any missed returns before accepting the map.",
             "options": [
                 {
                     "type": "process",
@@ -87,14 +157,57 @@
                     "text": "Record a full sweep"
                 },
                 {
-                    "type": "finish",
-                    "text": "Sweep complete!",
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Sweep logs and map annotations are ready.",
                     "requiresItems": [
                         {
                             "id": "9f2109f5-59c8-4309-8a6c-3c60be744985",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Dropouts or false echoes are corrupting the map."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: completion requires two consecutive sweeps with consistent nearest-obstacle readings and a note explaining any residual blind spots.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sweep parity achieved: map is consistent and documented.",
+                    "requiresItems": [
+                        {
+                            "id": "9f2109f5-59c8-4309-8a6c-3c60be744985",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Map consistency failed; apply fixes and re-scan."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: lower sweep speed, shield cross-talk sources, recheck sensor power/ground, and rerun safety checks before collecting new evidence.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Corrections complete; re-verify safe scan setup."
+                },
+                {
+                    "type": "goto",
+                    "goto": "scan",
+                    "text": "Retry full sweeps with updated parameters."
                 }
             ]
         }
@@ -108,8 +221,8 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 96,
+        "emoji": "🛠️",
         "history": []
     }
 }

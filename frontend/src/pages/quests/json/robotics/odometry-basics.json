@@ -8,23 +8,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Want to track how far your bot rolls? We'll turn encoder ticks into centimeters.",
+            "text": "Want to track how far your bot rolls? Pick a validation route so your odometry has a baseline before we trust it in autonomous runs.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "wire",
-                    "text": "Let's wire it up."
+                    "text": "Run a 1-meter tape test for simple calibration."
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Run a square-loop test to catch turning drift early."
                 }
             ]
         },
         {
             "id": "wire",
-            "text": "Power off, wear goggles, send VCC/GND to Arduino, and hook A/B leads to pins 2 & 3.",
+            "text": "Power down first, wear goggles, and route encoder A/B leads to interrupt pins 2/3 with strain relief so vibration cannot fake tick counts.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Wired and safe.",
+                    "goto": "safety-check",
+                    "text": "Wiring is clean and secured.",
                     "requiresItems": [
                         {
                             "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
@@ -35,16 +40,100 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Counts are noisy or one wheel misses pulses."
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Upload code to count pulses times wheel size. Roll one meter and check the log.",
+            "id": "safety-check",
+            "text": "Safety gate: put the robot on blocks for a dry-spin check, confirm emergency stop access, then mark your test lane before floor runs.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline-run",
+                    "text": "Safety checks done; capture baseline odometry.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Wheel spin is unsafe or unstable; pause and fix it."
+                }
+            ]
+        },
+        {
+            "id": "baseline-run",
+            "text": "Run three passes and log commanded distance versus measured distance for each pass before changing any calibration constants.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Baseline log captured for all three passes.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "The baseline spread is too wide to trust."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: if error stays within ±5 cm over 1 meter and both wheels agree, record it as pass; otherwise adjust wheel diameter/ticks-per-rev and retest.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Distance recorded!"
+                    "text": "Pass confirmed and logged: odometry baseline is ready for navigation.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Fail: drift or wheel mismatch detected; rework calibration."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-seat encoder mounts, debounce signal wiring, lower wheel slip on the lane, then rerun the dry-spin and baseline checks before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Fixes applied; re-run safety checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline-run",
+                    "text": "Re-test with updated calibration constants."
                 }
             ]
         }
@@ -58,8 +147,8 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 92,
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -8,39 +8,120 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to give your bot some neck muscles? We'll build a simple pan-tilt mount for sensors.",
+            "text": "Ready to give your bot some neck muscles? Choose your assembly order so we can validate motion before loading a fragile sensor.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "parts",
-                    "text": "Tell me what I need."
+                    "text": "Build pan axis first, then add tilt."
+                },
+                {
+                    "type": "goto",
+                    "goto": "parts",
+                    "text": "Build tilt axis first for easier horn alignment."
                 }
             ]
         },
         {
             "id": "parts",
-            "text": "Stack one servo on another to create horizontal and vertical movement. Attach a bracket or small platform for your sensor.",
+            "text": "Mount two servos with thread-lock and strain-relieved wires. Keep enough cable slack so full-range sweeps do not snag.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Servos mounted.",
+                    "goto": "safety",
+                    "text": "Servos mounted and cable paths cleared.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
                             "count": 2
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Binding or stripped horns detected during assembly."
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Write a sketch that sweeps both axes to scan the area. Try pointing an ultrasonic sensor to map obstacles.",
+            "id": "safety",
+            "text": "Safety gate: power up at low sweep speed, verify hard-stop limits, and keep fingers clear before allowing full-angle tests.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sweep-test",
+                    "text": "Safety checks pass; run sweep validation.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Unexpected jitter or hard-stop impacts observed."
+                }
+            ]
+        },
+        {
+            "id": "sweep-test",
+            "text": "Run five full sweeps and record min/max angles plus return-to-center error for each axis.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Sweep log captured with stable center return.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Center return error exceeds tolerance."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: pass requires two consecutive sweeps with <3° center error and no cable snag events.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Sweep complete!"
+                    "text": "Pan-tilt mount validated and ready for sensor payloads.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "A sweep failed; tune linkages and retry."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-seat horns at neutral, reduce sweep acceleration, inspect for cracked brackets, then repeat safety and sweep tests.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Corrections made; re-run safety checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "sweep-test",
+                    "text": "Retry sweep validation with updated settings."
                 }
             ]
         }
@@ -54,8 +135,8 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 92,
+        "emoji": "🛠️",
         "history": []
     }
 }
