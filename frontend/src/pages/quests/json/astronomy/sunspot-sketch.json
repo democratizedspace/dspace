@@ -135,6 +135,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Notes incomplete—return to recovery."
                 }
             ]
         },
@@ -201,7 +206,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

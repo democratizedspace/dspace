@@ -179,6 +179,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `quick-route` → "I can separate all four moons clearly." — basic telescope ×1
     - `observe` → "Evidence captured across sessions." — mission logbook ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "Orbital movement confirmed in the log." — mission logbook ×1, mission log entry ×1
+    - `recovery` → "Unsafe tonight, but evidence is already logged—finish with caution." — mission logbook ×1, mission log entry ×1
 - Troubleshooting/safety branches:
     - `plan` branches to `chart-route` (main) and `quick-route` (alternate) before evidence review.
     - `recovery` enforces safety stand-down for unsafe footing/weather/glare and loops back to planning.
@@ -189,9 +190,18 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
     - [observe-jupiter-moons](/processes/observe-jupiter-moons)
         - Requires: basic telescope ×1, camera tripod ×1
         - Consumes: none
+        - Creates: none
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 7) Map the Constellations (`astronomy/constellations`)
 
@@ -244,14 +254,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [identify-constellations](/processes/identify-constellations)
-        - Requires: basic telescope ×1, planisphere star chart ×1
-        - Consumes: none
-        - Creates: constellation sketch set ×1
-    - [write-mission-log-entry](/processes/write-mission-log-entry)
-        - Requires: mission logbook ×1, feather quill ×1
-        - Consumes: bottle of black ink ×0.05
-        - Creates: mission log entry ×1
+    - None
 
 ## 9) Measure Light Pollution (`astronomy/light-pollution`)
 
@@ -548,7 +551,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 21) Observe Venus's Phases (`astronomy/venus-phases`)
 
