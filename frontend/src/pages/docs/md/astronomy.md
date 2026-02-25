@@ -175,7 +175,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
-    - `observe` → "Week complete." — basic telescope ×1
+    - `chart-route` → "Ready to log moon positions." — basic telescope ×1, planisphere star chart ×1, constellation sketch set ×1
+    - `quick-route` → "I can separate all four moons clearly." — basic telescope ×1
+    - `observe` → "Evidence captured across sessions." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Orbital movement confirmed in the log." — mission logbook ×1, mission log entry ×1
+- Troubleshooting/safety branches:
+    - `plan` branches to `chart-route` (main) and `quick-route` (alternate) before evidence review.
+    - `recovery` enforces safety stand-down for unsafe footing/weather/glare and loops back to planning.
+    - `interpret` blocks completion when evidence is inconsistent and routes back through recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -447,13 +454,16 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/meteor-shower`
 - Dialogue `requiresItems` gates:
     - `plan` → "Plan recorded and route is clear." — mission logbook ×1, basic telescope ×1, seasonal star hop plan ×1
-    - `weather-hold` → "Sky cleared enough—resume setup." — seasonal star hop plan ×1, basic telescope ×1
+    - `safety-preflight` → "Preflight complete and hazard check passed." — basic telescope ×1, seasonal star hop plan ×1
+    - `weather-hold` → "Sky cleared enough—run preflight before setup." — seasonal star hop plan ×1, basic telescope ×1
     - `setup` → "Setup is stable and ready." — basic telescope ×1, constellation sketch set ×1
     - `observe` → "Pass observed with full notes." — mission logbook ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "All fields logged and coherent." — mission logbook ×1, mission log entry ×1, feather quill ×1
 - Troubleshooting/safety branches:
-    - `weather-hold` provides seeing/weather fallback and rescheduling path.
-    - `troubleshoot` enforces a realignment retry loop before completion.
+    - `safety-preflight` is a mandatory operational check between planning and setup.
+    - `weather-hold` provides seeing/weather fallback and routes through preflight before setup.
+    - `classify-anomaly` separates tracking drift, weather interruption, and persistent safety hazards before retry/abort.
+    - `troubleshoot` enforces a realignment retry loop that returns through preflight before completion.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -523,7 +533,15 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/saturn-rings`
 - Dialogue `requiresItems` gates:
-    - `project` → "Sunspots sketched in my logbook." — basic telescope ×1, mission logbook ×1
+    - `safety-brief` → "Safety controls are in place." — basic telescope ×1, mission logbook ×1
+    - `chart-align` → "Projection disk is crisp and stable." — constellation sketch set ×1
+    - `shadow-align` → "Shadow minimized; projection stable." — basic telescope ×1
+    - `capture` → "Sketch and notes are complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "All required fields are present." — mission logbook ×1, mission log entry ×1
+- Troubleshooting/safety branches:
+    - `setup` branches between chart-assisted and shadow-minimization alignment strategies.
+    - `recovery` enforces stand-down when overheating or bystander-safety issues appear and loops to `safety-brief`.
+    - `interpret` requires structured sketch evidence before finish and sends missing fields back to recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

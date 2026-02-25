@@ -350,9 +350,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3660, #3718)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3718)
 - `astronomy/jupiter-moons`
-  - [ ] Observed issue: `astronomy/jupiter-moons` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `astronomy/jupiter-moons` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #TBD)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #TBD)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #TBD)
 - `astronomy/light-pollution`
   - [x] Observed issue (addressed): `astronomy/light-pollution` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3710)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3710)
@@ -382,9 +382,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/satellite-pass`
-  - [ ] Observed issue: `astronomy/satellite-pass` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
-  - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
-  - [ ] Include failed-session troubleshooting and a scheduled follow-up observation check before completion.
+  - [x] Observed issue (addressed): `astronomy/satellite-pass` was observation-heavy with thin fallback handling for seeing/weather constraints; this was hardened in this pass. (PR #TBD)
+  - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #TBD)
+  - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #TBD)
 - `astronomy/saturn-rings`
   - [ ] Observed issue: `astronomy/saturn-rings` is observation-heavy but fallback handling for seeing/weather constraints is typically thin.
   - [ ] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation.
@@ -394,9 +394,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/sunspot-sketch`
-  - [ ] Observed issue: `astronomy/sunspot-sketch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `astronomy/sunspot-sketch` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #TBD)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #TBD)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #TBD)
 - `astronomy/venus-phases`
   - [x] Observed issue (addressed): `astronomy/venus-phases` now enforces deterministic out-of-range recovery by resetting failed measurements before re-test loops. (PR #3691)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3691)
