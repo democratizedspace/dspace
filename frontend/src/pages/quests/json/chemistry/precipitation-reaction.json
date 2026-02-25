@@ -32,10 +32,6 @@
                     "text": "I captured a visible precipitate plus a stable reading.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        },
-                        {
                             "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
                             "count": 1
                         }
@@ -57,10 +53,6 @@
                     "goto": "finish",
                     "text": "Pass: precipitate is stable and pH is 6.0–8.0.",
                     "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        },
                         {
                             "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
                             "count": 1

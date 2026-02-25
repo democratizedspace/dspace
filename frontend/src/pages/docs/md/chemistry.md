@@ -153,8 +153,8 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/ph-adjustment`
 - Dialogue `requiresItems` gates:
-    - `mix` → "I captured a visible precipitate plus a stable reading." — pH strip ×1, hydroponic pH reading ×1
-    - `interpret` → "Pass: precipitate is stable and pH is 6.0–8.0." — pH strip ×1, hydroponic pH reading ×1
+    - `mix` → "I captured a visible precipitate plus a stable reading." — hydroponic pH reading ×1
+    - `interpret` → "Pass: precipitate is stable and pH is 6.0–8.0." — hydroponic pH reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
