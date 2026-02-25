@@ -8,23 +8,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ever seen a robot balance on two wheels? We'll use a gyro to keep a platform upright.",
+            "text": "Two-wheel balance is all about fast corrections and safe test runs. Pick a tuning strategy before we spin the motors.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "parts",
-                    "text": "Let's gather parts."
+                    "text": "Use a conservative P-only baseline first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "parts",
+                    "text": "Start with full PID tuning and tighter control."
                 }
             ]
         },
         {
             "id": "parts",
-            "text": "Grab an Arduino Uno, two continuous servos, and an MPU-6050 gyroscope breakout.",
+            "text": "Stage an Arduino Uno, two drive servos, and the MPU-6050. Keep wiring short and secure so vibration does not fake gyro drift.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
-                    "text": "Parts ready.",
+                    "goto": "safety-check",
+                    "text": "Hardware is staged and strain-relieved.",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -35,16 +40,96 @@
                             "count": 2
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "The gyro values jump around while stationary."
                 }
             ]
         },
         {
-            "id": "code",
-            "text": "Use the MPU6050 and Servo libraries. Read the gyro angle and adjust servo speeds with a simple\nPID loop.",
+            "id": "safety-check",
+            "text": "Safety gate: test at low speed with a soft catch zone. Confirm emergency stop access before enabling continuous balancing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tune",
+                    "text": "Safety setup complete; begin tuning.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I need to secure the test zone first."
+                }
+            ]
+        },
+        {
+            "id": "tune",
+            "text": "Run five 10-second balance attempts and log tip direction plus correction latency after each run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Tuning log is complete and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "It still oscillates or drifts into a fall."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-level the frame, recalibrate gyro offset, then reduce D gain and retry a short run before raising speed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Fixes applied; repeat safety checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "tune",
+                    "text": "Retry the five-run stability test."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: pass three consecutive 10-second holds with no uncontrolled tip-over and documented latency improvements.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "It's balancing!"
+                    "text": "Three clean balance holds recorded; gyro balance is validated.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "A hold failed; return to corrective tuning."
                 }
             ]
         }
@@ -58,7 +143,7 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 90,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

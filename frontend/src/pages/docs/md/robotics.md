@@ -178,7 +178,9 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/line-follower`, `robotics/ultrasonic-rangefinder`
 - Dialogue `requiresItems` gates:
-    - `build` → "It's dodging nicely!" — Servo Motor ×1
+    - `build` → "Wiring and avoidance routine are ready." — Servo Motor ×1
+    - `safety` → "Safety checks pass; run the obstacle course." — Servo Motor ×1
+    - `evidence` → "Three clean runs logged; obstacle avoidance is field-ready." — Servo Motor ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -186,6 +188,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Adds a strategy fork (conservative vs agile detection profiles) before convergence.
+    - Adds a safety stop-distance gate before full-speed obstacle runs.
+    - Adds a troubleshooting loop for false triggers/collisions and a three-run evidence requirement.
 
 ## 9) Scan with a servo-mounted sensor (`robotics/servo-radar`)
 
@@ -247,7 +253,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/odometry-basics`
 - Dialogue `requiresItems` gates:
-    - `parts` → "Parts ready." — Arduino Uno ×1, Servo Motor ×2
+    - `parts` → "Hardware is staged and strain-relieved." — Arduino Uno ×1, Servo Motor ×2
+    - `safety-check` → "Safety setup complete; begin tuning." — Arduino Uno ×1
+    - `tune` → "Tuning log is complete and stable." — Servo Motor ×2
+    - `evidence` → "Three clean balance holds recorded; gyro balance is validated." — Arduino Uno ×1, Servo Motor ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -255,6 +264,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Adds non-linear setup options (P-only baseline vs full PID-first) before tuning.
+    - Adds a safety gate for low-speed trials, soft catch zones, and emergency-stop readiness.
+    - Adds recovery loop for drift/oscillation plus a consecutive-holds evidence gate.
 
 ## 13) Navigate a Simple Maze (`robotics/maze-navigation`)
 
@@ -262,7 +275,9 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/obstacle-avoidance`, `robotics/odometry-basics`
 - Dialogue `requiresItems` gates:
-    - `program` → "It made it through!" — Servo Motor ×2
+    - `strategy` → "Decision tree loaded and tested in dry-run mode." — Servo Motor ×2
+    - `safety` → "Safety limits set; begin full maze attempts." — Servo Motor ×2
+    - `evidence` → "Two clean clears recorded; maze navigation is validated." — Servo Motor ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -270,6 +285,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Adds two route-planning strategies before convergence into shared validation.
+    - Adds operational timeout/manual-stop safety checks before full maze attempts.
+    - Adds a dead-end troubleshooting loop and requires two clean maze clears as evidence.
 
 ## QA flow notes
 
