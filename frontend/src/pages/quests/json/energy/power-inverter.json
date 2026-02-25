@@ -16,7 +16,7 @@
                     "text": "I'm ready.",
                     "requiresItems": [
                         {
-                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "id": "c9b51052-0000-0000-0000-000000000000",
                             "count": 1
                         }
                     ]
@@ -144,10 +144,6 @@
                     "text": "Rollback complete; re-run installation.",
                     "requiresItems": [
                         {
-                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
-                            "count": 1
-                        },
-                        {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
                             "count": 1
                         }
@@ -211,7 +207,7 @@
         },
         {
             "id": "recover",
-            "text": "Disconnect the load, let the inverter cool, then inspect cable torque and airflow. Re-enter load testing only after lockout checks pass.",
+            "text": "Disconnect the load, let the inverter cool, then inspect cable torque and airflow before re-running the load test.",
             "options": [
                 {
                     "type": "goto",

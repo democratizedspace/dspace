@@ -332,7 +332,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `lockout` → "Lockout complete; return to staging." — digital multimeter ×1
     - `mount` → "Inverter mounted, fuse in, cables secure." — mounted 300 W inverter ×1
     - `verify-mount` → "Mount verification passed; proceed to load test." — mounted 300 W inverter ×1, digital multimeter ×1
-    - `rollback` → "Rollback complete; re-run installation." — 8 AWG fused cable kit ×1, digital multimeter ×1
+    - `rollback` → "Rollback complete; re-run installation." — digital multimeter ×1
     - `test` → "AC holds steady and nothing smells toasty." — load-tested inverter ×1
     - `verify-output` → "Verification run passed with stable output." — load-tested inverter ×1, digital multimeter ×1
     - `recover` → "Recovery complete; re-run load test." — mounted 300 W inverter ×1, digital multimeter ×1
