@@ -1,14 +1,14 @@
 {
     "id": "astronomy/satellite-pass",
     "title": "Track a Satellite Pass",
-    "description": "Plan and track a satellite pass with weather fallback, logged evidence, and a troubleshooting retry loop.",
+    "description": "Plan and track a satellite pass with weather fallback, safety preflight, anomaly classification, and logged evidence.",
     "image": "/assets/quests/satellite_pass_tracking_scope.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A bright satellite is passing tonight. We'll plan first, then track with a fallback if visibility collapses.",
+            "text": "A bright satellite is passing tonight. We'll plan first, run a safety preflight, then track with fallback if visibility collapses.",
             "options": [
                 {
                     "type": "goto",
@@ -28,7 +28,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
+                    "goto": "safety-preflight",
                     "text": "Plan recorded and route is clear.",
                     "requiresItems": [
                         {
@@ -63,8 +63,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Sky cleared enough\u2014resume setup.",
+                    "goto": "safety-preflight",
+                    "text": "Sky cleared enough\u2014run preflight before setup.",
                     "requiresItems": [
                         {
                             "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
@@ -75,6 +75,32 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "safety-preflight",
+            "text": "Safety preflight: confirm clear footing, dark-adapted lighting, and no overhead obstructions before moving to setup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Preflight complete and hazard check passed.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Conditions still marginal\u2014hold for next window."
                 }
             ]
         },
@@ -106,6 +132,11 @@
                     "type": "goto",
                     "goto": "troubleshoot",
                     "text": "Tripod drift or alignment error detected."
+                },
+                {
+                    "type": "goto",
+                    "goto": "classify-anomaly",
+                    "text": "Vibration or glare hazard detected."
                 }
             ]
         },
@@ -139,8 +170,29 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "classify-anomaly",
+                    "text": "Lost the satellite mid-pass or data fields are inconsistent."
+                }
+            ]
+        },
+        {
+            "id": "classify-anomaly",
+            "text": "Classify the issue before retrying: tracking drift, cloud interruption, or safety hazard. Apply the matching corrective action and re-verify.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "troubleshoot",
-                    "text": "Lost the satellite mid-pass."
+                    "text": "Tracking drift\u2014realign and retry."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Cloud interruption\u2014defer to the next pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Safety hazard persists\u2014abort run with a caution note."
                 }
             ]
         },
@@ -150,8 +202,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "setup",
-                    "text": "Realigned\u2014retry the pass."
+                    "goto": "safety-preflight",
+                    "text": "Realigned\u2014run preflight and retry the pass."
                 },
                 {
                     "type": "goto",
@@ -185,8 +237,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "troubleshoot",
-                    "text": "One or more fields missing\u2014retry with recovery steps."
+                    "goto": "classify-anomaly",
+                    "text": "One or more fields missing\u2014classify anomaly then retry."
                 }
             ]
         },

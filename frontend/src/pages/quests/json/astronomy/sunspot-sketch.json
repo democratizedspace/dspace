@@ -1,29 +1,30 @@
 {
     "id": "astronomy/sunspot-sketch",
     "title": "Sketch Sunspots",
-    "description": "Project the Sun onto paper with a basic telescope and sketch sunspots in your mission logbook without looking through the eyepiece.",
+    "description": "Use safe solar projection to capture a sunspot sketch, log interpretation notes, and recover cleanly when projection quality is poor.",
     "image": "/assets/quests/solar.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Sunspots show the Sun's activity. We'll use projection for safety.",
+            "text": "Sunspots show the Sun's activity. We only observe by projection—never through the eyepiece.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "project",
-                    "text": "Set up the projection."
+                    "goto": "safety-brief",
+                    "text": "Run the safety brief first."
                 }
             ]
         },
         {
-            "id": "project",
-            "text": "Aim your basic telescope at the Sun and project the image onto a white card. Never look through the eyepiece.",
+            "id": "safety-brief",
+            "text": "Confirm tripod stability, block bystander eyepiece access, and set a short exposure window to avoid overheating equipment.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "setup",
+                    "text": "Safety controls are in place.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -33,14 +34,160 @@
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
                             "count": 1
                         }
-                    ],
-                    "text": "Sunspots sketched in my logbook."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I need to pause and secure the area."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Choose your approach: chart-assisted alignment (main) or direct shadow-minimization alignment (alternate).",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart-align",
+                    "text": "Main path: chart-assisted setup."
+                },
+                {
+                    "type": "goto",
+                    "goto": "shadow-align",
+                    "text": "Alternate path: shadow-minimization setup."
+                }
+            ]
+        },
+        {
+            "id": "chart-align",
+            "text": "Use your chart and low-power alignment to center the projected solar disk before sketching.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Alignment references confirmed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Projection disk is crisp and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Glare or instability is too high."
+                }
+            ]
+        },
+        {
+            "id": "shadow-align",
+            "text": "Minimize tube shadow on the card, then lock the tripod once the disk is centered and stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Shadow minimized; projection stable.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Projection keeps drifting off the card."
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Sketch sunspot groups with timestamp and orientation arrows in your mission logbook, then add a short interpretation note.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Sketch notes captured in mission log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Sketch and notes are complete.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Notes incomplete—return to recovery."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery branch: stand down if equipment overheats or people drift into line of sight, then restart from the safety brief.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-brief",
+                    "text": "Area and equipment secure—retry safely."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Unsafe conditions persist—log a no-observation day and finish."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: confirm your log includes spot count, approximate position, and at least one note about projection quality.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All required fields are present.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Missing fields—repeat capture safely."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great work! Sunspot sketches help track solar cycles. Store your telescope and logbook safely.",
+            "text": "Great work. You used projection safely, logged structured evidence, and recovered correctly when conditions drifted.",
             "options": [
                 {
                     "type": "finish",
@@ -58,7 +205,7 @@
     "requiresQuests": ["astronomy/saturn-rings"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
