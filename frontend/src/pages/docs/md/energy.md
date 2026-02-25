@@ -85,9 +85,12 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
-    - `install` → "All set" — 200 Wh battery pack ×1
+    - `prep` → "Pack isolated, PPE on, and upgrade kit staged." — 200 Wh battery pack ×1
+    - `install` → "Installation completed; let's verify charging behavior." — Solar setup (1 kWh) ×1
+    - `troubleshoot` → "Polarity and torque rechecked; retry install." — 200 Wh battery pack ×1
+    - `verify` → "Verified: storage upgrade is stable and producing." — Solar setup (1 kWh) ×1, dSolar ×200
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - `prep` → "Loan me the upgraded battery pack." — 200 Wh battery pack ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
@@ -96,6 +99,10 @@ Energy quests build practical progression through the energy skill tree. This pa
         - Requires: none
         - Consumes: portable solar panel ×1, 1 kWh battery pack ×1, Solar charge controller ×1, Small solar enclosure ×1
         - Creates: Solar setup (1 kWh) ×1
+    - [solar-1000Wh](/processes/solar-1000Wh)
+        - Requires: Solar setup (1 kWh) ×1
+        - Consumes: none
+        - Creates: dWatt ×1000, dSolar ×1000
 
 ## 4) Configure a Solar Charge Controller (`energy/charge-controller-setup`)
 
@@ -141,10 +148,7 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Rewards:
     - portable solar panel ×1
 - Processes used:
-    - [biogas-ferment-50Wh](/processes/biogas-ferment-50Wh)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - None
 
 ## 6) Accumulate 10,000 dWatt (`energy/dWatt-1e4`)
 
@@ -370,17 +374,17 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar-1kWh`
 - Dialogue `requiresItems` gates:
-    - `assemble` → "Frame is assembled and wired" — 200 Wh battery pack ×1
+    - `assemble` → "Frame assembled, vent line routed, and leak check complete." — 200 Wh battery pack ×1
+    - `feed` → "Fermentation run complete; verify output and safety checks." — dWatt ×50
+    - `safety-stop` → "Seal is stable again; resume fermentation." — 200 Wh battery pack ×1
+    - `verify` → "Verified: output + safety log both pass." — dWatt ×50
 - Grants:
-    - `assemble` → "I'll grab the battery pack" — 200 Wh battery pack ×1
+    - `assemble` → "I'll grab the battery pack." — 200 Wh battery pack ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [biogas-ferment-50Wh](/processes/biogas-ferment-50Wh)
-        - Requires: TBD (known gap; process IO not yet specified)
-        - Consumes: TBD (known gap; process IO not yet specified)
-        - Creates: TBD (known gap; process IO not yet specified)
+    - None
 
 ## 17) Accrue 1,000 dSolar (`energy/dSolar-1kW`)
 
@@ -433,9 +437,12 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar-1kWh`
 - Dialogue `requiresItems` gates:
-    - `track` → "Tracker humming" — Solar setup (200 Wh) ×1
+    - `prep` → "Tracker balanced and safety stops installed." — Solar setup (200 Wh) ×1
+    - `track` → "Run complete; verify output and mechanical stability." — dSolar ×200
+    - `recover` → "Minor issue fixed; retry the tracking run." — Solar setup (200 Wh) ×1
+    - `verify` → "Verified: tracker is productive and safe." — Solar setup (200 Wh) ×1, dSolar ×200
 - Grants:
-    - `track` → "Take the kit" — Solar setup (200 Wh) ×1
+    - `prep` → "Take the 200 Wh kit." — Solar setup (200 Wh) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1

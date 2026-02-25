@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Turn leftovers into fuel. Build a biogas digester. Wear gloves and vent air.",
+            "text": "Turn leftovers into fuel by building a biogas digester. We treat methane like a serious fuel: gloves on, no flames, and active venting.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "assemble",
-                    "text": "I'm ready to build it"
+                    "text": "I'm ready to build it safely."
                 }
             ]
         },
         {
             "id": "assemble",
-            "text": "Use a sealed 20 L drum, fit pipes, and power the mixer with a 200 Wh pack.",
+            "text": "Use a sealed 20 L drum, fit gas lines, and power the mixer with a 200 Wh pack while keeping ignition sources clear.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,12 +29,61 @@
                             "count": 1
                         }
                     ],
-                    "text": "I'll grab the battery pack"
+                    "text": "I'll grab the battery pack."
                 },
                 {
                     "type": "goto",
                     "goto": "feed",
-                    "text": "Frame is assembled and wired",
+                    "text": "Frame assembled, vent line routed, and leak check complete.",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "I smell gas or cannot maintain a seal."
+                }
+            ]
+        },
+        {
+            "id": "feed",
+            "text": "Add scraps and water, seal the drum, and start fermentation. Log output milestones so you can confirm healthy digestion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Fermentation run complete; verify output and safety checks.",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 50
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Pressure spikes or vent condensate blocks the line."
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Stop and vent to a safe outdoor area. Purge lines, inspect seals, and restart only when the leak source is corrected and gauges are steady.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Leak fixed and vent path clear; reassemble safely."
+                },
+                {
+                    "type": "goto",
+                    "goto": "feed",
+                    "text": "Seal is stable again; resume fermentation.",
                     "requiresItems": [
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
@@ -45,19 +94,24 @@
             ]
         },
         {
-            "id": "feed",
-            "text": "Add scraps and water, seal the drum, and keep flames away while it ferments.",
+            "id": "verify",
+            "text": "Evidence gate: confirm at least 50 dWatt generated and record that the digester remained leak-free through the run before cooking use.",
             "options": [
-                {
-                    "type": "process",
-                    "process": "biogas-ferment-50Wh",
-                    "goto": "fin",
-                    "text": "Start the fermentation run."
-                },
                 {
                     "type": "goto",
                     "goto": "fin",
-                    "text": "Gas production started"
+                    "text": "Verified: output + safety log both pass.",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 50
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Verification failed; classify anomaly and re-run."
                 }
             ]
         },
@@ -82,7 +136,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

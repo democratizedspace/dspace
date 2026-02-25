@@ -8,18 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Fixed panels miss watts. Let's mount your 200 Wh kit on a swivel stand to chase the sun.",
+            "text": "Fixed panels miss watts. Let's mount your 200 Wh kit on a swivel stand to chase the sun without stressing cables.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "track",
-                    "text": "Sounds efficient!"
+                    "goto": "prep",
+                    "text": "Let's set up the tracker."
                 }
             ]
         },
         {
-            "id": "track",
-            "text": "Rest the kit on a pivot and turn it hourly toward the sun. Keep cables slack and the base weighted.",
+            "id": "prep",
+            "text": "Stage the tracker base with ballast, route cables with slack, and mark east-west stops so wind gusts can't whip the panel.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,23 +29,98 @@
                             "count": 1
                         }
                     ],
-                    "text": "Take the kit"
-                },
-                {
-                    "type": "process",
-                    "process": "solar-200Wh",
-                    "text": "Track and generate"
+                    "text": "Take the 200 Wh kit."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Tracker humming",
+                    "goto": "track",
+                    "text": "Tracker balanced and safety stops installed.",
                     "requiresItems": [
                         {
                             "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Base shifts or cable strain appears during setup."
+                }
+            ]
+        },
+        {
+            "id": "track",
+            "text": "Rotate the panel hourly toward peak sun and log generation windows. Pause if wind rises enough to shake the mast.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solar-200Wh",
+                    "text": "Track and generate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Run complete; verify output and mechanical stability.",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Output drops unexpectedly or alignment drifts."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: lock the tracker flat, retighten pivot hardware, and reset cable routing before another generation cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Hardware secured; re-stage the tracker."
+                },
+                {
+                    "type": "goto",
+                    "goto": "track",
+                    "text": "Minor issue fixed; retry the tracking run.",
+                    "requiresItems": [
+                        {
+                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: confirm at least 200 dSolar harvested while the tracker remained stable and cables stayed cool through the session.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verified: tracker is productive and safe.",
+                    "requiresItems": [
+                        {
+                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "count": 1
+                        },
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Verification failed; adjust tracker and retry."
                 }
             ]
         },
@@ -70,7 +145,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -16,10 +16,7 @@ const processes: Array<{ id: string }> = JSON.parse(
 
 const itemIds = new Set(items.map((item) => item.id));
 const processIds = new Set(processes.map((process) => process.id));
-const allowedProcessPlaceholders = new Set([
-    'neutralize-acid',
-    'biogas-ferment-50Wh',
-]);
+const allowedProcessPlaceholders = new Set(['neutralize-acid']);
 const allowedRewardPlaceholders = new Set(['15e3dd7e-374b-4233-b8c9-117e3057f009']);
 
 type RewardContext = { entry: RewardEntry; path: string };
