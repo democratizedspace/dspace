@@ -29,14 +29,25 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `sysadmin/basic-commands`
 - Dialogue `requiresItems` gates:
-    - `list` → "I've gathered the parts." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1
+    - `start` → "Start the parts and risk review." — PoE+ switch ×1
+    - `bom` → "All required parts are staged." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1
+    - `strategy` → both strategy options require a hardware worksheet artifact (`journalctl report` ×1)
+    - `troubleshoot` → "Updated BOM ready. Re-check hardware readiness." — incident log extract ×1
+    - `verify`/`finish` → worksheet artifact (`journalctl report` ×1)
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 2) Prepare the First Node (`devops/prepare-first-node`)
 
@@ -44,8 +55,11 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/pi-cluster-hardware`
 - Dialogue `requiresItems` gates:
-    - `start` → "Card flashed and booted." — flashed microSD card ×1
-    - `update` → "System updated." — Raspberry Pi 5 board ×1
+    - `start` → "Begin preflight and flash workflow." — 64GB microSD card ×1, Raspberry Pi 5 board ×1
+    - `preflight` → "Card flashed and first boot complete." — flashed microSD card ×1
+    - `update` → both update paths require Raspberry Pi 5 board ×1
+    - `docker`/`verify`/`finish` → Docker verification artifact (`journalctl report` ×1)
+    - `recover` → "System stabilized; re-run update and install path." — incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -56,6 +70,14 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Laptop Computer ×1
         - Consumes: 64GB microSD card ×1
         - Creates: flashed microSD card ×1
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 3) Launch DSPACE in Docker (`devops/docker-compose`)
 
@@ -327,8 +349,12 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/prepare-first-node`
 - Dialogue `requiresItems` gates:
-    - `clone` → "Clone complete." — bootable 1TB SSD ×1
-    - `move` → "Booted from SSD." — Pi cluster node ×1
+    - `start` → "Begin SSD migration plan." — 64GB microSD card ×1, 1TB 2230 M.2 SSD ×1
+    - `baseline` → "Baseline captured; start clone." — journalctl report ×1
+    - `clone` → "Clone complete; prep hardware cutover." — bootable 1TB SSD ×1
+    - `mount` → "Node is online; verify root device and performance." — Pi cluster node ×1
+    - `verify`/`finish` → Pi cluster node ×1 + journalctl report ×1
+    - `recover` retry paths require incident log extract ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -343,6 +369,14 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: none
         - Consumes: Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, bootable 1TB SSD ×1, fan case ×1
         - Creates: Pi cluster node ×1
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
 
 ## 14) Harden SSH Access (`devops/ssh-hardening`)
 

@@ -1,38 +1,26 @@
 {
     "id": "devops/ssd-boot",
     "title": "Boot from SSD",
-    "description": "Clone the OS to an SSD and enable M.2 boot.",
+    "description": "Clone to NVMe, verify SSD boot, and recover safely if boot order fails.",
     "image": "/assets/quests/devops_pi_ssd_boot.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Next we'll copy the OS to the SSD so the Pi boots quicker and lasts longer.",
+            "text": "Now we migrate from microSD to SSD for speed and durability. We'll clone, rewire boot order, then verify with evidence before cutover.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "clone",
-                    "text": "I'm ready."
-                }
-            ]
-        },
-        {
-            "id": "clone",
-            "text": "Run `lsblk` to locate the drive then use `sudo rpi-clone /dev/sda` to clone the system. Set the boot order to USB boot in raspi-config and power down when it finishes.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "clone-os-to-ssd",
-                    "text": "Cloning now."
-                },
-                {
-                    "type": "goto",
-                    "goto": "move",
-                    "text": "Clone complete.",
+                    "goto": "baseline",
+                    "text": "Begin SSD migration plan.",
                     "requiresItems": [
                         {
-                            "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                            "id": "36042a2b-861a-4192-a991-98778898963a",
+                            "count": 1
+                        },
+                        {
+                            "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
                             "count": 1
                         }
                     ]
@@ -40,18 +28,67 @@
             ]
         },
         {
-            "id": "move",
-            "text": "Insert the SSD into the PoE HAT's M.2 slot and add `dtparam=nvme` to `/boot/config.txt`. Boot again and confirm the partitions mount from the SSD.",
+            "id": "baseline",
+            "text": "Safety stop: confirm firmware supports NVMe boot and keep the microSD intact for rollback. Capture pre-migration notes before cloning.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture baseline storage and firmware notes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "Baseline captured; start clone.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "clone",
+            "text": "Run `rpi-clone` to the SSD and wait for a complete copy. Do not power-cycle early.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "clone-os-to-ssd",
+                    "text": "Clone now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Clone complete; prep hardware cutover.",
+                    "requiresItems": [
+                        {
+                            "id": "4af856b5-b5c1-494f-8037-9b6559785633",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Clone failed or SSD health is questionable."
+                }
+            ]
+        },
+        {
+            "id": "mount",
+            "text": "Install the SSD in the M.2 HAT, enable NVMe boot params, and reassemble the node.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-pi-node",
-                    "text": "Installing HAT and SSD."
+                    "text": "Assemble and boot from SSD path."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Booted from SSD.",
+                    "goto": "verify",
+                    "text": "Node is online; verify root device and performance.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
@@ -62,12 +99,86 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Collect proof that `/` mounts from NVMe and cold boot is stable for repeated restarts. If not, rollback to microSD and investigate.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture post-migration boot evidence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "SSD boot verified with evidence logs.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Boot source wrong or instability detected."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Troubleshoot safely: revert boot order to microSD, review firmware and cable fit, then retry from clone or verification depending on failure mode.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Log rollback actions and root cause clues."
+                },
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "Storage image suspect; re-clone from known-good microSD.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Hardware fix applied; re-run SSD boot verification.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        },
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! The Pi now runs from the SSD. Time to launch DSPACE.",
+            "text": "Nice. SSD boot is proven with rollback notes captured, so this node is ready for reliable service runs.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Let's launch it."
+                    "text": "Launch stack on SSD-backed node.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -82,7 +193,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

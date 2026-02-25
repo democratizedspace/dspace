@@ -1,24 +1,45 @@
 {
     "id": "devops/prepare-first-node",
     "title": "Prepare the First Node",
-    "description": "Flash the OS and install Docker under Orion's guidance.",
+    "description": "Flash, harden, and verify the first Pi node with rollback-aware checkpoints.",
     "image": "/assets/quests/devops_prepare_first_node_flash_docker.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's get that first Pi running. Flash Raspberry Pi OS to a microSD card so we can update everything.",
+            "text": "Let's bring up the first Pi node. We'll run preflight, update firmware, then verify Docker with evidence before calling it done.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Begin preflight and flash workflow.",
+                    "requiresItems": [
+                        {
+                            "id": "36042a2b-861a-4192-a991-98778898963a",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "preflight",
+            "text": "Safety stop: verify stable power and cooling before flashing. Then write Raspberry Pi OS to microSD and boot once for initial checks.",
             "options": [
                 {
                     "type": "process",
                     "process": "flash-sd-card",
-                    "text": "Flashing now."
+                    "text": "Flash the microSD now."
                 },
                 {
                     "type": "goto",
                     "goto": "update",
-                    "text": "Card flashed and booted.",
+                    "text": "Card flashed and first boot complete.",
                     "requiresItems": [
                         {
                             "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
@@ -30,15 +51,53 @@
         },
         {
             "id": "update",
-            "text": "Run `sudo apt update && sudo apt full-upgrade` then install the latest firmware with `sudo rpi-eeprom-update -a`.",
+            "text": "Apply OS and EEPROM updates. Choose fast-path commands or an idempotent script, but don't install Docker until updates and reboot both succeed.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "docker",
-                    "text": "System updated.",
+                    "text": "Manual path complete: apt + EEPROM update verified.",
                     "requiresItems": [
                         {
                             "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "docker",
+                    "text": "Automated script path complete with successful reboot.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Update failed or node became unstable."
+                }
+            ]
+        },
+        {
+            "id": "docker",
+            "text": "Install Docker, add your user to the docker group, then collect output proving `docker version` and compose plugin access. Safety stop: if daemon won't start, do not proceed.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture install and daemon verification output."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Docker installed; move to verification gate.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
                             "count": 1
                         }
                     ]
@@ -46,23 +105,66 @@
             ]
         },
         {
-            "id": "docker",
-            "text": "Clone the DSPACE repo and install Docker. Use `sudo apt install -y docker.io docker-compose`, add yourself to the docker group, and run `newgrp docker` to refresh.",
+            "id": "verify",
+            "text": "Re-login and run a no-risk compose command to confirm permissions are correct. We only finish if the verification log artifact is present.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Docker ready."
+                    "text": "Verification passed and artifact captured.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        },
+                        {
+                            "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Permission or daemon checks failed; enter recovery loop."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Rollback to last known-good state: check power/cooling, inspect update logs, and re-run package/daemon setup. Record the failure mode before retry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Capture incident notes and remediation steps."
+                },
+                {
+                    "type": "goto",
+                    "goto": "update",
+                    "text": "System stabilized; re-run update and install path.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! The first node is set up and waiting for an SSD.",
+            "text": "Great job. First node is reproducible, verified, and rollback-ready for the SSD migration stage.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Onward!"
+                    "text": "Proceed to SSD boot prep.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -77,7 +179,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
