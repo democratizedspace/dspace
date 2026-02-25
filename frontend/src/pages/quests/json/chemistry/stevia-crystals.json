@@ -1,51 +1,142 @@
 {
     "id": "chemistry/stevia-crystals",
     "title": "Refine Stevia Crystals",
-    "description": "Purify your extract into concentrated crystals",
+    "description": "Refine extract with staged setup and outcome evidence, plus contamination and solvent-safety recovery paths.",
     "image": "/assets/quests/stevia_crystal_refinement.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to step up purity? We'll separate the sweet compounds with a small, controlled alcohol wash.",
+            "text": "Phoenix here. Crystal refinement rewards patience and clean technique. Choose your setup route, then prove both setup readiness and crystal outcome before sign-off.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "purify",
-                    "text": "Let's refine it."
+                    "goto": "setup-branch",
+                    "text": "Stage refinement workflow."
                 }
             ]
         },
         {
-            "id": "purify",
-            "text": "Add a splash of food-grade ethanol and let the solution evaporate. Crystals form as it dries\u2014slow is fine.",
+            "id": "setup-branch",
+            "text": "Pick a route: controlled low-heat concentration (main) or micro-batch seed test (alternate). Both must produce extract-processing evidence before outcome review.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "controlled-setup",
+                    "text": "Main path: controlled low-heat concentration."
+                },
+                {
+                    "type": "goto",
+                    "goto": "seed-setup",
+                    "text": "Alternate path: micro-batch seed test first."
+                }
+            ]
+        },
+        {
+            "id": "controlled-setup",
+            "text": "Filter the extract, label vessels, and keep airflow steady. Use minimal food-grade ethanol and avoid open flame sources.",
             "options": [
                 {
                     "type": "process",
                     "process": "purify-stevia",
-                    "text": "Begin purification"
+                    "text": "Run controlled crystal purification."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "I see white crystals!",
+                    "goto": "outcome-check",
+                    "text": "Controlled run complete—evaluate crystal outcome.",
                     "requiresItems": [
                         {
                             "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Clouding or solvent risk observed—enter recovery protocol."
+                }
+            ]
+        },
+        {
+            "id": "seed-setup",
+            "text": "Use a micro-batch to test evaporation pace before processing the full volume. Stop if odor sharpens or crystal growth is patchy.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "purify-stevia",
+                    "text": "Run micro-batch seed purification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "outcome-check",
+                    "text": "Seed batch produced crystals—review quality gate.",
+                    "requiresItems": [
+                        {
+                            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Seed batch failed quality signals—recover and rerun."
+                }
+            ]
+        },
+        {
+            "id": "outcome-check",
+            "text": "Outcome gate: accept only dry, pale crystals with no sticky residue and no burnt odor. If quality is below spec, route to recovery before finish.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Outcome passes—crystals are dry and clean.",
+                    "requiresItems": [
+                        {
+                            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Outcome fails quality gate—perform corrective recovery."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery protocol: discard compromised residue, sanitize vessels, reduce solvent load, and re-stage ventilation before retry. If quality fails twice, pause production and log equipment inspection.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Decontaminate hands and bench before next attempt."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup-branch",
+                    "text": "Recovery complete—retry from route selection."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Paused safely after documenting repeated instability."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. These crystals are potent and store well. Seal them and label the batch.",
+            "text": "Excellent control. You separated setup and outcome evidence, handled solvent safety, and used recovery loops instead of forcing a bad batch.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks for the guidance!"
+                    "text": "Crystals refined."
                 }
             ]
         }
@@ -60,7 +151,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

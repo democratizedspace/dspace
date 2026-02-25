@@ -1,47 +1,103 @@
 {
     "id": "chemistry/precipitation-reaction",
     "title": "Form a Precipitate",
-    "description": "Mix two solutions until a solid appears.",
+    "description": "Capture precipitation evidence, classify results against clear acceptance bounds, and recover safely when outcomes drift.",
     "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Grab beakers, safety gear, and two clear salt solutions.",
+            "text": "Set up two clear salt solutions, PPE, and labeled beakers. We are not done when cloudiness appears—we need interpretable evidence.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mix",
-                    "text": "Solutions are ready."
+                    "text": "Setup complete—start controlled mixing."
                 }
             ]
         },
         {
             "id": "mix",
-            "text": "Combine the solutions slowly while stirring. Watch for a cloud forming.",
+            "text": "Combine solutions slowly while stirring. Capture both precipitate appearance and a pH reading from the supernatant as your evidence pair.",
             "options": [
                 {
                     "type": "process",
-                    "process": "wash-hands",
-                    "text": "Rinse off any splashes."
+                    "process": "measure-ph",
+                    "text": "Measure supernatant pH and log the reading."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "A solid precipitate settles.",
+                    "goto": "interpret",
+                    "text": "I captured a visible precipitate plus a stable reading.",
                     "requiresItems": [
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                             "count": 1
+                        },
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective-loop",
+                    "text": "Mixture stayed clear or clumped unpredictably—run troubleshooting."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: pass only if a fine, persistent precipitate forms and pH lands in the 6.0–8.0 verification window. Out-of-range readings or unstable solids must be corrected before completion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pass: precipitate is stable and pH is 6.0–8.0.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective-loop",
+                    "text": "Fail: artifact quality or pH window missed—correct and retest."
+                }
+            ]
+        },
+        {
+            "id": "corrective-loop",
+            "text": "Corrective branch: stop additions, isolate suspect reagent, and remix with fresh measured volumes. If splashes occurred, decontaminate first. If two runs fail, log and pause for supervisor review.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Complete spill-safe cleanup before retrying."
+                },
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Corrective actions complete—run another precipitation trial."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Paused safely after logging repeated failed runs."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Filter and label the precipitate for later study.",
+            "text": "Good chemistry discipline: you captured evidence, interpreted it against explicit bounds, and used a controlled recovery loop when results were unreliable.",
             "options": [
                 {
                     "type": "finish",
@@ -60,7 +116,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

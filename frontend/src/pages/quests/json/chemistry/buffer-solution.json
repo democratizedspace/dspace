@@ -1,47 +1,150 @@
 {
     "id": "chemistry/buffer-solution",
     "title": "Prepare a Buffer Solution",
-    "description": "Mix vinegar and baking soda to resist pH swings.",
+    "description": "Build a stable buffer with explicit safety checks, verification evidence, and recovery loops.",
     "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. We'll mix a gentle buffer. Gather vinegar, baking soda, a beaker, gloves, goggles, and a lab coat.",
+            "text": "Phoenix here. Buffer work is about control, not speed. Stage PPE, label vessels, and choose a prep strategy before any mixing starts.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "mix",
-                    "text": "Ready to mix."
+                    "goto": "choose-path",
+                    "text": "Safety setup complete—pick a buffer prep path."
                 }
             ]
         },
         {
-            "id": "mix",
-            "text": "Dissolve a teaspoon of baking soda in water. Stir in vinegar dropwise and check pH as you go.",
+            "id": "choose-path",
+            "text": "Use either a measured route (main path) or a pilot route (alternate). Both must capture a pH artifact before interpretation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measured-mix",
+                    "text": "Main path: measured additions with frequent checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "pilot-mix",
+                    "text": "Alternate path: run a small pilot batch first."
+                }
+            ]
+        },
+        {
+            "id": "measured-mix",
+            "text": "Dissolve baking soda in measured water, add vinegar dropwise, and keep splashes inside a spill tray. Pause if heat or foaming spikes.",
             "options": [
                 {
                     "type": "process",
                     "process": "measure-ph",
-                    "text": "Testing the solution."
+                    "text": "Measure and log pH for the measured batch."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Measured batch logged—review stability window.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Foaming or contamination risk spotted—enter recovery loop."
+                }
+            ]
+        },
+        {
+            "id": "pilot-mix",
+            "text": "Run a small pilot in a labeled beaker to tune dosing pace. If the pilot drifts or clouds, recover before scaling up.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Measure and log pH for the pilot batch."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Pilot data captured—evaluate against pass bounds.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        },
+                        {
+                            "id": "3455faac-8811-4991-b818-cecb98e8fff7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Pilot unstable or cross-contaminated—recover and retry."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: accept only stable pH 6.8–7.2 with no active foaming. Out-of-range or unstable readings must go to corrective recovery before finish.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is stable and in-range (6.8–7.2).",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Reading drifted or missed range—perform corrective loop."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery protocol: stop additions, cap reagents, rinse any splash zones, and reset with fresh strip + clean stir rod. If a second attempt still drifts, pause the run and escalate.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Complete decontamination and bench reset."
+                },
+                {
+                    "type": "goto",
+                    "goto": "choose-path",
+                    "text": "Recovery complete—restart from strategy selection."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "pH is stable around 7.",
-                    "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Escalated safely after documenting repeated instability."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Label the buffer and store it sealed. Small, clean batches beat waste.",
+            "text": "Buffer run closed with evidence, interpretation, and safe recovery discipline. Label the batch and store sealed.",
             "options": [
                 {
                     "type": "finish",
@@ -60,7 +163,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
