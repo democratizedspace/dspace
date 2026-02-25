@@ -1,57 +1,73 @@
 {
     "id": "devops/ssd-boot",
     "title": "Boot from SSD",
-    "description": "Clone the OS to an SSD and enable M.2 boot.",
+    "description": "Migrate boot media with rollback-safe verification before production launch.",
     "image": "/assets/quests/devops_pi_ssd_boot.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Next we'll copy the OS to the SSD so the Pi boots quicker and lasts longer.",
+            "text": "Now we move to SSD boot. Start with a rollback plan so we never lose a bootable system.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "clone",
-                    "text": "I'm ready."
+                    "text": "Rollback checklist ready; start clone.",
+                    "requiresItems": [
+                        {
+                            "id": "36042a2b-861a-4192-a991-98778898963a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I still need to document rollback steps."
                 }
             ]
         },
         {
             "id": "clone",
-            "text": "Run `lsblk` to locate the drive then use `sudo rpi-clone /dev/sda` to clone the system. Set the boot order to USB boot in raspi-config and power down when it finishes.",
+            "text": "Run `lsblk` to confirm target disk, then clone with `sudo rpi-clone /dev/sda`. Do not change boot order until clone verification finishes.",
             "options": [
                 {
                     "type": "process",
                     "process": "clone-os-to-ssd",
-                    "text": "Cloning now."
+                    "text": "Clone OS to SSD."
                 },
                 {
                     "type": "goto",
-                    "goto": "move",
-                    "text": "Clone complete.",
+                    "goto": "install",
+                    "text": "Clone complete and filesystem integrity spot-check passed.",
                     "requiresItems": [
                         {
                             "id": "4af856b5-b5c1-494f-8037-9b6559785633",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Clone failed or source/target disks were mixed up."
                 }
             ]
         },
         {
-            "id": "move",
-            "text": "Insert the SSD into the PoE HAT's M.2 slot and add `dtparam=nvme` to `/boot/config.txt`. Boot again and confirm the partitions mount from the SSD.",
+            "id": "install",
+            "text": "Mount the SSD in the PoE HAT M.2 slot, set NVMe boot params, and power cycle. Keep the microSD nearby for rollback.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-pi-node",
-                    "text": "Installing HAT and SSD."
+                    "text": "Install SSD and reassemble node."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Booted from SSD.",
+                    "goto": "verify",
+                    "text": "Node assembled and boot order updated.",
                     "requiresItems": [
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
@@ -62,8 +78,45 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Verification gate: confirm `/` is on SSD and capture boot logs. If it still boots from microSD, execute rollback and retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verified SSD rootfs and clean reboot evidence captured.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "36042a2b-861a-4192-a991-98778898963a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Boot target is wrong or NVMe is unstable."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Rollback path: boot from known-good microSD, inspect EEPROM boot order and NVMe seating, then rerun clone/install verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "Rollback succeeded; retry migration with corrected settings."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! The Pi now runs from the SSD. Time to launch DSPACE.",
+            "text": "Nice! The Pi now boots from SSD with documented rollback and verification evidence.",
             "options": [
                 {
                     "type": "finish",
@@ -82,7 +135,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

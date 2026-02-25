@@ -1,24 +1,24 @@
 {
     "id": "devops/prepare-first-node",
     "title": "Prepare the First Node",
-    "description": "Flash the OS and install Docker under Orion's guidance.",
+    "description": "Flash and harden the first Pi node with safety and recovery checkpoints.",
     "image": "/assets/quests/devops_prepare_first_node_flash_docker.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's get that first Pi running. Flash Raspberry Pi OS to a microSD card so we can update everything.",
+            "text": "Let's get that first Pi running. First create verified install media, then boot with console access before we touch firmware.",
             "options": [
                 {
                     "type": "process",
                     "process": "flash-sd-card",
-                    "text": "Flashing now."
+                    "text": "Flash Raspberry Pi OS to microSD."
                 },
                 {
                     "type": "goto",
-                    "goto": "update",
-                    "text": "Card flashed and booted.",
+                    "goto": "preflight",
+                    "text": "Card flashed and first boot completed.",
                     "requiresItems": [
                         {
                             "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
@@ -29,36 +29,93 @@
             ]
         },
         {
+            "id": "preflight",
+            "text": "Safety stop: verify stable power and network before running updates or EEPROM changes. Interrupted firmware updates can brick a node.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "update",
+                    "text": "Power/network preflight passed.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Preflight failed (unstable power, no network, or no console)."
+                }
+            ]
+        },
+        {
             "id": "update",
-            "text": "Run `sudo apt update && sudo apt full-upgrade` then install the latest firmware with `sudo rpi-eeprom-update -a`.",
+            "text": "Run `sudo apt update && sudo apt full-upgrade` and `sudo rpi-eeprom-update -a`, then reboot and confirm the node returns cleanly.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "docker",
-                    "text": "System updated.",
+                    "text": "System updated and reboot verification succeeded.",
                     "requiresItems": [
                         {
                             "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Update failed or node did not return after reboot."
                 }
             ]
         },
         {
             "id": "docker",
-            "text": "Clone the DSPACE repo and install Docker. Use `sudo apt install -y docker.io docker-compose`, add yourself to the docker group, and run `newgrp docker` to refresh.",
+            "text": "Install Docker and Compose, then run `docker --version` and a hello-world container so we have objective runtime evidence.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Docker ready."
+                    "text": "Docker installed and runtime checks passed.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Docker install failed or socket permissions are broken."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Troubleshoot in order: restore power/network, fix apt mirror issues, then retry from preflight so every risky step is re-validated.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Fixes applied; rerun preflight and continue."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! The first node is set up and waiting for an SSD.",
+            "text": "Great job! The first node is stable, patched, and Docker-ready for SSD migration.",
             "options": [
                 {
                     "type": "finish",
@@ -77,7 +134,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

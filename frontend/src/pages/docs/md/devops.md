@@ -29,7 +29,9 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `sysadmin/basic-commands`
 - Dialogue `requiresItems` gates:
-    - `list` → "I've gathered the parts." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1
+    - `profile` → "BOM logged and all parts are on hand." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1
+    - `safety` → "Safety checks complete and assembly checklist signed." — fan case ×1, PoE+ switch ×1
+    - Recovery loop: `profile`/`safety` can route to `recover` and back to `profile` for missing-part remediation
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -44,8 +46,11 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/pi-cluster-hardware`
 - Dialogue `requiresItems` gates:
-    - `start` → "Card flashed and booted." — flashed microSD card ×1
-    - `update` → "System updated." — Raspberry Pi 5 board ×1
+    - `start` → "Card flashed and first boot completed." — flashed microSD card ×1
+    - `preflight` → "Power/network preflight passed." — Raspberry Pi 5 board ×1, Ethernet cable ×1
+    - `update` → "System updated and reboot verification succeeded." — Raspberry Pi 5 board ×1
+    - `docker` → "Docker installed and runtime checks passed." — Raspberry Pi 5 board ×1, flashed microSD card ×1
+    - Recovery loop: `preflight`/`update`/`docker` can route to `recover`, which returns to `preflight`
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -327,8 +332,11 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/prepare-first-node`
 - Dialogue `requiresItems` gates:
-    - `clone` → "Clone complete." — bootable 1TB SSD ×1
-    - `move` → "Booted from SSD." — Pi cluster node ×1
+    - `start` → "Rollback checklist ready; start clone." — 64GB microSD card ×1
+    - `clone` → "Clone complete and filesystem integrity spot-check passed." — bootable 1TB SSD ×1
+    - `install` → "Node assembled and boot order updated." — Pi cluster node ×1
+    - `verify` → "Verified SSD rootfs and clean reboot evidence captured." — Pi cluster node ×1, 64GB microSD card ×1
+    - Recovery loop: `start`/`clone`/`verify` can route to `recover`, which returns to `clone`
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
