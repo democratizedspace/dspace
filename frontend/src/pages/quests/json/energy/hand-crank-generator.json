@@ -122,6 +122,38 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "The fuse seat looks loose. Pause and re-check before assembly.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good catch. Re-seat the fuse, meter polarity again, and only continue if readings stay stable with no warmth at the terminals.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Safety checks passed; return to staging.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -166,12 +198,65 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "fin",
+                    "goto": "verify",
                     "text": "Logged 50 Wh without hot wires.",
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                             "count": 50
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Compare your multimeter reading against expected charge gain. If output falls short, rest the crank, tighten terminals, and retry under load.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "Verified: 50 Wh output and stable wiring.",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 50
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Output dipped. Enter recovery mode before retrying.",
+                    "requiresItems": [
+                        {
+                            "id": "afb2b5a3-60e2-4863-b2db-e4d280145128",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Pause and cool down. Re-seat the crank hub, tighten lugs, and confirm polarity before taking another charging run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Recovery complete; retry charging.",
+                    "requiresItems": [
+                        {
+                            "id": "afb2b5a3-60e2-4863-b2db-e4d280145128",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
                         }
                     ]
                 }

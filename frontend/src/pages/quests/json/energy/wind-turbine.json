@@ -48,6 +48,34 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Wind gusts are spiking. Hold position and run safety checks.",
+                    "requiresItems": [
+                        {
+                            "id": "743681a7-d2e7-465c-af07-43665079bf4d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good call. Engage the brake, secure the rotor, and verify mast plumb before climbing. Resume only when gust windows are stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Safety conditions restored; restart install flow.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -62,7 +90,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "harvest",
+                    "goto": "verify-brake",
                     "text": "Tower is anchored and the brake test passed.",
                     "requiresItems": [
                         {
@@ -71,6 +99,59 @@
                         },
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-brake",
+            "text": "Run one more brake/release cycle while watching cable tension. If the mast shifts or wiring chatters, descend and correct before harvesting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Verification passed; proceed to harvesting.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Brake check failed; recover and re-mount.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Lock the brake, lower the nacelle angle, and re-torque all anchor bolts before repeating the mount verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Recovery complete; retry setup.",
+                    "requiresItems": [
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
                             "count": 1
                         }
                     ]
@@ -88,12 +169,65 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify-output",
                     "text": "Logged 200 Wh and cables stayed cool.",
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                             "count": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-output",
+            "text": "Confirm production holds for another gust window and inspect guy lines for creep before sign-off.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verified: output stable and tower secure.",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 200
+                        },
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "gust-recover",
+                    "text": "Output oscillated; run gust recovery and retest.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "gust-recover",
+            "text": "Feather the blades, re-check balance, and tighten guy lines. Re-enter harvesting only after a calm brake test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Recovery complete; retry wind harvest.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
                         }
                     ]
                 }
