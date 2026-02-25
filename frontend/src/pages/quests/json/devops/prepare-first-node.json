@@ -1,23 +1,23 @@
 {
     "id": "devops/prepare-first-node",
     "title": "Prepare the First Node",
-    "description": "Flash the OS and install Docker under Orion's guidance.",
+    "description": "Flash the OS, harden baseline access, and verify Docker readiness with rollback checkpoints.",
     "image": "/assets/quests/devops_prepare_first_node_flash_docker.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's get that first Pi running. Flash Raspberry Pi OS to a microSD card so we can update everything.",
+            "text": "Let's prep node one with operator discipline: flash clean media, patch safely, and verify Docker before we trust automation.",
             "options": [
                 {
                     "type": "process",
                     "process": "flash-sd-card",
-                    "text": "Flashing now."
+                    "text": "Flash Raspberry Pi OS to microSD."
                 },
                 {
                     "type": "goto",
-                    "goto": "update",
+                    "goto": "safety",
                     "text": "Card flashed and booted.",
                     "requiresItems": [
                         {
@@ -29,16 +29,46 @@
             ]
         },
         {
+            "id": "safety",
+            "text": "Before updates, confirm console fallback access and stable power. Safety stop: if you're SSH-only with no local recovery path, do not upgrade firmware yet.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "update",
+                    "text": "Recovery access confirmed; patch baseline.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and stage safer recovery access first."
+                }
+            ]
+        },
+        {
             "id": "update",
-            "text": "Run `sudo apt update && sudo apt full-upgrade` then install the latest firmware with `sudo rpi-eeprom-update -a`.",
+            "text": "Run `sudo apt update && sudo apt full-upgrade`, then `sudo rpi-eeprom-update -a`. Capture package and firmware versions in your runbook.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "docker",
-                    "text": "System updated.",
+                    "text": "System patched with version notes recorded.",
                     "requiresItems": [
                         {
                             "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
                             "count": 1
                         }
                     ]
@@ -47,22 +77,98 @@
         },
         {
             "id": "docker",
-            "text": "Clone the DSPACE repo and install Docker. Use `sudo apt install -y docker.io docker-compose`, add yourself to the docker group, and run `newgrp docker` to refresh.",
+            "text": "Install Docker (`sudo apt install -y docker.io docker-compose`), add your user to the docker group, and verify `docker ps` works without sudo.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Docker installed; verify runtime evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Docker permissions or daemon health failed.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Classify failure (group membership, daemon not enabled, storage driver mismatch). Apply one fix at a time and re-run the verification command.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Remediation done; rerun Docker verification.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: verify `docker ps` and a minimal compose dry run both succeed, then log the command output in ops notes.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Docker ready."
+                    "text": "Runtime checks passed and evidence captured.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Runtime check failed; return to remediation.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! The first node is set up and waiting for an SSD.",
+            "text": "Great work. Node one is now reproducible, recoverable, and evidenced for the SSD migration step.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Onward!"
+                    "text": "Proceed to SSD boot prep.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -77,7 +183,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

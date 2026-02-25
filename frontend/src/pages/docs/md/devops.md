@@ -29,7 +29,13 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `sysadmin/basic-commands`
 - Dialogue `requiresItems` gates:
-    - `list` → "I've gathered the parts." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1
+    - `start` → "Document the cluster workload profile." — Laptop Computer ×1
+    - `profile` → "Budget and target documented. Audit hardware inventory." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1
+    - `inventory-audit` → "Inventory passes with traceable records." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1
+    - `inventory-audit` → "One or more components failed compatibility checks." — Laptop Computer ×1
+    - `recover` → "Replacement acquired; rerun inventory audit." — Laptop Computer ×1
+    - `evidence` → "Manifest complete and hardware set is verified." — Laptop Computer ×1, Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1
+    - `finish` → "Proceed to prepare the first node." — Raspberry Pi 5 board ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -45,7 +51,14 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `requiresQuests`: `devops/pi-cluster-hardware`
 - Dialogue `requiresItems` gates:
     - `start` → "Card flashed and booted." — flashed microSD card ×1
-    - `update` → "System updated." — Raspberry Pi 5 board ×1
+    - `safety` → "Recovery access confirmed; patch baseline." — Raspberry Pi 5 board ×1, Laptop Computer ×1
+    - `update` → "System patched with version notes recorded." — Raspberry Pi 5 board ×1, Laptop Computer ×1
+    - `docker` → "Docker installed; verify runtime evidence." — Raspberry Pi 5 board ×1, Laptop Computer ×1
+    - `docker` → "Docker permissions or daemon health failed." — Laptop Computer ×1
+    - `recover` → "Remediation done; rerun Docker verification." — Laptop Computer ×1
+    - `verify` → "Runtime checks passed and evidence captured." — Raspberry Pi 5 board ×1, Laptop Computer ×1
+    - `verify` → "Runtime check failed; return to remediation." — Laptop Computer ×1
+    - `finish` → "Proceed to SSD boot prep." — Raspberry Pi 5 board ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -327,8 +340,15 @@ Devops quests build practical progression through the devops skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `devops/prepare-first-node`
 - Dialogue `requiresItems` gates:
-    - `clone` → "Clone complete." — bootable 1TB SSD ×1
-    - `move` → "Booted from SSD." — Pi cluster node ×1
+    - `start` → "Run SSD migration preflight." — flashed microSD card ×1, 1TB 2230 M.2 SSD ×1
+    - `preflight` → "Baseline confirmed; proceed to clone." — flashed microSD card ×1, 1TB 2230 M.2 SSD ×1
+    - `clone` → "Clone complete with summary evidence." — bootable 1TB SSD ×1
+    - `move` → "Node boots and mounts root from SSD." — Pi cluster node ×1
+    - `move` → "Boot order or NVMe detection failed." — Raspberry Pi 5 board ×1
+    - `recover` → "Recovery complete; retry SSD boot path." — flashed microSD card ×1, bootable 1TB SSD ×1
+    - `verify` → "Verification evidence confirms stable SSD boot." — Pi cluster node ×1
+    - `verify` → "Evidence is inconsistent; rerun recovery and retest." — Raspberry Pi 5 board ×1
+    - `finish` → "Continue to production launch." — Pi cluster node ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

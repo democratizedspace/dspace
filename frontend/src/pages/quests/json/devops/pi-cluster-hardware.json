@@ -1,31 +1,140 @@
 {
     "id": "devops/pi-cluster-hardware",
     "title": "Plan Your Pi Cluster",
-    "description": "Orion lists the parts needed to build a Raspberry Pi cluster.",
+    "description": "Orion guides a hardware readiness review with safety checks before cluster assembly.",
     "image": "/assets/quests/devops_pi_cluster_hardware_planning.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey there! Orion here. Ready to build a little cluster to run DSPACE on your own hardware?",
+            "text": "Hey there! Orion here. Before we spend credits, we run this like ops: define workload goals, verify power/cooling, and keep a recovery path if anything is missing.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "list",
-                    "text": "Absolutely!"
+                    "goto": "profile",
+                    "text": "Document the cluster workload profile.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "list",
-            "text": "You'll need Raspberry Pi 5 boards, PoE+ HATs with M.2 slots, 1TB NVMe SSDs, a PoE+ switch with cables and a microSD card for flashing the OS. Don't forget a fan case or heatsink so everything stays cool.",
+            "id": "profile",
+            "text": "Choose your target: lightweight services or full CI + observability. Safety stop: if your power budget cannot sustain PoE draw with cooling overhead, pause procurement and resize the plan.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inventory-audit",
+                    "text": "Budget and target documented. Audit hardware inventory.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
+                            "count": 1
+                        },
+                        {
+                            "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Power or cooling risk found. Re-scope first."
+                }
+            ]
+        },
+        {
+            "id": "inventory-audit",
+            "text": "Audit each critical component: Pi board, PoE+ HAT, SSD, microSD, switch, cable, and cooling. Record serials so replacements are traceable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Inventory passes with traceable records.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
+                            "count": 1
+                        },
+                        {
+                            "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
+                            "count": 1
+                        },
+                        {
+                            "id": "36042a2b-861a-4192-a991-98778898963a",
+                            "count": 1
+                        },
+                        {
+                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                            "count": 1
+                        },
+                        {
+                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "count": 1
+                        },
+                        {
+                            "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "One or more components failed compatibility checks.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Good catch. Isolate the failed part, replace only that SKU, and rerun compatibility checks before proceeding. No mixed revisions in the first node.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inventory-audit",
+                    "text": "Replacement acquired; rerun inventory audit.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Final gate: keep a parts manifest and staging photo in your ops notes so future failures map to exact hardware revisions.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "I've gathered the parts.",
+                    "text": "Manifest complete and hardware set is verified.",
                     "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
                         {
                             "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
                             "count": 1
@@ -60,11 +169,17 @@
         },
         {
             "id": "finish",
-            "text": "Excellent! With the hardware ready we can prepare the first node.",
+            "text": "Excellent. Your cluster plan now has a safety stop, an audit trail, and a recovery loop instead of a one-click checklist.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Let's do it."
+                    "text": "Proceed to prepare the first node.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -79,7 +194,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
