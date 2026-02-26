@@ -8,39 +8,112 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session.\nLet's sanitize it so it's ready for the next use.",
+            "text": "Your CPR pocket mask needs post-training decontamination. We'll run a full clean-disinfect-verify cycle.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "clean",
-                    "text": "How do I clean it?"
+                    "goto": "precheck",
+                    "text": "Start sanitation checklist"
                 }
             ]
         },
         {
-            "id": "clean",
-            "text": "Wash the mask with warm soapy water, rinse and soak it in a 1:10 bleach solution for two minutes.\nLet it air dry completely before storing it in your first aid kit.",
+            "id": "precheck",
+            "text": "Confirm PPE and tools: nitrile gloves, antiseptic wipes, and the mask itself. If the valve is cracked, retire the mask.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wash",
+                    "text": "PPE ready and mask is intact",
+                    "requiresItems": [
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 },
+                        { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "replace-mask",
+                    "text": "Mask is cracked or cloudy"
+                }
+            ]
+        },
+        {
+            "id": "replace-mask",
+            "text": "Do not sanitize damaged rescue gear. Replace the pocket mask first, then restart this quest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "precheck",
+                    "text": "Replacement mask ready"
+                }
+            ]
+        },
+        {
+            "id": "wash",
+            "text": "Wash your hands before handling the mask. Keep gloves on during the disinfect phase.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Hands washed",
+                    "goto": "disinfect"
+                }
+            ]
+        },
+        {
+            "id": "disinfect",
+            "text": "Wash the mask with warm soapy water, rinse, then disinfect (1:10 bleach soak for 2 minutes). Air-dry fully.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Sanitization complete",
+                    "requiresItems": [
+                        { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 },
+                        { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse-retry",
+                    "text": "Still smells like bleach or looks dirty"
+                }
+            ]
+        },
+        {
+            "id": "rinse-retry",
+            "text": "Rinse again and repeat the disinfection cycle. Never store a damp or residue-covered mask.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "disinfect",
+                    "text": "Repeat sanitize cycle"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final safety check: mask is dry, clear, and resealed in a clean pouch inside your first aid kit.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Mask is sanitized",
+                    "text": "Verified and stored",
                     "requiresItems": [
-                        {
-                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
-                            "count": 1
-                        }
+                        { "id": "a1c7f153-5b2e-443d-936a-47f396a7d191", "count": 1 },
+                        { "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 }
                     ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "All clean! A sanitized mask protects both you and your patient during resuscitation.",
+            "text": "Mask sanitation complete. Clean gear and clear storage logs keep CPR response safer for everyone.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ready for emergencies"
+                    "text": "Pocket mask is ready"
                 }
             ]
         }
@@ -55,7 +128,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

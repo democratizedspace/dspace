@@ -27,7 +27,9 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - `pack` → "Supplies packed" — first aid kit ×1
+    - `inventory-check` → "Supplies are complete and in date" — adhesive bandages ×1, sterile gauze pads ×1, antiseptic wipes ×1, nitrile gloves (pair) ×1, first aid kit ×1
+    - `pack` → "Kit is already packed and sealed" — first aid kit ×1
+    - `verify` → "Seal and storage checks pass" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -123,14 +125,19 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/learn-cpr`
 - Dialogue `requiresItems` gates:
-    - `clean` → "Mask is sanitized" — CPR pocket mask ×1
+    - `precheck` → "PPE ready and mask is intact" — nitrile gloves (pair) ×1, antiseptic wipes ×1, CPR pocket mask ×1
+    - `disinfect` → "Sanitization complete" — CPR pocket mask ×1, antiseptic wipes ×1
+    - `verify` → "Verified and stored" — CPR pocket mask ×1, first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
 
 ## 7) Stop a Nosebleed (`firstaid/stop-nosebleed`)
 
@@ -138,7 +145,7 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/restock-kit`
 - Dialogue `requiresItems` gates:
-    - `pressure` → "Holding pressure now." — first aid kit ×1, sterile gauze pads ×1, nitrile gloves (pair) ×1, antiseptic wipes ×1
+    - `prep` → "Supplies ready" — first aid kit ×1, sterile gauze pads ×1, nitrile gloves (pair) ×1, antiseptic wipes ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -258,4 +265,5 @@ First Aid quests build practical progression through the first aid skill tree. T
 
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
+- Safety/recovery checks for this hardening pass: `firstaid/assemble-kit` now includes contamination restart + seal verification loop, `firstaid/sanitize-pocket-mask` includes damaged-mask stop + rinse-retry path, and `firstaid/stop-nosebleed` includes emergency triage and mandatory escalation after failed retry.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.

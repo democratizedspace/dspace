@@ -8,84 +8,135 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "dChat here! Minor cuts happen. A first aid kit and clean hands help you respond fast.",
+            "text": "dChat here! Minor cuts happen. We'll build a clean, labeled kit and confirm it's actually ready before we call it done.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "gather",
-                    "text": "What do I need?"
+                    "goto": "inventory-check",
+                    "text": "Let's build it"
                 }
             ]
         },
         {
-            "id": "gather",
-            "text": "Wash with soap and water 20s, then dry with a paper towel. Set out bandages, gauze pads, antiseptic wipes, nitrile gloves.",
+            "id": "inventory-check",
+            "text": "Check your supplies first: bandages, gauze, antiseptic wipes, nitrile gloves, and a dry kit box with a lid.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "hygiene",
+                    "text": "Supplies are complete and in date",
+                    "requiresItems": [
+                        { "id": "7f2d7f53-5fe2-4955-8830-71158388af0f", "count": 1 },
+                        { "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9", "count": 1 },
+                        { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "missing-supplies",
+                    "text": "I'm missing something or found expired supplies"
+                }
+            ]
+        },
+        {
+            "id": "missing-supplies",
+            "text": "Good catch. Replace expired items and restock before assembly. Don't seal a kit with questionable supplies.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inventory-check",
+                    "text": "Supplies replaced; re-run inventory check"
+                }
+            ]
+        },
+        {
+            "id": "hygiene",
+            "text": "Safety first: wash for 20 seconds, dry hands fully, and only then handle sterile items.",
             "options": [
                 {
                     "type": "process",
                     "process": "wash-hands",
-                    "text": "Hands are clean",
+                    "text": "Hands washed",
                     "goto": "dry"
                 },
                 {
                     "type": "goto",
-                    "goto": "dry",
-                    "text": "I already washed my hands."
+                    "goto": "contamination-restart",
+                    "text": "I touched a dirty surface while setting up"
+                }
+            ]
+        },
+        {
+            "id": "contamination-restart",
+            "text": "Pause assembly and wash again. Contamination control is non-negotiable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "hygiene",
+                    "text": "Understood; washing again"
                 }
             ]
         },
         {
             "id": "dry",
-            "text": "Dry your hands before handling supplies.",
+            "text": "Dry your hands completely before you touch sterile gauze and wipes.",
             "options": [
                 {
                     "type": "process",
                     "process": "dry-hands",
                     "text": "Hands are dry",
                     "goto": "pack"
-                },
-                {
-                    "type": "goto",
-                    "goto": "start",
-                    "text": "Let me restart the checklist before handling supplies."
-                },
-                {
-                    "type": "goto",
-                    "goto": "pack",
-                    "text": "My hands are already dry."
                 }
             ]
         },
         {
             "id": "pack",
-            "text": "Check for damage or expiry. Pack items in a dry box with a label and tight lid.",
+            "text": "Pack the kit with sterile supplies, close the lid tightly, and label today's date for inspection tracking.",
             "options": [
                 {
                     "type": "process",
                     "process": "pack-first-aid-kit",
-                    "text": "Packing now",
-                    "goto": "finish"
+                    "text": "Pack and seal the kit",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
+                    "text": "Kit is already packed and sealed",
                     "requiresItems": [
-                        {
-                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Supplies packed"
+                        { "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final check: lid sealed, label readable, and kit stored dry/out of direct heat. If any check fails, reopen and repack.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Seal and storage checks pass",
+                    "requiresItems": [
+                        { "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "pack",
+                    "text": "Seal failed; reopen and repack"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Keep kit dry out of reach; restock supplies and call emergency services for serious injuries.",
+            "text": "Great work. Your first aid kit is stocked, sealed, and safely stored. Recheck monthly and replace expired supplies immediately.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do!"
+                    "text": "Kit is mission-ready"
                 }
             ]
         }
@@ -100,7 +151,7 @@
     "hardening": {
         "passes": 6,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",

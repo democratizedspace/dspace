@@ -8,56 +8,138 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You're bleeding from the nose. Stay calm, sit upright, and grab your first aid kit.",
+            "text": "You're bleeding from the nose. Stay calm. We'll run a fast safety triage before first aid steps.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-triage",
+                    "text": "Start triage"
+                }
+            ]
+        },
+        {
+            "id": "safety-triage",
+            "text": "Check danger signs first: heavy flow, head injury, blood thinners, or faintness. If any are present, seek urgent medical help.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "No danger signs; proceed with first aid"
+                },
+                {
+                    "type": "goto",
+                    "goto": "emergency",
+                    "text": "Danger signs present"
+                }
+            ]
+        },
+        {
+            "id": "emergency",
+            "text": "Stop self-treatment and contact emergency care now. Keep leaning forward and avoid packing the nostril.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Escalated to emergency care"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Sit upright, lean forward ~30°, glove up, and prepare gauze + antiseptic wipe from your first aid kit.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "pressure",
-                    "text": "How do I stop it?"
+                    "text": "Supplies ready",
+                    "requiresItems": [
+                        { "id": "09af703f-7054-4b33-a67d-4035d58bdfb7", "count": 1 },
+                        { "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9", "count": 1 },
+                        { "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa", "count": 1 },
+                        { "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a", "count": 1 }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "restock",
+                    "text": "Missing supplies"
+                }
+            ]
+        },
+        {
+            "id": "restock",
+            "text": "Restock before treatment so you can stay clean and apply steady pressure safely.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Supplies restocked"
                 }
             ]
         },
         {
             "id": "pressure",
-            "text": "Sit upright and lean forward about 30\u00b0 so blood drains out, not down your throat. Put on nitrile gloves from a first aid kit, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and hold steady pressure for at least 10 minutes without checking early. When bleeding slows, wipe around the nostrils with an antiseptic wipe without inserting anything into the nose. Do not tilt your head back or stuff anything into the nostrils.",
+            "text": "Pinch the soft part of your nose with gauze and hold for 10 full minutes without checking early. Breathe through your mouth.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stop-nosebleed",
+                    "text": "Run 10-minute pressure cycle",
+                    "goto": "recheck"
+                }
+            ]
+        },
+        {
+            "id": "recheck",
+            "text": "After 10 minutes, release pressure once and reassess. Keep leaning forward.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Holding pressure now.",
-                    "requiresItems": [
-                        {
-                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
-                            "count": 1
-                        },
-                        {
-                            "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Bleeding stopped"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry",
+                    "text": "Bleeding continues"
+                }
+            ]
+        },
+        {
+            "id": "retry",
+            "text": "Apply a second 10-minute pressure cycle. If it still doesn't stop, escalate to medical care.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stop-nosebleed",
+                    "text": "Run second pressure cycle",
+                    "goto": "escalate-check"
+                }
+            ]
+        },
+        {
+            "id": "escalate-check",
+            "text": "If bleeding remains after 20 minutes total, call emergency services or go to urgent care.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bleeding stopped after second cycle"
+                },
+                {
+                    "type": "goto",
+                    "goto": "emergency",
+                    "text": "Still bleeding; escalate now"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "If bleeding hasn't stopped after 20 minutes, is heavy, you're on blood thinners, or you feel faint, seek medical help or call emergency services. After it stops, rest with your head elevated, throw away used supplies, wash your hands, and avoid blowing or picking your nose for the rest of the day.",
+            "text": "Good closeout: dispose used supplies, wash hands, avoid nose blowing/picking for the day, and monitor for re-bleeding.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "stop-nosebleed",
-                    "text": "Review nosebleed control steps"
-                },
-                {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Done"
                 }
             ]
         }
@@ -72,7 +154,7 @@
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",
