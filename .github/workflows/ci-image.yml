@@ -99,7 +99,7 @@ jobs:
           platforms: linux/amd64
           provenance: false
           cache-from: type=gha,scope=ci-image-local
-          cache-to: type=gha,mode=max,scope=ci-image-local
+          cache-to: type=gha,mode=max,ignore-error=true,scope=ci-image-local
           load: true
           tags: dspace-test:latest
           build-args: |
@@ -379,7 +379,7 @@ jobs:
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max,ignore-error=true
 
       - name: Build and push image (attempt 2)
         id: build_push_2
@@ -405,7 +405,7 @@ jobs:
             org.opencontainers.image.revision=${{ steps.metadata.outputs.revision }}
             org.opencontainers.image.created=${{ steps.metadata.outputs.created }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=max,ignore-error=true
 
       - name: Build image for SHA verification
         if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
