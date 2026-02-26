@@ -116,7 +116,7 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Conditions improved\u2014retry observation."
+                    "text": "Conditions improved—retry observation."
                 },
                 {
                     "type": "goto",
@@ -187,7 +187,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Notes are incomplete or the signature is uncertain\u2014retry."
+                    "text": "Notes are incomplete or the signature is uncertain—retry."
                 }
             ]
         },
@@ -208,11 +208,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/andromeda"],
+    "requiresQuests": [
+        "astronomy/andromeda"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-17",
