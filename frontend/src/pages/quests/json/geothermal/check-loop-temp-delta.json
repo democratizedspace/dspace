@@ -218,18 +218,8 @@
                             "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
                             "count": 1
                         }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "interpret-retest",
-                    "text": "Post-correction trace logged",
-                    "requiresItems": [
-                        {
-                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 3
-                        }
-                    ]
+                    ],
+                    "goto": "interpret-retest"
                 }
             ]
         },

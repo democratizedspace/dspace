@@ -178,7 +178,6 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `publish` → "Push a live delta dashboard" — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
     - `publish` → "Dashboard is live, interpret delta stability" — live temperature dashboard ×1
     - `interpret` → "Delta stayed stable and in range" — live temperature dashboard ×1
-    - `retest` → "Post-correction trace logged" — temperature log CSV ×3
     - `interpret-retest` → "Corrective trace passed" — temperature log CSV ×3, live temperature dashboard ×1
     - `finish` → "Delta is monitored" — live temperature dashboard ×1
 - Grants:
@@ -325,7 +324,6 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `compare` → "Seasonal comparison dataset ready" — temperature log CSV ×2
     - `interpret` → "Seasonal drift is within bounds" — temperature log CSV ×2
     - `retest` → "Capture corrected seasonal trace" — thermistor logging rig ×1, Laptop Computer ×1
-    - `retest` → "Corrected trace logged" — temperature log CSV ×4
     - `interpret-retest` → "Corrected dataset passed" — temperature log CSV ×4
     - `finish` → "Seasonal comparison validated" — temperature log CSV ×2
 - Grants:
