@@ -137,12 +137,6 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
-                            "count": 1
-                        }
-                    ],
                     "text": "Unsafe window tonight; log the partial and stand down."
                 }
             ]
