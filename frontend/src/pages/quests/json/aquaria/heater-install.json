@@ -1,7 +1,7 @@
 {
     "id": "aquaria/heater-install",
     "title": "Install an aquarium heater",
-    "description": "Install a 150 W heater in a Walstad tank, verify a safe range, and recover if the first reading drifts.",
+    "description": "Install a 150 W heater in a Walstad tank, verify safe stability, and use rollback or lockout recovery when readings drift or hardware risk appears.",
     "image": "/assets/quests/install_aquarium_heater.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
@@ -33,7 +33,7 @@
         },
         {
             "id": "mount",
-            "text": "Unplug other gear, submerge the heater near flow, set 26°C, and wait 20 minutes before powering so the glass equalizes to water temp.",
+            "text": "Unplug other gear, submerge the heater near flow, set 26\u00b0C, and wait 20 minutes before powering so the glass equalizes to water temp.",
             "options": [
                 {
                     "type": "process",
@@ -55,7 +55,7 @@
         },
         {
             "id": "verify",
-            "text": "Log the stabilized temperature before adding fish. Acceptable range is 25–27°C after a full warm-up window.",
+            "text": "Log the stabilized temperature before adding fish. Acceptable range is 25\u201327\u00b0C after a full warm-up window.",
             "options": [
                 {
                     "type": "process",
@@ -82,7 +82,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Range held at 25–27°C for two checks",
+                    "text": "Range held at 25\u201327\u00b0C for two checks",
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
@@ -100,12 +100,17 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-lockout",
+                    "text": "Heater glass looks cracked, exposed, or intermittently powered"
                 }
             ]
         },
         {
             "id": "rollback",
-            "text": "Recovery protocol: unplug heater, confirm full submersion depth, reset the dial one notch toward target, then take a fresh stabilized reading before deciding next action.",
+            "text": "Recovery protocol: unplug heater, confirm full submersion depth, reset the dial one notch toward target, then take a fresh stabilized reading before deciding next action. If drift persists or hardware confidence drops, transition to lockout before any further heating.",
             "options": [
                 {
                     "type": "process",
@@ -123,6 +128,27 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-lockout",
+                    "text": "Drift or instability continues after rollback; lock out and replace hardware."
+                }
+            ]
+        },
+        {
+            "id": "safety-lockout",
+            "text": "Safety lockout: keep the heater unplugged, isolate livestock heat risk, and do not resume automatic heating until damaged hardware is replaced.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Replacement heater is staged; rerun rollback verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Lockout documented and manual monitoring plan is active."
                 }
             ]
         },
@@ -145,9 +171,9 @@
     ],
     "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer", "aquaria/walstad"],
     "hardening": {
-        "passes": 3,
+        "passes": 4,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-16",
@@ -163,6 +189,11 @@
                 "task": "codex-quest-update-2025-05-24",
                 "date": "2025-05-24",
                 "score": 92
+            },
+            {
+                "task": "codex-quest-hardening-2026-02-26",
+                "date": "2026-02-26",
+                "score": 96
             }
         ]
     }

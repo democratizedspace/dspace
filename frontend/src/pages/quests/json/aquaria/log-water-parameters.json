@@ -1,7 +1,7 @@
 {
     "id": "aquaria/log-water-parameters",
     "title": "Log Water Parameters",
-    "description": "Run a full liquid test panel, classify anomalies, and log a complete record for trend tracking.",
+    "description": "Run a full liquid test panel, classify anomalies by severity, and log complete records with a deterministic corrective/retest loop.",
     "image": "/assets/quests/paperwork.jpg",
     "npc": "/assets/npc/vega.jpg",
     "start": "start",
@@ -62,7 +62,7 @@
         },
         {
             "id": "log",
-            "text": "Record date/time plus all four fields. Flag ammonia or nitrite above 0 ppm, nitrate above 40 ppm, or pH outside 6.8–7.6.",
+            "text": "Record date/time plus all four fields. Minimum cadence is every 48 hours for stocked tanks. Flag ammonia or nitrite above 0 ppm, nitrate above 40 ppm, or pH outside 6.8–7.6.",
             "options": [
                 {
                     "type": "process",
@@ -126,12 +126,23 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "critical-response",
+                    "text": "Ammonia or nitrite is above 0 ppm (critical event)",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "corrective",
-            "text": "Corrective branch: perform a partial water change, then run the test panel again before we sign off the day.",
+            "text": "Corrective branch: perform a partial water change, then run the test panel again before we sign off the day. Keep fish feeding reduced until values normalize.",
             "options": [
                 {
                     "type": "process",
@@ -142,6 +153,28 @@
                     "type": "goto",
                     "goto": "measure",
                     "text": "Correction complete, re-measure the panel",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "critical-response",
+            "text": "Critical response: pause feeding, run an immediate partial water change, and retest before returning to the normal logging cadence.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run emergency corrective water change"
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Emergency change complete; rerun full measurement panel",
                     "requiresItems": [
                         {
                             "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
@@ -170,14 +203,19 @@
     ],
     "requiresQuests": ["aquaria/water-testing"],
     "hardening": {
-        "passes": 1,
+        "passes": 2,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-23",
                 "date": "2025-08-23",
                 "score": 65
+            },
+            {
+                "task": "codex-quest-hardening-2026-02-26",
+                "date": "2026-02-26",
+                "score": 96
             }
         ]
     }

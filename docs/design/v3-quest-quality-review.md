@@ -237,9 +237,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature
 
 - `aquaria/aquarium-light`
-  - [ ] Observed issue: `aquaria/aquarium-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue: `aquaria/aquarium-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3746)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3746)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3746)
 - `aquaria/balance-ph`
   - [x] Observed issue: `aquaria/balance-ph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3609)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3609)
@@ -267,11 +267,11 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 - `aquaria/heater-install`
   - [x] Observed issue: `aquaria/heater-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3620)
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3620)
-  - [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3620)
+  - [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3620, #3746)
 - `aquaria/log-water-parameters`
   - [x] Observed issue: `aquaria/log-water-parameters` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3620)
   - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3620)
-  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3620)
+  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3620, #3746)
 - `aquaria/net-fish`
   - [x] Observed issue: `aquaria/net-fish` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3651)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3651)
