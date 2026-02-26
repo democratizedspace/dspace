@@ -8,40 +8,108 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Ready to try out the basic income system? Let's trigger your first payout so you see how it works.",
+            "text": "Ready to try out the basic income system? Let's trigger your first payout so you can verify the full claim loop, not just click one button.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "claim",
-                    "text": "Absolutely."
+                    "goto": "prep",
+                    "text": "Absolutely. Let's do a clean first claim."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-start",
+                    "text": "I tried before and the claim button wasn't ready."
                 }
             ]
         },
         {
-            "id": "claim",
-            "text": "Open the wallet page and click the claim button. Your balance will increase instantly once the transaction finishes.",
+            "id": "prep",
+            "text": "Step one: open Wallet and confirm the basic-income process card is visible. If you do not see it, reload once and re-open Wallet before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "claim-process",
+                    "text": "Card is visible. Launching claim now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-start",
+                    "text": "Still missing or still on cooldown."
+                }
+            ]
+        },
+        {
+            "id": "claim-process",
+            "text": "Great. Launch one `basic-income` claim and wait until it completes. Your wallet should gain both dUSD and dBI.",
             "options": [
                 {
                     "type": "process",
                     "process": "basic-income",
-                    "text": "Claiming now."
+                    "text": "Run basic-income now."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Funds received",
+                    "goto": "verify-proof",
+                    "text": "Process finished. I am ready to verify balances.",
                     "requiresItems": [
                         {
                             "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
-                            "count": 1
+                            "count": 100
+                        },
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 100
                         }
                     ]
                 }
             ]
         },
         {
+            "id": "verify-proof",
+            "text": "Nice evidence gate. You now hold at least 100 dBI and 100 dUSD, which proves the payout posted. Do you want to practice the repeatable daily flow or finish now?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "repeatable-flow",
+                    "text": "Show me the repeatable daily checklist."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Proof recorded, I'm ready to finish."
+                }
+            ]
+        },
+        {
+            "id": "repeatable-flow",
+            "text": "Repeatable flow: 1) check cooldown, 2) claim, 3) confirm both dUSD and dBI moved, 4) set a reminder so you do not miss tomorrow.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Got it. I'll follow that routine daily."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot-start",
+            "text": "Troubleshooting path: if claim is unavailable, verify you already completed `ubi/basicincome`, wait for the daily cooldown, then reload Wallet. If the process still fails to launch, pause and avoid repeated rapid clicks so your state stays clean.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Issue cleared. Continue with the clean claim path."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I'll stop here and retry after cooldown safely."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Come back tomorrow for another payment and watch your savings grow.",
+            "text": "Excellent first payout. Come back tomorrow for another claim and keep your evidence habit: confirm both currencies each time.",
             "options": [
                 {
                     "type": "finish",
@@ -60,7 +128,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

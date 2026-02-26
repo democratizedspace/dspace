@@ -36,7 +36,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - Unlock prerequisite:
     - `requiresQuests`: `ubi/basicincome`
 - Dialogue `requiresItems` gates:
-    - `claim` → "Funds received" — dBI ×1
+    - `claim-process` → "Process finished. I am ready to verify balances." — dBI ×100 and dUSD ×100
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -48,13 +48,18 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
         - Consumes: none
         - Creates: dUSD ×100, dBI ×100
 
+- QA hardening notes:
+    - Added two progression branches (clean claim flow vs troubleshooting for cooldown/card visibility).
+    - Completion now requires mechanics-backed balance evidence (dBI + dUSD threshold gate) before finish.
+    - Added a repeatable daily operating checklist branch.
+
 ## 3) Set a UBI Reminder (`ubi/reminder`)
 
 - Quest link: [/quests/ubi/reminder](/quests/ubi/reminder)
 - Unlock prerequisite:
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
-    - None
+    - `verify-signal` → "Verified dBI balance and reminder label." — dBI ×100
 - Player action expectation:
     - This quest instructs the player to create a recurring reminder in their IRL phone reminder/alarm app.
     - DSpace does **not** create in-game reminders for this quest.
@@ -66,6 +71,11 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - Processes used:
     - None (player action is setting an IRL phone reminder; the UBI claim process is run later outside this quest dialogue)
 
+- QA hardening notes:
+    - Added non-linear branch selection (strict routine vs fallback routine).
+    - Added a troubleshooting branch for notifications/timezone/permission failures and recovery loop.
+    - Added an in-game evidence gate tying reminder setup to an active UBI wallet state.
+
 ## 4) Start a Savings Jar (`ubi/savings-goal`)
 
 - Quest link: [/quests/ubi/savings-goal](/quests/ubi/savings-goal)
@@ -73,12 +83,20 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
     - `buy-jar` → "I bought the savings jar." — savings jar ×1
+    - `single-deposit` → "Deposit complete. Verify stored balance now." — dUSD ×90
+    - `staged-deposit` → "Top-up done. Proceed with jar deposit." — dUSD ×100
+    - `verify-store` → "Stored value confirmed and break-risk understood." — savings jar ×1
+    - `budget-recovery` → "Recovery complete. Retry jar setup." — dUSD ×100
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - None
 - Processes used:
+    - [basic-income](/processes/basic-income)
+        - Requires: none
+        - Consumes: none
+        - Creates: dUSD ×100, dBI ×100
     - [savings-jar-deposit](/processes/savings-jar-deposit)
         - Requires: savings jar ×1
         - Consumes: dUSD ×10
@@ -87,6 +105,11 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
         - Requires: savings jar ×1
         - Consumes: savings jar ×1
         - Creates: broken savings jar ×1 and returns all stored dUSD from container balance
+
+- QA hardening notes:
+    - Added alternate strategy branch (single-deposit vs staged top-up path).
+    - Added budget/inventory recovery loop using `basic-income` when balances are short.
+    - Added operational safety guidance to verify stored value before any jar break action.
 
 ## QA flow notes
 

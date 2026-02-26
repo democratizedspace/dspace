@@ -8,12 +8,17 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You're collecting dUSD regularly. Let's set up a real savings habit with a dedicated jar.",
+            "text": "You're collecting dUSD regularly. Let's build a durable savings routine with a jar, proof checks, and a fallback path.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "buy-jar",
                     "text": "Sounds good."
+                },
+                {
+                    "type": "goto",
+                    "goto": "budget-recovery",
+                    "text": "I don't have enough dUSD yet."
                 }
             ]
         },
@@ -23,7 +28,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "deposit",
+                    "goto": "deposit-choice",
                     "text": "I bought the savings jar.",
                     "requiresItems": [
                         {
@@ -31,28 +36,121 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "budget-recovery",
+                    "text": "I still need more dUSD first."
                 }
             ]
         },
         {
-            "id": "deposit",
-            "text": "Great. Run the savings jar deposit process to stash exactly 10 dUSD.",
+            "id": "deposit-choice",
+            "text": "Now choose your deposit approach: exact single deposit or staged deposits while keeping at least 10 dUSD total ready.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "single-deposit",
+                    "text": "Single deposit plan."
+                },
+                {
+                    "type": "goto",
+                    "goto": "staged-deposit",
+                    "text": "Staged deposit plan."
+                }
+            ]
+        },
+        {
+            "id": "single-deposit",
+            "text": "Run one `savings-jar-deposit` process for 10 dUSD and then verify your wallet still has at least 90 dUSD remaining for operations.",
             "options": [
                 {
                     "type": "process",
                     "process": "savings-jar-deposit",
-                    "text": "Deposit 10 dUSD into the jar."
+                    "text": "Deposit 10 dUSD in one go."
                 },
                 {
                     "type": "goto",
+                    "goto": "verify-store",
+                    "text": "Deposit complete. Verify stored balance now.",
+                    "requiresItems": [
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 90
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "staged-deposit",
+            "text": "Staged path: if your wallet is tight, claim basic income first, then run savings deposit once your balance is healthy.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "Top up with one basic-income cycle first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "single-deposit",
+                    "text": "Top-up done. Proceed with jar deposit.",
+                    "requiresItems": [
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 100
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-store",
+            "text": "Operational safety check: open the jar details and confirm stored value increased before planning to break it. Never break the jar unless you intentionally want to cash out.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "I deposited 10 dUSD and checked Stored contents on the jar page."
+                    "text": "Stored value confirmed and break-risk understood.",
+                    "requiresItems": [
+                        {
+                            "id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "budget-recovery",
+                    "text": "Stored value looks wrong or missing."
+                }
+            ]
+        },
+        {
+            "id": "budget-recovery",
+            "text": "Recovery branch: if funds are short or balances look wrong, run another basic-income claim, refresh inventory, then re-check jar ownership and wallet totals before retrying deposit.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "Run recovery claim cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "buy-jar",
+                    "text": "Recovery complete. Retry jar setup.",
+                    "requiresItems": [
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 100
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! The savings jar now tracks your stored dUSD separately. To retrieve it, you must run the break process.",
+            "text": "Nice work. You now have a resilient savings loop: fund wallet, deposit intentionally, and verify stored balance before any jar break action.",
             "options": [
                 {
                     "type": "finish",
@@ -71,7 +169,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
