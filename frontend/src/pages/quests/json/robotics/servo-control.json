@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion again! Ready to add some movement to your projects? We'll wire a servo test rig and sweep it safely\u2014ESD strap on, and keep fingers clear of the horn.",
+            "text": "Orion again! Ready to add some movement to your projects? We'll wire a servo test rig and sweep it safely—ESD strap on, and keep fingers clear of the horn.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "hookup",
-                    "text": "Gear is ready\u2014let's wire it.",
+                    "text": "Gear is ready—let's wire it.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -62,7 +62,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "code",
+                    "goto": "safety-check",
                     "text": "Wiring is tidy and strain relief is done.",
                     "requiresItems": [
                         {
@@ -74,8 +74,30 @@
             ]
         },
         {
+            "id": "safety-check",
+            "text": "Before movement, verify horn clearance, confirm no exposed conductors, and set a low-angle test (30° to 150°) so the first sweep cannot slam hard stops.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Safety checks pass; run the first sweep.",
+                    "requiresItems": [
+                        {
+                            "id": "b3857812-f50c-4880-810d-c929698599b3",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I hear chatter or see the horn binding—pause and fix before sweeping."
+                }
+            ]
+        },
+        {
             "id": "code",
-            "text": "Load the Sweep example, set min/max to avoid stalling, and log one smooth cycle. Unplug if you hear chatter; adjust limits and rerun.",
+            "text": "Load the Sweep example, start with conservative limits, and log one full motion cycle. Keep your hand near power in case the servo stalls.",
             "options": [
                 {
                     "type": "process",
@@ -84,14 +106,57 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Sweep logged and quiet.",
+                    "goto": "evidence",
+                    "text": "Sweep log captured.",
                     "requiresItems": [
                         {
                             "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Sweep chattered, bound, or never completed—go to recovery steps."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Troubleshoot in this order: reseat ground/power, recenter the horn, then reduce sweep range by 10° each side. Re-run only after the rig is stable and quiet.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "hookup",
+                    "text": "Reworked wiring and mounting—repeat hookup verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Mechanical issue fixed—repeat safety gate."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Capture a second sweep after your limit tuning. Finish only when both cycles are quiet and center return stays repeatable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Two clean sweeps recorded; center return is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Second sweep drifted or buzzed—apply recovery before retrying."
                 }
             ]
         },
@@ -116,7 +181,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
