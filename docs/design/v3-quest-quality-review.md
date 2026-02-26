@@ -766,17 +766,17 @@ Anchor confirmation in docs/qa/v3.md §4.5: [x] hydroponics/nutrient-check; [x] 
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3653)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3653)
 - `geothermal/check-loop-temp-delta`
-  - [ ] Observed issue: `geothermal/check-loop-temp-delta` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `geothermal/check-loop-temp-delta` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #9001)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #9001)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #9001)
 - `geothermal/compare-depth-ground-temps`
   - [x] Observed issue: `geothermal/compare-depth-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3713)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3713)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3713)
 - `geothermal/compare-seasonal-ground-temps`
-  - [ ] Observed issue: `geothermal/compare-seasonal-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `geothermal/compare-seasonal-ground-temps` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #9001)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #9001)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #9001)
 - `geothermal/install-backup-thermistor`
   - [x] Observed issue (addressed): `geothermal/install-backup-thermistor` previously read like a one-pass install task, with verify/rollback state changes not clearly represented; this was hardened in PR #3628. (PR #3628)
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3628)
@@ -802,9 +802,9 @@ Anchor confirmation in docs/qa/v3.md §4.5: [x] hydroponics/nutrient-check; [x] 
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3653)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3653)
 - `geothermal/survey-ground-temperature`
-  - [x] Observed issue: `geothermal/survey-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3713)
-  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3713)
-  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3713)
+  - [x] Observed issue: `geothermal/survey-ground-temperature` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3713, #9001)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3713, #9001)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3713, #9001)
 
 ### hydroponics (21 quests)
 
