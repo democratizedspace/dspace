@@ -207,6 +207,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - `requiresQuests`: `robotics/line-follower`, `robotics/ultrasonic-rangefinder`
 - Dialogue `requiresItems` gates:
     - `build` → "Wiring and avoidance routine are ready." — Servo Motor ×1
+    - `safety` → "Safety checks pass; run operator lockout checks." — Servo Motor ×1
     - `ops-check` → "Ops checks pass; run the obstacle course." — Servo Motor ×1, safety goggles ×1
     - `evidence` → "Three clean runs logged; obstacle avoidance is field-ready." — Servo Motor ×1, safety goggles ×1
 - Grants:
@@ -261,7 +262,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Dialogue `requiresItems` gates:
     - `mount` → "Mechanical install complete; run safety and signal checks." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
     - `verify-safety` → "Safety and pulse checks pass; start calibration runs." — Wheel Encoder ×2, safety goggles ×1
-    - `calibrate` → "Calibration logs are complete and within tolerance." — Wheel Encoder ×2, Arduino Uno ×1
+    - `calibrate` → "Calibration logs are complete and within tolerance." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
     - `evidence` → "Encoder install is validated and ready for odometry quests." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -304,8 +305,9 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - `requiresQuests`: `robotics/odometry-basics`
 - Dialogue `requiresItems` gates:
     - `parts` → "Hardware is staged and strain-relieved." — Arduino Uno ×1, Servo Motor ×2
+    - `safety-check` → "Safety setup complete; run operator recovery drills." — Arduino Uno ×1
     - `operator-check` → "Drill complete; start the five-run tuning block." — safety goggles ×1
-    - `tune` → "Tuning log is complete and stable." — Servo Motor ×2
+    - `tune` → "Tuning log is complete and stable." — Servo Motor ×2, safety goggles ×1
     - `evidence` → "Three clean balance holds recorded; gyro balance is validated." — Arduino Uno ×1, Servo Motor ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -326,6 +328,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - `requiresQuests`: `robotics/obstacle-avoidance`, `robotics/odometry-basics`
 - Dialogue `requiresItems` gates:
     - `strategy` → "Decision tree loaded and tested in dry-run mode." — Servo Motor ×2
+    - `safety` → "Safety limits set; run dead-end recovery drills first." — Servo Motor ×2
     - `recovery-drill` → "Recovery drills pass; start full maze attempts." — Servo Motor ×2, safety goggles ×1
     - `evidence` → "Two clean clears recorded; maze navigation is validated." — Servo Motor ×2, safety goggles ×1
 - Grants:

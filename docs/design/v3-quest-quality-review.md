@@ -1025,7 +1025,7 @@ Rubric assignment rule: first keyword match wins (`measurement/check` => thresho
 Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run-tests (fallback: no checked robotics quests yet)
 
 - `robotics/gyro-balance`
-  - [x] Observed issue (addressed): `robotics/gyro-balance` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #1)
+  - [x] Observed issue (addressed): `robotics/gyro-balance` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3740)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3722)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3722)
 - `robotics/line-follower`
@@ -1033,11 +1033,11 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3665)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3665)
 - `robotics/maze-navigation`
-  - [x] Observed issue (addressed): `robotics/maze-navigation` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #1)
+  - [x] Observed issue (addressed): `robotics/maze-navigation` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3740)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3722)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3722)
 - `robotics/obstacle-avoidance`
-  - [x] Observed issue (addressed): `robotics/obstacle-avoidance` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #1)
+  - [x] Observed issue (addressed): `robotics/obstacle-avoidance` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3740)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3722)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3722)
 - `robotics/odometry-basics`
@@ -1073,9 +1073,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3665)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3665)
 - `robotics/wheel-encoders`
-  - [x] Observed issue (addressed): `robotics/wheel-encoders` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #1)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #1)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #1)
+  - [x] Observed issue (addressed): `robotics/wheel-encoders` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3740)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3740)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3740)
 
 ### rocketry (10 quests)
 
