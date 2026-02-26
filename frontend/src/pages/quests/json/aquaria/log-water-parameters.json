@@ -62,7 +62,7 @@
         },
         {
             "id": "log",
-            "text": "Record date/time plus all four fields. Minimum cadence is every 48 hours for stocked tanks. Flag ammonia or nitrite above 0 ppm, nitrate above 40 ppm, or pH outside 6.8\u20137.6.",
+            "text": "Record date/time plus all four fields. Minimum cadence is every 48 hours for stocked tanks. Flag ammonia or nitrite above 0 ppm, nitrate above 40 ppm, or pH outside 6.8–7.6.",
             "options": [
                 {
                     "type": "process",
@@ -201,13 +201,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "aquaria/water-testing"
-    ],
+    "requiresQuests": ["aquaria/water-testing"],
     "hardening": {
         "passes": 2,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-23",
