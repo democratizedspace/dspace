@@ -30,6 +30,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
     - `safety` → "Safety check complete and thermometer staged." — aquarium thermometer (0–50°C) ×1
+    - `measure` → "Capture a timestamped baseline run" — thermistor logging rig ×1, Laptop Computer ×1
     - `measure` → "Seal the three-point baseline log." — aquarium thermometer (0–50°C) ×1
     - `measure` → "Readings recorded and stable near 10-14°C." — temperature log CSV ×1, aquarium thermometer (0–50°C) ×1
     - `interpret` → "Baseline accepted and logged." — temperature log CSV ×1, aquarium thermometer (0–50°C) ×1
@@ -40,10 +41,13 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Rewards:
     - Solarpunk Award ×1
 - Processes used:
-    - None (baseline evidence is granted via the measurement logging step in dialogue).
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
 - QA notes:
     - Added explicit safety-first staging and a three-point measurement interpretation gate before finish.
-    - Added a troubleshooting branch for >2°C spot drift that requires reseat + timed retest before completion.
+    - Added an operational safety lockout in troubleshooting so circulator vibration cannot contaminate retest measurements.
 
 ## 2) Calibrate Ground Sensor (`geothermal/calibrate-ground-sensor`)
 
@@ -150,7 +154,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None (baseline evidence is granted via the measurement logging step in dialogue).
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
 - QA notes:
     - Completion requires a captured pressure snapshot plus interpretation against the 20–35 psi and <2 psi oscillation targets.
     - Out-of-range pressure must follow corrective branch (bleed air / inspect fittings) and a mandatory retest loop before finish.
@@ -169,7 +176,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `annotate` → "Add notes to the overlay" — temperature line chart ×1, Laptop Computer ×1, live temperature JSON endpoint ×1
     - `annotate` → "Notes are logged" — annotated temperature graph ×1
     - `publish` → "Push a live delta dashboard" — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
-    - `publish` → "Dashboard is live" — live temperature dashboard ×1
+    - `publish` → "Dashboard is live, interpret delta stability" — live temperature dashboard ×1
+    - `interpret` → "Delta stayed stable and in range" — live temperature dashboard ×1
+    - `interpret-retest` → "Corrective trace passed" — temperature log CSV ×3, live temperature dashboard ×1
     - `finish` → "Delta is monitored" — live temperature dashboard ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -193,6 +202,10 @@ Geothermal quests build practical progression through the geothermal skill tree.
         - Requires: live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: live temperature dashboard ×1
+
+- QA notes:
+    - Added explicit interpretation bounds (3-8°C delta and ±1.5°C drift) before finish can unlock.
+    - Added corrective maintenance and mandatory retest loop that requires fresh logging evidence before re-interpretation.
 
 ## 7) Install Backup Thermistor (`geothermal/install-backup-thermistor`)
 
@@ -304,17 +317,29 @@ Geothermal quests build practical progression through the geothermal skill tree.
 - Unlock prerequisite:
     - `requiresQuests`: `geothermal/log-ground-temperature`
 - Dialogue `requiresItems` gates:
-    - `deploy` → "Sensor logging" — Arduino Uno ×1
+    - `safety` → "Safety checks complete and depth marker fixed" — aquarium thermometer (0–50°C) ×1
+    - `baseline` → "Capture seasonal baseline trace" — thermistor logging rig ×1, Laptop Computer ×1
+    - `baseline` → "Baseline trace logged" — temperature log CSV ×1
+    - `compare` → "Capture current-season trace" — thermistor logging rig ×1, Laptop Computer ×1
+    - `compare` → "Seasonal comparison dataset ready" — temperature log CSV ×2
+    - `interpret` → "Seasonal drift is within bounds" — temperature log CSV ×2
+    - `retest` → "Capture corrected seasonal trace" — thermistor logging rig ×1, Laptop Computer ×1
+    - `interpret-retest` → "Corrected dataset passed" — temperature log CSV ×4
+    - `finish` → "Seasonal comparison validated" — temperature log CSV ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - [arduino-thermistor-read](/processes/arduino-thermistor-read)
-        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
         - Consumes: none
-        - Creates: none
+        - Creates: temperature log CSV ×1
+- QA notes:
+    - Added baseline and current-season evidence captures at fixed depth before interpretation.
+    - Added explicit seasonal pass/fail thresholds (±4°C seasonal delta, ±1.5°C short-term variance).
+    - Added corrective reseat and repeat-until-pass retest loop for unstable readings.
 
 ## 11) Log Heat Pump Warmup (`geothermal/log-heat-pump-warmup`)
 
