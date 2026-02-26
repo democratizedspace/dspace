@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hey explorer—before we plan trenches, we need a clean baseline. We'll stage tools, log readings, and verify stability so we don't size the loop on bad data.",
+            "text": "Hey explorer\u2014before we plan trenches, we need a clean baseline. We'll stage tools, log readings, and verify stability so we don't size the loop on bad data.",
             "options": [
                 {
                     "type": "goto",
@@ -87,7 +87,7 @@
                 {
                     "type": "goto",
                     "goto": "interpret",
-                    "text": "Readings recorded and stable near 10-14°C.",
+                    "text": "Readings recorded and stable near 10-14\u00b0C.",
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -102,7 +102,7 @@
                 {
                     "type": "goto",
                     "goto": "troubleshoot",
-                    "text": "Readings drifted more than 2°C between spots."
+                    "text": "Readings drifted more than 2\u00b0C between spots."
                 }
             ]
         },
@@ -119,7 +119,7 @@
         },
         {
             "id": "interpret",
-            "text": "Great. Stable readings in that band indicate usable geothermal potential for this training setup. Save the baseline and flag any >2°C variance for a same-day recheck before downstream loop sizing.",
+            "text": "Great. Stable readings in that band indicate usable geothermal potential for this training setup. Save the baseline and flag any >2\u00b0C variance for a same-day recheck before downstream loop sizing.",
             "options": [
                 {
                     "type": "finish",
@@ -144,13 +144,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "energy/solar"
-    ],
+    "requiresQuests": ["energy/solar"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "🛠️",
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
