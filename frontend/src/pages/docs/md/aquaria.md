@@ -147,7 +147,11 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/sponge-filter`
 - Dialogue `requiresItems` gates:
-    - `mount` → "Light secured." — aquarium LED light (20 W) ×1
+    - `start` → "Bench is dry, timer is ready, and cable has a drip loop." — aquarium LED light (20 W) ×1, Restored sponge filter flow ×1
+    - `mount` → "Fixture is mounted and timer set to 8 hours." — aquarium LED light (20 W) ×1
+    - `verify` → "Plants are upright, fish behavior is normal, and glare is controlled." — aquarium LED light (20 W) ×1
+    - `verify` → "Algae or fish stress signs appeared during the first cycle." — aquarium LED light (20 W) ×1
+    - `tune-cycle` → "Adjusted photoperiod and fixture height; run verification again." — aquarium LED light (20 W) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -202,6 +206,9 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `verify` → "Reading recorded" — Aquarium temperature reading ×1
     - `interpret` → "Range held at 25–27°C for two checks" — Aquarium temperature reading ×1
     - `interpret` → "Temperature overshot or dropped outside safe range" — Aquarium temperature reading ×1
+    - `interpret` → "Heater glass looks cracked, exposed, or intermittently powered" — none
+    - `safety-lockout` → "Replacement heater is staged; rerun rollback verification." — none
+    - `safety-lockout` → "Lockout documented and manual monitoring plan is active." — none
     - `rollback` → "Apply rollback and capture a fresh verification reading" — none
     - `rollback` → "Fresh post-rollback reading is logged" — Aquarium temperature reading ×1
 - Grants:
@@ -293,6 +300,8 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `log` → "Entry logged with today's readings." — Logged water parameters ×1
     - `interpret` → "All readings are within guardrails" — Logged water parameters ×1
     - `interpret` → "At least one value is out of range" — Logged water parameters ×1
+    - `interpret` → "Ammonia or nitrite is above 0 ppm (critical event)" — Logged water parameters ×1
+    - `critical-response` → "Emergency change complete; rerun full measurement panel" — Freshly changed aquarium (80 L) ×1
     - `corrective` → "Correction complete, re-measure the panel" — Freshly changed aquarium (80 L) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
