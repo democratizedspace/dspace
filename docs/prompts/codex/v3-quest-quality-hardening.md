@@ -22,7 +22,7 @@ and optimize for clearing those boxes after manual human verification.
 **Fail-closed bookkeeping invariant**: any PR that edits one or more
 `frontend/src/pages/quests/json/<tree>/<quest>.json` files MUST also modify
 `docs/design/v3-quest-quality-review.md` in the same PR for every touched quest ID. Non-compliant
-PRs must not be opened.
+PRs must not be review-ready/opened for review.
 
 ## Deterministic selection and anchoring rules (required)
 
@@ -68,6 +68,9 @@ PRs must not be opened.
   - only flip `[ ]` to `[x]` when this PR's diff clearly proves the line item is satisfied;
   - keep `[ ]` when evidence is ambiguous, but still add canonical PR tag(s) for traceability;
   - do not use placeholder tags (for example `PR #0000`, `PR TBD`, `PR ???`).
+- If the final PR number is not yet available while drafting changes, it is acceptable to open a
+  draft PR only to obtain the number, then immediately update bookkeeping lines to use canonical
+  real PR tag(s) before requesting review.
 - **Mandatory completion gate for this prompt**: any Codex task run from this prompt that modifies
   one or more `frontend/src/pages/quests/json/<tree>/<quest>.json` files must include matching
   checklist updates in `docs/design/v3-quest-quality-review.md` for those quest IDs in the same
@@ -94,7 +97,7 @@ PRs must not be opened.
 7. Bookkeeping validation (required, fail-closed): for each selected quest ID, confirm its block
    exists in `docs/design/v3-quest-quality-review.md` and at least one relevant checklist line in
    that block contains the current PR number in canonical form. Example shell pattern (adapt quest
-   IDs and PR number): `PR_NUM=<current_pr_number>; for q in <tree>/<quest1> <tree>/<quest2>; do rg -n "$q" docs/design/v3-quest-quality-review.md >/dev/null || { echo "Missing quest block: $q"; exit 1; }; rg -n "\(PR #([0-9]+, )*${PR_NUM}(, #[0-9]+)*\)" docs/design/v3-quest-quality-review.md >/dev/null || { echo "Missing PR tag for $q"; exit 1; }; done`
+   IDs and PR number): `PR_NUM=<current_pr_number>; for q in <tree>/<quest1> <tree>/<quest2>; do rg -n "^- ${q}\\b" docs/design/v3-quest-quality-review.md >/dev/null || { echo "Missing quest block: $q"; exit 1; }; rg -n "^- ${q}\\b" -A 40 docs/design/v3-quest-quality-review.md | rg -q "\\(PR (#[0-9]+, )*#${PR_NUM}(, #[0-9]+)*\\)" || { echo "Missing PR tag for $q"; exit 1; }; done`
 
 ## REQUIRED output format for your PR summary
 
@@ -146,13 +149,16 @@ Goals:
 - Preserve and strengthen fail-closed bookkeeping invariants for
   `docs/design/v3-quest-quality-review.md`: any PR that edits one or more
   `frontend/src/pages/quests/json/<tree>/<quest>.json` files must also update checklist lines in
-  the same PR for every touched quest ID, or the PR is non-compliant and must not be opened.
+  the same PR for every touched quest ID, or the PR is non-compliant and must not be marked
+  review-ready/opened for review.
 - Make per-quest bookkeeping explicit and non-ambiguous: for EACH touched quest ID, find the quest
   block, update at least one relevant checklist line, append canonical PR tag(s) using
   `(PR #<number>)` or `(PR #<number1>, #<number2>)` (single `PR` prefix), append additional tags
   as `, #<number>` inside the same parenthetical, and only flip `[ ]` to `[x]` when evidence in
   the same PR clearly proves completion.
 - Explicitly forbid placeholder PR tags (for example `PR #0000`, `PR TBD`).
+- Clarify allowed PR-number timing: if needed, a draft PR may be opened only to obtain the PR
+  number, but canonical real PR tags must be applied before requesting review.
 - Require a bookkeeping-first workflow: after selecting quests and before deep JSON edits, open
   the relevant checklist blocks and plan intended checklist outcomes.
 - Require bookkeeping validation commands that verify each selected quest block exists and includes
