@@ -8,11 +8,11 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You're getting comfortable with servos. Let's take the next step and build a small robotic arm with a gripper. Clear a stable bench, strap in for ESD, and keep cables away from the moving joints.",
+            "text": "You're getting comfortable with servos. Let's build a two-joint arm and prove it can run repeatable pick-and-place cycles. Keep ESD strap on and clear the sweep zone.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "build",
+                    "goto": "strategy",
                     "text": "Kit and tools are ready.",
                     "requiresItems": [
                         {
@@ -36,17 +36,33 @@
             ]
         },
         {
-            "id": "build",
-            "text": "Bolt the base servo, stack the second servo for the elbow, and fasten the gripper plate. Route wires so they won't snag when the arm sweeps.",
+            "id": "strategy",
+            "text": "Choose your assembly order. Base-first gives easy cable routing; elbow-first helps verify gripper alignment before locking the base.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "base-first",
+                    "text": "Assemble base-first for cable management."
+                },
+                {
+                    "type": "goto",
+                    "goto": "elbow-first",
+                    "text": "Assemble elbow-first to verify gripper alignment early."
+                }
+            ]
+        },
+        {
+            "id": "base-first",
+            "text": "Bolt the base servo first, route power and signal lines with slack loops, then mount the elbow servo and gripper plate.",
             "options": [
                 {
                     "type": "process",
                     "process": "assemble-servo-arm-kit",
-                    "text": "Assemble the two-servo arm"
+                    "text": "Build the arm with base-first order"
                 },
                 {
                     "type": "goto",
-                    "goto": "tune",
+                    "goto": "safety-check",
                     "text": "Arm swings freely and the gripper opens.",
                     "requiresItems": [
                         {
@@ -54,12 +70,44 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Cable snags or joints bind during sweep."
                 }
             ]
         },
         {
-            "id": "tune",
-            "text": "Upload a smooth motion sketch, set soft limits so nothing binds, and test with a light payload before closing the loop.",
+            "id": "elbow-first",
+            "text": "Mount elbow + gripper module first, verify neutral angle and jaw clearance, then bolt the base servo and route wiring.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-servo-arm-kit",
+                    "text": "Build the arm with elbow-first order"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Assembly complete and movement is unobstructed.",
+                    "requiresItems": [
+                        {
+                            "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Alignment drifts when both joints move."
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Safety gate: set conservative soft limits, confirm emergency stop access, and keep tools out of the arm's operating envelope before tuning.",
             "options": [
                 {
                     "type": "process",
@@ -68,7 +116,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "evidence",
                     "text": "Calibration saved and joints stay cool.",
                     "requiresItems": [
                         {
@@ -76,16 +124,48 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need to rework limits before cycle testing."
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Great job! Label the axes, park the arm at center, and coil the USB cable so you're ready for the next pick-and-place drill.",
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-center horns, re-seat loose brackets, reduce acceleration, and re-run one dry cycle before payload tests.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Retry with the other assembly order."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Motion is stable again; re-run safety checks."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: complete ten center-to-pick-to-place cycles with no stalls, then park at center and confirm repeatability on two final runs.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Onward!"
+                    "text": "Cycle evidence logged; arm is production-ready.",
+                    "requiresItems": [
+                        {
+                            "id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "A cycle failed; troubleshoot and re-verify."
                 }
             ]
         }
@@ -100,7 +180,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

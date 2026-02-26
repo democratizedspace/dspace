@@ -8,23 +8,31 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Gather two wheel encoders and an Arduino Uno. We'll log wheel rotation to measure distance. Disconnect power and put on safety goggles.",
+            "text": "Gather two wheel encoders and an Arduino Uno. Choose whether to mount encoder brackets first or route signal wiring first. Disconnect power and wear safety goggles.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "mount",
-                    "text": "Sounds good."
-                }
-            ]
-        },
-        {
-            "id": "mount",
-            "text": "Raise the powered-off robot so wheels can't turn. Mount one encoder on each wheel hub using its bracket.\nRun 5 V and GND to the Arduino, then connect each signal wire to digital pins 2 and 3. Keep wiring clear of moving parts before restoring power.",
-            "options": [
+                    "goto": "mount-first",
+                    "text": "Mount hardware first, then wire signals.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Installed and reading pulses!",
+                    "goto": "wire-first",
+                    "text": "Route and label signal harness first, then mount.",
                     "requiresItems": [
                         {
                             "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
@@ -43,12 +51,117 @@
             ]
         },
         {
-            "id": "finish",
-            "text": "Great! Now you can measure distance and tune code for straighter paths.",
+            "id": "mount-first",
+            "text": "Raise the robot and secure both encoder brackets to the wheel hubs. Confirm each wheel spins freely before routing signal lines to pins 2 and 3.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Mount-first path complete; wiring is clear of moving parts.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "One wheel rubs or cable strain is too high."
+                }
+            ]
+        },
+        {
+            "id": "wire-first",
+            "text": "Route 5V/GND and signal wires first, label left/right channels, then mount encoders and verify no pinch points across full suspension travel.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Wire-first path complete; channels are labeled and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Pulse stream is noisy or channels are swapped."
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Safety gate: keep wheels lifted for first power-on, verify emergency cutoff, and cap motor PWM while validating encoder pulses.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Safety checks done; begin pulse validation runs.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need to correct wiring before test runs."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-seat connectors, swap miswired channels, and rerun a hand-spin test until left/right pulse counts are independent and stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Restart with the alternate install strategy."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Pulse quality improved; re-run safety checks."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: record three straight-line test runs where left/right pulse delta stays within tolerance and no dropout appears in logs.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Awesome!"
+                    "text": "Installed and pulse parity verified.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Parity failed; troubleshoot and rerun validation."
                 }
             ]
         }
@@ -63,7 +176,7 @@
     "hardening": {
         "passes": 2,
         "score": 80,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-09",

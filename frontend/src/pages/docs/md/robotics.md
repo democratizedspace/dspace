@@ -124,7 +124,12 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-control`
 - Dialogue `requiresItems` gates:
-    - `attach` → "Works great" — Servo Motor ×1
+    - `start` → "Bench-fit first for easier linkage tuning." — Servo Motor ×1, precision screwdriver set ×1
+    - `start` → "Mount directly on the robot to test fit in place." — Servo Motor ×1, anti-static wrist strap ×1
+    - `bench-fit` → "Bench-fit passes and linkage motion is smooth." — Servo Motor ×1
+    - `direct-mount` → "Direct mount is secure and clears the frame." — Servo Motor ×1
+    - `safety-check` → "Safety checks done; run grip-cycle validation." — Servo Motor ×1
+    - `evidence` → "Grip-cycle evidence recorded; gripper ready." — Servo Motor ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -132,6 +137,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Adds non-linear pathing with bench-first vs direct-mount build strategies.
+    - Adds a pinch-point safety gate with conservative servo travel limits before validation.
+    - Adds a troubleshooting loop for binding/stalls and requires repeatable grip-cycle evidence.
 
 ## 6) Assemble a Servo Arm (`robotics/servo-arm`)
 
@@ -140,8 +149,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - `requiresQuests`: `robotics/servo-gripper`
 - Dialogue `requiresItems` gates:
     - `start` → "Kit and tools are ready." — two-servo arm kit ×1, Servo Motor ×2, precision screwdriver set ×1, anti-static wrist strap ×1
-    - `build` → "Arm swings freely and the gripper opens." — assembled servo arm ×1
-    - `tune` → "Calibration saved and joints stay cool." — calibrated servo arm ×1
+    - `base-first` → "Arm swings freely and the gripper opens." — assembled servo arm ×1
+    - `elbow-first` → "Assembly complete and movement is unobstructed." — assembled servo arm ×1
+    - `safety-check` → "Calibration saved and joints stay cool." — calibrated servo arm ×1
+    - `evidence` → "Cycle evidence logged; arm is production-ready." — calibrated servo arm ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -156,6 +167,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
         - Requires: assembled servo arm ×1, Arduino Uno ×1, Jumper Wires ×4, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
         - Consumes: none
         - Creates: calibrated servo arm ×1
+- QA notes:
+    - Adds assembly-order branching (base-first vs elbow-first) before convergence.
+    - Adds explicit safety checks (soft limits + e-stop reachability) before tuning evidence.
+    - Adds a recovery loop for snagging/overheating and requires repeatable pick-place cycle proof.
 
 ## 7) Measure distance with an ultrasonic sensor (`robotics/ultrasonic-rangefinder`)
 
@@ -237,7 +252,12 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-gripper`
 - Dialogue `requiresItems` gates:
-    - `mount` → "Installed and reading pulses!" — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
+    - `start` → "Mount hardware first, then wire signals." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
+    - `start` → "Route and label signal harness first, then mount." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
+    - `mount-first` → "Mount-first path complete; wiring is clear of moving parts." — Wheel Encoder ×2
+    - `wire-first` → "Wire-first path complete; channels are labeled and stable." — Wheel Encoder ×2
+    - `safety-check` → "Safety checks done; begin pulse validation runs." — Wheel Encoder ×2, Arduino Uno ×1
+    - `evidence` → "Installed and pulse parity verified." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -245,6 +265,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Adds strategy branching (mount-first vs wire-first) and convergence through a safety gate.
+    - Adds operational safety checks (wheels lifted, cutoff access, low PWM) before powered tests.
+    - Adds a troubleshooting loop and parity-evidence requirement across repeated straight-line runs.
 
 ## 11) Track distance with wheel encoders (`robotics/odometry-basics`)
 

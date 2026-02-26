@@ -8,26 +8,34 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A gripper is a simple way to interact with the world. Let's add one to your robot using a standard servo motor.",
+            "text": "A gripper is a simple way to interact with the world. Choose whether to prototype on a bench first or mount directly on your chassis. Wear eye protection before testing moving jaws.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "attach",
-                    "text": "Sounds fun."
-                }
-            ]
-        },
-        {
-            "id": "attach",
-            "text": "Mount the servo vertically and connect two fingers with a linkage so they open and close when the servo turns.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Works great",
+                    "goto": "bench-fit",
+                    "text": "Bench-fit first for easier linkage tuning.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "direct-mount",
+                    "text": "Mount directly on the robot to test fit in place.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
                             "count": 1
                         }
                     ]
@@ -35,12 +43,105 @@
             ]
         },
         {
-            "id": "finish",
-            "text": "Nice! You can now grab and carry small parts for future builds.",
+            "id": "bench-fit",
+            "text": "Clamp the servo horn at center, verify jaw symmetry, and check that linkage screws clear the travel arc.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Bench-fit passes and linkage motion is smooth.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Jaws bind near closed position."
+                }
+            ]
+        },
+        {
+            "id": "direct-mount",
+            "text": "Mount the servo vertical on your frame, then test jaw alignment against chassis clearance before applying full travel.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Direct mount is secure and clears the frame.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Linkage rubs on frame or stalls."
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Safety gate: run with a current-limited supply, keep fingers out of pinch points, and set a conservative 20°-160° servo travel window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Safety checks done; run grip-cycle validation.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need to adjust limits before testing."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-center horn, loosen over-tight linkage screws by a quarter turn, and re-test with no payload before trying object pickup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Restart with a different build strategy."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Motion is clean again; re-run safety checks."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: complete five open-close cycles without chatter, then pick and place a light part three times without slipping.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Sweet!"
+                    "text": "Grip-cycle evidence recorded; gripper ready.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Cycle failed; return to troubleshooting."
                 }
             ]
         }
@@ -55,7 +156,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
