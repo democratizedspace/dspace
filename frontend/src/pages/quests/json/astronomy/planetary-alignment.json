@@ -1,61 +1,179 @@
 {
     "id": "astronomy/planetary-alignment",
     "title": "Planetary Alignment",
-    "description": "Use a star chart to track a rare alignment of planets.",
+    "description": "Plan and verify a planetary lineup with logged evidence, interpretation gates, and retry-safe recovery.",
     "image": "/assets/quests/planetary_alignment_star_chart.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Several planets are lining up tonight. Want to check it out?",
+            "text": "Several planets are lining up tonight. Want the quick verify route or a chart-first route with extra safeguards?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "middle",
-                    "text": "Absolutely, let's prepare."
+                    "goto": "choose-route",
+                    "text": "Show me both routes."
                 }
             ]
         },
         {
-            "id": "middle",
-            "text": "Here's a star chart to guide your telescope.",
+            "id": "choose-route",
+            "text": "Either route works, but completion needs a logged alignment note plus an interpretation check.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Thanks for the chart!"
-                },
-                {
-                    "type": "process",
-                    "process": "identify-constellations",
-                    "text": "Mapping the alignment."
+                    "type": "goto",
+                    "goto": "chart-route",
+                    "text": "Chart-first route (main path)."
                 },
                 {
                     "type": "goto",
-                    "goto": "completion",
+                    "goto": "quick-route",
+                    "text": "Quick verify route (alternate path)."
+                }
+            ]
+        },
+        {
+            "id": "chart-route",
+            "text": "Use the planisphere to map horizon timing, then verify each planet from west to east.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Mapped anchors for the alignment window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "All planned targets are visible in order.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
                         }
-                    ],
-                    "text": "Alignment confirmed."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Haze or glare is breaking the sequence."
                 }
             ]
         },
         {
-            "id": "completion",
-            "text": "Great work! The planetary lineup is documented.",
+            "id": "quick-route",
+            "text": "Start with brightest targets and validate spacing with short checks before full confirmation.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Quick anchor sweep complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "I verified the lineup and can record it now.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Too much skyglow — need a safer retry plan."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Run a safety reset: stable tripod, clear footing, no horizon glare risk, and a narrower target set before retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Safety reset complete; retry a route."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Unsafe conditions persist; log the abort and close for tonight.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log-evidence",
+            "text": "Write the observed order, time window, and any mismatch notes so another observer can reproduce the check.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Alignment log drafted."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Move to interpretation.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: do timing and spacing match the predicted window?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes, interpretation confirmed with notes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "No, I need a corrective re-check."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work — you completed a reproducible planetary alignment session with safety-aware recovery.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Celestial success!"
+                    "text": "Alignment documented."
                 }
             ]
         }
@@ -70,7 +188,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -245,16 +245,25 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `chart-route` → "I can resolve two stars and distinct colors." — basic telescope ×1, planisphere star chart ×1, constellation sketch set ×1
     - `focus-route` → "Focus lock achieved; I see gold and blue." — basic telescope ×1, constellation sketch set ×1
     - `log-evidence` → "Observation logged with color notes." — mission logbook ×1, basic telescope ×1, mission log entry ×1, feather quill ×1
+    - `recovery` → "Conditions are unsafe tonight; reschedule and finish with a caution note." — mission logbook ×1
 - Troubleshooting/safety branches:
-    - `recovery` loops back to route selection after tripod/footing/glare safety checks.
-    - Unsafe conditions can be logged with caution and end the run without forced completion.
+    - `choose-route` keeps a main and alternate acquisition strategy before evidence review.
+    - `recovery` loops back only after tripod/footing/glare checks, with a safe abort option.
+    - `interpret` blocks finish bypasses by routing uncertain observations to recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 9) Measure Light Pollution (`astronomy/light-pollution`)
 
@@ -466,9 +475,16 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/north-star`
 - Dialogue `requiresItems` gates:
-    - `middle` → "Alignment confirmed." — basic telescope ×1
+    - `chart-route` → "All planned targets are visible in order." — basic telescope ×1, planisphere star chart ×1, constellation sketch set ×1
+    - `quick-route` → "I verified the lineup and can record it now." — basic telescope ×1, constellation sketch set ×1
+    - `recovery` → "Unsafe conditions persist; log the abort and close for tonight." — mission logbook ×1
+    - `log-evidence` → "Move to interpretation." — mission logbook ×1, mission log entry ×1, feather quill ×1
+- Troubleshooting/safety branches:
+    - `choose-route` provides chart-first and quick-verify branches before logging evidence.
+    - `recovery` enforces tripod/footing/glare safety reset and loops to route selection.
+    - `interpret` requires agreement between expected and observed timing; mismatches route to corrective retry.
 - Grants:
-    - `middle` → "Thanks for the chart!" — basic telescope ×1
+    - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - dUSD ×100
@@ -477,6 +493,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
         - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 17) Track a Satellite Pass (`astronomy/satellite-pass`)
 
@@ -551,10 +571,17 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/planetary-alignment`
 - Dialogue `requiresItems` gates:
-    - `start` → "Plot the hop and gear." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
-    - `plan` → "Tripod leveled and azimuth marked." — seasonal star hop plan ×1, red flashlight ×1, digital camera ×1, camera tripod ×1
-    - `setup` → "Stack captured and color-balanced." — polar-aligned camera rig ×1, Laptop Computer ×1
+    - `start` → "Show both setup routes." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+    - `plan-route` → "Plan and azimuth marks are ready." — seasonal star hop plan ×1, digital camera ×1
+    - `quick-route` → "Test frame is sharp and orientation is stable." — camera tripod ×1, red flashlight ×1
+    - `capture` → "Arc is continuous and color-balanced." — polar-aligned camera rig ×1, Laptop Computer ×1
+    - `log-evidence` → "Move to interpretation." — mission logbook ×1, mission log entry ×1
+    - `recovery` → "Unsafe to continue tonight; close with a logged follow-up." — mission log entry ×1
     - `finish` → "Save to the observing log." — stacked star trail photo ×1
+- Troubleshooting/safety branches:
+    - `choose-route` provides main (plan-first) and alternate (quick-readiness) setup paths.
+    - `capture` routes broken arcs/noise into `recovery` for controlled retry.
+    - `recovery` enforces weather/footing stop conditions before any new attempt.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -573,6 +600,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: polar-aligned camera rig ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: stacked star trail photo ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 20) Sketch Sunspots (`astronomy/sunspot-sketch`)
 
