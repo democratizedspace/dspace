@@ -1,7 +1,7 @@
 {
     "id": "astronomy/binary-star",
     "title": "Split a Binary Star",
-    "description": "Use charting and focus checks to split Albireo, log color evidence, and recover if seeing is poor.",
+    "description": "Use charting and focus checks to split Albireo, verify interpretation, and recover safely when seeing is poor.",
     "image": "/assets/quests/binary_star_albireo_observation.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
@@ -19,7 +19,7 @@
         },
         {
             "id": "choose-route",
-            "text": "Both routes work. Pick one, then prove the split with a mission-log entry before we call it complete.",
+            "text": "Both routes work. Pick one, then prove the split with a mission-log entry and an interpretation check before we call it complete.",
             "options": [
                 {
                     "type": "goto",
@@ -45,7 +45,7 @@
                 {
                     "type": "goto",
                     "goto": "log-evidence",
-                    "text": "I can resolve two stars and distinct colors.",
+                    "text": "I can resolve two stars and distinct colors; move to evidence logging.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -65,6 +65,11 @@
                     "type": "goto",
                     "goto": "recovery",
                     "text": "Still a blurry single point\u2014need troubleshooting."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Seeing keeps collapsing\u2014pause and recover."
                 }
             ]
         },
@@ -80,7 +85,7 @@
                 {
                     "type": "goto",
                     "goto": "log-evidence",
-                    "text": "Focus lock achieved; I see gold and blue.",
+                    "text": "Focus lock achieved; route to evidence logging.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
@@ -100,8 +105,34 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpretation check: do your logged notes clearly separate the primary and secondary star colors, and can you repeat the split?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes\u2014color contrast and repeatability are both confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "No\u2014the split wasn't repeatable; run recovery and retry."
+                }
+            ]
+        },
+        {
             "id": "recovery",
-            "text": "Pause and run a safety check: steady tripod, no rushing in darkness, and no looking near bright horizon glare. Then retry with lower magnification.",
+            "text": "Pause and run a safety check: steady tripod, safe footing, and no bright-horizon glare. Then retry with lower magnification or reschedule.",
             "options": [
                 {
                     "type": "goto",
@@ -126,8 +157,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Observation logged with color notes.",
+                    "goto": "interpret",
+                    "text": "Observation logged; run interpretation check.",
                     "requiresItems": [
                         {
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
@@ -151,7 +182,7 @@
         },
         {
             "id": "finish",
-            "text": "Great split. You proved the observation with logged evidence and used a safe recovery plan when seeing conditions shifted.",
+            "text": "Great split. You proved the observation with logged evidence, interpretation, and a safe recovery plan for poor seeing.",
             "options": [
                 {
                     "type": "finish",

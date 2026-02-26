@@ -1,7 +1,7 @@
 {
     "id": "astronomy/star-trails",
     "title": "Capture Star Trails",
-    "description": "Use long-exposure photography to show the Earth's rotation.",
+    "description": "Use long-exposure photography to capture star trails with logged pass criteria and recovery loops.",
     "image": "/assets/quests/star_trails_long_exposure_tripod.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
@@ -73,7 +73,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Stack captured and color-balanced.",
                     "process": "capture-star-trail-stack",
                     "requiresItems": [
@@ -91,12 +91,65 @@
                     "type": "goto",
                     "goto": "plan",
                     "text": "I bumped the tripod\u2014realign."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Condensation, battery drain, or clouds interrupted capture."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: confirm trails are continuous, noise is acceptable, and frame drift stayed below your tolerance.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pass: trails are continuous and drift stayed in bounds.",
+                    "requiresItems": [
+                        {
+                            "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                            "count": 1
+                        },
+                        {
+                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Fail: drift/noise exceeded bounds, rerun required."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery: secure tripod, wipe lens dew, and verify you still have a safe setup path before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Recovery checks complete\u2014replan and retry."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Unsafe window tonight; log the partial and stand down."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Beautiful! That spiral proves Earth's steady spin and your methodical setup.",
+            "text": "Beautiful work. You captured, interpreted, and recovered safely when conditions shifted.",
             "options": [
                 {
                     "type": "finish",
