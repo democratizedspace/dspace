@@ -30,7 +30,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
     - `safety` → "Safety check complete and thermometer staged." — aquarium thermometer (0–50°C) ×1
-    - `measure` → "Capture a timestamped baseline run" — aquarium thermometer (0–50°C) ×1, Laptop Computer ×1
+    - `measure` → "Capture a timestamped baseline run" — thermistor logging rig ×1, Laptop Computer ×1
     - `measure` → "Seal the three-point baseline log." — aquarium thermometer (0–50°C) ×1
     - `measure` → "Readings recorded and stable near 10-14°C." — temperature log CSV ×1, aquarium thermometer (0–50°C) ×1
     - `interpret` → "Baseline accepted and logged." — temperature log CSV ×1, aquarium thermometer (0–50°C) ×1
@@ -178,8 +178,8 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `publish` → "Push a live delta dashboard" — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
     - `publish` → "Dashboard is live, interpret delta stability" — live temperature dashboard ×1
     - `interpret` → "Delta stayed stable and in range" — live temperature dashboard ×1
-    - `retest` → "Post-correction trace logged" — temperature log CSV ×2
-    - `interpret-retest` → "Corrective trace passed" — temperature log CSV ×2, live temperature dashboard ×1
+    - `retest` → "Post-correction trace logged" — temperature log CSV ×3
+    - `interpret-retest` → "Corrective trace passed" — temperature log CSV ×3, live temperature dashboard ×1
     - `finish` → "Delta is monitored" — live temperature dashboard ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -319,14 +319,14 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `requiresQuests`: `geothermal/log-ground-temperature`
 - Dialogue `requiresItems` gates:
     - `safety` → "Safety checks complete and depth marker fixed" — aquarium thermometer (0–50°C) ×1
-    - `baseline` → "Capture seasonal baseline trace" — aquarium thermometer (0–50°C) ×1, Laptop Computer ×1
+    - `baseline` → "Capture seasonal baseline trace" — thermistor logging rig ×1, Laptop Computer ×1
     - `baseline` → "Baseline trace logged" — temperature log CSV ×1
-    - `compare` → "Capture current-season trace" — aquarium thermometer (0–50°C) ×1, Laptop Computer ×1
+    - `compare` → "Capture current-season trace" — thermistor logging rig ×1, Laptop Computer ×1
     - `compare` → "Seasonal comparison dataset ready" — temperature log CSV ×2
     - `interpret` → "Seasonal drift is within bounds" — temperature log CSV ×2
-    - `retest` → "Capture corrected seasonal trace" — aquarium thermometer (0–50°C) ×1, Laptop Computer ×1
-    - `retest` → "Corrected trace logged" — temperature log CSV ×3
-    - `interpret-retest` → "Corrected dataset passed" — temperature log CSV ×3
+    - `retest` → "Capture corrected seasonal trace" — thermistor logging rig ×1, Laptop Computer ×1
+    - `retest` → "Corrected trace logged" — temperature log CSV ×4
+    - `interpret-retest` → "Corrected dataset passed" — temperature log CSV ×4
     - `finish` → "Seasonal comparison validated" — temperature log CSV ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
