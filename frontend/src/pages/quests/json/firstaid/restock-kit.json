@@ -42,6 +42,11 @@
                     "process": "wash-hands",
                     "text": "Sanitized and ready",
                     "goto": "audit"
+                },
+                {
+                    "type": "goto",
+                    "goto": "audit",
+                    "text": "Skip process log and restart the audit manually."
                 }
             ]
         },
@@ -119,9 +124,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "firstaid/assemble-kit"
-    ],
+    "requiresQuests": ["firstaid/assemble-kit"],
     "hardening": {
         "passes": 0,
         "score": 90,
