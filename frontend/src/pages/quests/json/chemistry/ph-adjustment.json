@@ -8,31 +8,23 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Once you know the current pH, we can tweak it to the ideal level.",
+            "text": "Phoenix here. We do this like a lab: baseline reading, controlled adjustment, then verification before we trust the batch.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "adjust",
-                    "text": "Let's balance it."
-                }
-            ]
-        },
-        {
-            "id": "adjust",
-            "text": "Add a few drops of acid or base, stir, and recheck. Protective gear keeps splashes harmless.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "adjust-ph",
-                    "text": "Carefully adding and stirring."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "The pH is on target.",
+                    "goto": "baseline",
+                    "text": "Run baseline measurement with PPE on.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
                     ]
@@ -40,12 +32,136 @@
             ]
         },
         {
+            "id": "baseline",
+            "text": "Capture a pH reading before dosing anything. Record the number so your correction has context.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Measure baseline pH."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Baseline recorded, interpret before adjusting.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Target band is pH 6.0-7.2. If you're inside it, preserve the batch. If outside, do micro-dosing corrections and re-test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is within 6.0-7.2; no further adjustment needed.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Out of range: run a correction pass."
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Add tiny doses of pH down or pH up, stir fully, and pause before retesting. No large swings.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Run controlled pH adjustment."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Adjustment complete, collect verification reading.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Unexpected heat or clouding appeared; pause and secure the bench."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Retest and compare against target band. Re-enter correction loop if still out of range.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Take post-adjustment pH reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification is inside 6.0-7.2.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Still out of range; apply another micro-dose and re-test."
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good stop-work call. Rinse exposed surfaces, document the anomaly, and only resume with fresh PPE and tools.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Decontaminate and reset."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Bench reset complete; restart from baseline measurement."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great, the solution is balanced and safe to use.",
+            "text": "Balanced and verified. You used evidence, not guesswork, and left a reproducible trail.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Chemistry in harmony."
+                    "text": "Chemistry in harmony.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -59,7 +175,7 @@
     "requiresQuests": ["chemistry/buffer-solution"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

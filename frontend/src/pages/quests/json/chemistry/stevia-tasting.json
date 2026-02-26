@@ -8,11 +8,11 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your extraction went well. Suit up and let's taste-test without bias.",
+            "text": "Your extraction held together, nice work. For tasting, we separate setup evidence from outcome evidence so bias doesn't contaminate decisions.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep",
+                    "goto": "setup-route",
                     "text": "Gloves and goggles on.",
                     "requiresItems": [
                         {
@@ -28,78 +28,116 @@
             ]
         },
         {
-            "id": "prep",
-            "text": "Rinse your beaker and cylinder, then measure a 1% solution so we can compare sweetness against sugar.",
+            "id": "setup-route",
+            "text": "Choose your prep route: precision single-sample or comparative panel. Either way, produce a labeled tasting solution artifact first.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "taste",
-                    "text": "Solution mixed and labeled.",
-                    "process": "mix-stevia-tasting-solution",
-                    "requiresItems": [
-                        {
-                            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
-                            "count": 1
-                        },
-                        {
-                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
-                            "count": 1
-                        },
-                        {
-                            "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "precision-setup",
+                    "text": "Run precision single-sample prep."
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "Need a refresher on PPE order."
+                    "goto": "panel-setup",
+                    "text": "Run comparative panel prep."
                 }
             ]
         },
         {
-            "id": "taste",
-            "text": "Do a blind sip against plain water, then record sweetness, aftertaste, and how fast it hits the tongue.",
+            "id": "precision-setup",
+            "text": "Rinse tools, prepare a 1% solution, and label concentration plus timestamp.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "mix-stevia-tasting-solution",
+                    "text": "Mix precision tasting solution."
+                },
+                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Logged flavor notes.",
-                    "process": "record-stevia-tasting-notes",
+                    "goto": "outcome-check",
+                    "text": "Setup artifact captured; proceed to outcome check.",
                     "requiresItems": [
                         {
                             "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
                             "count": 1
-                        },
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "panel-setup",
+            "text": "Prepare stevia and control samples side-by-side so you can compare sweetness onset and aftertaste fairly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "mix-stevia-tasting-solution",
+                    "text": "Mix comparative tasting solution."
+                },
+                {
+                    "type": "goto",
+                    "goto": "outcome-check",
+                    "text": "Comparative setup ready; move to blind taste logging.",
+                    "requiresItems": [
                         {
-                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "outcome-check",
+            "text": "Run blind tasting and log sweetness, aftertaste, and onset timing. Outcome evidence must exist before completion.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "record-stevia-tasting-notes",
+                    "text": "Record tasting outcome notes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Outcome artifact logged with clear notes.",
+                    "requiresItems": [
+                        {
+                            "id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
                             "count": 1
                         }
                     ]
                 },
                 {
                     "type": "goto",
-                    "goto": "prep",
-                    "text": "Dilute further and retest."
+                    "goto": "recovery",
+                    "text": "Panel reported bitterness spike or contaminated cup; run recovery branch."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Abort the tasting round, sanitize glassware, and re-mix a fresh sample. If two retries fail, defer to next day to avoid palate fatigue bias.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Sanitize station and reset protocol."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup-route",
+                    "text": "Recovery complete; retry with fresh sample."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup-route",
+                    "text": "Defer tasting until next session, then restart with fresh setup evidence."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great notes! We'll tune the extraction to tame any bitterness before scaling up.",
+            "text": "Great notes. You now have both setup and outcome artifacts to tune extraction toward cleaner sweetness.",
             "options": [
                 {
                     "type": "finish",
@@ -123,7 +161,7 @@
     "requiresQuests": ["chemistry/stevia-crystals"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 90,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

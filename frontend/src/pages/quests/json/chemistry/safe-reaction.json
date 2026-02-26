@@ -8,22 +8,22 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Up for a safe reaction that demonstrates gas generation without hazardous reagents?",
+            "text": "Phoenix here. Today we prove control, not chaos: prep safely, pick a reaction route, and log what the chemistry tells you.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "safety",
-                    "text": "I'm in."
+                    "text": "Proceed with lab safety checks."
                 }
             ]
         },
         {
             "id": "safety",
-            "text": "Before we mix anything, suit up and prep your glassware. Gloves, goggles, beaker, and cylinder are mandatory.",
+            "text": "Before mixing, confirm PPE and clean tools. Gloves, goggles, beaker, and cylinder are non-negotiable.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "mix",
+                    "goto": "route-select",
                     "text": "Safety gear is on and tools are ready.",
                     "requiresItems": [
                         {
@@ -47,21 +47,95 @@
             ]
         },
         {
-            "id": "mix",
-            "text": "Measure, combine, and observe the fizz reaction while keeping the setup open and controlled.",
+            "id": "route-select",
+            "text": "Choose your demonstration mode. Open-beaker is easiest to observe. Controlled-capture emphasizes disciplined gas handling.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "open-beaker",
+                    "text": "Run open-beaker observation route."
+                },
+                {
+                    "type": "goto",
+                    "goto": "controlled-capture",
+                    "text": "Run controlled-capture route."
+                }
+            ]
+        },
+        {
+            "id": "open-beaker",
+            "text": "Run the fizz protocol in an open vessel and watch for controlled bubble formation and safe temperature behavior.",
             "options": [
                 {
                     "type": "process",
                     "process": "run-safe-fizz-reaction",
-                    "text": "Run the reaction protocol."
+                    "text": "Execute open-beaker protocol."
                 },
                 {
                     "type": "goto",
-                    "goto": "log",
-                    "text": "Reaction complete and controlled.",
+                    "goto": "verify",
+                    "text": "Reaction remained controlled; move to verification and logging."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Foam rise or splash risk detected; move to recovery path."
+                }
+            ]
+        },
+        {
+            "id": "controlled-capture",
+            "text": "Run a slower dosing cadence focused on consistent gas generation and stable handling.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-safe-fizz-reaction",
+                    "text": "Execute controlled-capture protocol."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Capture route completed with stable behavior; move to verification and logging."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Pressure or bubbling looked unstable; stop and troubleshoot."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Good catch. Pause additions, vent safely, and decontaminate surfaces before any retry. If repeat instability occurs, escalate instead of improvising.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Run cleanup and reset protocol."
+                },
+                {
+                    "type": "goto",
+                    "goto": "route-select",
+                    "text": "Setup stable again; retry using the safer route."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Now document what happened so another tech could reproduce the run and safety checks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-safe-reaction",
+                    "text": "Log reaction observations."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stable run documented; proceed to closeout.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
                             "count": 1
                         }
                     ]
@@ -69,14 +143,9 @@
             ]
         },
         {
-            "id": "log",
-            "text": "Great. Capture what happened so you can compare runs and scale safely later.",
+            "id": "finish",
+            "text": "Excellent. You demonstrated a reaction with explicit safety controls, reproducible evidence, and a recovery path.",
             "options": [
-                {
-                    "type": "process",
-                    "process": "log-safe-reaction",
-                    "text": "Log reaction observations."
-                },
                 {
                     "type": "finish",
                     "text": "Logged and ready for the next experiment.",
