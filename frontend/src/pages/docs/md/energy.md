@@ -234,8 +234,11 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `start` → "I'll prep the printer and parts list." — entry-level FDM 3D printer ×1, white PLA filament ×60, 8 AWG fused cable kit ×1
     - `print` → "Prints cooled and cleaned." — 3D printed crank handle ×1, 3D printed generator housing ×1
     - `prep` → "Bench is staged and parts checked." — 200 Wh battery pack ×1, 12 V DC motor ×1, 3D printed crank handle ×1, 3D printed generator housing ×1, 8 AWG fused cable kit ×1, precision screwdriver set ×1, digital multimeter ×1
+    - `safety-stop` → "Safety checks passed; return to staging." — 8 AWG fused cable kit ×1, digital multimeter ×1
     - `assemble` → "Generator spins freely and leads are secure." — hand crank generator assembly ×1, 200 Wh battery pack ×1, digital multimeter ×1
     - `charge` → "Logged 50 Wh without hot wires." — dWatt ×50
+    - `verify` → "Verified: 50 Wh output and stable wiring." — dWatt ×50, digital multimeter ×1
+    - `recover` → "Recovery complete; retry charging." — hand crank generator assembly ×1, 200 Wh battery pack ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -324,9 +327,16 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/battery-upgrade`
 - Dialogue `requiresItems` gates:
+    - `start` → "I'm ready." — safety goggles ×1
     - `gather` → "Parts staged and vent fans are clear." — 300 W pure sine inverter ×1, 8 AWG fused cable kit ×1, 200 Wh battery pack ×1, digital multimeter ×1
+    - `lockout` → "Lockout complete; return to staging." — digital multimeter ×1
     - `mount` → "Inverter mounted, fuse in, cables secure." — mounted 300 W inverter ×1
+    - `verify-mount` → "Mount verification passed; proceed to load test." — mounted 300 W inverter ×1, digital multimeter ×1
+    - `rollback` → "Rollback complete; re-run installation." — digital multimeter ×1
     - `test` → "AC holds steady and nothing smells toasty." — load-tested inverter ×1
+    - `verify-output` → "Verification run passed with stable output." — load-tested inverter ×1, digital multimeter ×1
+    - `recover` → "Recovery complete; re-run load test." — mounted 300 W inverter ×1, digital multimeter ×1
+- QA note: `rollback` intentionally does not re-require the consumed 8 AWG cable kit so recovery cannot soft-lock after `mount-inverter-300w` consumption.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -459,8 +469,13 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `requiresQuests`: `energy/solar-1kWh`
 - Dialogue `requiresItems` gates:
     - `start` → "Site is clear and gear is staged." — 500 W wind turbine ×1, Solar charge controller ×1, 8 AWG fused cable kit ×1, tape measure ×1, wire stripper ×1, wire cutters ×1, digital multimeter ×1, 200 Wh battery pack ×1
+    - `safety-stop` → "Safety conditions restored; restart install flow." — digital multimeter ×1
     - `setup` → "Tower is anchored and the brake test passed." — wired 500 W wind turbine ×1, 200 Wh battery pack ×1
+    - `verify-brake` → "Verification passed; proceed to harvesting." — wired 500 W wind turbine ×1, digital multimeter ×1
+    - `recover` → "Recovery complete; retry setup." — tape measure ×1, digital multimeter ×1
     - `harvest` → "Logged 200 Wh and cables stayed cool." — dWatt ×200
+    - `verify-output` → "Verified: output stable and tower secure." — dWatt ×200, wired 500 W wind turbine ×1
+    - `gust-recover` → "Recovery complete; retry wind harvest." — wired 500 W wind turbine ×1, digital multimeter ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
