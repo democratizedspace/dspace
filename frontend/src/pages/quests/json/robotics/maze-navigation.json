@@ -50,8 +50,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "evidence",
-                    "text": "Safety limits set; begin full maze attempts.",
+                    "goto": "recovery-drill",
+                    "text": "Safety limits set; run dead-end recovery drills first.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -67,6 +67,32 @@
             ]
         },
         {
+            "id": "recovery-drill",
+            "text": "Recovery drill: force two dead-end scenarios and verify reverse-turn-rejoin behavior before full maze attempts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Recovery drills pass; start full maze attempts.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Dead-end recovery failed; troubleshoot before retry."
+                }
+            ]
+        },
+        {
             "id": "troubleshoot",
             "text": "Recovery loop: tune turn bias, add dead-end detection, and reset odometry checkpoints before re-running from start.",
             "options": [
@@ -78,7 +104,7 @@
                 {
                     "type": "goto",
                     "goto": "safety",
-                    "text": "Behavior improved; repeat safety checks."
+                    "text": "Behavior improved; revalidate timeout and manual-stop safety limits."
                 }
             ]
         },
@@ -93,6 +119,10 @@
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
                             "count": 2
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
                 },

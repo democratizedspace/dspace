@@ -54,8 +54,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "tune",
-                    "text": "Safety setup complete; begin tuning.",
+                    "goto": "operator-check",
+                    "text": "Safety setup complete; run operator recovery drills.",
                     "requiresItems": [
                         {
                             "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
@@ -71,6 +71,28 @@
             ]
         },
         {
+            "id": "operator-check",
+            "text": "Operational drill: rehearse emergency stop, spotter callouts, and battery disconnect steps before live balancing attempts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tune",
+                    "text": "Drill complete; start the five-run tuning block.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need to tighten stop procedure and spotter roles first."
+                }
+            ]
+        },
+        {
             "id": "tune",
             "text": "Run five 10-second balance attempts and log tip direction plus correction latency after each run.",
             "options": [
@@ -82,6 +104,10 @@
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
                             "count": 2
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
                         }
                     ]
                 },
@@ -103,8 +129,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "tune",
-                    "text": "Retry the five-run stability test."
+                    "goto": "operator-check",
+                    "text": "Retry with a fresh operator safety check."
                 }
             ]
         },

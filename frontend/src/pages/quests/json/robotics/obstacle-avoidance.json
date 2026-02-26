@@ -13,7 +13,12 @@
                 {
                     "type": "goto",
                     "goto": "strategy",
-                    "text": "Sounds challenging."
+                    "text": "Prioritize safe slowdowns and clean bypasses."
+                },
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Prioritize faster reroutes with tighter control."
                 }
             ]
         },
@@ -61,8 +66,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "evidence",
-                    "text": "Safety checks pass; run the obstacle course.",
+                    "goto": "ops-check",
+                    "text": "Safety checks pass; run operator lockout checks.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -78,6 +83,32 @@
             ]
         },
         {
+            "id": "ops-check",
+            "text": "Operational check: confirm remote kill switch response and no-go zones around bystanders before obstacle-course validation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Ops checks pass; run the obstacle course.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Kill switch drill failed; return to troubleshooting."
+                }
+            ]
+        },
+        {
             "id": "troubleshoot",
             "text": "Recovery loop: check sensor angle, filter noisy pings, and lower turn speed. Re-run a short two-obstacle trial after each fix.",
             "options": [
@@ -89,13 +120,13 @@
                 {
                     "type": "goto",
                     "goto": "safety",
-                    "text": "Stability improved; repeat safety checks."
+                    "text": "Stability improved; rerun stop-distance safety checks."
                 }
             ]
         },
         {
             "id": "evidence",
-            "text": "Evidence gate: complete three clean obstacle-course runs without contact and record the chosen stop distance.",
+            "text": "Evidence gate: complete three clean obstacle-course runs without contact, logging stop distance and reroute reason each run.",
             "options": [
                 {
                     "type": "finish",
@@ -103,6 +134,10 @@
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
                     ]
