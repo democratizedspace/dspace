@@ -39,8 +39,8 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "neutralize-acid",
-                    "text": "Run `neutralize-acid` simulation log before manual verification."
+                    "process": "adjust-ph",
+                    "text": "Run `adjust-ph` to document controlled neutralization before manual verification."
                 },
                 {
                     "type": "goto",

@@ -415,9 +415,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature,
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3703)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3703)
 - `chemistry/buffer-solution`
-  - [ ] Observed issue: `chemistry/buffer-solution` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `chemistry/buffer-solution` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3729)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3729)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3729)
 - `chemistry/ph-adjustment`
   - [ ] Observed issue: `chemistry/ph-adjustment` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
   - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
@@ -427,17 +427,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature,
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3703)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3703)
 - `chemistry/precipitation-reaction`
-  - [ ] Observed issue: `chemistry/precipitation-reaction` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `chemistry/precipitation-reaction` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3729)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3729)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3729)
 - `chemistry/safe-reaction`
   - [ ] Observed issue: `chemistry/safe-reaction` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `chemistry/stevia-crystals`
-  - [ ] Observed issue: `chemistry/stevia-crystals` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated.
-  - [ ] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`.
-  - [ ] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `chemistry/stevia-crystals` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated. (PR #3729)
+  - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #3729)
+  - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3729)
 - `chemistry/stevia-extraction`
   - [x] Observed issue: `chemistry/stevia-extraction` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated. (PR #3703)
   - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #3703)

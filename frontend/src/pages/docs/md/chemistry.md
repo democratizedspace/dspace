@@ -108,7 +108,9 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/ph-test`
 - Dialogue `requiresItems` gates:
-    - `mix` → "pH is stable around 7." — pH strip ×1
+    - `measured-mix` → "Measured batch logged—review stability window." — hydroponic pH reading ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `pilot-mix` → "Pilot data captured—evaluate against pass bounds." — hydroponic pH reading ×1, lab coat ×1
+    - `interpret` → "Reading is stable and in-range (6.8–7.2)." — hydroponic pH reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -119,6 +121,13 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
         - Consumes: pH strip ×1
         - Creates: hydroponic pH reading ×1
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Non-linear flow now supports measured and pilot prep paths before a shared interpretation gate.
+    - Recovery path enforces contamination control and supports retry-or-escalate behavior.
 
 ## 6) Adjust Solution pH (`chemistry/ph-adjustment`)
 
@@ -144,17 +153,25 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/ph-adjustment`
 - Dialogue `requiresItems` gates:
-    - `mix` → "A solid precipitate settles." — pH strip ×1
+    - `mix` → "I captured a visible precipitate plus a stable reading." — hydroponic pH reading ×1
+    - `interpret` → "Pass: precipitate is stable and pH is 6.0–8.0." — hydroponic pH reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [measure-ph](/processes/measure-ph)
+        - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
+        - Consumes: pH strip ×1
+        - Creates: hydroponic pH reading ×1
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
         - Creates: none
+- QA notes:
+    - Quest now requires a paired evidence artifact (visible precipitate + logged reading) before interpretation.
+    - Corrective loop includes contamination cleanup, retest branch, and safe pause after repeated failures.
 
 ## 8) Extract Stevia Sweetener (`chemistry/stevia-extraction`)
 
@@ -186,7 +203,9 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/stevia-extraction`
 - Dialogue `requiresItems` gates:
-    - `purify` → "I see white crystals!" — stevia crystals ×1
+    - `controlled-setup` → "Controlled run complete—evaluate crystal outcome." — stevia crystals ×1
+    - `seed-setup` → "Seed batch produced crystals—review quality gate." — stevia crystals ×1
+    - `outcome-check` → "Outcome passes—crystals are dry and clean." — stevia crystals ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -197,6 +216,13 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: none
         - Consumes: stevia extract ×1
         - Creates: stevia crystals ×1
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Lifecycle flow now separates setup-route evidence from outcome quality gates.
+    - Recovery branch adds solvent-safety controls, sanitize-and-retry, and a safe pause path.
 
 ## 10) Taste Test Stevia Crystals (`chemistry/stevia-tasting`)
 
