@@ -36,7 +36,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - Unlock prerequisite:
     - `requiresQuests`: `ubi/basicincome`
 - Dialogue `requiresItems` gates:
-    - `claim-process` → "Process finished. I am ready to verify balances." — dBI ×100 and dUSD ×100
+    - `claim-process` → "Process finished. I am ready to verify balances." — dBI ×150 and dUSD ×150
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -50,7 +50,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 
 - QA hardening notes:
     - Added two progression branches (clean claim flow vs troubleshooting for cooldown/card visibility).
-    - Completion now requires mechanics-backed balance evidence (dBI + dUSD threshold gate) before finish.
+    - Completion now requires mechanics-backed balance evidence (dBI + dUSD threshold gate) before finish; troubleshooting now routes to a safe stop/restart path instead of quest completion.
     - Added a repeatable daily operating checklist branch.
 
 ## 3) Set a UBI Reminder (`ubi/reminder`)
@@ -83,6 +83,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
     - `buy-jar` → "I bought the savings jar." — savings jar ×1
+    - `deposit-choice` → "Single deposit plan (I have at least 100 dUSD)." — dUSD ×100
     - `single-deposit` → "Deposit complete. Verify stored balance now." — dUSD ×90
     - `staged-deposit` → "Top-up done. Proceed with jar deposit." — dUSD ×100
     - `verify-store` → "Stored value confirmed and break-risk understood." — savings jar ×1
@@ -91,7 +92,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - None
+    - dUSD ×1
 - Processes used:
     - [basic-income](/processes/basic-income)
         - Requires: none
