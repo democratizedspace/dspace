@@ -180,9 +180,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3613)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3613)
 - `3dprinting/benchy_100`
-  - [ ] Observed issue: `3dprinting/benchy_100` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3660)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3676)
+  - [x] Observed issue (addressed): `3dprinting/benchy_100` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3732. (PR #3732)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3660, #3732)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3676, #3732)
 - `3dprinting/benchy_25`
   - [x] Observed issue (addressed): `3dprinting/benchy_25` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3608)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3608)
@@ -192,13 +192,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3613)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3613)
 - `3dprinting/cable-clip`
-  - [ ] Observed issue: `3dprinting/cable-clip` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3676)
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `3dprinting/cable-clip` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3732. (PR #3732)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3676, #3732)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3732)
 - `3dprinting/calibration-cube`
-  - [ ] Observed issue: `3dprinting/calibration-cube` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `3dprinting/calibration-cube` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3732. (PR #3732)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3732)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3732)
 - `3dprinting/filament-change`
   - [x] Observed issue (addressed): `3dprinting/filament-change` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in PR #3590. (PR #3590)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3590)

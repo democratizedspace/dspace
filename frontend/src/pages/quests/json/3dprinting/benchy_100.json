@@ -8,12 +8,33 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. One hundred Benchies is factory work. We'll choose a production strategy, log checkpoints, and only close once the fleet survives inspection.",
+            "text": "Phoenix here. One hundred Benchies is factory work. We'll run a safety preflight, choose a production strategy, and only close once the fleet survives inspection.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Let's run preflight before production."
+                }
+            ]
+        },
+        {
+            "id": "preflight",
+            "text": "Preflight gate: verify ventilation, dry filament, and emergency stop access before committing to high-volume output.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "strategy",
-                    "text": "Let's design the print campaign."
+                    "text": "Preflight complete. Start production planning.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -70,7 +91,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "evidence",
+                    "goto": "qa-audit",
                     "text": "Quality checkpoints logged and fleet reached 100.",
                     "requiresItems": [
                         {
@@ -117,7 +138,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "evidence",
+                    "goto": "qa-audit",
                     "text": "Sprint logs are complete and 100 prints pass inspection.",
                     "requiresItems": [
                         {
@@ -184,6 +205,38 @@
             ]
         },
         {
+            "id": "qa-audit",
+            "text": "Before closure, run a QA audit: sample ten hulls for bridging defects and log at least two anomalies with corrective actions.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "QA audit passed with corrective notes and verification samples.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 100
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Audit found recurring defects; trigger controlled recovery.",
+                    "requiresItems": [
+                        {
+                            "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+                            "count": 60
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "evidence",
             "text": "Before finish, interpret the run log: record at least two anomalies, the corrective action used, and the retest result so your next 100-run is reproducible.",
             "options": [
@@ -198,7 +251,7 @@
                         },
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }

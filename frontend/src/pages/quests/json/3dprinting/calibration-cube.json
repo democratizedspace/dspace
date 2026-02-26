@@ -8,17 +8,39 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Let's harden your printer accuracy. We'll capture baseline measurements, tune offsets, and prove the retest lands within tolerance before closing.",
+            "text": "Let's harden your printer accuracy. We'll capture baseline measurements, choose a tuning strategy, and prove the retest lands within tolerance before closing.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "print",
-                    "text": "Ready to run baseline print."
+                    "text": "Main path: run baseline print first."
                 },
+                {
+                    "type": "goto",
+                    "goto": "firmware-check",
+                    "text": "Alternate path: validate firmware and filament before printing."
+                }
+            ]
+        },
+        {
+            "id": "firmware-check",
+            "text": "Alternate setup path: verify nozzle profile, measure filament diameter, and record planned adjustment limits before baseline printing.",
+            "options": [
                 {
                     "type": "process",
                     "process": "measure-filament-diameter",
-                    "text": "How do I check filament diameter first?"
+                    "text": "Measure filament and log target profile."
+                },
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Setup evidence captured; proceed to baseline print.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -86,12 +108,44 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Measurements are unstable or drift worsened after tuning.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Safety stop: pause motion, let the hotend cool, and inspect belt and coupler security before retrying to avoid compounding mechanical drift.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Safety checks complete; resume structured recovery.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "recover",
-            "text": "Recovery loop: re-check belt tension, confirm extrusion multiplier, and rerun a single-axis test print. If drift persists, roll back to last-known-good profile and repeat baseline.",
+            "text": "Recovery loop: re-check belt tension, confirm extrusion multiplier, and rerun a single-axis test print. If drift persists, roll back to last-known-good profile, cool the hotend, and repeat baseline.",
             "options": [
                 {
                     "type": "goto",
@@ -104,6 +158,10 @@
                         },
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
                             "count": 1
                         }
                     ]
