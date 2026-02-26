@@ -13,7 +13,17 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Give me the two route options."
+                    "text": "Give me the two route options.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -64,7 +74,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Still a blurry single point\u2014need troubleshooting."
+                    "text": "Still a blurry single point—need troubleshooting."
                 }
             ]
         },
@@ -106,12 +116,12 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Safety check done\u2014retry one of the routes."
+                    "text": "Safety check done—retry one of the routes."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Conditions are unsafe tonight; reschedule and finish with a caution note."
+                    "goto": "safe-stop",
+                    "text": "Conditions are unsafe tonight; log a caution stop."
                 }
             ]
         },
@@ -126,7 +136,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "interpret",
                     "text": "Observation logged with color notes.",
                     "requiresItems": [
                         {
@@ -150,27 +160,70 @@
             ]
         },
         {
+            "id": "interpret",
+            "text": "Interpretation gate: do your logged color notes and split stability match both route expectations?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes—evidence is reproducible.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "No—need to troubleshoot and re-test."
+                }
+            ]
+        },
+        {
+            "id": "safe-stop",
+            "text": "Good call. You logged a safe stop without forcing unsafe observing conditions.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Finish with a caution note.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great split. You proved the observation with logged evidence and used a safe recovery plan when seeing conditions shifted.",
+            "text": "Great split. You captured the pair cleanly, documented your evidence, and handled risk like a seasoned observer.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Logged and ready for the next target."
+                    "text": "Albireo logged!"
                 }
             ]
         }
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
-            "count": 1
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 100
         }
     ],
     "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 0,
-        "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 95,
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -1,25 +1,51 @@
 {
     "id": "astronomy/planetary-alignment",
     "title": "Planetary Alignment",
-    "description": "Use a star chart to track a rare alignment of planets.",
+    "description": "Plan, observe, and verify a planetary lineup with logged evidence and safety fallback handling.",
     "image": "/assets/quests/planetary_alignment_star_chart.jpg",
     "npc": "/assets/npc/nova.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Several planets are lining up tonight. Want to check it out?",
+            "text": "Several planets are lining up tonight. Want to run a quick chart-first pass or a horizon-first setup?",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "middle",
-                    "text": "Absolutely, let's prepare."
+                    "goto": "choose-route",
+                    "text": "Show me both alignment routes.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "middle",
-            "text": "Here's a star chart to guide your telescope.",
+            "id": "choose-route",
+            "text": "Great. Either route works, but we only close this mission once the lineup is logged with timestamps and horizon notes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart-route",
+                    "text": "Use planisphere charting (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "horizon-route",
+                    "text": "Use horizon-first visual alignment (alternate path)."
+                }
+            ]
+        },
+        {
+            "id": "chart-route",
+            "text": "Start with your planisphere and lock each target planet in sequence from west to east.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -29,29 +55,158 @@
                             "count": 1
                         }
                     ],
-                    "text": "Thanks for the chart!"
+                    "text": "Copying the lineup to my chart now."
                 },
                 {
                     "type": "process",
                     "process": "identify-constellations",
-                    "text": "Mapping the alignment."
+                    "text": "Run constellation references for planet positions."
                 },
                 {
                     "type": "goto",
-                    "goto": "completion",
+                    "goto": "log-evidence",
+                    "text": "I can identify all target planets with clear spacing.",
                     "requiresItems": [
                         {
                             "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
                             "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
                         }
-                    ],
-                    "text": "Alignment confirmed."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Cloud cover or glare keeps breaking the sequence."
                 }
             ]
         },
         {
-            "id": "completion",
-            "text": "Great work! The planetary lineup is documented.",
+            "id": "horizon-route",
+            "text": "Use low magnification and horizon landmarks to verify spacing before naming each planet.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Run horizon alignment sweep."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "Landmarks and planet order both match the plan.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "The line of sight is unstable and I lost one planet."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Troubleshoot before retry: stabilize tripod, avoid roof-edge footing, and wait for haze gaps. If conditions stay risky, stand down.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Safety checks complete; retry alignment."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safe-stop",
+                    "text": "Conditions are unsafe; record a safety stop."
+                }
+            ]
+        },
+        {
+            "id": "log-evidence",
+            "text": "Write the lineup order, timestamp, and horizon reference so another observer can reproduce it.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Record alignment evidence in the mission log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Evidence entry written.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: does the logged order match the forecast window and stay stable for both route methods?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes, order/time/horizon notes all reconcile.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "No, one segment is inconsistent; troubleshoot and re-run."
+                }
+            ]
+        },
+        {
+            "id": "safe-stop",
+            "text": "Good call. You logged a safe abort and preserved your setup for another window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Finish with a safety note in the log.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. Your planetary alignment run is reproducible, documented, and safely handled.",
             "options": [
                 {
                     "type": "finish",
@@ -70,7 +225,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
