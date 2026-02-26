@@ -687,9 +687,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
 Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, composting/start (fallback: no checked firstaid quests yet)
 
 - `firstaid/assemble-kit`
-  - [ ] Observed issue: `firstaid/assemble-kit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `firstaid/assemble-kit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3733)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3733)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3733)
 - `firstaid/change-bandage`
   - [ ] Observed issue: `firstaid/change-bandage` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -703,9 +703,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, compos
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/flashlight-battery`
-  - [ ] Observed issue: `firstaid/flashlight-battery` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `firstaid/flashlight-battery` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3733)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3733)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3733)
 - `firstaid/learn-cpr`
   - [ ] Observed issue: `firstaid/learn-cpr` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -719,9 +719,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, compos
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/sanitize-pocket-mask`
-  - [ ] Observed issue: `firstaid/sanitize-pocket-mask` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `firstaid/sanitize-pocket-mask` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3733)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3733)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3733)
 - `firstaid/splint-limb`
   - [ ] Observed issue: `firstaid/splint-limb` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).

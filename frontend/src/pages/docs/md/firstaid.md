@@ -27,7 +27,9 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
+    - `replace-supplies` → "Replacements are ready; re-check the kit." — adhesive bandages ×1, sterile gauze pads ×1, antiseptic wipes ×1, nitrile gloves (pair) ×1
     - `pack` → "Supplies packed" — first aid kit ×1
+    - `stage-storage` → "Kit is staged in a safe location." — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -53,7 +55,10 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/assemble-kit`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Battery reads 9 V" — red flashlight ×1, digital multimeter ×1, 9 V battery ×1
+    - `measure` → "Run measurement now." — red flashlight ×1, digital multimeter ×1, 9 V battery ×1
+    - `measure` → "I already measured and logged a reading." — red flashlight ×1, digital multimeter ×1, 9 V battery ×1
+    - `interpret` → "Reading is 8.5 V or higher; flashlight is ready." — red flashlight ×1
+    - `replace-battery` → "Battery replaced; run the measurement again." — 9 V battery ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -123,14 +128,19 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/learn-cpr`
 - Dialogue `requiresItems` gates:
-    - `clean` → "Mask is sanitized" — CPR pocket mask ×1
+    - `precheck` → "Mask is intact and ready to clean." — CPR pocket mask ×1
+    - `replace-mask` → "Replacement mask acquired; continue sanitizing." — CPR pocket mask ×1
+    - `dry` → "Mask is dry and resealed in the kit." — CPR pocket mask ×1, first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
 
 ## 7) Stop a Nosebleed (`firstaid/stop-nosebleed`)
 

@@ -8,29 +8,94 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session.\nLet's sanitize it so it's ready for the next use.",
+            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session. Let's sanitize it so it's ready for the next use.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "clean",
-                    "text": "How do I clean it?"
+                    "goto": "precheck",
+                    "text": "How do I clean it safely?"
                 }
             ]
         },
         {
-            "id": "clean",
-            "text": "Wash the mask with warm soapy water, rinse and soak it in a 1:10 bleach solution for two minutes.\nLet it air dry completely before storing it in your first aid kit.",
+            "id": "precheck",
+            "text": "Inspect the valve and body first. If cracked or brittle, retire it and replace the mask instead of sanitizing.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Mask is sanitized",
+                    "goto": "clean",
+                    "text": "Mask is intact and ready to clean.",
                     "requiresItems": [
                         {
                             "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "replace-mask",
+                    "text": "The valve is damaged or the mask is degraded."
+                }
+            ]
+        },
+        {
+            "id": "replace-mask",
+            "text": "Safety first. Replace the pocket mask, then sanitize the new one before storing it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Replacement mask acquired; continue sanitizing.",
+                    "requiresItems": [
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "clean",
+            "text": "Wash with warm soapy water, rinse thoroughly, then disinfect with a fresh 1:10 bleach solution for two minutes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "goto": "dry",
+                    "text": "Sanitizing complete; moving to dry and storage checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "dry",
+                    "text": "Cleaning and disinfection steps complete."
+                }
+            ]
+        },
+        {
+            "id": "dry",
+            "text": "Air-dry completely before storage. Moisture trapped in the mask can grow contamination.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Mask is dry and resealed in the kit.",
+                    "requiresItems": [
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        },
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Mask still smells like bleach or feels damp; rinse/dry cycle again."
                 }
             ]
         },
@@ -53,9 +118,15 @@
     ],
     "requiresQuests": ["firstaid/learn-cpr"],
     "hardening": {
-        "passes": 0,
-        "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 91,
+        "emoji": "🛠️",
+        "history": [
+            {
+                "task": "codex-hardening-2026-02-26",
+                "date": "2026-02-26",
+                "score": 91
+            }
+        ]
     }
 }

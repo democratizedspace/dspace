@@ -19,7 +19,7 @@
         },
         {
             "id": "gather",
-            "text": "Wash with soap and water 20s, then dry with a paper towel. Set out bandages, gauze pads, antiseptic wipes, nitrile gloves.",
+            "text": "Wash with soap and water 20s, then dry with a paper towel. Set out bandages, gauze pads, antiseptic wipes, and nitrile gloves.",
             "options": [
                 {
                     "type": "process",
@@ -36,13 +36,13 @@
         },
         {
             "id": "dry",
-            "text": "Dry your hands before handling supplies.",
+            "text": "Dry your hands before handling supplies. Moisture can contaminate sterile items.",
             "options": [
                 {
                     "type": "process",
                     "process": "dry-hands",
                     "text": "Hands are dry",
-                    "goto": "pack"
+                    "goto": "inspect"
                 },
                 {
                     "type": "goto",
@@ -51,37 +51,104 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "pack",
+                    "goto": "inspect",
                     "text": "My hands are already dry."
                 }
             ]
         },
         {
+            "id": "inspect",
+            "text": "Inspect wrappers and expiry labels before packing. If anything is torn, damp, or expired, set it aside and restock first.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pack",
+                    "text": "All supplies look sealed and in date."
+                },
+                {
+                    "type": "goto",
+                    "goto": "replace-supplies",
+                    "text": "I found damaged or expired supplies."
+                }
+            ]
+        },
+        {
+            "id": "replace-supplies",
+            "text": "Good catch. Replace compromised items before storing anything. Never seal a kit with uncertain supplies.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Replacements are ready; re-check the kit.",
+                    "requiresItems": [
+                        {
+                            "id": "2f4db9f6-c6d0-4004-a348-33b87f084fdb",
+                            "count": 1
+                        },
+                        {
+                            "id": "ff1c6f6a-cfa2-40ac-af15-2c07944c85af",
+                            "count": 1
+                        },
+                        {
+                            "id": "95085935-8e9d-4d08-89e0-b4dab153376f",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ecf2145-b5e2-4953-916c-10fc4bf5ec8d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "pack",
-            "text": "Check for damage or expiry. Pack items in a dry box with a label and tight lid.",
+            "text": "Pack items in a dry box with a label and tight lid. Keep trauma supplies separate from daily-use meds.",
             "options": [
                 {
                     "type": "process",
                     "process": "pack-first-aid-kit",
                     "text": "Packing now",
-                    "goto": "finish"
+                    "goto": "stage-storage"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "stage-storage",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
                             "count": 1
                         }
                     ],
-                    "text": "Supplies packed"
+                    "text": "Supplies are already packed."
+                }
+            ]
+        },
+        {
+            "id": "stage-storage",
+            "text": "Before finishing, place the kit in a dry, accessible location away from children and heat sources.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Kit is staged in a safe location.",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "I found moisture risk where I planned to store it. Re-check and repack if needed."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Keep kit dry out of reach; restock supplies and call emergency services for serious injuries.",
+            "text": "Great work! Restock after each use and call emergency services for serious injuries.",
             "options": [
                 {
                     "type": "finish",
@@ -98,9 +165,9 @@
     ],
     "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
-        "passes": 6,
-        "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "passes": 7,
+        "score": 96,
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
@@ -131,6 +198,11 @@
                 "task": "codex-cleanup-2025-08-06",
                 "date": "2025-08-06",
                 "score": 95
+            },
+            {
+                "task": "codex-hardening-2026-02-26",
+                "date": "2026-02-26",
+                "score": 96
             }
         ]
     }
