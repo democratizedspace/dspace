@@ -161,7 +161,7 @@
     "requiresQuests": ["chemistry/stevia-crystals"],
     "hardening": {
         "passes": 0,
-        "score": 85,
+        "score": 90,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
