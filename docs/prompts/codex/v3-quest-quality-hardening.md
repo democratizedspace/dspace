@@ -19,6 +19,11 @@ verified checked exemplars in `docs/qa/v3.md` §4.5.
 Prioritize quests that map directly to still-unchecked per-quest boxes in `docs/qa/v3.md` §4.5,
 and optimize for clearing those boxes after manual human verification.
 
+**Fail-closed invariant (non-optional completion gate):** any PR that edits one or more
+`frontend/src/pages/quests/json/<tree>/<quest>.json` files MUST also modify
+`docs/design/v3-quest-quality-review.md` in the same PR with per-quest checklist traceability for
+all touched quest IDs. Non-compliant PRs must not be opened.
+
 ## Deterministic selection and anchoring rules (required)
 
 1. Build a target list from still-unchecked **per-quest** rows in `docs/qa/v3.md` §4.5
@@ -48,32 +53,29 @@ and optimize for clearing those boxes after manual human verification.
 
 - Edit quest JSON under `frontend/src/pages/quests/json/<tree>/<quest>.json`.
 - Keep quest IDs stable unless correcting a proven canonical mismatch.
-- For each selected quest in `docs/design/v3-quest-quality-review.md`, update checklist boxes only
-  when the corresponding work is verifiably complete **and** the quest JSON changes are included
-  in the same PR:
-  - switch `[ ]` to `[x]` for each completed line item in PRs that also modify the corresponding
-    quest JSON;
-  - append the current PR number at end-of-line as `(PR #<number>)`;
-  - canonical PR-tag format is a single parenthetical with one `PR` prefix:
-    `(PR #<number1>, #<number2>, #<number3>)`;
-  - if a line already has PR tags, append the new PR as `, #<number>` inside that same
-    parenthetical so the line still follows the canonical format above;
-  - leave boxes unchecked when evidence is ambiguous;
-  - bookkeeping-only follow-up PRs that do not touch quest JSON may adjust PR tags inside the
-    existing parenthetical but must not change any `[ ]`/`[x]` checkbox state.
-- **Mandatory completion gate for this prompt**: any Codex task run from this prompt that modifies
+- **Bookkeeping-first workflow (required):** after selecting quests and before deep JSON edits,
+  open each selected quest's checklist block in `docs/design/v3-quest-quality-review.md` and plan
+  which line(s) this PR intends to satisfy; finish the PR with those line updates and canonical PR
+  tags present.
+- For EACH touched quest ID, perform checklist bookkeeping in
+  `docs/design/v3-quest-quality-review.md`:
+  - find that quest ID's block;
+  - update at least one relevant checklist line item in that block;
+  - append PR tags using canonical format only: `(PR #<number>)` or
+    `(PR #<number1>, #<number2>)` (single `PR` prefix);
+  - if a line already has canonical tags, append the new PR as `, #<number>` inside the same
+    parenthetical;
+  - flip `[ ]` -> `[x]` only when this PR's diff clearly proves that line item is satisfied;
+  - when evidence is not conclusive, keep `[ ]` and add/append canonical PR tags for traceability.
+- Placeholder or non-canonical tags are forbidden (for example `PR #0000`, `PR TBD`, `#1234`
+  without `PR`, or multiple parentheticals for PR tags on one line).
+- **Mandatory completion gate for this prompt:** any Codex task run from this prompt that modifies
   one or more `frontend/src/pages/quests/json/<tree>/<quest>.json` files must also include
   matching checklist updates in `docs/design/v3-quest-quality-review.md` for those quest IDs in
-  the same PR. A PR is non-compliant if it hardens quests but does not check/update at least one
-  corresponding checklist line with PR tag(s).
-- For that mandatory checklist update, the minimum acceptable bookkeeping is updating relevant
-  checklist line(s) with canonical PR tag(s) for each touched quest ID; do **not** flip `[ ]` to
-  `[x]` unless the completed state is clearly evidenced by the same PR. Leaving `[ ]` while adding
-  traceable PR tags is valid when completion cannot be verified.
-- **Retroactive bookkeeping requirement**: if you discover older hardening PR(s) that changed
-  quest JSON but failed to record the corresponding checklist updates in
-  `docs/design/v3-quest-quality-review.md`, add a focused bookkeeping commit in the current PR to
-  backfill the missing PR tag(s) and (only when clearly evidenced) checkbox state.
+  the same PR. Non-compliant PRs must not be opened.
+- **Retroactive bookkeeping (allowed, focused):** if older hardening PR(s) are missing checklist
+  PR tags, you may add missing canonical PR tag(s) in the same PR, but keep edits laser-focused to
+  relevant quest blocks only and do not flip checkbox states unless conclusively evidenced.
 - If quest flow changes materially, update paired docs in
   `frontend/src/pages/docs/md/<tree>.md`.
 - Codex cannot create/edit binary images. If quality hardening needs new item imagery,
@@ -89,6 +91,11 @@ and optimize for clearing those boxes after manual human verification.
 4. `npm run test:ci`
 5. `npm run link-check` (run when docs/markdown changed)
 6. `for f in frontend/src/pages/quests/json/<tree>/*.json; do node scripts/validate-quest.js "$f" || exit 1; done`
+7. Bookkeeping validation (required): after applying changes and knowing current PR number `<pr>`,
+   verify each selected quest block exists and has at least one relevant checklist line containing
+   canonical reference to this PR number (either `(PR #<pr>)` or `, #<pr>` inside canonical
+   parenthetical), for example:
+   `for q in <tree/quest1> <tree/quest2>; do rg -n "$q" docs/design/v3-quest-quality-review.md >/dev/null || { echo "Missing quest block: $q"; exit 1; }; done && rg -n "^\s*- \[[ x]\].*\(PR #[0-9]+(, #[0-9]+)*\)" docs/design/v3-quest-quality-review.md | rg "(#<pr>\)|, #<pr>\))"`
 
 ## REQUIRED output format for your PR summary
 
@@ -115,9 +122,12 @@ Output exactly these eight sections in order (no extra sections):
 8. `Checklist box updates`
    - Bullet list of every line item changed in
      `docs/design/v3-quest-quality-review.md`, quoted verbatim with its final checkbox state and
-     appended PR tag(s).
-   - If no line items were changed, explicitly output `BLOCKED (non-compliant with prompt)` and do
-     not open the PR until checklist updates are included.
+     canonical PR tag(s).
+   - For every touched quest ID, include at least one quoted changed checklist line from that
+     quest's block, verbatim, showing final checkbox state plus canonical PR tag(s).
+   - If any touched quest ID is missing from this section, the PR is non-compliant.
+   - If no checklist lines were changed, or if not all touched quest IDs are represented, output
+     `BLOCKED (non-compliant with prompt)` and do not open the PR.
 ```
 
 ## Upgrade prompt
@@ -134,17 +144,27 @@ Goals:
 - Preserve deterministic rules: verified exemplar anchors, rubric type first-match behavior, and
   required output format.
 - Preserve checklist bookkeeping rules for
-  `docs/design/v3-quest-quality-review.md` (check only verified items when the same PR includes
-  quest JSON hardening, keep PR tags in canonical single-parenthetical format `(PR #1234, #5678)`
-  when multiple PRs apply, append new PR tags as `, #<number>` within that parenthetical, and
-  keep checkbox state unchanged in bookkeeping-only follow-up PRs).
-- Make it unambiguous that checklist updates are required (not optional) for any Codex task using
-  this prompt that edits quest JSON; PRs without corresponding checklist updates are non-compliant.
-- Require retroactive bookkeeping in the same PR when prior hardening PRs are found to be missing
-  required checklist traceability.
+  `docs/design/v3-quest-quality-review.md` with fail-closed behavior: any PR that edits
+  `frontend/src/pages/quests/json/<tree>/<quest>.json` must also update checklist bookkeeping for
+  every touched quest ID in the same PR, and non-compliant PRs must not be opened.
+- Preserve explicit per-quest bookkeeping steps: find each touched quest block, update at least
+  one relevant line, use canonical tags `(PR #<number>)` or `(PR #<number1>, #<number2>)`, append
+  additional PRs as `, #<number>` in the same parenthetical, and only flip `[ ]` to `[x]` when the
+  same PR conclusively proves completion.
+- Keep placeholder/non-canonical tags forbidden (`PR #0000`, `PR TBD`, etc.).
+- Keep bookkeeping-first workflow requirement (plan checklist lines before deep JSON edits).
+- Keep retroactive bookkeeping guidance: allow focused PR-tag backfills for older missing
+  traceability, but avoid checkbox flips without conclusive evidence and avoid unrelated churn.
+- Preserve required validation commands, including an explicit bookkeeping validation check that
+  confirms selected quest blocks exist and include the current PR number in canonical PR tags.
+- Preserve required 8-section PR summary format and strengthen section 8 so each touched quest ID
+  is represented with at least one verbatim changed checklist line containing final checkbox state
+  and canonical PR tags, with fail-closed `BLOCKED (non-compliant with prompt)` behavior when
+  missing.
 - Optimize for clearing still-unchecked quest-quality boxes in `docs/qa/v3.md` after manual human
   verification.
-- Preserve Codex binary-asset limitations guidance (reuse image references; no new binary assets).
+- Preserve guidance to keep quest IDs stable and preserve Codex binary-asset limitations guidance
+  (reuse image references; no new binary assets).
 
 Constraints:
 
