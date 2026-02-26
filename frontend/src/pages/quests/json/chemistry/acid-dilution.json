@@ -30,37 +30,13 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Suit up: lab coat, nitrile gloves, goggles. In a spill tray, set 100 mL water in a 250 mL beaker with a stir rod, pH strip, and the 37% HCl bottle. Acid goes into water, always.",
+            "text": "Phoenix here. Safety brief first: lab coat, gloves, goggles, spill tray, and pre-measured water in the beaker. Acid goes into water, never the reverse.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "dilute",
-                    "text": "PPE on and workstation ready."
-                }
-            ]
-        },
-        {
-            "id": "dilute",
-            "text": "Slowly trickle 10 mL of HCl down the beaker wall while stirring. Face back, pace slow, then verify with a pH strip.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Rinsing any splashes."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Solution mixed safely.",
+                    "goto": "choose-method",
+                    "text": "Bench is staged and PPE is confirmed.",
                     "requiresItems": [
-                        {
-                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
-                            "count": 1
-                        },
-                        {
-                            "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
-                            "count": 1
-                        },
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
@@ -74,14 +50,6 @@
                             "count": 1
                         },
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        },
-                        {
-                            "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
-                            "count": 1
-                        },
-                        {
                             "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
                             "count": 1
                         }
@@ -90,12 +58,136 @@
             ]
         },
         {
+            "id": "choose-method",
+            "text": "Pick a dilution strategy based on confidence and setup. Both require a verification reading before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "micro-batch",
+                    "text": "Use micro-batch additions for tight control."
+                },
+                {
+                    "type": "goto",
+                    "goto": "staged-pour",
+                    "text": "Use staged pour with cooling pauses."
+                }
+            ]
+        },
+        {
+            "id": "micro-batch",
+            "text": "Add acid dropwise down the beaker wall while stirring. Pause between additions to control heat.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Micro-batch dilution complete; verify pH.",
+                    "requiresItems": [
+                        {
+                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                            "count": 1
+                        },
+                        {
+                            "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                            "count": 1
+                        },
+                        {
+                            "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Mixture warmed too quickly or splashed; enter recovery protocol."
+                }
+            ]
+        },
+        {
+            "id": "staged-pour",
+            "text": "Add acid in three short pours with stirring and cooling checks between each stage.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Staged pour complete; run verification.",
+                    "requiresItems": [
+                        {
+                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                            "count": 1
+                        },
+                        {
+                            "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                            "count": 1
+                        },
+                        {
+                            "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Unexpected fumes or surface contamination; stop and recover."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Use a pH strip and record the reading. If the mix is unstable or outside your expected range, troubleshoot before storage.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading logged and dilution is stable for storage.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Reading looks off; run recovery and re-verify."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Contain first, then clean. Rinse exposed skin immediately, wipe the tray perimeter, and restart from method selection with fresh strips.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Run spill-response hygiene step."
+                },
+                {
+                    "type": "goto",
+                    "goto": "choose-method",
+                    "text": "Bench recovered; retry dilution with tighter pacing."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Label the diluted acid with concentration and date, cap it, and store it in the spill tray. No mystery mixes.",
+            "text": "Label concentration and date, cap securely, and return the bottle to spill-tray storage. Clean chemistry is repeatable chemistry.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Safety first."
+                    "text": "Safety first.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }

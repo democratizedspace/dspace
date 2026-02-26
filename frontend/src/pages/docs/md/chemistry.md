@@ -25,8 +25,9 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
     - `safety` → "Safety gear is on and tools are ready." — nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
-    - `mix` → "Reaction complete and controlled." — pH strip ×1
-    - `log` → "Logged and ready for the next experiment." — 250 mL glass beaker ×1
+    - `open-beaker` → "Reaction remained controlled; capture verification reading." — pH strip ×1
+    - `controlled-capture` → "Capture route completed with stable behavior; verify and log." — pH strip ×1
+    - `verify` → "Evidence logged with a stable reading." — 250 mL glass beaker ×1, pH strip ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -41,6 +42,13 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: 250 mL glass beaker ×1
         - Consumes: none
         - Creates: none
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Flow is now non-linear (open-beaker vs controlled-capture) before shared verification and logging.
+    - Troubleshooting enforces stop-work cleanup and route reselection before completion.
 
 ## 2) Measure Solution pH (`chemistry/ph-test`)
 
@@ -70,7 +78,11 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/ph-test`
 - Dialogue `requiresItems` gates:
-    - `dilute` → "Solution mixed safely." — 250 mL glass beaker ×1, glass stir rod ×1, nitrile gloves (pair) ×1, safety goggles ×1, lab coat ×1, pH strip ×1, hydrochloric acid (37%, 500 mL) ×1, spill tray ×1
+    - `start` → "Bench is staged and PPE is confirmed." — nitrile gloves (pair) ×1, safety goggles ×1, lab coat ×1, spill tray ×1
+    - `micro-batch` → "Micro-batch dilution complete; verify pH." — 250 mL glass beaker ×1, glass stir rod ×1, hydrochloric acid (37%, 500 mL) ×1
+    - `staged-pour` → "Staged pour complete; run verification." — 250 mL glass beaker ×1, glass stir rod ×1, hydrochloric acid (37%, 500 mL) ×1
+    - `verify` → "Reading logged and dilution is stable for storage." — pH strip ×1
+    - `finish` → "Safety first." — pH strip ×1, spill tray ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -81,6 +93,9 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
         - Creates: none
+- QA notes:
+    - Dilution now branches into micro-batch and staged-pour methods with a shared pH verification gate.
+    - Recovery path handles splash/heat/fume anomalies and loops back to method selection before closure.
 
 ## 4) Neutralize an Acid Spill (`chemistry/acid-neutralization`)
 
@@ -135,17 +150,32 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `chemistry/buffer-solution`
 - Dialogue `requiresItems` gates:
-    - `adjust` → "The pH is on target." — pH strip ×1
+    - `start` → "Run baseline measurement with PPE on." — nitrile gloves (pair) ×1, safety goggles ×1, hydroponics tub (ready) ×1
+    - `baseline` → "Baseline recorded, interpret before adjusting." — pH strip ×1
+    - `interpret` → "Reading is within 6.0-7.2; no further adjustment needed." — pH strip ×1
+    - `retest` → "Verification is inside 6.0-7.2." — pH strip ×1
+    - `finish` → "Chemistry in harmony." — pH strip ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [measure-ph](/processes/measure-ph)
+        - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
+        - Consumes: pH strip ×1
+        - Creates: pH strip ×1
     - [adjust-ph](/processes/adjust-ph)
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
         - Consumes: pH down solution (500 mL) ×0.05, pH up solution (potassium carbonate) ×0.05
         - Creates: none
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Measurement-first flow enforces baseline artifact, interpretation, and pass bounds (pH 6.0-7.2).
+    - Out-of-range correction loops through adjust -> retest, with a safety-stop recovery branch.
 
 ## 7) Form a Precipitate (`chemistry/precipitation-reaction`)
 
@@ -231,8 +261,10 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `requiresQuests`: `chemistry/stevia-crystals`
 - Dialogue `requiresItems` gates:
     - `start` → "Gloves and goggles on." — nitrile gloves (pair) ×1, safety goggles ×1
-    - `prep` → "Solution mixed and labeled." — stevia crystals ×1, nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1, glass stir rod ×1
-    - `taste` → "Logged flavor notes." — stevia tasting solution ×1, mission logbook ×1
+    - `precision-setup` → "Setup artifact captured; proceed to outcome check." — stevia tasting solution ×1
+    - `panel-setup` → "Comparative setup ready; move to blind taste logging." — stevia tasting solution ×1
+    - `outcome-check` → "Outcome artifact logged with clear notes." — stevia tasting notes ×1
+    - `recovery` → "Defer tasting to scheduled follow-up after reset window." — stevia tasting solution ×1
     - `finish` → "Ready for the next batch." — stevia tasting notes ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -248,6 +280,13 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: stevia tasting solution ×1, mission logbook ×1
         - Consumes: stevia tasting solution ×1
         - Creates: stevia tasting notes ×1
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Lifecycle progression now requires staged evidence (setup artifact before outcome artifact).
+    - Recovery branch covers contamination/palate-fatigue handling with retry and defer options.
 
 ## QA flow notes
 
