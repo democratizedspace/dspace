@@ -336,6 +336,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `test` → "AC holds steady and nothing smells toasty." — load-tested inverter ×1
     - `verify-output` → "Verification run passed with stable output." — load-tested inverter ×1, digital multimeter ×1
     - `recover` → "Recovery complete; re-run load test." — mounted 300 W inverter ×1, digital multimeter ×1
+- QA note: `rollback` intentionally does not re-require the consumed 8 AWG cable kit so recovery cannot soft-lock after `mount-inverter-300w` consumption.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
