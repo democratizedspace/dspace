@@ -401,18 +401,33 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/constellations`
 - Dialogue `requiresItems` gates:
-    - `start` → "Show me the steps." — constellation sketch set ×1
-    - `locate` → "Polaris spotted." — Polaris alignment note ×1
+    - `start` → "Show both routes." — constellation sketch set ×1
+    - `pointer-route` → "Polaris is stable and the heading is repeatable." — planisphere star chart ×1, constellation sketch set ×1
+    - `tripod-route` → "Alignment note captured and Polaris confirmed." — Polaris alignment note ×1, basic telescope ×1
+    - `log-evidence` → "Evidence logged and verified." — mission logbook ×1, feather quill ×1, mission log entry ×1, Polaris alignment note ×1
+    - `recovery` → "Unsafe tonight; log a caution closeout." — mission logbook ×1, mission log entry ×1
+- Troubleshooting/safety branches:
+    - `choose-route` splits into pointer-star and tripod-assisted acquisition paths before evidence logging.
+    - `recovery` enforces footing/light-discipline checks, then loops to route selection for deterministic retry handling.
+    - Unsafe nights can only close out after a mission-log entry exists, so recovery cannot bypass evidence logging.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - Polaris alignment note ×1
 - Processes used:
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
     - [mark-polaris-alignment](/processes/mark-polaris-alignment)
         - Requires: constellation sketch set ×1, basic telescope ×1, camera tripod ×1, red flashlight ×1, mission logbook ×1
         - Consumes: none
         - Creates: Polaris alignment note ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 15) Observe the Orion Nebula (`astronomy/orion-nebula`)
 
@@ -420,7 +435,16 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/andromeda`
 - Dialogue `requiresItems` gates:
-    - `search` → "The nebula glows!" — planisphere star chart ×1, red flashlight ×1, basic telescope ×1
+    - `start` → "Give me both approaches." — planisphere star chart ×1, constellation sketch set ×1
+    - `belt-route` → "Nebula structure is visible and steady." — planisphere star chart ×1, basic telescope ×1, red flashlight ×1
+    - `wide-route` → "Glow confirmed after refocus." — basic telescope ×1, red flashlight ×1
+    - `log-observation` → "Log entry ready for interpretation." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Interpretation complete and reproducible." — feather quill ×1, red flashlight ×1
+    - `recovery` → "Conditions unsafe/poor; close with a deferred-session note." — mission logbook ×1, mission log entry ×1
+- Troubleshooting/safety branches:
+    - `choose-route` introduces belt-hop and wide-field strategies before evidence gating.
+    - `recovery` handles dew, glare, and weather degradation with a mandatory retry loop back to route selection.
+    - `interpret` blocks completion until artifact quality is verified and routes uncertain runs back to recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -431,6 +455,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: basic telescope ×1, planisphere star chart ×1
         - Consumes: none
         - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 16) Planetary Alignment (`astronomy/planetary-alignment`)
 
@@ -492,14 +520,30 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/basic-telescope`
 - Dialogue `requiresItems` gates:
-    - `start` → "Where do I point?" — planisphere star chart ×1, basic telescope ×1
+    - `start` → "Brief me on both routes." — planisphere star chart ×1, basic telescope ×1
+    - `chart-route` → "Ring plane resolved clearly." — planisphere star chart ×1, basic telescope ×1, red flashlight ×1
+    - `focus-route` → "Focus lock holds and the rings are visible." — basic telescope ×1, red flashlight ×1
+    - `log-observation` → "Log entry complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Interpretation passes; session is reproducible." — feather quill ×1, red flashlight ×1
+    - `recovery` → "Unsafe conditions persist; close with a caution log." — mission logbook ×1, mission log entry ×1
+- Troubleshooting/safety branches:
+    - `choose-route` provides chart-first and focus-first acquisition branches.
+    - `recovery` enforces tripod stability, footing, and lighting safety checks before any retry.
+    - `interpret` prevents finish bypasses by routing uncertain captures back through recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [identify-constellations](/processes/identify-constellations)
+        - Requires: basic telescope ×1, planisphere star chart ×1
+        - Consumes: none
+        - Creates: constellation sketch set ×1
+    - [write-mission-log-entry](/processes/write-mission-log-entry)
+        - Requires: mission logbook ×1, feather quill ×1
+        - Consumes: bottle of black ink ×0.05
+        - Creates: mission log entry ×1
 
 ## 19) Capture Star Trails (`astronomy/star-trails`)
 
