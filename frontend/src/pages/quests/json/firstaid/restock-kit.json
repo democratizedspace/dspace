@@ -8,23 +8,56 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Recent scrapes have thinned out your first aid kit. Let's top it up so you're ready for the next emergency.",
+            "text": "Let's run a disciplined restock: inventory audit, replacement branch, and final readiness check.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "gather",
-                    "text": "What should I replace?"
+                    "goto": "audit",
+                    "text": "Start kit audit."
                 }
             ]
         },
         {
-            "id": "gather",
-            "text": "Wash your hands, remove expired items, and add adhesive bandages, sterile gauze pads and antiseptic wipes. Keep everything sealed and dry.",
+            "id": "audit",
+            "text": "Audit the kit and list what is low, expired, or opened. Keep gloves on while sorting used materials.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Everything's replaced",
+                    "goto": "replace",
+                    "text": "Audit complete; proceed to replacement."
+                },
+                {
+                    "type": "goto",
+                    "goto": "sanitize-reset",
+                    "text": "I contaminated supplies during sorting."
+                }
+            ]
+        },
+        {
+            "id": "sanitize-reset",
+            "text": "Recovery path: sanitize hands and work surface, then redo the audit with sealed replacements only.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Sanitized and ready",
+                    "goto": "audit"
+                },
+                {
+                    "type": "goto",
+                    "goto": "audit",
+                    "text": "Skip process log and restart the audit manually."
+                }
+            ]
+        },
+        {
+            "id": "replace",
+            "text": "Replace core consumables: adhesive bandages, sterile gauze pads, antiseptic wipes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Core supplies replaced",
                     "requiresItems": [
                         {
                             "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
@@ -39,16 +72,48 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "shortage",
+                    "text": "I am missing one or more replacements."
+                }
+            ]
+        },
+        {
+            "id": "shortage",
+            "text": "Troubleshooting shortage: borrow from backup stock or postpone non-critical use, then re-run replacement once items are available.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "replace",
+                    "text": "Replacement items acquired; retry."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Operational check: confirm expiry dates, reseal kit, and stage it in an accessible spot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Readiness verified."
+                },
+                {
+                    "type": "goto",
+                    "goto": "audit",
+                    "text": "Found another issue; re-audit before closing."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Perfect! Keeping your kit stocked and disposing of expired items safely means small injuries won't slow you down.",
+            "text": "Restock complete. Your kit is revalidated and ready for the next incident.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Safety first!"
+                    "text": "Kit is mission-ready."
                 }
             ]
         }
@@ -62,7 +127,7 @@
     "requiresQuests": ["firstaid/assemble-kit"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

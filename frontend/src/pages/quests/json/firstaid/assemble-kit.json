@@ -8,84 +8,149 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "dChat here! Minor cuts happen. A first aid kit and clean hands help you respond fast.",
+            "text": "dChat here. We'll build a responder-ready kit: clean hands, complete supplies, and a quick safety check before we seal it.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "gather",
-                    "text": "What do I need?"
+                    "goto": "prep",
+                    "text": "Run the assembly checklist."
                 }
             ]
         },
         {
-            "id": "gather",
-            "text": "Wash with soap and water 20s, then dry with a paper towel. Set out bandages, gauze pads, antiseptic wipes, nitrile gloves.",
+            "id": "prep",
+            "text": "Step 1: wash and dry your hands, then stage bandages, gauze, wipes, and nitrile gloves on a clean surface.",
             "options": [
                 {
                     "type": "process",
                     "process": "wash-hands",
-                    "text": "Hands are clean",
+                    "text": "Hands washed",
                     "goto": "dry"
                 },
                 {
                     "type": "goto",
                     "goto": "dry",
-                    "text": "I already washed my hands."
+                    "text": "Hands already washed; continue."
                 }
             ]
         },
         {
             "id": "dry",
-            "text": "Dry your hands before handling supplies.",
+            "text": "Step 2: dry fully. Damp hands can contaminate sterile supplies.",
             "options": [
                 {
                     "type": "process",
                     "process": "dry-hands",
-                    "text": "Hands are dry",
-                    "goto": "pack"
+                    "text": "Hands dry now",
+                    "goto": "inspect"
                 },
                 {
                     "type": "goto",
-                    "goto": "start",
-                    "text": "Let me restart the checklist before handling supplies."
+                    "goto": "inspect",
+                    "text": "Hands already dry."
                 },
+                {
+                    "type": "goto",
+                    "goto": "restart-hygiene",
+                    "text": "I touched a dirty surface; restart hygiene."
+                }
+            ]
+        },
+        {
+            "id": "restart-hygiene",
+            "text": "Good catch. Rewash, re-dry, then restart inspection with fresh handling.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Restart clean-hand workflow."
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "Step 3: inspect expiry and packaging. If seals are broken or dates are expired, pull replacements before packing.",
+            "options": [
                 {
                     "type": "goto",
                     "goto": "pack",
-                    "text": "My hands are already dry."
+                    "text": "Supplies pass inspection."
+                },
+                {
+                    "type": "goto",
+                    "goto": "replace",
+                    "text": "I found expired or damaged supplies."
+                }
+            ]
+        },
+        {
+            "id": "replace",
+            "text": "Troubleshooting branch: remove damaged stock, grab replacements, and re-check every item before packing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Rechecked replacements; continue inspection."
                 }
             ]
         },
         {
             "id": "pack",
-            "text": "Check for damage or expiry. Pack items in a dry box with a label and tight lid.",
+            "text": "Step 4: pack and label the kit. Evidence gate: you must either run the packing process or prove a completed first aid kit exists.",
             "options": [
                 {
                     "type": "process",
                     "process": "pack-first-aid-kit",
-                    "text": "Packing now",
-                    "goto": "finish"
+                    "text": "Pack kit now",
+                    "goto": "safety-check"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "safety-check",
+                    "text": "Kit already packed and labeled",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
                             "count": 1
                         }
-                    ],
-                    "text": "Supplies packed"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Operational safety check: store the kit dry, easy to reach, and away from children or heat sources.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Storage is safe and documented."
+                },
+                {
+                    "type": "goto",
+                    "goto": "relocate",
+                    "text": "Storage spot is unsafe; relocate first."
+                }
+            ]
+        },
+        {
+            "id": "relocate",
+            "text": "Move the kit to a dry, labeled location and verify everyone knows where it is before finishing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Relocated; rerun safety check."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Keep kit dry out of reach; restock supplies and call emergency services for serious injuries.",
+            "text": "Kit assembled. You now have a verifiable first-aid baseline and a safer storage plan.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do!"
+                    "text": "Ready for minor injuries."
                 }
             ]
         }
