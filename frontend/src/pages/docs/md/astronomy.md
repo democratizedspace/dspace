@@ -402,7 +402,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `requiresQuests`: `astronomy/constellations`
 - Dialogue `requiresItems` gates:
     - `start` → "Show both routes." — constellation sketch set ×1
-    - `pointer-route` → "Polaris is stable and the heading is repeatable." — planisphere star chart ×1, basic telescope ×1, constellation sketch set ×1
+    - `pointer-route` → "Polaris is stable and the heading is repeatable." — planisphere star chart ×1, constellation sketch set ×1
     - `tripod-route` → "Alignment note captured and Polaris confirmed." — Polaris alignment note ×1, basic telescope ×1
     - `log-evidence` → "Evidence logged and verified." — mission logbook ×1, feather quill ×1, mission log entry ×1, Polaris alignment note ×1
     - `recovery` → "Unsafe tonight; log a caution closeout." — mission logbook ×1, mission log entry ×1
