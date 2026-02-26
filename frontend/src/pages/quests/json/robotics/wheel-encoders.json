@@ -8,23 +8,28 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Gather two wheel encoders and an Arduino Uno. We'll log wheel rotation to measure distance. Disconnect power and put on safety goggles.",
+            "text": "Wheel encoders unlock precise odometry, but only if install and verification are disciplined. Choose your install strategy and prep safety controls.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mount",
-                    "text": "Sounds good."
+                    "text": "Bench-install both encoders before mounting wheels."
+                },
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Install one side at a time to isolate wiring faults."
                 }
             ]
         },
         {
             "id": "mount",
-            "text": "Raise the powered-off robot so wheels can't turn. Mount one encoder on each wheel hub using its bracket.\nRun 5 V and GND to the Arduino, then connect each signal wire to digital pins 2 and 3. Keep wiring clear of moving parts before restoring power.",
+            "text": "Power down, lift the chassis, and mount one encoder per wheel hub. Route 5V/GND and signal lines to pins 2/3 while keeping wires clear of rotation.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Installed and reading pulses!",
+                    "goto": "verify-safety",
+                    "text": "Mechanical install complete; run safety and signal checks.",
                     "requiresItems": [
                         {
                             "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
@@ -39,16 +44,108 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "One encoder rubs the wheel or misses pulses."
                 }
             ]
         },
         {
-            "id": "finish",
-            "text": "Great! Now you can measure distance and tune code for straighter paths.",
+            "id": "verify-safety",
+            "text": "Safety gate: verify wheels spin freely on the stand, emergency stop works, and pulse counts increase cleanly in serial output during hand-rotation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Safety and pulse checks pass; start calibration runs.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Pulse data is noisy or emergency stop failed."
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Run three 1-meter trials and log pulse totals per wheel to confirm left/right parity stays within 5%.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Calibration logs are complete and within tolerance.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Parity drifted beyond tolerance; need corrective action."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-seat encoder disks, debounce noisy inputs, and recheck wheel alignment. Repeat safety verification before another calibration set.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Rework mount and wiring from the install stage."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-safety",
+                    "text": "Fixes applied; repeat safety and signal checks."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: submit three consecutive calibration runs with <=5% wheel pulse variance and documented emergency-stop verification.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Awesome!"
+                    "text": "Encoder install is validated and ready for odometry quests.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Evidence incomplete; return to troubleshooting and retest."
                 }
             ]
         }
@@ -59,11 +156,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["robotics/servo-gripper"],
+    "requiresQuests": [
+        "robotics/servo-gripper"
+    ],
     "hardening": {
         "passes": 2,
-        "score": 80,
-        "emoji": "\u2705",
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-09",

@@ -207,8 +207,8 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - `requiresQuests`: `robotics/line-follower`, `robotics/ultrasonic-rangefinder`
 - Dialogue `requiresItems` gates:
     - `build` → "Wiring and avoidance routine are ready." — Servo Motor ×1
-    - `safety` → "Safety checks pass; run the obstacle course." — Servo Motor ×1
-    - `evidence` → "Three clean runs logged; obstacle avoidance is field-ready." — Servo Motor ×1
+    - `ops-check` → "Ops checks pass; run the obstacle course." — Servo Motor ×1, safety goggles ×1
+    - `evidence` → "Three clean runs logged; obstacle avoidance is field-ready." — Servo Motor ×1, safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -219,6 +219,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - QA notes:
     - Adds a strategy fork (conservative vs agile detection profiles) before convergence.
     - Adds a safety stop-distance gate before full-speed obstacle runs.
+    - Adds operational lockout checks (remote kill switch + bystander no-go zones) before evidence runs.
     - Adds a troubleshooting loop for false triggers/collisions and a three-run evidence requirement.
 
 ## 9) Scan with a servo-mounted sensor (`robotics/servo-radar`)
@@ -258,7 +259,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-gripper`
 - Dialogue `requiresItems` gates:
-    - `mount` → "Installed and reading pulses!" — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
+    - `mount` → "Mechanical install complete; run safety and signal checks." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
+    - `verify-safety` → "Safety and pulse checks pass; start calibration runs." — Wheel Encoder ×2, safety goggles ×1
+    - `calibrate` → "Calibration logs are complete and within tolerance." — Wheel Encoder ×2, Arduino Uno ×1
+    - `evidence` → "Encoder install is validated and ready for odometry quests." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -266,6 +270,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Replaces thin-shell install flow with branching install strategy and staged verification.
+    - Adds explicit operational safety checks (lifted chassis + emergency stop + free-spin test) before calibration.
+    - Requires logged three-run parity evidence and provides a rework/re-verify troubleshooting loop.
 
 ## 11) Track distance with wheel encoders (`robotics/odometry-basics`)
 
@@ -296,7 +304,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - `requiresQuests`: `robotics/odometry-basics`
 - Dialogue `requiresItems` gates:
     - `parts` → "Hardware is staged and strain-relieved." — Arduino Uno ×1, Servo Motor ×2
-    - `safety-check` → "Safety setup complete; begin tuning." — Arduino Uno ×1
+    - `operator-check` → "Drill complete; start the five-run tuning block." — safety goggles ×1
     - `tune` → "Tuning log is complete and stable." — Servo Motor ×2
     - `evidence` → "Three clean balance holds recorded; gyro balance is validated." — Arduino Uno ×1, Servo Motor ×2
 - Grants:
@@ -308,7 +316,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - None
 - QA notes:
     - Adds non-linear setup options (P-only baseline vs full PID-first) before tuning.
-    - Adds a safety gate for low-speed trials, soft catch zones, and emergency-stop readiness.
+    - Adds safety gates for low-speed trials plus operator emergency-stop/spotter drills before tuning.
     - Adds recovery loop for drift/oscillation plus a consecutive-holds evidence gate.
 
 ## 13) Navigate a Simple Maze (`robotics/maze-navigation`)
@@ -318,8 +326,8 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - `requiresQuests`: `robotics/obstacle-avoidance`, `robotics/odometry-basics`
 - Dialogue `requiresItems` gates:
     - `strategy` → "Decision tree loaded and tested in dry-run mode." — Servo Motor ×2
-    - `safety` → "Safety limits set; begin full maze attempts." — Servo Motor ×2
-    - `evidence` → "Two clean clears recorded; maze navigation is validated." — Servo Motor ×2
+    - `recovery-drill` → "Recovery drills pass; start full maze attempts." — Servo Motor ×2, safety goggles ×1
+    - `evidence` → "Two clean clears recorded; maze navigation is validated." — Servo Motor ×2, safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -330,7 +338,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - QA notes:
     - Adds two route-planning strategies before convergence into shared validation.
     - Adds operational timeout/manual-stop safety checks before full maze attempts.
-    - Adds a dead-end troubleshooting loop and requires two clean maze clears as evidence.
+    - Adds mandatory dead-end recovery drills, then a troubleshooting loop and two clean maze clears as evidence.
 
 ## QA flow notes
 
