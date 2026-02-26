@@ -8,7 +8,7 @@ programming: 18 quests, 2574 lines
 devops: 15 quests, 2326 lines
 geothermal: 15 quests, 2568 lines
 firstaid: 13 quests, 1126 lines
-robotics: 13 quests, 1990 lines
+robotics: 13 quests, 2182 lines
 chemistry: 10 quests, 1619 lines
 rocketry: 10 quests, 1961 lines
 woodworking: 10 quests, 2276 lines
