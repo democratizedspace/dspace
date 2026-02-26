@@ -202,12 +202,7 @@
                 {
                     "type": "goto",
                     "goto": "safety-check",
-                    "text": "Corrections complete; re-verify safe scan setup."
-                },
-                {
-                    "type": "goto",
-                    "goto": "safety-check",
-                    "text": "Retry full sweeps with updated parameters after safety re-check."
+                    "text": "Corrections complete; rerun safety checks before retrying full sweeps."
                 }
             ]
         }
