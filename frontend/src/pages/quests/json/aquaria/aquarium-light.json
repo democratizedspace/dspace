@@ -85,6 +85,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "manual-review",
+                    "text": "A second cycle still shows stress; pause automation and escalate to manual review."
                 }
             ]
         },
@@ -102,6 +107,17 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "manual-review",
+            "text": "Escalation path: hold the light at 6 hours, pause intensity increases, and run manual diagnostics (water quality, fixture spread, and livestock behavior) before returning to normal progression.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Manual review logged with a conservative lighting hold plan."
                 }
             ]
         },
@@ -131,9 +147,9 @@
         "emoji": "\ud83c\udf00",
         "history": [
             {
-                "task": "codex-quest-hardening-2026-02-26",
+                "task": "codex-quest-hardening-95-2026-02-26",
                 "date": "2026-02-26",
-                "score": 80
+                "score": 95
             }
         ]
     }

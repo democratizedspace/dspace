@@ -110,7 +110,7 @@
         },
         {
             "id": "rollback",
-            "text": "Recovery protocol: unplug heater, confirm full submersion depth, reset the dial one notch toward target, then take a fresh stabilized reading before deciding next action. If instability repeats twice, move to lockout and replace hardware.",
+            "text": "Recovery protocol: unplug heater, confirm full submersion depth, reset the dial one notch toward target, then take a fresh stabilized reading before deciding next action. If drift persists or hardware confidence drops, transition to lockout before any further heating.",
             "options": [
                 {
                     "type": "process",
@@ -128,6 +128,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-lockout",
+                    "text": "Drift or instability continues after rollback; lock out and replace hardware."
                 }
             ]
         },

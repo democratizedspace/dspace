@@ -237,9 +237,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, composting/check-temperature
 
 - `aquaria/aquarium-light`
-  - [x] Observed issue: `aquaria/aquarium-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3748)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3748)
+  - [x] Observed issue: `aquaria/aquarium-light` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3746)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3746)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3746)
 - `aquaria/balance-ph`
   - [x] Observed issue: `aquaria/balance-ph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3609)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3609)
@@ -267,11 +267,11 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 - `aquaria/heater-install`
   - [x] Observed issue: `aquaria/heater-install` reads like a one-pass install task, with verify/rollback state changes not clearly represented. (PR #3620)
   - [x] Apply install → verify → rollback sequencing in separate nodes and gate completion on a concrete verification artifact (status output, log snapshot, or expected-state item). (PR #3620)
-  - [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3620, #3748)
+  - [x] Add rollback/lockout-avoidance handling with a re-verify checkpoint before retrying the install path. (PR #3620, #3746)
 - `aquaria/log-water-parameters`
   - [x] Observed issue: `aquaria/log-water-parameters` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3620)
   - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3620)
-  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3620, #3748)
+  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3620, #3746)
 - `aquaria/net-fish`
   - [x] Observed issue: `aquaria/net-fish` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3651)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3651)
@@ -331,8 +331,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3691)
 - `astronomy/binary-star`
   - [ ] Observed issue: `astronomy/binary-star` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/comet-tracking`
   - [x] Observed issue (addressed): `astronomy/comet-tracking` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3710)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3710)
@@ -379,8 +379,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #3734)
 - `astronomy/planetary-alignment`
   - [ ] Observed issue: `astronomy/planetary-alignment` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/satellite-pass`
   - [x] Observed issue (addressed): `astronomy/satellite-pass` was observation-heavy with thin fallback handling for seeing/weather constraints; this was hardened in this pass. (PR #3725)
   - [x] Add a seeing/weather/light-pollution fallback branch plus an observation artifact gate (log, sketch, or photo surrogate) with interpretation. (PR #3725)
@@ -391,8 +391,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #3734)
 - `astronomy/star-trails`
   - [ ] Observed issue: `astronomy/star-trails` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `astronomy/sunspot-sketch`
   - [x] Observed issue (addressed): `astronomy/sunspot-sketch` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3725)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3725)
@@ -465,12 +465,12 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, welcom
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3668)
 - `completionist/reminder`
   - [ ] Observed issue: `completionist/reminder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `completionist/v2`
   - [ ] Observed issue: `completionist/v2` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 
 ### devops (15 quests)
 
@@ -602,11 +602,11 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydr
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3698)
 - `electronics/solder-led-harness`
   - [ ] Observed issue: `electronics/solder-led-harness` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/solder-wire`
   - [ ] Observed issue: `electronics/solder-wire` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `electronics/soldering-intro`
   - [x] Observed issue: `electronics/soldering-intro` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3689)
@@ -659,11 +659,11 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3728)
 - `energy/offgrid-charger`
   - [ ] Observed issue: `energy/offgrid-charger` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/portable-solar-panel`
   - [ ] Observed issue: `energy/portable-solar-panel` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `energy/power-inverter`
   - [x] Observed issue: `energy/power-inverter` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3728)
@@ -688,55 +688,55 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, compos
 
 - `firstaid/assemble-kit`
   - [ ] Observed issue: `firstaid/assemble-kit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/change-bandage`
   - [ ] Observed issue: `firstaid/change-bandage` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/dispose-bandages`
   - [ ] Observed issue: `firstaid/dispose-bandages` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/dispose-expired`
   - [ ] Observed issue: `firstaid/dispose-expired` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/flashlight-battery`
   - [ ] Observed issue: `firstaid/flashlight-battery` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/learn-cpr`
   - [ ] Observed issue: `firstaid/learn-cpr` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/remove-splinter`
   - [ ] Observed issue: `firstaid/remove-splinter` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/restock-kit`
   - [ ] Observed issue: `firstaid/restock-kit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/sanitize-pocket-mask`
   - [ ] Observed issue: `firstaid/sanitize-pocket-mask` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/splint-limb`
   - [ ] Observed issue: `firstaid/splint-limb` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/stop-nosebleed`
   - [ ] Observed issue: `firstaid/stop-nosebleed` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/treat-burn`
   - [ ] Observed issue: `firstaid/treat-burn` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `firstaid/wound-care`
   - [ ] Observed issue: `firstaid/wound-care` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 
 ### geothermal (15 quests)
@@ -1074,8 +1074,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3665)
 - `robotics/wheel-encoders`
   - [ ] Observed issue: `robotics/wheel-encoders` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 
 ### rocketry (10 quests)
 
@@ -1083,7 +1083,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, sysadmin/re
 
 - `rocketry/firstlaunch`
   - [ ] Observed issue: `rocketry/firstlaunch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
   - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
 - `rocketry/fuel-mixture`
   - [x] Observed issue: `rocketry/fuel-mixture` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3708)
@@ -1149,8 +1149,8 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/how
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3707)
 - `woodworking/birdhouse`
   - [ ] Observed issue: `woodworking/birdhouse` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3748)
+  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
 - `woodworking/bookshelf`
   - [x] Observed issue (addressed): `woodworking/bookshelf` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3709)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3709)
