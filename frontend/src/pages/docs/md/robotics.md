@@ -58,7 +58,9 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Dialogue `requiresItems` gates:
     - `start` → "Gear is ready—let's wire it." — Servo Motor ×1, Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, USB Type-A to Type-B cable ×1, precision screwdriver set ×1, anti-static wrist strap ×1, Laptop Computer ×1
     - `hookup` → "Wiring is tidy and strain relief is done." — servo test rig ×1
-    - `code` → "Sweep logged and quiet." — servo sweep log ×1
+    - `safety-check` → "Safety checks pass; run the first sweep." — servo test rig ×1
+    - `code` → "Sweep log captured." — servo sweep log ×1
+    - `evidence` → "Two clean sweeps recorded; center return is stable." — servo sweep log ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -73,6 +75,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
         - Requires: servo test rig ×1, Laptop Computer ×1, anti-static wrist strap ×1
         - Consumes: none
         - Creates: servo sweep log ×1
+- QA notes:
+    - Adds a safety gate before motion with explicit horn-clearance and low-range first sweep checks.
+    - Uses mechanics-backed evidence gating through servo sweep log requirements before completion.
+    - Adds a troubleshooting loop for chatter/binding with required re-verification before retry.
 
 ## 3) Build a line-following robot (`robotics/line-follower`)
 
@@ -124,7 +130,12 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-control`
 - Dialogue `requiresItems` gates:
-    - `attach` → "Works great" — Servo Motor ×1
+    - `start` → "Bench is clear and parts are staged." — Servo Motor ×1
+    - `plan` → "Use direct horn mount for a compact build." — Servo Motor ×1
+    - `plan` → "Use offset linkage for gentler grip." — Servo Motor ×1
+    - `assemble` → "Jaws move freely through full range." — Servo Motor ×1
+    - `safety` → "Soft-object test passes with smooth release." — servo test rig ×1
+    - `evidence` → "Three controlled cycles complete." — servo test rig ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -132,6 +143,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Replaces linear flow with strategy branching (direct horn vs offset linkage) before convergence.
+    - Adds a safety gate for capped grip force and soft-object testing before final validation.
+    - Adds a recovery loop for linkage rub/stall issues with mandatory re-entry checkpoints.
 
 ## 6) Assemble a Servo Arm (`robotics/servo-arm`)
 
@@ -141,7 +156,9 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Dialogue `requiresItems` gates:
     - `start` → "Kit and tools are ready." — two-servo arm kit ×1, Servo Motor ×2, precision screwdriver set ×1, anti-static wrist strap ×1
     - `build` → "Arm swings freely and the gripper opens." — assembled servo arm ×1
+    - `safety-check` → "Safety checks pass; start calibration." — assembled servo arm ×1
     - `tune` → "Calibration saved and joints stay cool." — calibrated servo arm ×1
+    - `evidence` → "Two stable cycles logged." — calibrated servo arm ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -156,6 +173,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
         - Requires: assembled servo arm ×1, Arduino Uno ×1, Jumper Wires ×4, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
         - Consumes: none
         - Creates: calibrated servo arm ×1
+- QA notes:
+    - Adds a non-linear strategy node (base-first vs elbow-first assembly) before shared verification.
+    - Adds an explicit safety gate and mechanics-backed evidence gate tied to calibrated arm output.
+    - Adds a troubleshooting/recovery branch for harness snags, hard-stop risks, and re-verification.
 
 ## 7) Measure distance with an ultrasonic sensor (`robotics/ultrasonic-rangefinder`)
 

@@ -1053,17 +1053,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3665)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3665)
 - `robotics/servo-arm`
-  - [ ] Observed issue: `robotics/servo-arm` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `robotics/servo-arm` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #PENDING)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #PENDING)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #PENDING)
 - `robotics/servo-control`
-  - [ ] Observed issue: `robotics/servo-control` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `robotics/servo-control` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #PENDING)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #PENDING)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #PENDING)
 - `robotics/servo-gripper`
-  - [ ] Observed issue: `robotics/servo-gripper` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `robotics/servo-gripper` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #PENDING)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #PENDING)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #PENDING)
 - `robotics/servo-radar`
   - [x] Observed issue: `robotics/servo-radar` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3730)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3730)
