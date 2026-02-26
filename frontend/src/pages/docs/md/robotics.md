@@ -102,7 +102,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-control`
 - Dialogue `requiresItems` gates:
-    - `parts` → "Servos mounted." — Servo Motor ×2
+    - `parts` → "Servos mounted and cable paths cleared." — Servo Motor ×2
+    - `safety` → "Safety checks pass; run sweep validation." — Servo Motor ×2
+    - `sweep-test` → "Sweep log captured with stable center return." — Servo Motor ×2
+    - `evidence` → "Pan-tilt mount validated and ready for sensor payloads." — Servo Motor ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -110,6 +113,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Adds strategy branching for assembly order (pan-first vs tilt-first) before convergence.
+    - Adds an explicit safety gate and tolerance-based evidence requirement (<3° center error).
+    - Adds a troubleshooting loop for binding, jitter, and hard-stop impacts before closure.
 
 ## 5) Build a Servo Gripper (`robotics/servo-gripper`)
 
@@ -199,9 +206,12 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/pan-tilt`, `robotics/ultrasonic-rangefinder`
 - Dialogue `requiresItems` gates:
-    - `start` → "Parts staged and strapped in." — Servo Motor ×2, ultrasonic distance sensor ×1, pan-tilt servo bracket ×1, Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×6, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
+    - `start` → "Run a fast coarse sweep first, then refine hotspots." — Servo Motor ×2, ultrasonic distance sensor ×1, pan-tilt servo bracket ×1, Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×6, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
+    - `start` → "Run a slower high-resolution sweep for cleaner maps." — Servo Motor ×2, ultrasonic distance sensor ×1, pan-tilt servo bracket ×1, Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×6, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
     - `build` → "Rig moves smoothly with no pinched wires." — pan-tilt ultrasonic rig ×1
-    - `code` → "Sweep complete!" — ultrasonic sweep map ×1
+    - `safety-check` → "Safety checks complete; start mapped scans." — pan-tilt ultrasonic rig ×1
+    - `scan` → "Sweep logs and map annotations are ready." — ultrasonic sweep map ×1
+    - `evidence` → "Sweep parity achieved: map is consistent and documented." — ultrasonic sweep map ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -216,6 +226,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
         - Requires: pan-tilt ultrasonic rig ×1, Laptop Computer ×1, anti-static wrist strap ×1
         - Consumes: none
         - Creates: ultrasonic sweep map ×1
+- QA notes:
+    - Adds explicit strategy branching (coarse-first vs high-resolution-first sweep plans).
+    - Adds a safety checkpoint before mapped scans and a documented evidence gate for consistency.
+    - Adds recovery handling for sweep dropouts, cross-talk, and wiring faults with mandatory re-scan.
 
 ## 10) Add Wheel Encoders (`robotics/wheel-encoders`)
 
@@ -238,7 +252,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/wheel-encoders`
 - Dialogue `requiresItems` gates:
-    - `wire` → "Wired and safe." — Wheel Encoder ×2, Arduino Uno ×1
+    - `wire` → "Wiring is clean and secured." — Wheel Encoder ×2, Arduino Uno ×1
+    - `safety-check` → "Safety checks done; capture baseline odometry." — Wheel Encoder ×2
+    - `baseline-run` → "Baseline log captured for all three passes." — Wheel Encoder ×2, Arduino Uno ×1
+    - `interpret` → "Pass confirmed and logged: odometry baseline is ready for navigation." — Wheel Encoder ×2, Arduino Uno ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -246,6 +263,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Adds strategy branching (1-meter tape test vs square-loop drift test) before calibration.
+    - Adds a safety gate and mechanics-backed baseline logging requirement before interpretation.
+    - Adds troubleshooting/recovery for pulse noise, wheel slip, and calibration drift with re-test loops.
 
 ## 12) Balance with a gyroscope (`robotics/gyro-balance`)
 
