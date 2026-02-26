@@ -60,7 +60,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - `hookup` → "Wiring is tidy and strain relief is done." — servo test rig ×1
     - `safety-check` → "Safety checks pass; run the first sweep." — servo test rig ×1
     - `code` → "Sweep log captured." — servo sweep log ×1
-    - `evidence` → "Two clean sweeps recorded; center return is stable." — servo sweep log ×1
+    - `evidence` → "Two clean sweeps recorded; center return is stable." — servo sweep log ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

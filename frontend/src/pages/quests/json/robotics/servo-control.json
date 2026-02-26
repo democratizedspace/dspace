@@ -114,6 +114,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Sweep chattered, bound, or never completed—go to recovery steps."
                 }
             ]
         },
@@ -144,7 +149,7 @@
                     "requiresItems": [
                         {
                             "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 },
