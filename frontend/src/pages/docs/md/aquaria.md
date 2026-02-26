@@ -151,6 +151,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `mount` → "Fixture is mounted and timer set to 8 hours." — aquarium LED light (20 W) ×1
     - `verify` → "Plants are upright, fish behavior is normal, and glare is controlled." — aquarium LED light (20 W) ×1
     - `verify` → "Algae or fish stress signs appeared during the first cycle." — aquarium LED light (20 W) ×1
+    - `verify` → "A second cycle still shows stress; pause automation and escalate to manual review." — none
     - `tune-cycle` → "Adjusted photoperiod and fixture height; run verification again." — aquarium LED light (20 W) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -211,6 +212,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `safety-lockout` → "Lockout documented and manual monitoring plan is active." — none
     - `rollback` → "Apply rollback and capture a fresh verification reading" — none
     - `rollback` → "Fresh post-rollback reading is logged" — Aquarium temperature reading ×1
+    - `rollback` → "Drift or instability continues after rollback; lock out and replace hardware." — none
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
