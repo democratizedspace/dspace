@@ -153,7 +153,7 @@
     "requiresQuests": ["robotics/servo-control"],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
