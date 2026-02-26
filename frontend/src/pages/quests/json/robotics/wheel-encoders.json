@@ -13,17 +13,63 @@
                 {
                     "type": "goto",
                     "goto": "mount",
-                    "text": "Sounds good."
+                    "text": "Standard path: mount both sensors before routing wires.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Alternative path: preflight stand + wiring plan before mounting.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "preflight",
+            "text": "Safety stop: raise the robot so wheels spin free, mark left/right channels, and verify pin plan for interrupt lines before power-on.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Preflight complete; proceed with install.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "mount",
-            "text": "Raise the powered-off robot so wheels can't turn. Mount one encoder on each wheel hub using its bracket.\nRun 5 V and GND to the Arduino, then connect each signal wire to digital pins 2 and 3. Keep wiring clear of moving parts before restoring power.",
+            "text": "Mount one encoder on each wheel hub. Route 5V/GND plus signal to pins 2 and 3 and secure cable slack away from axle drag points before restoring power.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
                     "text": "Installed and reading pulses!",
                     "requiresItems": [
                         {
@@ -43,8 +89,41 @@
             ]
         },
         {
+            "id": "verify",
+            "text": "Verification gate: both channels must count forward/reverse pulses consistently during a 10-wheel-turn bench spin. Branch to recovery if counts drift or drop out.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "PASS: left/right pulse counts are stable and repeatable.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "FAIL: one wheel drops pulses or direction is inverted."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: power off, reseat encoder gap, swap suspect signal lead, and rerun the 10-turn parity check before any floor test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Recovery done; retry install verification."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Great! Now you can measure distance and tune code for straighter paths.",
+            "text": "Great! You now have evidence-backed encoder telemetry for repeatable motion tuning.",
             "options": [
                 {
                     "type": "finish",
@@ -63,7 +142,7 @@
     "hardening": {
         "passes": 2,
         "score": 80,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-09",

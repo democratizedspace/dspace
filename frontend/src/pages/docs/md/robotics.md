@@ -56,9 +56,12 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/arduino-blink`
 - Dialogue `requiresItems` gates:
-    - `start` → "Gear is ready—let's wire it." — Servo Motor ×1, Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, USB Type-A to Type-B cable ×1, precision screwdriver set ×1, anti-static wrist strap ×1, Laptop Computer ×1
+    - `start` → "Standard sweep path: wire first, then code." — Servo Motor ×1, Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, USB Type-A to Type-B cable ×1, precision screwdriver set ×1, anti-static wrist strap ×1, Laptop Computer ×1
+    - `start` → "Preflight path: confirm supply + horn clearance before final wiring." — Servo Motor ×1, Arduino Uno ×1, anti-static wrist strap ×1
+    - `preflight` → "Preflight checks are complete; continue with wiring." — anti-static wrist strap ×1
     - `hookup` → "Wiring is tidy and strain relief is done." — servo test rig ×1
-    - `code` → "Sweep logged and quiet." — servo sweep log ×1
+    - `code` → "Sweep log captured." — servo sweep log ×1
+    - `verify` → "PASS: sweep is repeatable and quiet." — servo sweep log ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -73,6 +76,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
         - Requires: servo test rig ×1, Laptop Computer ×1, anti-static wrist strap ×1
         - Consumes: none
         - Creates: servo sweep log ×1
+- QA notes:
+    - Adds a non-linear opening (standard wire-first path vs explicit preflight path).
+    - Keeps mechanics-backed evidence through process output (`servo sweep log`) before finish.
+    - Adds a recovery loop for chatter, overshoot, and reset faults before completion.
 
 ## 3) Build a line-following robot (`robotics/line-follower`)
 
@@ -124,14 +131,25 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-control`
 - Dialogue `requiresItems` gates:
-    - `attach` → "Works great" — Servo Motor ×1
+    - `start` → "Mock-fit first so linkage travel is predictable." — Servo Motor ×1
+    - `start` → "I already validated the template; go to final assembly." — Servo Motor ×1, servo test rig ×1
+    - `mock-fit` → "Travel is smooth and symmetric now." — Servo Motor ×1
+    - `attach` → "Cycle log captured with no chatter." — servo sweep log ×1
+    - `verify` → "Verification passed: closure is repeatable and safe." — servo sweep log ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [log-servo-sweep](/processes/log-servo-sweep)
+        - Requires: servo test rig ×1, Laptop Computer ×1, anti-static wrist strap ×1
+        - Consumes: none
+        - Creates: servo sweep log ×1
+- QA notes:
+    - Adds branching between mock-fit and direct-assembly approaches.
+    - Uses a process-backed evidence gate (`servo sweep log`) before finish.
+    - Adds recovery for chatter/binding with mandatory re-verification.
 
 ## 6) Assemble a Servo Arm (`robotics/servo-arm`)
 
@@ -139,9 +157,12 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-gripper`
 - Dialogue `requiresItems` gates:
-    - `start` → "Kit and tools are ready." — two-servo arm kit ×1, Servo Motor ×2, precision screwdriver set ×1, anti-static wrist strap ×1
+    - `start` → "Bench prep first: lock power and verify workspace." — two-servo arm kit ×1, precision screwdriver set ×1, anti-static wrist strap ×1
+    - `start` → "I already preflighted and documented the bench setup." — two-servo arm kit ×1, Servo Motor ×2, precision screwdriver set ×1, anti-static wrist strap ×1
+    - `safety` → "Safety checks pass; continue assembly." — precision screwdriver set ×1, anti-static wrist strap ×1
     - `build` → "Arm swings freely and the gripper opens." — assembled servo arm ×1
-    - `tune` → "Calibration saved and joints stay cool." — calibrated servo arm ×1
+    - `tune` → "Calibration saved." — calibrated servo arm ×1
+    - `verify` → "PASS: three stable cycles and safe thermal behavior." — calibrated servo arm ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -156,6 +177,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
         - Requires: assembled servo arm ×1, Arduino Uno ×1, Jumper Wires ×4, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
         - Consumes: none
         - Creates: calibrated servo arm ×1
+- QA notes:
+    - Adds branch choice between explicit safety-preflight and direct build path.
+    - Preserves staged evidence gates (`assembled servo arm` then `calibrated servo arm`).
+    - Adds troubleshooting loop for jitter/thermal faults with mandatory recalibration.
 
 ## 7) Measure distance with an ultrasonic sensor (`robotics/ultrasonic-rangefinder`)
 
@@ -237,7 +262,11 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-gripper`
 - Dialogue `requiresItems` gates:
+    - `start` → "Standard path: mount both sensors before routing wires." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
+    - `start` → "Alternative path: preflight stand + wiring plan before mounting." — Arduino Uno ×1, safety goggles ×1
+    - `preflight` → "Preflight complete; proceed with install." — Wheel Encoder ×2
     - `mount` → "Installed and reading pulses!" — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
+    - `verify` → "PASS: left/right pulse counts are stable and repeatable." — Wheel Encoder ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -245,6 +274,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Adds a non-linear opening (standard install path vs preflight-first path).
+    - Uses explicit parity verification before finish to evidence successful installation.
+    - Adds troubleshooting branch for inverted channels and pulse dropout with retry loop.
 
 ## 11) Track distance with wheel encoders (`robotics/odometry-basics`)
 

@@ -8,23 +8,44 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "A gripper is a simple way to interact with the world. Let's add one to your robot using a standard servo motor.",
+            "text": "A gripper is a simple way to interact with the world. We'll build it with Orion's two-path drill: either mock-fit first to catch geometry mistakes, or go straight to assembly if your template is proven.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "mock-fit",
+                    "text": "Mock-fit first so linkage travel is predictable.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "attach",
-                    "text": "Sounds fun."
+                    "text": "I already validated the template; go to final assembly.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "b3857812-f50c-4880-810d-c929698599b3",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "attach",
-            "text": "Mount the servo vertically and connect two fingers with a linkage so they open and close when the servo turns.",
+            "id": "mock-fit",
+            "text": "Dry-fit both jaws and cycle by hand. If the hinge binds before mid-travel, widen the slot and recenter the horn before fastening.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Works great",
+                    "goto": "attach",
+                    "text": "Travel is smooth and symmetric now.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -35,12 +56,67 @@
             ]
         },
         {
+            "id": "attach",
+            "text": "Mount the servo vertically and connect both fingers with linkage. Keep wire slack away from the jaw path and set a soft-close limit to avoid stripping gears.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-servo-sweep",
+                    "text": "Run and log five open/close cycles"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Cycle log captured with no chatter.",
+                    "requiresItems": [
+                        {
+                            "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Interpret the sweep log: no hard stops, no skipped pulses, and repeatable jaw closure. If the jaw stalls or chatters, branch to recovery before trying to finish.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification passed: closure is repeatable and safe.",
+                    "requiresItems": [
+                        {
+                            "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I saw chatter, binding, or asymmetric closure."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: power down, loosen linkage one turn, re-center neutral pulse, then rerun the cycle log. Do not continue if gear noise persists.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "attach",
+                    "text": "Recovery complete; rerun the verification log."
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! You can now grab and carry small parts for future builds.",
+            "text": "Nice! Your gripper now has a documented safe operating range and can reliably handle small payloads.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Sweet!"
+                    "text": "Gripper ready"
                 }
             ]
         }
@@ -55,7 +131,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

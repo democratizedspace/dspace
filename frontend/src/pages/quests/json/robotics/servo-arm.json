@@ -8,12 +8,31 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You're getting comfortable with servos. Let's take the next step and build a small robotic arm with a gripper. Clear a stable bench, strap in for ESD, and keep cables away from the moving joints.",
+            "text": "You're getting comfortable with servos. Next step: build a small robotic arm with a gripper. Clear a stable bench, strap in for ESD, and keep cables away from moving joints.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "safety",
+                    "text": "Bench prep first: lock power and verify workspace.",
+                    "requiresItems": [
+                        {
+                            "id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
+                            "count": 1
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "build",
-                    "text": "Kit and tools are ready.",
+                    "text": "I already preflighted and documented the bench setup.",
                     "requiresItems": [
                         {
                             "id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
@@ -36,8 +55,29 @@
             ]
         },
         {
+            "id": "safety",
+            "text": "Safety stop: disconnect USB power, confirm no hard-stop interference in both joints, and route all jumpers with enough slack for full sweep.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Safety checks pass; continue assembly.",
+                    "requiresItems": [
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "build",
-            "text": "Bolt the base servo, stack the second servo for the elbow, and fasten the gripper plate. Route wires so they won't snag when the arm sweeps.",
+            "text": "Bolt the base servo, stack the elbow servo, and fasten the gripper plate. Keep cable loops clear so they cannot snag at full extension.",
             "options": [
                 {
                     "type": "process",
@@ -59,7 +99,7 @@
         },
         {
             "id": "tune",
-            "text": "Upload a smooth motion sketch, set soft limits so nothing binds, and test with a light payload before closing the loop.",
+            "text": "Upload smooth-motion control, set soft limits, and test with a light payload. If joints heat up or jitter, branch to recovery before final verification.",
             "options": [
                 {
                     "type": "process",
@@ -68,14 +108,47 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Calibration saved and joints stay cool.",
+                    "goto": "verify",
+                    "text": "Calibration saved.",
                     "requiresItems": [
                         {
                             "id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: complete three pick/place cycles without stall alarms and park at center with motors below thermal warning levels.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "PASS: three stable cycles and safe thermal behavior.",
+                    "requiresItems": [
+                        {
+                            "id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "FAIL: jitter, binding, or heat spike detected."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: unload payload, reduce acceleration, inspect cable drag, then rerun calibration and verification. Abort if heat warning repeats.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tune",
+                    "text": "Recovery actions complete; re-test calibration."
                 }
             ]
         },
@@ -100,7 +173,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

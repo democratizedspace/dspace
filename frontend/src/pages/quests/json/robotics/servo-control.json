@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion again! Ready to add some movement to your projects? We'll wire a servo test rig and sweep it safely\u2014ESD strap on, and keep fingers clear of the horn.",
+            "text": "Orion again! Ready to add movement to your projects? We'll wire a servo test rig and sweep it safely—ESD strap on, and keep fingers clear of the horn.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "hookup",
-                    "text": "Gear is ready\u2014let's wire it.",
+                    "text": "Standard sweep path: wire first, then code.",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -48,12 +48,48 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Preflight path: confirm supply + horn clearance before final wiring.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "preflight",
+            "text": "Preflight safety stop: power off, center the horn by hand, and verify 5V/GND orientation before plugging signal into pin 9.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "hookup",
+                    "text": "Preflight checks are complete; continue with wiring.",
+                    "requiresItems": [
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "hookup",
-            "text": "Mount the servo so it can't twist loose. Connect signal to pin 9, power and ground to the rails, and strain-relieve the jumpers so the horn doesn't yank them.",
+            "text": "Mount the servo so it cannot twist loose. Connect signal to pin 9, power and ground to rails, and strain-relieve jumpers so horn motion cannot yank them free.",
             "options": [
                 {
                     "type": "process",
@@ -75,7 +111,7 @@
         },
         {
             "id": "code",
-            "text": "Load the Sweep example, set min/max to avoid stalling, and log one smooth cycle. Unplug if you hear chatter; adjust limits and rerun.",
+            "text": "Load Sweep, set soft limits to avoid stalling, and log one smooth cycle. If you hear chatter or brownouts, stop and branch to recovery.",
             "options": [
                 {
                     "type": "process",
@@ -84,14 +120,47 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Sweep logged and quiet.",
+                    "goto": "verify",
+                    "text": "Sweep log captured.",
                     "requiresItems": [
                         {
                             "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Interpretation gate: pass only if motion returns to center cleanly and current draw stays stable during repeated sweeps.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "PASS: sweep is repeatable and quiet.",
+                    "requiresItems": [
+                        {
+                            "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "FAIL: chatter, overshoot, or reset occurred."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery loop: cut power, inspect ground/common reference, lower sweep range, and re-run the log until one clean pass is recorded.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Recovery complete; rerun sweep logging."
                 }
             ]
         },
@@ -116,7 +185,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
