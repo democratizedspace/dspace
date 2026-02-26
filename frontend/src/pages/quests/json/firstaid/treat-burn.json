@@ -8,39 +8,129 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Cooking mishap? Let's cool that burn before it blisters.",
+            "text": "Minor burn protocol: stop the heat source, cool the skin, then protect it. If severity rises, escalate immediately.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "severity-check",
+                    "text": "Assess and begin treatment."
+                }
+            ]
+        },
+        {
+            "id": "severity-check",
+            "text": "Safety gate: if the burn is deep, large, or on face/hands/genitals, skip self-care and call emergency services now.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "cool",
-                    "text": "How?"
+                    "text": "Minor burn confirmed; continue home care."
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "This is not minor; I need urgent care."
+                }
+            ]
+        },
+        {
+            "id": "escalate",
+            "text": "Correct move. Remove from danger, call emergency services, and avoid ointments/ice until directed by clinicians.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Escalation complete; seeking professional help."
                 }
             ]
         },
         {
             "id": "cool",
-            "text": "Hold the area under cool running water for several minutes, then gently pat it dry.",
+            "text": "Cool running water for several minutes, then pat dry with clean material.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Cooled off and ready to cover",
+                    "goto": "dress",
+                    "text": "Cooling complete; ready to dress."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-cooling",
+                    "text": "Pain still intense or skin too warm; repeat cooling."
+                }
+            ]
+        },
+        {
+            "id": "retry-cooling",
+            "text": "Recovery branch: continue cooling in short cycles and reassess. Stop and escalate if symptoms worsen.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "severity-check",
+                    "text": "Reassess severity before continuing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cool",
+                    "text": "Continue cooling cycle."
+                }
+            ]
+        },
+        {
+            "id": "dress",
+            "text": "Evidence gate: use supplies from your first aid kit to apply a sterile, non-stick dressing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Dressing applied with clean supplies",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "kit-missing",
+                    "text": "I cannot find the kit or sterile dressings."
+                }
+            ]
+        },
+        {
+            "id": "kit-missing",
+            "text": "Troubleshooting: retrieve or restock the kit before dressing. Avoid improvised linty cloth that can contaminate the burn.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "dress",
+                    "text": "Kit restored; apply dressing now."
+                }
+            ]
+        },
+        {
+            "id": "monitor",
+            "text": "Monitor for infection, swelling, or increasing pain over the next day.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Symptoms stable; continue routine care."
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "Symptoms worsening; escalate care."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Apply a sterile dressing from your kit and watch for signs of infection.",
+            "text": "Burn stabilized with safe home protocol and clear escalation criteria.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep an eye on it."
+                    "text": "Understood."
                 }
             ]
         }
@@ -51,7 +141,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["firstaid/stop-nosebleed"],
+    "requiresQuests": [
+        "firstaid/stop-nosebleed"
+    ],
     "hardening": {
         "passes": 0,
         "score": 75,

@@ -27,7 +27,7 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
-    - `pack` → "Supplies packed" — first aid kit ×1
+    - `pack` → "Kit already packed and labeled" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -46,6 +46,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: none
         - Consumes: adhesive bandages ×1, sterile gauze pads ×1, antiseptic wipes ×1, nitrile gloves (pair) ×1
         - Creates: first aid kit ×1
+- QA notes:
+    - Main path is now prep → inspect → pack → safety-check with an explicit evidence gate (`pack-first-aid-kit` or existing first aid kit item).
+    - Troubleshooting branches include hygiene reset (`restart-hygiene`) and replacement loop (`replace`) before completion.
+    - Finish is blocked until storage safety is verified (`safety-check` / `relocate`).
 
 ## 2) Check Flashlight Battery (`firstaid/flashlight-battery`)
 
@@ -90,14 +94,21 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/assemble-kit`
 - Dialogue `requiresItems` gates:
-    - `gather` → "Everything's replaced" — adhesive bandages ×1, sterile gauze pads ×1, antiseptic wipes ×1
+    - `replace` → "Core supplies replaced" — adhesive bandages ×1, sterile gauze pads ×1, antiseptic wipes ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Main path now enforces audit → replacement → readiness verification instead of a single-step completion.
+    - Includes contamination recovery (`sanitize-reset`) and shortage troubleshooting (`shortage`) loops.
+    - Completion is gated on required replacement items and a final operational readiness check.
 
 ## 5) Dispose Expired First Aid Supplies (`firstaid/dispose-expired`)
 
@@ -156,7 +167,7 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/stop-nosebleed`
 - Dialogue `requiresItems` gates:
-    - `cool` → "Cooled off and ready to cover" — first aid kit ×1
+    - `dress` → "Dressing applied with clean supplies" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -164,6 +175,10 @@ First Aid quests build practical progression through the first aid skill tree. T
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Added severity triage safety gate with an explicit emergency escalation endpoint (`escalate`).
+    - Added cooling recovery branch (`retry-cooling`) with reassessment loop before dressing.
+    - Completion requires kit-backed dressing evidence and a monitor/escalate branch for worsening symptoms.
 
 ## 9) Practice Basic Wound Care (`firstaid/wound-care`)
 
