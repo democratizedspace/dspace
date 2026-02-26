@@ -97,7 +97,7 @@ PRs must not be review-ready/opened for review.
 7. Bookkeeping validation (required, fail-closed): for each selected quest ID, confirm its block
    exists in `docs/design/v3-quest-quality-review.md` and at least one relevant checklist line in
    that block contains the current PR number in canonical form. Example shell pattern (adapt quest
-   IDs and PR number): `PR_NUM=<current_pr_number>; for q in <tree>/<quest1> <tree>/<quest2>; do rg -n "^- ${q}\\b" docs/design/v3-quest-quality-review.md >/dev/null || { echo "Missing quest block: $q"; exit 1; }; rg -n "^- ${q}\\b" -A 40 docs/design/v3-quest-quality-review.md | rg -q "\\(PR (#[0-9]+, )*#${PR_NUM}(, #[0-9]+)*\\)" || { echo "Missing PR tag for $q"; exit 1; }; done`
+   IDs and PR number): `PR_NUM=<current_pr_number>; FILE=docs/design/v3-quest-quality-review.md; echo "$PR_NUM" | rg -q '^[1-9][0-9]*$' || { echo "PR_NUM must be a non-zero integer"; exit 1; }; for q in <tree>/<quest1> <tree>/<quest2>; do START=$(rg -n "^- ${q}\\b" "$FILE" | head -n1 | cut -d: -f1); [ -n "$START" ] || { echo "Missing quest block: $q"; exit 1; }; NEXT=$(tail -n +"$((START + 1))" "$FILE" | rg -n '^### ' | head -n1 | cut -d: -f1); if [ -n "$NEXT" ]; then BLOCK=$(tail -n +"$START" "$FILE" | head -n "$NEXT"); else BLOCK=$(tail -n +"$START" "$FILE"); fi; printf '%s\n' "$BLOCK" | rg -q "\\(PR (#[1-9][0-9]*, )*#${PR_NUM}(, #[1-9][0-9]*)*\\)" || { echo "Missing canonical PR tag for $q"; exit 1; }; done`
 
 ## REQUIRED output format for your PR summary
 
