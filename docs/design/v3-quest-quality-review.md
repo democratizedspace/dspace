@@ -1127,17 +1127,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, sysadmin/re
 Exemplar anchors (checked in docs/qa/v3.md §4.5): ubi/basicincome
 
 - `ubi/first-payment`
-  - [ ] Observed issue: `ubi/first-payment` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `ubi/first-payment` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened with staged claim verification and a non-completing safe-stop branch. (PR #3733)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3733)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3733)
 - `ubi/reminder`
-  - [ ] Observed issue: `ubi/reminder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `ubi/reminder` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened with evidence-linked reminder validation and alternate routine branches. (PR #3733)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3733)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3733)
 - `ubi/savings-goal`
-  - [ ] Observed issue: `ubi/savings-goal` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `ubi/savings-goal` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened with deposit-strategy branching, prechecks, and recovery routing. (PR #3733)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3733)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3733)
 
 ### woodworking (10 quests)
 
