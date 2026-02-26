@@ -129,14 +129,9 @@
                     "text": "Recovery complete; retry with fresh sample."
                 },
                 {
-                    "type": "finish",
-                    "text": "Defer tasting to scheduled follow-up after reset window.",
-                    "requiresItems": [
-                        {
-                            "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
-                            "count": 1
-                        }
-                    ]
+                    "type": "goto",
+                    "goto": "setup-route",
+                    "text": "Defer tasting until next session, then restart with fresh setup evidence."
                 }
             ]
         },

@@ -25,9 +25,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
     - `safety` → "Safety gear is on and tools are ready." — nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
-    - `open-beaker` → "Reaction remained controlled; capture verification reading." — pH strip ×1
-    - `controlled-capture` → "Capture route completed with stable behavior; verify and log." — pH strip ×1
-    - `verify` → "Evidence logged with a stable reading." — 250 mL glass beaker ×1, pH strip ×1
+    - `verify` → "Stable run documented; proceed to closeout." — 250 mL glass beaker ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -36,8 +34,8 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Processes used:
     - [run-safe-fizz-reaction](/processes/run-safe-fizz-reaction)
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
-        - Consumes: pH strip ×1
-        - Creates: pH strip ×1
+        - Consumes: none
+        - Creates: none
     - [log-safe-reaction](/processes/log-safe-reaction)
         - Requires: 250 mL glass beaker ×1
         - Consumes: none
@@ -151,10 +149,10 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `requiresQuests`: `chemistry/buffer-solution`
 - Dialogue `requiresItems` gates:
     - `start` → "Run baseline measurement with PPE on." — nitrile gloves (pair) ×1, safety goggles ×1, hydroponics tub (ready) ×1
-    - `baseline` → "Baseline recorded, interpret before adjusting." — pH strip ×1
-    - `interpret` → "Reading is within 6.0-7.2; no further adjustment needed." — pH strip ×1
-    - `retest` → "Verification is inside 6.0-7.2." — pH strip ×1
-    - `finish` → "Chemistry in harmony." — pH strip ×1
+    - `baseline` → "Baseline recorded, interpret before adjusting." — hydroponic pH reading ×1
+    - `interpret` → "Reading is within 6.0-7.2; no further adjustment needed." — hydroponic pH reading ×1
+    - `retest` → "Verification is inside 6.0-7.2." — hydroponic pH reading ×1
+    - `finish` → "Chemistry in harmony." — hydroponic pH reading ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -164,7 +162,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - [measure-ph](/processes/measure-ph)
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
         - Consumes: pH strip ×1
-        - Creates: pH strip ×1
+        - Creates: hydroponic pH reading ×1
     - [adjust-ph](/processes/adjust-ph)
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
         - Consumes: pH down solution (500 mL) ×0.05, pH up solution (potassium carbonate) ×0.05
@@ -264,7 +262,6 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `precision-setup` → "Setup artifact captured; proceed to outcome check." — stevia tasting solution ×1
     - `panel-setup` → "Comparative setup ready; move to blind taste logging." — stevia tasting solution ×1
     - `outcome-check` → "Outcome artifact logged with clear notes." — stevia tasting notes ×1
-    - `recovery` → "Defer tasting to scheduled follow-up after reset window." — stevia tasting solution ×1
     - `finish` → "Ready for the next batch." — stevia tasting notes ×1
 - Grants:
     - Dialogue options/steps grantsItems: None

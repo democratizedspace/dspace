@@ -74,13 +74,7 @@
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Reaction remained controlled; capture verification reading.",
-                    "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Reaction remained controlled; move to verification and logging."
                 },
                 {
                     "type": "goto",
@@ -101,13 +95,7 @@
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Capture route completed with stable behavior; verify and log.",
-                    "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Capture route completed with stable behavior; move to verification and logging."
                 },
                 {
                     "type": "goto",
@@ -144,14 +132,10 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Evidence logged with a stable reading.",
+                    "text": "Stable run documented; proceed to closeout.",
                     "requiresItems": [
                         {
                             "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
-                            "count": 1
-                        },
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                             "count": 1
                         }
                     ]

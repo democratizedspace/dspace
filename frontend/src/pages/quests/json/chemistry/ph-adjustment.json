@@ -24,7 +24,7 @@
                             "count": 1
                         },
                         {
-                            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         }
                     ]
@@ -46,7 +46,7 @@
                     "text": "Baseline recorded, interpret before adjusting.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
                             "count": 1
                         }
                     ]
@@ -63,7 +63,7 @@
                     "text": "Reading is within 6.0-7.2; no further adjustment needed.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
                             "count": 1
                         }
                     ]
@@ -121,7 +121,7 @@
                     "text": "Verification is inside 6.0-7.2.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
                             "count": 1
                         }
                     ]
@@ -158,7 +158,7 @@
                     "text": "Chemistry in harmony.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
                             "count": 1
                         }
                     ]
