@@ -13,7 +13,7 @@
                 {
                     "type": "goto",
                     "goto": "print",
-                    "text": "Manual path: run baseline print first."
+                    "text": "Main path: run baseline print first."
                 },
                 {
                     "type": "goto",

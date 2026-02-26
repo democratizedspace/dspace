@@ -206,7 +206,9 @@ slug: '3dprinting'
     - `prep` → "First-layer line is smooth and white PLA is flowing cleanly." — entry-level FDM 3D printer (white PLA loaded) ×1, safety goggles ×1
     - `print` → "Batch printed, cooled, and deburred." — 3D printed cable clip set ×1, mission log entry ×1
     - `print` → "Clips stringed, cracked, or failed to snap onto cable." — 3D printed cable clip set ×1
-    - `troubleshoot` → "Adjustments made; run another clip batch with monitoring." — entry-level FDM 3D printer (white PLA loaded) ×1, safety goggles ×1
+    - `fit-test` → "Fit test passed and no brittle fractures appeared." — 3D printed cable clip set ×1, mission log entry ×1
+    - `fit-test` → "Fit test failed or clips fractured during installation." — 3D printed cable clip set ×1
+    - `troubleshoot` → "Adjustments made; verify with a fresh fit test before sign-off." — entry-level FDM 3D printer (white PLA loaded) ×1, safety goggles ×1
     - `evidence` → "Fit test passed and notes are logged." — 3D printed cable clip set ×1, mission log entry ×1
 - Grants:
     - Dialogue options/steps grantsItems: None

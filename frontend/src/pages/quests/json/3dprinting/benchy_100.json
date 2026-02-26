@@ -170,7 +170,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "qa-audit",
+                    "goto": "steady",
                     "text": "Verification batch passed; resume steady production.",
                     "requiresItems": [
                         {
@@ -185,7 +185,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "qa-audit",
+                    "goto": "sprint",
                     "text": "Verification batch passed; resume sprint production.",
                     "requiresItems": [
                         {
@@ -219,7 +219,7 @@
                         },
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
-                            "count": 2
+                            "count": 1
                         }
                     ]
                 },
