@@ -8,32 +8,56 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Used bandages can spread germs. Let's bag them properly.",
+            "text": "Used bandages can spread germs. We will stage, seal, and verify disposal before cleanup.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "bag",
-                    "text": "Show me how."
+                    "goto": "stage",
+                    "text": "Start safe disposal"
                 }
             ]
         },
         {
-            "id": "bag",
-            "text": "Place the used bandage and wipes in a biohazard bag, seal it, then wash your hands.",
+            "id": "stage",
+            "text": "Put on gloves and stage a biohazard bag at arm's reach so contaminated items do not touch clean surfaces.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Wash hands",
-                    "goto": "bag"
-                },
-                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Supplies bagged",
+                    "goto": "seal",
+                    "text": "Supplies staged and ready",
                     "requiresItems": [
                         {
                             "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+                            "count": 1
+                        },
+                        {
+                            "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "shortage",
+                    "text": "Missing bag or gloves"
+                }
+            ]
+        },
+        {
+            "id": "shortage",
+            "text": "Pause and restock before handling contaminated supplies. Never carry loose used bandages around.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Restocked; restart staging",
+                    "requiresItems": [
+                        {
+                            "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+                            "count": 1
+                        },
+                        {
+                            "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
                             "count": 1
                         }
                     ]
@@ -41,8 +65,73 @@
             ]
         },
         {
+            "id": "seal",
+            "text": "Place used bandages and wipes into the bag, push out extra air, and seal the top tightly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Bag sealed with contaminated supplies",
+                    "requiresItems": [
+                        {
+                            "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "tear",
+                    "text": "Bag tore or leaked while sealing"
+                }
+            ]
+        },
+        {
+            "id": "tear",
+            "text": "Double-bag immediately, disinfect contact surfaces, and restart the seal check with a fresh outer bag.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Containment restored; restart staging"
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "Leak was large; request supervision"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final verification: sealed bag closed, no visible leakage, and disposal route identified away from food areas.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Verified safe disposal and completed hand hygiene",
+                    "goto": "finish"
+                },
+                {
+                    "type": "goto",
+                    "goto": "tear",
+                    "text": "Seal or contamination check failed"
+                }
+            ]
+        },
+        {
+            "id": "escalate",
+            "text": "Good safety stop. Keep contaminated materials isolated and ask a trained responder to complete disposal.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Escalated disposal safely"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice work. Dispose of the sealed bag with your regular trash.",
+            "text": "Nice work. Contaminated materials are contained and your cleanup routine is complete.",
             "options": [
                 {
                     "type": "finish",
@@ -61,7 +150,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -160,6 +160,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: first aid kit ×1
         - Consumes: nitrile gloves (pair) ×1, sterile gauze pads ×1, antiseptic wipes ×1
         - Creates: none
+- QA notes:
+    - Added an emergency safety screen before home-care steps to force escalation on high-risk symptoms.
+    - Added deterministic retry handling (`recheck` → `retry` → `retry-check`) with a hard escalation stop after 20 minutes.
+    - Added supply-gap recovery so the pressure routine cannot proceed without kit-backed sterile supplies.
 
 ## 8) Treat a Minor Burn (`firstaid/treat-burn`)
 
@@ -217,6 +221,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: first aid kit ×1, sink ×1
         - Consumes: nitrile gloves (pair) ×1, antiseptic wipes ×1, adhesive bandages ×1, liquid soap ×1, biohazard waste bag ×1
         - Creates: none
+- QA notes:
+    - Added an upfront red-flag screen so severe wound signs branch to `escalate` instead of continuing home care.
+    - Added shortage recovery and hygiene prep loops before the clean-and-redress evidence gate can run.
+    - Added post-change verification and troubleshooting loops (`verify` / `troubleshoot`) before completion.
 
 ## 11) Bag Used Bandages (`firstaid/dispose-bandages`)
 
@@ -235,6 +243,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
         - Creates: none
+- QA notes:
+    - Added staged disposal flow (`stage` → `seal` → `verify`) with explicit PPE and biohazard bag evidence gates.
+    - Added containment failure recovery (`tear`) with restart and supervised escalation outcomes.
+    - Completion now requires hand-hygiene process confirmation after disposal verification.
 
 ## 12) Remove a Splinter (`firstaid/remove-splinter`)
 
