@@ -8,41 +8,65 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Expired bandages can fail when needed most. Let's remove them.",
+            "text": "Expired supplies can fail when needed most. We'll run this like a safety audit, not a trash sprint.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Show me what to do"
+                    "text": "Start the disposal checklist"
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Wash your hands, put on nitrile gloves and safety goggles, then open the kit.",
+            "text": "Wash your hands, then put on nitrile gloves and safety goggles before touching the kit.",
             "options": [
                 {
                     "type": "process",
                     "process": "wash-hands",
-                    "text": "Hands are washed",
-                    "goto": "sort"
+                    "text": "Run handwashing now"
                 },
                 {
                     "type": "goto",
                     "goto": "sort",
-                    "text": "I already washed my hands."
+                    "text": "Hands washed and PPE on"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sanitize-reset",
+                    "text": "I touched supplies before I was ready"
+                }
+            ]
+        },
+        {
+            "id": "sanitize-reset",
+            "text": "No shame in a reset. Rewash, reglove, and re-open only clean supplies.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Rewash before reopening supplies"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sort",
+                    "text": "Reset hygiene and continue"
                 }
             ]
         },
         {
             "id": "sort",
-            "text": "Check labels and pull expired items. Bag them for disposal per rules.",
+            "text": "Separate what is expired now from what stays in service. Keep opened-but-valid items in a review pile.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Expired items discarded",
+                    "goto": "verify",
+                    "text": "Expired supplies are bagged and labeled",
                     "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        },
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
@@ -52,16 +76,48 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "A package leaked or tore during handling"
+                }
+            ]
+        },
+        {
+            "id": "escalate",
+            "text": "Pause and isolate the spill area. Replace torn bags and do not continue until contaminated surfaces are cleaned.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sanitize-reset",
+                    "text": "Area is isolated and cleaned, retry safely"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final check: no expired items remain in the active kit and sealed bags are ready for proper disposal.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Audit complete and disposal staged"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sort",
+                    "text": "I found one more expired item"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Your kit is clean and ready for fresh supplies.",
+            "text": "Clean work. Your kit is safer now because you proved disposal readiness and contamination control.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Safety first!"
+                    "text": "Safety first"
                 }
             ]
         }
@@ -76,7 +132,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
