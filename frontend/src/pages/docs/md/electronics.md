@@ -388,9 +388,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/tin-soldering-iron`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Parts staged and polarity checked." — safety goggles ×1, soldering iron kit ×1, 5 mm LED ×1, 220 Ohm Resistor ×1, Jumper Wires ×2
+    - `prep` → "Parts staged and polarity checked." — safety goggles ×1, soldering iron kit ×1, 5 mm LED ×1, 220 Ohm Resistor ×1, wire stripper ×1, flux pen ×1, helping hands ×1, heat-shrink tubing ×5, Jumper Wires ×2
     - `branch-choice` → "Use helping hands for stable joints." — helping hands ×1
-    - `verify` → "Pass: polarity and tug-test verified." — repeats staged tool/component evidence before closeout.
+    - `verify` → "Pass: polarity and tug-test verified." — requires safety goggles ×1, soldering iron kit ×1, flux pen ×1, and LED indicator module ×1 as post-process evidence before closeout.
     - Troubleshooting/safety: failed joints route through `rework`; unsafe conditions route through `safety-reset` before any retry.
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -410,8 +410,8 @@ Electronics quests build practical progression through the electronics skill tre
     - `requiresQuests`: `electronics/tin-soldering-iron`
 - Dialogue `requiresItems` gates:
     - `prep` → "Wires stripped; select splice method." — safety goggles ×1, soldering iron kit ×1, wire stripper ×1, Jumper Wires ×2, heat-shrink tubing ×5, flux pen ×1, brass tip cleaner ×1, heat gun ×1, solder fume extractor ×1, needle-nose pliers ×1
-    - `verify` → "Pass: insulation and mechanical checks verified." — repeats full splice-tool evidence before finish.
-    - Troubleshooting/safety: weak splice or exposed strands route through `fault`; smoke/heat risk routes through `safety-reset` before continuation.
+    - `verify` → "Pass: insulation and mechanical checks verified." — repeats splice-tool evidence before finish, excluding consumed heat-shrink tubing.
+    - Troubleshooting/safety: weak splice or exposed strands route through `fault`; smoke/heat risk routes through `safety-reset` and restart (no direct completion from abort).
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

@@ -164,10 +164,6 @@
                             "count": 2
                         },
                         {
-                            "id": "96083990-f333-4e42-ab04-7eb2a234570e",
-                            "count": 5
-                        },
-                        {
                             "id": "dad7f853-ccc9-40be-b226-89272708db84",
                             "count": 1
                         },
@@ -223,8 +219,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Abort for safety and log unfinished repair."
+                    "goto": "start",
+                    "text": "Abort this attempt; restart once the bench is safe."
                 }
             ]
         },
