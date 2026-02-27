@@ -8,45 +8,115 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Used bandages can spread germs. Let's bag them properly.",
+            "text": "Used bandages can spread germs. We are doing this in a containment-first order.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Start disposal workflow"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Put on gloves and stage a fresh biohazard bag before touching contaminated waste.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "bag",
-                    "text": "Show me how."
+                    "text": "Supplies staged",
+                    "requiresItems": [
+                        {
+                            "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+                            "count": 1
+                        },
+                        {
+                            "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I touched waste before staging"
                 }
             ]
         },
         {
             "id": "bag",
-            "text": "Place the used bandage and wipes in a biohazard bag, seal it, then wash your hands.",
+            "text": "Place used bandages and wipes in the bag, expel excess air, then seal the bag before transport.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Wash hands",
-                    "goto": "bag"
-                },
-                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Supplies bagged",
+                    "goto": "verify",
+                    "text": "Bag sealed and leak-free",
                     "requiresItems": [
                         {
                             "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Bag tore or leaked"
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Pause disposal, isolate the spill, re-bag with fresh PPE, and sanitize hands before restarting.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Sanitize and restart",
+                    "goto": "prep"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Exposure incident needs supervisor help"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Now verify final controls: sealed waste, clean hands, and disposal path that avoids food-prep areas.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Final hand wash",
+                    "goto": "finish"
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Need to re-bag before final wash"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Correct move. Escalate exposure incidents and resume only after safety guidance is clear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Return after incident response"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work. Dispose of the sealed bag with your regular trash.",
+            "text": "Nice work. The waste stream is controlled and your station is clean.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "All clean!"
+                    "text": "Disposal complete"
                 }
             ]
         }
@@ -61,7 +131,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

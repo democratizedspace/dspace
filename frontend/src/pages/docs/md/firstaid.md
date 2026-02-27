@@ -205,18 +205,28 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/wound-care`
 - Dialogue `requiresItems` gates:
-    - `change` → "Bandage changed" — antiseptic wipes ×1, adhesive bandages ×1
-    - `change` → "Fresh bandage is on." — first aid kit ×1
+    - `prep` → "Already washed and gloved" — nitrile gloves (pair) ×1
+    - `change` → "Do a full clean-and-redress cycle" — antiseptic wipes ×1, adhesive bandages ×1
+    - `change` → "Bandage swapped with clean supplies" — first aid kit ×1, adhesive bandages ×1
+    - `verify` → "Dressing is secure and clean" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
     - [clean-minor-cut](/processes/clean-minor-cut)
         - Requires: first aid kit ×1, sink ×1
         - Consumes: nitrile gloves (pair) ×1, antiseptic wipes ×1, adhesive bandages ×1, liquid soap ×1, biohazard waste bag ×1
         - Creates: none
+- QA notes:
+    - Added explicit safety triage (`assess`) with non-completing escalation path (`safety-stop`) for worsening symptoms.
+    - Completion now requires prep + care + verification, with mechanics-backed evidence from item gates and a clean-and-redress process option.
+    - Added contamination and adhesion failure recovery loop (`troubleshoot`) that routes through hygiene reset before reattempt.
 
 ## 11) Bag Used Bandages (`firstaid/dispose-bandages`)
 
@@ -224,7 +234,8 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/change-bandage`
 - Dialogue `requiresItems` gates:
-    - `bag` → "Supplies bagged" — biohazard waste bag ×1
+    - `prep` → "Supplies staged" — nitrile gloves (pair) ×1, biohazard waste bag ×1
+    - `bag` → "Bag sealed and leak-free" — biohazard waste bag ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -235,6 +246,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
         - Creates: none
+- QA notes:
+    - Reworked to containment sequence (`prep` → `bag` → `verify`) instead of single-step disposal.
+    - Added leak/exposure troubleshooting (`recover`) with required hygiene reset process before retry.
+    - Added a safety escalation stop (`safety-stop`) for exposure incidents that should not complete in-quest.
 
 ## 12) Remove a Splinter (`firstaid/remove-splinter`)
 
@@ -242,7 +257,9 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/wound-care`
 - Dialogue `requiresItems` gates:
-    - `remove` → "Splinter removed" — nitrile gloves (pair) ×1, antiseptic wipes ×1, precision tweezers ×1
+    - `prep` → "Prep complete with available kit" — precision tweezers ×1, antiseptic wipes ×1, nitrile gloves (pair) ×1
+    - `remove` → "Splinter removed and site cleaned" — precision tweezers ×1, antiseptic wipes ×1
+    - `verify` → "Site looks clean and controlled" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -253,6 +270,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
         - Creates: none
+- QA notes:
+    - Added front-loaded safety triage (`assess`) and clinician escalation branch (`safety-stop`) for deep-risk cases.
+    - Added troubleshooting branch (`recover`) for broken/retained fragments with enforced clean retry loop.
+    - Completion now requires a post-removal verification gate in addition to removal evidence.
 
 ## 13) Splint a Minor Fracture (`firstaid/splint-limb`)
 

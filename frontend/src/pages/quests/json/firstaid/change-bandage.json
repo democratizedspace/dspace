@@ -8,24 +8,63 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Bandages should be changed daily so wounds heal cleanly.",
+            "text": "Bandages should be changed daily so wounds heal cleanly. First, check whether this is still minor care.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "assess",
+                    "text": "Run a quick safety check"
+                }
+            ]
+        },
+        {
+            "id": "assess",
+            "text": "If bleeding is heavy, spreading, or the wound smells foul, stop and seek urgent medical care.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Looks minor and stable"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Symptoms are worsening"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Wash hands and put on fresh gloves before touching the wound or supplies.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Wash and glove up",
+                    "goto": "change"
+                },
+                {
+                    "type": "goto",
                     "goto": "change",
-                    "text": "Let's change it"
+                    "text": "Already washed and gloved",
+                    "requiresItems": [
+                        {
+                            "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "change",
-            "text": "Wash hands, remove the old bandage, clean the cut and apply a fresh adhesive bandage.",
+            "text": "Remove the old bandage, clean the area, and apply a fresh dressing without touching the sterile pad.",
             "options": [
                 {
                     "type": "process",
                     "process": "clean-minor-cut",
-                    "text": "Bandage changed",
-                    "goto": "finish",
+                    "text": "Do a full clean-and-redress cycle",
+                    "goto": "verify",
                     "requiresItems": [
                         {
                             "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
@@ -39,24 +78,83 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "Bandage swapped with clean supplies",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        },
+                        {
+                            "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Bandage won't stick or got contaminated"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "No shortcut here: replace contaminated supplies, re-clean, then retry with dry skin and fresh adhesive.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Reset hygiene and retry",
+                    "goto": "change"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Wound now looks infected"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verify the new bandage is secure, clean, and dry with no active bleeding through.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
+                    "text": "Dressing is secure and clean",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
                             "count": 1
                         }
-                    ],
-                    "text": "Fresh bandage is on."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need another replacement attempt"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good catch. Pause home care and contact a clinician or urgent care for assessment.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assess",
+                    "text": "Return after symptoms are evaluated"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Keep the area clean and swap the bandage again tomorrow if needed.",
+            "text": "Great work. Keep monitoring for redness, heat, swelling, or discharge.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Got it!"
+                    "text": "Bandage maintenance complete"
                 }
             ]
         }
@@ -71,7 +169,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
