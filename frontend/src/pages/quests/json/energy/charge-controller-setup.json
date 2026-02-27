@@ -69,7 +69,25 @@
                 {
                     "type": "goto",
                     "goto": "bench-test",
-                    "text": "Bench-test the controller display before connecting the panel."
+                    "text": "Bench-test the controller display before connecting the panel.",
+                    "requiresItems": [
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -136,6 +154,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "layout",
+                    "text": "Pause and restage the kit before retrying."
                 }
             ]
         },
