@@ -684,7 +684,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
 
 ### firstaid (13 quests)
 
-Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, composting/start (fallback: no checked firstaid quests yet)
+Exemplar anchors: welcome/howtodoquests, composting/start
+
+Anchor confirmation in docs/qa/v3.md §4.5: [x] welcome/howtodoquests; [x] composting/start.
 
 - `firstaid/assemble-kit`
   - [x] Observed issue (addressed): `firstaid/assemble-kit` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3748)
