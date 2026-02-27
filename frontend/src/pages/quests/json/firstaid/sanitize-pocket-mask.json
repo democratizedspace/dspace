@@ -8,35 +8,145 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session.\nLet's sanitize it so it's ready for the next use.",
+            "text": "Your CPR pocket mask needs a full reset before it goes back in the kit. We'll do a safety check, sanitize, then verify storage readiness.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "clean",
-                    "text": "How do I clean it?"
+                    "goto": "inspect",
+                    "text": "Start inspection"
                 }
             ]
         },
         {
-            "id": "clean",
-            "text": "Wash the mask with warm soapy water, rinse and soak it in a 1:10 bleach solution for two minutes.\nLet it air dry completely before storing it in your first aid kit.",
+            "id": "inspect",
+            "text": "If the valve is cracked, straps are torn, or there is visible blood residue, stop and replace the mask. Do not reuse damaged PPE.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Mask is sanitized",
+                    "goto": "prep",
+                    "text": "Mask is intact and safe to sanitize",
                     "requiresItems": [
                         {
                             "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Mask is damaged or heavily contaminated"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Put on nitrile gloves and stage bleach solution, clean water, and a drying surface before disassembly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sanitize",
+                    "text": "Supplies staged",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Missing clean supplies"
+                }
+            ]
+        },
+        {
+            "id": "sanitize",
+            "text": "Wash with warm soapy water, rinse, then soak parts in a 1:10 bleach solution for two minutes. Rinse again and air dry fully before reassembly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Sanitization cycle complete",
+                    "requiresItems": [
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Contamination concern or rinse skipped"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "If any step was missed, restart from supply prep with fresh solution. Never store damp or partially sanitized equipment.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Reset and sanitize again"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Unable to verify safe condition"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Confirm the mask is dry, odor-free, and sealed in a clean storage bag inside your kit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Mask sanitized and sealed",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        },
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need another sanitization pass"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good catch. Quarantine this mask and replace it before the next CPR drill.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Resume after replacement"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "All clean! A sanitized mask protects both you and your patient during resuscitation.",
+            "text": "All clean. A verified mask protects both rescuer and patient during resuscitation.",
             "options": [
                 {
                     "type": "finish",
@@ -55,7 +165,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

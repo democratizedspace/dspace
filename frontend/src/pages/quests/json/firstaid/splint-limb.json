@@ -8,22 +8,64 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Accidents happen. Make sure the area is safe and call for help before touching the injury. Let's practice applying a simple splint.",
+            "text": "Before splinting, confirm scene safety and rule out life-threatening bleeding. Splints support transport; they do not replace medical care.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wrap",
-                    "text": "Okay, walk me through it."
+                    "goto": "assess",
+                    "text": "Run injury triage"
                 }
             ]
         },
         {
-            "id": "wrap",
-            "text": "Place soft padding around the injury, then position rigid supports on each side. Use bandages from your first aid kit to tie the splint snugly without cutting off circulation.",
+            "id": "assess",
+            "text": "Check pulse, color, warmth, and sensation below the injury. If severe deformity, open fracture, or absent pulse is present, stop and call emergency services.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "prep",
+                    "text": "Minor closed injury with circulation intact"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Red-flag symptoms detected"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Pad the limb, place rigid supports on both sides, and stage wrap material before tightening anything.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "secure",
+                    "text": "Supplies staged",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        },
+                        {
+                            "id": "0dde854e-7fcb-40ac-88ea-9afd9196f856",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Padding or wraps are missing"
+                }
+            ]
+        },
+        {
+            "id": "secure",
+            "text": "Tie above and below the injury, avoid direct pressure on the fracture site, and leave fingertips or toes visible for circulation checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
                     "text": "Splint secured",
                     "requiresItems": [
                         {
@@ -31,16 +73,70 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Wrap slipped or feels too tight"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "If numbness, cool skin, or increasing pain appears, loosen and re-pad immediately, then re-secure and re-check circulation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Reset and reapply splint"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Symptoms worsen after adjustment"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Re-check pulse, warmth, and sensation below the splint after 5-10 minutes. Keep limb elevated and arrange medical evaluation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Circulation remains stable",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need another fit adjustment"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Pause home care and hand off to emergency professionals for definitive stabilization.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assess",
+                    "text": "Return after professional reassessment"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep the limb immobilized, monitor fingers or toes for color and warmth, and seek medical attention.",
+            "text": "Nice work. Immobilization held and follow-up care is arranged.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Splinting practice complete"
                 }
             ]
         }
@@ -55,7 +151,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
