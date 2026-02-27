@@ -389,7 +389,8 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/json-api`
 - Dialogue `requiresItems` gates:
     - `start` → "Sounds great." — temperature log CSV ×1, thermistor logging rig ×1, Raspberry Pi 5 board ×1
-    - `code` → "Endpoint streaming data!" — live temperature JSON endpoint ×1
+    - `verify` → "Sample is in range and documented." — live temperature JSON endpoint ×1
+    - `retest` → "Re-test passed with a stable value." — live temperature JSON endpoint ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -400,6 +401,10 @@ Programming quests build practical progression through the programming skill tre
         - Requires: thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
         - Consumes: none
         - Creates: live temperature JSON endpoint ×1
+- QA notes:
+    - Main path now enforces deploy → range-check interpretation before completion.
+    - Adds explicit out-of-range troubleshooting with a required re-test loop.
+    - Completion requires mechanics-backed endpoint artifacts (first-pass or re-test evidence).
 
 ## 16) Serve a live temperature graph (`programming/temp-graph`)
 
@@ -408,7 +413,8 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/graph-temp-data`, `programming/temp-json-api`
 - Dialogue `requiresItems` gates:
     - `start` → "Show me how." — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
-    - `code` → "Graph generated!" — live temperature dashboard ×1
+    - `verify` → "The graph matches the expected temperature trend." — live temperature dashboard ×1
+    - `retest` → "Re-test passed; trend is stable." — live temperature dashboard ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -419,6 +425,10 @@ Programming quests build practical progression through the programming skill tre
         - Requires: live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: live temperature dashboard ×1
+- QA notes:
+    - Main path now enforces publish → trend verification with explicit cadence checks.
+    - Adds a troubleshooting branch for stale/incorrect graph data and a mandatory re-test loop.
+    - Completion requires dashboard evidence artifacts from the verification path.
 
 ## 17) Set Temperature Alert (`programming/temp-alert`)
 

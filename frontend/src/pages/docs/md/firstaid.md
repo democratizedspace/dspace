@@ -205,8 +205,10 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/wound-care`
 - Dialogue `requiresItems` gates:
+    - `safety-check` → "No red flags. Continue with routine change." — first aid kit ×1
     - `change` → "Bandage changed" — antiseptic wipes ×1, adhesive bandages ×1
-    - `change` → "Fresh bandage is on." — first aid kit ×1
+    - `contamination` → "Supplies reset; retry clean bandage change." — antiseptic wipes ×2, adhesive bandages ×2
+    - `verify` → "Fresh bandage is on and checks out." — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -217,6 +219,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: first aid kit ×1, sink ×1
         - Consumes: nitrile gloves (pair) ×1, antiseptic wipes ×1, adhesive bandages ×1, liquid soap ×1, biohazard waste bag ×1
         - Creates: none
+- QA notes:
+    - Added a safety triage node with explicit escalation path before routine dressing changes.
+    - Added contamination recovery that requires fresh supplies and loops back through treatment.
+    - Completion now requires a post-change verification checkpoint instead of immediate finish.
 
 ## 11) Bag Used Bandages (`firstaid/dispose-bandages`)
 

@@ -38,24 +38,75 @@
                 {
                     "type": "process",
                     "process": "deploy-temperature-json-endpoint",
-                    "text": "Publish the JSON route"
+                    "text": "Publish the JSON route",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "My endpoint crashes when the sensor drops out."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Record your first live sample and compare it to your expected ambient range (18-30 C).",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Endpoint streaming data!",
+                    "text": "Sample is in range and documented.",
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "The reading is out of range."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Debug input wiring, reject NaN payloads, and log one failed + one recovered sample before retrying.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "deploy-temperature-json-endpoint",
+                    "text": "Patch endpoint and collect a fresh verification sample",
+                    "goto": "retest"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Run the endpoint again and confirm the latest sample is stable and inside your pass band.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Re-test passed with a stable value.",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Still unstable, run another debug cycle."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Clients can now fetch the current temperature from your server.",
+            "text": "Nice! Clients can now fetch the current temperature from your server with range-checked confidence.",
             "options": [
                 {
                     "type": "finish",
@@ -74,7 +125,7 @@
     "hardening": {
         "passes": 2,
         "score": 95,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-12-01",

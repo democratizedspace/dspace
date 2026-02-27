@@ -391,7 +391,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/resource-monitoring,
   - [x] Include failed-session troubleshooting and a scheduled follow-up observation check before completion. (PR #3734)
 - `astronomy/star-trails`
   - [x] Observed issue (addressed): `astronomy/star-trails` now enforces capture interpretation bounds plus recovery handling for weather/equipment failures. (PR #3745)
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3749)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3745)
 - `astronomy/sunspot-sketch`
   - [x] Observed issue (addressed): `astronomy/sunspot-sketch` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3725)
@@ -603,7 +603,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): sysadmin/basic-commands, hydr
 - `electronics/solder-led-harness`
   - [ ] Observed issue: `electronics/solder-led-harness` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3749)
 - `electronics/solder-wire`
   - [ ] Observed issue: `electronics/solder-wire` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -691,9 +691,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, compos
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3748)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3748)
 - `firstaid/change-bandage`
-  - [ ] Observed issue: `firstaid/change-bandage` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `firstaid/change-bandage` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3749)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3749)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3749)
 - `firstaid/dispose-bandages`
   - [ ] Observed issue: `firstaid/dispose-bandages` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
   - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
@@ -1000,13 +1000,13 @@ Rubric assignment rule: first keyword match wins (`measurement/check` => thresho
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3712)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3712)
 - `programming/temp-graph`
-  - [ ] Observed issue: `programming/temp-graph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `programming/temp-graph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3749)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3749)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3749)
 - `programming/temp-json-api`
-  - [ ] Observed issue: `programming/temp-json-api` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `programming/temp-json-api` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3749)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3749)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3749)
 - `programming/temp-logger`
   - [x] Observed issue: `programming/temp-logger` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3666)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3666)

@@ -38,18 +38,69 @@
                 {
                     "type": "process",
                     "process": "publish-live-temperature-graph",
-                    "text": "Publish the live dashboard"
+                    "text": "Publish the live dashboard",
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "My chart is blank or spikes wildly."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Capture a dashboard screenshot and verify your refresh cadence does not drift from your logger interval.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Graph generated!",
+                    "text": "The graph matches the expected temperature trend.",
                     "requiresItems": [
                         {
                             "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Refresh cadence or values look wrong."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Check API latency, chart timestamp parsing, and stale-cache behavior. Record a failed snapshot before retesting.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "publish-live-temperature-graph",
+                    "text": "Apply fix and republish dashboard",
+                    "goto": "retest"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Retest with a second snapshot and compare against your first chart for consistency.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Re-test passed; trend is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Still inconsistent, continue debugging."
                 }
             ]
         },
@@ -74,7 +125,7 @@
     "hardening": {
         "passes": 2,
         "score": 98,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-12-08",
