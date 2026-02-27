@@ -68,6 +68,11 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: red flashlight ×1, digital multimeter ×1, 9 V battery ×1
         - Consumes: none
         - Creates: none
+- QA notes:
+    - Expanded from a one-hop measurement to setup → measurement → interpretation → beam verification.
+    - Added a safety stop branch for corrosion/damaged leads and a troubleshooting re-measure loop.
+    - Completion now expects both mechanics-backed evidence (`check-flashlight-battery`) and an
+      operational readiness confirmation.
 
 ## 3) Practice Basic CPR (`firstaid/learn-cpr`)
 
@@ -87,6 +92,12 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1
         - Consumes: none
         - Creates: none
+- QA notes:
+    - Added explicit scene safety triage (`scene-check`) with a non-completing safety stop loop.
+    - Added staged evidence progression (`prep-gear` item gate + `practice-cpr` process evidence)
+      before debrief and finish.
+    - Added troubleshooting/recovery loops for missing supplies (`resupply`) and technique drift
+      (`technique-fix`) before completion.
 
 ## 4) Restock Your First Aid Kit (`firstaid/restock-kit`)
 
@@ -116,7 +127,8 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/restock-kit`
 - Dialogue `requiresItems` gates:
-    - `sort` → "Expired items discarded" — nitrile gloves (pair) ×1, safety goggles ×1
+    - `sort` → "Expired supplies are bagged and labeled" — first aid kit ×1, nitrile gloves
+      (pair) ×1, safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -127,6 +139,12 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
         - Creates: none
+- QA notes:
+    - Reworked to a multi-step audit (`prep` → `sort` → `verify`) with a resettable hygiene path.
+    - Added contamination spill handling (`escalate`) that forces cleanup and safe re-entry before
+      progressing.
+    - Completion now requires mechanics-backed disposal evidence and a final verification checkpoint
+      instead of a single-step pass.
 
 ## 6) Sanitize Your CPR Pocket Mask (`firstaid/sanitize-pocket-mask`)
 

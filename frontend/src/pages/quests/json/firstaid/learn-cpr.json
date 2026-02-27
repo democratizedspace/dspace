@@ -8,23 +8,50 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the manikin on a firm surface. Put on nitrile gloves, set the pocket mask and open antiseptic wipes from your first aid kit. Check for hazards, call emergency services, then begin.",
+            "text": "We'll drill CPR with discipline: scene safety first, emergency activation second, technique practice third.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "steps",
-                    "text": "I'm ready."
+                    "goto": "scene-check",
+                    "text": "Begin CPR practice workflow"
                 }
             ]
         },
         {
-            "id": "steps",
-            "text": "With the manikin on its back, place the heel of one hand on the chest center and interlock your fingers. Keep arms straight and push 2 inches deep at 100\u2013120 compressions per minute, letting the chest rise fully. After 30 compressions, tilt the head, seal the mask and give two breaths if trained. Stop if anything seems unsafe.",
+            "id": "scene-check",
+            "text": "Scan for hazards and confirm this is a training scenario. If the scene is unsafe, stop and reposition before touching the manikin.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "practice-cpr",
-                    "text": "Practicing now.",
+                    "type": "goto",
+                    "goto": "prep-gear",
+                    "text": "Scene is clear and training-safe"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Scene is not safe yet"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Correct hazards first. CPR skills matter, but scene safety outranks speed in every drill.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scene-check",
+                    "text": "Hazards controlled, re-run scene check"
+                }
+            ]
+        },
+        {
+            "id": "prep-gear",
+            "text": "Put on nitrile gloves, stage the pocket mask, and ready antiseptic wipes. Confirm your first aid kit and manikin are present.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "practice",
+                    "text": "Gear staged and emergency call sequence reviewed",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
@@ -50,7 +77,31 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "resupply",
+                    "text": "I am missing one or more items"
+                }
+            ]
+        },
+        {
+            "id": "resupply",
+            "text": "Use your kit checklist to restock before practicing. Skipping PPE or barrier equipment is a hard stop.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-gear",
+                    "text": "Resupplied, re-check gear"
+                }
+            ]
+        },
+        {
+            "id": "practice",
+            "text": "Run one full 30:2 cycle at 100-120 compressions/min, ~2 inches deep, with full recoil. Pause if form breaks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "practice-cpr",
+                    "text": "Complete the practice cycle",
+                    "goto": "debrief",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
@@ -72,18 +123,55 @@
                             "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
                             "count": 1
                         }
-                    ],
-                    "text": "I know the basics."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "technique-fix",
+                    "text": "My rhythm, depth, or seal was inconsistent"
+                }
+            ]
+        },
+        {
+            "id": "technique-fix",
+            "text": "Reset hand placement and cadence. Review compression depth and mask seal, then re-run the cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "practice",
+                    "text": "Technique corrected, repeat cycle"
+                }
+            ]
+        },
+        {
+            "id": "debrief",
+            "text": "Debrief the drill: confirm emergency-call order, contamination control, and what to improve next session.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sanitize",
+                    "text": "Debrief complete"
+                }
+            ]
+        },
+        {
+            "id": "sanitize",
+            "text": "Sanitize the pocket mask and manikin contact surfaces before storing gear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Gear sanitized and packed"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job. Clean the manikin and pocket mask with antiseptic wipes and return everything to your first aid kit. Real emergencies should be handled by certified professionals whenever possible.",
+            "text": "Strong work. You completed scene safety, evidence-backed practice, correction loops, and post-drill hygiene.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep practicing."
+                    "text": "I'll keep practicing and seek certification"
                 }
             ]
         }
@@ -98,7 +186,7 @@
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
