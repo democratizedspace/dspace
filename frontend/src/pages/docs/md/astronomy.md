@@ -576,10 +576,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `plan` → "Tripod leveled and azimuth marked." — seasonal star hop plan ×1, red flashlight ×1, digital camera ×1, camera tripod ×1
     - `setup` → "Stack captured and color-balanced." — polar-aligned camera rig ×1, Laptop Computer ×1
     - `interpret` → "Pass: trails are continuous and drift stayed in bounds." — polar-aligned camera rig ×1, stacked star trail photo ×1
+    - `interval-plan` → "Burst set captured and stacked for review." — polar-aligned camera rig ×1, Laptop Computer ×1
     - `recovery` → "Unsafe window tonight; log the partial and stand down." — stacked star trail photo ×1
     - `finish` → "Save to the observing log." — stacked star trail photo ×1
 - Troubleshooting/safety branches:
-    - `setup` can now route to `recovery` on condensation/cloud/battery failures.
+    - `setup` now branches between full-length captures and `interval-plan` burst strategy when seeing is unstable.
+    - Both capture strategies gate advancement through `capture-star-trail-stack` evidence before interpretation.
+    - `setup` can route to `recovery` on condensation/cloud/battery failures.
     - `interpret` adds explicit pass/fail evidence checks before completion.
     - `recovery` loops back to planning only after tripod/lens/safe-path checks.
 - Grants:

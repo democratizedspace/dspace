@@ -70,6 +70,9 @@ Woodworking quests build practical progression through the woodworking skill tre
         - Requires: safety goggles ×1, tape measure ×1
         - Consumes: Glued birdhouse shell ×1, Sandpaper pack ×1
         - Creates: Birdhouse ×1
+- Troubleshooting/safety branches:
+    - `template-jig` provides an alternate template-first path before committing to cuts.
+    - `troubleshoot-joints` handles split panels or wobble, then routes back to recut/re-assembly retries.
 
 ## 3) Build a step stool (`woodworking/step-stool`)
 
