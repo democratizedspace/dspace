@@ -841,7 +841,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/basil, hydroponic
   - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #3611)
   - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #3611)
 - `hydroponics/mint-cutting`
-  - [x] Observed issue: `hydroponics/mint-cutting` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated. (PR #3766)
+  - [x] Observed issue (addressed): `hydroponics/mint-cutting` is lifecycle-oriented but can read as narration unless staged setup and outcome proofs are separated; this was hardened with a stress-check contingency gate and staged setup/outcome evidence checks. (PR #3766)
   - [x] Require staged evidence gates: one setup artifact first, then an outcome artifact before `finish`. (PR #3766)
   - [x] Add a stress/failure contingency branch with concrete pause/abort criteria and timed re-check before resuming. (PR #3766)
 - `hydroponics/netcup-clean`
