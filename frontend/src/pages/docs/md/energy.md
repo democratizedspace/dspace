@@ -270,10 +270,15 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Dialogue `requiresItems` gates:
     - `start` → "Let's give it a try." — smartphone ×1
     - `kit` → "Everything is staged and dry." — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, USB Cable ×1, 8 AWG fused cable kit ×1
+    - `wire-recover` → "Fuse removed and polarity rechecked; retry wiring." — 8 AWG fused cable kit ×1
     - `wire` → "Everything is tight, fused, and quiet." — portable solar kit (wired) ×1
     - `profile` → "Profile saved; cables cool." — charge controller profile set ×1
     - `charge` → "200 Wh harvested and stable." — dSolar ×200
+    - `low-output` → "Shading fixed and voltage recovered; retry harvest." — portable solar kit (wired) ×1
     - `phone` → "Phone charged and the cable stayed cool." — off-grid phone charge log ×1
+    - `cable-heat` → "Cable cooled and connectors cleaned; retry charge." — USB Cable ×1
+    - `verify-log` → "Log captured with all safety notes." — off-grid phone charge log ×1, charge controller profile set ×1
+- QA note: Added explicit safety recovery nodes (`weather-hold`, `wire-recover`, `low-output`, `cable-heat`) to enforce fail-closed pauses before retrying hazardous steps.
 - Grants:
     - `kit` → "Take the solar kit" — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, USB Cable ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
@@ -304,8 +309,12 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `requiresQuests`: `energy/offgrid-charger`
 - Dialogue `requiresItems` gates:
     - `kit` → "Parts staged and safe." — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
+    - `rewire` → "Fuse out and polarity verified; retry wiring." — 8 AWG fused cable kit ×1
     - `wire` → "Cable ends are tight and fused." — portable solar kit (wired) ×1
     - `harvest` → "Harvested 200 Wh without any hot cables." — dSolar ×200
+    - `shade-recovery` → "Panel repositioned and output recovered; retry harvest." — portable solar kit (wired) ×1
+    - `panel-log` → "Logged orientation and stable-output evidence." — portable solar kit (wired) ×1, dSolar ×200
+- QA note: Added preflight and recovery branches (`site-check`, `rewire`, `shade-recovery`) plus a final evidence gate (`panel-log`) before finish.
 - Grants:
     - `kit` → "Take the loaner kit" — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None

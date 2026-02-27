@@ -14,6 +14,22 @@
                     "type": "goto",
                     "goto": "kit",
                     "text": "I'd love to test it!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "site-check",
+                    "text": "Let's run a safety site check first."
+                }
+            ]
+        },
+        {
+            "id": "site-check",
+            "text": "Scout the setup zone: dry footing, no overhead hazards, and enough airflow around the battery. Abort if rain starts or connectors are contaminated.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Site is dry, stable, and clear."
                 }
             ]
         },
@@ -87,6 +103,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Polarity check failed; I need to rewire safely."
                 }
             ]
         },
@@ -101,9 +122,69 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "fin",
+                    "goto": "panel-log",
                     "text": "Harvested 200 Wh without any hot cables.",
                     "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "shade-recovery",
+                    "text": "Output dipped; I need to troubleshoot shading and angle."
+                }
+            ]
+        },
+        {
+            "id": "rewire",
+            "text": "De-energize before touching conductors: remove fuse, inspect MC4 seating, and confirm red/black orientation with the controller labels before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Fuse out and polarity verified; retry wiring.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "shade-recovery",
+            "text": "Track the sun and remove shadow sources. If panel temperature spikes or wind gusts become unsafe, pause and re-stage the array before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Panel repositioned and output recovered; retry harvest.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "panel-log",
+            "text": "Before wrap-up, log panel angle, weather conditions, and stable output notes so future deployments can reproduce this performance window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "Logged orientation and stable-output evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        },
                         {
                             "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
                             "count": 200

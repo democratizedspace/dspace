@@ -28,6 +28,22 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "bounds",
+                    "text": "Before coding, define acceptable temperature bounds."
+                }
+            ]
+        },
+        {
+            "id": "bounds",
+            "text": "Set guardrails before deploy: normal ambient output should stay between 10\u00b0C and 35\u00b0C for this sensor bay. Readings outside that range require troubleshooting before release.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Bounds documented; continue implementation."
                 }
             ]
         },
@@ -42,11 +58,50 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Endpoint streaming data!",
+                    "goto": "interpret",
+                    "text": "Endpoint streaming data; let's validate the response.",
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Capture three `/temp` samples and interpret the trend: if values are stable in the 10\u00b0C-35\u00b0C band, the endpoint is healthy. If samples jump outside bounds, treat it as a fault.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Samples stayed in-range and coherent.",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Samples were out-of-range or erratic."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Troubleshoot before relaunch: check thermistor wiring, confirm unit conversion (\u00b0C vs \u00b0F), and retry the endpoint only after sensor noise settles.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "code",
+                    "text": "Applied fixes; redeploy and re-test `/temp`.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
                             "count": 1
                         }
                     ]

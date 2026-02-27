@@ -79,6 +79,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Clouds and wind are rolling in, I need a weather hold."
                 }
             ]
         },
@@ -101,6 +106,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire-recover",
+                    "text": "I saw a spark while landing the fuse."
                 }
             ]
         },
@@ -145,6 +155,11 @@
                             "count": 200
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "low-output",
+                    "text": "Output is sagging below expected harvest."
                 }
             ]
         },
@@ -159,11 +174,99 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify-log",
                     "text": "Phone charged and the cable stayed cool.",
                     "requiresItems": [
                         {
                             "id": "2a9083b7-8578-45e3-8d76-7a298462f847",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "cable-heat",
+                    "text": "USB cable is warm; pause charging."
+                }
+            ]
+        },
+        {
+            "id": "weather-hold",
+            "text": "Good call. Collapse the panel if gusts exceed your mounting plan, cap exposed connectors, and wait for a dry restart window before resuming setup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Weather stabilized; resume safe staging."
+                }
+            ]
+        },
+        {
+            "id": "wire-recover",
+            "text": "Stop and isolate power: remove the fuse, confirm polarity, and re-seat lugs with insulated tools before attempting the wiring step again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Fuse removed and polarity rechecked; retry wiring.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "low-output",
+            "text": "Use the controller readout to troubleshoot: clear shading, correct panel angle, and verify cable seating. Do not continue if voltage keeps collapsing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Shading fixed and voltage recovered; retry harvest.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "cable-heat",
+            "text": "Thermal stop: unplug the phone, let the cable cool in shade, and inspect connectors for debris before another charge attempt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "phone",
+                    "text": "Cable cooled and connectors cleaned; retry charge.",
+                    "requiresItems": [
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-log",
+            "text": "Final verification: confirm the off-grid charge log includes start SOC, end SOC, and no-heat notes before declaring the mission complete.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log captured with all safety notes.",
+                    "requiresItems": [
+                        {
+                            "id": "2a9083b7-8578-45e3-8d76-7a298462f847",
+                            "count": 1
+                        },
+                        {
+                            "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
                             "count": 1
                         }
                     ]

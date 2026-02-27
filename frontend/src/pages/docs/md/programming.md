@@ -389,7 +389,10 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/json-api`
 - Dialogue `requiresItems` gates:
     - `start` → "Sounds great." — temperature log CSV ×1, thermistor logging rig ×1, Raspberry Pi 5 board ×1
-    - `code` → "Endpoint streaming data!" — live temperature JSON endpoint ×1
+    - `code` → "Endpoint streaming data; let's validate the response." — live temperature JSON endpoint ×1
+    - `interpret` → "Samples stayed in-range and coherent." — live temperature JSON endpoint ×1
+    - `out-of-range` → "Applied fixes; redeploy and re-test `/temp`." — Raspberry Pi 5 board ×1
+- QA note: Added explicit pass/fail interpretation bounds (10°C-35°C) and an out-of-range troubleshooting loop before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
