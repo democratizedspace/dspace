@@ -55,6 +55,9 @@ Woodworking quests build practical progression through the woodworking skill tre
 - Grants:
     - `gather` → "Gather materials" — Pine board ×1, Wood glue ×1, Handsaw ×1, tape measure ×1, Sandpaper pack ×1, claw hammer (16 oz) ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
+- Troubleshooting/safety branches:
+    - `template-jig` provides an alternate template-first path before committing to cuts.
+    - `troubleshoot-joints` handles split panels or wobble, then routes back to recut/re-assembly retries.
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
@@ -84,6 +87,9 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Gather parts" — Pine board ×2, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - `claim` → "Take the stool" — Step stool ×1
     - Quest-level `grantsItems`: None
+- Troubleshooting/safety branches:
+    - `template-jig` provides an alternate template-first path before committing to cuts.
+    - `troubleshoot-joints` handles split panels or wobble, then routes back to recut/re-assembly retries.
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
@@ -105,6 +111,9 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Issue the bookshelf kit" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - `finish` → "Take the bookshelf" — Bookshelf ×1
     - Quest-level `grantsItems`: None
+- Troubleshooting/safety branches:
+    - `template-jig` provides an alternate template-first path before committing to cuts.
+    - `troubleshoot-joints` handles split panels or wobble, then routes back to recut/re-assembly retries.
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
@@ -125,6 +134,9 @@ Woodworking quests build practical progression through the woodworking skill tre
 - Grants:
     - `gather` → "Issue table materials and PPE" — Pine board ×6, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
+- Troubleshooting/safety branches:
+    - `template-jig` provides an alternate template-first path before committing to cuts.
+    - `troubleshoot-joints` handles split panels or wobble, then routes back to recut/re-assembly retries.
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
@@ -187,6 +199,9 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `materials` → "Issue me the starter kit" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1
     - `claim` → "Claim my new workbench" — Workbench ×1
     - Quest-level `grantsItems`: None
+- Troubleshooting/safety branches:
+    - `template-jig` provides an alternate template-first path before committing to cuts.
+    - `troubleshoot-joints` handles split panels or wobble, then routes back to recut/re-assembly retries.
 - Rewards:
     - cured compost bucket ×1
 - Processes used:

@@ -103,8 +103,29 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "template-jig",
+                    "text": "Use a cardboard template to double-check symmetry"
+                },
+                {
+                    "type": "goto",
                     "goto": "gather",
                     "text": "Need to grab materials"
+                }
+            ]
+        },
+        {
+            "id": "template-jig",
+            "text": "Trace each panel on cardboard before cutting. If the mock-up rocks or the entry hole sits too low, correct marks now to avoid wasted lumber.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cut",
+                    "text": "Template fit passes; cut the real panels"
+                },
+                {
+                    "type": "goto",
+                    "goto": "layout",
+                    "text": "Template shows mismatch; re-mark measurements"
                 }
             ]
         },
@@ -151,6 +172,11 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "troubleshoot-joints",
+                    "text": "Gap, split, or wobble spotted in the dry-fit"
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
                         {
@@ -159,6 +185,22 @@
                         }
                     ],
                     "text": "Shell is glued up"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot-joints",
+            "text": "Troubleshooting branch: clamp the split, pre-drill nail paths, and confirm goggles stay on before retrying any cut or glue step.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cut",
+                    "text": "Panel damage needs a recut"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Dry-fit is corrected; retry glue-up"
                 }
             ]
         },
@@ -206,7 +248,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/planter-box"],
+    "requiresQuests": [
+        "woodworking/planter-box"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,

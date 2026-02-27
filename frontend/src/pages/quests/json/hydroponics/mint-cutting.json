@@ -95,8 +95,24 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "recover",
+                    "goto": "stress-check",
                     "text": "Wilting, stem rot, or dry plug spotted."
+                }
+            ]
+        },
+        {
+            "id": "stress-check",
+            "text": "Stress contingency: if leaves collapse or rot odor appears, pause propagation for 12 hours, sanitize tools, and verify humidity before choosing recovery.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Pause complete; run a recovery recut and re-soak."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage-setup",
+                    "text": "Abort this clone attempt and restart with a fresh stem tomorrow."
                 }
             ]
         },
@@ -149,7 +165,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/plug-soak"],
+    "requiresQuests": [
+        "hydroponics/plug-soak"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

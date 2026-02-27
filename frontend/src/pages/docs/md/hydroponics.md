@@ -605,10 +605,13 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `plant` → "Run mint cutting setup process." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
     - `plant` → "Cutting is set; move to root outcome checks." — soaked hydroponic starter plug ×1
     - `observe` → "Cutting is upright with visible root start." — soaked hydroponic starter plug ×1, 5 gallon bucket of dechlorinated tap water ×1
+    - `stress-check` → "Pause complete; run a recovery recut and re-soak." — none
     - `recover` → "Run recovery cutting pass." — 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
     - `recover` → "Recovery complete; re-check root and leaf condition." — soaked hydroponic starter plug ×2
 - Recovery/troubleshooting branches:
-    - `observe` routes to `recover` for wilt/rot; `recover` loops back to outcome verification
+    - `observe` routes to `stress-check` for wilt/rot signs before any retry.
+    - `stress-check` enforces a timed pause + sanitation checkpoint, then branches to recovery or full restart.
+    - `recover` loops back to outcome verification after the contingency gate.
 - Safety/ops checks:
     - Setup stage requires clean handling PPE before cloning and includes abort guidance if rot persists after retry
 - Grants:
