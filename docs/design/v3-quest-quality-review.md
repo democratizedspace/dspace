@@ -1002,13 +1002,13 @@ Rubric assignment rule: first keyword match wins (`measurement/check` => thresho
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3712)
   - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #3712)
 - `programming/temp-graph`
-  - [ ] Observed issue: `programming/temp-graph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `programming/temp-graph` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #1)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #1)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #1)
 - `programming/temp-json-api`
-  - [ ] Observed issue: `programming/temp-json-api` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin.
-  - [ ] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock.
-  - [ ] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds.
+  - [x] Observed issue: `programming/temp-json-api` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #1)
+  - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #1)
+  - [x] Add an out-of-range corrective branch with a mandatory re-test loop and explicit pass/fail bounds. (PR #1)
 - `programming/temp-logger`
   - [x] Observed issue: `programming/temp-logger` centers on a measurement/check action but acceptance thresholds and out-of-range handling are thin. (PR #3666)
   - [x] Require a recorded measurement artifact plus an interpretation node before `finish` can unlock. (PR #3666)
@@ -1084,9 +1084,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): 3dprinting/start, welcome/run
 Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/start, sysadmin/resource-monitoring (fallback: no checked rocketry quests yet)
 
 - `rocketry/firstlaunch`
-  - [ ] Observed issue: `rocketry/firstlaunch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant.
+  - [x] Observed issue: `rocketry/firstlaunch` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #1)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #1)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #1)
 - `rocketry/fuel-mixture`
   - [x] Observed issue: `rocketry/fuel-mixture` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3708)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3708)

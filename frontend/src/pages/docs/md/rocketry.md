@@ -26,8 +26,11 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Dialogue `requiresItems` gates:
     - `components` → "Alright, all 4 components are now printed! What's next?" — 3D printed nosecone ×1, 3D printed body tube ×1, 3D printed fincan ×1, 3D printed nosecone coupler ×1
     - `assemble` → "The rocket's assembled! Are we ready for launch?" — launch-capable model rocket ×1
-    - `launch` → "We are go for launch!!! Right?" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
-    - `go` → "Whoa! I can't believe I launched a rocket!! It didn't survive the landing, though, unfortunately." — damaged model rocket ×1
+    - `launch` → "Kit is staged. Run the range safety checklist." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
+    - `go` → "Launch successful and recovery complete." — damaged model rocket ×1
+- Troubleshooting/safety branches:
+    - `range-safety` and `range-hold` enforce go/no-go stop conditions (weather, exclusion zone, recovery path) with mandatory re-checks.
+    - `troubleshoot-ignition` adds an abort-and-recover route that returns through safety gating before retry.
 - Grants:
     - `launch` → "Oh cool, I'll never turn down free stuff!" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
     - Quest-level `grantsItems`: None

@@ -389,7 +389,11 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/json-api`
 - Dialogue `requiresItems` gates:
     - `start` → "Sounds great." — temperature log CSV ×1, thermistor logging rig ×1, Raspberry Pi 5 board ×1
-    - `code` → "Endpoint streaming data!" — live temperature JSON endpoint ×1
+    - `code` → "Endpoint is live. Let's validate sample readings." — live temperature JSON endpoint ×1
+    - `pass-window` → "Validation logged." — live temperature JSON endpoint ×1
+- Troubleshooting/safety branches:
+    - `sample` adds an explicit pass/fail range gate (18-30 C) before completion.
+    - `out-of-range` pauses automation, routes through endpoint patching, and requires a re-test loop.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -408,7 +412,11 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/graph-temp-data`, `programming/temp-json-api`
 - Dialogue `requiresItems` gates:
     - `start` → "Show me how." — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
-    - `code` → "Graph generated!" — live temperature dashboard ×1
+    - `code` → "Dashboard is up. Let's verify the graph behavior." — live temperature dashboard ×1
+    - `stable` → "Evidence captured." — live temperature dashboard ×1
+- Troubleshooting/safety branches:
+    - `review` adds cadence plus value-window acceptance checks before finish can unlock.
+    - `drift` enforces stale-data/cache troubleshooting with a required recheck loop.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
