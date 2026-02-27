@@ -57,7 +57,10 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/assemble-kit`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Battery reads 9 V" — red flashlight ×1, digital multimeter ×1, 9 V battery ×1
+    - `setup` → "Gear staged and meter configured" — red flashlight ×1, digital multimeter ×1,
+      9 V battery ×1
+    - `measure` process option → "Run measurement and log reading" — red flashlight ×1,
+      digital multimeter ×1, 9 V battery ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -80,8 +83,10 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/assemble-kit`
 - Dialogue `requiresItems` gates:
-    - `steps` → "Practicing now." — first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1, antiseptic wipes ×1
-    - `steps` → "I know the basics." — first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1, antiseptic wipes ×1
+    - `prep-gear` → "Gear staged and emergency call sequence reviewed" — first aid kit ×1,
+      nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1, antiseptic wipes ×1
+    - `practice` process option → "Complete the practice cycle" — first aid kit ×1,
+      nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1, antiseptic wipes ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
