@@ -151,7 +151,7 @@
     "requiresQuests": ["firstaid/assemble-kit"],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
