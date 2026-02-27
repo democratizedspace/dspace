@@ -157,7 +157,8 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/learn-cpr`
 - Dialogue `requiresItems` gates:
-    - `clean` → "Mask is sanitized" — CPR pocket mask ×1
+    - `prep` → "Mask passes inspection and station is ready" — first aid kit ×1, CPR pocket mask ×1
+    - `sanitize` → "Soak timed, rinsed, and drying on a clean surface" — CPR pocket mask ×1, nitrile gloves (pair) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -165,6 +166,10 @@ First Aid quests build practical progression through the first aid skill tree. T
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Expanded flow to `prep` → `sanitize` → `verify` with documented contact-time evidence before completion.
+    - Added contamination recovery loop (`contaminated`) and damaged-mask safety branch (`replace`).
+    - Completion now requires dry/odor-free verification rather than a single post-clean click-through.
 
 ## 7) Stop a Nosebleed (`firstaid/stop-nosebleed`)
 
@@ -172,7 +177,9 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/restock-kit`
 - Dialogue `requiresItems` gates:
-    - `pressure` → "Holding pressure now." — first aid kit ×1, sterile gauze pads ×1, nitrile gloves (pair) ×1, antiseptic wipes ×1
+    - `pressure-round-one` → "Completed first 10-minute pressure cycle" — first aid kit ×1, sterile gauze pads ×1, nitrile gloves (pair) ×1
+    - `check-result` → "Bleeding slowed and is nearly stopped" — antiseptic wipes ×1
+    - `pressure-round-two` → "Second pressure cycle complete" — sterile gauze pads ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -183,6 +190,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: first aid kit ×1
         - Consumes: nitrile gloves (pair) ×1, sterile gauze pads ×1, antiseptic wipes ×1
         - Creates: none
+- QA notes:
+    - Added explicit red-flag safety screen (`safety-screen`) with mandatory escalation path (`escalate`).
+    - Added interpret-and-retry structure (`check-result` → `pressure-round-two` → `post-second-check`) for persistent bleeding.
+    - Completion now requires either successful aftercare verification or emergency escalation after the two-cycle limit.
 
 ## 8) Treat a Minor Burn (`firstaid/treat-burn`)
 
@@ -209,8 +220,8 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/learn-cpr`
 - Dialogue `requiresItems` gates:
-    - `clean` → "Clean and dress the cut" — liquid soap ×1, nitrile gloves (pair) ×1, antiseptic wipes ×1, antibiotic ointment packet ×1, adhesive bandages ×1, biohazard waste bag ×1
-    - `clean` → "All bandaged up!" — first aid kit ×1
+    - `clean` → "Complete cleaning protocol" — liquid soap ×1, nitrile gloves (pair) ×1, antiseptic wipes ×1, antibiotic ointment packet ×1, adhesive bandages ×1, biohazard waste bag ×1
+    - `dress` → "Bandage applied and bleeding controlled" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -221,6 +232,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: first aid kit ×1, sink ×1
         - Consumes: nitrile gloves (pair) ×1, antiseptic wipes ×1, adhesive bandages ×1, liquid soap ×1, biohazard waste bag ×1
         - Creates: none
+- QA notes:
+    - Added triage safety gate (`triage`) and explicit non-home-care escalation endpoint (`escalate`).
+    - Added contamination troubleshooting loop (`reclean`) that forces a full clean-and-redress retry.
+    - Completion now requires a verification checkpoint (`verify`) with warning-sign routing instead of direct finish.
 
 ## 10) Change a Bandage (`firstaid/change-bandage`)
 
@@ -304,7 +319,7 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/wound-care`
 - Dialogue `requiresItems` gates:
-    - `wrap` → "Splint secured" — first aid kit ×1
+    - `wrap` → "Splint secured for circulation check" — first aid kit ×1, sterile gauze pads ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -312,6 +327,10 @@ First Aid quests build practical progression through the first aid skill tree. T
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Added front-loaded risk triage (`assess`) and emergency safety stop branch (`emergency`).
+    - Added circulation verification gate (`circulation-check`) with troubleshooting loops (`retry-wrap`, `loosen-recheck`).
+    - Completion now requires post-splint circulation checks instead of immediate single-step finish.
 
 ## QA flow notes
 
