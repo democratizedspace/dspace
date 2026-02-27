@@ -263,7 +263,7 @@
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-hardening-2026-02-27",

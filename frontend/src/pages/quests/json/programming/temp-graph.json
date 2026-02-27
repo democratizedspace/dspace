@@ -55,7 +55,7 @@
         },
         {
             "id": "review",
-            "text": "Check the last five points. Accept only if updates arrive every minute and values stay in the expected 18-30 C window.",
+            "text": "Check the last five points. Accept only if updates arrive every minute and values stay in the expected 18-30C window.",
             "options": [
                 {
                     "type": "goto",

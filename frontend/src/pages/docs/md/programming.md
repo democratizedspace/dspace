@@ -392,7 +392,7 @@ Programming quests build practical progression through the programming skill tre
     - `code` → "Endpoint is live. Let's validate sample readings." — live temperature JSON endpoint ×1
     - `pass-window` → "Validation logged." — live temperature JSON endpoint ×1
 - Troubleshooting/safety branches:
-    - `sample` adds an explicit pass/fail range gate (18-30 C) before completion.
+    - `sample` adds an explicit pass/fail range gate (18-30C) before completion.
     - `out-of-range` pauses automation, routes through endpoint patching, and requires a re-test loop.
 - Grants:
     - Dialogue options/steps grantsItems: None

@@ -55,17 +55,17 @@
         },
         {
             "id": "sample",
-            "text": "Capture three readings a minute apart and compare them with your sensor baseline. The safe room range for this run is 18-30 C.",
+            "text": "Capture three readings a minute apart and compare them with your sensor baseline. The safe room range for this run is 18C–30C.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "pass-window",
-                    "text": "All three readings landed between 18 C and 30 C."
+                    "text": "All three readings landed between 18C and 30C."
                 },
                 {
                     "type": "goto",
                     "goto": "out-of-range",
-                    "text": "One or more readings are outside 18-30 C."
+                    "text": "One or more readings are outside 18C–30C."
                 }
             ]
         },

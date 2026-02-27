@@ -32,7 +32,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - `range-safety` and `range-hold` enforce go/no-go stop conditions (weather, exclusion zone, recovery path) with mandatory re-checks.
     - `troubleshoot-ignition` adds an abort-and-recover route that returns through safety gating before retry.
 - Grants:
-    - `launch` → "Oh cool, I'll never turn down free stuff!" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
+    - `launch` → "Thanks for the spare launch kit." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Rocketeer Award ×1
