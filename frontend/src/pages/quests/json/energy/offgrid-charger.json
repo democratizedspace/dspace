@@ -20,6 +20,22 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Cloudburst rolling in\u2014pause setup until conditions are safe."
+                }
+            ]
+        },
+        {
+            "id": "weather-hold",
+            "text": "Good call. Park the kit under cover, cap exposed connectors, and wait for dry footing before touching terminals again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Weather cleared and workspace is dry. Resume setup."
                 }
             ]
         },
@@ -55,7 +71,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "wire",
+                    "goto": "precheck",
                     "text": "Everything is staged and dry.",
                     "requiresItems": [
                         {
@@ -83,6 +99,39 @@
             ]
         },
         {
+            "id": "precheck",
+            "text": "Before live wiring, choose your plan: direct sun for speed or partial shade to keep thermal headroom. Either path must keep connectors cool and fuse accessible.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Run a direct-sun setup and monitor cable temperature every 5 minutes.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Start in partial shade for a conservative ramp-up, then re-aim after a stability check.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Surface got damp or windy; pause and reset safety conditions."
+                }
+            ]
+        },
+        {
             "id": "wire",
             "text": "Battery first, then panel\u2014keep red to positive, black to negative, fuse in line, and controller off the ground. If anything sparks or heats up, pull the fuse.",
             "options": [
@@ -101,6 +150,22 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "I spotted polarity uncertainty or a warm connector\u2014run troubleshooting first."
+                }
+            ]
+        },
+        {
+            "id": "rewire",
+            "text": "Troubleshooting path: isolate the battery, inspect every crimp and polarity mark, then reseat the fuse only after terminals cool and strain relief is restored.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Checks complete. Retry controlled wiring."
                 }
             ]
         },
@@ -115,14 +180,41 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "charge",
-                    "text": "Profile saved; cables cool.",
+                    "goto": "profile-audit",
+                    "text": "Profile saved; run an audit before charging.",
                     "requiresItems": [
                         {
                             "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Controller warnings persisted; re-check wiring before profile retries."
+                }
+            ]
+        },
+        {
+            "id": "profile-audit",
+            "text": "Evidence gate: confirm the controller still shows LiFePO4 values and no thermal alarms after a 2-minute idle soak.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Audit passed. Begin energy harvest.",
+                    "requiresItems": [
+                        {
+                            "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Audit failed. Return to troubleshooting and rewire."
                 }
             ]
         },
@@ -145,6 +237,22 @@
                             "count": 200
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "shade-recovery",
+                    "text": "Output dipped or connectors heated\u2014run recovery and retry harvest."
+                }
+            ]
+        },
+        {
+            "id": "shade-recovery",
+            "text": "Recovery branch: reduce panel angle, move battery into shade, and wait until connectors are cool-to-touch before resuming harvest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Thermals stabilized. Retry charging."
                 }
             ]
         },
@@ -167,6 +275,22 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "port-cleanup",
+                    "text": "Charging port got dusty or warm; pause for cleanup before retrying."
+                }
+            ]
+        },
+        {
+            "id": "port-cleanup",
+            "text": "Unplug, dry and inspect the USB ends, then reconnect only once contacts are clean and strain-relieved.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "phone",
+                    "text": "Ports cleaned. Retry final charging pass."
                 }
             ]
         },
@@ -187,10 +311,12 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/hand-crank-generator"],
+    "requiresQuests": [
+        "energy/hand-crank-generator"
+    ],
     "hardening": {
-        "passes": 3,
-        "score": 95,
+        "passes": 4,
+        "score": 96,
         "emoji": "\ud83d\udcaf",
         "history": [
             {
@@ -207,6 +333,11 @@
                 "task": "codex-offgrid-charger-2025-08-06",
                 "date": "2025-08-06",
                 "score": 90
+            },
+            {
+                "task": "codex-energy-parity-2026-02-27",
+                "date": "2026-02-27",
+                "score": 96
             }
         ]
     }
