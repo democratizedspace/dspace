@@ -57,7 +57,13 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/assemble-kit`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Battery reads 9 V" — red flashlight ×1, digital multimeter ×1, 9 V battery ×1
+    - `prep` → "Battery and probes are positioned safely." — red flashlight ×1, digital multimeter ×1, 9 V battery ×1
+    - `prep` → "Reading is unstable or terminals look dirty." — digital multimeter ×1
+    - `measure` → "Reading is 8.8-9.6 V (ready)." — red flashlight ×1, digital multimeter ×1
+    - `measure` → "Reading is below 8.8 V or drops under load." — red flashlight ×1
+    - `troubleshoot` → "Contacts cleaned; re-test now." — 9 V battery ×1
+    - `replace` → "Replacement installed; confirm with another reading." — 9 V battery ×1
+    - `good` → "Battery status logged and flashlight stored safely." — red flashlight ×1, digital multimeter ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -68,6 +74,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: red flashlight ×1, digital multimeter ×1, 9 V battery ×1
         - Consumes: none
         - Creates: none
+- QA notes:
+    - Main path now enforces prep safety checks before measurement classification.
+    - Weak/unstable readings trigger troubleshooting and replacement loops before completion.
+    - Finish requires explicit safe storage and logging confirmation.
 
 ## 3) Practice Basic CPR (`firstaid/learn-cpr`)
 

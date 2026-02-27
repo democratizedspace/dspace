@@ -389,7 +389,11 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/json-api`
 - Dialogue `requiresItems` gates:
     - `start` → "Sounds great." — temperature log CSV ×1, thermistor logging rig ×1, Raspberry Pi 5 board ×1
-    - `code` → "Endpoint streaming data!" — live temperature JSON endpoint ×1
+    - `deploy` → "I logged three samples in the 15-35°C expected range." — live temperature JSON endpoint ×1, temperature log CSV ×2
+    - `deploy` → "One or more samples were outside 15-35°C or missing." — temperature log CSV ×1
+    - `out-of-range` → "I patched wiring/parsing and will re-test." — Raspberry Pi 5 board ×1
+    - `retest` → "Retest data collected; evaluate bounds again." — temperature log CSV ×2
+    - `interpret` → "Interpretation documented and endpoint validated." — live temperature JSON endpoint ×1, temperature log CSV ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -400,6 +404,13 @@ Programming quests build practical progression through the programming skill tre
         - Requires: thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
         - Consumes: none
         - Creates: live temperature JSON endpoint ×1
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+- QA notes:
+    - Main path now requires deploy → bounded sample capture (15-35°C) → interpretation before finish.
+    - Out-of-range readings trigger a corrective branch (`out-of-range` → `retest`) with mandatory re-test loop.
 
 ## 16) Serve a live temperature graph (`programming/temp-graph`)
 
@@ -408,7 +419,11 @@ Programming quests build practical progression through the programming skill tre
     - `requiresQuests`: `programming/graph-temp-data`, `programming/temp-json-api`
 - Dialogue `requiresItems` gates:
     - `start` → "Show me how." — live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
-    - `code` → "Graph generated!" — live temperature dashboard ×1
+    - `publish` → "Refresh checks passed and the graph stayed within 15-35°C." — live temperature dashboard ×1, temperature log CSV ×1
+    - `publish` → "Graph stuttered, froze, or showed out-of-range spikes." — live temperature dashboard ×1
+    - `triage` → "Patched refresh logic and endpoint calls; ready to re-test." — live temperature JSON endpoint ×1
+    - `retest` → "Retest evidence captured; evaluate bounds again." — temperature log CSV ×1
+    - `interpret` → "Interpretation complete; dashboard validated." — live temperature dashboard ×1, temperature log CSV ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -419,6 +434,13 @@ Programming quests build practical progression through the programming skill tre
         - Requires: live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
         - Consumes: none
         - Creates: live temperature dashboard ×1
+    - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
+        - Requires: thermistor logging rig ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: temperature log CSV ×1
+- QA notes:
+    - Main path now requires publish → bounded refresh validation (15-35°C) → interpretation.
+    - Failures route through `triage` and `retest` before returning to publish for pass/fail re-evaluation.
 
 ## 17) Set Temperature Alert (`programming/temp-alert`)
 

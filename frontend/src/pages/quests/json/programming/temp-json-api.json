@@ -12,7 +12,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
+                    "goto": "deploy",
                     "text": "Sounds great.",
                     "requiresItems": [
                         {
@@ -32,8 +32,8 @@
             ]
         },
         {
-            "id": "code",
-            "text": "Read the sensor and respond with JSON like `{ \"temp\": 22.5 }` at `/temp`. Keep it lightweight so it can run alongside the logger and stay worthy of being called a live temperature JSON endpoint.",
+            "id": "deploy",
+            "text": "Deploy `/temp` so it reads from the sensor, then collect three timestamped samples over at least ten minutes to prove it is live.",
             "options": [
                 {
                     "type": "process",
@@ -42,11 +42,26 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Endpoint streaming data!",
+                    "goto": "interpret",
+                    "text": "I logged three samples in the 15-35°C expected range.",
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "One or more samples were outside 15-35°C or missing.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
                             "count": 1
                         }
                     ]
@@ -54,8 +69,68 @@
             ]
         },
         {
+            "id": "out-of-range",
+            "text": "Good catch. Verify sensor wiring and API parse logic, then take a fresh sample set before trusting this endpoint.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "I patched wiring/parsing and will re-test.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Run another ten-minute capture window and compare it against room conditions before re-evaluating pass/fail.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture another temperature log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Retest data collected; evaluate bounds again.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the sample trend: if values track ambient expectations and update cadence, your live temperature JSON endpoint is trustworthy.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Interpretation documented and endpoint validated.",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Clients can now fetch the current temperature from your server.",
+            "text": "Nice! Clients can now fetch the current temperature from your server with confidence in the data quality.",
             "options": [
                 {
                     "type": "finish",
@@ -74,7 +149,7 @@
     "hardening": {
         "passes": 2,
         "score": 95,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-12-01",

@@ -12,7 +12,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "code",
+                    "goto": "publish",
                     "text": "Show me how.",
                     "requiresItems": [
                         {
@@ -32,8 +32,8 @@
             ]
         },
         {
-            "id": "code",
-            "text": "Add a lightweight web page that calls your live temperature JSON endpoint and renders an updating line chart with Chart.js or another browser-friendly library.",
+            "id": "publish",
+            "text": "Publish a dashboard that queries `/temp` every 30-60 seconds and renders a timestamped line chart with clear axis labels.",
             "options": [
                 {
                     "type": "process",
@@ -42,11 +42,86 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Graph generated!",
+                    "goto": "interpret",
+                    "text": "Refresh checks passed and the graph stayed within 15-35°C.",
                     "requiresItems": [
                         {
                             "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "Graph stuttered, froze, or showed out-of-range spikes.",
+                    "requiresItems": [
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "triage",
+            "text": "Troubleshoot before sharing: check endpoint latency, browser console errors, and chart refresh interval mismatch.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Patched refresh logic and endpoint calls; ready to re-test.",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Run another three refresh cycles and verify timestamps advance in order with no stale datapoints before deciding pass/fail.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture validation samples"
+                },
+                {
+                    "type": "goto",
+                    "goto": "publish",
+                    "text": "Retest evidence captured; evaluate bounds again.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret your validation log: smooth updates, plausible ranges, and no stale timestamps means the graph is reliable for monitoring.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Interpretation complete; dashboard validated.",
+                    "requiresItems": [
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
                             "count": 1
                         }
                     ]
@@ -74,7 +149,7 @@
     "hardening": {
         "passes": 2,
         "score": 98,
-        "emoji": "\u2705",
+        "emoji": "✅",
         "history": [
             {
                 "task": "codex-hardening-2025-12-08",
