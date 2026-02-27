@@ -120,8 +120,10 @@ Completionist quests build practical progression through the completionist skill
 - Unlock prerequisite:
     - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "I'll check back" — Completionist Award II ×1
-    - `remind` → "Reminder set" — weekly quest reminder ×1
+    - `start` → "I'll set up a reliable reminder loop." — Completionist Award II ×1
+    - `digital` → "Reminder created; move to verification." — weekly quest reminder ×1
+    - `manual` → "Checklist routine is in place and visible." — weekly quest reminder ×1
+    - `verify` → "Reminder verified and first check-in scheduled." — weekly quest reminder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -132,6 +134,9 @@ Completionist quests build practical progression through the completionist skill
         - Requires: smartphone ×1
         - Consumes: none
         - Creates: weekly quest reminder ×1
+- QA notes:
+    - `completionist/reminder` now branches into digital/manual planning paths and includes a `troubleshoot` recovery loop back to verification when reminders fail.
+    - `completionist/v2` now includes a printer `safety-stop`, `core-qc` evidence gate, and `recover-print` loop before final inspection can complete.
 
 ## QA flow notes
 

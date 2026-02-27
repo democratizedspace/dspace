@@ -20,6 +20,22 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Run a quick weather and cable safety stop."
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Safety stop: if rain is incoming, insulation is nicked, or connectors are wet, halt and dry everything before energizing the system.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Conditions are safe and dry; continue setup."
                 }
             ]
         },
@@ -101,6 +117,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Saw a spark or loose lug; recover safely first."
                 }
             ]
         },
@@ -123,6 +144,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Profile did not save or temp sensor looks wrong."
                 }
             ]
         },
@@ -137,14 +163,45 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "phone",
-                    "text": "200 Wh harvested and stable.",
+                    "goto": "verify",
+                    "text": "200 Wh harvested; run verification gate.",
                     "requiresItems": [
                         {
                             "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
                             "count": 200
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Voltage sagged or connectors warmed; recover before charging again."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: confirm profile set + 200 Wh harvested before connecting the phone. If either check fails, branch to recovery and retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "phone",
+                    "text": "Evidence checks pass; proceed to phone charging.",
+                    "requiresItems": [
+                        {
+                            "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+                            "count": 1
+                        },
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Evidence incomplete or unstable readings."
                 }
             ]
         },
@@ -167,6 +224,22 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Phone did not charge cleanly; troubleshoot and retry."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: isolate the fuse, re-seat terminals, dry all connectors, and re-run wiring + profile checks before attempting harvest again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Recovery done; restart from wiring verification."
                 }
             ]
         },
@@ -187,7 +260,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/hand-crank-generator"],
+    "requiresQuests": [
+        "energy/hand-crank-generator"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,

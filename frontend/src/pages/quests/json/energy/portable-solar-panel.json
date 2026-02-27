@@ -14,6 +14,22 @@
                     "type": "goto",
                     "goto": "kit",
                     "text": "I'd love to test it!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Pause for safety checks before handling hardware."
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Safety stop: inspect cables for cuts, keep electronics dry, and confirm the fuse is accessible before you connect anything.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Safety checks passed; continue."
                 }
             ]
         },
@@ -87,6 +103,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Connection looked risky; troubleshoot first."
                 }
             ]
         },
@@ -101,14 +122,56 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "Harvested 200 Wh without any hot cables.",
+                    "goto": "verify",
+                    "text": "Harvest complete; verify the output stability.",
                     "requiresItems": [
                         {
                             "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
                             "count": 200
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Output was unstable or cables heated up."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: confirm both wired-kit evidence and harvested solar output before finish. If readings drift, branch to recovery and repeat.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "All checks pass; wrap the field test.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        },
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Need another test cycle with corrected setup."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: disconnect, cool the kit, reseat MC4 and fused lead connections, then re-run wiring and harvest checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Recovery complete; retry the test loop."
                 }
             ]
         },
@@ -129,7 +192,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/offgrid-charger"],
+    "requiresQuests": [
+        "energy/offgrid-charger"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

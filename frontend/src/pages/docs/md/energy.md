@@ -272,7 +272,8 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `kit` → "Everything is staged and dry." — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, USB Cable ×1, 8 AWG fused cable kit ×1
     - `wire` → "Everything is tight, fused, and quiet." — portable solar kit (wired) ×1
     - `profile` → "Profile saved; cables cool." — charge controller profile set ×1
-    - `charge` → "200 Wh harvested and stable." — dSolar ×200
+    - `charge` → "200 Wh harvested; run verification gate." — dSolar ×200
+    - `verify` → "Evidence checks pass; proceed to phone charging." — charge controller profile set ×1, dSolar ×200
     - `phone` → "Phone charged and the cable stayed cool." — off-grid phone charge log ×1
 - Grants:
     - `kit` → "Take the solar kit" — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, USB Cable ×1, 8 AWG fused cable kit ×1
@@ -305,7 +306,8 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Dialogue `requiresItems` gates:
     - `kit` → "Parts staged and safe." — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - `wire` → "Cable ends are tight and fused." — portable solar kit (wired) ×1
-    - `harvest` → "Harvested 200 Wh without any hot cables." — dSolar ×200
+    - `harvest` → "Harvest complete; verify the output stability." — dSolar ×200
+    - `verify` → "All checks pass; wrap the field test." — portable solar kit (wired) ×1, dSolar ×200
 - Grants:
     - `kit` → "Take the loaner kit" — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
@@ -320,6 +322,10 @@ Energy quests build practical progression through the energy skill tree. This pa
         - Requires: portable solar kit (wired) ×1
         - Consumes: none
         - Creates: dWatt ×200, dSolar ×200
+
+- QA notes:
+    - `energy/offgrid-charger` now includes `safety-stop`, `verify`, and `recover` branches so unstable wiring/profile states must be corrected before completion.
+    - `energy/portable-solar-panel` now includes `safety-stop`, `verify`, and `recover` loopbacks to enforce repeat-until-pass field testing.
 
 ## 14) Install a Power Inverter (`energy/power-inverter`)
 

@@ -14,6 +14,22 @@
                     "type": "goto",
                     "goto": "prep-printer",
                     "text": "Let's build the real trophy"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Pause for printer safety checks first."
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Safety checkpoint: verify ventilation, stable bed temp, and no loose wiring before any long print. If something looks risky, do not continue.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-printer",
+                    "text": "Safety checks passed; continue prep."
                 }
             ]
         },
@@ -54,7 +70,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "print-plate",
+                    "goto": "core-qc",
                     "text": "Core is printed and cool",
                     "requiresItems": [
                         {
@@ -62,6 +78,28 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "core-qc",
+            "text": "Quality gate: inspect first-layer adhesion, wall integrity, and warp. If defects appear, branch to recovery and reprint before proceeding.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-plate",
+                    "text": "Core passed inspection; proceed to plate.",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-print",
+                    "text": "Warping or weak layers found; recover first."
                 }
             ]
         },
@@ -102,7 +140,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "inspect",
                     "text": "Award is bonded and cured",
                     "requiresItems": [
                         {
@@ -110,6 +148,39 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "Final inspection: verify flush plate fit, clean edges, and full cure. If glue squeeze-out or misalignment appears, rework and verify again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Inspection passed; award is shelf-ready.",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-print",
+                    "text": "Fit or finish failed; rework before finishing."
+                }
+            ]
+        },
+        {
+            "id": "recover-print",
+            "text": "Recovery branch: clean bed, dry filament, and rerun the affected print stage before returning to QC.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-core",
+                    "text": "Recovery complete; restart core print + QC loop."
                 }
             ]
         },

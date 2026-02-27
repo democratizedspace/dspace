@@ -12,8 +12,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "remind",
-                    "text": "I'll check back",
+                    "goto": "plan",
+                    "text": "I'll set up a reliable reminder loop.",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
@@ -24,8 +24,24 @@
             ]
         },
         {
-            "id": "remind",
-            "text": "Use your phone or calendar app to nudge you every week. Capture the day and time so it sticks.",
+            "id": "plan",
+            "text": "Pick your strategy: calendar app with repeating alerts, or an analog checklist in your quest notebook. Either route needs proof before we close.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "digital",
+                    "text": "Use a digital reminder"
+                },
+                {
+                    "type": "goto",
+                    "goto": "manual",
+                    "text": "Use a manual checklist routine"
+                }
+            ]
+        },
+        {
+            "id": "digital",
+            "text": "Open your calendar and set a weekly recurring reminder for quests. Include day, time, and notification lead time so you actually act on it.",
             "options": [
                 {
                     "type": "process",
@@ -34,14 +50,69 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Reminder set",
+                    "goto": "verify",
+                    "text": "Reminder created; move to verification.",
                     "requiresItems": [
                         {
                             "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "manual",
+            "text": "Manual path works too: write your recurring quest check-in cadence and keep it somewhere visible. If you miss a week, switch to alarms immediately.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Checklist routine is in place and visible.",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I keep forgetting and need a recovery plan."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: show an active weekly reminder artifact, then commit to your first check-in window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reminder verified and first check-in scheduled.",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Reminder failed or cadence is unclear."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery branch: simplify to one weekly reminder, test notification volume now, and set a backup reminder 24 hours later before retrying verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "digital",
+                    "text": "Recovery complete; rebuild and verify the reminder."
                 }
             ]
         },
