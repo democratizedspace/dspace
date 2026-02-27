@@ -22,6 +22,12 @@
             "text": "Put on gloves and stage a fresh biohazard bag before touching contaminated waste.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Wash, glove, and stage disposal bag",
+                    "goto": "bag"
+                },
+                {
                     "type": "goto",
                     "goto": "bag",
                     "text": "Supplies staged",
@@ -60,6 +66,11 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "Bagging sequence completed under supervision"
+                },
+                {
+                    "type": "goto",
                     "goto": "recover",
                     "text": "Bag tore or leaked"
                 }
@@ -86,6 +97,11 @@
             "id": "verify",
             "text": "Now verify final controls: sealed waste, clean hands, and disposal path that avoids food-prep areas.",
             "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Final controls verified"
+                },
                 {
                     "type": "process",
                     "process": "wash-hands",
@@ -127,11 +143,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["firstaid/change-bandage"],
+    "requiresQuests": [
+        "firstaid/change-bandage"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
