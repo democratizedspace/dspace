@@ -157,14 +157,23 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/learn-cpr`
 - Dialogue `requiresItems` gates:
-    - `clean` → "Mask is sanitized" — CPR pocket mask ×1
+    - `prep` → "Prep complete with PPE and mask ready" — CPR pocket mask ×1, nitrile gloves (pair) ×1
+    - `sanitize` → "Sanitize cycle complete" — CPR pocket mask ×1
+    - `verify` → "Mask passes inspection and is kit-ready" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
-    - None
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
+- QA notes:
+    - Added safety triage (`assess`) with a non-completing replacement branch (`safety-stop`) for damaged masks.
+    - Added sanitize recovery loop (`recover`) for failed disinfectant timing or persistent valve issues.
+    - Completion now requires post-clean verification evidence (`verify`) instead of a direct one-step finish.
 
 ## 7) Stop a Nosebleed (`firstaid/stop-nosebleed`)
 
@@ -209,18 +218,27 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/learn-cpr`
 - Dialogue `requiresItems` gates:
-    - `clean` → "Clean and dress the cut" — liquid soap ×1, nitrile gloves (pair) ×1, antiseptic wipes ×1, antibiotic ointment packet ×1, adhesive bandages ×1, biohazard waste bag ×1
-    - `clean` → "All bandaged up!" — first aid kit ×1
+    - `prep` → "Prep complete with sterile supplies" — liquid soap ×1, nitrile gloves (pair) ×1, antiseptic wipes ×1
+    - `clean` → "Completed manual cleaning workflow" — liquid soap ×1, nitrile gloves (pair) ×1, antiseptic wipes ×1, antibiotic ointment packet ×1, adhesive bandages ×1, biohazard waste bag ×1
+    - `verify` → "Wound dressed and monitoring plan set" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - cured compost bucket ×1
 - Processes used:
+    - [wash-hands](/processes/wash-hands)
+        - Requires: sink ×1
+        - Consumes: liquid soap ×1, paper towel ×1
+        - Creates: none
     - [clean-minor-cut](/processes/clean-minor-cut)
         - Requires: first aid kit ×1, sink ×1
         - Consumes: nitrile gloves (pair) ×1, antiseptic wipes ×1, adhesive bandages ×1, liquid soap ×1, biohazard waste bag ×1
         - Creates: none
+- QA notes:
+    - Added up-front severity gate (`assess`) with a safety escalation branch (`safety-stop`) for non-minor wounds.
+    - Added contamination troubleshooting (`recover`) that forces hygiene reset before retrying the clean step.
+    - Completion now requires a verification node (`verify`) after process or manual care evidence.
 
 ## 10) Change a Bandage (`firstaid/change-bandage`)
 
@@ -304,7 +322,10 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/wound-care`
 - Dialogue `requiresItems` gates:
-    - `wrap` → "Splint secured" — first aid kit ×1
+    - `prep` → "Prep complete with kit and bandages" — first aid kit ×1, nitrile gloves (pair) ×1
+    - `secure` → "Splint secured and pulse rechecked" — first aid kit ×1
+    - `recover` → "Rebuild splint with safer tension" — first aid kit ×1
+    - `verify` → "Splint stable and circulation normal" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -312,6 +333,10 @@ First Aid quests build practical progression through the first aid skill tree. T
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Added triage gate (`assess`) with hard safety-stop escalation for open-fracture red flags.
+    - Added troubleshooting branch (`recover`) for over-tight wraps and alignment failures with mandatory recheck.
+    - Added a final circulation verification node (`verify`) so completion needs evidence beyond initial wrapping.
 
 ## QA flow notes
 

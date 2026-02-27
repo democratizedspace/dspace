@@ -8,26 +8,52 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session.\nLet's sanitize it so it's ready for the next use.",
+            "text": "Your CPR pocket mask needs a proper reset after the last drill. We'll do a safety-first sanitize cycle with a verification check.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "clean",
-                    "text": "How do I clean it?"
+                    "goto": "assess",
+                    "text": "Start sanitation check"
                 }
             ]
         },
         {
-            "id": "clean",
-            "text": "Wash the mask with warm soapy water, rinse and soak it in a 1:10 bleach solution for two minutes.\nLet it air dry completely before storing it in your first aid kit.",
+            "id": "assess",
+            "text": "If the mask has tears, clouded valves, or sticky residue you can't remove, stop and replace it instead of reusing unsafe gear.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Mask is sanitized",
+                    "goto": "prep",
+                    "text": "Mask is intact and suitable for cleaning"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Mask condition is unsafe"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Wash hands and stage the mask, gloves, and disinfecting setup before handling breathing equipment.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Run hygiene prep",
+                    "goto": "sanitize"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sanitize",
+                    "text": "Prep complete with PPE and mask ready",
                     "requiresItems": [
                         {
                             "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         }
                     ]
@@ -35,8 +61,80 @@
             ]
         },
         {
+            "id": "sanitize",
+            "text": "Disassemble removable parts, wash with warm soapy water, rinse, then disinfect per label timing. Air-dry on a clean surface.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Sanitize cycle complete",
+                    "requiresItems": [
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Residue remains or timing was missed"
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "If solution timing or contact coverage failed, restart disinfection with fresh supplies. If the valve still sticks, retire the mask.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Reset and rerun sanitation",
+                    "goto": "sanitize"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Retire and replace the mask"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Confirm the mask is fully dry, valve movement is smooth, and storage pouch is clean before returning it to the kit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Mask passes inspection and is kit-ready",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Need another sanitize cycle"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good call. Compromised airway equipment should be replaced, not risked in an emergency.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assess",
+                    "text": "Return after replacement guidance"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "All clean! A sanitized mask protects both you and your patient during resuscitation.",
+            "text": "All clean. Your CPR pocket mask is now sanitized, verified, and staged for safe use.",
             "options": [
                 {
                     "type": "finish",
@@ -54,8 +152,8 @@
     "requiresQuests": ["firstaid/learn-cpr"],
     "hardening": {
         "passes": 0,
-        "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "score": 100,
+        "emoji": "🛠️",
         "history": []
     }
 }
