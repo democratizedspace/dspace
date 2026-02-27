@@ -1,6 +1,6 @@
-hydroponics: 23 quests, 4220 lines
+hydroponics: 23 quests, 4236 lines
 electronics: 22 quests, 3694 lines
-astronomy: 21 quests, 4241 lines
+astronomy: 21 quests, 4273 lines
 energy: 21 quests, 2876 lines
 aquaria: 19 quests, 3809 lines
 programming: 18 quests, 2672 lines
@@ -11,7 +11,7 @@ firstaid: 13 quests, 2158 lines
 robotics: 13 quests, 2182 lines
 chemistry: 10 quests, 1619 lines
 rocketry: 10 quests, 2010 lines
-woodworking: 10 quests, 2276 lines
+woodworking: 10 quests, 2318 lines
 completionist: 5 quests, 604 lines
 welcome: 5 quests, 778 lines
 composting: 4 quests, 809 lines
