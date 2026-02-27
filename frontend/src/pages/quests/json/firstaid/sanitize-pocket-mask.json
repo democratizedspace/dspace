@@ -8,26 +8,48 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session.\nLet's sanitize it so it's ready for the next use.",
+            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session. Before touching the valve, make sure this is routine maintenance and not an active emergency.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "clean",
-                    "text": "How do I clean it?"
+                    "goto": "assess",
+                    "text": "Run the safety check"
                 }
             ]
         },
         {
-            "id": "clean",
-            "text": "Wash the mask with warm soapy water, rinse and soak it in a 1:10 bleach solution for two minutes.\nLet it air dry completely before storing it in your first aid kit.",
+            "id": "assess",
+            "text": "If someone currently needs rescue breaths, use emergency response protocol first and switch to a backup barrier device. Only sanitize this mask when no active patient care is underway.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Mask is sanitized",
+                    "goto": "prep",
+                    "text": "No active emergency; proceed with cleaning"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Emergency use is happening now"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Wash your hands, put on fresh gloves, and inspect the mask for cracks or a stuck one-way valve before disinfecting.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Wash and glove up",
+                    "goto": "sanitize"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sanitize",
+                    "text": "Already washed and gloved",
                     "requiresItems": [
                         {
-                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         }
                     ]
@@ -35,12 +57,83 @@
             ]
         },
         {
+            "id": "sanitize",
+            "text": "Disassemble the mask per manufacturer instructions, wash with warm soapy water, rinse, then soak components in a 1:10 bleach solution for two minutes. Rinse again and air dry on a clean surface.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Sanitization cycle complete",
+                    "requiresItems": [
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Valve stayed sticky or parts touched a dirty surface"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "If contamination happened, restart with fresh solution and clean gloves. If the valve remains damaged or sticky, quarantine this mask and replace it before next use.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sanitize",
+                    "text": "Restart the sanitization cycle"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Mask may be unsafe to reuse"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Confirm the mask is fully dry, valve movement is smooth, and it is sealed in a clean bag with a visible date note.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Dry, functional, and packed for storage",
+                    "requiresItems": [
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Needs another clean-and-dry pass"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good stop. Use a backup pocket mask and escalate replacement through your kit restock plan before the next CPR drill.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assess",
+                    "text": "Return once safe replacement steps are planned"
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "All clean! A sanitized mask protects both you and your patient during resuscitation.",
+            "text": "All clean. A sanitized mask protects both rescuer and patient during resuscitation.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ready for emergencies"
+                    "text": "Mask is emergency-ready"
                 }
             ]
         }
@@ -51,10 +144,12 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["firstaid/learn-cpr"],
+    "requiresQuests": [
+        "firstaid/learn-cpr"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 75,
+        "score": 100,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

@@ -8,39 +8,131 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Accidents happen. Make sure the area is safe and call for help before touching the injury. Let's practice applying a simple splint.",
+            "text": "Accidents happen. First make sure the scene is safe and call for help before touching the injury. We'll practice splinting only for stable, minor injuries.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wrap",
-                    "text": "Okay, walk me through it."
+                    "goto": "assess",
+                    "text": "Run initial safety assessment"
                 }
             ]
         },
         {
-            "id": "wrap",
-            "text": "Place soft padding around the injury, then position rigid supports on each side. Use bandages from your first aid kit to tie the splint snugly without cutting off circulation.",
+            "id": "assess",
+            "text": "If there's deformity with severe pain, open fracture, numbness, or uncontrolled bleeding, stop and seek emergency care immediately.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Splint secured",
+                    "goto": "prep",
+                    "text": "Injury appears minor and stable"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Danger signs are present"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Pad above and below the injury, prepare rigid supports, and keep the limb still. Check pulse/color/warmth before applying ties so you can compare after splinting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "apply",
+                    "text": "Supplies staged; begin splinting",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Missing support or circulation already looks poor"
+                }
+            ]
+        },
+        {
+            "id": "apply",
+            "text": "Position supports on both sides of the limb and tie bandages snugly without compressing the injury site. Immobilize joints above and below when possible.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Splint secured with padding in place",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Wrap slipped or pain increased during application"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Loosen and re-pad if ties are too tight. If fingers or toes turn pale, cold, or numb, remove pressure and escalate to urgent medical care before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "apply",
+                    "text": "Retry splinting with better padding"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Circulation warning signs persist"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Re-check pulse, skin color, warmth, and sensation beyond the splint. The limb should be immobilized but still perfused.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Circulation stable and limb immobilized",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Re-check failed; adjust and reassess"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good call. Keep the limb supported, avoid movement, and hand off to emergency or urgent care professionals.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assess",
+                    "text": "Return after professional assessment"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep the limb immobilized, monitor fingers or toes for color and warmth, and seek medical attention.",
+            "text": "Nice work. Continue monitoring circulation and seek follow-up medical care even when the splint looks stable.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Splinting drill complete"
                 }
             ]
         }
@@ -51,10 +143,12 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["firstaid/wound-care"],
+    "requiresQuests": [
+        "firstaid/wound-care"
+    ],
     "hardening": {
         "passes": 0,
-        "score": 80,
+        "score": 100,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

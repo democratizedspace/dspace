@@ -8,30 +8,70 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Minor scrapes happen. We'll clean and dress a small cut with supplies from a first aid kit. Only treat shallow wounds; if it's deep, gaping or bleeding heavily, stop and seek medical care.",
+            "text": "Minor scrapes happen. We'll clean and dress a shallow cut with first aid supplies. If the wound is deep, gaping, or heavily bleeding, this quest should pause for professional care.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "assess",
+                    "text": "Run safety triage"
+                }
+            ]
+        },
+        {
+            "id": "assess",
+            "text": "Check for heavy bleeding, embedded debris, numbness, or loss of movement. Those are stop signs for home treatment.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Looks minor; continue home care"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Warning signs detected"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Wash hands for 20 seconds, put on nitrile gloves, and lay out antiseptic wipe, ointment, and fresh bandage on a clean surface.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Do full hygiene prep",
+                    "goto": "clean"
+                },
+                {
+                    "type": "goto",
                     "goto": "clean",
-                    "text": "Sounds good."
+                    "text": "Already prepped with clean supplies",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "clean",
-            "text": "Scrub your hands with liquid soap under running water for 20 seconds, slip on nitrile gloves, rinse the cut with clean water, wipe around it with a fresh antiseptic wipe, let it air dry, apply a thin layer of antibiotic ointment, then cover it with an adhesive bandage. Toss used supplies in the trash and stop if pain worsens or numbness appears.",
+            "text": "Rinse the cut with clean water, wipe around it with a fresh antiseptic wipe, let it air dry, then apply a thin layer of antibiotic ointment before dressing.",
             "options": [
                 {
                     "type": "process",
                     "process": "clean-minor-cut",
-                    "text": "Clean and dress the cut",
+                    "text": "Run clean-and-dress process",
+                    "goto": "verify",
                     "requiresItems": [
                         {
                             "id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         },
                         {
@@ -54,24 +94,82 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "Completed manual clean-and-bandage cycle",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        },
+                        {
+                            "id": "1b1030bf-9767-4b16-9ff6-a8e7de28b689",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Bandage contaminated or wound keeps oozing"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Discard contaminated supplies, re-clean with fresh materials, and recheck pain/swelling. If redness spreads, pus appears, or fever starts, stop and escalate care.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Retry with new sterile supplies"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Signs of infection are present"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Confirm the dressing is secure, skin is warm with normal color, and bleeding is controlled. Plan a daily bandage change and symptom check.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "All bandaged up!",
+                    "text": "Stable dressing and aftercare plan ready",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need another cleaning or dressing attempt"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good stop. Keep pressure on the wound if needed and contact a clinician or urgent care for next steps.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assess",
+                    "text": "Return after medical guidance"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job! Keep the wound clean and dry, change the bandage daily, and seek medical care if redness, swelling, pus or fever develops.",
+            "text": "Great job. Keep the wound clean and dry, and watch for worsening symptoms over the next 24 hours.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Wound-care drill complete"
                 }
             ]
         }
@@ -82,7 +180,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["firstaid/learn-cpr"],
+    "requiresQuests": [
+        "firstaid/learn-cpr"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,
