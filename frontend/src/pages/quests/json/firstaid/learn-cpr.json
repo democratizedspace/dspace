@@ -46,7 +46,7 @@
         },
         {
             "id": "prep-gear",
-            "text": "Put on nitrile gloves, stage the pocket mask, and ready antiseptic wipes. Confirm your first aid kit and manikin are present.",
+            "text": "Put on nitrile gloves, stage the pocket mask, ready antiseptic wipes, and review the emergency call sequence. Confirm your first aid kit and manikin are present.",
             "options": [
                 {
                     "type": "goto",
@@ -101,7 +101,6 @@
                     "type": "process",
                     "process": "practice-cpr",
                     "text": "Complete the practice cycle",
-                    "goto": "debrief",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
@@ -124,6 +123,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "debrief",
+                    "text": "Practice cycle complete, move to debrief"
                 },
                 {
                     "type": "goto",

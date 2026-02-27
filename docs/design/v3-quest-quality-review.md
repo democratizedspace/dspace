@@ -699,17 +699,17 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, compos
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3753)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3753)
 - `firstaid/dispose-expired`
-  - [x] Observed issue (addressed): `firstaid/dispose-expired` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3754)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3754)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3754)
+  - [x] Observed issue (addressed): `firstaid/dispose-expired` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3759)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3759)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3759)
 - `firstaid/flashlight-battery`
-  - [x] Observed issue (addressed): `firstaid/flashlight-battery` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3754)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3754)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3754)
+  - [x] Observed issue (addressed): `firstaid/flashlight-battery` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3759)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3759)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3759)
 - `firstaid/learn-cpr`
-  - [x] Observed issue (addressed): `firstaid/learn-cpr` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3754)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3754)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3754)
+  - [x] Observed issue (addressed): `firstaid/learn-cpr` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3759)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3759)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`; include domain-appropriate safety stop conditions where risk handling is relevant. (PR #3759)
 - `firstaid/remove-splinter`
   - [x] Observed issue (addressed): `firstaid/remove-splinter` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3753)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3753)

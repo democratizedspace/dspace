@@ -19,13 +19,17 @@
         },
         {
             "id": "prep",
-            "text": "Put on nitrile gloves and safety goggles. Then wash your hands before touching the kit.",
+            "text": "Wash your hands, then put on nitrile gloves and safety goggles before touching the kit.",
             "options": [
                 {
                     "type": "process",
                     "process": "wash-hands",
-                    "text": "Hands washed and PPE on",
-                    "goto": "sort"
+                    "text": "Run handwashing now"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sort",
+                    "text": "Hands washed and PPE on"
                 },
                 {
                     "type": "goto",
@@ -41,8 +45,12 @@
                 {
                     "type": "process",
                     "process": "wash-hands",
-                    "text": "Reset hygiene and continue",
-                    "goto": "sort"
+                    "text": "Rewash before reopening supplies"
+                },
+                {
+                    "type": "goto",
+                    "goto": "sort",
+                    "text": "Reset hygiene and continue"
                 }
             ]
         },
