@@ -1,35 +1,30 @@
 {
     "id": "electronics/solder-led-harness",
     "title": "Solder an LED Harness",
-    "description": "Join a 5 mm LED and 220 \u03a9 resistor to two jumper wires using a soldering iron kit. Ventilate and wear safety goggles.",
+    "description": "Build and verify an LED harness with staged solder checks, safety pauses, and rework loops before sign-off.",
     "image": "/assets/quests/electronics_solder_led_harness.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A loose indicator needs wiring. Ventilate the area, wear safety goggles, keep the iron on its stand, and clear flammables before heating.",
+            "text": "A loose indicator needs wiring. Ventilate the bench, wear safety goggles, keep the iron on its stand, and clear flammables before heating.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "What parts do I need?"
+                    "text": "Bench is safe. Show me the build plan."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Gather the soldering iron kit, flux pen, and wire stripper. Add a 5 mm LED, a 220 \u03a9 resistor, two jumper wires, and safety goggles. Heat the iron, tin the tip, and slide heat-shrink over one wire before soldering.",
+            "text": "Gather the soldering iron kit, flux pen, wire stripper, helping hands, 5 mm LED, 220 \u03a9 resistor, two jumper wires, and heat-shrink. Tin the tip and dry-fit LED polarity before soldering.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "solder-led-resistor",
-                    "text": "Review how to join the LED and resistor"
-                },
-                {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "LED harness soldered and cool",
+                    "goto": "branch-choice",
+                    "text": "Parts staged and polarity checked.",
                     "requiresItems": [
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
@@ -48,20 +43,171 @@
                             "count": 1
                         },
                         {
+                            "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+                            "count": 1
+                        },
+                        {
+                            "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                            "count": 1
+                        },
+                        {
+                            "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+                            "count": 1
+                        },
+                        {
+                            "id": "96083990-f333-4e42-ab04-7eb2a234570e",
+                            "count": 5
+                        },
+                        {
                             "id": "3cd82744-d2aa-414e-9f03-80024b624066",
                             "count": 2
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "Bench isn't safe yet; pause and reset."
+                }
+            ]
+        },
+        {
+            "id": "branch-choice",
+            "text": "Choose a solder strategy: fixture-first for stability or freehand with quick tacks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fixture-path",
+                    "text": "Use helping hands for stable joints.",
+                    "requiresItems": [
+                        {
+                            "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "quick-tack-path",
+                    "text": "Use quick tack joints, then reinforce."
+                }
+            ]
+        },
+        {
+            "id": "fixture-path",
+            "text": "Clamp LED and resistor in helping hands. Heat each lead for 2-3 seconds, feed solder, and let joints cool before moving the harness.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solder-led-resistor",
+                    "text": "Run fixture-assisted solder sequence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Fixture path complete; move to verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rework",
+                    "text": "Joint looks dull, bridged, or cracked."
+                }
+            ]
+        },
+        {
+            "id": "quick-tack-path",
+            "text": "Apply minimal solder tacks first, then reinforce each joint after alignment. Keep heat brief to avoid LED damage.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solder-led-resistor",
+                    "text": "Run quick-tack solder sequence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Quick-tack path complete; verify strength and polarity."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rework",
+                    "text": "Component shifted or polarity uncertain."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: confirm LED polarity, no solder bridges, and a gentle tug test on both leads. Record pass/fail before closeout.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pass: polarity and tug-test verified.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                            "count": 1
+                        },
+                        {
+                            "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rework",
+                    "text": "Fail: bridge, cold joint, or weak pull-test."
+                }
+            ]
+        },
+        {
+            "id": "rework",
+            "text": "Rework branch: power down, let joints cool, wick excess solder, and reflow only one lead at a time. Restart verification after each correction.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "branch-choice",
+                    "text": "Rework done; retry solder path."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "Bench became unsafe during rework."
+                }
+            ]
+        },
+        {
+            "id": "safety-reset",
+            "text": "Safety stop: unplug iron, confirm fume extraction, clear loose wire scraps, and resume only when the station is stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Safety checks complete; return to prep."
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Abort this attempt; restart after restoring bench safety."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Unplug the iron, let it cool on its stand, shrink the tubing, wipe the tip, and store the harness for later projects.",
+            "text": "Nice work. You completed a verified LED harness and handled rework/safety checks without rushing hot tools.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Orion!"
+                    "text": "Harness complete."
                 }
             ]
         }

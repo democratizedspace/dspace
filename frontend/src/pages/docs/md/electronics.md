@@ -388,7 +388,10 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/tin-soldering-iron`
 - Dialogue `requiresItems` gates:
-    - `prep` → "LED harness soldered and cool" — safety goggles ×1, soldering iron kit ×1, 5 mm LED ×1, 220 Ohm Resistor ×1, Jumper Wires ×2
+    - `prep` → "Parts staged and polarity checked." — safety goggles ×1, soldering iron kit ×1, 5 mm LED ×1, 220 Ohm Resistor ×1, wire stripper ×1, flux pen ×1, helping hands ×1, heat-shrink tubing ×5, Jumper Wires ×2
+    - `branch-choice` → "Use helping hands for stable joints." — helping hands ×1
+    - `verify` → "Pass: polarity and tug-test verified." — requires safety goggles ×1, soldering iron kit ×1, flux pen ×1, and LED indicator module ×1 as post-process evidence before closeout.
+    - Troubleshooting/safety: failed joints route through `rework`; unsafe conditions route through `safety-reset` before any retry.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -406,7 +409,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/tin-soldering-iron`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Wire joined and cool" — safety goggles ×1, soldering iron kit ×1, wire stripper ×1, Jumper Wires ×2, heat-shrink tubing ×5, flux pen ×1, brass tip cleaner ×1, heat gun ×1, solder fume extractor ×1, needle-nose pliers ×1
+    - `prep` → "Wires stripped; select splice method." — safety goggles ×1, soldering iron kit ×1, wire stripper ×1, Jumper Wires ×2, heat-shrink tubing ×5, flux pen ×1, brass tip cleaner ×1, heat gun ×1, solder fume extractor ×1, needle-nose pliers ×1
+    - `verify` → "Pass: insulation and mechanical checks verified." — repeats splice-tool evidence before finish, excluding consumed heat-shrink tubing.
+    - Troubleshooting/safety: weak splice or exposed strands route through `fault`; smoke/heat risk routes through `safety-reset` and restart (no direct completion from abort).
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -468,9 +473,11 @@ Electronics quests build practical progression through the electronics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/continuity-test`
 - Dialogue `requiresItems` gates:
-    - `prep-check` → "Thresholds noted; begin test cycle." — GFCI outlet tester ×1
-    - `interpret-pass` → "Verification logged with tester evidence." — GFCI outlet tester ×1
-    - Troubleshooting branch: fail/no-trip/reset-instability routes through breaker-off corrective flow and mandatory full retest.
+    - `prep-check` → "Bounds logged; begin cycle." — GFCI outlet tester ×1
+    - `measure-cycle` → "Observed normal pattern + trip ≤1s + stable reset." — GFCI outlet tester ×1
+    - `corrective-loop` → "Correction complete; rerun full cycle." — GFCI outlet tester ×1
+    - `interpret-pass` → "Results logged with tester evidence." — GFCI outlet tester ×1
+    - Troubleshooting/safety: anomalies route through explicit fault classification + breaker-off correction loop; persistent hazard routes to `safety-abort`.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

@@ -1,40 +1,35 @@
 {
     "id": "electronics/solder-wire",
     "title": "Solder a Wire Connection",
-    "description": "Join jumper wires with a soldering kit, heat-shrink tubing, and a heat gun. Keep a brass tip cleaner handy, ventilate, and wear safety goggles.",
+    "description": "Repair a snapped jumper lead with staged prep, splice verification, and fault-recovery loops under solder safety controls.",
     "image": "/assets/quests/electronics_solder_wire_connection.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "A lead snapped. Ventilate, turn on the fume extractor, wear goggles, keep the hot iron on its stand, and clear flammables.",
+            "text": "A lead snapped. Ventilate, enable the fume extractor, wear goggles, keep the hot iron on its stand, and clear flammables.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "What gear do I need?"
+                    "text": "Safety setup complete."
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Gather the soldering iron kit, flux pen, wire stripper, needle-nose pliers, brass tip cleaner, solder fume extractor, and heat gun. Add two jumper wires, 5 cm of heat-shrink tubing, and safety goggles. Strip the wire ends with the wire stripper, grip them with the needle-nose pliers, and slide the tubing over one lead. Heat the iron on its stand, keep cords tidy, clean the tip with the brass cleaner, and let the fume extractor pull smoke away. Use the heat gun to shrink the tubing after soldering.",
+            "text": "Gather the soldering iron kit, flux pen, wire stripper, needle-nose pliers, brass tip cleaner, solder fume extractor, heat gun, two jumper wires, and heat-shrink tubing.",
             "options": [
                 {
                     "type": "process",
                     "process": "strip-jumper-wire",
-                    "text": "Strip the jumper wires"
-                },
-                {
-                    "type": "process",
-                    "process": "solder-wire-connection",
-                    "text": "Review soldering steps"
+                    "text": "Strip and twist wire ends."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Wire joined and cool",
+                    "goto": "splice-path",
+                    "text": "Wires stripped; select splice method.",
                     "requiresItems": [
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
@@ -77,16 +72,165 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "Pause: bench setup drifted unsafe."
+                }
+            ]
+        },
+        {
+            "id": "splice-path",
+            "text": "Choose a splice strategy: western-union twist for strain resistance or overlap splice for faster repair.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "western-union",
+                    "text": "Use western-union twist with pliers."
+                },
+                {
+                    "type": "goto",
+                    "goto": "overlap",
+                    "text": "Use overlap splice and reinforce with solder."
+                }
+            ]
+        },
+        {
+            "id": "western-union",
+            "text": "Twist conductors in opposite directions, apply flux, and solder until wetting is even across the splice.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solder-wire-connection",
+                    "text": "Run western-union solder workflow."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Splice soldered; proceed to verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fault",
+                    "text": "Joint overheated, brittle, or misaligned."
+                }
+            ]
+        },
+        {
+            "id": "overlap",
+            "text": "Overlap stripped conductors, clamp with pliers, tack both sides, then fully wet the joint and slide heat-shrink into place.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solder-wire-connection",
+                    "text": "Run overlap splice workflow."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Overlap splice complete; verify."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fault",
+                    "text": "Cold joint or exposed strands found."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: confirm no exposed copper, heat-shrink fully sealed, and splice passes gentle bend + tug checks without crackle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pass: insulation and mechanical checks verified.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 2
+                        },
+                        {
+                            "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                            "count": 1
+                        },
+                        {
+                            "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
+                            "count": 1
+                        },
+                        {
+                            "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26",
+                            "count": 1
+                        },
+                        {
+                            "id": "593fc442-f437-4449-94e5-17b7b4625c41",
+                            "count": 1
+                        },
+                        {
+                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fault",
+                    "text": "Fail: weak splice, exposed strands, or insulation gap."
+                }
+            ]
+        },
+        {
+            "id": "fault",
+            "text": "Troubleshooting: power down, trim back damaged strands, re-strip, and reflow with fresh flux. Retry only after the iron tip is clean and stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Fault corrected; restart prep + splice."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "Heat buildup or smoke exceeded safe limits."
+                }
+            ]
+        },
+        {
+            "id": "safety-reset",
+            "text": "Safety stop: unplug iron and heat gun, clear fumes, and verify cord routing before resuming.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Safety controls restored; continue."
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Abort this attempt; restart once the bench is safe."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Unplug the iron, let it cool on its stand, shrink tubing, wipe the tip, and store gear.",
+            "text": "Nice work. You repaired the wire with a verified splice and safe recovery handling.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Thanks, Orion!"
+                    "text": "Repair complete."
                 }
             ]
         }
