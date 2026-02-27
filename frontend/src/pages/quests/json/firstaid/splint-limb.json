@@ -8,39 +8,92 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Accidents happen. Make sure the area is safe and call for help before touching the injury. Let's practice applying a simple splint.",
+            "text": "Start with a safety triage: check for severe bleeding, deformity, or numbness before attempting any splinting.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "wrap",
-                    "text": "Okay, walk me through it."
+                    "goto": "prep",
+                    "text": "Minor, stable injury for practice"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Serious injury signs are present"
                 }
             ]
         },
         {
-            "id": "wrap",
-            "text": "Place soft padding around the injury, then position rigid supports on each side. Use bandages from your first aid kit to tie the splint snugly without cutting off circulation.",
+            "id": "prep",
+            "text": "Pad the limb and align supports above and below the injury. Keep fingers or toes visible for circulation checks.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Splint secured",
+                    "goto": "secure",
+                    "text": "Padding and supports are staged",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Supports slipped or alignment is uncertain"
+                }
+            ]
+        },
+        {
+            "id": "secure",
+            "text": "Tie bandages snugly without cutting circulation, then reassess pulse, warmth, and color beyond the splint.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Splint secured and circulation re-check passed",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Circulation check failed or pain increased"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Loosen and re-pad, then re-apply the splint with less tension. Re-check circulation before proceeding.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Adjusted and ready to retry"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Stop here and escalate to emergency care. Severe injury signs require professional treatment, not practice.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Escalate to emergency services"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice work! Keep the limb immobilized, monitor fingers or toes for color and warmth, and seek medical attention.",
+            "text": "Well done. You completed a safer splinting routine with a circulation verification check.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Practice complete"
                 }
             ]
         }
@@ -55,7 +108,7 @@
     "hardening": {
         "passes": 0,
         "score": 80,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -75,8 +75,9 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/assemble-kit`
 - Dialogue `requiresItems` gates:
-    - `steps` → "Practicing now." — first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1, antiseptic wipes ×1
-    - `steps` → "I know the basics." — first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1, antiseptic wipes ×1
+    - `prep` → "PPE and training gear are ready" — first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1, antiseptic wipes ×1
+    - `compressions` → "Run the timed CPR drill" — first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1, antiseptic wipes ×1
+    - `verify` → "Drill met targets and gear is sanitized" — first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1, antiseptic wipes ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -87,6 +88,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1
         - Consumes: none
         - Creates: none
+- QA notes:
+    - Added scene-safety triage with an emergency escalation stop for unsafe conditions.
+    - Added coaching retry loop (`troubleshoot`) for failed pacing/form attempts.
+    - Completion now requires process-backed drill evidence plus cleanup verification.
 
 ## 4) Restock Your First Aid Kit (`firstaid/restock-kit`)
 
@@ -116,7 +121,8 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/restock-kit`
 - Dialogue `requiresItems` gates:
-    - `sort` → "Expired items discarded" — nitrile gloves (pair) ×1, safety goggles ×1
+    - `prep` → "Prep and PPE complete" — nitrile gloves (pair) ×1, safety goggles ×1
+    - `sort` → "Expired supplies sealed and kit re-checked" — nitrile gloves (pair) ×1, safety goggles ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -127,6 +133,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
         - Creates: none
+- QA notes:
+    - Added emergency-vs-routine safety branch to prevent disposal during active incidents.
+    - Added audit/troubleshoot recovery path for uncertain expiry checks and contamination events.
+    - Completion now requires PPE-backed disposal and post-sort re-verification.
 
 ## 6) Sanitize Your CPR Pocket Mask (`firstaid/sanitize-pocket-mask`)
 
@@ -281,7 +291,8 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/wound-care`
 - Dialogue `requiresItems` gates:
-    - `wrap` → "Splint secured" — first aid kit ×1
+    - `prep` → "Padding and supports are staged" — first aid kit ×1
+    - `secure` → "Splint secured and circulation re-check passed" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -289,6 +300,10 @@ First Aid quests build practical progression through the first aid skill tree. T
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Added severity triage with explicit emergency escalation stop.
+    - Added troubleshooting loop for failed circulation/pain checks before reattempt.
+    - Completion now requires both setup and circulation verification checkpoints.
 
 ## QA flow notes
 

@@ -8,40 +8,29 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Expired bandages can fail when needed most. Let's remove them.",
+            "text": "Expired supplies can fail when needed most. First, confirm this is routine cleanup and not an active emergency.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep",
-                    "text": "Show me what to do"
+                    "text": "Routine kit cleanup only"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Someone may need care right now"
                 }
             ]
         },
         {
             "id": "prep",
-            "text": "Wash your hands, put on nitrile gloves and safety goggles, then open the kit.",
+            "text": "Wash your hands, put on nitrile gloves and safety goggles, and stage a disposal bag beside the kit.",
             "options": [
                 {
                     "type": "process",
                     "process": "wash-hands",
-                    "text": "Hands are washed",
-                    "goto": "sort"
-                },
-                {
-                    "type": "goto",
-                    "goto": "sort",
-                    "text": "I already washed my hands."
-                }
-            ]
-        },
-        {
-            "id": "sort",
-            "text": "Check labels and pull expired items. Bag them for disposal per rules.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Expired items discarded",
+                    "text": "Prep and PPE complete",
+                    "goto": "audit",
                     "requiresItems": [
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
@@ -52,16 +41,84 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I am missing one of those supplies"
+                }
+            ]
+        },
+        {
+            "id": "audit",
+            "text": "Use expiration dates and damaged packaging to separate safe-to-keep from must-discard supplies.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "sort",
+                    "text": "I identified expired or damaged items"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I am not sure what qualifies as expired"
+                }
+            ]
+        },
+        {
+            "id": "sort",
+            "text": "Seal expired supplies in the disposal bag, then re-check that the kit keeps only in-date items.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Expired supplies sealed and kit re-checked",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "A bag tore or contamination occurred"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Stop and recover: replace damaged PPE, sanitize the workspace, and restart the audit to avoid cross-contamination.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Supplies replaced, restarting prep"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Do not spend time on disposal during an emergency. Prioritize patient care and emergency services first.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Understood, safety first"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Nice! Your kit is clean and ready for fresh supplies.",
+            "text": "Great work. Your kit is now safer, with expired supplies removed and contamination risks controlled.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Safety first!"
+                    "text": "Kit hygiene verified"
                 }
             ]
         }
@@ -76,7 +133,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

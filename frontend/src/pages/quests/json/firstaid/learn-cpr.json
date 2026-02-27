@@ -1,30 +1,35 @@
 {
     "id": "firstaid/learn-cpr",
     "title": "Practice Basic CPR",
-    "description": "Practice 30:2 compressions on a CPR manikin using nitrile gloves, a pocket mask and antiseptic wipes from your first aid kit. Confirm the area is safe, call emergency services first and sanitize gear after. This exercise does not replace formal certification.",
+    "description": "Practice 30:2 compressions on a CPR manikin using nitrile gloves, a pocket mask and antiseptic wipes from your first aid kit. Confirm scene safety, call emergency services first and sanitize gear after. This exercise does not replace formal certification.",
     "image": "/assets/quests/firstaid_cpr_practice_manikin.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the manikin on a firm surface. Put on nitrile gloves, set the pocket mask and open antiseptic wipes from your first aid kit. Check for hazards, call emergency services, then begin.",
+            "text": "Before compressions, run a quick safety triage: scene hazards, responsiveness check, and emergency call status.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "steps",
-                    "text": "I'm ready."
+                    "goto": "prep",
+                    "text": "Scene is safe and emergency call is active"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Scene is unsafe or help is not contacted yet"
                 }
             ]
         },
         {
-            "id": "steps",
-            "text": "With the manikin on its back, place the heel of one hand on the chest center and interlock your fingers. Keep arms straight and push 2 inches deep at 100\u2013120 compressions per minute, letting the chest rise fully. After 30 compressions, tilt the head, seal the mask and give two breaths if trained. Stop if anything seems unsafe.",
+            "id": "prep",
+            "text": "Place the manikin on a firm surface. Put on nitrile gloves, set the pocket mask, and stage antiseptic wipes for post-drill cleanup.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "practice-cpr",
-                    "text": "Practicing now.",
+                    "type": "goto",
+                    "goto": "compressions",
+                    "text": "PPE and training gear are ready",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
@@ -50,7 +55,20 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "troubleshoot",
+                    "text": "A required training supply is missing"
+                }
+            ]
+        },
+        {
+            "id": "compressions",
+            "text": "Run a full 30:2 cycle at 100-120 compressions per minute with 2 inch depth and full chest recoil.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "practice-cpr",
+                    "text": "Run the timed CPR drill",
+                    "goto": "verify",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
@@ -72,18 +90,81 @@
                             "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
                             "count": 1
                         }
-                    ],
-                    "text": "I know the basics."
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Form or pacing broke down during the drill"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Debrief: confirm compression rhythm, depth consistency, and post-session mask/manikin sanitation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Drill met targets and gear is sanitized",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        },
+                        {
+                            "id": "b397aa70-3503-4e40-b84a-4d5609578d2b",
+                            "count": 1
+                        },
+                        {
+                            "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Targets missed; re-coach and retry"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Reset with a coaching pass: re-check hand position, cadence counting, and mask seal, then repeat the drill.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "compressions",
+                    "text": "Coaching complete, retrying drill"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Pause the drill. In real emergencies, prioritize scene safety and professional responders before practice steps.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Safety escalation acknowledged"
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great job. Clean the manikin and pocket mask with antiseptic wipes and return everything to your first aid kit. Real emergencies should be handled by certified professionals whenever possible.",
+            "text": "Good work. You completed a safer CPR practice cycle with verification and cleanup.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "I'll keep practicing."
+                    "text": "I'll keep practicing with certified guidance"
                 }
             ]
         }
@@ -98,7 +179,7 @@
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
