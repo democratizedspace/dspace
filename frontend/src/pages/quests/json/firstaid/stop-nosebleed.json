@@ -1,7 +1,7 @@
 {
     "id": "firstaid/stop-nosebleed",
     "title": "Stop a Nosebleed",
-    "description": "Sit upright, lean forward, and pinch the soft part of your nose with a sterile gauze pad. Wear nitrile gloves from a first aid kit, use an antiseptic wipe around your nostrils after bleeding slows, and keep your head tilted forward the whole time. Never tilt your head back or insert anything into the nostrils.",
+    "description": "Sit upright, lean forward, and pinch the soft part of your nose with sterile supplies while monitoring for escalation triggers.",
     "image": "/assets/quests/stop_nosebleed_first_aid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
@@ -12,19 +12,46 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "pressure",
+                    "goto": "safety-check",
                     "text": "How do I stop it?"
                 }
             ]
         },
         {
-            "id": "pressure",
-            "text": "Sit upright and lean forward about 30\u00b0 so blood drains out, not down your throat. Put on nitrile gloves from a first aid kit, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and hold steady pressure for at least 10 minutes without checking early. When bleeding slows, wipe around the nostrils with an antiseptic wipe without inserting anything into the nose. Do not tilt your head back or stuff anything into the nostrils.",
+            "id": "safety-check",
+            "text": "Safety gate: if there was major trauma, bleeding is very heavy, or the person feels faint, escalate immediately instead of home treatment.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Holding pressure now.",
+                    "goto": "pressure",
+                    "text": "No red flags; begin controlled pressure protocol."
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "Red flags present; seek urgent medical help now."
+                }
+            ]
+        },
+        {
+            "id": "escalate",
+            "text": "Correct escalation. Keep leaning forward, maintain pressure, and contact emergency services or urgent care.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Escalation complete; transferring to professional care."
+                }
+            ]
+        },
+        {
+            "id": "pressure",
+            "text": "Lean forward about 30°, put on nitrile gloves, fold sterile gauze over the soft part of the nose, and pinch continuously for 10 minutes without checking early.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stop-nosebleed",
+                    "goto": "recheck",
+                    "text": "Pressure cycle completed with clean supplies.",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
@@ -43,18 +70,61 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "supply-reset",
+                    "text": "I lost sterile supplies or broke pressure protocol."
+                }
+            ]
+        },
+        {
+            "id": "supply-reset",
+            "text": "Troubleshooting: replace contaminated gauze/gloves and restart the full 10-minute timer. Never tilt the head back or pack the nostrils.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pressure",
+                    "text": "Supplies reset; restart pressure cycle."
+                }
+            ]
+        },
+        {
+            "id": "recheck",
+            "text": "Verification checkpoint: bleeding should be slowing after a full cycle. Clean around the nostrils only after pressure is released.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bleeding controlled; move to aftercare."
+                },
+                {
+                    "type": "goto",
+                    "goto": "repeat-cycle",
+                    "text": "Still bleeding lightly; repeat one more controlled cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "Still heavy after repeat or symptoms worsening; escalate now."
+                }
+            ]
+        },
+        {
+            "id": "repeat-cycle",
+            "text": "Recovery branch: run a second pressure cycle with fresh gauze, then reassess.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pressure",
+                    "text": "Begin second cycle."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "If bleeding hasn't stopped after 20 minutes, is heavy, you're on blood thinners, or you feel faint, seek medical help or call emergency services. After it stops, rest with your head elevated, throw away used supplies, wash your hands, and avoid blowing or picking your nose for the rest of the day.",
+            "text": "Aftercare complete: rest with head elevated, discard used supplies safely, and avoid blowing or picking your nose for the rest of the day.",
             "options": [
-                {
-                    "type": "process",
-                    "process": "stop-nosebleed",
-                    "text": "Review nosebleed control steps"
-                },
                 {
                     "type": "finish",
                     "text": "Will do."
@@ -72,7 +142,7 @@
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",

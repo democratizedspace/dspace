@@ -8,29 +8,99 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session.\nLet's sanitize it so it's ready for the next use.",
+            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session. Let's sanitize it so it's ready for the next use.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "clean",
+                    "goto": "safety-check",
                     "text": "How do I clean it?"
                 }
             ]
         },
         {
-            "id": "clean",
-            "text": "Wash the mask with warm soapy water, rinse and soak it in a 1:10 bleach solution for two minutes.\nLet it air dry completely before storing it in your first aid kit.",
+            "id": "safety-check",
+            "text": "Operational safety: wear gloves and mix disinfectant correctly. If the mask has cracks or a torn valve, retire it and replace instead of reusing it.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Mask is sanitized",
+                    "goto": "wash",
+                    "text": "Mask body is intact; continue sanitizing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "replace-mask",
+                    "text": "Mask is damaged; remove it from service."
+                }
+            ]
+        },
+        {
+            "id": "replace-mask",
+            "text": "Troubleshooting branch: replace the damaged mask before the next CPR drill. Do not store compromised gear in your response kit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wash",
+                    "text": "Replacement mask ready; resume sanitizing workflow."
+                }
+            ]
+        },
+        {
+            "id": "wash",
+            "text": "Wash with warm soapy water, rinse thoroughly, then sanitize using your first aid protocol.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "goto": "verify",
+                    "text": "Sanitizing complete and contamination controls followed.",
                     "requiresItems": [
                         {
                             "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
                             "count": 1
+                        },
+                        {
+                            "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
+                            "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "redo-sanitize",
+                    "text": "I skipped contact time or contamination happened; redo sanitizing."
+                }
+            ]
+        },
+        {
+            "id": "redo-sanitize",
+            "text": "Recovery loop: rewash the mask and repeat disinfectant contact time from the start before storage.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wash",
+                    "text": "Restart sanitizing cycle."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: confirm the mask is fully air-dried and sealed in the kit to avoid bacterial growth.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Mask is sanitized, dry, and staged in the first aid kit.",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "redo-sanitize",
+                    "text": "Mask is still damp or storage wasn't sterile; repeat sanitizing."
                 }
             ]
         },
@@ -55,7 +125,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

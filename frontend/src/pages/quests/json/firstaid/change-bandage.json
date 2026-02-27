@@ -12,20 +12,46 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "change",
+                    "goto": "triage",
                     "text": "Let's change it"
                 }
             ]
         },
         {
-            "id": "change",
-            "text": "Wash hands, remove the old bandage, clean the cut and apply a fresh adhesive bandage.",
+            "id": "triage",
+            "text": "Safety check: if the wound is deeply reopened, bleeding through fast, or has red streaks and fever, skip home care and seek urgent medical help.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Looks minor; continue with a clean bandage change."
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "Symptoms look severe; escalate to urgent care."
+                }
+            ]
+        },
+        {
+            "id": "escalate",
+            "text": "Good call. Keep pressure on the wound and get professional care instead of continuing this quest path.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Escalating care now."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Wash your hands, stage clean supplies, and remove the old bandage without tearing healing skin.",
             "options": [
                 {
                     "type": "process",
                     "process": "clean-minor-cut",
-                    "text": "Bandage changed",
-                    "goto": "finish",
+                    "text": "Supplies staged and wound cleaned with the process checklist.",
+                    "goto": "verify",
                     "requiresItems": [
                         {
                             "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
@@ -39,6 +65,28 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "missing-supplies",
+                    "text": "I am missing wipes or fresh adhesive bandages."
+                }
+            ]
+        },
+        {
+            "id": "missing-supplies",
+            "text": "Troubleshooting branch: restock before changing the dressing. Never reuse dirty gauze or old adhesive strips.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Supplies restored; retry the clean bandage change."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: confirm the new bandage is dry, secure, and not too tight.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
                         {
@@ -46,13 +94,29 @@
                             "count": 1
                         }
                     ],
-                    "text": "Fresh bandage is on."
+                    "text": "Fresh bandage is on and the full first aid kit is available for follow-up checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "reclean",
+                    "text": "Bandage is damp, slipping, or painful; redo cleaning and placement."
+                }
+            ]
+        },
+        {
+            "id": "reclean",
+            "text": "Recovery loop: remove the failed dressing, clean the area again, and apply a new sterile bandage before re-checking fit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Restart clean replacement sequence."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great! Keep the area clean and swap the bandage again tomorrow if needed.",
+            "text": "Great! Keep the area clean and replace the bandage again tomorrow or sooner if it gets wet/dirty.",
             "options": [
                 {
                     "type": "finish",
@@ -71,7 +135,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
