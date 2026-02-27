@@ -268,12 +268,11 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/hand-crank-generator`
 - Dialogue `requiresItems` gates:
-    - `start` → "Let's give it a try." — smartphone ×1
     - `kit` → "Everything is staged and dry." — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, USB Cable ×1, 8 AWG fused cable kit ×1
     - `wire` → "Everything is tight, fused, and quiet." — portable solar kit (wired) ×1
-    - `profile` → "Profile saved; cables cool." — charge controller profile set ×1
+    - `profile` → "Profile saved; cables remain cool." — charge controller profile set ×1
     - `charge` → "200 Wh harvested and stable." — dSolar ×200
-    - `phone` → "Phone charged and the cable stayed cool." — off-grid phone charge log ×1
+    - `phone` → "Phone charged and cable stayed cool." — off-grid phone charge log ×1
 - Grants:
     - `kit` → "Take the solar kit" — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, USB Cable ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
@@ -305,7 +304,8 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Dialogue `requiresItems` gates:
     - `kit` → "Parts staged and safe." — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - `wire` → "Cable ends are tight and fused." — portable solar kit (wired) ×1
-    - `harvest` → "Harvested 200 Wh without any hot cables." — dSolar ×200
+    - `harvest` → "Harvest run completed" — dSolar ×200
+    - `verify-output` → "Output and thermal checks both passed" — dSolar ×200
 - Grants:
     - `kit` → "Take the loaner kit" — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
@@ -495,4 +495,6 @@ Energy quests build practical progression through the energy skill tree. This pa
 
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
+- Off-grid QA: `energy/offgrid-charger` now has a charge-strategy fork (direct sun vs low-light recovery), plus a safety-stop branch that enforces disconnect/rewire before retry.
+- Portable QA: `energy/portable-solar-panel` now has rapid-deploy vs stability-first setup, explicit output verification, and a safety recovery loop for heat/polarity issues.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.

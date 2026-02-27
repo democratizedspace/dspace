@@ -8,24 +8,18 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Phone low? Set up a 200 W panel, charge controller, 200 Wh LiFePO4 battery, fused lead kit, USB cable, and your smartphone on dry ground. Handle connectors by their insulation and stop if cables warm or weather turns.",
+            "text": "Phone low? Set up a 200 W panel, charge controller, 200 Wh LiFePO4 battery, fused lead kit, USB cable, and your smartphone on dry ground. Handle connectors by insulation and stop if weather turns.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Let's give it a try.",
-                    "requiresItems": [
-                        {
-                            "id": "82577af7-6724-4cb2-8922-f7140e550145",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Stage the off-grid charging kit"
                 }
             ]
         },
         {
             "id": "kit",
-            "text": "Unfold the panel, set the controller, battery, and fused leads on a dry board, and keep metal away from the terminals.",
+            "text": "Take the full kit and perform a safety pre-check: dry surface, no frayed wires, and no hot connectors from prior runs.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -84,7 +78,7 @@
         },
         {
             "id": "wire",
-            "text": "Battery first, then panel\u2014keep red to positive, black to negative, fuse in line, and controller off the ground. If anything sparks or heats up, pull the fuse.",
+            "text": "Battery first, then panel: red to positive, black to negative, fuse in-line, controller elevated. If anything sparks or heats, pull the fuse immediately.",
             "options": [
                 {
                     "type": "process",
@@ -101,12 +95,17 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "I saw heat, sparks, or loose terminals"
                 }
             ]
         },
         {
             "id": "profile",
-            "text": "Set LiFePO4 profile: absorb 14.4 V, float 13.6 V, temp sensor attached. Note the settings so you can rebuild this later.",
+            "text": "Set LiFePO4 profile: absorb 14.4 V, float 13.6 V, temp sensor attached. Save the profile so this setup is reproducible.",
             "options": [
                 {
                     "type": "process",
@@ -115,20 +114,41 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "charge",
-                    "text": "Profile saved; cables cool.",
+                    "goto": "charge-strategy",
+                    "text": "Profile saved; cables remain cool.",
                     "requiresItems": [
                         {
                             "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Controller warnings appeared"
+                }
+            ]
+        },
+        {
+            "id": "charge-strategy",
+            "text": "Pick a charging strategy. Direct sun is fastest; low-light mode requires repositioning and staged checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Run direct-sun charging"
+                },
+                {
+                    "type": "goto",
+                    "goto": "low-light-recovery",
+                    "text": "Use low-light recovery strategy"
                 }
             ]
         },
         {
             "id": "charge",
-            "text": "Face the panel toward the sun, shade the battery, and charge until you collect 200 Wh. Stop if the fuse warms or voltage sags sharply.",
+            "text": "Face the panel toward the sun, shade the battery, and charge until you collect 200 Wh. Stop immediately if fuse warms or voltage sags sharply.",
             "options": [
                 {
                     "type": "process",
@@ -145,12 +165,38 @@
                             "count": 200
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Unsafe heat or weather during harvest"
+                }
+            ]
+        },
+        {
+            "id": "low-light-recovery",
+            "text": "Low-light branch: re-angle the panel every 20 minutes, reduce USB draw, and verify controller remains in a safe charging band.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "harvest-200Wh-portable",
+                    "text": "Run staged low-light charging checks"
+                },
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Output stabilized; return to main charge path"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Output unstable or connectors heating"
                 }
             ]
         },
         {
             "id": "phone",
-            "text": "Plug the USB cable into the controller and your phone. Coil slack, keep connectors off wet ground, and stop if the cable warms.",
+            "text": "Plug USB cable into the controller and phone. Keep cable off wet ground and verify cable temperature stays safe during the session.",
             "options": [
                 {
                     "type": "process",
@@ -160,13 +206,34 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Phone charged and the cable stayed cool.",
+                    "text": "Phone charged and cable stayed cool.",
                     "requiresItems": [
                         {
                             "id": "2a9083b7-8578-45e3-8d76-7a298462f847",
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Cable warmed or phone failed to negotiate charge"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Safety stop engaged. Disconnect panel first, then battery, inspect fuse and terminals, and do not resume until heat/spark causes are corrected.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wire-portable-solar-kit",
+                    "text": "Perform safe disconnect and rewire"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Retry wiring and verification"
                 }
             ]
         },
@@ -187,11 +254,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/hand-crank-generator"],
+    "requiresQuests": [
+        "energy/hand-crank-generator"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",

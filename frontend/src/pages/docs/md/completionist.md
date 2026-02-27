@@ -20,9 +20,11 @@ Completionist quests build practical progression through the completionist skill
     - `requiresQuests`: `welcome/howtodoquests`, `ubi/basicincome`, `3dprinter/start`, `aquaria/water-testing`, `energy/solar`, `rocketry/parachute`, `hydroponics/basil`
 - Dialogue `requiresItems` gates:
     - `prep-printer` → "Printer is leveled and loaded" — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×150
+    - `modular-prep` → "Coupon passed; continue to core print" — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×150
     - `print-core` → "Core is printed and cool" — Completionist Award II core ×1
     - `print-plate` → "Plate fits the recess" — Completionist Award II core ×1, Completionist Award II nameplate ×1
     - `assemble` → "Award is bonded and cured" — Completionist Award II ×1
+    - `quality-gate` → "Pass all quality checks" — Completionist Award II ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -120,8 +122,10 @@ Completionist quests build practical progression through the completionist skill
 - Unlock prerequisite:
     - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "I'll check back" — Completionist Award II ×1
-    - `remind` → "Reminder set" — weekly quest reminder ×1
+    - `start` → "Let's lock a reminder system" — Completionist Award II ×1
+    - `calendar-path` → "Calendar reminder exists" — weekly quest reminder ×1
+    - `logbook-path` → "Quest log reminder recorded" — weekly quest reminder ×1
+    - `verify-reminder` → "Verified: weekly cadence and channel are both recorded" — weekly quest reminder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -140,4 +144,6 @@ Completionist quests build practical progression through the completionist skill
 - Catalog QA: `completionist/catalog` now requires a review checkpoint (serial + location + date) and supports a re-record loop when the log artifact is incomplete.
 - Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
+- Reminder QA: `completionist/reminder` now includes two planning branches (calendar or in-game log), a verification gate, and a recovery loop for missed cadence details.
+- Trophy QA: `completionist/v2` now supports single-run vs modular build paths, adds a final quality gate, and includes a printer recovery loop before retry.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.

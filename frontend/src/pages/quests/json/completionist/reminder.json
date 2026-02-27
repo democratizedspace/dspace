@@ -12,8 +12,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "remind",
-                    "text": "I'll check back",
+                    "goto": "pick-channel",
+                    "text": "Let's lock a reminder system",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
@@ -24,24 +24,100 @@
             ]
         },
         {
-            "id": "remind",
-            "text": "Use your phone or calendar app to nudge you every week. Capture the day and time so it sticks.",
+            "id": "pick-channel",
+            "text": "Pick your accountability channel. Calendar reminders are great for routine players, while the quest log path keeps an in-game proof trail.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calendar-path",
+                    "text": "Use calendar + phone alarms"
+                },
+                {
+                    "type": "goto",
+                    "goto": "logbook-path",
+                    "text": "Use in-game quest log notes"
+                }
+            ]
+        },
+        {
+            "id": "calendar-path",
+            "text": "Create a weekly recurring reminder with a weekday, exact time, and a title like 'Check new DSPACE quests'.",
             "options": [
                 {
                     "type": "process",
                     "process": "schedule-quest-reminder",
-                    "text": "Create the weekly quest reminder"
+                    "text": "Create weekly calendar reminder"
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Reminder set",
+                    "goto": "verify-reminder",
+                    "text": "Calendar reminder exists",
                     "requiresItems": [
                         {
                             "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "logbook-path",
+            "text": "Use your quest log as backup: record next check date plus one concrete target tree to review.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "schedule-quest-reminder",
+                    "text": "Write the weekly reminder in your quest log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-reminder",
+                    "text": "Quest log reminder recorded",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-reminder",
+            "text": "Quick reliability check: did you include both time and channel? Missing either means you may skip a week.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verified: weekly cadence and channel are both recorded",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I missed details / timing conflicts"
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "No stress. Re-open your reminder, add a backup alert 24h later, and avoid quiet hours so you do not auto-dismiss it.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "schedule-quest-reminder",
+                    "text": "Repair the schedule and add a backup ping"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-reminder",
+                    "text": "Retry verification"
                 }
             ]
         },

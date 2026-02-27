@@ -12,8 +12,24 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "prep-printer",
+                    "goto": "build-plan",
                     "text": "Let's build the real trophy"
+                }
+            ]
+        },
+        {
+            "id": "build-plan",
+            "text": "Choose your build strategy. A single-run print is fastest, while modular printing is safer when your printer can drift mid-job.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-printer",
+                    "text": "Single-run core + plate path"
+                },
+                {
+                    "type": "goto",
+                    "goto": "modular-prep",
+                    "text": "Modular prints with checkpoint inspections"
                 }
             ]
         },
@@ -40,6 +56,37 @@
                             "count": 150
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "modular-prep",
+            "text": "Run a short calibration coupon before committing filament. If your first layer is rough, pause and recalibrate rather than wasting a full core.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Print calibration coupon + re-level"
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-core",
+                    "text": "Coupon passed; continue to core print",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 150
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-recovery",
+                    "text": "Calibration failed / nozzle issues"
                 }
             ]
         },
@@ -102,7 +149,7 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "quality-gate",
                     "text": "Award is bonded and cured",
                     "requiresItems": [
                         {
@@ -110,6 +157,49 @@
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "quality-gate",
+            "text": "Final quality gate: no sharp burrs, plate alignment centered, and base stable on a flat table. If any check fails, you need a rework loop before presenting it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pass all quality checks",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-recovery",
+                    "text": "Fail: warping, burrs, or misalignment"
+                }
+            ]
+        },
+        {
+            "id": "print-recovery",
+            "text": "Recovery protocol: stop the printer safely, let hotend cool, clear stringing or clogged nozzle, then re-run bed level before retrying. Never scrape prints while hot.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Run safe recovery + re-level"
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep-printer",
+                    "text": "Retry main print path"
+                },
+                {
+                    "type": "goto",
+                    "goto": "modular-prep",
+                    "text": "Retry modular checkpoint path"
                 }
             ]
         },
