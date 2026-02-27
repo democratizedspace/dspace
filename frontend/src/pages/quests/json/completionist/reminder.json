@@ -13,7 +13,7 @@
                 {
                     "type": "goto",
                     "goto": "remind",
-                    "text": "I'll check back",
+                    "text": "I'll set up a tracking habit.",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
@@ -25,7 +25,7 @@
         },
         {
             "id": "remind",
-            "text": "Use your phone or calendar app to nudge you every week. Capture the day and time so it sticks.",
+            "text": "Use your phone or calendar app to nudge you every week. Capture a day and time, then add a backup note in case your primary alert gets muted.",
             "options": [
                 {
                     "type": "process",
@@ -34,8 +34,63 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "Reminder plus backup note are saved.",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-missed-alert",
+                    "text": "I forgot to set a backup note and already missed one check.",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Before we lock this in, do a dry run: confirm next trigger time is visible and notifications are allowed. If timing is wrong, edit now.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Reminder set",
+                    "text": "Next trigger is visible and notifications are enabled.",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-missed-alert",
+                    "text": "Trigger time looks wrong or notifications are blocked."
+                }
+            ]
+        },
+        {
+            "id": "recover-missed-alert",
+            "text": "Good catch. Reopen the reminder, set a second alert window, and pin a weekly checklist note so silence or timezone drift cannot hide new quests.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "schedule-quest-reminder",
+                    "text": "Reconfigure reminder with backup coverage"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Backup reminders are rebuilt. Re-run the verification.",
                     "requiresItems": [
                         {
                             "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
@@ -47,11 +102,11 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your dedication keeps the future Metaguild growing.",
+            "text": "Great! Your reminder system can survive missed pings, so new quests won't slip by unnoticed.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Happy to help."
+                    "text": "Schedule locked in."
                 }
             ]
         }
@@ -66,7 +121,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You cleared every quest! Let's actually fabricate the Completionist Award II instead of just talking about it.",
+            "text": "You cleared every quest! Let's fabricate the Completionist Award II for real, with quality checks at each stage.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "prep-printer",
-            "text": "We need a leveled printer and enough filament to chew through a solid core. Ready your green-lit printer before we spin up a long print.",
+            "text": "We need a leveled printer and enough filament for a long run. Confirm a clear work area, ventilation, and a stable spool path before heat-up.",
             "options": [
                 {
                     "type": "process",
@@ -29,7 +29,7 @@
                 {
                     "type": "goto",
                     "goto": "print-core",
-                    "text": "Printer is leveled and loaded",
+                    "text": "Printer is leveled, loaded, and workspace is clear.",
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
@@ -45,7 +45,7 @@
         },
         {
             "id": "print-core",
-            "text": "Time to print the trophy core with beefy walls and clean layer lines. Babysit the first layer and keep the chamber at temp.",
+            "text": "Run the core print with thick walls. Watch the first layers for adhesion and pause immediately if corners lift or extrusion stutters.",
             "options": [
                 {
                     "type": "process",
@@ -54,8 +54,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "print-plate",
-                    "text": "Core is printed and cool",
+                    "goto": "inspect-core",
+                    "text": "Core print finished and cooled.",
                     "requiresItems": [
                         {
                             "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
@@ -66,8 +66,62 @@
             ]
         },
         {
+            "id": "inspect-core",
+            "text": "Inspect the core seams and base flatness. If the base rocks or layers split, recover before adding the plate.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-plate",
+                    "text": "Core passes seam and flatness checks.",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-core",
+                    "text": "Core has warping or weak layers; recover first.",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover-core",
+            "text": "Recovery path: re-check bed level, dry filament, and restart the core print. Keep hands clear while reheating and confirm the first layer sticks edge-to-edge.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level after the failed core"
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-core",
+                    "text": "Settings corrected; rerun the core print.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 150
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "print-plate",
-            "text": "Let's add a crisp nameplate with the completion date. Swap to a fine layer height for the lettering so it pops when you buff it.",
+            "text": "Now print the engraved nameplate at finer layers. Keep nozzle temperature steady so lettering stays crisp.",
             "options": [
                 {
                     "type": "process",
@@ -76,8 +130,8 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "assemble",
-                    "text": "Plate fits the recess",
+                    "goto": "fit-check",
+                    "text": "Nameplate print is complete.",
                     "requiresItems": [
                         {
                             "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
@@ -92,8 +146,34 @@
             ]
         },
         {
+            "id": "fit-check",
+            "text": "Dry-fit the plate. If the recess fit is rough or letters are smeared, reprint before assembly so glue doesn't lock in defects.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Plate fits flush and lettering is readable.",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        },
+                        {
+                            "id": "a0fc23b6-3460-404f-bd16-dfb5700f7326",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-plate",
+                    "text": "Fit or lettering failed; reprint the plate."
+                }
+            ]
+        },
+        {
             "id": "assemble",
-            "text": "Sand the edges, wick in a tiny bead of glue, and press the plate until it seats flush. Let it cure so the award feels like a single piece.",
+            "text": "Sand edges, apply a small glue bead, and press the plate flush. Let it cure on a flat surface and avoid handling until set.",
             "options": [
                 {
                     "type": "process",
@@ -103,7 +183,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Award is bonded and cured",
+                    "text": "Award is bonded, cured, and stable.",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
@@ -115,7 +195,7 @@
         },
         {
             "id": "finish",
-            "text": "Fresh off the build table! That Completionist Award II is now a real artifact, not just a checkbox.",
+            "text": "Fresh off the build table! Completionist Award II is now a verified artifact, not just a checkbox.",
             "options": [
                 {
                     "type": "finish",

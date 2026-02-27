@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Want off-grid power on the go? I have a 200 W portable panel, charge controller, and 200 Wh pack\u2014if you wire them right.",
+            "text": "Want off-grid power on the go? I have a 200 W portable panel, charge controller, and 200 Wh pack—if you wire them right and respect weather risk.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "kit",
-            "text": "I'll loan you the panel, controller, pack, and a fused lead kit. Lay them out on a dry surface, keep ring terminals off the ground, and disconnect if anything gets hot.",
+            "text": "I'll loan you the panel, controller, pack, and fused lead kit. Lay them out on a dry surface, keep ring terminals off the ground, and abort if clouds turn stormy.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -46,7 +46,7 @@
                 {
                     "type": "goto",
                     "goto": "wire",
-                    "text": "Parts staged and safe.",
+                    "text": "Parts staged, dry, and storm watch is clear.",
                     "requiresItems": [
                         {
                             "id": "02b32152-a7b2-458e-9643-7b754c722165",
@@ -70,7 +70,7 @@
         },
         {
             "id": "wire",
-            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead\u2014red to positive, black to negative\u2014torque to spec, and zip-tie strain relief so nothing yanks free.",
+            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead—red to positive, black to negative—torque to spec, then zip-tie strain relief.",
             "options": [
                 {
                     "type": "process",
@@ -87,12 +87,17 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire-recovery",
+                    "text": "I saw a hot connector or loose strain relief."
                 }
             ]
         },
         {
             "id": "harvest",
-            "text": "Face the panel toward the sun, shade the battery, and start charging. Stop if connectors warm up or voltage dips below the controller\u2019s low-cutoff.",
+            "text": "Face the panel toward the sun, shade the battery, and start charging. Capture the total harvested energy and stop if connectors warm or voltage dips below cutoff.",
             "options": [
                 {
                     "type": "process",
@@ -101,12 +106,78 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "fin",
-                    "text": "Harvested 200 Wh without any hot cables.",
+                    "goto": "verify-yield",
+                    "text": "Harvest run complete; check output logs.",
                     "requiresItems": [
                         {
                             "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
                             "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "low-yield-recovery",
+                    "text": "Yield stalled or weather shifted during harvest."
+                }
+            ]
+        },
+        {
+            "id": "verify-yield",
+            "text": "Verification gate: confirm at least 200 Wh landed without hot cables, then document shutdown order (panel → controller → battery).",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "Verified 200 Wh and safe shutdown notes captured.",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "low-yield-recovery",
+                    "text": "Output or safety notes were incomplete; recover and retry."
+                }
+            ]
+        },
+        {
+            "id": "rewire-recovery",
+            "text": "Recovery path: de-energize, replace the suspect connector, and rebuild strain relief before reconnecting. Never tighten live conductors.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wire-portable-solar-kit",
+                    "text": "Rewire after corrective actions"
+                },
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Rewire complete; begin harvest again.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "low-yield-recovery",
+            "text": "Troubleshooting branch: re-aim panel tilt, clear shade, and wait for stable sun before retrying. If storm risk rises, pack down and restart later.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Conditions stabilized; retry the harvest pass.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
                         }
                     ]
                 }
@@ -133,7 +204,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

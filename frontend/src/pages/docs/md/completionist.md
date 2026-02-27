@@ -20,9 +20,12 @@ Completionist quests build practical progression through the completionist skill
     - `requiresQuests`: `welcome/howtodoquests`, `ubi/basicincome`, `3dprinter/start`, `aquaria/water-testing`, `energy/solar`, `rocketry/parachute`, `hydroponics/basil`
 - Dialogue `requiresItems` gates:
     - `prep-printer` → "Printer is leveled and loaded" — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×150
-    - `print-core` → "Core is printed and cool" — Completionist Award II core ×1
-    - `print-plate` → "Plate fits the recess" — Completionist Award II core ×1, Completionist Award II nameplate ×1
-    - `assemble` → "Award is bonded and cured" — Completionist Award II ×1
+    - `print-core` → "Core print finished and cooled." — Completionist Award II core ×1
+    - `inspect-core` → "Core passes seam and flatness checks." — Completionist Award II core ×1
+    - `recover-core` → "Settings corrected; rerun the core print." — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×150
+    - `print-plate` → "Nameplate print is complete." — Completionist Award II core ×1, Completionist Award II nameplate ×1
+    - `fit-check` → "Plate fits flush and lettering is readable." — Completionist Award II core ×1, Completionist Award II nameplate ×1
+    - `assemble` → "Award is bonded, cured, and stable." — Completionist Award II ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -120,8 +123,10 @@ Completionist quests build practical progression through the completionist skill
 - Unlock prerequisite:
     - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "I'll check back" — Completionist Award II ×1
-    - `remind` → "Reminder set" — weekly quest reminder ×1
+    - `start` → "I'll set up a tracking habit." — Completionist Award II ×1
+    - `remind` → "Reminder plus backup note are saved." — weekly quest reminder ×1
+    - `verify` → "Next trigger is visible and notifications are enabled." — weekly quest reminder ×1
+    - `recover-missed-alert` → "Backup reminders are rebuilt. Re-run the verification." — weekly quest reminder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -141,3 +146,5 @@ Completionist quests build practical progression through the completionist skill
 - Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
+- Reminder QA: `completionist/reminder` now requires a verification pass and includes a missed-alert recovery loop before finish.
+- Trophy QA: `completionist/v2` now includes core inspection, fit-check validation, and explicit recovery paths for warped prints and bad plate fits.

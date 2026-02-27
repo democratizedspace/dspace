@@ -303,9 +303,12 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/offgrid-charger`
 - Dialogue `requiresItems` gates:
-    - `kit` → "Parts staged and safe." — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
+    - `kit` → "Parts staged, dry, and storm watch is clear." — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - `wire` → "Cable ends are tight and fused." — portable solar kit (wired) ×1
-    - `harvest` → "Harvested 200 Wh without any hot cables." — dSolar ×200
+    - `harvest` → "Harvest run complete; check output logs." — dSolar ×200
+    - `verify-yield` → "Verified 200 Wh and safe shutdown notes captured." — dSolar ×200
+    - `rewire-recovery` → "Rewire complete; begin harvest again." — portable solar kit (wired) ×1
+    - `low-yield-recovery` → "Conditions stabilized; retry the harvest pass." — portable solar kit (wired) ×1
 - Grants:
     - `kit` → "Take the loaner kit" — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
@@ -320,6 +323,7 @@ Energy quests build practical progression through the energy skill tree. This pa
         - Requires: portable solar kit (wired) ×1
         - Consumes: none
         - Creates: dWatt ×200, dSolar ×200
+- QA note: `energy/portable-solar-panel` now enforces a post-harvest verification gate and includes separate recovery loops for unsafe wiring and low-yield weather conditions.
 
 ## 14) Install a Power Inverter (`energy/power-inverter`)
 
