@@ -1,31 +1,130 @@
 {
     "id": "firstaid/sanitize-pocket-mask",
     "title": "Sanitize Your CPR Pocket Mask",
-    "description": "Clean and disinfect your CPR mask so it's safe for the next emergency.",
+    "description": "Clean and disinfect your CPR mask with a verify-and-recovery loop so it is safe for the next emergency.",
     "image": "/assets/quests/firstaid_sanitize_cpr_pocket_mask.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session.\nLet's sanitize it so it's ready for the next use.",
+            "text": "Your CPR pocket mask hasn't been cleaned since the last practice session. We'll inspect, disinfect, then confirm safe storage.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "clean",
-                    "text": "How do I clean it?"
+                    "goto": "inspect",
+                    "text": "Show me the sanitation workflow"
                 }
             ]
         },
         {
-            "id": "clean",
-            "text": "Wash the mask with warm soapy water, rinse and soak it in a 1:10 bleach solution for two minutes.\nLet it air dry completely before storing it in your first aid kit.",
+            "id": "inspect",
+            "text": "Inspect the mask valve and body for cracks, tears, or stiff plastic. Damaged masks should be removed from service.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Mask is sanitized",
+                    "goto": "wash",
+                    "text": "Mask is intact and serviceable",
                     "requiresItems": [
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Mask is cracked or valve is compromised"
+                }
+            ]
+        },
+        {
+            "id": "wash",
+            "text": "Wash the mask with warm soapy water, rinse thoroughly, and avoid abrasive scrubbing that can damage the valve.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "disinfect",
+                    "text": "Mask washed and rinsed"
+                }
+            ]
+        },
+        {
+            "id": "disinfect",
+            "text": "Soak in a 1:10 bleach solution for a full two minutes. Shorter contact times do not count as complete disinfection.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "dry",
+                    "text": "Two-minute soak completed",
+                    "requiresItems": [
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-soak",
+                    "text": "I interrupted the soak early"
+                }
+            ]
+        },
+        {
+            "id": "retry-soak",
+            "text": "Restart the disinfection timer with fresh solution, then repeat the full soak window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "disinfect",
+                    "text": "Restart disinfection"
+                }
+            ]
+        },
+        {
+            "id": "dry",
+            "text": "Air-dry the mask completely on a clean surface. Moisture trapped in storage can re-contaminate the kit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Mask is fully dry",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        },
+                        {
+                            "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-soak",
+                    "text": "Still smells strongly of bleach or looks soapy"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Seal the mask in a clean pouch, log today's sanitation date, and restock it in your first aid kit.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Mask sanitized and storage verified",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        },
                         {
                             "id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
                             "count": 1
@@ -35,12 +134,13 @@
             ]
         },
         {
-            "id": "finish",
-            "text": "All clean! A sanitized mask protects both you and your patient during resuscitation.",
+            "id": "safety-stop",
+            "text": "Safety stop: do not reuse a damaged CPR mask. Replace it before next practice or real-world use.",
             "options": [
                 {
-                    "type": "finish",
-                    "text": "Ready for emergencies"
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Replacement mask acquired; re-run inspection"
                 }
             ]
         }
@@ -55,7 +155,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

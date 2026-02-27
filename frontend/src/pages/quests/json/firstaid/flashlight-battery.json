@@ -1,31 +1,140 @@
 {
     "id": "firstaid/flashlight-battery",
     "title": "Check Flashlight Battery",
-    "description": "Measure your emergency flashlight's 9 V battery with a digital multimeter.",
+    "description": "Measure your emergency flashlight's 9 V battery with a digital multimeter and follow a retest workflow before signing off readiness.",
     "image": "/assets/quests/firstaid_flashlight_battery_check.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Power failures happen. Let's make sure your red flashlight still has juice.",
+            "text": "Power failures happen. Before we trust this flashlight, we'll run a dry-area precheck, measure voltage, and log what to do next.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "precheck",
+                    "text": "Start the battery readiness check"
+                }
+            ]
+        },
+        {
+            "id": "precheck",
+            "text": "Confirm your hands are dry and the battery compartment is free of corrosion or moisture. Do not probe a wet or leaking battery.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Grab the multimeter."
+                    "text": "Area is dry and contacts look clean",
+                    "requiresItems": [
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I found corrosion or an unstable contact"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Battery is leaking or hot"
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Set the meter to 20 V DC and measure across the 9 V battery terminals.",
+            "text": "Set the multimeter to DC volts and probe the battery terminals. A healthy 9 V battery should read close to rated voltage.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Battery reads 9 V",
+                    "goto": "log",
+                    "text": "Reading is in-range (8.7 V to 9.6 V)",
                     "process": "check-flashlight-battery",
+                    "requiresItems": [
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "80d30825-a42b-4add-b715-322e1713952c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "replace",
+                    "text": "Reading is low (<8.7 V)"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Reading jumps around or seems unreliable"
+                }
+            ]
+        },
+        {
+            "id": "replace",
+            "text": "Swap in a known-good 9 V battery, clean the contacts if needed, and re-test before declaring the flashlight ready.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Battery replaced, ready to retest",
+                    "requiresItems": [
+                        {
+                            "id": "80d30825-a42b-4add-b715-322e1713952c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshoot by reseating probes, cleaning oxidation, and checking meter leads. If the reading is still unstable, pause and inspect gear before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Contacts cleaned and probes reseated",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "80d30825-a42b-4add-b715-322e1713952c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Still unstable and getting warm"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Run a second voltage check and only close this task after an in-range result.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Re-run measurement",
                     "requiresItems": [
                         {
                             "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
@@ -44,12 +153,23 @@
             ]
         },
         {
-            "id": "finish",
-            "text": "Great! Replace the battery if it drops below 7.5 V.",
+            "id": "log",
+            "text": "Record the voltage, replacement date (if any), and next check date on your kit checklist so readiness is auditable.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Will do."
+                    "text": "Flashlight readiness logged"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Safety stop: if a battery is leaking, swollen, or hot, isolate the flashlight and follow local hazardous battery disposal guidance before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Issue contained, return to troubleshooting"
                 }
             ]
         }
@@ -64,7 +184,7 @@
     "hardening": {
         "passes": 0,
         "score": 75,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

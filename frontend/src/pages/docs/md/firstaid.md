@@ -57,7 +57,9 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/assemble-kit`
 - Dialogue `requiresItems` gates:
-    - `measure` → "Battery reads 9 V" — red flashlight ×1, digital multimeter ×1, 9 V battery ×1
+    - `precheck` → "Area is dry and contacts look clean" — red flashlight ×1, digital multimeter ×1
+    - `measure` → "Reading is in-range (8.7 V to 9.6 V)" — red flashlight ×1, digital multimeter ×1, 9 V battery ×1
+    - `retest` → "Re-run measurement" — red flashlight ×1, digital multimeter ×1, 9 V battery ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -68,6 +70,10 @@ First Aid quests build practical progression through the first aid skill tree. T
         - Requires: red flashlight ×1, digital multimeter ×1, 9 V battery ×1
         - Consumes: none
         - Creates: none
+- QA notes:
+    - Quest now follows precheck → measurement → logging instead of a single hop into `finish`.
+    - Adds troubleshooting/retest loop (`troubleshoot` ↔ `measure`) and low-voltage recovery branch (`replace` → `retest`).
+    - Includes safety stop for leaking/hot batteries before resuming the workflow.
 
 ## 3) Practice Basic CPR (`firstaid/learn-cpr`)
 
@@ -134,7 +140,10 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/learn-cpr`
 - Dialogue `requiresItems` gates:
-    - `clean` → "Mask is sanitized" — CPR pocket mask ×1
+    - `inspect` → "Mask is intact and serviceable" — CPR pocket mask ×1, nitrile gloves (pair) ×1
+    - `disinfect` → "Two-minute soak completed" — CPR pocket mask ×1
+    - `dry` → "Mask is fully dry" — first aid kit ×1, CPR pocket mask ×1
+    - `verify` → "Mask sanitized and storage verified" — first aid kit ×1, CPR pocket mask ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -142,6 +151,10 @@ First Aid quests build practical progression through the first aid skill tree. T
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Sanitization now requires inspect → wash → disinfect → dry → verify checkpoints with item-backed evidence.
+    - Adds a failed-soak recovery loop (`retry-soak`) so interrupted disinfection cannot bypass validation.
+    - Adds a domain safety stop for damaged valves/mask bodies before returning to inspection.
 
 ## 7) Stop a Nosebleed (`firstaid/stop-nosebleed`)
 
@@ -281,7 +294,10 @@ First Aid quests build practical progression through the first aid skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `firstaid/wound-care`
 - Dialogue `requiresItems` gates:
-    - `wrap` → "Splint secured" — first aid kit ×1
+    - `assess` → "Injury appears minor and patient is stable" — first aid kit ×1, nitrile gloves (pair) ×1
+    - `stage` → "Supplies staged and padding in place" — first aid kit ×1
+    - `secure` → "Splint secured; ready to verify circulation" — first aid kit ×1
+    - `verify` → "Circulation stable and limb immobilized" — first aid kit ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -289,6 +305,10 @@ First Aid quests build practical progression through the first aid skill tree. T
     - cured compost bucket ×1
 - Processes used:
     - None
+- QA notes:
+    - Progression now enforces triage → staging → securing → circulation verification before completion.
+    - Adds a corrective adjustment branch (`adjust`) with re-verification loop for tight/unstable splints.
+    - Adds an emergency safety stop path for red-flag symptoms and failed circulation checks.
 
 ## QA flow notes
 
