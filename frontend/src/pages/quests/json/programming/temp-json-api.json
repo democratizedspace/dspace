@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Your API returns static data. Let's feed it live temperature readings.",
+            "text": "Your API returns static data. Let's feed it live temperature readings and verify the values stay sane under real sensor noise.",
             "options": [
                 {
                     "type": "goto",
@@ -33,7 +33,7 @@
         },
         {
             "id": "code",
-            "text": "Read the sensor and respond with JSON like `{ \"temp\": 22.5 }` at `/temp`. Keep it lightweight so it can run alongside the logger and stay worthy of being called a live temperature JSON endpoint.",
+            "text": "Read the sensor and respond with JSON like `{ \"temp\": 22.5 }` at `/temp`. Keep it lightweight so it can run alongside the logger.",
             "options": [
                 {
                     "type": "process",
@@ -42,8 +42,57 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "sample",
+                    "text": "Endpoint is live. Let's validate sample readings.",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "sample",
+            "text": "Capture three readings a minute apart and compare them with your sensor baseline. The safe room range for this run is 18C–30C.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pass-window",
+                    "text": "All three readings landed between 18C and 30C."
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "One or more readings are outside 18C–30C."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Great catch. Pause automation and troubleshoot before exposing bad telemetry: check wiring, sensor seating, and unit conversion (C vs F).",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "deploy-temperature-json-endpoint",
+                    "text": "Patch the endpoint and restart the service."
+                },
+                {
+                    "type": "goto",
+                    "goto": "sample",
+                    "text": "Re-run the three-reading check after the fix."
+                }
+            ]
+        },
+        {
+            "id": "pass-window",
+            "text": "Nice! With the endpoint stable in-range, record that validation in your run log so downstream graphs can trust this feed.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Endpoint streaming data!",
+                    "text": "Validation logged.",
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
@@ -55,7 +104,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice! Clients can now fetch the current temperature from your server.",
+            "text": "Nice! Clients can now fetch the current temperature from your server with clear validation bounds and a recovery plan.",
             "options": [
                 {
                     "type": "finish",

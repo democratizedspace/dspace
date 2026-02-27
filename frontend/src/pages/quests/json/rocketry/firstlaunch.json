@@ -134,7 +134,7 @@
         },
         {
             "id": "launch",
-            "text": "Almost there. You'll need a launch pad, igniter, and launch controller. The pad keeps it straight; the controller lights it. Here\u2014spares from my kit.",
+            "text": "Almost there. You need a launch pad, igniter, and controller. We do a safety gate before touching ignition.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -152,10 +152,12 @@
                             "count": 1
                         }
                     ],
-                    "text": "Oh cool, I'll never turn down free stuff!"
+                    "text": "Thanks for the spare launch kit."
                 },
                 {
                     "type": "goto",
+                    "goto": "range-safety",
+                    "text": "Kit is staged. Run the range safety checklist.",
                     "requiresItems": [
                         {
                             "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
@@ -169,20 +171,50 @@
                             "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
                             "count": 1
                         }
-                    ],
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "range-safety",
+            "text": "Safety stop conditions: wind gusts above your local limit, people inside the exclusion zone, or uncertain recovery path means no launch.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "go",
-                    "text": "We are go for launch!!! Right?"
+                    "text": "Range is clear, weather is within limits, and recovery zone is confirmed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "range-hold",
+                    "text": "One or more stop conditions triggered. Hold launch."
+                }
+            ]
+        },
+        {
+            "id": "range-hold",
+            "text": "Good call. Stand down, re-brief the crew, and correct the issue before any ignition attempt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range-safety",
+                    "text": "Hazard cleared. Re-run safety checklist."
                 }
             ]
         },
         {
             "id": "go",
-            "text": "Place the rocket on the pad, insert the igniter, connect the controller, and step back. On your call, press launch and track the flight.",
+            "text": "Pad is clear, countdown is called, and everyone is behind the line. If ignition fails, stand down before retrying.",
             "options": [
                 {
                     "type": "process",
                     "process": "launch-rocket",
                     "text": "3 ... 2 ... 1 ... LIFTOFF!!!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot-ignition",
+                    "text": "No liftoff or unstable ignition. Abort and troubleshoot first."
                 },
                 {
                     "type": "goto",
@@ -193,13 +225,24 @@
                             "count": 1
                         }
                     ],
-                    "text": "Whoa! I can't believe I launched a rocket!! It didn't survive the landing, though, unfortunately."
+                    "text": "Launch successful and recovery complete."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot-ignition",
+            "text": "Troubleshooting path: disconnect controller power, inspect igniter seating, and verify motor retention before any retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range-safety",
+                    "text": "Issue fixed. Return to safety gate before relaunch."
                 }
             ]
         },
         {
             "id": "done",
-            "text": "Still a huge win. You're on your way to rocketeer status. We'll iterate the design and aim for a clean recovery next time.",
+            "text": "Huge win. You launched safely, handled go/no-go decisions, and completed recovery discipline like a real range crew.",
             "options": [
                 {
                     "type": "finish",
@@ -216,9 +259,15 @@
     ],
     "requiresQuests": ["3dprinter/start"],
     "hardening": {
-        "passes": 0,
+        "passes": 1,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-hardening-2026-02-27",
+                "date": "2026-02-27",
+                "score": 100
+            }
+        ]
     }
 }

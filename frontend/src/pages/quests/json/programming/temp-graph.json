@@ -33,7 +33,7 @@
         },
         {
             "id": "code",
-            "text": "Add a lightweight web page that calls your live temperature JSON endpoint and renders an updating line chart with Chart.js or another browser-friendly library.",
+            "text": "Add a lightweight web page that calls your live temperature JSON endpoint and renders an updating line chart.",
             "options": [
                 {
                     "type": "process",
@@ -42,8 +42,57 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "review",
+                    "text": "Dashboard is up. Let's verify the graph behavior.",
+                    "requiresItems": [
+                        {
+                            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "review",
+            "text": "Check the last five points. Accept only if updates arrive every minute and values stay in the expected 18-30C window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stable",
+                    "text": "Cadence and values look good."
+                },
+                {
+                    "type": "goto",
+                    "goto": "drift",
+                    "text": "The graph is stale or values drift outside the safe window."
+                }
+            ]
+        },
+        {
+            "id": "drift",
+            "text": "Do not trust a drifting dashboard. Verify API timestamps, browser cache headers, and sensor units before declaring success.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "publish-live-temperature-graph",
+                    "text": "Republish after fixes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "review",
+                    "text": "Re-check five fresh points."
+                }
+            ]
+        },
+        {
+            "id": "stable",
+            "text": "Great. Capture a screenshot/log note for your ops journal so others can audit this dashboard baseline later.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Graph generated!",
+                    "text": "Evidence captured.",
                     "requiresItems": [
                         {
                             "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
@@ -55,7 +104,7 @@
         },
         {
             "id": "finish",
-            "text": "Nice work! Visualizing data makes patterns much easier to spot.",
+            "text": "Nice work! Visualizing data makes patterns much easier to spot, and now you have pass/fail checks for reliability.",
             "options": [
                 {
                     "type": "finish",
