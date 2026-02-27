@@ -1,7 +1,7 @@
 {
     "id": "firstaid/stop-nosebleed",
     "title": "Stop a Nosebleed",
-    "description": "Sit upright, lean forward, and pinch the soft part of your nose with a sterile gauze pad. Wear nitrile gloves from a first aid kit, use an antiseptic wipe around your nostrils after bleeding slows, and keep your head tilted forward the whole time. Never tilt your head back or insert anything into the nostrils.",
+    "description": "Sit upright, lean forward, and pinch the soft part of your nose with sterile gauze. Wear nitrile gloves, never tilt your head back, and escalate to urgent care when warning signs persist.",
     "image": "/assets/quests/stop_nosebleed_first_aid.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
@@ -12,19 +12,35 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "pressure",
-                    "text": "How do I stop it?"
+                    "goto": "safety-screen",
+                    "text": "Show me the safe first steps"
                 }
             ]
         },
         {
-            "id": "pressure",
-            "text": "Sit upright and lean forward about 30\u00b0 so blood drains out, not down your throat. Put on nitrile gloves from a first aid kit, fold a sterile gauze pad over the soft part of your nose, and pinch firmly. Breathe through your mouth and hold steady pressure for at least 10 minutes without checking early. When bleeding slows, wipe around the nostrils with an antiseptic wipe without inserting anything into the nose. Do not tilt your head back or stuff anything into the nostrils.",
+            "id": "safety-screen",
+            "text": "Safety screen first: call emergency services immediately for heavy bleeding after major trauma, trouble breathing, fainting, or blood-thinner complications.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Holding pressure now.",
+                    "goto": "pressure-round-one",
+                    "text": "No emergency red flags right now"
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "Emergency red flags are present"
+                }
+            ]
+        },
+        {
+            "id": "pressure-round-one",
+            "text": "Lean forward about 30°, place sterile gauze over the soft part of your nose, and pinch firmly for a full 10 minutes without checking early. Wear gloves and breathe through your mouth.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "check-result",
+                    "text": "Completed first 10-minute pressure cycle",
                     "requiresItems": [
                         {
                             "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
@@ -37,9 +53,44 @@
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
-                        },
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "check-result",
+            "text": "Interpretation gate: if bleeding is slowing, clean around the nostrils with an antiseptic wipe (never insert anything). If bleeding is still active, run a second pressure cycle and prepare to escalate.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "aftercare",
+                    "text": "Bleeding slowed and is nearly stopped",
+                    "requiresItems": [
                         {
                             "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "pressure-round-two",
+                    "text": "Still actively bleeding"
+                }
+            ]
+        },
+        {
+            "id": "pressure-round-two",
+            "text": "Troubleshooting loop: reset with fresh gauze and repeat pressure for another 10 minutes while leaning forward. Do not tilt your head back.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "post-second-check",
+                    "text": "Second pressure cycle complete",
+                    "requiresItems": [
+                        {
+                            "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
                             "count": 1
                         }
                     ]
@@ -47,14 +98,52 @@
             ]
         },
         {
-            "id": "finish",
-            "text": "If bleeding hasn't stopped after 20 minutes, is heavy, you're on blood thinners, or you feel faint, seek medical help or call emergency services. After it stops, rest with your head elevated, throw away used supplies, wash your hands, and avoid blowing or picking your nose for the rest of the day.",
+            "id": "post-second-check",
+            "text": "If bleeding still has not stopped after 20 minutes total, this exceeds home-care limits.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "aftercare",
+                    "text": "Bleeding has now stopped"
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "Bleeding continues after 20 minutes"
+                }
+            ]
+        },
+        {
+            "id": "escalate",
+            "text": "Safety stop: seek urgent medical care now. Keep leaning forward, avoid packing the nostril, and bring notes on duration and any medications.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Escalation complete"
+                }
+            ]
+        },
+        {
+            "id": "aftercare",
+            "text": "Aftercare: rest with head elevated, discard used supplies, wash hands, and avoid nose blowing or heavy exertion for the day.",
             "options": [
                 {
                     "type": "process",
                     "process": "stop-nosebleed",
                     "text": "Review nosebleed control steps"
                 },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Aftercare logged"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "You completed a safety-first nosebleed response with escalation criteria and re-check loops.",
+            "options": [
                 {
                     "type": "finish",
                     "text": "Will do."
@@ -72,7 +161,7 @@
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",
