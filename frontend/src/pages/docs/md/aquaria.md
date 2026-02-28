@@ -205,12 +205,12 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `start` → "Tank is ready for heat" — Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1, Restored sponge filter flow ×1
     - `mount` → "Heater installed and powered on" — Heated Walstad aquarium (80 L, 26°C) ×1
     - `verify` → "Reading recorded" — Aquarium temperature reading ×1
-    - `interpret` → "Range held at 25–27°C for two checks" — Aquarium temperature reading ×1
+    - `interpret` → "Range held at 25–27°C for two checks" — Aquarium temperature reading ×1, Heated Walstad aquarium (80 L, 26°C) ×1
     - `interpret` → "Temperature overshot or dropped outside safe range" — Aquarium temperature reading ×1
     - `interpret` → "Heater glass looks cracked, exposed, or intermittently powered" — none
     - `safety-lockout` → "Replacement heater is staged; rerun rollback verification." — none
     - `safety-lockout` → "Lockout documented and manual monitoring plan is active." — none
-    - `rollback` → "Apply rollback and capture a fresh verification reading" — none
+    - `rollback` → "Apply rollback and capture a fresh stabilized reading" — Heated Walstad aquarium (80 L, 26°C) ×1
     - `rollback` → "Fresh post-rollback reading is logged" — Aquarium temperature reading ×1
     - `rollback` → "Drift or instability continues after rollback; lock out and replace hardware." — none
 - Grants:
@@ -295,7 +295,9 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/water-testing`
 - Dialogue `requiresItems` gates:
-    - `start` → "Bench is clear and kit is open." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
+    - `start` → "Bench is clear, PPE is on, and kit + logbook are ready." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1, water test logbook ×1
+    - `start` → "PPE or logbook is missing; pause and recover setup first." — none
+    - `ppe-recovery` → "PPE and logbook are staged; restart measurement." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1, water test logbook ×1
     - `measure` → "Run the liquid tests." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
     - `measure` → "Readings are ready to log." — Liquid test readings ×1
     - `log` → "Record the results in the logbook." — Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
@@ -303,6 +305,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `interpret` → "All readings are within guardrails" — Logged water parameters ×1
     - `interpret` → "At least one value is out of range" — Logged water parameters ×1
     - `interpret` → "Ammonia or nitrite is above 0 ppm (critical event)" — Logged water parameters ×1
+    - `interpret` → "Trend looks noisy or unclear; capture a confirmatory panel before acting." — Logged water parameters ×1
     - `critical-response` → "Emergency change complete; rerun full measurement panel" — Freshly changed aquarium (80 L) ×1
     - `corrective` → "Correction complete, re-measure the panel" — Freshly changed aquarium (80 L) ×1
 - Grants:
@@ -333,13 +336,16 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `start` → "Strip and gloves ready." — pH strip ×1, nitrile gloves (pair) ×1
     - `dip` → "Dip and read the strip." — pH strip ×1, nitrile gloves (pair) ×1
     - `dip` → "Reading recorded from the strip." — Aquarium pH reading ×1
+    - `dip` → "Color pad bled or read window was missed; stage a clean retest." — none
     - `interpret` → "Reading is within 6.8–7.6" — Aquarium pH reading ×1
     - `interpret` → "Reading is out of range" — Aquarium pH reading ×1
+    - `strip-recovery` → "Fresh strip staged; rerun the dip and timed read." — pH strip ×1, nitrile gloves (pair) ×1
     - `corrective` → "Correction staged; run a mandatory re-test" — pH strip ×1, nitrile gloves (pair) ×1
     - `log` → "Write it in the logbook." — Aquarium pH reading ×1, water test logbook ×1
     - `log` → "Entry logged and dated." — Logged pH entry ×1
 - Grants:
     - `start` → "I need a strip." — pH strip ×1
+    - `strip-recovery` (node grant) — pH strip ×1
     - `corrective` (node grant) — pH strip ×1
     - Quest-level `grantsItems`: None
 - Rewards:

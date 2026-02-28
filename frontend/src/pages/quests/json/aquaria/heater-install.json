@@ -33,7 +33,7 @@
         },
         {
             "id": "mount",
-            "text": "Unplug other gear, submerge the heater near flow, set 26\u00b0C, and wait 20 minutes before powering so the glass equalizes to water temp.",
+            "text": "Unplug other gear, submerge the heater near flow, set 26°C, and wait 20 minutes before powering so the glass equalizes to water temp.",
             "options": [
                 {
                     "type": "process",
@@ -55,7 +55,7 @@
         },
         {
             "id": "verify",
-            "text": "Log the stabilized temperature before adding fish. Acceptable range is 25\u201327\u00b0C after a full warm-up window.",
+            "text": "Log the stabilized temperature before adding fish. Acceptable range is 25–27°C after a full warm-up window.",
             "options": [
                 {
                     "type": "process",
@@ -82,10 +82,14 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Range held at 25\u201327\u00b0C for two checks",
+                    "text": "Range held at 25–27°C for two checks",
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        },
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
                             "count": 1
                         }
                     ]
@@ -116,7 +120,13 @@
                     "type": "process",
                     "process": "log-walstad-temperature",
                     "goto": "interpret",
-                    "text": "Apply rollback and capture a fresh verification reading"
+                    "text": "Apply rollback and capture a fresh stabilized reading",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -169,11 +179,15 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer", "aquaria/walstad"],
+    "requiresQuests": [
+        "aquaria/sponge-filter",
+        "aquaria/thermometer",
+        "aquaria/walstad"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-16",

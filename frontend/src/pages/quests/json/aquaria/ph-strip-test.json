@@ -67,6 +67,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "strip-recovery",
+                    "text": "Color pad bled or read window was missed; stage a clean retest."
                 }
             ]
         },
@@ -92,6 +97,33 @@
                     "requiresItems": [
                         {
                             "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "strip-recovery",
+            "text": "Troubleshooting branch: discard the compromised strip, restage PPE, and use a fresh strip with the chart at eye level before re-reading.",
+            "grantsItems": [
+                {
+                    "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                    "count": 1
+                }
+            ],
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "dip",
+                    "text": "Fresh strip staged; rerun the dip and timed read.",
+                    "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         }
                     ]
@@ -179,11 +211,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing"],
+    "requiresQuests": [
+        "aquaria/water-testing"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

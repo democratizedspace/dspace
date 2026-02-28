@@ -8,19 +8,45 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Logs are how we catch trouble before livestock pays the price. Gloves on, kit open, and let's collect ammonia, nitrite, nitrate, and pH as a full snapshot.",
+            "text": "Logs are how we catch trouble before livestock pays the price. Confirm PPE, kit reagents, and logbook are ready before any sample leaves the tank.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Bench is clear and kit is open.",
+                    "text": "Bench is clear, PPE is on, and kit + logbook are ready.",
                     "requiresItems": [
                         {
-                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         },
                         {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "ppe-recovery",
+                    "text": "PPE or logbook is missing; pause and recover setup first."
+                }
+            ]
+        },
+        {
+            "id": "ppe-recovery",
+            "text": "Recovery branch: restage gloves, goggles, and logbook, then restart measurement with clean tools to avoid contaminated records.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "PPE and logbook are staged; restart measurement.",
+                    "requiresItems": [
+                        {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
                             "count": 1
                         }
                     ]
@@ -137,6 +163,17 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Trend looks noisy or unclear; capture a confirmatory panel before acting.",
+                    "requiresItems": [
+                        {
+                            "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -201,7 +238,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing"],
+    "requiresQuests": [
+        "aquaria/water-testing"
+    ],
     "hardening": {
         "passes": 2,
         "score": 95,
