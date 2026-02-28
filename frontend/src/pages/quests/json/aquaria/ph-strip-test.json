@@ -95,6 +95,17 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "emergency-response",
+                    "text": "Reading is below 6.4 or above 8.0 (livestock stress risk)",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -113,6 +124,42 @@
                     "goto": "dip",
                     "text": "Correction staged; run a mandatory re-test",
                     "requiresItems": [
+                        {
+                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "emergency-response",
+            "text": "Safety stop: hold feeding changes, run a partial water change first, then retest with a fresh strip before normal correction loops.",
+            "grantsItems": [
+                {
+                    "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                    "count": 1
+                }
+            ],
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run emergency partial water change"
+                },
+                {
+                    "type": "goto",
+                    "goto": "dip",
+                    "text": "Emergency action complete; perform mandatory re-test",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        },
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                             "count": 1

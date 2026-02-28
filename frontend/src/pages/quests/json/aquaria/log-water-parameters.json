@@ -62,7 +62,7 @@
         },
         {
             "id": "log",
-            "text": "Record date/time plus all four fields. Minimum cadence is every 48 hours for stocked tanks. Flag ammonia or nitrite above 0 ppm, nitrate above 40 ppm, or pH outside 6.8–7.6.",
+            "text": "Record date/time plus all four fields. Minimum cadence is every 48 hours for stocked tanks. Flag ammonia or nitrite above 0 ppm, nitrate above 40 ppm, or pH outside 6.8–7.6. Incomplete logs must be corrected before closure.",
             "options": [
                 {
                     "type": "process",
@@ -98,6 +98,43 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "audit-gap",
+                    "text": "Log entry is missing a field or timestamp",
+                    "requiresItems": [
+                        {
+                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "audit-gap",
+            "text": "Audit branch: incomplete records are operationally unsafe. Re-run the panel if needed, then rewrite the full entry with timestamp and all four parameters.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Re-run measurements to complete missing fields",
+                    "requiresItems": [
+                        {
+                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "All fields and timestamp are now complete"
                 }
             ]
         },
