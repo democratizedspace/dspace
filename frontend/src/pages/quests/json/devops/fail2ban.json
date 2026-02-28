@@ -24,6 +24,44 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "canary",
+                    "text": "Run a canary dry-run before cluster-wide rollout.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "canary",
+            "text": "Canary path: apply allowlist and mild ban thresholds on one node, then observe whether trusted admin IPs remain unbanned before full rollout.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture canary baseline report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Canary evidence looks safe. Promote policy cluster-wide.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Canary shows lockout risk. Enter recovery before rollout."
                 }
             ]
         },
@@ -60,6 +98,17 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "policy-tune",
+                    "text": "Ban evidence exists, but false positives hit trusted admin sources.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "recover",
                     "text": "Ban evidence missing or admin access degraded.",
                     "requiresItems": [
@@ -76,6 +125,28 @@
                     "requiresItems": [
                         {
                             "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "policy-tune",
+            "text": "Tune jail policy: add allowlisted admin ranges, reduce bantime for false positives, and document why each threshold changed.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Record policy-tuning changes and expected side effects."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Tuning captured. Re-run controlled login failure tests.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
                             "count": 1
                         }
                     ]
@@ -127,7 +198,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["devops/ssh-hardening"],
+    "requiresQuests": [
+        "devops/ssh-hardening"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

@@ -165,8 +165,10 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `requiresQuests`: `devops/k3s-deploy`
 - Dialogue `requiresItems` gates:
     - `install` → "Dashboards are loading and metrics are scraping." — external backup SSD ×1
-    - `verify` → "Snapshot meets thresholds and is logged in ops notes." — external backup SSD ×1, Pi cluster node ×1
-    - `incident` → "Load spike mitigated. Re-run the 15-minute verification window." — Pi cluster node ×1
+    - `verify` → "Snapshot meets thresholds. Compile the monitoring logbook artifact." — external backup SSD ×1, Pi cluster node ×1
+    - `incident` → "Incident extract captured. Choose the remediation path." — incident log extract ×1
+    - `classify` → all remediation exits require incident log extract ×1
+    - `logbook` → "Logbook complete with thresholds, cadence, and evidence archive." — journalctl report ×1, external backup SSD ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -177,6 +179,14 @@ Devops quests build practical progression through the devops skill tree. This pa
         - Requires: Pi cluster node ×1
         - Consumes: none
         - Creates: external backup SSD ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
 
 ## 7) Enable Automatic Updates (`devops/auto-updates`)
 
@@ -246,7 +256,8 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `start` → "Console access confirmed. Stage certbot." — Pi cluster node ×1, auto-update health report ×1
     - `provision` → "Certificates minted." — Pi cluster node ×1, auto-update health report ×1
     - `verify` → "TLS health verified with clean chain and renewal output." — TLS certificate bundle ×1, Pi cluster node ×1
-    - `rollback` → "Rollback complete. Retry certificate provisioning." — Pi cluster node ×1
+    - `rollback` → "Rollback checks captured. Decide whether to retry issuance or pause." — Pi cluster node ×1
+    - `rollback-verify` → "Rollback is stable. Retry certificate provisioning." — HTTPS service check ×1, Pi cluster node ×1
     - `finish` → "Document the renewal schedule." — HTTPS service check ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -420,9 +431,13 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `requiresQuests`: `devops/ssh-hardening`
 - Dialogue `requiresItems` gates:
     - `start` → "Stage a fail2ban policy." — Pi cluster node ×1, Laptop Computer ×1
+    - `start` → "Run a canary dry-run before cluster-wide rollout." — Pi cluster node ×1
+    - `canary` → "Canary evidence looks safe. Promote policy cluster-wide." — journalctl report ×1
+    - `verify` → "Ban evidence exists, but false positives hit trusted admin sources." — journalctl report ×1
     - `stage` → "Policy staged; capture ban evidence." — Pi cluster node ×1
     - `verify` → "Ban evidence missing or admin access degraded." — journalctl report ×1
     - `verify` → "Ban telemetry and admin access both pass." — journalctl report ×1
+    - `policy-tune` → "Tuning captured. Re-run controlled login failure tests." — incident log extract ×1
     - `recover` → "Mitigation applied; verify again." — incident log extract ×1
     - `finish` → "Keep fail2ban metrics in weekly ops review." — journalctl report ×1
 - Grants:
