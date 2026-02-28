@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Want off-grid power on the go? I have a 200 W portable panel, charge controller, and 200 Wh pack\u2014if you wire them right.",
+            "text": "Want off-grid power on the go? I have a 200 W portable panel, charge controller, and 200 Wh pack—if you wire them right.",
             "options": [
                 {
                     "type": "goto",
@@ -113,13 +113,13 @@
                 {
                     "type": "goto",
                     "goto": "safety-pause",
-                    "text": "Wind picked up\u2014pause and reset the site."
+                    "text": "Wind picked up—pause and reset the site."
                 }
             ]
         },
         {
             "id": "wire",
-            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead\u2014red to positive, black to negative\u2014torque to spec, and zip-tie strain relief so nothing yanks free.",
+            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead—red to positive, black to negative—torque to spec, and zip-tie strain relief so nothing yanks free.",
             "options": [
                 {
                     "type": "process",
@@ -179,7 +179,7 @@
         },
         {
             "id": "harvest",
-            "text": "Face the panel toward the sun, shade the battery, and start charging. Stop if connectors warm up or voltage dips below the controller\u2019s low-cutoff.",
+            "text": "Face the panel toward the sun, shade the battery, and start charging. Stop if connectors warm up or voltage dips below the controller’s low-cutoff.",
             "options": [
                 {
                     "type": "process",
@@ -200,7 +200,7 @@
                 {
                     "type": "goto",
                     "goto": "cloud-recovery",
-                    "text": "Clouds rolled in or cable temps rose\u2014stabilize before retry."
+                    "text": "Clouds rolled in or cable temps rose—stabilize before retry."
                 }
             ]
         },
@@ -258,13 +258,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "energy/offgrid-charger"
-    ],
+    "requiresQuests": ["energy/offgrid-charger"],
     "hardening": {
         "passes": 1,
         "score": 96,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-energy-parity-2026-02-27",
