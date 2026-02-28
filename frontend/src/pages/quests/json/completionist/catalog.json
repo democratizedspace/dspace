@@ -55,8 +55,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Entry has serial + location + date, filing it now",
+                    "goto": "monitoring-check",
+                    "text": "Entry has serial + location + date",
                     "requiresItems": [
                         {
                             "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
@@ -68,6 +68,28 @@
                     "type": "goto",
                     "goto": "fix-entry",
                     "text": "Missing fields or blurry photo, I need to correct it"
+                }
+            ]
+        },
+        {
+            "id": "monitoring-check",
+            "text": "Set your maintenance cadence now: revisit this entry after every trophy move. Keep full serial details private and only publish redacted screenshots.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cadence noted and redaction policy understood",
+                    "requiresItems": [
+                        {
+                            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fix-entry",
+                    "text": "I need to re-record a cleaner, redacted-safe entry"
                 }
             ]
         },
@@ -114,7 +136,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

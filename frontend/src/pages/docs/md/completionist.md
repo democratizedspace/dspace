@@ -21,8 +21,12 @@ Completionist quests build practical progression through the completionist skill
 - Dialogue `requiresItems` gates:
     - `prep-printer` → "Printer is leveled and loaded" — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×150
     - `print-core` → "Core is printed and cool" — Completionist Award II core ×1
+    - `inspect-core` → "Core is dimensionally clean and stable" — Completionist Award II core ×1
+    - `recover-core` → "Recovery print complete, inspect again" — Completionist Award II core ×1
     - `print-plate` → "Plate fits the recess" — Completionist Award II core ×1, Completionist Award II nameplate ×1
     - `assemble` → "Award is bonded and cured" — Completionist Award II ×1
+    - `verify-assembly` → "Stability and finish checks pass" — Completionist Award II ×1
+    - `recover-assembly` → "Recovery complete, verify one more time" — Completionist Award II ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -54,7 +58,8 @@ Completionist quests build practical progression through the completionist skill
 - Dialogue `requiresItems` gates:
     - `start` → "Yeah, let's catalog it" — Completionist Award II ×1
     - `prep` → "I have an entry ready for review" — Completionist Award II ×1, completionist trophy log entry ×1
-    - `review` → "Entry has serial + location + date, filing it now" — completionist trophy log entry ×1
+    - `review` → "Entry has serial + location + date" — completionist trophy log entry ×1
+    - `monitoring-check` → "Cadence noted and redaction policy understood" — completionist trophy log entry ×1
     - `fix-entry` → "Retake complete, review again" — completionist trophy log entry ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
@@ -120,8 +125,10 @@ Completionist quests build practical progression through the completionist skill
 - Unlock prerequisite:
     - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "I'll check back" — Completionist Award II ×1
-    - `remind` → "Reminder set" — weekly quest reminder ×1
+    - `start` → "I'll set up a real weekly reminder" — Completionist Award II ×1
+    - `plan-window` → "Reminder exists and is repeating" — weekly quest reminder ×1
+    - `verify-reminder` → "Everything looks correct and active" — weekly quest reminder ×1
+    - `recover-reminder` → "Cleanup done, re-run verification" — weekly quest reminder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -137,7 +144,9 @@ Completionist quests build practical progression through the completionist skill
 
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
-- Catalog QA: `completionist/catalog` now requires a review checkpoint (serial + location + date) and supports a re-record loop when the log artifact is incomplete.
+- Catalog QA: `completionist/catalog` now includes a monitoring cadence checkpoint and explicit serial-redaction safety guidance before filing.
 - Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
+- Fabrication QA: `completionist/v2` now requires core inspection before nameplate printing and adds assembly recovery loops before final verification.
+- Reminder QA: `completionist/reminder` now enforces reminder verification criteria and includes a cleanup branch for muted or duplicate alerts.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.

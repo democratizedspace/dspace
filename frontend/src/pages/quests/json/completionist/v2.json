@@ -54,8 +54,57 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "print-plate",
+                    "goto": "inspect-core",
                     "text": "Core is printed and cool",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "inspect-core",
+            "text": "Inspect the core before engraving. Reject it if the base rocks or walls split; otherwise we can proceed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-plate",
+                    "text": "Core is dimensionally clean and stable",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-core",
+                    "text": "Warping or gaps detected, redo setup first"
+                }
+            ]
+        },
+        {
+            "id": "recover-core",
+            "text": "Good call. Re-level the bed and re-run the core print with tighter first-layer watch. Don't force-fit a bad base into final assembly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level the bed for a recovery pass"
+                },
+                {
+                    "type": "process",
+                    "process": "print-completionist-core",
+                    "text": "Reprint the core"
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect-core",
+                    "text": "Recovery print complete, inspect again",
                     "requiresItems": [
                         {
                             "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
@@ -102,8 +151,52 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify-assembly",
                     "text": "Award is bonded and cured",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-assembly",
+            "text": "Final QA: plate sits flush, edges are smooth, and the trophy stands without wobble before you call it done.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stability and finish checks pass",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-assembly",
+                    "text": "Plate shifted or surface still rough"
+                }
+            ]
+        },
+        {
+            "id": "recover-assembly",
+            "text": "Recovery path: lightly sand, re-seat with a minimal glue bead, and cure again before re-checking. Avoid excess glue near the engraved text.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-award-ii",
+                    "text": "Run an assembly recovery pass"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-assembly",
+                    "text": "Recovery complete, verify one more time",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",

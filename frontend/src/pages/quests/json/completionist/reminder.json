@@ -12,8 +12,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "remind",
-                    "text": "I'll check back",
+                    "goto": "plan-window",
+                    "text": "I'll set up a real weekly reminder",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
@@ -24,18 +24,62 @@
             ]
         },
         {
-            "id": "remind",
-            "text": "Use your phone or calendar app to nudge you every week. Capture the day and time so it sticks.",
+            "id": "plan-window",
+            "text": "Pick one weekday and one backup slot so missed pings don't turn into missed quest drops.",
             "options": [
                 {
                     "type": "process",
                     "process": "schedule-quest-reminder",
-                    "text": "Create the weekly quest reminder"
+                    "text": "Create the primary weekly quest reminder"
                 },
                 {
                     "type": "goto",
+                    "goto": "verify-reminder",
+                    "text": "Reminder exists and is repeating",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-reminder",
+            "text": "Sanity check before we lock it in: title includes 'new quests', repeat is weekly, and notifications are enabled.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Reminder set",
+                    "text": "Everything looks correct and active",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-reminder",
+                    "text": "The reminder is muted, duplicated, or missing details"
+                }
+            ]
+        },
+        {
+            "id": "recover-reminder",
+            "text": "Good catch. Edit it now: disable duplicate reminders, re-enable notifications, and keep one canonical entry so you trust the signal.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "schedule-quest-reminder",
+                    "text": "Rebuild a clean weekly reminder"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-reminder",
+                    "text": "Cleanup done, re-run verification",
                     "requiresItems": [
                         {
                             "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
@@ -66,7 +110,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
