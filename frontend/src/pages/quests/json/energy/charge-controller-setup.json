@@ -65,6 +65,51 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "bench-test",
+                    "text": "Bench-test the controller display before connecting the panel.",
+                    "requiresItems": [
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "bench-test",
+            "text": "Quick bench test: power the controller from the battery only, confirm display boot and fault log are clear, then disconnect before panel hookup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Bench test passed; proceed to full wiring.",
+                    "requiresItems": [
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback-safe",
+                    "text": "Bench test raised warnings; enter rollback-safe diagnostics."
                 }
             ]
         },
@@ -109,6 +154,11 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "layout",
+                    "text": "Pause and restage the kit before retrying."
                 }
             ]
         },
@@ -136,6 +186,17 @@
                     "type": "goto",
                     "goto": "rollback-safe",
                     "text": "Profile mismatch or repeated warnings; return to safe rollback."
+                },
+                {
+                    "type": "goto",
+                    "goto": "profile-review",
+                    "text": "Run a profile review checklist before charging.",
+                    "requiresItems": [
+                        {
+                            "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -167,6 +228,28 @@
             ]
         },
         {
+            "id": "profile-review",
+            "text": "Alternate verification branch: read back absorb/float settings and confirm they match the recorded LiFePO4 target values before charging starts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "charge",
+                    "text": "Profile values match. Continue to controlled charging.",
+                    "requiresItems": [
+                        {
+                            "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback-safe",
+                    "text": "Values drifted. Roll back and reconfigure."
+                }
+            ]
+        },
+        {
             "id": "verify",
             "text": "Verification gate: confirm the stored profile still matches LiFePO4 targets and the final charge run completed without alarms. If anything drifted, roll back and re-verify.",
             "options": [
@@ -189,6 +272,32 @@
                     "type": "goto",
                     "goto": "rollback-safe",
                     "text": "Verification failed; execute rollback and retry sequence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor-recovery",
+                    "text": "Minor drift detected; run monitoring recovery then re-verify."
+                }
+            ]
+        },
+        {
+            "id": "monitor-recovery",
+            "text": "Monitoring recovery: cool the controller, tighten terminal screws, and wait one check interval for stable voltage before returning to final verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery complete. Re-run verification gate.",
+                    "requiresItems": [
+                        {
+                            "id": "22a50cfd-4433-4ce7-bbed-e4038338191b",
+                            "count": 1
+                        },
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
                 }
             ]
         },
@@ -211,9 +320,15 @@
     ],
     "requiresQuests": ["energy/solar"],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "🛠️",
-        "history": []
+        "passes": 1,
+        "score": 92,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-energy-parity-2026-02-27",
+                "date": "2026-02-27",
+                "score": 92
+            }
+        ]
     }
 }

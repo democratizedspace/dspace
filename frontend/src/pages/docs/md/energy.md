@@ -110,12 +110,15 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar`
 - Dialogue `requiresItems` gates:
+    - `bench-test` → "Bench test passed; proceed to full wiring." — Solar charge controller ×1
     - `layout` → "Polarity checked; fuse still out." — Solar charge controller ×1, portable solar panel ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - `rollback-safe` → "Rollback complete, wiring rechecked. Retry controlled power-up." — portable solar kit (wired) ×1
     - `wire` → "Controller powers up without sparks." — portable solar kit (wired) ×1
     - `configure` → "Settings saved and fuse seated." — charge controller profile set ×1
+    - `profile-review` → "Profile values match. Continue to controlled charging." — charge controller profile set ×1
     - `charge` → "Controller reports stable charging. Verify before finish." — dSolar ×200
     - `verify` → "Verified: profile + charge output are both in spec." — charge controller profile set ×1, dSolar ×200
+    - `monitor-recovery` → "Recovery complete. Re-run verification gate." — charge controller profile set ×1, dSolar ×200
 - Grants:
     - `layout` → "Borrow my kit" — Solar charge controller ×1, portable solar panel ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
@@ -270,8 +273,11 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Dialogue `requiresItems` gates:
     - `start` → "Let's give it a try." — smartphone ×1
     - `kit` → "Everything is staged and dry." — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, USB Cable ×1, 8 AWG fused cable kit ×1
+    - `precheck` → "Run a direct-sun setup and monitor cable temperature every 5 minutes." — 8 AWG fused cable kit ×1
+    - `precheck` → "Start in partial shade for a conservative ramp-up, then re-aim after a stability check." — 8 AWG fused cable kit ×1
     - `wire` → "Everything is tight, fused, and quiet." — portable solar kit (wired) ×1
-    - `profile` → "Profile saved; cables cool." — charge controller profile set ×1
+    - `profile` → "Profile saved; run an audit before charging." — charge controller profile set ×1
+    - `profile-audit` → "Audit passed. Begin energy harvest." — charge controller profile set ×1
     - `charge` → "200 Wh harvested and stable." — dSolar ×200
     - `phone` → "Phone charged and the cable stayed cool." — off-grid phone charge log ×1
 - Grants:
@@ -304,8 +310,12 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `requiresQuests`: `energy/offgrid-charger`
 - Dialogue `requiresItems` gates:
     - `kit` → "Parts staged and safe." — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
+    - `site-check` → "Track the sun for higher output and run frequent thermal checks." — 8 AWG fused cable kit ×1
+    - `site-check` → "Use a conservative angle to prioritize cable cooling and stable voltage." — 8 AWG fused cable kit ×1
     - `wire` → "Cable ends are tight and fused." — portable solar kit (wired) ×1
+    - `inspect-terminals` → "Inspection passed. Begin harvest." — portable solar kit (wired) ×1
     - `harvest` → "Harvested 200 Wh without any hot cables." — dSolar ×200
+    - `verify` → "Verification complete. Pack down safely." — portable solar kit (wired) ×1, dSolar ×200
 - Grants:
     - `kit` → "Take the loaner kit" — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
