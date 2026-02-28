@@ -165,8 +165,9 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `requiresQuests`: `devops/k3s-deploy`
 - Dialogue `requiresItems` gates:
     - `install` → "Dashboards are loading and metrics are scraping." — external backup SSD ×1
-    - `verify` → "Snapshot meets thresholds. Compile the monitoring logbook artifact." — external backup SSD ×1, Pi cluster node ×1
-    - `incident` → "Incident extract captured. Choose the remediation path." — incident log extract ×1
+    - `verify` → "Snapshot meets thresholds. Compile the monitoring logbook artifact." — external backup SSD ×1, Pi cluster node ×1, Laptop Computer ×1
+    - `verify` → "Anomaly detected (alerts firing or scrape gaps). Enter incident triage with log export access." — Laptop Computer ×1
+    - `incident` → "Incident report and extract captured. Choose the remediation path." — journalctl report ×1, incident log extract ×1
     - `classify` → all remediation exits require incident log extract ×1
     - `logbook` → "Logbook complete with thresholds, cadence, and evidence archive." — journalctl report ×1, external backup SSD ×1
 - Grants:
@@ -256,7 +257,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `start` → "Console access confirmed. Stage certbot." — Pi cluster node ×1, auto-update health report ×1
     - `provision` → "Certificates minted." — Pi cluster node ×1, auto-update health report ×1
     - `verify` → "TLS health verified with clean chain and renewal output." — TLS certificate bundle ×1, Pi cluster node ×1
-    - `rollback` → "Rollback checks captured. Decide whether to retry issuance or pause." — Pi cluster node ×1
+    - `rollback` → "Rollback checks captured. Decide whether to retry issuance or pause." — Pi cluster node ×1 (rollback evidence captured via HTTPS health check output)
     - `rollback-verify` → "Rollback is stable. Retry certificate provisioning." — HTTPS service check ×1, Pi cluster node ×1
     - `finish` → "Document the renewal schedule." — HTTPS service check ×1
 - Grants:
@@ -431,8 +432,9 @@ Devops quests build practical progression through the devops skill tree. This pa
     - `requiresQuests`: `devops/ssh-hardening`
 - Dialogue `requiresItems` gates:
     - `start` → "Stage a fail2ban policy." — Pi cluster node ×1, Laptop Computer ×1
-    - `start` → "Run a canary dry-run before cluster-wide rollout." — Pi cluster node ×1
+    - `start` → "Run a canary dry-run before cluster-wide rollout." — Pi cluster node ×1, Laptop Computer ×1
     - `canary` → "Canary evidence looks safe. Promote policy cluster-wide." — journalctl report ×1
+    - `canary` → "Canary shows lockout risk with evidence captured. Enter recovery before rollout." — journalctl report ×1
     - `verify` → "Ban evidence exists, but false positives hit trusted admin sources." — journalctl report ×1
     - `stage` → "Policy staged; capture ban evidence." — Pi cluster node ×1
     - `verify` → "Ban evidence missing or admin access degraded." — journalctl report ×1

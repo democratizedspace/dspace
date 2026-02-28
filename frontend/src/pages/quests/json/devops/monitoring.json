@@ -55,13 +55,23 @@
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
                             "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
                         }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "incident",
-                    "text": "Anomaly detected (alerts firing or scrape gaps)."
+                    "text": "Anomaly detected (alerts firing or scrape gaps). Enter incident triage with log export access.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -71,16 +81,25 @@
             "options": [
                 {
                     "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Export journalctl report for incident triage."
+                },
+                {
+                    "type": "process",
                     "process": "sysadmin-logs-tail-incident-extract",
                     "text": "Capture incident extract for triage."
                 },
                 {
                     "type": "goto",
                     "goto": "classify",
-                    "text": "Incident extract captured. Choose the remediation path.",
+                    "text": "Incident report and extract captured. Choose the remediation path.",
                     "requiresItems": [
                         {
                             "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        },
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
                             "count": 1
                         }
                     ]

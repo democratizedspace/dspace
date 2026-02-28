@@ -99,12 +99,12 @@
         },
         {
             "id": "rollback",
-            "text": "Safety stop: restore the prior web config, keep HTTP reachable for control access, then capture a rollback health check before reissuing certificates.",
+            "text": "Safety stop: restore a known-good web config, keep admin access reachable, then capture rollback TLS health output before reissuing certificates.",
             "options": [
                 {
                     "type": "process",
                     "process": "verify-https-service",
-                    "text": "Capture rollback health output (HTTP reachable, TLS disabled by design)."
+                    "text": "Capture rollback TLS health output (HTTPS service reachable with expected rollback configuration)."
                 },
                 {
                     "type": "goto",
