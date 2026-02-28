@@ -66,6 +66,21 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "quarantine-hold",
+                    "text": "Run the cautious quarantine hold before placing plants.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -163,6 +178,43 @@
             ]
         },
         {
+            "id": "quarantine-hold",
+            "text": "Quarantine path: hold clippings in dechlorinated water, remove melt-prone stems, and only place vigorous growth after a final rinse.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-floating-plants",
+                    "text": "Run quarantine rinse and trim weak stems.",
+                    "goto": "place",
+                    "requiresItems": [
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "place",
+                    "text": "Quarantine check passed; healthy bundle ready for placement.",
+                    "requiresItems": [
+                        {
+                            "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "place",
             "text": "Float the rinsed stems under the light, keep them clear of the intake, and leave a breathing lane so shrimp can reach the surface.",
             "options": [
@@ -197,7 +249,7 @@
         },
         {
             "id": "verify",
-            "text": "Now verify operations: if the mat covers more than half the surface or blocks flow, thin it before calling this stable.",
+            "text": "Now verify operations: if the mat covers more than half the surface, blocks flow, or shades out oxygen exchange, thin it before calling this stable.",
             "options": [
                 {
                     "type": "goto",
@@ -214,6 +266,34 @@
                     "type": "goto",
                     "goto": "troubleshoot",
                     "text": "Flow is blocked or plants are melting; troubleshoot and re-rinse before retrying.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-trim",
+                    "text": "Surface gas exchange looks sluggish; run safety trim and reopen lanes.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-trim",
+            "text": "Safety trim branch: remove excess surface cover, clear the filter intake lane, and confirm shrimp can still reach open air pockets before final verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Trim complete; re-check flow and surface access.",
                     "requiresItems": [
                         {
                             "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
@@ -240,7 +320,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/shrimp"],
+    "requiresQuests": [
+        "aquaria/shrimp"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

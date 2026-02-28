@@ -62,7 +62,7 @@
         },
         {
             "id": "log",
-            "text": "Record date/time plus all four fields. Minimum cadence is every 48 hours for stocked tanks. Flag ammonia or nitrite above 0 ppm, nitrate above 40 ppm, or pH outside 6.8–7.6.",
+            "text": "Record date/time plus all four fields. Minimum cadence is every 48 hours for stocked tanks. Flag ammonia or nitrite above 0 ppm, nitrate above 40 ppm, or pH outside 6.8\u20137.6, then classify severity before corrective action.",
             "options": [
                 {
                     "type": "process",
@@ -103,7 +103,7 @@
         },
         {
             "id": "interpret",
-            "text": "Now classify today's panel. If all fields are in bounds, close the cycle. If any field is out of bounds, run a corrective action and then re-measure.",
+            "text": "Now classify today's panel. If all fields are in bounds, close the cycle. If any field is out of bounds, branch to triage before corrective work.",
             "options": [
                 {
                     "type": "goto",
@@ -118,8 +118,36 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "triage",
+                    "text": "At least one value is out of range; classify severity first",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "Ammonia or nitrite is above 0 ppm (critical signal to triage)",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "triage",
+            "text": "Triage branch: determine whether this is a routine drift correction or a critical toxicity response requiring emergency cadence and immediate retest.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "corrective",
-                    "text": "At least one value is out of range",
+                    "text": "Only nitrate/pH drift detected; run standard corrective cycle.",
                     "requiresItems": [
                         {
                             "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
@@ -130,7 +158,7 @@
                 {
                     "type": "goto",
                     "goto": "critical-response",
-                    "text": "Ammonia or nitrite is above 0 ppm (critical event)",
+                    "text": "Ammonia or nitrite is non-zero; trigger emergency response.",
                     "requiresItems": [
                         {
                             "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
@@ -153,6 +181,17 @@
                     "type": "goto",
                     "goto": "measure",
                     "text": "Correction complete, re-measure the panel",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "Retest still abnormal; reclassify and escalate if needed.",
                     "requiresItems": [
                         {
                             "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
@@ -201,11 +240,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing"],
+    "requiresQuests": [
+        "aquaria/water-testing"
+    ],
     "hardening": {
         "passes": 2,
         "score": 95,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-23",

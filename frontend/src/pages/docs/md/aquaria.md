@@ -204,7 +204,9 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Dialogue `requiresItems` gates:
     - `start` → "Tank is ready for heat" — Walstad aquarium with thermometer (80 L) ×1, aquarium heater (150 W) ×1, Restored sponge filter flow ×1
     - `mount` → "Heater installed and powered on" — Heated Walstad aquarium (80 L, 26°C) ×1
-    - `verify` → "Reading recorded" — Aquarium temperature reading ×1
+    - `verify` → "First reading recorded" — Aquarium temperature reading ×1
+    - `stability-window` → "Second reading is logged and ready for interpretation" — Aquarium temperature reading ×1
+    - `stability-window` → "Second reading drifted outside target range" — none
     - `interpret` → "Range held at 25–27°C for two checks" — Aquarium temperature reading ×1
     - `interpret` → "Temperature overshot or dropped outside safe range" — Aquarium temperature reading ×1
     - `interpret` → "Heater glass looks cracked, exposed, or intermittently powered" — none
@@ -236,14 +238,19 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Dialogue `requiresItems` gates:
     - `start` → "Bench is clear, PPE is on, and the kit is ready." — Aquarium liquid test kit ×1, nitrile gloves (pair) ×1, safety goggles ×1, water test logbook ×1
     - `measure` → "Panel run complete and readings are ready to log." — Liquid test readings ×1
+    - `measure` → "Spill or cross-contamination happened; reset glassware and PPE before continuing." — nitrile gloves (pair) ×1
     - `log` → "Readings are logged and ready for interpretation." — Logged water parameters ×1
     - `interpret` → "All values are in range; shrimp-safe window confirmed." — Logged water parameters ×1
-    - `interpret` → "At least one value is out of range; start corrective response." — Logged water parameters ×1
+    - `interpret` → "At least one value is out of range; classify the issue." — Logged water parameters ×1
+    - `triage` → "Nitrate is high but ammonia/nitrite are zero; run standard correction." — Logged water parameters ×1
+    - `triage` → "pH drift is the only issue; run controlled correction and retest." — Logged water parameters ×1
+    - `triage` → "Ammonia or nitrite is above 0 ppm; escalate to emergency response." — Logged water parameters ×1
     - `corrective` → "Run corrective partial water change." — Heated Walstad aquarium (80 L, 26°C) ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
     - `corrective` → "Water change is complete and conditions are stable." — Freshly changed aquarium (80 L) ×1
     - `retest` → "Run the retest panel now." — Freshly changed aquarium (80 L) ×1
     - `retest` → "Retest still out of range; run another corrective cycle." — Freshly changed aquarium (80 L) ×1
     - `retest` → "Retest passed and fresh readings confirm safe ranges." — Liquid test readings ×1
+    - `critical-response` → "Emergency change complete; start the retest cycle." — Freshly changed aquarium (80 L) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -301,10 +308,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `log` → "Record the results in the logbook." — Aquarium liquid test kit ×1, Liquid test readings ×1, water test logbook ×1, nitrile gloves (pair) ×1
     - `log` → "Entry logged with today's readings." — Logged water parameters ×1
     - `interpret` → "All readings are within guardrails" — Logged water parameters ×1
-    - `interpret` → "At least one value is out of range" — Logged water parameters ×1
-    - `interpret` → "Ammonia or nitrite is above 0 ppm (critical event)" — Logged water parameters ×1
+    - `interpret` → "At least one value is out of range; classify severity first" — Logged water parameters ×1
+    - `interpret` → "Ammonia or nitrite is above 0 ppm (critical signal to triage)" — Logged water parameters ×1
+    - `triage` → "Only nitrate/pH drift detected; run standard corrective cycle." — Logged water parameters ×1
+    - `triage` → "Ammonia or nitrite is non-zero; trigger emergency response." — Logged water parameters ×1
     - `critical-response` → "Emergency change complete; rerun full measurement panel" — Freshly changed aquarium (80 L) ×1
     - `corrective` → "Correction complete, re-measure the panel" — Freshly changed aquarium (80 L) ×1
+    - `corrective` → "Retest still abnormal; reclassify and escalate if needed." — Freshly changed aquarium (80 L) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -421,6 +431,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `start` → "I'll use the bucket that's already dechlorinated." — 5 gallon bucket of dechlorinated tap water ×1, 5 gallon bucket ×1, Guppy grass starter ×1, nitrile gloves (pair) ×1
     - `strategy` → "Use the standard rinse path." — 5 gallon bucket of dechlorinated tap water ×1
     - `strategy` → "I found hitchhikers or mushy stems; do a recovery rinse." — 5 gallon bucket of dechlorinated tap water ×1
+    - `strategy` → "Run the cautious quarantine hold before placing plants." — 5 gallon bucket of dechlorinated tap water ×1, Guppy grass starter ×1
     - `rinse` → "Rinse and inspect the plants." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1
     - `rinse` → "Rinsed bundle is clean and ready for placement." — Rinsed guppy grass ×1
     - `troubleshoot` → "Run a second rinse after trimming contaminated stems." — Guppy grass starter ×1, 5 gallon bucket of dechlorinated tap water ×1, aquarium net ×1
@@ -430,6 +441,8 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `place` → "Mat is floating and the intake lane stays open." — Floating plant mat ×1
     - `verify` → "Coverage and flow are balanced; fry still have open surface access." — Floating plant mat ×1
     - `verify` → "Flow is blocked or plants are melting; troubleshoot and re-rinse before retrying." — Floating plant mat ×1
+    - `verify` → "Surface gas exchange looks sluggish; run safety trim and reopen lanes." — Floating plant mat ×1
+    - `safety-trim` → "Trim complete; re-check flow and surface access." — Floating plant mat ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

@@ -55,23 +55,52 @@
         },
         {
             "id": "verify",
-            "text": "Log the stabilized temperature before adding fish. Acceptable range is 25\u201327\u00b0C after a full warm-up window.",
+            "text": "Log the first stabilized temperature before adding fish. Acceptable range is 25\u201327\u00b0C after a full warm-up window.",
             "options": [
                 {
                     "type": "process",
                     "process": "log-walstad-temperature",
-                    "text": "Log stabilized temperature"
+                    "text": "Log the first stabilized temperature",
+                    "goto": "stability-window"
                 },
                 {
                     "type": "goto",
-                    "goto": "interpret",
-                    "text": "Reading recorded",
+                    "goto": "stability-window",
+                    "text": "First reading recorded",
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
                             "count": 1
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "stability-window",
+            "text": "Run a second check 30 minutes later. We only pass install when two sequential readings stay in range and show no drift trend.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Log the second stability reading",
+                    "goto": "interpret"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Second reading is logged and ready for interpretation",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Second reading drifted outside target range"
                 }
             ]
         },
@@ -169,7 +198,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer", "aquaria/walstad"],
+    "requiresQuests": [
+        "aquaria/sponge-filter",
+        "aquaria/thermometer",
+        "aquaria/walstad"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,

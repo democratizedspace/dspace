@@ -55,6 +55,38 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-reset",
+                    "text": "Spill or cross-contamination happened; reset glassware and PPE before continuing.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-reset",
+            "text": "Safety reset: discard compromised sample water, rinse tubes, replace gloves, and restart the panel with clean technique.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "PPE and vials reset; rerun the test panel.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -83,7 +115,7 @@
         },
         {
             "id": "interpret",
-            "text": "Interpret the log before stocking: ammonia = 0 ppm, nitrite = 0 ppm, nitrate < 40 ppm. If any value is out of range, branch to corrective work and retest.",
+            "text": "Interpret the log before stocking: ammonia = 0 ppm, nitrite = 0 ppm, nitrate < 40 ppm. If any value is out of range, classify the failure mode before corrective work.",
             "options": [
                 {
                     "type": "goto",
@@ -98,8 +130,47 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "triage",
+                    "text": "At least one value is out of range; classify the issue.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "triage",
+            "text": "Triage determines the safest fix: toxicity events require emergency response, while nitrate-only drift can use a standard corrective cycle.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "corrective",
-                    "text": "At least one value is out of range; start corrective response.",
+                    "text": "Nitrate is high but ammonia/nitrite are zero; run standard correction.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "pH drift is the only issue; run controlled correction and retest.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "critical-response",
+                    "text": "Ammonia or nitrite is above 0 ppm; escalate to emergency response.",
                     "requiresItems": [
                         {
                             "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
@@ -190,6 +261,47 @@
             ]
         },
         {
+            "id": "critical-response",
+            "text": "Critical response: pause feeding, run an immediate partial water change, and keep livestock observation active until retest values normalize.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run emergency partial water change.",
+                    "goto": "retest",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Emergency change complete; start the retest cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
             "text": "Excellent discipline. You documented readings, handled risk safely, and proved recovery before moving livestock.",
             "options": [
@@ -206,11 +318,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/thermometer"],
+    "requiresQuests": [
+        "aquaria/thermometer"
+    ],
     "hardening": {
         "passes": 5,
         "score": 100,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
