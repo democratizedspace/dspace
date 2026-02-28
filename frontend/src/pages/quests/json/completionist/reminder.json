@@ -1,7 +1,7 @@
 {
     "id": "completionist/reminder",
     "title": "Check for New Quests",
-    "description": "Set a weekly reminder so new quests never sneak past you.",
+    "description": "Set and verify a weekly reminder so new quests never sneak past you.",
     "image": "/assets/quests/completionist_new_quests_reminder.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
@@ -12,8 +12,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "remind",
-                    "text": "I'll check back",
+                    "goto": "plan-window",
+                    "text": "Let's lock in a reminder plan",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
@@ -24,18 +24,62 @@
             ]
         },
         {
-            "id": "remind",
-            "text": "Use your phone or calendar app to nudge you every week. Capture the day and time so it sticks.",
+            "id": "plan-window",
+            "text": "Pick a low-noise window with reliable internet, then define a fallback channel in case your main calendar app misses notifications.",
             "options": [
                 {
                     "type": "process",
                     "process": "schedule-quest-reminder",
-                    "text": "Create the weekly quest reminder"
+                    "text": "Schedule a weekly reminder in your primary calendar"
                 },
                 {
                     "type": "goto",
+                    "goto": "verify-reminder",
+                    "text": "Primary reminder scheduled, continue to verification",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-reminder",
+            "text": "Run a dry test: does the reminder include the quest board link, weekly cadence, and timezone? If any field is off, don't lock it in yet.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Reminder set",
+                    "text": "Dry run passed: cadence, link, and timezone are all correct",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Something failed (wrong timezone, no link, or muted alerts)"
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Good catch. Enable a backup alert channel and re-run the test before you trust it. Never rely on a single silent reminder.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "schedule-quest-reminder",
+                    "text": "Reconfigure reminder and backup alerts"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-reminder",
+                    "text": "Re-test the corrected reminder",
                     "requiresItems": [
                         {
                             "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
@@ -47,11 +91,11 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your dedication keeps the future Metaguild growing.",
+            "text": "Great! Your reminder loop is resilient and the future Metaguild stays visible on your radar.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Happy to help."
+                    "text": "Reminder verified and resilient"
                 }
             ]
         }
@@ -66,7 +110,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
