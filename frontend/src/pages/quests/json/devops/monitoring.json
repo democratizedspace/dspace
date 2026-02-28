@@ -41,12 +41,12 @@
         },
         {
             "id": "verify",
-            "text": "Record a 15-minute snapshot: CPU < 80%, memory < 85%, disk < 75%, and no crash-looping pods.",
+            "text": "Record a 15-minute snapshot: CPU < 80%, memory < 85%, disk < 75%, and no crash-looping pods. Include service, threshold, timestamp, and operator notes for each metric row.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Snapshot meets thresholds and is logged in ops notes.",
+                    "goto": "logbook",
+                    "text": "Snapshot meets thresholds. Compile the monitoring logbook artifact.",
                     "requiresItems": [
                         {
                             "id": "849eb5e1-9f63-488b-80d3-913492049090",
@@ -55,32 +55,51 @@
                         {
                             "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
                             "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
                         }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "incident",
-                    "text": "Anomaly detected (alerts firing or scrape gaps)."
+                    "text": "Anomaly detected (alerts firing or scrape gaps). Enter incident triage with log export access.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "incident",
-            "text": "Classify the anomaly first: exporter down, resource saturation, or bad alert rule. Stabilize service before tuning dashboards.",
+            "text": "Classify the anomaly first: exporter down, resource saturation, or bad alert rule. Capture incident evidence before applying corrective actions.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "install",
-                    "text": "Exporter/rule fix applied. Rebuild dashboards and scrape targets."
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Export journalctl report for incident triage."
+                },
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Capture incident extract for triage."
                 },
                 {
                     "type": "goto",
-                    "goto": "verify",
-                    "text": "Load spike mitigated. Re-run the 15-minute verification window.",
+                    "goto": "classify",
+                    "text": "Incident report and extract captured. Choose the remediation path.",
                     "requiresItems": [
                         {
-                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        },
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
                             "count": 1
                         }
                     ]
@@ -89,6 +108,71 @@
                     "type": "goto",
                     "goto": "start",
                     "text": "Safety stop: pause rollout and return after cluster health is stable."
+                }
+            ]
+        },
+        {
+            "id": "classify",
+            "text": "Route the fix by failure mode: restore exporter connectivity, relieve resource pressure, or tune noisy alert rules. Re-run monitoring only after the selected corrective action is documented.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Exporter pipeline repaired. Rebuild scrape targets.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Resource pressure mitigated. Re-run the 15-minute verification window.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Alert thresholds tuned. Confirm no false positives in the next window.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "logbook",
+            "text": "Finalize the monitoring logbook with cadence and thresholds: capture CPU/memory/disk/pod health every 5 minutes for the 15-minute window and archive the run output.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Export monitoring validation report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Logbook complete with thresholds, cadence, and evidence archive.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        },
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -113,7 +197,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
