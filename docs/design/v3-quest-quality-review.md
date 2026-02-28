@@ -452,9 +452,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature,
 Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, welcome/intro-inventory (fallback: no checked completionist quests yet)
 
 - `completionist/catalog`
-  - [x] Observed issue: `completionist/catalog` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3668)
-  - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3668)
-  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3668)
+  - [x] Observed issue: `completionist/catalog` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3668, #3767)
+  - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3668, #3767)
+  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3668, #3767)
 - `completionist/display`
   - [x] Observed issue: `completionist/display` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3668)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3668)
@@ -464,13 +464,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, welcom
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3668)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3668)
 - `completionist/reminder`
-  - [ ] Observed issue: `completionist/reminder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `completionist/reminder` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3767)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3767)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3767)
 - `completionist/v2`
-  - [ ] Observed issue: `completionist/v2` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates.
-  - [ ] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output).
-  - [ ] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`.
+  - [x] Observed issue (addressed): `completionist/v2` previously trended toward thin-shell progression with limited decision points and weak intermediate proof gates; this was hardened in this pass. (PR #3767)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3767)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3767)
 
 ### devops (15 quests)
 

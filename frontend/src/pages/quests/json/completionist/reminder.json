@@ -1,19 +1,19 @@
 {
     "id": "completionist/reminder",
     "title": "Check for New Quests",
-    "description": "Set a weekly reminder so new quests never sneak past you.",
+    "description": "Set a weekly reminder, verify alerts fire, and recover if notifications fail.",
     "image": "/assets/quests/completionist_new_quests_reminder.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "More quests are added all the time. Keep an eye on the board so you can maintain that shiny Completionist trophy!",
+            "text": "More quests are added all the time. Let's set up a reminder workflow that still works when your phone is noisy or notifications are blocked.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "remind",
-                    "text": "I'll check back",
+                    "goto": "plan",
+                    "text": "I'll build a reliable reminder routine",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
@@ -24,8 +24,24 @@
             ]
         },
         {
+            "id": "plan",
+            "text": "Pick your cadence first: weekly pulse for routine checks or bi-weekly plus release-note scans if you want lower alert fatigue.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "remind",
+                    "text": "Weekly pulse with one fixed day"
+                },
+                {
+                    "type": "goto",
+                    "goto": "remind",
+                    "text": "Bi-weekly pulse + manual release-note scan"
+                }
+            ]
+        },
+        {
             "id": "remind",
-            "text": "Use your phone or calendar app to nudge you every week. Capture the day and time so it sticks.",
+            "text": "Use your phone or calendar app to schedule the reminder. Keep it private if your notes include quest IDs you don't want to leak publicly.",
             "options": [
                 {
                     "type": "process",
@@ -34,8 +50,52 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "verify",
+                    "text": "Reminder set, run a notification check",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: confirm your reminder appears in the next scheduled slot and includes a clear action (open Quests board + scan New Quests).",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Reminder set",
+                    "text": "Alert fired and action text is clear",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Notification muted, wrong time, or missing action text"
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: disable battery optimization for the calendar app, re-save the reminder with a louder channel, then test again before closing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "schedule-quest-reminder",
+                    "text": "Reconfigure and resave reminder"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Retry verification",
                     "requiresItems": [
                         {
                             "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
@@ -47,7 +107,7 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your dedication keeps the future Metaguild growing.",
+            "text": "Great! Your dedication keeps the future Metaguild growing, and your reminder pipeline is resilient instead of wishful.",
             "options": [
                 {
                     "type": "finish",

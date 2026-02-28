@@ -1,19 +1,35 @@
 {
     "id": "completionist/v2",
     "title": "Congrats for finishing all the quests!!",
-    "description": "Print, plate, and assemble a real Completionist Award II for your shelf.",
+    "description": "Print, plate, verify, and recover safely while assembling a real Completionist Award II.",
     "image": "/assets/quests/completionist_trophy_award.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "You cleared every quest! Let's actually fabricate the Completionist Award II instead of just talking about it.",
+            "text": "You cleared every quest! Let's fabricate the Completionist Award II with real operator checks so this run is repeatable, not lucky.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Let's build the real trophy"
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Safety preflight: clear flammables from the enclosure, verify first-layer watch, and stage goggles for any bed cleanup or trim work.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "prep-printer",
-                    "text": "Let's build the real trophy"
+                    "text": "Preflight complete"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Need to reset workspace first"
                 }
             ]
         },
@@ -62,6 +78,27 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-core",
+                    "text": "First layer shifted or warped"
+                }
+            ]
+        },
+        {
+            "id": "recover-core",
+            "text": "Recovery branch: abort the print, clean nozzle and bed, then re-level before restarting the core so warped layers don't propagate.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level after cleanup"
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep-printer",
+                    "text": "Recovery complete, retry core path"
                 }
             ]
         },
@@ -88,6 +125,28 @@
                             "count": 1
                         }
                     ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-plate",
+                    "text": "Lettering smeared or plate fit failed"
+                }
+            ]
+        },
+        {
+            "id": "recover-plate",
+            "text": "Recovery branch: drop layer height, slow walls, and verify plate dimensions before attempting another nameplate run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-plate",
+                    "text": "Re-tune complete, retry plate print",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -102,8 +161,52 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "verify",
                     "text": "Award is bonded and cured",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: plate sits flush, glue line is clean, and the award stands without wobble for one minute.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Fit, finish, and stability all passed",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-assembly",
+                    "text": "Wobble or adhesive gap detected"
+                }
+            ]
+        },
+        {
+            "id": "recover-assembly",
+            "text": "Pause and recover: remove uncured squeeze-out, clamp square, and allow a full cure window before re-verification.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-award-ii",
+                    "text": "Re-seat and re-cure the assembly"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery cure complete, verify again",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",

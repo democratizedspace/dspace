@@ -23,6 +23,9 @@ Completionist quests build practical progression through the completionist skill
     - `print-core` → "Core is printed and cool" — Completionist Award II core ×1
     - `print-plate` → "Plate fits the recess" — Completionist Award II core ×1, Completionist Award II nameplate ×1
     - `assemble` → "Award is bonded and cured" — Completionist Award II ×1
+    - `verify` → "Fit, finish, and stability all passed" — Completionist Award II ×1
+    - `recover-plate` → "Re-tune complete, retry plate print" — Completionist Award II core ×1
+    - `recover-assembly` → "Recovery cure complete, verify again" — Completionist Award II ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -30,6 +33,7 @@ Completionist quests build practical progression through the completionist skill
     - cured compost bucket ×1
 - Processes used:
     - [level-3d-printer-bed](/processes/level-3d-printer-bed)
+        - Used in: preflight recovery before restarting warped prints
         - Requires: entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
         - Consumes: none
         - Creates: entry-level FDM 3D printer (leveled bed) ×1
@@ -54,8 +58,10 @@ Completionist quests build practical progression through the completionist skill
 - Dialogue `requiresItems` gates:
     - `start` → "Yeah, let's catalog it" — Completionist Award II ×1
     - `prep` → "I have an entry ready for review" — Completionist Award II ×1, completionist trophy log entry ×1
-    - `review` → "Entry has serial + location + date, filing it now" — completionist trophy log entry ×1
+    - `review` → "Entry has serial + location + date, continue to storage check" — completionist trophy log entry ×1
+    - `storage-check` → "Storage location and access notes are captured" — completionist trophy log entry ×1
     - `fix-entry` → "Retake complete, review again" — completionist trophy log entry ×1
+    - `recover-storage` → "Metadata fixed, review again" — completionist trophy log entry ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -120,8 +126,10 @@ Completionist quests build practical progression through the completionist skill
 - Unlock prerequisite:
     - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "I'll check back" — Completionist Award II ×1
-    - `remind` → "Reminder set" — weekly quest reminder ×1
+    - `start` → "I'll build a reliable reminder routine" — Completionist Award II ×1
+    - `remind` → "Reminder set, run a notification check" — weekly quest reminder ×1
+    - `verify` → "Alert fired and action text is clear" — weekly quest reminder ×1
+    - `recover` → "Retry verification" — weekly quest reminder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -137,7 +145,9 @@ Completionist quests build practical progression through the completionist skill
 
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
-- Catalog QA: `completionist/catalog` now requires a review checkpoint (serial + location + date) and supports a re-record loop when the log artifact is incomplete.
+- Trophy build QA: `completionist/v2` now adds safety preflight plus explicit recovery loops for warped first layers, failed plate lettering, and post-cure wobble before finish unlocks.
+- Catalog QA: `completionist/catalog` now requires review plus a storage/access metadata checkpoint and supports re-record + metadata recovery loops when evidence is incomplete.
 - Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
+- Reminder QA: `completionist/reminder` now includes cadence planning, notification verification, and a fail-closed reminder recovery loop before completion.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
