@@ -271,7 +271,7 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): hydroponics/nutrient-check, c
 - `aquaria/log-water-parameters`
   - [x] Observed issue: `aquaria/log-water-parameters` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3620)
   - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3620, #3779)
-  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3620, #3746)
+  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3620, #3746, #3779)
 - `aquaria/net-fish`
   - [x] Observed issue: `aquaria/net-fish` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3651)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3651)
