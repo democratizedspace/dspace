@@ -20,7 +20,7 @@ Completionist quests build practical progression through the completionist skill
     - `requiresQuests`: `welcome/howtodoquests`, `ubi/basicincome`, `3dprinter/start`, `aquaria/water-testing`, `energy/solar`, `rocketry/parachute`, `hydroponics/basil`
 - Dialogue `requiresItems` gates:
     - `safety-brief` → "Safety checks complete, proceed" — safety goggles ×1
-    - `prep-printer` → "Printer is leveled and loaded with buffer filament" — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×180
+    - `prep-printer` → "Printer is leveled and loaded with buffer filament" — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×200
     - `verify-core` → "Core is stable and within tolerance" — Completionist Award II core ×1
     - `print-plate` → "Plate fits the recess" — Completionist Award II core ×1, Completionist Award II nameplate ×1
     - `assemble` → "Award is bonded, aligned, and cured" — Completionist Award II ×1
