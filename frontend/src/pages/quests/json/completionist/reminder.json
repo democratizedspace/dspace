@@ -1,7 +1,7 @@
 {
     "id": "completionist/reminder",
     "title": "Check for New Quests",
-    "description": "Set a weekly reminder so new quests never sneak past you.",
+    "description": "Set and verify a weekly reminder so new quests never sneak past you.",
     "image": "/assets/quests/completionist_new_quests_reminder.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
@@ -12,8 +12,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "remind",
-                    "text": "I'll check back",
+                    "goto": "set-window",
+                    "text": "I'll lock in a weekly quest check",
                     "requiresItems": [
                         {
                             "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
@@ -24,18 +24,62 @@
             ]
         },
         {
-            "id": "remind",
-            "text": "Use your phone or calendar app to nudge you every week. Capture the day and time so it sticks.",
+            "id": "set-window",
+            "text": "Pick a repeatable day/time and set quiet-hours-safe notifications so the reminder is useful instead of disruptive.",
             "options": [
                 {
                     "type": "process",
                     "process": "schedule-quest-reminder",
-                    "text": "Create the weekly quest reminder"
+                    "text": "Schedule the weekly reminder"
                 },
                 {
                     "type": "goto",
+                    "goto": "verify-alert",
+                    "text": "Reminder exists with day/time and alert enabled",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-alert",
+            "text": "Run a quick test alert now. If it fails, classify the failure before closing: muted app, wrong day, or no repeat rule.",
+            "options": [
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "Reminder set",
+                    "text": "Test alert fired and repeat cadence looks correct",
+                    "requiresItems": [
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-alert",
+                    "text": "Alert failed or cadence is wrong, fix and retry"
+                }
+            ]
+        },
+        {
+            "id": "recover-alert",
+            "text": "Fix one issue at a time: unmute notifications, restore weekly repeat, then rerun the test alert before leaving this quest.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "schedule-quest-reminder",
+                    "text": "Reconfigure the reminder safely"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-alert",
+                    "text": "Settings corrected, run verification again",
                     "requiresItems": [
                         {
                             "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
@@ -47,11 +91,11 @@
         },
         {
             "id": "finish",
-            "text": "Great! Your dedication keeps the future Metaguild growing.",
+            "text": "Great! Your reminder is configured and verified, so future quests should never silently pile up.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Happy to help."
+                    "text": "Reminder verified"
                 }
             ]
         }
@@ -66,7 +110,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

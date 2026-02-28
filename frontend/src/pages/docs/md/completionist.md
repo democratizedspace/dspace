@@ -21,8 +21,9 @@ Completionist quests build practical progression through the completionist skill
 - Dialogue `requiresItems` gates:
     - `prep-printer` → "Printer is leveled and loaded" — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×150
     - `print-core` → "Core is printed and cool" — Completionist Award II core ×1
-    - `print-plate` → "Plate fits the recess" — Completionist Award II core ×1, Completionist Award II nameplate ×1
-    - `assemble` → "Award is bonded and cured" — Completionist Award II ×1
+    - `print-plate` → "Plate finished, time for fit check" — Completionist Award II nameplate ×1
+    - `dry-fit` → "Dry fit passes, proceed to assembly" — Completionist Award II core ×1, Completionist Award II nameplate ×1
+    - `assemble` → "Award is bonded, lettering is clean, and cure is complete" — Completionist Award II ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -54,8 +55,9 @@ Completionist quests build practical progression through the completionist skill
 - Dialogue `requiresItems` gates:
     - `start` → "Yeah, let's catalog it" — Completionist Award II ×1
     - `prep` → "I have an entry ready for review" — Completionist Award II ×1, completionist trophy log entry ×1
-    - `review` → "Entry has serial + location + date, filing it now" — completionist trophy log entry ×1
+    - `review` → "Entry is complete and readable" — completionist trophy log entry ×1
     - `fix-entry` → "Retake complete, review again" — completionist trophy log entry ×1
+    - `audit-cadence` → "Entry filed and audit cadence scheduled" — completionist trophy log entry ×1, weekly quest reminder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -66,6 +68,10 @@ Completionist quests build practical progression through the completionist skill
         - Requires: mission logbook ×1, smartphone ×1, Completionist Award II ×1
         - Consumes: none
         - Creates: completionist trophy log entry ×1
+    - [schedule-quest-reminder](/processes/schedule-quest-reminder)
+        - Requires: smartphone ×1
+        - Consumes: none
+        - Creates: weekly quest reminder ×1
 
 ## 3) Show Off Your Trophy (`completionist/display`)
 
@@ -120,8 +126,10 @@ Completionist quests build practical progression through the completionist skill
 - Unlock prerequisite:
     - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "I'll check back" — Completionist Award II ×1
-    - `remind` → "Reminder set" — weekly quest reminder ×1
+    - `start` → "I'll lock in a weekly quest check" — Completionist Award II ×1
+    - `set-window` → "Reminder exists with day/time and alert enabled" — weekly quest reminder ×1
+    - `verify-alert` → "Test alert fired and repeat cadence looks correct" — weekly quest reminder ×1
+    - `recover-alert` → "Settings corrected, run verification again" — weekly quest reminder ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -137,7 +145,9 @@ Completionist quests build practical progression through the completionist skill
 
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
-- Catalog QA: `completionist/catalog` now requires a review checkpoint (serial + location + date) and supports a re-record loop when the log artifact is incomplete.
+- Catalog QA: `completionist/catalog` now requires serial/location/date plus legibility review, then a recurring audit reminder before finish.
 - Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
+- Reminder QA: `completionist/reminder` now enforces test-alert verification with a notification recovery loop before finish.
+- V2 fabrication QA: `completionist/v2` now includes first-layer recovery and dry-fit validation prior to final assembly.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.

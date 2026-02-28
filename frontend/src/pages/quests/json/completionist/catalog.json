@@ -1,7 +1,7 @@
 {
     "id": "completionist/catalog",
     "title": "Catalog Your Trophy",
-    "description": "Log your Completionist Award II with a recorded serial and photo note.",
+    "description": "Log your Completionist Award II with serial, placement, and a verifiable audit note.",
     "image": "/assets/quests/completionist_catalog_logbook.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
@@ -25,12 +25,12 @@
         },
         {
             "id": "prep",
-            "text": "Set the trophy on a clear surface and grab your logbook so the entry shows the serial, location, and date stamp.",
+            "text": "Set the trophy on a clear surface and capture serial, display location, and date. Keep full serials in your private log only.",
             "options": [
                 {
                     "type": "process",
                     "process": "record-completionist-award-entry",
-                    "text": "Capture the log entry with a quick photo"
+                    "text": "Capture the log entry with a photo"
                 },
                 {
                     "type": "goto",
@@ -51,12 +51,12 @@
         },
         {
             "id": "review",
-            "text": "Review the note before filing it. A valid log must include the trophy serial, display location, and today's date so audits are reproducible.",
+            "text": "A valid entry needs serial, location, date, and legible photo metadata. Classify defects before you file anything.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Entry has serial + location + date, filing it now",
+                    "goto": "audit-cadence",
+                    "text": "Entry is complete and readable",
                     "requiresItems": [
                         {
                             "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
@@ -73,7 +73,7 @@
         },
         {
             "id": "fix-entry",
-            "text": "Good catch. Re-shoot the entry in steady light and avoid posting full serials in public channels; keep detailed proof in your private log.",
+            "text": "Good catch. Re-record with stable lighting and complete fields, then rerun review before the record can be accepted.",
             "options": [
                 {
                     "type": "process",
@@ -94,12 +94,38 @@
             ]
         },
         {
+            "id": "audit-cadence",
+            "text": "Before closure, set a recurring audit reminder so this log stays current. Monthly cadence is enough unless the display moves.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "schedule-quest-reminder",
+                    "text": "Create a recurring catalog audit reminder"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Entry filed and audit cadence scheduled",
+                    "requiresItems": [
+                        {
+                            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                            "count": 1
+                        },
+                        {
+                            "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
-            "text": "Nice! Future you will thank present you for the tidy records.",
+            "text": "Nice! Future you will thank present you for the tidy, auditable records.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Log filed and searchable"
+                    "text": "Log filed and monitored"
                 }
             ]
         }
@@ -114,7 +140,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
