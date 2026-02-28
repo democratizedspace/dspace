@@ -27,7 +27,7 @@
                     "text": "Safety checks complete, proceed",
                     "requiresItems": [
                         {
-                            "id": "0ca5ea8f-ee4c-4444-a6f9-f6ecf6f13253",
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
                             "count": 1
                         }
                     ]
@@ -52,7 +52,7 @@
         },
         {
             "id": "prep-printer",
-            "text": "We need a leveled printer and enough filament for core + plate plus a 10% contingency in case of failed first layers.",
+            "text": "We need a leveled printer and enough filament for core + plate plus contingency filament in case of failed first layers.",
             "options": [
                 {
                     "type": "process",
@@ -116,7 +116,7 @@
         },
         {
             "id": "recover-core",
-            "text": "Troubleshoot before retry: clean nozzle, dry filament, and reduce first-layer speed. Then rerun from core print.",
+            "text": "Troubleshoot before retry: clean nozzle, dry filament, and reduce first-layer speed. Plate defects can also signal calibration drift, so rerun from core print.",
             "options": [
                 {
                     "type": "process",

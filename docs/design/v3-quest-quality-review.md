@@ -452,9 +452,9 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): composting/check-temperature,
 Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, welcome/intro-inventory (fallback: no checked completionist quests yet)
 
 - `completionist/catalog`
-  - [x] Observed issue: `completionist/catalog` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3668, #3770)
-  - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3668, #3770)
-  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3668, #3770)
+  - [x] Observed issue: `completionist/catalog` asks for logging/monitoring but pass criteria and anomaly response are not explicit. (PR #3668, #3775)
+  - [x] Define required log fields/cadence/thresholds and gate completion on the produced log or monitoring snapshot artifact. (PR #3668, #3775)
+  - [x] Add an anomaly classification branch with corrective action and a follow-up verification window before closure. (PR #3668, #3775)
 - `completionist/display`
   - [x] Observed issue: `completionist/display` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3668)
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3668)
@@ -464,13 +464,13 @@ Exemplar anchors (checked in docs/qa/v3.md §4.5): welcome/howtodoquests, welcom
   - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3668)
   - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3668)
 - `completionist/reminder`
-  - [x] Observed issue: `completionist/reminder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3770)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3770)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3770)
+  - [x] Observed issue: `completionist/reminder` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3775)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3775)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3775)
 - `completionist/v2`
-  - [x] Observed issue: `completionist/v2` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3770)
-  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3770)
-  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3770)
+  - [x] Observed issue: `completionist/v2` still trends toward thin-shell progression with limited decision points and weak intermediate proof gates. (PR #3775)
+  - [x] Add at least one non-linear branch (main path plus alternate strategy) and gate advancement on mechanics-backed evidence (`requiresItems`, `launchesProcess`, or logged output). (PR #3775)
+  - [x] Insert troubleshooting/recovery handling so failures produce actionable next steps and a verification retry before `finish`. (PR #3775)
 
 ### devops (15 quests)
 
