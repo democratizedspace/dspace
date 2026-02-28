@@ -104,6 +104,22 @@
                         {
                             "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
                             "count": 1
+                        },
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
                         }
                     ]
                 }
@@ -166,6 +182,17 @@
                         },
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Water-change kit unavailable; stage corrective dosing and re-test instead.",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
                             "count": 1
                         }
                     ]
