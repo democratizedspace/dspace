@@ -42,6 +42,22 @@ describe('Menu accessibility', () => {
         expect(gamesavesLink).toHaveAttribute('aria-current', 'page');
     });
 
+    it('highlights only Quests on nested quest routes with matching words', () => {
+        const { getByRole, queryByRole } = render(Menu, {
+            pathname: '/quests/energy/battery-maintenance',
+        });
+
+        const questsLink = getByRole('link', { name: 'Quests' });
+        const energyLink = getByRole('link', { name: 'Energy' });
+        const activeLinks = document.querySelectorAll('a.active[aria-current="page"]');
+
+        expect(questsLink).toHaveClass('active');
+        expect(questsLink).toHaveAttribute('aria-current', 'page');
+        expect(energyLink).not.toHaveClass('active');
+        expect(queryByRole('link', { name: 'Energy' })).toHaveAttribute('href', '/energy');
+        expect(activeLinks).toHaveLength(1);
+    });
+
     it('renders Settings as a navigable link instead of a disabled chip', async () => {
         const { getByRole, queryByRole } = render(Menu, { pathname: '/' });
 

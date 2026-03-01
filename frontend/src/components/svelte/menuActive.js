@@ -33,27 +33,32 @@ const normalizeHref = (href) => {
     return normalizePathname(href);
 };
 
+const stripSupportedBasePath = (pathname) => {
+    if (pathname === '/app') {
+        return '/';
+    }
+
+    if (pathname.startsWith('/app/')) {
+        return pathname.slice('/app'.length);
+    }
+
+    return pathname;
+};
+
 const matchesTarget = (current, target) => {
     if (current === target) {
         return true;
     }
 
-    if (current.startsWith(`${target}/`)) {
-        return true;
-    }
-
-    if (current.endsWith(target)) {
-        return true;
-    }
-
-    return current.includes(`${target}/`);
+    return current.startsWith(`${target}/`);
 };
 
 export const isMenuItemActive = (pathname, item) => {
     const target = normalizeHref(item?.href);
-    const current = normalizePathname(
+    const normalizedPathname = normalizePathname(
         typeof pathname === 'string' ? pathname : isBrowser ? window.location.pathname : ''
     );
+    const current = stripSupportedBasePath(normalizedPathname);
 
     if (!target || !current) {
         return false;
