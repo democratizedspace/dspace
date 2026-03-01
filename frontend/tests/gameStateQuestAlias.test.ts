@@ -25,4 +25,47 @@ describe('gameState quest alias migration', () => {
             expect.arrayContaining(['legacy-step', 'canonical-step'])
         );
     });
+
+    test('rewrites legacy claimed-option keys to canonical quest id during migration', () => {
+        const validated = validateGameState({
+            quests: {
+                '3dprinter/start': {
+                    itemsClaimed: ['3dprinter/start-grant-0', 'custom-claim-key'],
+                },
+                '3dprinting/start': {
+                    itemsClaimed: ['3dprinting/start-grant-0'],
+                },
+            },
+        });
+
+        expect(validated.quests['3dprinter/start']).toBeUndefined();
+        expect(validated.quests['3dprinting/start'].itemsClaimed).toEqual(
+            expect.arrayContaining(['3dprinting/start-grant-0', 'custom-claim-key'])
+        );
+        expect(validated.quests['3dprinting/start'].itemsClaimed).not.toContain(
+            '3dprinter/start-grant-0'
+        );
+    });
+
+    test('ignores array-shaped quest progress entries during alias migration', () => {
+        const validated = validateGameState({
+            quests: {
+                '3dprinter/start': ['not', 'a', 'progress', 'object'],
+                '3dprinting/start': {
+                    stepId: 'canonical',
+                },
+            },
+        });
+
+        expect(validated.quests['3dprinter/start']).toEqual(['not', 'a', 'progress', 'object']);
+        expect(validated.quests['3dprinting/start']).toMatchObject({ stepId: 'canonical' });
+    });
+
+    test('replaces non-object quests container before alias migration', () => {
+        const validated = validateGameState({
+            quests: ['invalid quests container'],
+        });
+
+        expect(validated.quests).toEqual({});
+    });
 });
