@@ -3,7 +3,7 @@
   "date": "2026-03-01",
   "component": "tests/quest-completion",
   "rootCause": "The quest completable test treated BETA_PLACEHOLDER inventory items as implicitly obtainable, and its completion simulation did not include dialogue-path required items when marking quests as completable.",
-  "resolution": "Restrict implicit obtainability to explicitly priced items only and include dialogue-path requirements in the quest completion simulation; add a regression test to ensure BETA_PLACEHOLDER items are never treated as purchasable gates.",
+  "resolution": "Set an explicit price on the 12 V DC motor (6caa08d8-815c-4a0e-9297-0fda4516659d), include dialogue-path requirements in quest completion simulation, and add a focused regression test for hand-crank generator finish-path obtainability.",
   "references": [
     "tests/questCompletableItems.test.ts",
     "frontend/src/pages/inventory/json/items/misc.json",

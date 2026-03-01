@@ -239,9 +239,11 @@ const getItemDependencies = (item: any) =>
 const computeObtainableItems = ({
     allItems,
     allQuests,
+    includeBetaPlaceholderItems = true,
 }: {
     allItems: Array<any>;
     allQuests: Array<any>;
+    includeBetaPlaceholderItems?: boolean;
 }) => {
     const itemMap = new Map(allItems.map((item) => [item.id, item]));
     const getItemDependencyInfo = (itemId: string) => {
@@ -267,7 +269,11 @@ const computeObtainableItems = ({
     while (changed) {
         changed = false;
 
-        for (const itemId of [...purchasable, ...betaPlaceholderItems]) {
+        const basePurchasable = includeBetaPlaceholderItems
+            ? [...purchasable, ...betaPlaceholderItems]
+            : [...purchasable];
+
+        for (const itemId of basePurchasable) {
             if (obtainable.has(itemId)) continue;
             const { known, unknown } = getItemDependencyInfo(itemId);
             if (unknown.length === 0 && known.every((dependency) => obtainable.has(dependency))) {
@@ -383,6 +389,7 @@ describe('quest completion item availability', () => {
         const obtainable = computeObtainableItems({
             allItems: items as Array<any>,
             allQuests: quests,
+            includeBetaPlaceholderItems: false,
         });
         const handCrankMotorId = '6caa08d8-815c-4a0e-9297-0fda4516659d';
 
