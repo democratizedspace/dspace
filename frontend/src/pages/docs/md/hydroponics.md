@@ -640,6 +640,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `contam` branch pauses dosing, requires cleanup, and loops back to prep/flush
 - Safety/ops checks:
     - Pump isolation check before flush and repeat-until-clear verification loop
+    - Canonical gate item is **Beginner hydroponics tub** (`11aa585c-fdeb-41ba-9191-be4bcdaa23c4`)
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None

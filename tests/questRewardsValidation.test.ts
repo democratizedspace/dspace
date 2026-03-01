@@ -17,7 +17,7 @@ const processes: Array<{ id: string }> = JSON.parse(
 const itemIds = new Set(items.map((item) => item.id));
 const processIds = new Set(processes.map((process) => process.id));
 const allowedProcessPlaceholders = new Set<string>();
-const allowedRewardPlaceholders = new Set(['15e3dd7e-374b-4233-b8c9-117e3057f009']);
+const allowedRewardPlaceholders = new Set<string>();
 
 type RewardContext = { entry: RewardEntry; path: string };
 type ProcessContext = { entry: ProcessReference; path: string };
