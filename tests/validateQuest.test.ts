@@ -163,3 +163,75 @@ test('passes when all process references exist in the known process set', () => 
     expect(result).toBe(true);
 });
 
+
+
+test('fails when options reference an unknown item id', () => {
+    const questWithMissingItem = {
+        id: 'q-missing-item',
+        title: 'Needs Item',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    {
+                        type: 'goto',
+                        goto: 'finish',
+                        text: 'go',
+                        requiresItems: [{ id: 'missing-item', count: 1 }],
+                    },
+                ],
+            },
+            {
+                id: 'finish',
+                text: 'done',
+                options: [{ type: 'finish', text: 'done' }],
+            },
+        ],
+        hardening: defaultHardening,
+    };
+    const file = writeQuestFile(questWithMissingItem);
+    const result = validateQuest(file, { knownItemIds: new Set(['existing-item']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(false);
+});
+
+test('passes when item references exist in the known item set', () => {
+    const questWithValidItems = {
+        id: 'q-valid-item',
+        title: 'Has Items',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    {
+                        type: 'goto',
+                        goto: 'finish',
+                        text: 'go',
+                        requiresItems: [{ id: 'existing-item', count: 1 }],
+                    },
+                ],
+            },
+            {
+                id: 'finish',
+                text: 'done',
+                options: [{ type: 'finish', text: 'done' }],
+            },
+        ],
+        rewards: [{ id: 'existing-item', count: 1 }],
+        hardening: defaultHardening,
+    };
+    const file = writeQuestFile(questWithValidItems);
+    const result = validateQuest(file, { knownItemIds: new Set(['existing-item']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(true);
+});

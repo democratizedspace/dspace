@@ -6,6 +6,7 @@ import items from '../frontend/src/pages/inventory/json/items';
 
 type RewardEntry = { id?: unknown; count?: unknown };
 type ProcessReference = { id?: unknown };
+type ItemReference = { id?: unknown };
 
 const questDir = path.join(__dirname, '../frontend/src/pages/quests/json');
 const questFiles = globSync(path.join(questDir, '**/*.json')).sort();
@@ -18,19 +19,25 @@ const itemIds = new Set(items.map((item) => item.id));
 const processIds = new Set(processes.map((process) => process.id));
 const allowedProcessPlaceholders = new Set<string>();
 const allowedRewardPlaceholders = new Set(['15e3dd7e-374b-4233-b8c9-117e3057f009']);
+const allowedRequiredItemPlaceholders = new Set([
+    '11aa585c-16f6-4012-9fec-48f6c203f7c7',
+    '15e3dd7e-374b-4233-b8c9-117e3057f009',
+]);
 
 type RewardContext = { entry: RewardEntry; path: string };
 type ProcessContext = { entry: ProcessReference; path: string };
+type ItemContext = { entry: ItemReference; path: string };
 
 const collectRewardsAndProcesses = (
     node: unknown,
     pathPrefix: string,
     rewards: RewardContext[],
-    processes: ProcessContext[]
+    processes: ProcessContext[],
+    requiredItems: ItemContext[]
 ): void => {
     if (Array.isArray(node)) {
         node.forEach((value, index) =>
-            collectRewardsAndProcesses(value, `${pathPrefix}[${index}]`, rewards, processes)
+            collectRewardsAndProcesses(value, `${pathPrefix}[${index}]`, rewards, processes, requiredItems)
         );
         return;
     }
@@ -60,20 +67,40 @@ const collectRewardsAndProcesses = (
         processes.push({ entry: { id: record.process }, path: `${pathPrefix}.process` });
     }
 
+    if (Array.isArray(record.requiresItems)) {
+        record.requiresItems.forEach((entry, index) =>
+            requiredItems.push({
+                entry: entry as ItemReference,
+                path: `${pathPrefix}.requiresItems[${index}]`,
+            })
+        );
+    }
+
+    if (Array.isArray(record.requireItems)) {
+        record.requireItems.forEach((entry, index) =>
+            requiredItems.push({
+                entry: entry as ItemReference,
+                path: `${pathPrefix}.requireItems[${index}]`,
+            })
+        );
+    }
+
     for (const [key, value] of Object.entries(record)) {
         if (key === 'rewards' || key === 'grantsItems') {
             continue;
         }
-        collectRewardsAndProcesses(value, `${pathPrefix}.${key}`, rewards, processes);
+        collectRewardsAndProcesses(value, `${pathPrefix}.${key}`, rewards, processes, requiredItems);
     }
 };
 
 describe('quest reward validation', () => {
     it('uses known item/process ids and positive counts for rewards and process launches', () => {
         const seenRewardPlaceholders = new Set<string>();
+        const seenRequiredItemPlaceholders = new Set<string>();
         const seenPlaceholderProcesses = new Set<string>();
         const missingRewardIds = new Set<string>();
         const missingProcessIds = new Set<string>();
+        const missingRequiredItemIds = new Set<string>();
 
         for (const file of questFiles) {
             const quest = JSON.parse(readFileSync(file, 'utf8'));
@@ -81,8 +108,15 @@ describe('quest reward validation', () => {
             expect(quest.rewards.length, `Quest must grant at least one reward in ${file}`).toBeGreaterThan(0);
             const rewardContexts: RewardContext[] = [];
             const processContexts: ProcessContext[] = [];
+            const requiredItemContexts: ItemContext[] = [];
 
-            collectRewardsAndProcesses(quest, path.basename(file), rewardContexts, processContexts);
+            collectRewardsAndProcesses(
+                quest,
+                path.basename(file),
+                rewardContexts,
+                processContexts,
+                requiredItemContexts
+            );
 
             for (const { entry, path: entryPath } of rewardContexts) {
                 expect(typeof entry.id, `Expected reward id at ${entryPath} in ${file}`).toBe('string');
@@ -126,6 +160,21 @@ describe('quest reward validation', () => {
 
                 missingProcessIds.add(`${processId} at ${entryPath} in ${file}`);
             }
+
+            for (const { entry, path: entryPath } of requiredItemContexts) {
+                expect(typeof entry.id, `Expected required item id at ${entryPath} in ${file}`).toBe(
+                    'string'
+                );
+                const requiredItemId = entry.id as string;
+
+                if (!itemIds.has(requiredItemId)) {
+                    if (allowedRequiredItemPlaceholders.has(requiredItemId)) {
+                        seenRequiredItemPlaceholders.add(requiredItemId);
+                    } else {
+                        missingRequiredItemIds.add(`${requiredItemId} at ${entryPath} in ${file}`);
+                    }
+                }
+            }
         }
 
         expect(
@@ -138,12 +187,26 @@ describe('quest reward validation', () => {
             `Unknown process ids found:\n${Array.from(missingProcessIds).join('\n')}`
         ).toBe(0);
 
+        expect(
+            missingRequiredItemIds.size,
+            `Unknown required item ids found:\n${Array.from(missingRequiredItemIds).join('\n')}`
+        ).toBe(0);
+
         const unusedRewardPlaceholders = [...allowedRewardPlaceholders].filter(
             (rewardId) => !seenRewardPlaceholders.has(rewardId)
         );
         expect(
             unusedRewardPlaceholders.length,
             `Placeholder reward ids no longer referenced: ${unusedRewardPlaceholders.join(', ')}`
+        ).toBe(0);
+
+
+        const unusedRequiredItemPlaceholders = [...allowedRequiredItemPlaceholders].filter(
+            (itemId) => !seenRequiredItemPlaceholders.has(itemId)
+        );
+        expect(
+            unusedRequiredItemPlaceholders.length,
+            `Placeholder required item ids no longer referenced: ${unusedRequiredItemPlaceholders.join(', ')}`
         ).toBe(0);
 
         const unusedPlaceholders = [...allowedProcessPlaceholders].filter(

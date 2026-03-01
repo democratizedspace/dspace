@@ -8,6 +8,7 @@ const hardeningSchema = require('../frontend/src/pages/sharedSchemas/hardening.j
 
 let cachedQuestIds;
 let cachedProcessIds;
+let cachedItemIds;
 
 function collectQuestIds(dir, ids) {
   if (!fs.existsSync(dir)) {
@@ -105,6 +106,91 @@ function toQuestIdSet(knownQuestIds) {
   return new Set(loadDefaultQuestIds());
 }
 
+function loadItemIds() {
+  if (cachedItemIds) {
+    return cachedItemIds;
+  }
+
+  const itemDir = path.resolve(__dirname, '../frontend/src/pages/inventory/json/items');
+  const itemIds = new Set();
+
+  if (!fs.existsSync(itemDir)) {
+    cachedItemIds = itemIds;
+    return cachedItemIds;
+  }
+
+  for (const entry of fs.readdirSync(itemDir)) {
+    if (!entry.endsWith('.json')) {
+      continue;
+    }
+
+    const fullPath = path.join(itemDir, entry);
+    try {
+      const records = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+      if (!Array.isArray(records)) {
+        continue;
+      }
+      for (const item of records) {
+        if (item && typeof item.id === 'string' && item.id.trim().length > 0) {
+          itemIds.add(item.id);
+        }
+      }
+    } catch (error) {
+      console.warn(`Unable to parse item file ${fullPath}:`, error.message);
+    }
+  }
+
+  cachedItemIds = itemIds;
+  return cachedItemIds;
+}
+
+function toItemIdSet(knownItemIds) {
+  if (knownItemIds instanceof Set) {
+    return knownItemIds;
+  }
+
+  if (Array.isArray(knownItemIds)) {
+    return new Set(knownItemIds);
+  }
+
+  if (typeof knownItemIds === 'string' && knownItemIds.length > 0) {
+    return new Set([knownItemIds]);
+  }
+
+  return new Set(loadItemIds());
+}
+
+function collectItemIdsFromEntries(entries) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+
+  return entries
+    .map((entry) => entry && entry.id)
+    .filter((id) => typeof id === 'string' && id.length > 0);
+}
+
+const defaultAllowedItemPlaceholderIds = new Set([
+  '11aa585c-16f6-4012-9fec-48f6c203f7c7',
+  '15e3dd7e-374b-4233-b8c9-117e3057f009'
+]);
+
+function toAllowedItemPlaceholderSet(allowedItemPlaceholderIds) {
+  if (allowedItemPlaceholderIds instanceof Set) {
+    return allowedItemPlaceholderIds;
+  }
+
+  if (Array.isArray(allowedItemPlaceholderIds)) {
+    return new Set(allowedItemPlaceholderIds);
+  }
+
+  if (typeof allowedItemPlaceholderIds === 'string' && allowedItemPlaceholderIds.length > 0) {
+    return new Set([allowedItemPlaceholderIds]);
+  }
+
+  return new Set(defaultAllowedItemPlaceholderIds);
+}
+
 const ajv = new Ajv({ allErrors: true, strict: false });
 ajv.addSchema(hardeningSchema, hardeningSchema.$id);
 const validate = ajv.compile(schema);
@@ -120,6 +206,8 @@ function validateQuest(filePath, options = {}) {
 
   const questIdSet = toQuestIdSet(options.knownQuestIds);
   const processIdSet = toProcessIdSet(options.knownProcessIds);
+  const itemIdSet = toItemIdSet(options.knownItemIds);
+  const allowedItemPlaceholderSet = toAllowedItemPlaceholderSet(options.allowedItemPlaceholderIds);
 
   if (Array.isArray(data.requiresQuests)) {
     const missing = data.requiresQuests.filter((dep) => !questIdSet.has(dep));
@@ -131,9 +219,25 @@ function validateQuest(filePath, options = {}) {
     }
   }
 
+
+  const referencedItemIds = new Set([
+    ...collectItemIdsFromEntries(data.rewards),
+    ...collectItemIdsFromEntries(data.grantsItems),
+    ...collectItemIdsFromEntries(data.requiresItems)
+  ]);
+
   for (const node of data.dialogue || []) {
     if (!Array.isArray(node.options)) {
       continue;
+    }
+
+    for (const option of node.options) {
+      for (const itemId of collectItemIdsFromEntries(option.requiresItems)) {
+        referencedItemIds.add(itemId);
+      }
+      for (const itemId of collectItemIdsFromEntries(option.grantsItems)) {
+        referencedItemIds.add(itemId);
+      }
     }
 
     const missingProcessIds = node.options
@@ -147,6 +251,16 @@ function validateQuest(filePath, options = {}) {
       );
       return false;
     }
+  }
+
+  const missingItemIds = [...referencedItemIds].filter(
+    (itemId) => !itemIdSet.has(itemId) && !allowedItemPlaceholderSet.has(itemId)
+  );
+  if (missingItemIds.length > 0) {
+    console.error(
+      `Validation failed for ${filePath}: unknown item ids ${missingItemIds.join(', ')}`
+    );
+    return false;
   }
 
   return true;
