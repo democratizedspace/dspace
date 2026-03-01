@@ -475,3 +475,8 @@ slug: '3dprinting'
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
+
+
+## Reward rebalance (2026-03-01)
+
+Quest completions in this tree that previously granted `1 x cured compost bucket` now rotate among theme-appropriate rewards: `green PLA filament`, `Benchy Award`, `dPrint`.

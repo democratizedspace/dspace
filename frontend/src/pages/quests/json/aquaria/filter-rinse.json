@@ -183,15 +183,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "a07b75e3-f828-4cb1-81d6-1ab0e9857a79",
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/sponge-filter"],
+    "requiresQuests": [
+        "aquaria/sponge-filter"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-19",

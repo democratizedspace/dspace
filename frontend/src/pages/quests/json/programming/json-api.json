@@ -145,7 +145,7 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
             "count": 1
         }
     ],
@@ -157,7 +157,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

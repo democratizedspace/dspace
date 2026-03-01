@@ -144,11 +144,14 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "092dae11-237a-43cc-b342-246aabbba258",
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/stevia", "chemistry/safe-reaction"],
+    "requiresQuests": [
+        "hydroponics/stevia",
+        "chemistry/safe-reaction"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

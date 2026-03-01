@@ -128,3 +128,8 @@ Composting quests build practical progression through the composting skill tree.
   single process run needs. Example: `cure-compost-bucket` requires one temp and one moisture
   log per run, while this quest's continuation gates require two of each because players are
   expected to loop measurement/recheck steps.
+
+
+## Reward rebalance (2026-03-01)
+
+Quest completions in this tree that previously granted `1 x cured compost bucket` now rotate among theme-appropriate rewards: `screened compost blend`, `Lettuce Seeds`, `Tree Hugger Award`.

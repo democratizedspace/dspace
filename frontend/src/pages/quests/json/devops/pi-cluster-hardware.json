@@ -163,15 +163,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "d3d0a7bd-e338-48f1-86ab-ddcc3626cecc",
             "count": 1
         }
     ],
-    "requiresQuests": ["sysadmin/basic-commands"],
+    "requiresQuests": [
+        "sysadmin/basic-commands"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

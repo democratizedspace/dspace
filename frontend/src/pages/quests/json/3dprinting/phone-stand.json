@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sydney here. We'll prep safely, print a stand, then prove it with measurements. Pass target is a 60\u201370\u00b0 lean and charging-port clearance.",
+            "text": "Sydney here. We'll prep safely, print a stand, then prove it with measurements. Pass target is a 60–70° lean and charging-port clearance.",
             "options": [
                 {
                     "type": "goto",
@@ -60,7 +60,7 @@
         },
         {
             "id": "print",
-            "text": "Slice at 0.2 mm layers, 3 perimeters, and 15% gyroid infill. Use a 3\u20135 mm brim if adhesion looks weak. Watch first layer lines before leaving the machine.",
+            "text": "Slice at 0.2 mm layers, 3 perimeters, and 15% gyroid infill. Use a 3–5 mm brim if adhesion looks weak. Watch first layer lines before leaving the machine.",
             "options": [
                 {
                     "type": "process",
@@ -86,7 +86,7 @@
         },
         {
             "id": "measure",
-            "text": "Record two checks: lean angle between 60\u201370\u00b0 and charging-port opening at least 12 mm. Write both values before deciding pass/fail.",
+            "text": "Record two checks: lean angle between 60–70° and charging-port opening at least 12 mm. Write both values before deciding pass/fail.",
             "options": [
                 {
                     "type": "goto",
@@ -167,15 +167,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -81,7 +81,7 @@
         },
         {
             "id": "capture",
-            "text": "Upload the thermistor sketch and open Serial Monitor. Evidence artifact: record three readings over one minute. Expected room-range for this quest is 15-35 \u00b0C with smooth changes.",
+            "text": "Upload the thermistor sketch and open Serial Monitor. Evidence artifact: record three readings over one minute. Expected room-range for this quest is 15-35 °C with smooth changes.",
             "options": [
                 {
                     "type": "process",
@@ -167,15 +167,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/potentiometer-dimmer"],
+    "requiresQuests": [
+        "electronics/potentiometer-dimmer"
+    ],
     "hardening": {
         "passes": 5,
         "score": 97,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-03",

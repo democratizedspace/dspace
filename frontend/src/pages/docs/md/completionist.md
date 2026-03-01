@@ -148,3 +148,8 @@ Completionist quests build practical progression through the completionist skill
 - Reminder QA: `completionist/reminder` now adds dry-run verification for cadence/link/timezone plus a backup-alert recovery loop.
 - Trophy build QA: `completionist/v2` now includes a safety preflight stop, core verification gate, and retune-and-retry recovery branch.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
+
+
+## Reward rebalance (2026-03-01)
+
+Quest completions in this tree that previously granted `1 x cured compost bucket` now rotate among theme-appropriate rewards: `Completionist Award`, `Completionist Award II`, `completionist trophy log entry`.

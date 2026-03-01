@@ -182,11 +182,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "cc7d36e7-c66d-466f-9390-f7a365d857b9",
             "count": 1
         }
     ],
-    "requiresQuests": ["firstaid/assemble-kit"],
+    "requiresQuests": [
+        "firstaid/assemble-kit"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,

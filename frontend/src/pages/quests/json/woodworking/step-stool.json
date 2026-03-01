@@ -10,7 +10,11 @@
             "id": "start",
             "text": "Atlas here. Step stools fail fast if we skip verification, so we're doing this with clear checks.",
             "options": [
-                { "type": "goto", "goto": "gather", "text": "I'm ready for the checklist." }
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "I'm ready for the checklist."
+                }
             ]
         },
         {
@@ -20,11 +24,26 @@
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 2 },
-                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
-                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 2
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ],
                     "text": "Gather parts"
                 },
@@ -32,11 +51,26 @@
                     "type": "goto",
                     "goto": "build-path",
                     "requiresItems": [
-                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 2 },
-                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
-                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 2
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ],
                     "text": "Parts ready and safety gear on"
                 }
@@ -66,12 +100,22 @@
                     "type": "goto",
                     "goto": "wobble-check",
                     "requiresItems": [
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ],
                     "text": "Side frames are square and glued."
                 },
-                { "type": "goto", "goto": "fix-loop", "text": "One frame sits twisted." }
+                {
+                    "type": "goto",
+                    "goto": "fix-loop",
+                    "text": "One frame sits twisted."
+                }
             ]
         },
         {
@@ -82,12 +126,22 @@
                     "type": "goto",
                     "goto": "wobble-check",
                     "requiresItems": [
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ],
                     "text": "Step fit and supports verified."
                 },
-                { "type": "goto", "goto": "fix-loop", "text": "Step panel shifts under pressure." }
+                {
+                    "type": "goto",
+                    "goto": "fix-loop",
+                    "text": "Step panel shifts under pressure."
+                }
             ]
         },
         {
@@ -98,12 +152,22 @@
                     "type": "goto",
                     "goto": "claim",
                     "requiresItems": [
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ],
                     "text": "No wobble and edges are safe to touch."
                 },
-                { "type": "goto", "goto": "fix-loop", "text": "Wobble or sharp edge found." }
+                {
+                    "type": "goto",
+                    "goto": "fix-loop",
+                    "text": "Wobble or sharp edge found."
+                }
             ]
         },
         {
@@ -125,7 +189,12 @@
         {
             "id": "safe-pause",
             "text": "Good stop. Resume later and pass the wobble check before claiming the stool.",
-            "options": [{ "type": "finish", "text": "Pause for now." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Pause for now."
+                }
+            ]
         },
         {
             "id": "claim",
@@ -133,15 +202,31 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [{ "id": "0d4a7b77-f241-4c19-9365-c74647066802", "count": 1 }],
+                    "grantsItems": [
+                        {
+                            "id": "0d4a7b77-f241-4c19-9365-c74647066802",
+                            "count": 1
+                        }
+                    ],
                     "text": "Take the stool"
                 },
-                { "type": "finish", "text": "Onward!" }
+                {
+                    "type": "finish",
+                    "text": "Onward!"
+                }
             ]
         }
     ],
-    "rewards": [{ "id": "b281360b-2ecc-4fea-a248-36a61c5f7399", "count": 1 }],
-    "requiresQuests": ["woodworking/birdhouse", "woodworking/planter-box"],
+    "rewards": [
+        {
+            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "woodworking/birdhouse",
+        "woodworking/planter-box"
+    ],
     "hardening": {
         "passes": 2,
         "score": 93,

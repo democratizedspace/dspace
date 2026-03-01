@@ -1,0 +1,13 @@
+{
+  "id": "OUT-2026-03-01-quest-reward-compost-overuse",
+  "date": "2026-03-01",
+  "component": "frontend/quests",
+  "rootCause": "Many quest trees reused a placeholder completion reward (1 x cured compost bucket), which made rewards thematically inconsistent and reduced progression variety.",
+  "resolution": "Audited all quest rewards and replaced cured compost bucket rewards with tree-appropriate rotating reward pools. Updated 177 quests across 17 trees (3dprinting:12, aquaria:13, astronomy:15, chemistry:10, completionist:5, composting:2, devops:15, electronics:12, energy:10, firstaid:13, geothermal:13, hydroponics:20, programming:18, robotics:10, rocketry:2, ubi:2, woodworking:5) and documented the updated reward policy in each affected Skills doc.",
+  "references": [
+    "frontend/src/pages/quests/json",
+    "frontend/src/pages/docs/md/3dprinting.md",
+    "frontend/src/pages/docs/md/programming.md",
+    "frontend/src/pages/docs/md/firstaid.md"
+  ]
+}

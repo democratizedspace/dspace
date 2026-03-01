@@ -189,15 +189,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
             "count": 1
         }
     ],
-    "requiresQuests": ["devops/k3s-deploy"],
+    "requiresQuests": [
+        "devops/k3s-deploy"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
