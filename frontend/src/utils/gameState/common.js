@@ -17,6 +17,25 @@ const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
 const CURRENT_VERSION = '3';
+const LEGACY_QUEST_ID_ALIASES = {
+    '3dprinter/start': '3dprinting/start',
+};
+
+const isPlainObject = (value) =>
+    value !== null && typeof value === 'object' && !Array.isArray(value);
+
+const rewriteLegacyClaimKey = (claimKey, legacyId, canonicalId) => {
+    if (typeof claimKey !== 'string') {
+        return claimKey;
+    }
+
+    const legacyPrefix = `${legacyId}-`;
+    if (!claimKey.startsWith(legacyPrefix)) {
+        return claimKey;
+    }
+
+    return `${canonicalId}-${claimKey.slice(legacyPrefix.length)}`;
+};
 
 const logPersistenceIssue = (message, error) => {
     const details = error?.message ?? error;
@@ -239,8 +258,38 @@ export const validateGameState = (state) => {
     if (!state || typeof state !== 'object') {
         return initializeGameState();
     }
-    if (typeof state.quests !== 'object' || state.quests === null) {
+    if (!isPlainObject(state.quests)) {
         state.quests = {};
+    }
+    for (const [legacyId, canonicalId] of Object.entries(LEGACY_QUEST_ID_ALIASES)) {
+        const legacyProgress = state.quests[legacyId];
+        if (!isPlainObject(legacyProgress)) {
+            continue;
+        }
+
+        const canonicalSource = state.quests[canonicalId];
+        const canonicalProgress = isPlainObject(canonicalSource) ? canonicalSource : {};
+        const rewrittenLegacyClaims = Array.isArray(legacyProgress.itemsClaimed)
+            ? legacyProgress.itemsClaimed.map((claimKey) =>
+                  rewriteLegacyClaimKey(claimKey, legacyId, canonicalId)
+              )
+            : [];
+
+        state.quests[canonicalId] = {
+            ...legacyProgress,
+            ...canonicalProgress,
+            finished: Boolean(canonicalProgress.finished || legacyProgress.finished),
+            itemsClaimed: [
+                ...new Set([
+                    ...rewrittenLegacyClaims,
+                    ...(Array.isArray(canonicalProgress.itemsClaimed)
+                        ? canonicalProgress.itemsClaimed
+                        : []),
+                ]),
+            ],
+        };
+
+        delete state.quests[legacyId];
     }
     if (typeof state.inventory !== 'object' || state.inventory === null) {
         state.inventory = {};
