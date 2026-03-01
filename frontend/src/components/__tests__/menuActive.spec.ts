@@ -21,9 +21,24 @@ describe('isMenuItemActive', () => {
         expect(isMenuItemActive(pathname, { href: '/energy' })).toBe(false);
     });
 
+    it('keeps legitimate child routes active for top-level sections', () => {
+        expect(isMenuItemActive('/energy/some-child', { href: '/energy' })).toBe(true);
+        expect(isMenuItemActive('/quests/some-child', { href: '/quests' })).toBe(true);
+    });
+
     it('never highlights two top-level sections for nested quest routes', () => {
         const pathname = '/quests/energy/battery-maintenance';
-        const topLevelHrefs = ['/quests', '/inventory', '/energy', '/wallet', '/profile', '/docs'];
+        const topLevelHrefs = [
+            '/',
+            '/quests',
+            '/inventory',
+            '/energy',
+            '/wallet',
+            '/profile',
+            '/docs',
+            '/chat',
+            '/changelog',
+        ];
 
         const activeCount = topLevelHrefs.filter((href) =>
             isMenuItemActive(pathname, {
