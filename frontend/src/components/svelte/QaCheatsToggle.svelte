@@ -244,6 +244,7 @@
                     step="1"
                     bind:value={itemCountToAdd}
                     class="qa-tools__count-input"
+                    disabled={Boolean(workingAction)}
                     data-testid="qa-inventory-item-count"
                 />
                 <Chip

@@ -1,11 +1,15 @@
 import 'fake-indexeddb/auto';
 import { fireEvent, render, waitFor } from '@testing-library/svelte';
-import { afterEach, beforeEach, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+
+const addItemsSpy = vi.fn();
+vi.mock('../../utils/gameState/inventory.js', () => ({
+    addItems: addItemsSpy,
+}));
 
 import QaCheatsToggle from '../svelte/QaCheatsToggle.svelte';
 import {
     closeGameStateDatabaseForTesting,
-    loadGameState,
     resetGameState,
 } from '../../utils/gameState/common.js';
 import { initializeQaCheats, setQaCheatsPreference } from '../../lib/qaCheats';
@@ -17,6 +21,7 @@ describe('QaCheatsToggle inventory grant', () => {
         initializeQaCheats(true);
         setQaCheatsPreference(false);
         await resetGameState();
+        addItemsSpy.mockReset();
     });
 
     afterEach(async () => {
@@ -25,6 +30,18 @@ describe('QaCheatsToggle inventory grant', () => {
         document.documentElement.dataset.cheatsAvailable = 'false';
         initializeQaCheats(false);
         setQaCheatsPreference(false);
+    });
+
+    test('shows inventory grant tool only when staging and cheats are enabled', async () => {
+        const { findByTestId } = render(QaCheatsToggle, {
+            cheatsAvailable: true,
+            stagingEnvironment: true,
+        });
+
+        const toggle = await findByTestId('qa-cheats-toggle');
+        await fireEvent.click(toggle);
+
+        expect(await findByTestId('qa-inventory-grant-tool')).toBeTruthy();
     });
 
     test('adds a custom item id to inventory when staging QA cheats are enabled', async () => {
@@ -51,8 +68,7 @@ describe('QaCheatsToggle inventory grant', () => {
         await findByText(/Added 5000 × qa-custom-dwatt to inventory/i);
 
         await waitFor(() => {
-            const gameState = loadGameState();
-            expect(gameState.inventory['qa-custom-dwatt']).toBe(5000);
+            expect(addItemsSpy).toHaveBeenCalledWith([{ id: 'qa-custom-dwatt', count: 5000 }]);
         });
     });
 
