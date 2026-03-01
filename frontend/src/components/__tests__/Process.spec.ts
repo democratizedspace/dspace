@@ -192,6 +192,35 @@ test('pauses and resumes a process while showing remaining time', async () => {
     expect(getByText(/remaining/).textContent).not.toBe(pausedRemaining);
 });
 
+test('renders requires and consumes sections with inverted item-list chips for contrast', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 0, 'item-2': 0 });
+
+    const customProcess = {
+        id: 'custom-contrast',
+        title: 'Contrast Coverage Process',
+        duration: '15s',
+        requireItems: [{ id: 'item-1', count: 1 }],
+        consumeItems: [{ id: 'item-2', count: 1 }],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-contrast',
+        processData: customProcess,
+    });
+
+    await waitFor(() => {
+        const requiresChip = getByTestId('process-requires').querySelector('.chip-container');
+        const consumesChip = getByTestId('process-consumes').querySelector('.chip-container');
+
+        expect(requiresChip?.classList.contains('inverted')).toBe(true);
+        expect(consumesChip?.classList.contains('inverted')).toBe(true);
+    });
+});
+
 test('shows required items even when counts are zero', async () => {
     getItemCountsMock.mockReturnValue({ 'item-1': 0 });
 

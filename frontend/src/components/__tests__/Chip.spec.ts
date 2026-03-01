@@ -1,4 +1,5 @@
 import { render } from '@testing-library/svelte';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import Chip from '../svelte/Chip.svelte';
 
@@ -37,5 +38,12 @@ describe('Chip', () => {
         expect(container.querySelector('nav .chip-container.static-container.inverted')).toBe(
             staticContainer
         );
+    });
+    it('keeps static container base styles low-specificity so inverted contrast can override them', () => {
+        const source = readFileSync('frontend/src/components/svelte/Chip.svelte', 'utf8');
+
+        expect(source).toContain('.chip-container {');
+        expect(source).toContain('.inverted {');
+        expect(source).not.toContain('nav .chip-container {');
     });
 });

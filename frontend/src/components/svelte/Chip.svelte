@@ -91,7 +91,7 @@
         transition: 200ms linear;
     }
 
-    nav .chip-container {
+    .chip-container {
         display: flex;
         background-color: #007006;
         border-radius: 0.4rem;
@@ -105,16 +105,16 @@
         transition: 200ms linear;
     }
 
-    nav .chip-container {
+    .chip-container {
         -webkit-user-select: text;
         user-select: text;
     }
 
-    nav .chip-container.static-container {
+    .chip-container.static-container {
         opacity: 1;
     }
 
-    nav .chip-container.static-container.inverted {
+    .chip-container.static-container.inverted {
         box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
     }
 
