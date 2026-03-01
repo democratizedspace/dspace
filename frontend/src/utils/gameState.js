@@ -19,6 +19,50 @@ import { UUID_REGEX } from './uuid.js';
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
 
+const LEGACY_QUEST_ID_ALIASES = {
+    '3dprinting/start': ['3dprinter/start'],
+};
+
+const getEquivalentQuestIds = (questId) => {
+    const questKey = String(questId ?? '').trim();
+    if (!questKey) return [];
+
+    const equivalents = new Set([questKey]);
+    const directAliases = LEGACY_QUEST_ID_ALIASES[questKey] ?? [];
+    directAliases.forEach((alias) => {
+        equivalents.add(alias);
+    });
+
+    Object.entries(LEGACY_QUEST_ID_ALIASES).forEach(([canonicalId, aliases]) => {
+        if (aliases.includes(questKey)) {
+            equivalents.add(canonicalId);
+        }
+    });
+
+    return Array.from(equivalents);
+};
+
+const resolveQuestStorageKey = (gameState, questId) => {
+    const equivalents = getEquivalentQuestIds(questId);
+    for (const equivalentId of equivalents) {
+        if (gameState?.quests?.[equivalentId]) {
+            return equivalentId;
+        }
+    }
+    return equivalents[0] ?? String(questId ?? '');
+};
+
+const readQuestState = (gameState, questId) => {
+    const equivalents = getEquivalentQuestIds(questId);
+    for (const equivalentId of equivalents) {
+        const questState = gameState?.quests?.[equivalentId];
+        if (questState) {
+            return questState;
+        }
+    }
+    return undefined;
+};
+
 // ---------------------
 // QUESTS
 // ---------------------
@@ -27,15 +71,15 @@ export const finishQuest = (questId, rewardItems) => {
     addItems(rewardItems);
 
     const gameState = loadGameState();
-    gameState.quests[questId] = { finished: true };
+    const storageKey = resolveQuestStorageKey(gameState, questId);
+    gameState.quests[storageKey] = { finished: true };
     saveGameState(gameState);
 };
 
 export const questFinished = (questId) => {
     const gameState = loadGameState();
 
-    const finished = gameState.quests[questId] ? gameState.quests[questId].finished : false;
-    return finished;
+    return Boolean(readQuestState(gameState, questId)?.finished);
 };
 
 export const canStartQuest = (quest) => {
@@ -59,23 +103,26 @@ export const canStartQuest = (quest) => {
 export const setCurrentDialogueStep = (questId, stepId) => {
     const gameState = loadGameState();
 
-    gameState.quests[questId] = { stepId };
+    const storageKey = resolveQuestStorageKey(gameState, questId);
+    gameState.quests[storageKey] = { stepId };
     saveGameState(gameState);
 };
 
 export const getCurrentDialogueStep = (questId) => {
     const gameState = loadGameState();
 
-    return gameState.quests[questId] ? gameState.quests[questId].stepId : 0;
+    return readQuestState(gameState, questId)?.stepId ?? 0;
 };
 
 const setItemsGranted = (questId, stepId, optionIndex) => {
     const gameState = loadGameState();
 
     const key = `${questId}-${stepId}-${optionIndex}`;
-    gameState.quests[questId] = {
-        ...gameState.quests[questId],
-        itemsClaimed: [...(gameState.quests[questId].itemsClaimed || []), key],
+    const storageKey = resolveQuestStorageKey(gameState, questId);
+    const questState = readQuestState(gameState, questId) ?? {};
+    gameState.quests[storageKey] = {
+        ...questState,
+        itemsClaimed: [...(questState.itemsClaimed || []), key],
     };
     saveGameState(gameState);
 };
@@ -85,7 +132,7 @@ export const getItemsGranted = (questId, stepId, optionIndex) => {
 
     try {
         const key = `${questId}-${stepId}-${optionIndex}`;
-        const itemsClaimed = gameState.quests[questId].itemsClaimed;
+        const itemsClaimed = readQuestState(gameState, questId)?.itemsClaimed;
         return itemsClaimed && itemsClaimed.includes(key);
     } catch (e) {
         console.error(e);
