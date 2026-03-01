@@ -723,6 +723,14 @@
         "category": "Rocketry & Flight"
     },
     {
+        "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+        "name": "wind log",
+        "description": "Field note card capturing two launch-pad wind readings, gust spread, and a go/no-go decision (uses temporary shared card artwork).",
+        "image": "/assets/rocket_launch_checklist_card.jpg",
+        "price": "1 dUSD",
+        "category": "Rocketry & Flight"
+    },
+    {
         "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
         "name": "launch-capable model rocket",
         "description": "35 cm rocket with B6-4 motor and recovery wadding; launch remotely via controller.",
