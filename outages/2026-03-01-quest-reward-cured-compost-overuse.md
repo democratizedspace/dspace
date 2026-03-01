@@ -6,17 +6,16 @@ A global audit found that many quests across unrelated trees were granting **1 x
 We replaced those rewards with more appropriate, tree-specific rewards and cycled reward pools to increase variety.
 
 ## Scope of impact
-- **Quests affected:** 177
-- **Quest trees affected:** 17
+- **Quests changed:** 177
+- **Quest trees changed:** 17
 - **Primary issue:** reward-theme mismatch and repeated reward monotony
 
 ## Before
-- 177 quests granted `1 x cured compost bucket` on completion.
-- This included quests in non-composting domains (e.g., robotics, devops, astronomy, first aid).
+- **Completion rewards set to cured compost bucket:** 177 quests
 
 ## After
-- All 177 affected quest completion rewards were reassigned to thematic reward pools by quest tree.
-- Reward pools are rotated per tree to improve variety and avoid a single repeated reward.
+- **Completion rewards still set to cured compost bucket:** 0 quests
+- **Total quest completion rewards changed in this audit:** 177 quests
 
 ## Per-tree impact (quests updated)
 - 3dprinting: 12
