@@ -1,7 +1,7 @@
 {
     "id": "ubi/savings-goal",
     "title": "Start a Savings Jar",
-    "description": "Buy a savings jar, deposit 10 dUSD, and track your stored balance.",
+    "description": "Buy a savings jar, deposit 100 dUSD, and confirm the jar's stored balance.",
     "image": "/assets/quests/ubi_savings_jar.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
@@ -46,12 +46,12 @@
         },
         {
             "id": "deposit-choice",
-            "text": "Now choose your deposit approach: exact single deposit or staged deposits while keeping at least 10 dUSD total ready.",
+            "text": "Now choose your deposit approach: run ten savings-jar deposits in a row, either all at once or with top-ups between runs.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "single-deposit",
-                    "text": "Single deposit plan (I have at least 100 dUSD).",
+                    "text": "Straight run plan (I have at least 100 dUSD now).",
                     "requiresItems": [
                         {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
@@ -68,21 +68,26 @@
         },
         {
             "id": "single-deposit",
-            "text": "Run one `savings-jar-deposit` process for 10 dUSD and then verify your wallet still has at least 90 dUSD remaining for operations.",
+            "text": "Run `savings-jar-deposit` ten times (10 dUSD each) to store at least 100 dUSD in your jar.",
             "options": [
                 {
                     "type": "process",
                     "process": "savings-jar-deposit",
-                    "text": "Deposit 10 dUSD in one go."
+                    "text": "Run one savings-jar deposit (+10 dUSD stored)."
                 },
                 {
                     "type": "goto",
                     "goto": "verify-store",
-                    "text": "Deposit complete. Verify stored balance now.",
+                    "text": "I have at least 100 dUSD stored in the jar. Verify now.",
                     "requiresItems": [
                         {
+                            "id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
+                            "count": 1
+                        },
+                        {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                            "count": 90
+                            "count": 100,
+                            "containerItemId": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec"
                         }
                     ]
                 }
@@ -90,7 +95,7 @@
         },
         {
             "id": "staged-deposit",
-            "text": "Staged path: if your wallet is tight, claim basic income first, then run savings deposit once your balance is healthy.",
+            "text": "Staged path: if your wallet is tight, claim basic income as needed and keep running savings deposits until the jar reaches 100 dUSD.",
             "options": [
                 {
                     "type": "process",
@@ -100,7 +105,7 @@
                 {
                     "type": "goto",
                     "goto": "single-deposit",
-                    "text": "Top-up done. Proceed with jar deposit.",
+                    "text": "Top-up done. Continue depositing into the jar.",
                     "requiresItems": [
                         {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
@@ -112,7 +117,7 @@
         },
         {
             "id": "verify-store",
-            "text": "Operational safety check: open the jar details and confirm stored value increased before planning to break it. Never break the jar unless you intentionally want to cash out.",
+            "text": "Operational safety check: open jar details and confirm at least 100 dUSD is stored before planning to break it. Never break the jar unless you intentionally want to cash out.",
             "options": [
                 {
                     "type": "goto",

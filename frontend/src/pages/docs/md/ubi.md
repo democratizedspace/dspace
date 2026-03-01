@@ -83,9 +83,9 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
     - `buy-jar` → "I bought the savings jar." — savings jar ×1
-    - `deposit-choice` → "Single deposit plan (I have at least 100 dUSD)." — dUSD ×100
-    - `single-deposit` → "Deposit complete. Verify stored balance now." — dUSD ×90
-    - `staged-deposit` → "Top-up done. Proceed with jar deposit." — dUSD ×100
+    - `deposit-choice` → "Straight run plan (I have at least 100 dUSD now)." — dUSD ×100
+    - `single-deposit` → "I have at least 100 dUSD stored in the jar. Verify now." — savings jar ×1 and savings jar stored dUSD ×100 (container check)
+    - `staged-deposit` → "Top-up done. Continue depositing into the jar." — dUSD ×100
     - `verify-store` → "Stored value confirmed and break-risk understood." — savings jar ×1
     - `budget-recovery` → "Recovery complete. Retry jar setup." — dUSD ×100
 - Grants:
@@ -108,9 +108,9 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
         - Creates: broken savings jar ×1 and returns all stored dUSD from container balance
 
 - QA hardening notes:
-    - Added alternate strategy branch (single-deposit vs staged top-up path).
+    - Added alternate strategy branch (straight run vs staged top-up path).
     - Added budget/inventory recovery loop using `basic-income` when balances are short.
-    - Added operational safety guidance to verify stored value before any jar break action.
+    - Added operational safety guidance plus a hard gate requiring at least 100 dUSD stored in the jar before completion.
 
 ## QA flow notes
 

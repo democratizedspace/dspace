@@ -10,7 +10,7 @@
     export let quest, option;
     let githubConnected = false;
     const itemRequirementsMet = writable(
-        areItemRequirementsMet(option.requiresItems, get(state)?.inventory)
+        areItemRequirementsMet(option.requiresItems, get(state))
     );
     let isDisabled = false;
 
@@ -22,7 +22,7 @@
 
     $: {
         if ($state) {
-            itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state.inventory));
+            itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state));
         }
     }
 

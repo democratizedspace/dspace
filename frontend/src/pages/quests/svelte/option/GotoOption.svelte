@@ -18,7 +18,7 @@
 
     $: {
         if ($state) {
-            itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state.inventory));
+            itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state));
         }
     }
 </script>
