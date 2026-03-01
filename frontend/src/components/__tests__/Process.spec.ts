@@ -278,6 +278,60 @@ test('shows missing requirement feedback with plural "more items" label', async 
     expect(startProcess).not.toHaveBeenCalled();
 });
 
+test('alternates process chip contrast between parent container and item groups', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 3, 'item-2': 3, 'item-3': 3 });
+
+    const customProcess = {
+        id: 'custom-contrast',
+        title: 'Contrast Check',
+        duration: '5s',
+        requireItems: [{ id: 'item-1', count: 1 }],
+        consumeItems: [{ id: 'item-2', count: 1 }],
+        createItems: [{ id: 'item-3', count: 1 }],
+        custom: true,
+    };
+
+    const getSectionChipContainer = (
+        getByTestId: (testId: string) => HTMLElement,
+        testId: string
+    ) => {
+        const section = getByTestId(testId);
+        // CompactItemList does not expose a per-list test id yet,
+        // so we scope to the section wrapper.
+        return section.querySelector('.Container nav .chip-container.static-container');
+    };
+
+    const assertContrastAlternation = async (inverted: boolean) => {
+        const { getByTestId, unmount } = render(Process, {
+            processId: `custom-contrast-${inverted ? 'inverted' : 'default'}`,
+            processData: customProcess,
+            inverted,
+        });
+
+        await waitFor(() => {
+            expect(getByTestId('process-requires')).toBeTruthy();
+            expect(getByTestId('process-consumes')).toBeTruthy();
+            expect(getByTestId('process-creates')).toBeTruthy();
+        });
+
+        const processChip = getByTestId('process-chip');
+        expect(processChip.classList.contains('inverted')).toBe(inverted);
+
+        ['process-requires', 'process-consumes', 'process-creates'].forEach((sectionTestId) => {
+            const sectionChip = getSectionChipContainer(getByTestId, sectionTestId);
+            expect(sectionChip).toBeTruthy();
+            expect(sectionChip?.classList.contains('inverted')).toBe(!inverted);
+        });
+
+        unmount();
+    };
+
+    await assertContrastAlternation(true);
+    await assertContrastAlternation(false);
+});
+
 test('shows missing requirement feedback when two items are missing', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
     getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
