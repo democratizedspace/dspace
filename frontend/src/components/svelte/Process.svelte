@@ -480,12 +480,14 @@
 
             {#if process.createItems && process.createItems.length > 0}
                 <h6>Creates:</h6>
-                <CompactItemList
-                    itemList={process.createItems}
-                    noRed={true}
-                    increase={true}
-                    {inverted}
-                />
+                <div data-testid="process-creates">
+                    <CompactItemList
+                        itemList={process.createItems}
+                        noRed={true}
+                        increase={true}
+                        {inverted}
+                    />
+                </div>
             {/if}
 
             <h4>Duration: {process.duration}</h4>
