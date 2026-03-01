@@ -1,5 +1,5 @@
 <script>
-    import { writable } from 'svelte/store';
+    import { get, writable } from 'svelte/store';
     import Chip from '../../../../components/svelte/Chip.svelte';
     import CompactItemList from '../../../../components/svelte/CompactItemList.svelte';
     import { setCurrentDialogueStep } from '../../../../utils/gameState.js';
@@ -8,7 +8,9 @@
 
     export let option, questId;
 
-    const itemRequirementsMet = writable(areItemRequirementsMet(option.requiresItems));
+    const itemRequirementsMet = writable(
+        areItemRequirementsMet(option.requiresItems, get(state)?.inventory, get(state))
+    );
 
     function onClick() {
         if ($itemRequirementsMet) {
@@ -18,7 +20,9 @@
 
     $: {
         if ($state) {
-            itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state.inventory));
+            itemRequirementsMet.set(
+                areItemRequirementsMet(option.requiresItems, $state.inventory, $state)
+            );
         }
     }
 </script>

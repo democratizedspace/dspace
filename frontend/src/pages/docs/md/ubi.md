@@ -83,11 +83,11 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
     - `buy-jar` → "I bought the savings jar." — savings jar ×1
-    - `deposit-choice` → "Single deposit plan (I have at least 100 dUSD)." — dUSD ×100
-    - `single-deposit` → "Deposit complete. Verify stored balance now." — dUSD ×90
-    - `staged-deposit` → "Top-up done. Proceed with jar deposit." — dUSD ×100
-    - `verify-store` → "Stored value confirmed and break-risk understood." — savings jar ×1
-    - `budget-recovery` → "Recovery complete. Retry jar setup." — dUSD ×100
+    - `deposit-choice` → "Direct deposit loop plan (I already have 100 dUSD)." — dUSD ×100
+    - `single-deposit` → "I completed enough deposit runs. Verify jar balance now." — savings jar ×1 and stored dUSD in savings jar ×100
+    - `staged-deposit` → "Top-up done. Proceed with repeated jar deposits." — dUSD ×100
+    - `verify-store` → "Stored value confirmed and break-risk understood." — savings jar ×1 and stored dUSD in savings jar ×100
+    - `budget-recovery` → "Recovery complete. Retry jar setup and deposit loop." — dUSD ×100
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -101,7 +101,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - [savings-jar-deposit](/processes/savings-jar-deposit)
         - Requires: savings jar ×1
         - Consumes: dUSD ×10
-        - Creates: none (stores 10 dUSD in jar container balance)
+        - Creates: none (stores 10 dUSD in jar container balance; run 10 times to reach this quest's 100 dUSD proof gate)
     - [savings-jar-break](/processes/savings-jar-break)
         - Requires: savings jar ×1
         - Consumes: savings jar ×1
@@ -110,7 +110,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - QA hardening notes:
     - Added alternate strategy branch (single-deposit vs staged top-up path).
     - Added budget/inventory recovery loop using `basic-income` when balances are short.
-    - Added operational safety guidance to verify stored value before any jar break action.
+    - Completion now requires mechanics-backed proof that savings jar container balance is at least dUSD ×100.
 
 ## QA flow notes
 

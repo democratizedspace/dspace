@@ -35,6 +35,11 @@ export const getItemCounts = (itemList) => {
 
     const counts = {};
     itemList.forEach((item) => {
+        if (item.containerItemId) {
+            counts[item.id] = getContainedItemCount(item.containerItemId, item.id);
+            return;
+        }
+
         counts[item.id] = gameState.inventory[item.id] || 0;
     });
     return counts;
