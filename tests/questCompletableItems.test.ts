@@ -121,26 +121,48 @@ const getRequiredItemsFromDialoguePath = (quest: any) => {
         }
     }
 
-    const required = new Set<string>();
-    for (const nodeId of reachableFromStart) {
-        if (!canReachFinish.has(nodeId)) continue;
-        const node = idToNode.get(nodeId);
-        if (!node) continue;
-
-        const hasFinishOption = (node.options ?? []).some((option: any) => option.type === 'finish');
-        if (hasFinishOption) continue;
-
-        const validTransitions = (node.options ?? []).filter((option: any) => {
-            if (option.type !== 'goto' || typeof option.goto !== 'string') return false;
-            const target = option.goto.trim();
-            return canReachFinish.has(target) && idToNode.has(target);
-        });
-
-        if (validTransitions.length !== 1) continue;
-        for (const itemId of getRequiredItemIds(validTransitions[0])) {
-            required.add(itemId);
+    const transitions: Array<{ sourceId: string; targetId: string; option: any }> = [];
+    for (const node of dialogue) {
+        const sourceId = typeof node?.id === 'string' ? node.id.trim() : '';
+        if (!sourceId || !reachableFromStart.has(sourceId) || !canReachFinish.has(sourceId)) continue;
+        for (const option of node.options ?? []) {
+            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+            const targetId = option.goto.trim();
+            if (!idToNode.has(targetId) || !canReachFinish.has(targetId)) continue;
+            transitions.push({ sourceId, targetId, option });
         }
     }
+
+    const hasPathToFinishWithoutTransition = (skipIndex: number) => {
+        const visited = new Set<string>();
+        const searchQueue = [startId];
+
+        while (searchQueue.length > 0) {
+            const current = searchQueue.shift();
+            if (!current || visited.has(current)) continue;
+            visited.add(current);
+            const node = idToNode.get(current);
+            if (!node) continue;
+            const hasFinish = (node.options ?? []).some((option: any) => option.type === 'finish');
+            if (hasFinish) return true;
+
+            transitions.forEach((transition, index) => {
+                if (index === skipIndex || transition.sourceId !== current) return;
+                if (visited.has(transition.targetId)) return;
+                searchQueue.push(transition.targetId);
+            });
+        }
+
+        return false;
+    };
+
+    const required = new Set<string>();
+    transitions.forEach((transition, index) => {
+        if (hasPathToFinishWithoutTransition(index)) return;
+        for (const itemId of getRequiredItemIds(transition.option)) {
+            required.add(itemId);
+        }
+    });
 
     return [...required];
 };
@@ -204,6 +226,50 @@ describe('quest completion item availability', () => {
         expect(error).toContain('fixture/unobtainable-required-item');
         expect(error).toContain(questPath);
         expect(error).toContain('has no price, no producing process, and no rewarding quest.');
+    });
+
+    it('detects required items hidden behind branch-and-loop transitions', () => {
+        const quest = {
+            id: 'fixture/mandatory-branch-loop-item',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    options: [{ type: 'goto', goto: 'prep', text: 'Start prep' }],
+                },
+                {
+                    id: 'prep',
+                    options: [
+                        {
+                            type: 'goto',
+                            goto: 'assemble',
+                            text: 'Continue to assembly',
+                            requiresItems: [{ id: 'dc-motor', count: 1 }],
+                        },
+                        {
+                            type: 'goto',
+                            goto: 'safety-stop',
+                            text: 'Run a safety check',
+                            requiresItems: [{ id: 'multimeter', count: 1 }],
+                        },
+                    ],
+                },
+                {
+                    id: 'safety-stop',
+                    options: [{ type: 'goto', goto: 'prep', text: 'Back to prep' }],
+                },
+                {
+                    id: 'assemble',
+                    options: [{ type: 'goto', goto: 'fin', text: 'Finalize build' }],
+                },
+                {
+                    id: 'fin',
+                    options: [{ type: 'finish', text: 'Done' }],
+                },
+            ],
+        };
+
+        expect(getRequiredItemsFromDialoguePath(quest)).toContain('dc-motor');
     });
 
     it('ensures finish requirements are obtainable', async () => {

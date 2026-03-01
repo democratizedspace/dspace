@@ -1,0 +1,14 @@
+{
+  "id": "OUT-2026-03-01-hand-crank-generator-dc-motor-tradeability-gap",
+  "date": "2026-03-01",
+  "component": "frontend/quests-and-inventory-tests",
+  "rootCause": "The quest completable-item test only treated single-branch dialogue transitions as path-required, so it missed mandatory requirements hidden behind branch-and-loop structures. The hand-crank-generator quest requires a DC motor on a mandatory transition, but that requirement was skipped; because the DC motor also had BETA_PLACEHOLDER pricing, it was not tradeable and the gap went undetected.",
+  "resolution": "Set a concrete price for the 12 V DC motor and updated the dialogue-path requirement analysis to detect mandatory transitions even when a node branches and loops before progress. Added a regression test covering the branch-and-loop pattern.",
+  "references": [
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "frontend/src/pages/quests/json/energy/hand-crank-generator.json",
+    "tests/questCompletableItems.test.ts",
+    "https://staging.democratized.space/inventory/item/6caa08d8-815c-4a0e-9297-0fda4516659d",
+    "https://staging.democratized.space/quests/energy/hand-crank-generator"
+  ]
+}
