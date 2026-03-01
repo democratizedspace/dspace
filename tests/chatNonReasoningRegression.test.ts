@@ -135,7 +135,7 @@ describe('chat non-reasoning regression probes', () => {
             versionNumberString: '3',
             quests: {
                 'welcome/howtodoquests': { finished: true },
-                '3dprinter/start': { finished: true },
+                '3dprinting/start': { finished: true },
             },
             inventory: {},
         });
@@ -161,7 +161,7 @@ describe('chat non-reasoning regression probes', () => {
         ]);
 
         expect(reply).toContain('welcome/howtodoquests');
-        expect(reply).toContain('3dprinter/start');
+        expect(reply).toContain('3dprinting/start');
         expect(reply).not.toMatch(/\/gamesaves/i);
     });
 
