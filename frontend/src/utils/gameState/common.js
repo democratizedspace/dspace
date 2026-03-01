@@ -21,7 +21,8 @@ const LEGACY_QUEST_ID_ALIASES = {
     '3dprinter/start': '3dprinting/start',
 };
 
-const isPlainObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+const isPlainObject = (value) =>
+    value !== null && typeof value === 'object' && !Array.isArray(value);
 
 const rewriteLegacyClaimKey = (claimKey, legacyId, canonicalId) => {
     if (typeof claimKey !== 'string') {
