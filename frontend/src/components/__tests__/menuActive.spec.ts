@@ -14,6 +14,13 @@ describe('isMenuItemActive', () => {
         expect(isMenuItemActive('/app/gamesaves', { href: '/gamesaves' })).toBe(true);
     });
 
+    it('keeps nested legacy /app quest routes active without activating /energy', () => {
+        const pathname = '/app/quests/energy/battery-maintenance';
+
+        expect(isMenuItemActive(pathname, { href: '/quests' })).toBe(true);
+        expect(isMenuItemActive(pathname, { href: '/energy' })).toBe(false);
+    });
+
     it('never highlights two top-level sections for nested quest routes', () => {
         const pathname = '/quests/energy/battery-maintenance';
         const topLevelHrefs = ['/quests', '/inventory', '/energy', '/wallet', '/profile', '/docs'];

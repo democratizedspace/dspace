@@ -33,6 +33,20 @@ const normalizeHref = (href) => {
     return normalizePathname(href);
 };
 
+const LEGACY_BASE_PATH = '/app';
+
+const stripLegacyBasePath = (pathname) => {
+    if (pathname === LEGACY_BASE_PATH) {
+        return '/';
+    }
+
+    if (pathname.startsWith(`${LEGACY_BASE_PATH}/`)) {
+        return pathname.slice(LEGACY_BASE_PATH.length);
+    }
+
+    return pathname;
+};
+
 const matchesTarget = (current, target) => {
     if (current === target) {
         return true;
@@ -51,8 +65,10 @@ const matchesTarget = (current, target) => {
 
 export const isMenuItemActive = (pathname, item) => {
     const target = normalizeHref(item?.href);
-    const current = normalizePathname(
-        typeof pathname === 'string' ? pathname : isBrowser ? window.location.pathname : ''
+    const current = stripLegacyBasePath(
+        normalizePathname(
+            typeof pathname === 'string' ? pathname : isBrowser ? window.location.pathname : ''
+        )
     );
 
     if (!target || !current) {
