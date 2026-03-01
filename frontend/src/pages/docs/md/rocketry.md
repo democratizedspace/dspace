@@ -97,7 +97,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - rocket igniter ×10, hobbyist solid rocket motor ×5, Rocket Descent (animated) ×1
+    - Rocketeer Award ×1
 - Processes used:
     - [assemble-rocket-parachute](/processes/assemble-rocket-parachute)
         - Requires: none
@@ -125,7 +125,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
         - `wind-readings` → "Record both readings in the pad log." grants wind-check placeholder reward item (`15e3dd7e-374b-4233-b8c9-117e3057f009`) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Rocketeer Award ×1
+    - rocket igniter ×10, hobbyist solid rocket motor ×5, Rocket Descent (animated) ×1
 - Processes used:
     - [launch-rocket](/processes/launch-rocket)
         - Requires: launch controller ×1, Model rocket launchpad ×1, rocket launch checklist ×1
@@ -151,7 +151,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - guided flight stack ×1, nosecone camera module ×1
+    - Rocketeer Award ×1
 - Processes used:
     - [3dprint-guided-fincan](/processes/3dprint-guided-fincan)
         - Requires: none
@@ -190,7 +190,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - rocket igniter ×10, hobbyist solid rocket motor ×5, Rocket Descent (animated) ×1
 - Processes used:
     - [launch-rocket-parachute](/processes/launch-rocket-parachute)
         - Requires: launch controller ×1, Model rocket launchpad ×1, rocket launch checklist ×1
@@ -213,7 +213,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Rocket Descent (animated) ×1
+    - Rocketeer Award ×1
 - Processes used:
     - [launch-rocket-parachute](/processes/launch-rocket-parachute)
         - Requires: launch controller ×1, Model rocket launchpad ×1, rocket launch checklist ×1
@@ -234,7 +234,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - rocket igniter ×10, hobbyist solid rocket motor ×5, Rocket Descent (animated) ×1
 - Processes used:
     - None
 
@@ -259,7 +259,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - dLaunch ×2
+    - guided flight stack ×1, nosecone camera module ×1
 - Processes used:
     - [suborbital-hop](/processes/suborbital-hop)
         - Requires: guided flight stack ×1, stability firmware ×1
@@ -294,7 +294,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - placeholder reward item (canonical ID: 15e3dd7e-374b-4233-b8c9-117e3057f009) ×1
+    - Rocketeer Award ×1
 - Processes used:
     - None
 

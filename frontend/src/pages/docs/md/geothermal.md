@@ -39,7 +39,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `measure` → "Seal the three-point baseline log." — temperature log CSV ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Solarpunk Award ×1
+    - portable solar panel ×1, Solarpunk Award ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -63,7 +63,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Solarpunk Award ×1
 - Processes used:
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
@@ -88,7 +88,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Solarpunk Award ×1
 - Processes used:
     - [assemble-thermistor-logger](/processes/assemble-thermistor-logger)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1
@@ -126,7 +126,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Solarpunk Award ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -152,7 +152,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Solarpunk Award ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -184,7 +184,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dWatt ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -222,7 +222,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `materials` → "Issue Arduino Uno logger" — Arduino Uno ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - temperature log CSV ×1
 - Processes used:
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
@@ -247,7 +247,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - temperature log CSV ×1
 - Processes used:
     - [assemble-thermistor-logger](/processes/assemble-thermistor-logger)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1
@@ -293,7 +293,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dWatt ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -330,7 +330,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dWatt ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -358,7 +358,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dWatt ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -413,7 +413,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `materials` → "Issue purge pump" — submersible water pump ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dWatt ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -435,7 +435,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `materials` → "Issue backflush pump" — submersible water pump ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Solarpunk Award ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -461,7 +461,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Solarpunk Award ×1
 - Processes used:
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1

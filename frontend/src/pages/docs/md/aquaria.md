@@ -44,7 +44,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dChat ×1, dUSD ×1000
 - Processes used:
     - [condition-bucket-water](/processes/condition-bucket-water)
         - Requires: 5 gallon bucket ×1, Water conditioner ×1
@@ -72,7 +72,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - pH strip ×1
 - Processes used:
     - [attach-aquarium-thermometer](/processes/attach-aquarium-thermometer)
         - Requires: Walstad aquarium (80 L) ×1, aquarium thermometer (0–50°C) ×1, paper towel ×1
@@ -98,7 +98,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Heated Walstad aquarium (80 L, 26°C) ×1
+    - Fish Friend Award ×1
 - Processes used:
     - [heat-walstad](/processes/heat-walstad)
         - Requires: none
@@ -126,7 +126,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Heated Walstad aquarium (80 L, 26°C) ×1
 - Processes used:
     - [condition-bucket-water](/processes/condition-bucket-water)
         - Requires: 5 gallon bucket ×1, Water conditioner ×1
@@ -157,7 +157,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Duckweed portion ×1
+    - pH strip ×1
 - Processes used:
     - None
 
@@ -181,7 +181,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - pH strip ×1
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
         - Requires: none
@@ -219,7 +219,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - pH strip ×1
 - Processes used:
     - [heat-walstad](/processes/heat-walstad)
         - Requires: none
@@ -250,7 +250,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Duckweed portion ×1
+    - Fish Friend Award ×1
 - Processes used:
     - [measure-liquid-parameters](/processes/measure-liquid-parameters)
         - Requires: Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
@@ -280,7 +280,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Heated Walstad aquarium with guppies (80 L, 26°C) ×1
+    - Duckweed portion ×1
 - Processes used:
     - [heat-walstad](/processes/heat-walstad)
         - Requires: none
@@ -313,7 +313,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Duckweed portion ×1
 - Processes used:
     - [measure-liquid-parameters](/processes/measure-liquid-parameters)
         - Requires: Aquarium liquid test kit ×1, nitrile gloves (pair) ×1
@@ -351,7 +351,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `emergency-response` (node grant) — pH strip ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Duckweed portion ×1
 - Processes used:
     - [measure-aquarium-ph](/processes/measure-aquarium-ph)
         - Requires: pH strip ×1, nitrile gloves (pair) ×1
@@ -391,7 +391,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Duckweed portion ×1
 - Processes used:
     - [adjust-ph](/processes/adjust-ph)
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
@@ -413,7 +413,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Dwarf shrimp ×3
+    - pH strip ×1
 - Processes used:
     - [drip-acclimate-shrimp](/processes/drip-acclimate-shrimp)
         - Requires: Airline tubing ×1, 5 gallon bucket ×1, Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
@@ -446,7 +446,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
         - Requires: none
@@ -486,7 +486,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Grants:
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Fish Friend Award ×1
 - Processes used:
     - [prepare-guppy-fry-cover](/processes/prepare-guppy-fry-cover)
         - Requires: Heated Walstad aquarium with guppies (80 L, 26°C) ×1, Floating plant mat ×1, Hornwort cuttings ×1
@@ -526,7 +526,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Fish Friend Award ×1
+    - Duckweed portion ×1
 - Processes used:
     - [prepare-aquarium](/processes/prepare-aquarium)
         - Requires: none
@@ -563,7 +563,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Heated Walstad aquarium with guppies (80 L, 26°C) ×1
 - Processes used:
     - [condition-bucket-water](/processes/condition-bucket-water)
         - Requires: 5 gallon bucket ×1, Water conditioner ×1
@@ -594,7 +594,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Fish Friend Award ×1
 - Processes used:
     - [log-freshly-changed-walstad-temperature](/processes/log-freshly-changed-walstad-temperature)
         - Requires: Freshly changed aquarium (80 L) ×1
@@ -616,7 +616,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Fish Friend Award ×1
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
         - Requires: none

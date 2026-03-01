@@ -28,7 +28,7 @@ Completionist quests build practical progression through the completionist skill
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Green Thumb Award ×1
 - Processes used:
     - [level-3d-printer-bed](/processes/level-3d-printer-bed)
         - Requires: entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
@@ -63,7 +63,7 @@ Completionist quests build practical progression through the completionist skill
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Completionist Award ×1
 - Processes used:
     - [record-completionist-award-entry](/processes/record-completionist-award-entry)
         - Requires: mission logbook ×1, smartphone ×1, Completionist Award II ×1
@@ -85,7 +85,7 @@ Completionist quests build practical progression through the completionist skill
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Completionist Award ×1
 - Processes used:
     - [polish-completionist-award](/processes/polish-completionist-award)
         - Requires: liquid soap ×1, Completionist Award II ×1, paper towel ×1
@@ -110,7 +110,7 @@ Completionist quests build practical progression through the completionist skill
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Completionist Award ×1
 - Processes used:
     - [polish-completionist-award](/processes/polish-completionist-award)
         - Requires: liquid soap ×1, Completionist Award II ×1, paper towel ×1
@@ -131,7 +131,7 @@ Completionist quests build practical progression through the completionist skill
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Completionist Award ×1
 - Processes used:
     - [schedule-quest-reminder](/processes/schedule-quest-reminder)
         - Requires: smartphone ×1

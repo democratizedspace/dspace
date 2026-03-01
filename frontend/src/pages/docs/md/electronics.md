@@ -43,7 +43,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - USB Cable ×1
+    - dChat ×1, dUSD ×1000
 - Processes used:
     - [verify-resistor-color-code](/processes/verify-resistor-color-code)
         - Requires: 220 Ohm Resistor ×1, resistor color chart ×1
@@ -68,7 +68,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Servo Motor ×1
+    - USB Cable ×1
 - Processes used:
     - [arduino-ide-install](/processes/arduino-ide-install)
         - Requires: Laptop Computer ×1
@@ -136,7 +136,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - USB Cable ×1
 - Processes used:
     - [arduino-ide-install](/processes/arduino-ide-install)
         - Requires: Laptop Computer ×1
@@ -181,7 +181,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - USB Cable ×1
+    - Servo Motor ×1
 - Processes used:
     - None
 
@@ -200,7 +200,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Servo Motor ×1
 - Processes used:
     - [arduino-ide-install](/processes/arduino-ide-install)
         - Requires: Laptop Computer ×1
@@ -246,7 +246,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - USB Cable ×1
 - Processes used:
     - [measure-resistance](/processes/measure-resistance)
         - Requires: digital multimeter ×1, 220 Ohm Resistor ×1, safety goggles ×1
@@ -268,7 +268,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Servo Motor ×1
 - Processes used:
     - [arduino-ide-install](/processes/arduino-ide-install)
         - Requires: Laptop Computer ×1
@@ -293,7 +293,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - soldered jumper wire ×1
 - Processes used:
     - [arduino-ide-install](/processes/arduino-ide-install)
         - Requires: Laptop Computer ×1
@@ -317,7 +317,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Motor Award ×1
 - Processes used:
     - [pyserial-install](/processes/pyserial-install)
         - Requires: Raspberry Pi 5 board ×1
@@ -341,7 +341,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Motor Award ×1
 - Processes used:
     - [plot-temperature-data](/processes/plot-temperature-data)
         - Requires: Laptop Computer ×1
@@ -361,7 +361,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Motor Award ×1
 - Processes used:
     - None
 
@@ -378,7 +378,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - USB Cable ×1
 - Processes used:
     - None
 
@@ -440,7 +440,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - GFCI outlet tester ×1
+    - soldered jumper wire ×1
 - Processes used:
     - [test-cable-continuity](/processes/test-cable-continuity)
         - Requires: digital multimeter ×1, USB Cable ×1, wire cutters ×1
@@ -460,7 +460,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - soldered jumper wire ×1
 - Processes used:
     - [desolder-through-hole](/processes/desolder-through-hole)
         - Requires: soldering iron kit ×1, desoldering pump ×1, safety goggles ×1
@@ -482,7 +482,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - GFCI outlet tester ×1
 - Processes used:
     - [test-gfci-outlet](/processes/test-gfci-outlet)
         - Requires: GFCI outlet tester ×1
@@ -503,7 +503,7 @@ Electronics quests build practical progression through the electronics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Servo Motor ×1
 - Processes used:
     - [verify-resistor-color-code](/processes/verify-resistor-color-code)
         - Requires: 220 Ohm Resistor ×1, resistor color chart ×1

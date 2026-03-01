@@ -43,7 +43,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Servo Motor ×1
 - Processes used:
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
@@ -72,7 +72,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Motor Award ×1
 - Processes used:
     - [assemble-thermistor-logger](/processes/assemble-thermistor-logger)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1
@@ -98,7 +98,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [plot-temperature-data](/processes/plot-temperature-data)
         - Requires: Laptop Computer ×1
@@ -127,7 +127,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [plot-temperature-data](/processes/plot-temperature-data)
         - Requires: Laptop Computer ×1
@@ -152,7 +152,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - live temperature JSON endpoint ×1
 - Processes used:
     - [refine-temperature-graph](/processes/refine-temperature-graph)
         - Requires: temperature line chart ×1, Laptop Computer ×1
@@ -178,7 +178,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - None
 
@@ -196,7 +196,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [plot-temperature-data](/processes/plot-temperature-data)
         - Requires: Laptop Computer ×1
@@ -221,7 +221,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [plot-temperature-data](/processes/plot-temperature-data)
         - Requires: Laptop Computer ×1
@@ -246,7 +246,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - shell transcript ×1
 - Processes used:
     - [plot-temperature-data](/processes/plot-temperature-data)
         - Requires: Laptop Computer ×1
@@ -273,7 +273,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
@@ -294,7 +294,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [plot-temperature-data](/processes/plot-temperature-data)
         - Requires: Laptop Computer ×1
@@ -320,7 +320,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - live temperature JSON endpoint ×1
 - Processes used:
     - [pyserial-install](/processes/pyserial-install)
         - Requires: Raspberry Pi 5 board ×1
@@ -350,7 +350,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [refine-temperature-graph](/processes/refine-temperature-graph)
         - Requires: temperature line chart ×1, Laptop Computer ×1
@@ -375,7 +375,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - live temperature JSON endpoint ×1
 - Processes used:
     - [deploy-temperature-json-endpoint](/processes/deploy-temperature-json-endpoint)
         - Requires: thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
@@ -398,7 +398,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - live temperature JSON endpoint ×1
 - Processes used:
     - [deploy-temperature-json-endpoint](/processes/deploy-temperature-json-endpoint)
         - Requires: thermistor logging rig ×1, temperature log CSV ×1, Raspberry Pi 5 board ×1
@@ -421,7 +421,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - live temperature JSON endpoint ×1
 - Processes used:
     - [publish-live-temperature-graph](/processes/publish-live-temperature-graph)
         - Requires: live temperature JSON endpoint ×1, annotated temperature graph ×1, Laptop Computer ×1
@@ -442,7 +442,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - shell transcript ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1
@@ -467,7 +467,7 @@ Programming quests build practical progression through the programming skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - live temperature JSON endpoint ×1
 - Processes used:
     - [capture-hourly-temperature-log](/processes/capture-hourly-temperature-log)
         - Requires: thermistor logging rig ×1, Laptop Computer ×1

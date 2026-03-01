@@ -38,7 +38,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
         - Requires: Laptop Computer ×1
@@ -65,7 +65,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - observability checkpoint badge ×1
 - Processes used:
     - [flash-sd-card](/processes/flash-sd-card)
         - Requires: Laptop Computer ×1
@@ -98,7 +98,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - incident response analyst badge ×1
 - Processes used:
     - [run-docker-compose](/processes/run-docker-compose)
         - Requires: Pi cluster node ×1
@@ -126,7 +126,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [create-ci-workflow](/processes/create-ci-workflow)
         - Requires: GitHub repository ×1
@@ -147,7 +147,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [join-k3s-cluster](/processes/join-k3s-cluster)
         - Requires: Pi cluster node ×1
@@ -174,7 +174,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - observability checkpoint badge ×1
 - Processes used:
     - [install-monitoring-stack](/processes/install-monitoring-stack)
         - Requires: Pi cluster node ×1
@@ -206,7 +206,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [configure-unattended-upgrades](/processes/configure-unattended-upgrades)
         - Requires: Pi cluster node ×1, Laptop Computer ×1
@@ -233,7 +233,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [configure-daily-backups](/processes/configure-daily-backups)
         - Requires: Pi cluster node ×1, external backup SSD ×1
@@ -264,7 +264,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - incident response analyst badge ×1
 - Processes used:
     - [request-letsencrypt-cert](/processes/request-letsencrypt-cert)
         - Requires: auto-update health report ×1, Pi cluster node ×1
@@ -288,7 +288,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [configure-ufw-firewall](/processes/configure-ufw-firewall)
         - Requires: Laptop Computer ×1, Pi cluster node ×1
@@ -309,7 +309,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - incident response analyst badge ×1
 - Processes used:
     - [configure-daily-backups](/processes/configure-daily-backups)
         - Requires: Pi cluster node ×1, external backup SSD ×1
@@ -341,7 +341,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [run-docker-compose](/processes/run-docker-compose)
         - Requires: Pi cluster node ×1
@@ -372,7 +372,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - incident response analyst badge ×1
 - Processes used:
     - [clone-os-to-ssd](/processes/clone-os-to-ssd)
         - Requires: none
@@ -406,7 +406,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [generate-ssh-key](/processes/generate-ssh-key)
         - Requires: Laptop Computer ×1, Pi cluster node ×1
@@ -446,7 +446,7 @@ Devops quests build practical progression through the devops skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - incident response analyst badge ×1
 - Processes used:
     - [configure-ufw-firewall](/processes/configure-ufw-firewall)
         - Requires: Laptop Computer ×1, Pi cluster node ×1

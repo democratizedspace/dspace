@@ -36,7 +36,7 @@ slug: '3dprinting'
     - `grant` → "Don't mind if I do!" — entry-level FDM 3D printer ×1, green PLA filament ×1000
     - Quest-level `grantsItems`: None
 - Rewards:
-    - dUSD ×100, Benchy Award ×1
+    - dChat ×1, dUSD ×1000
 - Processes used:
     - [3dprint-benchy](/processes/3dprint-benchy)
         - Requires: entry-level FDM 3D printer ×1
@@ -60,7 +60,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - green PLA filament ×1
 - Processes used:
     - [level-3d-printer-bed](/processes/level-3d-printer-bed)
         - Requires: entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
@@ -82,7 +82,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - green PLA filament ×1
 - Processes used:
     - [measure-filament-diameter](/processes/measure-filament-diameter)
         - Requires: digital calipers ×1, white PLA filament ×1
@@ -114,7 +114,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - green PLA filament ×1
 - Processes used:
     - [swap-green-pla-filament](/processes/swap-green-pla-filament)
         - Requires: entry-level FDM 3D printer (leveled bed) ×1, safety goggles ×1, wire cutters ×1
@@ -140,7 +140,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - green PLA filament ×1000
+    - Benchy Award ×1
 - Processes used:
     - [3dprint-benchy](/processes/3dprint-benchy)
         - Requires: entry-level FDM 3D printer ×1
@@ -166,7 +166,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - green PLA filament ×10000
+    - green PLA filament ×1000
 - Processes used:
     - [3dprint-benchy](/processes/3dprint-benchy)
         - Requires: entry-level FDM 3D printer ×1
@@ -192,7 +192,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - green PLA filament ×100000
+    - green PLA filament ×10000
 - Processes used:
     - None
 
@@ -214,7 +214,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Benchy Award ×1
 - Processes used:
     - [level-3d-printer-bed](/processes/level-3d-printer-bed)
         - Requires: entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
@@ -251,7 +251,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Benchy Award ×1
 - Processes used:
     - [3dprint-nozzle-clog](/processes/3dprint-nozzle-clog)
         - Requires: none
@@ -283,7 +283,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - green PLA filament ×1
 - Processes used:
     - [3dprint-nozzle-clog](/processes/3dprint-nozzle-clog)
         - Requires: none
@@ -313,7 +313,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - 3D printed cable clip set ×1
 - Processes used:
     - [3dprint-blob-of-death](/processes/3dprint-blob-of-death)
         - Requires: none
@@ -340,7 +340,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Benchy Award ×1
 - Processes used:
     - [level-3d-printer-bed](/processes/level-3d-printer-bed)
         - Requires: entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
@@ -374,7 +374,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Benchy Award ×1
 - Processes used:
     - [level-3d-printer-bed](/processes/level-3d-printer-bed)
         - Requires: entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
@@ -413,7 +413,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - green PLA filament ×1
 - Processes used:
     - [tune-retraction-benchy](/processes/tune-retraction-benchy)
         - Requires: entry-level FDM 3D printer (green PLA loaded) ×1, safety goggles ×1, digital calipers ×1
@@ -438,7 +438,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - 3D printed cable clip set ×1
 - Processes used:
     - [print-temperature-tower](/processes/print-temperature-tower)
         - Requires: entry-level FDM 3D printer ×1, safety goggles ×1
@@ -463,7 +463,7 @@ slug: '3dprinting'
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - 3D printed cable clip set ×1
 - Processes used:
     - [tighten-x-belt](/processes/tighten-x-belt)
         - Requires: entry-level FDM 3D printer (leveled bed) ×1, precision screwdriver set ×1, safety goggles ×1

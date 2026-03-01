@@ -41,7 +41,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dUSD ×100, dBI ×100
 - Processes used:
     - [basic-income](/processes/basic-income)
         - Requires: none
@@ -67,7 +67,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dBI ×1
 - Processes used:
     - None (player action is setting an IRL phone reminder; the UBI claim process is run later outside this quest dialogue)
 
@@ -92,7 +92,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - dUSD ×1
+    - dBI ×1
 - Processes used:
     - [basic-income](/processes/basic-income)
         - Requires: none

@@ -32,7 +32,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dChat ×1, dUSD ×1000
 - Processes used:
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
@@ -65,7 +65,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - first aid kit ×1
 - Processes used:
     - [check-flashlight-battery](/processes/check-flashlight-battery)
         - Requires: red flashlight ×1, digital multimeter ×1, 9 V battery ×1
@@ -91,7 +91,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - first aid kit ×1
 - Processes used:
     - [practice-cpr](/processes/practice-cpr)
         - Requires: first aid kit ×1, nitrile gloves (pair) ×1, CPR pocket mask ×1, CPR training manikin ×1
@@ -115,7 +115,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - first aid kit ×1
 - Processes used:
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
@@ -138,7 +138,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - adhesive bandages ×1
 - Processes used:
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
@@ -163,7 +163,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - antiseptic wipes ×1
 - Processes used:
     - None
 - QA notes:
@@ -184,7 +184,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - adhesive bandages ×1
 - Processes used:
     - [stop-nosebleed](/processes/stop-nosebleed)
         - Requires: first aid kit ×1
@@ -206,7 +206,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - adhesive bandages ×1
 - Processes used:
     - None
 - QA notes:
@@ -226,7 +226,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - antiseptic wipes ×1
 - Processes used:
     - [clean-minor-cut](/processes/clean-minor-cut)
         - Requires: first aid kit ×1, sink ×1
@@ -251,7 +251,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - first aid kit ×1
 - Processes used:
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
@@ -278,7 +278,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - adhesive bandages ×1
 - Processes used:
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
@@ -302,7 +302,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - first aid kit ×1
 - Processes used:
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
@@ -324,7 +324,7 @@ First Aid quests build practical progression through the first aid skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - first aid kit ×1
 - Processes used:
     - None
 - QA notes:
