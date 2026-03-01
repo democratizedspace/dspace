@@ -446,7 +446,7 @@
 
 {#if mounted && process}
     <Chip text="" {inverted} dataTestId="process-chip">
-        <div class="container">
+        <div class="container" class:container-inverted={inverted}>
             <h3>{process.title}</h3>
 
             {#if process.requireItems && process.requireItems.length > 0}
@@ -501,7 +501,7 @@
                     <Chip
                         text="Start"
                         onClick={onProcessStart}
-                        inverted={true}
+                        inverted={false}
                         dataTestId="process-start-button"
                     />
                 </div>
@@ -578,6 +578,12 @@
     h6 {
         color: white;
         margin: 0px;
+    }
+
+    .container.container-inverted h3,
+    .container.container-inverted h4,
+    .container.container-inverted h6 {
+        color: #111827;
     }
 
     .qa-chip-label {

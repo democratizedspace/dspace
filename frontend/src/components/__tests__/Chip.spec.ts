@@ -38,4 +38,55 @@ describe('Chip', () => {
             staticContainer
         );
     });
+
+    it('applies contrasting backgrounds for default and inverted static chips', () => {
+        const { getByTestId } = render(Chip, {
+            props: {
+                text: '',
+                inverted: false,
+                dataTestId: 'chip-default-bg',
+            },
+        });
+        const { getByTestId: getByTestIdInverted } = render(Chip, {
+            props: {
+                text: '',
+                inverted: true,
+                dataTestId: 'chip-inverted-bg',
+            },
+        });
+
+        const defaultChip = getByTestId('chip-default-bg');
+        const invertedChip = getByTestIdInverted('chip-inverted-bg');
+
+        expect(getComputedStyle(defaultChip as HTMLElement).backgroundColor).toBe('rgb(0, 112, 6)');
+        expect(getComputedStyle(invertedChip as HTMLElement).backgroundColor).toBe(
+            'rgb(104, 212, 109)'
+        );
+    });
+
+    it('applies inverted contrast to interactive button and link chips', () => {
+        const { getByRole } = render(Chip, {
+            props: {
+                text: 'Start',
+                inverted: true,
+                onClick: () => {},
+            },
+        });
+        const buttonChip = getByRole('button', { name: 'Start' });
+        expect(buttonChip.classList.contains('inverted')).toBe(true);
+        expect(getComputedStyle(buttonChip as HTMLElement).backgroundColor).toBe('rgb(104, 212, 109)');
+        expect(getComputedStyle(buttonChip as HTMLElement).color).toBe('rgb(0, 0, 0)');
+
+        const { getByRole: getByRoleLink } = render(Chip, {
+            props: {
+                text: 'Docs',
+                href: '/docs',
+                inverted: true,
+            },
+        });
+        const linkChip = getByRoleLink('link', { name: 'Docs' });
+        expect(linkChip.classList.contains('inverted')).toBe(true);
+        expect(getComputedStyle(linkChip as HTMLElement).backgroundColor).toBe('rgb(104, 212, 109)');
+        expect(getComputedStyle(linkChip as HTMLElement).color).toBe('rgb(0, 0, 0)');
+    });
 });

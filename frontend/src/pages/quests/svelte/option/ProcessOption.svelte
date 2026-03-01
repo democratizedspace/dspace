@@ -6,5 +6,5 @@
 </script>
 
 <Chip text="">
-    <Process inverted={false} processId={option.process} />
+    <Process inverted={true} processId={option.process} />
 </Chip>

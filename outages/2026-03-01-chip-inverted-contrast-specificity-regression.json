@@ -1,0 +1,24 @@
+{
+  "id": "chip-inverted-contrast-specificity-regression",
+  "date": "2026-03-01",
+  "component": "frontend/ui/chip-and-process-contrast",
+  "longForm": "outages/2026-03-01-chip-inverted-contrast-specificity-regression.md",
+  "rootCause": "Chip static-container base styles were moved to a more specific selector (nav .chip-container) while inversion styles stayed on generic selectors (.inverted), so inverted=true did not consistently win the cascade for static chips and nested process-card layouts.",
+  "resolution": "Aligned Chip state selectors to matching specificity across links, buttons, and static containers; restored process-card/light-vs-nested contrast by passing inverted=true where required, keeping Start dark, and adding explicit regression tests for static, interactive, and nested process contrast behavior.",
+  "references": [
+    "frontend/src/components/svelte/Chip.svelte",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/pages/quests/svelte/option/ProcessOption.svelte",
+    "frontend/src/pages/process/[slug]/ProcessView.svelte",
+    "frontend/src/components/__tests__/Chip.spec.ts",
+    "frontend/src/components/__tests__/Process.spec.ts",
+    "outages/2026-03-01-chip-inverted-contrast-specificity-regression.md",
+    "https://github.com/democratizedspace/dspace/commit/e4c80b0f82e078ac5b7c68a57340b8b5bc9f8a89"
+  ],
+  "dateRanges": [
+    {
+      "start": "2026-02-15",
+      "end": "2026-03-01"
+    }
+  ]
+}

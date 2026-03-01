@@ -332,6 +332,42 @@ test('alternates process chip contrast between parent container and item groups'
     await assertContrastAlternation(false);
 });
 
+test('keeps a dark Start chip and inverted container class for light process cards', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 3 });
+
+    const customProcess = {
+        id: 'custom-start-contrast',
+        title: 'Start Contrast',
+        duration: '5s',
+        requireItems: [{ id: 'item-1', count: 1 }],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-start-contrast',
+        processData: customProcess,
+        inverted: true,
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('process-chip')).toBeTruthy();
+        expect(getByTestId('process-start-button')).toBeTruthy();
+    });
+
+    const processChip = getByTestId('process-chip');
+    expect(processChip.classList.contains('inverted')).toBe(true);
+
+    const processContainer = processChip.querySelector('.container');
+    expect(processContainer?.classList.contains('container-inverted')).toBe(true);
+
+    const startChip = getByTestId('process-start-button');
+    expect(startChip.classList.contains('inverted')).toBe(false);
+});
+
 test('shows missing requirement feedback when two items are missing', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
     getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
