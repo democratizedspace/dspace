@@ -60,6 +60,35 @@
                                         "required": ["id", "count"]
                                     }
                                 },
+                                "requiresContainedItems": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "containerItemId": {
+                                                "type": "string"
+                                            },
+                                            "itemId": {
+                                                "type": "string"
+                                            },
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "count": {
+                                                "type": "number"
+                                            }
+                                        },
+                                        "required": ["containerItemId", "count"],
+                                        "anyOf": [
+                                            {
+                                                "required": ["itemId"]
+                                            },
+                                            {
+                                                "required": ["id"]
+                                            }
+                                        ]
+                                    }
+                                },
                                 "grantsItems": {
                                     "type": "array",
                                     "items": {

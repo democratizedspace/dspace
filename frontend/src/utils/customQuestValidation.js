@@ -41,6 +41,20 @@ export const customQuestSchema = {
                                         required: ['id', 'count'],
                                     },
                                 },
+                                requiresContainedItems: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            containerItemId: { type: 'string', minLength: 1 },
+                                            itemId: { type: 'string', minLength: 1 },
+                                            id: { type: 'string', minLength: 1 },
+                                            count: { type: 'number', minimum: 1 },
+                                        },
+                                        required: ['containerItemId', 'count'],
+                                        anyOf: [{ required: ['itemId'] }, { required: ['id'] }],
+                                    },
+                                },
                                 grantsItems: {
                                     type: 'array',
                                     items: {
