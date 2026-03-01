@@ -172,8 +172,14 @@ describe('quest completion item availability', () => {
 
             addUnknownReferences('quest-level requirements', getQuestLevelRequiredItemIds(quest));
             addUnknownReferences('quest rewards', toItemIds(quest.rewards));
+            addUnknownReferences('quest-level grants', toItemIdsFromUnknown(quest?.grantsItems));
 
             for (const node of quest.dialogue ?? []) {
+                addUnknownReferences(
+                    `node "${node.id}" grantsItems`,
+                    toItemIdsFromUnknown(node?.grantsItems)
+                );
+
                 for (const option of node.options ?? []) {
                     addUnknownReferences(
                         `node "${node.id}" option "${option.text ?? option.type ?? 'unknown'}" requiresItems`,
@@ -205,7 +211,6 @@ describe('quest completion item availability', () => {
 
         expect(unknownReferences).toEqual([]);
     });
-
 
     it('flags unobtainable dialogue-path required items with a clear reason', () => {
         const quest = {
