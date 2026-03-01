@@ -99,7 +99,9 @@ seeded profiles are powered by
 cheats panel when it is available. QA cheats are gated by `getCheatsAvailabilityFlag`
 (`frontend/src/utils/cheatsAvailability.ts`) and the toggle in
 `frontend/src/components/svelte/QaCheatsToggle.svelte`, which is enabled when `DSPACE_ENV` is set
-to `dev`, `development`, or `staging`.
+to `dev`, `development`, or `staging`. When QA cheats are enabled on staging/dev, the same panel
+also exposes an item picker + count field that can instantly grant built-in or custom items to
+your v3 inventory for quest/process QA.
 
 ### Minimal seed (cookies only)
 

@@ -16,6 +16,10 @@
         seedLegacyV1Save,
         seedLegacyV2LocalStorageSave,
     } from '../../utils/legacySaveSeeding';
+    import ItemSelector from './ItemSelector.svelte';
+    import builtInItems from '../../pages/inventory/json/items';
+    import { getMergedItemCatalog } from '../../utils/itemCatalog.js';
+    import { addItems } from '../../utils/gameState/inventory.js';
 
     export let cheatsAvailable = false;
 
@@ -28,6 +32,9 @@
     let lastSeedSummary = null;
     let v1Profile = LEGACY_V1_SEED_PROFILES[0]?.id ?? 'minimal';
     let v2Profile = LEGACY_V2_SEED_PROFILES[0]?.id ?? 'minimal';
+    let itemCatalog = builtInItems;
+    let grantItemId = '';
+    let grantItemCount = 1;
     $: v1SeedItems = getLegacyV1SeedItems(v1Profile);
     $: v2SeedItems = getLegacyV2SeedItems(v2Profile);
 
@@ -59,6 +66,28 @@
         }
     };
 
+    const loadItemCatalog = async () => {
+        itemCatalog = await getMergedItemCatalog({ builtInItems });
+    };
+
+    const handleGrantItemSelect = (event) => {
+        grantItemId = event.detail.itemId ?? '';
+    };
+
+    const grantSelectedItem = () =>
+        withStatus('grant-item', async () => {
+            const normalizedCount = Number(grantItemCount);
+            if (!grantItemId) {
+                throw new Error('Pick an item before granting inventory.');
+            }
+            if (!Number.isFinite(normalizedCount) || normalizedCount <= 0) {
+                throw new Error('Enter a count greater than 0.');
+            }
+
+            addItems([{ id: grantItemId, count: normalizedCount }]);
+            statusMessage = `Added ${normalizedCount} × ${grantItemId} to inventory.`;
+        });
+
     const seedV1Save = () =>
         withStatus('seed-v1', async () => {
             const summary = seedLegacyV1Save(v1Profile);
@@ -85,6 +114,9 @@
 
     onMount(() => {
         initializeQaCheats(cheatsAvailable);
+        loadItemCatalog().catch((error) => {
+            console.warn('Unable to load merged item catalog for QA grants.', error);
+        });
 
         unsubscribeAvailability = qaCheatsAvailability.subscribe((value) => {
             available = value;
@@ -139,6 +171,42 @@
                 Create or clear sample legacy saves to test the Legacy save upgrades flows. Actions
                 refresh the page so detection reruns immediately.
             </p>
+        </div>
+        <div class="qa-tools__seed-group">
+            <label class="qa-tools__label" for="qa-grant-item-picker">
+                <span class="qa-tools__label-text">Grant inventory item</span>
+            </label>
+            <ItemSelector
+                selectedItemId={grantItemId}
+                label="Item to add"
+                items={itemCatalog}
+                allowCustomId={true}
+                customIdLabel="Custom item ID"
+                customIdPlaceholder="Enter custom item ID"
+                customIdButtonLabel="Use custom ID"
+                testId="qa-grant-item-picker"
+                on:select={handleGrantItemSelect}
+            />
+            <label class="qa-tools__label" for="qa-grant-item-count">
+                <span class="qa-tools__label-text">Count to add</span>
+                <input
+                    id="qa-grant-item-count"
+                    class="qa-tools__input"
+                    type="number"
+                    min="1"
+                    step="1"
+                    bind:value={grantItemCount}
+                    disabled={Boolean(workingAction)}
+                    data-testid="qa-grant-item-count"
+                />
+            </label>
+            <Chip
+                text={workingAction === 'grant-item' ? 'Adding item…' : 'Add item to inventory'}
+                onClick={grantSelectedItem}
+                cheat={true}
+                disabled={Boolean(workingAction)}
+                dataTestId="qa-grant-item"
+            />
         </div>
         <div class="qa-tools__actions">
             <div class="qa-tools__seed-group">
@@ -452,6 +520,15 @@
     }
 
     .qa-tools__select {
+        border-radius: 8px;
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        background: rgba(15, 23, 42, 0.6);
+        color: #e0f2ff;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    .qa-tools__input {
         border-radius: 8px;
         border: 1px solid rgba(59, 130, 246, 0.4);
         background: rgba(15, 23, 42, 0.6);
