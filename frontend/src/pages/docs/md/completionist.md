@@ -17,7 +17,7 @@ Completionist quests build practical progression through the completionist skill
 
 - Quest link: [/quests/completionist/v2](/quests/completionist/v2)
 - Unlock prerequisite:
-    - `requiresQuests`: `welcome/howtodoquests`, `ubi/basicincome`, `3dprinting/start`, `aquaria/water-testing`, `energy/solar`, `rocketry/parachute`, `hydroponics/basil`
+    - `requiresQuests`: `welcome/howtodoquests`, `ubi/basicincome`, `3dprinter/start`, `aquaria/water-testing`, `energy/solar`, `rocketry/parachute`, `hydroponics/basil`
 - Dialogue `requiresItems` gates:
     - `safety-brief` → "Safety checks complete, proceed" — safety goggles ×1
     - `prep-printer` → "Printer is leveled and loaded with buffer filament" — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×200

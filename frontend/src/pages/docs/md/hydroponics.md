@@ -96,7 +96,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 
 - Quest link: [/quests/hydroponics/bucket_10](/quests/hydroponics/bucket_10)
 - Unlock prerequisite:
-    - `requiresQuests`: `hydroponics/basil`, `3dprinting/start`
+    - `requiresQuests`: `hydroponics/basil`, `3dprinter/start`
 - Dialogue `requiresItems` gates:
     - `stage`/`haul` → inspection handoff — ten-bucket water haul ×1
     - `recover` → inspection retry — ten-bucket water haul ×1

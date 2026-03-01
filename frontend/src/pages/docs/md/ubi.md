@@ -16,7 +16,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 
 - Quest link: [/quests/ubi/basicincome](/quests/ubi/basicincome)
 - Unlock prerequisite:
-    - `requiresQuests`: `3dprinting/start`
+    - `requiresQuests`: `3dprinter/start`
 - Dialogue `requiresItems` gates:
     - None
 - Grants:

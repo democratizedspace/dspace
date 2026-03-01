@@ -28,7 +28,7 @@ formats.
 - **v3 detection:** v3 checks cookies/localStorage for legacy artifacts; the migration scope for v1
   is **items + currency balances** (v1 `item-<id>` cookies plus `currency-balance-dUSD`).
 - **Why skip quests/process timers:** v1 quest IDs are numeric (`0`, `1`, `2`), while v2/v3 use slug
-  routes (ex: `/quests/3dprinting/start`). Process timers also depend on v1 process IDs/machine IDs
+  routes (ex: `/quests/3dprinter/start`). Process timers also depend on v1 process IDs/machine IDs
   that do not map 1:1. Treat quest/progress/process timers as **out-of-scope** for the default v1
   migration, even if the cookies exist.
 

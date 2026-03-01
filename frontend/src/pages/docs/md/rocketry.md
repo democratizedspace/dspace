@@ -22,7 +22,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 
 - Quest link: [/quests/rocketry/firstlaunch](/quests/rocketry/firstlaunch)
 - Unlock prerequisite:
-    - `requiresQuests`: `3dprinting/start`
+    - `requiresQuests`: `3dprinter/start`
 - Dialogue `requiresItems` gates:
     - `components` → "Alright, all 4 components are now printed! What's next?" — 3D printed nosecone ×1, 3D printed body tube ×1, 3D printed fincan ×1, 3D printed nosecone coupler ×1
     - `assemble` → "The rocket's assembled! Are we ready for launch?" — launch-capable model rocket ×1

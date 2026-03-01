@@ -2,7 +2,7 @@
     "filename": "/assets/quests/first_3d_printer_setup.jpg",
     "entity": "frontend/src/pages/quests/json/3dprinting/start.json",
     "item_name": "Set up your first 3D printer",
-    "item_id": "3dprinting/start",
+    "item_id": "3dprinter/start",
     "entity_type": "quest",
     "prompt": "A small desktop FDM 3D printer sits on a sturdy table in a tidy workshop, partially assembled with its frame squared up and the printhead parked above the empty build plate. A pair of hands is visible tightening a knob on the bed or adjusting a cable connection, while an open cardboard box with foam inserts and spare parts sits nearby, clearly showing that the printer has just been unboxed. On the table are a neatly coiled spool of filament, an Allen key set, a USB stick, and a simple quick-start guide with diagrams but no readable text, making it obvious that the scene is about learning how to set up a first 3D printer.\n\nThe environment has a bright, near-future solarpunk aesthetic: clean composite surfaces, soft LED task lighting, and subtle space-exploration touches like a poster of a stylized rocket or planet on the wall and a small model spacecraft on a shelf in the background. The 512×512 image should be photorealistic with gentle cinematic lighting, emphasizing the printer, tools, and careful setup process without clutter. No brand logos or readable labels appear on the printer or accessories, and only the user’s hands and forearms are visible, reinforcing a welcoming tutorial vibe for starting a space-focused 3D printing adventure.",
     "image_model": "Z-Image Turbo",
