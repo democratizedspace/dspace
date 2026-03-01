@@ -206,6 +206,48 @@ describe('quest completion item availability', () => {
         expect(error).toContain('has no price, no producing process, and no rewarding quest.');
     });
 
+    it('requires hand-crank-generator finish path items to be obtainable without placeholders', async () => {
+        const quests = await loadQuests();
+        const handCrankQuest = quests.find((quest: any) => quest.id === 'energy/hand-crank-generator');
+
+        expect(handCrankQuest).toBeDefined();
+
+        const itemMap = new Map((items as Array<any>).map((item) => [item.id, item]));
+        const rewardSources = new Set<string>();
+        for (const quest of quests) {
+            for (const reward of quest.rewards ?? []) {
+                rewardSources.add(reward.id);
+            }
+            for (const itemId of getGrantedItems(quest)) {
+                rewardSources.add(itemId);
+            }
+        }
+
+        const processSources = new Set<string>();
+        for (const process of processes as Array<any>) {
+            for (const created of toItemIds(process.createItems)) {
+                processSources.add(created);
+            }
+        }
+
+        const requiredItemIds = uniqueItemIds([
+            ...getQuestLevelRequiredItemIds(handCrankQuest),
+            ...getRequiredItemsFromDialoguePath(handCrankQuest),
+            ...getFinishOptions(handCrankQuest).flatMap((option: any) => getRequiredItemIds(option)),
+        ]);
+
+        const unobtainable = requiredItemIds.filter((itemId) => {
+            const item = itemMap.get(itemId);
+            if (!item) return true;
+            if (item.price) return false;
+            if (processSources.has(itemId)) return false;
+            if (rewardSources.has(itemId)) return false;
+            return true;
+        });
+
+        expect(unobtainable).toEqual([]);
+    });
+
     it('ensures finish requirements are obtainable', async () => {
         const quests = await loadQuests();
         const questPaths = await loadQuestPaths();
@@ -219,6 +261,11 @@ describe('quest completion item availability', () => {
             const known = dependencies.filter((dependency) => itemMap.has(dependency));
             return { known, unknown };
         };
+        const dialoguePathRequiredItemsByQuest = new Map<string, string[]>();
+        for (const quest of quests) {
+            dialoguePathRequiredItemsByQuest.set(quest.id, getRequiredItemsFromDialoguePath(quest));
+        }
+
         const purchasable = new Set(
             (items as Array<any>).filter((item) => item.price).map((item) => item.id)
         );
@@ -306,9 +353,11 @@ describe('quest completion item availability', () => {
                 if (finishOptions.length === 0) continue;
 
                 const questRequiredItems = getQuestLevelRequiredItemIds(quest);
+                const dialoguePathRequiredItems = dialoguePathRequiredItemsByQuest.get(quest.id) ?? [];
                 const canFinish = finishOptions.some((option: any) => {
                     const itemsMet = uniqueItemIds([
                         ...questRequiredItems,
+                        ...dialoguePathRequiredItems,
                         ...getRequiredItemIds(option),
                     ]).every((id) => obtainable.has(id));
                     const githubRequirementMet = !option.requiresGitHub || allowGitHubRequirement;
@@ -396,7 +445,7 @@ describe('quest completion item availability', () => {
             const finishOptions = getFinishOptions(quest);
             const questPath = questPaths.get(quest.id);
             const questRequiredItems = getQuestLevelRequiredItemIds(quest);
-            const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest).filter((id) =>
+            const dialoguePathRequiredItems = (dialoguePathRequiredItemsByQuest.get(quest.id) ?? []).filter((id) =>
                 itemMap.has(id)
             );
             if (finishOptions.length === 0) {
