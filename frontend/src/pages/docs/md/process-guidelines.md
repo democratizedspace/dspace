@@ -218,3 +218,11 @@ One of the most effective ways to design processes is to think in terms of chain
 When designing process chains, consider how they support the educational goals of DSPACE and guide players through increasingly complex concepts relevant to space exploration.
 
 By following these guidelines, you'll create processes that enhance gameplay while advancing DSPACE's mission of democratizing space exploration through practical, hands-on education.
+
+## UI Readability and Contrast
+
+Process cards intentionally alternate chip contrast in nested sections (for example: process card container,
+then Requires/Consumes/Creates item lists) so each layer remains legible on all supported themes.
+
+When touching process UI components, preserve this alternating pattern by keeping `Chip` `inverted` styles
+working for both static containers and buttons.

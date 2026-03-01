@@ -1,5 +1,6 @@
 import { render } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import Chip from '../svelte/Chip.svelte';
 
 function ensureChipStaticOpacityStyle() {
@@ -37,5 +38,14 @@ describe('Chip', () => {
         expect(container.querySelector('nav .chip-container.static-container.inverted')).toBe(
             staticContainer
         );
+    });
+
+    it('defines explicit inverted selectors for static and button chip variants', () => {
+        const source = readFileSync('frontend/src/components/svelte/Chip.svelte', 'utf8');
+
+        expect(source).toContain('nav button.inverted');
+        expect(source).toContain('nav .chip-container.inverted');
+        expect(source).toContain('background-color: #68d46d');
+        expect(source).toContain('color: black');
     });
 });

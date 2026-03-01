@@ -208,6 +208,22 @@ test('shows required items even when counts are zero', async () => {
     });
 });
 
+test('renders requirement lists inside inverted chip containers for process contrast', async () => {
+    getItemCountsMock.mockReturnValue({ 'item-1': 0 });
+
+    const { getByTestId } = render(Process, { processId: 'p2' });
+
+    await waitFor(() => {
+        const requiresSection = getByTestId('process-requires');
+        const listChip = requiresSection.querySelector(
+            '.Container nav .chip-container.static-container'
+        ) as HTMLElement | null;
+
+        expect(listChip).toBeTruthy();
+        expect(listChip?.classList.contains('inverted')).toBe(true);
+    });
+});
+
 test('shows missing requirement feedback with singular "more" label', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
     getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });

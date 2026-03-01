@@ -139,26 +139,31 @@
         cursor: pointer;
     }
 
-    .red {
+    nav button.red,
+    nav .chip-container.red {
         color: rgb(255, 94, 0);
     }
 
-    .hazard:not(.disabled) {
+    nav button.hazard:not(.disabled),
+    nav .chip-container.hazard:not(.disabled) {
         background-color: #9b1c31;
         color: white;
         opacity: 1;
     }
 
-    .hazard:not(.disabled):hover {
+    nav button.hazard:not(.disabled):hover,
+    nav .chip-container.hazard:not(.disabled):hover {
         opacity: 0.9;
     }
 
-    .inverted {
+    nav button.inverted,
+    nav .chip-container.inverted {
         background-color: #68d46d;
         color: black;
     }
 
-    .cheat {
+    nav button.cheat,
+    nav .chip-container.cheat {
         background-color: transparent;
         border: 2px dashed #f97316;
         color: #f97316;
@@ -168,7 +173,8 @@
         opacity: 1;
     }
 
-    .cheat:not(.disabled):hover {
+    nav button.cheat:not(.disabled):hover,
+    nav .chip-container.cheat:not(.disabled):hover {
         background-color: rgba(249, 115, 22, 0.12);
         color: #fff7ed;
         border-color: #fb923c;
@@ -177,13 +183,15 @@
             0 10px 18px rgba(0, 0, 0, 0.28);
     }
 
-    .disabled {
+    nav button.disabled,
+    nav .chip-container.disabled {
         background-color: #575f57;
         color: #8a8a8a;
         opacity: 1;
     }
 
-    .disabled:hover {
+    nav button.disabled:hover,
+    nav .chip-container.disabled:hover {
         cursor: default;
     }
 
