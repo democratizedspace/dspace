@@ -212,7 +212,7 @@
   "8aa6dc27-dc42-4622-ac88-cbd57f48625f": {
     "requires": [
       "3dprinting/x-belt-tension",
-      "3dprinter/start",
+      "3dprinting/start",
       "3dprinting/spool-holder",
       "3dprinting/phone-stand",
       "3dprinting/nozzle-clog",
@@ -224,7 +224,7 @@
     ],
     "rewards": [
       "welcome/run-tests",
-      "3dprinter/start"
+      "3dprinting/start"
     ]
   },
   "50ada74c-686d-4818-9421-e02d98444579": {
@@ -259,7 +259,7 @@
       "welcome/howtodoquests",
       "ubi/basicincome",
       "astronomy/planetary-alignment",
-      "3dprinter/start",
+      "3dprinting/start",
       "3dprinting/spool-holder",
       "3dprinting/cable-clip"
     ]
@@ -1823,19 +1823,19 @@
   "fe46e236-5d03-4c95-9b38-68b045a0df03": {
     "requires": [],
     "rewards": [
-      "3dprinter/start"
+      "3dprinting/start"
     ]
   },
   "d3590107-25ff-4de5-af3a-46e2497bfc52": {
     "requires": [
-      "3dprinter/start",
+      "3dprinting/start",
       "3dprinting/spool-holder",
       "3dprinting/filament-change",
       "3dprinting/calibration-cube",
       "3dprinting/cable-clip"
     ],
     "rewards": [
-      "3dprinter/start",
+      "3dprinting/start",
       "3dprinting/benchy_25",
       "3dprinting/benchy_100",
       "3dprinting/benchy_10"
@@ -1843,7 +1843,7 @@
   },
   "7892ffc6-c651-445f-946b-7edc998cf389": {
     "requires": [
-      "3dprinter/start",
+      "3dprinting/start",
       "3dprinting/retraction-test",
       "3dprinting/benchy_25",
       "3dprinting/benchy_100",

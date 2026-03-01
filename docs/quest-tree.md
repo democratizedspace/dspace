@@ -6,26 +6,26 @@ Regenerate with `npm run gen:quest-tree`.
 ## 3dprinter
 | Quest | Title | Description | Requires |
 | --- | --- | --- | --- |
-| 3dprinter/start | Set up your first 3D printer | Accept Sydney's offer of a 3D printer, and learn how to set it up for use in your space exploration adventure. | welcome/howtodoquests |
+| 3dprinting/start | Set up your first 3D printer | Accept Sydney's offer of a 3D printer, and learn how to set it up for use in your space exploration adventure. | welcome/howtodoquests |
 
 ## 3dprinting
 | Quest | Title | Description | Requires |
 | --- | --- | --- | --- |
-| 3dprinting/bed-leveling | Level the Print Bed | After power-off and cooling, level the FDM bed with a sheet of printer paper. | 3dprinter/start |
-| 3dprinting/benchy_10 | 3D Print 10 Benchies | Put your 3D printer to the test! To complete this quest, print at least 10 Benchies. | 3dprinter/start |
+| 3dprinting/bed-leveling | Level the Print Bed | After power-off and cooling, level the FDM bed with a sheet of printer paper. | 3dprinting/start |
+| 3dprinting/benchy_10 | 3D Print 10 Benchies | Put your 3D printer to the test! To complete this quest, print at least 10 Benchies. | 3dprinting/start |
 | 3dprinting/benchy_100 | 3D Print 100 Benchies | Show off your 3D printing prowess! To complete this quest, print at least 100 Benchies. | 3dprinting/benchy_25 |
 | 3dprinting/benchy_25 | 3D Print 25 Benchies | Increase your 3D printing output! To complete this quest, print at least 25 Benchies. | 3dprinting/benchy_10 |
-| 3dprinting/blob-of-death | Witness a Blob of Death | Skipping a first-layer check lets a failed Z homing extrude in mid-air, engulfing the nozzle in molten plastic. | 3dprinter/start |
-| 3dprinting/cable-clip | Print a Cable Clip | Reduce clutter by 3D printing a simple cable clip. | 3dprinter/start |
-| 3dprinting/calibration-cube | Print a Calibration Cube | Print and measure a 20 mm calibration cube to verify your printer's accuracy. | 3dprinter/start |
-| 3dprinting/filament-change | Swap Filament | Swap to green PLA on your entry-level FDM printer with goggles, wire cutters, and a 10 g purge. | 3dprinter/start |
-| 3dprinting/nozzle-cleaning | Clear a Clogged Nozzle | Heat and clean the nozzle to restore smooth extrusion. | 3dprinter/start |
-| 3dprinting/nozzle-clog | Fix a Clogged Nozzle | Disassemble your printer after a blob of death from skipping the first layer to unclog or replace the nozzle. | 3dprinter/start<br>3dprinting/blob-of-death |
-| 3dprinting/phone-stand | Print a Phone Stand | Practice 3D printing by making a handy phone stand. | 3dprinter/start |
+| 3dprinting/blob-of-death | Witness a Blob of Death | Skipping a first-layer check lets a failed Z homing extrude in mid-air, engulfing the nozzle in molten plastic. | 3dprinting/start |
+| 3dprinting/cable-clip | Print a Cable Clip | Reduce clutter by 3D printing a simple cable clip. | 3dprinting/start |
+| 3dprinting/calibration-cube | Print a Calibration Cube | Print and measure a 20 mm calibration cube to verify your printer's accuracy. | 3dprinting/start |
+| 3dprinting/filament-change | Swap Filament | Swap to green PLA on your entry-level FDM printer with goggles, wire cutters, and a 10 g purge. | 3dprinting/start |
+| 3dprinting/nozzle-cleaning | Clear a Clogged Nozzle | Heat and clean the nozzle to restore smooth extrusion. | 3dprinting/start |
+| 3dprinting/nozzle-clog | Fix a Clogged Nozzle | Disassemble your printer after a blob of death from skipping the first layer to unclog or replace the nozzle. | 3dprinting/start<br>3dprinting/blob-of-death |
+| 3dprinting/phone-stand | Print a Phone Stand | Practice 3D printing by making a handy phone stand. | 3dprinting/start |
 | 3dprinting/retraction-test | Tune Retraction Settings | Print a single Benchy while adjusting retraction to reduce stringing. | 3dprinting/phone-stand |
-| 3dprinting/spool-holder | Print a Spool Holder | Keep filament tidy by printing a simple spool holder. | 3dprinter/start |
+| 3dprinting/spool-holder | Print a Spool Holder | Keep filament tidy by printing a simple spool holder. | 3dprinting/start |
 | 3dprinting/temperature-tower | Print a Temperature Tower | Find the ideal nozzle temperature by printing a simple calibration tower. | 3dprinting/retraction-test |
-| 3dprinting/x-belt-tension | Tighten the X-axis Belt | Keep your prints sharp by safely tightening a loose X-axis belt. | 3dprinter/start |
+| 3dprinting/x-belt-tension | Tighten the X-axis Belt | Keep your prints sharp by safely tightening a loose X-axis belt. | 3dprinting/start |
 
 ## aquaria
 | Quest | Title | Description | Requires |
@@ -96,7 +96,7 @@ Regenerate with `npm run gen:quest-tree`.
 | completionist/display | Show Off Your Trophy | Give your Completionist Award II a dedicated spot on the shelf. | completionist/v2 |
 | completionist/polish | Polish Your Trophy | Keep your Completionist Award II shiny and proud. | completionist/v2 |
 | completionist/reminder | Check for New Quests | Return regularly to see what fresh challenges await you. | completionist/v2 |
-| completionist/v2 | Congrats for finishing all the quests!! | Here's a trophy for your efforts! | welcome/howtodoquests<br>ubi/basicincome<br>3dprinter/start<br>aquaria/water-testing<br>energy/solar-1kWh<br>rocketry/parachute<br>hydroponics/basil |
+| completionist/v2 | Congrats for finishing all the quests!! | Here's a trophy for your efforts! | welcome/howtodoquests<br>ubi/basicincome<br>3dprinting/start<br>aquaria/water-testing<br>energy/solar-1kWh<br>rocketry/parachute<br>hydroponics/basil |
 
 ## composting
 | Quest | Title | Description | Requires |
@@ -217,7 +217,7 @@ Regenerate with `npm run gen:quest-tree`.
 | --- | --- | --- | --- |
 | hydroponics/air-stone-soak | Soak Air Stone | Prime the air stone so bubbles stay even. | hydroponics/filter-clean |
 | hydroponics/basil | Grow basil hydroponically | Learn how to grow plants without soil! | welcome/howtodoquests |
-| hydroponics/bucket_10 | Bucket, we'll do it live! | Have 10 buckets of dechlorinated water in your inventory. For some reason. | hydroponics/basil<br>3dprinter/start |
+| hydroponics/bucket_10 | Bucket, we'll do it live! | Have 10 buckets of dechlorinated water in your inventory. For some reason. | hydroponics/basil<br>3dprinting/start |
 | hydroponics/ec-calibrate | Calibrate EC Meter | Use calibration solution so readings stay accurate. | hydroponics/ph-check |
 | hydroponics/ec-check | Check Solution EC | Measure nutrient strength with an EC meter. | hydroponics/ec-calibrate |
 | hydroponics/filter-clean | Rinse Grow Bed Filter | Clear out the gunk so the roots can breathe. | hydroponics/top-off |
@@ -281,7 +281,7 @@ Regenerate with `npm run gen:quest-tree`.
 ## rocketry
 | Quest | Title | Description | Requires |
 | --- | --- | --- | --- |
-| rocketry/firstlaunch | First rocket launch! | Print and launch your own model rocket. Follow the steps to print, assemble, and launch the rocket. Get ready for liftoff! | 3dprinter/start |
+| rocketry/firstlaunch | First rocket launch! | Print and launch your own model rocket. Follow the steps to print, assemble, and launch the rocket. Get ready for liftoff! | 3dprinting/start |
 | rocketry/fuel-mixture | Fuel Mixture Calibration | Dial in a safe oxidizer-to-fuel ratio for a hobbyist model rocket before launch. | rocketry/firstlaunch |
 | rocketry/guided-rocket-build | Build a Guided Model Rocket | Print a servo-ready fincan, assemble the avionics, and program guidance for a camera-equipped hop. | rocketry/firstlaunch<br>rocketry/parachute<br>rocketry/preflight-check |
 | rocketry/night-launch | Night Launch | Take your rocket experience to the stars with a night launch. Gather your gear and light up the sky. | rocketry/recovery-run |
@@ -302,7 +302,7 @@ Regenerate with `npm run gen:quest-tree`.
 ## ubi
 | Quest | Title | Description | Requires |
 | --- | --- | --- | --- |
-| ubi/basicincome | Earn basic income | Learn about the basic income system and how to earn dUSD. | 3dprinter/start |
+| ubi/basicincome | Earn basic income | Learn about the basic income system and how to earn dUSD. | 3dprinting/start |
 | ubi/first-payment | Claim Your First UBI | Withdraw your daily dUSD for the first time. | ubi/basicincome |
 | ubi/reminder | Set a UBI Reminder | Schedule a daily reminder so you never miss your dUSD payout. | ubi/first-payment |
 | ubi/savings-goal | Start a Savings Jar | Set aside some dUSD for future plans. | ubi/first-payment |

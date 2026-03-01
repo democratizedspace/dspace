@@ -203,7 +203,7 @@
     "requiresQuests": [
         "welcome/howtodoquests",
         "ubi/basicincome",
-        "3dprinter/start",
+        "3dprinting/start",
         "aquaria/water-testing",
         "energy/solar",
         "rocketry/parachute",
