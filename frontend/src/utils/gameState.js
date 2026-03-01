@@ -18,6 +18,10 @@ import { UUID_REGEX } from './uuid.js';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
+const LEGACY_QUEST_ID_ALIASES = {
+    '3dprinting/start': ['3dprinter/start'],
+    '3dprinter/start': ['3dprinting/start'],
+};
 
 // ---------------------
 // QUESTS
@@ -33,9 +37,9 @@ export const finishQuest = (questId, rewardItems) => {
 
 export const questFinished = (questId) => {
     const gameState = loadGameState();
+    const candidateIds = [questId, ...(LEGACY_QUEST_ID_ALIASES[questId] || [])];
 
-    const finished = gameState.quests[questId] ? gameState.quests[questId].finished : false;
-    return finished;
+    return candidateIds.some((candidateId) => Boolean(gameState.quests[candidateId]?.finished));
 };
 
 export const canStartQuest = (quest) => {
