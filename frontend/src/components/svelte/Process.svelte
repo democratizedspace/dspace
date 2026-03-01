@@ -25,6 +25,7 @@
 
     export let processId;
     export let processData = null;
+    export let inverted = false;
 
     let process;
     let builtInProcess;
@@ -444,7 +445,7 @@
 </script>
 
 {#if mounted && process}
-    <Chip text="">
+    <Chip text="" {inverted} dataTestId="process-chip">
         <div class="container">
             <h3>{process.title}</h3>
 
@@ -456,7 +457,7 @@
                     data-testid="process-requires"
                     bind:this={requiresContainer}
                 >
-                    <CompactItemList itemList={process.requireItems} noRed={true} />
+                    <CompactItemList itemList={process.requireItems} noRed={true} {inverted} />
                 </div>
             {/if}
 
@@ -468,13 +469,23 @@
                     data-testid="process-consumes"
                     bind:this={consumesContainer}
                 >
-                    <CompactItemList itemList={process.consumeItems} noRed={true} decrease={true} />
+                    <CompactItemList
+                        itemList={process.consumeItems}
+                        noRed={true}
+                        decrease={true}
+                        {inverted}
+                    />
                 </div>
             {/if}
 
             {#if process.createItems && process.createItems.length > 0}
                 <h6>Creates:</h6>
-                <CompactItemList itemList={process.createItems} noRed={true} increase={true} />
+                <CompactItemList
+                    itemList={process.createItems}
+                    noRed={true}
+                    increase={true}
+                    {inverted}
+                />
             {/if}
 
             <h4>Duration: {process.duration}</h4>

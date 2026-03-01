@@ -278,6 +278,39 @@ test('shows missing requirement feedback with plural "more items" label', async 
     expect(startProcess).not.toHaveBeenCalled();
 });
 
+test('alternates process chip contrast between parent container and item groups', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 3 });
+
+    const customProcess = {
+        id: 'custom-contrast',
+        title: 'Contrast Check',
+        duration: '5s',
+        requireItems: [{ id: 'item-1', count: 1 }],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-contrast',
+        processData: customProcess,
+        inverted: true,
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('process-requires')).toBeTruthy();
+    });
+
+    const processChip = getByTestId('process-chip');
+    const requiresChip =
+        getByTestId('process-requires').querySelector('nav .chip-container.static-container');
+
+    expect(processChip.classList.contains('inverted')).toBe(true);
+    expect(requiresChip?.classList.contains('inverted')).toBe(false);
+});
+
 test('shows missing requirement feedback when two items are missing', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
     getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
