@@ -293,9 +293,13 @@ test('alternates process chip contrast between parent container and item groups'
         custom: true,
     };
 
-    const getSectionChipContainer = (getByTestId: (testId: string) => HTMLElement, testId: string) => {
+    const getSectionChipContainer = (
+        getByTestId: (testId: string) => HTMLElement,
+        testId: string
+    ) => {
         const section = getByTestId(testId);
-        // CompactItemList does not expose a per-list test id yet, so we scope to the section wrapper.
+        // CompactItemList does not expose a per-list test id yet,
+        // so we scope to the section wrapper.
         return section.querySelector('.Container nav .chip-container.static-container');
     };
 
