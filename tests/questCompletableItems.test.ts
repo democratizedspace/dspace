@@ -154,6 +154,57 @@ const getItemDependencies = (item: any) =>
     uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
 
 describe('quest completion item availability', () => {
+    it('ensures quests and processes only reference valid item IDs', async () => {
+        const quests = await loadQuests();
+        const knownItems = new Set((items as Array<any>).map((item) => item.id));
+        const unknownReferences: string[] = [];
+
+        for (const quest of quests) {
+            const addUnknownReferences = (context: string, ids: string[]) => {
+                for (const itemId of ids) {
+                    if (!knownItems.has(itemId)) {
+                        unknownReferences.push(
+                            `Quest "${quest.id}" ${context} references unknown item "${itemId}".`
+                        );
+                    }
+                }
+            };
+
+            addUnknownReferences('quest-level requirements', getQuestLevelRequiredItemIds(quest));
+            addUnknownReferences('quest rewards', toItemIds(quest.rewards));
+
+            for (const node of quest.dialogue ?? []) {
+                for (const option of node.options ?? []) {
+                    addUnknownReferences(
+                        `node "${node.id}" option "${option.text ?? option.type ?? 'unknown'}" requiresItems`,
+                        getRequiredItemIds(option)
+                    );
+                    addUnknownReferences(
+                        `node "${node.id}" option "${option.text ?? option.type ?? 'unknown'}" grantsItems`,
+                        toItemIdsFromUnknown(option.grantsItems)
+                    );
+                }
+            }
+        }
+
+        for (const process of processes as Array<any>) {
+            const processItemRefs = [
+                ...toItemIds(process.requireItems),
+                ...toItemIds(process.consumeItems),
+                ...toItemIds(process.createItems),
+            ];
+
+            for (const itemId of processItemRefs) {
+                if (!knownItems.has(itemId)) {
+                    unknownReferences.push(
+                        `Process "${process.id}" references unknown item "${itemId}".`
+                    );
+                }
+            }
+        }
+
+        expect(unknownReferences).toEqual([]);
+    });
 
 
     it('flags unobtainable dialogue-path required items with a clear reason', () => {
@@ -396,9 +447,7 @@ describe('quest completion item availability', () => {
             const finishOptions = getFinishOptions(quest);
             const questPath = questPaths.get(quest.id);
             const questRequiredItems = getQuestLevelRequiredItemIds(quest);
-            const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest).filter((id) =>
-                itemMap.has(id)
-            );
+            const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest);
             if (finishOptions.length === 0) {
                 errors.push(
                     `Quest "${quest.id}" (${questPath ?? 'unknown path'}) has no finish option.`
