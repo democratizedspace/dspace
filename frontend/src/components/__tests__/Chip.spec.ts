@@ -1,5 +1,7 @@
 import { render } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import Chip from '../svelte/Chip.svelte';
 
 function ensureChipStaticOpacityStyle() {
@@ -37,5 +39,24 @@ describe('Chip', () => {
         expect(container.querySelector('nav .chip-container.static-container.inverted')).toBe(
             staticContainer
         );
+    });
+
+    it('defines a dedicated inverted selector for static chip containers', () => {
+        const { getByTestId } = render(Chip, {
+            props: {
+                text: '',
+                inverted: true,
+                dataTestId: 'chip-static-inverted',
+            },
+        });
+
+        const staticContainer = getByTestId('chip-static-inverted') as HTMLElement;
+        const chipSource = readFileSync(
+            path.resolve(process.cwd(), 'frontend/src/components/svelte/Chip.svelte'),
+            'utf8'
+        );
+
+        expect(staticContainer.classList.contains('inverted')).toBe(true);
+        expect(chipSource).toContain('nav .chip-container.inverted');
     });
 });

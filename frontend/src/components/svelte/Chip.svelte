@@ -153,7 +153,8 @@
         opacity: 0.9;
     }
 
-    .inverted {
+    nav button.inverted,
+    nav .chip-container.inverted {
         background-color: #68d46d;
         color: black;
     }

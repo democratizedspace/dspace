@@ -220,6 +220,60 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('uses dark text by default so nested inverted chips stay readable', async () => {
+        const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 2 }];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ alpha: 5 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue([
+            {
+                id: 'alpha',
+                name: 'Alpha',
+                image: '/alpha.png',
+                count: 2,
+            },
+        ]);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+
+        const itemText = container.querySelector('.horizontal p');
+        expect(itemText?.classList.contains('inverted')).toBe(false);
+
+        unmount();
+    });
+
+    test('uses light text when parent requests inverted list styling', async () => {
+        const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 2 }];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ alpha: 5 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue([
+            {
+                id: 'alpha',
+                name: 'Alpha',
+                image: '/alpha.png',
+                count: 2,
+            },
+        ]);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, inverted: true },
+        });
+
+        await tick();
+
+        const itemText = container.querySelector('.horizontal p');
+        expect(itemText?.classList.contains('inverted')).toBe(true);
+
+        unmount();
+    });
+
     test('renders fallback metadata for unknown custom items', async () => {
         const items = [{ id: 'custom-item', count: 1 }];
 
