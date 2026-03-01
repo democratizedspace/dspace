@@ -117,15 +117,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "946b07b7-2b2c-4507-a725-edb270d8e910",
             "count": 1
         }
     ],
-    "requiresQuests": ["rocketry/parachute"],
+    "requiresQuests": [
+        "rocketry/parachute"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

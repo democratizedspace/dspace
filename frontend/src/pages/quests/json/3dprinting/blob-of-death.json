@@ -112,11 +112,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/nozzle-cleaning"],
+    "requiresQuests": [
+        "3dprinting/nozzle-cleaning"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

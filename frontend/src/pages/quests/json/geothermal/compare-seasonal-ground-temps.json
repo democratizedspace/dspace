@@ -105,7 +105,7 @@
         },
         {
             "id": "interpret",
-            "text": "Interpretation gate: pass if seasonal delta stays within \u00b14\u00b0C and short-term variance remains under \u00b11.5\u00b0C. Beyond those bounds, treat the site as unstable until corrected and re-measured.",
+            "text": "Interpretation gate: pass if seasonal delta stays within ±4°C and short-term variance remains under ±1.5°C. Beyond those bounds, treat the site as unstable until corrected and re-measured.",
             "options": [
                 {
                     "type": "goto",
@@ -170,7 +170,7 @@
         },
         {
             "id": "interpret-retest",
-            "text": "Re-check using corrected data. Pass only if seasonal delta is now within \u00b14\u00b0C and short-term variance remains under \u00b11.5\u00b0C.",
+            "text": "Re-check using corrected data. Pass only if seasonal delta is now within ±4°C and short-term variance remains under ±1.5°C.",
             "options": [
                 {
                     "type": "goto",
@@ -209,15 +209,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
             "count": 1
         }
     ],
-    "requiresQuests": ["geothermal/log-ground-temperature"],
+    "requiresQuests": [
+        "geothermal/log-ground-temperature"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

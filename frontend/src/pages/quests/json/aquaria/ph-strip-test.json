@@ -249,15 +249,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/water-testing"],
+    "requiresQuests": [
+        "aquaria/water-testing"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

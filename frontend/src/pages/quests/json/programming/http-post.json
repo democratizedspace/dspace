@@ -110,11 +110,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
             "count": 1
         }
     ],
-    "requiresQuests": ["programming/json-api"],
+    "requiresQuests": [
+        "programming/json-api"
+    ],
     "hardening": {
         "passes": 1,
         "score": 96,

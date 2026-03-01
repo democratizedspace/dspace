@@ -1,0 +1,12 @@
+{
+  "id": "quest-reward-cured-compost-overuse",
+  "date": "2026-03-01",
+  "component": "frontend/quests/rewards",
+  "longForm": "outages/2026-03-01-quest-reward-cured-compost-overuse.md",
+  "rootCause": "A placeholder reward (1 x cured compost bucket) was copied broadly across quest trees, resulting in thematically mismatched completion rewards and low reward variety.",
+  "resolution": "Audited all quest rewards and replaced cured compost bucket completion rewards with tree-appropriate reward pools (cycled per tree for variety). Scope: 177 quests updated across 17 quest trees.",
+  "references": [
+    "frontend/src/pages/quests/json",
+    "outages/2026-03-01-quest-reward-cured-compost-overuse.md"
+  ]
+}

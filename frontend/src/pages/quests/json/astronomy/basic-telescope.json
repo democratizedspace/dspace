@@ -195,15 +195,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/observe-moon"],
+    "requiresQuests": [
+        "astronomy/observe-moon"
+    ],
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-basic-telescope-2025-08-03",

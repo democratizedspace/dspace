@@ -185,11 +185,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "74a0707b-7292-4ac8-95f2-2b258210064f",
             "count": 1
         }
     ],
-    "requiresQuests": ["devops/prepare-first-node"],
+    "requiresQuests": [
+        "devops/prepare-first-node"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
