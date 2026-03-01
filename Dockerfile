@@ -24,7 +24,7 @@ RUN apt-get update \
         python3 \
     && rm -rf /var/lib/apt/lists/* \
     && ln -sf python3 /usr/bin/python \
-    && corepack enable
+    && npm install -g pnpm@9.0.0
 WORKDIR /workspace
 
 FROM base AS deps
