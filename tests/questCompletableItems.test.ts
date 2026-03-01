@@ -145,6 +145,89 @@ const getRequiredItemsFromDialoguePath = (quest: any) => {
     return [...required];
 };
 
+const getRequiredItemsFromFinishReachableTransitions = (quest: any) => {
+    const dialogue = quest.dialogue ?? [];
+    if (dialogue.length === 0) return [];
+
+    const idToNode = new Map<string, any>(
+        dialogue
+            .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
+            .map((node: any) => [node.id.trim(), node])
+    );
+    const startId =
+        typeof quest.start === 'string' && quest.start.trim()
+            ? quest.start.trim()
+            : (dialogue[0]?.id ?? '').trim();
+    if (!startId || !idToNode.has(startId)) return [];
+
+    const reverseEdges = new Map<string, string[]>();
+    for (const node of dialogue) {
+        const sourceId = typeof node?.id === 'string' ? node.id.trim() : '';
+        if (!sourceId) continue;
+        for (const option of node.options ?? []) {
+            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+            const target = option.goto.trim();
+            if (!idToNode.has(target)) continue;
+            if (!reverseEdges.has(target)) reverseEdges.set(target, []);
+            reverseEdges.get(target)?.push(sourceId);
+        }
+    }
+
+    const canReachFinish = new Set<string>();
+    const reverseQueue: string[] = [];
+    for (const node of dialogue) {
+        const nodeId = typeof node?.id === 'string' ? node.id.trim() : '';
+        if (!nodeId) continue;
+        const hasFinish = (node.options ?? []).some((option: any) => option.type === 'finish');
+        if (!hasFinish) continue;
+        canReachFinish.add(nodeId);
+        reverseQueue.push(nodeId);
+    }
+
+    while (reverseQueue.length > 0) {
+        const nodeId = reverseQueue.shift();
+        if (!nodeId) continue;
+        for (const previous of reverseEdges.get(nodeId) ?? []) {
+            if (canReachFinish.has(previous)) continue;
+            canReachFinish.add(previous);
+            reverseQueue.push(previous);
+        }
+    }
+
+    const reachableFromStart = new Set<string>();
+    const forwardQueue = [startId];
+    while (forwardQueue.length > 0) {
+        const nodeId = forwardQueue.shift();
+        if (!nodeId || reachableFromStart.has(nodeId)) continue;
+        reachableFromStart.add(nodeId);
+        const node = idToNode.get(nodeId);
+        if (!node) continue;
+        for (const option of node.options ?? []) {
+            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+            const target = option.goto.trim();
+            if (!idToNode.has(target) || reachableFromStart.has(target)) continue;
+            forwardQueue.push(target);
+        }
+    }
+
+    const required = new Set<string>();
+    for (const nodeId of reachableFromStart) {
+        if (!canReachFinish.has(nodeId)) continue;
+        const node = idToNode.get(nodeId);
+        if (!node) continue;
+        for (const option of node.options ?? []) {
+            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+            const target = option.goto.trim();
+            if (!idToNode.has(target) || !canReachFinish.has(target)) continue;
+            for (const itemId of getRequiredItemIds(option)) {
+                required.add(itemId);
+            }
+        }
+    }
+
+    return [...required];
+};
+
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
@@ -153,9 +236,94 @@ const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
 const getItemDependencies = (item: any) =>
     uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
 
+const computeObtainableItems = ({
+    allItems,
+    allQuests,
+}: {
+    allItems: Array<any>;
+    allQuests: Array<any>;
+}) => {
+    const itemMap = new Map(allItems.map((item) => [item.id, item]));
+    const getItemDependencyInfo = (itemId: string) => {
+        const item = itemMap.get(itemId);
+        const dependencies = getItemDependencies(item);
+        const unknown = dependencies.filter((dependency) => !itemMap.has(dependency));
+        const known = dependencies.filter((dependency) => itemMap.has(dependency));
+        return { known, unknown };
+    };
+
+    const purchasable = new Set(allItems.filter((item) => item.price).map((item) => item.id));
+    const betaPlaceholderItems = new Set(
+        allItems
+            .filter((item) => item.priceExemptionReason === 'BETA_PLACEHOLDER')
+            .map((item) => item.id)
+    );
+
+    const obtainable = new Set<string>();
+    const completableQuests = new Set<string>();
+    const allowGitHubRequirement = true;
+    let changed = true;
+
+    while (changed) {
+        changed = false;
+
+        for (const itemId of [...purchasable, ...betaPlaceholderItems]) {
+            if (obtainable.has(itemId)) continue;
+            const { known, unknown } = getItemDependencyInfo(itemId);
+            if (unknown.length === 0 && known.every((dependency) => obtainable.has(dependency))) {
+                obtainable.add(itemId);
+                changed = true;
+            }
+        }
+
+        for (const process of processes as Array<any>) {
+            const requirements = [...toItemIds(process.requireItems), ...toItemIds(process.consumeItems)];
+            if (requirements.every((id) => obtainable.has(id))) {
+                for (const created of toItemIds(process.createItems)) {
+                    if (!obtainable.has(created)) {
+                        obtainable.add(created);
+                        changed = true;
+                    }
+                }
+            }
+        }
+
+        for (const quest of allQuests) {
+            if (completableQuests.has(quest.id)) continue;
+            if ((quest.requiresQuests ?? []).some((id: string) => !completableQuests.has(id))) continue;
+
+            const finishOptions = getFinishOptions(quest);
+            if (finishOptions.length === 0) continue;
+
+            const questRequiredItems = getQuestLevelRequiredItemIds(quest);
+            const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest);
+            const canFinish = finishOptions.some((option: any) => {
+                const itemsMet = uniqueItemIds([
+                    ...questRequiredItems,
+                    ...dialoguePathRequiredItems,
+                    ...getRequiredItemIds(option),
+                ]).every((id) => obtainable.has(id));
+                const githubRequirementMet = !option.requiresGitHub || allowGitHubRequirement;
+                return itemsMet && githubRequirementMet;
+            });
+
+            if (canFinish) {
+                completableQuests.add(quest.id);
+                const questRewards = [...toItemIds(quest.rewards), ...getGrantedItems(quest)];
+                for (const reward of questRewards) {
+                    if (!obtainable.has(reward)) {
+                        obtainable.add(reward);
+                        changed = true;
+                    }
+                }
+            }
+        }
+    }
+
+    return obtainable;
+};
+
 describe('quest completion item availability', () => {
-
-
     it('flags unobtainable dialogue-path required items with a clear reason', () => {
         const quest = {
             id: 'fixture/unobtainable-required-item',
@@ -212,38 +380,21 @@ describe('quest completion item availability', () => {
 
         expect(handCrankQuest).toBeDefined();
 
-        const itemMap = new Map((items as Array<any>).map((item) => [item.id, item]));
-        const rewardSources = new Set<string>();
-        for (const quest of quests) {
-            for (const reward of quest.rewards ?? []) {
-                rewardSources.add(reward.id);
-            }
-            for (const itemId of getGrantedItems(quest)) {
-                rewardSources.add(itemId);
-            }
-        }
-
-        const processSources = new Set<string>();
-        for (const process of processes as Array<any>) {
-            for (const created of toItemIds(process.createItems)) {
-                processSources.add(created);
-            }
-        }
+        const obtainable = computeObtainableItems({
+            allItems: items as Array<any>,
+            allQuests: quests,
+        });
+        const handCrankMotorId = '6caa08d8-815c-4a0e-9297-0fda4516659d';
 
         const requiredItemIds = uniqueItemIds([
             ...getQuestLevelRequiredItemIds(handCrankQuest),
-            ...getRequiredItemsFromDialoguePath(handCrankQuest),
+            ...getRequiredItemsFromFinishReachableTransitions(handCrankQuest),
             ...getFinishOptions(handCrankQuest).flatMap((option: any) => getRequiredItemIds(option)),
         ]);
 
-        const unobtainable = requiredItemIds.filter((itemId) => {
-            const item = itemMap.get(itemId);
-            if (!item) return true;
-            if (item.price) return false;
-            if (processSources.has(itemId)) return false;
-            if (rewardSources.has(itemId)) return false;
-            return true;
-        });
+        expect(requiredItemIds).toContain(handCrankMotorId);
+
+        const unobtainable = requiredItemIds.filter((itemId) => !obtainable.has(itemId));
 
         expect(unobtainable).toEqual([]);
     });
@@ -265,15 +416,6 @@ describe('quest completion item availability', () => {
         for (const quest of quests) {
             dialoguePathRequiredItemsByQuest.set(quest.id, getRequiredItemsFromDialoguePath(quest));
         }
-
-        const purchasable = new Set(
-            (items as Array<any>).filter((item) => item.price).map((item) => item.id)
-        );
-        const betaPlaceholderItems = new Set(
-            (items as Array<any>)
-                .filter((item) => item.priceExemptionReason === 'BETA_PLACEHOLDER')
-                .map((item) => item.id)
-        );
 
         const rewardSources = new Map<string, string[]>();
         for (const quest of quests) {
@@ -303,82 +445,11 @@ describe('quest completion item availability', () => {
             }
         }
 
-        const obtainable = new Set<string>();
-        // This validator focuses on item obtainability and assumes GitHub connections can be made.
         const allowGitHubRequirement = true;
-        const completableQuests = new Set<string>();
-        let changed = true;
-
-        while (changed) {
-            changed = false;
-
-            for (const itemId of [...purchasable, ...betaPlaceholderItems]) {
-                if (obtainable.has(itemId)) continue;
-                const { known, unknown } = getItemDependencyInfo(itemId);
-                if (
-                    unknown.length === 0 &&
-                    known.every((dependency) => obtainable.has(dependency))
-                ) {
-                    obtainable.add(itemId);
-                    changed = true;
-                }
-            }
-
-            for (const process of processes as Array<any>) {
-                const requirements = [
-                    ...toItemIds(process.requireItems),
-                    ...toItemIds(process.consumeItems),
-                ];
-                if (requirements.every((id) => obtainable.has(id))) {
-                    for (const created of toItemIds(process.createItems)) {
-                        if (!obtainable.has(created)) {
-                            obtainable.add(created);
-                            changed = true;
-                        }
-                    }
-                }
-            }
-
-            for (const quest of quests) {
-                if (completableQuests.has(quest.id)) continue;
-                if (
-                    (quest.requiresQuests ?? []).some(
-                        (id: string) => !completableQuests.has(id)
-                    )
-                ) {
-                    continue;
-                }
-
-                const finishOptions = getFinishOptions(quest);
-                if (finishOptions.length === 0) continue;
-
-                const questRequiredItems = getQuestLevelRequiredItemIds(quest);
-                const dialoguePathRequiredItems = dialoguePathRequiredItemsByQuest.get(quest.id) ?? [];
-                const canFinish = finishOptions.some((option: any) => {
-                    const itemsMet = uniqueItemIds([
-                        ...questRequiredItems,
-                        ...dialoguePathRequiredItems,
-                        ...getRequiredItemIds(option),
-                    ]).every((id) => obtainable.has(id));
-                    const githubRequirementMet = !option.requiresGitHub || allowGitHubRequirement;
-                    return itemsMet && githubRequirementMet;
-                });
-
-                if (canFinish) {
-                    completableQuests.add(quest.id);
-                    const questRewards = [
-                        ...toItemIds(quest.rewards),
-                        ...getGrantedItems(quest),
-                    ];
-                    for (const reward of questRewards) {
-                        if (!obtainable.has(reward)) {
-                            obtainable.add(reward);
-                            changed = true;
-                        }
-                    }
-                }
-            }
-        }
+        const obtainable = computeObtainableItems({
+            allItems: items as Array<any>,
+            allQuests: quests,
+        });
 
         const errors: string[] = [];
 
