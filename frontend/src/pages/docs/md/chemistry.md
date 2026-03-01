@@ -30,7 +30,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - dScience ×1
+    - dChat ×1, dUSD ×1000
 - Processes used:
     - [run-safe-fizz-reaction](/processes/run-safe-fizz-reaction)
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
@@ -60,7 +60,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - stevia crystals ×1
 - Processes used:
     - [measure-ph](/processes/measure-ph)
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
@@ -85,7 +85,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - stevia tasting solution ×1
 - Processes used:
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
@@ -108,7 +108,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - stevia tasting solution ×1
 - Processes used:
     - None (quest gates rely on PPE + pH-strip verification evidence in dialogue branches).
 - QA notes:
@@ -128,7 +128,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - stevia tasting solution ×1
 - Processes used:
     - [measure-ph](/processes/measure-ph)
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
@@ -157,7 +157,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - 250 mL glass beaker ×1
 - Processes used:
     - [measure-ph](/processes/measure-ph)
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
@@ -187,7 +187,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - stevia crystals ×1
 - Processes used:
     - [measure-ph](/processes/measure-ph)
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
@@ -215,7 +215,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - stevia crystals ×1
 - Processes used:
     - [extract-stevia](/processes/extract-stevia)
         - Requires: none
@@ -238,7 +238,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - 250 mL glass beaker ×1
 - Processes used:
     - [purify-stevia](/processes/purify-stevia)
         - Requires: none
@@ -267,7 +267,7 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - stevia tasting solution ×1
 - Processes used:
     - [mix-stevia-tasting-solution](/processes/mix-stevia-tasting-solution)
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1, glass stir rod ×1

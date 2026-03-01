@@ -53,7 +53,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `lighting` → "Cool grow lamp! This'll add a nice pink hue to my room." — hydroponic grow lamp ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Green Thumb Award ×1
+    - dChat ×1, dUSD ×1000
 - Processes used:
     - [bucket-water-chlorinated](/processes/bucket-water-chlorinated)
         - Requires: sink ×1
@@ -138,7 +138,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [smart-plug-schedule-12h](/processes/smart-plug-schedule-12h)
         - Requires: smart plug ×1
@@ -163,7 +163,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `kit` → "Stock me up." — Lettuce Seeds ×10, hydroponic starter plug ×10
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Lettuce Seeds ×10
+    - Green Thumb Award ×1
 - Processes used:
     - [rockwool-soak](/processes/rockwool-soak)
     - [germinate-lettuce](/processes/germinate-lettuce)
@@ -183,7 +183,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Green Thumb Award ×1
 - Processes used:
     - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
         - Requires: EC meter ×1, 50 mL measuring syringe ×1
@@ -212,7 +212,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [measure-ph](/processes/measure-ph)
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
@@ -246,7 +246,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Lettuce Seeds ×1
 - Processes used:
     - [measure-ec](/processes/measure-ec)
     - [measure-ec-solution](/processes/measure-ec-solution)
@@ -273,7 +273,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [measure-ec-solution](/processes/measure-ec-solution)
     - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
@@ -302,7 +302,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [measure-ph](/processes/measure-ph)
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
@@ -335,7 +335,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
         - Requires: EC meter ×1, 50 mL measuring syringe ×1
@@ -360,7 +360,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - dScience ×1
+    - Lettuce Seeds ×1
 - Processes used:
     - [install-submersible-pump](/processes/install-submersible-pump)
         - Requires: submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
@@ -394,7 +394,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Lettuce Seeds ×1
 - Processes used:
     - [install-submersible-pump](/processes/install-submersible-pump)
         - Requires: submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
@@ -424,7 +424,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Lettuce Seeds ×10
 - Processes used:
     - [germinate-stevia](/processes/germinate-stevia)
         - Requires: hydroponic grow lamp ×1
@@ -457,7 +457,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [regrow-stevia](/processes/regrow-stevia)
         - Requires: none
@@ -488,7 +488,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [attach-aquarium-thermometer](/processes/attach-aquarium-thermometer)
     - [log-walstad-temperature](/processes/log-walstad-temperature)
@@ -512,7 +512,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `start` → "Sync the working reservoir state before top-off." — hydroponics tub (ready) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Lettuce Seeds ×1
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
     - [measure-ec-solution](/processes/measure-ec-solution)
@@ -535,7 +535,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - dScience ×1
+    - Green Thumb Award ×1
 - Processes used:
     - [rinse-aquarium-filter](/processes/rinse-aquarium-filter)
     - [restart-sponge-filter](/processes/restart-sponge-filter)
@@ -559,7 +559,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Green Thumb Award ×1
 - Processes used:
     - [soak-air-stone](/processes/soak-air-stone)
         - Requires: porous air stone ×1, 5 gallon bucket of dechlorinated tap water ×1
@@ -588,7 +588,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Green Thumb Award ×1
 - Processes used:
     - [rockwool-soak](/processes/rockwool-soak)
         - Requires: 5 gallon bucket of dechlorinated tap water ×1
@@ -618,7 +618,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [clone-mint-cutting](/processes/clone-mint-cutting)
         - Requires: 5 gallon bucket of dechlorinated tap water ×1, soaked hydroponic starter plug ×1
@@ -645,7 +645,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Green Thumb Award ×1
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
         - Requires: none
@@ -674,7 +674,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Lettuce Seeds ×1
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
     - [mix-peroxide-bath](/processes/mix-peroxide-bath)
@@ -699,7 +699,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Hydro Award ×1
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
         - Requires: none

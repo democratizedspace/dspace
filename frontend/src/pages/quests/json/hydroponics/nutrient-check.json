@@ -93,7 +93,7 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
             "count": 1
         }
     ],
@@ -101,7 +101,7 @@
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",

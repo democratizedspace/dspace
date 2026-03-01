@@ -46,7 +46,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dChat ×1, dUSD ×1000
 - Processes used:
     - [write-mission-log-entry](/processes/write-mission-log-entry)
         - Requires: mission logbook ×1, feather quill ×1
@@ -71,7 +71,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Venus phase sketch ×1
 - Processes used:
     - [assemble-basic-telescope](/processes/assemble-basic-telescope)
         - Requires: 50 mm magnifying lens ×1, 20 mm magnifying lens ×1, cardboard mailing tube ×1, camera tripod ×1, masking tape ×1
@@ -93,7 +93,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - ISS pass log ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -121,7 +121,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - ISS pass log ×1
+    - Venus phase sketch ×1
 - Processes used:
     - [check-iss-pass](/processes/check-iss-pass)
         - Requires: smartphone ×1, mission logbook ×1
@@ -158,7 +158,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - ISS pass log ×1
 - Processes used:
     - [check-iss-pass](/processes/check-iss-pass)
         - Requires: smartphone ×1, mission logbook ×1
@@ -188,7 +188,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - ISS pass log ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -221,7 +221,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - constellation sketch set ×1
+    - planisphere star chart ×1
 - Processes used:
     - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
         - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
@@ -254,7 +254,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - constellation sketch set ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -282,7 +282,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - constellation sketch set ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -310,7 +310,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - aurora sighting log ×1
+    - Venus phase sketch ×1
 - Processes used:
     - [check-aurora-forecast](/processes/check-aurora-forecast)
         - Requires: smartphone ×1, mission logbook ×1
@@ -340,7 +340,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Venus phase sketch ×1
 - Processes used:
     - [write-mission-log-entry](/processes/write-mission-log-entry)
         - Requires: mission logbook ×1, feather quill ×1
@@ -366,7 +366,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - planisphere star chart ×1
 - Processes used:
     - [observe-meteor-shower](/processes/observe-meteor-shower)
         - Requires: basic telescope ×1
@@ -393,7 +393,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - planisphere star chart ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -423,7 +423,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Polaris alignment note ×1
+    - constellation sketch set ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -458,7 +458,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Venus phase sketch ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -488,7 +488,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - dUSD ×100
+    - Polaris alignment note ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -520,7 +520,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - planisphere star chart ×1
 - Processes used:
     - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
         - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
@@ -555,7 +555,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - ISS pass log ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -589,7 +589,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dUSD ×100
 - Processes used:
     - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
         - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
@@ -623,7 +623,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Venus phase sketch ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1

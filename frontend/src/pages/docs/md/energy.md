@@ -44,7 +44,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `materials` → "Wow, no charge? You're too kind!" — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, Small solar enclosure ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×1, Solarpunk Award ×1
+    - dChat ×1, dUSD ×1000
 - Processes used:
     - [setup-solar-enclosure-200Wh](/processes/setup-solar-enclosure-200Wh)
         - Requires: none
@@ -68,7 +68,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `start` → "Loan me a safe diagnostics + charging kit." — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - portable solar panel ×1, Solarpunk Award ×1
 - Processes used:
     - [measure-battery-voltage](/processes/measure-battery-voltage)
         - Requires: 200 Wh battery pack ×1, digital multimeter ×1, safety goggles ×1
@@ -93,7 +93,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `prep` → "Loan me the upgraded battery pack." — 200 Wh battery pack ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - portable solar panel ×1, Solarpunk Award ×1
 - Processes used:
     - [setup-solar-enclosure-1kWh](/processes/setup-solar-enclosure-1kWh)
         - Requires: none
@@ -123,7 +123,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `layout` → "Borrow my kit" — Solar charge controller ×1, portable solar panel ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - portable solar panel ×1, Solarpunk Award ×1
 - Processes used:
     - [wire-portable-solar-kit](/processes/wire-portable-solar-kit)
         - Requires: none
@@ -149,7 +149,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×1
+    - Solarpunk Award ×1
 - Processes used:
     - None
 
@@ -164,7 +164,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×3
+    - portable solar panel ×1
 - Processes used:
     - None
 
@@ -179,7 +179,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×5
+    - portable solar panel ×3
 - Processes used:
     - None
 
@@ -194,7 +194,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×10
+    - portable solar panel ×3
 - Processes used:
     - None
 
@@ -209,7 +209,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×25
+    - portable solar panel ×5
 - Processes used:
     - None
 
@@ -224,7 +224,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×50
+    - portable solar panel ×25
 - Processes used:
     - None
 
@@ -246,7 +246,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - portable solar panel ×1
 - Processes used:
     - [print-crank-handle](/processes/print-crank-handle)
         - Requires: entry-level FDM 3D printer ×1
@@ -284,7 +284,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `kit` → "Take the solar kit" — portable solar panel ×1, 200 Wh battery pack ×1, Solar charge controller ×1, USB Cable ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dWatt ×1
 - Processes used:
     - [wire-portable-solar-kit](/processes/wire-portable-solar-kit)
         - Requires: none
@@ -320,7 +320,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `kit` → "Take the loaner kit" — portable solar panel ×1, Solar charge controller ×1, 200 Wh battery pack ×1, 8 AWG fused cable kit ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - portable solar panel ×1
 - Processes used:
     - [wire-portable-solar-kit](/processes/wire-portable-solar-kit)
         - Requires: none
@@ -351,7 +351,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - dWatt ×1
 - Processes used:
     - [mount-inverter-300w](/processes/mount-inverter-300w)
         - Requires: none
@@ -373,7 +373,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×3
+    - Solarpunk Award ×1
 - Processes used:
     - [disassemble-enclosure-200Wh](/processes/disassemble-enclosure-200Wh)
         - Requires: none
@@ -402,7 +402,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `assemble` → "I'll grab the battery pack." — 200 Wh battery pack ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - portable solar panel ×3
 - Processes used:
     - None
 
@@ -432,7 +432,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×6
+    - portable solar panel ×3
 - Processes used:
     - None
 
@@ -447,7 +447,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×10
+    - portable solar panel ×6
 - Processes used:
     - None
 
@@ -465,7 +465,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - `prep` → "Take the 200 Wh kit." — Solar setup (200 Wh) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - portable solar panel ×3
 - Processes used:
     - [solar-200Wh](/processes/solar-200Wh)
         - Requires: Solar setup (200 Wh) ×1
@@ -490,7 +490,7 @@ Energy quests build practical progression through the energy skill tree. This pa
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - portable solar panel ×3
 - Processes used:
     - [mount-wire-wind-turbine-500w](/processes/mount-wire-wind-turbine-500w)
         - Requires: 500 W wind turbine ×1, Solar charge controller ×1, 8 AWG fused cable kit ×1, tape measure ×1, wire stripper ×1, wire cutters ×1, digital multimeter ×1

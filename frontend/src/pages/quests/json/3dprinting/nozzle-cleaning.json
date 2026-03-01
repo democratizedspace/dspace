@@ -56,7 +56,7 @@
         },
         {
             "id": "clean",
-            "text": "Preheat to 200 \u00b0C with goggles on, clear softened filament with pliers, and only swap the nozzle while hot enough for a proper seat.",
+            "text": "Preheat to 200 °C with goggles on, clear softened filament with pliers, and only swap the nozzle while hot enough for a proper seat.",
             "options": [
                 {
                     "type": "process",
@@ -166,7 +166,7 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
             "count": 1
         }
     ],
@@ -174,7 +174,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -19,7 +19,7 @@
         },
         {
             "id": "prep-check",
-            "text": "Set acceptance bounds: PASS requires normal wiring pattern, TEST trip in \u22641 second, and stable RESET without flicker. Any burn smell, arcing sound, or reversed wiring is an immediate stop condition.",
+            "text": "Set acceptance bounds: PASS requires normal wiring pattern, TEST trip in ≤1 second, and stable RESET without flicker. Any burn smell, arcing sound, or reversed wiring is an immediate stop condition.",
             "options": [
                 {
                     "type": "goto",
@@ -46,7 +46,7 @@
                 {
                     "type": "goto",
                     "goto": "interpret-pass",
-                    "text": "Observed normal pattern + trip \u22641s + stable reset.",
+                    "text": "Observed normal pattern + trip ≤1s + stable reset.",
                     "requiresItems": [
                         {
                             "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
@@ -140,7 +140,7 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
             "count": 1
         }
     ],
@@ -148,7 +148,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

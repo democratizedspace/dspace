@@ -31,7 +31,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Gather materials" — claw hammer (16 oz) ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Pine planter box ×1, basil seeds ×1
+    - dChat ×1, dUSD ×1000
 - Processes used:
     - [assemble-planter-box](/processes/assemble-planter-box)
         - Requires: Handsaw ×1, claw hammer (16 oz) ×1
@@ -56,7 +56,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Gather materials" — Pine board ×1, Wood glue ×1, Handsaw ×1, tape measure ×1, Sandpaper pack ×1, claw hammer (16 oz) ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Pine planter box ×1, basil seeds ×1
 - Processes used:
     - [cut-birdhouse-panels](/processes/cut-birdhouse-panels)
         - Requires: Handsaw ×1, safety goggles ×1, tape measure ×1
@@ -88,7 +88,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `claim` → "Take the stool" — Step stool ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Pine planter box ×1, basil seeds ×1
 - Processes used:
     - None
 - Troubleshooting/safety branches:
@@ -109,7 +109,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `finish` → "Take the bookshelf" — Bookshelf ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Pine planter box ×1
 - Processes used:
     - None
 - Troubleshooting/safety branches:
@@ -129,7 +129,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Issue table materials and PPE" — Pine board ×6, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Step stool ×1
 - Processes used:
     - None
 - Troubleshooting/safety branches:
@@ -149,7 +149,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - paintbrush ×1, Sandpaper pack ×1
+    - Pine planter box ×1
 - Processes used:
     - None
 - Troubleshooting/safety branches:
@@ -169,7 +169,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Take the brush" — paintbrush ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Wood glue ×1, Sandpaper pack ×1
+    - paintbrush ×1, Sandpaper pack ×1
 - Processes used:
     - None
 - Troubleshooting/safety branches:
@@ -191,7 +191,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `claim` → "Claim my new workbench" — Workbench ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Pine planter box ×1
 - Processes used:
     - None
 - Troubleshooting/safety branches:
@@ -211,7 +211,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Wood glue ×1, Sandpaper pack ×1
+    - Step stool ×1
 - Processes used:
     - None
 - Troubleshooting/safety branches:
@@ -231,7 +231,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - paintbrush ×1, Wood glue ×1
+    - Wood glue ×1, Sandpaper pack ×1
 - Processes used:
     - None
 - Troubleshooting/safety branches:

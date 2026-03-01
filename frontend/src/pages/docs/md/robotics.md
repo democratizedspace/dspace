@@ -36,7 +36,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - dScience ×1
+    - basic shell operator badge ×1
 - Processes used:
     - [calibrate-reflectance-sensors](/processes/calibrate-reflectance-sensors)
         - Requires: Arduino Uno ×1, ultrasonic distance sensor ×1
@@ -65,7 +65,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - 3D Printed Phone Stand ×1
+    - Servo Motor ×1
 - Processes used:
     - [wire-servo-test-rig](/processes/wire-servo-test-rig)
         - Requires: Servo Motor ×1, Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×4, precision screwdriver set ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
@@ -116,7 +116,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - 3D Printed Phone Stand ×1
 - Processes used:
     - None
 - QA notes:
@@ -140,7 +140,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - 3D Printed Phone Stand ×1
 - Processes used:
     - None
 - QA notes:
@@ -163,7 +163,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Wheel Encoder ×1
 - Processes used:
     - [assemble-servo-arm-kit](/processes/assemble-servo-arm-kit)
         - Requires: two-servo arm kit ×1, Servo Motor ×2, precision screwdriver set ×1, anti-static wrist strap ×1
@@ -192,7 +192,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - 3D Printed Phone Stand ×1
+    - Servo Motor ×1
 - Processes used:
     - None
 - QA notes:
@@ -214,7 +214,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - 3D Printed Phone Stand ×1
 - Processes used:
     - None
 - QA notes:
@@ -239,7 +239,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - 3D Printed Phone Stand ×1
 - Processes used:
     - [build-pan-tilt-ultrasonic](/processes/build-pan-tilt-ultrasonic)
         - Requires: Servo Motor ×2, ultrasonic distance sensor ×1, pan-tilt servo bracket ×1, Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×6, precision screwdriver set ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
@@ -268,7 +268,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Wheel Encoder ×1
 - Processes used:
     - None
 - QA notes:
@@ -290,7 +290,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Motor Award ×1
 - Processes used:
     - None
 - QA notes:
@@ -313,7 +313,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Motor Award ×1
 - Processes used:
     - None
 - QA notes:
@@ -335,7 +335,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - Motor Award ×1
 - Processes used:
     - None
 - QA notes:

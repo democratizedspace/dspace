@@ -129,7 +129,7 @@
     "requiresQuests": ["robotics/servo-control"],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
             "count": 1
         }
     ],

@@ -24,7 +24,7 @@ Composting quests build practical progression through the composting skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Lettuce Seeds ×2, compost sifter ×1
+    - Green Thumb Award ×1
 - Processes used:
     - [start-compost-bin](/processes/start-compost-bin)
         - Requires: 5 gallon bucket ×1, nitrile gloves (pair) ×1
@@ -46,7 +46,7 @@ Composting quests build practical progression through the composting skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - compost thermometer ×1, compost moisture meter ×1
+    - Lettuce Seeds ×2, compost sifter ×1
 - Processes used:
     - [turn-compost-bucket](/processes/turn-compost-bucket)
         - Requires: 5 gallon bucket ×1, nitrile gloves (pair) ×1, layered compost bucket ×1
@@ -79,7 +79,7 @@ Composting quests build practical progression through the composting skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - compost thermometer ×1, compost moisture meter ×1
 - Processes used:
     - [measure-compost-temperature](/processes/measure-compost-temperature)
         - Requires: compost thermometer ×1, active compost bucket ×1
@@ -112,7 +112,7 @@ Composting quests build practical progression through the composting skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - cured compost bucket ×1
+    - screened compost blend ×1
 - Processes used:
     - [sift-compost](/processes/sift-compost)
         - Requires: compost sifter ×1, nitrile gloves (pair) ×1, cured compost bucket ×1

@@ -210,7 +210,7 @@
     "requiresQuests": ["robotics/pan-tilt", "robotics/ultrasonic-rangefinder"],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
             "count": 1
         }
     ],
