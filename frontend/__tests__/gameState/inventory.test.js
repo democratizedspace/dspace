@@ -117,7 +117,6 @@ describe('gameState - inventory', () => {
         expect(counts).toEqual(expectedCounts);
     });
 
-
     test('getItemCounts should return contained counts when containerItemId is present', () => {
         getStoredItemCount.mockReturnValue(42);
 
