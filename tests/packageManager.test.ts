@@ -40,4 +40,14 @@ describe('.npmrc', () => {
       .filter(Boolean);
     expect(lines).toContain('packageManager=pnpm@9.0.0');
   });
+
+  it('keeps frontend npm peer behavior explicit for local installs', () => {
+    const npmrcPath = join(__dirname, '..', 'frontend', '.npmrc');
+    expect(existsSync(npmrcPath)).toBe(true);
+    const lines = readFileSync(npmrcPath, 'utf8')
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean);
+    expect(lines).toContain('legacy-peer-deps=true');
+  });
 });
