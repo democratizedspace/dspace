@@ -568,7 +568,7 @@ describe('buildChatPrompt', () => {
             quests: {
                 'welcome/howtodoquests': { finished: true },
                 'welcome/intro-inventory': { finished: false },
-                '3dprinter/start': { finished: true },
+                '3dprinting/start': { finished: true },
             },
             inventory: {
                 'item-alpha': 12,
@@ -588,7 +588,7 @@ describe('buildChatPrompt', () => {
 
         expect(snapshot?.versionNumberString).toBe('3');
         expect(snapshot?.questsFinished).toEqual(
-            expect.arrayContaining(['welcome/howtodoquests', '3dprinter/start'])
+            expect.arrayContaining(['welcome/howtodoquests', '3dprinting/start'])
         );
         expect(snapshot?.questsFinished).not.toEqual(
             expect.arrayContaining(['welcome/intro-inventory'])

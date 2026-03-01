@@ -24,7 +24,7 @@ slug: '3dprinting'
 15. [Print a Temperature Tower](/quests/3dprinting/temperature-tower)
 16. [Tighten the X-axis Belt](/quests/3dprinting/x-belt-tension)
 
-## 1) Set up your first 3D printer (`3dprinter/start`)
+## 1) Set up your first 3D printer (`3dprinting/start`)
 
 - Quest link: [/quests/3dprinting/start](/quests/3dprinting/start)
 - Unlock prerequisite:
@@ -47,7 +47,7 @@ slug: '3dprinting'
 
 - Quest link: [/quests/3dprinting/bed-leveling](/quests/3dprinting/bed-leveling)
 - Unlock prerequisite:
-    - `requiresQuests`: `3dprinter/start`
+    - `requiresQuests`: `3dprinting/start`
 - Dialogue `requiresItems` gates:
     - `baseline` → "Record baseline and run the first leveling pass." — entry-level FDM 3D printer ×1, sheet of printer paper ×1, safety goggles ×1
     - `baseline` → "Baseline notes captured; ready to adjust corners." — entry-level FDM 3D printer (green PLA loaded) ×1, sheet of printer paper ×1
