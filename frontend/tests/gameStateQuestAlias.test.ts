@@ -47,6 +47,22 @@ describe('gameState quest alias migration', () => {
         );
     });
 
+    test('keeps completion when canonical progress is unfinished but legacy progress is finished', () => {
+        const validated = validateGameState({
+            quests: {
+                '3dprinter/start': {
+                    finished: true,
+                },
+                '3dprinting/start': {
+                    finished: false,
+                },
+            },
+        });
+
+        expect(validated.quests['3dprinter/start']).toBeUndefined();
+        expect(validated.quests['3dprinting/start']).toMatchObject({ finished: true });
+    });
+
     test('ignores array-shaped quest progress entries during alias migration', () => {
         const validated = validateGameState({
             quests: {
