@@ -5,8 +5,13 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 const { addItemsSpy } = vi.hoisted(() => ({
     addItemsSpy: vi.fn(),
 }));
+
 vi.mock('../../utils/gameState/inventory.js', () => ({
     addItems: addItemsSpy,
+}));
+
+vi.mock('../../utils/itemCatalog.js', () => ({
+    getMergedItemCatalog: vi.fn(async ({ builtInItems = [] } = {}) => builtInItems),
 }));
 
 import QaCheatsToggle from '../svelte/QaCheatsToggle.svelte';
@@ -64,7 +69,7 @@ describe('QaCheatsToggle inventory grant', () => {
         const addButton = await findByRole('button', { name: 'Add items to inventory' });
         await fireEvent.click(addButton);
 
-        await findByText(/Added 5000 × qa-custom-dwatt to inventory/i);
+        await findByText('Added 5000 × qa-custom-dwatt to inventory.');
 
         await waitFor(() => {
             expect(addItemsSpy).toHaveBeenCalledWith([{ id: 'qa-custom-dwatt', count: 5000 }]);
