@@ -46,7 +46,7 @@ const matchesTarget = (current, target) => {
         return true;
     }
 
-    return current.includes(`${target}/`);
+    return false;
 };
 
 export const isMenuItemActive = (pathname, item) => {
