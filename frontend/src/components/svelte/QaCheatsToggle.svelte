@@ -110,9 +110,8 @@
             notifyLegacyUpgradeRefresh(true);
         });
 
-    onMount(async () => {
+    onMount(() => {
         initializeQaCheats(cheatsAvailable);
-        itemCatalog = await getMergedItemCatalog({ builtInItems });
 
         unsubscribeAvailability = qaCheatsAvailability.subscribe((value) => {
             available = value;
@@ -120,6 +119,12 @@
         unsubscribeEnabled = qaCheatsEnabled.subscribe((value) => {
             enabled = value;
         });
+
+        if (stagingEnvironment) {
+            getMergedItemCatalog({ builtInItems }).then((catalog) => {
+                itemCatalog = catalog;
+            });
+        }
 
         hydrated = true;
 
@@ -214,10 +219,10 @@
 
         {#if inventoryGrantAvailable}
             <div class="qa-tools__seed-group" data-testid="qa-inventory-grant-tool">
-                <label class="qa-tools__label" for="qa-item-count">
+                <div class="qa-tools__label">
                     <span class="qa-tools__label-text">Instant inventory grant (staging only)</span>
                     <span>Add any item directly to your inventory for QA walkthroughs.</span>
-                </label>
+                </div>
                 <ItemSelector
                     items={itemCatalog}
                     selectedItemId={selectedItemId}
@@ -231,6 +236,7 @@
                         selectedItemId = event.detail.itemId;
                     }}
                 />
+                <label class="qa-tools__count-label" for="qa-item-count">Count</label>
                 <input
                     id="qa-item-count"
                     type="number"
