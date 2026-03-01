@@ -18,6 +18,44 @@ import { UUID_REGEX } from './uuid.js';
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
+const LEGACY_QUEST_ID_ALIASES = {
+    '3dprinter/start': '3dprinting/start',
+};
+
+const canonicalQuestId = (questId) => LEGACY_QUEST_ID_ALIASES[questId] ?? questId;
+
+const migrateLegacyQuestIds = (gameState) => {
+    if (!gameState?.quests || typeof gameState.quests !== 'object') return false;
+
+    let didMigrate = false;
+    Object.entries(LEGACY_QUEST_ID_ALIASES).forEach(([legacyQuestId, canonicalQuestIdValue]) => {
+        if (!gameState.quests[legacyQuestId]) return;
+
+        gameState.quests[canonicalQuestIdValue] = {
+            ...gameState.quests[legacyQuestId],
+            ...gameState.quests[canonicalQuestIdValue],
+            finished:
+                Boolean(gameState.quests[legacyQuestId].finished) ||
+                Boolean(gameState.quests[canonicalQuestIdValue]?.finished),
+            itemsClaimed: [
+                ...(gameState.quests[legacyQuestId].itemsClaimed || []),
+                ...(gameState.quests[canonicalQuestIdValue]?.itemsClaimed || []),
+            ],
+        };
+        delete gameState.quests[legacyQuestId];
+        didMigrate = true;
+    });
+
+    return didMigrate;
+};
+
+const loadGameStateWithQuestIdMigration = () => {
+    const gameState = loadGameState();
+    if (migrateLegacyQuestIds(gameState)) {
+        saveGameState(gameState);
+    }
+    return gameState;
+};
 
 // ---------------------
 // QUESTS
@@ -26,15 +64,16 @@ const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Tro
 export const finishQuest = (questId, rewardItems) => {
     addItems(rewardItems);
 
-    const gameState = loadGameState();
-    gameState.quests[questId] = { finished: true };
+    const gameState = loadGameStateWithQuestIdMigration();
+    gameState.quests[canonicalQuestId(questId)] = { finished: true };
     saveGameState(gameState);
 };
 
 export const questFinished = (questId) => {
-    const gameState = loadGameState();
+    const gameState = loadGameStateWithQuestIdMigration();
 
-    const finished = gameState.quests[questId] ? gameState.quests[questId].finished : false;
+    const canonicalId = canonicalQuestId(questId);
+    const finished = gameState.quests[canonicalId] ? gameState.quests[canonicalId].finished : false;
     return finished;
 };
 
@@ -57,35 +96,38 @@ export const canStartQuest = (quest) => {
 };
 
 export const setCurrentDialogueStep = (questId, stepId) => {
-    const gameState = loadGameState();
+    const gameState = loadGameStateWithQuestIdMigration();
 
-    gameState.quests[questId] = { stepId };
+    gameState.quests[canonicalQuestId(questId)] = { stepId };
     saveGameState(gameState);
 };
 
 export const getCurrentDialogueStep = (questId) => {
-    const gameState = loadGameState();
+    const gameState = loadGameStateWithQuestIdMigration();
+    const canonicalId = canonicalQuestId(questId);
 
-    return gameState.quests[questId] ? gameState.quests[questId].stepId : 0;
+    return gameState.quests[canonicalId] ? gameState.quests[canonicalId].stepId : 0;
 };
 
 const setItemsGranted = (questId, stepId, optionIndex) => {
-    const gameState = loadGameState();
+    const gameState = loadGameStateWithQuestIdMigration();
+    const canonicalId = canonicalQuestId(questId);
 
-    const key = `${questId}-${stepId}-${optionIndex}`;
-    gameState.quests[questId] = {
-        ...gameState.quests[questId],
-        itemsClaimed: [...(gameState.quests[questId].itemsClaimed || []), key],
+    const key = `${canonicalId}-${stepId}-${optionIndex}`;
+    gameState.quests[canonicalId] = {
+        ...gameState.quests[canonicalId],
+        itemsClaimed: [...(gameState.quests[canonicalId].itemsClaimed || []), key],
     };
     saveGameState(gameState);
 };
 
 export const getItemsGranted = (questId, stepId, optionIndex) => {
-    const gameState = loadGameState();
+    const gameState = loadGameStateWithQuestIdMigration();
+    const canonicalId = canonicalQuestId(questId);
 
     try {
-        const key = `${questId}-${stepId}-${optionIndex}`;
-        const itemsClaimed = gameState.quests[questId].itemsClaimed;
+        const key = `${canonicalId}-${stepId}-${optionIndex}`;
+        const itemsClaimed = gameState.quests[canonicalId].itemsClaimed;
         return itemsClaimed && itemsClaimed.includes(key);
     } catch (e) {
         console.error(e);
