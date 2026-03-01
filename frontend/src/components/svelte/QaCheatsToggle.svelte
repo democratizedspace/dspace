@@ -1,12 +1,16 @@
 <script>
     import { onMount } from 'svelte';
+    import ItemSelector from './ItemSelector.svelte';
     import {
         initializeQaCheats,
         qaCheatsAvailability,
         qaCheatsEnabled,
         setQaCheatsPreference,
     } from '../../lib/qaCheats';
+    import builtInItems from '../../pages/inventory/json/items';
     import Chip from './Chip.svelte';
+    import { addItems } from '../../utils/gameState/inventory.js';
+    import { getMergedItemCatalog } from '../../utils/itemCatalog.js';
     import {
         clearSeededLegacySaves,
         getLegacyV1SeedItems,
@@ -28,6 +32,9 @@
     let lastSeedSummary = null;
     let v1Profile = LEGACY_V1_SEED_PROFILES[0]?.id ?? 'minimal';
     let v2Profile = LEGACY_V2_SEED_PROFILES[0]?.id ?? 'minimal';
+    let availableItems = builtInItems;
+    let qaItemId = '';
+    let qaItemCount = 1;
     $: v1SeedItems = getLegacyV1SeedItems(v1Profile);
     $: v2SeedItems = getLegacyV2SeedItems(v2Profile);
 
@@ -83,8 +90,30 @@
             notifyLegacyUpgradeRefresh(true);
         });
 
+    const grantInventoryItem = () =>
+        withStatus('grant-item', async () => {
+            const normalizedCount = Number(qaItemCount);
+            if (!qaItemId) {
+                throw new Error('Select an item to grant.');
+            }
+            if (!Number.isInteger(normalizedCount) || normalizedCount <= 0) {
+                throw new Error('Count must be a positive whole number.');
+            }
+
+            addItems([{ id: qaItemId, count: normalizedCount }]);
+            statusMessage = `Added ${normalizedCount} × ${qaItemId} to inventory.`;
+        });
+
+    const handleItemSelect = (event) => {
+        qaItemId = event.detail.itemId;
+    };
+
     onMount(() => {
         initializeQaCheats(cheatsAvailable);
+
+        void (async () => {
+            availableItems = await getMergedItemCatalog({ builtInItems });
+        })();
 
         unsubscribeAvailability = qaCheatsAvailability.subscribe((value) => {
             available = value;
@@ -141,6 +170,44 @@
             </p>
         </div>
         <div class="qa-tools__actions">
+            <div class="qa-tools__seed-group">
+                <div class="qa-tools__label">
+                    <span class="qa-tools__label-text">Grant inventory items</span>
+                    <span class="qa-tools__seeded-items-description">
+                        Instantly add any built-in or custom item by ID.
+                    </span>
+                </div>
+                <ItemSelector
+                    items={availableItems}
+                    selectedItemId={qaItemId}
+                    label="Select item to grant"
+                    allowCustomId={true}
+                    customIdLabel="Custom item ID"
+                    customIdPlaceholder="Enter custom item ID"
+                    customIdButtonLabel="Use custom ID"
+                    on:select={handleItemSelect}
+                    testId="qa-grant-item-selector"
+                />
+                <label class="qa-tools__label">
+                    <span class="qa-tools__label-text">Count</span>
+                    <input
+                        type="number"
+                        bind:value={qaItemCount}
+                        min="1"
+                        step="1"
+                        class="qa-tools__input"
+                        disabled={Boolean(workingAction)}
+                        data-testid="qa-grant-item-count"
+                    />
+                </label>
+                <Chip
+                    text={workingAction === 'grant-item' ? 'Adding item…' : 'Add item to inventory'}
+                    onClick={grantInventoryItem}
+                    cheat={true}
+                    disabled={Boolean(workingAction)}
+                    dataTestId="qa-grant-item"
+                />
+            </div>
             <div class="qa-tools__seed-group">
                 <label class="qa-tools__label">
                     <span class="qa-tools__label-text">V1 seed profile</span>
@@ -452,6 +519,15 @@
     }
 
     .qa-tools__select {
+        border-radius: 8px;
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        background: rgba(15, 23, 42, 0.6);
+        color: #e0f2ff;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    .qa-tools__input {
         border-radius: 8px;
         border: 1px solid rgba(59, 130, 246, 0.4);
         background: rgba(15, 23, 42, 0.6);
