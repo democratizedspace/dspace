@@ -1,0 +1,13 @@
+{
+  "id": "2026-03-01-power-inverter-invalid-item-gate",
+  "date": "2026-03-01",
+  "component": "frontend/quests",
+  "rootCause": "The energy/power-inverter quest start node referenced a placeholder item UUID that does not exist in the inventory catalog, producing an 'Unknown item' gate and blocking progression.",
+  "resolution": "Replaced the invalid start-node item gate with the existing 300 W pure sine inverter item ID and added automated item-reference integrity checks so CI fails when quests or processes reference undefined inventory IDs.",
+  "references": [
+    "frontend/src/pages/quests/json/energy/power-inverter.json",
+    "scripts/validate-quest.js",
+    "tests/validateQuest.test.ts",
+    "tests/itemReferenceIntegrity.test.ts"
+  ]
+}

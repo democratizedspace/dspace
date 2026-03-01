@@ -337,7 +337,7 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/battery-upgrade`
 - Dialogue `requiresItems` gates:
-    - `start` → "I'm ready." — safety goggles ×1
+    - `start` → "I'm ready." — 300 W pure sine inverter ×1
     - `gather` → "Parts staged and vent fans are clear." — 300 W pure sine inverter ×1, 8 AWG fused cable kit ×1, 200 Wh battery pack ×1, digital multimeter ×1
     - `lockout` → "Lockout complete; return to staging." — digital multimeter ×1
     - `mount` → "Inverter mounted, fuse in, cables secure." — mounted 300 W inverter ×1

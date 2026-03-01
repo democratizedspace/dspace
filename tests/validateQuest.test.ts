@@ -163,3 +163,77 @@ test('passes when all process references exist in the known process set', () => 
     expect(result).toBe(true);
 });
 
+test('fails when a dialogue option references an unknown item id', () => {
+    const questWithMissingItem = {
+        id: 'q-missing-item',
+        title: 'Needs Item',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    {
+                        type: 'goto',
+                        goto: 'finish-node',
+                        text: 'continue',
+                        requiresItems: [{ id: 'missing-item', count: 1 }],
+                    },
+                ],
+            },
+            {
+                id: 'finish-node',
+                text: 'done',
+                options: [{ type: 'finish', text: 'done' }],
+            },
+        ],
+        hardening: defaultHardening,
+    };
+
+    const file = writeQuestFile(questWithMissingItem);
+    const result = validateQuest(file, { knownItemIds: new Set(['existing-item']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(false);
+});
+
+test('passes when quest-level and option item references exist in the known item set', () => {
+    const questWithValidItemRefs = {
+        id: 'q-valid-item',
+        title: 'Item Valid',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        rewards: [{ id: 'reward-item', count: 1 }],
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    {
+                        type: 'goto',
+                        goto: 'finish-node',
+                        text: 'continue',
+                        requiresItems: [{ id: 'required-item', count: 1 }],
+                    },
+                ],
+            },
+            {
+                id: 'finish-node',
+                text: 'done',
+                options: [{ type: 'finish', text: 'done' }],
+            },
+        ],
+        hardening: defaultHardening,
+    };
+
+    const file = writeQuestFile(questWithValidItemRefs);
+    const result = validateQuest(file, {
+        knownItemIds: new Set(['required-item', 'reward-item']),
+    });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(true);
+});

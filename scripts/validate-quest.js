@@ -8,6 +8,7 @@ const hardeningSchema = require('../frontend/src/pages/sharedSchemas/hardening.j
 
 let cachedQuestIds;
 let cachedProcessIds;
+let cachedItemIds;
 
 function collectQuestIds(dir, ids) {
   if (!fs.existsSync(dir)) {
@@ -73,6 +74,44 @@ function loadProcessIds() {
   return cachedProcessIds;
 }
 
+function collectItemIds(dir, ids) {
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+
+  for (const entry of fs.readdirSync(dir)) {
+    const fullPath = path.join(dir, entry);
+    const stats = fs.statSync(fullPath);
+
+    if (stats.isDirectory()) {
+      collectItemIds(fullPath, ids);
+      continue;
+    }
+
+    if (!entry.endsWith('.json')) {
+      continue;
+    }
+
+    const records = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+    for (const record of records) {
+      if (record && typeof record.id === 'string' && record.id.trim().length > 0) {
+        ids.add(record.id);
+      }
+    }
+  }
+}
+
+function loadItemIds() {
+  if (cachedItemIds) {
+    return cachedItemIds;
+  }
+
+  const ids = new Set();
+  collectItemIds(path.resolve(__dirname, '../frontend/src/pages/inventory/json/items'), ids);
+  cachedItemIds = ids;
+  return cachedItemIds;
+}
+
 function toProcessIdSet(knownProcessIds) {
   if (knownProcessIds instanceof Set) {
     return knownProcessIds;
@@ -105,6 +144,42 @@ function toQuestIdSet(knownQuestIds) {
   return new Set(loadDefaultQuestIds());
 }
 
+function toItemIdSet(knownItemIds) {
+  if (knownItemIds instanceof Set) {
+    return knownItemIds;
+  }
+
+  if (Array.isArray(knownItemIds)) {
+    return new Set(knownItemIds);
+  }
+
+  if (typeof knownItemIds === 'string' && knownItemIds.length > 0) {
+    return new Set([knownItemIds]);
+  }
+
+  return new Set(loadItemIds());
+}
+
+function extractItemIds(entries) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+
+  return entries
+    .map((entry) => {
+      if (typeof entry === 'string') {
+        return entry;
+      }
+
+      if (entry && typeof entry.id === 'string') {
+        return entry.id;
+      }
+
+      return null;
+    })
+    .filter((entry) => typeof entry === 'string' && entry.length > 0);
+}
+
 const ajv = new Ajv({ allErrors: true, strict: false });
 ajv.addSchema(hardeningSchema, hardeningSchema.$id);
 const validate = ajv.compile(schema);
@@ -120,6 +195,7 @@ function validateQuest(filePath, options = {}) {
 
   const questIdSet = toQuestIdSet(options.knownQuestIds);
   const processIdSet = toProcessIdSet(options.knownProcessIds);
+  const itemIdSet = toItemIdSet(options.knownItemIds);
 
   if (Array.isArray(data.requiresQuests)) {
     const missing = data.requiresQuests.filter((dep) => !questIdSet.has(dep));
@@ -129,6 +205,19 @@ function validateQuest(filePath, options = {}) {
       );
       return false;
     }
+  }
+
+  const requiredAndRewardItemIds = [
+    ...extractItemIds(data.requiresItems),
+    ...extractItemIds(data.rewards),
+  ];
+
+  const missingQuestLevelItemIds = requiredAndRewardItemIds.filter((itemId) => !itemIdSet.has(itemId));
+  if (missingQuestLevelItemIds.length > 0) {
+    console.error(
+      `Validation failed for ${filePath}: unknown quest-level item ids ${missingQuestLevelItemIds.join(', ')}`
+    );
+    return false;
   }
 
   for (const node of data.dialogue || []) {
@@ -144,6 +233,20 @@ function validateQuest(filePath, options = {}) {
     if (missingProcessIds.length > 0) {
       console.error(
         `Validation failed for ${filePath}: unknown process ids ${missingProcessIds.join(', ')}`
+      );
+      return false;
+    }
+
+    const missingOptionItemIds = node.options
+      .flatMap((option) => [
+        ...extractItemIds(option.requiresItems),
+        ...extractItemIds(option.grantsItems),
+      ])
+      .filter((itemId) => !itemIdSet.has(itemId));
+
+    if (missingOptionItemIds.length > 0) {
+      console.error(
+        `Validation failed for ${filePath}: unknown option item ids ${missingOptionItemIds.join(', ')}`
       );
       return false;
     }
