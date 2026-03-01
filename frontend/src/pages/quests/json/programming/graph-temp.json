@@ -102,15 +102,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
             "count": 1
         }
     ],
-    "requiresQuests": ["programming/temp-logger"],
+    "requiresQuests": [
+        "programming/temp-logger"
+    ],
     "hardening": {
         "passes": 3,
         "score": 97,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-12-08",

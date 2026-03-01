@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into VΩmA, then set the meter to resistance (Ω) mode at a range above the resistor's expected value.",
+            "text": "Place the loose resistor, digital multimeter, and safety goggles on a dry, non-conductive surface.\nPut on the goggles. Insert the black probe into COM and the red probe into V\u03a9mA, then set the meter to resistance (\u03a9) mode at a range above the resistor's expected value.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "baseline",
-            "text": "Short the probes together first. Your meter should read near 0 Ω. If it does not, clean probe tips and reseat leads before touching the resistor.",
+            "text": "Short the probes together first. Your meter should read near 0 \u03a9. If it does not, clean probe tips and reseat leads before touching the resistor.",
             "options": [
                 {
                     "type": "goto",
@@ -46,12 +46,12 @@
         },
         {
             "id": "measure",
-            "text": "Hold the resistor by its body so fingers stay off the leads. Touch black probe to one lead and red to the other. Record the stable reading and compare against 220 Ω ±5% (209-231 Ω).\nStop immediately if the resistor warms, the reading spikes wildly, or probes slip.",
+            "text": "Hold the resistor by its body so fingers stay off the leads. Touch black probe to one lead and red to the other. Record the stable reading and compare against 220 \u03a9 \u00b15% (209-231 \u03a9).\nStop immediately if the resistor warms, the reading spikes wildly, or probes slip.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "pass-window",
-                    "text": "Reading is inside 209-231 Ω.",
+                    "text": "Reading is inside 209-231 \u03a9.",
                     "process": "measure-resistance",
                     "requiresItems": [
                         {
@@ -71,7 +71,7 @@
                 {
                     "type": "goto",
                     "goto": "out-of-range",
-                    "text": "Reading is outside 209-231 Ω or keeps drifting.",
+                    "text": "Reading is outside 209-231 \u03a9 or keeps drifting.",
                     "requiresItems": [
                         {
                             "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
@@ -145,15 +145,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/resistor-color-check"],
+    "requiresQuests": [
+        "electronics/resistor-color-check"
+    ],
     "hardening": {
         "passes": 2,
         "score": 90,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-quest-refine-2025-08-12",

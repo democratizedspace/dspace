@@ -110,15 +110,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "c377a2ff-1391-4ad8-a150-1e4531067406",
             "count": 1
         }
     ],
-    "requiresQuests": ["programming/hello-sensor"],
+    "requiresQuests": [
+        "programming/hello-sensor"
+    ],
     "hardening": {
         "passes": 1,
         "score": 96,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-hardening-2026-02-22",

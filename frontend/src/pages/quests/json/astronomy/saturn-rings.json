@@ -116,7 +116,7 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Safety checks passed—retry."
+                    "text": "Safety checks passed\u2014retry."
                 },
                 {
                     "type": "goto",
@@ -187,7 +187,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Too uncertain—run recovery and retry."
+                    "text": "Too uncertain\u2014run recovery and retry."
                 }
             ]
         },
@@ -204,15 +204,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/basic-telescope"],
+    "requiresQuests": [
+        "astronomy/basic-telescope"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-17",

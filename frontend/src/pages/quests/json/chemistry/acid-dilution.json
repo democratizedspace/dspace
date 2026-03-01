@@ -194,9 +194,11 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-test"]
+    "requiresQuests": [
+        "chemistry/ph-test"
+    ]
 }

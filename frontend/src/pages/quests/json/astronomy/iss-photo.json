@@ -48,7 +48,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Clouds or glare are building—need a fallback."
+                    "text": "Clouds or glare are building\u2014need a fallback."
                 }
             ]
         },
@@ -117,7 +117,7 @@
                 {
                     "type": "goto",
                     "goto": "retest",
-                    "text": "Fail: timing, heading, or framing out of range—run corrective loop."
+                    "text": "Fail: timing, heading, or framing out of range\u2014run corrective loop."
                 }
             ]
         },
@@ -133,7 +133,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Conditions still unstable—switch to recovery plan."
+                    "text": "Conditions still unstable\u2014switch to recovery plan."
                 }
             ]
         },
@@ -144,7 +144,7 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Conditions improved—replan the session."
+                    "text": "Conditions improved\u2014replan the session."
                 },
                 {
                     "type": "goto",
@@ -172,15 +172,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/iss-flyover"],
+    "requiresQuests": [
+        "astronomy/iss-flyover"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

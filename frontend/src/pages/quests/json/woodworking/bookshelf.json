@@ -24,11 +24,26 @@
                 {
                     "type": "grantsItems",
                     "grantsItems": [
-                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
-                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
-                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ],
                     "text": "Issue the bookshelf kit."
                 },
@@ -36,11 +51,26 @@
                     "type": "goto",
                     "goto": "choose-joinery",
                     "requiresItems": [
-                        { "id": "6c075116-ebd1-4147-8666-ec6338ca251e", "count": 4 },
-                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 },
-                        { "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e", "count": 1 },
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ],
                     "text": "Kit staged with PPE and measuring tools."
                 }
@@ -70,8 +100,14 @@
                     "type": "goto",
                     "goto": "square-check",
                     "requiresItems": [
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ],
                     "text": "Cuts complete and dry-fit done."
                 },
@@ -90,8 +126,14 @@
                     "type": "goto",
                     "goto": "square-check",
                     "requiresItems": [
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 }
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
                     ],
                     "text": "Alternate layout cut and dry-fit complete."
                 },
@@ -110,9 +152,18 @@
                     "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
-                        { "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878", "count": 1 },
-                        { "id": "c9b51052-4594-42d7-a723-82b815ab8cc2", "count": 1 },
-                        { "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399", "count": 1 }
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        }
                     ],
                     "text": "Square verified; glue-up cured safely."
                 },
@@ -135,14 +186,19 @@
                 {
                     "type": "goto",
                     "goto": "safe-pause",
-                    "text": "Unsafe light or fatigue tonight—pause and finish with a safety note."
+                    "text": "Unsafe light or fatigue tonight\u2014pause and finish with a safety note."
                 }
             ]
         },
         {
             "id": "safe-pause",
             "text": "Good call stopping here. Resume when conditions improve and pass square-check before claiming the bookshelf.",
-            "options": [{ "type": "finish", "text": "Pause for now." }]
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Pause for now."
+                }
+            ]
         },
         {
             "id": "finish",
@@ -150,7 +206,12 @@
             "options": [
                 {
                     "type": "grantsItems",
-                    "grantsItems": [{ "id": "619d485d-803f-4875-a048-157ce28d31c4", "count": 1 }],
+                    "grantsItems": [
+                        {
+                            "id": "619d485d-803f-4875-a048-157ce28d31c4",
+                            "count": 1
+                        }
+                    ],
                     "text": "Take the bookshelf."
                 },
                 {
@@ -160,12 +221,19 @@
             ]
         }
     ],
-    "rewards": [{ "id": "b281360b-2ecc-4fea-a248-36a61c5f7399", "count": 1 }],
-    "requiresQuests": ["woodworking/step-stool"],
+    "rewards": [
+        {
+            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "woodworking/step-stool"
+    ],
     "hardening": {
         "passes": 1,
         "score": 94,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-harden-bookshelf-2026-02-24",

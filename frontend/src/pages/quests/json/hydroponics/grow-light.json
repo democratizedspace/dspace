@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-06",
@@ -35,7 +35,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Healthy greens need steady light. We'll do install → verify cycle timing → recovery if flicker or heat risk appears.",
+            "text": "Healthy greens need steady light. We'll do install \u2192 verify cycle timing \u2192 recovery if flicker or heat risk appears.",
             "options": [
                 {
                     "type": "goto",
@@ -200,9 +200,11 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/bucket_10"]
+    "requiresQuests": [
+        "hydroponics/bucket_10"
+    ]
 }

@@ -261,11 +261,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/nutrient-check"],
+    "requiresQuests": [
+        "hydroponics/nutrient-check"
+    ],
     "hardening": {
         "passes": 2,
         "score": 90,

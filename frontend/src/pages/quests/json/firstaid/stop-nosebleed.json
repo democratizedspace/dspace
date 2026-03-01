@@ -35,7 +35,7 @@
         },
         {
             "id": "pressure-round-one",
-            "text": "Lean forward about 30°, place sterile gauze over the soft part of your nose, and pinch firmly for a full 10 minutes without checking early. Wear gloves and breathe through your mouth.",
+            "text": "Lean forward about 30\u00b0, place sterile gauze over the soft part of your nose, and pinch firmly for a full 10 minutes without checking early. Wear gloves and breathe through your mouth.",
             "options": [
                 {
                     "type": "goto",
@@ -153,15 +153,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
             "count": 1
         }
     ],
-    "requiresQuests": ["firstaid/restock-kit"],
+    "requiresQuests": [
+        "firstaid/restock-kit"
+    ],
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",

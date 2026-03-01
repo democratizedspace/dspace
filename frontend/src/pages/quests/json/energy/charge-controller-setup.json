@@ -115,7 +115,7 @@
         },
         {
             "id": "wire",
-            "text": "Connect battery first, then panel MC4s, keeping red to positive (+) and black to negative (−). Torque ring terminals, seat the fuse, and tuck the controller off the ground.",
+            "text": "Connect battery first, then panel MC4s, keeping red to positive (+) and black to negative (\u2212). Torque ring terminals, seat the fuse, and tuck the controller off the ground.",
             "options": [
                 {
                     "type": "process",
@@ -142,7 +142,7 @@
         },
         {
             "id": "rollback-safe",
-            "text": "Hold up—go to safe mode: disconnect panel input, pull the fuse, and re-check polarity before touching terminals. We only resume once no connector heating or fault code remains.",
+            "text": "Hold up\u2014go to safe mode: disconnect panel input, pull the fuse, and re-check polarity before touching terminals. We only resume once no connector heating or fault code remains.",
             "options": [
                 {
                     "type": "goto",
@@ -202,7 +202,7 @@
         },
         {
             "id": "charge",
-            "text": "Point the panel at the sun and let it soak up 200 Wh. Check the controller display after 10 minutes—cool cables and steady voltage mean you're good.",
+            "text": "Point the panel at the sun and let it soak up 200 Wh. Check the controller display after 10 minutes\u2014cool cables and steady voltage mean you're good.",
             "options": [
                 {
                     "type": "process",
@@ -314,15 +314,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "5bba251a-d223-4e22-aa30-b65238b17516",
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar"],
+    "requiresQuests": [
+        "energy/solar"
+    ],
     "hardening": {
         "passes": 1,
         "score": 92,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-energy-parity-2026-02-27",

@@ -1,14 +1,14 @@
 {
     "id": "electronics/voltage-divider",
     "title": "Build a Voltage Divider",
-    "description": "Split 5 V to about 2.5 V using 220 Ω and 10 kΩ resistors on a Breadboard.",
+    "description": "Split 5 V to about 2.5 V using 220 \u03a9 and 10 k\u03a9 resistors on a Breadboard.",
     "image": "/assets/quests/electronics_voltage_divider_breadboard.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Orion here. Gather a breadboard, 220 Ω resistor, 10 kΩ resistor, two jumper wires, a 5 V power supply, and a digital multimeter. Keep the supply unplugged while wiring.",
+            "text": "Orion here. Gather a breadboard, 220 \u03a9 resistor, 10 k\u03a9 resistor, two jumper wires, a 5 V power supply, and a digital multimeter. Keep the supply unplugged while wiring.",
             "options": [
                 {
                     "type": "goto",
@@ -19,7 +19,7 @@
         },
         {
             "id": "build",
-            "text": "Place the 220 Ω and 10 kΩ resistors in series. Connect the supply rails and clip the multimeter to the resistor junction. Verify color bands before you energize anything.",
+            "text": "Place the 220 \u03a9 and 10 k\u03a9 resistors in series. Connect the supply rails and clip the multimeter to the resistor junction. Verify color bands before you energize anything.",
             "options": [
                 {
                     "type": "process",
@@ -61,7 +61,7 @@
         },
         {
             "id": "thresholds",
-            "text": "Define acceptance before power-on: with a 5 V source, your divider output should land between 2.40 V and 2.60 V and stay within ±0.05 V over two consecutive checks.",
+            "text": "Define acceptance before power-on: with a 5 V source, your divider output should land between 2.40 V and 2.60 V and stay within \u00b10.05 V over two consecutive checks.",
             "options": [
                 {
                     "type": "goto",
@@ -127,15 +127,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/tin-soldering-iron"],
+    "requiresQuests": [
+        "electronics/tin-soldering-iron"
+    ],
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-18",

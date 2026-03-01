@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Kill pump power, keep probe leads dry, and prep two cups: ice slurry near 0°C and boiling water near 100°C. Ready to baseline the thermistor?",
+            "text": "Kill pump power, keep probe leads dry, and prep two cups: ice slurry near 0\u00b0C and boiling water near 100\u00b0C. Ready to baseline the thermistor?",
             "options": [
                 {
                     "type": "goto",
@@ -69,7 +69,7 @@
         },
         {
             "id": "interpret",
-            "text": "Pass target: ice reading 0±2°C and boiling reading 100±3°C (adjust for altitude). Are your readings inside tolerance?",
+            "text": "Pass target: ice reading 0\u00b12\u00b0C and boiling reading 100\u00b13\u00b0C (adjust for altitude). Are your readings inside tolerance?",
             "options": [
                 {
                     "type": "goto",
@@ -135,15 +135,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
             "count": 1
         }
     ],
-    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "requiresQuests": [
+        "geothermal/survey-ground-temperature"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

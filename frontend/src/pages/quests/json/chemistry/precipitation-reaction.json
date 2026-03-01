@@ -8,12 +8,12 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Set up two clear salt solutions, PPE, and labeled beakers. We are not done when cloudiness appears—we need interpretable evidence.",
+            "text": "Set up two clear salt solutions, PPE, and labeled beakers. We are not done when cloudiness appears\u2014we need interpretable evidence.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "mix",
-                    "text": "Setup complete—start controlled mixing."
+                    "text": "Setup complete\u2014start controlled mixing."
                 }
             ]
         },
@@ -40,18 +40,18 @@
                 {
                     "type": "goto",
                     "goto": "corrective-loop",
-                    "text": "Mixture stayed clear or clumped unpredictably—run troubleshooting."
+                    "text": "Mixture stayed clear or clumped unpredictably\u2014run troubleshooting."
                 }
             ]
         },
         {
             "id": "interpret",
-            "text": "Interpretation gate: pass only if a fine, persistent precipitate forms and pH lands in the 6.0–8.0 verification window. Out-of-range readings or unstable solids must be corrected before completion.",
+            "text": "Interpretation gate: pass only if a fine, persistent precipitate forms and pH lands in the 6.0\u20138.0 verification window. Out-of-range readings or unstable solids must be corrected before completion.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Pass: precipitate is stable and pH is 6.0–8.0.",
+                    "text": "Pass: precipitate is stable and pH is 6.0\u20138.0.",
                     "requiresItems": [
                         {
                             "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
@@ -62,7 +62,7 @@
                 {
                     "type": "goto",
                     "goto": "corrective-loop",
-                    "text": "Fail: artifact quality or pH window missed—correct and retest."
+                    "text": "Fail: artifact quality or pH window missed\u2014correct and retest."
                 }
             ]
         },
@@ -78,7 +78,7 @@
                 {
                     "type": "goto",
                     "goto": "mix",
-                    "text": "Corrective actions complete—run another precipitation trial."
+                    "text": "Corrective actions complete\u2014run another precipitation trial."
                 },
                 {
                     "type": "goto",
@@ -100,15 +100,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-adjustment"],
+    "requiresQuests": [
+        "chemistry/ph-adjustment"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

@@ -172,11 +172,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/tub-scrub"],
+    "requiresQuests": [
+        "hydroponics/tub-scrub"
+    ],
     "hardening": {
         "passes": 1,
         "score": 90,

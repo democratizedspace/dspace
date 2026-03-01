@@ -151,11 +151,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/start"],
+    "requiresQuests": [
+        "3dprinting/start"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,

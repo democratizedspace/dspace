@@ -89,7 +89,7 @@
         },
         {
             "id": "interpret",
-            "text": "Accept this run only if deep readings stay within ±1.5°C while shallow readings show the larger swing. If curves cross repeatedly, the probe depth or contact is wrong.",
+            "text": "Accept this run only if deep readings stay within \u00b11.5\u00b0C while shallow readings show the larger swing. If curves cross repeatedly, the probe depth or contact is wrong.",
             "options": [
                 {
                     "type": "process",
@@ -109,7 +109,7 @@
                 {
                     "type": "goto",
                     "goto": "correct",
-                    "text": "Curves look wrong—need corrective retest"
+                    "text": "Curves look wrong\u2014need corrective retest"
                 },
                 {
                     "type": "goto",
@@ -201,7 +201,7 @@
         },
         {
             "id": "interpret-retest",
-            "text": "Confirm the corrected run: deep trace should hold within ±1.5°C while shallow still swings more. If the curves cross again, repeat corrective setup.",
+            "text": "Confirm the corrected run: deep trace should hold within \u00b11.5\u00b0C while shallow still swings more. If the curves cross again, repeat corrective setup.",
             "options": [
                 {
                     "type": "process",
@@ -255,15 +255,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
             "count": 1
         }
     ],
-    "requiresQuests": ["geothermal/log-ground-temperature"],
+    "requiresQuests": [
+        "geothermal/log-ground-temperature"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

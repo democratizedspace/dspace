@@ -256,15 +256,18 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/guppy", "aquaria/floating-plants"],
+    "requiresQuests": [
+        "aquaria/guppy",
+        "aquaria/floating-plants"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2026-02-19",

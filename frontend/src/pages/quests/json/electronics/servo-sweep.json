@@ -1,7 +1,7 @@
 {
     "id": "electronics/servo-sweep",
     "title": "Sweep a Servo",
-    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0° to 180°.",
+    "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0\u00b0 to 180\u00b0.",
     "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -152,7 +152,7 @@
         },
         {
             "id": "evidence",
-            "text": "Evidence gate: confirm two consecutive full sweeps from 0° to 180° without reset, stall, or abnormal heating. Record which power path you used.",
+            "text": "Evidence gate: confirm two consecutive full sweeps from 0\u00b0 to 180\u00b0 without reset, stall, or abnormal heating. Record which power path you used.",
             "options": [
                 {
                     "type": "goto",
@@ -174,15 +174,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
             "count": 1
         }
     ],
-    "requiresQuests": ["electronics/arduino-blink"],
+    "requiresQuests": [
+        "electronics/arduino-blink"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-02",

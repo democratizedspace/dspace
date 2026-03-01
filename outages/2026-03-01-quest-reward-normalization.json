@@ -1,0 +1,19 @@
+{
+  "id": "2026-03-01-quest-reward-normalization",
+  "date": "2026-03-01",
+  "component": "quests",
+  "rootCause": "177 quests across 17 quest trees used the same completion reward (1 x cured compost bucket), which made reward theming inconsistent and reduced progression variety.",
+  "resolution": "Replaced cured compost bucket completion rewards with tree-appropriate reward pools and rotated rewards per quest to increase variety. Scope: 177 quests updated (3dprinting 12, aquaria 13, astronomy 15, chemistry 10, completionist 5, composting 2, devops 15, electronics 12, energy 10, firstaid 13, geothermal 13, hydroponics 20, programming 18, robotics 10, rocketry 2, ubi 2, woodworking 5).",
+  "references": [
+    "frontend/src/pages/quests/json"
+  ],
+  "before": {
+    "rewardItem": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+    "rewardName": "cured compost bucket",
+    "affectedQuestCount": 177
+  },
+  "after": {
+    "strategy": "Use per-tree reward pools with rotation by quest file order.",
+    "affectedQuestCount": 177
+  }
+}
