@@ -8,6 +8,7 @@ const hardeningSchema = require('../frontend/src/pages/sharedSchemas/hardening.j
 
 let cachedQuestIds;
 let cachedProcessIds;
+let cachedItemIds;
 
 function collectQuestIds(dir, ids) {
   if (!fs.existsSync(dir)) {
@@ -73,6 +74,32 @@ function loadProcessIds() {
   return cachedProcessIds;
 }
 
+function loadItemIds() {
+  if (cachedItemIds) {
+    return cachedItemIds;
+  }
+
+  const itemsDir = path.resolve(__dirname, '../frontend/src/pages/inventory/json/items');
+  const itemIds = new Set();
+
+  for (const entry of fs.readdirSync(itemsDir)) {
+    if (!entry.endsWith('.json')) {
+      continue;
+    }
+
+    const filePath = path.join(itemsDir, entry);
+    const items = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    for (const item of items) {
+      if (item && typeof item.id === 'string' && item.id.trim().length > 0) {
+        itemIds.add(item.id);
+      }
+    }
+  }
+
+  cachedItemIds = itemIds;
+  return cachedItemIds;
+}
+
 function toProcessIdSet(knownProcessIds) {
   if (knownProcessIds instanceof Set) {
     return knownProcessIds;
@@ -105,6 +132,33 @@ function toQuestIdSet(knownQuestIds) {
   return new Set(loadDefaultQuestIds());
 }
 
+function toItemIdSet(knownItemIds) {
+  if (knownItemIds instanceof Set) {
+    return knownItemIds;
+  }
+
+  if (Array.isArray(knownItemIds)) {
+    return new Set(knownItemIds);
+  }
+
+  if (typeof knownItemIds === 'string' && knownItemIds.length > 0) {
+    return new Set([knownItemIds]);
+  }
+
+  return new Set(loadItemIds());
+}
+
+function collectMissingItemIds(entries, itemIdSet) {
+  if (!Array.isArray(entries)) {
+    return [];
+  }
+
+  return entries
+    .map((entry) => entry && entry.id)
+    .filter((id) => typeof id === 'string' && id.length > 0)
+    .filter((id) => !itemIdSet.has(id));
+}
+
 const ajv = new Ajv({ allErrors: true, strict: false });
 ajv.addSchema(hardeningSchema, hardeningSchema.$id);
 const validate = ajv.compile(schema);
@@ -120,6 +174,7 @@ function validateQuest(filePath, options = {}) {
 
   const questIdSet = toQuestIdSet(options.knownQuestIds);
   const processIdSet = toProcessIdSet(options.knownProcessIds);
+  const itemIdSet = toItemIdSet(options.knownItemIds);
 
   if (Array.isArray(data.requiresQuests)) {
     const missing = data.requiresQuests.filter((dep) => !questIdSet.has(dep));
@@ -147,6 +202,32 @@ function validateQuest(filePath, options = {}) {
       );
       return false;
     }
+
+    for (const option of node.options) {
+      const missingRequiredItemIds = collectMissingItemIds(option.requiresItems, itemIdSet);
+      if (missingRequiredItemIds.length > 0) {
+        console.error(
+          `Validation failed for ${filePath}: unknown required item ids ${missingRequiredItemIds.join(', ')}`
+        );
+        return false;
+      }
+
+      const missingGrantedItemIds = collectMissingItemIds(option.grantsItems, itemIdSet);
+      if (missingGrantedItemIds.length > 0) {
+        console.error(
+          `Validation failed for ${filePath}: unknown granted item ids ${missingGrantedItemIds.join(', ')}`
+        );
+        return false;
+      }
+    }
+  }
+
+  const missingRewardItemIds = collectMissingItemIds(data.rewards, itemIdSet);
+  if (missingRewardItemIds.length > 0) {
+    console.error(
+      `Validation failed for ${filePath}: unknown reward item ids ${missingRewardItemIds.join(', ')}`
+    );
+    return false;
   }
 
   return true;

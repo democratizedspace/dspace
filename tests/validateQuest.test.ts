@@ -163,3 +163,134 @@ test('passes when all process references exist in the known process set', () => 
     expect(result).toBe(true);
 });
 
+test('fails when an option requires an unknown item id', () => {
+    const questWithMissingRequiredItem = {
+        id: 'q-missing-required-item',
+        title: 'Missing Item Requirement',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    {
+                        type: 'goto',
+                        goto: 'finish-node',
+                        text: 'continue',
+                        requiresItems: [{ id: 'missing-item', count: 1 }],
+                    },
+                ],
+            },
+            {
+                id: 'finish-node',
+                text: 'done',
+                options: [{ type: 'finish', text: 'done' }],
+            },
+        ],
+        hardening: defaultHardening,
+    };
+    const file = writeQuestFile(questWithMissingRequiredItem);
+    const result = validateQuest(file, { knownItemIds: new Set(['existing-item']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(false);
+});
+
+test('fails when an option grants an unknown item id', () => {
+    const questWithMissingGrantedItem = {
+        id: 'q-missing-granted-item',
+        title: 'Missing Granted Item',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    {
+                        type: 'grantsItems',
+                        text: 'grant item',
+                        grantsItems: [{ id: 'missing-grant', count: 1 }],
+                    },
+                    { type: 'finish', text: 'done' },
+                ],
+            },
+        ],
+        hardening: defaultHardening,
+    };
+    const file = writeQuestFile(questWithMissingGrantedItem);
+    const result = validateQuest(file, { knownItemIds: new Set(['existing-item']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(false);
+});
+
+test('fails when rewards reference an unknown item id', () => {
+    const questWithMissingReward = {
+        id: 'q-missing-reward-item',
+        title: 'Missing Reward Item',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [{ type: 'finish', text: 'done' }],
+            },
+        ],
+        rewards: [{ id: 'missing-reward', count: 1 }],
+        hardening: defaultHardening,
+    };
+    const file = writeQuestFile(questWithMissingReward);
+    const result = validateQuest(file, { knownItemIds: new Set(['existing-item']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(false);
+});
+
+test('passes when required, granted, and reward item references are valid', () => {
+    const questWithValidItems = {
+        id: 'q-valid-items',
+        title: 'Valid Item References',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    {
+                        type: 'grantsItems',
+                        text: 'grant',
+                        grantsItems: [{ id: 'granted-item', count: 1 }],
+                    },
+                    {
+                        type: 'goto',
+                        goto: 'finish-node',
+                        text: 'continue',
+                        requiresItems: [{ id: 'required-item', count: 1 }],
+                    },
+                ],
+            },
+            {
+                id: 'finish-node',
+                text: 'done',
+                options: [{ type: 'finish', text: 'done' }],
+            },
+        ],
+        rewards: [{ id: 'reward-item', count: 1 }],
+        hardening: defaultHardening,
+    };
+    const file = writeQuestFile(questWithValidItems);
+    const result = validateQuest(file, {
+        knownItemIds: new Set(['required-item', 'granted-item', 'reward-item']),
+    });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(true);
+});
