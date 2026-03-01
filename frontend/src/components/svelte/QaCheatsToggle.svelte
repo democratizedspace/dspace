@@ -7,6 +7,7 @@
         setQaCheatsPreference,
     } from '../../lib/qaCheats';
     import Chip from './Chip.svelte';
+    import ItemSelector from './ItemSelector.svelte';
     import {
         clearSeededLegacySaves,
         getLegacyV1SeedItems,
@@ -16,8 +17,12 @@
         seedLegacyV1Save,
         seedLegacyV2LocalStorageSave,
     } from '../../utils/legacySaveSeeding';
+    import builtInItems from '../../pages/inventory/json/items';
+    import { getMergedItemCatalog } from '../../utils/itemCatalog.js';
+    import { addItems } from '../../utils/gameState/inventory.js';
 
     export let cheatsAvailable = false;
+    export let stagingEnvironment = false;
 
     let available = cheatsAvailable;
     let enabled = false;
@@ -28,11 +33,16 @@
     let lastSeedSummary = null;
     let v1Profile = LEGACY_V1_SEED_PROFILES[0]?.id ?? 'minimal';
     let v2Profile = LEGACY_V2_SEED_PROFILES[0]?.id ?? 'minimal';
+    let itemCatalog = builtInItems;
+    let selectedItemId = '';
+    let itemCountToAdd = 1;
     $: v1SeedItems = getLegacyV1SeedItems(v1Profile);
     $: v2SeedItems = getLegacyV2SeedItems(v2Profile);
 
     let unsubscribeAvailability;
     let unsubscribeEnabled;
+
+    $: inventoryGrantAvailable = Boolean(available && enabled && stagingEnvironment);
 
     const handleToggle = () => {
         setQaCheatsPreference(!enabled);
@@ -75,6 +85,23 @@
             notifyLegacyUpgradeRefresh(false);
         });
 
+    const addInventoryItems = () =>
+        withStatus('add-inventory-items', async () => {
+            const normalizedItemId = selectedItemId.trim();
+            const normalizedCount = Number(itemCountToAdd);
+
+            if (!normalizedItemId) {
+                throw new Error('Pick an item before adding inventory.');
+            }
+
+            if (!Number.isFinite(normalizedCount) || normalizedCount <= 0) {
+                throw new Error('Enter a count greater than zero.');
+            }
+
+            addItems([{ id: normalizedItemId, count: normalizedCount }]);
+            statusMessage = `Added ${normalizedCount} × ${normalizedItemId} to inventory.`;
+        });
+
     const clearSeededSaves = () =>
         withStatus('clear-seeded', async () => {
             clearSeededLegacySaves();
@@ -92,6 +119,12 @@
         unsubscribeEnabled = qaCheatsEnabled.subscribe((value) => {
             enabled = value;
         });
+
+        if (stagingEnvironment) {
+            getMergedItemCatalog({ builtInItems }).then((catalog) => {
+                itemCatalog = catalog;
+            });
+        }
 
         hydrated = true;
 
@@ -183,6 +216,51 @@
                     dataTestId="qa-seed-v2"
                 />
             </div>
+
+            {#if inventoryGrantAvailable}
+                <div class="qa-tools__seed-group" data-testid="qa-inventory-grant-tool">
+                    <div class="qa-tools__label">
+                        <span class="qa-tools__label-text"
+                            >Instant inventory grant (staging only)</span
+                        >
+                        <span>Add any item directly to your inventory for QA walkthroughs.</span>
+                    </div>
+                    <ItemSelector
+                        items={itemCatalog}
+                        {selectedItemId}
+                        label="Select inventory item"
+                        allowCustomId={true}
+                        customIdLabel="Custom item ID"
+                        customIdPlaceholder="Enter a custom item ID"
+                        customIdButtonLabel="Use custom item ID"
+                        testId="qa-inventory-item-selector"
+                        on:select={(event) => {
+                            selectedItemId = event.detail.itemId;
+                        }}
+                    />
+                    <label class="qa-tools__count-label" for="qa-item-count">Count</label>
+                    <input
+                        id="qa-item-count"
+                        type="number"
+                        min="1"
+                        step="1"
+                        bind:value={itemCountToAdd}
+                        class="qa-tools__count-input"
+                        disabled={Boolean(workingAction)}
+                        data-testid="qa-inventory-item-count"
+                    />
+                    <Chip
+                        text={workingAction === 'add-inventory-items'
+                            ? 'Adding items…'
+                            : 'Add items to inventory'}
+                        onClick={addInventoryItems}
+                        cheat={true}
+                        disabled={Boolean(workingAction)}
+                        dataTestId="qa-add-inventory-items"
+                    />
+                </div>
+            {/if}
+
             <Chip
                 text="Clear seeded legacy saves"
                 onClick={clearSeededSaves}
@@ -458,6 +536,16 @@
         color: #e0f2ff;
         padding: 0.45rem 0.6rem;
         font-size: 0.95rem;
+    }
+
+    .qa-tools__count-input {
+        border-radius: 8px;
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        background: rgba(15, 23, 42, 0.6);
+        color: #e0f2ff;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.95rem;
+        max-width: 160px;
     }
 
     .qa-tools__seeded-items {

@@ -21,4 +21,8 @@ export const isCheatsAvailable = (environment = process.env.DSPACE_ENV): boolean
     return ALLOWED_ENVIRONMENTS.has(normalized);
 };
 
+export const isStagingEnvironment = (environment = process.env.DSPACE_ENV): boolean => {
+    return normalize(environment) === 'staging';
+};
+
 export const getCheatsAvailabilityFlag = (): boolean => isCheatsAvailable();
