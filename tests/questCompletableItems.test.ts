@@ -206,6 +206,41 @@ describe('quest completion item availability', () => {
         expect(error).toContain('has no price, no producing process, and no rewarding quest.');
     });
 
+
+    it('requires mandatory hand-crank generator motor to be sourceable', async () => {
+        const quests = await loadQuests();
+        const targetQuestId = 'energy/hand-crank-generator';
+        const requiredMotorId = '6caa08d8-815c-4a0e-9297-0fda4516659d';
+
+        const quest = quests.find((entry: any) => entry.id === targetQuestId);
+        expect(quest).toBeDefined();
+
+        const itemMap = new Map((items as Array<any>).map((item) => [item.id, item]));
+        const motor = itemMap.get(requiredMotorId);
+        expect(motor).toBeDefined();
+
+        const isProducedByProcess = (processes as Array<any>).some((process) =>
+            toItemIds(process.createItems).includes(requiredMotorId)
+        );
+        const isRewardedByQuest = quests.some((entry: any) => {
+            const questRewards = toItemIds(entry.rewards);
+            const dialogueRewards = getGrantedItems(entry);
+            return [...questRewards, ...dialogueRewards].includes(requiredMotorId);
+        });
+
+        const requiresMotorInDialogue = (quest.dialogue ?? []).some((node: any) =>
+            (node.options ?? []).some((option: any) =>
+                getRequiredItemIds(option).includes(requiredMotorId)
+            )
+        );
+        expect(requiresMotorInDialogue).toBe(true);
+
+        const hasTradeOrSource =
+            Boolean(motor?.price) || isProducedByProcess || isRewardedByQuest;
+
+        expect(hasTradeOrSource).toBe(true);
+    });
+
     it('ensures finish requirements are obtainable', async () => {
         const quests = await loadQuests();
         const questPaths = await loadQuestPaths();

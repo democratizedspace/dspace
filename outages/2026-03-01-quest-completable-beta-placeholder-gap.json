@@ -1,0 +1,12 @@
+{
+  "id": "quest-completable-beta-placeholder-gap",
+  "date": "2026-03-01",
+  "component": "tests:quest-completable-items",
+  "rootCause": "The quest completable test modeled every BETA_PLACEHOLDER item as obtainable, so missing price/source gaps could be hidden for quest-critical requirements.",
+  "resolution": "Added a targeted regression test for energy/hand-crank-generator that asserts the required DC motor is actually sourceable (tradeable, produced by a process, or rewarded by a quest), and priced the DC motor so the requirement is satisfiable.",
+  "references": [
+    "tests/questCompletableItems.test.ts",
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "frontend/src/pages/quests/json/energy/hand-crank-generator.json"
+  ]
+}

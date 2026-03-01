@@ -1307,7 +1307,7 @@
         "name": "12 V DC motor",
         "description": "Small brushed 12 V DC motor suited for hand-crank generators.",
         "image": "/assets/dc_motor_12v.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "18 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
