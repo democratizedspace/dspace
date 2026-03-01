@@ -501,7 +501,7 @@
                     <Chip
                         text="Start"
                         onClick={onProcessStart}
-                        inverted={false}
+                        inverted={!inverted}
                         dataTestId="process-start-button"
                     />
                 </div>
@@ -517,8 +517,8 @@
                     </p>
                 {/if}
             {:else if state === ProcessStates.IN_PROGRESS}
-                <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
-                <Chip text="Pause" onClick={onProcessPause} inverted={true} />
+                <Chip text="Cancel" onClick={onProcessCancel} inverted={!inverted} />
+                <Chip text="Pause" onClick={onProcessPause} inverted={!inverted} />
                 {#if canInstantFinish}
                     <Chip
                         text="Instant finish"
@@ -537,8 +537,8 @@
                     {currentTime}
                 />
             {:else if state === ProcessStates.PAUSED}
-                <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
-                <Chip text="Resume" onClick={onProcessResume} inverted={true} />
+                <Chip text="Cancel" onClick={onProcessCancel} inverted={!inverted} />
+                <Chip text="Resume" onClick={onProcessResume} inverted={!inverted} />
                 {#if canInstantFinish}
                     <Chip
                         text="Instant finish"
@@ -557,7 +557,7 @@
                     {currentTime}
                 />
             {:else}
-                <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
+                <Chip text="Collect" onClick={onProcessComplete} inverted={!inverted} />
             {/if}
         </div>
     </Chip>
@@ -624,6 +624,10 @@
         font-size: 0.9rem;
         color: #fff7ed;
         text-align: center;
+    }
+
+    .container.container-inverted .start-feedback {
+        color: #1f2937;
     }
 
     .deposit-input-label {

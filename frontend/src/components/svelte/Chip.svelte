@@ -31,13 +31,16 @@
 <nav>
     {#if href}
         <a
-            {href}
+            href={disabled === true ? undefined : href}
             class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
             class:hazard={hazard === true}
             class:cheat={cheat === true}
+            aria-disabled={disabled === true}
+            tabindex={disabled === true ? -1 : undefined}
             data-testid={dataTestId}
+            on:click={handleClick}
         >
             {text}
         </a>

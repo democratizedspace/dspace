@@ -332,7 +332,7 @@ test('alternates process chip contrast between parent container and item groups'
     await assertContrastAlternation(false);
 });
 
-test('keeps a dark Start chip and inverted container class for light process cards', async () => {
+test('keeps Start chip contrast opposite from process chip in both inverted modes', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
     getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
     getItemCountsMock.mockReturnValue({ 'item-1': 3 });
@@ -347,25 +347,75 @@ test('keeps a dark Start chip and inverted container class for light process car
         custom: true,
     };
 
-    const { getByTestId } = render(Process, {
-        processId: 'custom-start-contrast',
-        processData: customProcess,
-        inverted: true,
-    });
+    const assertStartContrast = async (inverted: boolean) => {
+        const { getByTestId, unmount } = render(Process, {
+            processId: `custom-start-contrast-${inverted ? 'inverted' : 'default'}`,
+            processData: customProcess,
+            inverted,
+        });
 
-    await waitFor(() => {
-        expect(getByTestId('process-chip')).toBeTruthy();
-        expect(getByTestId('process-start-button')).toBeTruthy();
-    });
+        await waitFor(() => {
+            expect(getByTestId('process-chip')).toBeTruthy();
+            expect(getByTestId('process-start-button')).toBeTruthy();
+        });
 
-    const processChip = getByTestId('process-chip');
-    expect(processChip.classList.contains('inverted')).toBe(true);
+        const processChip = getByTestId('process-chip');
+        expect(processChip.classList.contains('inverted')).toBe(inverted);
 
-    const processContainer = processChip.querySelector('.container');
-    expect(processContainer?.classList.contains('container-inverted')).toBe(true);
+        const processContainer = processChip.querySelector('.container');
+        expect(processContainer?.classList.contains('container-inverted')).toBe(inverted);
 
-    const startChip = getByTestId('process-start-button');
-    expect(startChip.classList.contains('inverted')).toBe(false);
+        const startChip = getByTestId('process-start-button');
+        expect(startChip.classList.contains('inverted')).toBe(!inverted);
+
+        unmount();
+    };
+
+    await assertStartContrast(true);
+    await assertStartContrast(false);
+});
+
+test('keeps in-progress action chips opposite from process chip in both inverted modes', async () => {
+    stateInfo.state = ProcessStates.IN_PROGRESS;
+    getProcessState.mockReturnValue({ state: ProcessStates.IN_PROGRESS, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 3 });
+
+    const customProcess = {
+        id: 'custom-running-contrast',
+        title: 'Running Contrast',
+        duration: '5s',
+        requireItems: [{ id: 'item-1', count: 1 }],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const assertControlContrast = async (inverted: boolean) => {
+        const { getByTestId, getByText, unmount } = render(Process, {
+            processId: `custom-running-contrast-${inverted ? 'inverted' : 'default'}`,
+            processData: customProcess,
+            inverted,
+        });
+
+        await waitFor(() => {
+            expect(getByTestId('process-chip')).toBeTruthy();
+            expect(getByText('Cancel')).toBeTruthy();
+            expect(getByText('Pause')).toBeTruthy();
+        });
+
+        const processChip = getByTestId('process-chip');
+        expect(processChip.classList.contains('inverted')).toBe(inverted);
+
+        const cancelChip = getByText('Cancel').closest('button');
+        const pauseChip = getByText('Pause').closest('button');
+        expect(cancelChip?.classList.contains('inverted')).toBe(!inverted);
+        expect(pauseChip?.classList.contains('inverted')).toBe(!inverted);
+
+        unmount();
+    };
+
+    await assertControlContrast(true);
+    await assertControlContrast(false);
 });
 
 test('shows missing requirement feedback when two items are missing', async () => {
