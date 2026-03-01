@@ -83,11 +83,11 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - `requiresQuests`: `ubi/first-payment`
 - Dialogue `requiresItems` gates:
     - `buy-jar` → "I bought the savings jar." — savings jar ×1
-    - `deposit-choice` → "Single deposit plan (I have at least 100 dUSD)." — dUSD ×100
+    - `deposit-choice` → "Direct deposit loop plan (I already have 100 dUSD)." — dUSD ×100
     - `single-deposit` → "I completed enough deposit runs. Verify jar balance now." — savings jar ×1 and stored dUSD in savings jar ×100
     - `staged-deposit` → "Top-up done. Proceed with repeated jar deposits." — dUSD ×100
     - `verify-store` → "Stored value confirmed and break-risk understood." — savings jar ×1 and stored dUSD in savings jar ×100
-    - `budget-recovery` → "Recovery complete. Retry jar setup." — dUSD ×100
+    - `budget-recovery` → "Recovery complete. Retry jar setup and deposit loop." — dUSD ×100
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
