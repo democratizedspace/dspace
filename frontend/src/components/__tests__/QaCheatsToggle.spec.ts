@@ -2,16 +2,15 @@ import 'fake-indexeddb/auto';
 import { fireEvent, render, waitFor } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-const addItemsSpy = vi.fn();
+const { addItemsSpy } = vi.hoisted(() => ({
+    addItemsSpy: vi.fn(),
+}));
 vi.mock('../../utils/gameState/inventory.js', () => ({
     addItems: addItemsSpy,
 }));
 
 import QaCheatsToggle from '../svelte/QaCheatsToggle.svelte';
-import {
-    closeGameStateDatabaseForTesting,
-    resetGameState,
-} from '../../utils/gameState/common.js';
+import { closeGameStateDatabaseForTesting, resetGameState } from '../../utils/gameState/common.js';
 import { initializeQaCheats, setQaCheatsPreference } from '../../lib/qaCheats';
 
 describe('QaCheatsToggle inventory grant', () => {

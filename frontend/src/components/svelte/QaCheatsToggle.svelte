@@ -217,47 +217,49 @@
                 />
             </div>
 
-        {#if inventoryGrantAvailable}
-            <div class="qa-tools__seed-group" data-testid="qa-inventory-grant-tool">
-                <div class="qa-tools__label">
-                    <span class="qa-tools__label-text">Instant inventory grant (staging only)</span>
-                    <span>Add any item directly to your inventory for QA walkthroughs.</span>
+            {#if inventoryGrantAvailable}
+                <div class="qa-tools__seed-group" data-testid="qa-inventory-grant-tool">
+                    <div class="qa-tools__label">
+                        <span class="qa-tools__label-text"
+                            >Instant inventory grant (staging only)</span
+                        >
+                        <span>Add any item directly to your inventory for QA walkthroughs.</span>
+                    </div>
+                    <ItemSelector
+                        items={itemCatalog}
+                        {selectedItemId}
+                        label="Select inventory item"
+                        allowCustomId={true}
+                        customIdLabel="Custom item ID"
+                        customIdPlaceholder="Enter a custom item ID"
+                        customIdButtonLabel="Use custom item ID"
+                        testId="qa-inventory-item-selector"
+                        on:select={(event) => {
+                            selectedItemId = event.detail.itemId;
+                        }}
+                    />
+                    <label class="qa-tools__count-label" for="qa-item-count">Count</label>
+                    <input
+                        id="qa-item-count"
+                        type="number"
+                        min="1"
+                        step="1"
+                        bind:value={itemCountToAdd}
+                        class="qa-tools__count-input"
+                        disabled={Boolean(workingAction)}
+                        data-testid="qa-inventory-item-count"
+                    />
+                    <Chip
+                        text={workingAction === 'add-inventory-items'
+                            ? 'Adding items…'
+                            : 'Add items to inventory'}
+                        onClick={addInventoryItems}
+                        cheat={true}
+                        disabled={Boolean(workingAction)}
+                        dataTestId="qa-add-inventory-items"
+                    />
                 </div>
-                <ItemSelector
-                    items={itemCatalog}
-                    selectedItemId={selectedItemId}
-                    label="Select inventory item"
-                    allowCustomId={true}
-                    customIdLabel="Custom item ID"
-                    customIdPlaceholder="Enter a custom item ID"
-                    customIdButtonLabel="Use custom item ID"
-                    testId="qa-inventory-item-selector"
-                    on:select={(event) => {
-                        selectedItemId = event.detail.itemId;
-                    }}
-                />
-                <label class="qa-tools__count-label" for="qa-item-count">Count</label>
-                <input
-                    id="qa-item-count"
-                    type="number"
-                    min="1"
-                    step="1"
-                    bind:value={itemCountToAdd}
-                    class="qa-tools__count-input"
-                    disabled={Boolean(workingAction)}
-                    data-testid="qa-inventory-item-count"
-                />
-                <Chip
-                    text={workingAction === 'add-inventory-items'
-                        ? 'Adding items…'
-                        : 'Add items to inventory'}
-                    onClick={addInventoryItems}
-                    cheat={true}
-                    disabled={Boolean(workingAction)}
-                    dataTestId="qa-add-inventory-items"
-                />
-            </div>
-        {/if}
+            {/if}
 
             <Chip
                 text="Clear seeded legacy saves"
