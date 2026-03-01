@@ -204,11 +204,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "70bb8d86-2c4e-4330-9705-371891934686",
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/basic-telescope"],
+    "requiresQuests": [
+        "astronomy/basic-telescope"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,

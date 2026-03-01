@@ -149,11 +149,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/walstad"],
+    "requiresQuests": [
+        "aquaria/walstad"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,

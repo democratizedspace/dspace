@@ -99,7 +99,7 @@
         },
         {
             "id": "retest",
-            "text": "Repeat the 100 mm move test. Pass when error stays within \u00b10.20 mm and carriage motion remains smooth without chirping.",
+            "text": "Repeat the 100 mm move test. Pass when error stays within ±0.20 mm and carriage motion remains smooth without chirping.",
             "options": [
                 {
                     "type": "goto",
@@ -190,15 +190,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/cable-clip"],
+    "requiresQuests": [
+        "3dprinting/cable-clip"
+    ],
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-10-15",

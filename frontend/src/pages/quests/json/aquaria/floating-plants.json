@@ -236,15 +236,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/shrimp"],
+    "requiresQuests": [
+        "aquaria/shrimp"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -203,11 +203,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/bookshelf"],
+    "requiresQuests": [
+        "woodworking/bookshelf"
+    ],
     "hardening": {
         "passes": 1,
         "score": 94,

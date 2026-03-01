@@ -139,15 +139,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
             "count": 1
         }
     ],
-    "requiresQuests": ["firstaid/change-bandage"],
+    "requiresQuests": [
+        "firstaid/change-bandage"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

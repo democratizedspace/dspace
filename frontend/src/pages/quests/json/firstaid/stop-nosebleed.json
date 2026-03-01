@@ -153,11 +153,13 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
             "count": 1
         }
     ],
-    "requiresQuests": ["firstaid/restock-kit"],
+    "requiresQuests": [
+        "firstaid/restock-kit"
+    ],
     "hardening": {
         "passes": 5,
         "score": 96,

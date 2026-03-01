@@ -24,7 +24,7 @@
                 {
                     "type": "goto",
                     "goto": "weather-hold",
-                    "text": "Cloudburst rolling in\u2014pause setup until conditions are safe."
+                    "text": "Cloudburst rolling in—pause setup until conditions are safe."
                 }
             ]
         },
@@ -133,7 +133,7 @@
         },
         {
             "id": "wire",
-            "text": "Battery first, then panel\u2014keep red to positive, black to negative, fuse in line, and controller off the ground. If anything sparks or heats up, pull the fuse.",
+            "text": "Battery first, then panel—keep red to positive, black to negative, fuse in line, and controller off the ground. If anything sparks or heats up, pull the fuse.",
             "options": [
                 {
                     "type": "process",
@@ -154,7 +154,7 @@
                 {
                     "type": "goto",
                     "goto": "rewire",
-                    "text": "I spotted polarity uncertainty or a warm connector\u2014run troubleshooting first."
+                    "text": "I spotted polarity uncertainty or a warm connector—run troubleshooting first."
                 }
             ]
         },
@@ -241,7 +241,7 @@
                 {
                     "type": "goto",
                     "goto": "shade-recovery",
-                    "text": "Output dipped or connectors heated\u2014run recovery and retry harvest."
+                    "text": "Output dipped or connectors heated—run recovery and retry harvest."
                 }
             ]
         },
@@ -307,15 +307,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "02b32152-a7b2-458e-9643-7b754c722165",
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/hand-crank-generator"],
+    "requiresQuests": [
+        "energy/hand-crank-generator"
+    ],
     "hardening": {
         "passes": 4,
         "score": 96,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-05",

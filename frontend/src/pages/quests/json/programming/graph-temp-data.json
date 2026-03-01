@@ -110,15 +110,17 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
             "count": 1
         }
     ],
-    "requiresQuests": ["programming/graph-temp"],
+    "requiresQuests": [
+        "programming/graph-temp"
+    ],
     "hardening": {
         "passes": 3,
         "score": 97,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-12-08",

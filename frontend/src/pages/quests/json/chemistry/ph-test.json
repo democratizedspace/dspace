@@ -129,9 +129,11 @@
     ],
     "rewards": [
         {
-            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/safe-reaction"]
+    "requiresQuests": [
+        "chemistry/safe-reaction"
+    ]
 }

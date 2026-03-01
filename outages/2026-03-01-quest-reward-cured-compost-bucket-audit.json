@@ -1,0 +1,166 @@
+{
+  "id": "2026-03-01-quest-reward-cured-compost-bucket-audit",
+  "date": "2026-03-01",
+  "component": "frontend/quests/rewards",
+  "rootCause": "A broad copy-forward quest template defaulted completion rewards to \"1 x cured compost bucket\" and that placeholder propagated across many unrelated quest trees.",
+  "resolution": "Audited all quest rewards, replaced cured compost bucket rewards with tree-relevant inventory rewards, and distributed replacements across multiple thematic items per tree to improve reward variety.",
+  "impact": {
+    "rewardIdReplaced": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+    "rewardNameReplaced": "cured compost bucket",
+    "questsAffected": 177,
+    "treesAffected": 17,
+    "perTree": {
+      "3dprinting": {
+        "questsAffected": 12,
+        "replacements": {
+          "sheet of printer paper": 3,
+          "safety goggles": 3,
+          "entry-level FDM 3D printer": 3,
+          "entry-level FDM 3D printer (green PLA loaded)": 3
+        }
+      },
+      "aquaria": {
+        "questsAffected": 13,
+        "replacements": {
+          "nitrile gloves (pair)": 4,
+          "Aquarium temperature reading": 3,
+          "5 gallon bucket of dechlorinated tap water": 3,
+          "Aquarium pH reading": 3
+        }
+      },
+      "astronomy": {
+        "questsAffected": 15,
+        "replacements": {
+          "mission logbook": 4,
+          "basic telescope": 4,
+          "mission log entry": 4,
+          "feather quill": 3
+        }
+      },
+      "chemistry": {
+        "questsAffected": 10,
+        "replacements": {
+          "hydroponic pH reading": 3,
+          "nitrile gloves (pair)": 3,
+          "safety goggles": 2,
+          "250 mL glass beaker": 2
+        }
+      },
+      "completionist": {
+        "questsAffected": 5,
+        "replacements": {
+          "Completionist Award II": 2,
+          "completionist trophy log entry": 1,
+          "Completionist Award II (polished)": 1,
+          "Completionist Award II (displayed)": 1
+        }
+      },
+      "composting": {
+        "questsAffected": 2,
+        "replacements": {
+          "active compost bucket": 1,
+          "compost temperature log": 1
+        }
+      },
+      "devops": {
+        "questsAffected": 15,
+        "replacements": {
+          "Pi cluster node": 4,
+          "journalctl report": 4,
+          "Laptop Computer": 4,
+          "incident log extract": 3
+        }
+      },
+      "electronics": {
+        "questsAffected": 12,
+        "replacements": {
+          "safety goggles": 3,
+          "Jumper Wires": 3,
+          "USB Cable": 3,
+          "220 Ohm Resistor": 3
+        }
+      },
+      "energy": {
+        "questsAffected": 10,
+        "replacements": {
+          "200 Wh battery pack": 3,
+          "portable solar panel": 3,
+          "8 AWG fused cable kit": 2,
+          "Solar charge controller": 2
+        }
+      },
+      "firstaid": {
+        "questsAffected": 13,
+        "replacements": {
+          "first aid kit": 4,
+          "nitrile gloves (pair)": 3,
+          "antiseptic wipes": 3,
+          "adhesive bandages": 3
+        }
+      },
+      "geothermal": {
+        "questsAffected": 13,
+        "replacements": {
+          "temperature log CSV": 4,
+          "Laptop Computer": 3,
+          "thermistor logging rig": 3,
+          "Arduino Uno": 3
+        }
+      },
+      "hydroponics": {
+        "questsAffected": 20,
+        "replacements": {
+          "nitrile gloves (pair)": 5,
+          "hydroponics tub (ready)": 5,
+          "safety goggles": 5,
+          "5 gallon bucket of dechlorinated tap water": 5
+        }
+      },
+      "programming": {
+        "questsAffected": 18,
+        "replacements": {
+          "temperature log CSV": 5,
+          "temperature line chart": 5,
+          "annotated temperature graph": 4,
+          "Raspberry Pi 5 board": 4
+        }
+      },
+      "robotics": {
+        "questsAffected": 10,
+        "replacements": {
+          "Servo Motor": 3,
+          "Arduino Uno": 3,
+          "Wheel Encoder": 2,
+          "safety goggles": 2
+        }
+      },
+      "rocketry": {
+        "questsAffected": 2,
+        "replacements": {
+          "launch-capable model rocket (parachute)": 1,
+          "rocket igniter": 1
+        }
+      },
+      "ubi": {
+        "questsAffected": 2,
+        "replacements": {
+          "savings jar": 2
+        }
+      },
+      "woodworking": {
+        "questsAffected": 5,
+        "replacements": {
+          "Wood glue": 2,
+          "tape measure": 1,
+          "Handsaw": 1,
+          "Pine board": 1
+        }
+      }
+    }
+  },
+  "references": [
+    "frontend/src/pages/quests/json",
+    "frontend/src/pages/inventory/json/items",
+    "outages/2026-03-01-quest-reward-cured-compost-bucket-audit.json"
+  ]
+}
