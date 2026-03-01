@@ -111,6 +111,19 @@ describe('gameState - common utilities', () => {
         expect(typeof validated._meta?.lastUpdated).toBe('number');
     });
 
+    test('validateGameState should normalize legacy 3d printer quest ids', () => {
+        const validated = validateGameState({
+            quests: {
+                '3dprinter/start': { finished: true },
+            },
+            inventory: {},
+            processes: {},
+        });
+
+        expect(validated.quests['3dprinter/start']).toBeUndefined();
+        expect(validated.quests['3dprinting/start']).toEqual({ finished: true });
+    });
+
     test('rollbackGameState should restore previous state', async () => {
         const state = loadGameState();
         state.inventory['1'] = 1;

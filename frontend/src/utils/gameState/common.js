@@ -17,6 +17,9 @@ const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
 const CURRENT_VERSION = '3';
+const LEGACY_QUEST_ID_ALIASES = {
+    '3dprinter/start': '3dprinting/start',
+};
 
 const logPersistenceIssue = (message, error) => {
     const details = error?.message ?? error;
@@ -241,6 +244,17 @@ export const validateGameState = (state) => {
     }
     if (typeof state.quests !== 'object' || state.quests === null) {
         state.quests = {};
+    } else {
+        Object.entries(LEGACY_QUEST_ID_ALIASES).forEach(([legacyId, canonicalId]) => {
+            const legacyState = state.quests[legacyId];
+            if (!legacyState || legacyId === canonicalId) return;
+
+            if (!state.quests[canonicalId]) {
+                state.quests[canonicalId] = legacyState;
+            }
+
+            delete state.quests[legacyId];
+        });
     }
     if (typeof state.inventory !== 'object' || state.inventory === null) {
         state.inventory = {};
