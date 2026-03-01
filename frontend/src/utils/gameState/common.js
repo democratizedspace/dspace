@@ -17,6 +17,9 @@ const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
 const CURRENT_VERSION = '3';
+const LEGACY_QUEST_ID_ALIASES = {
+    '3dprinter/start': '3dprinting/start',
+};
 
 const logPersistenceIssue = (message, error) => {
     const details = error?.message ?? error;
@@ -241,6 +244,33 @@ export const validateGameState = (state) => {
     }
     if (typeof state.quests !== 'object' || state.quests === null) {
         state.quests = {};
+    }
+    for (const [legacyId, canonicalId] of Object.entries(LEGACY_QUEST_ID_ALIASES)) {
+        const legacyProgress = state.quests[legacyId];
+        if (!legacyProgress || typeof legacyProgress !== 'object') {
+            continue;
+        }
+
+        const canonicalProgress =
+            state.quests[canonicalId] && typeof state.quests[canonicalId] === 'object'
+                ? state.quests[canonicalId]
+                : {};
+
+        state.quests[canonicalId] = {
+            ...legacyProgress,
+            ...canonicalProgress,
+            finished: Boolean(canonicalProgress.finished || legacyProgress.finished),
+            itemsClaimed: [
+                ...new Set([
+                    ...(Array.isArray(legacyProgress.itemsClaimed) ? legacyProgress.itemsClaimed : []),
+                    ...(Array.isArray(canonicalProgress.itemsClaimed)
+                        ? canonicalProgress.itemsClaimed
+                        : []),
+                ]),
+            ],
+        };
+
+        delete state.quests[legacyId];
     }
     if (typeof state.inventory !== 'object' || state.inventory === null) {
         state.inventory = {};
