@@ -33,20 +33,26 @@ const normalizeHref = (href) => {
     return normalizePathname(href);
 };
 
+const APP_BASE_PATH = '/app';
+
+const stripAppBasePath = (pathname) => {
+    if (pathname === APP_BASE_PATH) {
+        return '/';
+    }
+
+    if (pathname.startsWith(`${APP_BASE_PATH}/`)) {
+        return pathname.slice(APP_BASE_PATH.length);
+    }
+
+    return pathname;
+};
+
 const matchesTarget = (current, target) => {
     if (current === target) {
         return true;
     }
 
-    if (current.startsWith(`${target}/`)) {
-        return true;
-    }
-
-    if (current.endsWith(target)) {
-        return true;
-    }
-
-    return current.includes(`${target}/`);
+    return current.startsWith(`${target}/`);
 };
 
 export const isMenuItemActive = (pathname, item) => {
@@ -63,5 +69,6 @@ export const isMenuItemActive = (pathname, item) => {
         return current === '/';
     }
 
-    return matchesTarget(current, target);
+    const candidates = [current, stripAppBasePath(current)];
+    return candidates.some((candidate) => matchesTarget(candidate, target));
 };
