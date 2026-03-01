@@ -176,9 +176,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/tub-scrub"
-    ],
+    "requiresQuests": ["hydroponics/tub-scrub"],
     "hardening": {
         "passes": 1,
         "score": 90,

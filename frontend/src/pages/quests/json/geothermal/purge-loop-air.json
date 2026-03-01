@@ -182,9 +182,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "geothermal/monitor-heat-pump-energy"
-    ],
+    "requiresQuests": ["geothermal/monitor-heat-pump-energy"],
     "hardening": {
         "passes": 0,
         "score": 95,

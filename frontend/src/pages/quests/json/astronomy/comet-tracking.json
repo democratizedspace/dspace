@@ -172,9 +172,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/meteor-shower"
-    ],
+    "requiresQuests": ["astronomy/meteor-shower"],
     "hardening": {
         "passes": 1,
         "score": 95,

@@ -208,9 +208,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/andromeda"
-    ],
+    "requiresQuests": ["astronomy/andromeda"],
     "hardening": {
         "passes": 1,
         "score": 95,

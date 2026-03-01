@@ -318,9 +318,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "energy/solar"
-    ],
+    "requiresQuests": ["energy/solar"],
     "hardening": {
         "passes": 1,
         "score": 92,

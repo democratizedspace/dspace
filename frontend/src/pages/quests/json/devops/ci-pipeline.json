@@ -152,7 +152,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "devops/docker-compose"
-    ]
+    "requiresQuests": ["devops/docker-compose"]
 }

@@ -114,9 +114,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/hello-sensor"
-    ],
+    "requiresQuests": ["programming/hello-sensor"],
     "hardening": {
         "passes": 1,
         "score": 96,

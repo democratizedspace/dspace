@@ -138,9 +138,7 @@
             ]
         }
     ],
-    "requiresQuests": [
-        "robotics/wheel-encoders"
-    ],
+    "requiresQuests": ["robotics/wheel-encoders"],
     "rewards": [
         {
             "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",

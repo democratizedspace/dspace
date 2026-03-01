@@ -198,7 +198,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "chemistry/ph-test"
-    ]
+    "requiresQuests": ["chemistry/ph-test"]
 }

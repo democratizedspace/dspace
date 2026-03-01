@@ -152,9 +152,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "firstaid/learn-cpr"
-    ],
+    "requiresQuests": ["firstaid/learn-cpr"],
     "hardening": {
         "passes": 4,
         "score": 95,

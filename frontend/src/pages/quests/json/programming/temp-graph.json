@@ -119,10 +119,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/graph-temp-data",
-        "programming/temp-json-api"
-    ],
+    "requiresQuests": ["programming/graph-temp-data", "programming/temp-json-api"],
     "hardening": {
         "passes": 2,
         "score": 98,

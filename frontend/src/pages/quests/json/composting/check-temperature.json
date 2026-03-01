@@ -179,9 +179,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "composting/turn-pile"
-    ],
+    "requiresQuests": ["composting/turn-pile"],
     "hardening": {
         "passes": 0,
         "score": 90,

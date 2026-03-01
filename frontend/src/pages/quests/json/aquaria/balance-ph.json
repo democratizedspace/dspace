@@ -254,9 +254,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "aquaria/ph-strip-test"
-    ],
+    "requiresQuests": ["aquaria/ph-strip-test"],
     "hardening": {
         "passes": 1,
         "score": 95,

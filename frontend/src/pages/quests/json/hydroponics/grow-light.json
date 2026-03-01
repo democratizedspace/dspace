@@ -204,7 +204,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/bucket_10"
-    ]
+    "requiresQuests": ["hydroponics/bucket_10"]
 }

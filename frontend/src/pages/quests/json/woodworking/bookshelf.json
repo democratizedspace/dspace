@@ -227,9 +227,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "woodworking/step-stool"
-    ],
+    "requiresQuests": ["woodworking/step-stool"],
     "hardening": {
         "passes": 1,
         "score": 94,

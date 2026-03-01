@@ -180,9 +180,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "geothermal/check-loop-pressure"
-    ],
+    "requiresQuests": ["geothermal/check-loop-pressure"],
     "hardening": {
         "passes": 0,
         "score": 95,
