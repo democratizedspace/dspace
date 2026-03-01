@@ -7,6 +7,15 @@ vi.mock('../../src/utils/gameState/common.js', () => {
     };
 });
 
+vi.mock('../../src/utils/gameState/itemContainers.js', () => {
+    return {
+        addStoredItems: vi.fn(),
+        getStoredItemCount: vi.fn(),
+        getStoredItemCounts: vi.fn(),
+        removeAllStoredItems: vi.fn(),
+    };
+});
+
 import {
     addItems,
     burnItems,
@@ -26,6 +35,7 @@ const ITEM1 = 'item-1';
 const ITEM2 = 'item-2';
 
 import { loadGameState, saveGameState } from '../../src/utils/gameState/common.js';
+import { getStoredItemCount } from '../../src/utils/gameState/itemContainers.js';
 
 describe('gameState - inventory', () => {
     let mockGameState;
@@ -105,6 +115,17 @@ describe('gameState - inventory', () => {
         };
 
         expect(counts).toEqual(expectedCounts);
+    });
+
+    test('getItemCounts should return contained counts when containerItemId is present', () => {
+        getStoredItemCount.mockReturnValue(42);
+
+        const counts = getItemCounts([{ id: '1', containerItemId: 'savings-jar' }]);
+
+        expect(getStoredItemCount).toHaveBeenCalledWith('savings-jar', '1');
+        expect(counts).toEqual({
+            1: 42,
+        });
     });
 
     test('getItemCount should correctly return the count of a specific item', () => {

@@ -55,6 +55,9 @@
                                             },
                                             "count": {
                                                 "type": "number"
+                                            },
+                                            "containerItemId": {
+                                                "type": "string"
                                             }
                                         },
                                         "required": ["id", "count"]
