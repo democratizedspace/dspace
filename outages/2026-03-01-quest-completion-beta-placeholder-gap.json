@@ -1,0 +1,14 @@
+{
+  "id": "OUT-2026-03-01-quest-completion-beta-placeholder-gap",
+  "date": "2026-03-01",
+  "component": "tests/quest-completion",
+  "rootCause": "The broad quest completable-items coverage allowed BETA_PLACEHOLDER inventory exemptions to stand in for market availability, and there was no focused regression ensuring the hand-crank generator quest had at least one obtainable source for each critical required item.",
+  "resolution": "Add a targeted regression in questCompletableItems to assert that energy/hand-crank-generator critical requirements are obtainable via price, process outputs, or quest rewards, and assign a real inventory price to the required 12 V DC motor so it is tradeable.",
+  "references": [
+    "tests/questCompletableItems.test.ts",
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "frontend/src/pages/quests/json/energy/hand-crank-generator.json",
+    "https://staging.democratized.space/inventory/item/6caa08d8-815c-4a0e-9297-0fda4516659d",
+    "https://staging.democratized.space/quests/energy/hand-crank-generator"
+  ]
+}

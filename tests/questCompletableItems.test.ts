@@ -153,7 +153,50 @@ const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
 const getItemDependencies = (item: any) =>
     uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
 
+const getInitiallyObtainableItemIds = (inventoryItems: Array<any>) =>
+    inventoryItems
+        .filter((item) => item.price || item.priceExemptionReason === 'BETA_PLACEHOLDER')
+        .map((item) => item.id);
+
 describe('quest completion item availability', () => {
+
+    it('requires tradeable inventory for hand-crank-generator critical requirements', async () => {
+        const quests = await loadQuests();
+        const handCrankQuest = quests.find((quest: any) => quest.id === 'energy/hand-crank-generator');
+        expect(handCrankQuest).toBeDefined();
+
+        const itemMap = new Map((items as Array<any>).map((item) => [item.id, item]));
+        const processOutputItems = new Set(
+            (processes as Array<any>).flatMap((process) =>
+                toItemIds(process.createItems)
+            )
+        );
+        const rewardItems = new Set(
+            quests.flatMap((quest: any) => [
+                ...toItemIds(quest.rewards),
+                ...getGrantedItems(quest),
+            ])
+        );
+        const requiredItems = uniqueItemIds([
+            ...getQuestLevelRequiredItemIds(handCrankQuest),
+            ...getRequiredItemsFromDialoguePath(handCrankQuest),
+            ...getFinishOptions(handCrankQuest).flatMap((option: any) => getRequiredItemIds(option)),
+        ]);
+
+        const blockedRequirements = requiredItems
+            .map((itemId) => {
+                const item = itemMap.get(itemId);
+                if (!item) return null;
+                const hasPrice = Boolean(item.price);
+                const hasProcessSource = processOutputItems.has(itemId);
+                const hasQuestRewardSource = rewardItems.has(itemId);
+                if (hasPrice || hasProcessSource || hasQuestRewardSource) return null;
+                return `${item.name} (${item.id})`;
+            })
+            .filter(Boolean);
+
+        expect(blockedRequirements).toEqual([]);
+    });
 
 
     it('flags unobtainable dialogue-path required items with a clear reason', () => {
@@ -219,14 +262,7 @@ describe('quest completion item availability', () => {
             const known = dependencies.filter((dependency) => itemMap.has(dependency));
             return { known, unknown };
         };
-        const purchasable = new Set(
-            (items as Array<any>).filter((item) => item.price).map((item) => item.id)
-        );
-        const betaPlaceholderItems = new Set(
-            (items as Array<any>)
-                .filter((item) => item.priceExemptionReason === 'BETA_PLACEHOLDER')
-                .map((item) => item.id)
-        );
+        const purchasable = new Set(getInitiallyObtainableItemIds(items as Array<any>));
 
         const rewardSources = new Map<string, string[]>();
         for (const quest of quests) {
@@ -265,7 +301,7 @@ describe('quest completion item availability', () => {
         while (changed) {
             changed = false;
 
-            for (const itemId of [...purchasable, ...betaPlaceholderItems]) {
+            for (const itemId of purchasable) {
                 if (obtainable.has(itemId)) continue;
                 const { known, unknown } = getItemDependencyInfo(itemId);
                 if (
