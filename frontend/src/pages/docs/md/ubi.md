@@ -84,10 +84,11 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
 - Dialogue `requiresItems` gates:
     - `buy-jar` → "I bought the savings jar." — savings jar ×1
     - `deposit-choice` → "Single deposit plan (I have at least 100 dUSD)." — dUSD ×100
-    - `single-deposit` → "Deposit complete. Verify stored balance now." — dUSD ×90
     - `staged-deposit` → "Top-up done. Proceed with jar deposit." — dUSD ×100
-    - `verify-store` → "Stored value confirmed and break-risk understood." — savings jar ×1
+    - `verify-store` → "Jar balance is 100+ dUSD and break-risk understood." — savings jar ×1
     - `budget-recovery` → "Recovery complete. Retry jar setup." — dUSD ×100
+- Dialogue `requiresContainedItems` gates:
+    - `verify-store` → "Jar balance is 100+ dUSD and break-risk understood." — savings jar stores dUSD ×100 minimum
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -101,7 +102,7 @@ Ubi quests build practical progression through the ubi skill tree. This page is 
     - [savings-jar-deposit](/processes/savings-jar-deposit)
         - Requires: savings jar ×1
         - Consumes: dUSD ×10
-        - Creates: none (stores 10 dUSD in jar container balance)
+        - Creates: none (stores 10 dUSD in jar container balance; run 10 times to reach 100 dUSD)
     - [savings-jar-break](/processes/savings-jar-break)
         - Requires: savings jar ×1
         - Consumes: savings jar ×1

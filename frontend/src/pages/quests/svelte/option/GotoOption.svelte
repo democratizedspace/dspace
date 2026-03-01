@@ -4,11 +4,11 @@
     import CompactItemList from '../../../../components/svelte/CompactItemList.svelte';
     import { setCurrentDialogueStep } from '../../../../utils/gameState.js';
     import { state } from '../../../../utils/gameState/common.js';
-    import { areItemRequirementsMet } from './itemRequirements.js';
+    import { areOptionRequirementsMet } from './itemRequirements.js';
 
     export let option, questId;
 
-    const itemRequirementsMet = writable(areItemRequirementsMet(option.requiresItems));
+    const itemRequirementsMet = writable(areOptionRequirementsMet(option));
 
     function onClick() {
         if ($itemRequirementsMet) {
@@ -18,7 +18,7 @@
 
     $: {
         if ($state) {
-            itemRequirementsMet.set(areItemRequirementsMet(option.requiresItems, $state.inventory));
+            itemRequirementsMet.set(areOptionRequirementsMet(option, $state));
         }
     }
 </script>
@@ -35,6 +35,18 @@
                         increase={false}
                         noRed={true}
                     />
+                </div>
+            </Chip>
+        {/if}
+        {#if option.requiresContainedItems && option.requiresContainedItems.length > 0}
+            <Chip inverted={true} disabled={!$itemRequirementsMet} text="">
+                <div class="vertical">
+                    Requires container balance:
+                    {#each option.requiresContainedItems as requirement (requirement.containerId + requirement.id)}
+                        <span>
+                            {requirement.count} of item {requirement.id} in container {requirement.containerId}
+                        </span>
+                    {/each}
                 </div>
             </Chip>
         {/if}
