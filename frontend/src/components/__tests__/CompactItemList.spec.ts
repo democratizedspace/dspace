@@ -133,6 +133,31 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('falls back to index keys when rendered metadata includes ids outside itemList', async () => {
+        const itemList = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
+        const renderedItems = [
+            { id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 },
+            { id: 'beta', name: 'Beta', image: '/beta.png', count: 1 },
+        ];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ alpha: 1, beta: 1 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(renderedItems);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList },
+        });
+
+        await tick();
+
+        expect(container.querySelectorAll('.horizontal')).toHaveLength(2);
+        expect(container.textContent).toContain('Alpha');
+        expect(container.textContent).toContain('Beta');
+
+        unmount();
+    });
+
     test('shows loading spinners until game state is ready', async () => {
         const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
         let isReady = false;
