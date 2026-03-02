@@ -57,31 +57,32 @@ describe('BuySell sales tax regression', () => {
         mockSellItems.mockReset();
     });
 
-
     test('keeps the BuySell container non-inverted while nested buy controls are inverted', async () => {
-        const { findByText, container } = render(BuySell, { props: { itemId: 'taxed-item' } });
+        const { findByTestId } = render(BuySell, { props: { itemId: 'taxed-item' } });
 
-        const buyAction = await findByText('Buy for 10 dUSD');
-        expect(buyAction.closest('button')?.classList.contains('inverted')).toBe(true);
+        const rootContainer = await findByTestId('buy-sell-root');
+        expect(rootContainer.classList.contains('inverted')).toBe(false);
 
-        const staticContainers = container.querySelectorAll('nav .chip-container.static-container');
-        expect(staticContainers).toHaveLength(2);
-        expect(staticContainers[0].classList.contains('inverted')).toBe(false);
+        const buyToggle = await findByTestId('buy-toggle');
+        const sellToggle = await findByTestId('sell-toggle');
+        const buyAction = await findByTestId('transaction-cta');
 
-        const buyToggle = await findByText('Buy');
-        const sellToggle = await findByText('Sell');
-        expect(buyToggle.closest('button')?.classList.contains('inverted')).toBe(true);
-        expect(sellToggle.closest('button')?.classList.contains('inverted')).toBe(false);
+        expect(buyAction.textContent).toContain('Buy for 10 dUSD');
+        expect(buyAction.classList.contains('inverted')).toBe(true);
+        expect(buyToggle.classList.contains('inverted')).toBe(true);
+        expect(sellToggle.classList.contains('inverted')).toBe(false);
     });
 
     test('passes base item price to sellItems so tax is not double-applied', async () => {
-        const { findByText } = render(BuySell, { props: { itemId: 'taxed-item' } });
+        const { findByTestId, findByText } = render(BuySell, { props: { itemId: 'taxed-item' } });
 
-        const sellToggle = await findByText('Sell');
-        await fireEvent.click(sellToggle.closest('button') as HTMLButtonElement);
+        const sellToggle = await findByTestId('sell-toggle');
+        await fireEvent.click(sellToggle);
 
-        const sellAction = await findByText('Sell for 8 dUSD (-20%)');
-        await fireEvent.click(sellAction.closest('button') as HTMLButtonElement);
+        await findByText('Sell for 8 dUSD (-20%)');
+        const sellAction = await findByTestId('transaction-cta');
+        expect(sellAction.classList.contains('red')).toBe(true);
+        await fireEvent.click(sellAction);
 
         expect(mockSellItems).toHaveBeenCalledWith(
             expect.arrayContaining([

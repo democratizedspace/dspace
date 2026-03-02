@@ -97,7 +97,7 @@
     $: displaySellPriceInRed = sellChipActive && taxAmount > 0;
 </script>
 
-<Chip inverted={false} text="">
+<Chip inverted={false} text="" dataTestId="buy-sell-root">
     {#if isLoading}
         <p>Loading...</p>
     {:else if !item}
@@ -106,12 +106,18 @@
         <p>Not tradeable</p>
     {:else}
         <div class="buy-sell-wrapper vertical">
-            <CompactItemList {itemList} inverted={true} />
+            <CompactItemList {itemList} inverted={false} />
 
             <div class="horizontal">
-                <Chip text="Buy" inverted={buyChipActive} onClick={() => handleTypeClick('buy')} />
+                <Chip
+                    text="Buy"
+                    dataTestId="buy-toggle"
+                    inverted={buyChipActive}
+                    onClick={() => handleTypeClick('buy')}
+                />
                 <Chip
                     text="Sell"
+                    dataTestId="sell-toggle"
                     inverted={sellChipActive}
                     onClick={() => handleTypeClick('sell')}
                 />
@@ -131,10 +137,10 @@
                     text={buyChipActive
                         ? `Buy for ${quantity * price} ${symbol}`
                         : `Sell for ${quantity * effectiveSellPrice} ${symbol} (-${taxAmount}%)`}
+                    dataTestId="transaction-cta"
                     onClick={handleTransactionClick}
                     inverted={true}
-                    priceInRed={displaySellPriceInRed}
-                    red={sellChipActive}
+                    red={displaySellPriceInRed}
                 />
             </div>
 
@@ -144,7 +150,7 @@
                     <a href="/docs/dCarbon">dCarbon</a> in your inventory:
                 </p>
 
-                <CompactItemList itemList={[{ id: dCarbonId }]} inverted={true} />
+                <CompactItemList itemList={[{ id: dCarbonId }]} inverted={false} />
             {/if}
         </div>
     {/if}
