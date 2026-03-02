@@ -19,6 +19,76 @@ const getRuntimeConsumeItems = (process) => [...(process.consumeItems || [])];
 
 const isPositiveNumber = (value) => Number.isFinite(value) && value > 0;
 
+const coercePositiveCount = (value) => {
+    const numeric = Number(value);
+    return isPositiveNumber(numeric) ? numeric : 0;
+};
+
+const mergeItemCounts = (items = []) => {
+    const merged = new Map();
+
+    items.forEach((item) => {
+        const itemId = typeof item?.id === 'string' ? item.id : '';
+        const count = coercePositiveCount(item?.count);
+        if (!itemId || count === 0) {
+            return;
+        }
+
+        const existing = merged.get(itemId);
+        if (existing) {
+            existing.count += count;
+            return;
+        }
+
+        merged.set(itemId, {
+            ...item,
+            id: itemId,
+            count,
+        });
+    });
+
+    return Array.from(merged.values());
+};
+
+const getOperationCreateItems = (operations = []) => {
+    const createdItems = [];
+
+    operations.forEach((operation) => {
+        if (!validateItemCountOperation(operation)) {
+            return;
+        }
+
+        const currentCount = getStoredItemCount(operation.containerItemId, operation.itemId);
+        if (operation.operation === 'withdraw-all') {
+            if (currentCount > 0) {
+                createdItems.push({ id: operation.itemId, count: currentCount });
+            }
+            return;
+        }
+
+        if (operation.operation === 'withdraw') {
+            const requestedCount = coercePositiveCount(operation.count);
+            const count = Math.min(currentCount, requestedCount);
+            if (count > 0) {
+                createdItems.push({ id: operation.itemId, count });
+            }
+        }
+    });
+
+    return createdItems;
+};
+
+export const getRuntimeCreateItems = (processId, processDefinition) => {
+    const process = resolveProcessDefinition(processId, processDefinition);
+    if (!process) {
+        return [];
+    }
+
+    const baseCreateItems = Array.isArray(process.createItems) ? process.createItems : [];
+    const operationCreateItems = getOperationCreateItems(process.itemCountOperations || []);
+    return mergeItemCounts([...baseCreateItems, ...operationCreateItems]);
+};
+
 const addItemsToState = (gameState, items = []) => {
     if (!gameState.inventory || typeof gameState.inventory !== 'object') {
         gameState.inventory = {};

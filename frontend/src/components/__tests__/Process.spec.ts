@@ -21,6 +21,7 @@ const cheatsEnabledStore = writable(false);
 const finishProcessNow = vi.hoisted(() => vi.fn());
 const startProcess = vi.hoisted(() => vi.fn(() => true));
 const getItemCountOperationStartError = vi.hoisted(() => vi.fn(() => ''));
+const getRuntimeCreateItems = vi.hoisted(() => vi.fn((_, process) => process?.createItems ?? []));
 const dbGetMock = vi.hoisted(() => vi.fn<(entityType: string, id: string) => Promise<unknown>>());
 
 const getProcessState = vi.mocked(getProcessStateMock);
@@ -102,6 +103,7 @@ vi.mock('../../utils/gameState/processes.js', () => ({
     finishProcess: vi.fn(),
     getProcessState: vi.fn(() => stateInfo),
     ProcessStates,
+    getRuntimeCreateItems,
     getProcessStartedAt: (...args: unknown[]) => getProcessStartedAtMock(...args),
     pauseProcess,
     resumeProcess,
@@ -138,6 +140,8 @@ beforeEach(() => {
     startProcess.mockClear();
     getItemCountOperationStartError.mockReset();
     getItemCountOperationStartError.mockReturnValue('');
+    getRuntimeCreateItems.mockReset();
+    getRuntimeCreateItems.mockImplementation((_, process) => process?.createItems ?? []);
     dbGetMock.mockReset();
     getItemMapMock.mockResolvedValue(
         new Map([
@@ -206,6 +210,47 @@ test('shows required items even when counts are zero', async () => {
         expect(normalizedText).toMatch(/Test Item/);
         expect(normalizedText).not.toMatch(/0\s*\/\s*2/);
     });
+});
+
+
+test('renders container-withdraw outputs in creates list', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+
+    const customProcess = {
+        id: 'custom-withdraw',
+        title: 'Break savings jar and retrieve all dUSD',
+        duration: '5s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [{ id: 'item-3', count: 1 }],
+        itemCountOperations: [
+            {
+                operation: 'withdraw-all',
+                containerItemId: 'item-1',
+                itemId: 'item-2',
+            },
+        ],
+        custom: true,
+    };
+
+    getItemCountsMock.mockReturnValue({ 'item-2': 0, 'item-3': 0 });
+    getRuntimeCreateItems.mockImplementation(() => [
+        { id: 'item-3', count: 1 },
+        { id: 'item-2', count: 40 },
+    ]);
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-withdraw',
+        processData: customProcess,
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('process-creates').textContent).toMatch(/\+40\s*x\s*Second Item/);
+        expect(getByTestId('process-creates').textContent).toMatch(/\+1\s*x\s*Third Item/);
+    });
+
+    expect(getRuntimeCreateItems).toHaveBeenCalledWith('custom-withdraw', customProcess);
 });
 
 test('shows missing requirement feedback with singular "more" label', async () => {
