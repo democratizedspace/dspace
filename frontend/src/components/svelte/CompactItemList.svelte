@@ -40,7 +40,7 @@
     }, new Map());
     const getItemKey = (item, index) => {
         const stableId = getStableItemId(item);
-        const occurrences = stableId ? (itemKeyCounts.get(stableId) ?? 0) : 0;
+        const occurrences = stableId ? itemKeyCounts.get(stableId) : 0;
 
         if (stableId && occurrences === 1) {
             return stableId;
@@ -50,6 +50,10 @@
     };
 
     const shouldRenderNameCount = () => !increase && !decrease && nameCountFormat;
+
+    const formatNameCount = (item, counts) => `${item.name}: ${prettyPrintNumber(counts[item.id])}`;
+
+    const getContainerContext = (item) => (item.containerName ? `in ${item.containerName}` : null);
 
     const releaseItemImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
@@ -203,7 +207,7 @@
                                             {prettyPrintNumber($itemCounts[item.id])}
                                         </span>
                                     {:else if shouldRenderNameCount()}
-                                        {item.name}: {prettyPrintNumber($itemCounts[item.id])}
+                                        {formatNameCount(item, $itemCounts)}
                                     {:else}
                                         {prettyPrintNumber($itemCounts[item.id])}
                                     {/if}
@@ -260,10 +264,10 @@
                                 {/if}
                                 {#if !shouldRenderNameCount()}
                                     <span>{`x ${item.name}`}</span>
-                                    {#if item.containerName}
-                                        <span class="container-context"
-                                            >in {item.containerName}</span
-                                        >
+                                    {#if getContainerContext(item)}
+                                        <span class="container-context">
+                                            {getContainerContext(item)}
+                                        </span>
                                     {/if}
                                 {/if}
                             </p>
