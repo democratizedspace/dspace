@@ -104,7 +104,7 @@
 </script>
 
 <div class="process-view">
-    <Process processId={slug} {processData} />
+    <Process inverted={true} processId={slug} {processData} />
     {#if canBuyRequired()}
         <button
             class="primary"

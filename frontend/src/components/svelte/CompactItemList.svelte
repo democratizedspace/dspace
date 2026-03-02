@@ -268,7 +268,11 @@
     }
 
     .disabled {
-        color: rgb(0, 0, 0);
+        color: rgba(0, 0, 0, 0.72);
+    }
+
+    .disabled.inverted {
+        color: rgba(255, 255, 255, 0.78);
     }
 
     .inverted {

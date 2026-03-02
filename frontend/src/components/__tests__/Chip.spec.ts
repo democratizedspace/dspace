@@ -1,5 +1,5 @@
-import { render } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
+import { render, fireEvent } from '@testing-library/svelte';
+import { describe, expect, it, vi } from 'vitest';
 import Chip from '../svelte/Chip.svelte';
 
 function ensureChipStaticOpacityStyle() {
@@ -37,5 +37,87 @@ describe('Chip', () => {
         expect(container.querySelector('nav .chip-container.static-container.inverted')).toBe(
             staticContainer
         );
+    });
+
+    it('applies contrasting backgrounds for default and inverted static chips', () => {
+        const { getByTestId } = render(Chip, {
+            props: {
+                text: '',
+                inverted: false,
+                dataTestId: 'chip-default-bg',
+            },
+        });
+        const { getByTestId: getByTestIdInverted } = render(Chip, {
+            props: {
+                text: '',
+                inverted: true,
+                dataTestId: 'chip-inverted-bg',
+            },
+        });
+
+        const defaultChip = getByTestId('chip-default-bg');
+        const invertedChip = getByTestIdInverted('chip-inverted-bg');
+
+        expect(defaultChip.classList.contains('inverted')).toBe(false);
+        expect(invertedChip.classList.contains('inverted')).toBe(true);
+    });
+
+    it('blocks disabled link navigation while preserving active link click handling', async () => {
+        const onClick = vi.fn();
+        const { getByRole } = render(Chip, {
+            props: {
+                text: 'Disabled Docs',
+                href: '/docs',
+                disabled: true,
+                onClick,
+            },
+        });
+
+        const disabledLinkChip = getByRole('navigation').querySelector('a');
+        expect(disabledLinkChip).toBeTruthy();
+
+        await fireEvent.click(disabledLinkChip as HTMLElement);
+
+        expect((disabledLinkChip as HTMLElement).getAttribute('href')).toBeNull();
+        expect((disabledLinkChip as HTMLElement).getAttribute('aria-disabled')).toBe('true');
+        expect((disabledLinkChip as HTMLElement).getAttribute('tabindex')).toBe('-1');
+        expect(onClick).not.toHaveBeenCalled();
+
+        const activeOnClick = vi.fn();
+        const { getByRole: getActiveLinkByRole } = render(Chip, {
+            props: {
+                text: 'Active Docs',
+                href: '/docs',
+                onClick: activeOnClick,
+            },
+        });
+
+        const activeLinkChip = getActiveLinkByRole('link', { name: 'Active Docs' });
+
+        await fireEvent.click(activeLinkChip);
+
+        expect(activeOnClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('applies inverted contrast to interactive button and link chips', () => {
+        const { getByRole } = render(Chip, {
+            props: {
+                text: 'Start',
+                inverted: true,
+                onClick: () => {},
+            },
+        });
+        const buttonChip = getByRole('button', { name: 'Start' });
+        expect(buttonChip.classList.contains('inverted')).toBe(true);
+
+        const { getByRole: getByRoleLink } = render(Chip, {
+            props: {
+                text: 'Docs',
+                href: '/docs',
+                inverted: true,
+            },
+        });
+        const linkChip = getByRoleLink('link', { name: 'Docs' });
+        expect(linkChip.classList.contains('inverted')).toBe(true);
     });
 });

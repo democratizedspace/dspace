@@ -446,7 +446,7 @@
 
 {#if mounted && process}
     <Chip text="" {inverted} dataTestId="process-chip">
-        <div class="container">
+        <div class="container" class:container-inverted={inverted}>
             <h3>{process.title}</h3>
 
             {#if process.requireItems && process.requireItems.length > 0}
@@ -501,7 +501,7 @@
                     <Chip
                         text="Start"
                         onClick={onProcessStart}
-                        inverted={true}
+                        inverted={!inverted}
                         dataTestId="process-start-button"
                     />
                 </div>
@@ -517,8 +517,8 @@
                     </p>
                 {/if}
             {:else if state === ProcessStates.IN_PROGRESS}
-                <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
-                <Chip text="Pause" onClick={onProcessPause} inverted={true} />
+                <Chip text="Cancel" onClick={onProcessCancel} inverted={!inverted} />
+                <Chip text="Pause" onClick={onProcessPause} inverted={!inverted} />
                 {#if canInstantFinish}
                     <Chip
                         text="Instant finish"
@@ -537,8 +537,8 @@
                     {currentTime}
                 />
             {:else if state === ProcessStates.PAUSED}
-                <Chip text="Cancel" onClick={onProcessCancel} inverted={true} />
-                <Chip text="Resume" onClick={onProcessResume} inverted={true} />
+                <Chip text="Cancel" onClick={onProcessCancel} inverted={!inverted} />
+                <Chip text="Resume" onClick={onProcessResume} inverted={!inverted} />
                 {#if canInstantFinish}
                     <Chip
                         text="Instant finish"
@@ -557,7 +557,7 @@
                     {currentTime}
                 />
             {:else}
-                <Chip text="Collect" onClick={onProcessComplete} inverted={true} />
+                <Chip text="Collect" onClick={onProcessComplete} inverted={!inverted} />
             {/if}
         </div>
     </Chip>
@@ -578,6 +578,12 @@
     h6 {
         color: white;
         margin: 0px;
+    }
+
+    .container.container-inverted h3,
+    .container.container-inverted h4,
+    .container.container-inverted h6 {
+        color: #111827;
     }
 
     .qa-chip-label {
@@ -618,6 +624,10 @@
         font-size: 0.9rem;
         color: #fff7ed;
         text-align: center;
+    }
+
+    .container.container-inverted .start-feedback {
+        color: #1f2937;
     }
 
     .deposit-input-label {
