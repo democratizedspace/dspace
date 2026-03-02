@@ -165,6 +165,38 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('renders name-count format while loading and after polling updates', async () => {
+        const items = [{ id: 'dusd', name: 'dUSD', image: '/dusd.png' }];
+        let isReady = false;
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockImplementation(() => ({ dusd: isReady ? 10 : 0 }));
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockImplementation((list, totals) =>
+            list.map((item) => ({ ...item, total: totals[item.id] ?? 0, count: null }))
+        );
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, nameCountFormat: true },
+        });
+
+        await tick();
+
+        expect(container.textContent).toContain('dUSD:');
+        expect(container.textContent).not.toContain('x dUSD');
+        expect(container.querySelector('[aria-label="Loading inventory count"]')).not.toBeNull();
+
+        isReady = true;
+        resolveReadyPromise();
+        await Promise.resolve();
+        await tick();
+
+        expect(container.textContent).toContain('dUSD: 10');
+        expect(container.textContent).not.toContain('x dUSD');
+
+        unmount();
+    });
+
     test('renders placeholder icon when item metadata is loading', async () => {
         const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
 
