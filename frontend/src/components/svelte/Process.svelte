@@ -13,6 +13,7 @@
         getProcessState,
         ProcessStates,
         getProcessStartedAt,
+        getRuntimeCreateItems,
     } from '../../utils/gameState/processes.js';
     import processes from '../../generated/processes.json';
     import { durationInSeconds } from '../../utils.js';
@@ -50,6 +51,7 @@
     let pulseTimeoutId;
     let queuedPulseTargets = null;
     let queuedPulseMessage = '';
+    let runtimeCreateItems = [];
     let requiresContainer;
     let consumesContainer;
     let requirementItemMap = new Map();
@@ -231,6 +233,7 @@
             state = ProcessStates.NOT_STARTED;
             processStartedAt = undefined;
             currentTime = Date.now();
+            runtimeCreateItems = [];
             return;
         }
 
@@ -241,6 +244,8 @@
         if (state !== ProcessStates.PAUSED) {
             currentTime = Date.now();
         }
+
+        runtimeCreateItems = getRuntimeCreateItems(processId, process);
     };
 
     const onProcessStart = async () => {
@@ -478,11 +483,11 @@
                 </div>
             {/if}
 
-            {#if process.createItems && process.createItems.length > 0}
+            {#if runtimeCreateItems.length > 0}
                 <h6>Creates:</h6>
                 <div data-testid="process-creates">
                     <CompactItemList
-                        itemList={process.createItems}
+                        itemList={runtimeCreateItems}
                         noRed={true}
                         increase={true}
                         {inverted}
