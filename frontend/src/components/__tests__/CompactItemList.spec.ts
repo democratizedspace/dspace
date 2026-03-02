@@ -1,4 +1,4 @@
-import { render } from '@testing-library/svelte';
+import { render, waitFor } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
@@ -386,6 +386,66 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('renders container-scoped requirements nested under the container item', async () => {
+        const items = [
+            {
+                id: 'savings-jar',
+                name: 'Savings Jar',
+                image: '/savings-jar.png',
+                count: 1,
+            },
+            {
+                id: 'dusd',
+                name: 'dUSD',
+                image: '/dusd.png',
+                count: 100,
+                containerItemId: 'savings-jar',
+            },
+        ];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ 'savings-jar': 1, dusd: 100 });
+        getItemMapMock.mockResolvedValue(
+            new Map([
+                [
+                    'savings-jar',
+                    {
+                        id: 'savings-jar',
+                        name: 'savings jar',
+                        image: '/savings-jar.png',
+                        releaseImage: null,
+                    },
+                ],
+                [
+                    'dusd',
+                    {
+                        id: 'dusd',
+                        name: 'dUSD',
+                        image: '/dusd.png',
+                        releaseImage: null,
+                    },
+                ],
+            ])
+        );
+
+        const { buildFullItemList } = await vi.importActual('../svelte/compactItemListHelpers.js');
+        buildFullItemListMock.mockImplementation(buildFullItemList);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await waitFor(() => {
+            const rows = Array.from(container.querySelectorAll('.horizontal'));
+            expect(rows).toHaveLength(2);
+            expect(rows[0].textContent?.toLowerCase()).toContain('savings jar');
+            expect(rows[1].textContent).toContain('dUSD');
+            expect(rows[1].classList.contains('nested-requirement')).toBe(true);
+            expect(rows[1].textContent).toContain('in savings jar');
+        });
+
+        unmount();
+    });
     test('renders fallback metadata for unknown custom items', async () => {
         const items = [{ id: 'custom-item', count: 1 }];
 
@@ -417,5 +477,133 @@ describe('CompactItemList', () => {
         expect(container.textContent).toContain('Unknown item');
 
         unmount();
+    });
+
+    test('releases stale metadata images when a newer metadata request wins', async () => {
+        const firstReleaseImage = vi.fn();
+        const secondReleaseImage = vi.fn();
+        const firstMap = new Map([
+            [
+                'dusd',
+                {
+                    id: 'dusd',
+                    name: 'dUSD',
+                    image: '/dusd.png',
+                    releaseImage: firstReleaseImage,
+                },
+            ],
+        ]);
+        const secondMap = new Map([
+            [
+                'credits',
+                {
+                    id: 'credits',
+                    name: 'Credits',
+                    image: '/credits.png',
+                    releaseImage: secondReleaseImage,
+                },
+            ],
+        ]);
+
+        let resolveFirstMap;
+        let resolveSecondMap;
+
+        const firstMapPromise = new Promise<Map<string, unknown>>((resolve) => {
+            resolveFirstMap = resolve;
+        });
+        const secondMapPromise = new Promise<Map<string, unknown>>((resolve) => {
+            resolveSecondMap = resolve;
+        });
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockImplementation((list) =>
+            Object.fromEntries(list.map((item) => [item.id, item.count ?? 0]))
+        );
+        buildFullItemListMock.mockImplementation((list) => list);
+        getItemMapMock.mockReturnValueOnce(firstMapPromise).mockReturnValueOnce(secondMapPromise);
+
+        const { rerender, unmount } = render(CompactItemList, {
+            props: { itemList: [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 100 }] },
+        });
+
+        await rerender({
+            itemList: [{ id: 'credits', name: 'Credits', image: '/credits.png', count: 1 }],
+        });
+
+        resolveSecondMap(secondMap);
+        await tick();
+
+        resolveFirstMap(firstMap);
+        await waitFor(() => {
+            expect(firstReleaseImage).toHaveBeenCalledTimes(1);
+        });
+
+        expect(secondReleaseImage).not.toHaveBeenCalled();
+
+        unmount();
+        expect(secondReleaseImage).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not start counts interval when unmounted before ready resolves', async () => {
+        const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockReturnValue({ alpha: 0 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockImplementation((list) => list);
+
+        const { unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+        unmount();
+
+        resolveReadyPromise();
+        await Promise.resolve();
+        await tick();
+        vi.advanceTimersByTime(2000);
+
+        expect(getItemCountsMock).not.toHaveBeenCalled();
+    });
+
+    test('falls back to index keys when an item has no stable id', async () => {
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({});
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockImplementation((list) => list);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: {
+                itemList: [
+                    { id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 },
+                    { id: undefined, name: 'No ID Item', image: '/fallback.png', count: 1 },
+                ],
+            },
+        });
+
+        await waitFor(() => {
+            const rows = Array.from(container.querySelectorAll('.horizontal'));
+            expect(rows).toHaveLength(2);
+            expect(rows[1].textContent).toContain('No ID Item');
+        });
+
+        unmount();
+    });
+
+    test('safely handles undefined item metadata maps', async () => {
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ alpha: 1 });
+        getItemMapMock.mockResolvedValue(undefined);
+        buildFullItemListMock.mockImplementation((list) => list);
+
+        const { unmount } = render(CompactItemList, {
+            props: { itemList: [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }] },
+        });
+
+        await tick();
+        expect(getItemMapMock).toHaveBeenCalledWith(['alpha']);
+
+        expect(() => unmount()).not.toThrow();
     });
 });

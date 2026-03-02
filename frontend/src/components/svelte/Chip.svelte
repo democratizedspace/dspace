@@ -179,6 +179,12 @@
         color: black;
     }
 
+    nav a.inverted.red,
+    nav button.inverted.red,
+    nav .chip-container.inverted.red {
+        color: rgb(255, 94, 0);
+    }
+
     nav a.cheat,
     nav button.cheat,
     nav .chip-container.cheat {

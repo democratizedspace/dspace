@@ -28,7 +28,7 @@ const CUSTOM_CONTENT_BACKUP_MATCH = /\bcustom content backup\b|\/contentbackup/i
 const LEGACY_QUERY_CUES = /\b(v1|v2|legacy|2022|2023|old(?:er)?)\b/i;
 const LEGACY_CHANGELOG_ANCHOR = /^202[0-3]/;
 const PREFERRED_DOC_SLUGS = new Set(['/docs/v3-release-state', '/docs/routes', '/docs/backups']);
-const PREFERRED_CHANGELOG_ANCHORS = new Set(['20260301']);
+const PREFERRED_CHANGELOG_ANCHORS = new Set(['20260401']);
 const SEARCH_OPTIONS = Object.freeze({
     boost: { title: 3, heading: 2 },
     prefix: true,

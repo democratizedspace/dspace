@@ -57,14 +57,36 @@ describe('BuySell sales tax regression', () => {
         mockSellItems.mockReset();
     });
 
+    test('keeps root non-inverted while nested compact list container and buy CTA are inverted', async () => {
+        const { container, findByTestId } = render(BuySell, { props: { itemId: 'taxed-item' } });
+
+        const rootContainer = await findByTestId('buy-sell-root');
+        expect(rootContainer.classList.contains('inverted')).toBe(false);
+
+        const buyToggle = await findByTestId('buy-toggle');
+        const sellToggle = await findByTestId('sell-toggle');
+        const buyAction = await findByTestId('transaction-cta');
+        const compactItemContainer = container.querySelector(
+            '.buy-sell-wrapper > .Container nav .chip-container.static-container'
+        );
+
+        expect(buyAction.textContent).toContain('Buy for 10 dUSD');
+        expect(buyAction.classList.contains('inverted')).toBe(true);
+        expect(compactItemContainer?.classList.contains('inverted')).toBe(true);
+        expect(buyToggle.classList.contains('inverted')).toBe(true);
+        expect(sellToggle.classList.contains('inverted')).toBe(false);
+    });
+
     test('passes base item price to sellItems so tax is not double-applied', async () => {
-        const { findByText } = render(BuySell, { props: { itemId: 'taxed-item' } });
+        const { findByTestId, findByText } = render(BuySell, { props: { itemId: 'taxed-item' } });
 
-        const sellToggle = await findByText('Sell');
-        await fireEvent.click(sellToggle.closest('button') as HTMLButtonElement);
+        const sellToggle = await findByTestId('sell-toggle');
+        await fireEvent.click(sellToggle);
 
-        const sellAction = await findByText('Sell for 8 dUSD (-20%)');
-        await fireEvent.click(sellAction.closest('button') as HTMLButtonElement);
+        await findByText('Sell for 8 dUSD (-20%)');
+        const sellAction = await findByTestId('transaction-cta');
+        expect(sellAction.classList.contains('red')).toBe(true);
+        await fireEvent.click(sellAction);
 
         expect(mockSellItems).toHaveBeenCalledWith(
             expect.arrayContaining([

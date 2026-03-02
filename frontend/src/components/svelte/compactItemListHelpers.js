@@ -25,12 +25,23 @@ export function getItemMetadata(entry, itemMap) {
 export function buildFullItemList(itemList, totals = {}, itemMap = new Map()) {
     return itemList.map((item) => {
         const metadata = getItemMetadata(item, itemMap);
+        const hasContainerMetadata = item?.containerItemId
+            ? itemMap?.has(String(item.containerItemId))
+            : false;
+        const containerMetadata = hasContainerMetadata
+            ? getItemMetadata({ id: item.containerItemId }, itemMap)
+            : null;
         const hasCount = Object.prototype.hasOwnProperty.call(item, 'count');
         const rawCount =
             hasCount && item.count !== undefined && item.count !== null ? Number(item.count) : null;
 
         return {
             ...metadata,
+            containerItemId: item?.containerItemId,
+            containerName:
+                containerMetadata && !containerMetadata.missing && !containerMetadata.loading
+                    ? (containerMetadata.name ?? null)
+                    : null,
             count:
                 rawCount !== null && Number.isFinite(rawCount) ? Number(rawCount.toFixed(5)) : null,
             total: totals[item.id] ?? 0,

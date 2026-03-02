@@ -16,8 +16,8 @@ formats.
   format. See [`/changelog#20230630`](/changelog#20230630).
 - **V2.1 localStorage format (September 15, 2023):** v2.1 explicitly documents that game state is
   stored in localStorage. See [`/changelog#20230915`](/changelog#20230915).
-- **V3 IndexedDB migration (March 1, 2026):** the changelog entry documents the IndexedDB-based
-  storage system and legacy migration context. See [`/changelog#20260301`](/changelog#20260301).
+- **V3 IndexedDB migration (April 1, 2026):** the changelog entry documents the IndexedDB-based
+  storage system and legacy migration context. See [`/changelog#20260401`](/changelog#20260401).
 
 ## DSPACE v1 save format (commit `fc840def24c5140411d2892f468960acb8250681`)
 

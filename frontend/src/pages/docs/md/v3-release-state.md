@@ -16,7 +16,7 @@ slug: 'v3-release-state'
 
 - **Blockchain/Web3 integration plans are removed in v3.** The v3 release notes explicitly
   remove blockchain integration plans and keep the virtual units (dWatt, dUSD, etc.) as plain
-  progress metrics without tokenization. See [/changelog#20260301](/changelog#20260301).
+  progress metrics without tokenization. See [/changelog#20260401](/changelog#20260401).
 - **Primary save storage moved from v2 localStorage to v3 IndexedDB.** v3 stores game state in
   IndexedDB, migrates legacy `gameState` from localStorage on first launch, and clears the legacy
   keys; localStorage is only a fallback when IndexedDB is unavailable. See
