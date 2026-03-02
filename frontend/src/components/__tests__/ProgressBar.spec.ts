@@ -98,3 +98,17 @@ test('re-dispatches completion after progress resets', async () => {
 
     expect(onComplete).toHaveBeenCalledTimes(2);
 });
+
+test('uses high-contrast inverted styles for light process cards', () => {
+    const startDate = new Date('2026-01-13T00:00:00.000Z');
+    const { container } = render(ProgressBar, {
+        startDate,
+        totalDurationSeconds: 10,
+        currentTime: new Date('2026-01-13T00:00:02.000Z').getTime(),
+        inverted: true,
+    });
+
+    expect(container.querySelector('.progress-container.inverted')).toBeTruthy();
+    const fill = container.querySelector('.progress-bar-fill');
+    expect(fill?.getAttribute('style')).toContain('width: 20%');
+});
