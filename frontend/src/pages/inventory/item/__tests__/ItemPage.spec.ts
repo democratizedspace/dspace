@@ -152,20 +152,22 @@ describe('ItemPage', () => {
         );
         isGameStateReadyMock.mockReturnValue(true);
 
-        const { getByText } = render(ItemPage, {
+        const { getByText, queryByText } = render(ItemPage, {
             props: { itemId: savingsJar!.id },
         });
 
         await waitFor(() => {
             expect(getByText('Stored contents:')).toBeTruthy();
             expect(getByText(/dUSD:\s*42/)).toBeTruthy();
+            expect(queryByText(/[+−-]?undefined/)).toBeNull();
         });
 
         storedDusdCount = 52;
-        vi.advanceTimersByTime(1000);
+        await vi.advanceTimersByTimeAsync(1000);
 
         await waitFor(() => {
             expect(getByText(/dUSD:\s*52/)).toBeTruthy();
+            expect(queryByText(/[+−-]?undefined/)).toBeNull();
         });
     });
 });
