@@ -8,9 +8,9 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     '20221019': [
         {
             message:
-                'Process reservations evolved significantly after this build. For the v3 behavior and related fixes, take a look at the March 1, 2026 release notes.',
-            href: '/docs/changelog/20260301',
-            linkLabel: 'March 1, 2026 changelog',
+                'Process reservations evolved significantly after this build. For the v3 behavior and related fixes, take a look at the April 1, 2026 release notes.',
+            href: '/docs/changelog/20260401',
+            linkLabel: 'April 1, 2026 changelog',
         },
         {
             message:
@@ -30,9 +30,9 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     '20221210': [
         {
             message:
-                'The energy and offset systems described below evolved over time. For the up-to-date renewable workflow, review the March 1, 2026 release notes.',
-            href: '/docs/changelog/20260301',
-            linkLabel: 'March 1, 2026 changelog',
+                'The energy and offset systems described below evolved over time. For the up-to-date renewable workflow, review the April 1, 2026 release notes.',
+            href: '/docs/changelog/20260401',
+            linkLabel: 'April 1, 2026 changelog',
         },
         {
             message:
@@ -44,9 +44,9 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     '20230101': [
         {
             message:
-                'Need the modern process reservation rules? They are documented alongside the v3 architecture refresh in the March 1, 2026 release notes.',
-            href: '/docs/changelog/20260301',
-            linkLabel: 'March 1, 2026 changelog',
+                'Need the modern process reservation rules? They are documented alongside the v3 architecture refresh in the April 1, 2026 release notes.',
+            href: '/docs/changelog/20260401',
+            linkLabel: 'April 1, 2026 changelog',
         },
     ],
     '20230630': [
@@ -58,9 +58,9 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         },
         {
             message:
-                'Inventory filters, the contributor tooling roadmap, and the dChat knowledge base all matured in the March 1, 2026 release. Read the v3 changelog for the latest details.',
-            href: '/docs/changelog/20260301',
-            linkLabel: 'March 1, 2026 changelog',
+                'Inventory filters, the contributor tooling roadmap, and the dChat knowledge base all matured in the April 1, 2026 release. Read the v3 changelog for the latest details.',
+            href: '/docs/changelog/20260401',
+            linkLabel: 'April 1, 2026 changelog',
         },
         {
             message:
@@ -93,9 +93,9 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     '20230915': [
         {
             message:
-                'Cloud Sync and cross-device backups arrived in the March 1, 2026 release. Check that changelog for setup instructions.',
-            href: '/docs/changelog/20260301',
-            linkLabel: 'March 1, 2026 changelog',
+                'Cloud Sync and cross-device backups arrived in the April 1, 2026 release. Check that changelog for setup instructions.',
+            href: '/docs/changelog/20260401',
+            linkLabel: 'April 1, 2026 changelog',
         },
     ],
     '20260201': [
@@ -106,10 +106,10 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
             linkLabel: 'token.place integration doc',
         },
     ],
-    '20260301': [
+    '20260401': [
         {
             message:
-                'Release summary: v3.0.0 shipped on March 1, 2026 with 10x quest growth (246 official quests) plus new chemistry, programming, and rocketry chains.',
+                'Release summary: v3.0.0 shipped on April 1, 2026 with 10x quest growth (246 official quests) plus new chemistry, programming, and rocketry chains.',
             href: '/docs/quest-trees',
             linkLabel: 'Quest Trees',
         },
