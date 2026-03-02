@@ -1,6 +1,5 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
-    import { writable } from 'svelte/store';
     import Chip from '../../../components/svelte/Chip.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
     import {
@@ -8,24 +7,24 @@
         getProcessesForItemIncludingCustom,
         ProcessItemTypes,
     } from '../../../utils/gameState/processes.js';
-    import { getContainedItemCounts, getItemCounts } from '../../../utils/gameState/inventory.js';
+    import { state } from '../../../utils/gameState/common.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
-    import { getItemById, getItemMap } from '../../../utils/itemResolver.js';
+    import { getItemById } from '../../../utils/itemResolver.js';
 
     export let itemId;
 
     let itemList = [{ id: itemId }];
 
-    const mounted = writable(false);
-    const count = writable(0);
+    let mounted = false;
 
     let item = null;
     let isLoading = true;
     let itemNotFound = false;
     let releaseImage = null;
-    let containedItemCounts = [];
+    let containedItemList = [];
+    let unsubscribeState;
 
     let processes = {};
     const quests = getQuestsForItem(itemId);
@@ -58,48 +57,46 @@
         isLoading = false;
     }
 
-    async function loadContainedItemCounts() {
+    function buildContainedItemList() {
         if (!item || !item.itemCounts || typeof item.itemCounts !== 'object') {
-            containedItemCounts = [];
+            containedItemList = [];
             return;
         }
 
         const trackedItemIds = Object.keys(item.itemCounts);
 
         if (trackedItemIds.length === 0) {
-            containedItemCounts = [];
+            containedItemList = [];
             return;
         }
 
-        const counts = getContainedItemCounts(item.id, trackedItemIds);
-        const itemMap = await getItemMap(trackedItemIds);
-
-        containedItemCounts = trackedItemIds.map((trackedItemId) => ({
+        containedItemList = trackedItemIds.map((trackedItemId) => ({
             id: trackedItemId,
-            name: itemMap.get(trackedItemId)?.name ?? trackedItemId,
-            count: Number(counts[trackedItemId] || 0),
+            containerItemId: item.id,
         }));
     }
 
     onMount(async () => {
         await loadItem();
+        buildContainedItemList();
         try {
             processes = await getProcessesForItemIncludingCustom(itemId);
         } catch (error) {
             processes = getProcessesForItem(itemId);
         }
-        const itemCount = getItemCounts([{ id: itemId }])[itemId];
-        count.set(itemCount);
-        await loadContainedItemCounts();
-        mounted.set(true);
+        unsubscribeState = state.subscribe(() => {
+            buildContainedItemList();
+        });
+        mounted = true;
     });
 
     onDestroy(() => {
+        unsubscribeState?.();
         releaseImage?.();
     });
 </script>
 
-{#if $mounted}
+{#if mounted}
     <Chip inverted={true} text="" dataTestId="item-page-detail-chip">
         {#if isLoading}
             <div class="vertical">
@@ -114,13 +111,9 @@
                 <img src={item.image} alt={item.name} />
                 <h2>{item.name}</h2>
                 <CompactItemList {itemList} inverted={true} />
-                {#if containedItemCounts.length > 0}
+                {#if containedItemList.length > 0}
                     <p>Stored contents:</p>
-                    <ul>
-                        {#each containedItemCounts as containedItem}
-                            <li>{containedItem.name}: {containedItem.count}</li>
-                        {/each}
-                    </ul>
+                    <CompactItemList itemList={containedItemList} inverted={true} />
                 {/if}
                 {item.description}
                 <BuySell {itemId} />

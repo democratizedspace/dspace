@@ -7,7 +7,6 @@ import { db } from '../../../../utils/customcontent.js';
 import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 
 const getItemCountsMock = vi.fn();
-const getContainedItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
 
 vi.mock('../../../../utils/gameState/processes.js', () => {
@@ -36,7 +35,6 @@ vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
     return {
         ...actual,
         getItemCounts: (...args) => getItemCountsMock(...args),
-        getContainedItemCounts: (...args) => getContainedItemCountsMock(...args),
     };
 });
 
@@ -73,10 +71,10 @@ async function deleteCustomContentDb() {
 }
 
 afterEach(async () => {
+    vi.useRealTimers();
     clearItemResolverCache();
     await deleteCustomContentDb();
     getItemCountsMock.mockReset();
-    getContainedItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
 });
 
@@ -140,13 +138,20 @@ describe('ItemPage', () => {
     });
 
     it('renders container item balances from itemCounts metadata', async () => {
+        vi.useFakeTimers();
         const savingsJar = items.find((item) => item.id === '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec');
+        const dUSDId = '5247a603-294a-4a34-a884-1ae20969b2a1';
 
         expect(savingsJar).toBeDefined();
 
-        getItemCountsMock.mockReturnValue({ [savingsJar!.id]: 1 });
-        getContainedItemCountsMock.mockReturnValue({
-            '5247a603-294a-4a34-a884-1ae20969b2a1': 42,
+        let storedCount = 42;
+        getItemCountsMock.mockImplementation((itemList) => {
+            const counts = {};
+            itemList.forEach((item) => {
+                counts[item.id] =
+                    item.containerItemId === savingsJar!.id && item.id === dUSDId ? storedCount : 1;
+            });
+            return counts;
         });
         isGameStateReadyMock.mockReturnValue(true);
 
@@ -156,7 +161,14 @@ describe('ItemPage', () => {
 
         await waitFor(() => {
             expect(getByText('Stored contents:')).toBeTruthy();
-            expect(getByText(/dUSD: 42/)).toBeTruthy();
+            expect(getByText(/42 x dUSD/)).toBeTruthy();
+        });
+
+        storedCount = 84;
+        await vi.advanceTimersByTimeAsync(1000);
+
+        await waitFor(() => {
+            expect(getByText(/84 x dUSD/)).toBeTruthy();
         });
     });
 });
