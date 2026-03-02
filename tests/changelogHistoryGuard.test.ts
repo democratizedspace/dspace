@@ -33,7 +33,7 @@ const SNAPSHOT_HASH_PATH = path.join(
   __dirname,
   '../frontend/tests/fixtures/changelogSnapshotHashes.json'
 );
-const LATEST_FILE = '20260301';
+const LATEST_FILE = '20260401';
 
 function readChangelogBody(filePath: string): string {
   const raw = fs.readFileSync(filePath, 'utf8');
