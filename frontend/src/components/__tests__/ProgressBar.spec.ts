@@ -72,6 +72,22 @@ test('renders stopped state without animated transition', () => {
     expect(fill?.getAttribute('style')).toContain('transition: none');
 });
 
+
+test('uses high-contrast inverted colors when requested', () => {
+    const { container } = render(ProgressBar, {
+        inverted: true,
+        startDate: new Date('2026-01-13T00:00:00.000Z'),
+        totalDurationSeconds: 10,
+        currentTime: new Date('2026-01-13T00:00:02.000Z'),
+    });
+
+    const progressBar = container.querySelector('.progress-bar');
+    const fill = container.querySelector('.progress-bar-fill');
+
+    expect(progressBar?.classList.contains('inverted')).toBe(true);
+    expect(fill).not.toBeNull();
+});
+
 test('re-dispatches completion after progress resets', async () => {
     const startDate = new Date('2026-01-13T00:00:00.000Z');
     const onComplete = vi.fn();
