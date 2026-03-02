@@ -1,4 +1,5 @@
 import { render } from '@testing-library/svelte';
+import { readFileSync } from 'node:fs';
 import { afterEach, expect, test, vi } from 'vitest';
 import { tick } from 'svelte';
 import ProgressBar from '../svelte/ProgressBar.svelte';
@@ -108,8 +109,17 @@ test('uses high-contrast inverted styles for light process cards', () => {
         inverted: true,
     });
 
-    expect(container.querySelector('.progress-container.inverted')).toBeTruthy();
+    const progressContainer = container.querySelector('.progress-container.inverted');
+    expect(progressContainer).toBeTruthy();
     const fill = container.querySelector('.progress-bar-fill');
     expect(fill).toBeTruthy();
     expect(fill.style.width).toBe('20%');
+
+    const componentSource = readFileSync(
+        `${process.cwd()}/frontend/src/components/svelte/ProgressBar.svelte`,
+        'utf8'
+    );
+
+    expect(componentSource).toContain('.progress-container.inverted .progress-bar-fill');
+    expect(componentSource).toContain('background-color: #007006;');
 });

@@ -9,6 +9,7 @@
     "frontend/src/components/svelte/Process.svelte",
     "frontend/src/components/svelte/ProgressBar.svelte",
     "frontend/src/components/__tests__/ProgressBar.spec.ts",
+    "outages/2026-03-01-chip-inverted-contrast-specificity-regression.json",
     "outages/2026-03-01-chip-inverted-contrast-specificity-regression.md",
     "outages/2026-02-16-item-page-contrast-regression.json",
     "https://github.com/democratizedspace/dspace/pull/3816",
