@@ -241,6 +241,40 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('renders container context only in default count-name mode', async () => {
+        const items = [
+            {
+                id: 'dusd',
+                name: 'dUSD',
+                image: '/dusd.png',
+                count: null,
+                containerName: 'Savings Jar',
+            },
+        ];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ dusd: 10 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, rerender, unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+
+        expect(container.textContent).toContain('10 x dUSD');
+        expect(container.textContent).toContain('in Savings Jar');
+
+        await rerender({ itemList: items, nameCountFormat: true });
+        await tick();
+
+        expect(container.textContent).toContain('10 x dUSD');
+        expect(container.textContent).toContain('in Savings Jar');
+
+        unmount();
+    });
+
     test('falls back to index keys when items have no stable id', async () => {
         const items = [
             { id: null, name: 'Mystery A', image: '/a.png', count: 1 },
