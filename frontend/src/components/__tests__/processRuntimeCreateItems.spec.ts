@@ -1,4 +1,5 @@
 import { vi, describe, test, expect, beforeEach } from 'vitest';
+import processes from '../../generated/processes.json';
 
 const getStoredItemCountMock = vi.hoisted(() => vi.fn());
 
@@ -8,22 +9,6 @@ vi.mock('../../utils/gameState/itemContainers.js', () => ({
     addStoredItemsToState: vi.fn(),
     removeStoredItemsFromState: vi.fn(),
     removeAllStoredItemsFromState: vi.fn(),
-}));
-
-vi.mock('../../generated/processes.json', () => ({
-    default: [
-        {
-            id: 'runtime-create',
-            createItems: [{ id: 'broken-jar', count: 1 }],
-            itemCountOperations: [
-                {
-                    operation: 'withdraw-all',
-                    containerItemId: 'jar',
-                    itemId: 'dusd',
-                },
-            ],
-        },
-    ],
 }));
 
 import { getRuntimeCreateItems } from '../../utils/gameState/processes.js';
@@ -36,10 +21,34 @@ describe('getRuntimeCreateItems', () => {
     test('includes withdraw-all item counts alongside static create items', () => {
         getStoredItemCountMock.mockReturnValue(37);
 
-        expect(getRuntimeCreateItems('runtime-create')).toEqual([
+        expect(
+            getRuntimeCreateItems('runtime-create', {
+                id: 'runtime-create',
+                createItems: [{ id: 'broken-jar', count: 1 }],
+                itemCountOperations: [
+                    {
+                        operation: 'withdraw-all',
+                        containerItemId: 'jar',
+                        itemId: 'dusd',
+                    },
+                ],
+            })
+        ).toEqual([
             { id: 'broken-jar', count: 1 },
             { id: 'dusd', count: 37 },
         ]);
+    });
+
+    test('uses savings-jar-break generated process for runtime creates', () => {
+        getStoredItemCountMock.mockReturnValue(37);
+
+        expect(getRuntimeCreateItems('savings-jar-break')).toEqual([
+            { id: 'f797d8de-11c5-4f89-a725-c2ac2255d173', count: 1 },
+            { id: '5247a603-294a-4a34-a884-1ae20969b2a1', count: 37 },
+        ]);
+
+        const savingsJarBreak = processes.find((process) => process.id === 'savings-jar-break');
+        expect(savingsJarBreak?.title).toBe('Break savings jar and retrieve all dUSD');
     });
 
     test('merges duplicate created items by id', () => {
