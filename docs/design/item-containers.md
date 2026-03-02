@@ -32,9 +32,14 @@ Processes can apply container balance operations:
 Each operation references `{ containerItemId, itemId }`.
 Validation enforces that the pair is allowed by container catalog `itemCounts` keys.
 
+Process cards treat `withdraw` and `withdraw-all` operations as explicit created outputs so
+players can see container contents coming back into inventory. For `withdraw-all`, the
+creates list uses the current stored count at render time.
+
 ## Savings jar use case
 
 - Savings jar item allows storing only dUSD via `itemCounts`.
 - Deposit process consumes 10 dUSD and deposits 10 dUSD to the jar.
-- Break process consumes savings jar, creates broken savings jar, and withdraws all dUSD.
+- Break process consumes savings jar, creates broken savings jar, and shows the withdrawn
+  dUSD count in Creates based on the current jar balance.
 - Item page displays current stored contents from runtime `itemContainerCounts`.

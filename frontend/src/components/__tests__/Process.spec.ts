@@ -597,6 +597,51 @@ test('renders custom process start controls when rendering a custom process', as
     expect(startProcess).toHaveBeenCalledWith('custom-1', customProcess);
 });
 
+test('shows withdraw-all container output in the creates list', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockImplementation((items = []) => {
+        const [first] = items;
+        if (first?.containerItemId === 'jar-1') {
+            return { 'item-1': 7 };
+        }
+
+        return {
+            'item-1': 2,
+            'item-2': 3,
+        };
+    });
+
+    const customProcess = {
+        id: 'custom-withdraw-all',
+        title: 'Break savings jar',
+        duration: '5s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [{ id: 'item-2', count: 1 }],
+        itemCountOperations: [
+            {
+                operation: 'withdraw-all',
+                containerItemId: 'jar-1',
+                itemId: 'item-1',
+            },
+        ],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'custom-withdraw-all',
+        processData: customProcess,
+    });
+
+    await waitFor(() => {
+        const normalized = getByTestId('process-creates').textContent?.replace(/\s+/g, ' ');
+        expect(normalized).toMatch(/Second Item/);
+        expect(normalized).toMatch(/\+1/);
+        expect(normalized).toMatch(/Test Item/);
+        expect(normalized).toMatch(/\+7/);
+    });
+});
 test('shows start feedback when container-operation validation fails', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
     getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });

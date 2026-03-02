@@ -55,6 +55,7 @@
     let requirementItemMap = new Map();
     let requirementItemRequestId = 0;
     let previousRequirementKey = '';
+    let displayCreateItems = [];
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
@@ -241,6 +242,47 @@
         if (state !== ProcessStates.PAUSED) {
             currentTime = Date.now();
         }
+    };
+
+    const getContainerWithdrawCreateItems = (itemCountOperations = []) => {
+        return itemCountOperations.reduce((items, operation) => {
+            if (
+                !operation ||
+                (operation.operation !== 'withdraw' && operation.operation !== 'withdraw-all')
+            ) {
+                return items;
+            }
+
+            const itemId =
+                typeof operation.itemId === 'string' && operation.itemId.trim().length > 0
+                    ? operation.itemId
+                    : null;
+            const containerItemId =
+                typeof operation.containerItemId === 'string' &&
+                operation.containerItemId.trim().length > 0
+                    ? operation.containerItemId
+                    : null;
+
+            if (!itemId || !containerItemId) {
+                return items;
+            }
+
+            const operationCount =
+                operation.operation === 'withdraw-all'
+                    ? Number(getItemCounts([{ id: itemId, containerItemId }])[itemId] ?? 0)
+                    : Number(operation.count ?? 0);
+
+            if (!Number.isFinite(operationCount) || operationCount < 0) {
+                return items;
+            }
+
+            items.push({
+                id: itemId,
+                count: operationCount,
+                containerItemId,
+            });
+            return items;
+        }, []);
     };
 
     const onProcessStart = async () => {
@@ -442,6 +484,11 @@
             void loadRequirementItemMap(requirementItems);
         }
     }
+
+    $: displayCreateItems = [
+        ...(process?.createItems ?? []),
+        ...getContainerWithdrawCreateItems(process?.itemCountOperations ?? []),
+    ];
 </script>
 
 {#if mounted && process}
@@ -478,11 +525,11 @@
                 </div>
             {/if}
 
-            {#if process.createItems && process.createItems.length > 0}
+            {#if displayCreateItems.length > 0}
                 <h6>Creates:</h6>
                 <div data-testid="process-creates">
                     <CompactItemList
-                        itemList={process.createItems}
+                        itemList={displayCreateItems}
                         noRed={true}
                         increase={true}
                         {inverted}
