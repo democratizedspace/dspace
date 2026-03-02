@@ -220,8 +220,14 @@ describe('CompactItemList', () => {
         unmount();
     });
 
-    test('renders container-scoped requirements with nested styling', async () => {
+    test('renders container-scoped requirements nested under the container item', async () => {
         const items = [
+            {
+                id: 'savings-jar',
+                name: 'Savings Jar',
+                image: '/savings-jar.png',
+                count: 1,
+            },
             {
                 id: 'dusd',
                 name: 'dUSD',
@@ -232,18 +238,32 @@ describe('CompactItemList', () => {
         ];
 
         isGameStateReadyMock.mockReturnValue(true);
-        getItemCountsMock.mockReturnValue({ dusd: 30 });
-        getItemMapMock.mockResolvedValue(new Map());
-        buildFullItemListMock.mockReturnValue([
-            {
-                id: 'dusd',
-                name: 'dUSD',
-                image: '/dusd.png',
-                count: 100,
-                containerItemId: 'savings-jar',
-                containerName: 'savings jar',
-            },
-        ]);
+        getItemCountsMock.mockReturnValue({ 'savings-jar': 1, dusd: 100 });
+        getItemMapMock.mockResolvedValue(
+            new Map([
+                [
+                    'savings-jar',
+                    {
+                        id: 'savings-jar',
+                        name: 'savings jar',
+                        image: '/savings-jar.png',
+                        releaseImage: null,
+                    },
+                ],
+                [
+                    'dusd',
+                    {
+                        id: 'dusd',
+                        name: 'dUSD',
+                        image: '/dusd.png',
+                        releaseImage: null,
+                    },
+                ],
+            ])
+        );
+
+        const { buildFullItemList } = await vi.importActual('../svelte/compactItemListHelpers.js');
+        buildFullItemListMock.mockImplementation(buildFullItemList);
 
         const { container, unmount } = render(CompactItemList, {
             props: { itemList: items },
@@ -251,10 +271,12 @@ describe('CompactItemList', () => {
 
         await tick();
 
-        const nestedRequirement = container.querySelector('.nested-requirement');
-        expect(nestedRequirement).not.toBeNull();
-        expect(container.textContent).toContain('in savings jar');
-        expect(getItemMapMock).toHaveBeenCalledWith(['dusd', 'savings-jar']);
+        const rows = Array.from(container.querySelectorAll('.horizontal'));
+        expect(rows).toHaveLength(2);
+        expect(rows[0].textContent).toContain('savings jar');
+        expect(rows[1].textContent).toContain('dUSD');
+        expect(rows[1].classList.contains('nested-requirement')).toBe(true);
+        expect(rows[1].textContent).toContain('in savings jar');
 
         unmount();
     });
