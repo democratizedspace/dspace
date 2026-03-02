@@ -448,6 +448,35 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('keeps name-count mode stable when a ready total is temporarily missing', async () => {
+        const items = [
+            {
+                id: 'dusd',
+                name: 'dUSD',
+                image: '/dusd.png',
+                count: null,
+                containerName: 'Savings Jar',
+            },
+        ];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({});
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, nameCountFormat: true },
+        });
+
+        await tick();
+
+        expect(container.textContent).not.toContain('x dUSD');
+        expect(container.textContent).not.toContain('in Savings Jar');
+        expect(container.textContent).not.toContain('undefined');
+
+        unmount();
+    });
+
     test('renders suffix and container context when name-count mode is disabled', async () => {
         const items = [
             {
