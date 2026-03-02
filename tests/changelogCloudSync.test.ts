@@ -28,7 +28,7 @@ describe('September 15, 2023 changelog', () => {
             expect.arrayContaining([
                 expect.objectContaining({
                     href: '/docs/changelog/20260301',
-                    linkLabel: 'March 1, 2026 changelog',
+                    linkLabel: 'April 1, 2026 changelog',
                 }),
             ])
         );

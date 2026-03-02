@@ -24,7 +24,7 @@ describe('June 30, 2023 changelog AI companion note', () => {
             expect.arrayContaining([
                 expect.objectContaining({
                     href: '/docs/changelog/20260301',
-                    linkLabel: 'March 1, 2026 changelog',
+                    linkLabel: 'April 1, 2026 changelog',
                 }),
             ])
         );
