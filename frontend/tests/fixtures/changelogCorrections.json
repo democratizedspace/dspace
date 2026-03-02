@@ -59,10 +59,10 @@
             "date": "2026-01-07"
         }
     ],
-    "20260301": [
+    "20260401": [
         {
             "type": "formatting",
-            "description": "Shifted the v3 release date from February 1 to March 1 per QA schedule.",
+            "description": "Shifted the v3 release date from March 1 to April 1 per release schedule.",
             "date": "2026-01-27"
         },
         {

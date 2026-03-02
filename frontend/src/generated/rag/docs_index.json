@@ -6007,182 +6007,182 @@
         "541": {
             "id": "changelog:/changelog:20260301:0:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
-            "heading": "March 1, 2026",
-            "anchor": "20260301",
+            "title": "April 1, 2026",
+            "heading": "April 1, 2026",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "542": {
             "id": "changelog:/changelog:20260301:1:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Navigation",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "543": {
             "id": "changelog:/changelog:20260301:2:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Content updates",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "544": {
             "id": "changelog:/changelog:20260301:3:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Infrastructure",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "545": {
             "id": "changelog:/changelog:20260301:4:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Development milestones",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "546": {
             "id": "changelog:/changelog:20260301:5:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "10x More Quests",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "547": {
             "id": "changelog:/changelog:20260301:6:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Quest detail page",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "548": {
             "id": "changelog:/changelog:20260301:7:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Custom Quests",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "549": {
             "id": "changelog:/changelog:20260301:8:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Custom Items & Processes",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "550": {
             "id": "changelog:/changelog:20260301:9:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Process System Improvements",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "551": {
             "id": "changelog:/changelog:20260301:10:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "UI Polish",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "552": {
             "id": "changelog:/changelog:20260301:11:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Streamlined Game Systems",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "553": {
             "id": "changelog:/changelog:20260301:12:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Local‑First Architecture",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "554": {
             "id": "changelog:/changelog:20260301:13:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Refined Virtual Economy",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "555": {
             "id": "changelog:/changelog:20260301:14:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "AI Integration Updates",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "556": {
             "id": "changelog:/changelog:20260301:15:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "dChat knowledge upgrade",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "557": {
             "id": "changelog:/changelog:20260301:16:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Community Features",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "558": {
             "id": "changelog:/changelog:20260301:17:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Self‑hosted",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "559": {
             "id": "changelog:/changelog:20260301:18:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Switching to MIT License",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "560": {
             "id": "changelog:/changelog:20260301:19:0",
             "slug": "/changelog",
-            "title": "March 1, 2026",
+            "title": "April 1, 2026",
             "heading": "Looking Forward",
-            "anchor": "20260301",
+            "anchor": "20260401",
             "kind": "changelog",
-            "path": "frontend/src/pages/docs/md/changelog/20260301.md"
+            "path": "frontend/src/pages/docs/md/changelog/20260401.md"
         },
         "561": {
             "id": "route:/docs/routes:top:0:0",
@@ -8327,7 +8327,7 @@
             }
         ],
         [
-            "20260301",
+            "20260401",
             {
                 "2": { "210": 1, "499": 1 },
                 "4": {

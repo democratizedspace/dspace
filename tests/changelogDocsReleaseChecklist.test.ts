@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-describe('March 1, 2026 changelog release checklist', () => {
+describe('April 1, 2026 changelog release checklist', () => {
     it('drops the prerelease checklist language from the published notes', () => {
         const changelogPath = join(
             process.cwd(),
@@ -12,7 +12,7 @@ describe('March 1, 2026 changelog release checklist', () => {
             'docs',
             'md',
             'changelog',
-            '20260301.md'
+            '20260401.md'
         );
 
         const content = readFileSync(changelogPath, 'utf8');

@@ -29,8 +29,8 @@ describe('changelog 20230630 contributors guidance', () => {
     expect(notes).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          href: '/docs/changelog/20260301',
-          linkLabel: 'March 1, 2026 changelog',
+          href: '/docs/changelog/20260401',
+          linkLabel: 'April 1, 2026 changelog',
         }),
         expect.objectContaining({
           href: '/docs/contributors-guide',

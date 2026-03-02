@@ -168,7 +168,7 @@ describe('QA 9.4 chat hallucination contracts', () => {
         const ragMessages = debugMessages.filter((message) => message.kind === 'rag');
         const ragText = ragMessages.map((message) => message.content).join('\n');
 
-        expect(ragText).toMatch(/\/docs\/v3-release-state|\/changelog#20260301/);
+        expect(ragText).toMatch(/\/docs\/v3-release-state|\/changelog#20260401/);
         expect(ragText).not.toMatch(/\/changelog#2023/);
     });
 });
