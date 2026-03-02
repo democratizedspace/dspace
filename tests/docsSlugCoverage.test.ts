@@ -71,10 +71,17 @@ describe('Docs slugs and references', () => {
             .filter((slug): slug is string => typeof slug === 'string')
             .map((slug) => slug.toLowerCase());
 
+        const changelogDocSlugs = docFiles
+            .filter((filePath) => filePath.includes(`${path.sep}changelog${path.sep}`))
+            .map((filePath) => readFrontmatter(filePath).frontmatter?.slug)
+            .filter((slug): slug is string => typeof slug === 'string')
+            .map((slug) => slug.toLowerCase());
+
         const knownDocRoutes = new Set<string>(['/docs', '/docs/outages', '/changelog']);
 
         topLevelDocSlugs.forEach((slug) => knownDocRoutes.add(`/docs/${slug}`));
         outageDocSlugs.forEach((slug) => knownDocRoutes.add(`/docs/outages/${slug}`));
+        changelogDocSlugs.forEach((slug) => knownDocRoutes.add(`/docs/changelog/${slug}`));
 
         const referencedDocRoutes = new Set<string>();
 
