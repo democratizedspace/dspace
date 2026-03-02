@@ -147,4 +147,25 @@ describe('BuySell', () => {
         expect(buyLabel).toBeTruthy();
         expect(db.get).not.toHaveBeenCalled();
     });
+
+    it('keeps buy action controls inverted for contrast', async () => {
+        mockItems.push({
+            id: 'catalog-item',
+            name: 'Catalog Item',
+            description: 'Static catalog entry',
+            image: '/catalog.png',
+            price: '3 dUSD',
+            unit: 'unit',
+        });
+
+        const { findByText } = render(BuySell, { props: { itemId: 'catalog-item' } });
+
+        const buyToggle = await findByText('Buy');
+        const buyAction = await findByText('Buy for 3 dUSD');
+        const sellToggle = await findByText('Sell');
+
+        expect(buyToggle.closest('button')?.classList.contains('inverted')).toBe(true);
+        expect(sellToggle.closest('button')?.classList.contains('inverted')).toBe(false);
+        expect(buyAction.closest('button')?.classList.contains('inverted')).toBe(true);
+    });
 });

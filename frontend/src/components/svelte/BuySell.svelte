@@ -97,7 +97,7 @@
     $: displaySellPriceInRed = sellChipActive && taxAmount > 0;
 </script>
 
-<Chip inverted={true} text="">
+<Chip inverted={false} text="">
     {#if isLoading}
         <p>Loading...</p>
     {:else if !item}
@@ -106,15 +106,13 @@
         <p>Not tradeable</p>
     {:else}
         <div class="buy-sell-wrapper vertical">
-            <Chip text="">
-                <CompactItemList {itemList} />
-            </Chip>
+            <CompactItemList {itemList} inverted={true} />
 
             <div class="horizontal">
-                <Chip text="Buy" inverted={!buyChipActive} onClick={() => handleTypeClick('buy')} />
+                <Chip text="Buy" inverted={buyChipActive} onClick={() => handleTypeClick('buy')} />
                 <Chip
                     text="Sell"
-                    inverted={!sellChipActive}
+                    inverted={sellChipActive}
                     onClick={() => handleTypeClick('sell')}
                 />
             </div>
@@ -136,6 +134,7 @@
                     onClick={handleTransactionClick}
                     priceInRed={displaySellPriceInRed}
                     red={sellChipActive}
+                    inverted={true}
                 />
             </div>
 
