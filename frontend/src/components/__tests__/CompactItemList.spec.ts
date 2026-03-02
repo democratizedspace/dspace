@@ -219,6 +219,118 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('keeps default count-name format when decrease mode is enabled', async () => {
+        const items = [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 3 }];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ dusd: 10 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, decrease: true, nameCountFormat: true },
+        });
+
+        await tick();
+
+        expect(container.textContent).toContain('10');
+        expect(container.textContent).toContain('−3');
+        expect(container.textContent).toContain('x dUSD');
+        expect(container.textContent).not.toContain('dUSD:');
+
+        unmount();
+    });
+
+
+    test('falls back to index keys when items have no stable id', async () => {
+        const items = [
+            { id: null, name: 'Mystery A', image: '/a.png', count: 1 },
+            { id: undefined, name: 'Mystery B', image: '/b.png', count: 1 },
+        ];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({});
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+
+        expect(container.querySelectorAll('.horizontal')).toHaveLength(2);
+        expect(container.textContent).toContain('Mystery A');
+        expect(container.textContent).toContain('Mystery B');
+
+        unmount();
+    });
+
+    test('releases stale metadata images when a newer request wins', async () => {
+        const staleReleaseImage = vi.fn();
+        const alpha = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: null }];
+        const beta = [{ id: 'beta', name: 'Beta', image: '/beta.png', count: null }];
+        let resolveFirstMetadata;
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ alpha: 1, beta: 2 });
+        getItemMapMock
+            .mockImplementationOnce(
+                () =>
+                    new Promise((resolve) => {
+                        resolveFirstMetadata = resolve;
+                    })
+            )
+            .mockResolvedValueOnce(new Map([['beta', { id: 'beta', name: 'Beta', image: '/beta.png' }]]));
+        buildFullItemListMock.mockImplementation((list) => list);
+
+        const { rerender, unmount } = render(CompactItemList, {
+            props: { itemList: alpha, nameCountFormat: true },
+        });
+
+        await tick();
+        await rerender({ itemList: beta, nameCountFormat: true });
+        await tick();
+
+        resolveFirstMetadata(
+            new Map([
+                [
+                    'alpha',
+                    { id: 'alpha', name: 'Alpha', image: '/alpha.png', releaseImage: staleReleaseImage },
+                ],
+            ])
+        );
+
+        await Promise.resolve();
+        await Promise.resolve();
+
+        expect(staleReleaseImage).toHaveBeenCalledTimes(1);
+
+        unmount();
+    });
+
+    test('ignores game-state ready resolution after unmount', async () => {
+        const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: null }];
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockReturnValue({ alpha: 3 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { unmount } = render(CompactItemList, {
+            props: { itemList: items, nameCountFormat: true },
+        });
+
+        await tick();
+        unmount();
+
+        resolveReadyPromise();
+        await Promise.resolve();
+        await Promise.resolve();
+
+        expect(getItemCountsMock).not.toHaveBeenCalled();
+    });
+
     test('renders placeholder icon when item metadata is loading', async () => {
         const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
 
