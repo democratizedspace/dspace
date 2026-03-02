@@ -52,7 +52,25 @@
         items.forEach((item) => item?.releaseImage?.());
     };
 
-    const getIdsKey = (list) => list.map((item) => getStableItemId(item)).join('|');
+    const releaseMapImages = (map) => {
+        if (!map) {
+            return;
+        }
+
+        releaseItemImages(Array.from(map.values()));
+    };
+
+    const getIdsKey = (list) =>
+        list
+            .map((item) => {
+                const itemId = getStableItemId(item);
+                const containerId =
+                    typeof item?.containerItemId === 'string' || typeof item?.containerItemId === 'number'
+                        ? String(item.containerItemId)
+                        : '';
+                return `${itemId ?? ''}:${containerId}`;
+            })
+            .join('|');
 
     let previousIdsKey = '';
 
@@ -64,11 +82,12 @@
         const map = await getItemMap(ids);
 
         if (!isMounted || requestId !== metadataRequestId) {
-            releaseItemImages(Array.from(map.values()));
+            releaseMapImages(map);
             return;
         }
 
         releaseItemImages(fullItemList);
+        releaseMapImages(metadataMap);
         metadataMap = map;
     }
 
@@ -106,6 +125,7 @@
 
     onDestroy(() => {
         releaseItemImages(fullItemList);
+        releaseMapImages(metadataMap);
     });
 
     // Reactive updates
@@ -253,7 +273,7 @@
     .nested-requirement {
         margin-left: 18px;
         padding-left: 8px;
-        border-left: 2px solid rgba(255, 255, 255, 0.3);
+        border-left: 2px solid var(--nested-requirement-border-color, currentColor);
     }
 
     .icon {

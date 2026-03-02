@@ -254,6 +254,7 @@ describe('CompactItemList', () => {
         const nestedRequirement = container.querySelector('.nested-requirement');
         expect(nestedRequirement).not.toBeNull();
         expect(container.textContent).toContain('in savings jar');
+        expect(getItemMapMock).toHaveBeenCalledWith(['dusd', 'savings-jar']);
 
         unmount();
     });
