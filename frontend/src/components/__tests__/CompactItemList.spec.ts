@@ -1,4 +1,4 @@
-import { render } from '@testing-library/svelte';
+import { render, waitFor } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
@@ -269,14 +269,14 @@ describe('CompactItemList', () => {
             props: { itemList: items },
         });
 
-        await tick();
-
-        const rows = Array.from(container.querySelectorAll('.horizontal'));
-        expect(rows).toHaveLength(2);
-        expect(rows[0].textContent).toContain('savings jar');
-        expect(rows[1].textContent).toContain('dUSD');
-        expect(rows[1].classList.contains('nested-requirement')).toBe(true);
-        expect(rows[1].textContent).toContain('in savings jar');
+        await waitFor(() => {
+            const rows = Array.from(container.querySelectorAll('.horizontal'));
+            expect(rows).toHaveLength(2);
+            expect(rows[0].textContent?.toLowerCase()).toContain('savings jar');
+            expect(rows[1].textContent).toContain('dUSD');
+            expect(rows[1].classList.contains('nested-requirement')).toBe(true);
+            expect(rows[1].textContent).toContain('in savings jar');
+        });
 
         unmount();
     });

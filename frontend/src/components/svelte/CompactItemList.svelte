@@ -65,7 +65,8 @@
             .map((item) => {
                 const itemId = getStableItemId(item);
                 const containerId =
-                    typeof item?.containerItemId === 'string' || typeof item?.containerItemId === 'number'
+                    typeof item?.containerItemId === 'string' ||
+                    typeof item?.containerItemId === 'number'
                         ? String(item.containerItemId)
                         : '';
                 return `${itemId ?? ''}:${containerId}`;
@@ -151,7 +152,10 @@
             <Chip inverted={!inverted} {disabled} text="">
                 <div class="vertical">
                     {#each fullItemList as item, index (getItemKey(item, index))}
-                        <div class="horizontal" class:nested-requirement={Boolean(item.containerItemId)}>
+                        <div
+                            class="horizontal"
+                            class:nested-requirement={Boolean(item.containerItemId)}
+                        >
                             {#if item.loading}
                                 <span class="icon placeholder" aria-label="Loading item image">
                                     <span class="spinner" aria-hidden="true"></span>

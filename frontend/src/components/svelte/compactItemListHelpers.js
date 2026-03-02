@@ -40,7 +40,7 @@ export function buildFullItemList(itemList, totals = {}, itemMap = new Map()) {
             containerItemId: item?.containerItemId,
             containerName:
                 containerMetadata && !containerMetadata.missing && !containerMetadata.loading
-                    ? containerMetadata.name ?? null
+                    ? (containerMetadata.name ?? null)
                     : null,
             count:
                 rawCount !== null && Number.isFinite(rawCount) ? Number(rawCount.toFixed(5)) : null,
