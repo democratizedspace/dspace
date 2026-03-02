@@ -197,6 +197,86 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('renders loading placeholder with suffix + container context in default mode', async () => {
+        const items = [
+            {
+                id: 'dusd',
+                name: 'dUSD',
+                image: '/dusd.png',
+                count: null,
+                containerName: 'Savings Jar',
+            },
+        ];
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockReturnValue({ dusd: 10 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+
+        expect(container.querySelector('[aria-label="Loading inventory count"]')).not.toBeNull();
+        expect(container.textContent).toContain('x dUSD');
+        expect(container.textContent).toContain('in Savings Jar');
+
+        unmount();
+    });
+
+    test('renders loading placeholder in name-count mode without suffix context', async () => {
+        const items = [
+            {
+                id: 'dusd',
+                name: 'dUSD',
+                image: '/dusd.png',
+                count: null,
+                containerName: 'Savings Jar',
+            },
+        ];
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockReturnValue({ dusd: 10 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, nameCountFormat: true },
+        });
+
+        await tick();
+
+        expect(container.querySelector('[aria-label="Loading inventory count"]')).not.toBeNull();
+        expect(container.textContent).toContain('dUSD:');
+        expect(container.textContent).not.toContain('x dUSD');
+        expect(container.textContent).not.toContain('in Savings Jar');
+
+        unmount();
+    });
+
+    test('renders loading decrease placeholder with pending delta', async () => {
+        const items = [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 3 }];
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockReturnValue({ dusd: 10 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, decrease: true },
+        });
+
+        await tick();
+
+        expect(container.querySelector('[aria-label="Loading inventory count"]')).not.toBeNull();
+        expect(container.textContent).toContain('−3');
+        expect(container.textContent).toContain('x dUSD');
+
+        unmount();
+    });
+
     test('keeps default count-name format when increase mode is enabled', async () => {
         const items = [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 3 }];
 

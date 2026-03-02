@@ -243,7 +243,7 @@
                                         <span class="spinner" aria-hidden="true"></span>
                                     </span>
                                 {:else if shouldRenderNameCount()}
-                                    {item.name}:
+                                    <span>{`${item.name}:`}</span>
                                     <span
                                         class="count-placeholder"
                                         aria-label="Loading inventory count"
@@ -259,7 +259,7 @@
                                     </span>
                                 {/if}
                                 {#if !shouldRenderNameCount()}
-                                    x {item.name}
+                                    <span>{`x ${item.name}`}</span>
                                     {#if item.containerName}
                                         <span class="container-context"
                                             >in {item.containerName}</span
