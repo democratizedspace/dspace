@@ -14,6 +14,7 @@ const ProcessStates = vi.hoisted(() => ({
 
 const stateInfo = vi.hoisted(() => ({ state: ProcessStates.IN_PROGRESS, progress: 0 }));
 const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
+const getContainedItemCountMock = vi.hoisted(() => vi.fn(() => 0));
 const getItemMapMock = vi.hoisted(() => vi.fn());
 const getProcessStartedAtMock = vi.hoisted(() => vi.fn(() => Date.now()));
 const cheatsAvailabilityStore = writable(false);
@@ -52,6 +53,7 @@ vi.mock('../../pages/inventory/json/items', () => ({
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
     getItemCounts: (...args: unknown[]) => getItemCountsMock(...args),
+    getContainedItemCount: (...args: unknown[]) => getContainedItemCountMock(...args),
 }));
 
 vi.mock('../../utils/itemResolver.js', () => ({
@@ -136,6 +138,8 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    getContainedItemCountMock.mockReset();
+    getContainedItemCountMock.mockReturnValue(0);
     getItemCountOperationStartError.mockReset();
     getItemCountOperationStartError.mockReturnValue('');
     dbGetMock.mockReset();
@@ -205,6 +209,45 @@ test('shows required items even when counts are zero', async () => {
         expect(normalizedText).toMatch(/2\s*\/\s*0/);
         expect(normalizedText).toMatch(/Test Item/);
         expect(normalizedText).not.toMatch(/0\s*\/\s*2/);
+    });
+});
+
+test('shows withdraw-all container outputs in creates list', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 1, 'item-2': 40, 'item-3': 0 });
+    getContainedItemCountMock.mockReturnValue(125);
+
+    const customProcess = {
+        id: 'custom-withdraw-all',
+        title: 'Break savings jar and retrieve all dUSD',
+        duration: '5s',
+        requireItems: [{ id: 'item-1', count: 1 }],
+        consumeItems: [{ id: 'item-1', count: 1 }],
+        createItems: [{ id: 'item-3', count: 1 }],
+        itemCountOperations: [
+            {
+                operation: 'withdraw-all',
+                containerItemId: 'item-1',
+                itemId: 'item-2',
+            },
+        ],
+        custom: true,
+    };
+
+    const { getByText } = render(Process, {
+        processId: 'custom-withdraw-all',
+        processData: customProcess,
+    });
+
+    await waitFor(() => {
+        const createSection = getByText('Creates:').parentElement;
+        const normalizedText = createSection?.textContent?.replace(/\s+/g, ' ');
+
+        expect(normalizedText).toContain('Creates:');
+        expect(normalizedText).toMatch(/Third Item/);
+        expect(normalizedText).toMatch(/Second Item/);
+        expect(normalizedText).toMatch(/125/);
     });
 });
 

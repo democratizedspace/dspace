@@ -18,7 +18,7 @@
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
-    import { getItemCounts } from '../../utils/gameState/inventory.js';
+    import { getContainedItemCount, getItemCounts } from '../../utils/gameState/inventory.js';
     import { getItemMetadata } from './compactItemListHelpers.js';
     import { getItemMap } from '../../utils/itemResolver.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
@@ -55,6 +55,7 @@
     let requirementItemMap = new Map();
     let requirementItemRequestId = 0;
     let previousRequirementKey = '';
+    let displayedCreateItems = [];
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
@@ -62,6 +63,30 @@
 
     const releaseItemImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
+    };
+
+    const getContainerCreateItems = (itemCountOperations = []) => {
+        if (!Array.isArray(itemCountOperations) || itemCountOperations.length === 0) {
+            return [];
+        }
+
+        return itemCountOperations.reduce((createdItems, operation) => {
+            if (!operation || operation.operation === 'deposit') {
+                return createdItems;
+            }
+
+            if (operation.operation === 'withdraw') {
+                createdItems.push({ id: operation.itemId, count: Number(operation.count) || 0 });
+                return createdItems;
+            }
+
+            if (operation.operation === 'withdraw-all') {
+                const count = getContainedItemCount(operation.containerItemId, operation.itemId);
+                createdItems.push({ id: operation.itemId, count: Number(count) || 0 });
+            }
+
+            return createdItems;
+        }, []);
     };
 
     // Collect item deficits for a specific requirement list.
@@ -442,6 +467,11 @@
             void loadRequirementItemMap(requirementItems);
         }
     }
+
+    $: displayedCreateItems = [
+        ...(process?.createItems ?? []),
+        ...getContainerCreateItems(process?.itemCountOperations ?? []),
+    ];
 </script>
 
 {#if mounted && process}
@@ -478,11 +508,11 @@
                 </div>
             {/if}
 
-            {#if process.createItems && process.createItems.length > 0}
+            {#if displayedCreateItems.length > 0}
                 <h6>Creates:</h6>
                 <div data-testid="process-creates">
                     <CompactItemList
-                        itemList={process.createItems}
+                        itemList={displayedCreateItems}
                         noRed={true}
                         increase={true}
                         {inverted}
