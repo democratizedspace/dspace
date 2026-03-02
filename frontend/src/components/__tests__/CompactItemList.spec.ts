@@ -241,7 +241,6 @@ describe('CompactItemList', () => {
         unmount();
     });
 
-
     test('falls back to index keys when items have no stable id', async () => {
         const items = [
             { id: null, name: 'Mystery A', image: '/a.png', count: 1 },
@@ -281,7 +280,9 @@ describe('CompactItemList', () => {
                         resolveFirstMetadata = resolve;
                     })
             )
-            .mockResolvedValueOnce(new Map([['beta', { id: 'beta', name: 'Beta', image: '/beta.png' }]]));
+            .mockResolvedValueOnce(
+                new Map([['beta', { id: 'beta', name: 'Beta', image: '/beta.png' }]])
+            );
         buildFullItemListMock.mockImplementation((list) => list);
 
         const { rerender, unmount } = render(CompactItemList, {
@@ -296,7 +297,12 @@ describe('CompactItemList', () => {
             new Map([
                 [
                     'alpha',
-                    { id: 'alpha', name: 'Alpha', image: '/alpha.png', releaseImage: staleReleaseImage },
+                    {
+                        id: 'alpha',
+                        name: 'Alpha',
+                        image: '/alpha.png',
+                        releaseImage: staleReleaseImage,
+                    },
                 ],
             ])
         );
