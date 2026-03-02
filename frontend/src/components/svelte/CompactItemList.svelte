@@ -261,7 +261,9 @@
                                 {#if !shouldRenderNameCount()}
                                     x {item.name}
                                     {#if item.containerName}
-                                        <span class="container-context">in {item.containerName}</span>
+                                        <span class="container-context"
+                                            >in {item.containerName}</span
+                                        >
                                     {/if}
                                 {/if}
                             </p>
