@@ -72,6 +72,19 @@ test('renders stopped state without animated transition', () => {
     expect(fill?.getAttribute('style')).toContain('transition: none');
 });
 
+
+test('applies inverted contrast class when requested', () => {
+    const { container } = render(ProgressBar, {
+        startDate: new Date('2026-01-13T00:00:00.000Z'),
+        totalDurationSeconds: 10,
+        currentTime: new Date('2026-01-13T00:00:02.000Z'),
+        inverted: true,
+    });
+
+    const progressContainer = container.querySelector('.progress-container');
+    expect(progressContainer?.classList.contains('inverted')).toBe(true);
+});
+
 test('re-dispatches completion after progress resets', async () => {
     const startDate = new Date('2026-01-13T00:00:00.000Z');
     const onComplete = vi.fn();

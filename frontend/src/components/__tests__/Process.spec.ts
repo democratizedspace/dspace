@@ -450,6 +450,9 @@ test('keeps in-progress action chips opposite from process chip in both inverted
         const processChip = getByTestId('process-chip');
         expect(processChip.classList.contains('inverted')).toBe(inverted);
 
+        const progressContainer = processChip.querySelector('.progress-container');
+        expect(progressContainer?.classList.contains('inverted')).toBe(inverted);
+
         const cancelChip = getByText('Cancel').closest('button');
         const pauseChip = getByText('Pause').closest('button');
         expect(cancelChip?.classList.contains('inverted')).toBe(!inverted);

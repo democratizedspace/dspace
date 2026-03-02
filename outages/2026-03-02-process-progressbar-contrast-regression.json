@@ -1,0 +1,24 @@
+{
+  "id": "process-progressbar-contrast-regression",
+  "date": "2026-03-02",
+  "component": "frontend/process/progress-bar",
+  "longForm": "outages/2026-03-02-process-progressbar-contrast-regression.md",
+  "rootCause": "After process cards were explicitly rendered with light chip surfaces (inverted=true), ProgressBar kept fixed colors (light-gray track and light-green fill) and did not consume container inversion state, so the fill blended into the light process background and looked invisible while in progress.",
+  "resolution": "Added an inverted prop to ProgressBar and switched to a dark-green fill with darker track when inverted=true; wired Process.svelte to pass its inversion state into ProgressBar and added regression assertions so in-progress process cards keep visible progress contrast in both inverted and default modes.",
+  "references": [
+    "frontend/src/components/svelte/ProgressBar.svelte",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/components/__tests__/ProgressBar.spec.ts",
+    "frontend/src/components/__tests__/Process.spec.ts",
+    "outages/2026-03-01-chip-inverted-contrast-specificity-regression.json",
+    "outages/2026-02-16-item-page-contrast-regression.json",
+    "https://github.com/democratizedspace/dspace/pull/3816",
+    "https://github.com/democratizedspace/dspace/pull/3823"
+  ],
+  "dateRanges": [
+    {
+      "start": "2026-03-01",
+      "end": "2026-03-02"
+    }
+  ]
+}

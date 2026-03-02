@@ -6,6 +6,7 @@
     export let totalDurationSeconds = 5;
     export let stopped = false;
     export let currentTime = Date.now();
+    export let inverted = false;
 
     const dispatch = createEventDispatcher();
     let elapsedSeconds = 0;
@@ -33,7 +34,7 @@
     }
 </script>
 
-<div class="progress-container">
+<div class="progress-container" class:inverted>
     {#if stopped}
         stopped
         <div class="progress-bar">
@@ -76,10 +77,18 @@
         margin: 5px;
     }
 
+    .progress-container.inverted .progress-bar {
+        background-color: rgba(0, 112, 6, 0.25);
+    }
+
     .progress-bar-fill {
         height: 50px;
         background-color: #68d46d;
         transition: width 0.1s linear;
+    }
+
+    .progress-container.inverted .progress-bar-fill {
+        background-color: #007006;
     }
 
     .progress-text {
