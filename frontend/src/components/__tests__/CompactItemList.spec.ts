@@ -400,4 +400,44 @@ describe('CompactItemList', () => {
 
         expect(getItemCountsMock).not.toHaveBeenCalled();
     });
+
+    test('falls back to index keys when an item has no stable id', async () => {
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({});
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockImplementation((list) => list);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: {
+                itemList: [
+                    { id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 },
+                    { id: undefined, name: 'No ID Item', image: '/fallback.png', count: 1 },
+                ],
+            },
+        });
+
+        await waitFor(() => {
+            const rows = Array.from(container.querySelectorAll('.horizontal'));
+            expect(rows).toHaveLength(2);
+            expect(rows[1].textContent).toContain('No ID Item');
+        });
+
+        unmount();
+    });
+
+    test('safely handles undefined item metadata maps', async () => {
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ alpha: 1 });
+        getItemMapMock.mockResolvedValue(undefined);
+        buildFullItemListMock.mockImplementation((list) => list);
+
+        const { unmount } = render(CompactItemList, {
+            props: { itemList: [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }] },
+        });
+
+        await tick();
+        expect(getItemMapMock).toHaveBeenCalledWith(['alpha']);
+
+        expect(() => unmount()).not.toThrow();
+    });
 });

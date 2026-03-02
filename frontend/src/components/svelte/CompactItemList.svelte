@@ -98,9 +98,6 @@
         let intervalId;
         let isActive = true;
         const startInterval = () => {
-            if (!isActive) {
-                return;
-            }
             itemCounts.set(getItemCounts(itemList));
             intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
         };
