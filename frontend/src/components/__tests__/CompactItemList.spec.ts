@@ -197,6 +197,28 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('keeps default count-name format when increase mode is enabled', async () => {
+        const items = [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 3 }];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ dusd: 10 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, increase: true, nameCountFormat: true },
+        });
+
+        await tick();
+
+        expect(container.textContent).toContain('10');
+        expect(container.textContent).toContain('+3');
+        expect(container.textContent).toContain('x dUSD');
+        expect(container.textContent).not.toContain('dUSD:');
+
+        unmount();
+    });
+
     test('renders placeholder icon when item metadata is loading', async () => {
         const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
 
