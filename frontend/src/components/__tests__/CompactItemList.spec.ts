@@ -277,6 +277,48 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('renders loading increase placeholder with pending delta', async () => {
+        const items = [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 3 }];
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockReturnValue({ dusd: 10 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, increase: true },
+        });
+
+        await tick();
+
+        expect(container.querySelector('[aria-label="Loading inventory count"]')).not.toBeNull();
+        expect(container.textContent).toContain('+3');
+        expect(container.textContent).toContain('x dUSD');
+
+        unmount();
+    });
+
+    test('renders loading decrease delta without negative styling when noRed is enabled', async () => {
+        const items = [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 3 }];
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockReturnValue({ dusd: 10 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, decrease: true, noRed: true },
+        });
+
+        await tick();
+
+        const delta = container.querySelector('.qty');
+        expect(delta?.textContent).toContain('−3');
+        expect(delta?.classList.contains('neg')).toBe(false);
+
+        unmount();
+    });
+
     test('keeps default count-name format when increase mode is enabled', async () => {
         const items = [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 3 }];
 
