@@ -363,6 +363,28 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('keeps decrease delta non-negative in ready mode when noRed is true', async () => {
+        const items = [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 3 }];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ dusd: 10 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue(items);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items, decrease: true, noRed: true },
+        });
+
+        await tick();
+
+        const delta = container.querySelector('.qty');
+        expect(container.textContent).toContain('10');
+        expect(container.textContent).toContain('−3');
+        expect(delta?.classList.contains('neg')).toBe(false);
+
+        unmount();
+    });
+
     test('renders container context only in default count-name mode', async () => {
         const items = [
             {
