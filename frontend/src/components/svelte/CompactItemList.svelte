@@ -37,6 +37,25 @@
         counts.set(stableId, (counts.get(stableId) ?? 0) + 1);
         return counts;
     }, new Map());
+
+    $: containerNames = fullItemList.reduce((names, item) => {
+        const stableId = getStableItemId(item);
+        if (!stableId || !item?.name) {
+            return names;
+        }
+
+        names.set(stableId, item.name);
+        return names;
+    }, new Map());
+
+    const getContainerName = (item) => {
+        if (!item?.containerItemId) {
+            return null;
+        }
+
+        const containerKey = String(item.containerItemId);
+        return containerNames.get(containerKey) ?? 'required container';
+    };
     const getItemKey = (item, index) => {
         const stableId = getStableItemId(item);
         const occurrences = stableId ? (itemKeyCounts.get(stableId) ?? 0) : 0;
@@ -129,7 +148,7 @@
             <Chip inverted={!inverted} {disabled} text="">
                 <div class="vertical">
                     {#each fullItemList as item, index (getItemKey(item, index))}
-                        <div class="horizontal">
+                        <div class="horizontal" class:nested-requirement={Boolean(item.containerItemId)}>
                             {#if item.loading}
                                 <span class="icon placeholder" aria-label="Loading item image">
                                     <span class="spinner" aria-hidden="true"></span>
@@ -223,6 +242,9 @@
                                     </span>
                                 {/if}
                                 x {item.name}
+                                {#if item.containerItemId}
+                                    <span class="container-context">(in {getContainerName(item)})</span>
+                                {/if}
                             </p>
                         </div>
                     {/each}
@@ -243,6 +265,12 @@
     }
     .horizontal {
         flex-direction: row;
+    }
+
+    .nested-requirement {
+        margin-left: 20px;
+        padding-left: 10px;
+        border-left: 2px solid rgba(0, 0, 0, 0.25);
     }
 
     .icon {
@@ -277,6 +305,12 @@
 
     .inverted {
         color: rgb(255, 255, 255);
+    }
+
+    .container-context {
+        margin-left: 6px;
+        font-size: 0.9em;
+        opacity: 0.85;
     }
 
     .qty.neg {
