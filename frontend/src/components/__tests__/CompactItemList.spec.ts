@@ -312,4 +312,92 @@ describe('CompactItemList', () => {
 
         unmount();
     });
+
+    test('releases stale metadata images when a newer metadata request wins', async () => {
+        const firstReleaseImage = vi.fn();
+        const secondReleaseImage = vi.fn();
+        const firstMap = new Map([
+            [
+                'dusd',
+                {
+                    id: 'dusd',
+                    name: 'dUSD',
+                    image: '/dusd.png',
+                    releaseImage: firstReleaseImage,
+                },
+            ],
+        ]);
+        const secondMap = new Map([
+            [
+                'credits',
+                {
+                    id: 'credits',
+                    name: 'Credits',
+                    image: '/credits.png',
+                    releaseImage: secondReleaseImage,
+                },
+            ],
+        ]);
+
+        let resolveFirstMap;
+        let resolveSecondMap;
+
+        const firstMapPromise = new Promise<Map<string, unknown>>((resolve) => {
+            resolveFirstMap = resolve;
+        });
+        const secondMapPromise = new Promise<Map<string, unknown>>((resolve) => {
+            resolveSecondMap = resolve;
+        });
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockImplementation((list) =>
+            Object.fromEntries(list.map((item) => [item.id, item.count ?? 0]))
+        );
+        buildFullItemListMock.mockImplementation((list) => list);
+        getItemMapMock.mockReturnValueOnce(firstMapPromise).mockReturnValueOnce(secondMapPromise);
+
+        const { rerender, unmount } = render(CompactItemList, {
+            props: { itemList: [{ id: 'dusd', name: 'dUSD', image: '/dusd.png', count: 100 }] },
+        });
+
+        await rerender({
+            itemList: [{ id: 'credits', name: 'Credits', image: '/credits.png', count: 1 }],
+        });
+
+        resolveSecondMap(secondMap);
+        await tick();
+
+        resolveFirstMap(firstMap);
+        await waitFor(() => {
+            expect(firstReleaseImage).toHaveBeenCalledTimes(1);
+        });
+
+        expect(secondReleaseImage).not.toHaveBeenCalled();
+
+        unmount();
+        expect(secondReleaseImage).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not start counts interval when unmounted before ready resolves', async () => {
+        const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
+
+        isGameStateReadyMock.mockReturnValue(false);
+        getItemCountsMock.mockReturnValue({ alpha: 0 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockImplementation((list) => list);
+
+        const { unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+        unmount();
+
+        resolveReadyPromise();
+        await Promise.resolve();
+        await tick();
+        vi.advanceTimersByTime(2000);
+
+        expect(getItemCountsMock).not.toHaveBeenCalled();
+    });
 });
