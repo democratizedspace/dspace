@@ -48,6 +48,16 @@
         return `index-${index}`;
     };
 
+    const getContainerName = (containerItemId) => {
+        if (!containerItemId) {
+            return null;
+        }
+
+        return metadataMap.get(String(containerItemId))?.name ?? 'container';
+    };
+
+    const isNestedRequirement = (item) => Boolean(item?.containerItemId);
+
     const releaseItemImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
     };
@@ -58,7 +68,13 @@
 
     async function loadItemMetadata() {
         const requestId = ++metadataRequestId;
-        const ids = itemList.map((item) => item.id);
+        const ids = [
+            ...new Set(
+                itemList.flatMap((item) =>
+                    item?.containerItemId ? [item.id, item.containerItemId] : [item.id]
+                )
+            ),
+        ];
         const map = await getItemMap(ids);
 
         if (!isMounted || requestId !== metadataRequestId) {
@@ -129,7 +145,10 @@
             <Chip inverted={!inverted} {disabled} text="">
                 <div class="vertical">
                     {#each fullItemList as item, index (getItemKey(item, index))}
-                        <div class="horizontal">
+                        <div
+                            class="horizontal"
+                            class:nested-requirement={isNestedRequirement(item)}
+                        >
                             {#if item.loading}
                                 <span class="icon placeholder" aria-label="Loading item image">
                                     <span class="spinner" aria-hidden="true"></span>
@@ -223,6 +242,11 @@
                                     </span>
                                 {/if}
                                 x {item.name}
+                                {#if item.containerItemId}
+                                    <span class="container-context">
+                                        in {getContainerName(item.containerItemId)}
+                                    </span>
+                                {/if}
                             </p>
                         </div>
                     {/each}
@@ -245,6 +269,10 @@
         flex-direction: row;
     }
 
+    .horizontal.nested-requirement {
+        margin-left: 24px;
+    }
+
     .icon {
         width: 30px;
         height: 30px;
@@ -265,6 +293,13 @@
     p {
         margin: 0px;
         margin-top: 10px;
+    }
+
+    .container-context {
+        display: block;
+        font-size: 0.8rem;
+        margin-top: 2px;
+        opacity: 0.85;
     }
 
     .disabled {
