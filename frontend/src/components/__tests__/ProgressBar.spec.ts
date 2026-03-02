@@ -72,6 +72,20 @@ test('renders stopped state without animated transition', () => {
     expect(fill?.getAttribute('style')).toContain('transition: none');
 });
 
+test('uses darker fill color when rendered on inverted process chips', () => {
+    const { container } = render(ProgressBar, {
+        startDate: new Date('2026-01-13T00:00:00.000Z'),
+        totalDurationSeconds: 10,
+        currentTime: new Date('2026-01-13T00:00:05.000Z').getTime(),
+        inverted: true,
+    });
+
+    const progressContainer = container.querySelector('.progress-container');
+
+    expect(progressContainer).not.toBeNull();
+    expect(progressContainer?.getAttribute('style')).toContain('--progress-fill-color: #007006');
+});
+
 test('re-dispatches completion after progress resets', async () => {
     const startDate = new Date('2026-01-13T00:00:00.000Z');
     const onComplete = vi.fn();

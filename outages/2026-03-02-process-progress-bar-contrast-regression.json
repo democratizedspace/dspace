@@ -1,0 +1,16 @@
+{
+  "id": "process-progress-bar-contrast-regression",
+  "date": "2026-03-02",
+  "component": "frontend/ui/process-progress-bar",
+  "rootCause": "After the chip contrast fixes in PRs #3816 and #3823 switched process containers to the inverted light-green surface, ProgressBar.svelte still used the same light-green fill color as non-inverted contexts. That made the completed segment visually blend into the process card background and appear missing.",
+  "resolution": "Added an inverted-aware ProgressBar style path and passed the process chip inversion state into ProgressBar so inverted process cards render a dark fill with clear contrast against the light background while preserving existing behavior elsewhere.",
+  "references": [
+    "frontend/src/components/svelte/ProgressBar.svelte",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/components/__tests__/ProgressBar.spec.ts",
+    "outages/2026-02-16-item-page-contrast-regression.json",
+    "outages/2026-03-01-chip-inverted-contrast-specificity-regression.json",
+    "https://github.com/democratizedspace/dspace/pull/3816",
+    "https://github.com/democratizedspace/dspace/pull/3823"
+  ]
+}
