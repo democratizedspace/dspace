@@ -57,8 +57,8 @@ describe('BuySell sales tax regression', () => {
         mockSellItems.mockReset();
     });
 
-    test('keeps the BuySell container non-inverted while nested buy controls are inverted', async () => {
-        const { findByTestId } = render(BuySell, { props: { itemId: 'taxed-item' } });
+    test('keeps root non-inverted while nested compact list container and buy CTA are inverted', async () => {
+        const { container, findByTestId } = render(BuySell, { props: { itemId: 'taxed-item' } });
 
         const rootContainer = await findByTestId('buy-sell-root');
         expect(rootContainer.classList.contains('inverted')).toBe(false);
@@ -66,9 +66,13 @@ describe('BuySell sales tax regression', () => {
         const buyToggle = await findByTestId('buy-toggle');
         const sellToggle = await findByTestId('sell-toggle');
         const buyAction = await findByTestId('transaction-cta');
+        const compactItemContainer = container.querySelector(
+            '.buy-sell-wrapper > .Container nav .chip-container.static-container'
+        );
 
         expect(buyAction.textContent).toContain('Buy for 10 dUSD');
         expect(buyAction.classList.contains('inverted')).toBe(true);
+        expect(compactItemContainer?.classList.contains('inverted')).toBe(true);
         expect(buyToggle.classList.contains('inverted')).toBe(true);
         expect(sellToggle.classList.contains('inverted')).toBe(false);
     });
