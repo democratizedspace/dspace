@@ -18,7 +18,7 @@
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
-    import { getItemCounts } from '../../utils/gameState/inventory.js';
+    import { getContainedItemCount, getItemCounts } from '../../utils/gameState/inventory.js';
     import { getItemMetadata } from './compactItemListHelpers.js';
     import { getItemMap } from '../../utils/itemResolver.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
@@ -55,6 +55,7 @@
     let requirementItemMap = new Map();
     let requirementItemRequestId = 0;
     let previousRequirementKey = '';
+    let createItemsForDisplay = [];
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
@@ -434,6 +435,62 @@
         updateState();
     }
 
+    const resolveDynamicCreateItems = (processDefinition) => {
+        if (!processDefinition) {
+            return [];
+        }
+
+        const dynamicCreates = [];
+        (processDefinition.itemCountOperations || []).forEach((operation) => {
+            if (!operation?.itemId) {
+                return;
+            }
+
+            if (operation.operation === 'withdraw') {
+                const withdrawCount = Number(operation.count);
+                if (Number.isFinite(withdrawCount) && withdrawCount > 0) {
+                    dynamicCreates.push({ id: operation.itemId, count: withdrawCount });
+                }
+                return;
+            }
+
+            if (operation.operation === 'withdraw-all') {
+                const withdrawAllCount = Number(
+                    getContainedItemCount(operation.containerItemId, operation.itemId)
+                );
+                if (Number.isFinite(withdrawAllCount) && withdrawAllCount >= 0) {
+                    dynamicCreates.push({ id: operation.itemId, count: withdrawAllCount });
+                }
+            }
+        });
+
+        return dynamicCreates;
+    };
+
+    const mergeCreateItems = (baseItems = [], dynamicItems = []) => {
+        const merged = new Map();
+        [...baseItems, ...dynamicItems].forEach((item) => {
+            const itemId = item?.id;
+            if (!itemId) {
+                return;
+            }
+
+            const count = Number(item?.count ?? 0);
+            if (!Number.isFinite(count)) {
+                return;
+            }
+
+            merged.set(itemId, (merged.get(itemId) || 0) + count);
+        });
+
+        return Array.from(merged.entries()).map(([id, count]) => ({ id, count }));
+    };
+
+    $: createItemsForDisplay = mergeCreateItems(
+        process?.createItems ?? [],
+        resolveDynamicCreateItems(process)
+    );
+
     $: if (mounted && process) {
         const requirementItems = [...(process.requireItems ?? []), ...(process.consumeItems ?? [])];
         const nextKey = requirementItems.map((item) => item?.id ?? '').join('|');
@@ -478,11 +535,11 @@
                 </div>
             {/if}
 
-            {#if process.createItems && process.createItems.length > 0}
+            {#if createItemsForDisplay.length > 0}
                 <h6>Creates:</h6>
                 <div data-testid="process-creates">
                     <CompactItemList
-                        itemList={process.createItems}
+                        itemList={createItemsForDisplay}
                         noRed={true}
                         increase={true}
                         {inverted}

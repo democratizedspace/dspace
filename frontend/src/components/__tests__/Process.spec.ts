@@ -14,6 +14,7 @@ const ProcessStates = vi.hoisted(() => ({
 
 const stateInfo = vi.hoisted(() => ({ state: ProcessStates.IN_PROGRESS, progress: 0 }));
 const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
+const getContainedItemCountMock = vi.hoisted(() => vi.fn(() => 0));
 const getItemMapMock = vi.hoisted(() => vi.fn());
 const getProcessStartedAtMock = vi.hoisted(() => vi.fn(() => Date.now()));
 const cheatsAvailabilityStore = writable(false);
@@ -52,6 +53,7 @@ vi.mock('../../pages/inventory/json/items', () => ({
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
     getItemCounts: (...args: unknown[]) => getItemCountsMock(...args),
+    getContainedItemCount: (...args: unknown[]) => getContainedItemCountMock(...args),
 }));
 
 vi.mock('../../utils/itemResolver.js', () => ({
@@ -156,6 +158,8 @@ beforeEach(() => {
             ],
         ])
     );
+    getContainedItemCountMock.mockReset();
+    getContainedItemCountMock.mockReturnValue(0);
 });
 
 afterEach(() => {
@@ -632,6 +636,41 @@ test('shows start feedback when container-operation validation fails', async () 
     expect(getByTestId('process-start-feedback').textContent).toContain(
         'Cannot start yet: test error'
     );
+});
+
+test('adds withdraw-all container balances to Creates list', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getContainedItemCountMock.mockReturnValue(42);
+
+    const customProcess = {
+        id: 'withdraw-all-preview',
+        title: 'Break Container',
+        duration: '5s',
+        requireItems: [],
+        consumeItems: [],
+        createItems: [{ id: 'item-2', count: 1 }],
+        itemCountOperations: [
+            {
+                operation: 'withdraw-all',
+                containerItemId: 'item-1',
+                itemId: 'item-3',
+            },
+        ],
+        custom: true,
+    };
+
+    const { getByTestId } = render(Process, {
+        processId: 'withdraw-all-preview',
+        processData: customProcess,
+    });
+
+    await tick();
+
+    expect(getContainedItemCountMock).toHaveBeenCalledWith('item-1', 'item-3');
+    const createsSection = getByTestId('process-creates');
+    expect(createsSection.textContent).toContain('+1');
+    expect(createsSection.textContent).toContain('+42');
 });
 
 test('prefers provided process data over built-in catalog lookup', async () => {
