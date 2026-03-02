@@ -165,6 +165,43 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('indents contained requirements under their container requirement', async () => {
+        const items = [
+            { id: 'jar', name: 'savings jar', image: '/jar.png', count: 1 },
+            {
+                id: 'dusd',
+                name: 'dUSD',
+                image: '/dusd.png',
+                count: 100,
+                containerItemId: 'jar',
+            },
+        ];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ jar: 1, dusd: 30 });
+        getItemMapMock.mockResolvedValue(
+            new Map([
+                ['jar', { id: 'jar', name: 'savings jar', image: '/jar.png', releaseImage: null }],
+                ['dusd', { id: 'dusd', name: 'dUSD', image: '/dusd.png', releaseImage: null }],
+            ])
+        );
+        buildFullItemListMock.mockImplementation((list, totals) =>
+            list.map((item) => ({ ...item, total: totals[item.id] ?? 0 }))
+        );
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+
+        const rows = Array.from(container.querySelectorAll('.horizontal'));
+        expect(rows).toHaveLength(2);
+        expect(rows[1].classList.contains('contained')).toBe(true);
+
+        unmount();
+    });
+
     test('renders placeholder icon when item metadata is loading', async () => {
         const items = [{ id: 'alpha', name: 'Alpha', image: '/alpha.png', count: 1 }];
 

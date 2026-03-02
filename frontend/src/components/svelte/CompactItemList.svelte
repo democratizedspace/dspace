@@ -52,13 +52,34 @@
         items.forEach((item) => item?.releaseImage?.());
     };
 
-    const getIdsKey = (list) => list.map((item) => getStableItemId(item)).join('|');
+    const getIdsKey = (list) =>
+        list
+            .map((item) => {
+                const stableId = getStableItemId(item);
+                return `${stableId ?? 'missing'}:${item?.containerItemId ?? 'none'}`;
+            })
+            .join('|');
+
+    const getContainerName = (item) => {
+        if (!item?.containerItemId) {
+            return null;
+        }
+
+        return metadataMap.get(String(item.containerItemId))?.name ?? null;
+    };
+
+    const isContainedRequirement = (item) =>
+        Boolean(
+            item?.containerItemId && fullItemList.some((entry) => entry.id === item.containerItemId)
+        );
 
     let previousIdsKey = '';
 
     async function loadItemMetadata() {
         const requestId = ++metadataRequestId;
-        const ids = itemList.map((item) => item.id);
+        const ids = Array.from(
+            new Set(itemList.flatMap((item) => [item.id, item.containerItemId]).filter(Boolean))
+        );
         const map = await getItemMap(ids);
 
         if (!isMounted || requestId !== metadataRequestId) {
@@ -129,7 +150,7 @@
             <Chip inverted={!inverted} {disabled} text="">
                 <div class="vertical">
                     {#each fullItemList as item, index (getItemKey(item, index))}
-                        <div class="horizontal">
+                        <div class="horizontal" class:contained={isContainedRequirement(item)}>
                             {#if item.loading}
                                 <span class="icon placeholder" aria-label="Loading item image">
                                     <span class="spinner" aria-hidden="true"></span>
@@ -223,6 +244,11 @@
                                     </span>
                                 {/if}
                                 x {item.name}
+                                {#if getContainerName(item)}
+                                    <span class="container-context">
+                                        in {getContainerName(item)}</span
+                                    >
+                                {/if}
                             </p>
                         </div>
                     {/each}
@@ -243,6 +269,10 @@
     }
     .horizontal {
         flex-direction: row;
+    }
+
+    .horizontal.contained {
+        margin-left: 16px;
     }
 
     .icon {
@@ -282,6 +312,12 @@
     .qty.neg {
         color: var(--red-500);
         font-weight: 600;
+    }
+
+    .container-context {
+        opacity: 0.8;
+        font-size: 0.9em;
+        font-style: italic;
     }
 
     .count-placeholder {

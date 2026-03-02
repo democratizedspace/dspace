@@ -31,6 +31,7 @@ export function buildFullItemList(itemList, totals = {}, itemMap = new Map()) {
 
         return {
             ...metadata,
+            containerItemId: item.containerItemId ?? null,
             count:
                 rawCount !== null && Number.isFinite(rawCount) ? Number(rawCount.toFixed(5)) : null,
             total: totals[item.id] ?? 0,
