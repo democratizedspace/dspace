@@ -52,21 +52,43 @@
         items.forEach((item) => item?.releaseImage?.());
     };
 
-    const getIdsKey = (list) => list.map((item) => getStableItemId(item)).join('|');
+    const releaseMapImages = (map) => {
+        if (!map) {
+            return;
+        }
+
+        releaseItemImages(Array.from(map.values()));
+    };
+
+    const getIdsKey = (list) =>
+        list
+            .map((item) => {
+                const itemId = getStableItemId(item);
+                const containerId =
+                    typeof item?.containerItemId === 'string' ||
+                    typeof item?.containerItemId === 'number'
+                        ? String(item.containerItemId)
+                        : '';
+                return `${itemId ?? ''}:${containerId}`;
+            })
+            .join('|');
 
     let previousIdsKey = '';
 
     async function loadItemMetadata() {
         const requestId = ++metadataRequestId;
-        const ids = itemList.map((item) => item.id);
+        const ids = itemList.flatMap((item) =>
+            item?.containerItemId ? [item.id, item.containerItemId] : [item.id]
+        );
         const map = await getItemMap(ids);
 
         if (!isMounted || requestId !== metadataRequestId) {
-            releaseItemImages(Array.from(map.values()));
+            releaseMapImages(map);
             return;
         }
 
         releaseItemImages(fullItemList);
+        releaseMapImages(metadataMap);
         metadataMap = map;
     }
 
@@ -76,9 +98,6 @@
         let intervalId;
         let isActive = true;
         const startInterval = () => {
-            if (!isActive) {
-                return;
-            }
             itemCounts.set(getItemCounts(itemList));
             intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
         };
@@ -104,6 +123,7 @@
 
     onDestroy(() => {
         releaseItemImages(fullItemList);
+        releaseMapImages(metadataMap);
     });
 
     // Reactive updates
@@ -129,7 +149,10 @@
             <Chip inverted={!inverted} {disabled} text="">
                 <div class="vertical">
                     {#each fullItemList as item, index (getItemKey(item, index))}
-                        <div class="horizontal">
+                        <div
+                            class="horizontal"
+                            class:nested-requirement={Boolean(item.containerItemId)}
+                        >
                             {#if item.loading}
                                 <span class="icon placeholder" aria-label="Loading item image">
                                     <span class="spinner" aria-hidden="true"></span>
@@ -223,6 +246,9 @@
                                     </span>
                                 {/if}
                                 x {item.name}
+                                {#if item.containerName}
+                                    <span class="container-context">in {item.containerName}</span>
+                                {/if}
                             </p>
                         </div>
                     {/each}
@@ -243,6 +269,12 @@
     }
     .horizontal {
         flex-direction: row;
+    }
+
+    .nested-requirement {
+        margin-left: 18px;
+        padding-left: 8px;
+        border-left: 2px solid var(--nested-requirement-border-color, currentColor);
     }
 
     .icon {
@@ -282,6 +314,12 @@
     .qty.neg {
         color: var(--red-500);
         font-weight: 600;
+    }
+
+    .container-context {
+        font-style: italic;
+        opacity: 0.9;
+        margin-left: 0.25rem;
     }
 
     .count-placeholder {
