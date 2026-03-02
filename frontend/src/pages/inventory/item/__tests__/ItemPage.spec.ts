@@ -139,24 +139,41 @@ describe('ItemPage', () => {
         });
     });
 
-    it('renders container item balances from itemCounts metadata', async () => {
-        const savingsJar = items.find((item) => item.id === '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec');
+    it('renders and refreshes container item balances from itemCounts metadata', async () => {
+        vi.useFakeTimers();
 
-        expect(savingsJar).toBeDefined();
+        try {
+            const savingsJar = items.find((item) => item.id === '830d74da-9de5-44c7-8b9f-83a1ed3aa8ec');
 
-        getItemCountsMock.mockReturnValue({ [savingsJar!.id]: 1 });
-        getContainedItemCountsMock.mockReturnValue({
-            '5247a603-294a-4a34-a884-1ae20969b2a1': 42,
-        });
-        isGameStateReadyMock.mockReturnValue(true);
+            expect(savingsJar).toBeDefined();
 
-        const { getByText } = render(ItemPage, {
-            props: { itemId: savingsJar!.id },
-        });
+            const trackedItemId = Object.keys(savingsJar?.itemCounts ?? {})[0];
+            let containedCount = 42;
 
-        await waitFor(() => {
-            expect(getByText('Stored contents:')).toBeTruthy();
-            expect(getByText(/dUSD: 42/)).toBeTruthy();
-        });
+            getItemCountsMock.mockReturnValue({ [savingsJar!.id]: 1 });
+            getContainedItemCountsMock.mockImplementation(() => ({
+                [trackedItemId]: containedCount,
+            }));
+            isGameStateReadyMock.mockReturnValue(true);
+
+            const { getByText, queryByText } = render(ItemPage, {
+                props: { itemId: savingsJar!.id },
+            });
+
+            await waitFor(() => {
+                expect(getByText('Stored contents:')).toBeTruthy();
+                expect(getByText(new RegExp(`${containedCount}\\s+x\\s+dUSD`))).toBeTruthy();
+            });
+
+            containedCount = 52;
+            vi.advanceTimersByTime(1000);
+
+            await waitFor(() => {
+                expect(queryByText(/42\s+x\s+dUSD/)).toBeNull();
+                expect(getByText(/52\s+x\s+dUSD/)).toBeTruthy();
+            });
+        } finally {
+            vi.useRealTimers();
+        }
     });
 });

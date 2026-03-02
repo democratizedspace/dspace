@@ -48,7 +48,8 @@ items. This is the primary way to create items in the game.
 
 Your [inventory](/docs/inventory) holds everything you earn from quests and processes. Items are
 stored locally in IndexedDB, grouped into categories, and can be filtered or inspected in detail
-from the `/inventory` page.
+from the `/inventory` page. Container items also show live stored-content balances on their
+detail pages without requiring a manual refresh.
 
 ## Can I create custom quests, items, or processes?
 

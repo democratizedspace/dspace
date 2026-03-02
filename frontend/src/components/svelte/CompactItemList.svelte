@@ -15,7 +15,8 @@
         decrease = false,
         disabled = false,
         noRed = false,
-        inverted = false;
+        inverted = false,
+        countsResolver = getItemCounts;
 
     // Local State
     let fullItemList = [];
@@ -79,8 +80,8 @@
             if (!isActive) {
                 return;
             }
-            itemCounts.set(getItemCounts(itemList));
-            intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
+            itemCounts.set(countsResolver(itemList));
+            intervalId = setInterval(() => itemCounts.set(countsResolver(itemList)), 1000);
         };
 
         if (isGameStateReady()) {
@@ -109,7 +110,7 @@
     // Reactive updates
     $: {
         if (countsReady) {
-            itemCounts.set(getItemCounts(itemList));
+            itemCounts.set(countsResolver(itemList));
         }
         fullItemList = buildFullItemList(itemList, $itemCounts, metadataMap);
     }

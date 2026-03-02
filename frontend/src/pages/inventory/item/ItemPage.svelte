@@ -8,24 +8,25 @@
         getProcessesForItemIncludingCustom,
         ProcessItemTypes,
     } from '../../../utils/gameState/processes.js';
-    import { getContainedItemCounts, getItemCounts } from '../../../utils/gameState/inventory.js';
+    import { getContainedItemCounts } from '../../../utils/gameState/inventory.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
-    import { getItemById, getItemMap } from '../../../utils/itemResolver.js';
+    import { getItemById } from '../../../utils/itemResolver.js';
 
     export let itemId;
 
     let itemList = [{ id: itemId }];
 
     const mounted = writable(false);
-    const count = writable(0);
-
     let item = null;
     let isLoading = true;
     let itemNotFound = false;
     let releaseImage = null;
-    let containedItemCounts = [];
+    $: containedItemList =
+        item && item.itemCounts && typeof item.itemCounts === 'object'
+            ? Object.keys(item.itemCounts).map((trackedItemId) => ({ id: trackedItemId }))
+            : [];
 
     let processes = {};
     const quests = getQuestsForItem(itemId);
@@ -58,28 +59,14 @@
         isLoading = false;
     }
 
-    async function loadContainedItemCounts() {
-        if (!item || !item.itemCounts || typeof item.itemCounts !== 'object') {
-            containedItemCounts = [];
-            return;
+    const getContainedCounts = (trackedItems) => {
+        if (!item) {
+            return {};
         }
 
-        const trackedItemIds = Object.keys(item.itemCounts);
-
-        if (trackedItemIds.length === 0) {
-            containedItemCounts = [];
-            return;
-        }
-
-        const counts = getContainedItemCounts(item.id, trackedItemIds);
-        const itemMap = await getItemMap(trackedItemIds);
-
-        containedItemCounts = trackedItemIds.map((trackedItemId) => ({
-            id: trackedItemId,
-            name: itemMap.get(trackedItemId)?.name ?? trackedItemId,
-            count: Number(counts[trackedItemId] || 0),
-        }));
-    }
+        const trackedItemIds = trackedItems.map((trackedItem) => trackedItem.id);
+        return getContainedItemCounts(item.id, trackedItemIds);
+    };
 
     onMount(async () => {
         await loadItem();
@@ -88,9 +75,6 @@
         } catch (error) {
             processes = getProcessesForItem(itemId);
         }
-        const itemCount = getItemCounts([{ id: itemId }])[itemId];
-        count.set(itemCount);
-        await loadContainedItemCounts();
         mounted.set(true);
     });
 
@@ -114,13 +98,13 @@
                 <img src={item.image} alt={item.name} />
                 <h2>{item.name}</h2>
                 <CompactItemList {itemList} inverted={true} />
-                {#if containedItemCounts.length > 0}
+                {#if containedItemList.length > 0}
                     <p>Stored contents:</p>
-                    <ul>
-                        {#each containedItemCounts as containedItem}
-                            <li>{containedItem.name}: {containedItem.count}</li>
-                        {/each}
-                    </ul>
+                    <CompactItemList
+                        itemList={containedItemList}
+                        countsResolver={getContainedCounts}
+                        inverted={true}
+                    />
                 {/if}
                 {item.description}
                 <BuySell {itemId} />
