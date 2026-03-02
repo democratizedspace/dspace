@@ -110,5 +110,6 @@ test('uses high-contrast inverted styles for light process cards', () => {
 
     expect(container.querySelector('.progress-container.inverted')).toBeTruthy();
     const fill = container.querySelector('.progress-bar-fill');
-    expect(fill?.getAttribute('style')).toContain('width: 20%');
+    expect(fill).toBeTruthy();
+    expect(fill.style.width).toBe('20%');
 });
