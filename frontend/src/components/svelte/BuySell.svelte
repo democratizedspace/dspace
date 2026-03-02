@@ -23,6 +23,7 @@
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
+    const inverted = false;
 
     function handleTypeClick(type) {
         activeType = type;
@@ -97,7 +98,7 @@
     $: displaySellPriceInRed = sellChipActive && taxAmount > 0;
 </script>
 
-<Chip inverted={true} text="">
+<Chip {inverted} text="">
     {#if isLoading}
         <p>Loading...</p>
     {:else if !item}
@@ -106,15 +107,17 @@
         <p>Not tradeable</p>
     {:else}
         <div class="buy-sell-wrapper vertical">
-            <Chip text="">
-                <CompactItemList {itemList} />
-            </Chip>
+            <CompactItemList {itemList} inverted={!inverted} />
 
             <div class="horizontal">
-                <Chip text="Buy" inverted={!buyChipActive} onClick={() => handleTypeClick('buy')} />
+                <Chip
+                    text="Buy"
+                    inverted={buyChipActive ? !inverted : inverted}
+                    onClick={() => handleTypeClick('buy')}
+                />
                 <Chip
                     text="Sell"
-                    inverted={!sellChipActive}
+                    inverted={sellChipActive ? !inverted : inverted}
                     onClick={() => handleTypeClick('sell')}
                 />
             </div>
@@ -136,6 +139,7 @@
                     onClick={handleTransactionClick}
                     priceInRed={displaySellPriceInRed}
                     red={sellChipActive}
+                    inverted={!inverted}
                 />
             </div>
 

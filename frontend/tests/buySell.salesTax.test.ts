@@ -77,4 +77,19 @@ describe('BuySell sales tax regression', () => {
             ])
         );
     });
+
+    test('uses non-inverted parent chip and inverted nested buy controls', async () => {
+        const { container, findByText } = render(BuySell, { props: { itemId: 'taxed-item' } });
+
+        const buyToggle = (await findByText('Buy')).closest('button');
+        const sellToggle = (await findByText('Sell')).closest('button');
+        const buyAction = (await findByText('Buy for 10 dUSD')).closest('button');
+        await findByText(/x Taxed Item/);
+        const compactContainer = container.querySelector('.Container .chip-container.static-container');
+
+        expect(buyToggle?.classList.contains('inverted')).toBe(true);
+        expect(sellToggle?.classList.contains('inverted')).toBe(false);
+        expect(buyAction?.classList.contains('inverted')).toBe(true);
+        expect(compactContainer?.classList.contains('inverted')).toBe(false);
+    });
 });
