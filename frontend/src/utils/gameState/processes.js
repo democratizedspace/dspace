@@ -52,16 +52,27 @@ const mergeItemCounts = (items = []) => {
 
 const getOperationCreateItems = (operations = []) => {
     const createdItems = [];
+    const remainingByKey = new Map();
 
     operations.forEach((operation) => {
         if (!validateItemCountOperation(operation)) {
             return;
         }
 
-        const currentCount = getStoredItemCount(operation.containerItemId, operation.itemId);
+        const operationKey = `${operation.containerItemId}::${operation.itemId}`;
+        const currentCount = remainingByKey.has(operationKey)
+            ? remainingByKey.get(operationKey)
+            : getStoredItemCount(operation.containerItemId, operation.itemId);
+
+        if (!isPositiveNumber(currentCount)) {
+            remainingByKey.set(operationKey, 0);
+            return;
+        }
+
         if (operation.operation === 'withdraw-all') {
             if (currentCount > 0) {
                 createdItems.push({ id: operation.itemId, count: currentCount });
+                remainingByKey.set(operationKey, 0);
             }
             return;
         }
@@ -71,7 +82,11 @@ const getOperationCreateItems = (operations = []) => {
             const count = Math.min(currentCount, requestedCount);
             if (count > 0) {
                 createdItems.push({ id: operation.itemId, count });
+                remainingByKey.set(operationKey, currentCount - count);
+                return;
             }
+
+            remainingByKey.set(operationKey, currentCount);
         }
     });
 

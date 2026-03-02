@@ -59,4 +59,48 @@ describe('getRuntimeCreateItems', () => {
             })
         ).toEqual([{ id: 'dusd', count: 5 }]);
     });
+
+    test('caps withdraw projection by available count', () => {
+        getStoredItemCountMock.mockReturnValue(10);
+
+        expect(
+            getRuntimeCreateItems('custom', {
+                id: 'custom',
+                createItems: [],
+                itemCountOperations: [
+                    {
+                        operation: 'withdraw',
+                        containerItemId: 'jar',
+                        itemId: 'dusd',
+                        count: 15,
+                    },
+                ],
+            })
+        ).toEqual([{ id: 'dusd', count: 10 }]);
+    });
+
+    test('tracks remaining balance across sequential withdraw operations', () => {
+        getStoredItemCountMock.mockReturnValue(10);
+
+        expect(
+            getRuntimeCreateItems('custom', {
+                id: 'custom',
+                createItems: [],
+                itemCountOperations: [
+                    {
+                        operation: 'withdraw',
+                        containerItemId: 'jar',
+                        itemId: 'dusd',
+                        count: 7,
+                    },
+                    {
+                        operation: 'withdraw',
+                        containerItemId: 'jar',
+                        itemId: 'dusd',
+                        count: 7,
+                    },
+                ],
+            })
+        ).toEqual([{ id: 'dusd', count: 10 }]);
+    });
 });

@@ -212,7 +212,6 @@ test('shows required items even when counts are zero', async () => {
     });
 });
 
-
 test('renders container-withdraw outputs in creates list', async () => {
     stateInfo.state = ProcessStates.NOT_STARTED;
     getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });

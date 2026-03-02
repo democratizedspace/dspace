@@ -36,5 +36,5 @@ Validation enforces that the pair is allowed by container catalog `itemCounts` k
 
 - Savings jar item allows storing only dUSD via `itemCounts`.
 - Deposit process consumes 10 dUSD and deposits 10 dUSD to the jar.
-- Break process consumes savings jar, creates broken savings jar, and surfaces withdrawn dUSD in the Creates list using the current stored count (for example: `broken savings jar ×1`, `dUSD ×37`).
+  - Break process consumes savings jar, creates broken savings jar, and surfaces withdrawn dUSD in the Creates list using the current stored count (for example: `broken savings jar ×1`, `dUSD ×37`).
 - Item page displays current stored contents from runtime `itemContainerCounts`.
