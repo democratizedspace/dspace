@@ -15,7 +15,8 @@
         decrease = false,
         disabled = false,
         noRed = false,
-        inverted = false;
+        inverted = false,
+        nameCountFormat = false;
 
     // Local State
     let fullItemList = [];
@@ -47,6 +48,8 @@
 
         return `index-${index}`;
     };
+
+    const shouldRenderNameCount = () => !increase && !decrease && nameCountFormat;
 
     const releaseItemImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
@@ -176,6 +179,8 @@
                                         <span class="qty">
                                             {prettyPrintNumber($itemCounts[item.id])}
                                         </span>
+                                    {:else if shouldRenderNameCount()}
+                                        {item.name}: {prettyPrintNumber($itemCounts[item.id])}
                                     {:else}
                                         {prettyPrintNumber($itemCounts[item.id])}
                                     {/if}
@@ -214,6 +219,14 @@
                                     >
                                         <span class="spinner" aria-hidden="true"></span>
                                     </span>
+                                {:else if shouldRenderNameCount()}
+                                    {item.name}:
+                                    <span
+                                        class="count-placeholder"
+                                        aria-label="Loading inventory count"
+                                    >
+                                        <span class="spinner" aria-hidden="true"></span>
+                                    </span>
                                 {:else}
                                     <span
                                         class="count-placeholder"
@@ -222,7 +235,9 @@
                                         <span class="spinner" aria-hidden="true"></span>
                                     </span>
                                 {/if}
-                                x {item.name}
+                                {#if !shouldRenderNameCount()}
+                                    x {item.name}
+                                {/if}
                             </p>
                         </div>
                     {/each}

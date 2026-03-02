@@ -96,7 +96,11 @@
                 <CompactItemList {itemList} inverted={true} />
                 {#if containedItems.length > 0}
                     <p>Stored contents:</p>
-                    <CompactItemList itemList={containedItems} inverted={true} />
+                    <CompactItemList
+                        itemList={containedItems}
+                        inverted={true}
+                        nameCountFormat={true}
+                    />
                 {/if}
                 {item.description}
                 <BuySell {itemId} />

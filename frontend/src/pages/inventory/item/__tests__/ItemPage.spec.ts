@@ -158,14 +158,14 @@ describe('ItemPage', () => {
 
         await waitFor(() => {
             expect(getByText('Stored contents:')).toBeTruthy();
-            expect(getByText(/42\s*x dUSD/)).toBeTruthy();
+            expect(getByText(/dUSD:\s*42/)).toBeTruthy();
         });
 
         storedDusdCount = 52;
         vi.advanceTimersByTime(1000);
 
         await waitFor(() => {
-            expect(getByText(/52\s*x dUSD/)).toBeTruthy();
+            expect(getByText(/dUSD:\s*52/)).toBeTruthy();
         });
     });
 });
