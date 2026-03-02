@@ -8,7 +8,7 @@
         getProcessesForItemIncludingCustom,
         ProcessItemTypes,
     } from '../../../utils/gameState/processes.js';
-    import { getContainedItemCounts, getItemCounts } from '../../../utils/gameState/inventory.js';
+    import { getContainedItemCounts } from '../../../utils/gameState/inventory.js';
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
@@ -19,13 +19,14 @@
     let itemList = [{ id: itemId }];
 
     const mounted = writable(false);
-    const count = writable(0);
 
     let item = null;
     let isLoading = true;
     let itemNotFound = false;
     let releaseImage = null;
     let containedItemCounts = [];
+    let containedCountsByItemId = {};
+    let containedBalanceInterval;
 
     let processes = {};
     const quests = getQuestsForItem(itemId);
@@ -61,6 +62,7 @@
     async function loadContainedItemCounts() {
         if (!item || !item.itemCounts || typeof item.itemCounts !== 'object') {
             containedItemCounts = [];
+            containedCountsByItemId = {};
             return;
         }
 
@@ -68,6 +70,7 @@
 
         if (trackedItemIds.length === 0) {
             containedItemCounts = [];
+            containedCountsByItemId = {};
             return;
         }
 
@@ -79,6 +82,11 @@
             name: itemMap.get(trackedItemId)?.name ?? trackedItemId,
             count: Number(counts[trackedItemId] || 0),
         }));
+
+        containedCountsByItemId = containedItemCounts.reduce((result, containedItem) => {
+            result[containedItem.id] = containedItem.count;
+            return result;
+        }, {});
     }
 
     onMount(async () => {
@@ -88,13 +96,13 @@
         } catch (error) {
             processes = getProcessesForItem(itemId);
         }
-        const itemCount = getItemCounts([{ id: itemId }])[itemId];
-        count.set(itemCount);
         await loadContainedItemCounts();
+        containedBalanceInterval = setInterval(loadContainedItemCounts, 1000);
         mounted.set(true);
     });
 
     onDestroy(() => {
+        clearInterval(containedBalanceInterval);
         releaseImage?.();
     });
 </script>
@@ -116,11 +124,11 @@
                 <CompactItemList {itemList} inverted={true} />
                 {#if containedItemCounts.length > 0}
                     <p>Stored contents:</p>
-                    <ul>
-                        {#each containedItemCounts as containedItem}
-                            <li>{containedItem.name}: {containedItem.count}</li>
-                        {/each}
-                    </ul>
+                    <CompactItemList
+                        itemList={containedItemCounts}
+                        externalItemCounts={containedCountsByItemId}
+                        inverted={true}
+                    />
                 {/if}
                 {item.description}
                 <BuySell {itemId} />

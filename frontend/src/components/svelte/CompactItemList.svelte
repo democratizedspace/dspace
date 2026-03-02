@@ -15,7 +15,8 @@
         decrease = false,
         disabled = false,
         noRed = false,
-        inverted = false;
+        inverted = false,
+        externalItemCounts = null;
 
     // Local State
     let fullItemList = [];
@@ -69,6 +70,18 @@
         releaseItemImages(fullItemList);
         metadataMap = map;
     }
+
+    const getDisplayCount = (itemId) => {
+        if (
+            externalItemCounts &&
+            typeof externalItemCounts === 'object' &&
+            Object.prototype.hasOwnProperty.call(externalItemCounts, itemId)
+        ) {
+            return externalItemCounts[itemId];
+        }
+
+        return $itemCounts[itemId];
+    };
 
     // Initial setup and cleanup on mount
     onMount(() => {
@@ -150,19 +163,19 @@
 
                             <p
                                 class:disabled={countsReady &&
-                                    (disabled || $itemCounts[item.id] < item.count)}
+                                    (disabled || getDisplayCount(item.id) < item.count)}
                                 class:inverted
                             >
                                 {#if countsReady}
                                     {#if increase}
-                                        {prettyPrintNumber($itemCounts[item.id])}
+                                        {prettyPrintNumber(getDisplayCount(item.id))}
                                         {#if item.count !== null}
                                             <span class="qty">
                                                 +{prettyPrintNumber(item.count)}
                                             </span>
                                         {/if}
                                     {:else if decrease}
-                                        {prettyPrintNumber($itemCounts[item.id])}
+                                        {prettyPrintNumber(getDisplayCount(item.id))}
                                         {#if item.count !== null}
                                             <span class="qty {!noRed ? 'neg' : ''}">
                                                 −{prettyPrintNumber(item.count)}
@@ -174,10 +187,10 @@
                                         </span>
                                         /
                                         <span class="qty">
-                                            {prettyPrintNumber($itemCounts[item.id])}
+                                            {prettyPrintNumber(getDisplayCount(item.id))}
                                         </span>
                                     {:else}
-                                        {prettyPrintNumber($itemCounts[item.id])}
+                                        {prettyPrintNumber(getDisplayCount(item.id))}
                                     {/if}
                                 {:else if increase}
                                     <span

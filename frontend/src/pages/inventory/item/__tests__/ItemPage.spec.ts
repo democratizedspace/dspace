@@ -145,18 +145,28 @@ describe('ItemPage', () => {
         expect(savingsJar).toBeDefined();
 
         getItemCountsMock.mockReturnValue({ [savingsJar!.id]: 1 });
-        getContainedItemCountsMock.mockReturnValue({
-            '5247a603-294a-4a34-a884-1ae20969b2a1': 42,
-        });
+        getContainedItemCountsMock
+            .mockReturnValueOnce({
+                '5247a603-294a-4a34-a884-1ae20969b2a1': 42,
+            })
+            .mockReturnValue({
+                '5247a603-294a-4a34-a884-1ae20969b2a1': 52,
+            });
         isGameStateReadyMock.mockReturnValue(true);
 
-        const { getByText } = render(ItemPage, {
+        const { getByText, container } = render(ItemPage, {
             props: { itemId: savingsJar!.id },
         });
 
         await waitFor(() => {
             expect(getByText('Stored contents:')).toBeTruthy();
-            expect(getByText(/dUSD: 42/)).toBeTruthy();
+            expect(container.textContent).toContain('42');
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 1100));
+
+        await waitFor(() => {
+            expect(container.textContent).toContain('52');
         });
     });
 });
