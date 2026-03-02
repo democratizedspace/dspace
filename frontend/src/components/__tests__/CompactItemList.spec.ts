@@ -220,6 +220,43 @@ describe('CompactItemList', () => {
         unmount();
     });
 
+    test('renders container-scoped requirements with nested styling', async () => {
+        const items = [
+            {
+                id: 'dusd',
+                name: 'dUSD',
+                image: '/dusd.png',
+                count: 100,
+                containerItemId: 'savings-jar',
+            },
+        ];
+
+        isGameStateReadyMock.mockReturnValue(true);
+        getItemCountsMock.mockReturnValue({ dusd: 30 });
+        getItemMapMock.mockResolvedValue(new Map());
+        buildFullItemListMock.mockReturnValue([
+            {
+                id: 'dusd',
+                name: 'dUSD',
+                image: '/dusd.png',
+                count: 100,
+                containerItemId: 'savings-jar',
+                containerName: 'savings jar',
+            },
+        ]);
+
+        const { container, unmount } = render(CompactItemList, {
+            props: { itemList: items },
+        });
+
+        await tick();
+
+        const nestedRequirement = container.querySelector('.nested-requirement');
+        expect(nestedRequirement).not.toBeNull();
+        expect(container.textContent).toContain('in savings jar');
+
+        unmount();
+    });
     test('renders fallback metadata for unknown custom items', async () => {
         const items = [{ id: 'custom-item', count: 1 }];
 

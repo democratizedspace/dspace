@@ -58,7 +58,9 @@
 
     async function loadItemMetadata() {
         const requestId = ++metadataRequestId;
-        const ids = itemList.map((item) => item.id);
+        const ids = itemList.flatMap((item) =>
+            item?.containerItemId ? [item.id, item.containerItemId] : [item.id]
+        );
         const map = await getItemMap(ids);
 
         if (!isMounted || requestId !== metadataRequestId) {
@@ -129,7 +131,7 @@
             <Chip inverted={!inverted} {disabled} text="">
                 <div class="vertical">
                     {#each fullItemList as item, index (getItemKey(item, index))}
-                        <div class="horizontal">
+                        <div class="horizontal" class:nested-requirement={Boolean(item.containerItemId)}>
                             {#if item.loading}
                                 <span class="icon placeholder" aria-label="Loading item image">
                                     <span class="spinner" aria-hidden="true"></span>
@@ -223,6 +225,9 @@
                                     </span>
                                 {/if}
                                 x {item.name}
+                                {#if item.containerName}
+                                    <span class="container-context">in {item.containerName}</span>
+                                {/if}
                             </p>
                         </div>
                     {/each}
@@ -243,6 +248,12 @@
     }
     .horizontal {
         flex-direction: row;
+    }
+
+    .nested-requirement {
+        margin-left: 18px;
+        padding-left: 8px;
+        border-left: 2px solid rgba(255, 255, 255, 0.3);
     }
 
     .icon {
@@ -282,6 +293,12 @@
     .qty.neg {
         color: var(--red-500);
         font-weight: 600;
+    }
+
+    .container-context {
+        font-style: italic;
+        opacity: 0.9;
+        margin-left: 0.25rem;
     }
 
     .count-placeholder {
