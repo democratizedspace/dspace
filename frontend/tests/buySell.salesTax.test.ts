@@ -57,6 +57,23 @@ describe('BuySell sales tax regression', () => {
         mockSellItems.mockReset();
     });
 
+
+    test('keeps the BuySell container non-inverted while nested buy controls are inverted', async () => {
+        const { findByText, container } = render(BuySell, { props: { itemId: 'taxed-item' } });
+
+        const buyAction = await findByText('Buy for 10 dUSD');
+        expect(buyAction.closest('button')?.classList.contains('inverted')).toBe(true);
+
+        const staticContainers = container.querySelectorAll('nav .chip-container.static-container');
+        expect(staticContainers).toHaveLength(2);
+        expect(staticContainers[0].classList.contains('inverted')).toBe(false);
+
+        const buyToggle = await findByText('Buy');
+        const sellToggle = await findByText('Sell');
+        expect(buyToggle.closest('button')?.classList.contains('inverted')).toBe(true);
+        expect(sellToggle.closest('button')?.classList.contains('inverted')).toBe(false);
+    });
+
     test('passes base item price to sellItems so tax is not double-applied', async () => {
         const { findByText } = render(BuySell, { props: { itemId: 'taxed-item' } });
 
