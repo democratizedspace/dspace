@@ -72,7 +72,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [attach-aquarium-thermometer](/processes/attach-aquarium-thermometer)
         - Requires: Walstad aquarium (80 L) ×1, aquarium thermometer (0–50°C) ×1, paper towel ×1
@@ -157,7 +157,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - None
 
@@ -181,7 +181,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
         - Requires: none
@@ -219,7 +219,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [heat-walstad](/processes/heat-walstad)
         - Requires: none
@@ -416,7 +416,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [drip-acclimate-shrimp](/processes/drip-acclimate-shrimp)
         - Requires: Airline tubing ×1, 5 gallon bucket ×1, Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
@@ -435,11 +435,13 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
           Walstad aquarium with dead dwarf shrimp (80 L) ×1
         - Consumes: 5 gallon bucket of dechlorinated tap water ×1,
           Walstad aquarium with dead dwarf shrimp (80 L) ×1
-        - Creates: Walstad aquarium (80 L) ×1
+        - Creates: Walstad aquarium (80 L) ×1, Dwarf shrimp ×1
     - [log-heated-walstad-temperature](/processes/log-heated-walstad-temperature)
         - Requires: Heated Walstad aquarium (80 L, 26°C) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
+- Known limitation / follow-up:
+    - New shrimp-state inventory entries in this PR intentionally reuse existing image assets. A human should replace these placeholder images with dedicated assets using the Image Analysis CLI workflow in `DEVELOPER_GUIDE.md`.
 
 ## 14) Add Floating Plants (`aquaria/floating-plants`)
 
