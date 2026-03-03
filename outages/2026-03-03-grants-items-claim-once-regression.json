@@ -1,0 +1,21 @@
+{
+  "id": "grants-items-claim-once-regression",
+  "date": "2026-03-03",
+  "component": "frontend/quests/game-state",
+  "rootCause": "git blame on frontend/src/utils/gameState.js traced the regression to commit 0969275, where setCurrentDialogueStep and finishQuest overwrite quest progress objects instead of merging fields; this dropped itemsClaimed metadata and re-enabled grantsItems Claim buttons after navigation.",
+  "resolution": "Preserved existing quest progress fields when updating stepId and finished status so itemsClaimed remains in IndexedDB-backed gameState, and added regression tests that assert claim metadata survives dialogue-step and finish transitions.",
+  "references": [
+    "frontend/src/utils/gameState.js",
+    "frontend/__tests__/gameState/gameState.test.js",
+    "frontend/src/pages/quests/svelte/option/GrantItemsOption.svelte",
+    "frontend/src/pages/quests/json/aquaria/ph-strip-test.json",
+    "git blame frontend/src/utils/gameState.js",
+    "0969275"
+  ],
+  "dateRanges": [
+    {
+      "start": "2026-02-22",
+      "end": "2026-03-03"
+    }
+  ]
+}
