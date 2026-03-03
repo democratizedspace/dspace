@@ -232,11 +232,11 @@ const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
 const getStartNodeId = (quest: any) => {
-    const dialogue = quest.dialogue ?? [];
     if (typeof quest.start === 'string' && quest.start.trim()) {
         return quest.start.trim();
     }
-    return (dialogue[0]?.id ?? '').trim();
+
+    return 'start';
 };
 
 const buildFeasibleDialogueGraph = (quest: any, obtainable: Set<string>) => {
@@ -321,6 +321,7 @@ const findFeasibleDeadEnds = (quest: any, obtainable: Set<string>) => {
 
     return {
         startId,
+        startExists: startId ? reachable.has(startId) : false,
         deadEnds,
         hasFeasibleFinishPath: startId ? canReachFinish.has(startId) : false,
     };
@@ -519,9 +520,11 @@ describe('quest completion item availability', () => {
             }
             const path = questPaths.get(quest.id) ?? 'unknown path';
             if (result.hasFeasibleFinishPath && result.deadEnds.length === 0) continue;
-            if (!result.hasFeasibleFinishPath && result.deadEnds.length === 0) {
+            if (!result.startExists) {
                 failures.push(
-                    `Quest "${quest.id}" (${path}) start node "${result.startId}" not found in dialogue.`
+                    typeof quest.start === 'string' && quest.start.trim()
+                        ? `Quest "${quest.id}" (${path}) start node "${result.startId}" from quest.start not found in dialogue.`
+                        : `Quest "${quest.id}" (${path}) is missing a \"start\" dialogue node.`
                 );
                 continue;
             }
