@@ -34,11 +34,14 @@ describe('gameState grantsItems claim-once regression', () => {
             versionNumberString: '3',
         };
 
+        vi.mocked(loadGameState).mockClear();
+        vi.mocked(saveGameState).mockClear();
+        vi.mocked(addItems).mockClear();
+
         vi.mocked(loadGameState).mockImplementation(() => mockGameState);
         vi.mocked(saveGameState).mockImplementation((newState) => {
             mockGameState = newState as typeof mockGameState;
         });
-        vi.mocked(addItems).mockClear();
     });
 
     test('preserves itemsClaimed when advancing dialogue step', () => {
@@ -62,11 +65,15 @@ describe('gameState grantsItems claim-once regression', () => {
         grantItems('aquaria/ph-strip-test', 'start', 0, grantsItems);
         expect(vi.mocked(addItems)).toHaveBeenCalledTimes(1);
         expect(getItemsGranted('aquaria/ph-strip-test', 'start', 0)).toBe(true);
+        expect(vi.mocked(saveGameState)).toHaveBeenCalledTimes(1);
 
         setCurrentDialogueStep('aquaria/ph-strip-test', 'dip');
+        expect(vi.mocked(saveGameState)).toHaveBeenCalledTimes(2);
 
+        const saveCallsBeforeSecondGrant = vi.mocked(saveGameState).mock.calls.length;
         grantItems('aquaria/ph-strip-test', 'start', 0, grantsItems);
         expect(vi.mocked(addItems)).toHaveBeenCalledTimes(1);
+        expect(vi.mocked(saveGameState)).toHaveBeenCalledTimes(saveCallsBeforeSecondGrant);
     });
 
     test('normalizes non-array itemsClaimed state before recording claim key', () => {

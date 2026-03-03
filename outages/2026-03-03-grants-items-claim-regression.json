@@ -6,6 +6,8 @@
   "resolution": "Preserve existing quest progress fields when writing stepId/finished and harden claim writes to initialize missing quest progress before appending itemsClaimed. Added regression tests covering claim-once behavior across dialogue-step transitions.",
   "references": [
     "frontend/src/utils/gameState.js",
-    "frontend/tests/gameStateGrantItemsRegression.test.ts"
+    "frontend/tests/gameStateGrantItemsRegression.test.ts",
+    "git blame -L 62,69 -- frontend/src/utils/gameState.js",
+    "regression surface: frontend/src/utils/gameState.js#L62-L69 (setCurrentDialogueStep replaced quest progress and dropped itemsClaimed)"
   ]
 }
