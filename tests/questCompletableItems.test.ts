@@ -231,6 +231,96 @@ const getRequiredItemsFromFinishReachableTransitions = (quest: any) => {
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
+const getStartNodeId = (quest: any) => {
+    const dialogue = quest.dialogue ?? [];
+    if (typeof quest.start === 'string' && quest.start.trim()) {
+        return quest.start.trim();
+    }
+    return (dialogue[0]?.id ?? '').trim();
+};
+
+const buildFeasibleDialogueGraph = (quest: any, obtainable: Set<string>) => {
+    const dialogue = quest.dialogue ?? [];
+    const nodeMap = new Map<string, any>(
+        dialogue
+            .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
+            .map((node: any) => [node.id.trim(), node])
+    );
+
+    const startId = getStartNodeId(quest);
+    const reachable = new Set<string>();
+    const edges = new Map<string, string[]>();
+    const finishableNodes = new Set<string>();
+    const queue = startId && nodeMap.has(startId) ? [startId] : [];
+
+    while (queue.length > 0) {
+        const nodeId = queue.shift();
+        if (!nodeId || reachable.has(nodeId)) continue;
+
+        reachable.add(nodeId);
+        const node = nodeMap.get(nodeId);
+        if (!node) continue;
+
+        const nodeEdges: string[] = [];
+        for (const option of node.options ?? []) {
+            const requiredItems = getRequiredItemIds(option);
+            if (requiredItems.some((itemId) => !obtainable.has(itemId))) {
+                continue;
+            }
+
+            if (option.type === 'finish') {
+                finishableNodes.add(nodeId);
+                continue;
+            }
+
+            if (option.type === 'goto' && typeof option.goto === 'string') {
+                const target = option.goto.trim();
+                if (!nodeMap.has(target)) continue;
+                nodeEdges.push(target);
+                if (!reachable.has(target)) queue.push(target);
+            }
+        }
+        edges.set(nodeId, nodeEdges);
+    }
+
+    return { startId, nodeMap, edges, reachable, finishableNodes };
+};
+
+const findFeasibleDeadEnds = (quest: any, obtainable: Set<string>) => {
+    const { startId, edges, reachable, finishableNodes } = buildFeasibleDialogueGraph(
+        quest,
+        obtainable
+    );
+
+    const reverseEdges = new Map<string, string[]>();
+    for (const [source, targets] of edges.entries()) {
+        for (const target of targets) {
+            if (!reverseEdges.has(target)) reverseEdges.set(target, []);
+            reverseEdges.get(target)?.push(source);
+        }
+    }
+
+    const canReachFinish = new Set<string>(finishableNodes);
+    const reverseQueue = [...finishableNodes];
+    while (reverseQueue.length > 0) {
+        const nodeId = reverseQueue.shift();
+        if (!nodeId) continue;
+        for (const previous of reverseEdges.get(nodeId) ?? []) {
+            if (canReachFinish.has(previous)) continue;
+            canReachFinish.add(previous);
+            reverseQueue.push(previous);
+        }
+    }
+
+    const deadEnds = [...reachable].filter((nodeId) => !canReachFinish.has(nodeId));
+
+    return {
+        startId,
+        deadEnds,
+        hasFeasibleFinishPath: startId ? canReachFinish.has(startId) : false,
+    };
+};
+
 const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
 
 const getItemDependencies = (item: any) =>
@@ -404,6 +494,36 @@ describe('quest completion item availability', () => {
         const unobtainable = requiredItemIds.filter((itemId) => !obtainable.has(itemId));
 
         expect(unobtainable).toEqual([]);
+    });
+
+    it('has no feasible dialogue dead-ends between start and finish without placeholder pricing', async () => {
+        const quests = await loadQuests();
+        const questPaths = await loadQuestPaths();
+        const obtainable = computeObtainableItems({
+            allItems: items as Array<any>,
+            allQuests: quests,
+            includeBetaPlaceholderItems: false,
+        });
+
+        const failures: string[] = [];
+        for (const quest of quests) {
+            const result = findFeasibleDeadEnds(quest, obtainable);
+            if (!result.startId) {
+                failures.push(`Quest "${quest.id}" has no start node.`);
+                continue;
+            }
+            if (result.hasFeasibleFinishPath && result.deadEnds.length === 0) continue;
+
+            const path = questPaths.get(quest.id) ?? 'unknown path';
+            const deadEndList = result.deadEnds.length
+                ? result.deadEnds.join(', ')
+                : '(no reachable finish)';
+            failures.push(
+                `Quest "${quest.id}" (${path}) has dead-end reachable nodes: ${deadEndList}.`
+            );
+        }
+
+        expect(failures).toEqual([]);
     });
 
     it('ensures finish requirements are obtainable', async () => {

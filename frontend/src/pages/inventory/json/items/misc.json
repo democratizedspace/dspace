@@ -9,7 +9,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -23,14 +23,14 @@
     {
         "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
         "name": "sheet of printer paper",
-        "description": "Single 216 \u00d7 279 mm (8.5 \u00d7 11 in) sheet of 80 g/m\u00b2 letter printer paper.",
+        "description": "Single 216 × 279 mm (8.5 × 11 in) sheet of 80 g/m² letter printer paper.",
         "image": "/assets/letter_printer_paper_sheet.jpg",
         "price": "0.02 dUSD",
         "unit": "sheet",
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -55,7 +55,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-09",
@@ -75,7 +75,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-03",
@@ -94,13 +94,13 @@
     {
         "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
         "name": "200 Wh battery pack",
-        "description": "12 V 16 Ah lithium iron phosphate battery pack (\u2248200 Wh) with built-in BMS for renewable energy storage.",
+        "description": "12 V 16 Ah lithium iron phosphate battery pack (≈200 Wh) with built-in BMS for renewable energy storage.",
         "price": "120 dUSD",
         "image": "/assets/200wh_lifepo4_battery_pack.jpg",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
@@ -120,7 +120,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -134,7 +134,7 @@
         "hardening": {
             "passes": 0,
             "score": 80,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -149,7 +149,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -163,7 +163,7 @@
         "hardening": {
             "passes": 0,
             "score": 88,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -177,7 +177,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -191,7 +191,7 @@
         "hardening": {
             "passes": 0,
             "score": 82,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -205,7 +205,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -220,7 +220,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -240,7 +240,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -265,7 +265,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -294,7 +294,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -315,7 +315,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -329,14 +329,14 @@
     {
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
         "name": "3D printing kit",
-        "description": "Assembled FDM printer, 0.4 mm nozzle, 180\u00d7180\u00d7180 mm build with 500 g PLA.",
+        "description": "Assembled FDM printer, 0.4 mm nozzle, 180×180×180 mm build with 500 g PLA.",
         "image": "/assets/3d_printing_starter_kit_fdm_printer_04mm_nozzle_pla.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -356,7 +356,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -376,7 +376,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -390,7 +390,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -404,7 +404,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -418,7 +418,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -432,7 +432,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -446,7 +446,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -513,13 +513,13 @@
     {
         "id": "799ace33-1336-46c0-904a-9f16778230f1",
         "name": "sink",
-        "description": "Steel sink with faucet; ~50\u00d740\u00d720 cm basin (~5 kg). Provides tap water.",
+        "description": "Steel sink with faucet; ~50×40×20 cm basin (~5 kg). Provides tap water.",
         "image": "/assets/tap.jpg",
         "price": "120 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -540,7 +540,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -561,7 +561,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -597,7 +597,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -619,13 +619,13 @@
     {
         "id": "4d817f1c-d78d-4fac-a514-402bce330693",
         "name": "hobbyist solid rocket motor",
-        "description": "Single-use 18 mm (0.7 in) \u00d7 70 mm (2.8 in) black powder motor weighing 18 g. Delivers ~31 N peak thrust for 0.8 s with ~2.5 N\u00b7s total impulse.",
+        "description": "Single-use 18 mm (0.7 in) × 70 mm (2.8 in) black powder motor weighing 18 g. Delivers ~31 N peak thrust for 0.8 s with ~2.5 N·s total impulse.",
         "image": "/assets/rocket_motor.jpg",
         "price": "5 dUSD",
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-04",
@@ -644,13 +644,13 @@
     {
         "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
         "name": "superglue",
-        "description": "Small 3 g tube of cyanoacrylate adhesive for quick repairs. Bonds plastic and wood in seconds\u2014avoid skin contact.",
+        "description": "Small 3 g tube of cyanoacrylate adhesive for quick repairs. Bonds plastic and wood in seconds—avoid skin contact.",
         "image": "/assets/superglue.jpg",
         "price": "3 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -671,7 +671,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -691,7 +691,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -705,13 +705,13 @@
     {
         "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
         "name": "rocket launch checklist",
-        "description": "A5 laminated card (148\u00d7210 mm, ~25 g) listing pad setup, arming and 10-sec countdown steps.",
+        "description": "A5 laminated card (148×210 mm, ~25 g) listing pad setup, arming and 10-sec countdown steps.",
         "image": "/assets/rocket_launch_checklist_card.jpg",
         "price": "2 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -739,7 +739,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -761,14 +761,14 @@
     {
         "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
         "name": "pH strip",
-        "description": "Disposable 0\u201314 pH test strip with 1-unit resolution; 0.3 g each.",
+        "description": "Disposable 0–14 pH test strip with 1-unit resolution; 0.3 g each.",
         "image": "/assets/single_ph_test_strip.jpg",
         "price": "0.15 dUSD",
         "unit": "each",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -805,7 +805,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-16",
@@ -826,7 +826,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-18",
@@ -847,7 +847,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-24",
@@ -894,7 +894,7 @@
     {
         "id": "bdc905f5-c36f-4608-9c7f-da7b0988572f",
         "name": "keychain camera kit",
-        "description": "20 g keychain HD camera, lithium cell, and mounting frame sized for 30\u201335 mm nosecones.",
+        "description": "20 g keychain HD camera, lithium cell, and mounting frame sized for 30–35 mm nosecones.",
         "image": "/assets/keychain_camera_kit_30mm_nosecone.jpg",
         "price": "22 dUSD",
         "category": "Electronics & Robotics"
@@ -989,7 +989,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-24",
@@ -1086,8 +1086,8 @@
         "name": "flame-resistant recovery wadding",
         "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
         "image": "/assets/recovery_wadding.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Rocketry & Flight"
+        "category": "Rocketry & Flight",
+        "price": "4 dUSD"
     },
     {
         "id": "7cbb9db5-1d15-481e-b0bb-a1eed889063b",
@@ -1118,8 +1118,8 @@
         "name": "Arduino Uno",
         "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
         "image": "/assets/arduino_uno_board.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "30 dUSD"
     },
     {
         "id": "d1105b87-8185-4a30-ba55-406384be169f",
@@ -1132,7 +1132,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Electronics & Robotics"
@@ -1142,37 +1142,37 @@
         "name": "Jumper Wires",
         "description": "Flexible wires with pin connectors for building temporary circuits.",
         "image": "/assets/jumper_wires_set.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "5 dUSD"
     },
     {
         "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
         "name": "5 mm LED",
         "description": "A 5 mm red light-emitting diode for basic electronics projects.",
         "image": "/assets/led_5mm_red.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "1 dUSD"
     },
     {
         "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
         "name": "220 Ohm Resistor",
         "description": "A resistor commonly used to limit current to an LED.",
         "image": "/assets/220_ohm_resistor.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "1 dUSD"
     },
     {
         "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
         "name": "resistor color chart",
         "description": "Printed reference sheet for decoding resistor color bands.",
         "image": "/assets/resistor_color_chart_sheet.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "2 dUSD"
     },
     {
         "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
         "name": "LED indicator module",
-        "description": "5 mm red LED pre-wired with a 220 \u03a9 resistor and jumper leads for breadboard projects.",
+        "description": "5 mm red LED pre-wired with a 220 Ω resistor and jumper leads for breadboard projects.",
         "image": "/assets/led_indicator_module.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
@@ -1195,7 +1195,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -1243,8 +1243,8 @@
         "name": "servo test rig",
         "description": "Breadboarded Arduino Uno, wired hobby servo, and strain relief ready for motion tests.",
         "image": "/assets/servo_test_rig.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "25 dUSD"
     },
     {
         "id": "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872",
@@ -1257,18 +1257,18 @@
     {
         "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
         "name": "ultrasonic distance sensor",
-        "description": "5 V ultrasonic rangefinder module with trigger/echo pins and 2 cm\u20134 m sensing range.",
+        "description": "5 V ultrasonic rangefinder module with trigger/echo pins and 2 cm–4 m sensing range.",
         "image": "/assets/ultrasonic_distance_sensor_module.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "6 dUSD"
     },
     {
         "id": "f22293ab-0553-4f6f-8377-093f2a1351c8",
         "name": "pan-tilt servo bracket",
         "description": "Stacked mini-servo bracket with hardware for sweeping lightweight sensors in two axes.",
         "image": "/assets/pan_tilt_mini_servo_bracket.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "12 dUSD"
     },
     {
         "id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
@@ -1281,7 +1281,7 @@
     {
         "id": "9f2109f5-59c8-4309-8a6c-3c60be744985",
         "name": "ultrasonic sweep map",
-        "description": "Logged point cloud from a 180\u00b0 ultrasonic sweep showing obstacles and clear arcs.",
+        "description": "Logged point cloud from a 180° ultrasonic sweep showing obstacles and clear arcs.",
         "image": "/assets/ultrasonic_sweep_obstacle_map.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
@@ -1291,8 +1291,8 @@
         "name": "two-servo arm kit",
         "description": "Laser-cut links, hardware, and a micro gripper plate sized for two hobby servos.",
         "image": "/assets/two_servo_arm_kit_parts_layout.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "30 dUSD"
     },
     {
         "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
@@ -1319,7 +1319,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -1383,8 +1383,8 @@
         "name": "Potentiometer",
         "description": "Variable resistor for adjusting signal levels in circuits.",
         "image": "/assets/potentiometer_knob.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "3 dUSD"
     },
     {
         "id": "3f1cc002-1f7a-4301-a1c6-343f65e7f21a",
@@ -1597,16 +1597,16 @@
         "name": "PoE+ switch",
         "description": "Powers multiple devices and provides network connectivity.",
         "image": "/assets/poe_plus_switch_on_rack.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "60 dUSD"
     },
     {
         "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
         "name": "Ethernet cable",
         "description": "A simple cable for wired network connections.",
         "image": "/assets/ethernet_network_cable.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "8 dUSD"
     },
     {
         "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
@@ -1748,7 +1748,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -1884,8 +1884,8 @@
         "name": "CPR training manikin",
         "description": "Life-size torso manikin for practicing chest compressions and rescue breaths.",
         "image": "/assets/cpr_training_manikin_torso.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Safety & Medical"
+        "category": "Safety & Medical",
+        "price": "180 dUSD"
     },
     {
         "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
@@ -1948,7 +1948,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-09-07",
@@ -1978,7 +1978,7 @@
     {
         "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
         "name": "safety goggles",
-        "description": "ANSI Z87.1 polycarbonate goggles with vents, side shields, adjustable strap; fit over glasses, block splashes; 80\u2013100 g.",
+        "description": "ANSI Z87.1 polycarbonate goggles with vents, side shields, adjustable strap; fit over glasses, block splashes; 80–100 g.",
         "image": "/assets/safety_goggles_vented_clear.jpg",
         "price": "8 dUSD",
         "type": "tool",
@@ -1986,7 +1986,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -2015,7 +2015,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Biology & Lab"
@@ -2038,7 +2038,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-18",
@@ -2052,14 +2052,14 @@
     {
         "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",
         "name": "electrical tape",
-        "description": "19 mm \u00d7 20 m PVC electrical tape for insulating wire splices.",
+        "description": "19 mm × 20 m PVC electrical tape for insulating wire splices.",
         "image": "/assets/electrical_tape_roll.jpg",
         "price": "2 dUSD",
         "unit": "roll",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Workshop & Construction"
@@ -2084,7 +2084,7 @@
     {
         "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
         "name": "spill tray",
-        "description": "Polypropylene tray with 2 cm lip to contain acid drips; 300 \u00d7 200 mm; ~150 g.",
+        "description": "Polypropylene tray with 2 cm lip to contain acid drips; 300 × 200 mm; ~150 g.",
         "image": "/assets/lab_spill_tray_on_bench.jpg",
         "price": "5 dUSD",
         "category": "Biology & Lab"
@@ -2115,7 +2115,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-13",
@@ -2131,16 +2131,16 @@
         "name": "Thermistor (10k NTC)",
         "description": "A temperature-sensitive resistor for Arduino voltage dividers.",
         "image": "/assets/thermistor_10k_ntc.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "4 dUSD"
     },
     {
         "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
         "name": "10k Ohm Resistor",
         "description": "A resistor for sensor voltage divider circuits.",
         "image": "/assets/10k_ohm_resistor_through_hole.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "1 dUSD"
     },
     {
         "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -2196,43 +2196,43 @@
         "name": "5 V Power Supply",
         "description": "A battery pack or USB adapter that provides a stable 5 V DC output.",
         "image": "/assets/power_supply_5v.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "15 dUSD"
     },
     {
         "id": "0254a829-9002-4a75-8af2-03cd961601da",
         "name": "50 mm magnifying lens",
         "description": "Glass lens with ~50 mm focal length used as a telescope objective.",
         "image": "/assets/magnifying_lens_50mm_objective.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Astronomy & Observation"
+        "category": "Astronomy & Observation",
+        "price": "12 dUSD"
     },
     {
         "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
         "name": "20 mm magnifying lens",
         "description": "Small lens with ~20 mm focal length for use as a telescope eyepiece.",
         "image": "/assets/magnifying_lens_20mm_eyepiece.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Astronomy & Observation"
+        "category": "Astronomy & Observation",
+        "price": "8 dUSD"
     },
     {
         "id": "2794503d-fbe7-4031-a63e-deac531f9784",
         "name": "cardboard mailing tube",
         "description": "Sturdy cardboard tube about 40 cm long to hold telescope optics.",
         "image": "/assets/cardboard_mailing_tube_telescope_body.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Workshop & Construction"
+        "category": "Workshop & Construction",
+        "price": "5 dUSD"
     },
     {
         "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
         "name": "camera tripod",
-        "description": "Aluminum tripod with 3-way pan head; extends 0.5\u20131.5 m, supports up to 3 kg, weighs 1.2 kg.",
+        "description": "Aluminum tripod with 3-way pan head; extends 0.5–1.5 m, supports up to 3 kg, weighs 1.2 kg.",
         "image": "/assets/aluminum_camera_tripod_pan_head.jpg",
         "price": "30 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -2248,27 +2248,27 @@
         "name": "masking tape",
         "description": "Low-tack paper tape for temporarily securing lenses during assembly.",
         "image": "/assets/masking_tape_roll.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Workshop & Construction"
+        "category": "Workshop & Construction",
+        "price": "3 dUSD"
     },
     {
         "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
         "name": "digital camera",
         "description": "Mirrorless camera capable of long-exposure astrophotography.",
         "image": "/assets/digital_camera_astrophotography.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Astronomy & Observation"
+        "category": "Astronomy & Observation",
+        "price": "120 dUSD"
     },
     {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
         "name": "astronaut poster",
-        "description": "61\u00d791 cm (24\u00d736 in) matte poster on 150 g/m\u00b2 paper; NASA crew, ~85 g.",
+        "description": "61×91 cm (24×36 in) matte poster on 150 g/m² paper; NASA crew, ~85 g.",
         "image": "/assets/astronauts.jpg",
         "price": "12 dUSD",
         "hardening": {
             "passes": 2,
             "score": 78,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -2287,13 +2287,13 @@
     {
         "id": "70bb8d86-2c4e-4330-9705-371891934686",
         "name": "mission logbook",
-        "description": "A5 (148 \u00d7 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
+        "description": "A5 (148 × 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
         "image": "/assets/hardbound_mission_logbook_a5.jpg",
         "price": "8 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -2329,7 +2329,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -2349,7 +2349,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -2369,7 +2369,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-11",
@@ -2390,7 +2390,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
