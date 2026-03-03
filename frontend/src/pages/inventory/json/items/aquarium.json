@@ -272,6 +272,20 @@
         }
     },
     {
+        "id": "5e55f6de-8924-4c0a-b42a-dcf53e8ca288",
+        "name": "Drip-acclimated dwarf shrimp",
+        "description": "Dwarf shrimp acclimated over ~1 hour via slow drip to match tank temperature and chemistry.",
+        "image": "/assets/dwarf_shrimp_glass_closeup.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "unit": "each",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "60e517b4-5807-4983-afb8-e2aad1566587",
         "name": "Airline tubing",
         "description": "2 m of 4 mm inner diameter clear PVC tubing for aquarium air pumps or drip acclimation.",
@@ -308,6 +322,32 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "f64baed5-ab74-43ca-94c5-a9de35f3879c",
+        "name": "Heated Walstad aquarium with dwarf shrimp (80 L, 26°C)",
+        "description": "Heated 80 L Walstad tank stocked with drip-acclimated dwarf shrimp that are actively grazing.",
+        "image": "/assets/walstad.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "15471f52-3bb8-4ac4-9f8d-41c8d1973046",
+        "name": "Heated Walstad aquarium with dead dwarf shrimp (80 L, 26°C)",
+        "description": "A heated Walstad tank where non-acclimated shrimp suffered osmotic shock and died, fouling the water column.",
+        "image": "/assets/walstad.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {

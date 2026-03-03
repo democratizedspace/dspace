@@ -41,7 +41,7 @@
         },
         {
             "id": "acclimate",
-            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2\u20134 drops per second for about an hour until parameters match.",
+            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2–4 drops per second for about an hour until parameters match.",
             "options": [
                 {
                     "type": "process",
@@ -55,13 +55,39 @@
                         {
                             "id": "0564d441-7367-412e-b709-dad770814a39",
                             "count": 1
+                        },
+                        {
+                            "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                            "count": 1
                         }
                     ]
                 },
                 {
                     "type": "goto",
-                    "goto": "release",
-                    "text": "Water is matched and shrimp behavior stayed calm."
+                    "goto": "release-acclimated",
+                    "text": "Water is matched and shrimp behavior stayed calm.",
+                    "requiresItems": [
+                        {
+                            "id": "5e55f6de-8924-4c0a-b42a-dcf53e8ca288",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "add-unacclimated-shrimp",
+                    "goto": "die-off",
+                    "text": "Skip drip acclimation and add shrimp directly to the tank (risky).",
+                    "requiresItems": [
+                        {
+                            "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -94,16 +120,58 @@
             ]
         },
         {
-            "id": "release",
-            "text": "Use an aquarium net to move the shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
+            "id": "release-acclimated",
+            "text": "Use an aquarium net to move only drip-acclimated shrimp into the heated tank. Never pour store water into your aquarium.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "add-drip-acclimated-shrimp",
+                    "goto": "release-acclimated",
+                    "text": "Net in the drip-acclimated shrimp.",
+                    "requiresItems": [
+                        {
+                            "id": "5e55f6de-8924-4c0a-b42a-dcf53e8ca288",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                },
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Shrimp released without adding store water.",
+                    "text": "Shrimp were added with the net and are exploring calmly.",
                     "requiresItems": [
                         {
+                            "id": "f64baed5-ab74-43ca-94c5-a9de35f3879c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "die-off",
+            "text": "The sudden chemistry swing caused osmotic shock. The shrimp died in the display and waste is now degrading water quality.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "recover-from-shrimp-die-off",
+                    "goto": "acclimate",
+                    "text": "Use a net to remove carcasses, do a water change, and restart with proper drip acclimation.",
+                    "requiresItems": [
+                        {
+                            "id": "15471f52-3bb8-4ac4-9f8d-41c8d1973046",
+                            "count": 1
+                        },
+                        {
                             "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
                             "count": 1
                         }
                     ]
@@ -116,7 +184,7 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "log-heated-walstad-temperature",
+                    "process": "log-shrimp-walstad-temperature",
                     "text": "Capture post-release verification reading.",
                     "goto": "verify"
                 },
@@ -134,7 +202,7 @@
                             "count": 1
                         },
                         {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "id": "f64baed5-ab74-43ca-94c5-a9de35f3879c",
                             "count": 1
                         }
                     ]
