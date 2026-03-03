@@ -5874,8 +5874,18 @@
                 "count": 1
             }
         ],
-        "consumeItems": [],
-        "createItems": [],
+        "consumeItems": [
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "011129b7-2190-47dd-b541-8123a2e8a9a3",
+                "count": 1
+            }
+        ],
         "duration": "1h",
         "hardening": {
             "passes": 1,
@@ -5888,6 +5898,133 @@
                     "score": 70
                 }
             ]
+        }
+    },
+    {
+        "id": "release-drip-acclimated-shrimp",
+        "title": "Net drip-acclimated shrimp into the Walstad aquarium",
+        "requireItems": [
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            },
+            {
+                "id": "011129b7-2190-47dd-b541-8123a2e8a9a3",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "011129b7-2190-47dd-b541-8123a2e8a9a3",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "35aeac1d-e26e-475b-8b05-b74562e90173",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "release-unacclimated-shrimp",
+        "title": "Add unacclimated shrimp directly to the Walstad aquarium",
+        "requireItems": [
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "1b63146c-5cb3-4c75-bb31-ac4bb2e2bebe",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "recover-shrimp-die-off",
+        "title": "Net out shrimp carcasses and run a corrective water change",
+        "requireItems": [
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "1b63146c-5cb3-4c75-bb31-ac4bb2e2bebe",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            },
+            {
+                "id": "1b63146c-5cb3-4c75-bb31-ac4bb2e2bebe",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            },
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
         }
     },
     {

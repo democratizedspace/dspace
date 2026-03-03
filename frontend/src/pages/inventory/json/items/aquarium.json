@@ -272,6 +272,27 @@
         }
     },
     {
+        "id": "011129b7-2190-47dd-b541-8123a2e8a9a3",
+        "name": "Drip-acclimated dwarf shrimp",
+        "description": "Dwarf shrimp adjusted slowly to tank parameters and ready for net transfer.",
+        "image": "/assets/dwarf_shrimp_glass_closeup.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "35aeac1d-e26e-475b-8b05-b74562e90173",
+        "name": "Walstad aquarium with dwarf shrimp (80 L)",
+        "description": "An 80 L Walstad aquarium stocked with drip-acclimated dwarf shrimp.",
+        "image": "/assets/walstad_aquarium_80l.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "1b63146c-5cb3-4c75-bb31-ac4bb2e2bebe",
+        "name": "Walstad aquarium with dead dwarf shrimp (80 L)",
+        "description": "An 80 L Walstad aquarium after a failed shrimp transfer that caused a total die-off.",
+        "image": "/assets/walstad_aquarium_80l.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
         "id": "60e517b4-5807-4983-afb8-e2aad1566587",
         "name": "Airline tubing",
         "description": "2 m of 4 mm inner diameter clear PVC tubing for aquarium air pumps or drip acclimation.",

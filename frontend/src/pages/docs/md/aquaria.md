@@ -72,7 +72,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [attach-aquarium-thermometer](/processes/attach-aquarium-thermometer)
         - Requires: Walstad aquarium (80 L) ×1, aquarium thermometer (0–50°C) ×1, paper towel ×1
@@ -157,7 +157,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - None
 
@@ -181,7 +181,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [bucket-water-dechlorinated](/processes/bucket-water-dechlorinated)
         - Requires: none
@@ -219,7 +219,7 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [heat-walstad](/processes/heat-walstad)
         - Requires: none
@@ -407,22 +407,41 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `start` → "Tank checks passed and I'm ready to stage acclimation gear." — Aquarium liquid test kit ×1
     - `acclimate` → "Start drip acclimation" — Airline tubing ×1, 5 gallon bucket ×1
     - `stress-response` → "Reading logged and behavior recovered; resume controlled acclimation." — Aquarium temperature reading ×1
-    - `release` → "Shrimp released without adding store water." — aquarium net ×1
-    - `verify` → "Shrimp are active, temperature is logged, and transfer is stable." — Aquarium temperature reading ×1, aquarium net ×1
+    - `verify` → "Shrimp are active, temperature is logged, and the transfer is stable." —
+      Aquarium temperature reading ×1, Walstad aquarium with dwarf shrimp (80 L) ×1
+- Pathing:
+    - Main path: `start` → `acquire` → `acclimate` (drip path) → `release` → `verify` → finish
+    - Branch: `acclimate` (skip drip) → `die-off` → `lesson-learned` → `acclimate`
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [drip-acclimate-shrimp](/processes/drip-acclimate-shrimp)
         - Requires: Airline tubing ×1, 5 gallon bucket ×1, Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
-        - Consumes: none
-        - Creates: none
+        - Consumes: Dwarf shrimp ×1
+        - Creates: Drip-acclimated dwarf shrimp ×1
+    - [release-drip-acclimated-shrimp](/processes/release-drip-acclimated-shrimp)
+        - Requires: aquarium net ×1, Drip-acclimated dwarf shrimp ×1, Walstad aquarium (80 L) ×1
+        - Consumes: Drip-acclimated dwarf shrimp ×1, Walstad aquarium (80 L) ×1
+        - Creates: Walstad aquarium with dwarf shrimp (80 L) ×1
+    - [release-unacclimated-shrimp](/processes/release-unacclimated-shrimp)
+        - Requires: Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
+        - Consumes: Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
+        - Creates: Walstad aquarium with dead dwarf shrimp (80 L) ×1
+    - [recover-shrimp-die-off](/processes/recover-shrimp-die-off)
+        - Requires: aquarium net ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1,
+          Walstad aquarium with dead dwarf shrimp (80 L) ×1
+        - Consumes: 5 gallon bucket of dechlorinated tap water ×1,
+          Walstad aquarium with dead dwarf shrimp (80 L) ×1
+        - Creates: Walstad aquarium (80 L) ×1, Dwarf shrimp ×1
     - [log-heated-walstad-temperature](/processes/log-heated-walstad-temperature)
         - Requires: Heated Walstad aquarium (80 L, 26°C) ×1
         - Consumes: none
         - Creates: Aquarium temperature reading ×1
+- Known limitation / follow-up:
+    - New shrimp-state inventory entries in this PR intentionally reuse existing image assets. A human should replace these placeholder images with dedicated assets using the Image Analysis CLI workflow in `DEVELOPER_GUIDE.md`.
 
 ## 14) Add Floating Plants (`aquaria/floating-plants`)
 
