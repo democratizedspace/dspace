@@ -5874,8 +5874,18 @@
                 "count": 1
             }
         ],
-        "consumeItems": [],
-        "createItems": [],
+        "consumeItems": [
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "c6d10826-cb00-45f6-8e6d-8247423fa978",
+                "count": 1
+            }
+        ],
         "duration": "1h",
         "hardening": {
             "passes": 1,
@@ -5888,6 +5898,133 @@
                     "score": 70
                 }
             ]
+        }
+    },
+    {
+        "id": "stock-drip-acclimated-shrimp",
+        "title": "Net drip-acclimated dwarf shrimp into your Walstad aquarium",
+        "requireItems": [
+            {
+                "id": "c6d10826-cb00-45f6-8e6d-8247423fa978",
+                "count": 1
+            },
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "c6d10826-cb00-45f6-8e6d-8247423fa978",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "f7d1e4dd-4ba7-4d15-a66c-e3773b1fcb59",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "dump-unacclimated-shrimp",
+        "title": "Add non-acclimated dwarf shrimp directly to the Walstad tank",
+        "requireItems": [
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                "count": 1
+            },
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "f98cd334-df1f-4e31-83d0-1246738f5f9a",
+                "count": 1
+            }
+        ],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "recover-walstad-after-shrimp-die-off",
+        "title": "Net out shrimp carcasses and run a partial water change",
+        "requireItems": [
+            {
+                "id": "f98cd334-df1f-4e31-83d0-1246738f5f9a",
+                "count": 1
+            },
+            {
+                "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                "count": 1
+            },
+            {
+                "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                "count": 1
+            },
+            {
+                "id": "0564d441-7367-412e-b709-dad770814a39",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "f98cd334-df1f-4e31-83d0-1246738f5f9a",
+                "count": 1
+            },
+            {
+                "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                "count": 0.25
+            }
+        ],
+        "createItems": [
+            {
+                "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
         }
     },
     {

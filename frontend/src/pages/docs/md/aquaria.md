@@ -41,7 +41,8 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `recovery` → "Recovery completed; return to stability verification." — Walstad aquarium (80 L) ×1
     - `recovery` → "Cloudiness is improving; hold livestock and continue passive settling checks." — Walstad aquarium (80 L) ×1
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems:
+        - `lesson-learned` → "I understand—return to drip acclimation and do it correctly." grants Dwarf shrimp ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - dChat ×1, dUSD ×1000
@@ -69,7 +70,8 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `interpret` → "Reading is out of range; pause and stabilize before rechecking." — Aquarium temperature reading ×1
     - `stabilize` → "Fresh reading logged; re-evaluate range." — Aquarium temperature reading ×1
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems:
+        - `lesson-learned` → "I understand—return to drip acclimation and do it correctly." grants Dwarf shrimp ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - pH strip ×1
@@ -404,21 +406,38 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Unlock prerequisite:
     - `requiresQuests`: `aquaria/ph-strip-test`, `aquaria/heater-install`, `aquaria/log-water-parameters`
 - Dialogue `requiresItems` gates:
-    - `start` → "Tank checks passed and I'm ready to stage acclimation gear." — Aquarium liquid test kit ×1
-    - `acclimate` → "Start drip acclimation" — Airline tubing ×1, 5 gallon bucket ×1
+    - `start` → "Tank checks passed and I'm ready to stage acclimation gear." — none
+    - `acclimate` → "Start drip acclimation and match parameters." — Airline tubing ×1, 5 gallon bucket ×1, Dwarf shrimp ×1
+    - `acclimate` → "Water is matched and drip-acclimated shrimp are ready for transfer." — Drip-acclimated Dwarf shrimp ×1
+    - `acclimate` → "Skip drip acclimation and add shrimp directly (unsafe)." — Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
+    - `acclimate` → "Direct-add attempt caused immediate losses." — Walstad aquarium with shrimp die-off (80 L) ×1
     - `stress-response` → "Reading logged and behavior recovered; resume controlled acclimation." — Aquarium temperature reading ×1
-    - `release` → "Shrimp released without adding store water." — aquarium net ×1
-    - `verify` → "Shrimp are active, temperature is logged, and transfer is stable." — Aquarium temperature reading ×1, aquarium net ×1
+    - `die-off` → "Cleanup is complete and I can retry acclimation." — Walstad aquarium (80 L) ×1
+    - `lesson-learned` → "I understand—return to drip acclimation and do it correctly." — Walstad aquarium (80 L) ×1
+    - `verify` → "Shrimp are active, temperature is logged, and transfer is stable." — Aquarium temperature reading ×1, Walstad aquarium with drip-acclimated dwarf shrimp (80 L) ×1
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems:
+        - `lesson-learned` → "I understand—return to drip acclimation and do it correctly." grants Dwarf shrimp ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [drip-acclimate-shrimp](/processes/drip-acclimate-shrimp)
         - Requires: Airline tubing ×1, 5 gallon bucket ×1, Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
-        - Consumes: none
-        - Creates: none
+        - Consumes: Dwarf shrimp ×1
+        - Creates: Drip-acclimated Dwarf shrimp ×1
+    - [stock-drip-acclimated-shrimp](/processes/stock-drip-acclimated-shrimp)
+        - Requires: Drip-acclimated Dwarf shrimp ×1, aquarium net ×1, Walstad aquarium (80 L) ×1
+        - Consumes: Drip-acclimated Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
+        - Creates: Walstad aquarium with drip-acclimated dwarf shrimp (80 L) ×1
+    - [dump-unacclimated-shrimp](/processes/dump-unacclimated-shrimp)
+        - Requires: Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
+        - Consumes: Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
+        - Creates: Walstad aquarium with shrimp die-off (80 L) ×1
+    - [recover-walstad-after-shrimp-die-off](/processes/recover-walstad-after-shrimp-die-off)
+        - Requires: Walstad aquarium with shrimp die-off (80 L) ×1, aquarium net ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Consumes: Walstad aquarium with shrimp die-off (80 L) ×1, 5 gallon bucket of dechlorinated tap water ×0.25
+        - Creates: Walstad aquarium (80 L) ×1
     - [log-heated-walstad-temperature](/processes/log-heated-walstad-temperature)
         - Requires: Heated Walstad aquarium (80 L, 26°C) ×1
         - Consumes: none

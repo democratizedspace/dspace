@@ -13,13 +13,7 @@
                 {
                     "type": "goto",
                     "goto": "acquire",
-                    "text": "Tank checks passed and I'm ready to stage acclimation gear.",
-                    "requiresItems": [
-                        {
-                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Tank checks passed and I'm ready to stage acclimation gear."
                 }
             ]
         },
@@ -46,7 +40,8 @@
                 {
                     "type": "process",
                     "process": "drip-acclimate-shrimp",
-                    "text": "Start drip acclimation",
+                    "goto": "release",
+                    "text": "Start drip acclimation and match parameters.",
                     "requiresItems": [
                         {
                             "id": "60e517b4-5807-4983-afb8-e2aad1566587",
@@ -55,13 +50,50 @@
                         {
                             "id": "0564d441-7367-412e-b709-dad770814a39",
                             "count": 1
+                        },
+                        {
+                            "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                            "count": 1
                         }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "release",
-                    "text": "Water is matched and shrimp behavior stayed calm."
+                    "text": "Water is matched and drip-acclimated shrimp are ready for transfer.",
+                    "requiresItems": [
+                        {
+                            "id": "c6d10826-cb00-45f6-8e6d-8247423fa978",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "dump-unacclimated-shrimp",
+                    "goto": "die-off",
+                    "text": "Skip drip acclimation and add shrimp directly (unsafe).",
+                    "requiresItems": [
+                        {
+                            "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                            "count": 1
+                        },
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "die-off",
+                    "text": "Direct-add attempt caused immediate losses.",
+                    "requiresItems": [
+                        {
+                            "id": "f98cd334-df1f-4e31-83d0-1246738f5f9a",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -95,15 +127,67 @@
         },
         {
             "id": "release",
-            "text": "Use an aquarium net to move the shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
+            "text": "Use an aquarium net to move drip-acclimated shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "stock-drip-acclimated-shrimp",
+                    "goto": "verify",
+                    "text": "Net in drip-acclimated shrimp for a safe transfer."
+                },
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Shrimp released without adding store water.",
+                    "text": "Drip-acclimated shrimp were released without adding store water.",
                     "requiresItems": [
                         {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "id": "f7d1e4dd-4ba7-4d15-a66c-e3773b1fcb59",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "die-off",
+            "text": "Adding non-acclimated shrimp directly shocked them. Remove carcasses immediately, refresh water, and reset before trying again.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "recover-walstad-after-shrimp-die-off",
+                    "goto": "lesson-learned",
+                    "text": "Net out losses and run a cleanup water change."
+                },
+                {
+                    "type": "goto",
+                    "goto": "lesson-learned",
+                    "text": "Cleanup is complete and I can retry acclimation.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "lesson-learned",
+            "text": "Lesson learned: rapid parameter swings can kill shrimp. Re-stage acclimation gear and retry with a controlled drip method.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "acclimate",
+                    "text": "I understand\u2014return to drip acclimation and do it correctly.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ],
+                    "grantsItems": [
+                        {
+                            "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
                             "count": 1
                         }
                     ]
@@ -126,7 +210,7 @@
                     "text": "Stress signs observed; pause and recover before finishing."
                 },
                 {
-                    "type": "finish",
+                    "type": "goto",
                     "text": "Shrimp are active, temperature is logged, and transfer is stable.",
                     "requiresItems": [
                         {
@@ -134,10 +218,21 @@
                             "count": 1
                         },
                         {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "id": "f7d1e4dd-4ba7-4d15-a66c-e3773b1fcb59",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "goto": "finish"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great recovery and execution. Controlled acclimation keeps shrimp alive and your tank stable.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Complete shrimp stocking with lessons learned."
                 }
             ]
         }
