@@ -41,7 +41,7 @@
         },
         {
             "id": "acclimate",
-            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2\u20134 drops per second for about an hour until parameters match.",
+            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2–4 drops per second for about an hour until parameters match.",
             "options": [
                 {
                     "type": "process",
@@ -56,12 +56,14 @@
                             "id": "0564d441-7367-412e-b709-dad770814a39",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "goto": "release"
                 },
                 {
-                    "type": "goto",
-                    "goto": "release",
-                    "text": "Water is matched and shrimp behavior stayed calm."
+                    "type": "process",
+                    "process": "release-unacclimated-shrimp",
+                    "text": "Skip drip acclimation and add shrimp directly (risky).",
+                    "goto": "die-off"
                 },
                 {
                     "type": "goto",
@@ -95,18 +97,36 @@
         },
         {
             "id": "release",
-            "text": "Use an aquarium net to move the shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
+            "text": "Use an aquarium net to move drip-acclimated shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "release-drip-acclimated-shrimp",
+                    "text": "Transfer the drip-acclimated shrimp with a net.",
+                    "goto": "verify"
+                }
+            ]
+        },
+        {
+            "id": "die-off",
+            "text": "You added non-acclimated shrimp directly to the tank. Osmotic shock caused a die-off, so remove carcasses, run a partial water change, and reset before trying again.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "recover-shrimp-die-off",
+                    "text": "Net out shrimp carcasses and complete a corrective water change.",
+                    "goto": "lesson-learned"
+                }
+            ]
+        },
+        {
+            "id": "lesson-learned",
+            "text": "Lesson learned: skipping acclimation can crash livestock quickly. Restabilize the tank and restart with a controlled drip acclimation.",
             "options": [
                 {
                     "type": "goto",
-                    "goto": "verify",
-                    "text": "Shrimp released without adding store water.",
-                    "requiresItems": [
-                        {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "acclimate",
+                    "text": "Tank recovered; retry with drip acclimation."
                 }
             ]
         },
@@ -127,14 +147,14 @@
                 },
                 {
                     "type": "finish",
-                    "text": "Shrimp are active, temperature is logged, and transfer is stable.",
+                    "text": "Shrimp are active, temperature is logged, and the transfer is stable.",
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
                             "count": 1
                         },
                         {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "id": "35aeac1d-e26e-475b-8b05-b74562e90173",
                             "count": 1
                         }
                     ]
@@ -156,7 +176,7 @@
     "hardening": {
         "passes": 4,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
