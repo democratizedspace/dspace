@@ -6,8 +6,14 @@ import path from 'path';
 describe('process hardening metadata', () => {
   it('reinjects all hardening files', () => {
     const hardeningDir = path.join(__dirname, '../frontend/src/pages/processes/hardening');
-    const hardeningFiles = fs.readdirSync(hardeningDir);
-    const withHardening = (processes as Array<any>).filter(p => p.hardening).length;
-    expect(withHardening).toBe(hardeningFiles.length);
+    const hardeningFiles = fs.readdirSync(hardeningDir).map(file => path.parse(file).name);
+    const processesById = new Map((processes as Array<any>).map(process => [process.id, process]));
+
+    const reinjectedHardening = hardeningFiles.filter(processId => {
+      const process = processesById.get(processId);
+      return process?.hardening;
+    });
+
+    expect(reinjectedHardening).toHaveLength(hardeningFiles.length);
   });
 });
