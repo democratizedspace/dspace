@@ -407,18 +407,32 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `start` → "Tank checks passed and I'm ready to stage acclimation gear." — Aquarium liquid test kit ×1
     - `acclimate` → "Start drip acclimation" — Airline tubing ×1, 5 gallon bucket ×1
     - `stress-response` → "Reading logged and behavior recovered; resume controlled acclimation." — Aquarium temperature reading ×1
-    - `release` → "Shrimp released without adding store water." — aquarium net ×1
-    - `verify` → "Shrimp are active, temperature is logged, and transfer is stable." — Aquarium temperature reading ×1, aquarium net ×1
+    - `release` → "Add drip-acclimated shrimp with the net." — aquarium net ×1, Drip-acclimated dwarf shrimp ×1
+    - `release` → "Add non-acclimated shrimp directly to the tank." — aquarium net ×1, Dwarf shrimp ×1
+    - `loss-recovery` → "Remove shrimp carcasses and run a cleanup water change." — Heated Walstad aquarium with shrimp die-off (80 L, 26°C) ×1
+    - `verify` → "Shrimp are active, temperature is logged, and transfer is stable." — Aquarium temperature reading ×1, Heated Walstad aquarium with dwarf shrimp (80 L, 26°C) ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - pH strip ×1
+    - Dwarf shrimp ×3
 - Processes used:
     - [drip-acclimate-shrimp](/processes/drip-acclimate-shrimp)
         - Requires: Airline tubing ×1, 5 gallon bucket ×1, Dwarf shrimp ×1, Walstad aquarium (80 L) ×1
-        - Consumes: none
-        - Creates: none
+        - Consumes: Dwarf shrimp ×1
+        - Creates: Drip-acclimated dwarf shrimp ×1
+    - [stock-drip-acclimated-shrimp](/processes/stock-drip-acclimated-shrimp)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, Drip-acclimated dwarf shrimp ×1, aquarium net ×1
+        - Consumes: Heated Walstad aquarium (80 L, 26°C) ×1, Drip-acclimated dwarf shrimp ×1
+        - Creates: Heated Walstad aquarium with dwarf shrimp (80 L, 26°C) ×1
+    - [stock-unacclimated-shrimp](/processes/stock-unacclimated-shrimp)
+        - Requires: Heated Walstad aquarium (80 L, 26°C) ×1, Dwarf shrimp ×1, aquarium net ×1
+        - Consumes: Heated Walstad aquarium (80 L, 26°C) ×1, Dwarf shrimp ×1
+        - Creates: Heated Walstad aquarium with shrimp die-off (80 L, 26°C) ×1
+    - [cleanup-shrimp-die-off](/processes/cleanup-shrimp-die-off)
+        - Requires: Heated Walstad aquarium with shrimp die-off (80 L, 26°C) ×1, aquarium net ×1, gravel vacuum ×1, 5 gallon bucket ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Consumes: Heated Walstad aquarium with shrimp die-off (80 L, 26°C) ×1, 5 gallon bucket of dechlorinated tap water ×1
+        - Creates: Heated Walstad aquarium (80 L, 26°C) ×1
     - [log-heated-walstad-temperature](/processes/log-heated-walstad-temperature)
         - Requires: Heated Walstad aquarium (80 L, 26°C) ×1
         - Consumes: none

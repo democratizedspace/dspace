@@ -41,7 +41,7 @@
         },
         {
             "id": "acclimate",
-            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2\u20134 drops per second for about an hour until parameters match.",
+            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2–4 drops per second for about an hour until parameters match.",
             "options": [
                 {
                     "type": "process",
@@ -61,7 +61,24 @@
                 {
                     "type": "goto",
                     "goto": "release",
-                    "text": "Water is matched and shrimp behavior stayed calm."
+                    "text": "Water is matched and shrimp behavior stayed calm.",
+                    "requiresItems": [
+                        {
+                            "id": "73f5e4b3-21dd-4d79-9a64-42624a123fc8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "release",
+                    "text": "Skip drip acclimation and add the shrimp right away.",
+                    "requiresItems": [
+                        {
+                            "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -95,15 +112,84 @@
         },
         {
             "id": "release",
-            "text": "Use an aquarium net to move the shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
+            "text": "Use an aquarium net to move the shrimp into the tank. Drip-acclimated shrimp settle in, while skipping acclimation can cause fatal osmotic shock.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "verify",
-                    "text": "Shrimp released without adding store water.",
+                    "type": "process",
+                    "process": "stock-drip-acclimated-shrimp",
+                    "text": "Add drip-acclimated shrimp with the net.",
                     "requiresItems": [
                         {
                             "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        },
+                        {
+                            "id": "73f5e4b3-21dd-4d79-9a64-42624a123fc8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "stock-unacclimated-shrimp",
+                    "text": "Add non-acclimated shrimp directly to the tank.",
+                    "requiresItems": [
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        },
+                        {
+                            "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Shrimp were added after drip acclimation.",
+                    "requiresItems": [
+                        {
+                            "id": "f8b6339e-807c-48d0-9aa9-f2c1baad61a2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "loss-recovery",
+                    "text": "Shrimp died after direct transfer; begin cleanup.",
+                    "requiresItems": [
+                        {
+                            "id": "cb3b52dc-9156-456b-84e3-7546768c5978",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "loss-recovery",
+            "text": "The unacclimated shrimp died from transfer shock. Net out the carcasses and complete a partial water change before trying again—lesson learned: always drip acclimate.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "cleanup-shrimp-die-off",
+                    "text": "Remove shrimp carcasses and run a cleanup water change.",
+                    "requiresItems": [
+                        {
+                            "id": "cb3b52dc-9156-456b-84e3-7546768c5978",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "acclimate",
+                    "text": "Cleanup completed; retry with proper drip acclimation.",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
                             "count": 1
                         }
                     ]
@@ -134,7 +220,7 @@
                             "count": 1
                         },
                         {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "id": "f8b6339e-807c-48d0-9aa9-f2c1baad61a2",
                             "count": 1
                         }
                     ]
@@ -156,7 +242,7 @@
     "hardening": {
         "passes": 4,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
