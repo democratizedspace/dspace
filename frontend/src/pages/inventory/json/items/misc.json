@@ -1086,7 +1086,7 @@
         "name": "flame-resistant recovery wadding",
         "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
         "image": "/assets/recovery_wadding.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "8 dUSD",
         "category": "Rocketry & Flight"
     },
     {
@@ -1118,7 +1118,7 @@
         "name": "Arduino Uno",
         "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
         "image": "/assets/arduino_uno_board.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "30 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1259,7 +1259,7 @@
         "name": "ultrasonic distance sensor",
         "description": "5 V ultrasonic rangefinder module with trigger/echo pins and 2 cm\u20134 m sensing range.",
         "image": "/assets/ultrasonic_distance_sensor_module.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "12 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1597,7 +1597,7 @@
         "name": "PoE+ switch",
         "description": "Powers multiple devices and provides network connectivity.",
         "image": "/assets/poe_plus_switch_on_rack.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "120 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1605,7 +1605,7 @@
         "name": "Ethernet cable",
         "description": "A simple cable for wired network connections.",
         "image": "/assets/ethernet_network_cable.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "6 dUSD",
         "category": "Electronics & Robotics"
     },
     {
