@@ -1,0 +1,22 @@
+{
+  "id": "grants-items-claim-once-regression",
+  "date": "2026-03-02",
+  "component": "frontend/quests/grants-items",
+  "longForm": "outages/2026-03-02-grants-items-claim-once-regression.md",
+  "rootCause": "The quest claim tracking helpers accessed gameState.quests[questId].itemsClaimed without guarding missing quest progress, so first-time claim attempts threw before saving claim state. grantsItems options kept granting inventory on each click because addItems ran before the claim mark persisted.",
+  "resolution": "Updated quest progress writes to merge existing per-quest state, guarded missing quest objects for claim reads/writes, and added regression tests covering first-time grantsItems claims and preservation of quest-specific fields when saving dialogue progress.",
+  "references": [
+    "frontend/src/utils/gameState.js",
+    "frontend/__tests__/gameState/gameState.test.js",
+    "frontend/src/pages/quests/svelte/option/GrantItemsOption.svelte",
+    "frontend/src/pages/quests/json/aquaria/ph-strip-test.json",
+    "outages/2026-03-02-grants-items-claim-once-regression.md",
+    "https://github.com/democratizedspace/dspace/commit/0969275"
+  ],
+  "dateRanges": [
+    {
+      "start": "2026-02-22",
+      "end": "2026-03-02"
+    }
+  ]
+}
