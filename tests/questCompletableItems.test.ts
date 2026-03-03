@@ -252,9 +252,11 @@ const buildFeasibleDialogueGraph = (quest: any, obtainable: Set<string>) => {
     const edges = new Map<string, string[]>();
     const finishableNodes = new Set<string>();
     const queue = startId && nodeMap.has(startId) ? [startId] : [];
+    const enqueued = new Set<string>(queue);
+    let queueIndex = 0;
 
-    while (queue.length > 0) {
-        const nodeId = queue.shift();
+    while (queueIndex < queue.length) {
+        const nodeId = queue[queueIndex++];
         if (!nodeId || reachable.has(nodeId)) continue;
 
         reachable.add(nodeId);
@@ -277,7 +279,10 @@ const buildFeasibleDialogueGraph = (quest: any, obtainable: Set<string>) => {
                 const target = option.goto.trim();
                 if (!nodeMap.has(target)) continue;
                 nodeEdges.push(target);
-                if (!reachable.has(target)) queue.push(target);
+                if (!reachable.has(target) && !enqueued.has(target)) {
+                    enqueued.add(target);
+                    queue.push(target);
+                }
             }
         }
         edges.set(nodeId, nodeEdges);
@@ -302,8 +307,8 @@ const findFeasibleDeadEnds = (quest: any, obtainable: Set<string>) => {
 
     const canReachFinish = new Set<string>(finishableNodes);
     const reverseQueue = [...finishableNodes];
-    while (reverseQueue.length > 0) {
-        const nodeId = reverseQueue.shift();
+    for (let i = 0; i < reverseQueue.length; i++) {
+        const nodeId = reverseQueue[i];
         if (!nodeId) continue;
         for (const previous of reverseEdges.get(nodeId) ?? []) {
             if (canReachFinish.has(previous)) continue;
@@ -512,15 +517,22 @@ describe('quest completion item availability', () => {
                 failures.push(`Quest "${quest.id}" has no start node.`);
                 continue;
             }
-            if (result.hasFeasibleFinishPath && result.deadEnds.length === 0) continue;
-
             const path = questPaths.get(quest.id) ?? 'unknown path';
-            const deadEndList = result.deadEnds.length
-                ? result.deadEnds.join(', ')
-                : '(no reachable finish)';
-            failures.push(
-                `Quest "${quest.id}" (${path}) has dead-end reachable nodes: ${deadEndList}.`
-            );
+            if (result.hasFeasibleFinishPath && result.deadEnds.length === 0) continue;
+            if (!result.hasFeasibleFinishPath && result.deadEnds.length === 0) {
+                failures.push(
+                    `Quest "${quest.id}" (${path}) start node "${result.startId}" not found in dialogue.`
+                );
+                continue;
+            }
+            if (!result.hasFeasibleFinishPath) {
+                failures.push(`Quest "${quest.id}" (${path}) has no feasible path to a finish node.`);
+            }
+            if (result.deadEnds.length > 0) {
+                failures.push(
+                    `Quest "${quest.id}" (${path}) has reachable dead-end nodes: ${result.deadEnds.join(', ')}.`
+                );
+            }
         }
 
         expect(failures).toEqual([]);

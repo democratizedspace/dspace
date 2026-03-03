@@ -1086,8 +1086,8 @@
         "name": "flame-resistant recovery wadding",
         "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
         "image": "/assets/recovery_wadding.jpg",
-        "category": "Rocketry & Flight",
-        "price": "4 dUSD"
+        "price": "4 dUSD",
+        "category": "Rocketry & Flight"
     },
     {
         "id": "7cbb9db5-1d15-481e-b0bb-a1eed889063b",
@@ -1118,8 +1118,8 @@
         "name": "Arduino Uno",
         "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
         "image": "/assets/arduino_uno_board.jpg",
-        "category": "Electronics & Robotics",
-        "price": "30 dUSD"
+        "price": "30 dUSD",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "d1105b87-8185-4a30-ba55-406384be169f",
@@ -1142,16 +1142,16 @@
         "name": "Jumper Wires",
         "description": "Flexible wires with pin connectors for building temporary circuits.",
         "image": "/assets/jumper_wires_set.jpg",
-        "category": "Electronics & Robotics",
-        "price": "5 dUSD"
+        "price": "5 dUSD",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
         "name": "5 mm LED",
         "description": "A 5 mm red light-emitting diode for basic electronics projects.",
         "image": "/assets/led_5mm_red.jpg",
-        "category": "Electronics & Robotics",
-        "price": "1 dUSD"
+        "price": "1 dUSD",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
@@ -1259,16 +1259,16 @@
         "name": "ultrasonic distance sensor",
         "description": "5 V ultrasonic rangefinder module with trigger/echo pins and 2 cm–4 m sensing range.",
         "image": "/assets/ultrasonic_distance_sensor_module.jpg",
-        "category": "Electronics & Robotics",
-        "price": "6 dUSD"
+        "price": "6 dUSD",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "f22293ab-0553-4f6f-8377-093f2a1351c8",
         "name": "pan-tilt servo bracket",
         "description": "Stacked mini-servo bracket with hardware for sweeping lightweight sensors in two axes.",
         "image": "/assets/pan_tilt_mini_servo_bracket.jpg",
-        "category": "Electronics & Robotics",
-        "price": "12 dUSD"
+        "price": "12 dUSD",
+        "category": "Electronics & Robotics"
     },
     {
         "id": "054d7c58-0e39-4f60-b072-e62cd5e879cf",
