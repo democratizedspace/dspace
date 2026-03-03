@@ -1,0 +1,18 @@
+{
+  "id": "quest-grants-items-claim-regression",
+  "date": "2026-03-02",
+  "component": "frontend/game-state/quests",
+  "rootCause": "Commit 0969275 introduced a quest state overwrite in setCurrentDialogueStep (gameState.quests[questId] = { stepId }), which dropped per-quest fields like itemsClaimed whenever dialogue advanced. That reset grant-claim history and allowed grantsItems options to be claimed repeatedly.",
+  "resolution": "Updated setCurrentDialogueStep to merge into existing quest state instead of replacing it, preserving itemsClaimed in IndexedDB-backed gameState. Added regression tests covering both state preservation and grant lock behavior across dialogue transitions.",
+  "dateRanges": [
+    {
+      "start": "2026-02-22",
+      "end": "2026-03-02"
+    }
+  ],
+  "references": [
+    "frontend/src/utils/gameState.js",
+    "frontend/tests/gameStateGrantItemsRegression.test.ts",
+    "https://github.com/democratizedspace/dspace/commit/0969275"
+  ]
+}

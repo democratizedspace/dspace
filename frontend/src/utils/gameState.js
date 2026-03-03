@@ -59,7 +59,10 @@ export const canStartQuest = (quest) => {
 export const setCurrentDialogueStep = (questId, stepId) => {
     const gameState = loadGameState();
 
-    gameState.quests[questId] = { stepId };
+    gameState.quests[questId] = {
+        ...gameState.quests[questId],
+        stepId,
+    };
     saveGameState(gameState);
 };
 
