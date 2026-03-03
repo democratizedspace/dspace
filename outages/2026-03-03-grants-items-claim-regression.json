@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-03-grants-items-claim-regression",
+  "date": "2026-03-03",
+  "component": "quest grantsItems claim tracking",
+  "rootCause": "Commit 09692754c947152d8a6f517591b5cf11ae1dceb5 reintroduced state replacement in setCurrentDialogueStep (gameState.quests[questId] = { stepId }). Advancing dialogue overwrote quest-specific fields like itemsClaimed, so grantsItems options became claimable again after navigation.",
+  "resolution": "Preserve existing quest progress fields when writing stepId/finished and harden claim writes to initialize missing quest progress before appending itemsClaimed. Added regression tests covering claim-once behavior across dialogue-step transitions.",
+  "references": [
+    "frontend/src/utils/gameState.js",
+    "frontend/tests/gameStateGrantItemsRegression.test.ts"
+  ]
+}

@@ -27,7 +27,10 @@ export const finishQuest = (questId, rewardItems) => {
     addItems(rewardItems);
 
     const gameState = loadGameState();
-    gameState.quests[questId] = { finished: true };
+    gameState.quests[questId] = {
+        ...(gameState.quests[questId] || {}),
+        finished: true,
+    };
     saveGameState(gameState);
 };
 
@@ -59,7 +62,10 @@ export const canStartQuest = (quest) => {
 export const setCurrentDialogueStep = (questId, stepId) => {
     const gameState = loadGameState();
 
-    gameState.quests[questId] = { stepId };
+    gameState.quests[questId] = {
+        ...(gameState.quests[questId] || {}),
+        stepId,
+    };
     saveGameState(gameState);
 };
 
@@ -73,24 +79,20 @@ const setItemsGranted = (questId, stepId, optionIndex) => {
     const gameState = loadGameState();
 
     const key = `${questId}-${stepId}-${optionIndex}`;
+    const questProgress = gameState.quests[questId] || {};
     gameState.quests[questId] = {
-        ...gameState.quests[questId],
-        itemsClaimed: [...(gameState.quests[questId].itemsClaimed || []), key],
+        ...questProgress,
+        itemsClaimed: [...(questProgress.itemsClaimed || []), key],
     };
     saveGameState(gameState);
 };
 
 export const getItemsGranted = (questId, stepId, optionIndex) => {
     const gameState = loadGameState();
+    const key = `${questId}-${stepId}-${optionIndex}`;
+    const itemsClaimed = gameState.quests?.[questId]?.itemsClaimed;
 
-    try {
-        const key = `${questId}-${stepId}-${optionIndex}`;
-        const itemsClaimed = gameState.quests[questId].itemsClaimed;
-        return itemsClaimed && itemsClaimed.includes(key);
-    } catch (e) {
-        console.error(e);
-        return false;
-    }
+    return Array.isArray(itemsClaimed) && itemsClaimed.includes(key);
 };
 
 export const grantItems = (questId, stepId, optionIndex, itemList) => {

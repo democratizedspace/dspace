@@ -1,0 +1,66 @@
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+
+vi.mock('../src/utils/gameState/common.js', () => ({
+    loadGameState: vi.fn(),
+    saveGameState: vi.fn(),
+    validateGameState: (state: unknown) => state,
+    isUsingLocalStorage: vi.fn(() => false),
+}));
+
+vi.mock('../src/utils/gameState/inventory.js', () => ({
+    addItems: vi.fn(),
+}));
+
+import { getItemsGranted, grantItems, setCurrentDialogueStep } from '../src/utils/gameState.js';
+import { loadGameState, saveGameState } from '../src/utils/gameState/common.js';
+import { addItems } from '../src/utils/gameState/inventory.js';
+
+describe('gameState grantsItems claim-once regression', () => {
+    let mockGameState: {
+        quests: Record<string, { stepId?: string; itemsClaimed?: string[]; finished?: boolean }>;
+        inventory: Record<string, number>;
+        versionNumberString: string;
+    };
+
+    beforeEach(() => {
+        mockGameState = {
+            quests: {},
+            inventory: {},
+            versionNumberString: '3',
+        };
+
+        vi.mocked(loadGameState).mockImplementation(() => mockGameState);
+        vi.mocked(saveGameState).mockImplementation((newState) => {
+            mockGameState = newState as typeof mockGameState;
+        });
+        vi.mocked(addItems).mockClear();
+    });
+
+    test('preserves itemsClaimed when advancing dialogue step', () => {
+        mockGameState.quests['aquaria/ph-strip-test'] = {
+            stepId: 'start',
+            itemsClaimed: ['aquaria/ph-strip-test-start-0'],
+        };
+
+        setCurrentDialogueStep('aquaria/ph-strip-test', 'dip');
+
+        expect(mockGameState.quests['aquaria/ph-strip-test']).toEqual({
+            stepId: 'dip',
+            itemsClaimed: ['aquaria/ph-strip-test-start-0'],
+        });
+        expect(getItemsGranted('aquaria/ph-strip-test', 'start', 0)).toBe(true);
+    });
+
+    test('initializes missing quest progress and prevents repeated grant claims', () => {
+        const grantsItems = [{ id: 'strip-item', count: 1 }];
+
+        grantItems('aquaria/ph-strip-test', 'start', 0, grantsItems);
+        expect(vi.mocked(addItems)).toHaveBeenCalledTimes(1);
+        expect(getItemsGranted('aquaria/ph-strip-test', 'start', 0)).toBe(true);
+
+        setCurrentDialogueStep('aquaria/ph-strip-test', 'dip');
+
+        grantItems('aquaria/ph-strip-test', 'start', 0, grantsItems);
+        expect(vi.mocked(addItems)).toHaveBeenCalledTimes(1);
+    });
+});
