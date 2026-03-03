@@ -11,7 +11,12 @@ vi.mock('../src/utils/gameState/inventory.js', () => ({
     addItems: vi.fn(),
 }));
 
-import { getItemsGranted, grantItems, setCurrentDialogueStep } from '../src/utils/gameState.js';
+import {
+    finishQuest,
+    getItemsGranted,
+    grantItems,
+    setCurrentDialogueStep,
+} from '../src/utils/gameState.js';
 import { loadGameState, saveGameState } from '../src/utils/gameState/common.js';
 import { addItems } from '../src/utils/gameState/inventory.js';
 
@@ -62,5 +67,36 @@ describe('gameState grantsItems claim-once regression', () => {
 
         grantItems('aquaria/ph-strip-test', 'start', 0, grantsItems);
         expect(vi.mocked(addItems)).toHaveBeenCalledTimes(1);
+    });
+
+    test('normalizes non-array itemsClaimed state before recording claim key', () => {
+        mockGameState.quests['aquaria/ph-strip-test'] = {
+            stepId: 'start',
+            itemsClaimed: {} as unknown as string[],
+        };
+
+        expect(() => {
+            grantItems('aquaria/ph-strip-test', 'start', 0, [{ id: 'strip-item', count: 1 }]);
+        }).not.toThrow();
+
+        expect(mockGameState.quests['aquaria/ph-strip-test'].itemsClaimed).toEqual([
+            'aquaria/ph-strip-test-start-0',
+        ]);
+        expect(getItemsGranted('aquaria/ph-strip-test', 'start', 0)).toBe(true);
+    });
+
+    test('preserves existing quest progress when finishing quest', () => {
+        mockGameState.quests['aquaria/ph-strip-test'] = {
+            stepId: 'dip',
+            itemsClaimed: ['aquaria/ph-strip-test-start-0'],
+        };
+
+        finishQuest('aquaria/ph-strip-test', []);
+
+        expect(mockGameState.quests['aquaria/ph-strip-test']).toEqual({
+            stepId: 'dip',
+            itemsClaimed: ['aquaria/ph-strip-test-start-0'],
+            finished: true,
+        });
     });
 });
