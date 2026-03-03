@@ -80,7 +80,9 @@ const setItemsGranted = (questId, stepId, optionIndex) => {
 
     const key = `${questId}-${stepId}-${optionIndex}`;
     const questProgress = gameState.quests[questId] || {};
-    const claimedItems = Array.isArray(questProgress.itemsClaimed) ? questProgress.itemsClaimed : [];
+    const claimedItems = Array.isArray(questProgress.itemsClaimed)
+        ? questProgress.itemsClaimed
+        : [];
     gameState.quests[questId] = {
         ...questProgress,
         itemsClaimed: [...claimedItems, key],
