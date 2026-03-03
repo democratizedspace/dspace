@@ -456,6 +456,7 @@ describe('quest completion item availability', () => {
         const obtainable = computeObtainableItems({
             allItems: items as Array<any>,
             allQuests: quests,
+            includeBetaPlaceholderItems: false,
         });
 
         const errors: string[] = [];

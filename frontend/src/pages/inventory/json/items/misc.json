@@ -1086,8 +1086,8 @@
         "name": "flame-resistant recovery wadding",
         "description": "Protects parachute from heat, ensuring safe deployment without burning risks. Essential for model rocket recovery.",
         "image": "/assets/recovery_wadding.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Rocketry & Flight"
+        "category": "Rocketry & Flight",
+        "price": "4 dUSD"
     },
     {
         "id": "7cbb9db5-1d15-481e-b0bb-a1eed889063b",
@@ -1118,8 +1118,8 @@
         "name": "Arduino Uno",
         "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
         "image": "/assets/arduino_uno_board.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "30 dUSD"
     },
     {
         "id": "d1105b87-8185-4a30-ba55-406384be169f",
@@ -1142,32 +1142,32 @@
         "name": "Jumper Wires",
         "description": "Flexible wires with pin connectors for building temporary circuits.",
         "image": "/assets/jumper_wires_set.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "5 dUSD"
     },
     {
         "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
         "name": "5 mm LED",
         "description": "A 5 mm red light-emitting diode for basic electronics projects.",
         "image": "/assets/led_5mm_red.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "1 dUSD"
     },
     {
         "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
         "name": "220 Ohm Resistor",
         "description": "A resistor commonly used to limit current to an LED.",
         "image": "/assets/220_ohm_resistor.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "2 dUSD"
     },
     {
         "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
         "name": "resistor color chart",
         "description": "Printed reference sheet for decoding resistor color bands.",
         "image": "/assets/resistor_color_chart_sheet.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "1 dUSD"
     },
     {
         "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
@@ -1182,8 +1182,8 @@
         "name": "USB Cable",
         "description": "Standard USB cable for charging or data transfer between devices.",
         "image": "/assets/usb_cable_standard.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "6 dUSD"
     },
     {
         "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
@@ -1227,16 +1227,16 @@
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
         "image": "/assets/servo_motor_small.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "8 dUSD"
     },
     {
         "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
         "name": "Wheel Encoder",
         "description": "Pair of low-resolution quadrature encoders for tracking robot wheel rotation.",
         "image": "/assets/wheel_encoder_pair.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "22 dUSD"
     },
     {
         "id": "b3857812-f50c-4880-810d-c929698599b3",
@@ -1259,8 +1259,8 @@
         "name": "ultrasonic distance sensor",
         "description": "5 V ultrasonic rangefinder module with trigger/echo pins and 2 cm\u20134 m sensing range.",
         "image": "/assets/ultrasonic_distance_sensor_module.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "18 dUSD"
     },
     {
         "id": "f22293ab-0553-4f6f-8377-093f2a1351c8",
@@ -1291,8 +1291,8 @@
         "name": "two-servo arm kit",
         "description": "Laser-cut links, hardware, and a micro gripper plate sized for two hobby servos.",
         "image": "/assets/two_servo_arm_kit_parts_layout.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "24 dUSD"
     },
     {
         "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
@@ -1597,16 +1597,16 @@
         "name": "PoE+ switch",
         "description": "Powers multiple devices and provides network connectivity.",
         "image": "/assets/poe_plus_switch_on_rack.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "45 dUSD"
     },
     {
         "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
         "name": "Ethernet cable",
         "description": "A simple cable for wired network connections.",
         "image": "/assets/ethernet_network_cable.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "4 dUSD"
     },
     {
         "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
@@ -2131,16 +2131,16 @@
         "name": "Thermistor (10k NTC)",
         "description": "A temperature-sensitive resistor for Arduino voltage dividers.",
         "image": "/assets/thermistor_10k_ntc.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "14 dUSD"
     },
     {
         "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
         "name": "10k Ohm Resistor",
         "description": "A resistor for sensor voltage divider circuits.",
         "image": "/assets/10k_ohm_resistor_through_hole.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "14 dUSD"
     },
     {
         "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
@@ -2196,32 +2196,32 @@
         "name": "5 V Power Supply",
         "description": "A battery pack or USB adapter that provides a stable 5 V DC output.",
         "image": "/assets/power_supply_5v.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Electronics & Robotics"
+        "category": "Electronics & Robotics",
+        "price": "20 dUSD"
     },
     {
         "id": "0254a829-9002-4a75-8af2-03cd961601da",
         "name": "50 mm magnifying lens",
         "description": "Glass lens with ~50 mm focal length used as a telescope objective.",
         "image": "/assets/magnifying_lens_50mm_objective.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Astronomy & Observation"
+        "category": "Astronomy & Observation",
+        "price": "12 dUSD"
     },
     {
         "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
         "name": "20 mm magnifying lens",
         "description": "Small lens with ~20 mm focal length for use as a telescope eyepiece.",
         "image": "/assets/magnifying_lens_20mm_eyepiece.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Astronomy & Observation"
+        "category": "Astronomy & Observation",
+        "price": "9 dUSD"
     },
     {
         "id": "2794503d-fbe7-4031-a63e-deac531f9784",
         "name": "cardboard mailing tube",
         "description": "Sturdy cardboard tube about 40 cm long to hold telescope optics.",
         "image": "/assets/cardboard_mailing_tube_telescope_body.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Workshop & Construction"
+        "category": "Workshop & Construction",
+        "price": "6 dUSD"
     },
     {
         "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
@@ -2248,16 +2248,16 @@
         "name": "masking tape",
         "description": "Low-tack paper tape for temporarily securing lenses during assembly.",
         "image": "/assets/masking_tape_roll.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Workshop & Construction"
+        "category": "Workshop & Construction",
+        "price": "3 dUSD"
     },
     {
         "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
         "name": "digital camera",
         "description": "Mirrorless camera capable of long-exposure astrophotography.",
         "image": "/assets/digital_camera_astrophotography.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
-        "category": "Astronomy & Observation"
+        "category": "Astronomy & Observation",
+        "price": "60 dUSD"
     },
     {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
