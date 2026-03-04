@@ -185,8 +185,18 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "safe-pause",
                     "text": "Paused safely for a better work session."
+                }
+            ]
+        },
+        {
+            "id": "safe-pause",
+            "text": "Good stop call. Power down, label your parts, and resume when footing and lighting are safe.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Pause and return later."
                 }
             ]
         },
@@ -214,7 +224,7 @@
         },
         {
             "id": "complete",
-            "text": "Excellent work. You selected a path, proved stability, and handled faults with safe recovery.",
+            "text": "You've got your coffee table. Place it where it stays level and clear for daily use.",
             "options": [
                 {
                     "type": "finish",
@@ -223,12 +233,7 @@
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "7a8a7f56-e84f-45e0-b321-d9cff33d9ac5",
-            "count": 1
-        }
-    ],
+    "rewards": [],
     "requiresQuests": [
         "woodworking/bookshelf"
     ],

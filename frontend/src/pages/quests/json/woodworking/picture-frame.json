@@ -226,7 +226,7 @@
         },
         {
             "id": "complete",
-            "text": "Great job. Your frame is square, sanded, and safe to hang with your print installed.",
+            "text": "Frame finished and hang-ready. Pick the photo, set the backing, and put it where you'll see it daily.",
             "options": [
                 {
                     "type": "finish",
@@ -235,12 +235,7 @@
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "7b2c58bc-e484-4110-996c-220cfb7a4ba7",
-            "count": 1
-        }
-    ],
+    "rewards": [],
     "requiresQuests": [
         "woodworking/tool-rack"
     ],

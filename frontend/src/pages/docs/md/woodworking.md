@@ -87,7 +87,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Gather parts" — Pine board ×2, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Pine planter box ×1, basil seeds ×1
+    - Pine planter box ×1
 - Processes used:
     - [build-step-stool](/processes/build-step-stool)
         - Requires: Handsaw ×1, tape measure ×1, safety goggles ×1
@@ -110,7 +110,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Issue the bookshelf kit" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Pine planter box ×1
+    - Step stool ×1
 - Processes used:
     - [build-bookshelf](/processes/build-bookshelf)
         - Requires: Handsaw ×1, tape measure ×1, safety goggles ×1
@@ -133,7 +133,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Issue table materials and PPE" — Pine board ×6, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Coffee table ×1
+    - None
 - Processes used:
     - [build-coffee-table](/processes/build-coffee-table)
         - Requires: Handsaw ×1, tape measure ×1, safety goggles ×1
@@ -197,7 +197,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `materials` → "Issue me the starter kit" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Pine planter box ×1
+    - Step stool ×1
 - Processes used:
     - [build-workbench](/processes/build-workbench)
         - Requires: Handsaw ×1, tape measure ×1
@@ -220,7 +220,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Tool rack ×1
+    - Wood glue ×1, Sandpaper pack ×1
 - Processes used:
     - [build-tool-rack](/processes/build-tool-rack)
         - Requires: Handsaw ×1, wood chisel ×1
@@ -243,7 +243,7 @@ Woodworking quests build practical progression through the woodworking skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Picture frame ×1
+    - None
 - Processes used:
     - [craft-picture-frame](/processes/craft-picture-frame)
         - Requires: Handsaw ×1

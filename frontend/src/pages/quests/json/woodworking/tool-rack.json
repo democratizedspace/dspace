@@ -274,7 +274,7 @@
         },
         {
             "id": "complete",
-            "text": "Nice work. Your tool wall now supports daily use and safer cleanup because every tool has a known home.",
+            "text": "Rack installed. Every tool now has a repeatable slot, and you've got fresh consumables for the next build.",
             "options": [
                 {
                     "type": "finish",
@@ -285,7 +285,11 @@
     ],
     "rewards": [
         {
-            "id": "fff4b263-806f-4aeb-a862-cbb0d50146e2",
+            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+            "count": 1
+        },
+        {
+            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
             "count": 1
         }
     ],
