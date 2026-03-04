@@ -1,0 +1,14 @@
+{
+  "id": "OUT-2026-03-04-completionist-reminder-polished-gate",
+  "date": "2026-03-04",
+  "component": "quests/completionist",
+  "rootCause": "The reminder quest depended on completionist/polish but still gated entry on the pre-polish trophy item (Completionist Award II). The prerequisite polish process consumes that item and transforms it into Completionist Award II (polished), making the reminder quest unreachable.",
+  "resolution": "Added a regression test in tests/questCompletableItems.test.ts that detects prerequisite process transformations consumed irreversibly and blocks dependent quest gates on those consumed items. Updated completionist/reminder to require Completionist Award II (polished) and refreshed completionist skill docs to match the true gate.",
+  "references": [
+    "tests/questCompletableItems.test.ts",
+    "frontend/src/pages/quests/json/completionist/reminder.json",
+    "frontend/src/pages/quests/json/completionist/polish.json",
+    "frontend/src/pages/docs/md/completionist.md",
+    "https://staging.democratized.space/quests/completionist/reminder"
+  ]
+}

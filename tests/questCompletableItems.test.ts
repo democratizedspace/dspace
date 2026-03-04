@@ -541,6 +541,51 @@ describe('quest completion item availability', () => {
         expect(failures).toEqual([]);
     });
 
+    it('prevents dependent quests from requiring an irreversibly transformed prerequisite trophy item', async () => {
+        const quests = await loadQuests();
+        const questById = new Map(quests.map((quest: any) => [quest.id, quest]));
+        const reminderQuest = questById.get('completionist/reminder');
+        const polishQuest = questById.get('completionist/polish');
+
+        expect(reminderQuest).toBeDefined();
+        expect(polishQuest).toBeDefined();
+        expect(reminderQuest.requiresQuests ?? []).toContain('completionist/polish');
+
+        const processById = new Map((processes as Array<any>).map((process) => [process.id, process]));
+        const polishProcessIds = (polishQuest?.dialogue ?? []).flatMap((node: any) =>
+            (node.options ?? [])
+                .filter((option: any) => option.type === 'process' && typeof option.process === 'string')
+                .map((option: any) => option.process)
+        );
+
+        const irreversiblyConsumedByPolish = new Set<string>();
+        for (const processId of polishProcessIds) {
+            const process = processById.get(processId);
+            if (!process) continue;
+            const recreated = new Set<string>(toItemIds(process.createItems));
+            for (const consumed of process.consumeItems ?? []) {
+                const consumedCount = Number(consumed?.count ?? 0);
+                if (consumedCount <= 0 || !consumed?.id) continue;
+                if (recreated.has(consumed.id)) continue;
+                irreversiblyConsumedByPolish.add(consumed.id);
+            }
+        }
+
+        const reminderRequiredItems = new Set(
+            uniqueItemIds([
+                ...getQuestLevelRequiredItemIds(reminderQuest),
+                ...getRequiredItemsFromDialoguePath(reminderQuest),
+                ...getFinishOptions(reminderQuest).flatMap((option: any) => getRequiredItemIds(option)),
+            ])
+        );
+
+        const blockedReminderRequirements = [...reminderRequiredItems].filter((itemId) =>
+            irreversiblyConsumedByPolish.has(itemId)
+        );
+
+        expect(blockedReminderRequirements).toEqual([]);
+    });
+
     it('ensures finish requirements are obtainable', async () => {
         const quests = await loadQuests();
         const questPaths = await loadQuestPaths();
