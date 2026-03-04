@@ -109,7 +109,7 @@
     "requiresQuests": ["completionist/polish"],
     "hardening": {
         "passes": 0,
-        "score": 95,
+        "score": 90,
         "emoji": "🛠️",
         "history": []
     }
