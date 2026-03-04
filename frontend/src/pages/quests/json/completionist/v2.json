@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You cleared every quest available in v2! Let's fabricate the Completionist Award II with the same discipline you'd use on any critical build.",
+            "text": "You cleared every quest that were available in v2! Let's fabricate the Completionist Award II with the same discipline you'd use on any critical build.",
             "options": [
                 {
                     "type": "goto",
