@@ -191,9 +191,20 @@
             "text": "Safety check: confirm hanger screws are seated and test-hang over a soft surface before wall mounting.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "craft-picture-frame",
+                    "text": "Run picture frame assembly process"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Load test passed"
+                    "text": "Load test passed",
+                    "requiresItems": [
+                        {
+                            "id": "00f167fa-85ef-4439-abff-44dc58308606",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -223,7 +234,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/tool-rack"],
+    "requiresQuests": [
+        "woodworking/tool-rack"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

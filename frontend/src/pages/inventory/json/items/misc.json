@@ -2480,5 +2480,29 @@
         "image": "/assets/mission_log_entry_page.json",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
+    },
+    {
+        "id": "f427d245-3da7-4a49-a5c7-16801a05b79d",
+        "name": "Coffee table",
+        "description": "A low wooden table with a stable apron frame for everyday living-room use.",
+        "image": "/assets/simple_wooden_bookshelf.jpg",
+        "price": "70 dUSD",
+        "category": "Workshop & Construction"
+    },
+    {
+        "id": "241b544c-bbd7-48b9-b5e0-3008d42920da",
+        "name": "Tool rack",
+        "description": "Wall-mounted wooden rack that keeps hand tools organized and easy to reach.",
+        "image": "/assets/woodworking_workbench_sturdy.jpg",
+        "price": "40 dUSD",
+        "category": "Workshop & Construction"
+    },
+    {
+        "id": "00f167fa-85ef-4439-abff-44dc58308606",
+        "name": "Picture frame",
+        "description": "A square wooden frame with reinforced miters and hanging hardware.",
+        "image": "/assets/wooden_birdhouse.jpg",
+        "price": "22 dUSD",
+        "category": "Workshop & Construction"
     }
 ]
