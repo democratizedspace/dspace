@@ -7,15 +7,17 @@ Completionist quests build practical progression through the completionist skill
 
 ## Quest tree
 
-1. [Congrats for finishing all the quests!!](/quests/completionist/v2)
+1. [Congrats for finishing all the v2 quests!!](/quests/completionist/v2)
 2. [Catalog Your Trophy](/quests/completionist/catalog)
 3. [Show Off Your Trophy](/quests/completionist/display)
 4. [Polish Your Trophy](/quests/completionist/polish)
 5. [Check for New Quests](/quests/completionist/reminder)
 
-## 1) Congrats for finishing all the quests!! (`completionist/v2`)
+## 1) Congrats for finishing all the v2 quests!! (`completionist/v2`)
 
 - Quest link: [/quests/completionist/v2](/quests/completionist/v2)
+- Framing note: this opener confirms you've completed all quests that existed in v2 and starts the
+  follow-up Completionist series.
 - Unlock prerequisite:
     - `requiresQuests`: `welcome/howtodoquests`, `ubi/basicincome`, `3dprinter/start`, `aquaria/water-testing`, `energy/solar`, `rocketry/parachute`, `hydroponics/basil`
 - Dialogue `requiresItems` gates:
