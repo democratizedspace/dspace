@@ -56,6 +56,117 @@ const getFinishOptions = (quest: any) =>
         (node.options ?? []).filter((option: any) => option.type === 'finish')
     );
 
+const processById = new Map((processes as Array<any>).map((process) => [process.id, process]));
+
+const canCompleteQuestRetainingItem = ({
+    quest,
+    initialItems,
+    itemId,
+}: {
+    quest: any;
+    initialItems: string[];
+    itemId: string;
+}) => {
+    const dialogue = quest.dialogue ?? [];
+    const nodeMap = new Map<string, any>(
+        dialogue
+            .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
+            .map((node: any) => [node.id.trim(), node])
+    );
+    const startId = getStartNodeId(quest);
+    if (!startId || !nodeMap.has(startId)) {
+        return false;
+    }
+
+    const relevantItems = new Set<string>(initialItems);
+    relevantItems.add(itemId);
+    for (const node of dialogue) {
+        for (const option of node.options ?? []) {
+            for (const id of getRequiredItemIds(option)) relevantItems.add(id);
+            if (option.type !== 'process' || typeof option.process !== 'string') continue;
+            const process = processById.get(option.process);
+            if (!process) continue;
+            for (const id of [
+                ...toItemIds(process.requireItems),
+                ...toItemIds(process.consumeItems),
+                ...toItemIds(process.createItems),
+            ]) {
+                relevantItems.add(id);
+            }
+        }
+    }
+
+    const normalize = (inventory: Set<string>) =>
+        [...inventory]
+            .filter((id) => relevantItems.has(id))
+            .sort()
+            .join(',');
+
+    const queue: Array<{ nodeId: string; inventory: Set<string> }> = [
+        { nodeId: startId, inventory: new Set(initialItems) },
+    ];
+    const visited = new Set<string>();
+
+    while (queue.length > 0) {
+        const state = queue.shift();
+        if (!state) continue;
+        const key = `${state.nodeId}|${normalize(state.inventory)}`;
+        if (visited.has(key)) continue;
+        visited.add(key);
+
+        const node = nodeMap.get(state.nodeId);
+        if (!node) continue;
+
+        for (const option of node.options ?? []) {
+            const optionRequirements = getRequiredItemIds(option);
+            if (optionRequirements.some((requiredId) => !state.inventory.has(requiredId))) {
+                continue;
+            }
+
+            if (option.type === 'finish') {
+                if (state.inventory.has(itemId)) {
+                    return true;
+                }
+                continue;
+            }
+
+            if (option.type === 'goto' && typeof option.goto === 'string') {
+                const target = option.goto.trim();
+                if (!nodeMap.has(target)) continue;
+                queue.push({ nodeId: target, inventory: new Set(state.inventory) });
+                continue;
+            }
+
+            if (option.type !== 'process' || typeof option.process !== 'string') {
+                continue;
+            }
+
+            const process = processById.get(option.process);
+            if (!process) continue;
+
+            const processRequirements = uniqueItemIds([
+                ...toItemIds(process.requireItems),
+                ...toItemIds(process.consumeItems),
+            ]);
+            if (processRequirements.some((requiredId) => !state.inventory.has(requiredId))) {
+                continue;
+            }
+
+            const nextInventory = new Set(state.inventory);
+            for (const consumedId of toItemIds(process.consumeItems)) {
+                nextInventory.delete(consumedId);
+            }
+            for (const createdId of toItemIds(process.createItems)) {
+                nextInventory.add(createdId);
+            }
+
+            queue.push({ nodeId: state.nodeId, inventory: nextInventory });
+        }
+    }
+
+    return false;
+};
+
 const getRequiredItemsFromDialoguePath = (quest: any) => {
     const dialogue = quest.dialogue ?? [];
     if (dialogue.length === 0) return [];
@@ -709,5 +820,35 @@ describe('quest completion item availability', () => {
         }
 
         expect(errors).toEqual([]);
+    });
+
+    it('fails when a dependency quest consumes an item required to start the next quest', async () => {
+        const quests = await loadQuests();
+        const polishQuest = quests.find((quest: any) => quest.id === 'completionist/polish');
+        const reminderQuest = quests.find((quest: any) => quest.id === 'completionist/reminder');
+
+        expect(polishQuest).toBeDefined();
+        expect(reminderQuest).toBeDefined();
+
+        const completionistAwardId = 'c01676ec-27e5-4a53-9a47-24bf6c5a56a9';
+        const polishedAwardId = '1030a6c5-88b9-46e9-b38a-b20d8d326764';
+        const liquidSoapId = '55ace400-79ee-4b24-b7da-0b0435ab7d72';
+        const paperTowelId = 'b16cd6c7-dfeb-49bf-8758-0cb3563b0d50';
+
+        const canFinishPolishWithRawAward = canCompleteQuestRetainingItem({
+            quest: polishQuest,
+            itemId: completionistAwardId,
+            initialItems: [completionistAwardId, liquidSoapId, paperTowelId],
+        });
+
+        expect(canFinishPolishWithRawAward).toBe(false);
+
+        const reminderStartNode = reminderQuest?.dialogue?.find((node: any) => node.id === reminderQuest.start);
+        const reminderStartRequiredItems = uniqueItemIds(
+            (reminderStartNode?.options ?? []).flatMap((option: any) => getRequiredItemIds(option))
+        );
+
+        expect(reminderStartRequiredItems).not.toContain(completionistAwardId);
+        expect(reminderStartRequiredItems).toContain(polishedAwardId);
     });
 });

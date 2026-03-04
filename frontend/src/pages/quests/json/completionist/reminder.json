@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "More quests are added all the time. Keep an eye on the board so you can maintain that shiny Completionist trophy!",
+            "text": "More quests are added all the time. Keep checking the board so your polished Completionist trophy still means you're current.",
             "options": [
                 {
                     "type": "goto",
@@ -16,7 +16,7 @@
                     "text": "Let's lock in a reminder plan",
                     "requiresItems": [
                         {
-                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
                             "count": 1
                         }
                     ]
@@ -25,7 +25,7 @@
         },
         {
             "id": "plan-window",
-            "text": "Pick a low-noise window with reliable internet, then define a fallback channel in case your main calendar app misses notifications.",
+            "text": "Pick a low-noise window with reliable internet, then define a fallback channel in case your main calendar app misses notifications. Keep the polished award nearby as your visual cue to stay consistent.",
             "options": [
                 {
                     "type": "process",

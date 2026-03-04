@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-04-completionist-reminder-raw-award-gate",
+  "date": "2026-03-04",
+  "component": "quests-completionist",
+  "rootCause": "The completionist/reminder start gate required the raw Completionist Award II even though completionist/polish (a required prerequisite) consumes that item and converts it into the polished variant.",
+  "resolution": "Added a quest-completability regression that simulates process consume/create effects across a prerequisite quest and updated completionist/reminder to gate on the polished award item instead of the pre-polish item.",
+  "references": [
+    "frontend/src/pages/quests/json/completionist/reminder.json",
+    "tests/questCompletableItems.test.ts",
+    "frontend/src/pages/docs/md/completionist.md"
+  ]
+}

@@ -17,7 +17,7 @@ Completionist quests build practical progression through the completionist skill
 
 - Quest link: [/quests/completionist/v2](/quests/completionist/v2)
 - Unlock prerequisite:
-    - `requiresQuests`: `welcome/howtodoquests`, `ubi/basicincome`, `3dprinter/start`, `aquaria/water-testing`, `energy/solar`, `rocketry/parachute`, `hydroponics/basil`
+    - `requiresQuests`: `welcome/howtodoquests`, `ubi/basicincome`, `3dprinting/start`, `aquaria/water-testing`, `energy/solar`, `rocketry/parachute`, `hydroponics/basil`
 - Dialogue `requiresItems` gates:
     - `safety-brief` → "Safety checks complete, proceed" — safety goggles ×1
     - `prep-printer` → "Printer is leveled and loaded with buffer filament" — entry-level FDM 3D printer (leveled bed) ×1, white PLA filament ×200
@@ -123,7 +123,7 @@ Completionist quests build practical progression through the completionist skill
 - Unlock prerequisite:
     - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "Let's lock in a reminder plan" — Completionist Award II ×1
+    - `start` → "Let's lock in a reminder plan" — Completionist Award II (polished) ×1
     - `plan-window` → "Primary reminder scheduled, continue to verification" — weekly quest reminder ×1
     - `verify-reminder` → "Dry run passed: cadence, link, and timezone are all correct" — weekly quest reminder ×1
     - `recovery` → "Re-test the corrected reminder" — weekly quest reminder ×1
@@ -145,6 +145,6 @@ Completionist quests build practical progression through the completionist skill
 - Catalog QA: `completionist/catalog` now enforces an audit classification step (pass vs anomaly) and a corrective incident-response loop before closure.
 - Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
-- Reminder QA: `completionist/reminder` now adds dry-run verification for cadence/link/timezone plus a backup-alert recovery loop.
+- Reminder QA: `completionist/reminder` now uses the polished award as the entry gate and adds dry-run verification for cadence/link/timezone plus a backup-alert recovery loop.
 - Trophy build QA: `completionist/v2` now includes a safety preflight stop, core verification gate, and retune-and-retry recovery branch.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
