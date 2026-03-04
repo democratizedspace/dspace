@@ -123,7 +123,7 @@ Completionist quests build practical progression through the completionist skill
 - Unlock prerequisite:
     - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "Let's lock in a reminder plan" — Completionist Award II ×1
+    - `start` → "Let's lock in a reminder plan around the polished award" — Completionist Award II (polished) ×1
     - `plan-window` → "Primary reminder scheduled, continue to verification" — weekly quest reminder ×1
     - `verify-reminder` → "Dry run passed: cadence, link, and timezone are all correct" — weekly quest reminder ×1
     - `recovery` → "Re-test the corrected reminder" — weekly quest reminder ×1

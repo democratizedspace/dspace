@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-04-completionist-reminder-polished-gate",
+  "date": "2026-03-04",
+  "component": "quests-completionist",
+  "rootCause": "The completionist/reminder quest was gated on Completionist Award II (raw) even though its prerequisite completionist/polish consumes that item and creates Completionist Award II (polished), leaving no valid progression state after prerequisites.",
+  "resolution": "Updated completionist/reminder to require the polished award and added a regression test that verifies post-process transformed item gates for prerequisite-dependent quests.",
+  "references": [
+    "frontend/src/pages/quests/json/completionist/reminder.json",
+    "frontend/src/pages/docs/md/completionist.md",
+    "tests/questCompletableItems.test.ts"
+  ]
+}

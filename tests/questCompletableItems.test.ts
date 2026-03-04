@@ -502,6 +502,39 @@ describe('quest completion item availability', () => {
         expect(unobtainable).toEqual([]);
     });
 
+    it('requires post-process transformed items for quests gated behind prerequisite transformations', async () => {
+        const quests = await loadQuests();
+        const reminderQuest = quests.find((quest: any) => quest.id === 'completionist/reminder');
+        const polishQuest = quests.find((quest: any) => quest.id === 'completionist/polish');
+
+        expect(reminderQuest).toBeDefined();
+        expect(polishQuest).toBeDefined();
+        expect(reminderQuest.requiresQuests ?? []).toContain('completionist/polish');
+
+        const polishProcess = (processes as Array<any>).find(
+            (process) => process.id === 'polish-completionist-award'
+        );
+        expect(polishProcess).toBeDefined();
+
+        const transformedFromId = polishProcess.consumeItems?.find(
+            (entry: any) => entry.id === 'c01676ec-27e5-4a53-9a47-24bf6c5a56a9'
+        )?.id;
+        const transformedToId = polishProcess.createItems?.find(
+            (entry: any) => entry.id === '1030a6c5-88b9-46e9-b38a-b20d8d326764'
+        )?.id;
+        expect(transformedFromId).toBeDefined();
+        expect(transformedToId).toBeDefined();
+
+        const reminderRequiredItems = uniqueItemIds([
+            ...getQuestLevelRequiredItemIds(reminderQuest),
+            ...getRequiredItemsFromDialoguePath(reminderQuest),
+            ...getFinishOptions(reminderQuest).flatMap((option: any) => getRequiredItemIds(option)),
+        ]);
+
+        expect(reminderRequiredItems).toContain(transformedToId);
+        expect(reminderRequiredItems).not.toContain(transformedFromId);
+    });
+
     it('has no feasible dialogue dead-ends between start and finish without placeholder pricing', async () => {
         const quests = await loadQuests();
         const questPaths = await loadQuestPaths();
