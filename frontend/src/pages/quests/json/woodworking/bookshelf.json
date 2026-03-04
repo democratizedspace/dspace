@@ -239,18 +239,16 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "woodworking/step-stool"
-    ],
+    "requiresQuests": ["woodworking/step-stool"],
     "hardening": {
         "passes": 1,
-        "score": 94,
+        "score": 96,
         "emoji": "\ud83c\udf00",
         "history": [
             {
-                "task": "codex-harden-bookshelf-2026-02-24",
-                "date": "2026-02-24",
-                "score": 94
+                "task": "codex-harden-bookshelf-2026-03-04",
+                "date": "2026-03-04",
+                "score": 96
             }
         ]
     }

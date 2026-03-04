@@ -235,14 +235,23 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": [
-        "woodworking/tool-rack"
+    "rewards": [
+        {
+            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+            "count": 1
+        }
     ],
+    "requiresQuests": ["woodworking/tool-rack"],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 96,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-harden-picture-frame-2026-03-04",
+                "date": "2026-03-04",
+                "score": 96
+            }
+        ]
     }
 }

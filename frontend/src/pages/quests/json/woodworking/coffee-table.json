@@ -233,19 +233,22 @@
             ]
         }
     ],
-    "rewards": [],
-    "requiresQuests": [
-        "woodworking/bookshelf"
+    "rewards": [
+        {
+            "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+            "count": 1
+        }
     ],
+    "requiresQuests": ["woodworking/bookshelf"],
     "hardening": {
         "passes": 1,
-        "score": 94,
+        "score": 96,
         "emoji": "\ud83c\udf00",
         "history": [
             {
-                "task": "codex-harden-coffee-table-2026-02-24",
-                "date": "2026-02-24",
-                "score": 94
+                "task": "codex-harden-coffee-table-2026-03-04",
+                "date": "2026-03-04",
+                "score": 96
             }
         ]
     }
