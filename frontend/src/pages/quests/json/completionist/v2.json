@@ -1,6 +1,6 @@
 {
     "id": "completionist/v2",
-    "title": "Congrats for finishing all the quests!!",
+    "title": "Congrats for finishing all quests available in v2!!",
     "description": "Print, plate, and assemble a real Completionist Award II for your shelf.",
     "image": "/assets/quests/completionist_trophy_award.jpg",
     "npc": "/assets/npc/dChat.jpg",
@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "You cleared every quest! Let's fabricate the Completionist Award II with the same discipline you'd use on any critical build.",
+            "text": "You cleared every quest available in v2! Let's fabricate the Completionist Award II with the same discipline you'd use on any critical build.",
             "options": [
                 {
                     "type": "goto",
