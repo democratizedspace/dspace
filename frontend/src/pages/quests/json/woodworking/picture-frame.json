@@ -191,9 +191,20 @@
             "text": "Safety check: confirm hanger screws are seated and test-hang over a soft surface before wall mounting.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "craft-picture-frame",
+                    "text": "Run the final frame assembly process"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Load test passed"
+                    "text": "Load test passed",
+                    "requiresItems": [
+                        {
+                            "id": "d4d7a8c7-9248-45dc-a180-a6d0579f2b6a",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -204,7 +215,7 @@
         },
         {
             "id": "finish",
-            "text": "Great job. Your frame is square, sanded, and safe to hang with your print installed.",
+            "text": "Great job. Your frame is square, sanded, and now tracked in inventory for d\u00e9cor quests.",
             "options": [
                 {
                     "type": "finish",
@@ -221,9 +232,15 @@
         {
             "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
             "count": 1
+        },
+        {
+            "id": "d4d7a8c7-9248-45dc-a180-a6d0579f2b6a",
+            "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/tool-rack"],
+    "requiresQuests": [
+        "woodworking/tool-rack"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

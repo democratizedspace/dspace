@@ -2480,5 +2480,29 @@
         "image": "/assets/mission_log_entry_page.json",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
+    },
+    {
+        "id": "1f34ad37-2a8f-4a5f-9a5e-8a72f6306bd1",
+        "name": "Coffee table",
+        "description": "A compact pine coffee table with a stable apron frame for everyday use.",
+        "image": "/assets/quests/woodworking_coffee_table_build.jpg",
+        "price": "80 dUSD",
+        "category": "Workshop & Construction"
+    },
+    {
+        "id": "91bc12f4-3078-4c2f-a9ca-5986c0ccf387",
+        "name": "Tool rack",
+        "description": "A wall-mounted rack that keeps frequently used hand tools organized and accessible.",
+        "image": "/assets/quests/woodworking_tool_rack_build.jpg",
+        "price": "38 dUSD",
+        "category": "Workshop & Construction"
+    },
+    {
+        "id": "d4d7a8c7-9248-45dc-a180-a6d0579f2b6a",
+        "name": "Picture frame",
+        "description": "A square wooden frame with secure hanging hardware for displaying prints.",
+        "image": "/assets/quests/woodworking_picture_frame_craft.jpg",
+        "price": "22 dUSD",
+        "category": "Workshop & Construction"
     }
 ]

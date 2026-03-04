@@ -149,6 +149,11 @@
             "text": "Evidence gate: stool must pass a no-wobble floor test and edges must be sanded before use.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "build-step-stool",
+                    "text": "Run the step stool assembly process"
+                },
+                {
                     "type": "goto",
                     "goto": "claim",
                     "requiresItems": [
@@ -158,6 +163,10 @@
                         },
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "0d4a7b77-f241-4c19-9365-c74647066802",
                             "count": 1
                         }
                     ],
@@ -201,16 +210,6 @@
             "text": "Solid work. You verified stability and handled faults before declaring the stool complete.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
-                        {
-                            "id": "0d4a7b77-f241-4c19-9365-c74647066802",
-                            "count": 1
-                        }
-                    ],
-                    "text": "Take the stool"
-                },
-                {
                     "type": "finish",
                     "text": "Onward!"
                 }
@@ -223,11 +222,14 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/birdhouse", "woodworking/planter-box"],
+    "requiresQuests": [
+        "woodworking/birdhouse",
+        "woodworking/planter-box"
+    ],
     "hardening": {
         "passes": 2,
         "score": 93,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-refine-step-stool-2025-08-19",

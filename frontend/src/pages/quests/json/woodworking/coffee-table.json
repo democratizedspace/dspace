@@ -149,6 +149,11 @@
             "text": "Evidence gate: table must stand without wobble and survive a gentle push test before finish.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "build-coffee-table",
+                    "text": "Run the coffee table build process"
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "requiresItems": [
@@ -162,6 +167,10 @@
                         },
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "1f34ad37-2a8f-4a5f-9a5e-8a72f6306bd1",
                             "count": 1
                         }
                     ],
@@ -192,7 +201,7 @@
         },
         {
             "id": "finish",
-            "text": "Excellent work. You selected a path, proved stability, and handled faults with safe recovery.",
+            "text": "Excellent work. You selected a path, proved stability, and completed a verified build process.",
             "options": [
                 {
                     "type": "finish",
@@ -205,13 +214,19 @@
         {
             "id": "619d485d-803f-4875-a048-157ce28d31c4",
             "count": 1
+        },
+        {
+            "id": "1f34ad37-2a8f-4a5f-9a5e-8a72f6306bd1",
+            "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/bookshelf"],
+    "requiresQuests": [
+        "woodworking/bookshelf"
+    ],
     "hardening": {
         "passes": 1,
         "score": 94,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-harden-coffee-table-2026-02-24",

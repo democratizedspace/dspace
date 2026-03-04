@@ -5937,7 +5937,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -5974,7 +5974,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -6023,7 +6023,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -9201,6 +9201,250 @@
         "hardening": {
             "passes": 0,
             "score": 88,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "build-step-stool",
+        "title": "Assemble and verify a pine step stool",
+        "image": "/assets/quests/woodworking_step_stool_build.jpg",
+        "requireItems": [
+            {
+                "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                "count": 1
+            },
+            {
+                "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 2
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "0d4a7b77-f241-4c19-9365-c74647066802",
+                "count": 1
+            }
+        ],
+        "duration": "90m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-bookshelf",
+        "title": "Cut, square, and glue a small bookshelf",
+        "image": "/assets/quests/woodworking_small_bookshelf_build.jpg",
+        "requireItems": [
+            {
+                "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                "count": 1
+            },
+            {
+                "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 4
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "619d485d-803f-4875-a048-157ce28d31c4",
+                "count": 1
+            }
+        ],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "build-coffee-table",
+        "title": "Assemble a compact pine coffee table",
+        "image": "/assets/quests/woodworking_coffee_table_build.jpg",
+        "requireItems": [
+            {
+                "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                "count": 1
+            },
+            {
+                "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 6
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "1f34ad37-2a8f-4a5f-9a5e-8a72f6306bd1",
+                "count": 1
+            }
+        ],
+        "duration": "3h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-workbench",
+        "title": "Assemble and level a basic workbench",
+        "image": "/assets/quests/woodworking_workbench_build.jpg",
+        "requireItems": [
+            {
+                "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                "count": 1
+            },
+            {
+                "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 4
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
+                "count": 1
+            }
+        ],
+        "duration": "4h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "build-tool-rack",
+        "title": "Mount and load-test a workshop tool rack",
+        "image": "/assets/quests/woodworking_tool_rack_build.jpg",
+        "requireItems": [
+            {
+                "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                "count": 1
+            },
+            {
+                "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 1
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            },
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "91bc12f4-3078-4c2f-a9ca-5986c0ccf387",
+                "count": 1
+            }
+        ],
+        "duration": "75m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "craft-picture-frame",
+        "title": "Cut, square, and finish a wooden picture frame",
+        "image": "/assets/quests/woodworking_picture_frame_craft.jpg",
+        "requireItems": [
+            {
+                "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 1
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            },
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "d4d7a8c7-9248-45dc-a180-a6d0579f2b6a",
+                "count": 1
+            }
+        ],
+        "duration": "60m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }

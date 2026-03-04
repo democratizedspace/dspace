@@ -234,12 +234,21 @@
             "text": "Safety/ops gate: verify level front-to-back and side-to-side before loading tools on top.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-workbench",
+                    "text": "Run the workbench assembly process"
+                },
+                {
                     "type": "goto",
                     "goto": "claim",
                     "text": "Level checks passed and structure feels solid",
                     "requiresItems": [
                         {
                             "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
                             "count": 1
                         }
                     ]
@@ -253,22 +262,18 @@
         },
         {
             "id": "claim",
-            "text": "Bench passes verification. Claim your workbench item so later quests can require it explicitly.",
+            "text": "Bench passes verification. Your assembled workbench is now in inventory for later quests.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Workbench item added",
+                    "requiresItems": [
                         {
                             "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
                             "count": 1
                         }
-                    ],
-                    "text": "Claim my new workbench"
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Workbench item added"
+                    ]
                 }
             ]
         },
@@ -289,11 +294,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/step-stool"],
+    "requiresQuests": [
+        "woodworking/step-stool"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
