@@ -527,7 +527,7 @@ describe('quest completion item availability', () => {
 
         const reminderRequiredItems = uniqueItemIds([
             ...getQuestLevelRequiredItemIds(reminderQuest),
-            ...getRequiredItemsFromDialoguePath(reminderQuest),
+            ...getRequiredItemsFromFinishReachableTransitions(reminderQuest),
             ...getFinishOptions(reminderQuest).flatMap((option: any) => getRequiredItemIds(option)),
         ]);
 
