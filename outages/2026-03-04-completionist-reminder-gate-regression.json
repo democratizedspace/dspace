@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-04-completionist-reminder-gate-regression",
+  "date": "2026-03-04",
+  "component": "frontend/quests/completionist/reminder",
+  "rootCause": "The reminder quest start gate required \"Completionist Award II\" even though the prerequisite quest (completionist/polish) deterministically transforms that item into \"Completionist Award II (polished)\" via a required process path. The existing quest completable-item tests tracked whether items were ever obtainable, but not whether prerequisite quest chains consumed and replaced required items before dependent quest entry.",
+  "resolution": "Added a regression test that simulates deterministic prerequisite quest completion with process consume/create effects and verifies dependent quest start gates remain satisfiable. Updated completionist/reminder to gate on \"Completionist Award II (polished)\" so progression remains completable after completionist/polish.",
+  "references": [
+    "tests/questCompletableItems.test.ts",
+    "frontend/src/pages/quests/json/completionist/reminder.json",
+    "frontend/src/pages/docs/md/completionist.md"
+  ]
+}

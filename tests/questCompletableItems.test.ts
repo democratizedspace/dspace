@@ -231,6 +231,96 @@ const getRequiredItemsFromFinishReachableTransitions = (quest: any) => {
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
+const addItemsToInventory = (inventory: Set<string>, entries: ItemEntry[] | undefined) => {
+    for (const entry of entries ?? []) {
+        if (entry?.id) {
+            inventory.add(entry.id);
+        }
+    }
+};
+
+const removeItemsFromInventory = (inventory: Set<string>, entries: ItemEntry[] | undefined) => {
+    for (const entry of entries ?? []) {
+        if (entry?.id) {
+            inventory.delete(entry.id);
+        }
+    }
+};
+
+const findOptionProcess = (option: any) =>
+    (processes as Array<any>).find((process) => process.id === option?.process);
+
+const runProcessOption = (inventory: Set<string>, option: any) => {
+    const process = findOptionProcess(option);
+    if (!process) return false;
+
+    const requiredItems = [
+        ...toItemIds(process.requireItems),
+        ...toItemIds(process.consumeItems),
+        ...getRequiredItemIds(option),
+    ];
+    if (requiredItems.some((itemId) => !inventory.has(itemId))) {
+        return false;
+    }
+
+    removeItemsFromInventory(inventory, process.consumeItems);
+    addItemsToInventory(inventory, process.createItems);
+    return true;
+};
+
+const runQuestDeterministically = (quest: any, baseInventory: Set<string>) => {
+    const dialogue = quest.dialogue ?? [];
+    const nodeMap = new Map<string, any>(
+        dialogue
+            .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
+            .map((node: any) => [node.id.trim(), node])
+    );
+
+    const inventory = new Set(baseInventory);
+    let currentNodeId = getStartNodeId(quest);
+    let completed = false;
+    let steps = 0;
+
+    while (currentNodeId && nodeMap.has(currentNodeId) && steps < 100) {
+        steps += 1;
+
+        const node = nodeMap.get(currentNodeId);
+        if (!node) break;
+
+        const feasibleOptions = (node.options ?? []).filter((option: any) => {
+            const optionRequirements = uniqueItemIds(getRequiredItemIds(option));
+            return optionRequirements.every((itemId) => inventory.has(itemId));
+        });
+
+        const finishOption = feasibleOptions.find((option: any) => option.type === 'finish');
+        if (finishOption) {
+            completed = true;
+            break;
+        }
+
+        const gotoOption = feasibleOptions.find(
+            (option: any) => option.type === 'goto' && typeof option.goto === 'string'
+        );
+        if (gotoOption) {
+            currentNodeId = gotoOption.goto.trim();
+            continue;
+        }
+
+        const processOption = feasibleOptions.find((option: any) => option.type === 'process');
+        if (processOption && runProcessOption(inventory, processOption)) {
+            continue;
+        }
+
+        break;
+    }
+
+    if (completed) {
+        addItemsToInventory(inventory, quest.rewards);
+    }
+
+    return { inventory, completed };
+};
+
 const getStartNodeId = (quest: any) => {
     if (typeof quest.start === 'string' && quest.start.trim()) {
         return quest.start.trim();
@@ -426,6 +516,38 @@ const computeObtainableItems = ({
 };
 
 describe('quest completion item availability', () => {
+    it('keeps start gates satisfiable after required prerequisite quests transform items', async () => {
+        const quests = await loadQuests();
+        const questById = new Map(quests.map((quest: any) => [quest.id, quest]));
+        const reminderQuest = questById.get('completionist/reminder');
+        const polishQuest = questById.get('completionist/polish');
+
+        expect(reminderQuest).toBeDefined();
+        expect(polishQuest).toBeDefined();
+
+        const initialInventory = computeObtainableItems({
+            allItems: items as Array<any>,
+            allQuests: quests,
+            includeBetaPlaceholderItems: false,
+        });
+        initialInventory.delete('1030a6c5-88b9-46e9-b38a-b20d8d326764');
+        initialInventory.delete('a8120ce3-4a9d-4d49-b955-92bd9d7fbc07');
+
+        const afterPolish = runQuestDeterministically(polishQuest, initialInventory);
+        expect(afterPolish.completed).toBe(true);
+
+        const startNode = (reminderQuest?.dialogue ?? []).find((node: any) => node.id === 'start');
+        const startGateItems = uniqueItemIds(
+            (startNode?.options ?? []).flatMap((option: any) => getRequiredItemIds(option))
+        );
+
+        const missingStartGateItems = startGateItems.filter(
+            (itemId) => !afterPolish.inventory.has(itemId)
+        );
+
+        expect(missingStartGateItems).toEqual([]);
+    });
+
     it('flags unobtainable dialogue-path required items with a clear reason', () => {
         const quest = {
             id: 'fixture/unobtainable-required-item',

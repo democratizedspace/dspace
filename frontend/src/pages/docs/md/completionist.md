@@ -123,7 +123,7 @@ Completionist quests build practical progression through the completionist skill
 - Unlock prerequisite:
     - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "Let's lock in a reminder plan" — Completionist Award II ×1
+    - `start` → "Let's lock in a reminder plan for the polished award run" — Completionist Award II (polished) ×1
     - `plan-window` → "Primary reminder scheduled, continue to verification" — weekly quest reminder ×1
     - `verify-reminder` → "Dry run passed: cadence, link, and timezone are all correct" — weekly quest reminder ×1
     - `recovery` → "Re-test the corrected reminder" — weekly quest reminder ×1
@@ -145,6 +145,6 @@ Completionist quests build practical progression through the completionist skill
 - Catalog QA: `completionist/catalog` now enforces an audit classification step (pass vs anomaly) and a corrective incident-response loop before closure.
 - Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
-- Reminder QA: `completionist/reminder` now adds dry-run verification for cadence/link/timezone plus a backup-alert recovery loop.
+- Reminder QA: `completionist/reminder` now adds dry-run verification for cadence/link/timezone plus a backup-alert recovery loop, and start gating now keys off Completionist Award II (polished) so it remains satisfiable after `completionist/polish`.
 - Trophy build QA: `completionist/v2` now includes a safety preflight stop, core verification gate, and retune-and-retry recovery branch.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
