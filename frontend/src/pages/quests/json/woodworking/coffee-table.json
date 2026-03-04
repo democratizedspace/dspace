@@ -149,23 +149,9 @@
             "text": "Evidence gate: table must stand without wobble and survive a gentle push test before finish.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
-                            "count": 1
-                        },
-                        {
-                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ],
-                    "text": "No wobble, no rack, and glue joints look sound."
+                    "type": "process",
+                    "process": "assemble-coffee-table",
+                    "text": "Lock joinery, level feet, and pass the push test."
                 },
                 {
                     "type": "goto",
@@ -196,7 +182,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Enjoy the new table."
+                    "text": "Enjoy the new table.",
+                    "requiresItems": [
+                        {
+                            "id": "8d6cb322-27cd-4358-90f8-bf76f07f26a2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -207,7 +199,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/bookshelf"],
+    "requiresQuests": [
+        "woodworking/bookshelf"
+    ],
     "hardening": {
         "passes": 1,
         "score": 94,

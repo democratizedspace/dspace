@@ -239,9 +239,9 @@
             "text": "Load tools from lightest to heaviest and confirm no anchor creep. Final gate: all tools return to stable slots without rubbing.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Load test passed"
+                    "type": "process",
+                    "process": "assemble-tool-rack",
+                    "text": "Run final anchor and load verification."
                 },
                 {
                     "type": "goto",
@@ -256,7 +256,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Rack complete"
+                    "text": "Rack complete",
+                    "requiresItems": [
+                        {
+                            "id": "6e62d85f-0682-4458-89ce-cb4917dfd96a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -271,7 +277,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/workbench"],
+    "requiresQuests": [
+        "woodworking/workbench"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
