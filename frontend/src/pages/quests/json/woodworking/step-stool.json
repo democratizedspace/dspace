@@ -201,15 +201,27 @@
             "text": "Solid work. You verified stability and handled faults before declaring the stool complete.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
+                    "type": "process",
+                    "process": "build-step-stool",
+                    "text": "Assemble the stool and run the stability checklist."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the stool",
+                    "requiresItems": [
                         {
                             "id": "0d4a7b77-f241-4c19-9365-c74647066802",
                             "count": 1
                         }
-                    ],
-                    "text": "Take the stool"
-                },
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Solid work. You verified stability and handled faults before declaring the stool complete.",
+            "options": [
                 {
                     "type": "finish",
                     "text": "Onward!"
@@ -223,11 +235,14 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/birdhouse", "woodworking/planter-box"],
+    "requiresQuests": [
+        "woodworking/birdhouse",
+        "woodworking/planter-box"
+    ],
     "hardening": {
         "passes": 2,
         "score": 93,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-refine-step-stool-2025-08-19",

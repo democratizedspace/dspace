@@ -85,12 +85,14 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `wobble-check` → "No wobble and edges are safe to touch" — tape measure ×1, safety goggles ×1
 - Grants:
     - `gather` → "Gather parts" — Pine board ×2, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
-    - `claim` → "Take the stool" — Step stool ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Pine planter box ×1, basil seeds ×1
 - Processes used:
-    - None
+    - [build-step-stool](/processes/build-step-stool)
+        - Requires: Handsaw ×1, tape measure ×1, safety goggles ×1
+        - Consumes: Pine board ×2, Wood glue ×1
+        - Creates: Step stool ×1
 - Troubleshooting/safety branches:
     - `fix-loop` enforces re-square/trim correction and retries before final claim.
     - Explicit stop condition for degraded tool control routes to `safe-pause`, which ends the session without granting the stool.
@@ -106,12 +108,14 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `square-check` → "Square verified; glue-up cured safely" — Wood glue ×1, tape measure ×1, safety goggles ×1
 - Grants:
     - `gather` → "Issue the bookshelf kit" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
-    - `finish` → "Take the bookshelf" — Bookshelf ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Pine planter box ×1
 - Processes used:
-    - None
+    - [build-bookshelf](/processes/build-bookshelf)
+        - Requires: Handsaw ×1, tape measure ×1, safety goggles ×1
+        - Consumes: Pine board ×4, Wood glue ×1
+        - Creates: Bookshelf ×1
 - Troubleshooting/safety branches:
     - `choose-joinery` introduces main/alternate build strategies before square validation.
     - `troubleshoot` requires a re-mark/re-cut loop and routes unsafe conditions to `safe-pause`, which ends without granting the bookshelf.
@@ -129,9 +133,12 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `gather` → "Issue table materials and PPE" — Pine board ×6, Wood glue ×1, Handsaw ×1, tape measure ×1, safety goggles ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Step stool ×1
+    - Coffee table ×1
 - Processes used:
-    - None
+    - [build-coffee-table](/processes/build-coffee-table)
+        - Requires: Handsaw ×1, tape measure ×1, safety goggles ×1
+        - Consumes: Pine board ×6, Wood glue ×1
+        - Creates: Coffee table ×1
 - Troubleshooting/safety branches:
     - `strategy` adds main/alternate assembly plans before the stability gate.
     - `rework` loops through re-square + retest and includes an unsafe-conditions stop path.
@@ -188,12 +195,14 @@ Woodworking quests build practical progression through the woodworking skill tre
     - `level-check` → "Level checks passed and structure feels solid" — Handsaw ×1
 - Grants:
     - `materials` → "Issue me the starter kit" — Pine board ×4, Wood glue ×1, Handsaw ×1, tape measure ×1
-    - `claim` → "Claim my new workbench" — Workbench ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - Pine planter box ×1
 - Processes used:
-    - None
+    - [build-workbench](/processes/build-workbench)
+        - Requires: Handsaw ×1, tape measure ×1
+        - Consumes: Pine board ×4, Wood glue ×1
+        - Creates: Workbench ×1
 - Troubleshooting/safety branches:
     - `glue-recovery` re-squares a drifted top frame before leg assembly.
     - `wobble-fix` and `level-check` enforce a stable, level bench before completion.
@@ -211,9 +220,12 @@ Woodworking quests build practical progression through the woodworking skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Step stool ×1
+    - Tool rack ×1
 - Processes used:
-    - None
+    - [build-tool-rack](/processes/build-tool-rack)
+        - Requires: Handsaw ×1, wood chisel ×1
+        - Consumes: Pine board ×1, Wood glue ×1, Sandpaper pack ×1
+        - Creates: Tool rack ×1
 - Troubleshooting/safety branches:
     - `cut-strategy` adds slot-first and hook-first build paths.
     - `troubleshoot` forces spacing/load corrections and can route to `safety` for wall-hazard resets before reattempting mount verification.
@@ -231,9 +243,12 @@ Woodworking quests build practical progression through the woodworking skill tre
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Wood glue ×1, Sandpaper pack ×1
+    - Picture frame ×1
 - Processes used:
-    - None
+    - [craft-picture-frame](/processes/craft-picture-frame)
+        - Requires: Handsaw ×1
+        - Consumes: Pine board ×1, Wood glue ×1, Sandpaper pack ×1
+        - Creates: Picture frame ×1
 - Troubleshooting/safety branches:
     - `miter-repair` handles open-corner recovery before square verification.
     - `hardware-fix` and `hang-check` verify hanger integrity with a safe load test before finish.

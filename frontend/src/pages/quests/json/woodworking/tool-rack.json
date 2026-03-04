@@ -255,6 +255,28 @@
             "text": "Nice work. Your tool wall now supports daily use and safer cleanup because every tool has a known home.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "build-tool-rack",
+                    "text": "Cut slots, mount anchors, and secure the rack."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the tool rack.",
+                    "requiresItems": [
+                        {
+                            "id": "fff4b263-806f-4aeb-a862-cbb0d50146e2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Nice work. Your tool wall now supports daily use and safer cleanup because every tool has a known home.",
+            "options": [
+                {
                     "type": "finish",
                     "text": "Rack complete"
                 }
@@ -263,19 +285,17 @@
     ],
     "rewards": [
         {
-            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
-            "count": 1
-        },
-        {
-            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+            "id": "fff4b263-806f-4aeb-a862-cbb0d50146e2",
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/workbench"],
+    "requiresQuests": [
+        "woodworking/workbench"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

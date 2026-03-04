@@ -195,6 +195,28 @@
             "text": "Excellent work. You selected a path, proved stability, and handled faults with safe recovery.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "build-coffee-table",
+                    "text": "Assemble the table and verify it stays level under load."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the coffee table.",
+                    "requiresItems": [
+                        {
+                            "id": "7a8a7f56-e84f-45e0-b321-d9cff33d9ac5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Excellent work. You selected a path, proved stability, and handled faults with safe recovery.",
+            "options": [
+                {
                     "type": "finish",
                     "text": "Enjoy the new table."
                 }
@@ -203,15 +225,17 @@
     ],
     "rewards": [
         {
-            "id": "619d485d-803f-4875-a048-157ce28d31c4",
+            "id": "7a8a7f56-e84f-45e0-b321-d9cff33d9ac5",
             "count": 1
         }
     ],
-    "requiresQuests": ["woodworking/bookshelf"],
+    "requiresQuests": [
+        "woodworking/bookshelf"
+    ],
     "hardening": {
         "passes": 1,
         "score": 94,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-harden-coffee-table-2026-02-24",
