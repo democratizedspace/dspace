@@ -186,7 +186,7 @@
                 {
                     "type": "goto",
                     "goto": "safe-pause",
-                    "text": "Unsafe light or fatigue tonight—pause and finish with a safety note."
+                    "text": "Unsafe light or fatigue tonight\u2014pause and finish with a safety note."
                 }
             ]
         },
@@ -205,15 +205,27 @@
             "text": "Clean build. You proved prep, branch selection, square verification, and safe recovery handling.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
+                    "type": "process",
+                    "process": "build-bookshelf",
+                    "text": "Assemble and square the bookshelf."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the bookshelf.",
+                    "requiresItems": [
                         {
                             "id": "619d485d-803f-4875-a048-157ce28d31c4",
                             "count": 1
                         }
-                    ],
-                    "text": "Take the bookshelf."
-                },
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Great execution. The shelf is stable, square, and ready to load.",
+            "options": [
                 {
                     "type": "finish",
                     "text": "On to the coffee table build."
@@ -230,13 +242,13 @@
     "requiresQuests": ["woodworking/step-stool"],
     "hardening": {
         "passes": 1,
-        "score": 94,
-        "emoji": "🌀",
+        "score": 96,
+        "emoji": "\ud83c\udf00",
         "history": [
             {
-                "task": "codex-harden-bookshelf-2026-02-24",
-                "date": "2026-02-24",
-                "score": 94
+                "task": "codex-harden-bookshelf-2026-03-04",
+                "date": "2026-03-04",
+                "score": 96
             }
         ]
     }

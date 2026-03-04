@@ -1513,6 +1513,66 @@
         "category": "Workshop & Construction"
     },
     {
+        "id": "7a8a7f56-e84f-45e0-b321-d9cff33d9ac5",
+        "name": "Coffee table",
+        "description": "A low pine coffee table with leveled legs and a stable top.",
+        "image": "/assets/woodworking_workbench_sturdy.jpg",
+        "price": "65 dUSD",
+        "category": "Workshop & Construction",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-coffee-table-item-2026-03-04",
+                    "date": "2026-03-04",
+                    "score": 70
+                }
+            ]
+        }
+    },
+    {
+        "id": "fff4b263-806f-4aeb-a862-cbb0d50146e2",
+        "name": "Tool rack",
+        "description": "Wall-mounted rack that keeps hand tools organized and easy to reach.",
+        "image": "/assets/poe_plus_switch_on_rack.jpg",
+        "price": "40 dUSD",
+        "category": "Workshop & Construction",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-tool-rack-item-2026-03-04",
+                    "date": "2026-03-04",
+                    "score": 70
+                }
+            ]
+        }
+    },
+    {
+        "id": "7b2c58bc-e484-4110-996c-220cfb7a4ba7",
+        "name": "Picture frame",
+        "description": "Simple wooden frame with square miters and secure hanging hardware.",
+        "image": "/assets/compost_sifter_wooden_frame.jpg",
+        "price": "22 dUSD",
+        "category": "Workshop & Construction",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-hardening-picture-frame-item-2026-03-04",
+                    "date": "2026-03-04",
+                    "score": 70
+                }
+            ]
+        }
+    },
+    {
         "id": "6dbb283e-b5b3-476c-a6aa-f89b91d30604",
         "name": "stevia seeds",
         "description": "Seeds of the Stevia rebaudiana plant.",

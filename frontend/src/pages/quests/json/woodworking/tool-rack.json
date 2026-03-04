@@ -255,6 +255,28 @@
             "text": "Nice work. Your tool wall now supports daily use and safer cleanup because every tool has a known home.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "build-tool-rack",
+                    "text": "Cut slots, mount anchors, and secure the rack."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the tool rack.",
+                    "requiresItems": [
+                        {
+                            "id": "fff4b263-806f-4aeb-a862-cbb0d50146e2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Rack installed. Every tool now has a repeatable slot, and you've got fresh consumables for the next build.",
+            "options": [
+                {
                     "type": "finish",
                     "text": "Rack complete"
                 }
@@ -275,7 +297,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

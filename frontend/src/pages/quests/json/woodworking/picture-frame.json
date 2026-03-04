@@ -207,6 +207,28 @@
             "text": "Great job. Your frame is square, sanded, and safe to hang with your print installed.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "craft-picture-frame",
+                    "text": "Glue, clamp, and finish the frame for hanging."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the picture frame.",
+                    "requiresItems": [
+                        {
+                            "id": "7b2c58bc-e484-4110-996c-220cfb7a4ba7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Frame finished and hang-ready. Pick the photo, set the backing, and put it where you'll see it daily.",
+            "options": [
+                {
                     "type": "finish",
                     "text": "Hang it up!"
                 }
@@ -215,19 +237,21 @@
     ],
     "rewards": [
         {
-            "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
-            "count": 1
-        },
-        {
             "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
             "count": 1
         }
     ],
     "requiresQuests": ["woodworking/tool-rack"],
     "hardening": {
-        "passes": 0,
-        "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
-        "history": []
+        "passes": 1,
+        "score": 96,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-harden-picture-frame-2026-03-04",
+                "date": "2026-03-04",
+                "score": 96
+            }
+        ]
     }
 }

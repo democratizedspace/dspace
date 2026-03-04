@@ -185,14 +185,46 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "safe-pause",
                     "text": "Paused safely for a better work session."
+                }
+            ]
+        },
+        {
+            "id": "safe-pause",
+            "text": "Good stop call. Power down, label your parts, and resume when footing and lighting are safe.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Pause and return later."
                 }
             ]
         },
         {
             "id": "finish",
             "text": "Excellent work. You selected a path, proved stability, and handled faults with safe recovery.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "build-coffee-table",
+                    "text": "Assemble the table and verify it stays level under load."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the coffee table.",
+                    "requiresItems": [
+                        {
+                            "id": "7a8a7f56-e84f-45e0-b321-d9cff33d9ac5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "You've got your coffee table. Place it where it stays level and clear for daily use.",
             "options": [
                 {
                     "type": "finish",
@@ -203,20 +235,20 @@
     ],
     "rewards": [
         {
-            "id": "619d485d-803f-4875-a048-157ce28d31c4",
+            "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
             "count": 1
         }
     ],
     "requiresQuests": ["woodworking/bookshelf"],
     "hardening": {
         "passes": 1,
-        "score": 94,
-        "emoji": "🌀",
+        "score": 96,
+        "emoji": "\ud83c\udf00",
         "history": [
             {
-                "task": "codex-harden-coffee-table-2026-02-24",
-                "date": "2026-02-24",
-                "score": 94
+                "task": "codex-harden-coffee-table-2026-03-04",
+                "date": "2026-03-04",
+                "score": 96
             }
         ]
     }

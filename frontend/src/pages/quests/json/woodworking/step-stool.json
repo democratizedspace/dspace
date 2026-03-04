@@ -201,15 +201,27 @@
             "text": "Solid work. You verified stability and handled faults before declaring the stool complete.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "grantsItems": [
+                    "type": "process",
+                    "process": "build-step-stool",
+                    "text": "Assemble the stool and run the stability checklist."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the stool",
+                    "requiresItems": [
                         {
                             "id": "0d4a7b77-f241-4c19-9365-c74647066802",
                             "count": 1
                         }
-                    ],
-                    "text": "Take the stool"
-                },
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Solid work. You verified stability and handled faults before declaring the stool complete.",
+            "options": [
                 {
                     "type": "finish",
                     "text": "Onward!"
@@ -226,8 +238,8 @@
     "requiresQuests": ["woodworking/birdhouse", "woodworking/planter-box"],
     "hardening": {
         "passes": 2,
-        "score": 93,
-        "emoji": "✅",
+        "score": 96,
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-refine-step-stool-2025-08-19",
@@ -235,9 +247,9 @@
                 "score": 65
             },
             {
-                "task": "codex-harden-step-stool-2026-02-24",
-                "date": "2026-02-24",
-                "score": 93
+                "task": "codex-harden-step-stool-2026-03-04",
+                "date": "2026-03-04",
+                "score": 96
             }
         ]
     }
