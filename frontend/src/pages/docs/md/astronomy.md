@@ -47,6 +47,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - dChat ×1, dUSD ×1000
+    - moon crater sketch sheet ×1
 - Processes used:
     - [write-mission-log-entry](/processes/write-mission-log-entry)
         - Requires: mission logbook ×1, feather quill ×1
@@ -72,6 +73,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - telescope build alignment card ×1
 - Processes used:
     - [assemble-basic-telescope](/processes/assemble-basic-telescope)
         - Requires: 50 mm magnifying lens ×1, 20 mm magnifying lens ×1, cardboard mailing tube ×1, camera tripod ×1, masking tape ×1
@@ -94,6 +96,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - ISS pass log ×1
+    - andromeda acquisition log ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -122,6 +125,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - iss timing callout sheet ×1
 - Processes used:
     - [check-iss-pass](/processes/check-iss-pass)
         - Requires: smartphone ×1, mission logbook ×1
@@ -159,6 +163,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - ISS pass log ×1
+    - iss long-exposure photo print ×1
 - Processes used:
     - [check-iss-pass](/processes/check-iss-pass)
         - Requires: smartphone ×1, mission logbook ×1
@@ -189,6 +194,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - ISS pass log ×1
+    - galilean moon position chart ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -222,6 +228,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - planisphere star chart ×1
+    - constellation route atlas page ×1
 - Processes used:
     - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
         - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
@@ -255,6 +262,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - constellation sketch set ×1
+    - binary star split verification card ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -283,6 +291,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - constellation sketch set ×1
+    - skyglow gradient worksheet ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -311,6 +320,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - aurora activity timeline ×1
 - Processes used:
     - [check-aurora-forecast](/processes/check-aurora-forecast)
         - Requires: smartphone ×1, mission logbook ×1
@@ -341,6 +351,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - lunar eclipse phase sequence strip ×1
 - Processes used:
     - [write-mission-log-entry](/processes/write-mission-log-entry)
         - Requires: mission logbook ×1, feather quill ×1
@@ -367,6 +378,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - planisphere star chart ×1
+    - meteor tally board ×1
 - Processes used:
     - [observe-meteor-shower](/processes/observe-meteor-shower)
         - Requires: basic telescope ×1
@@ -394,6 +406,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - planisphere star chart ×1
+    - comet drift comparison sheet ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -424,6 +437,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - constellation sketch set ×1
+    - north-star alignment card ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -459,6 +473,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - orion nebula glow sketch ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -489,6 +504,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - Polaris alignment note ×1
+    - planetary alignment witness chart ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -521,6 +537,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - planisphere star chart ×1
+    - satellite pass classification notes ×1
 - Processes used:
     - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
         - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
@@ -556,6 +573,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - ISS pass log ×1
+    - saturn ring division sketch ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -590,6 +608,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - dUSD ×100
+    - star trail composition plan ×1
 - Processes used:
     - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
         - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
@@ -624,6 +643,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - sunspot transit notebook page ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -653,6 +673,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - venus phase progression card ×1
 - Processes used:
     - [plan-venus-window](/processes/plan-venus-window)
         - Requires: planisphere star chart ×1, smartphone ×1, mission logbook ×1

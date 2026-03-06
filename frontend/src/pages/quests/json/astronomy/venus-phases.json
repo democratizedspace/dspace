@@ -146,9 +146,15 @@
         {
             "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
             "count": 1
+        },
+        {
+            "id": "7e9cc033-a1bd-40fc-92b1-7d55b9dba295",
+            "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/saturn-rings"],
+    "requiresQuests": [
+        "astronomy/saturn-rings"
+    ],
     "hardening": {
         "passes": 1,
         "score": 100,
