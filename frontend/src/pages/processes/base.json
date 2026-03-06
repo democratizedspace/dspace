@@ -9107,7 +9107,7 @@
     },
     {
         "id": "run-safe-fizz-reaction",
-        "title": "Run a controlled, low-risk fizz reaction with PPE",
+        "title": "Run a controlled fizz reaction and collect disposal-ready sample",
         "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
         "requireItems": [
             {
@@ -9128,7 +9128,12 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
+                "count": 1
+            }
+        ],
         "duration": "15m",
         "hardening": {
             "passes": 0,
@@ -9139,16 +9144,25 @@
     },
     {
         "id": "log-safe-reaction",
-        "title": "Log observations from a safe chemistry reaction",
+        "title": "Log reaction observations and disposal notes",
         "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
         "requireItems": [
             {
-                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
                 "count": 1
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 0,
@@ -9445,6 +9459,340 @@
         "hardening": {
             "passes": 0,
             "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-measure-ph",
+        "title": "Measure chemistry sample pH and capture a reading card",
+        "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "3455faac-8811-4991-b818-cecb98e8fff7",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+                "count": 1
+            }
+        ],
+        "duration": "3m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-dilute-hcl",
+        "title": "Dilute hydrochloric acid into a labeled working solution",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            },
+            {
+                "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
+                "count": 1
+            }
+        ],
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-neutralize-acid-spill",
+        "title": "Neutralize an acid spill and package residue for disposal",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 0.02
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-prepare-buffer",
+        "title": "Prepare a buffer solution batch from diluted acid/base components",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
+        "requireItems": [
+            {
+                "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 0.01
+            }
+        ],
+        "createItems": [
+            {
+                "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
+                "count": 1
+            }
+        ],
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-adjust-buffer-ph",
+        "title": "Adjust buffer solution to target pH and relabel the batch",
+        "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
+        "requireItems": [
+            {
+                "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            },
+            {
+                "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 0.01
+            },
+            {
+                "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                "count": 0.01
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+                "count": 1
+            },
+            {
+                "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-form-precipitate",
+        "title": "Run the precipitation reaction and capture slurry evidence",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "d36caabd-ddb7-4634-8d51-751957be80f4",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-filter-precipitate",
+        "title": "Filter and collect precipitate with disposal-ready labels",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "d36caabd-ddb7-4634-8d51-751957be80f4",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d36caabd-ddb7-4634-8d51-751957be80f4",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "487c7586-a6f4-4fff-a210-979497f6380f",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 92,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }

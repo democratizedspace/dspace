@@ -2540,5 +2540,77 @@
         "image": "/assets/mission_log_entry_page.json",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
+    },
+    {
+        "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
+        "name": "fizz reaction cylinder sample",
+        "description": "A labeled graduated cylinder holding the post-fizz solution (water, weak acid, dissolved carbonate salts). Marked as chemical waste requiring neutralization and proper disposal.",
+        "image": "/assets/safe_eco_propellant_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
+        "name": "safe fizz reaction log sheet",
+        "description": "A lab notebook page recording reagent ratios, bubbling profile, peak temperature, and disposal note for the spent fizz solution.",
+        "image": "/assets/safe_eco_propellant_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+        "name": "chemistry pH reading card",
+        "description": "A timestamped pH strip card taped to a note with sample source and interpretation range for chemistry lab verification.",
+        "image": "/assets/single_ph_test_strip.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
+        "name": "diluted hydrochloric acid solution",
+        "description": "A clearly labeled beaker of diluted HCl prepared by adding acid to water. Includes concentration/date label and storage/disposal caution.",
+        "image": "/assets/hydrochloric_acid_37pct_safety_bottle.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+        "name": "neutralized spill waste container",
+        "description": "Collected absorbent and salts from a neutralized acid spill, sealed and tagged for hazardous-waste pickup.",
+        "image": "/assets/lab_spill_tray_on_bench.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
+        "name": "buffer solution batch",
+        "description": "A prepared buffer in a labeled beaker with composition notes and expected pH range before final tuning.",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+        "name": "pH-adjusted buffer solution",
+        "description": "Buffer solution tuned to target pH and labeled with before/after readings, reagent additions, and handling notes.",
+        "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "d36caabd-ddb7-4634-8d51-751957be80f4",
+        "name": "precipitation reaction slurry",
+        "description": "Cloudy reaction mixture showing newly formed solids suspended in solution before filtration.",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "487c7586-a6f4-4fff-a210-979497f6380f",
+        "name": "filtered precipitate sample",
+        "description": "Recovered precipitate and decanted liquid documented for follow-up analysis and disposal routing.",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
     }
 ]

@@ -39,14 +39,18 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "adjust-ph",
-                    "text": "Run `adjust-ph` to document controlled neutralization before manual verification."
+                    "process": "chemistry-neutralize-acid-spill",
+                    "text": "Neutralize spill and package residue for disposal."
                 },
                 {
                     "type": "goto",
                     "goto": "verify",
                     "text": "Kit run complete; verify with pH strip.",
                     "requiresItems": [
+                        {
+                            "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+                            "count": 1
+                        },
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                             "count": 1
@@ -56,7 +60,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Unexpected fizzing/heat—need recovery protocol."
+                    "text": "Unexpected fizzing/heat\u2014need recovery protocol."
                 }
             ]
         },
@@ -70,6 +74,10 @@
                     "text": "Manual neutralization complete; proceed to pH verification.",
                     "requiresItems": [
                         {
+                            "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+                            "count": 1
+                        },
+                        {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                             "count": 1
                         }
@@ -78,7 +86,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Manual approach unstable—switch to recovery."
+                    "text": "Manual approach unstable\u2014switch to recovery."
                 }
             ]
         },
@@ -92,7 +100,7 @@
                     "text": "Verification passed: spill zone is neutral and controlled.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
                             "count": 1
                         }
                     ]
@@ -111,7 +119,7 @@
                 {
                     "type": "goto",
                     "goto": "choose-path",
-                    "text": "Recovery complete—retry with selected path."
+                    "text": "Recovery complete\u2014retry with selected path."
                 },
                 {
                     "type": "goto",
@@ -137,11 +145,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-test"],
+    "requiresQuests": [
+        "chemistry/ph-test"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

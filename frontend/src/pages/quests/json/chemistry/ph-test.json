@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
@@ -35,7 +35,7 @@
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Safety setup complete—start the pH measurement run."
+                    "text": "Safety setup complete\u2014start the pH measurement run."
                 }
             ]
         },
@@ -45,8 +45,8 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "measure-ph",
-                    "text": "Run `measure-ph` and capture a reading artifact."
+                    "process": "chemistry-measure-ph",
+                    "text": "Run `chemistry-measure-ph` and capture a labeled reading card."
                 },
                 {
                     "type": "goto",
@@ -54,7 +54,7 @@
                     "text": "I logged a stable reading and kept PPE on.",
                     "requiresItems": [
                         {
-                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
                             "count": 1
                         },
                         {
@@ -74,21 +74,21 @@
                 {
                     "type": "goto",
                     "goto": "troubleshoot",
-                    "text": "Color band is ambiguous or drifting—need troubleshooting."
+                    "text": "Color band is ambiguous or drifting\u2014need troubleshooting."
                 }
             ]
         },
         {
             "id": "interpret",
-            "text": "Interpret the reading: target operating window is pH 6.0–7.5 for this training solution. Choose the branch that matches your logged result.",
+            "text": "Interpret the reading: target operating window is pH 6.0\u20137.5 for this training solution. Choose the branch that matches your logged result.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Reading is in-range (6.0–7.5); safe to proceed.",
+                    "text": "Reading is in-range (6.0\u20137.5); safe to proceed.",
                     "requiresItems": [
                         {
-                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
                             "count": 1
                         }
                     ]
@@ -107,7 +107,7 @@
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Corrective actions complete—retest now."
+                    "text": "Corrective actions complete\u2014retest now."
                 },
                 {
                     "type": "goto",
@@ -133,5 +133,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/safe-reaction"]
+    "requiresQuests": [
+        "chemistry/safe-reaction"
+    ]
 }
