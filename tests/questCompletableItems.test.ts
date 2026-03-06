@@ -329,6 +329,37 @@ const findFeasibleDeadEnds = (quest: any, obtainable: Set<string>) => {
 
 const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
 
+const buildQuestPrerequisiteClosure = (allQuests: Array<any>) => {
+    const requiresByQuest = new Map(
+        allQuests.map((quest) => [quest.id, new Set<string>(quest.requiresQuests ?? [])])
+    );
+
+    const memo = new Map<string, Set<string>>();
+    const visiting = new Set<string>();
+
+    const visit = (questId: string): Set<string> => {
+        if (memo.has(questId)) return memo.get(questId) as Set<string>;
+        if (visiting.has(questId)) return new Set();
+        visiting.add(questId);
+
+        const closure = new Set<string>();
+        for (const prereq of requiresByQuest.get(questId) ?? new Set<string>()) {
+            closure.add(prereq);
+            for (const nested of visit(prereq)) closure.add(nested);
+        }
+
+        visiting.delete(questId);
+        memo.set(questId, closure);
+        return closure;
+    };
+
+    for (const quest of allQuests) {
+        visit(quest.id);
+    }
+
+    return memo;
+};
+
 const getItemDependencies = (item: any) =>
     uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
 
@@ -533,6 +564,155 @@ describe('quest completion item availability', () => {
 
         expect(reminderRequiredItems).toContain(transformedToId);
         expect(reminderRequiredItems).not.toContain(transformedFromId);
+    });
+
+    it('detects sibling quest soft-locks when one branch consumes another branch gate item', () => {
+        const fixtureQuests = [
+            {
+                id: 'fixture/root',
+                requiresQuests: [],
+                dialogue: [{ id: 'finish', options: [{ type: 'finish', text: 'done' }] }],
+            },
+            {
+                id: 'fixture/catalog',
+                requiresQuests: ['fixture/root'],
+                dialogue: [
+                    {
+                        id: 'start',
+                        options: [
+                            {
+                                type: 'goto',
+                                goto: 'finish',
+                                text: 'catalog',
+                                requiresItems: [{ id: 'raw-award', count: 1 }],
+                            },
+                        ],
+                    },
+                    { id: 'finish', options: [{ type: 'finish', text: 'done' }] },
+                ],
+            },
+            {
+                id: 'fixture/reminder',
+                requiresQuests: ['fixture/root'],
+                dialogue: [
+                    {
+                        id: 'start',
+                        options: [
+                            {
+                                type: 'goto',
+                                goto: 'finish',
+                                text: 'reminder',
+                                requiresItems: [{ id: 'polished-award', count: 1 }],
+                            },
+                        ],
+                    },
+                    { id: 'finish', options: [{ type: 'finish', text: 'done' }] },
+                ],
+            },
+        ];
+
+        const fixtureProcesses = [
+            {
+                id: 'fixture/polish-award',
+                consumeItems: [{ id: 'raw-award', count: 1 }],
+                createItems: [{ id: 'polished-award', count: 1 }],
+            },
+        ];
+
+        const prerequisiteClosure = buildQuestPrerequisiteClosure(fixtureQuests);
+        const requiredItemsByQuest = new Map(
+            fixtureQuests.map((quest: any) => [
+                quest.id,
+                uniqueItemIds([
+                    ...getQuestLevelRequiredItemIds(quest),
+                    ...getRequiredItemsFromFinishReachableTransitions(quest),
+                    ...getFinishOptions(quest).flatMap((option: any) => getRequiredItemIds(option)),
+                ]),
+            ])
+        );
+
+        const conflicts: string[] = [];
+        for (const process of fixtureProcesses) {
+            for (const consumedItemId of toItemIds(process.consumeItems)) {
+                for (const createdItemId of toItemIds(process.createItems)) {
+                    if (consumedItemId === createdItemId) continue;
+                    const rawQuests = fixtureQuests.filter((quest: any) =>
+                        (requiredItemsByQuest.get(quest.id) ?? []).includes(consumedItemId)
+                    );
+                    const transformedQuests = fixtureQuests.filter((quest: any) =>
+                        (requiredItemsByQuest.get(quest.id) ?? []).includes(createdItemId)
+                    );
+
+                    for (const transformedQuest of transformedQuests) {
+                        const transformedDeps =
+                            prerequisiteClosure.get(transformedQuest.id) ?? new Set<string>();
+                        for (const rawQuest of rawQuests) {
+                            if (rawQuest.id === transformedQuest.id) continue;
+                            const rawDeps = prerequisiteClosure.get(rawQuest.id) ?? new Set<string>();
+                            if (rawDeps.has(transformedQuest.id)) continue;
+                            if (transformedDeps.has(rawQuest.id)) continue;
+                            const sharedUnlock = [...rawDeps].some((id) => transformedDeps.has(id));
+                            if (!sharedUnlock) continue;
+                            conflicts.push(
+                                `${transformedQuest.id} can soft-lock ${rawQuest.id} via ${process.id}`
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        expect(conflicts).toContain(
+            'fixture/reminder can soft-lock fixture/catalog via fixture/polish-award'
+        );
+    });
+
+    it('keeps completionist transformed-item progression linear after cataloging', async () => {
+        const quests = await loadQuests();
+        const questById = new Map(quests.map((quest: any) => [quest.id, quest]));
+        const prerequisiteClosure = buildQuestPrerequisiteClosure(quests);
+        const completionistQuestIds = quests
+            .filter((quest: any) => String(quest.id).startsWith('completionist/'))
+            .map((quest: any) => quest.id);
+
+        const rawAwardId = 'c01676ec-27e5-4a53-9a47-24bf6c5a56a9';
+        const polishedAwardId = '1030a6c5-88b9-46e9-b38a-b20d8d326764';
+
+        const requiredItemsByQuest = new Map(
+            completionistQuestIds.map((questId) => {
+                const quest = questById.get(questId);
+                return [
+                    questId,
+                    uniqueItemIds([
+                        ...getQuestLevelRequiredItemIds(quest),
+                        ...getRequiredItemsFromFinishReachableTransitions(quest),
+                        ...getFinishOptions(quest).flatMap((option: any) => getRequiredItemIds(option)),
+                    ]),
+                ];
+            })
+        );
+
+        const rawAwardQuestIds = completionistQuestIds.filter((questId) =>
+            (requiredItemsByQuest.get(questId) ?? []).includes(rawAwardId)
+        );
+        const polishedAwardQuestIds = completionistQuestIds.filter((questId) =>
+            (requiredItemsByQuest.get(questId) ?? []).includes(polishedAwardId)
+        );
+
+        expect(rawAwardQuestIds).toContain('completionist/catalog');
+        expect(polishedAwardQuestIds).toContain('completionist/reminder');
+
+        const nonLinearPairs: string[] = [];
+        for (const transformedQuestId of polishedAwardQuestIds) {
+            const transformedDeps = prerequisiteClosure.get(transformedQuestId) ?? new Set<string>();
+            for (const rawQuestId of rawAwardQuestIds) {
+                if (transformedQuestId === rawQuestId) continue;
+                if (transformedDeps.has(rawQuestId)) continue;
+                nonLinearPairs.push(`${transformedQuestId} -> ${rawQuestId}`);
+            }
+        }
+
+        expect(nonLinearPairs).toEqual([]);
     });
 
     it('has no feasible dialogue dead-ends between start and finish without placeholder pricing', async () => {

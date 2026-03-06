@@ -1,0 +1,13 @@
+{
+  "id": "2026-03-05-quest-order-softlock-regression",
+  "date": "2026-03-05",
+  "component": "quests-completionist",
+  "rootCause": "Quest completable tests modeled item availability as monotonic and missed order-sensitive soft-locks where a sibling quest can consume a gate item needed by another still-unlocked quest.",
+  "resolution": "Linearized Completionist progression so destructive transform steps come after cataloging, updated the display gate to avoid requiring the pre-transform item at quest start, and added regression coverage for sibling-branch consumable soft-lock detection plus completionist-specific linearity checks.",
+  "references": [
+    "frontend/src/pages/quests/json/completionist/polish.json",
+    "frontend/src/pages/quests/json/completionist/display.json",
+    "frontend/src/pages/docs/md/completionist.md",
+    "tests/questCompletableItems.test.ts"
+  ]
+}
