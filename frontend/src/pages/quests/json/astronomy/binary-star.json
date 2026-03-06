@@ -195,6 +195,10 @@
         {
             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
             "count": 1
+        },
+        {
+            "id": "9db35820-1243-4567-a8a4-822530fb6328",
+            "count": 1
         }
     ],
     "requiresQuests": ["astronomy/constellations"],

@@ -140,7 +140,7 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Conditions are safe again\u2014retry a route."
+                    "text": "Conditions are safe again—retry a route."
                 },
                 {
                     "type": "goto",
@@ -208,13 +208,17 @@
         {
             "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
             "count": 1
+        },
+        {
+            "id": "8615b34c-f00e-4258-b94a-67bd58d11ece",
+            "count": 1
         }
     ],
     "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-17",

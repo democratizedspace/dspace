@@ -170,6 +170,10 @@
         {
             "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
             "count": 1
+        },
+        {
+            "id": "71ff4717-2def-43bf-8f13-cf249bf86f24",
+            "count": 1
         }
     ],
     "requiresQuests": ["astronomy/meteor-shower"],

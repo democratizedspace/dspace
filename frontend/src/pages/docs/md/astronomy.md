@@ -43,10 +43,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `verify` enforces a complete observation artifact (time + crater notes + seeing note) before completion.
     - `recovery` requires capping optics and re-validating footing/light discipline before looping back.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: moon crater sketch sheet ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - dChat ×1, dUSD ×1000
+    - moon crater sketch sheet ×1
 - Processes used:
     - [write-mission-log-entry](/processes/write-mission-log-entry)
         - Requires: mission logbook ×1, feather quill ×1
@@ -68,10 +69,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `verify` now gates advancement on the mission log entry artifact from `write-mission-log-entry` before safety sign-off.
     - `verify-safety` adds a hard safety gate (lens cap + fault scan + no sun alignment) and routes faults to `troubleshoot` before finish.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: telescope build alignment card ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - telescope build alignment card ×1
 - Processes used:
     - [assemble-basic-telescope](/processes/assemble-basic-telescope)
         - Requires: 50 mm magnifying lens ×1, 20 mm magnifying lens ×1, cardboard mailing tube ×1, camera tripod ×1, masking tape ×1
@@ -90,10 +92,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` branches to `recover` when the target cannot be stably re-acquired.
     - `recover` loops back through alignment and includes explicit stop conditions for unsafe footing and poor sky conditions.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: andromeda acquisition log ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - ISS pass log ×1
+    - andromeda acquisition log ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -118,10 +121,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `weather-delay` can schedule a deferred follow-up window (`follow-up-window`) when no safe viewing window exists.
     - `interpret` enforces a complete observation artifact (time + direction + duration) and routes incomplete entries back to mode selection for deterministic retries.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: iss timing callout sheet ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - iss timing callout sheet ×1
 - Processes used:
     - [check-iss-pass](/processes/check-iss-pass)
         - Requires: smartphone ×1, mission logbook ×1
@@ -146,9 +150,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Pass window confirmed, gear is staged." — smartphone ×1, camera tripod ×1, ISS pass window ×1
+    - `plan` → "Pass window confirmed, gear is staged." — digital camera ×1, camera tripod ×1, ISS pass window ×1
     - `capture` → "Photo saved and metadata logged." — mission logbook ×1, ISS pass window ×1, mission log entry ×1, feather quill ×1
-    - `interpret` → "Pass: streak continuous, timing <15s, heading matches plan." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Pass: streak continuous, timing <15s, heading matches plan." — mission logbook ×1, mission log entry ×1, feather quill ×1, iss long-exposure photo print ×1
     - `recovery` → "Session aborted safely; follow-up logged for next pass." — mission log entry ×1
 - Troubleshooting/safety branches:
     - `interpret` fail path forces `retest` when timing, heading, or framing are out of range.
@@ -164,6 +168,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
         - Requires: smartphone ×1, mission logbook ×1
         - Consumes: none
         - Creates: ISS pass window ×1
+    - [capture-iss-memento-photo](/processes/capture-iss-memento-photo)
+        - Requires: digital camera ×1, camera tripod ×1, ISS pass window ×1
+        - Consumes: none
+        - Creates: iss long-exposure photo print ×1
     - [write-mission-log-entry](/processes/write-mission-log-entry)
         - Requires: mission logbook ×1, feather quill ×1
         - Consumes: bottle of black ink ×0.05
@@ -185,10 +193,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` enforces safety stand-down for unsafe footing/weather/glare and loops back to planning.
     - `interpret` blocks completion when evidence is inconsistent and routes back through recovery.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: galilean moon position chart ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - ISS pass log ×1
+    - galilean moon position chart ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -218,10 +227,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `plan-route`, `sweep-route`, and `chart` all branch to `recovery` for haze/glare disorientation.
     - `recovery` loops back to route selection after a safety reset and prevents completion bypasses.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: constellation route atlas page ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - planisphere star chart ×1
+    - constellation route atlas page ×1
 - Processes used:
     - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
         - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
@@ -251,10 +261,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` loops back to route selection after tripod/footing/glare safety checks.
     - Unsafe conditions can still finish only through a caution path, preserving fail-closed safety behavior.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: binary star split verification card ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - constellation sketch set ×1
+    - binary star split verification card ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -279,10 +290,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` enforces glare/haze/footing safety pauses and explicit abort-or-retry handling.
     - Safety abort completion requires a mission-log entry describing why the run was skipped.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: skyglow gradient worksheet ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - constellation sketch set ×1
+    - skyglow gradient worksheet ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -307,10 +319,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `fallback` re-runs forecast planning before returning to session readiness.
     - `verify-log` enforces a complete observation record before finish.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: aurora activity timeline ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - aurora activity timeline ×1
 - Processes used:
     - [check-aurora-forecast](/processes/check-aurora-forecast)
         - Requires: smartphone ×1, mission logbook ×1
@@ -337,10 +350,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `review` branches to `retake` when images fail sharpness/exposure criteria.
     - `retake` loops back to capture with correction guidance and explicit cold/surface safety pause conditions; recapture still requires basic telescope ×1 and digital camera ×1.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: lunar eclipse phase sequence strip ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - lunar eclipse phase sequence strip ×1
 - Processes used:
     - [write-mission-log-entry](/processes/write-mission-log-entry)
         - Requires: mission logbook ×1, feather quill ×1
@@ -363,10 +377,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `weather-fallback` handles cloud/haze failures and loops through a re-plan cycle before retry.
     - Safe postponement now requires a logged follow-up note before completion to preserve evidence continuity.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: meteor tally board ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - planisphere star chart ×1
+    - meteor tally board ×1
 - Processes used:
     - [observe-meteor-shower](/processes/observe-meteor-shower)
         - Requires: basic telescope ×1
@@ -390,10 +405,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` enforces dark-path footing and glare safety checks with retry or safe-reschedule exits.
     - Safe-reschedule completion requires existing mission-log evidence, preventing bypass of the comet track record gate.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: comet drift comparison sheet ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - planisphere star chart ×1
+    - comet drift comparison sheet ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -420,10 +436,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` enforces footing/light-discipline checks, then loops to route selection for deterministic retry handling.
     - Unsafe nights can only close out after a mission-log entry exists, so recovery cannot bypass evidence logging.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: north-star alignment card ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - constellation sketch set ×1
+    - north-star alignment card ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -455,10 +472,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` handles dew, glare, and weather degradation with a mandatory retry loop back to route selection.
     - `interpret` blocks completion until artifact quality is verified and routes uncertain runs back to recovery.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: orion nebula glow sketch ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - orion nebula glow sketch ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -485,10 +503,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` blocks finish on inconsistent evidence and routes to `recovery`.
     - `recovery` enforces stand-down checks (footing/weather/glare) before retry or caution closeout.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: planetary alignment witness chart ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Polaris alignment note ×1
+    - planetary alignment witness chart ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -517,10 +536,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `classify-anomaly` separates tracking drift, weather interruption, and persistent safety hazards before retry/abort.
     - `troubleshoot` enforces a realignment retry loop that returns through preflight before completion.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: satellite pass classification notes ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - planisphere star chart ×1
+    - satellite pass classification notes ×1
 - Processes used:
     - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
         - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
@@ -552,10 +572,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` enforces tripod stability, footing, and lighting safety checks before any retry.
     - `interpret` prevents finish bypasses by routing uncertain captures back through recovery.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: saturn ring division sketch ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - ISS pass log ×1
+    - saturn ring division sketch ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -586,10 +607,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` adds explicit pass/fail evidence checks before completion.
     - `recovery` loops back to planning only after tripod/lens/safe-path checks.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: star trail composition plan ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - dUSD ×100
+    - star trail composition plan ×1
 - Processes used:
     - [draft-seasonal-star-plan](/processes/draft-seasonal-star-plan)
         - Requires: planisphere star chart ×1, red flashlight ×1, mission logbook ×1
@@ -620,10 +642,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` enforces stand-down when overheating or bystander-safety issues appear and loops to `safety-brief`.
     - `interpret` requires structured sketch evidence before finish and sends missing fields back to recovery.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: sunspot transit notebook page ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - sunspot transit notebook page ×1
 - Processes used:
     - [identify-constellations](/processes/identify-constellations)
         - Requires: basic telescope ×1, planisphere star chart ×1
@@ -649,10 +672,11 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` enforces pass/fail bounds (20%-60% illuminated fraction) and routes out-of-range results to corrective re-test loops (`recheck` → `plan`/`view`).
     - `recheck` archives failed evidence with `reset-venus-phase-sketch` before retesting to keep final proof deterministic.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: venus phase progression card ×1 (granted in `finish` via “Record and archive…” option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1
+    - venus phase progression card ×1
 - Processes used:
     - [plan-venus-window](/processes/plan-venus-window)
         - Requires: planisphere star chart ×1, smartphone ×1, mission logbook ×1

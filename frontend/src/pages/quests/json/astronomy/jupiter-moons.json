@@ -197,6 +197,10 @@
         {
             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
             "count": 1
+        },
+        {
+            "id": "be314ec9-c289-42e9-a6d6-5acc56779412",
+            "count": 1
         }
     ],
     "requiresQuests": ["astronomy/basic-telescope"],
