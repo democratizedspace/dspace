@@ -38,6 +38,11 @@
             "text": "Mount both drive servos, center wheel alignment, and set a contrast threshold from your reflectance readings.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-line-follower-robot",
+                    "text": "Assemble and wire the line-following robot chassis."
+                },
+                {
                     "type": "goto",
                     "goto": "safety-check",
                     "text": "Baseline tune is ready.",
@@ -59,6 +64,11 @@
             "id": "pid-setup",
             "text": "Load a PID loop and start with conservative P/I/D gains so oscillation is easier to diagnose.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-line-follower-robot",
+                    "text": "Assemble and wire the line-following robot chassis."
+                },
                 {
                     "type": "goto",
                     "goto": "safety-check",

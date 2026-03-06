@@ -1,0 +1,21 @@
+{
+  "id": "OUT-2026-03-06-quest-build-process-immersion-gap",
+  "date": "2026-03-06",
+  "component": "quest quality / process immersion",
+  "longForm": "outages/2026-03-06-quest-build-process-immersion-gap.md",
+  "rootCause": "Several quests described physically building/installing structures or machine assemblies but provided no process options, which bypassed real-time construction and reduced diegetic immersion.",
+  "resolution": "Added explicit process steps for biogas digester construction plus other build/install robotics and aquaria quests, created supporting process definitions (including real-time digester duration), and added a regression test that requires process-backed flow for build-like structure quests.",
+  "references": [
+    "frontend/src/pages/quests/json/energy/biogas-digester.json",
+    "frontend/src/pages/quests/json/aquaria/aquarium-light.json",
+    "frontend/src/pages/quests/json/robotics/line-follower.json",
+    "frontend/src/pages/quests/json/robotics/pan-tilt.json",
+    "frontend/src/pages/quests/json/robotics/servo-gripper.json",
+    "frontend/src/pages/quests/json/robotics/obstacle-avoidance.json",
+    "frontend/src/pages/quests/json/robotics/wheel-encoders.json",
+    "frontend/src/pages/processes/base.json",
+    "tests/questBuildProcessCoverage.test.ts",
+    "https://staging.democratized.space/quests/energy/biogas-digester",
+    "https://staging.democratized.space/docs/realtime"
+  ]
+}

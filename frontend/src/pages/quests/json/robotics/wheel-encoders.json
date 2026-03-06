@@ -27,6 +27,11 @@
             "text": "Power down, lift the chassis, and mount one encoder per wheel hub. Route 5V/GND and signal lines to pins 2/3 while keeping wires clear of rotation.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "install-wheel-encoders",
+                    "text": "Install and align both wheel encoders."
+                },
+                {
                     "type": "goto",
                     "goto": "verify-safety",
                     "text": "Mechanical install complete; run safety and signal checks.",

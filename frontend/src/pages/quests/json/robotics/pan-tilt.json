@@ -27,6 +27,11 @@
             "text": "Mount two servos with thread-lock and strain-relieved wires. Keep enough cable slack so full-range sweeps do not snag.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-pan-tilt-mount",
+                    "text": "Assemble and mount the pan-tilt bracket with servos."
+                },
+                {
                     "type": "goto",
                     "goto": "safety",
                     "text": "Servos mounted and cable paths cleared.",

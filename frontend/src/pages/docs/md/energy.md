@@ -404,7 +404,10 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Rewards:
     - portable solar panel ×3
 - Processes used:
-    - None
+    - [build-biogas-digester](/processes/build-biogas-digester)
+        - Requires: 200 Wh battery pack ×1
+        - Consumes: none
+        - Creates: dWatt ×50
 
 ## 17) Accrue 1,000 dSolar (`energy/dSolar-1kW`)
 

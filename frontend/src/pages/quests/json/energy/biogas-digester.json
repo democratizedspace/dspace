@@ -22,6 +22,11 @@
             "text": "Use a sealed 20 L drum, fit gas lines, and power the mixer with a 200 Wh pack while keeping ignition sources clear.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "build-biogas-digester",
+                    "text": "Run the full digester build (seal, vent, and leak-test rig)."
+                },
+                {
                     "type": "grantsItems",
                     "grantsItems": [
                         {

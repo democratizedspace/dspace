@@ -43,6 +43,11 @@
             "text": "Mount the ultrasonic sensor up front, route cables clear of wheels, and implement a stop-scan-turn routine.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "install-obstacle-avoidance-sensor",
+                    "text": "Install and wire the front ultrasonic obstacle sensor."
+                },
+                {
                     "type": "goto",
                     "goto": "safety",
                     "text": "Wiring and avoidance routine are ready.",

@@ -56,6 +56,11 @@
             "text": "Mount the servo vertically, align both jaws, and verify full open/close travel by hand before power-on.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-servo-gripper",
+                    "text": "Assemble and align the servo gripper mechanism."
+                },
+                {
                     "type": "goto",
                     "goto": "safety",
                     "text": "Jaws move freely through full range.",
