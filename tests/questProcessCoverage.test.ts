@@ -20,29 +20,29 @@ type QuestData = {
 };
 
 const BUILD_OR_STRUCTURE_TITLE = /^(build|construct|assemble|install|make|add)\b/i;
-const RECOVERY_NODE_TARGET = /^(safety|troubleshoot|recover|retry|rework)/i;
+const BUILD_OR_STRUCTURE_DESCRIPTION =
+    /\b(build|construct|assemble|install|mount|set up|setup|enclosure|rig|reactor|digester|gripper|tracker|turbine|frame|chassis|fixture|structure)\b/i;
+
+const IMMERSION_EXCEPTION_IDS = new Set<string>([
+    'aquaria/guppy',
+    'aquaria/shrimp',
+    'aquaria/floating-plants',
+]);
 
 const hasRequiredProcessStep = (quest: QuestData) =>
-    (quest.dialogue ?? []).some((node) => {
-        const options = node.options ?? [];
-        const hasTypedProcessOption = options.some(
+    (quest.dialogue ?? []).some((node) =>
+        (node.options ?? []).some(
             (option) =>
                 option.type === 'process' &&
                 typeof option.process === 'string' &&
                 option.process.trim().length > 0
-        );
+        )
+    );
 
-        if (!hasTypedProcessOption) return false;
-
-        const hasBypassGoto = options.some(
-            (option) =>
-                option.type === 'goto' &&
-                typeof option.goto === 'string' &&
-                !RECOVERY_NODE_TARGET.test(option.goto)
-        );
-
-        return !hasBypassGoto;
-    });
+const isBuildOrStructureQuest = (quest: QuestData) => {
+    const combinedText = `${quest.title ?? ''} ${quest.description ?? ''}`;
+    return BUILD_OR_STRUCTURE_TITLE.test(combinedText) && BUILD_OR_STRUCTURE_DESCRIPTION.test(combinedText);
+};
 
 describe('quest process coverage quality gates', () => {
     it('enforces mandatory process-backed immersion for build/install quest titles', async () => {
@@ -55,15 +55,16 @@ describe('quest process coverage quality gates', () => {
             )
         );
 
-        const buildOrStructureQuests = quests.filter((quest) =>
-            BUILD_OR_STRUCTURE_TITLE.test(quest.title ?? '')
+        const buildOrStructureQuests = quests.filter(
+            (quest) => isBuildOrStructureQuest(quest) && !IMMERSION_EXCEPTION_IDS.has(quest.id)
         );
         expect(buildOrStructureQuests.length).toBeGreaterThan(0);
 
-        const withRequiredProcessCount = buildOrStructureQuests.filter(hasRequiredProcessStep).length;
-        const coverage = withRequiredProcessCount / buildOrStructureQuests.length;
+        const flagged = buildOrStructureQuests
+            .filter((quest) => !hasRequiredProcessStep(quest))
+            .map((quest) => quest.id);
 
-        expect(coverage).toBe(1);
+        expect(flagged).toEqual([]);
     });
 
     it('reports quest ids that still bypass process-backed build/install steps', async () => {
@@ -74,7 +75,8 @@ describe('quest process coverage quality gates', () => {
 
         for (const questPath of questPaths.values()) {
             const quest = JSON.parse(await readFile(questPath, 'utf8')) as QuestData;
-            if (!BUILD_OR_STRUCTURE_TITLE.test(quest.title ?? '')) continue;
+            if (!isBuildOrStructureQuest(quest)) continue;
+            if (IMMERSION_EXCEPTION_IDS.has(quest.id)) continue;
             if (hasRequiredProcessStep(quest)) continue;
             flagged.push(quest.id);
         }

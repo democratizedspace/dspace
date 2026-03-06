@@ -60,7 +60,8 @@
                             "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "goto": "verify"
                 }
             ]
         },

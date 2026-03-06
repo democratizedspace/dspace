@@ -40,7 +40,8 @@
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "goto": "feed"
                 },
                 {
                     "type": "goto",
@@ -62,7 +63,8 @@
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
