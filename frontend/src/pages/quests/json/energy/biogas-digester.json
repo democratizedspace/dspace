@@ -22,6 +22,11 @@
             "text": "Use a sealed 20 L drum, fit gas lines, and power the mixer with a 200 Wh pack while keeping ignition sources clear.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "build-biogas-digester-20l",
+                    "text": "Start the sealed digester build (real-time fabrication)"
+                },
+                {
                     "type": "grantsItems",
                     "grantsItems": [
                         {
@@ -132,11 +137,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar-1kWh"],
+    "requiresQuests": [
+        "energy/solar-1kWh"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

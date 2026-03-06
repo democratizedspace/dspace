@@ -56,6 +56,11 @@
             "text": "Mount the servo vertically, align both jaws, and verify full open/close travel by hand before power-on.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-servo-gripper-jaws",
+                    "text": "Assemble, align, and cycle-test the servo gripper"
+                },
+                {
                     "type": "goto",
                     "goto": "safety",
                     "text": "Jaws move freely through full range.",
@@ -91,7 +96,7 @@
                 {
                     "type": "goto",
                     "goto": "recover",
-                    "text": "Grip slipped, crushed, or chattered—need retune."
+                    "text": "Grip slipped, crushed, or chattered\u2014need retune."
                 }
             ]
         },
@@ -129,7 +134,7 @@
                 {
                     "type": "goto",
                     "goto": "recover",
-                    "text": "Cycle consistency failed—return to recovery."
+                    "text": "Cycle consistency failed\u2014return to recovery."
                 }
             ]
         },
@@ -150,11 +155,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["robotics/servo-control"],
+    "requiresQuests": [
+        "robotics/servo-control"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

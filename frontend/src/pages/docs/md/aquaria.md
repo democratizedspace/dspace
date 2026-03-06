@@ -159,7 +159,10 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
 - Rewards:
     - Dwarf shrimp ×3
 - Processes used:
-    - None
+    - [install-aquarium-light-photoperiod](/processes/install-aquarium-light-photoperiod)
+        - Requires: aquarium LED light (20 W) ×1
+        - Consumes: none
+        - Creates: none
 
 ## 6) Rinse Sponge Filter (`aquaria/filter-rinse`)
 

@@ -151,7 +151,10 @@ Woodworking quests build practical progression through the woodworking skill tre
 - Rewards:
     - Pine planter box ×1
 - Processes used:
-    - None
+    - [finish-sand-project-surface](/processes/finish-sand-project-surface)
+        - Requires: Sandpaper pack ×1
+        - Consumes: none
+        - Creates: none
 - Troubleshooting/safety branches:
     - `strategy` adds main/alternate sanding approaches before acceptance gates.
     - `troubleshoot` enforces rework + retry loops and can route through `safety` before progress resumes.

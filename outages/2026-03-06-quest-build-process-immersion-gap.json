@@ -1,0 +1,18 @@
+{
+  "id": "2026-03-06-quest-build-process-immersion-gap",
+  "date": "2026-03-06",
+  "component": "quests-quality-process-immersion",
+  "rootCause": "Several quests described building/installing physical systems but had no process options, so players could skip the diegetic real-time construction steps entirely.",
+  "resolution": "Added explicit real-time process steps to build/install/enclosure quests in energy, aquaria, robotics, and woodworking; then added a regression test requiring process options for build/install-style quests with explicit milestone exceptions.",
+  "references": [
+    "frontend/src/pages/quests/json/energy/biogas-digester.json",
+    "frontend/src/pages/quests/json/aquaria/aquarium-light.json",
+    "frontend/src/pages/quests/json/robotics/line-follower.json",
+    "frontend/src/pages/quests/json/robotics/pan-tilt.json",
+    "frontend/src/pages/quests/json/robotics/servo-gripper.json",
+    "frontend/src/pages/quests/json/robotics/wheel-encoders.json",
+    "frontend/src/pages/quests/json/woodworking/finish-sanding.json",
+    "frontend/src/pages/processes/base.json",
+    "tests/questProcessImmersion.test.ts"
+  ]
+}
