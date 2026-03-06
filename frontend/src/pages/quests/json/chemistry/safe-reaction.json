@@ -74,7 +74,13 @@
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Reaction remained controlled; move to verification and logging."
+                    "text": "Reaction remained controlled; move to verification and logging.",
+                    "requiresItems": [
+                        {
+                            "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -95,7 +101,13 @@
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Capture route completed with stable behavior; move to verification and logging."
+                    "text": "Capture route completed with stable behavior; move to verification and logging.",
+                    "requiresItems": [
+                        {
+                            "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -135,7 +147,7 @@
                     "text": "Stable run documented; proceed to closeout.",
                     "requiresItems": [
                         {
-                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                            "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
                             "count": 1
                         }
                     ]
@@ -151,7 +163,7 @@
                     "text": "Logged and ready for the next experiment.",
                     "requiresItems": [
                         {
-                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                            "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
                             "count": 1
                         }
                     ]
@@ -169,7 +181,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
