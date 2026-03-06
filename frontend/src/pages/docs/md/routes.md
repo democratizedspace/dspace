@@ -187,7 +187,7 @@ This section is the citeable route catalog. Use the anchor
 
 ### Quests
 
-- /quests - Quest list
+- /quests - Quest list (cards in each grid row stretch to the tallest card for consistent layout)
 - /quests/create - Create new quest
 - /quests/manage - Manage quests
 - /quests/review - Review quests

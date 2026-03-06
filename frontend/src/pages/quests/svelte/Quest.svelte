@@ -38,6 +38,7 @@
         max-width: 100%;
         overflow: hidden;
         box-sizing: border-box;
+        height: 100%;
     }
 
     .container:hover,
@@ -76,6 +77,7 @@
         align-items: stretch;
         gap: 0;
         min-width: 0;
+        height: 100%;
     }
 
     @media only screen and (max-width: 640px) {

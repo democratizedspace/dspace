@@ -193,6 +193,11 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
         gap: 20px;
+        align-items: stretch;
+    }
+
+    .quests-grid > a {
+        height: 100%;
     }
 
     @media only screen and (max-width: 640px) {
