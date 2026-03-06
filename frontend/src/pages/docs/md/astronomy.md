@@ -150,9 +150,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/iss-flyover`
 - Dialogue `requiresItems` gates:
-    - `plan` → "Pass window confirmed, gear is staged." — smartphone ×1, camera tripod ×1, ISS pass window ×1
+    - `plan` → "Pass window confirmed, gear is staged." — digital camera ×1, camera tripod ×1, ISS pass window ×1
     - `capture` → "Photo saved and metadata logged." — mission logbook ×1, ISS pass window ×1, mission log entry ×1, feather quill ×1
-    - `interpret` → "Pass: streak continuous, timing <15s, heading matches plan." — mission logbook ×1, mission log entry ×1, feather quill ×1
+    - `interpret` → "Pass: streak continuous, timing <15s, heading matches plan." — mission logbook ×1, mission log entry ×1, feather quill ×1, iss long-exposure photo print ×1
     - `recovery` → "Session aborted safely; follow-up logged for next pass." — mission log entry ×1
 - Troubleshooting/safety branches:
     - `interpret` fail path forces `retest` when timing, heading, or framing are out of range.
@@ -163,12 +163,15 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Quest-level `grantsItems`: None
 - Rewards:
     - ISS pass log ×1
-    - iss long-exposure photo print ×1
 - Processes used:
     - [check-iss-pass](/processes/check-iss-pass)
         - Requires: smartphone ×1, mission logbook ×1
         - Consumes: none
         - Creates: ISS pass window ×1
+    - [capture-iss-memento-photo](/processes/capture-iss-memento-photo)
+        - Requires: digital camera ×1, camera tripod ×1, ISS pass window ×1
+        - Consumes: none
+        - Creates: iss long-exposure photo print ×1
     - [write-mission-log-entry](/processes/write-mission-log-entry)
         - Requires: mission logbook ×1, feather quill ×1
         - Consumes: bottle of black ink ×0.05
