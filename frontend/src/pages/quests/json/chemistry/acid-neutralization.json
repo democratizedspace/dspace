@@ -69,10 +69,19 @@
             "text": "Sprinkle baking soda slowly from the edge inward and avoid splashing. Keep containment in place until fizzing slows, then proceed to verification.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "chemistry-neutralize-acid-spill",
+                    "text": "Run controlled manual neutralization and package the neutralized residue."
+                },
+                {
                     "type": "goto",
                     "goto": "verify",
                     "text": "Manual neutralization complete; proceed to pH verification.",
                     "requiresItems": [
+                        {
+                            "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+                            "count": 1
+                        },
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                             "count": 1
