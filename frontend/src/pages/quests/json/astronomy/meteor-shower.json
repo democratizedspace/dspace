@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 2,
         "score": 97,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-17",
@@ -184,7 +184,13 @@
         {
             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
             "count": 1
+        },
+        {
+            "id": "e6fc7f97-1b00-4391-af7b-9ccb8f122b48",
+            "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/jupiter-moons"]
+    "requiresQuests": [
+        "astronomy/jupiter-moons"
+    ]
 }

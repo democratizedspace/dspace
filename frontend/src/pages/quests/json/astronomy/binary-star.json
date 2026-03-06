@@ -64,12 +64,12 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Still a blurry single point—need troubleshooting."
+                    "text": "Still a blurry single point\u2014need troubleshooting."
                 },
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Seeing keeps collapsing—pause and recover."
+                    "text": "Seeing keeps collapsing\u2014pause and recover."
                 }
             ]
         },
@@ -111,7 +111,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Yes—color contrast and repeatability are both confirmed.",
+                    "text": "Yes\u2014color contrast and repeatability are both confirmed.",
                     "requiresItems": [
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
@@ -126,7 +126,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "No—the split wasn't repeatable; run recovery and retry."
+                    "text": "No\u2014the split wasn't repeatable; run recovery and retry."
                 }
             ]
         },
@@ -137,7 +137,7 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Safety check done—retry one of the routes."
+                    "text": "Safety check done\u2014retry one of the routes."
                 },
                 {
                     "type": "goto",
@@ -195,13 +195,19 @@
         {
             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
             "count": 1
+        },
+        {
+            "id": "4a77acc0-eb9a-484f-9809-eeb696c52700",
+            "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

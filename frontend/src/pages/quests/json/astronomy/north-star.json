@@ -208,9 +208,15 @@
         {
             "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
             "count": 1
+        },
+        {
+            "id": "83d23471-6166-42b9-9806-50297c318266",
+            "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
