@@ -51,10 +51,10 @@ Completionist quests build practical progression through the completionist skill
 
 - Quest link: [/quests/completionist/catalog](/quests/completionist/catalog)
 - Unlock prerequisite:
-    - `requiresQuests`: `completionist/v2`
+    - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
-    - `start` → "Yeah, let's catalog it" — Completionist Award II ×1
-    - `prep` → "I have an entry ready for review" — Completionist Award II ×1, completionist trophy log entry ×1
+    - `start` → "Yeah, let's catalog it" — Completionist Award II (polished) ×1
+    - `prep` → "I have an entry ready for review" — Completionist Award II (polished) ×1, completionist trophy log entry ×1
     - `review` → "Entry includes all required fields" — completionist trophy log entry ×1
     - `audit-window` → "Audit pass: complete and readable record" — completionist trophy log entry ×1
     - `incident-response` → "Corrections done, rerun review" — completionist trophy log entry ×1
@@ -66,7 +66,7 @@ Completionist quests build practical progression through the completionist skill
     - Completionist Award ×1
 - Processes used:
     - [record-completionist-award-entry](/processes/record-completionist-award-entry)
-        - Requires: mission logbook ×1, smartphone ×1, Completionist Award II ×1
+        - Requires: mission logbook ×1, smartphone ×1, Completionist Award II (polished) ×1
         - Consumes: none
         - Creates: completionist trophy log entry ×1
 
@@ -74,7 +74,7 @@ Completionist quests build practical progression through the completionist skill
 
 - Quest link: [/quests/completionist/display](/quests/completionist/display)
 - Unlock prerequisite:
-    - `requiresQuests`: `completionist/v2`
+    - `requiresQuests`: `completionist/reminder`
 - Dialogue `requiresItems` gates:
     - `start` → "Let's find the perfect spot" — Completionist Award II ×1
     - `dust` → "Shelf is dusted and trophy gleams" — Completionist Award II (polished) ×1

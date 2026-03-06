@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-05-completionist-catalog-ordering-gap",
+  "date": "2026-03-05",
+  "component": "quests-completionist",
+  "rootCause": "completionist/catalog and completionist/polish were sibling quests unlocked by completionist/v2 while depending on different one-way transformed trophy states (raw vs polished), allowing players to complete polish first and strand catalog without an ordering gate.",
+  "resolution": "Linearized catalog onto completionist/polish with polished-item gates and expanded quest completable tests to fail when sibling quests share prerequisites but require opposite one-way transformation states without dependency ordering.",
+  "references": [
+    "frontend/src/pages/quests/json/completionist/catalog.json",
+    "frontend/src/pages/docs/md/completionist.md",
+    "tests/questCompletableItems.test.ts"
+  ]
+}

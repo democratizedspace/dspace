@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import processes from '../frontend/src/generated/processes.json' assert {
-    type: 'json',
-};
+import processes from '../frontend/src/generated/processes.json' assert { type: 'json' };
 import items from '../frontend/src/pages/inventory/json/items';
 import { loadQuests } from '../scripts/gen-quest-tree.mjs';
 import { loadQuestPaths } from './utils/questPaths';
@@ -9,738 +7,850 @@ import { loadQuestPaths } from './utils/questPaths';
 type ItemEntry = { id: string; count: number };
 
 const toItemIds = (entries: ItemEntry[] | undefined) =>
-    (entries ?? []).map((entry) => entry.id);
+  (entries ?? []).map((entry) => entry.id);
 
 const toItemIdsFromUnknown = (value: unknown) => {
-    if (!value) return [];
-    if (Array.isArray(value)) {
-        if (value.length === 0) return [];
-        if (typeof value[0] === 'string') {
-            return (value as string[]).filter(Boolean);
-        }
-        return (value as ItemEntry[]).map((entry) => entry.id).filter(Boolean);
+  if (!value) return [];
+  if (Array.isArray(value)) {
+    if (value.length === 0) return [];
+    if (typeof value[0] === 'string') {
+      return (value as string[]).filter(Boolean);
     }
-    if (typeof value === 'string') return [value];
-    if (typeof value === 'object' && value && 'id' in value) {
-        const entry = value as ItemEntry;
-        return entry.id ? [entry.id] : [];
-    }
-    return [];
+    return (value as ItemEntry[]).map((entry) => entry.id).filter(Boolean);
+  }
+  if (typeof value === 'string') return [value];
+  if (typeof value === 'object' && value && 'id' in value) {
+    const entry = value as ItemEntry;
+    return entry.id ? [entry.id] : [];
+  }
+  return [];
 };
 
 const getRequiredItemIds = (option: any) => {
-    const required = [
-        ...toItemIdsFromUnknown(option?.requiresItems),
-        ...toItemIdsFromUnknown(option?.requiredItems),
-        ...toItemIdsFromUnknown(option?.requiredItemIds),
-        ...toItemIdsFromUnknown(option?.requiredItemId),
-    ];
-    return [...new Set(required)];
+  const required = [
+    ...toItemIdsFromUnknown(option?.requiresItems),
+    ...toItemIdsFromUnknown(option?.requiredItems),
+    ...toItemIdsFromUnknown(option?.requiredItemIds),
+    ...toItemIdsFromUnknown(option?.requiredItemId),
+  ];
+  return [...new Set(required)];
 };
 
 const getQuestLevelRequiredItemIds = (quest: any) =>
-    uniqueItemIds([
-        ...toItemIdsFromUnknown(quest?.requiresItems),
-        ...toItemIdsFromUnknown(quest?.requiredItems),
-        ...toItemIdsFromUnknown(quest?.requiredItemIds),
-        ...toItemIdsFromUnknown(quest?.requiredItemId),
-    ]);
+  uniqueItemIds([
+    ...toItemIdsFromUnknown(quest?.requiresItems),
+    ...toItemIdsFromUnknown(quest?.requiredItems),
+    ...toItemIdsFromUnknown(quest?.requiredItemIds),
+    ...toItemIdsFromUnknown(quest?.requiredItemId),
+  ]);
 
 const getGrantedItems = (quest: any) =>
-    (quest.dialogue ?? []).flatMap((node: any) =>
-        (node.options ?? []).flatMap((option: any) => toItemIds(option.grantsItems))
-    );
+  (quest.dialogue ?? []).flatMap((node: any) =>
+    (node.options ?? []).flatMap((option: any) => toItemIds(option.grantsItems))
+  );
 
 const getFinishOptions = (quest: any) =>
-    (quest.dialogue ?? []).flatMap((node: any) =>
-        (node.options ?? []).filter((option: any) => option.type === 'finish')
-    );
+  (quest.dialogue ?? []).flatMap((node: any) =>
+    (node.options ?? []).filter((option: any) => option.type === 'finish')
+  );
 
 const getRequiredItemsFromDialoguePath = (quest: any) => {
-    const dialogue = quest.dialogue ?? [];
-    if (dialogue.length === 0) return [];
+  const dialogue = quest.dialogue ?? [];
+  if (dialogue.length === 0) return [];
 
-    const idToNode = new Map<string, any>(
-        dialogue
-            .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
-            .map((node: any) => [node.id.trim(), node])
+  const idToNode = new Map<string, any>(
+    dialogue
+      .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
+      .map((node: any) => [node.id.trim(), node])
+  );
+  const startId =
+    typeof quest.start === 'string' && quest.start.trim()
+      ? quest.start.trim()
+      : (dialogue[0]?.id ?? '').trim();
+  if (!startId || !idToNode.has(startId)) return [];
+
+  const reverseEdges = new Map<string, string[]>();
+  for (const node of dialogue) {
+    const sourceId = typeof node?.id === 'string' ? node.id.trim() : '';
+    if (!sourceId) continue;
+    for (const option of node.options ?? []) {
+      if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+      const target = option.goto.trim();
+      if (!idToNode.has(target)) continue;
+      if (!reverseEdges.has(target)) reverseEdges.set(target, []);
+      reverseEdges.get(target)?.push(sourceId);
+    }
+  }
+
+  const canReachFinish = new Set<string>();
+  const queue: string[] = [];
+  for (const node of dialogue) {
+    const nodeId = typeof node?.id === 'string' ? node.id.trim() : '';
+    if (!nodeId) continue;
+    const hasFinish = (node.options ?? []).some(
+      (option: any) => option.type === 'finish'
     );
-    const startId =
-        typeof quest.start === 'string' && quest.start.trim()
-            ? quest.start.trim()
-            : (dialogue[0]?.id ?? '').trim();
-    if (!startId || !idToNode.has(startId)) return [];
+    if (!hasFinish) continue;
+    canReachFinish.add(nodeId);
+    queue.push(nodeId);
+  }
 
-    const reverseEdges = new Map<string, string[]>();
-    for (const node of dialogue) {
-        const sourceId = typeof node?.id === 'string' ? node.id.trim() : '';
-        if (!sourceId) continue;
-        for (const option of node.options ?? []) {
-            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
-            const target = option.goto.trim();
-            if (!idToNode.has(target)) continue;
-            if (!reverseEdges.has(target)) reverseEdges.set(target, []);
-            reverseEdges.get(target)?.push(sourceId);
-        }
+  while (queue.length > 0) {
+    const nodeId = queue.shift();
+    if (!nodeId) continue;
+    for (const previous of reverseEdges.get(nodeId) ?? []) {
+      if (canReachFinish.has(previous)) continue;
+      canReachFinish.add(previous);
+      queue.push(previous);
     }
+  }
 
-    const canReachFinish = new Set<string>();
-    const queue: string[] = [];
-    for (const node of dialogue) {
-        const nodeId = typeof node?.id === 'string' ? node.id.trim() : '';
-        if (!nodeId) continue;
-        const hasFinish = (node.options ?? []).some((option: any) => option.type === 'finish');
-        if (!hasFinish) continue;
-        canReachFinish.add(nodeId);
-        queue.push(nodeId);
+  const reachableFromStart = new Set<string>();
+  const walkQueue = [startId];
+  while (walkQueue.length > 0) {
+    const nodeId = walkQueue.shift();
+    if (!nodeId || reachableFromStart.has(nodeId)) continue;
+    reachableFromStart.add(nodeId);
+    const node = idToNode.get(nodeId);
+    if (!node) continue;
+    for (const option of node.options ?? []) {
+      if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+      const target = option.goto.trim();
+      if (!idToNode.has(target) || reachableFromStart.has(target)) continue;
+      walkQueue.push(target);
     }
+  }
 
-    while (queue.length > 0) {
-        const nodeId = queue.shift();
-        if (!nodeId) continue;
-        for (const previous of reverseEdges.get(nodeId) ?? []) {
-            if (canReachFinish.has(previous)) continue;
-            canReachFinish.add(previous);
-            queue.push(previous);
-        }
+  const required = new Set<string>();
+  for (const nodeId of reachableFromStart) {
+    if (!canReachFinish.has(nodeId)) continue;
+    const node = idToNode.get(nodeId);
+    if (!node) continue;
+
+    const hasFinishOption = (node.options ?? []).some(
+      (option: any) => option.type === 'finish'
+    );
+    if (hasFinishOption) continue;
+
+    const validTransitions = (node.options ?? []).filter((option: any) => {
+      if (option.type !== 'goto' || typeof option.goto !== 'string')
+        return false;
+      const target = option.goto.trim();
+      return canReachFinish.has(target) && idToNode.has(target);
+    });
+
+    if (validTransitions.length !== 1) continue;
+    for (const itemId of getRequiredItemIds(validTransitions[0])) {
+      required.add(itemId);
     }
+  }
 
-    const reachableFromStart = new Set<string>();
-    const walkQueue = [startId];
-    while (walkQueue.length > 0) {
-        const nodeId = walkQueue.shift();
-        if (!nodeId || reachableFromStart.has(nodeId)) continue;
-        reachableFromStart.add(nodeId);
-        const node = idToNode.get(nodeId);
-        if (!node) continue;
-        for (const option of node.options ?? []) {
-            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
-            const target = option.goto.trim();
-            if (!idToNode.has(target) || reachableFromStart.has(target)) continue;
-            walkQueue.push(target);
-        }
-    }
-
-    const required = new Set<string>();
-    for (const nodeId of reachableFromStart) {
-        if (!canReachFinish.has(nodeId)) continue;
-        const node = idToNode.get(nodeId);
-        if (!node) continue;
-
-        const hasFinishOption = (node.options ?? []).some((option: any) => option.type === 'finish');
-        if (hasFinishOption) continue;
-
-        const validTransitions = (node.options ?? []).filter((option: any) => {
-            if (option.type !== 'goto' || typeof option.goto !== 'string') return false;
-            const target = option.goto.trim();
-            return canReachFinish.has(target) && idToNode.has(target);
-        });
-
-        if (validTransitions.length !== 1) continue;
-        for (const itemId of getRequiredItemIds(validTransitions[0])) {
-            required.add(itemId);
-        }
-    }
-
-    return [...required];
+  return [...required];
 };
 
 const getRequiredItemsFromFinishReachableTransitions = (quest: any) => {
-    const dialogue = quest.dialogue ?? [];
-    if (dialogue.length === 0) return [];
+  const dialogue = quest.dialogue ?? [];
+  if (dialogue.length === 0) return [];
 
-    const idToNode = new Map<string, any>(
-        dialogue
-            .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
-            .map((node: any) => [node.id.trim(), node])
+  const idToNode = new Map<string, any>(
+    dialogue
+      .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
+      .map((node: any) => [node.id.trim(), node])
+  );
+  const startId =
+    typeof quest.start === 'string' && quest.start.trim()
+      ? quest.start.trim()
+      : (dialogue[0]?.id ?? '').trim();
+  if (!startId || !idToNode.has(startId)) return [];
+
+  const reverseEdges = new Map<string, string[]>();
+  for (const node of dialogue) {
+    const sourceId = typeof node?.id === 'string' ? node.id.trim() : '';
+    if (!sourceId) continue;
+    for (const option of node.options ?? []) {
+      if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+      const target = option.goto.trim();
+      if (!idToNode.has(target)) continue;
+      if (!reverseEdges.has(target)) reverseEdges.set(target, []);
+      reverseEdges.get(target)?.push(sourceId);
+    }
+  }
+
+  const canReachFinish = new Set<string>();
+  const reverseQueue: string[] = [];
+  for (const node of dialogue) {
+    const nodeId = typeof node?.id === 'string' ? node.id.trim() : '';
+    if (!nodeId) continue;
+    const hasFinish = (node.options ?? []).some(
+      (option: any) => option.type === 'finish'
     );
-    const startId =
-        typeof quest.start === 'string' && quest.start.trim()
-            ? quest.start.trim()
-            : (dialogue[0]?.id ?? '').trim();
-    if (!startId || !idToNode.has(startId)) return [];
+    if (!hasFinish) continue;
+    canReachFinish.add(nodeId);
+    reverseQueue.push(nodeId);
+  }
 
-    const reverseEdges = new Map<string, string[]>();
-    for (const node of dialogue) {
-        const sourceId = typeof node?.id === 'string' ? node.id.trim() : '';
-        if (!sourceId) continue;
-        for (const option of node.options ?? []) {
-            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
-            const target = option.goto.trim();
-            if (!idToNode.has(target)) continue;
-            if (!reverseEdges.has(target)) reverseEdges.set(target, []);
-            reverseEdges.get(target)?.push(sourceId);
-        }
+  while (reverseQueue.length > 0) {
+    const nodeId = reverseQueue.shift();
+    if (!nodeId) continue;
+    for (const previous of reverseEdges.get(nodeId) ?? []) {
+      if (canReachFinish.has(previous)) continue;
+      canReachFinish.add(previous);
+      reverseQueue.push(previous);
     }
+  }
 
-    const canReachFinish = new Set<string>();
-    const reverseQueue: string[] = [];
-    for (const node of dialogue) {
-        const nodeId = typeof node?.id === 'string' ? node.id.trim() : '';
-        if (!nodeId) continue;
-        const hasFinish = (node.options ?? []).some((option: any) => option.type === 'finish');
-        if (!hasFinish) continue;
-        canReachFinish.add(nodeId);
-        reverseQueue.push(nodeId);
+  const reachableFromStart = new Set<string>();
+  const forwardQueue = [startId];
+  while (forwardQueue.length > 0) {
+    const nodeId = forwardQueue.shift();
+    if (!nodeId || reachableFromStart.has(nodeId)) continue;
+    reachableFromStart.add(nodeId);
+    const node = idToNode.get(nodeId);
+    if (!node) continue;
+    for (const option of node.options ?? []) {
+      if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+      const target = option.goto.trim();
+      if (!idToNode.has(target) || reachableFromStart.has(target)) continue;
+      forwardQueue.push(target);
     }
+  }
 
-    while (reverseQueue.length > 0) {
-        const nodeId = reverseQueue.shift();
-        if (!nodeId) continue;
-        for (const previous of reverseEdges.get(nodeId) ?? []) {
-            if (canReachFinish.has(previous)) continue;
-            canReachFinish.add(previous);
-            reverseQueue.push(previous);
-        }
+  const required = new Set<string>();
+  for (const nodeId of reachableFromStart) {
+    if (!canReachFinish.has(nodeId)) continue;
+    const node = idToNode.get(nodeId);
+    if (!node) continue;
+    for (const option of node.options ?? []) {
+      if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
+      const target = option.goto.trim();
+      if (!idToNode.has(target) || !canReachFinish.has(target)) continue;
+      for (const itemId of getRequiredItemIds(option)) {
+        required.add(itemId);
+      }
     }
+  }
 
-    const reachableFromStart = new Set<string>();
-    const forwardQueue = [startId];
-    while (forwardQueue.length > 0) {
-        const nodeId = forwardQueue.shift();
-        if (!nodeId || reachableFromStart.has(nodeId)) continue;
-        reachableFromStart.add(nodeId);
-        const node = idToNode.get(nodeId);
-        if (!node) continue;
-        for (const option of node.options ?? []) {
-            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
-            const target = option.goto.trim();
-            if (!idToNode.has(target) || reachableFromStart.has(target)) continue;
-            forwardQueue.push(target);
-        }
-    }
-
-    const required = new Set<string>();
-    for (const nodeId of reachableFromStart) {
-        if (!canReachFinish.has(nodeId)) continue;
-        const node = idToNode.get(nodeId);
-        if (!node) continue;
-        for (const option of node.options ?? []) {
-            if (option.type !== 'goto' || typeof option.goto !== 'string') continue;
-            const target = option.goto.trim();
-            if (!idToNode.has(target) || !canReachFinish.has(target)) continue;
-            for (const itemId of getRequiredItemIds(option)) {
-                required.add(itemId);
-            }
-        }
-    }
-
-    return [...required];
+  return [...required];
 };
 
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
-    required.filter((itemId) => !obtainable.has(itemId));
+  required.filter((itemId) => !obtainable.has(itemId));
 
 const getStartNodeId = (quest: any) => {
-    if (typeof quest.start === 'string' && quest.start.trim()) {
-        return quest.start.trim();
-    }
+  if (typeof quest.start === 'string' && quest.start.trim()) {
+    return quest.start.trim();
+  }
 
-    return 'start';
+  return 'start';
 };
 
 const buildFeasibleDialogueGraph = (quest: any, obtainable: Set<string>) => {
-    const dialogue = quest.dialogue ?? [];
-    const nodeMap = new Map<string, any>(
-        dialogue
-            .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
-            .map((node: any) => [node.id.trim(), node])
-    );
+  const dialogue = quest.dialogue ?? [];
+  const nodeMap = new Map<string, any>(
+    dialogue
+      .filter((node: any) => typeof node?.id === 'string' && node.id.trim())
+      .map((node: any) => [node.id.trim(), node])
+  );
 
-    const startId = getStartNodeId(quest);
-    const reachable = new Set<string>();
-    const edges = new Map<string, string[]>();
-    const finishableNodes = new Set<string>();
-    const queue = startId && nodeMap.has(startId) ? [startId] : [];
-    const enqueued = new Set<string>(queue);
-    let queueIndex = 0;
+  const startId = getStartNodeId(quest);
+  const reachable = new Set<string>();
+  const edges = new Map<string, string[]>();
+  const finishableNodes = new Set<string>();
+  const queue = startId && nodeMap.has(startId) ? [startId] : [];
+  const enqueued = new Set<string>(queue);
+  let queueIndex = 0;
 
-    while (queueIndex < queue.length) {
-        const nodeId = queue[queueIndex++];
-        if (!nodeId || reachable.has(nodeId)) continue;
+  while (queueIndex < queue.length) {
+    const nodeId = queue[queueIndex++];
+    if (!nodeId || reachable.has(nodeId)) continue;
 
-        reachable.add(nodeId);
-        const node = nodeMap.get(nodeId);
-        if (!node) continue;
+    reachable.add(nodeId);
+    const node = nodeMap.get(nodeId);
+    if (!node) continue;
 
-        const nodeEdges: string[] = [];
-        for (const option of node.options ?? []) {
-            const requiredItems = getRequiredItemIds(option);
-            if (requiredItems.some((itemId) => !obtainable.has(itemId))) {
-                continue;
-            }
+    const nodeEdges: string[] = [];
+    for (const option of node.options ?? []) {
+      const requiredItems = getRequiredItemIds(option);
+      if (requiredItems.some((itemId) => !obtainable.has(itemId))) {
+        continue;
+      }
 
-            if (option.type === 'finish') {
-                finishableNodes.add(nodeId);
-                continue;
-            }
+      if (option.type === 'finish') {
+        finishableNodes.add(nodeId);
+        continue;
+      }
 
-            if (option.type === 'goto' && typeof option.goto === 'string') {
-                const target = option.goto.trim();
-                if (!nodeMap.has(target)) continue;
-                nodeEdges.push(target);
-                if (!reachable.has(target) && !enqueued.has(target)) {
-                    enqueued.add(target);
-                    queue.push(target);
-                }
-            }
+      if (option.type === 'goto' && typeof option.goto === 'string') {
+        const target = option.goto.trim();
+        if (!nodeMap.has(target)) continue;
+        nodeEdges.push(target);
+        if (!reachable.has(target) && !enqueued.has(target)) {
+          enqueued.add(target);
+          queue.push(target);
         }
-        edges.set(nodeId, nodeEdges);
+      }
     }
+    edges.set(nodeId, nodeEdges);
+  }
 
-    return { startId, nodeMap, edges, reachable, finishableNodes };
+  return { startId, nodeMap, edges, reachable, finishableNodes };
 };
 
 const findFeasibleDeadEnds = (quest: any, obtainable: Set<string>) => {
-    const { startId, edges, reachable, finishableNodes } = buildFeasibleDialogueGraph(
-        quest,
-        obtainable
-    );
+  const { startId, edges, reachable, finishableNodes } =
+    buildFeasibleDialogueGraph(quest, obtainable);
 
-    const reverseEdges = new Map<string, string[]>();
-    for (const [source, targets] of edges.entries()) {
-        for (const target of targets) {
-            if (!reverseEdges.has(target)) reverseEdges.set(target, []);
-            reverseEdges.get(target)?.push(source);
-        }
+  const reverseEdges = new Map<string, string[]>();
+  for (const [source, targets] of edges.entries()) {
+    for (const target of targets) {
+      if (!reverseEdges.has(target)) reverseEdges.set(target, []);
+      reverseEdges.get(target)?.push(source);
     }
+  }
 
-    const canReachFinish = new Set<string>(finishableNodes);
-    const reverseQueue = [...finishableNodes];
-    for (let i = 0; i < reverseQueue.length; i++) {
-        const nodeId = reverseQueue[i];
-        if (!nodeId) continue;
-        for (const previous of reverseEdges.get(nodeId) ?? []) {
-            if (canReachFinish.has(previous)) continue;
-            canReachFinish.add(previous);
-            reverseQueue.push(previous);
-        }
+  const canReachFinish = new Set<string>(finishableNodes);
+  const reverseQueue = [...finishableNodes];
+  for (let i = 0; i < reverseQueue.length; i++) {
+    const nodeId = reverseQueue[i];
+    if (!nodeId) continue;
+    for (const previous of reverseEdges.get(nodeId) ?? []) {
+      if (canReachFinish.has(previous)) continue;
+      canReachFinish.add(previous);
+      reverseQueue.push(previous);
     }
+  }
 
-    const deadEnds = [...reachable].filter((nodeId) => !canReachFinish.has(nodeId));
+  const deadEnds = [...reachable].filter(
+    (nodeId) => !canReachFinish.has(nodeId)
+  );
 
-    return {
-        startId,
-        startExists: startId ? reachable.has(startId) : false,
-        deadEnds,
-        hasFeasibleFinishPath: startId ? canReachFinish.has(startId) : false,
-    };
+  return {
+    startId,
+    startExists: startId ? reachable.has(startId) : false,
+    deadEnds,
+    hasFeasibleFinishPath: startId ? canReachFinish.has(startId) : false,
+  };
 };
 
 const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
 
 const getItemDependencies = (item: any) =>
-    uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
+  uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
+
+const getTransitiveRequirements = (
+  questId: string,
+  questMap: Map<string, any>
+) => {
+  const seen = new Set<string>();
+  const stack = [...(questMap.get(questId)?.requiresQuests ?? [])];
+
+  while (stack.length > 0) {
+    const current = stack.pop();
+    if (!current || seen.has(current)) continue;
+    seen.add(current);
+    const quest = questMap.get(current);
+    for (const requirement of quest?.requiresQuests ?? []) {
+      if (!seen.has(requirement)) {
+        stack.push(requirement);
+      }
+    }
+  }
+
+  return seen;
+};
 
 const computeObtainableItems = ({
-    allItems,
-    allQuests,
-    includeBetaPlaceholderItems = true,
+  allItems,
+  allQuests,
+  includeBetaPlaceholderItems = true,
 }: {
-    allItems: Array<any>;
-    allQuests: Array<any>;
-    includeBetaPlaceholderItems?: boolean;
+  allItems: Array<any>;
+  allQuests: Array<any>;
+  includeBetaPlaceholderItems?: boolean;
 }) => {
-    const itemMap = new Map(allItems.map((item) => [item.id, item]));
-    const getItemDependencyInfo = (itemId: string) => {
-        const item = itemMap.get(itemId);
-        const dependencies = getItemDependencies(item);
-        const unknown = dependencies.filter((dependency) => !itemMap.has(dependency));
-        const known = dependencies.filter((dependency) => itemMap.has(dependency));
-        return { known, unknown };
-    };
-
-    const purchasable = new Set(allItems.filter((item) => item.price).map((item) => item.id));
-    const betaPlaceholderItems = new Set(
-        allItems
-            .filter((item) => item.priceExemptionReason === 'BETA_PLACEHOLDER')
-            .map((item) => item.id)
+  const itemMap = new Map(allItems.map((item) => [item.id, item]));
+  const getItemDependencyInfo = (itemId: string) => {
+    const item = itemMap.get(itemId);
+    const dependencies = getItemDependencies(item);
+    const unknown = dependencies.filter(
+      (dependency) => !itemMap.has(dependency)
     );
+    const known = dependencies.filter((dependency) => itemMap.has(dependency));
+    return { known, unknown };
+  };
 
-    const obtainable = new Set<string>();
-    const completableQuests = new Set<string>();
-    const allowGitHubRequirement = true;
-    let changed = true;
+  const purchasable = new Set(
+    allItems.filter((item) => item.price).map((item) => item.id)
+  );
+  const betaPlaceholderItems = new Set(
+    allItems
+      .filter((item) => item.priceExemptionReason === 'BETA_PLACEHOLDER')
+      .map((item) => item.id)
+  );
 
-    while (changed) {
-        changed = false;
+  const obtainable = new Set<string>();
+  const completableQuests = new Set<string>();
+  const allowGitHubRequirement = true;
+  let changed = true;
 
-        const basePurchasable = includeBetaPlaceholderItems
-            ? [...purchasable, ...betaPlaceholderItems]
-            : [...purchasable];
+  while (changed) {
+    changed = false;
 
-        for (const itemId of basePurchasable) {
-            if (obtainable.has(itemId)) continue;
-            const { known, unknown } = getItemDependencyInfo(itemId);
-            if (unknown.length === 0 && known.every((dependency) => obtainable.has(dependency))) {
-                obtainable.add(itemId);
-                changed = true;
-            }
-        }
+    const basePurchasable = includeBetaPlaceholderItems
+      ? [...purchasable, ...betaPlaceholderItems]
+      : [...purchasable];
 
-        for (const process of processes as Array<any>) {
-            const requirements = [...toItemIds(process.requireItems), ...toItemIds(process.consumeItems)];
-            if (requirements.every((id) => obtainable.has(id))) {
-                for (const created of toItemIds(process.createItems)) {
-                    if (!obtainable.has(created)) {
-                        obtainable.add(created);
-                        changed = true;
-                    }
-                }
-            }
-        }
-
-        for (const quest of allQuests) {
-            if (completableQuests.has(quest.id)) continue;
-            if ((quest.requiresQuests ?? []).some((id: string) => !completableQuests.has(id))) continue;
-
-            const finishOptions = getFinishOptions(quest);
-            if (finishOptions.length === 0) continue;
-
-            const questRequiredItems = getQuestLevelRequiredItemIds(quest);
-            const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest);
-            const canFinish = finishOptions.some((option: any) => {
-                const itemsMet = uniqueItemIds([
-                    ...questRequiredItems,
-                    ...dialoguePathRequiredItems,
-                    ...getRequiredItemIds(option),
-                ]).every((id) => obtainable.has(id));
-                const githubRequirementMet = !option.requiresGitHub || allowGitHubRequirement;
-                return itemsMet && githubRequirementMet;
-            });
-
-            if (canFinish) {
-                completableQuests.add(quest.id);
-                const questRewards = [...toItemIds(quest.rewards), ...getGrantedItems(quest)];
-                for (const reward of questRewards) {
-                    if (!obtainable.has(reward)) {
-                        obtainable.add(reward);
-                        changed = true;
-                    }
-                }
-            }
-        }
+    for (const itemId of basePurchasable) {
+      if (obtainable.has(itemId)) continue;
+      const { known, unknown } = getItemDependencyInfo(itemId);
+      if (
+        unknown.length === 0 &&
+        known.every((dependency) => obtainable.has(dependency))
+      ) {
+        obtainable.add(itemId);
+        changed = true;
+      }
     }
 
-    return obtainable;
+    for (const process of processes as Array<any>) {
+      const requirements = [
+        ...toItemIds(process.requireItems),
+        ...toItemIds(process.consumeItems),
+      ];
+      if (requirements.every((id) => obtainable.has(id))) {
+        for (const created of toItemIds(process.createItems)) {
+          if (!obtainable.has(created)) {
+            obtainable.add(created);
+            changed = true;
+          }
+        }
+      }
+    }
+
+    for (const quest of allQuests) {
+      if (completableQuests.has(quest.id)) continue;
+      if (
+        (quest.requiresQuests ?? []).some(
+          (id: string) => !completableQuests.has(id)
+        )
+      )
+        continue;
+
+      const finishOptions = getFinishOptions(quest);
+      if (finishOptions.length === 0) continue;
+
+      const questRequiredItems = getQuestLevelRequiredItemIds(quest);
+      const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest);
+      const canFinish = finishOptions.some((option: any) => {
+        const itemsMet = uniqueItemIds([
+          ...questRequiredItems,
+          ...dialoguePathRequiredItems,
+          ...getRequiredItemIds(option),
+        ]).every((id) => obtainable.has(id));
+        const githubRequirementMet =
+          !option.requiresGitHub || allowGitHubRequirement;
+        return itemsMet && githubRequirementMet;
+      });
+
+      if (canFinish) {
+        completableQuests.add(quest.id);
+        const questRewards = [
+          ...toItemIds(quest.rewards),
+          ...getGrantedItems(quest),
+        ];
+        for (const reward of questRewards) {
+          if (!obtainable.has(reward)) {
+            obtainable.add(reward);
+            changed = true;
+          }
+        }
+      }
+    }
+  }
+
+  return obtainable;
 };
 
 describe('quest completion item availability', () => {
-    it('flags unobtainable dialogue-path required items with a clear reason', () => {
-        const quest = {
-            id: 'fixture/unobtainable-required-item',
-            start: 'start',
-            dialogue: [
-                {
-                    id: 'start',
-                    options: [
-                        {
-                            type: 'goto',
-                            goto: 'finish',
-                            requiresItems: [{ id: 'missing-item', count: 1 }],
-                            text: 'Attempt finish',
-                        },
-                    ],
-                },
-                {
-                    id: 'finish',
-                    options: [{ type: 'finish', text: 'Done' }],
-                },
+  it('flags unobtainable dialogue-path required items with a clear reason', () => {
+    const quest = {
+      id: 'fixture/unobtainable-required-item',
+      start: 'start',
+      dialogue: [
+        {
+          id: 'start',
+          options: [
+            {
+              type: 'goto',
+              goto: 'finish',
+              requiresItems: [{ id: 'missing-item', count: 1 }],
+              text: 'Attempt finish',
+            },
+          ],
+        },
+        {
+          id: 'finish',
+          options: [{ type: 'finish', text: 'Done' }],
+        },
+      ],
+    };
+    const questPath =
+      'frontend/src/pages/quests/json/fixtures/unobtainable-required-item.json';
+    const obtainable = new Set<string>();
+    const questRequiredItems = getQuestLevelRequiredItemIds(quest);
+    const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest);
+    const finishOptions = getFinishOptions(quest);
+
+    const missingByOption = finishOptions.map((option: any) =>
+      getMissingItems(
+        uniqueItemIds([
+          ...questRequiredItems,
+          ...dialoguePathRequiredItems,
+          ...getRequiredItemIds(option),
+        ]),
+        obtainable
+      )
+    );
+
+    const explainMissingItem = (itemId: string) =>
+      `Missing Item (${itemId}) has no price, no producing process, and no rewarding quest.`;
+
+    const detail = missingByOption[0].map(explainMissingItem).join('\n  - ');
+    const error = `Quest "${quest.id}" (${questPath}) missing items:\n  - ${detail}`;
+
+    expect(error).toContain('fixture/unobtainable-required-item');
+    expect(error).toContain(questPath);
+    expect(error).toContain(
+      'has no price, no producing process, and no rewarding quest.'
+    );
+  });
+
+  it('requires hand-crank-generator finish path items to be obtainable without placeholders', async () => {
+    const quests = await loadQuests();
+    const handCrankQuest = quests.find(
+      (quest: any) => quest.id === 'energy/hand-crank-generator'
+    );
+
+    expect(handCrankQuest).toBeDefined();
+
+    const obtainable = computeObtainableItems({
+      allItems: items as Array<any>,
+      allQuests: quests,
+      includeBetaPlaceholderItems: false,
+    });
+    const handCrankMotorId = '6caa08d8-815c-4a0e-9297-0fda4516659d';
+
+    const requiredItemIds = uniqueItemIds([
+      ...getQuestLevelRequiredItemIds(handCrankQuest),
+      ...getRequiredItemsFromFinishReachableTransitions(handCrankQuest),
+      ...getFinishOptions(handCrankQuest).flatMap((option: any) =>
+        getRequiredItemIds(option)
+      ),
+    ]);
+
+    expect(requiredItemIds).toContain(handCrankMotorId);
+
+    const unobtainable = requiredItemIds.filter(
+      (itemId) => !obtainable.has(itemId)
+    );
+
+    expect(unobtainable).toEqual([]);
+  });
+
+  it('requires ordering when sibling quests depend on one-way transformed item states', async () => {
+    const quests = await loadQuests();
+    const questMap = new Map(quests.map((quest: any) => [quest.id, quest]));
+    const requiredItemsByQuest = new Map<string, Set<string>>();
+
+    for (const quest of quests) {
+      requiredItemsByQuest.set(
+        quest.id,
+        new Set(
+          uniqueItemIds([
+            ...getQuestLevelRequiredItemIds(quest),
+            ...getRequiredItemsFromFinishReachableTransitions(quest),
+            ...getFinishOptions(quest).flatMap((option: any) =>
+              getRequiredItemIds(option)
+            ),
+          ])
+        )
+      );
+    }
+
+    const itemNameById = new Map(
+      (items as Array<any>).map((item: any) => [item.id, item.name ?? ''])
+    );
+    const baseName = (itemId: string) =>
+      (itemNameById.get(itemId) ?? '')
+        .replace(/\s*\([^)]*\)\s*$/, '')
+        .trim()
+        .toLowerCase();
+
+    const transforms = (processes as Array<any>).flatMap((process: any) => {
+      const consumed = toItemIds(process.consumeItems).filter(Boolean);
+      const created = toItemIds(process.createItems).filter(Boolean);
+      if (consumed.length !== 1 || created.length !== 1) return [];
+      if (consumed[0] === created[0]) return [];
+      if (
+        !baseName(consumed[0]) ||
+        baseName(consumed[0]) !== baseName(created[0])
+      )
+        return [];
+      return [{ from: consumed[0], to: created[0], processId: process.id }];
+    });
+
+    const orderingConflicts: string[] = [];
+
+    for (const transform of transforms) {
+      const fromQuests = quests.filter((quest: any) =>
+        requiredItemsByQuest.get(quest.id)?.has(transform.from)
+      );
+      const toQuests = quests.filter((quest: any) =>
+        requiredItemsByQuest.get(quest.id)?.has(transform.to)
+      );
+
+      for (const fromQuest of fromQuests) {
+        const fromTransitive = getTransitiveRequirements(
+          fromQuest.id,
+          questMap
+        );
+        for (const toQuest of toQuests) {
+          if (fromQuest.id === toQuest.id) continue;
+          const toTransitive = getTransitiveRequirements(toQuest.id, questMap);
+
+          const fromDependsOnTo = fromTransitive.has(toQuest.id);
+          const toDependsOnFrom = toTransitive.has(fromQuest.id);
+          if (fromDependsOnTo || toDependsOnFrom) continue;
+
+          const [fromTree] = fromQuest.id.split('/');
+          const [toTree] = toQuest.id.split('/');
+          if (!fromTree || fromTree !== toTree) continue;
+
+          const fromDirect = new Set(fromQuest.requiresQuests ?? []);
+          const toDirect = new Set(toQuest.requiresQuests ?? []);
+          const sharedDirect = [...fromDirect].filter((id) => toDirect.has(id));
+          if (sharedDirect.length === 0) continue;
+
+          orderingConflicts.push(
+            `Quest "${fromQuest.id}" (requires ${transform.from}) and ` +
+              `"${toQuest.id}" (requires ${transform.to}) share prerequisite(s) ` +
+              `${sharedDirect.join(', ')} but have no ordering dependency; ` +
+              `transform: ${transform.processId}.`
+          );
+        }
+      }
+    }
+
+    expect(orderingConflicts).toEqual([]);
+  });
+
+  it('has no feasible dialogue dead-ends between start and finish without placeholder pricing', async () => {
+    const quests = await loadQuests();
+    const questPaths = await loadQuestPaths();
+    const obtainable = computeObtainableItems({
+      allItems: items as Array<any>,
+      allQuests: quests,
+      includeBetaPlaceholderItems: false,
+    });
+
+    const failures: string[] = [];
+    for (const quest of quests) {
+      const result = findFeasibleDeadEnds(quest, obtainable);
+      if (!result.startId) {
+        failures.push(`Quest "${quest.id}" has no start node.`);
+        continue;
+      }
+      const path = questPaths.get(quest.id) ?? 'unknown path';
+      if (result.hasFeasibleFinishPath && result.deadEnds.length === 0)
+        continue;
+      if (!result.startExists) {
+        failures.push(
+          typeof quest.start === 'string' && quest.start.trim()
+            ? `Quest "${quest.id}" (${path}) start node "${result.startId}" from quest.start not found in dialogue.`
+            : `Quest "${quest.id}" (${path}) is missing a \"start\" dialogue node.`
+        );
+        continue;
+      }
+      if (!result.hasFeasibleFinishPath) {
+        failures.push(
+          `Quest "${quest.id}" (${path}) has no feasible path to a finish node.`
+        );
+      }
+      if (result.deadEnds.length > 0) {
+        failures.push(
+          `Quest "${quest.id}" (${path}) has reachable dead-end nodes: ${result.deadEnds.join(', ')}.`
+        );
+      }
+    }
+
+    expect(failures).toEqual([]);
+  });
+
+  it('ensures finish requirements are obtainable', async () => {
+    const quests = await loadQuests();
+    const questPaths = await loadQuestPaths();
+    const itemMap = new Map(
+      (items as Array<any>).map((item) => [item.id, item])
+    );
+    const getItemDependencyInfo = (itemId: string) => {
+      const item = itemMap.get(itemId);
+      const dependencies = getItemDependencies(item);
+      const unknown = dependencies.filter(
+        (dependency) => !itemMap.has(dependency)
+      );
+      const known = dependencies.filter((dependency) =>
+        itemMap.has(dependency)
+      );
+      return { known, unknown };
+    };
+    const dialoguePathRequiredItemsByQuest = new Map<string, string[]>();
+    for (const quest of quests) {
+      dialoguePathRequiredItemsByQuest.set(
+        quest.id,
+        getRequiredItemsFromDialoguePath(quest)
+      );
+    }
+
+    const rewardSources = new Map<string, string[]>();
+    for (const quest of quests) {
+      const addRewardSource = (itemId: string) => {
+        if (!rewardSources.has(itemId)) {
+          rewardSources.set(itemId, []);
+        }
+        rewardSources.get(itemId)?.push(quest.id);
+      };
+
+      for (const reward of quest.rewards ?? []) {
+        addRewardSource(reward.id);
+      }
+
+      for (const itemId of getGrantedItems(quest)) {
+        addRewardSource(itemId);
+      }
+    }
+
+    const processSources = new Map<string, Array<any>>();
+    for (const process of processes as Array<any>) {
+      for (const item of process.createItems ?? []) {
+        if (!processSources.has(item.id)) {
+          processSources.set(item.id, []);
+        }
+        processSources.get(item.id)?.push(process);
+      }
+    }
+
+    const allowGitHubRequirement = true;
+    const obtainable = computeObtainableItems({
+      allItems: items as Array<any>,
+      allQuests: quests,
+    });
+
+    const errors: string[] = [];
+
+    const explainMissingItem = (itemId: string) => {
+      const item = itemMap.get(itemId);
+      if (!item) {
+        return `Unknown item (${itemId}) is not defined in inventory.`;
+      }
+      const name = item?.name ?? 'Unknown item';
+      const { known, unknown } = getItemDependencyInfo(itemId);
+      if (unknown.length > 0) {
+        return `${name} (${itemId}) depends on unknown item IDs: ${unknown.join(', ')}.`;
+      }
+      const missingDependencies = getMissingItems(known, obtainable);
+      if (missingDependencies.length > 0) {
+        const missingNames = missingDependencies
+          .map((missingId) => itemMap.get(missingId)?.name ?? missingId)
+          .join(', ');
+        return `${name} (${itemId}) depends on missing items: ${missingNames}.`;
+      }
+      const sources = processSources.get(itemId) ?? [];
+      if (sources.length > 0) {
+        const scored = sources.map((process) => {
+          const missing = getMissingItems(
+            [
+              ...toItemIds(process.requireItems),
+              ...toItemIds(process.consumeItems),
             ],
-        };
-        const questPath = 'frontend/src/pages/quests/json/fixtures/unobtainable-required-item.json';
-        const obtainable = new Set<string>();
-        const questRequiredItems = getQuestLevelRequiredItemIds(quest);
-        const dialoguePathRequiredItems = getRequiredItemsFromDialoguePath(quest);
-        const finishOptions = getFinishOptions(quest);
-
-        const missingByOption = finishOptions.map((option: any) =>
-            getMissingItems(
-                uniqueItemIds([
-                    ...questRequiredItems,
-                    ...dialoguePathRequiredItems,
-                    ...getRequiredItemIds(option),
-                ]),
-                obtainable
-            )
-        );
-
-        const explainMissingItem = (itemId: string) =>
-            `Missing Item (${itemId}) has no price, no producing process, and no rewarding quest.`;
-
-        const detail = missingByOption[0].map(explainMissingItem).join('\n  - ');
-        const error = `Quest "${quest.id}" (${questPath}) missing items:\n  - ${detail}`;
-
-        expect(error).toContain('fixture/unobtainable-required-item');
-        expect(error).toContain(questPath);
-        expect(error).toContain('has no price, no producing process, and no rewarding quest.');
-    });
-
-    it('requires hand-crank-generator finish path items to be obtainable without placeholders', async () => {
-        const quests = await loadQuests();
-        const handCrankQuest = quests.find((quest: any) => quest.id === 'energy/hand-crank-generator');
-
-        expect(handCrankQuest).toBeDefined();
-
-        const obtainable = computeObtainableItems({
-            allItems: items as Array<any>,
-            allQuests: quests,
-            includeBetaPlaceholderItems: false,
+            obtainable
+          );
+          return { process, missing };
         });
-        const handCrankMotorId = '6caa08d8-815c-4a0e-9297-0fda4516659d';
+        scored.sort((a, b) => a.missing.length - b.missing.length);
+        const best = scored[0];
+        if (best.missing.length > 0) {
+          const missingNames = best.missing
+            .map((missingId) => itemMap.get(missingId)?.name ?? missingId)
+            .join(', ');
+          return `${name} (${itemId}) requires "${best.process.id}" inputs: ${missingNames}.`;
+        }
+        return `${name} (${itemId}) is produced by "${best.process.id}".`;
+      }
 
-        const requiredItemIds = uniqueItemIds([
-            ...getQuestLevelRequiredItemIds(handCrankQuest),
-            ...getRequiredItemsFromFinishReachableTransitions(handCrankQuest),
-            ...getFinishOptions(handCrankQuest).flatMap((option: any) => getRequiredItemIds(option)),
-        ]);
-
-        expect(requiredItemIds).toContain(handCrankMotorId);
-
-        const unobtainable = requiredItemIds.filter((itemId) => !obtainable.has(itemId));
-
-        expect(unobtainable).toEqual([]);
-    });
-
-    it('requires post-process transformed items for quests gated behind prerequisite transformations', async () => {
-        const quests = await loadQuests();
-        const reminderQuest = quests.find((quest: any) => quest.id === 'completionist/reminder');
-        const polishQuest = quests.find((quest: any) => quest.id === 'completionist/polish');
-
-        expect(reminderQuest).toBeDefined();
-        expect(polishQuest).toBeDefined();
-        expect(reminderQuest.requiresQuests ?? []).toContain('completionist/polish');
-
-        const polishProcess = (processes as Array<any>).find(
-            (process) => process.id === 'polish-completionist-award'
+      const rewarders = rewardSources.get(itemId) ?? [];
+      if (rewarders.length > 0) {
+        const rewardList = rewarders.join(', ');
+        return (
+          `${name} (${itemId}) is only rewarded by quests that are not completable: ` +
+          `${rewardList}.`
         );
-        expect(polishProcess).toBeDefined();
+      }
 
-        const transformedFromId = polishProcess.consumeItems?.find(
-            (entry: any) => entry.id === 'c01676ec-27e5-4a53-9a47-24bf6c5a56a9'
-        )?.id;
-        const transformedToId = polishProcess.createItems?.find(
-            (entry: any) => entry.id === '1030a6c5-88b9-46e9-b38a-b20d8d326764'
-        )?.id;
-        expect(transformedFromId).toBeDefined();
-        expect(transformedToId).toBeDefined();
+      return `${name} (${itemId}) has no price, no producing process, and no rewarding quest.`;
+    };
 
-        const reminderRequiredItems = uniqueItemIds([
-            ...getQuestLevelRequiredItemIds(reminderQuest),
-            ...getRequiredItemsFromFinishReachableTransitions(reminderQuest),
-            ...getFinishOptions(reminderQuest).flatMap((option: any) => getRequiredItemIds(option)),
-        ]);
-
-        expect(reminderRequiredItems).toContain(transformedToId);
-        expect(reminderRequiredItems).not.toContain(transformedFromId);
-    });
-
-    it('has no feasible dialogue dead-ends between start and finish without placeholder pricing', async () => {
-        const quests = await loadQuests();
-        const questPaths = await loadQuestPaths();
-        const obtainable = computeObtainableItems({
-            allItems: items as Array<any>,
-            allQuests: quests,
-            includeBetaPlaceholderItems: false,
-        });
-
-        const failures: string[] = [];
-        for (const quest of quests) {
-            const result = findFeasibleDeadEnds(quest, obtainable);
-            if (!result.startId) {
-                failures.push(`Quest "${quest.id}" has no start node.`);
-                continue;
-            }
-            const path = questPaths.get(quest.id) ?? 'unknown path';
-            if (result.hasFeasibleFinishPath && result.deadEnds.length === 0) continue;
-            if (!result.startExists) {
-                failures.push(
-                    typeof quest.start === 'string' && quest.start.trim()
-                        ? `Quest "${quest.id}" (${path}) start node "${result.startId}" from quest.start not found in dialogue.`
-                        : `Quest "${quest.id}" (${path}) is missing a \"start\" dialogue node.`
-                );
-                continue;
-            }
-            if (!result.hasFeasibleFinishPath) {
-                failures.push(`Quest "${quest.id}" (${path}) has no feasible path to a finish node.`);
-            }
-            if (result.deadEnds.length > 0) {
-                failures.push(
-                    `Quest "${quest.id}" (${path}) has reachable dead-end nodes: ${result.deadEnds.join(', ')}.`
-                );
-            }
-        }
-
-        expect(failures).toEqual([]);
-    });
-
-    it('ensures finish requirements are obtainable', async () => {
-        const quests = await loadQuests();
-        const questPaths = await loadQuestPaths();
-        const itemMap = new Map(
-            (items as Array<any>).map((item) => [item.id, item])
+    for (const quest of quests) {
+      const finishOptions = getFinishOptions(quest);
+      const questPath = questPaths.get(quest.id);
+      const questRequiredItems = getQuestLevelRequiredItemIds(quest);
+      const dialoguePathRequiredItems = (
+        dialoguePathRequiredItemsByQuest.get(quest.id) ?? []
+      ).filter((id) => itemMap.has(id));
+      if (finishOptions.length === 0) {
+        errors.push(
+          `Quest "${quest.id}" (${questPath ?? 'unknown path'}) has no finish option.`
         );
-        const getItemDependencyInfo = (itemId: string) => {
-            const item = itemMap.get(itemId);
-            const dependencies = getItemDependencies(item);
-            const unknown = dependencies.filter((dependency) => !itemMap.has(dependency));
-            const known = dependencies.filter((dependency) => itemMap.has(dependency));
-            return { known, unknown };
-        };
-        const dialoguePathRequiredItemsByQuest = new Map<string, string[]>();
-        for (const quest of quests) {
-            dialoguePathRequiredItemsByQuest.set(quest.id, getRequiredItemsFromDialoguePath(quest));
-        }
+        continue;
+      }
 
-        const rewardSources = new Map<string, string[]>();
-        for (const quest of quests) {
-            const addRewardSource = (itemId: string) => {
-                if (!rewardSources.has(itemId)) {
-                    rewardSources.set(itemId, []);
-                }
-                rewardSources.get(itemId)?.push(quest.id);
-            };
+      const missingByOption = finishOptions.map((option: any) => {
+        const missing = getMissingItems(
+          uniqueItemIds([
+            ...questRequiredItems,
+            ...dialoguePathRequiredItems,
+            ...getRequiredItemIds(option),
+          ]),
+          obtainable
+        );
+        const requiresGitHub = Boolean(option.requiresGitHub);
+        return { option, missing, requiresGitHub };
+      });
 
-            for (const reward of quest.rewards ?? []) {
-                addRewardSource(reward.id);
-            }
+      const viable = missingByOption.find(
+        (entry) =>
+          entry.missing.length === 0 &&
+          (!entry.requiresGitHub || allowGitHubRequirement)
+      );
+      if (viable) continue;
 
-            for (const itemId of getGrantedItems(quest)) {
-                addRewardSource(itemId);
-            }
-        }
+      missingByOption.sort((a, b) => a.missing.length - b.missing.length);
+      const best = missingByOption[0];
+      const missingItemsDetail =
+        best.missing.length === 0 ? [] : best.missing.map(explainMissingItem);
+      const missingRequirementsDetail = best.requiresGitHub
+        ? ['GitHub connection required.']
+        : [];
+      const details = [...missingItemsDetail, ...missingRequirementsDetail]
+        .filter(Boolean)
+        .join('\n  - ');
+      const pathRequirementSummary = dialoguePathRequiredItems.length
+        ? `\n  - Path-required items considered: ${dialoguePathRequiredItems.join(', ')}`
+        : '';
+      errors.push(
+        `Quest "${quest.id}" (${questPath ?? 'unknown path'}) missing items:\n  - ${details}${pathRequirementSummary}`
+      );
+    }
 
-        const processSources = new Map<string, Array<any>>();
-        for (const process of processes as Array<any>) {
-            for (const item of process.createItems ?? []) {
-                if (!processSources.has(item.id)) {
-                    processSources.set(item.id, []);
-                }
-                processSources.get(item.id)?.push(process);
-            }
-        }
-
-        const allowGitHubRequirement = true;
-        const obtainable = computeObtainableItems({
-            allItems: items as Array<any>,
-            allQuests: quests,
-        });
-
-        const errors: string[] = [];
-
-        const explainMissingItem = (itemId: string) => {
-            const item = itemMap.get(itemId);
-            if (!item) {
-                return `Unknown item (${itemId}) is not defined in inventory.`;
-            }
-            const name = item?.name ?? 'Unknown item';
-            const { known, unknown } = getItemDependencyInfo(itemId);
-            if (unknown.length > 0) {
-                return `${name} (${itemId}) depends on unknown item IDs: ${unknown.join(', ')}.`;
-            }
-            const missingDependencies = getMissingItems(
-                known,
-                obtainable
-            );
-            if (missingDependencies.length > 0) {
-                const missingNames = missingDependencies
-                    .map((missingId) => itemMap.get(missingId)?.name ?? missingId)
-                    .join(', ');
-                return `${name} (${itemId}) depends on missing items: ${missingNames}.`;
-            }
-            const sources = processSources.get(itemId) ?? [];
-            if (sources.length > 0) {
-                const scored = sources.map((process) => {
-                    const missing = getMissingItems(
-                        [
-                            ...toItemIds(process.requireItems),
-                            ...toItemIds(process.consumeItems),
-                        ],
-                        obtainable
-                    );
-                    return { process, missing };
-                });
-                scored.sort((a, b) => a.missing.length - b.missing.length);
-                const best = scored[0];
-                if (best.missing.length > 0) {
-                    const missingNames = best.missing
-                        .map((missingId) => itemMap.get(missingId)?.name ?? missingId)
-                        .join(', ');
-                    return (
-                        `${name} (${itemId}) requires "${best.process.id}" inputs: ${missingNames}.`
-                    );
-                }
-                return `${name} (${itemId}) is produced by "${best.process.id}".`;
-            }
-
-            const rewarders = rewardSources.get(itemId) ?? [];
-            if (rewarders.length > 0) {
-                const rewardList = rewarders.join(', ');
-                return (
-                    `${name} (${itemId}) is only rewarded by quests that are not completable: ` +
-                    `${rewardList}.`
-                );
-            }
-
-            return (
-                `${name} (${itemId}) has no price, no producing process, and no rewarding quest.`
-            );
-        };
-
-        for (const quest of quests) {
-            const finishOptions = getFinishOptions(quest);
-            const questPath = questPaths.get(quest.id);
-            const questRequiredItems = getQuestLevelRequiredItemIds(quest);
-            const dialoguePathRequiredItems = (dialoguePathRequiredItemsByQuest.get(quest.id) ?? []).filter((id) =>
-                itemMap.has(id)
-            );
-            if (finishOptions.length === 0) {
-                errors.push(
-                    `Quest "${quest.id}" (${questPath ?? 'unknown path'}) has no finish option.`
-                );
-                continue;
-            }
-
-            const missingByOption = finishOptions.map((option: any) => {
-                const missing = getMissingItems(
-                    uniqueItemIds([
-                        ...questRequiredItems,
-                        ...dialoguePathRequiredItems,
-                        ...getRequiredItemIds(option),
-                    ]),
-                    obtainable
-                );
-                const requiresGitHub = Boolean(option.requiresGitHub);
-                return { option, missing, requiresGitHub };
-            });
-
-            const viable = missingByOption.find(
-                (entry) =>
-                    entry.missing.length === 0 &&
-                    (!entry.requiresGitHub || allowGitHubRequirement)
-            );
-            if (viable) continue;
-
-            missingByOption.sort((a, b) => a.missing.length - b.missing.length);
-            const best = missingByOption[0];
-            const missingItemsDetail =
-                best.missing.length === 0
-                    ? []
-                    : best.missing.map(explainMissingItem);
-            const missingRequirementsDetail = best.requiresGitHub
-                ? ['GitHub connection required.']
-                : [];
-            const details = [...missingItemsDetail, ...missingRequirementsDetail]
-                .filter(Boolean)
-                .join('\n  - ');
-            const pathRequirementSummary = dialoguePathRequiredItems.length
-                ? `\n  - Path-required items considered: ${dialoguePathRequiredItems.join(', ')}`
-                : '';
-            errors.push(
-                `Quest "${quest.id}" (${questPath ?? 'unknown path'}) missing items:\n  - ${details}${pathRequirementSummary}`
-            );
-        }
-
-        expect(errors).toEqual([]);
-    });
+    expect(errors).toEqual([]);
+  });
 });
