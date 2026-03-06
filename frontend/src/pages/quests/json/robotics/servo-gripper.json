@@ -68,17 +68,6 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "safety",
-                    "text": "Jaws move freely through full range.",
-                    "requiresItems": [
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
                     "goto": "recover",
                     "text": "Linkage rubs or stalls before full travel."
                 }

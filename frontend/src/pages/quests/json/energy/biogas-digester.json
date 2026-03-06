@@ -44,17 +44,6 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "feed",
-                    "text": "Frame assembled, vent line routed, and leak check complete.",
-                    "requiresItems": [
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
                     "goto": "safety-stop",
                     "text": "I smell gas or cannot maintain a seal."
                 }
@@ -72,17 +61,6 @@
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "verify",
-                    "text": "Fermentation run complete; verify output and safety checks.",
-                    "requiresItems": [
-                        {
-                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-                            "count": 50
                         }
                     ]
                 },

@@ -61,17 +61,6 @@
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "verify",
-                    "text": "Fixture is mounted and timer set to 8 hours.",
-                    "requiresItems": [
-                        {
-                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
-                            "count": 1
-                        }
-                    ]
                 }
             ]
         },

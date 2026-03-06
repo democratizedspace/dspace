@@ -86,8 +86,6 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-control`, `robotics/reflectance-sensors`
 - Dialogue `requiresItems` gates:
-    - `threshold-setup` → "Baseline tune is ready." — Servo Motor ×2
-    - `pid-setup` → "PID baseline is uploaded." — Servo Motor ×2
     - `safety-check` → "Safety checks done; begin timed passes." — Servo Motor ×2
     - `evidence` → "Three clean laps recorded; line follower is ready." — Servo Motor ×2
 - Grants:
@@ -172,7 +170,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Wheel Encoder ×1
+    - Motor Award ×1
 - Processes used:
     - [assemble-servo-arm-kit](/processes/assemble-servo-arm-kit)
         - Requires: two-servo arm kit ×1, Servo Motor ×2, precision screwdriver set ×1, anti-static wrist strap ×1
@@ -215,7 +213,6 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/line-follower`, `robotics/ultrasonic-rangefinder`
 - Dialogue `requiresItems` gates:
-    - `build` → "Wiring and avoidance routine are ready." — Servo Motor ×1
     - `safety` → "Safety checks pass; run operator lockout checks." — Servo Motor ×1
     - `ops-check` → "Ops checks pass; run the obstacle course." — Servo Motor ×1, safety goggles ×1
     - `evidence` → "Three clean runs logged; obstacle avoidance is field-ready." — Servo Motor ×1, safety goggles ×1
@@ -272,7 +269,6 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `robotics/servo-gripper`
 - Dialogue `requiresItems` gates:
-    - `mount` → "Mechanical install complete; run safety and signal checks." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
     - `verify-safety` → "Safety and pulse checks pass; start calibration runs." — Wheel Encoder ×2, safety goggles ×1
     - `calibrate` → "Calibration logs are complete and within tolerance." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
     - `evidence` → "Encoder install is validated and ready for odometry quests." — Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
@@ -280,7 +276,7 @@ Robotics quests build practical progression through the robotics skill tree. Thi
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Wheel Encoder ×1
+    - Motor Award ×1
 - Processes used:
     - [install-wheel-encoders](/processes/install-wheel-encoders)
         - Requires: Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1

@@ -148,7 +148,6 @@ Aquaria quests build practical progression through the aquaria skill tree. This 
     - `requiresQuests`: `aquaria/sponge-filter`
 - Dialogue `requiresItems` gates:
     - `start` → "Bench is dry, timer is ready, and cable has a drip loop." — aquarium LED light (20 W) ×1, Restored sponge filter flow ×1
-    - `mount` → "Fixture is mounted and timer set to 8 hours." — aquarium LED light (20 W) ×1
     - `verify` → "Plants are upright, fish behavior is normal, and glare is controlled." — aquarium LED light (20 W) ×1
     - `verify` → "Algae or fish stress signs appeared during the first cycle." — aquarium LED light (20 W) ×1
     - `verify` → "A second cycle still shows stress; pause automation and escalate to manual review." — none

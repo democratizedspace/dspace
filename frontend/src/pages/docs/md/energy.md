@@ -394,8 +394,6 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar-1kWh`
 - Dialogue `requiresItems` gates:
-    - `assemble` → "Frame assembled, vent line routed, and leak check complete." — 200 Wh battery pack ×1
-    - `feed` → "Fermentation run complete; verify output and safety checks." — dWatt ×50
     - `safety-stop` → "Seal is stable again; resume fermentation." — 200 Wh battery pack ×1
     - `verify` → "Verified: output + safety log both pass." — dWatt ×50
 - Grants:

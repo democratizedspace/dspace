@@ -50,17 +50,6 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "safety-check",
-                    "text": "Baseline tune is ready.",
-                    "requiresItems": [
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 2
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
                     "goto": "troubleshoot",
                     "text": "It keeps drifting off the line."
                 }
@@ -71,9 +60,9 @@
             "text": "Load a PID loop and start with conservative P/I/D gains so oscillation is easier to diagnose.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "safety-check",
-                    "text": "PID baseline is uploaded.",
+                    "type": "process",
+                    "process": "assemble-line-follower-chassis",
+                    "text": "Assemble and align the chassis, sensor bar, and baseline firmware tune (about 3 hours).",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
