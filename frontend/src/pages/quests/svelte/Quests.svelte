@@ -142,7 +142,7 @@
 
         <div class="quests-grid" data-testid="quests-grid">
             {#each filteredQuests as quest}
-                <a href="/quests/{quest.id}" aria-label={quest.title}>
+                <a class="quest-link" href="/quests/{quest.id}" aria-label={quest.title}>
                     <Quest {quest} />
                 </a>
             {/each}
@@ -157,7 +157,7 @@
         {#if finishedQuests.length > 0}
             <h2>Completed Quests</h2>
             {#each finishedQuests as quest}
-                <a href="/quests/{quest.id}" aria-label={quest.title}>
+                <a class="quest-link" href="/quests/{quest.id}" aria-label={quest.title}>
                     <Quest {quest} compact={true} />
                 </a>
             {/each}
@@ -193,6 +193,11 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
         gap: 20px;
+        align-items: stretch;
+    }
+
+    .quest-link {
+        height: 100%;
     }
 
     @media only screen and (max-width: 640px) {

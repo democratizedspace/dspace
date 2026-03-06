@@ -38,6 +38,7 @@
         max-width: 100%;
         overflow: hidden;
         box-sizing: border-box;
+        height: 100%;
     }
 
     .container:hover,
