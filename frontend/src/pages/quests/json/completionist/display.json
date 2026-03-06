@@ -22,11 +22,6 @@
             "text": "Clear a shelf and wipe away dust so the trophy doesn't sit on grit. The light bounce will look better too.",
             "options": [
                 {
-                    "type": "process",
-                    "process": "polish-completionist-award",
-                    "text": "Clean and buff the trophy"
-                },
-                {
                     "type": "goto",
                     "goto": "place",
                     "text": "Shelf is dusted and trophy gleams",

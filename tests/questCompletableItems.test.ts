@@ -335,12 +335,19 @@ const buildQuestPrerequisiteClosure = (allQuests: Array<any>) => {
     );
 
     const memo = new Map<string, Set<string>>();
+    const stack: string[] = [];
     const visiting = new Set<string>();
 
     const visit = (questId: string): Set<string> => {
         if (memo.has(questId)) return memo.get(questId) as Set<string>;
-        if (visiting.has(questId)) return new Set();
+        if (visiting.has(questId)) {
+            const cycleStart = stack.indexOf(questId);
+            const cyclePath = [...stack.slice(cycleStart), questId].join(' -> ');
+            throw new Error(`Quest dependency cycle detected: ${cyclePath}`);
+        }
+
         visiting.add(questId);
+        stack.push(questId);
 
         const closure = new Set<string>();
         for (const prereq of requiresByQuest.get(questId) ?? new Set<string>()) {
@@ -348,7 +355,9 @@ const buildQuestPrerequisiteClosure = (allQuests: Array<any>) => {
             for (const nested of visit(prereq)) closure.add(nested);
         }
 
+        closure.delete(questId);
         visiting.delete(questId);
+        stack.pop();
         memo.set(questId, closure);
         return closure;
     };
@@ -536,22 +545,22 @@ describe('quest completion item availability', () => {
     it('requires post-process transformed items for quests gated behind prerequisite transformations', async () => {
         const quests = await loadQuests();
         const reminderQuest = quests.find((quest: any) => quest.id === 'completionist/reminder');
-        const polishQuest = quests.find((quest: any) => quest.id === 'completionist/polish');
+        const displayQuest = quests.find((quest: any) => quest.id === 'completionist/display');
 
         expect(reminderQuest).toBeDefined();
-        expect(polishQuest).toBeDefined();
-        expect(reminderQuest.requiresQuests ?? []).toContain('completionist/polish');
+        expect(displayQuest).toBeDefined();
+        expect(reminderQuest.requiresQuests ?? []).toContain('completionist/display');
 
-        const polishProcess = (processes as Array<any>).find(
-            (process) => process.id === 'polish-completionist-award'
+        const stageProcess = (processes as Array<any>).find(
+            (process) => process.id === 'stage-completionist-award'
         );
-        expect(polishProcess).toBeDefined();
+        expect(stageProcess).toBeDefined();
 
-        const transformedFromId = polishProcess.consumeItems?.find(
-            (entry: any) => entry.id === 'c01676ec-27e5-4a53-9a47-24bf6c5a56a9'
-        )?.id;
-        const transformedToId = polishProcess.createItems?.find(
+        const transformedFromId = stageProcess.consumeItems?.find(
             (entry: any) => entry.id === '1030a6c5-88b9-46e9-b38a-b20d8d326764'
+        )?.id;
+        const transformedToId = stageProcess.createItems?.find(
+            (entry: any) => entry.id === 'a8120ce3-4a9d-4d49-b955-92bd9d7fbc07'
         )?.id;
         expect(transformedFromId).toBeDefined();
         expect(transformedToId).toBeDefined();
@@ -564,6 +573,19 @@ describe('quest completion item availability', () => {
 
         expect(reminderRequiredItems).toContain(transformedToId);
         expect(reminderRequiredItems).not.toContain(transformedFromId);
+    });
+
+
+    it('throws when quest prerequisites contain cycles', () => {
+        const fixtureQuests = [
+            { id: 'fixture/a', requiresQuests: ['fixture/b'], dialogue: [] },
+            { id: 'fixture/b', requiresQuests: ['fixture/c'], dialogue: [] },
+            { id: 'fixture/c', requiresQuests: ['fixture/a'], dialogue: [] },
+        ];
+
+        expect(() => buildQuestPrerequisiteClosure(fixtureQuests)).toThrow(
+            'Quest dependency cycle detected: fixture/a -> fixture/b -> fixture/c -> fixture/a'
+        );
     });
 
     it('detects sibling quest soft-locks when one branch consumes another branch gate item', () => {
@@ -677,6 +699,7 @@ describe('quest completion item availability', () => {
 
         const rawAwardId = 'c01676ec-27e5-4a53-9a47-24bf6c5a56a9';
         const polishedAwardId = '1030a6c5-88b9-46e9-b38a-b20d8d326764';
+        const displayedAwardId = 'a8120ce3-4a9d-4d49-b955-92bd9d7fbc07';
 
         const requiredItemsByQuest = new Map(
             completionistQuestIds.map((questId) => {
@@ -699,8 +722,13 @@ describe('quest completion item availability', () => {
             (requiredItemsByQuest.get(questId) ?? []).includes(polishedAwardId)
         );
 
+        const displayedAwardQuestIds = completionistQuestIds.filter((questId) =>
+            (requiredItemsByQuest.get(questId) ?? []).includes(displayedAwardId)
+        );
+
         expect(rawAwardQuestIds).toContain('completionist/catalog');
-        expect(polishedAwardQuestIds).toContain('completionist/reminder');
+        expect(polishedAwardQuestIds).toContain('completionist/display');
+        expect(displayedAwardQuestIds).toContain('completionist/reminder');
 
         const nonLinearPairs: string[] = [];
         for (const transformedQuestId of polishedAwardQuestIds) {
@@ -709,6 +737,15 @@ describe('quest completion item availability', () => {
                 if (transformedQuestId === rawQuestId) continue;
                 if (transformedDeps.has(rawQuestId)) continue;
                 nonLinearPairs.push(`${transformedQuestId} -> ${rawQuestId}`);
+            }
+        }
+
+        for (const transformedQuestId of displayedAwardQuestIds) {
+            const transformedDeps = prerequisiteClosure.get(transformedQuestId) ?? new Set<string>();
+            for (const polishedQuestId of polishedAwardQuestIds) {
+                if (transformedQuestId === polishedQuestId) continue;
+                if (transformedDeps.has(polishedQuestId)) continue;
+                nonLinearPairs.push(`${transformedQuestId} -> ${polishedQuestId}`);
             }
         }
 
