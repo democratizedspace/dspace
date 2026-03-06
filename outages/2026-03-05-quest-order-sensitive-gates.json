@@ -1,0 +1,13 @@
+{
+  "id": "2026-03-05-quest-order-sensitive-gates",
+  "date": "2026-03-05",
+  "component": "quests-completion-validation",
+  "rootCause": "Quest completable checks treated obtainable items as monotonic and did not model prerequisite chains that consume non-renewable gate items. This missed order-sensitive sibling quest conflicts where one branch can consume a scarce item required by another unlocked quest.",
+  "resolution": "Added a regression test that computes non-renewable quest gate items, expands quest prerequisite closures, and fails when optional prerequisite chains can consume sibling quest gate items after shared prerequisites. This catches the completionist catalog/reminder pattern and similar future ordering hazards.",
+  "references": [
+    "tests/questCompletableItems.test.ts",
+    "frontend/src/pages/quests/json/completionist/catalog.json",
+    "frontend/src/pages/quests/json/completionist/reminder.json",
+    "outages/2026-03-04-completionist-reminder-polished-gate.json"
+  ]
+}
