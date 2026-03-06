@@ -38,6 +38,17 @@
             "text": "Mount both drive servos, center wheel alignment, and set a contrast threshold from your reflectance readings.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-line-follower-chassis",
+                    "text": "Assemble and align the chassis, sensor bar, and baseline firmware tune (about 3 hours).",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
                     "goto": "safety-check",
                     "text": "Baseline tune is ready.",
@@ -137,7 +148,10 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/servo-control", "robotics/reflectance-sensors"],
+    "requiresQuests": [
+        "robotics/servo-control",
+        "robotics/reflectance-sensors"
+    ],
     "rewards": [
         {
             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
@@ -147,7 +161,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

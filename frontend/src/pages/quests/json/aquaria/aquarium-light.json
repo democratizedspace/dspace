@@ -48,6 +48,21 @@
             "text": "Mount the LED fixture over open water, avoid hotspot glare, and set an 8-hour baseline photoperiod before fish lights-on.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "install-aquarium-led-photoperiod",
+                    "text": "Run the fixture install + first full timed photoperiod cycle (about 1 day).",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        },
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
                     "goto": "verify",
                     "text": "Fixture is mounted and timer set to 8 hours.",
@@ -138,7 +153,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/sponge-filter"],
+    "requiresQuests": [
+        "aquaria/sponge-filter"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,

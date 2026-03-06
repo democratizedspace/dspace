@@ -1,0 +1,18 @@
+{
+  "id": "OUT-2026-03-06-quest-build-process-immersion-gap",
+  "date": "2026-03-06",
+  "component": "frontend/quests",
+  "rootCause": "Several quests with build/install narratives (including energy/biogas-digester and multiple robotics/aquaria build quests) advanced via plain goto steps without requiring any process execution, so players were not immersed in actually constructing the described machine/structure.",
+  "resolution": "Added explicit build/install process steps and corresponding process definitions with realistic durations (including a 21-day fermentation cycle for the biogas digester), updated coupled Skills docs, and added regression tests that enforce high process coverage plus mandatory process options for build/structure quest narratives.",
+  "references": [
+    "frontend/src/pages/quests/json/energy/biogas-digester.json",
+    "frontend/src/pages/quests/json/robotics/line-follower.json",
+    "frontend/src/pages/quests/json/robotics/obstacle-avoidance.json",
+    "frontend/src/pages/quests/json/robotics/pan-tilt.json",
+    "frontend/src/pages/quests/json/robotics/servo-gripper.json",
+    "frontend/src/pages/quests/json/robotics/wheel-encoders.json",
+    "frontend/src/pages/quests/json/aquaria/aquarium-light.json",
+    "frontend/src/pages/processes/base.json",
+    "tests/questProcessCoverage.test.ts"
+  ]
+}

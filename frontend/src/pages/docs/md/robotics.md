@@ -96,7 +96,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Rewards:
     - 3D Printed Phone Stand ×1
 - Processes used:
-    - None
+    - [assemble-line-follower-chassis](/processes/assemble-line-follower-chassis)
+        - Requires: Servo Motor ×2
+        - Consumes: none
+        - Creates: none
 - QA notes:
     - Supports two strategies (threshold-first and PID-first), then converges through safety checks.
     - Completion is gated on a mechanics-backed evidence step: three clean laps without leaving tape.
@@ -118,7 +121,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Rewards:
     - 3D Printed Phone Stand ×1
 - Processes used:
-    - None
+    - [assemble-pan-tilt-mount](/processes/assemble-pan-tilt-mount)
+        - Requires: Servo Motor ×2
+        - Consumes: none
+        - Creates: none
 - QA notes:
     - Adds strategy branching for assembly order (pan-first vs tilt-first) before convergence.
     - Adds an explicit safety gate and tolerance-based evidence requirement (<3° center error).
@@ -142,7 +148,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Rewards:
     - 3D Printed Phone Stand ×1
 - Processes used:
-    - None
+    - [assemble-servo-gripper](/processes/assemble-servo-gripper)
+        - Requires: Servo Motor ×1
+        - Consumes: none
+        - Creates: none
 - QA notes:
     - Replaces linear flow with strategy branching (direct horn vs offset linkage) before convergence.
     - Adds a safety gate for capped grip force and soft-object testing before final validation.
@@ -216,7 +225,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Rewards:
     - 3D Printed Phone Stand ×1
 - Processes used:
-    - None
+    - [integrate-obstacle-avoidance-sensor](/processes/integrate-obstacle-avoidance-sensor)
+        - Requires: Servo Motor ×1
+        - Consumes: none
+        - Creates: none
 - QA notes:
     - Adds a strategy fork (conservative vs agile detection profiles) before convergence.
     - Adds a safety stop-distance gate before full-speed obstacle runs.
@@ -270,7 +282,10 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Rewards:
     - Wheel Encoder ×1
 - Processes used:
-    - None
+    - [install-wheel-encoders](/processes/install-wheel-encoders)
+        - Requires: Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
+        - Consumes: none
+        - Creates: none
 - QA notes:
     - Replaces thin-shell install flow with branching install strategy and staged verification.
     - Adds explicit operational safety checks (lifted chassis + emergency stop + free-spin test) before calibration.

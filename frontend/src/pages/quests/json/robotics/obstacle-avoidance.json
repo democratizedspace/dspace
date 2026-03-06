@@ -43,6 +43,17 @@
             "text": "Mount the ultrasonic sensor up front, route cables clear of wheels, and implement a stop-scan-turn routine.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "integrate-obstacle-avoidance-sensor",
+                    "text": "Install and calibrate ultrasonic stop-scan-turn behavior with guarded bench tests (about 2 hours).",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
                     "goto": "safety",
                     "text": "Wiring and avoidance routine are ready.",
@@ -156,11 +167,14 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["robotics/line-follower", "robotics/ultrasonic-rangefinder"],
+    "requiresQuests": [
+        "robotics/line-follower",
+        "robotics/ultrasonic-rangefinder"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
