@@ -1,5 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, enableQuestGraphVisualizer, waitForHydration } from './test-helpers';
+import {
+    clearUserData,
+    enableQuestGraphVisualizer,
+    seedCustomQuest,
+    waitForHydration,
+} from './test-helpers';
 
 // Tolerance for scrollWidth comparison (1px for rounding)
 const OVERFLOW_TOLERANCE = 1;
@@ -225,15 +230,50 @@ test.describe('Quests page horizontal overflow regression', () => {
     test('quest tiles in the same row should share a uniform height', async ({ page }) => {
         await page.setViewportSize({ width: 1920, height: 1080 });
 
+        await page.goto('/');
+        await seedCustomQuest(page, {
+            id: 'quest-grid-height-test-a',
+            title: 'Quest Height Regression A',
+            description: 'Custom quest seeded for first-row height consistency checks.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Start node',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ],
+            requiresQuests: [],
+        });
+        await seedCustomQuest(page, {
+            id: 'quest-grid-height-test-b',
+            title: 'Quest Height Regression B',
+            description:
+                'Second custom quest seeded to guarantee more than one first-row tile in tests.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Start node',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ],
+            requiresQuests: [],
+        });
+
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const firstTile = page.locator('[data-testid="quest-tile"]').first();
+        const firstTile = page.locator('.quests-grid > a').first();
         await expect(firstTile).toBeVisible();
 
         const firstRowHeights = await page.evaluate(() => {
-            const tiles = Array.from(document.querySelectorAll('[data-testid="quest-tile"]'));
+            const tiles = Array.from(document.querySelectorAll('.quests-grid > a'));
             if (tiles.length === 0) {
                 return [];
             }
@@ -250,6 +290,7 @@ test.describe('Quests page horizontal overflow regression', () => {
         const maxHeight = Math.max(...firstRowHeights);
         expect(maxHeight - minHeight).toBeLessThanOrEqual(1);
     });
+
     test('quest tile text column should have comfortable right padding', async ({ page }) => {
         await page.setViewportSize({ width: 1920, height: 1080 });
 
