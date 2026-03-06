@@ -47,6 +47,11 @@
                     "type": "goto",
                     "goto": "safety-stop",
                     "text": "I smell gas or cannot maintain a seal."
+                },
+                {
+                    "type": "goto",
+                    "goto": "feed",
+                    "text": "Assembly checks complete; proceed to feed and seal the digester."
                 }
             ]
         },
@@ -70,6 +75,17 @@
                     "type": "goto",
                     "goto": "safety-stop",
                     "text": "Pressure spikes or vent condensate blocks the line."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Fermentation log complete; move to output verification.",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 50
+                        }
+                    ]
                 }
             ]
         },
@@ -134,9 +150,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "energy/solar-1kWh"
-    ],
+    "requiresQuests": ["energy/solar-1kWh"],
     "hardening": {
         "passes": 0,
         "score": 90,

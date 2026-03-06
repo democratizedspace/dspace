@@ -156,10 +156,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "robotics/line-follower",
-        "robotics/ultrasonic-rangefinder"
-    ],
+    "requiresQuests": ["robotics/line-follower", "robotics/ultrasonic-rangefinder"],
     "hardening": {
         "passes": 0,
         "score": 95,
