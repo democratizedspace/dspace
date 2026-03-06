@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-05-completionist-catalog-reminder-order-lockout",
+  "date": "2026-03-05",
+  "component": "quests-completionist",
+  "rootCause": "completionist/reminder and completionist/catalog were simultaneously available after completionist/v2 in live content, which allowed progression states where players advanced reminder-side work before catalog and then could not finish catalog without implicit ordering knowledge.",
+  "resolution": "Made completionist/reminder explicitly depend on both completionist/catalog and completionist/polish, updated the completionist skills doc dependency map, and tightened quest completable regression coverage to assert this dependency contract so similar non-linear lockouts are caught in CI.",
+  "references": [
+    "frontend/src/pages/quests/json/completionist/reminder.json",
+    "frontend/src/pages/docs/md/completionist.md",
+    "tests/questCompletableItems.test.ts"
+  ]
+}

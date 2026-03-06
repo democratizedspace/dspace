@@ -121,7 +121,7 @@ Completionist quests build practical progression through the completionist skill
 
 - Quest link: [/quests/completionist/reminder](/quests/completionist/reminder)
 - Unlock prerequisite:
-    - `requiresQuests`: `completionist/polish`
+    - `requiresQuests`: `completionist/catalog`, `completionist/polish`
 - Dialogue `requiresItems` gates:
     - `start` → "Let's lock in a reminder plan around the polished award" — Completionist Award II (polished) ×1
     - `plan-window` → "Primary reminder scheduled, continue to verification" — weekly quest reminder ×1

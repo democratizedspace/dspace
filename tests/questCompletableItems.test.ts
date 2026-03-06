@@ -502,14 +502,19 @@ describe('quest completion item availability', () => {
         expect(unobtainable).toEqual([]);
     });
 
-    it('requires post-process transformed items for quests gated behind prerequisite transformations', async () => {
+    it('keeps completionist reminder gated behind both catalog and polish to avoid order lockouts', async () => {
         const quests = await loadQuests();
         const reminderQuest = quests.find((quest: any) => quest.id === 'completionist/reminder');
         const polishQuest = quests.find((quest: any) => quest.id === 'completionist/polish');
+        const catalogQuest = quests.find((quest: any) => quest.id === 'completionist/catalog');
 
         expect(reminderQuest).toBeDefined();
         expect(polishQuest).toBeDefined();
-        expect(reminderQuest.requiresQuests ?? []).toContain('completionist/polish');
+        expect(catalogQuest).toBeDefined();
+        expect(reminderQuest.requiresQuests ?? []).toEqual([
+            'completionist/catalog',
+            'completionist/polish',
+        ]);
 
         const polishProcess = (processes as Array<any>).find(
             (process) => process.id === 'polish-completionist-award'

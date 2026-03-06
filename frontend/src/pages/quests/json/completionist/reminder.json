@@ -106,7 +106,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["completionist/polish"],
+    "requiresQuests": ["completionist/catalog", "completionist/polish"],
     "hardening": {
         "passes": 0,
         "score": 95,
