@@ -5,6 +5,16 @@ slug: 'astronomy'
 
 Astronomy quests build practical progression through the astronomy skill tree. This page is a QA-oriented map of quest dependencies, process IO, and inventory gates.
 
+## Tangible artifact refresh (2026-03)
+
+The astronomy questline now awards quest-specific observation artifacts (one memento per quest) so progression leaves concrete evidence rather than repeating generic rewards.
+
+Notable process update:
+- [capture-iss-long-exposure-photo](/processes/capture-iss-long-exposure-photo): requires camera + tripod + ISS pass window and creates the `ISS long-exposure photo print` proof item used by `astronomy/iss-photo`.
+
+See quest JSON under `frontend/src/pages/quests/json/astronomy/` for per-quest reward mappings and gating requirements.
+
+
 ## Quest tree
 
 1. [Observe the Moon](/quests/astronomy/observe-moon)

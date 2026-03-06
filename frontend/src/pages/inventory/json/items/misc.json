@@ -2540,5 +2540,125 @@
         "image": "/assets/mission_log_entry_page.json",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
+    },
+    {
+        "id": "8c8f9d7d-1f6e-47f8-bd31-6b44bd976a10",
+        "name": "lunar crater sketch plate",
+        "description": "Annotated crater sketch showing terminator position, major mare boundaries, seeing conditions, and a timestamped note proving your first disciplined moon observation session.",
+        "image": "/assets/venus_phase_sketch.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f86f97ed-9944-4a5e-bec2-e2f79d06b6fd",
+        "name": "telescope collimation checklist",
+        "description": "A signed build checklist confirming lens spacing, tube alignment, tripod stability, and safe storage steps for your hand-built beginner telescope.",
+        "image": "/assets/seasonal_star_hop_plan.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "24db3d7c-61d3-4f5a-9f29-85bb4890970b",
+        "name": "Andromeda finder card",
+        "description": "Field card with a star-hop route from Cassiopeia to M31, plus naked-eye limiting magnitude and moon phase notes from your successful attempt.",
+        "image": "/assets/seasonal_star_hop_plan.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "8ba8d063-8be4-41f7-b442-c90f2ce7750a",
+        "name": "ISS long-exposure photo print",
+        "description": "A high-contrast print showing the ISS streak crossing the frame, with handwritten metadata for pass time, heading, exposure settings, and sky transparency for posterity.",
+        "image": "/assets/iss_pass_log.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "2b8e6f20-b369-4b8e-9f9d-4d3f4448bb43",
+        "name": "Jupiter moon position sheet",
+        "description": "Observation sheet plotting Io, Europa, Ganymede, and Callisto positions across multiple timestamps to demonstrate real orbital motion.",
+        "image": "/assets/constellation_sketch_set.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "db404512-cd69-40f7-b455-bf9dc5a8bfa2",
+        "name": "binary star separation log",
+        "description": "Micrometer-style estimate notes documenting separation, orientation angle, and seeing quality from your resolved binary-star session.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d42ff5b9-f819-4d5f-b6b5-a9f3b9183b2f",
+        "name": "light pollution baseline reading",
+        "description": "Sky-brightness baseline record with location, transparency, nearby light sources, and mitigation notes for repeatable comparisons.",
+        "image": "/assets/aurora_sighting_log.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "a3a337dc-6f8d-40da-8f58-07173f7a4628",
+        "name": "lunar eclipse contact timeline",
+        "description": "Timed sequence of penumbral, partial, and total eclipse phases with brightness and color notes at each contact point.",
+        "image": "/assets/iss_pass_log.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "6eca71d5-7775-4259-8f41-281a3fb85c03",
+        "name": "meteor shower tally sheet",
+        "description": "Hourly tally sheet with meteor counts, radiant checks, and limiting magnitude notes used to compare peak activity.",
+        "image": "/assets/iss_pass_log.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f3d726f7-d4ed-4597-aad6-7240a354a93d",
+        "name": "comet tail drift sketch",
+        "description": "Successive sketches capturing coma shape and tail orientation changes against background stars over multiple nights.",
+        "image": "/assets/venus_phase_sketch.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "1056f0f0-b5ea-43c4-b9a9-4aad57e527f2",
+        "name": "Orion nebula observation sketch",
+        "description": "Field sketch of M42 showing trapezium placement, nebulosity extent, and transparency notes from your observing window.",
+        "image": "/assets/venus_phase_sketch.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "6d5b08cd-31ef-44eb-9637-51690bd9e6dc",
+        "name": "planetary alignment horizon sketch",
+        "description": "Panorama-style horizon sketch marking aligned planets, angular spacing estimates, and local landmark references for future checks.",
+        "image": "/assets/seasonal_star_hop_plan.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f9874497-a08f-4f5d-acac-b9eb834fabf2",
+        "name": "satellite pass identification card",
+        "description": "Verification card listing observed satellite track, magnitude estimate, and constellation crossings used to confirm a positive ID.",
+        "image": "/assets/iss_pass_window_card.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f258bd89-7e2b-48fd-9625-65164ea9d2d0",
+        "name": "Saturn ring division sketch",
+        "description": "Detailed eyepiece sketch highlighting ring tilt, Cassini Division visibility notes, and magnification used during observation.",
+        "image": "/assets/venus_phase_sketch.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "7c2deb31-ab9c-488f-a0af-5fbc808f2c87",
+        "name": "sunspot drift journal page",
+        "description": "Solar journal page documenting sunspot group shape, drift direction, and safety filter checks between sessions.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
     }
 ]

@@ -69,7 +69,7 @@
         },
         {
             "id": "setup",
-            "text": "Dial in a 20–30 second base exposure, use your red light to frame foreground, and lock focus on a bright star.",
+            "text": "Dial in a 20\u201330 second base exposure, use your red light to frame foreground, and lock focus on a bright star.",
             "options": [
                 {
                     "type": "goto",
@@ -90,7 +90,7 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "I bumped the tripod—realign."
+                    "text": "I bumped the tripod\u2014realign."
                 },
                 {
                     "type": "goto",
@@ -164,7 +164,7 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Recovery checks complete—replan and retry."
+                    "text": "Recovery checks complete\u2014replan and retry."
                 },
                 {
                     "type": "goto",
@@ -192,15 +192,17 @@
     ],
     "rewards": [
         {
-            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/planetary-alignment"],
+    "requiresQuests": [
+        "astronomy/planetary-alignment"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

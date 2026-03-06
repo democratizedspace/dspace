@@ -29,7 +29,7 @@
                 {
                     "type": "goto",
                     "goto": "kit",
-                    "text": "Window picked—what should I pack?",
+                    "text": "Window picked\u2014what should I pack?",
                     "requiresItems": [
                         {
                             "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
@@ -51,7 +51,7 @@
                 {
                     "type": "goto",
                     "goto": "session-check",
-                    "text": "Kit is ready—let's step outside.",
+                    "text": "Kit is ready\u2014let's step outside.",
                     "requiresItems": [
                         {
                             "id": "0ce0d0d4-d734-4099-b903-92e9b1c52b05",
@@ -73,7 +73,7 @@
                 {
                     "type": "goto",
                     "goto": "fallback",
-                    "text": "Clouded out or unsafe tonight—use the fallback plan."
+                    "text": "Clouded out or unsafe tonight\u2014use the fallback plan."
                 }
             ]
         },
@@ -89,7 +89,7 @@
                 {
                     "type": "goto",
                     "goto": "session-check",
-                    "text": "Updated forecast ready—re-evaluate conditions.",
+                    "text": "Updated forecast ready\u2014re-evaluate conditions.",
                     "requiresItems": [
                         {
                             "id": "808f8298-ba98-43d6-907b-1b34a7daffb8",
@@ -133,7 +133,7 @@
                 {
                     "type": "goto",
                     "goto": "observe",
-                    "text": "A field is missing—I'll re-log this session."
+                    "text": "A field is missing\u2014I'll re-log this session."
                 }
             ]
         },
@@ -154,11 +154,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/light-pollution"],
+    "requiresQuests": [
+        "astronomy/light-pollution"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-15",

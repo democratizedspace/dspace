@@ -177,15 +177,17 @@
     ],
     "rewards": [
         {
-            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+            "id": "d42ff5b9-f819-4d5f-b6b5-a9f3b9183b2f",
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 4,
         "score": 96,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-light-pollution-2025-08-05",

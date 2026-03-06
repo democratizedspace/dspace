@@ -143,12 +143,12 @@
                             "count": 1
                         }
                     ],
-                    "text": "Yes—logged order is consistent and uncertainty is documented."
+                    "text": "Yes\u2014logged order is consistent and uncertainty is documented."
                 },
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "No—evidence is inconsistent; rerun with safer conditions."
+                    "text": "No\u2014evidence is inconsistent; rerun with safer conditions."
                 }
             ]
         },
@@ -159,7 +159,7 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Conditions stabilized—retry via one of the routes."
+                    "text": "Conditions stabilized\u2014retry via one of the routes."
                 },
                 {
                     "type": "goto",
@@ -187,11 +187,17 @@
     ],
     "rewards": [
         {
+            "id": "6d5b08cd-31ef-44eb-9637-51690bd9e6dc",
+            "count": 1
+        },
+        {
             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
             "count": 100
         }
     ],
-    "requiresQuests": ["astronomy/north-star"],
+    "requiresQuests": [
+        "astronomy/north-star"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
