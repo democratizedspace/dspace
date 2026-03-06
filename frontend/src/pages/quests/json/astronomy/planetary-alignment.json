@@ -189,13 +189,17 @@
         {
             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
             "count": 100
+        },
+        {
+            "id": "40b059e7-a11d-49da-8aed-05570804c036",
+            "count": 1
         }
     ],
     "requiresQuests": ["astronomy/north-star"],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
