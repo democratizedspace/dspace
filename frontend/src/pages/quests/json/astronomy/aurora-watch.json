@@ -142,24 +142,8 @@
             "text": "Nice catch! Your notes help track storms. Warm up, check in with your buddy, and reuse dark sites.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the aurora activity timeline.",
-                    "grantsItems": [
-                        {
-                            "id": "2e856b2e-cd35-44ed-b7e0-76a781c47bb9",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "I'll watch again soon.",
-                    "requiresItems": [
-                        {
-                            "id": "2e856b2e-cd35-44ed-b7e0-76a781c47bb9",
-                            "count": 1
-                        }
-                    ]
+                    "text": "I'll watch again soon."
                 }
             ]
         }
@@ -174,9 +158,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/light-pollution"
-    ],
+    "requiresQuests": ["astronomy/light-pollution"],
     "hardening": {
         "passes": 1,
         "score": 95,

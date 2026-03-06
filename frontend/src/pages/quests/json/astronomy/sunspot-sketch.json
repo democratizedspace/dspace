@@ -190,24 +190,8 @@
             "text": "Great work. You used projection safely, logged structured evidence, and recovered correctly when conditions drifted.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the sunspot transit notebook page.",
-                    "grantsItems": [
-                        {
-                            "id": "ea043858-4d09-4510-a495-3ddae395ce51",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Solar sketch complete.",
-                    "requiresItems": [
-                        {
-                            "id": "ea043858-4d09-4510-a495-3ddae395ce51",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Solar sketch complete."
                 }
             ]
         }
@@ -222,9 +206,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/saturn-rings"
-    ],
+    "requiresQuests": ["astronomy/saturn-rings"],
     "hardening": {
         "passes": 0,
         "score": 95,

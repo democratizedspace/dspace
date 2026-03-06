@@ -169,24 +169,8 @@
             "text": "Great work. You captured a reproducible star-count baseline and handled visibility failures safely.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the skyglow gradient worksheet.",
-                    "grantsItems": [
-                        {
-                            "id": "78bd4b60-a932-4d22-9b34-ecf9c3d46a75",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "I'll track this monthly.",
-                    "requiresItems": [
-                        {
-                            "id": "78bd4b60-a932-4d22-9b34-ecf9c3d46a75",
-                            "count": 1
-                        }
-                    ]
+                    "text": "I'll track this monthly."
                 }
             ]
         }
@@ -201,9 +185,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/constellations"
-    ],
+    "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 4,
         "score": 96,

@@ -119,24 +119,8 @@
             "text": "Excellent work! Preserve the best frame notes in your logbook so the next eclipse setup starts from proven settings.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the lunar eclipse phase sequence strip.",
-                    "grantsItems": [
-                        {
-                            "id": "7019df00-c069-4644-9189-71340620ffba",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Capture set archived.",
-                    "requiresItems": [
-                        {
-                            "id": "7019df00-c069-4644-9189-71340620ffba",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Capture set archived."
                 }
             ]
         }
@@ -151,9 +135,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/observe-moon"
-    ],
+    "requiresQuests": ["astronomy/observe-moon"],
     "hardening": {
         "passes": 0,
         "score": 90,

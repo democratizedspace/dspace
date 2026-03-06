@@ -185,24 +185,8 @@
             "text": "Great split. You proved the observation with logged evidence, interpretation, and a safe recovery plan for poor seeing.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the binary star split verification card.",
-                    "grantsItems": [
-                        {
-                            "id": "9db35820-1243-4567-a8a4-822530fb6328",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Logged and ready for the next target.",
-                    "requiresItems": [
-                        {
-                            "id": "9db35820-1243-4567-a8a4-822530fb6328",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Logged and ready for the next target."
                 }
             ]
         }
@@ -217,9 +201,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/constellations"
-    ],
+    "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 0,
         "score": 100,

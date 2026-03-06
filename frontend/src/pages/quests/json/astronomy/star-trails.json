@@ -178,24 +178,8 @@
             "text": "Beautiful work. You captured, interpreted, and recovered safely when conditions shifted.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the star trail composition plan.",
-                    "grantsItems": [
-                        {
-                            "id": "684ec366-e0b1-4425-94fd-7dd9775dac08",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Save to the observing log.",
-                    "requiresItems": [
-                        {
-                            "id": "684ec366-e0b1-4425-94fd-7dd9775dac08",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Save to the observing log."
                 }
             ]
         }
@@ -210,9 +194,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/planetary-alignment"
-    ],
+    "requiresQuests": ["astronomy/planetary-alignment"],
     "hardening": {
         "passes": 0,
         "score": 90,

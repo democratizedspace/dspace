@@ -187,24 +187,8 @@
             "text": "Excellent diligence. You logged reproducible evidence, handled unstable conditions safely, and proved orbital motion without guessing.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the galilean moon position chart.",
-                    "grantsItems": [
-                        {
-                            "id": "be314ec9-c289-42e9-a6d6-5acc56779412",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Space feels closer already.",
-                    "requiresItems": [
-                        {
-                            "id": "be314ec9-c289-42e9-a6d6-5acc56779412",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Space feels closer already."
                 }
             ]
         }
@@ -219,9 +203,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/basic-telescope"
-    ],
+    "requiresQuests": ["astronomy/basic-telescope"],
     "hardening": {
         "passes": 0,
         "score": 95,

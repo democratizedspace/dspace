@@ -136,24 +136,8 @@
             "text": "Great observation! Tracking phases helps practice precision focusing.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the venus phase progression card.",
-                    "grantsItems": [
-                        {
-                            "id": "7e9cc033-a1bd-40fc-92b1-7d55b9dba295",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Can't wait for the next phase.",
-                    "requiresItems": [
-                        {
-                            "id": "7e9cc033-a1bd-40fc-92b1-7d55b9dba295",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Can't wait for the next phase."
                 }
             ]
         }
@@ -168,9 +152,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/saturn-rings"
-    ],
+    "requiresQuests": ["astronomy/saturn-rings"],
     "hardening": {
         "passes": 1,
         "score": 100,

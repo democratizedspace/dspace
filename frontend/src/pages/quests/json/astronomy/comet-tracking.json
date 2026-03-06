@@ -160,24 +160,8 @@
             "text": "Excellent. Your comet track now has repeatable evidence and a clear safety-aware recovery plan.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the comet drift comparison sheet.",
-                    "grantsItems": [
-                        {
-                            "id": "71ff4717-2def-43bf-8f13-cf249bf86f24",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "I'll compare tomorrow's position.",
-                    "requiresItems": [
-                        {
-                            "id": "71ff4717-2def-43bf-8f13-cf249bf86f24",
-                            "count": 1
-                        }
-                    ]
+                    "text": "I'll compare tomorrow's position."
                 }
             ]
         }
@@ -192,9 +176,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/meteor-shower"
-    ],
+    "requiresQuests": ["astronomy/meteor-shower"],
     "hardening": {
         "passes": 1,
         "score": 95,

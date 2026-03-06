@@ -196,24 +196,8 @@
             "text": "Great catch. You resolved Saturn's rings with evidence, interpretation, and safe fallback handling.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the saturn ring division sketch.",
-                    "grantsItems": [
-                        {
-                            "id": "b30925da-0fa5-4ecd-ba18-af6ff7c70e23",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Ring observation complete.",
-                    "requiresItems": [
-                        {
-                            "id": "b30925da-0fa5-4ecd-ba18-af6ff7c70e23",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Ring observation complete."
                 }
             ]
         }
@@ -228,9 +212,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/basic-telescope"
-    ],
+    "requiresQuests": ["astronomy/basic-telescope"],
     "hardening": {
         "passes": 1,
         "score": 95,

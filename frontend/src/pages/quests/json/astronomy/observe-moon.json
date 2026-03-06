@@ -156,24 +156,8 @@
             "text": "Nice work! Cap ink, wipe quill, close logbook and dry the telescope before packing up.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the moon crater sketch sheet.",
-                    "grantsItems": [
-                        {
-                            "id": "55851b57-86b7-4b16-a341-6a831aff0da5",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Onward!",
-                    "requiresItems": [
-                        {
-                            "id": "55851b57-86b7-4b16-a341-6a831aff0da5",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Onward!"
                 }
             ]
         }
@@ -188,9 +172,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "welcome/howtodoquests"
-    ],
+    "requiresQuests": ["welcome/howtodoquests"],
     "hardening": {
         "passes": 3,
         "score": 95,

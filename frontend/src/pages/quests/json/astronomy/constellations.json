@@ -165,24 +165,8 @@
             "text": "Excellent. You mapped constellations with reproducible evidence and used a safe fallback when conditions shifted.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the constellation route atlas page.",
-                    "grantsItems": [
-                        {
-                            "id": "eefbf274-67f1-4ea8-8253-25f85c0db336",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Thanks, Nova!",
-                    "requiresItems": [
-                        {
-                            "id": "eefbf274-67f1-4ea8-8253-25f85c0db336",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Thanks, Nova!"
                 }
             ]
         }
@@ -197,9 +181,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/jupiter-moons"
-    ],
+    "requiresQuests": ["astronomy/jupiter-moons"],
     "hardening": {
         "passes": 1,
         "score": 95,

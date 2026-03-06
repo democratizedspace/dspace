@@ -198,24 +198,8 @@
             "text": "Excellent. You located Polaris with repeatable evidence and used a safe recovery protocol when conditions shifted.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the north-star alignment card.",
-                    "grantsItems": [
-                        {
-                            "id": "8615b34c-f00e-4258-b94a-67bd58d11ece",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Polaris fix complete.",
-                    "requiresItems": [
-                        {
-                            "id": "8615b34c-f00e-4258-b94a-67bd58d11ece",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Polaris fix complete."
                 }
             ]
         }
@@ -230,9 +214,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/constellations"
-    ],
+    "requiresQuests": ["astronomy/constellations"],
     "hardening": {
         "passes": 1,
         "score": 95,

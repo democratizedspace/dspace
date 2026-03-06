@@ -266,24 +266,8 @@
             "text": "Awesome. You captured or deferred the pass with explicit evidence, fallback handling, and safe night operations.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the iss timing callout sheet.",
-                    "grantsItems": [
-                        {
-                            "id": "aa8d4075-2959-4b9d-84a4-85524e432b0b",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "Agreed!",
-                    "requiresItems": [
-                        {
-                            "id": "aa8d4075-2959-4b9d-84a4-85524e432b0b",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Agreed!"
                 }
             ]
         }
@@ -298,7 +282,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/observe-moon"
-    ]
+    "requiresQuests": ["astronomy/observe-moon"]
 }

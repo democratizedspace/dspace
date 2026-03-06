@@ -174,24 +174,8 @@
             "text": "Great work! You produced a usable observation record with interpretation, fallback handling, and clear night-safety checks.",
             "options": [
                 {
-                    "type": "grantsItems",
-                    "text": "Record and archive this session on the meteor tally board.",
-                    "grantsItems": [
-                        {
-                            "id": "6aa2c7a1-f604-4bf6-93f8-5a37d017301f",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
                     "type": "finish",
-                    "text": "I'll compare the next peak night.",
-                    "requiresItems": [
-                        {
-                            "id": "6aa2c7a1-f604-4bf6-93f8-5a37d017301f",
-                            "count": 1
-                        }
-                    ]
+                    "text": "I'll compare the next peak night."
                 }
             ]
         }
@@ -206,7 +190,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/jupiter-moons"
-    ]
+    "requiresQuests": ["astronomy/jupiter-moons"]
 }
