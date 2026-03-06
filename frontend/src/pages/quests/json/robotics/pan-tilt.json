@@ -27,9 +27,9 @@
             "text": "Mount two servos with thread-lock and strain-relieved wires. Keep enough cable slack so full-range sweeps do not snag.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "safety",
-                    "text": "Servos mounted and cable paths cleared.",
+                    "type": "process",
+                    "process": "assemble-pan-tilt-mount",
+                    "text": "Assemble both axes, apply thread-lock, and complete controlled sweep calibration (about 2 hours).",
                     "requiresItems": [
                         {
                             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
@@ -90,7 +90,7 @@
         },
         {
             "id": "evidence",
-            "text": "Evidence gate: pass requires two consecutive sweeps with <3° center error and no cable snag events.",
+            "text": "Evidence gate: pass requires two consecutive sweeps with <3\u00b0 center error and no cable snag events.",
             "options": [
                 {
                     "type": "finish",
@@ -135,8 +135,8 @@
     ],
     "hardening": {
         "passes": 0,
-        "score": 92,
-        "emoji": "🛠️",
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

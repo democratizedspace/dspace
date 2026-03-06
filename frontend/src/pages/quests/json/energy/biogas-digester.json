@@ -32,20 +32,26 @@
                     "text": "I'll grab the battery pack."
                 },
                 {
-                    "type": "goto",
-                    "goto": "feed",
-                    "text": "Frame assembled, vent line routed, and leak check complete.",
+                    "type": "process",
+                    "process": "build-biogas-digester-small-scale",
+                    "text": "Run the full sealed-drum build, leak test, and safety commissioning (about 2 days).",
                     "requiresItems": [
                         {
                             "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
                             "count": 1
                         }
-                    ]
+                    ],
+                    "goto": "feed"
                 },
                 {
                     "type": "goto",
                     "goto": "safety-stop",
                     "text": "I smell gas or cannot maintain a seal."
+                },
+                {
+                    "type": "goto",
+                    "goto": "feed",
+                    "text": "Assembly checks complete; proceed to feed and seal the digester."
                 }
             ]
         },
@@ -54,20 +60,32 @@
             "text": "Add scraps and water, seal the drum, and start fermentation. Log output milestones so you can confirm healthy digestion.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "ferment-biogas-digester-batch",
+                    "text": "Run a full anaerobic digestion batch and collect methane output logs (about 21 days).",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ],
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Pressure spikes or vent condensate blocks the line."
+                },
+                {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Fermentation run complete; verify output and safety checks.",
+                    "text": "Fermentation log complete; move to output verification.",
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
                             "count": 50
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "safety-stop",
-                    "text": "Pressure spikes or vent condensate blocks the line."
                 }
             ]
         },
@@ -136,7 +154,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
