@@ -184,6 +184,10 @@
         {
             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
             "count": 1
+        },
+        {
+            "id": "6aa2c7a1-f604-4bf6-93f8-5a37d017301f",
+            "count": 1
         }
     ],
     "requiresQuests": ["astronomy/jupiter-moons"]

@@ -179,13 +179,7 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Save to the observing log.",
-                    "requiresItems": [
-                        {
-                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Save to the observing log."
                 }
             ]
         }
@@ -193,6 +187,10 @@
     "rewards": [
         {
             "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+            "count": 1
+        },
+        {
+            "id": "684ec366-e0b1-4425-94fd-7dd9775dac08",
             "count": 1
         }
     ],

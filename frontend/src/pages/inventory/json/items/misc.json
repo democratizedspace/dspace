@@ -2612,5 +2612,173 @@
         "image": "/assets/lab_spill_tray_on_bench.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
+    },
+    {
+        "id": "55851b57-86b7-4b16-a341-6a831aff0da5",
+        "name": "moon crater sketch sheet",
+        "description": "Detailed A5 observation sheet documenting lunar phase, local seeing conditions (1-5 scale), and labeled crater rim shading from a 20-minute telescope session; includes timestamp, azimuth, and weather notes for repeatability.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "f293d45c-49bd-4c53-a73f-88233c5b6acc",
+        "name": "telescope build alignment card",
+        "description": "Stiff cardstock alignment card with measured focal spacing marks, tube centering notes, and tripod balance settings used to tune a hand-built telescope for stable nighttime viewing.",
+        "image": "/assets/cardboard_mailing_tube_telescope_body.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "82edf24f-3a5b-442d-8214-191454a6bc52",
+        "name": "andromeda acquisition log",
+        "description": "Two-page star-hop record tracing Mirach to Andromeda with eyepiece orientation arrows, estimated surface brightness notes, and a confidence score for re-acquisition on future nights.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "aa8d4075-2959-4b9d-84a4-85524e432b0b",
+        "name": "iss timing callout sheet",
+        "description": "Field checklist listing pass start/end times, maximum elevation, compass bearings, and verbal timing cues used to coordinate eyes-up spotting without losing situational awareness.",
+        "image": "/assets/weekly_quest_reminder_calendar_phone.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "3d92d73f-271e-4f8c-a482-4fc51cc69abf",
+        "name": "iss long-exposure photo print",
+        "description": "4x6 in archival print of a continuous ISS trail crossing a dark sky with annotated exposure settings, capture timestamp, and compass heading to preserve photographic proof of the flyover for posterity.",
+        "image": "/assets/digital_camera_astrophotography.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "be314ec9-c289-42e9-a6d6-5acc56779412",
+        "name": "galilean moon position chart",
+        "description": "Session chart plotting Io, Europa, Ganymede, and Callisto positions relative to Jupiter across multiple timestamps, with seeing notes and mirror-flip correction markings.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "eefbf274-67f1-4ea8-8253-25f85c0db336",
+        "name": "constellation route atlas page",
+        "description": "Annotated atlas page showing completed seasonal star-hop route, naked-eye anchor stars, and fallback waypoints used when haze obscured intermediate patterns.",
+        "image": "/assets/constellation_sketch_set.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "9db35820-1243-4567-a8a4-822530fb6328",
+        "name": "binary star split verification card",
+        "description": "Observation card recording magnification used, focus micro-adjustments, and color contrast notes confirming repeated visual separation of a binary pair over multiple attempts.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "78bd4b60-a932-4d22-9b34-ecf9c3d46a75",
+        "name": "skyglow gradient worksheet",
+        "description": "Site worksheet capturing horizon-by-horizon sky brightness estimates, glare source directions, and mitigation ideas (screening, timing, shielding) for future observations.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "2e856b2e-cd35-44ed-b7e0-76a781c47bb9",
+        "name": "aurora activity timeline",
+        "description": "Timeline sheet correlating aurora arc brightness changes with local time, camera settings, and cloud cover windows to support later analysis and storytelling.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "7019df00-c069-4644-9189-71340620ffba",
+        "name": "lunar eclipse phase sequence strip",
+        "description": "Sequential strip of hand-timed eclipse phase notes (penumbral, partial, totality) with color descriptions and edge-shadow sketches captured at regular intervals.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "6aa2c7a1-f604-4bf6-93f8-5a37d017301f",
+        "name": "meteor tally board",
+        "description": "Night tally board with directional radiant estimates, brightness classes, and minute-by-minute meteor counts, including excluded false positives like aircraft traces.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "71ff4717-2def-43bf-8f13-cf249bf86f24",
+        "name": "comet drift comparison sheet",
+        "description": "Comparison sheet overlaying comet position against fixed stars across nights, including tail length estimates and transparency ratings for each session.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "8615b34c-f00e-4258-b94a-67bd58d11ece",
+        "name": "north-star alignment card",
+        "description": "Durable card documenting Polaris lock procedure, improvised sightline checks, and landmark bearings used to establish reliable nighttime orientation in the field.",
+        "image": "/assets/planisphere_star_chart.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "31a986a6-537d-42d4-856f-274e6cb38c69",
+        "name": "orion nebula glow sketch",
+        "description": "Field sketch capturing the Orion Nebula core brightness gradient, wing structure hints, and star anchor references used to validate the observation under varying seeing.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "40b059e7-a11d-49da-8aed-05570804c036",
+        "name": "planetary alignment witness chart",
+        "description": "Witness chart recording relative planetary spacing, altitude bands, and horizon reference objects during a narrow alignment window for later verification.",
+        "image": "/assets/planisphere_star_chart.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "f537cbd4-e5f0-4ef9-a776-b126894988cf",
+        "name": "satellite pass classification notes",
+        "description": "Classification notes distinguishing likely satellites from aircraft by steady brightness, non-blinking tracks, and predicted path agreement.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "b30925da-0fa5-4ecd-ba18-af6ff7c70e23",
+        "name": "saturn ring division sketch",
+        "description": "Observation sketch marking ring tilt angle, Cassini-division visibility confidence, and focusing tweaks that produced the clearest ring separation.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "684ec366-e0b1-4425-94fd-7dd9775dac08",
+        "name": "star trail composition plan",
+        "description": "Long-exposure composition plan with tripod orientation, foreground framing marks, and interval timing strategy used to build clean circular or arcing trails.",
+        "image": "/assets/digital_camera_astrophotography.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "ea043858-4d09-4510-a495-3ddae395ce51",
+        "name": "sunspot transit notebook page",
+        "description": "Solar session notebook page with filtered-view safety checklist, sunspot group coordinates, and progression arrows showing apparent transit across the disk.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "7e9cc033-a1bd-40fc-92b1-7d55b9dba295",
+        "name": "venus phase progression card",
+        "description": "Progression card comparing observed Venus crescent/gibbous outlines over time, with elongation notes and atmospheric steadiness comments for each attempt.",
+        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Astronomy & Observation"
     }
 ]

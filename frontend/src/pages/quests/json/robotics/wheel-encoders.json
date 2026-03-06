@@ -27,9 +27,9 @@
             "text": "Power down, lift the chassis, and mount one encoder per wheel hub. Route 5V/GND and signal lines to pins 2/3 while keeping wires clear of rotation.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "verify-safety",
-                    "text": "Mechanical install complete; run safety and signal checks.",
+                    "type": "process",
+                    "process": "install-wheel-encoders",
+                    "text": "Install both encoder discs/sensors and complete pulse-integrity calibration (about 2 hours).",
                     "requiresItems": [
                         {
                             "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
@@ -163,8 +163,8 @@
     "requiresQuests": ["robotics/servo-gripper"],
     "hardening": {
         "passes": 2,
-        "score": 90,
-        "emoji": "✅",
+        "score": 95,
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-09",

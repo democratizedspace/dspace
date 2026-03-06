@@ -9506,6 +9506,38 @@
         }
     },
     {
+        "id": "capture-iss-memento-photo",
+        "title": "Capture and archive an ISS long-exposure memento photo",
+        "requireItems": [
+            {
+                "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                "count": 1
+            },
+            {
+                "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                "count": 1
+            },
+            {
+                "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "3d92d73f-271e-4f8c-a482-4fc51cc69abf",
+                "count": 1
+            }
+        ],
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
         "id": "chemistry-dilute-hcl",
         "title": "Dilute hydrochloric acid into a labeled working solution",
         "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
@@ -9551,6 +9583,25 @@
         "hardening": {
             "passes": 0,
             "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "build-biogas-digester-small-scale",
+        "title": "Build and pressure-test a small-scale biogas digester",
+        "requireItems": [
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2d",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -9606,6 +9657,30 @@
         }
     },
     {
+        "id": "ferment-biogas-digester-batch",
+        "title": "Run a biogas digestion batch to methane output",
+        "requireItems": [
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 80
+            }
+        ],
+        "duration": "21d",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
         "id": "chemistry-prepare-buffer",
         "title": "Prepare a buffer solution batch from diluted acid/base components",
         "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
@@ -9647,6 +9722,29 @@
         "hardening": {
             "passes": 0,
             "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "install-aquarium-led-photoperiod",
+        "title": "Install aquarium LED fixture and run first photoperiod cycle",
+        "requireItems": [
+            {
+                "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                "count": 1
+            },
+            {
+                "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "1d",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
@@ -9714,6 +9812,25 @@
         }
     },
     {
+        "id": "assemble-line-follower-chassis",
+        "title": "Assemble and align a line-follower robot chassis",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 2
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "3h",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
         "id": "chemistry-form-precipitate",
         "title": "Run the precipitation reaction and capture slurry evidence",
         "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
@@ -9760,6 +9877,63 @@
         }
     },
     {
+        "id": "integrate-obstacle-avoidance-sensor",
+        "title": "Integrate ultrasonic obstacle avoidance on a mobile robot",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-pan-tilt-mount",
+        "title": "Assemble and calibrate a pan-tilt servo mount",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 2
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-servo-gripper",
+        "title": "Assemble and calibrate a servo gripper",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
         "id": "chemistry-filter-precipitate",
         "title": "Filter and collect precipitate with disposal-ready labels",
         "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
@@ -9793,6 +9967,33 @@
         "hardening": {
             "passes": 0,
             "score": 92,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "install-wheel-encoders",
+        "title": "Install and calibrate wheel encoders",
+        "requireItems": [
+            {
+                "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                "count": 2
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }

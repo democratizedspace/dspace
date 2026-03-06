@@ -394,8 +394,6 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar-1kWh`
 - Dialogue `requiresItems` gates:
-    - `assemble` → "Frame assembled, vent line routed, and leak check complete." — 200 Wh battery pack ×1
-    - `feed` → "Fermentation run complete; verify output and safety checks." — dWatt ×50
     - `safety-stop` → "Seal is stable again; resume fermentation." — 200 Wh battery pack ×1
     - `verify` → "Verified: output + safety log both pass." — dWatt ×50
 - Grants:
@@ -404,7 +402,14 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Rewards:
     - portable solar panel ×3
 - Processes used:
-    - None
+    - [build-biogas-digester-small-scale](/processes/build-biogas-digester-small-scale)
+        - Requires: 200 Wh battery pack ×1
+        - Consumes: none
+        - Creates: none
+    - [ferment-biogas-digester-batch](/processes/ferment-biogas-digester-batch)
+        - Requires: 200 Wh battery pack ×1
+        - Consumes: none
+        - Creates: dWatt ×80
 
 ## 17) Accrue 1,000 dSolar (`energy/dSolar-1kW`)
 
