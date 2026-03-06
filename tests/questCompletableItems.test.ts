@@ -369,6 +369,112 @@ const buildQuestPrerequisiteClosure = (allQuests: Array<any>) => {
     return memo;
 };
 
+type TransformSoftLockConflict = {
+    processId: string;
+    consumedItemId: string;
+    createdItemId: string;
+    transformedQuestId: string;
+    rawQuestId: string;
+    sharedUnlockPrerequisites: string[];
+};
+
+const detectSiblingTransformSoftLockConflicts = ({
+    allQuests,
+    allProcesses,
+    prerequisiteClosure,
+}: {
+    allQuests: Array<any>;
+    allProcesses: Array<any>;
+    prerequisiteClosure: Map<string, Set<string>>;
+}) => {
+    const requiresByQuest = new Map(
+        allQuests.map((quest) => [quest.id, new Set<string>(quest.requiresQuests ?? [])])
+    );
+
+    const requiredItemsByQuest = new Map(
+        allQuests.map((quest: any) => [
+            quest.id,
+            uniqueItemIds([
+                ...getQuestLevelRequiredItemIds(quest),
+                ...getRequiredItemsFromFinishReachableTransitions(quest),
+                ...getFinishOptions(quest).flatMap((option: any) => getRequiredItemIds(option)),
+            ]),
+        ])
+    );
+
+
+    const creatorsByItem = new Map<string, Set<string>>();
+    for (const process of allProcesses) {
+        const processId = String(process.id ?? '').trim();
+        if (!processId) continue;
+        for (const createdItemId of toItemIds(process.createItems)) {
+            if (!createdItemId) continue;
+            if (!creatorsByItem.has(createdItemId)) creatorsByItem.set(createdItemId, new Set<string>());
+            creatorsByItem.get(createdItemId)?.add(processId);
+        }
+    }
+
+    const conflicts: TransformSoftLockConflict[] = [];
+    for (const process of allProcesses) {
+        const processId = String(process.id ?? '').trim();
+        if (!processId) continue;
+
+        for (const consumedItemId of toItemIds(process.consumeItems)) {
+            for (const createdItemId of toItemIds(process.createItems)) {
+                if (!consumedItemId || !createdItemId || consumedItemId === createdItemId) continue;
+
+                const creatorProcessIds = creatorsByItem.get(createdItemId) ?? new Set<string>();
+                if (creatorProcessIds.size !== 1 || !creatorProcessIds.has(processId)) continue;
+
+                const rawQuests = allQuests.filter((quest: any) =>
+                    (requiredItemsByQuest.get(quest.id) ?? []).includes(consumedItemId)
+                );
+                const transformedQuests = allQuests.filter((quest: any) =>
+                    (requiredItemsByQuest.get(quest.id) ?? []).includes(createdItemId)
+                );
+
+                for (const transformedQuest of transformedQuests) {
+                    const transformedDeps =
+                        prerequisiteClosure.get(transformedQuest.id) ?? new Set<string>();
+                    for (const rawQuest of rawQuests) {
+                        if (rawQuest.id === transformedQuest.id) continue;
+
+                        const rawTreeId = String(rawQuest.id).split('/')[0];
+                        const transformedTreeId = String(transformedQuest.id).split('/')[0];
+                        if (!rawTreeId || rawTreeId !== transformedTreeId) continue;
+
+                        const rawDeps = prerequisiteClosure.get(rawQuest.id) ?? new Set<string>();
+                        if (rawDeps.has(transformedQuest.id)) continue;
+                        if (transformedDeps.has(rawQuest.id)) continue;
+
+                        const sharedUnlockPrerequisites = [...rawDeps].filter((id) =>
+                            transformedDeps.has(id)
+                        );
+                        const rawDirectPrereqs = requiresByQuest.get(rawQuest.id) ?? new Set<string>();
+                        const transformedDirectPrereqs =
+                            requiresByQuest.get(transformedQuest.id) ?? new Set<string>();
+                        const sharesDirectUnlockSurface = [...rawDirectPrereqs].some((id) =>
+                            transformedDirectPrereqs.has(id)
+                        );
+                        if (!sharesDirectUnlockSurface) continue;
+
+                        conflicts.push({
+                            processId,
+                            consumedItemId,
+                            createdItemId,
+                            transformedQuestId: transformedQuest.id,
+                            rawQuestId: rawQuest.id,
+                            sharedUnlockPrerequisites,
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    return conflicts;
+};
+
 const getItemDependencies = (item: any) =>
     uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
 
@@ -642,114 +748,39 @@ describe('quest completion item availability', () => {
         ];
 
         const prerequisiteClosure = buildQuestPrerequisiteClosure(fixtureQuests);
-        const requiredItemsByQuest = new Map(
-            fixtureQuests.map((quest: any) => [
-                quest.id,
-                uniqueItemIds([
-                    ...getQuestLevelRequiredItemIds(quest),
-                    ...getRequiredItemsFromFinishReachableTransitions(quest),
-                    ...getFinishOptions(quest).flatMap((option: any) => getRequiredItemIds(option)),
-                ]),
-            ])
+        const conflicts = detectSiblingTransformSoftLockConflicts({
+            allQuests: fixtureQuests,
+            allProcesses: fixtureProcesses,
+            prerequisiteClosure,
+        }).map(
+            (conflict) =>
+                `${conflict.transformedQuestId} can soft-lock ${conflict.rawQuestId} via ${conflict.processId}`
         );
 
-        const conflicts: string[] = [];
-        for (const process of fixtureProcesses) {
-            for (const consumedItemId of toItemIds(process.consumeItems)) {
-                for (const createdItemId of toItemIds(process.createItems)) {
-                    if (consumedItemId === createdItemId) continue;
-                    const rawQuests = fixtureQuests.filter((quest: any) =>
-                        (requiredItemsByQuest.get(quest.id) ?? []).includes(consumedItemId)
-                    );
-                    const transformedQuests = fixtureQuests.filter((quest: any) =>
-                        (requiredItemsByQuest.get(quest.id) ?? []).includes(createdItemId)
-                    );
-
-                    for (const transformedQuest of transformedQuests) {
-                        const transformedDeps =
-                            prerequisiteClosure.get(transformedQuest.id) ?? new Set<string>();
-                        for (const rawQuest of rawQuests) {
-                            if (rawQuest.id === transformedQuest.id) continue;
-                            const rawDeps = prerequisiteClosure.get(rawQuest.id) ?? new Set<string>();
-                            if (rawDeps.has(transformedQuest.id)) continue;
-                            if (transformedDeps.has(rawQuest.id)) continue;
-                            const sharedUnlock = [...rawDeps].some((id) => transformedDeps.has(id));
-                            if (!sharedUnlock) continue;
-                            conflicts.push(
-                                `${transformedQuest.id} can soft-lock ${rawQuest.id} via ${process.id}`
-                            );
-                        }
-                    }
-                }
-            }
-        }
-
-        expect(conflicts).toContain(
-            'fixture/reminder can soft-lock fixture/catalog via fixture/polish-award'
-        );
+        expect(conflicts).toContain('fixture/reminder can soft-lock fixture/catalog via fixture/polish-award');
     });
 
-    it('keeps completionist transformed-item progression linear after cataloging', async () => {
+    it('scans repository-wide sibling transform soft-lock conflicts and finds none in completionist', async () => {
         const quests = await loadQuests();
-        const questById = new Map(quests.map((quest: any) => [quest.id, quest]));
         const prerequisiteClosure = buildQuestPrerequisiteClosure(quests);
-        const completionistQuestIds = quests
-            .filter((quest: any) => String(quest.id).startsWith('completionist/'))
-            .map((quest: any) => quest.id);
+        const conflicts = detectSiblingTransformSoftLockConflicts({
+            allQuests: quests,
+            allProcesses: processes as Array<any>,
+            prerequisiteClosure,
+        });
 
-        const rawAwardId = 'c01676ec-27e5-4a53-9a47-24bf6c5a56a9';
-        const polishedAwardId = '1030a6c5-88b9-46e9-b38a-b20d8d326764';
-        const displayedAwardId = 'a8120ce3-4a9d-4d49-b955-92bd9d7fbc07';
-
-        const requiredItemsByQuest = new Map(
-            completionistQuestIds.map((questId) => {
-                const quest = questById.get(questId);
-                return [
-                    questId,
-                    uniqueItemIds([
-                        ...getQuestLevelRequiredItemIds(quest),
-                        ...getRequiredItemsFromFinishReachableTransitions(quest),
-                        ...getFinishOptions(quest).flatMap((option: any) => getRequiredItemIds(option)),
-                    ]),
-                ];
-            })
+        const completionistConflicts = conflicts.filter(
+            (conflict) =>
+                conflict.transformedQuestId.startsWith('completionist/') ||
+                conflict.rawQuestId.startsWith('completionist/')
         );
 
-        const rawAwardQuestIds = completionistQuestIds.filter((questId) =>
-            (requiredItemsByQuest.get(questId) ?? []).includes(rawAwardId)
-        );
-        const polishedAwardQuestIds = completionistQuestIds.filter((questId) =>
-            (requiredItemsByQuest.get(questId) ?? []).includes(polishedAwardId)
+        const failureMessages = completionistConflicts.map(
+            (conflict) =>
+                `${conflict.transformedQuestId} can soft-lock ${conflict.rawQuestId} via process ${conflict.processId} (${conflict.consumedItemId} -> ${conflict.createdItemId})`
         );
 
-        const displayedAwardQuestIds = completionistQuestIds.filter((questId) =>
-            (requiredItemsByQuest.get(questId) ?? []).includes(displayedAwardId)
-        );
-
-        expect(rawAwardQuestIds).toContain('completionist/catalog');
-        expect(polishedAwardQuestIds).toContain('completionist/display');
-        expect(displayedAwardQuestIds).toContain('completionist/reminder');
-
-        const nonLinearPairs: string[] = [];
-        for (const transformedQuestId of polishedAwardQuestIds) {
-            const transformedDeps = prerequisiteClosure.get(transformedQuestId) ?? new Set<string>();
-            for (const rawQuestId of rawAwardQuestIds) {
-                if (transformedQuestId === rawQuestId) continue;
-                if (transformedDeps.has(rawQuestId)) continue;
-                nonLinearPairs.push(`${transformedQuestId} -> ${rawQuestId}`);
-            }
-        }
-
-        for (const transformedQuestId of displayedAwardQuestIds) {
-            const transformedDeps = prerequisiteClosure.get(transformedQuestId) ?? new Set<string>();
-            for (const polishedQuestId of polishedAwardQuestIds) {
-                if (transformedQuestId === polishedQuestId) continue;
-                if (transformedDeps.has(polishedQuestId)) continue;
-                nonLinearPairs.push(`${transformedQuestId} -> ${polishedQuestId}`);
-            }
-        }
-
-        expect(nonLinearPairs).toEqual([]);
+        expect(failureMessages).toEqual([]);
     });
 
     it('has no feasible dialogue dead-ends between start and finish without placeholder pricing', async () => {
