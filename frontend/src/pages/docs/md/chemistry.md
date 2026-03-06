@@ -25,7 +25,8 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `requiresQuests`: `welcome/howtodoquests`
 - Dialogue `requiresItems` gates:
     - `safety` → "Safety gear is on and tools are ready." — nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
-    - `verify` → "Stable run documented; proceed to closeout." — 250 mL glass beaker ×1
+    - `verify` → "Stable run documented; proceed to closeout." — safe reaction disposal log ×1
+    - `finish` → "Logged and ready for the next experiment." — safe reaction disposal log ×1, fizz reaction cylinder sample ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -36,10 +37,14 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
         - Consumes: none
         - Creates: none
-    - [log-safe-reaction](/processes/log-safe-reaction)
-        - Requires: 250 mL glass beaker ×1
+    - [capture-fizz-reaction-sample](/processes/capture-fizz-reaction-sample)
+        - Requires: nitrile gloves (pair) ×1, safety goggles ×1, 250 mL glass beaker ×1, 100 mL graduated cylinder ×1
         - Consumes: none
-        - Creates: none
+        - Creates: fizz reaction cylinder sample ×1
+    - [log-safe-reaction-disposal](/processes/log-safe-reaction-disposal)
+        - Requires: 250 mL glass beaker ×1, fizz reaction cylinder sample ×1
+        - Consumes: none
+        - Creates: safe reaction disposal log ×1
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
@@ -79,14 +84,18 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `start` → "Bench is staged and PPE is confirmed." — nitrile gloves (pair) ×1, safety goggles ×1, lab coat ×1, spill tray ×1
     - `micro-batch` → "Micro-batch dilution complete; verify pH." — 250 mL glass beaker ×1, glass stir rod ×1, hydrochloric acid (37%, 500 mL) ×1
     - `staged-pour` → "Staged pour complete; run verification." — 250 mL glass beaker ×1, glass stir rod ×1, hydrochloric acid (37%, 500 mL) ×1
-    - `verify` → "Reading logged and dilution is stable for storage." — pH strip ×1
-    - `finish` → "Safety first." — pH strip ×1, spill tray ×1
+    - `verify` → "Reading logged and dilution is stable for storage." — diluted hydrochloric acid stock ×1
+    - `finish` → "Safety first." — diluted hydrochloric acid stock ×1, spill tray ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - stevia tasting solution ×1
 - Processes used:
+    - [bottle-diluted-acid-stock](/processes/bottle-diluted-acid-stock)
+        - Requires: 250 mL glass beaker ×1, glass stir rod ×1, pH strip ×1, spill tray ×1
+        - Consumes: none
+        - Creates: diluted hydrochloric acid stock ×1
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
@@ -103,14 +112,22 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Dialogue `requiresItems` gates:
     - `kit-response` → "Kit run complete; verify with pH strip." — pH strip ×1
     - `manual-response` → "Manual neutralization complete; proceed to pH verification." — pH strip ×1
-    - `verify` → "Verification passed: spill zone is neutral and controlled." — pH strip ×1
+    - `verify` → "Verification passed: spill zone is neutral and controlled." — neutralized spill waste bag ×1
+    - `finish` → "Neutralization protocol complete." — neutralized spill waste bag ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
     - stevia tasting solution ×1
 - Processes used:
-    - None (quest gates rely on PPE + pH-strip verification evidence in dialogue branches).
+    - [adjust-ph](/processes/adjust-ph)
+        - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
+        - Consumes: pH down solution (500 mL) ×0.05, pH up solution (potassium carbonate) ×0.05
+        - Creates: none
+    - [package-neutralized-spill-waste](/processes/package-neutralized-spill-waste)
+        - Requires: nitrile gloves (pair) ×1, pH strip ×1
+        - Consumes: none
+        - Creates: neutralized spill waste bag ×1
 - QA notes:
     - Flow is now non-linear (spill-kit path vs manual path) with a shared verification node.
     - Recovery branch enforces stop-work behavior, re-containment, and retry/escalation before closure.
@@ -123,7 +140,8 @@ Chemistry quests build practical progression through the chemistry skill tree. T
 - Dialogue `requiresItems` gates:
     - `measured-mix` → "Measured batch logged—review stability window." — hydroponic pH reading ×1, nitrile gloves (pair) ×1, safety goggles ×1
     - `pilot-mix` → "Pilot data captured—evaluate against pass bounds." — hydroponic pH reading ×1, lab coat ×1
-    - `interpret` → "Reading is stable and in-range (6.8–7.2)." — hydroponic pH reading ×1
+    - `interpret` → "Reading is stable and in-range (6.8–7.2)." — labeled buffer solution batch ×1
+    - `finish` → "Buffer ready." — labeled buffer solution batch ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -134,6 +152,10 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
         - Consumes: pH strip ×1
         - Creates: hydroponic pH reading ×1
+    - [stage-buffer-batch](/processes/stage-buffer-batch)
+        - Requires: hydroponic pH reading ×1, 250 mL glass beaker ×1
+        - Consumes: none
+        - Creates: labeled buffer solution batch ×1
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
@@ -151,8 +173,8 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `start` → "Run baseline measurement with PPE on." — nitrile gloves (pair) ×1, safety goggles ×1, hydroponics tub (ready) ×1
     - `baseline` → "Baseline recorded, interpret before adjusting." — hydroponic pH reading ×1
     - `interpret` → "Reading is within 6.0-7.2; no further adjustment needed." — hydroponic pH reading ×1
-    - `retest` → "Verification is inside 6.0-7.2." — hydroponic pH reading ×1
-    - `finish` → "Chemistry in harmony." — hydroponic pH reading ×1
+    - `retest` → "Verification is inside 6.0-7.2." — pH-adjusted solution sample ×1
+    - `finish` → "Chemistry in harmony." — pH-adjusted solution sample ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -167,6 +189,10 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: nitrile gloves (pair) ×1, safety goggles ×1, glass stir rod ×1, pH down solution (500 mL) ×1, pH up solution (potassium carbonate) ×1
         - Consumes: pH down solution (500 mL) ×0.05, pH up solution (potassium carbonate) ×0.05
         - Creates: none
+    - [bottle-ph-adjusted-sample](/processes/bottle-ph-adjusted-sample)
+        - Requires: hydroponic pH reading ×1, 100 mL graduated cylinder ×1
+        - Consumes: none
+        - Creates: pH-adjusted solution sample ×1
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1
@@ -182,7 +208,8 @@ Chemistry quests build practical progression through the chemistry skill tree. T
     - `requiresQuests`: `chemistry/ph-adjustment`
 - Dialogue `requiresItems` gates:
     - `mix` → "I captured a visible precipitate plus a stable reading." — hydroponic pH reading ×1
-    - `interpret` → "Pass: precipitate is stable and pH is 6.0–8.0." — hydroponic pH reading ×1
+    - `interpret` → "Pass: precipitate is stable and pH is 6.0–8.0." — precipitate slurry vial ×1
+    - `finish` → "Sample collected." — precipitate slurry vial ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -193,6 +220,10 @@ Chemistry quests build practical progression through the chemistry skill tree. T
         - Requires: hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1, 100 mL graduated cylinder ×1
         - Consumes: pH strip ×1
         - Creates: hydroponic pH reading ×1
+    - [collect-precipitate-slurry](/processes/collect-precipitate-slurry)
+        - Requires: hydroponic pH reading ×1, 250 mL glass beaker ×1
+        - Consumes: none
+        - Creates: precipitate slurry vial ×1
     - [wash-hands](/processes/wash-hands)
         - Requires: sink ×1
         - Consumes: liquid soap ×1, paper towel ×1

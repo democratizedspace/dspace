@@ -138,12 +138,17 @@
             "text": "Use a pH strip and record the reading. If the mix is unstable or outside your expected range, troubleshoot before storage.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "bottle-diluted-acid-stock",
+                    "text": "Bottle, label, and stage the diluted acid stock for controlled storage."
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Reading logged and dilution is stable for storage.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "bcac759e-a699-432c-9592-9b15b337a17e",
                             "count": 1
                         }
                     ]
@@ -180,7 +185,7 @@
                     "text": "Safety first.",
                     "requiresItems": [
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "bcac759e-a699-432c-9592-9b15b337a17e",
                             "count": 1
                         },
                         {
@@ -198,5 +203,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-test"]
+    "requiresQuests": [
+        "chemistry/ph-test"
+    ]
 }

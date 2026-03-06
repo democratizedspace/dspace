@@ -9460,5 +9460,224 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "capture-fizz-reaction-sample",
+        "title": "Capture fizz reaction sample for disposal",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "40e5e3e6-ecf2-44a0-957d-88dfe0b16824",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "log-safe-reaction-disposal",
+        "title": "Log safe reaction chemicals and disposal plan",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "40e5e3e6-ecf2-44a0-957d-88dfe0b16824",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "6549cede-893f-4c0d-aa6b-da363f42805d",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "bottle-diluted-acid-stock",
+        "title": "Bottle and label diluted hydrochloric acid stock",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            },
+            {
+                "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "bcac759e-a699-432c-9592-9b15b337a17e",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "package-neutralized-spill-waste",
+        "title": "Package neutralized spill residue for hazardous disposal",
+        "image": "/assets/quests/acid_spill_neutralization_setup.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "a25b5b0f-63b3-47c9-933d-60ccfda674d3",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "stage-buffer-batch",
+        "title": "Stage and label a finished buffer batch",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
+        "requireItems": [
+            {
+                "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "fe4baea3-ca62-4db1-81dc-689a9e192d7c",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "bottle-ph-adjusted-sample",
+        "title": "Bottle pH-adjusted solution with baseline metadata",
+        "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
+        "requireItems": [
+            {
+                "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "a526e396-f53e-4948-a7a2-820aac122169",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "collect-precipitate-slurry",
+        "title": "Collect and label precipitate slurry sample",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "61892628-6a84-489f-aa9f-1c032855db11",
+                "count": 1
+            }
+        ],
+        "duration": "7m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

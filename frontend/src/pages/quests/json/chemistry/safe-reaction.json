@@ -72,6 +72,11 @@
                     "text": "Execute open-beaker protocol."
                 },
                 {
+                    "type": "process",
+                    "process": "capture-fizz-reaction-sample",
+                    "text": "Capture spent reaction liquid in the cylinder and label chemicals for disposal."
+                },
+                {
                     "type": "goto",
                     "goto": "verify",
                     "text": "Reaction remained controlled; move to verification and logging."
@@ -91,6 +96,11 @@
                     "type": "process",
                     "process": "run-safe-fizz-reaction",
                     "text": "Execute controlled-capture protocol."
+                },
+                {
+                    "type": "process",
+                    "process": "capture-fizz-reaction-sample",
+                    "text": "Capture spent reaction liquid in the cylinder and label chemicals for disposal."
                 },
                 {
                     "type": "goto",
@@ -126,8 +136,8 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "log-safe-reaction",
-                    "text": "Log reaction observations."
+                    "process": "log-safe-reaction-disposal",
+                    "text": "Log reagent details and disposal instructions for the spent sample."
                 },
                 {
                     "type": "goto",
@@ -135,7 +145,7 @@
                     "text": "Stable run documented; proceed to closeout.",
                     "requiresItems": [
                         {
-                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                            "id": "6549cede-893f-4c0d-aa6b-da363f42805d",
                             "count": 1
                         }
                     ]
@@ -151,7 +161,11 @@
                     "text": "Logged and ready for the next experiment.",
                     "requiresItems": [
                         {
-                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                            "id": "6549cede-893f-4c0d-aa6b-da363f42805d",
+                            "count": 1
+                        },
+                        {
+                            "id": "40e5e3e6-ecf2-44a0-957d-88dfe0b16824",
                             "count": 1
                         }
                     ]
@@ -165,7 +179,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

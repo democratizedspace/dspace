@@ -116,12 +116,17 @@
                     "text": "Take post-adjustment pH reading."
                 },
                 {
+                    "type": "process",
+                    "process": "bottle-ph-adjusted-sample",
+                    "text": "Bottle the corrected sample with baseline and verification pH labels."
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Verification is inside 6.0-7.2.",
                     "requiresItems": [
                         {
-                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "id": "a526e396-f53e-4948-a7a2-820aac122169",
                             "count": 1
                         }
                     ]
@@ -158,7 +163,7 @@
                     "text": "Chemistry in harmony.",
                     "requiresItems": [
                         {
-                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "id": "a526e396-f53e-4948-a7a2-820aac122169",
                             "count": 1
                         }
                     ]
@@ -172,7 +177,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/buffer-solution"],
+    "requiresQuests": [
+        "chemistry/buffer-solution"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

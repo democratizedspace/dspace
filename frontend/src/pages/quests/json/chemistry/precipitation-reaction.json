@@ -49,12 +49,17 @@
             "text": "Interpretation gate: pass only if a fine, persistent precipitate forms and pH lands in the 6.0–8.0 verification window. Out-of-range readings or unstable solids must be corrected before completion.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "collect-precipitate-slurry",
+                    "text": "Transfer solids and supernatant to a labeled vial for traceable disposal."
+                },
+                {
                     "type": "goto",
                     "goto": "finish",
                     "text": "Pass: precipitate is stable and pH is 6.0–8.0.",
                     "requiresItems": [
                         {
-                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "id": "61892628-6a84-489f-aa9f-1c032855db11",
                             "count": 1
                         }
                     ]
@@ -93,7 +98,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Sample collected."
+                    "text": "Sample collected.",
+                    "requiresItems": [
+                        {
+                            "id": "61892628-6a84-489f-aa9f-1c032855db11",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -104,7 +115,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-adjustment"],
+    "requiresQuests": [
+        "chemistry/ph-adjustment"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
