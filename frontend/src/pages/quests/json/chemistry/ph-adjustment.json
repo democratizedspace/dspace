@@ -90,6 +90,10 @@
                     "text": "Adjustment complete, collect verification reading.",
                     "requiresItems": [
                         {
+                            "id": "5869e50c-c6d7-451c-8b08-efef9818a2b9",
+                            "count": 1
+                        },
+                        {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
                             "count": 1
                         },
@@ -172,11 +176,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/buffer-solution"],
+    "requiresQuests": [
+        "chemistry/buffer-solution"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

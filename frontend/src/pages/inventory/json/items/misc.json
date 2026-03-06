@@ -2540,5 +2540,103 @@
         "image": "/assets/mission_log_entry_page.json",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
+    },
+    {
+        "id": "35c8ca76-0016-432c-8f72-f1e7832cb2a0",
+        "name": "spent fizz-reaction solution cylinder",
+        "description": "Labeled 100 mL graduated cylinder holding spent bicarbonate-acid reaction solution, annotated with reagent lot, observed foam height, and disposal instruction to neutralize and route to approved aqueous-waste handling.",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 88,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        },
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "91c7ef90-bd86-4780-8416-8c864221f02e",
+        "name": "safe reaction observation log",
+        "description": "Structured lab log capturing reactant ratios, temperature notes, fizz duration, and disposal confirmation for the spent reaction cylinder.",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 88,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        },
+        "category": "Digital & Records"
+    },
+    {
+        "id": "135f7f9f-925e-4095-9d57-17e096402371",
+        "name": "diluted hydrochloric acid sample",
+        "description": "Clearly labeled beaker sample of diluted hydrochloric acid with concentration estimate, prep timestamp, and hazard note requiring secondary containment and corrosive-waste disposal after use.",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 89,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        },
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "7119c1ae-ed41-4bb1-897b-beef64c85b97",
+        "name": "neutralized spill slurry container",
+        "description": "Post-neutralization slurry container tagged with initial acid source, final pH strip band, and instruction for proper hazardous-waste pickup rather than sink disposal.",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 89,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        },
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "8b1e37de-4632-4e9c-834f-07eeb13dbd4e",
+        "name": "buffered solution aliquot",
+        "description": "Prepared buffer aliquot in a labeled beaker noting target pH window, additives used, and hold-time limit before disposal or reconditioning.",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        },
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "5869e50c-c6d7-451c-8b08-efef9818a2b9",
+        "name": "pH-adjusted nutrient solution sample",
+        "description": "Nutrient solution sample after controlled pH correction, tagged with reagent additions and caution that unused corrected solution must be disposed according to nutrient-chemical handling rules.",
+        "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        },
+        "category": "Hydroponics"
+    },
+    {
+        "id": "817f9745-93dc-4ee7-b24c-3dc8cf0c45d5",
+        "name": "precipitate slurry vial",
+        "description": "Vial containing captured precipitate and supernatant, labeled with precursor chemicals and note to keep sealed for analysis before approved solid-liquid waste segregation.",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        },
+        "category": "Biology & Lab"
     }
 ]

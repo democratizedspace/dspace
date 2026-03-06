@@ -4368,7 +4368,12 @@
                 "count": 0.05
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "5869e50c-c6d7-451c-8b08-efef9818a2b9",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 0,
@@ -9128,7 +9133,12 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "35c8ca76-0016-432c-8f72-f1e7832cb2a0",
+                "count": 1
+            }
+        ],
         "duration": "15m",
         "hardening": {
             "passes": 0,
@@ -9145,10 +9155,19 @@
             {
                 "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
                 "count": 1
+            },
+            {
+                "id": "35c8ca76-0016-432c-8f72-f1e7832cb2a0",
+                "count": 1
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "91c7ef90-bd86-4780-8416-8c864221f02e",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 0,
@@ -9445,6 +9464,206 @@
         "hardening": {
             "passes": 0,
             "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "perform-acid-dilution",
+        "title": "Perform controlled hydrochloric acid dilution into labeled glassware",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            },
+            {
+                "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "135f7f9f-925e-4095-9d57-17e096402371",
+                "count": 1
+            }
+        ],
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 89,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "neutralize-acid-spill",
+        "title": "Neutralize diluted acid and containerize resulting slurry for disposal",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "135f7f9f-925e-4095-9d57-17e096402371",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "135f7f9f-925e-4095-9d57-17e096402371",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "7119c1ae-ed41-4bb1-897b-beef64c85b97",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 89,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "prepare-buffer-solution",
+        "title": "Prepare and label a buffered aliquot with measured additions",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            },
+            {
+                "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                "count": 0.03
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 0.03
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8b1e37de-4632-4e9c-834f-07eeb13dbd4e",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "form-precipitate-sample",
+        "title": "Create a precipitate slurry sample and preserve it for inspection",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            },
+            {
+                "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 0.03
+            },
+            {
+                "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+                "count": 0.03
+            }
+        ],
+        "createItems": [
+            {
+                "id": "817f9745-93dc-4ee7-b24c-3dc8cf0c45d5",
+                "count": 1
+            }
+        ],
+        "duration": "9m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
