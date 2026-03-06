@@ -9460,5 +9460,141 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "build-biogas-digester",
+        "title": "Build and leak-test a 20 L biogas digester with vented gas line",
+        "icon": "mdi:barrel",
+        "requireItems": [
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2d",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "ferment-biogas-batch",
+        "title": "Run a full anaerobic digestion batch to first stable methane output",
+        "icon": "mdi:molecule-co2",
+        "requireItems": [
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 75
+            }
+        ],
+        "duration": "21d",
+        "hardening": {
+            "passes": 0,
+            "score": 85,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "install-aquarium-light-led",
+        "title": "Install and secure an LED aquarium fixture with timer and drip loop",
+        "icon": "mdi:lightbulb-on-outline",
+        "requireItems": [
+            {
+                "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                "count": 1
+            },
+            {
+                "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "install-wheel-encoders",
+        "title": "Install dual wheel encoders and route clean signal wiring to the controller",
+        "icon": "mdi:gauge",
+        "requireItems": [
+            {
+                "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                "count": 2
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+                "count": 1
+            }
+        ],
+        "duration": "40m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "calibrate-wheel-encoders",
+        "title": "Run three 1 m odometry trials and calibrate left/right pulse parity",
+        "icon": "mdi:ruler-square-compass",
+        "requireItems": [
+            {
+                "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

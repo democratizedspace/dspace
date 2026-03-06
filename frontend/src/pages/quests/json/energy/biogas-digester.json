@@ -22,6 +22,11 @@
             "text": "Use a sealed 20 L drum, fit gas lines, and power the mixer with a 200 Wh pack while keeping ignition sources clear.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "build-biogas-digester",
+                    "text": "Start a real-time digester construction + seal verification run (about 2 days)."
+                },
+                {
                     "type": "grantsItems",
                     "grantsItems": [
                         {
@@ -53,6 +58,11 @@
             "id": "feed",
             "text": "Add scraps and water, seal the drum, and start fermentation. Log output milestones so you can confirm healthy digestion.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "ferment-biogas-batch",
+                    "text": "Start a full anaerobic digestion batch (about 21 days)."
+                },
                 {
                     "type": "goto",
                     "goto": "verify",
@@ -132,7 +142,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar-1kWh"],
+    "requiresQuests": [
+        "energy/solar-1kWh"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

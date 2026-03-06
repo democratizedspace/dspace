@@ -1,0 +1,20 @@
+{
+  "id": "2026-03-06-quest-build-process-immersion-gap",
+  "date": "2026-03-06",
+  "component": "quests-process-immersion",
+  "rootCause": "Several quests described constructing or installing physical systems but offered only dialogue/item gates, so players could complete them without running any diegetic build process in real time.",
+  "resolution": "Added explicit process steps (including new real-time biogas construction/fermentation and wheel-encoder install/calibration processes), updated coupled Skills docs, and added regression tests that fail build/install quests lacking process options while enforcing a low global no-process quest ratio.",
+  "references": [
+    "frontend/src/pages/quests/json/energy/biogas-digester.json",
+    "frontend/src/pages/quests/json/aquaria/aquarium-light.json",
+    "frontend/src/pages/quests/json/robotics/line-follower.json",
+    "frontend/src/pages/quests/json/robotics/pan-tilt.json",
+    "frontend/src/pages/quests/json/robotics/servo-gripper.json",
+    "frontend/src/pages/quests/json/robotics/wheel-encoders.json",
+    "frontend/src/pages/processes/base.json",
+    "frontend/src/pages/docs/md/energy.md",
+    "frontend/src/pages/docs/md/aquaria.md",
+    "frontend/src/pages/docs/md/robotics.md",
+    "tests/questProcessImmersionRegression.test.ts"
+  ]
+}

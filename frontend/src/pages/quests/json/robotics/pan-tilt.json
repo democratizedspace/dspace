@@ -27,6 +27,11 @@
             "text": "Mount two servos with thread-lock and strain-relieved wires. Keep enough cable slack so full-range sweeps do not snag.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "build-pan-tilt-ultrasonic",
+                    "text": "Run pan-tilt assembly process to build the mount."
+                },
+                {
                     "type": "goto",
                     "goto": "safety",
                     "text": "Servos mounted and cable paths cleared.",
@@ -70,6 +75,11 @@
             "id": "sweep-test",
             "text": "Run five full sweeps and record min/max angles plus return-to-center error for each axis.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "scan-room-ultrasonic",
+                    "text": "Run a sweep logging process and capture scan data."
+                },
                 {
                     "type": "goto",
                     "goto": "evidence",
@@ -126,7 +136,9 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/servo-control"],
+    "requiresQuests": [
+        "robotics/servo-control"
+    ],
     "rewards": [
         {
             "id": "71fafa9a-3998-4763-a63a-279acc4ca603",

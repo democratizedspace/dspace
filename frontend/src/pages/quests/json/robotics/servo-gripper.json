@@ -56,6 +56,11 @@
             "text": "Mount the servo vertically, align both jaws, and verify full open/close travel by hand before power-on.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "assemble-servo-arm-kit",
+                    "text": "Run servo gripper assembly process."
+                },
+                {
                     "type": "goto",
                     "goto": "safety",
                     "text": "Jaws move freely through full range.",
@@ -77,6 +82,11 @@
             "id": "safety",
             "text": "Safety gate: cap grip force with software limits and test with a soft object first so you don't crush parts or strip gears.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-servo-arm",
+                    "text": "Run servo endpoint calibration before grip tests."
+                },
                 {
                     "type": "goto",
                     "goto": "evidence",
@@ -150,7 +160,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["robotics/servo-control"],
+    "requiresQuests": [
+        "robotics/servo-control"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

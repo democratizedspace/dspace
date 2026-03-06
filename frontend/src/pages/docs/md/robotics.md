@@ -96,7 +96,14 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Rewards:
     - 3D Printed Phone Stand ×1
 - Processes used:
-    - None
+    - [calibrate-reflectance-sensors](/processes/calibrate-reflectance-sensors)
+        - Requires: reflectance sensor array ×1, line-follower robot chassis ×1, Arduino Uno ×1, breadboard jumper kit ×1, anti-static wrist strap ×1
+        - Consumes: none
+        - Creates: calibrated reflectance profile ×1
+    - [validate-line-thresholds](/processes/validate-line-thresholds)
+        - Requires: line-follower robot chassis ×1, calibrated reflectance profile ×1, Arduino Uno ×1, breadboard jumper kit ×1, anti-static wrist strap ×1
+        - Consumes: none
+        - Creates: line-following robot ×1
 - QA notes:
     - Supports two strategies (threshold-first and PID-first), then converges through safety checks.
     - Completion is gated on a mechanics-backed evidence step: three clean laps without leaving tape.
@@ -118,7 +125,14 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Rewards:
     - 3D Printed Phone Stand ×1
 - Processes used:
-    - None
+    - [build-pan-tilt-ultrasonic](/processes/build-pan-tilt-ultrasonic)
+        - Requires: Servo Motor ×2, ultrasonic distance sensor ×1, pan-tilt servo bracket ×1, Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×6, precision screwdriver set ×1, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
+        - Consumes: none
+        - Creates: pan-tilt ultrasonic rig ×1
+    - [scan-room-ultrasonic](/processes/scan-room-ultrasonic)
+        - Requires: pan-tilt ultrasonic rig ×1, Laptop Computer ×1, anti-static wrist strap ×1
+        - Consumes: none
+        - Creates: ultrasonic sweep map ×1
 - QA notes:
     - Adds strategy branching for assembly order (pan-first vs tilt-first) before convergence.
     - Adds an explicit safety gate and tolerance-based evidence requirement (<3° center error).
@@ -142,7 +156,14 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Rewards:
     - 3D Printed Phone Stand ×1
 - Processes used:
-    - None
+    - [assemble-servo-arm-kit](/processes/assemble-servo-arm-kit)
+        - Requires: two-servo arm kit ×1, Servo Motor ×2, precision screwdriver set ×1, anti-static wrist strap ×1
+        - Consumes: none
+        - Creates: assembled servo arm ×1
+    - [calibrate-servo-arm](/processes/calibrate-servo-arm)
+        - Requires: assembled servo arm ×1, Arduino Uno ×1, Jumper Wires ×4, USB Type-A to Type-B cable ×1, Laptop Computer ×1, anti-static wrist strap ×1
+        - Consumes: none
+        - Creates: calibrated servo arm ×1
 - QA notes:
     - Replaces linear flow with strategy branching (direct horn vs offset linkage) before convergence.
     - Adds a safety gate for capped grip force and soft-object testing before final validation.
@@ -270,7 +291,14 @@ Robotics quests build practical progression through the robotics skill tree. Thi
 - Rewards:
     - Wheel Encoder ×1
 - Processes used:
-    - None
+    - [install-wheel-encoders](/processes/install-wheel-encoders)
+        - Requires: Wheel Encoder ×2, Arduino Uno ×1, safety goggles ×1
+        - Consumes: none
+        - Creates: odometry-ready wheel encoder set ×1
+    - [calibrate-wheel-encoders](/processes/calibrate-wheel-encoders)
+        - Requires: odometry-ready wheel encoder set ×1, safety goggles ×1
+        - Consumes: none
+        - Creates: odometry-ready wheel encoder set ×1
 - QA notes:
     - Replaces thin-shell install flow with branching install strategy and staged verification.
     - Adds explicit operational safety checks (lifted chassis + emergency stop + free-spin test) before calibration.

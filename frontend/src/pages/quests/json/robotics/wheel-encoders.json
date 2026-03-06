@@ -27,6 +27,11 @@
             "text": "Power down, lift the chassis, and mount one encoder per wheel hub. Route 5V/GND and signal lines to pins 2/3 while keeping wires clear of rotation.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "install-wheel-encoders",
+                    "text": "Run encoder installation and wiring process."
+                },
+                {
                     "type": "goto",
                     "goto": "verify-safety",
                     "text": "Mechanical install complete; run safety and signal checks.",
@@ -82,6 +87,11 @@
             "id": "calibrate",
             "text": "Run three 1-meter trials and log pulse totals per wheel to confirm left/right parity stays within 5%.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-wheel-encoders",
+                    "text": "Run wheel-encoder calibration trials process."
+                },
                 {
                     "type": "goto",
                     "goto": "evidence",
@@ -160,7 +170,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["robotics/servo-gripper"],
+    "requiresQuests": [
+        "robotics/servo-gripper"
+    ],
     "hardening": {
         "passes": 2,
         "score": 90,

@@ -38,6 +38,11 @@
             "text": "Mount both drive servos, center wheel alignment, and set a contrast threshold from your reflectance readings.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "calibrate-reflectance-sensors",
+                    "text": "Run reflectance sensor calibration process."
+                },
+                {
                     "type": "goto",
                     "goto": "safety-check",
                     "text": "Baseline tune is ready.",
@@ -59,6 +64,11 @@
             "id": "pid-setup",
             "text": "Load a PID loop and start with conservative P/I/D gains so oscillation is easier to diagnose.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "validate-line-thresholds",
+                    "text": "Run motion validation process for tuned thresholds."
+                },
                 {
                     "type": "goto",
                     "goto": "safety-check",
@@ -137,7 +147,10 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/servo-control", "robotics/reflectance-sensors"],
+    "requiresQuests": [
+        "robotics/servo-control",
+        "robotics/reflectance-sensors"
+    ],
     "rewards": [
         {
             "id": "9018feac-7213-4eef-9654-b06dbd9404ea",

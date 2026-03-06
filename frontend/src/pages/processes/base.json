@@ -28,7 +28,7 @@
         "hardening": {
             "passes": 1,
             "score": 80,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-05",
@@ -99,7 +99,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -133,7 +133,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-upgrade-2025-08-06",
@@ -173,7 +173,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -198,7 +198,7 @@
         "hardening": {
             "passes": 1,
             "score": 80,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -234,7 +234,7 @@
         "hardening": {
             "passes": 2,
             "score": 95,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-05",
@@ -282,7 +282,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
@@ -320,7 +320,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -352,7 +352,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -393,7 +393,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -434,7 +434,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -471,7 +471,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -503,7 +503,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -536,7 +536,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -576,7 +576,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -615,7 +615,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -648,7 +648,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -693,7 +693,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -734,7 +734,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -767,7 +767,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -808,7 +808,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -849,7 +849,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -882,7 +882,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -907,7 +907,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -951,7 +951,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-12",
@@ -987,7 +987,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -1026,7 +1026,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
@@ -1065,7 +1065,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-upgrade-2025-08-06",
@@ -1113,7 +1113,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-13",
@@ -1143,7 +1143,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -1191,7 +1191,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-07",
@@ -1234,7 +1234,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -1269,7 +1269,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1303,7 +1303,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-07",
@@ -1351,7 +1351,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-14",
@@ -1394,7 +1394,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -1429,7 +1429,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-harvest-stevia-2025-08-20",
@@ -1460,7 +1460,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-14",
@@ -1490,7 +1490,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1535,7 +1535,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1568,7 +1568,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1587,7 +1587,7 @@
         "hardening": {
             "passes": 0,
             "score": 70,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1627,7 +1627,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1667,7 +1667,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1707,7 +1707,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1747,7 +1747,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1787,7 +1787,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1827,7 +1827,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1852,7 +1852,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1900,7 +1900,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1945,7 +1945,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -1974,7 +1974,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2019,7 +2019,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2047,7 +2047,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2087,7 +2087,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2115,7 +2115,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2148,7 +2148,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2197,7 +2197,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2225,7 +2225,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2294,7 +2294,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2334,7 +2334,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2370,7 +2370,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2406,7 +2406,7 @@
         "hardening": {
             "passes": 0,
             "score": 88,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2442,7 +2442,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2478,7 +2478,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2514,7 +2514,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2538,7 +2538,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2566,7 +2566,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2594,7 +2594,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2626,7 +2626,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2659,7 +2659,7 @@
         "hardening": {
             "passes": 0,
             "score": 92,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2696,7 +2696,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2724,7 +2724,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2776,7 +2776,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2822,7 +2822,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2856,7 +2856,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2890,7 +2890,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2920,7 +2920,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2948,7 +2948,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -2976,7 +2976,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3018,7 +3018,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3048,7 +3048,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3090,7 +3090,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3118,7 +3118,7 @@
         "hardening": {
             "passes": 0,
             "score": 75,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3146,7 +3146,7 @@
         "hardening": {
             "passes": 0,
             "score": 75,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3169,7 +3169,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3193,7 +3193,7 @@
         "hardening": {
             "passes": 0,
             "score": 92,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "itemCountOperations": [
@@ -3230,7 +3230,7 @@
         "hardening": {
             "passes": 0,
             "score": 92,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "itemCountOperations": [
@@ -3270,7 +3270,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3300,7 +3300,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -3334,7 +3334,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3370,7 +3370,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3394,7 +3394,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3418,7 +3418,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3446,7 +3446,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3474,7 +3474,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3493,7 +3493,7 @@
         "hardening": {
             "passes": 0,
             "score": 80,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3516,7 +3516,7 @@
         "hardening": {
             "passes": 0,
             "score": 80,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3550,7 +3550,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3575,7 +3575,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3605,7 +3605,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3624,7 +3624,7 @@
         "hardening": {
             "passes": 0,
             "score": 80,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3648,7 +3648,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3671,7 +3671,7 @@
         "hardening": {
             "passes": 0,
             "score": 80,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3711,7 +3711,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3753,7 +3753,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-22",
@@ -3809,7 +3809,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3843,7 +3843,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3873,7 +3873,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3907,7 +3907,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3945,7 +3945,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3969,7 +3969,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -3997,7 +3997,7 @@
         "hardening": {
             "passes": 2,
             "score": 85,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-10",
@@ -4032,7 +4032,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-20",
@@ -4062,13 +4062,13 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
     {
         "id": "measure-resistance",
-        "title": "Measure a 220 \u03a9 resistor with a digital multimeter",
+        "title": "Measure a 220 Ω resistor with a digital multimeter",
         "image": "/assets/launch_controller.jpg",
         "requireItems": [
             {
@@ -4090,7 +4090,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -4124,7 +4124,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -4180,7 +4180,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4208,7 +4208,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -4220,7 +4220,7 @@
     },
     {
         "id": "calibrate-multimeter",
-        "title": "Calibrate a digital multimeter using a 220 \u03a9 reference resistor",
+        "title": "Calibrate a digital multimeter using a 220 Ω reference resistor",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -4238,7 +4238,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -4264,7 +4264,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-wear-anti-static-wrist-strap-2025-08-15",
@@ -4299,7 +4299,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4328,7 +4328,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4373,13 +4373,13 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
     {
         "id": "log-stable-ph",
-        "title": "Log a stable 5.5\u20136.5 pH reading for the reservoir",
+        "title": "Log a stable 5.5–6.5 pH reading for the reservoir",
         "image": "/assets/quests/hydroponics_solution_ph_check.jpg",
         "requireItems": [
             {
@@ -4407,7 +4407,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4436,7 +4436,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -4467,7 +4467,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -4509,7 +4509,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4554,7 +4554,7 @@
         "hardening": {
             "passes": 2,
             "score": 90,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -4596,7 +4596,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-03",
@@ -4630,7 +4630,7 @@
         "hardening": {
             "passes": 1,
             "score": 80,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
@@ -4664,7 +4664,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-02-19",
@@ -4698,7 +4698,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-02-20",
@@ -4736,7 +4736,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-02-21",
@@ -4770,7 +4770,7 @@
         "hardening": {
             "passes": 3,
             "score": 90,
-            "emoji": "\ud83d\udcaf",
+            "emoji": "💯",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-05",
@@ -4822,7 +4822,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-02-22",
@@ -4860,7 +4860,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-02-23",
@@ -4890,7 +4890,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2026-02-22",
@@ -4928,7 +4928,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-02-24",
@@ -4970,7 +4970,7 @@
         "hardening": {
             "passes": 0,
             "score": 92,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -4998,7 +4998,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -5026,7 +5026,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-2025-08-04",
@@ -5072,7 +5072,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-02-25",
@@ -5110,7 +5110,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-02-26",
@@ -5148,7 +5148,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-02-27",
@@ -5178,7 +5178,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2026-02-22",
@@ -5203,7 +5203,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
@@ -5236,7 +5236,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-2025-08-04",
@@ -5261,7 +5261,7 @@
         "hardening": {
             "passes": 1,
             "score": 80,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-upgrade-2025-08-04",
@@ -5303,7 +5303,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-07",
@@ -5362,7 +5362,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -5395,7 +5395,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -5434,7 +5434,7 @@
         "hardening": {
             "passes": 1,
             "score": 80,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-05",
@@ -5465,7 +5465,7 @@
         "hardening": {
             "passes": 2,
             "score": 90,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-05",
@@ -5524,7 +5524,7 @@
         "hardening": {
             "passes": 2,
             "score": 90,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-12-03",
@@ -5563,7 +5563,7 @@
         "hardening": {
             "passes": 2,
             "score": 98,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-12-04",
@@ -5602,7 +5602,7 @@
         "hardening": {
             "passes": 2,
             "score": 90,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-12-06",
@@ -5645,7 +5645,7 @@
         "hardening": {
             "passes": 2,
             "score": 90,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-12-07",
@@ -5688,7 +5688,7 @@
         "hardening": {
             "passes": 2,
             "score": 90,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-12-09",
@@ -5743,7 +5743,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -5796,7 +5796,7 @@
         "hardening": {
             "passes": 1,
             "score": 80,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -5830,7 +5830,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -5849,7 +5849,7 @@
         "hardening": {
             "passes": 0,
             "score": 80,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -5890,7 +5890,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
@@ -5937,7 +5937,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -5974,7 +5974,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6023,7 +6023,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6060,7 +6060,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-05",
@@ -6103,7 +6103,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6144,7 +6144,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-05",
@@ -6174,7 +6174,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-07",
@@ -6213,7 +6213,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -6257,7 +6257,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -6309,7 +6309,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6351,7 +6351,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6389,7 +6389,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6418,7 +6418,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-05",
@@ -6430,7 +6430,7 @@
     },
     {
         "id": "solder-led-resistor",
-        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 \u03a9 resistor with two jumper wires",
+        "title": "Use a soldering iron kit to join a 5 mm LED and a 220 Ω resistor with two jumper wires",
         "requireItems": [
             {
                 "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
@@ -6461,7 +6461,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-05",
@@ -6495,7 +6495,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-strip-jumper-wire-2025-08-12",
@@ -6545,7 +6545,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-refine-2025-08-07",
@@ -6557,7 +6557,7 @@
     },
     {
         "id": "verify-resistor-color-code",
-        "title": "Confirm a 220 \u03a9 resistor's value using a printed color code chart",
+        "title": "Confirm a 220 Ω resistor's value using a printed color code chart",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -6575,7 +6575,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-verify-resistor-color-code-2025-08-15",
@@ -6610,7 +6610,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-05",
@@ -6653,7 +6653,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6690,7 +6690,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6719,7 +6719,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -6754,7 +6754,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -6801,7 +6801,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6835,7 +6835,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-15",
@@ -6874,7 +6874,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6899,7 +6899,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -6933,7 +6933,7 @@
         "hardening": {
             "passes": 2,
             "score": 95,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -6982,7 +6982,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7024,7 +7024,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-attach-aquarium-thermometer-2025-08-24",
@@ -7054,7 +7054,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-09-15",
@@ -7085,7 +7085,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7110,7 +7110,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7135,7 +7135,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7169,7 +7169,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7211,7 +7211,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-17",
@@ -7250,7 +7250,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -7288,7 +7288,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -7327,7 +7327,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-08",
@@ -7370,7 +7370,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-09",
@@ -7404,7 +7404,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-09",
@@ -7459,7 +7459,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7492,7 +7492,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-10",
@@ -7536,7 +7536,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7578,7 +7578,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7616,7 +7616,7 @@
         "hardening": {
             "passes": 1,
             "score": 100,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -7664,7 +7664,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7702,7 +7702,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-11",
@@ -7740,7 +7740,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-12",
@@ -7784,7 +7784,7 @@
         "hardening": {
             "passes": 1,
             "score": 95,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -7819,7 +7819,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-14",
@@ -7862,7 +7862,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7891,7 +7891,7 @@
         "hardening": {
             "passes": 1,
             "score": 90,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -7935,7 +7935,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -7973,7 +7973,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8001,7 +8001,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-12",
@@ -8031,7 +8031,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-30",
@@ -8065,7 +8065,7 @@
         "hardening": {
             "passes": 2,
             "score": 85,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-12",
@@ -8104,7 +8104,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-13",
@@ -8146,7 +8146,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -8176,7 +8176,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-15",
@@ -8219,7 +8219,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8264,7 +8264,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8325,13 +8325,13 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
     {
         "id": "scan-room-ultrasonic",
-        "title": "Sweep a pan-tilt ultrasonic rig through 180\u00b0 and record a point map",
+        "title": "Sweep a pan-tilt ultrasonic rig through 180° and record a point map",
         "image": "/assets/micro_servo_pair_with_horns.jpg",
         "requireItems": [
             {
@@ -8358,13 +8358,13 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
     {
         "id": "solder-smd-resistor",
-        "title": "Solder a 220 \u03a9 SMD resistor onto a PCB using a flux pen and precision tweezers",
+        "title": "Solder a 220 Ω SMD resistor onto a PCB using a flux pen and precision tweezers",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -8403,7 +8403,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8423,7 +8423,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-test-gfci-outlet-2025-08-16",
@@ -8453,7 +8453,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-use-soldering-mat-2025-08-18",
@@ -8483,7 +8483,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8507,7 +8507,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8527,7 +8527,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8551,7 +8551,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-configure-ufw-firewall-2025-08-24",
@@ -8585,7 +8585,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8613,7 +8613,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8641,7 +8641,7 @@
         "hardening": {
             "passes": 0,
             "score": 92,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8669,7 +8669,7 @@
         "hardening": {
             "passes": 0,
             "score": 92,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8693,7 +8693,7 @@
         "hardening": {
             "passes": 1,
             "score": 85,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-process-hardening-2025-08-18",
@@ -8723,13 +8723,13 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
     {
         "id": "trim-resistor-leads",
-        "title": "Trim excess leads from a soldered 220 \u03a9 resistor using wire cutters",
+        "title": "Trim excess leads from a soldered 220 Ω resistor using wire cutters",
         "image": "/assets/quests/basic_circuit.svg",
         "requireItems": [
             {
@@ -8747,7 +8747,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8772,7 +8772,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8796,7 +8796,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8820,7 +8820,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8844,7 +8844,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8876,7 +8876,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8900,7 +8900,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8924,7 +8924,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -8958,7 +8958,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9000,7 +9000,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9025,7 +9025,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9071,7 +9071,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9101,7 +9101,7 @@
         "hardening": {
             "passes": 0,
             "score": 95,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9133,7 +9133,7 @@
         "hardening": {
             "passes": 0,
             "score": 88,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9153,7 +9153,7 @@
         "hardening": {
             "passes": 0,
             "score": 88,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9177,7 +9177,7 @@
         "hardening": {
             "passes": 0,
             "score": 88,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9201,7 +9201,7 @@
         "hardening": {
             "passes": 0,
             "score": 88,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9243,7 +9243,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9285,7 +9285,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9327,7 +9327,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9365,7 +9365,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9407,7 +9407,7 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
     },
@@ -9445,8 +9445,114 @@
         "hardening": {
             "passes": 0,
             "score": 100,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "build-biogas-digester",
+        "title": "Build and leak-test a 20 L biogas digester with vented gas line",
+        "icon": "mdi:barrel",
+        "requireItems": [
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [],
+        "duration": "2d"
+    },
+    {
+        "id": "ferment-biogas-batch",
+        "title": "Run a full anaerobic digestion batch to first stable methane output",
+        "icon": "mdi:molecule-co2",
+        "requireItems": [
+            {
+                "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 75
+            }
+        ],
+        "duration": "21d"
+    },
+    {
+        "id": "install-aquarium-light-led",
+        "title": "Install and secure an LED aquarium fixture with timer and drip loop",
+        "icon": "mdi:lightbulb-on-outline",
+        "requireItems": [
+            {
+                "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                "count": 1
+            },
+            {
+                "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+                "count": 1
+            }
+        ],
+        "duration": "45m"
+    },
+    {
+        "id": "install-wheel-encoders",
+        "title": "Install dual wheel encoders and route clean signal wiring to the controller",
+        "icon": "mdi:gauge",
+        "requireItems": [
+            {
+                "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                "count": 2
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+                "count": 1
+            }
+        ],
+        "duration": "40m"
+    },
+    {
+        "id": "calibrate-wheel-encoders",
+        "title": "Run three 1 m odometry trials and calibrate left/right pulse parity",
+        "icon": "mdi:ruler-square-compass",
+        "requireItems": [
+            {
+                "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+                "count": 1
+            }
+        ],
+        "duration": "30m"
     }
 ]
