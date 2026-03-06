@@ -137,12 +137,12 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Conditions are safe again—retry with a planned route."
+                    "text": "Conditions are safe again\u2014retry with a planned route."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Unsafe tonight, but evidence is already logged—finish with caution.",
+                    "text": "Unsafe tonight, but evidence is already logged\u2014finish with caution.",
                     "requiresItems": [
                         {
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
@@ -178,7 +178,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Evidence is inconsistent—run another logged session."
+                    "text": "Evidence is inconsistent\u2014run another logged session."
                 }
             ]
         },
@@ -199,11 +199,19 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/basic-telescope"],
+    "requiresQuests": [
+        "astronomy/basic-telescope"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
-    }
+    },
+    "grantsItems": [
+        {
+            "id": "e066508a-5158-5ba4-9a56-ee3846a10e26",
+            "count": 1
+        }
+    ]
 }

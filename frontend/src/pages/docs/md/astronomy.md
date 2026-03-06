@@ -44,7 +44,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` requires capping optics and re-validating footing/light discipline before looping back.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - dChat ×1, dUSD ×1000
 - Processes used:
@@ -69,7 +69,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `verify-safety` adds a hard safety gate (lens cap + fault scan + no sun alignment) and routes faults to `troubleshoot` before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - Venus phase sketch ×1
 - Processes used:
@@ -91,7 +91,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recover` loops back through alignment and includes explicit stop conditions for unsafe footing and poor sky conditions.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - ISS pass log ×1
 - Processes used:
@@ -119,10 +119,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` enforces a complete observation artifact (time + direction + duration) and routes incomplete entries back to mode selection for deterministic retries.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - Venus phase sketch ×1
 - Processes used:
+    - [capture-iss-long-exposure-memento](/processes/capture-iss-long-exposure-memento)
+        - Requires: digital camera ×1, camera tripod ×1, ISS pass window ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: ISS long-exposure memento print ×1
     - [check-iss-pass](/processes/check-iss-pass)
         - Requires: smartphone ×1, mission logbook ×1
         - Consumes: none
@@ -156,10 +160,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` enforces a safety stop/reschedule path for weather or footing risk and requires a logged follow-up note before completion.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - ISS pass log ×1
 - Processes used:
+    - [capture-iss-long-exposure-memento](/processes/capture-iss-long-exposure-memento)
+        - Requires: digital camera ×1, camera tripod ×1, ISS pass window ×1, mission logbook ×1
+        - Consumes: none
+        - Creates: ISS long-exposure memento print ×1
     - [check-iss-pass](/processes/check-iss-pass)
         - Requires: smartphone ×1, mission logbook ×1
         - Consumes: none
@@ -186,7 +194,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` blocks completion when evidence is inconsistent and routes back through recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - ISS pass log ×1
 - Processes used:
@@ -219,7 +227,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` loops back to route selection after a safety reset and prevents completion bypasses.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - planisphere star chart ×1
 - Processes used:
@@ -252,7 +260,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Unsafe conditions can still finish only through a caution path, preserving fail-closed safety behavior.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - constellation sketch set ×1
 - Processes used:
@@ -280,7 +288,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Safety abort completion requires a mission-log entry describing why the run was skipped.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - constellation sketch set ×1
 - Processes used:
@@ -308,7 +316,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `verify-log` enforces a complete observation record before finish.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - Venus phase sketch ×1
 - Processes used:
@@ -338,7 +346,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `retake` loops back to capture with correction guidance and explicit cold/surface safety pause conditions; recapture still requires basic telescope ×1 and digital camera ×1.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - Venus phase sketch ×1
 - Processes used:
@@ -364,7 +372,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Safe postponement now requires a logged follow-up note before completion to preserve evidence continuity.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - planisphere star chart ×1
 - Processes used:
@@ -391,7 +399,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Safe-reschedule completion requires existing mission-log evidence, preventing bypass of the comet track record gate.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - planisphere star chart ×1
 - Processes used:
@@ -421,7 +429,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - Unsafe nights can only close out after a mission-log entry exists, so recovery cannot bypass evidence logging.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - constellation sketch set ×1
 - Processes used:
@@ -456,7 +464,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` blocks completion until artifact quality is verified and routes uncertain runs back to recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - Venus phase sketch ×1
 - Processes used:
@@ -486,7 +494,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` enforces stand-down checks (footing/weather/glare) before retry or caution closeout.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - Polaris alignment note ×1
 - Processes used:
@@ -518,7 +526,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `troubleshoot` enforces a realignment retry loop that returns through preflight before completion.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - planisphere star chart ×1
 - Processes used:
@@ -553,7 +561,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` prevents finish bypasses by routing uncertain captures back through recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - ISS pass log ×1
 - Processes used:
@@ -587,7 +595,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recovery` loops back to planning only after tripod/lens/safe-path checks.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - dUSD ×100
 - Processes used:
@@ -621,7 +629,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `interpret` requires structured sketch evidence before finish and sends missing fields back to recovery.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - Venus phase sketch ×1
 - Processes used:
@@ -650,7 +658,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `recheck` archives failed evidence with `reset-venus-phase-sketch` before retesting to keep final proof deterministic.
 - Grants:
     - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
+    - Quest-level `grantsItems`: 1 astronomy-themed memento reward in `Astronomy & Observation`
 - Rewards:
     - Venus phase sketch ×1
 - Processes used:

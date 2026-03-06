@@ -73,7 +73,7 @@
                             "count": 1
                         }
                     ],
-                    "text": "Shots captured—ready for review."
+                    "text": "Shots captured\u2014ready for review."
                 }
             ]
         },
@@ -84,12 +84,12 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Yes—usable set confirmed and logged."
+                    "text": "Yes\u2014usable set confirmed and logged."
                 },
                 {
                     "type": "goto",
                     "goto": "retake",
-                    "text": "No—blurred, clipped, or missing umbral detail."
+                    "text": "No\u2014blurred, clipped, or missing umbral detail."
                 }
             ]
         },
@@ -131,11 +131,19 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/observe-moon"],
+    "requiresQuests": [
+        "astronomy/observe-moon"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
-    }
+    },
+    "grantsItems": [
+        {
+            "id": "67d11881-1619-5a62-a6ee-499a5d31bc23",
+            "count": 1
+        }
+    ]
 }

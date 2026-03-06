@@ -2540,5 +2540,173 @@
         "image": "/assets/mission_log_entry_page.json",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
+    },
+    {
+        "id": "90f60bef-68c6-56c5-9011-8734e687b830",
+        "name": "Andromeda observation plate",
+        "description": "A field-kept astronomy artifact from the andromeda quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "441eca57-e563-5fcf-b9b2-d273342c9be1",
+        "name": "Aurora field strip",
+        "description": "A field-kept astronomy artifact from the aurora watch quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "af0770c0-d63d-5a88-aaac-53768eca8f26",
+        "name": "Hand-built refractor tube",
+        "description": "A field-kept astronomy artifact from the basic telescope quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "f1133006-aa70-555a-8835-56fe49d7cbdb",
+        "name": "Binary color-separation sketch",
+        "description": "A field-kept astronomy artifact from the binary star quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "c43b9f92-a9f3-50a8-83ab-cffa5ed7bafc",
+        "name": "Comet drift map card",
+        "description": "A field-kept astronomy artifact from the comet tracking quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "f2e8bce7-854e-510d-9a54-86d13f235b59",
+        "name": "Seasonal constellation atlas page",
+        "description": "A field-kept astronomy artifact from the constellations quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "299b8d5c-b2a6-5746-a197-ea4ff5e96548",
+        "name": "ISS flyover timing card",
+        "description": "A field-kept astronomy artifact from the iss flyover quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "61f0d668-b000-57c2-b540-2038ab4d59e8",
+        "name": "ISS long-exposure memento print",
+        "description": "A field-kept astronomy artifact from the iss photo quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/digital_camera_astrophotography.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "e066508a-5158-5ba4-9a56-ee3846a10e26",
+        "name": "Jovian moon position ledger",
+        "description": "A field-kept astronomy artifact from the jupiter moons quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "38fde201-e437-5025-8438-2101c12d712e",
+        "name": "Skyglow measurement profile",
+        "description": "A field-kept astronomy artifact from the light pollution quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "67d11881-1619-5a62-a6ee-499a5d31bc23",
+        "name": "Lunar eclipse sequence print",
+        "description": "A field-kept astronomy artifact from the lunar eclipse quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "747bc7e3-3c28-5871-9196-2c8275d8df01",
+        "name": "Meteor radiant tally sheet",
+        "description": "A field-kept astronomy artifact from the meteor shower quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "dea85c2b-9828-526b-b149-c004ebbae63d",
+        "name": "North-star bearing worksheet",
+        "description": "A field-kept astronomy artifact from the north star quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "e6a717dd-b8cc-5c65-ad8e-9b79cf929f77",
+        "name": "Lunar maria sketch card",
+        "description": "A field-kept astronomy artifact from the observe moon quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "92f4ac32-c4be-591f-be46-33bb672813df",
+        "name": "Orion nebula contrast sketch",
+        "description": "A field-kept astronomy artifact from the orion nebula quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "51e01c12-a5c1-5b76-96a6-ac58de78a3e6",
+        "name": "Planet alignment order strip",
+        "description": "A field-kept astronomy artifact from the planetary alignment quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "4c226705-8c8c-5c43-ac09-4cf65131f449",
+        "name": "Satellite pass track overlay",
+        "description": "A field-kept astronomy artifact from the satellite pass quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "3a62406f-ea50-5bb6-9aae-c48f9cfd3f7c",
+        "name": "Saturn ring-detail sketch",
+        "description": "A field-kept astronomy artifact from the saturn rings quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "6ceb7e94-310b-52a9-9788-344720a6570c",
+        "name": "Stacked star-trail contact sheet",
+        "description": "A field-kept astronomy artifact from the star trails quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "a20f0cba-026f-5459-b7f3-0eb58367c363",
+        "name": "Solar projection sunspot plate",
+        "description": "A field-kept astronomy artifact from the sunspot sketch quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
+    },
+    {
+        "id": "28f9742e-1a3f-5592-8e2f-55481444c0fc",
+        "name": "Venus phase progression sketch",
+        "description": "A field-kept astronomy artifact from the venus phases quest, capturing concrete observational evidence (time, orientation, conditions, and interpretation notes) so another observer can replay the session and verify the result.",
+        "image": "/assets/hardbound_mission_logbook_a5.jpg",
+        "priceExemptionReason": "QUEST_REWARD",
+        "category": "Astronomy & Observation"
     }
 ]

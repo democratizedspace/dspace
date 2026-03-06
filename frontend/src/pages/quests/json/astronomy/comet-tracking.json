@@ -172,11 +172,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/meteor-shower"],
+    "requiresQuests": [
+        "astronomy/meteor-shower"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-quality-parity-2026-02-24",
@@ -184,5 +186,11 @@
                 "score": 95
             }
         ]
-    }
+    },
+    "grantsItems": [
+        {
+            "id": "c43b9f92-a9f3-50a8-83ab-cffa5ed7bafc",
+            "count": 1
+        }
+    ]
 }

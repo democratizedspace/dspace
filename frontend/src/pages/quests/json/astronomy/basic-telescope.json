@@ -199,11 +199,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/observe-moon"],
+    "requiresQuests": [
+        "astronomy/observe-moon"
+    ],
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-basic-telescope-2025-08-03",
@@ -231,5 +233,11 @@
                 "score": 96
             }
         ]
-    }
+    },
+    "grantsItems": [
+        {
+            "id": "af0770c0-d63d-5a88-aaac-53768eca8f26",
+            "count": 1
+        }
+    ]
 }

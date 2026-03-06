@@ -56,7 +56,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Yes—the smudge holds across repeated sweeps."
+                    "text": "Yes\u2014the smudge holds across repeated sweeps."
                 },
                 {
                     "type": "goto",
@@ -93,11 +93,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/basic-telescope"],
+    "requiresQuests": [
+        "astronomy/basic-telescope"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-06",
@@ -115,5 +117,11 @@
                 "score": 90
             }
         ]
-    }
+    },
+    "grantsItems": [
+        {
+            "id": "90f60bef-68c6-56c5-9011-8734e687b830",
+            "count": 1
+        }
+    ]
 }

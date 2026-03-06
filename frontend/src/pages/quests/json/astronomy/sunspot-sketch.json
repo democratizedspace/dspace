@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sunspots show the Sun's activity. We only observe by projection—never through the eyepiece.",
+            "text": "Sunspots show the Sun's activity. We only observe by projection\u2014never through the eyepiece.",
             "options": [
                 {
                     "type": "goto",
@@ -139,7 +139,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Notes incomplete—return to recovery."
+                    "text": "Notes incomplete\u2014return to recovery."
                 }
             ]
         },
@@ -150,12 +150,12 @@
                 {
                     "type": "goto",
                     "goto": "safety-brief",
-                    "text": "Area and equipment secure—retry safely."
+                    "text": "Area and equipment secure\u2014retry safely."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Unsafe conditions persist—log a no-observation day and finish."
+                    "text": "Unsafe conditions persist\u2014log a no-observation day and finish."
                 }
             ]
         },
@@ -181,7 +181,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Missing fields—repeat capture safely."
+                    "text": "Missing fields\u2014repeat capture safely."
                 }
             ]
         },
@@ -202,11 +202,19 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/saturn-rings"],
+    "requiresQuests": [
+        "astronomy/saturn-rings"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
-    }
+    },
+    "grantsItems": [
+        {
+            "id": "a20f0cba-026f-5459-b7f3-0eb58367c363",
+            "count": 1
+        }
+    ]
 }

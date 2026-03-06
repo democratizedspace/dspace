@@ -168,11 +168,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-09-01",
@@ -190,5 +192,11 @@
                 "score": 92
             }
         ]
-    }
+    },
+    "grantsItems": [
+        {
+            "id": "e6a717dd-b8cc-5c65-ad8e-9b79cf929f77",
+            "count": 1
+        }
+    ]
 }

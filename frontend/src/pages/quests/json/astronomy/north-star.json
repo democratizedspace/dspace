@@ -210,7 +210,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
@@ -222,5 +224,11 @@
                 "score": 95
             }
         ]
-    }
+    },
+    "grantsItems": [
+        {
+            "id": "dea85c2b-9828-526b-b149-c004ebbae63d",
+            "count": 1
+        }
+    ]
 }
