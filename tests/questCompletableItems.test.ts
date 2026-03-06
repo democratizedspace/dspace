@@ -329,6 +329,152 @@ const findFeasibleDeadEnds = (quest: any, obtainable: Set<string>) => {
 
 const uniqueItemIds = (items: string[]) => [...new Set(items.filter(Boolean))];
 
+const buildQuestPrerequisiteClosure = (allQuests: Array<any>) => {
+    const requiresByQuest = new Map(
+        allQuests.map((quest) => [quest.id, new Set<string>(quest.requiresQuests ?? [])])
+    );
+
+    const memo = new Map<string, Set<string>>();
+    const stack: string[] = [];
+    const visiting = new Set<string>();
+
+    const visit = (questId: string): Set<string> => {
+        if (memo.has(questId)) return memo.get(questId) as Set<string>;
+        if (visiting.has(questId)) {
+            const cycleStart = stack.indexOf(questId);
+            const cyclePath = [...stack.slice(cycleStart), questId].join(' -> ');
+            throw new Error(`Quest dependency cycle detected: ${cyclePath}`);
+        }
+
+        visiting.add(questId);
+        stack.push(questId);
+
+        const closure = new Set<string>();
+        for (const prereq of requiresByQuest.get(questId) ?? new Set<string>()) {
+            closure.add(prereq);
+            for (const nested of visit(prereq)) closure.add(nested);
+        }
+
+        closure.delete(questId);
+        visiting.delete(questId);
+        stack.pop();
+        memo.set(questId, closure);
+        return closure;
+    };
+
+    for (const quest of allQuests) {
+        visit(quest.id);
+    }
+
+    return memo;
+};
+
+type TransformSoftLockConflict = {
+    processId: string;
+    consumedItemId: string;
+    createdItemId: string;
+    transformedQuestId: string;
+    rawQuestId: string;
+    sharedUnlockPrerequisites: string[];
+};
+
+const detectSiblingTransformSoftLockConflicts = ({
+    allQuests,
+    allProcesses,
+    prerequisiteClosure,
+}: {
+    allQuests: Array<any>;
+    allProcesses: Array<any>;
+    prerequisiteClosure: Map<string, Set<string>>;
+}) => {
+    const requiresByQuest = new Map(
+        allQuests.map((quest) => [quest.id, new Set<string>(quest.requiresQuests ?? [])])
+    );
+
+    const requiredItemsByQuest = new Map(
+        allQuests.map((quest: any) => [
+            quest.id,
+            uniqueItemIds([
+                ...getQuestLevelRequiredItemIds(quest),
+                ...getRequiredItemsFromFinishReachableTransitions(quest),
+                ...getFinishOptions(quest).flatMap((option: any) => getRequiredItemIds(option)),
+            ]),
+        ])
+    );
+
+
+    const creatorsByItem = new Map<string, Set<string>>();
+    for (const process of allProcesses) {
+        const processId = String(process.id ?? '').trim();
+        if (!processId) continue;
+        for (const createdItemId of toItemIds(process.createItems)) {
+            if (!createdItemId) continue;
+            if (!creatorsByItem.has(createdItemId)) creatorsByItem.set(createdItemId, new Set<string>());
+            creatorsByItem.get(createdItemId)?.add(processId);
+        }
+    }
+
+    const conflicts: TransformSoftLockConflict[] = [];
+    for (const process of allProcesses) {
+        const processId = String(process.id ?? '').trim();
+        if (!processId) continue;
+
+        for (const consumedItemId of toItemIds(process.consumeItems)) {
+            for (const createdItemId of toItemIds(process.createItems)) {
+                if (!consumedItemId || !createdItemId || consumedItemId === createdItemId) continue;
+
+                const creatorProcessIds = creatorsByItem.get(createdItemId) ?? new Set<string>();
+                if (creatorProcessIds.size !== 1 || !creatorProcessIds.has(processId)) continue;
+
+                const rawQuests = allQuests.filter((quest: any) =>
+                    (requiredItemsByQuest.get(quest.id) ?? []).includes(consumedItemId)
+                );
+                const transformedQuests = allQuests.filter((quest: any) =>
+                    (requiredItemsByQuest.get(quest.id) ?? []).includes(createdItemId)
+                );
+
+                for (const transformedQuest of transformedQuests) {
+                    const transformedDeps =
+                        prerequisiteClosure.get(transformedQuest.id) ?? new Set<string>();
+                    for (const rawQuest of rawQuests) {
+                        if (rawQuest.id === transformedQuest.id) continue;
+
+                        const rawTreeId = String(rawQuest.id).split('/')[0];
+                        const transformedTreeId = String(transformedQuest.id).split('/')[0];
+                        if (!rawTreeId || rawTreeId !== transformedTreeId) continue;
+
+                        const rawDeps = prerequisiteClosure.get(rawQuest.id) ?? new Set<string>();
+                        if (rawDeps.has(transformedQuest.id)) continue;
+                        if (transformedDeps.has(rawQuest.id)) continue;
+
+                        const sharedUnlockPrerequisites = [...rawDeps].filter((id) =>
+                            transformedDeps.has(id)
+                        );
+                        const rawDirectPrereqs = requiresByQuest.get(rawQuest.id) ?? new Set<string>();
+                        const transformedDirectPrereqs =
+                            requiresByQuest.get(transformedQuest.id) ?? new Set<string>();
+                        const sharesDirectUnlockSurface = [...rawDirectPrereqs].some((id) =>
+                            transformedDirectPrereqs.has(id)
+                        );
+                        if (!sharesDirectUnlockSurface) continue;
+
+                        conflicts.push({
+                            processId,
+                            consumedItemId,
+                            createdItemId,
+                            transformedQuestId: transformedQuest.id,
+                            rawQuestId: rawQuest.id,
+                            sharedUnlockPrerequisites,
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    return conflicts;
+};
+
 const getItemDependencies = (item: any) =>
     uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
 
@@ -505,22 +651,22 @@ describe('quest completion item availability', () => {
     it('requires post-process transformed items for quests gated behind prerequisite transformations', async () => {
         const quests = await loadQuests();
         const reminderQuest = quests.find((quest: any) => quest.id === 'completionist/reminder');
-        const polishQuest = quests.find((quest: any) => quest.id === 'completionist/polish');
+        const displayQuest = quests.find((quest: any) => quest.id === 'completionist/display');
 
         expect(reminderQuest).toBeDefined();
-        expect(polishQuest).toBeDefined();
-        expect(reminderQuest.requiresQuests ?? []).toContain('completionist/polish');
+        expect(displayQuest).toBeDefined();
+        expect(reminderQuest.requiresQuests ?? []).toContain('completionist/display');
 
-        const polishProcess = (processes as Array<any>).find(
-            (process) => process.id === 'polish-completionist-award'
+        const stageProcess = (processes as Array<any>).find(
+            (process) => process.id === 'stage-completionist-award'
         );
-        expect(polishProcess).toBeDefined();
+        expect(stageProcess).toBeDefined();
 
-        const transformedFromId = polishProcess.consumeItems?.find(
-            (entry: any) => entry.id === 'c01676ec-27e5-4a53-9a47-24bf6c5a56a9'
-        )?.id;
-        const transformedToId = polishProcess.createItems?.find(
+        const transformedFromId = stageProcess.consumeItems?.find(
             (entry: any) => entry.id === '1030a6c5-88b9-46e9-b38a-b20d8d326764'
+        )?.id;
+        const transformedToId = stageProcess.createItems?.find(
+            (entry: any) => entry.id === 'a8120ce3-4a9d-4d49-b955-92bd9d7fbc07'
         )?.id;
         expect(transformedFromId).toBeDefined();
         expect(transformedToId).toBeDefined();
@@ -533,6 +679,108 @@ describe('quest completion item availability', () => {
 
         expect(reminderRequiredItems).toContain(transformedToId);
         expect(reminderRequiredItems).not.toContain(transformedFromId);
+    });
+
+
+    it('throws when quest prerequisites contain cycles', () => {
+        const fixtureQuests = [
+            { id: 'fixture/a', requiresQuests: ['fixture/b'], dialogue: [] },
+            { id: 'fixture/b', requiresQuests: ['fixture/c'], dialogue: [] },
+            { id: 'fixture/c', requiresQuests: ['fixture/a'], dialogue: [] },
+        ];
+
+        expect(() => buildQuestPrerequisiteClosure(fixtureQuests)).toThrow(
+            'Quest dependency cycle detected: fixture/a -> fixture/b -> fixture/c -> fixture/a'
+        );
+    });
+
+    it('detects sibling quest soft-locks when one branch consumes another branch gate item', () => {
+        const fixtureQuests = [
+            {
+                id: 'fixture/root',
+                requiresQuests: [],
+                dialogue: [{ id: 'finish', options: [{ type: 'finish', text: 'done' }] }],
+            },
+            {
+                id: 'fixture/catalog',
+                requiresQuests: ['fixture/root'],
+                dialogue: [
+                    {
+                        id: 'start',
+                        options: [
+                            {
+                                type: 'goto',
+                                goto: 'finish',
+                                text: 'catalog',
+                                requiresItems: [{ id: 'raw-award', count: 1 }],
+                            },
+                        ],
+                    },
+                    { id: 'finish', options: [{ type: 'finish', text: 'done' }] },
+                ],
+            },
+            {
+                id: 'fixture/reminder',
+                requiresQuests: ['fixture/root'],
+                dialogue: [
+                    {
+                        id: 'start',
+                        options: [
+                            {
+                                type: 'goto',
+                                goto: 'finish',
+                                text: 'reminder',
+                                requiresItems: [{ id: 'polished-award', count: 1 }],
+                            },
+                        ],
+                    },
+                    { id: 'finish', options: [{ type: 'finish', text: 'done' }] },
+                ],
+            },
+        ];
+
+        const fixtureProcesses = [
+            {
+                id: 'fixture/polish-award',
+                consumeItems: [{ id: 'raw-award', count: 1 }],
+                createItems: [{ id: 'polished-award', count: 1 }],
+            },
+        ];
+
+        const prerequisiteClosure = buildQuestPrerequisiteClosure(fixtureQuests);
+        const conflicts = detectSiblingTransformSoftLockConflicts({
+            allQuests: fixtureQuests,
+            allProcesses: fixtureProcesses,
+            prerequisiteClosure,
+        }).map(
+            (conflict) =>
+                `${conflict.transformedQuestId} can soft-lock ${conflict.rawQuestId} via ${conflict.processId}`
+        );
+
+        expect(conflicts).toContain('fixture/reminder can soft-lock fixture/catalog via fixture/polish-award');
+    });
+
+    it('scans repository-wide sibling transform soft-lock conflicts and finds none in completionist', async () => {
+        const quests = await loadQuests();
+        const prerequisiteClosure = buildQuestPrerequisiteClosure(quests);
+        const conflicts = detectSiblingTransformSoftLockConflicts({
+            allQuests: quests,
+            allProcesses: processes as Array<any>,
+            prerequisiteClosure,
+        });
+
+        const completionistConflicts = conflicts.filter(
+            (conflict) =>
+                conflict.transformedQuestId.startsWith('completionist/') ||
+                conflict.rawQuestId.startsWith('completionist/')
+        );
+
+        const failureMessages = completionistConflicts.map(
+            (conflict) =>
+                `${conflict.transformedQuestId} can soft-lock ${conflict.rawQuestId} via process ${conflict.processId} (${conflict.consumedItemId} -> ${conflict.createdItemId})`
+        );
+
+        expect(failureMessages).toEqual([]);
     });
 
     it('has no feasible dialogue dead-ends between start and finish without placeholder pricing', async () => {

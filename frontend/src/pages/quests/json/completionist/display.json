@@ -13,13 +13,7 @@
                 {
                     "type": "goto",
                     "goto": "dust",
-                    "text": "Let's find the perfect spot",
-                    "requiresItems": [
-                        {
-                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Let's find the perfect spot"
                 }
             ]
         },
@@ -27,11 +21,6 @@
             "id": "dust",
             "text": "Clear a shelf and wipe away dust so the trophy doesn't sit on grit. The light bounce will look better too.",
             "options": [
-                {
-                    "type": "process",
-                    "process": "polish-completionist-award",
-                    "text": "Clean and buff the trophy"
-                },
                 {
                     "type": "goto",
                     "goto": "place",
@@ -133,7 +122,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["completionist/v2"],
+    "requiresQuests": ["completionist/polish"],
     "hardening": {
         "passes": 0,
         "score": 90,

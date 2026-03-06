@@ -9,8 +9,8 @@ Completionist quests build practical progression through the completionist skill
 
 1. [Congrats on finishing all the quests available in v2!](/quests/completionist/v2)
 2. [Catalog Your Trophy](/quests/completionist/catalog)
-3. [Show Off Your Trophy](/quests/completionist/display)
-4. [Polish Your Trophy](/quests/completionist/polish)
+3. [Polish Your Trophy](/quests/completionist/polish)
+4. [Show Off Your Trophy](/quests/completionist/display)
 5. [Check for New Quests](/quests/completionist/reminder)
 
 ## 1) Congrats on finishing all the quests available in v2! (`completionist/v2`)
@@ -70,37 +70,11 @@ Completionist quests build practical progression through the completionist skill
         - Consumes: none
         - Creates: completionist trophy log entry ×1
 
-## 3) Show Off Your Trophy (`completionist/display`)
-
-- Quest link: [/quests/completionist/display](/quests/completionist/display)
-- Unlock prerequisite:
-    - `requiresQuests`: `completionist/v2`
-- Dialogue `requiresItems` gates:
-    - `start` → "Let's find the perfect spot" — Completionist Award II ×1
-    - `dust` → "Shelf is dusted and trophy gleams" — Completionist Award II (polished) ×1
-    - `place` → "Award is staged with lighting" — Completionist Award II (displayed) ×1
-    - `verify` → "Stable and safe, locking in the display" — Completionist Award II (displayed) ×1
-    - `recover` → "Restaged and ready for verification" — Completionist Award II (displayed) ×1
-- Grants:
-    - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
-- Rewards:
-    - Completionist Award ×1
-- Processes used:
-    - [polish-completionist-award](/processes/polish-completionist-award)
-        - Requires: liquid soap ×1, Completionist Award II ×1, paper towel ×1
-        - Consumes: paper towel ×0.1, Completionist Award II ×1
-        - Creates: Completionist Award II (polished) ×1
-    - [stage-completionist-award](/processes/stage-completionist-award)
-        - Requires: Bookshelf ×1, Completionist Award II (polished) ×1
-        - Consumes: Completionist Award II (polished) ×1
-        - Creates: Completionist Award II (displayed) ×1
-
-## 4) Polish Your Trophy (`completionist/polish`)
+## 3) Polish Your Trophy (`completionist/polish`)
 
 - Quest link: [/quests/completionist/polish](/quests/completionist/polish)
 - Unlock prerequisite:
-    - `requiresQuests`: `completionist/v2`
+    - `requiresQuests`: `completionist/catalog`
 - Dialogue `requiresItems` gates:
     - `start` → "Absolutely, let's polish it" — Completionist Award II ×1
     - `prep` → "First polish pass complete" — Completionist Award II (polished) ×1
@@ -117,13 +91,34 @@ Completionist quests build practical progression through the completionist skill
         - Consumes: paper towel ×0.1, Completionist Award II ×1
         - Creates: Completionist Award II (polished) ×1
 
+## 4) Show Off Your Trophy (`completionist/display`)
+
+- Quest link: [/quests/completionist/display](/quests/completionist/display)
+- Unlock prerequisite:
+    - `requiresQuests`: `completionist/polish`
+- Dialogue `requiresItems` gates:
+    - `dust` → "Shelf is dusted and trophy gleams" — Completionist Award II (polished) ×1
+    - `place` → "Award is staged with lighting" — Completionist Award II (displayed) ×1
+    - `verify` → "Stable and safe, locking in the display" — Completionist Award II (displayed) ×1
+    - `recover` → "Restaged and ready for verification" — Completionist Award II (displayed) ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - Completionist Award ×1
+- Processes used:
+    - [stage-completionist-award](/processes/stage-completionist-award)
+        - Requires: Bookshelf ×1, Completionist Award II (polished) ×1
+        - Consumes: Completionist Award II (polished) ×1
+        - Creates: Completionist Award II (displayed) ×1
+
 ## 5) Check for New Quests (`completionist/reminder`)
 
 - Quest link: [/quests/completionist/reminder](/quests/completionist/reminder)
 - Unlock prerequisite:
-    - `requiresQuests`: `completionist/polish`
+    - `requiresQuests`: `completionist/display`
 - Dialogue `requiresItems` gates:
-    - `start` → "Let's lock in a reminder plan around the polished award" — Completionist Award II (polished) ×1
+    - `start` → "Let's lock in a reminder plan around the displayed award" — Completionist Award II (displayed) ×1
     - `plan-window` → "Primary reminder scheduled, continue to verification" — weekly quest reminder ×1
     - `verify-reminder` → "Dry run passed: cadence, link, and timezone are all correct" — weekly quest reminder ×1
     - `recovery` → "Re-test the corrected reminder" — weekly quest reminder ×1
