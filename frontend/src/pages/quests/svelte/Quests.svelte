@@ -195,6 +195,10 @@
         gap: 20px;
     }
 
+    .quests-grid > a {
+        height: 100%;
+    }
+
     @media only screen and (max-width: 640px) {
         .container {
             padding-inline: 1rem;

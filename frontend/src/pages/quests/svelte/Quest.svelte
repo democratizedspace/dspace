@@ -36,6 +36,7 @@
         margin: 5px;
         opacity: 0.8;
         max-width: 100%;
+        height: calc(100% - 10px);
         overflow: hidden;
         box-sizing: border-box;
     }
@@ -74,6 +75,7 @@
         display: flex;
         flex-direction: row;
         align-items: stretch;
+        height: 100%;
         gap: 0;
         min-width: 0;
     }
