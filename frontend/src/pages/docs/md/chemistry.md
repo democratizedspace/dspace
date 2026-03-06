@@ -51,7 +51,7 @@ inventory result (sample, log, adjusted solution, or waste package) that can be 
 ## 4) Neutralize an Acid Spill (`chemistry/acid-neutralization`)
 
 - Requires: `chemistry/ph-test`
-- Response and completion gates now require `neutralized spill waste container`
+- Kit workflow and verification require `neutralized spill waste container`; manual branch can proceed to verification with strip-based checks before confirming the container at pass gate
 - Process:
     - [/processes/chemistry-neutralize-acid-spill](/processes/chemistry-neutralize-acid-spill)
         - consumes neutralizer + pH strip
@@ -59,7 +59,7 @@ inventory result (sample, log, adjusted solution, or waste package) that can be 
 
 ## 5) Prepare a Buffer Solution (`chemistry/buffer-solution`)
 
-- Requires: `chemistry/ph-test`
+- Requires: `chemistry/ph-test`, `chemistry/acid-dilution`
 - Both prep branches now require paired evidence:
     - `buffer solution batch`
     - `chemistry pH reading card`
@@ -70,8 +70,8 @@ inventory result (sample, log, adjusted solution, or waste package) that can be 
 ## 6) Adjust Solution pH (`chemistry/ph-adjustment`)
 
 - Requires: `chemistry/buffer-solution`
-- Baseline/retest now depend on `chemistry pH reading card`
-- Adjustment branch now requires/produces transformed batch evidence:
+- Baseline/retest and completion now depend on `chemistry pH reading card`
+- Adjustment branch still requires/produces transformed batch evidence when corrections are needed:
     - requires `buffer solution batch`
     - creates `pH-adjusted buffer solution`
 - Processes:

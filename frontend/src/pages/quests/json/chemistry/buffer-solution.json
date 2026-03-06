@@ -170,7 +170,8 @@
         }
     ],
     "requiresQuests": [
-        "chemistry/ph-test"
+        "chemistry/ph-test",
+        "chemistry/acid-dilution"
     ],
     "hardening": {
         "passes": 0,

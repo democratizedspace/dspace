@@ -158,10 +158,6 @@
                     "text": "Chemistry in harmony.",
                     "requiresItems": [
                         {
-                            "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
-                            "count": 1
-                        },
-                        {
                             "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
                             "count": 1
                         }

@@ -2545,7 +2545,7 @@
         "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
         "name": "fizz reaction cylinder sample",
         "description": "A labeled graduated cylinder holding the post-fizz solution (water, weak acid, dissolved carbonate salts). Marked as chemical waste requiring neutralization and proper disposal.",
-        "image": "/assets/safe_eco_propellant_reaction.jpg",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2553,7 +2553,7 @@
         "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
         "name": "safe fizz reaction log sheet",
         "description": "A lab notebook page recording reagent ratios, bubbling profile, peak temperature, and disposal note for the spent fizz solution.",
-        "image": "/assets/safe_eco_propellant_reaction.jpg",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
