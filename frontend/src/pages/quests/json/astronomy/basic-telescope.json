@@ -187,8 +187,24 @@
             "text": "Excellent craftsmanship. Regular stargazing sharpens navigation. Cap both lenses before storing and keep the telescope away from heat and direct sunlight.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the telescope build alignment card.",
+                    "grantsItems": [
+                        {
+                            "id": "f293d45c-49bd-4c53-a73f-88233c5b6acc",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Thanks, Nova."
+                    "text": "Thanks, Nova.",
+                    "requiresItems": [
+                        {
+                            "id": "f293d45c-49bd-4c53-a73f-88233c5b6acc",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -209,7 +225,7 @@
     "hardening": {
         "passes": 5,
         "score": 96,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-basic-telescope-2025-08-03",

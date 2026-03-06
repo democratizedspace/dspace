@@ -64,7 +64,7 @@
                 {
                     "type": "goto",
                     "goto": "safety-preflight",
-                    "text": "Sky cleared enough\u2014run preflight before setup.",
+                    "text": "Sky cleared enough—run preflight before setup.",
                     "requiresItems": [
                         {
                             "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
@@ -100,7 +100,7 @@
                 {
                     "type": "goto",
                     "goto": "weather-hold",
-                    "text": "Conditions still marginal\u2014hold for next window."
+                    "text": "Conditions still marginal—hold for next window."
                 }
             ]
         },
@@ -182,17 +182,17 @@
                 {
                     "type": "goto",
                     "goto": "troubleshoot",
-                    "text": "Tracking drift\u2014realign and retry."
+                    "text": "Tracking drift—realign and retry."
                 },
                 {
                     "type": "goto",
                     "goto": "weather-hold",
-                    "text": "Cloud interruption\u2014defer to the next pass."
+                    "text": "Cloud interruption—defer to the next pass."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Safety hazard persists\u2014abort run with a caution note."
+                    "text": "Safety hazard persists—abort run with a caution note."
                 }
             ]
         },
@@ -203,7 +203,7 @@
                 {
                     "type": "goto",
                     "goto": "safety-preflight",
-                    "text": "Realigned\u2014run preflight and retry the pass."
+                    "text": "Realigned—run preflight and retry the pass."
                 },
                 {
                     "type": "goto",
@@ -238,7 +238,7 @@
                 {
                     "type": "goto",
                     "goto": "classify-anomaly",
-                    "text": "One or more fields missing\u2014classify anomaly then retry."
+                    "text": "One or more fields missing—classify anomaly then retry."
                 }
             ]
         },
@@ -247,8 +247,24 @@
             "text": "Great tracking run. You handled weather fallback, logged evidence, and used the recovery loop instead of guessing.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the satellite pass classification notes.",
+                    "grantsItems": [
+                        {
+                            "id": "f537cbd4-e5f0-4ef9-a776-b126894988cf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "That was fun!"
+                    "text": "That was fun!",
+                    "requiresItems": [
+                        {
+                            "id": "f537cbd4-e5f0-4ef9-a776-b126894988cf",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -269,7 +285,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -156,8 +156,24 @@
             "text": "Nice work! Cap ink, wipe quill, close logbook and dry the telescope before packing up.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the moon crater sketch sheet.",
+                    "grantsItems": [
+                        {
+                            "id": "55851b57-86b7-4b16-a341-6a831aff0da5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Onward!"
+                    "text": "Onward!",
+                    "requiresItems": [
+                        {
+                            "id": "55851b57-86b7-4b16-a341-6a831aff0da5",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -178,7 +194,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-09-01",

@@ -137,12 +137,12 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Conditions are safe again\u2014retry with a planned route."
+                    "text": "Conditions are safe again—retry with a planned route."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Unsafe tonight, but evidence is already logged\u2014finish with caution.",
+                    "text": "Unsafe tonight, but evidence is already logged—finish with caution.",
                     "requiresItems": [
                         {
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
@@ -178,7 +178,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Evidence is inconsistent\u2014run another logged session."
+                    "text": "Evidence is inconsistent—run another logged session."
                 }
             ]
         },
@@ -187,8 +187,24 @@
             "text": "Excellent diligence. You logged reproducible evidence, handled unstable conditions safely, and proved orbital motion without guessing.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the galilean moon position chart.",
+                    "grantsItems": [
+                        {
+                            "id": "be314ec9-c289-42e9-a6d6-5acc56779412",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Space feels closer already."
+                    "text": "Space feels closer already.",
+                    "requiresItems": [
+                        {
+                            "id": "be314ec9-c289-42e9-a6d6-5acc56779412",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -209,7 +225,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

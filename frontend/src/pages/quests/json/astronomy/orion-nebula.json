@@ -116,7 +116,7 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Conditions improved\u2014retry observation."
+                    "text": "Conditions improved—retry observation."
                 },
                 {
                     "type": "goto",
@@ -187,7 +187,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Notes are incomplete or the signature is uncertain\u2014retry."
+                    "text": "Notes are incomplete or the signature is uncertain—retry."
                 }
             ]
         },
@@ -196,8 +196,24 @@
             "text": "Nice work. You handled weather risk, produced evidence, and left a repeatable Orion Nebula record.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the orion nebula glow sketch.",
+                    "grantsItems": [
+                        {
+                            "id": "31a986a6-537d-42d4-856f-274e6cb38c69",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Nebula session complete."
+                    "text": "Nebula session complete.",
+                    "requiresItems": [
+                        {
+                            "id": "31a986a6-537d-42d4-856f-274e6cb38c69",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -218,7 +234,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-17",

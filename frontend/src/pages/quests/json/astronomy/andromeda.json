@@ -56,7 +56,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Yes\u2014the smudge holds across repeated sweeps."
+                    "text": "Yes—the smudge holds across repeated sweeps."
                 },
                 {
                     "type": "goto",
@@ -81,8 +81,24 @@
             "text": "Nice work! Log the position for next time, cap the telescope, switch off the flashlight and pack your gear before leaving the site.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the andromeda acquisition log.",
+                    "grantsItems": [
+                        {
+                            "id": "82edf24f-3a5b-442d-8214-191454a6bc52",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Logging observations."
+                    "text": "Logging observations.",
+                    "requiresItems": [
+                        {
+                            "id": "82edf24f-3a5b-442d-8214-191454a6bc52",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -103,7 +119,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-06",

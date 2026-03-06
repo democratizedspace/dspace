@@ -143,12 +143,12 @@
                             "count": 1
                         }
                     ],
-                    "text": "Yes\u2014logged order is consistent and uncertainty is documented."
+                    "text": "Yes—logged order is consistent and uncertainty is documented."
                 },
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "No\u2014evidence is inconsistent; rerun with safer conditions."
+                    "text": "No—evidence is inconsistent; rerun with safer conditions."
                 }
             ]
         },
@@ -159,7 +159,7 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Conditions stabilized\u2014retry via one of the routes."
+                    "text": "Conditions stabilized—retry via one of the routes."
                 },
                 {
                     "type": "goto",
@@ -179,8 +179,24 @@
             "text": "Great work. You documented the alignment with traceable evidence and handled adverse conditions safely.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the planetary alignment witness chart.",
+                    "grantsItems": [
+                        {
+                            "id": "40b059e7-a11d-49da-8aed-05570804c036",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Alignment run complete."
+                    "text": "Alignment run complete.",
+                    "requiresItems": [
+                        {
+                            "id": "40b059e7-a11d-49da-8aed-05570804c036",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -201,7 +217,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -39,7 +39,7 @@
                 {
                     "type": "goto",
                     "goto": "view",
-                    "text": "Timing locked\u2014let's observe.",
+                    "text": "Timing locked—let's observe.",
                     "requiresItems": [
                         {
                             "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
@@ -136,8 +136,24 @@
             "text": "Great observation! Tracking phases helps practice precision focusing.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the venus phase progression card.",
+                    "grantsItems": [
+                        {
+                            "id": "7e9cc033-a1bd-40fc-92b1-7d55b9dba295",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Can't wait for the next phase."
+                    "text": "Can't wait for the next phase.",
+                    "requiresItems": [
+                        {
+                            "id": "7e9cc033-a1bd-40fc-92b1-7d55b9dba295",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -158,7 +174,7 @@
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-18",

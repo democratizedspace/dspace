@@ -73,7 +73,7 @@
                             "count": 1
                         }
                     ],
-                    "text": "Shots captured\u2014ready for review."
+                    "text": "Shots captured—ready for review."
                 }
             ]
         },
@@ -84,12 +84,12 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Yes\u2014usable set confirmed and logged."
+                    "text": "Yes—usable set confirmed and logged."
                 },
                 {
                     "type": "goto",
                     "goto": "retake",
-                    "text": "No\u2014blurred, clipped, or missing umbral detail."
+                    "text": "No—blurred, clipped, or missing umbral detail."
                 }
             ]
         },
@@ -119,8 +119,24 @@
             "text": "Excellent work! Preserve the best frame notes in your logbook so the next eclipse setup starts from proven settings.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the lunar eclipse phase sequence strip.",
+                    "grantsItems": [
+                        {
+                            "id": "7019df00-c069-4644-9189-71340620ffba",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Capture set archived."
+                    "text": "Capture set archived.",
+                    "requiresItems": [
+                        {
+                            "id": "7019df00-c069-4644-9189-71340620ffba",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -141,7 +157,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

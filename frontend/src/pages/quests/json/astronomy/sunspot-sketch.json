@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Sunspots show the Sun's activity. We only observe by projection\u2014never through the eyepiece.",
+            "text": "Sunspots show the Sun's activity. We only observe by projection—never through the eyepiece.",
             "options": [
                 {
                     "type": "goto",
@@ -139,7 +139,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Notes incomplete\u2014return to recovery."
+                    "text": "Notes incomplete—return to recovery."
                 }
             ]
         },
@@ -150,12 +150,12 @@
                 {
                     "type": "goto",
                     "goto": "safety-brief",
-                    "text": "Area and equipment secure\u2014retry safely."
+                    "text": "Area and equipment secure—retry safely."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Unsafe conditions persist\u2014log a no-observation day and finish."
+                    "text": "Unsafe conditions persist—log a no-observation day and finish."
                 }
             ]
         },
@@ -181,7 +181,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Missing fields\u2014repeat capture safely."
+                    "text": "Missing fields—repeat capture safely."
                 }
             ]
         },
@@ -190,8 +190,24 @@
             "text": "Great work. You used projection safely, logged structured evidence, and recovered correctly when conditions drifted.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the sunspot transit notebook page.",
+                    "grantsItems": [
+                        {
+                            "id": "ea043858-4d09-4510-a495-3ddae395ce51",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Solar sketch complete."
+                    "text": "Solar sketch complete.",
+                    "requiresItems": [
+                        {
+                            "id": "ea043858-4d09-4510-a495-3ddae395ce51",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -212,7 +228,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

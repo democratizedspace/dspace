@@ -45,7 +45,7 @@
                 {
                     "type": "goto",
                     "goto": "chart",
-                    "text": "Plan is ready\u2014let's star hop.",
+                    "text": "Plan is ready—let's star hop.",
                     "requiresItems": [
                         {
                             "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
@@ -72,7 +72,7 @@
                 {
                     "type": "goto",
                     "goto": "chart",
-                    "text": "Anchor confirmed\u2014continue to full mapping.",
+                    "text": "Anchor confirmed—continue to full mapping.",
                     "requiresItems": [
                         {
                             "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
@@ -99,7 +99,7 @@
                 {
                     "type": "goto",
                     "goto": "log-evidence",
-                    "text": "Patterns are clear\u2014ready to log evidence.",
+                    "text": "Patterns are clear—ready to log evidence.",
                     "requiresItems": [
                         {
                             "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
@@ -151,12 +151,12 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Conditions improved\u2014retry a route."
+                    "text": "Conditions improved—retry a route."
                 },
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Unsafe tonight\u2014defer and retry when visibility improves."
+                    "text": "Unsafe tonight—defer and retry when visibility improves."
                 }
             ]
         },
@@ -165,8 +165,24 @@
             "text": "Excellent. You mapped constellations with reproducible evidence and used a safe fallback when conditions shifted.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the constellation route atlas page.",
+                    "grantsItems": [
+                        {
+                            "id": "eefbf274-67f1-4ea8-8253-25f85c0db336",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Thanks, Nova!"
+                    "text": "Thanks, Nova!",
+                    "requiresItems": [
+                        {
+                            "id": "eefbf274-67f1-4ea8-8253-25f85c0db336",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -187,7 +203,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-16",

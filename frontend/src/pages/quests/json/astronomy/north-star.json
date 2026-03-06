@@ -140,7 +140,7 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Conditions are safe again\u2014retry a route."
+                    "text": "Conditions are safe again—retry a route."
                 },
                 {
                     "type": "goto",
@@ -198,8 +198,24 @@
             "text": "Excellent. You located Polaris with repeatable evidence and used a safe recovery protocol when conditions shifted.",
             "options": [
                 {
+                    "type": "grantsItems",
+                    "text": "Record and archive this session on the north-star alignment card.",
+                    "grantsItems": [
+                        {
+                            "id": "8615b34c-f00e-4258-b94a-67bd58d11ece",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "finish",
-                    "text": "Polaris fix complete."
+                    "text": "Polaris fix complete.",
+                    "requiresItems": [
+                        {
+                            "id": "8615b34c-f00e-4258-b94a-67bd58d11ece",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -220,7 +236,7 @@
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-02-17",
