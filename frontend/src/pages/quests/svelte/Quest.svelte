@@ -35,6 +35,7 @@
         border-radius: 20px;
         margin: 5px;
         opacity: 0.8;
+        height: 100%;
         max-width: 100%;
         overflow: hidden;
         box-sizing: border-box;
@@ -75,6 +76,7 @@
         flex-direction: row;
         align-items: stretch;
         gap: 0;
+        height: 100%;
         min-width: 0;
     }
 
