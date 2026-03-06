@@ -222,6 +222,34 @@ test.describe('Quests page horizontal overflow regression', () => {
         expect(hasOverflow).toBe(false);
     });
 
+    test('quest tiles in the same row should share a uniform height', async ({ page }) => {
+        await page.setViewportSize({ width: 1920, height: 1080 });
+
+        await page.goto('/quests');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const firstTile = page.locator('[data-testid="quest-tile"]').first();
+        await expect(firstTile).toBeVisible();
+
+        const firstRowHeights = await page.evaluate(() => {
+            const tiles = Array.from(document.querySelectorAll('[data-testid="quest-tile"]'));
+            if (tiles.length === 0) {
+                return [];
+            }
+
+            const top = tiles[0].getBoundingClientRect().top;
+            return tiles
+                .filter((tile) => Math.abs(tile.getBoundingClientRect().top - top) < 1)
+                .map((tile) => tile.getBoundingClientRect().height);
+        });
+
+        expect(firstRowHeights.length).toBeGreaterThan(1);
+
+        const minHeight = Math.min(...firstRowHeights);
+        const maxHeight = Math.max(...firstRowHeights);
+        expect(maxHeight - minHeight).toBeLessThanOrEqual(1);
+    });
     test('quest tile text column should have comfortable right padding', async ({ page }) => {
         await page.setViewportSize({ width: 1920, height: 1080 });
 
