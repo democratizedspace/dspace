@@ -163,3 +163,33 @@ test('passes when all process references exist in the known process set', () => 
     expect(result).toBe(true);
 });
 
+test('fails when a process option defines requiresItems', () => {
+    const questWithProcessOptionRequiresItems = {
+        id: 'q-process-option-requires-items',
+        title: 'Has Redundant Requirement',
+        description: 'desc',
+        image: 'img.png',
+        npc: 'npc',
+        start: 'start',
+        dialogue: [
+            {
+                id: 'start',
+                text: 'hello',
+                options: [
+                    {
+                        type: 'process',
+                        process: 'existing-process',
+                        text: 'run it',
+                        requiresItems: [{ id: 'item-1', count: 1 }],
+                    },
+                    { type: 'finish', text: 'done' },
+                ],
+            },
+        ],
+        hardening: defaultHardening,
+    };
+    const file = writeQuestFile(questWithProcessOptionRequiresItems);
+    const result = validateQuest(file, { knownProcessIds: new Set(['existing-process']) });
+    rmSync(path.dirname(file), { recursive: true, force: true });
+    expect(result).toBe(false);
+});

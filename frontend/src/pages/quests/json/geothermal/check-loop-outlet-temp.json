@@ -26,7 +26,7 @@
                         },
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 2.0
+                            "count": 2
                         }
                     ]
                 }
@@ -39,17 +39,7 @@
                 {
                     "type": "process",
                     "process": "capture-hourly-temperature-log",
-                    "text": "Log the outlet run",
-                    "requiresItems": [
-                        {
-                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Log the outlet run"
                 },
                 {
                     "type": "goto",
@@ -104,17 +94,7 @@
                 {
                     "type": "process",
                     "process": "capture-hourly-temperature-log",
-                    "text": "Log corrective outlet run",
-                    "requiresItems": [
-                        {
-                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Log corrective outlet run"
                 },
                 {
                     "type": "goto",
@@ -158,21 +138,7 @@
                 {
                     "type": "process",
                     "process": "deploy-temperature-json-endpoint",
-                    "text": "Publish the outlet endpoint",
-                    "requiresItems": [
-                        {
-                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
-                            "count": 1
-                        },
-                        {
-                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 2.0
-                        },
-                        {
-                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Publish the outlet endpoint"
                 },
                 {
                     "type": "goto",
@@ -210,7 +176,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["geothermal/check-loop-inlet-temp"],
+    "requiresQuests": [
+        "geothermal/check-loop-inlet-temp"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

@@ -29,21 +29,7 @@
                 {
                     "type": "process",
                     "process": "swap-white-pla-filament",
-                    "text": "Purge to white PLA.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Purge to white PLA."
                 },
                 {
                     "type": "goto",
@@ -74,17 +60,7 @@
                 {
                     "type": "process",
                     "process": "3dprint-cable-clips",
-                    "text": "Alternate path: faster draft settings with active monitoring at each cooldown.",
-                    "requiresItems": [
-                        {
-                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Alternate path: faster draft settings with active monitoring at each cooldown."
                 },
                 {
                     "type": "goto",
@@ -205,7 +181,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/filament-change"],
+    "requiresQuests": [
+        "3dprinting/filament-change"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

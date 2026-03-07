@@ -34,25 +34,7 @@
                 {
                     "type": "process",
                     "process": "swap-green-pla-filament",
-                    "text": "Unload old filament and load green PLA.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 10
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Unload old filament and load green PLA."
                 },
                 {
                     "type": "goto",
@@ -110,25 +92,7 @@
                 {
                     "type": "process",
                     "process": "swap-green-pla-filament",
-                    "text": "Run a recovery swap and purge cycle.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 5
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Run a recovery swap and purge cycle."
                 },
                 {
                     "type": "goto",
@@ -160,7 +124,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/calibration-cube"],
+    "requiresQuests": [
+        "3dprinting/calibration-cube"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,

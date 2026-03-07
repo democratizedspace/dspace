@@ -136,6 +136,17 @@ function validateQuest(filePath, options = {}) {
       continue;
     }
 
+    const processOptionsWithRequiresItems = node.options.filter(
+      (option) => option.type === 'process' && Array.isArray(option.requiresItems)
+    );
+
+    if (processOptionsWithRequiresItems.length > 0) {
+      console.error(
+        `Validation failed for ${filePath}: process options cannot define requiresItems`
+      );
+      return false;
+    }
+
     const missingProcessIds = node.options
       .filter((option) => option.type === 'process')
       .map((option) => option.process)
