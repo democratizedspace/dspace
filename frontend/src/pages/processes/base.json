@@ -7090,6 +7090,73 @@
         }
     },
     {
+        "id": "attach-hydroponic-reservoir-thermometer",
+        "title": "Dry the hydroponic tub wall with a paper towel and mount a strip thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "79901310-c216-484d-8175-dea7c5bb7de6",
+                "count": 1
+            }
+        ],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "log-hydroponic-reservoir-temperature",
+        "title": "Log hydroponic reservoir temperature from the mounted strip thermometer",
+        "image": "/assets/aquarium_thermometer.jpg",
+        "requireItems": [
+            {
+                "id": "79901310-c216-484d-8175-dea7c5bb7de6",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "505c3c46-ce4b-43d6-b7cc-d03dac7af0ee",
+                "count": 1
+            }
+        ],
+        "duration": "30s",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "log-heated-walstad-temperature",
         "title": "Log a heated Walstad tank temperature reading",
         "image": "/assets/aquarium_thermometer.jpg",

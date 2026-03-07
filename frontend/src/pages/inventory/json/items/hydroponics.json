@@ -150,6 +150,20 @@
         "priceExemptionReason": "SOULBOUND"
     },
     {
+        "id": "79901310-c216-484d-8175-dea7c5bb7de6",
+        "name": "Hydroponic reservoir with thermometer mounted",
+        "description": "Hydroponic nutrient reservoir with a strip thermometer mounted in a representative flow zone for repeatable QA checks.",
+        "image": "/assets/walstad_aquarium_strip_thermometer_80L.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "505c3c46-ce4b-43d6-b7cc-d03dac7af0ee",
+        "name": "Hydroponic reservoir temperature reading",
+        "description": "Timestamped hydroponic reservoir temperature log captured from the mounted strip thermometer after stabilization.",
+        "image": "/assets/aquarium_temperature_strip_reading.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
         "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
         "name": "rinsed hydroponic root zone",
         "description": "Grow media thoroughly flushed with fresh water to clear salts before recharging nutrients.",
