@@ -178,7 +178,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Dialogue `requiresItems` gates:
     - `add` → "Mix and circulate." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, safety goggles ×1, submersible water pump ×1, 50 mL measuring syringe ×1, pH test strip pack ×1
     - `add` → "Check EC levels." — EC meter ×1, hydroponics tub (ready) ×1
-    - `add` → "Reservoir topped off!" — hydroponics tub (ready) ×1
+    - `add` → "Reservoir topped off!" — hydroponics tub (ready) ×2
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -262,8 +262,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `requiresQuests`: `hydroponics/ec-calibrate`
 - Dialogue `requiresItems` gates:
     - `measure` → "Capture EC reading." — EC meter ×1, hydroponics tub (ready) ×1
-    - `measure` → "Reading logged; let's interpret it." — hydroponic nutrient solution EC log ×1
-    - `interpret` → "In range (1.2-1.8). Close and record cadence." — hydroponic nutrient solution EC log ×1
+    - `measure` → "Reading logged; let's interpret it." — hydroponic nutrient solution EC log ×2
+    - `interpret` → "In range (1.2-1.8). Close and record cadence." — hydroponic nutrient solution EC log ×2
     - `adjust` → "Apply correction and circulate." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, safety goggles ×1, submersible water pump ×1, hydroponics tub (ready) ×1
 - Recovery/troubleshooting branches:
     - Out-of-range/caution path routes through `adjust` and loops back to `measure`
@@ -348,10 +348,10 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/reservoir-refresh`
 - Dialogue `requiresItems` gates:
-    - `kit` → "Kit is assembled and power is isolated." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1, safety goggles ×1
-    - `install` → "Pump is physically installed." — installed submersible pump loop ×1
-    - `verify` → "Flow is stable and documented." — verified hydroponic circulation loop ×1
-    - `rollback` → "Re-verify after corrective changes." — installed submersible pump loop ×1
+    - `kit` → "Kit is assembled and power is isolated." — submersible water pump ×3, hydroponics tub (ready) ×3, nitrile gloves (pair) ×3, safety goggles ×3
+    - `install` → "Pump is physically installed." — installed submersible pump loop ×4
+    - `verify` → "Flow is stable and documented." — verified hydroponic circulation loop ×4
+    - `rollback` → "Re-verify after corrective changes." — installed submersible pump loop ×4
 - Recovery/troubleshooting branches:
     - `rollback` branch enforces power-down, reseat, seal checks, then loops back to verification with installed hardware
 - Safety/ops checks:
@@ -377,14 +377,14 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/pump-install`
 - Dialogue `requiresItems` gates:
-    - `precheck` → "Installed loop, submerged intake, and PPE confirmed." — installed submersible pump loop ×1, nitrile gloves (pair) ×1, safety goggles ×1
-    - `precheck` → "Verified loop, submerged intake, and PPE confirmed." — verified hydroponic circulation loop ×1, nitrile gloves (pair) ×1, safety goggles ×1
+    - `precheck` → "Installed loop, submerged intake, and PPE confirmed." — installed submersible pump loop ×4, nitrile gloves (pair) ×3, safety goggles ×3
+    - `precheck` → "Verified loop, submerged intake, and PPE confirmed." — verified hydroponic circulation loop ×4, nitrile gloves (pair) ×3, safety goggles ×3
     - `prime` → "Run controlled prime cycle with wet intake." — submersible water pump ×1, hydroponics tub (ready) ×1, nitrile gloves (pair) ×1
-    - `prime` → "Prime cycle done; verify circulation artifact." — installed submersible pump loop ×1
-    - `prime` → "Prime cycle done; use existing verification artifact." — verified hydroponic circulation loop ×1
-    - `verify` → "Flow is stable after priming." — verified hydroponic circulation loop ×1
-    - `recover` → "Hardware is reseated; re-verify now." — installed submersible pump loop ×1
-    - `recover` → "Hardware is reseated; use verified loop to continue checks." — verified hydroponic circulation loop ×1
+    - `prime` → "Prime cycle done; verify circulation artifact." — installed submersible pump loop ×4
+    - `prime` → "Prime cycle done; use existing verification artifact." — verified hydroponic circulation loop ×4
+    - `verify` → "Flow is stable after priming." — verified hydroponic circulation loop ×4
+    - `recover` → "Hardware is reseated; re-verify now." — installed submersible pump loop ×4
+    - `recover` → "Hardware is reseated; use verified loop to continue checks." — verified hydroponic circulation loop ×4
 - Recovery/troubleshooting branches:
     - `precheck` can route to `recover` when cavitation/air ingress is observed
     - `verify` routes to `recover` for reseat/top-off retry before re-verification
@@ -475,10 +475,10 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
     - `attach` → "Attach thermometer for a stable reading." — Walstad aquarium (80 L) ×1, aquarium thermometer (0–50°C) ×1, paper towel ×1
-    - `attach` → "Thermometer mounted; capture temperature log." — attached aquarium thermometer ×1
+    - `attach` → "Thermometer mounted; capture temperature log." — attached aquarium thermometer ×2
     - `measure` → "Record temperature log artifact." — attached aquarium thermometer ×1
-    - `measure` → "Temperature log captured." — walstad tank temperature log ×1
-    - `interpret` → "In range and stable; close this check." — walstad tank temperature log ×1
+    - `measure` → "Temperature log captured." — walstad tank temperature log ×2
+    - `interpret` → "In range and stable; close this check." — walstad tank temperature log ×2
     - `correct` → "Stabilize reservoir before retest." — EC meter ×1, 50 mL measuring syringe ×1
 - Recovery/troubleshooting branches:
     - `interpret` branches to `correct` for caution/fail thresholds, then loops to `measure` for mandatory re-log

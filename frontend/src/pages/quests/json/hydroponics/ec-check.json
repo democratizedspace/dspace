@@ -43,7 +43,7 @@
                     "requiresItems": [
                         {
                             "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }
@@ -60,7 +60,7 @@
                     "requiresItems": [
                         {
                             "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 },
@@ -126,7 +126,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/ec-calibrate"],
+    "requiresQuests": [
+        "hydroponics/ec-calibrate"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
