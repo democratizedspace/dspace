@@ -30,6 +30,19 @@ type ProcessData = {
     createItems?: ItemCount[];
 };
 
+type ItemSource = {
+    questId: string;
+    nodeId?: string;
+    optionType?: string;
+    processId?: string;
+    count: number;
+};
+
+type InventoryState = {
+    counts: Map<string, number>;
+    sources: Map<string, ItemSource[]>;
+};
+
 const processMap = new Map((processes as ProcessData[]).map((p) => [p.id, p]));
 const purchasableItems = new Set(
     (items as Array<{ id: string; price?: number; priceExemptionReason?: string }>)
@@ -68,11 +81,23 @@ const buyMissingRequirements = (inventory: Map<string, number>, requirements: It
     return changed;
 };
 
-const cloneInventory = (inventory: Map<string, number>) => new Map<string, number>(inventory.entries());
+const cloneState = (state: InventoryState): InventoryState => ({
+    counts: new Map(state.counts.entries()),
+    sources: new Map(
+        [...state.sources.entries()].map(([id, entries]) => [id, [...entries]])
+    ),
+});
 
-const mergeInventory = (target: Map<string, number>, source: Map<string, number>) => {
-    for (const [id, count] of source.entries()) {
-        addItem(target, id, count);
+const recordSources = (
+    state: InventoryState,
+    entries: ItemCount[] = [],
+    sourceBase: Omit<ItemSource, 'count'>
+) => {
+    for (const entry of entries) {
+        const count = Number(entry.count ?? 0);
+        if (!Number.isFinite(count) || count <= 0 || !entry.id) continue;
+        if (!state.sources.has(entry.id)) state.sources.set(entry.id, []);
+        state.sources.get(entry.id)?.push({ ...sourceBase, count });
     }
 };
 
@@ -112,8 +137,9 @@ const buildReachability = (quest: QuestData) => {
     return { nodeById, canReachFinish };
 };
 
-const simulateQuestBody = (quest: QuestData, startingInventory: Map<string, number>) => {
-    const inventory = cloneInventory(startingInventory);
+const simulateQuestBody = (quest: QuestData, startingState: InventoryState) => {
+    const state = cloneState(startingState);
+    const inventory = state.counts;
     const { nodeById, canReachFinish } = buildReachability(quest);
     const startId =
         typeof quest.start === 'string' && quest.start.trim()
@@ -121,7 +147,7 @@ const simulateQuestBody = (quest: QuestData, startingInventory: Map<string, numb
             : (quest.dialogue?.[0]?.id ?? '').trim();
 
     if (!startId || !nodeById.has(startId)) {
-        return inventory;
+        return state;
     }
 
     buyMissingRequirements(inventory, quest.requiresItems ?? []);
@@ -152,8 +178,20 @@ const simulateQuestBody = (quest: QuestData, startingInventory: Map<string, numb
 
             executedProcesses.add(processKey);
             applyItems(inventory, option.grantsItems ?? [], 1);
+            recordSources(state, option.grantsItems ?? [], {
+                questId: quest.id,
+                nodeId: node.id,
+                optionType: option.type,
+                processId: option.process,
+            });
             applyItems(inventory, process.consumeItems ?? [], -1);
             applyItems(inventory, process.createItems ?? [], 1);
+            recordSources(state, process.createItems ?? [], {
+                questId: quest.id,
+                nodeId: node.id,
+                optionType: option.type,
+                processId: option.process,
+            });
         }
 
         const finishOption = options.find(
@@ -161,8 +199,17 @@ const simulateQuestBody = (quest: QuestData, startingInventory: Map<string, numb
         );
         if (finishOption) {
             applyItems(inventory, finishOption.grantsItems ?? [], 1);
+            recordSources(state, finishOption.grantsItems ?? [], {
+                questId: quest.id,
+                nodeId: node.id,
+                optionType: finishOption.type,
+            });
             applyItems(inventory, quest.rewards ?? [], 1);
-            return inventory;
+            recordSources(state, quest.rewards ?? [], {
+                questId: quest.id,
+                optionType: 'reward',
+            });
+            return state;
         }
 
         const gotoOption = options.find(
@@ -174,6 +221,11 @@ const simulateQuestBody = (quest: QuestData, startingInventory: Map<string, numb
         );
         if (gotoOption && typeof gotoOption.goto === 'string') {
             applyItems(inventory, gotoOption.grantsItems ?? [], 1);
+            recordSources(state, gotoOption.grantsItems ?? [], {
+                questId: quest.id,
+                nodeId: node.id,
+                optionType: gotoOption.type,
+            });
             current = gotoOption.goto.trim();
             continue;
         }
@@ -181,7 +233,7 @@ const simulateQuestBody = (quest: QuestData, startingInventory: Map<string, numb
         break;
     }
 
-    return inventory;
+    return state;
 };
 
 const sortByTopo = (quests: QuestData[]) => {
@@ -257,16 +309,17 @@ const simulateInventoryBeforeQuest = ({
         (a, b) => (topoIndex.get(a) ?? 0) - (topoIndex.get(b) ?? 0)
     );
 
-    const inventory = new Map<string, number>();
+    let state: InventoryState = {
+        counts: new Map<string, number>(),
+        sources: new Map<string, ItemSource[]>(),
+    };
     for (const prereqId of prerequisiteIds) {
         const prereq = questsById.get(prereqId);
         if (!prereq) continue;
-        const nextInventory = simulateQuestBody(prereq, inventory);
-        inventory.clear();
-        mergeInventory(inventory, nextInventory);
+        state = simulateQuestBody(prereq, state);
     }
 
-    return inventory;
+    return { prerequisiteIds, ...state };
 };
 
 const getBlockingGotoRequirements = (quest: QuestData) => {
@@ -322,6 +375,37 @@ const getCreatedItemIds = (quest: QuestData) => {
 };
 
 describe('quest process necessity simulation', () => {
+    it('uses only recursive requiresQuests ancestry for hydroponics/temp-check baseline', async () => {
+        const questPaths = await loadQuestPaths();
+        const quests = await Promise.all(
+            [...questPaths.values()].map(async (questPath) => {
+                const raw = await readFile(path.join(process.cwd(), questPath), 'utf8');
+                return JSON.parse(raw) as QuestData;
+            })
+        );
+
+        const questsById = new Map(quests.map((quest) => [quest.id, quest]));
+        const topoOrder = sortByTopo(quests);
+        const topoIndex = new Map(topoOrder.map((id, index) => [id, index]));
+        const prereqClosure = computePrereqClosure(questsById);
+
+        const probeItemId = '7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2';
+        const tempCheckState = simulateInventoryBeforeQuest({
+            questId: 'hydroponics/temp-check',
+            questsById,
+            topoIndex,
+            prereqClosure,
+        });
+
+        expect(tempCheckState.prerequisiteIds).toEqual([
+            'welcome/howtodoquests',
+            'hydroponics/basil',
+            'hydroponics/nutrient-check',
+        ]);
+        expect(tempCheckState.counts.get(probeItemId) ?? 0).toBe(0);
+        expect(tempCheckState.sources.get(probeItemId) ?? []).toEqual([]);
+    });
+
     it('requires at least one process run for quests that gate progression with process outputs', async () => {
         const questPaths = await loadQuestPaths();
         const quests = await Promise.all(
@@ -355,21 +439,38 @@ describe('quest process necessity simulation', () => {
             });
 
             const bypassed = gatingRequirements.filter((item) => {
-                const available = inventoryBeforeQuest.get(item.id) ?? 0;
+                const available = inventoryBeforeQuest.counts.get(item.id) ?? 0;
                 return available >= item.count;
             });
 
             if (bypassed.length === 0) continue;
+
+            const ancestry = inventoryBeforeQuest.prerequisiteIds.join(' -> ');
+            const perItem = bypassed
+                .slice()
+                .sort((a, b) => a.id.localeCompare(b.id) || a.count - b.count)
+                .map((item) => {
+                    const available = inventoryBeforeQuest.counts.get(item.id) ?? 0;
+                    const sources = (inventoryBeforeQuest.sources.get(item.id) ?? [])
+                        .map(
+                            (source) =>
+                                `${source.questId}${
+                                    source.processId ? `::${source.processId}` : ''
+                                } (+${source.count})`
+                        )
+                        .sort();
+
+                    return `item=${item.id} available=${available} required=${item.count} sources=${
+                        sources.length > 0 ? sources.join(',') : 'none'
+                    }`;
+                })
+                .join('; ');
+
             violations.push(
-                `${quest.id} bypasses process gate(s): ${bypassed
-                    .map((item) => {
-                        const available = inventoryBeforeQuest.get(item.id) ?? 0;
-                        return `${item.id} has ${available}, requires ${item.count}`;
-                    })
-                    .join('; ')}`
+                `quest=${quest.id} ancestry=[${ancestry}] bypass=[${perItem}]`
             );
         }
 
-        expect(violations).toEqual([]);
+        expect(violations.sort()).toEqual([]);
     });
 });

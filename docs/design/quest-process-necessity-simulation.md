@@ -12,18 +12,20 @@ using a simulated inventory that includes prerequisite quest progression.
 - Quests under `frontend/src/pages/quests/json/**`.
 - Process definitions from `frontend/src/generated/processes.json`.
 - Item purchase availability from inventory metadata (`price` and `BETA_PLACEHOLDER`).
+- Pre-quest baseline inventory for quest `q` is simulated from recursive `requiresQuests` ancestry only.
 
 ## Data model and assumptions
 1. **Dependency graph**
    - Build directed edges from `requiresQuests`.
    - Detect cycles.
 2. **Quest-body simulation**
-   - Simulate prerequisites in topological ancestor order.
+   - Simulate only transitive prerequisites from `requiresQuests` in topological ancestor order.
    - Track inventory counts as floating-point-compatible numeric quantities.
    - Allow required-item purchases for quest progression when item is purchasable.
    - Execute process options at most once per node+process while traversing to finish.
 3. **Bypass detection**
    - For each quest, collect process-created item IDs used as `goto` requirements on finish-reachable paths.
+   - For each created item, use the minimum finish-reachable `goto` requirement count (easiest branch).
    - If simulated pre-quest inventory already satisfies any such gate, record a violation.
 
 ## Why this catches the bug class
@@ -70,6 +72,14 @@ inventory baseline so that at least one process run is required.
 - Simulation is deterministic and does not enumerate all branching strategies.
 - Inventory economics are approximated from purchasability metadata.
 - Future quest schema changes may require parser updates.
+
+## Debuggability
+- The test includes a targeted assertion for `hydroponics/temp-check` that verifies:
+  - ordered recursive prerequisite ancestry,
+  - starting inventory count for `7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2`,
+  - and any prerequisite source records for that item.
+- Failure output is deterministic and includes quest id, ancestry used, bypassed item/count, and
+  contributing prerequisite quest/process sources.
 
 ## Validation
 Run:
