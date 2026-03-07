@@ -81,7 +81,7 @@
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -98,7 +98,7 @@
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
+                            "count": 2.0
                         },
                         {
                             "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
@@ -118,7 +118,7 @@
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -246,7 +246,7 @@
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }

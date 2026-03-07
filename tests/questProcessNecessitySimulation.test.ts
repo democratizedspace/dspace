@@ -41,15 +41,6 @@ const purchasableItems = new Set(
         .map((item) => item.id)
 );
 
-const toMap = (entries: ItemCount[] = []) => {
-    const map = new Map<string, number>();
-    for (const entry of entries) {
-        if (!entry?.id) continue;
-        map.set(entry.id, (map.get(entry.id) ?? 0) + Number(entry.count ?? 0));
-    }
-    return map;
-};
-
 const addItem = (inventory: Map<string, number>, id: string, count: number) => {
     if (!id || !Number.isFinite(count) || count === 0) return;
     inventory.set(id, (inventory.get(id) ?? 0) + count);
@@ -157,6 +148,7 @@ const simulateQuestBody = (quest: QuestData, startingInventory: Map<string, numb
             if (!hasItems(inventory, option.requiresItems ?? [])) continue;
             const process = processMap.get(option.process as string);
             if (!process) continue;
+            if (!hasItems(inventory, process.consumeItems ?? [])) continue;
 
             executedProcesses.add(processKey);
             applyItems(inventory, option.grantsItems ?? [], 1);
@@ -250,8 +242,6 @@ const computePrereqClosure = (questsById: Map<string, QuestData>) => {
     return memo;
 };
 
-
-
 const simulateInventoryBeforeQuest = ({
     questId,
     questsById,
@@ -307,7 +297,7 @@ const getBlockingGotoRequirements = (quest: QuestData) => {
             for (const req of option.requiresItems ?? []) {
                 const count = Number(req.count ?? 0);
                 if (!Number.isFinite(count) || count <= 0) continue;
-                required.set(req.id, Math.max(required.get(req.id) ?? 0, count));
+                required.set(req.id, Math.min(required.get(req.id) ?? Infinity, count));
             }
 
             if (!seen.has(target)) queue.push(target);

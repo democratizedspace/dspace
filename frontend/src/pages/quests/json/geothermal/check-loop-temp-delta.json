@@ -58,7 +58,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -75,7 +75,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 3.0
                         },
                         {
                             "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
@@ -227,7 +227,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 2
+                            "count": 3.0
                         }
                     ]
                 }
