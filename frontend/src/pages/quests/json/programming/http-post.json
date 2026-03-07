@@ -114,9 +114,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/json-api"
-    ],
+    "requiresQuests": ["programming/json-api"],
     "hardening": {
         "passes": 1,
         "score": 96,

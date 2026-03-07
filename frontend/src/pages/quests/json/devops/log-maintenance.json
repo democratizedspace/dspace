@@ -115,9 +115,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "devops/daily-backups"
-    ],
+    "requiresQuests": ["devops/daily-backups"],
     "hardening": {
         "passes": 0,
         "score": 90,

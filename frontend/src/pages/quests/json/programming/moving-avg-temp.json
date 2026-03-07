@@ -110,9 +110,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/avg-temp"
-    ],
+    "requiresQuests": ["programming/avg-temp"],
     "hardening": {
         "passes": 1,
         "score": 97,

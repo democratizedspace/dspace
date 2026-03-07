@@ -115,9 +115,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/median-temp"
-    ],
+    "requiresQuests": ["programming/median-temp"],
     "hardening": {
         "passes": 0,
         "score": 95,

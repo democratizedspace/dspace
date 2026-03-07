@@ -106,9 +106,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/temp-alert"
-    ],
+    "requiresQuests": ["programming/temp-alert"],
     "hardening": {
         "passes": 0,
         "score": 90,

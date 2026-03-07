@@ -190,7 +190,5 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/jupiter-moons"
-    ]
+    "requiresQuests": ["astronomy/jupiter-moons"]
 }

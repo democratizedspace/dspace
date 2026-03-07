@@ -110,9 +110,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "programming/temp-graph"
-    ],
+    "requiresQuests": ["programming/temp-graph"],
     "hardening": {
         "passes": 1,
         "score": 96,
