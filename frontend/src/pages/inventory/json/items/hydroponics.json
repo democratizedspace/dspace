@@ -569,5 +569,19 @@
         "description": "Pump loop after commissioning run confirms steady nutrient circulation.",
         "image": "/assets/submersible_hydroponic_water_pump.jpg",
         "price": "25 dUSD"
+    },
+    {
+        "id": "b5a1bdac-1637-49d3-8459-2eb68125ef06",
+        "name": "Hydroponic reservoir with mounted strip thermometer",
+        "description": "Hydroponic tub reservoir with a strip thermometer mounted at the circulation return for stable temperature checks.",
+        "image": "/assets/hydroponics_tub_ready_nutrient_solution.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "e6490f8f-1460-4e20-bde7-77e889fa3d18",
+        "name": "Hydroponic reservoir temperature reading log",
+        "description": "Timestamped hydroponic reservoir temperature log entry used for nutrient-solution QA and retest tracking.",
+        "image": "/assets/hydroponic_ph_log_entry.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
     }
 ]

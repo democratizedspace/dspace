@@ -23,11 +23,11 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "attach-aquarium-thermometer",
+                    "process": "attach-hydroponic-reservoir-thermometer",
                     "text": "Attach thermometer for a stable reading.",
                     "requiresItems": [
                         {
-                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
                             "count": 1
                         },
                         {
@@ -46,7 +46,7 @@
                     "text": "Thermometer mounted; capture temperature log.",
                     "requiresItems": [
                         {
-                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "id": "b5a1bdac-1637-49d3-8459-2eb68125ef06",
                             "count": 1
                         }
                     ]
@@ -59,11 +59,11 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "log-walstad-temperature",
+                    "process": "log-hydroponic-reservoir-temperature",
                     "text": "Record temperature log artifact.",
                     "requiresItems": [
                         {
-                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "id": "b5a1bdac-1637-49d3-8459-2eb68125ef06",
                             "count": 1
                         }
                     ]
@@ -74,7 +74,7 @@
                     "text": "Temperature log captured.",
                     "requiresItems": [
                         {
-                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "id": "e6490f8f-1460-4e20-bde7-77e889fa3d18",
                             "count": 1.0
                         }
                     ]
@@ -91,7 +91,7 @@
                     "text": "In range and stable; close this check.",
                     "requiresItems": [
                         {
-                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "id": "e6490f8f-1460-4e20-bde7-77e889fa3d18",
                             "count": 1.0
                         }
                     ]

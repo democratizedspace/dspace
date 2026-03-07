@@ -7047,6 +7047,48 @@
         }
     },
     {
+        "id": "attach-hydroponic-reservoir-thermometer",
+        "title": "Dry hydroponic tub wall and attach a strip thermometer at the reservoir return",
+        "image": "/assets/hydroponics_tub_ready_nutrient_solution.jpg",
+        "requireItems": [
+            {
+                "id": "71655665-4a59-41f4-9084-dad4d976df91",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "b5a1bdac-1637-49d3-8459-2eb68125ef06",
+                "count": 1
+            }
+        ],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "check-aquarium-temperature",
         "title": "Check aquarium water temperature with an attached strip thermometer",
         "image": "/assets/aquarium_thermometer.jpg",
@@ -7090,6 +7132,31 @@
         "createItems": [
             {
                 "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                "count": 1
+            }
+        ],
+        "duration": "30s",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "log-hydroponic-reservoir-temperature",
+        "title": "Log hydroponic reservoir temperature from the mounted strip thermometer",
+        "image": "/assets/hydroponics_tub_ready_nutrient_solution.jpg",
+        "requireItems": [
+            {
+                "id": "b5a1bdac-1637-49d3-8459-2eb68125ef06",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "e6490f8f-1460-4e20-bde7-77e889fa3d18",
                 "count": 1
             }
         ],
