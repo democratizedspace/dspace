@@ -50,32 +50,12 @@
                 {
                     "type": "process",
                     "process": "tighten-x-belt",
-                    "text": "Main path: tune X-belt tension first.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Main path: tune X-belt tension first."
                 },
                 {
                     "type": "process",
                     "process": "swap-white-pla-filament",
-                    "text": "Load white PLA and purge 10 grams before slicing.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Load white PLA and purge 10 grams before slicing."
                 },
                 {
                     "type": "goto",
@@ -201,11 +181,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["3dprinting/phone-stand"],
+    "requiresQuests": [
+        "3dprinting/phone-stand"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

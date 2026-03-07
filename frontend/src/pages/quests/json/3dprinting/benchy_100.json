@@ -77,17 +77,7 @@
                 {
                     "type": "process",
                     "process": "3dprint-benchy",
-                    "text": "Run a controlled batch.",
-                    "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 15
-                        }
-                    ]
+                    "text": "Run a controlled batch."
                 },
                 {
                     "type": "goto",
@@ -124,17 +114,7 @@
                 {
                     "type": "process",
                     "process": "3dprint-benchy",
-                    "text": "Run sprint production blocks.",
-                    "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 15
-                        }
-                    ]
+                    "text": "Run sprint production blocks."
                 },
                 {
                     "type": "goto",
@@ -274,11 +254,13 @@
             "count": 100000
         }
     ],
-    "requiresQuests": ["3dprinting/benchy_25"],
+    "requiresQuests": [
+        "3dprinting/benchy_25"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

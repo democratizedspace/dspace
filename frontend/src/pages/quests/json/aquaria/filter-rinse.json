@@ -60,21 +60,7 @@
                     "type": "process",
                     "process": "rinse-aquarium-filter",
                     "text": "Run normal rinse cycle.",
-                    "goto": "restart",
-                    "requiresItems": [
-                        {
-                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
-                            "count": 1
-                        },
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "restart"
                 },
                 {
                     "type": "goto",
@@ -119,21 +105,7 @@
                     "type": "process",
                     "process": "restart-sponge-filter",
                     "text": "Restart and tune airflow.",
-                    "goto": "verify",
-                    "requiresItems": [
-                        {
-                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
-                            "count": 1
-                        },
-                        {
-                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
-                            "count": 1
-                        },
-                        {
-                            "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",
@@ -187,7 +159,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/sponge-filter"],
+    "requiresQuests": [
+        "aquaria/sponge-filter"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,

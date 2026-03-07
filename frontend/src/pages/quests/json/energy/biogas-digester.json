@@ -35,12 +35,6 @@
                     "type": "process",
                     "process": "build-biogas-digester-small-scale",
                     "text": "Run the full sealed-drum build, leak test, and safety commissioning (about 2 days).",
-                    "requiresItems": [
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        }
-                    ],
                     "goto": "feed"
                 },
                 {
@@ -63,12 +57,6 @@
                     "type": "process",
                     "process": "ferment-biogas-digester-batch",
                     "text": "Run a full anaerobic digestion batch and collect methane output logs (about 21 days).",
-                    "requiresItems": [
-                        {
-                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
-                            "count": 1
-                        }
-                    ],
                     "goto": "verify"
                 },
                 {
@@ -150,11 +138,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["energy/solar-1kWh"],
+    "requiresQuests": [
+        "energy/solar-1kWh"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

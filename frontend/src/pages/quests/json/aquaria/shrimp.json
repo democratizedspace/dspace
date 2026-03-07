@@ -46,17 +46,7 @@
                 {
                     "type": "process",
                     "process": "drip-acclimate-shrimp",
-                    "text": "Start drip acclimation",
-                    "requiresItems": [
-                        {
-                            "id": "60e517b4-5807-4983-afb8-e2aad1566587",
-                            "count": 1
-                        },
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Start drip acclimation"
                 },
                 {
                     "type": "goto",
