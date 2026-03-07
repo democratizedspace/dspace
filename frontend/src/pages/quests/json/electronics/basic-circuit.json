@@ -1,7 +1,7 @@
 {
     "id": "electronics/basic-circuit",
     "title": "Build a basic LED circuit",
-    "description": "Wire a 5 mm LED and 220 \u03a9 resistor on a breadboard to learn basic circuits.",
+    "description": "Wire a 5 mm LED and 220 Ω resistor on a breadboard to learn basic circuits.",
     "image": "/assets/quests/electronics_basic_led_breadboard_circuit.jpg",
     "npc": "/assets/npc/orion.jpg",
     "start": "start",
@@ -86,17 +86,7 @@
                 {
                     "type": "process",
                     "process": "check-led-polarity",
-                    "text": "Run polarity check.",
-                    "requiresItems": [
-                        {
-                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Run polarity check."
                 },
                 {
                     "type": "goto",
@@ -143,7 +133,9 @@
             ]
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "rewards": [
         {
             "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
@@ -153,7 +145,7 @@
     "hardening": {
         "passes": 10,
         "score": 100,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-03",

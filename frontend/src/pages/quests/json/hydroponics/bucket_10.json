@@ -122,13 +122,7 @@
                 {
                     "type": "process",
                     "process": "award-hydro-haul",
-                    "text": "Claim the Hydro Award.",
-                    "requiresItems": [
-                        {
-                            "id": "86b5d874-a04e-426f-be77-0f7047789faf",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Claim the Hydro Award."
                 },
                 {
                     "type": "goto",
@@ -160,7 +154,10 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/basil", "3dprinting/start"],
+    "requiresQuests": [
+        "hydroponics/basil",
+        "3dprinting/start"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,

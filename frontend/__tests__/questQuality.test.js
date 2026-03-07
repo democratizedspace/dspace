@@ -358,6 +358,11 @@ function checkItemProcessUsage() {
                     if (!processIds.has(opt.process)) {
                         issues.push(`Quest ${id} references unknown process ${opt.process}`);
                     }
+                    if (opt.requiresItems) {
+                        issues.push(
+                            `Quest ${id} has process option "${opt.process}" with redundant requiresItems`
+                        );
+                    }
                 }
             });
         });

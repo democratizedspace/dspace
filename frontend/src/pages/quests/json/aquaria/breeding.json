@@ -40,21 +40,7 @@
                     "type": "process",
                     "process": "prepare-guppy-fry-cover",
                     "text": "Thicken the floating cover.",
-                    "goto": "feed",
-                    "requiresItems": [
-                        {
-                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
-                            "count": 1
-                        },
-                        {
-                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
-                            "count": 1
-                        },
-                        {
-                            "id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "feed"
                 },
                 {
                     "type": "goto",
@@ -82,13 +68,7 @@
                     "type": "process",
                     "process": "portion-fry-food",
                     "text": "Powder a week's fry-food reserve.",
-                    "goto": "monitor",
-                    "requiresItems": [
-                        {
-                            "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "monitor"
                 },
                 {
                     "type": "goto",
@@ -116,25 +96,7 @@
                     "type": "process",
                     "process": "log-aquarium-test-results",
                     "text": "Log water parameters before graduation.",
-                    "goto": "outcome",
-                    "requiresItems": [
-                        {
-                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
-                            "count": 1
-                        },
-                        {
-                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
-                            "count": 1
-                        },
-                        {
-                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "outcome"
                 },
                 {
                     "type": "goto",
@@ -162,25 +124,7 @@
                     "type": "process",
                     "process": "partial-water-change",
                     "text": "Run emergency partial water change.",
-                    "goto": "monitor",
-                    "requiresItems": [
-                        {
-                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
-                            "count": 1
-                        },
-                        {
-                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
-                            "count": 1
-                        },
-                        {
-                            "id": "0564d441-7367-412e-b709-dad770814a39",
-                            "count": 1
-                        },
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "monitor"
                 },
                 {
                     "type": "goto",
@@ -197,29 +141,7 @@
                     "type": "process",
                     "process": "raise-guppy-fry",
                     "text": "Advance fry to juvenile stage.",
-                    "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
-                            "count": 1
-                        },
-                        {
-                            "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
-                            "count": 1
-                        },
-                        {
-                            "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
-                            "count": 1
-                        },
-                        {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
-                            "count": 1
-                        },
-                        {
-                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "finish"
                 },
                 {
                     "type": "goto",
@@ -260,7 +182,10 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/guppy", "aquaria/floating-plants"],
+    "requiresQuests": [
+        "aquaria/guppy",
+        "aquaria/floating-plants"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,

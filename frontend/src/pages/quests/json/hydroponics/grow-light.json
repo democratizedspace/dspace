@@ -76,21 +76,7 @@
                 {
                     "type": "process",
                     "process": "smart-plug-schedule-12h",
-                    "text": "Direct schedule path: set the 12 h cycle now.",
-                    "requiresItems": [
-                        {
-                            "id": "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000",
-                            "count": 1
-                        },
-                        {
-                            "id": "a5395e29-1862-4eb7-8517-5d161635e032",
-                            "count": 1
-                        },
-                        {
-                            "id": "8f7c2e83-285a-4b29-9a3a-312f0dce2745",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Direct schedule path: set the 12 h cycle now."
                 },
                 {
                     "type": "goto",
@@ -125,13 +111,7 @@
                 {
                     "type": "process",
                     "process": "smart-plug-schedule-12h",
-                    "text": "Cycle test passed; apply full 12 h schedule.",
-                    "requiresItems": [
-                        {
-                            "id": "a5395e29-1862-4eb7-8517-5d161635e032",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Cycle test passed; apply full 12 h schedule."
                 },
                 {
                     "type": "goto",
@@ -204,5 +184,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/bucket_10"]
+    "requiresQuests": [
+        "hydroponics/bucket_10"
+    ]
 }
