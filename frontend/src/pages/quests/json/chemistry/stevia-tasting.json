@@ -59,7 +59,7 @@
                     "requiresItems": [
                         {
                             "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -81,7 +81,7 @@
                     "requiresItems": [
                         {
                             "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -158,11 +158,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/stevia-crystals"],
+    "requiresQuests": [
+        "chemistry/stevia-crystals"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

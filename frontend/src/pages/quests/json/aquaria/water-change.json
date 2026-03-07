@@ -45,7 +45,7 @@
         },
         {
             "id": "prep",
-            "text": "Condition replacement water and match temperature within 2 °C before it enters the tank.",
+            "text": "Condition replacement water and match temperature within 2 \u00b0C before it enters the tank.",
             "options": [
                 {
                     "type": "process",
@@ -106,7 +106,7 @@
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -127,7 +127,7 @@
                         },
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 },
@@ -176,7 +176,7 @@
                         },
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -199,11 +199,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/guppy"],
+    "requiresQuests": [
+        "aquaria/guppy"
+    ],
     "hardening": {
         "passes": 4,
         "score": 100,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-quest-refinement-2025-08-15",

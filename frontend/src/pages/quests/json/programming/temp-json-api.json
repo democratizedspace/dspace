@@ -47,7 +47,7 @@
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -55,7 +55,7 @@
         },
         {
             "id": "sample",
-            "text": "Capture three readings a minute apart and compare them with your sensor baseline. The safe room range for this run is 18C–30C.",
+            "text": "Capture three readings a minute apart and compare them with your sensor baseline. The safe room range for this run is 18C\u201330C.",
             "options": [
                 {
                     "type": "goto",
@@ -65,7 +65,7 @@
                 {
                     "type": "goto",
                     "goto": "out-of-range",
-                    "text": "One or more readings are outside 18C–30C."
+                    "text": "One or more readings are outside 18C\u201330C."
                 }
             ]
         },
@@ -96,7 +96,7 @@
                     "requiresItems": [
                         {
                             "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -119,11 +119,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["programming/json-api"],
+    "requiresQuests": [
+        "programming/json-api"
+    ],
     "hardening": {
         "passes": 2,
         "score": 95,
-        "emoji": "✅",
+        "emoji": "\u2705",
         "history": [
             {
                 "task": "codex-hardening-2025-12-01",

@@ -55,7 +55,7 @@
         },
         {
             "id": "measure",
-            "text": "Log the observed water temperature and classify it: 65-75°F pass, 60-64°F or 76-79°F caution, outside that is fail.",
+            "text": "Log the observed water temperature and classify it: 65-75\u00b0F pass, 60-64\u00b0F or 76-79\u00b0F caution, outside that is fail.",
             "options": [
                 {
                     "type": "process",
@@ -75,7 +75,7 @@
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }
@@ -92,7 +92,7 @@
                     "requiresItems": [
                         {
                             "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 },
@@ -146,11 +146,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/nutrient-check"],
+    "requiresQuests": [
+        "hydroponics/nutrient-check"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

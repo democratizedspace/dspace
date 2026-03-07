@@ -57,7 +57,7 @@
                     "requiresItems": [
                         {
                             "id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
-                            "count": 1
+                            "count": 2.0
                         }
                     ],
                     "text": "Screening complete."
@@ -87,11 +87,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["composting/check-temperature"],
+    "requiresQuests": [
+        "composting/check-temperature"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

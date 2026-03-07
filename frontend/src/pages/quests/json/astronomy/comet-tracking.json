@@ -115,7 +115,7 @@
                         },
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
-                            "count": 1
+                            "count": 5.0
                         },
                         {
                             "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
@@ -145,7 +145,7 @@
                         },
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
-                            "count": 1
+                            "count": 5.0
                         },
                         {
                             "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
@@ -176,11 +176,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/meteor-shower"],
+    "requiresQuests": [
+        "astronomy/meteor-shower"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-quality-parity-2026-02-24",

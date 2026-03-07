@@ -39,7 +39,7 @@
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -60,7 +60,7 @@
                         },
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 },
@@ -87,7 +87,7 @@
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -110,11 +110,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["programming/avg-temp"],
+    "requiresQuests": [
+        "programming/avg-temp"
+    ],
     "hardening": {
         "passes": 1,
         "score": 97,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-hardening-2026-02-22",

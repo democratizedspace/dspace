@@ -33,7 +33,7 @@
                     "requiresItems": [
                         {
                             "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
+                            "count": 2.0
                         },
                         {
                             "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
@@ -176,11 +176,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/tub-scrub"],
+    "requiresQuests": [
+        "hydroponics/tub-scrub"
+    ],
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-2025-08-15",

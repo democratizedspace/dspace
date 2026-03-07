@@ -100,7 +100,7 @@
                         },
                         {
                             "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 },
@@ -166,7 +166,7 @@
                     "requiresItems": [
                         {
                             "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
-                            "count": 1
+                            "count": 3.0
                         },
                         {
                             "id": "849eb5e1-9f63-488b-80d3-913492049090",
@@ -193,11 +193,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["devops/k3s-deploy"],
+    "requiresQuests": [
+        "devops/k3s-deploy"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

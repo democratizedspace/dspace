@@ -87,7 +87,7 @@
                     "requiresItems": [
                         {
                             "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 },
@@ -98,7 +98,7 @@
                     "requiresItems": [
                         {
                             "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -149,11 +149,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["devops/docker-compose"],
+    "requiresQuests": [
+        "devops/docker-compose"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
