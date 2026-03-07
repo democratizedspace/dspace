@@ -49,17 +49,7 @@
                 {
                     "type": "process",
                     "process": "refresh-hydroponic-tub",
-                    "text": "Run reservoir refresh process.",
-                    "requiresItems": [
-                        {
-                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
-                            "count": 1
-                        },
-                        {
-                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Run reservoir refresh process."
                 },
                 {
                     "type": "goto",
@@ -68,7 +58,7 @@
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 2.0
+                            "count": 2
                         }
                     ]
                 }
@@ -85,7 +75,7 @@
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 2.0
+                            "count": 2
                         },
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
@@ -107,17 +97,7 @@
                 {
                     "type": "process",
                     "process": "refresh-hydroponic-tub",
-                    "text": "Re-mix and replace solution with corrected ratio.",
-                    "requiresItems": [
-                        {
-                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
-                            "count": 1
-                        },
-                        {
-                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Re-mix and replace solution with corrected ratio."
                 },
                 {
                     "type": "goto",
@@ -149,7 +129,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/nutrient-check"],
+    "requiresQuests": [
+        "hydroponics/nutrient-check"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

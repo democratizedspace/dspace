@@ -24,48 +24,12 @@
                 {
                     "type": "process",
                     "process": "refresh-hydroponic-tub",
-                    "text": "Mix and circulate.",
-                    "requiresItems": [
-                        {
-                            "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
-                            "count": 1
-                        },
-                        {
-                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
-                            "count": 1
-                        },
-                        {
-                            "id": "092dae11-237a-43cc-b342-246aabbba258",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Mix and circulate."
                 },
                 {
                     "type": "process",
                     "process": "measure-ec-solution",
-                    "text": "Check EC levels.",
-                    "requiresItems": [
-                        {
-                            "id": "71655665-4a59-41f4-9084-dad4d976df91",
-                            "count": 1
-                        },
-                        {
-                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Check EC levels."
                 },
                 {
                     "type": "goto",
@@ -97,7 +61,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/basil"],
+    "requiresQuests": [
+        "hydroponics/basil"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,

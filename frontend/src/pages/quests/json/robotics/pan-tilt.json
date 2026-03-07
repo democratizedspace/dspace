@@ -29,13 +29,7 @@
                 {
                     "type": "process",
                     "process": "assemble-pan-tilt-mount",
-                    "text": "Assemble both axes, apply thread-lock, and complete controlled sweep calibration (about 2 hours).",
-                    "requiresItems": [
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 2
-                        }
-                    ]
+                    "text": "Assemble both axes, apply thread-lock, and complete controlled sweep calibration (about 2 hours)."
                 },
                 {
                     "type": "goto",
@@ -90,7 +84,7 @@
         },
         {
             "id": "evidence",
-            "text": "Evidence gate: pass requires two consecutive sweeps with <3\u00b0 center error and no cable snag events.",
+            "text": "Evidence gate: pass requires two consecutive sweeps with <3° center error and no cable snag events.",
             "options": [
                 {
                     "type": "finish",
@@ -126,7 +120,9 @@
             ]
         }
     ],
-    "requiresQuests": ["robotics/servo-control"],
+    "requiresQuests": [
+        "robotics/servo-control"
+    ],
     "rewards": [
         {
             "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
@@ -136,7 +132,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

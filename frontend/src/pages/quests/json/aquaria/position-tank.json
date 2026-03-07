@@ -60,7 +60,7 @@
         },
         {
             "id": "lift",
-            "text": "I'll take most of the weight. On three\u2014one, two, three. Keep the tank level and your back straight.",
+            "text": "I'll take most of the weight. On three—one, two, three. Keep the tank level and your back straight.",
             "options": [
                 {
                     "type": "goto",
@@ -70,7 +70,7 @@
                 {
                     "type": "goto",
                     "goto": "troubleshoot",
-                    "text": "Abort: footing slipped or grip shifted\u2014set it down safely first."
+                    "text": "Abort: footing slipped or grip shifted—set it down safely first."
                 }
             ]
         },
@@ -103,17 +103,7 @@
                 {
                     "type": "process",
                     "process": "heat-walstad",
-                    "text": "Install the heater and set it to 26\u00b0C",
-                    "requiresItems": [
-                        {
-                            "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
-                            "count": 1
-                        },
-                        {
-                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Install the heater and set it to 26°C"
                 },
                 {
                     "type": "goto",
@@ -156,7 +146,10 @@
             ]
         }
     ],
-    "requiresQuests": ["aquaria/walstad", "aquaria/thermometer"],
+    "requiresQuests": [
+        "aquaria/walstad",
+        "aquaria/thermometer"
+    ],
     "rewards": [
         {
             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
@@ -166,7 +159,7 @@
     "hardening": {
         "passes": 1,
         "score": 100,
-        "emoji": "\ud83c\udf00",
+        "emoji": "🌀",
         "history": [
             {
                 "task": "codex-upgrade-2025-08-07",
