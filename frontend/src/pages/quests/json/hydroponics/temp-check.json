@@ -23,11 +23,11 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "attach-aquarium-thermometer",
+                    "process": "attach-hydroponic-reservoir-thermometer",
                     "text": "Attach thermometer for a stable reading.",
                     "requiresItems": [
                         {
-                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
                             "count": 1
                         },
                         {
@@ -46,7 +46,7 @@
                     "text": "Thermometer mounted; capture temperature log.",
                     "requiresItems": [
                         {
-                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "id": "0e8e0b41-ba04-420c-b608-4298c55866b7",
                             "count": 1
                         }
                     ]
@@ -55,15 +55,15 @@
         },
         {
             "id": "measure",
-            "text": "Log the observed water temperature and classify it: 65-75\u00b0F pass, 60-64\u00b0F or 76-79\u00b0F caution, outside that is fail.",
+            "text": "Log the observed water temperature and classify it: 65-75°F pass, 60-64°F or 76-79°F caution, outside that is fail.",
             "options": [
                 {
                     "type": "process",
-                    "process": "log-walstad-temperature",
+                    "process": "log-hydroponic-reservoir-temperature",
                     "text": "Record temperature log artifact.",
                     "requiresItems": [
                         {
-                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "id": "0e8e0b41-ba04-420c-b608-4298c55866b7",
                             "count": 1
                         }
                     ]
@@ -74,7 +74,7 @@
                     "text": "Temperature log captured.",
                     "requiresItems": [
                         {
-                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "id": "218c2df0-11f4-4cf2-99b9-fb25694f64bb",
                             "count": 1.0
                         }
                     ]
@@ -91,7 +91,7 @@
                     "text": "In range and stable; close this check.",
                     "requiresItems": [
                         {
-                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "id": "218c2df0-11f4-4cf2-99b9-fb25694f64bb",
                             "count": 1.0
                         }
                     ]
@@ -146,11 +146,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/nutrient-check"],
+    "requiresQuests": [
+        "hydroponics/nutrient-check"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

@@ -389,7 +389,7 @@ describe('quest process necessity simulation', () => {
         const topoIndex = new Map(topoOrder.map((id, index) => [id, index]));
         const prereqClosure = computePrereqClosure(questsById);
 
-        const probeItemId = '7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2';
+        const probeItemId = '218c2df0-11f4-4cf2-99b9-fb25694f64bb';
         const tempCheckState = simulateInventoryBeforeQuest({
             questId: 'hydroponics/temp-check',
             questsById,

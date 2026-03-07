@@ -474,11 +474,11 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/nutrient-check`
 - Dialogue `requiresItems` gates:
-    - `attach` → "Attach thermometer for a stable reading." — Walstad aquarium (80 L) ×1, aquarium thermometer (0–50°C) ×1, paper towel ×1
-    - `attach` → "Thermometer mounted; capture temperature log." — attached aquarium thermometer ×1
-    - `measure` → "Record temperature log artifact." — attached aquarium thermometer ×1
-    - `measure` → "Temperature log captured." — walstad tank temperature log ×1
-    - `interpret` → "In range and stable; close this check." — walstad tank temperature log ×1
+    - `attach` → "Attach thermometer for a stable reading." — Beginner hydroponics tub ×1, aquarium thermometer (0–50°C) ×1, paper towel ×1
+    - `attach` → "Thermometer mounted; capture temperature log." — Hydroponic reservoir with thermometer mounted ×1
+    - `measure` → "Record temperature log artifact." — Hydroponic reservoir with thermometer mounted ×1
+    - `measure` → "Temperature log captured." — Hydroponic reservoir temperature reading ×1
+    - `interpret` → "In range and stable; close this check." — Hydroponic reservoir temperature reading ×1
     - `correct` → "Stabilize reservoir before retest." — EC meter ×1, 50 mL measuring syringe ×1
 - Recovery/troubleshooting branches:
     - `interpret` branches to `correct` for caution/fail thresholds, then loops to `measure` for mandatory re-log
@@ -490,8 +490,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Rewards:
     - Hydro Award ×1
 - Processes used:
-    - [attach-aquarium-thermometer](/processes/attach-aquarium-thermometer)
-    - [log-walstad-temperature](/processes/log-walstad-temperature)
+    - [attach-hydroponic-reservoir-thermometer](/processes/attach-hydroponic-reservoir-thermometer)
+    - [log-hydroponic-reservoir-temperature](/processes/log-hydroponic-reservoir-temperature)
     - [refresh-hydroponic-tub](/processes/refresh-hydroponic-tub)
 
 ## 16) Top Off the Reservoir (`hydroponics/top-off`)

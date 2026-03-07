@@ -76,7 +76,7 @@ inventory baseline so that at least one process run is required.
 ## Debuggability
 - The test includes a targeted assertion for `hydroponics/temp-check` that verifies:
   - ordered recursive prerequisite ancestry,
-  - starting inventory count for `7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2`,
+  - starting inventory count for `218c2df0-11f4-4cf2-99b9-fb25694f64bb`,
   - and any prerequisite source records for that item.
 - Failure output is deterministic and includes quest id, ancestry used, bypassed item/count, and
   contributing prerequisite quest/process sources.

@@ -38,6 +38,13 @@
         }
     },
     {
+        "id": "0e8e0b41-ba04-420c-b608-4298c55866b7",
+        "name": "Hydroponic reservoir with thermometer mounted",
+        "description": "Beginner hydroponics tub with a strip thermometer mounted in a representative reservoir zone for temperature QA.",
+        "image": "/assets/beginner_hydroponics_tub_20L_6_net_pots.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
         "id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
         "name": "basil seeds",
         "description": "Packet of ~50 Genovese basil seeds for hydroponic germination.",
@@ -146,6 +153,13 @@
         "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
         "name": "hydroponic nutrient solution EC log",
         "description": "EC meter reading log entry for the nutrient reservoir with timestamp and calibration note.",
+        "image": "/assets/hydroponic_ph_log_entry.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "218c2df0-11f4-4cf2-99b9-fb25694f64bb",
+        "name": "Hydroponic reservoir temperature reading",
+        "description": "Timestamped temperature log captured from the hydroponic reservoir after thermometer stabilization and interpretation notes.",
         "image": "/assets/hydroponic_ph_log_entry.jpg",
         "priceExemptionReason": "SOULBOUND"
     },

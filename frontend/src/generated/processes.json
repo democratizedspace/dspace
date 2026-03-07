@@ -7047,6 +7047,48 @@
         }
     },
     {
+        "id": "attach-hydroponic-reservoir-thermometer",
+        "title": "Dry hydroponic tub wall with a paper towel and attach a strip thermometer",
+        "image": "/assets/hydroponic_reservoir_temp_check.jpg",
+        "requireItems": [
+            {
+                "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+                "count": 1
+            },
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                "count": 1
+            },
+            {
+                "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "0e8e0b41-ba04-420c-b608-4298c55866b7",
+                "count": 1
+            }
+        ],
+        "duration": "2m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "check-aquarium-temperature",
         "title": "Check aquarium water temperature with an attached strip thermometer",
         "image": "/assets/aquarium_thermometer.jpg",
@@ -7090,6 +7132,31 @@
         "createItems": [
             {
                 "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                "count": 1
+            }
+        ],
+        "duration": "30s",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "log-hydroponic-reservoir-temperature",
+        "title": "Log hydroponic reservoir temperature from the mounted strip thermometer",
+        "image": "/assets/hydroponic_reservoir_temp_check.jpg",
+        "requireItems": [
+            {
+                "id": "0e8e0b41-ba04-420c-b608-4298c55866b7",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "218c2df0-11f4-4cf2-99b9-fb25694f64bb",
                 "count": 1
             }
         ],
