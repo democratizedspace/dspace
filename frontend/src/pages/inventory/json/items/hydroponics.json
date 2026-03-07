@@ -165,8 +165,8 @@
     },
     {
         "id": "6305ae99-c0b2-49f8-8d58-a1d81b765342",
-        "name": "hydroponic reservoir temperature reading",
-        "description": "Timestamped hydroponic reservoir temperature log used for nutrient-solution QA and retest decisions.",
+        "name": "hydroponic reservoir temperature reading log",
+        "description": "Timestamped hydroponic reservoir temperature-reading log artifact for hydroponic nutrient-reservoir QA decisions and retest evidence (not aquarium data).",
         "image": "/assets/aquarium_temperature_strip_reading.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
