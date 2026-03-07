@@ -249,7 +249,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Time to share healthy guppies."
+                    "text": "Time to share healthy guppies.",
+                    "requiresItems": [
+                        {
+                            "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -260,7 +266,10 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/guppy", "aquaria/floating-plants"],
+    "requiresQuests": [
+        "aquaria/guppy",
+        "aquaria/floating-plants"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,

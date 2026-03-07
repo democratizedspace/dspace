@@ -17,7 +17,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 6
                         }
                     ]
                 }
@@ -110,7 +110,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["programming/temp-graph"],
+    "requiresQuests": [
+        "programming/temp-graph"
+    ],
     "hardening": {
         "passes": 1,
         "score": 96,

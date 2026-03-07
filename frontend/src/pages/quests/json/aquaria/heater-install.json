@@ -52,7 +52,7 @@
                     "requiresItems": [
                         {
                             "id": "8c0f72a2-db79-4238-b80f-97721def169f",
-                            "count": 1
+                            "count": 2
                         }
                     ]
                 }
@@ -182,7 +182,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "Temperature locked in"
+                    "text": "Temperature locked in",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 2
+                        }
+                    ]
                 }
             ]
         }
@@ -193,7 +199,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer", "aquaria/walstad"],
+    "requiresQuests": [
+        "aquaria/sponge-filter",
+        "aquaria/thermometer",
+        "aquaria/walstad"
+    ],
     "hardening": {
         "passes": 4,
         "score": 95,

@@ -696,3 +696,10 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
+
+### Process-gate balancing note
+
+To prevent instant completion via previously accumulated inventory, process-output gate requirements were tightened in:
+- `astronomy/binary-star`
+- `astronomy/sunspot-sketch`
+

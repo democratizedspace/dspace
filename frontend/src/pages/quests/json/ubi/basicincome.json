@@ -124,7 +124,13 @@
                 },
                 {
                     "type": "finish",
-                    "text": "Cool, I've got the gist! See you around, dChat!"
+                    "text": "Cool, I've got the gist! See you around, dChat!",
+                    "requiresItems": [
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 1821
+                        }
+                    ]
                 }
             ]
         }
@@ -139,11 +145,13 @@
             "count": 100
         }
     ],
-    "requiresQuests": ["3dprinting/start"],
+    "requiresQuests": [
+        "3dprinting/start"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

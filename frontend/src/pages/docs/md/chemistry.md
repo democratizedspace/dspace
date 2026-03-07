@@ -118,3 +118,13 @@ inventory result (sample, log, adjusted solution, or waste package) that can be 
 - Verify every chemistry quest branch has a tangible evidence artifact before finish.
 - Verify transformed states propagate through inventory (`buffer batch` → `adjusted buffer` → `precipitate outputs`).
 - Verify waste/disposal artifacts are produced for hazardous chemistry steps.
+
+### Process-gate balancing note
+
+To prevent instant completion via previously accumulated inventory, process-output gate requirements were tightened in:
+- `chemistry/acid-neutralization`
+- `chemistry/buffer-solution`
+- `chemistry/ph-test`
+- `chemistry/precipitation-reaction`
+- `chemistry/stevia-crystals`
+

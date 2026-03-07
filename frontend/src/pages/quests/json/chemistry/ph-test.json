@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 3,
         "score": 95,
-        "emoji": "\ud83d\udcaf",
+        "emoji": "💯",
         "history": [
             {
                 "task": "codex-hardening-2025-08-04",
@@ -35,7 +35,7 @@
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Safety setup complete\u2014start the pH measurement run."
+                    "text": "Safety setup complete—start the pH measurement run."
                 }
             ]
         },
@@ -74,18 +74,18 @@
                 {
                     "type": "goto",
                     "goto": "troubleshoot",
-                    "text": "Color band is ambiguous or drifting\u2014need troubleshooting."
+                    "text": "Color band is ambiguous or drifting—need troubleshooting."
                 }
             ]
         },
         {
             "id": "interpret",
-            "text": "Interpret the reading: target operating window is pH 6.0\u20137.5 for this training solution. Choose the branch that matches your logged result.",
+            "text": "Interpret the reading: target operating window is pH 6.0–7.5 for this training solution. Choose the branch that matches your logged result.",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Reading is in-range (6.0\u20137.5); safe to proceed.",
+                    "text": "Reading is in-range (6.0–7.5); safe to proceed.",
                     "requiresItems": [
                         {
                             "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
@@ -107,7 +107,7 @@
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Corrective actions complete\u2014retest now."
+                    "text": "Corrective actions complete—retest now."
                 },
                 {
                     "type": "goto",
@@ -122,7 +122,13 @@
             "options": [
                 {
                     "type": "finish",
-                    "text": "pH check complete."
+                    "text": "pH check complete.",
+                    "requiresItems": [
+                        {
+                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         }
@@ -133,5 +139,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/safe-reaction"]
+    "requiresQuests": [
+        "chemistry/safe-reaction"
+    ]
 }
