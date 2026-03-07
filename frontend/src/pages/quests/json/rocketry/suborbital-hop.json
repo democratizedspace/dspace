@@ -97,7 +97,7 @@
                         },
                         {
                             "id": "c9ff3c3f-2e0b-49ad-9b0b-d24f85e1fde4",
-                            "count": 1
+                            "count": 3.0
                         },
                         {
                             "id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
@@ -105,7 +105,7 @@
                         },
                         {
                             "id": "246a8dca-ed43-490d-8b28-5ab4ab47a792",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -289,7 +289,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

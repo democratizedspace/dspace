@@ -174,7 +174,7 @@
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-                            "count": 200
+                            "count": 1001.0
                         }
                     ]
                 }
@@ -191,7 +191,7 @@
                     "requiresItems": [
                         {
                             "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-                            "count": 200
+                            "count": 1001.0
                         },
                         {
                             "id": "34540aad-4c25-4268-a158-a291283bc7a0",
@@ -254,7 +254,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

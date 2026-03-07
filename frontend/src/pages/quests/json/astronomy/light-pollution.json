@@ -119,7 +119,7 @@
                         },
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
-                            "count": 1
+                            "count": 4.0
                         },
                         {
                             "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
@@ -154,7 +154,7 @@
                         },
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
-                            "count": 1
+                            "count": 4.0
                         },
                         {
                             "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
@@ -189,7 +189,7 @@
     "hardening": {
         "passes": 4,
         "score": 96,
-        "emoji": "💯",
+        "emoji": "\ud83d\udcaf",
         "history": [
             {
                 "task": "codex-light-pollution-2025-08-05",

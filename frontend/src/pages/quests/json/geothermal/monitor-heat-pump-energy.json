@@ -83,7 +83,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -91,7 +91,7 @@
         },
         {
             "id": "classify",
-            "text": "Pass target: after warmup, inlet/outlet readings should settle into a repeatable band without rapid oscillation (>1.5°C swings every sample). Do your logs show stable trend, cycling spikes, or sustained drift?",
+            "text": "Pass target: after warmup, inlet/outlet readings should settle into a repeatable band without rapid oscillation (>1.5\u00b0C swings every sample). Do your logs show stable trend, cycling spikes, or sustained drift?",
             "options": [
                 {
                     "type": "goto",
@@ -100,7 +100,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 },
@@ -154,7 +154,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

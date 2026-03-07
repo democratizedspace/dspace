@@ -58,7 +58,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -75,7 +75,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 3.0
                         },
                         {
                             "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
@@ -90,7 +90,7 @@
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -170,7 +170,7 @@
         },
         {
             "id": "interpret",
-            "text": "Interpret before closing: pass only if delta-T stays in the 3-8°C band during a steady cycle and drift remains within ±1.5°C. Outside that range usually means trapped air, flow imbalance, or a slipping probe.",
+            "text": "Interpret before closing: pass only if delta-T stays in the 3-8\u00b0C band during a steady cycle and drift remains within \u00b11.5\u00b0C. Outside that range usually means trapped air, flow imbalance, or a slipping probe.",
             "options": [
                 {
                     "type": "goto",
@@ -227,7 +227,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 2
+                            "count": 3.0
                         }
                     ]
                 }
@@ -235,7 +235,7 @@
         },
         {
             "id": "interpret-retest",
-            "text": "Re-check pass bounds with the corrective trace: only approve if delta-T is 3-8°C with drift within ±1.5°C over a full steady cycle.",
+            "text": "Re-check pass bounds with the corrective trace: only approve if delta-T is 3-8\u00b0C with drift within \u00b11.5\u00b0C over a full steady cycle.",
             "options": [
                 {
                     "type": "goto",
@@ -286,7 +286,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

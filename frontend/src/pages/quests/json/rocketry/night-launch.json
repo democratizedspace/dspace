@@ -92,7 +92,7 @@
                         },
                         {
                             "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
-                            "count": 1
+                            "count": 4.0
                         }
                     ],
                     "text": "Flight complete. Move to post-flight recovery checks."
@@ -129,7 +129,7 @@
                         },
                         {
                             "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
-                            "count": 1
+                            "count": 4.0
                         }
                     ],
                     "text": "Rocket recovered with safe descent and clear visual tracking."
@@ -162,7 +162,7 @@
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

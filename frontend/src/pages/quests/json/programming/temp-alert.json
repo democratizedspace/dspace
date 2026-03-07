@@ -17,7 +17,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 7
                         }
                     ]
                 }
@@ -39,7 +39,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 2
+                            "count": 7
                         }
                     ]
                 }
@@ -60,7 +60,7 @@
                         },
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 7
                         }
                     ]
                 },
@@ -87,7 +87,7 @@
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
+                            "count": 4.0
                         }
                     ]
                 }
@@ -114,7 +114,7 @@
     "hardening": {
         "passes": 1,
         "score": 96,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-hardening-2026-02-22",

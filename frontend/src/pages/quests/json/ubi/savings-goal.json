@@ -55,7 +55,7 @@
                     "requiresItems": [
                         {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                            "count": 100
+                            "count": 101.0
                         }
                     ]
                 },
@@ -86,7 +86,7 @@
                         },
                         {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                            "count": 100,
+                            "count": 101.0,
                             "containerItemId": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec"
                         }
                     ]
@@ -109,7 +109,7 @@
                     "requiresItems": [
                         {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                            "count": 100
+                            "count": 101.0
                         }
                     ]
                 }
@@ -130,7 +130,7 @@
                         },
                         {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                            "count": 100,
+                            "count": 101.0,
                             "containerItemId": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec"
                         }
                     ]
@@ -158,7 +158,7 @@
                     "requiresItems": [
                         {
                             "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-                            "count": 100
+                            "count": 101.0
                         }
                     ]
                 }
@@ -185,7 +185,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

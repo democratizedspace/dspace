@@ -33,7 +33,7 @@
                     "requiresItems": [
                         {
                             "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
+                            "count": 2.0
                         },
                         {
                             "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
@@ -205,7 +205,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

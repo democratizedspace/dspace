@@ -43,7 +43,7 @@
                     "requiresItems": [
                         {
                             "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -118,7 +118,7 @@
                         },
                         {
                             "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 },
@@ -193,7 +193,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

@@ -5,7 +5,7 @@
     "hardening": {
         "passes": 1,
         "score": 90,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-hardening-2025-08-18",
@@ -97,7 +97,7 @@
                     "requiresItems": [
                         {
                             "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 },
@@ -108,7 +108,7 @@
                     "requiresItems": [
                         {
                             "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }

@@ -49,7 +49,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
+                            "count": 3.0
                         }
                     ]
                 }
@@ -81,7 +81,7 @@
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -89,7 +89,7 @@
         },
         {
             "id": "interpret",
-            "text": "Accept this run only if deep readings stay within ±1.5°C while shallow readings show the larger swing. If curves cross repeatedly, the probe depth or contact is wrong.",
+            "text": "Accept this run only if deep readings stay within \u00b11.5\u00b0C while shallow readings show the larger swing. If curves cross repeatedly, the probe depth or contact is wrong.",
             "options": [
                 {
                     "type": "process",
@@ -98,7 +98,7 @@
                     "requiresItems": [
                         {
                             "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 1
+                            "count": 2.0
                         },
                         {
                             "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
@@ -109,7 +109,7 @@
                 {
                     "type": "goto",
                     "goto": "correct",
-                    "text": "Curves look wrong—need corrective retest"
+                    "text": "Curves look wrong\u2014need corrective retest"
                 },
                 {
                     "type": "goto",
@@ -118,7 +118,7 @@
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -161,7 +161,7 @@
                     "requiresItems": [
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 2
+                            "count": 3.0
                         }
                     ]
                 }
@@ -201,7 +201,7 @@
         },
         {
             "id": "interpret-retest",
-            "text": "Confirm the corrected run: deep trace should hold within ±1.5°C while shallow still swings more. If the curves cross again, repeat corrective setup.",
+            "text": "Confirm the corrected run: deep trace should hold within \u00b11.5\u00b0C while shallow still swings more. If the curves cross again, repeat corrective setup.",
             "options": [
                 {
                     "type": "process",
@@ -246,7 +246,7 @@
                     "requiresItems": [
                         {
                             "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
-                            "count": 1
+                            "count": 2.0
                         }
                     ]
                 }
@@ -263,7 +263,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
