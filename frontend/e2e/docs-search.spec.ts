@@ -29,7 +29,10 @@ test.describe('Docs search', () => {
         await expect(
             page.getByRole('link', { name: 'Quest Schema Requirements', exact: true })
         ).toBeVisible();
-        await expect(allLinks).toHaveCountLessThan(baselineLinkCount);
+
+        const filteredLinkCount = await allLinks.count();
+        expect(filteredLinkCount).toBeGreaterThan(0);
+        expect(filteredLinkCount).toBeLessThan(baselineLinkCount);
 
         await searchInput.fill('');
         await expect(allLinks).toHaveCount(baselineLinkCount);
