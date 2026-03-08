@@ -3,8 +3,8 @@ title: 'Chemistry'
 slug: 'chemistry'
 ---
 
-Chemistry quests now emphasize **artifact-driven lab work**: every major transformation should leave a tangible
-inventory result (sample, log, adjusted solution, or waste package) that can be validated in later steps.
+Chemistry quests now run as **full lab workflows**: each quest requires explicit setup artifacts,
+process records, and closeout evidence (not just a final product item).
 
 ## Quest tree
 
@@ -22,99 +22,131 @@ inventory result (sample, log, adjusted solution, or waste package) that can be 
 ## 1) Demonstrate a Safe Chemical Reaction (`chemistry/safe-reaction`)
 
 - Requires: `welcome/howtodoquests`
-- Key gates now require evidence artifacts:
-    - `open-beaker`/`controlled-capture` → requires `fizz reaction cylinder sample`
-    - `verify`/`finish` → requires `safe fizz reaction log sheet`
+- Main artifacts:
+    - `fizz apparatus setup checklist`
+    - `safe fizz reaction log sheet`
+    - `neutralized fizz waste vial`
 - Processes:
-    - [/processes/run-safe-fizz-reaction](/processes/run-safe-fizz-reaction) → creates `fizz reaction cylinder sample`
-    - [/processes/log-safe-reaction](/processes/log-safe-reaction) → creates `safe fizz reaction log sheet`
+    - [/processes/chemistry-stage-fizz-apparatus](/processes/chemistry-stage-fizz-apparatus)
+    - [/processes/run-safe-fizz-reaction](/processes/run-safe-fizz-reaction)
+    - [/processes/log-safe-reaction](/processes/log-safe-reaction)
+    - [/processes/chemistry-quench-fizz-residue](/processes/chemistry-quench-fizz-residue)
 
 ## 2) Measure Solution pH (`chemistry/ph-test`)
 
 - Requires: `chemistry/safe-reaction`
-- Measurement and interpretation gates now use `chemistry pH reading card`
-- Process:
+- Main artifacts:
+    - `labeled aliquot vial`
+    - `two-point calibration log`
+    - `chemistry pH reading card`
+- Processes:
+    - [/processes/chemistry-prepare-ph-aliquot](/processes/chemistry-prepare-ph-aliquot)
+    - [/processes/chemistry-calibrate-ph-reference](/processes/chemistry-calibrate-ph-reference)
     - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph)
-        - consumes `pH strip`
-        - creates `chemistry pH reading card`
 
 ## 3) Dilute Hydrochloric Acid Safely (`chemistry/acid-dilution`)
 
 - Requires: `chemistry/ph-test`
-- Both route branches now run a dilution process and require `diluted hydrochloric acid solution`
-- Verification/finish now require the diluted solution artifact
-- Process:
+- Main artifacts:
+    - `acid dilution calculation sheet`
+    - `ice bath temperature log`
+    - `diluted hydrochloric acid solution`
+- Processes:
+    - [/processes/chemistry-calc-acid-dilution](/processes/chemistry-calc-acid-dilution)
+    - [/processes/chemistry-stage-dilution-ice-bath](/processes/chemistry-stage-dilution-ice-bath)
     - [/processes/chemistry-dilute-hcl](/processes/chemistry-dilute-hcl)
-        - consumes concentrated HCl (fractional)
-        - creates `diluted hydrochloric acid solution`
 
 ## 4) Neutralize an Acid Spill (`chemistry/acid-neutralization`)
 
 - Requires: `chemistry/ph-test`
-- Kit workflow and verification require `neutralized spill waste container`; manual branch can proceed to verification with strip-based checks before confirming the container at pass gate
-- Process:
+- Main artifacts:
+    - `spill boundary map card`
+    - `neutralized spill waste container`
+    - `sealed neutralization waste manifest`
+- Processes:
+    - [/processes/chemistry-map-spill-boundary](/processes/chemistry-map-spill-boundary)
     - [/processes/chemistry-neutralize-acid-spill](/processes/chemistry-neutralize-acid-spill)
-        - consumes neutralizer + pH strip
-        - creates `neutralized spill waste container`
+    - [/processes/chemistry-manifest-neutralized-waste](/processes/chemistry-manifest-neutralized-waste)
 
 ## 5) Prepare a Buffer Solution (`chemistry/buffer-solution`)
 
 - Requires: `chemistry/ph-test`, `chemistry/acid-dilution`
-- Both prep branches now require paired evidence:
+- Main artifacts:
+    - `buffer reagent weigh boat`
     - `buffer solution batch`
+    - `buffer stock bottle`
     - `chemistry pH reading card`
 - Processes:
-    - [/processes/chemistry-prepare-buffer](/processes/chemistry-prepare-buffer) → creates `buffer solution batch`
-    - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph) → creates `chemistry pH reading card`
+    - [/processes/chemistry-weigh-buffer-reagents](/processes/chemistry-weigh-buffer-reagents)
+    - [/processes/chemistry-prepare-buffer](/processes/chemistry-prepare-buffer)
+    - [/processes/chemistry-bottle-buffer-stock](/processes/chemistry-bottle-buffer-stock)
+    - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph)
 
 ## 6) Adjust Solution pH (`chemistry/ph-adjustment`)
 
 - Requires: `chemistry/buffer-solution`
-- Baseline/retest and completion now depend on `chemistry pH reading card`
-- Adjustment branch still requires/produces transformed batch evidence when corrections are needed:
-    - requires `buffer solution batch`
-    - creates `pH-adjusted buffer solution`
+- Main artifacts:
+    - `titration increment log`
+    - `pH-adjusted buffer solution`
+    - `30-minute drift check card`
 - Processes:
-    - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph)
+    - [/processes/chemistry-log-titration-increments](/processes/chemistry-log-titration-increments)
     - [/processes/chemistry-adjust-buffer-ph](/processes/chemistry-adjust-buffer-ph)
+    - [/processes/chemistry-run-drift-hold](/processes/chemistry-run-drift-hold)
 
 ## 7) Form a Precipitate (`chemistry/precipitation-reaction`)
 
 - Requires: `chemistry/ph-adjustment`
-- Evidence pair for pass:
+- Main artifacts:
+    - `reagent compatibility worksheet`
     - `filtered precipitate sample`
-    - `chemistry pH reading card`
+    - `dried precipitate mass record`
 - Processes:
-    - [/processes/chemistry-form-precipitate](/processes/chemistry-form-precipitate) → creates `precipitation reaction slurry`
-    - [/processes/chemistry-filter-precipitate](/processes/chemistry-filter-precipitate) → creates `filtered precipitate sample`
-    - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph)
+    - [/processes/chemistry-verify-precipitation-compatibility](/processes/chemistry-verify-precipitation-compatibility)
+    - [/processes/chemistry-form-precipitate](/processes/chemistry-form-precipitate)
+    - [/processes/chemistry-filter-precipitate](/processes/chemistry-filter-precipitate)
+    - [/processes/chemistry-dry-precipitate-and-log-mass](/processes/chemistry-dry-precipitate-and-log-mass)
 
 ## 8) Extract Stevia Sweetener (`chemistry/stevia-extraction`)
 
 - Requires: `hydroponics/stevia`, `chemistry/safe-reaction`
-- Continues to require `stevia extract` evidence across setup/outcome/recovery gates
-- Process:
-    - [/processes/extract-stevia](/processes/extract-stevia)
+- Main artifacts:
+    - `rinsed stevia leaf tray`
+    - `stevia ethanol macerate`
+    - `de-solvated stevia concentrate`
+    - `stevia extract`
+- Processes:
+    - [/processes/chemistry-rinse-stevia-leaves](/processes/chemistry-rinse-stevia-leaves)
+    - [/processes/chemistry-macerate-stevia-ethanol](/processes/chemistry-macerate-stevia-ethanol)
+    - [/processes/chemistry-rotovap-stevia-concentrate](/processes/chemistry-rotovap-stevia-concentrate)
 
 ## 9) Refine Stevia Crystals (`chemistry/stevia-crystals`)
 
 - Requires: `chemistry/stevia-extraction`
-- Continues to require `stevia crystals` evidence before completion
-- Process:
+- Main artifacts:
+    - `seeded stevia crystallization jar`
+    - `stevia crystals`
+    - `dried stevia crystal lot sheet`
+- Processes:
+    - [/processes/chemistry-seed-stevia-crystallization](/processes/chemistry-seed-stevia-crystallization)
     - [/processes/purify-stevia](/processes/purify-stevia)
+    - [/processes/chemistry-vacuum-dry-stevia-crystals](/processes/chemistry-vacuum-dry-stevia-crystals)
 
 ## 10) Taste Test Stevia Crystals (`chemistry/stevia-tasting`)
 
 - Requires: `chemistry/stevia-crystals`
-- Continues staged evidence model:
-    - setup artifact: `stevia tasting solution`
-    - outcome artifact: `stevia tasting notes`
+- Main artifacts:
+    - `palate calibration sheet`
+    - `stevia dilution ladder set`
+    - `stevia tasting notes`
 - Processes:
+    - [/processes/chemistry-calibrate-palate-panel](/processes/chemistry-calibrate-palate-panel)
+    - [/processes/chemistry-build-stevia-dilution-ladder](/processes/chemistry-build-stevia-dilution-ladder)
     - [/processes/mix-stevia-tasting-solution](/processes/mix-stevia-tasting-solution)
     - [/processes/record-stevia-tasting-notes](/processes/record-stevia-tasting-notes)
 
 ## QA checklist focus
 
-- Verify every chemistry quest branch has a tangible evidence artifact before finish.
-- Verify transformed states propagate through inventory (`buffer batch` → `adjusted buffer` → `precipitate outputs`).
-- Verify waste/disposal artifacts are produced for hazardous chemistry steps.
+- Verify every chemistry quest has setup, transformation, and closeout artifacts.
+- Verify stevia extraction now includes wash, solvent extraction, and solvent recovery stages.
+- Verify each hazardous workflow includes explicit containment and disposal documentation.
