@@ -30,46 +30,78 @@ const walkQuestFiles = (dir: string): string[] => {
     return files;
 };
 
+const findSameStepGrantGateViolations = (quest: Quest, source: string): string[] => {
+    const violations: string[] = [];
+
+    for (const step of quest.dialogue ?? []) {
+        const maxGrantByItem = new Map<string, number>();
+        for (const option of step.options ?? []) {
+            if (option.type !== 'grantsItems') continue;
+            for (const item of option.grantsItems ?? []) {
+                const itemId = typeof item.id === 'string' ? item.id : '';
+                const count = Number(item.count ?? 0);
+                if (!itemId || !Number.isFinite(count) || count <= 0) continue;
+                maxGrantByItem.set(itemId, Math.max(maxGrantByItem.get(itemId) ?? 0, count));
+            }
+        }
+
+        if (maxGrantByItem.size === 0) continue;
+
+        for (const option of step.options ?? []) {
+            if (option.type !== 'goto') continue;
+            for (const required of option.requiresItems ?? []) {
+                const itemId = typeof required.id === 'string' ? required.id : '';
+                if (!itemId || !maxGrantByItem.has(itemId)) continue;
+                const requiredCount = Number(required.count ?? 0);
+                const grantedCount = maxGrantByItem.get(itemId) ?? 0;
+                if (Number.isFinite(requiredCount) && requiredCount > grantedCount) {
+                    violations.push(
+                        `${quest.id ?? source}: step ${step.id ?? '(unknown)'} goto gate requires ` +
+                            `${requiredCount} of ${itemId} but the same step only grants ` +
+                            `${grantedCount} in any single claim option`
+                    );
+                }
+            }
+        }
+    }
+
+    return violations;
+};
+
 describe('quest same-step grant/gate compatibility', () => {
     test('same-step goto gates are satisfiable by same-step claim grants', () => {
         const violations: string[] = [];
 
         for (const file of walkQuestFiles(QUEST_ROOT)) {
             const quest = JSON.parse(readFileSync(file, 'utf8')) as Quest;
-
-            for (const step of quest.dialogue ?? []) {
-                const maxGrantByItem = new Map<string, number>();
-                for (const option of step.options ?? []) {
-                    if (option.type !== 'grantsItems') continue;
-                    for (const item of option.grantsItems ?? []) {
-                        const itemId = typeof item.id === 'string' ? item.id : '';
-                        const count = Number(item.count ?? 0);
-                        if (!itemId || !Number.isFinite(count) || count <= 0) continue;
-                        maxGrantByItem.set(itemId, Math.max(maxGrantByItem.get(itemId) ?? 0, count));
-                    }
-                }
-
-                if (maxGrantByItem.size === 0) continue;
-
-                for (const option of step.options ?? []) {
-                    if (option.type !== 'goto') continue;
-                    for (const required of option.requiresItems ?? []) {
-                        const itemId = typeof required.id === 'string' ? required.id : '';
-                        if (!itemId || !maxGrantByItem.has(itemId)) continue;
-                        const requiredCount = Number(required.count ?? 0);
-                        const grantedCount = maxGrantByItem.get(itemId) ?? 0;
-                        if (Number.isFinite(requiredCount) && requiredCount > grantedCount) {
-                            violations.push(
-                                `${quest.id ?? file}: step ${step.id ?? '(unknown)'} goto gate requires ` +
-                                    `${requiredCount} of ${itemId} but the same step only grants ` +
-                                    `${grantedCount} in any single claim option`
-                            );
-                        }
-                    }
-                }
-            }
+            violations.push(...findSameStepGrantGateViolations(quest, file));
         }
 
         expect(violations).toEqual([]);
+    });
+
+    test('fails when a same-step goto requires more than any single same-step grant', () => {
+        const quest: Quest = {
+            id: 'fixture-quest',
+            dialogue: [
+                {
+                    id: 'fixture-step',
+                    options: [
+                        {
+                            type: 'grantsItems',
+                            grantsItems: [{ id: 'item-a', count: 1 }],
+                        },
+                        {
+                            type: 'goto',
+                            requiresItems: [{ id: 'item-a', count: 2 }],
+                        },
+                    ],
+                },
+            ],
+        };
+
+        expect(findSameStepGrantGateViolations(quest, 'fixture')).toEqual([
+            'fixture-quest: step fixture-step goto gate requires 2 of item-a but the same step only grants 1 in any single claim option',
+        ]);
     });
 });
