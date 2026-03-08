@@ -506,7 +506,7 @@ Hydroponics quests build practical progression through the hydroponics skill tre
 - Unlock prerequisite:
     - `requiresQuests`: `hydroponics/pump-install`
 - Dialogue `requiresItems` gates:
-    - `start` → "Run the top-off checklist." — hydroponics tub (ready) ×1
+    - `start` → "Run the top-off checklist." — hydroponics tub (ready) ×1 (unlocked by the step's one-time sync claim)
     - `prep` → "Supplies ready and system looks stable." — 5 gallon bucket of dechlorinated tap water ×1, hydroponics tub (ready) ×1
     - `fill` → "Re-balance nutrients before measuring EC." — hydroponic nutrient concentrate (1 L) ×1, nitrile gloves (pair) ×1, safety goggles ×1, submersible water pump ×1, hydroponics tub (ready) ×1
     - `fill` → "Record post-top-off EC." — EC meter ×1, hydroponics tub (ready) ×1
