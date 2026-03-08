@@ -54,7 +54,7 @@
                     "text": "Temperature log captured.",
                     "requiresItems": [
                         {
-                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "id": "6305ae99-c0b2-49f8-8d58-a1d81b765342",
                             "count": 1.0
                         }
                     ]
@@ -71,7 +71,7 @@
                     "text": "In range and stable; close this check.",
                     "requiresItems": [
                         {
-                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "id": "6305ae99-c0b2-49f8-8d58-a1d81b765342",
                             "count": 1.0
                         }
                     ]
