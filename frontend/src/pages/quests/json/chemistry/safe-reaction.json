@@ -1,45 +1,27 @@
 {
     "id": "chemistry/safe-reaction",
     "title": "Demonstrate a Safe Chemical Reaction",
-    "description": "Phoenix guides you through PPE checks, reaction prep, and logging for a safe fizz-reaction demo.",
+    "description": "Run a benign fizz reaction with full preflight setup, gas-handling controls, and disposal documentation.",
     "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Today we prove control, not chaos: prep safely, pick a reaction route, and log what the chemistry tells you.",
+            "text": "Phoenix: before anything reacts, stage the bench like a real lab run\u2014PPE on, vent path clear, and vessels labeled with reagent volumes.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "safety",
-                    "text": "Proceed with lab safety checks."
-                }
-            ]
-        },
-        {
-            "id": "safety",
-            "text": "Before mixing, confirm PPE and clean tools. Gloves, goggles, beaker, and cylinder are non-negotiable.",
-            "options": [
+                    "type": "process",
+                    "process": "chemistry-stage-fizz-apparatus",
+                    "text": "Stage apparatus and complete setup checklist."
+                },
                 {
                     "type": "goto",
-                    "goto": "route-select",
-                    "text": "Safety gear is on and tools are ready.",
+                    "goto": "run",
+                    "text": "Checklist complete; proceed to controlled reaction.",
                     "requiresItems": [
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
-                            "count": 1
-                        },
-                        {
-                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                            "id": "9db8fe7a-0f05-442c-a4af-7f7db96c3bc1",
                             "count": 1
                         }
                     ]
@@ -47,105 +29,67 @@
             ]
         },
         {
-            "id": "route-select",
-            "text": "Choose your demonstration mode. Open-beaker is easiest to observe. Controlled-capture emphasizes disciplined gas handling.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "open-beaker",
-                    "text": "Run open-beaker observation route."
-                },
-                {
-                    "type": "goto",
-                    "goto": "controlled-capture",
-                    "text": "Run controlled-capture route."
-                }
-            ]
-        },
-        {
-            "id": "open-beaker",
-            "text": "Run the fizz protocol in an open vessel and watch for controlled bubble formation and safe temperature behavior.",
+            "id": "run",
+            "text": "Charge the cylinder slowly, keep beaker in secondary containment, and observe foam height plus venting behavior.",
             "options": [
                 {
                     "type": "process",
                     "process": "run-safe-fizz-reaction",
-                    "text": "Execute open-beaker protocol."
+                    "text": "Run controlled fizz reaction."
                 },
                 {
                     "type": "goto",
-                    "goto": "verify",
-                    "text": "Reaction remained controlled; move to verification and logging.",
+                    "goto": "log",
+                    "text": "Sample captured; document observations.",
                     "requiresItems": [
                         {
                             "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "troubleshoot",
-                    "text": "Foam rise or splash risk detected; move to recovery path."
                 }
             ]
         },
         {
-            "id": "controlled-capture",
-            "text": "Run a slower dosing cadence focused on consistent gas generation and stable handling.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "run-safe-fizz-reaction",
-                    "text": "Execute controlled-capture protocol."
-                },
-                {
-                    "type": "goto",
-                    "goto": "verify",
-                    "text": "Capture route completed with stable behavior; move to verification and logging.",
-                    "requiresItems": [
-                        {
-                            "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "troubleshoot",
-                    "text": "Pressure or bubbling looked unstable; stop and troubleshoot."
-                }
-            ]
-        },
-        {
-            "id": "troubleshoot",
-            "text": "Good catch. Pause additions, vent safely, and decontaminate surfaces before any retry. If repeat instability occurs, escalate instead of improvising.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Run cleanup and reset protocol."
-                },
-                {
-                    "type": "goto",
-                    "goto": "route-select",
-                    "text": "Setup stable again; retry using the safer route."
-                }
-            ]
-        },
-        {
-            "id": "verify",
-            "text": "Now document what happened so another tech could reproduce the run and safety checks.",
+            "id": "log",
+            "text": "Record reagent order, foam peak, temperature feel, and disposal intent for every liquid generated.",
             "options": [
                 {
                     "type": "process",
                     "process": "log-safe-reaction",
-                    "text": "Log reaction observations."
+                    "text": "Create reaction log sheet."
+                },
+                {
+                    "type": "goto",
+                    "goto": "quench",
+                    "text": "Log captured; neutralize residue.",
+                    "requiresItems": [
+                        {
+                            "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "quench",
+            "text": "Treat leftovers as chemical waste. Adjust to safe pH and label the disposal vial with date and initials.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-quench-fizz-residue",
+                    "text": "Quench residue and package waste vial."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Stable run documented; proceed to closeout.",
+                    "text": "Reaction run meets safety evidence requirements.",
                     "requiresItems": [
+                        {
+                            "id": "2f7a5a59-f7e6-473d-8188-13abcce58e95",
+                            "count": 1
+                        },
                         {
                             "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
                             "count": 1
@@ -156,17 +100,11 @@
         },
         {
             "id": "finish",
-            "text": "Excellent. You demonstrated a reaction with explicit safety controls, reproducible evidence, and a recovery path.",
+            "text": "You demonstrated that even a simple reaction needs setup discipline, traceability, and waste handling.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Logged and ready for the next experiment.",
-                    "requiresItems": [
-                        {
-                            "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Complete safe-reaction qualification."
                 }
             ]
         }

@@ -1,7 +1,99 @@
 {
     "id": "chemistry/ph-test",
     "title": "Measure Solution pH",
-    "description": "Measure solution pH with PPE, classify the reading, and recover safely when values are out of range.",
+    "description": "Measure pH with aliquot prep, two-point calibration evidence, and strip-based verification logs.",
+    "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Start by creating a representative aliquot: homogenize sample, avoid air bubbles, and label temperature and sample origin.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-prepare-ph-aliquot",
+                    "text": "Prepare labeled aliquot vial."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cal",
+                    "text": "Aliquot ready for calibration step.",
+                    "requiresItems": [
+                        {
+                            "id": "20f7f2d7-d889-4440-bd85-5ef1915be6bb",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "cal",
+            "text": "Run two-point calibration logic before trusting any strip readout. Document drift between references.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-calibrate-ph-reference",
+                    "text": "Create two-point calibration log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Calibration complete; collect field reading.",
+                    "requiresItems": [
+                        {
+                            "id": "fa77f2d1-b1a4-4358-aaaf-d35d5f5ad63a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Dip strip for the specified dwell time, compare immediately, and note color-match confidence.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-measure-ph",
+                    "text": "Record chemistry pH reading card."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "pH result accepted with calibration evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fa77f2d1-b1a4-4358-aaaf-d35d5f5ad63a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Good science: you linked sample prep, calibration, and final reading into one auditable trail.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Complete pH measurement protocol."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["chemistry/safe-reaction"],
     "hardening": {
         "passes": 3,
         "score": 95,
@@ -23,115 +115,5 @@
                 "score": 92
             }
         ]
-    },
-    "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
-    "npc": "/assets/npc/phoenix.jpg",
-    "start": "start",
-    "dialogue": [
-        {
-            "id": "start",
-            "text": "Before working with reactive solutions, stage PPE and controls. Put on nitrile gloves, goggles, and a lab coat, keep spill neutralizer nearby, and confirm the bench is dry and labeled.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "measure",
-                    "text": "Safety setup complete\u2014start the pH measurement run."
-                }
-            ]
-        },
-        {
-            "id": "measure",
-            "text": "Dip a fresh strip for one second, compare to the chart immediately, and record the observed value. Keep your face back from the vessel and avoid cross-contaminating the strip packet.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "chemistry-measure-ph",
-                    "text": "Run `chemistry-measure-ph` and capture a labeled reading card."
-                },
-                {
-                    "type": "goto",
-                    "goto": "interpret",
-                    "text": "I logged a stable reading and kept PPE on.",
-                    "requiresItems": [
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "3455faac-8811-4991-b818-cecb98e8fff7",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "troubleshoot",
-                    "text": "Color band is ambiguous or drifting\u2014need troubleshooting."
-                }
-            ]
-        },
-        {
-            "id": "interpret",
-            "text": "Interpret the reading: target operating window is pH 6.0\u20137.5 for this training solution. Choose the branch that matches your logged result.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Reading is in-range (6.0\u20137.5); safe to proceed.",
-                    "requiresItems": [
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "troubleshoot",
-                    "text": "Reading is out-of-range (<6.0 or >7.5); initiate corrective loop."
-                }
-            ]
-        },
-        {
-            "id": "troubleshoot",
-            "text": "Stop and stabilize: cap reagents, wipe spills, and replace gloves if contaminated. Re-mix gently, wait 30 seconds, then retest with a fresh strip. If the second reading still drifts, pause the experiment and escalate.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "measure",
-                    "text": "Corrective actions complete\u2014retest now."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Escalated safely and logged a deferred run for supervisor review."
-                }
-            ]
-        },
-        {
-            "id": "finish",
-            "text": "Good lab discipline. You captured measurement evidence, interpreted against explicit bounds, and used a safe recovery path when readings were unreliable.",
-            "options": [
-                {
-                    "type": "finish",
-                    "text": "pH check complete."
-                }
-            ]
-        }
-    ],
-    "rewards": [
-        {
-            "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
-            "count": 1
-        }
-    ],
-    "requiresQuests": ["chemistry/safe-reaction"]
+    }
 }
