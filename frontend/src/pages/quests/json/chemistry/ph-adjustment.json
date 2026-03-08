@@ -1,39 +1,14 @@
 {
     "id": "chemistry/ph-adjustment",
     "title": "Adjust Solution pH",
-    "description": "Bring a nutrient solution into range using acid or base.",
+    "description": "Adjust buffer pH using logged titration increments and post-adjustment drift monitoring.",
     "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. We do this like a lab: baseline reading, controlled adjustment, then verification before we trust the batch.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "baseline",
-                    "text": "Run baseline measurement with PPE on.",
-                    "requiresItems": [
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "baseline",
-            "text": "Capture a pH reading before dosing anything. Record the number so your correction has context.",
+            "text": "Capture baseline pH, then plan dropwise additions to avoid overshoot and back-correction.",
             "options": [
                 {
                     "type": "process",
@@ -42,126 +17,85 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "interpret",
-                    "text": "Baseline recorded, interpret before adjusting.",
+                    "goto": "titrate",
+                    "text": "Baseline ready; begin incremented titration.",
                     "requiresItems": [
                         {
                             "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 5.0
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "interpret",
-            "text": "Target band is pH 6.0-7.2. If you're inside it, preserve the batch. If outside, do micro-dosing corrections and re-test.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Reading is within 6.0-7.2; no further adjustment needed.",
-                    "requiresItems": [
+                            "count": 1
+                        },
                         {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 5.0
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "adjust",
-                    "text": "Out of range: run a correction pass."
-                }
-            ]
-        },
-        {
-            "id": "adjust",
-            "text": "Add tiny doses of pH down or pH up, stir fully, and pause before retesting. No large swings.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "chemistry-adjust-buffer-ph",
-                    "text": "Run controlled additions and relabel the adjusted buffer."
-                },
-                {
-                    "type": "goto",
-                    "goto": "retest",
-                    "text": "Adjustment complete, collect verification reading.",
-                    "requiresItems": [
-                        {
-                            "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+                            "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "safety-stop",
-                    "text": "Unexpected heat or clouding appeared; pause and secure the bench."
                 }
             ]
         },
         {
-            "id": "retest",
-            "text": "Retest and compare against target band. Re-enter correction loop if still out of range.",
+            "id": "titrate",
+            "text": "Add adjuster in micro-increments, stir fully between drops, and log every pH response.",
             "options": [
                 {
                     "type": "process",
-                    "process": "chemistry-measure-ph",
-                    "text": "Take post-adjustment pH reading."
+                    "process": "chemistry-log-titration-increments",
+                    "text": "Create titration increment log."
+                },
+                {
+                    "type": "process",
+                    "process": "chemistry-adjust-buffer-ph",
+                    "text": "Produce pH-adjusted buffer solution."
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
-                    "text": "Verification is inside 6.0-7.2.",
+                    "goto": "hold",
+                    "text": "Adjusted batch ready for stability hold.",
                     "requiresItems": [
                         {
                             "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
                             "count": 1
                         },
                         {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 5.0
+                            "id": "ff45c550-561d-4e9b-884d-e6d1777f6a7b",
+                            "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "adjust",
-                    "text": "Still out of range; apply another micro-dose and re-test."
                 }
             ]
         },
         {
-            "id": "safety-stop",
-            "text": "Good stop-work call. Rinse exposed surfaces, document the anomaly, and only resume with fresh PPE and tools.",
+            "id": "hold",
+            "text": "Run a 30-minute hold and verify drift stays within tolerance before releasing batch.",
             "options": [
                 {
                     "type": "process",
-                    "process": "wash-hands",
-                    "text": "Decontaminate and reset."
+                    "process": "chemistry-run-drift-hold",
+                    "text": "Record drift-check card."
                 },
                 {
                     "type": "goto",
-                    "goto": "baseline",
-                    "text": "Bench reset complete; restart from baseline measurement."
+                    "goto": "finish",
+                    "text": "Adjustment and stability evidence complete.",
+                    "requiresItems": [
+                        {
+                            "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce3889fd-6f0a-4428-8b49-b15e33639d0f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Balanced and verified. You used evidence, not guesswork, and left a reproducible trail.",
+            "text": "Excellent control\u2014your buffer is not just on-target now, but stable over time.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Chemistry in harmony.",
-                    "requiresItems": [
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Release adjusted buffer batch."
                 }
             ]
         }
