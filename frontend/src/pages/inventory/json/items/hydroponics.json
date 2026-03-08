@@ -150,6 +150,27 @@
         "priceExemptionReason": "SOULBOUND"
     },
     {
+        "id": "b32f7ddb-783a-4389-93e5-06369bcdceb4",
+        "name": "hydroponic strip thermometer (0\u201350\u00b0C)",
+        "description": "Stick-on strip thermometer assigned to hydroponic reservoirs; 0\u201350\u00b0C range with \u00b11\u00b0C accuracy.",
+        "image": "/assets/aquarium_stick_on_thermometer_strip.jpg",
+        "price": "8 dUSD"
+    },
+    {
+        "id": "b81e67a1-28b0-4cd8-b202-778f66a95a7b",
+        "name": "hydroponic reservoir with mounted thermometer strip",
+        "description": "Hydroponic nutrient reservoir with a strip thermometer mounted on dry outer wall for stable QA checks.",
+        "image": "/assets/walstad_aquarium_strip_thermometer_80L.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
+        "id": "6305ae99-c0b2-49f8-8d58-a1d81b765342",
+        "name": "hydroponic reservoir temperature reading log",
+        "description": "Timestamped hydroponic reservoir temperature-reading log artifact for hydroponic nutrient-reservoir QA decisions and retest evidence (not aquarium data).",
+        "image": "/assets/aquarium_temperature_strip_reading.jpg",
+        "priceExemptionReason": "SOULBOUND"
+    },
+    {
         "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
         "name": "rinsed hydroponic root zone",
         "description": "Grow media thoroughly flushed with fresh water to clear salts before recharging nutrients.",
