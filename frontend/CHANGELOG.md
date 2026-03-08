@@ -34,7 +34,7 @@
 - Settings menu entry now appears as an active destination instead of a disabled placeholder
 - Shop index featured actions now use the correct item slug instead of the numeric placeholder
 - Added pricing for the first aid kit so it no longer ships as a beta placeholder item
-- Priced the soaked hydroponic starter plug so it no longer uses a beta placeholder
+- Soaked hydroponic starter plugs are now soulbound and cannot be bought directly
 - ISS spotting station now has a real price instead of a beta placeholder
 - Photoresistor now has a real price instead of shipping as a beta placeholder component
 - Hypercar (80% charge) now has a real price instead of a beta placeholder entry
