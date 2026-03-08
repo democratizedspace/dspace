@@ -56,13 +56,7 @@
                 {
                     "type": "process",
                     "process": "arduino-thermistor-read",
-                    "text": "Run backup probe baseline capture",
-                    "requiresItems": [
-                        {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Run backup probe baseline capture"
                 },
                 {
                     "type": "goto",

@@ -68,21 +68,7 @@
                 {
                     "type": "process",
                     "process": "tighten-x-belt",
-                    "text": "Apply controlled tension adjustment.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        },
-                        {
-                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Apply controlled tension adjustment."
                 },
                 {
                     "type": "goto",
@@ -148,21 +134,7 @@
                 {
                     "type": "process",
                     "process": "tighten-x-belt",
-                    "text": "Apply a corrective micro-adjustment.",
-                    "requiresItems": [
-                        {
-                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
-                            "count": 1
-                        },
-                        {
-                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Apply a corrective micro-adjustment."
                 },
                 {
                     "type": "goto",

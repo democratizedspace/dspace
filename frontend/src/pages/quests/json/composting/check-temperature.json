@@ -30,32 +30,12 @@
                 {
                     "type": "process",
                     "process": "measure-compost-temperature",
-                    "requiresItems": [
-                        {
-                            "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
-                            "count": 1
-                        },
-                        {
-                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
-                            "count": 1
-                        }
-                    ],
                     "goto": "readings",
                     "text": "Log the temperature"
                 },
                 {
                     "type": "process",
                     "process": "measure-compost-moisture",
-                    "requiresItems": [
-                        {
-                            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
-                            "count": 1
-                        },
-                        {
-                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
-                            "count": 1
-                        }
-                    ],
                     "goto": "readings",
                     "text": "Record the moisture"
                 },
@@ -111,21 +91,7 @@
                     "type": "process",
                     "process": "cure-compost-bucket",
                     "goto": "finish",
-                    "text": "Start the cure rest",
-                    "requiresItems": [
-                        {
-                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
-                            "count": 1
-                        },
-                        {
-                            "id": "e034d081-a29e-4040-830f-a192304db50d",
-                            "count": 2
-                        },
-                        {
-                            "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
-                            "count": 2
-                        }
-                    ]
+                    "text": "Start the cure rest"
                 },
                 {
                     "type": "goto",

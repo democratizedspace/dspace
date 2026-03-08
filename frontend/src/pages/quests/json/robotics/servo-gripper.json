@@ -58,13 +58,7 @@
                 {
                     "type": "process",
                     "process": "assemble-servo-gripper",
-                    "text": "Assemble jaws, center the horn, and run non-stall travel calibration (about 2 hours).",
-                    "requiresItems": [
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Assemble jaws, center the horn, and run non-stall travel calibration (about 2 hours)."
                 },
                 {
                     "type": "goto",

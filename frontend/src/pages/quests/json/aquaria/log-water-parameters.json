@@ -35,17 +35,7 @@
                     "type": "process",
                     "process": "measure-liquid-parameters",
                     "text": "Run the liquid tests.",
-                    "goto": "log",
-                    "requiresItems": [
-                        {
-                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "log"
                 },
                 {
                     "type": "goto",
@@ -68,25 +58,7 @@
                     "type": "process",
                     "process": "log-aquarium-test-results",
                     "text": "Record the results in the logbook.",
-                    "goto": "interpret",
-                    "requiresItems": [
-                        {
-                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
-                            "count": 1
-                        },
-                        {
-                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
-                            "count": 1
-                        },
-                        {
-                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "interpret"
                 },
                 {
                     "type": "goto",

@@ -90,13 +90,7 @@
                 {
                     "type": "process",
                     "process": "sanitize-net-cups",
-                    "text": "Run sanitize + rinse cycle.",
-                    "requiresItems": [
-                        {
-                            "id": "68e50400-fa25-4459-9633-2304a67096c9",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Run sanitize + rinse cycle."
                 },
                 {
                     "type": "goto",

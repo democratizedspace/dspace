@@ -66,25 +66,7 @@
                 {
                     "type": "process",
                     "process": "replace-brass-nozzle",
-                    "text": "Install a fresh 0.4 mm nozzle.",
-                    "requiresItems": [
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
-                            "count": 1
-                        },
-                        {
-                            "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
-                            "count": 1
-                        },
-                        {
-                            "id": "564a76de-925b-4457-a548-d015168abe0c",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Install a fresh 0.4 mm nozzle."
                 },
                 {
                     "type": "goto",

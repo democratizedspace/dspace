@@ -30,17 +30,7 @@
                 {
                     "type": "process",
                     "process": "capture-hourly-temperature-log",
-                    "text": "Capture a paired depth log",
-                    "requiresItems": [
-                        {
-                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Capture a paired depth log"
                 },
                 {
                     "type": "goto",
@@ -62,17 +52,7 @@
                 {
                     "type": "process",
                     "process": "plot-temperature-data",
-                    "text": "Plot the depth comparison",
-                    "requiresItems": [
-                        {
-                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Plot the depth comparison"
                 },
                 {
                     "type": "goto",
@@ -94,17 +74,7 @@
                 {
                     "type": "process",
                     "process": "refine-temperature-graph",
-                    "text": "Annotate accepted spread and archive evidence",
-                    "requiresItems": [
-                        {
-                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 2.0
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Annotate accepted spread and archive evidence"
                 },
                 {
                     "type": "goto",
@@ -142,17 +112,7 @@
                 {
                     "type": "process",
                     "process": "capture-hourly-temperature-log",
-                    "text": "Capture corrective paired depth log",
-                    "requiresItems": [
-                        {
-                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Capture corrective paired depth log"
                 },
                 {
                     "type": "goto",
@@ -174,17 +134,7 @@
                 {
                     "type": "process",
                     "process": "plot-temperature-data",
-                    "text": "Plot corrective depth comparison",
-                    "requiresItems": [
-                        {
-                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 2
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Plot corrective depth comparison"
                 },
                 {
                     "type": "goto",
@@ -206,17 +156,7 @@
                 {
                     "type": "process",
                     "process": "refine-temperature-graph",
-                    "text": "Annotate corrected spread and archive evidence",
-                    "requiresItems": [
-                        {
-                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
-                            "count": 2
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Annotate corrected spread and archive evidence"
                 },
                 {
                     "type": "goto",

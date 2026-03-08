@@ -29,13 +29,7 @@
                 {
                     "type": "process",
                     "process": "assemble-pan-tilt-mount",
-                    "text": "Assemble both axes, apply thread-lock, and complete controlled sweep calibration (about 2 hours).",
-                    "requiresItems": [
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 2
-                        }
-                    ]
+                    "text": "Assemble both axes, apply thread-lock, and complete controlled sweep calibration (about 2 hours)."
                 },
                 {
                     "type": "goto",

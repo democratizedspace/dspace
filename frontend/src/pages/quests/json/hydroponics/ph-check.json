@@ -54,17 +54,7 @@
                 {
                     "type": "process",
                     "process": "measure-ph",
-                    "text": "Measure pH now.",
-                    "requiresItems": [
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Measure pH now."
                 },
                 {
                     "type": "goto",
@@ -114,17 +104,7 @@
                 {
                     "type": "process",
                     "process": "adjust-ph",
-                    "text": "Dose and stir.",
-                    "requiresItems": [
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Dose and stir."
                 },
                 {
                     "type": "goto",
@@ -173,13 +153,7 @@
                 {
                     "type": "process",
                     "process": "log-stable-ph",
-                    "text": "Log pH and timestamp.",
-                    "requiresItems": [
-                        {
-                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Log pH and timestamp."
                 },
                 {
                     "type": "goto",

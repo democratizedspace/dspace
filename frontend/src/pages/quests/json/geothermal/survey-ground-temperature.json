@@ -56,17 +56,7 @@
                 {
                     "type": "process",
                     "process": "capture-hourly-temperature-log",
-                    "text": "Capture a timestamped baseline run",
-                    "requiresItems": [
-                        {
-                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
-                            "count": 1
-                        },
-                        {
-                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Capture a timestamped baseline run"
                 },
                 {
                     "type": "grantsItems",

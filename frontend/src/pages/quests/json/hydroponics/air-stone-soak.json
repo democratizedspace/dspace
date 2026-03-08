@@ -81,13 +81,7 @@
                 {
                     "type": "process",
                     "process": "prime-air-stone",
-                    "text": "Run prime and bubble spread test.",
-                    "requiresItems": [
-                        {
-                            "id": "3b094479-ed97-46d6-8cab-ea91752972dd",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Run prime and bubble spread test."
                 },
                 {
                     "type": "goto",

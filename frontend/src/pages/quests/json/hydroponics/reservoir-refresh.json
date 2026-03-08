@@ -49,17 +49,7 @@
                 {
                     "type": "process",
                     "process": "refresh-hydroponic-tub",
-                    "text": "Run reservoir refresh process.",
-                    "requiresItems": [
-                        {
-                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
-                            "count": 1
-                        },
-                        {
-                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Run reservoir refresh process."
                 },
                 {
                     "type": "goto",
@@ -107,17 +97,7 @@
                 {
                     "type": "process",
                     "process": "refresh-hydroponic-tub",
-                    "text": "Re-mix and replace solution with corrected ratio.",
-                    "requiresItems": [
-                        {
-                            "id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
-                            "count": 1
-                        },
-                        {
-                            "id": "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Re-mix and replace solution with corrected ratio."
                 },
                 {
                     "type": "goto",

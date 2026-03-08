@@ -40,13 +40,7 @@
                 {
                     "type": "process",
                     "process": "assemble-line-follower-chassis",
-                    "text": "Assemble and align the chassis, sensor bar, and baseline firmware tune (about 3 hours).",
-                    "requiresItems": [
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 2
-                        }
-                    ]
+                    "text": "Assemble and align the chassis, sensor bar, and baseline firmware tune (about 3 hours)."
                 },
                 {
                     "type": "goto",
@@ -62,13 +56,7 @@
                 {
                     "type": "process",
                     "process": "assemble-line-follower-chassis",
-                    "text": "Assemble and align the chassis, sensor bar, and baseline firmware tune (about 3 hours).",
-                    "requiresItems": [
-                        {
-                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
-                            "count": 2
-                        }
-                    ]
+                    "text": "Assemble and align the chassis, sensor bar, and baseline firmware tune (about 3 hours)."
                 },
                 {
                     "type": "goto",

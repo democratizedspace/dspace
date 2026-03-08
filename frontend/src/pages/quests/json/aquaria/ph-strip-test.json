@@ -45,17 +45,7 @@
                     "type": "process",
                     "process": "measure-aquarium-ph",
                     "text": "Dip and read the strip.",
-                    "goto": "interpret",
-                    "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "interpret"
                 },
                 {
                     "type": "goto",
@@ -207,21 +197,7 @@
                     "type": "process",
                     "process": "log-aquarium-ph-reading",
                     "text": "Write it in the logbook.",
-                    "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
-                            "count": 1
-                        },
-                        {
-                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "finish"
                 },
                 {
                     "type": "goto",

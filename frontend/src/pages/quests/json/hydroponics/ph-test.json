@@ -112,21 +112,7 @@
                 {
                     "type": "process",
                     "process": "adjust-ph",
-                    "text": "Dose and mix corrective adjustment.",
-                    "requiresItems": [
-                        {
-                            "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Dose and mix corrective adjustment."
                 },
                 {
                     "type": "goto",
@@ -227,13 +213,7 @@
                 {
                     "type": "process",
                     "process": "log-stable-ph",
-                    "text": "Write stable pH log entry.",
-                    "requiresItems": [
-                        {
-                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Write stable pH log entry."
                 },
                 {
                     "type": "goto",

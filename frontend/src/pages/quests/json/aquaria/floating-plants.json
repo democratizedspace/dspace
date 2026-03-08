@@ -77,21 +77,7 @@
                     "type": "process",
                     "process": "rinse-floating-plants",
                     "text": "Rinse and inspect the plants.",
-                    "goto": "place",
-                    "requiresItems": [
-                        {
-                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
-                            "count": 1
-                        },
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        },
-                        {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "place"
                 },
                 {
                     "type": "goto",
@@ -114,21 +100,7 @@
                     "type": "process",
                     "process": "rinse-floating-plants",
                     "text": "Run a second rinse after trimming contaminated stems.",
-                    "goto": "place",
-                    "requiresItems": [
-                        {
-                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
-                            "count": 1
-                        },
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        },
-                        {
-                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "place"
                 },
                 {
                     "type": "goto",
@@ -170,17 +142,7 @@
                     "type": "process",
                     "process": "place-floating-plants",
                     "text": "Float and spread the guppy grass mat.",
-                    "goto": "verify",
-                    "requiresItems": [
-                        {
-                            "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
-                            "count": 1
-                        },
-                        {
-                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "verify"
                 },
                 {
                     "type": "goto",

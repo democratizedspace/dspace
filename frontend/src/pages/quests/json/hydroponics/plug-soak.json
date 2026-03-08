@@ -49,13 +49,7 @@
                 {
                     "type": "process",
                     "process": "rockwool-soak",
-                    "text": "Run the initial soak cycle.",
-                    "requiresItems": [
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Run the initial soak cycle."
                 },
                 {
                     "type": "goto",
@@ -103,13 +97,7 @@
                 {
                     "type": "process",
                     "process": "rockwool-soak",
-                    "text": "Re-soak with fresh dechlorinated water.",
-                    "requiresItems": [
-                        {
-                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Re-soak with fresh dechlorinated water."
                 },
                 {
                     "type": "goto",

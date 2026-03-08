@@ -44,17 +44,7 @@
                     "type": "process",
                     "process": "measure-aquarium-ph",
                     "text": "Take baseline pH reading.",
-                    "goto": "baseline-log",
-                    "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "baseline-log"
                 },
                 {
                     "type": "goto",
@@ -77,21 +67,7 @@
                     "type": "process",
                     "process": "log-aquarium-ph-reading",
                     "text": "Record baseline in the logbook.",
-                    "goto": "adjust",
-                    "requiresItems": [
-                        {
-                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
-                            "count": 1
-                        },
-                        {
-                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "adjust"
                 },
                 {
                     "type": "goto",
@@ -114,17 +90,7 @@
                     "type": "process",
                     "process": "adjust-ph",
                     "text": "Dose and circulate buffer safely.",
-                    "goto": "retest",
-                    "requiresItems": [
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "retest"
                 },
                 {
                     "type": "goto",
@@ -147,17 +113,7 @@
                     "type": "process",
                     "process": "measure-aquarium-ph",
                     "text": "Capture post-dose reading.",
-                    "goto": "interpret",
-                    "requiresItems": [
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "interpret"
                 },
                 {
                     "type": "goto",
@@ -180,17 +136,7 @@
                     "type": "process",
                     "process": "log-aquarium-ph-reading",
                     "text": "Log stable result (6.8-7.6) and close.",
-                    "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
-                            "count": 1
-                        },
-                        {
-                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "finish"
                 },
                 {
                     "type": "goto",
@@ -218,17 +164,7 @@
                     "type": "process",
                     "process": "adjust-ph",
                     "text": "Apply a smaller corrective dose.",
-                    "goto": "retest",
-                    "requiresItems": [
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "goto": "retest"
                 },
                 {
                     "type": "goto",

@@ -56,17 +56,7 @@
                 {
                     "type": "process",
                     "process": "3dprint-benchy",
-                    "text": "Print Benchies in controlled batches.",
-                    "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 15
-                        }
-                    ]
+                    "text": "Print Benchies in controlled batches."
                 },
                 {
                     "type": "goto",
@@ -92,17 +82,7 @@
                 {
                     "type": "process",
                     "process": "3dprint-benchy",
-                    "text": "Run burst batch printing.",
-                    "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 15
-                        }
-                    ]
+                    "text": "Run burst batch printing."
                 },
                 {
                     "type": "goto",

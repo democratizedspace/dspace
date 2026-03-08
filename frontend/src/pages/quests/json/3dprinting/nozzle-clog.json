@@ -13,21 +13,7 @@
                 {
                     "type": "process",
                     "process": "3dprint-nozzle-clog",
-                    "text": "Document the failure and trigger a clog state.",
-                    "requiresItems": [
-                        {
-                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 5
-                        },
-                        {
-                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
-                            "count": 50
-                        }
-                    ]
+                    "text": "Document the failure and trigger a clog state."
                 },
                 {
                     "type": "goto",
@@ -49,52 +35,12 @@
                 {
                     "type": "process",
                     "process": "repair-clogged-nozzle",
-                    "text": "Clear the nozzle and reseat it.",
-                    "requiresItems": [
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
-                            "count": 1
-                        },
-                        {
-                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
-                            "count": 1
-                        },
-                        {
-                            "id": "564a76de-925b-4457-a548-d015168abe0c",
-                            "count": 1
-                        },
-                        {
-                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
-                            "count": 5
-                        }
-                    ]
+                    "text": "Clear the nozzle and reseat it."
                 },
                 {
                     "type": "process",
                     "process": "replace-brass-nozzle",
-                    "text": "Swap in a new nozzle.",
-                    "requiresItems": [
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
-                            "count": 1
-                        },
-                        {
-                            "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
-                            "count": 1
-                        },
-                        {
-                            "id": "564a76de-925b-4457-a548-d015168abe0c",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Swap in a new nozzle."
                 },
                 {
                     "type": "goto",

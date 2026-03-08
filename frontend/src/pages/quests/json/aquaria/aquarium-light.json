@@ -41,16 +41,6 @@
                     "type": "process",
                     "process": "install-aquarium-led-photoperiod",
                     "text": "Run the fixture install + first full timed photoperiod cycle (about 1 day).",
-                    "requiresItems": [
-                        {
-                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
-                            "count": 1
-                        },
-                        {
-                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
-                            "count": 1
-                        }
-                    ],
                     "goto": "verify"
                 },
                 {

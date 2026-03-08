@@ -35,20 +35,6 @@
                     "type": "process",
                     "process": "sift-compost",
                     "goto": "finish",
-                    "requiresItems": [
-                        {
-                            "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
-                            "count": 1
-                        },
-                        {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
-                            "count": 1
-                        }
-                    ],
                     "text": "Sift the compost"
                 },
                 {

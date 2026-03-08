@@ -86,17 +86,7 @@
                 {
                     "type": "process",
                     "process": "check-led-polarity",
-                    "text": "Run polarity check.",
-                    "requiresItems": [
-                        {
-                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Run polarity check."
                 },
                 {
                     "type": "goto",
