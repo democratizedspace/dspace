@@ -10064,5 +10064,698 @@
             "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
+    },
+    {
+        "id": "chemistry-stage-fizz-apparatus",
+        "title": "Stage fizz-reaction apparatus with venting and splash controls",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "3455faac-8811-4991-b818-cecb98e8fff7",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "9db8fe7a-0f05-442c-a4af-7f7db96c3bc1",
+                "count": 1
+            }
+        ],
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-quench-fizz-residue",
+        "title": "Quench residual fizz slurry to disposal-safe pH",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
+                "count": 1
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
+                "count": 1
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 0.01
+            }
+        ],
+        "createItems": [
+            {
+                "id": "2f7a5a59-f7e6-473d-8188-13abcce58e95",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-prepare-ph-aliquot",
+        "title": "Prepare temperature-equilibrated aliquot for pH testing",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "20f7f2d7-d889-4440-bd85-5ef1915be6bb",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-calibrate-ph-reference",
+        "title": "Calibrate pH workflow against two reference standards",
+        "image": "/assets/single_ph_test_strip.jpg",
+        "requireItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 2
+            },
+            {
+                "id": "20f7f2d7-d889-4440-bd85-5ef1915be6bb",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fa77f2d1-b1a4-4358-aaaf-d35d5f5ad63a",
+                "count": 1
+            }
+        ],
+        "duration": "9m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-calc-acid-dilution",
+        "title": "Calculate acid dilution and verify addition sequence",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "e5ae16c5-f2c2-4ff9-b930-6cb68f5f5d19",
+                "count": 1
+            }
+        ],
+        "duration": "7m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-dilution-ice-bath",
+        "title": "Stage ice-bath cooling and log exotherm during dilution",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "58c9ecdc-f95a-4de4-a0f4-31d6d3bf415a",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-map-spill-boundary",
+        "title": "Map spill perimeter and isolate runoff risks",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "32b4b6d2-aa88-4d45-a938-33e6d9ec6ce1",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-manifest-neutralized-waste",
+        "title": "Package neutralized residue with disposal manifest",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5f0066db-c3ab-4627-9d31-e59e0d3a2cb6",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-weigh-buffer-reagents",
+        "title": "Weigh conjugate acid/base reagents for target buffer",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "requireItems": [
+            {
+                "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
+                "count": 1
+            },
+            {
+                "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "1f45f28e-3a34-40c5-93d0-2de4dc83f4eb",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-bottle-buffer-stock",
+        "title": "Bottle and label intermediate buffer stock",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "requireItems": [
+            {
+                "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d57a82d4-089b-49c6-af4d-3efdc5f00f6c",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-log-titration-increments",
+        "title": "Log dropwise titration increments during pH adjustment",
+        "image": "/assets/single_ph_test_strip.jpg",
+        "requireItems": [
+            {
+                "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
+                "count": 1
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "ff45c550-561d-4e9b-884d-e6d1777f6a7b",
+                "count": 1
+            }
+        ],
+        "duration": "9m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-run-drift-hold",
+        "title": "Run 30-minute drift hold to confirm adjusted buffer stability",
+        "image": "/assets/single_ph_test_strip.jpg",
+        "requireItems": [
+            {
+                "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+                "count": 1
+            },
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "ce3889fd-6f0a-4428-8b49-b15e33639d0f",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-verify-precipitation-compatibility",
+        "title": "Verify reagent compatibility and precipitation order",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "4a5fd3de-aab4-42df-b5ff-adce4dc19f20",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-dry-precipitate-and-log-mass",
+        "title": "Dry filtered precipitate and record mass balance",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "487c7586-a6f4-4fff-a210-979497f6380f",
+                "count": 1
+            },
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f8f7f0bb-b3de-4d19-afad-dbec78a97810",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-rinse-stevia-leaves",
+        "title": "Rinse, inspect, and blot stevia leaves before extraction",
+        "image": "/assets/bundle_of_stevia_leaves.jpg",
+        "requireItems": [
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 10
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "df155dcc-a59d-4a2f-96f5-abfa3ca57290",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-macerate-stevia-ethanol",
+        "title": "Macerate stevia leaves in food-grade ethanol under reflux",
+        "image": "/assets/stevia_extract_bottle.jpg",
+        "requireItems": [
+            {
+                "id": "df155dcc-a59d-4a2f-96f5-abfa3ca57290",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "df155dcc-a59d-4a2f-96f5-abfa3ca57290",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "d082ff44-cb6f-4845-a6e5-af4d4f15ce8f",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-rotovap-stevia-concentrate",
+        "title": "Recover solvent and concentrate stevia extract under vacuum",
+        "image": "/assets/stevia_extract_bottle.jpg",
+        "requireItems": [
+            {
+                "id": "d082ff44-cb6f-4845-a6e5-af4d4f15ce8f",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "d082ff44-cb6f-4845-a6e5-af4d4f15ce8f",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "f89a1d8f-7f17-4d66-a7fd-eafdf9de82b0",
+                "count": 1
+            },
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
+        "duration": "35m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-seed-stevia-crystallization",
+        "title": "Seed crystallization and control supersaturation profile",
+        "image": "/assets/stevia_crystals_jar.jpg",
+        "requireItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "df6d2af0-b171-4635-b2cd-314447e9f3b9",
+                "count": 1
+            }
+        ],
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-vacuum-dry-stevia-crystals",
+        "title": "Vacuum dry stevia crystals to constant mass",
+        "image": "/assets/stevia_crystals_jar.jpg",
+        "requireItems": [
+            {
+                "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                "count": 1
+            },
+            {
+                "id": "df6d2af0-b171-4635-b2cd-314447e9f3b9",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "77af847e-c085-4c44-af1c-0f7f5f0def96",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-calibrate-palate-panel",
+        "title": "Calibrate tasting panel with sucrose anchors and rinse cadence",
+        "image": "/assets/quests/stevia-tasting.jpg",
+        "requireItems": [
+            {
+                "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "c86c84d6-b6a6-4fe0-bf3c-a2752f93ec3d",
+                "count": 1
+            }
+        ],
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-build-stevia-dilution-ladder",
+        "title": "Prepare coded serial dilution ladder for blind tasting",
+        "image": "/assets/quests/stevia-tasting.jpg",
+        "requireItems": [
+            {
+                "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                "count": 0.05
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "04cab5c0-4815-4f8f-8f5d-5f8f9efd0478",
+                "count": 1
+            }
+        ],
+        "duration": "14m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
     }
 ]

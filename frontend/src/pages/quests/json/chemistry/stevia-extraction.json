@@ -1,130 +1,75 @@
 {
     "id": "chemistry/stevia-extraction",
     "title": "Extract Stevia Sweetener",
-    "description": "Produce stevia extract through staged setup and outcome evidence, with contamination recovery safeguards.",
+    "description": "Extract steviol glycosides using wash prep, ethanol maceration, solvent recovery, and concentrate verification.",
     "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. We are extracting sweetness, not cooking sludge. Choose a prep strategy and prove setup before we call any outcome valid.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "setup-branch",
-                    "text": "Ready to stage the extraction plan."
-                }
-            ]
-        },
-        {
-            "id": "setup-branch",
-            "text": "Two valid extraction routes: precision prep (measured batches) or low-tech prep (small pilot steep). Both routes must produce extraction evidence before outcome review.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "precision-setup",
-                    "text": "Main path: precision prep and measured steep."
-                },
-                {
-                    "type": "goto",
-                    "goto": "pilot-setup",
-                    "text": "Alternate path: pilot steep for quick viability check."
-                }
-            ]
-        },
-        {
-            "id": "precision-setup",
-            "text": "Dry and crush leaves, label containers, and stage clean filter media. Keep temperature below a full boil to protect glycosides.",
+            "text": "Detailed extraction begins with raw leaf QA: rinse away debris, inspect for mold, and blot to avoid dilution errors.",
             "options": [
                 {
                     "type": "process",
-                    "process": "extract-stevia",
-                    "text": "Run controlled extraction pass."
+                    "process": "chemistry-rinse-stevia-leaves",
+                    "text": "Prepare rinsed stevia leaf tray."
                 },
                 {
                     "type": "goto",
-                    "goto": "outcome-check",
-                    "text": "Extraction evidence captured; evaluate extract clarity.",
+                    "goto": "macerate",
+                    "text": "Leaves are clean and staged for solvent extraction.",
                     "requiresItems": [
                         {
-                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "id": "df155dcc-a59d-4a2f-96f5-abfa3ca57290",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "contamination-recovery",
-                    "text": "Cloudy or scorched notes detected—trigger recovery."
                 }
             ]
         },
         {
-            "id": "pilot-setup",
-            "text": "Run a short pilot steep with a small batch to validate heat and filter pace before full volume.",
+            "id": "macerate",
+            "text": "Run ethanol maceration with mild heat and agitation. Keep vessel closed to limit solvent loss and oxidation.",
             "options": [
                 {
                     "type": "process",
-                    "process": "extract-stevia",
-                    "text": "Run pilot extraction."
+                    "process": "chemistry-macerate-stevia-ethanol",
+                    "text": "Produce stevia ethanol macerate."
                 },
                 {
                     "type": "goto",
-                    "goto": "outcome-check",
-                    "text": "Pilot indicates viable extraction; check outcome evidence.",
+                    "goto": "recover",
+                    "text": "Macerate filtered; move to solvent recovery.",
                     "requiresItems": [
                         {
-                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "id": "d082ff44-cb6f-4845-a6e5-af4d4f15ce8f",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "contamination-recovery",
-                    "text": "Pilot failed or contaminated—enter recovery."
                 }
             ]
         },
         {
-            "id": "outcome-check",
-            "text": "Outcome gate: accept only if extract is clear-to-amber, aromatic, and free of burnt particulates. If not, you must recover and rerun.",
+            "id": "recover",
+            "text": "Use low-temperature vacuum recovery to remove ethanol while preserving sweet glycosides.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Outcome passes quality check; extract is ready.",
-                    "requiresItems": [
-                        {
-                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "contamination-recovery",
-                    "text": "Outcome fails quality gate; rerun required."
-                }
-            ]
-        },
-        {
-            "id": "contamination-recovery",
-            "text": "Recovery protocol: discard compromised batch, sanitize vessels, reduce heat input, and restart with fresh leaves. If two attempts fail, pause production and log equipment inspection.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "setup-branch",
-                    "text": "Recovery actions done—retry setup path."
+                    "type": "process",
+                    "process": "chemistry-rotovap-stevia-concentrate",
+                    "text": "Recover solvent and create concentrate + stevia extract."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Paused safely after documenting a valid extract and logged deferred extraction for maintenance.",
+                    "text": "Extraction complete with solvent-path evidence.",
                     "requiresItems": [
                         {
                             "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        },
+                        {
+                            "id": "f89a1d8f-7f17-4d66-a7fd-eafdf9de82b0",
                             "count": 1
                         }
                     ]
@@ -133,11 +78,11 @@
         },
         {
             "id": "finish",
-            "text": "Well done. You proved setup and outcome evidence separately, and you followed contamination controls instead of forcing an unsafe batch.",
+            "text": "This is production-grade extraction: pre-cleaning, solvent extraction, and controlled concentration.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Extraction complete."
+                    "text": "Archive stevia extract batch."
                 }
             ]
         }
@@ -152,7 +97,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

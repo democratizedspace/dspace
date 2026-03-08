@@ -1,142 +1,88 @@
 {
     "id": "chemistry/stevia-crystals",
     "title": "Refine Stevia Crystals",
-    "description": "Refine extract with staged setup and outcome evidence, plus contamination and solvent-safety recovery paths.",
+    "description": "Refine stevia extract by seeded crystallization and controlled drying to lot-release criteria.",
     "image": "/assets/quests/stevia_crystal_refinement.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Crystal refinement rewards patience and clean technique. Choose your setup route, then prove both setup readiness and crystal outcome before sign-off.",
+            "text": "Set crystallization conditions first: supersaturation window, seed mass, and cooling ramp.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "setup-branch",
-                    "text": "Stage refinement workflow."
-                }
-            ]
-        },
-        {
-            "id": "setup-branch",
-            "text": "Pick a route: controlled low-heat concentration (main) or micro-batch seed test (alternate). Both must produce extract-processing evidence before outcome review.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "controlled-setup",
-                    "text": "Main path: controlled low-heat concentration."
+                    "type": "process",
+                    "process": "chemistry-seed-stevia-crystallization",
+                    "text": "Create seeded crystallization jar record."
                 },
                 {
                     "type": "goto",
-                    "goto": "seed-setup",
-                    "text": "Alternate path: micro-batch seed test first."
+                    "goto": "crystallize",
+                    "text": "Jar seeded; proceed to crystal formation.",
+                    "requiresItems": [
+                        {
+                            "id": "df6d2af0-b171-4635-b2cd-314447e9f3b9",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "controlled-setup",
-            "text": "Filter the extract, label vessels, and keep airflow steady. Use minimal food-grade ethanol and avoid open flame sources.",
+            "id": "crystallize",
+            "text": "Drive concentration and separation carefully to avoid occluded solvent and sticky crystal agglomerates.",
             "options": [
                 {
                     "type": "process",
                     "process": "purify-stevia",
-                    "text": "Run controlled crystal purification."
+                    "text": "Purify extract into stevia crystals."
                 },
                 {
                     "type": "goto",
-                    "goto": "outcome-check",
-                    "text": "Controlled run complete—evaluate crystal outcome.",
+                    "goto": "dry",
+                    "text": "Crystals formed; verify drying endpoint.",
                     "requiresItems": [
                         {
                             "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Clouding or solvent risk observed—enter recovery protocol."
                 }
             ]
         },
         {
-            "id": "seed-setup",
-            "text": "Use a micro-batch to test evaporation pace before processing the full volume. Stop if odor sharpens or crystal growth is patchy.",
+            "id": "dry",
+            "text": "Vacuum dry to constant mass and document lot identity before packaging.",
             "options": [
                 {
                     "type": "process",
-                    "process": "purify-stevia",
-                    "text": "Run micro-batch seed purification."
-                },
-                {
-                    "type": "goto",
-                    "goto": "outcome-check",
-                    "text": "Seed batch produced crystals—review quality gate.",
-                    "requiresItems": [
-                        {
-                            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Seed batch failed quality signals—recover and rerun."
-                }
-            ]
-        },
-        {
-            "id": "outcome-check",
-            "text": "Outcome gate: accept only dry, pale crystals with no sticky residue and no burnt odor. If quality is below spec, route to recovery before finish.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Outcome passes—crystals are dry and clean.",
-                    "requiresItems": [
-                        {
-                            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Outcome fails quality gate—perform corrective recovery."
-                }
-            ]
-        },
-        {
-            "id": "recovery",
-            "text": "Recovery protocol: discard compromised residue, sanitize vessels, reduce solvent load, and re-stage ventilation before retry. If quality fails twice, pause production and log equipment inspection.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Decontaminate hands and bench before next attempt."
-                },
-                {
-                    "type": "goto",
-                    "goto": "setup-branch",
-                    "text": "Recovery complete—retry from route selection."
+                    "process": "chemistry-vacuum-dry-stevia-crystals",
+                    "text": "Create dried crystal lot sheet."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Paused safely after documenting repeated instability."
+                    "text": "Crystal lot meets release evidence requirements.",
+                    "requiresItems": [
+                        {
+                            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                            "count": 1
+                        },
+                        {
+                            "id": "77af847e-c085-4c44-af1c-0f7f5f0def96",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Excellent control. You separated setup and outcome evidence, handled solvent safety, and used recovery loops instead of forcing a bad batch.",
+            "text": "You converted extract to a traceable crystal lot with controlled nucleation and drying.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Crystals refined."
+                    "text": "Release stevia crystal lot."
                 }
             ]
         }
@@ -151,7 +97,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

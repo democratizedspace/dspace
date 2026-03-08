@@ -2780,5 +2780,173 @@
         "image": "/assets/mission_log_entry_handwritten.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
+    },
+    {
+        "id": "9db8fe7a-0f05-442c-a4af-7f7db96c3bc1",
+        "name": "fizz apparatus setup checklist",
+        "description": "Pre-run checklist documenting vessel labels, splash shield placement, and gas-vent path.",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "2f7a5a59-f7e6-473d-8188-13abcce58e95",
+        "name": "neutralized fizz waste vial",
+        "description": "Small labeled vial showing fizz residue neutralized to safe disposal pH.",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "20f7f2d7-d889-4440-bd85-5ef1915be6bb",
+        "name": "labeled aliquot vial",
+        "description": "Aliquot vial labeled with sample source, temperature, and expected pH range.",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "fa77f2d1-b1a4-4358-aaaf-d35d5f5ad63a",
+        "name": "two-point calibration log",
+        "description": "Calibration log proving pH measurement was checked against two standards.",
+        "image": "/assets/single_ph_test_strip.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "e5ae16c5-f2c2-4ff9-b930-6cb68f5f5d19",
+        "name": "acid dilution calculation sheet",
+        "description": "Worksheet with C1V1=C2V2 calculations, target molarity, and batch lot IDs.",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "58c9ecdc-f95a-4de4-a0f4-31d6d3bf415a",
+        "name": "ice bath temperature log",
+        "description": "Timed record of dilution vessel temperature while controlling exotherm.",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "32b4b6d2-aa88-4d45-a938-33e6d9ec6ce1",
+        "name": "spill boundary map card",
+        "description": "Card marking spill perimeter, drain isolation points, and neutralizer staging.",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "5f0066db-c3ab-4627-9d31-e59e0d3a2cb6",
+        "name": "sealed neutralization waste manifest",
+        "description": "Manifest listing residue mass, final pH, bag seal ID, and disposal route.",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "1f45f28e-3a34-40c5-93d0-2de4dc83f4eb",
+        "name": "buffer reagent weigh boat",
+        "description": "Weigh boat with measured conjugate acid/base salts for target buffer pair.",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "d57a82d4-089b-49c6-af4d-3efdc5f00f6c",
+        "name": "buffer stock bottle",
+        "description": "Labeled buffer stock bottle including concentration, ionic strength, and prep date.",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "ff45c550-561d-4e9b-884d-e6d1777f6a7b",
+        "name": "titration increment log",
+        "description": "Dropwise titration log with volume added and pH response after each increment.",
+        "image": "/assets/single_ph_test_strip.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "ce3889fd-6f0a-4428-8b49-b15e33639d0f",
+        "name": "30-minute drift check card",
+        "description": "Card recording pH stability hold at 0, 10, and 30 minutes.",
+        "image": "/assets/single_ph_test_strip.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "4a5fd3de-aab4-42df-b5ff-adce4dc19f20",
+        "name": "reagent compatibility worksheet",
+        "description": "Worksheet confirming precipitation reagents, concentrations, and mixing order.",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "f8f7f0bb-b3de-4d19-afad-dbec78a97810",
+        "name": "dried precipitate mass record",
+        "description": "Record of dry filter cake mass and moisture-loss calculation.",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "df155dcc-a59d-4a2f-96f5-abfa3ca57290",
+        "name": "rinsed stevia leaf tray",
+        "description": "Tray of rinsed, blotted stevia leaves ready for controlled extraction.",
+        "image": "/assets/bundle_of_stevia_leaves.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "d082ff44-cb6f-4845-a6e5-af4d4f15ce8f",
+        "name": "stevia ethanol macerate",
+        "description": "Filtered stevia macerate in food-grade ethanol for glycoside recovery.",
+        "image": "/assets/stevia_extract_bottle.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "f89a1d8f-7f17-4d66-a7fd-eafdf9de82b0",
+        "name": "de-solvated stevia concentrate",
+        "description": "Low-temperature concentrate after rotary evaporation and solvent recovery.",
+        "image": "/assets/stevia_extract_bottle.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "df6d2af0-b171-4635-b2cd-314447e9f3b9",
+        "name": "seeded stevia crystallization jar",
+        "description": "Jar documenting seed crystal charge, supersaturation, and cooling profile.",
+        "image": "/assets/stevia_crystals_jar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "77af847e-c085-4c44-af1c-0f7f5f0def96",
+        "name": "dried stevia crystal lot sheet",
+        "description": "Lot sheet with crystal mass, drying endpoint, and residual solvent check.",
+        "image": "/assets/stevia_crystals_jar.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "c86c84d6-b6a6-4fe0-bf3c-a2752f93ec3d",
+        "name": "palate calibration sheet",
+        "description": "Blind reference sheet for sucrose-equivalent intensity and off-note anchors.",
+        "image": "/assets/quests/stevia-tasting.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
+    },
+    {
+        "id": "04cab5c0-4815-4f8f-8f5d-5f8f9efd0478",
+        "name": "stevia dilution ladder set",
+        "description": "Set of coded tasting cups spanning serial stevia concentrations.",
+        "image": "/assets/quests/stevia-tasting.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
     }
 ]
