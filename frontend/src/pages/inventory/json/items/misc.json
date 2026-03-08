@@ -2780,5 +2780,93 @@
         "image": "/assets/mission_log_entry_handwritten.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
+    },
+    {
+        "id": "f00fe4dd-e99b-47d0-ad2d-a0b5f83a7afd",
+        "name": "safe reaction rig checklist",
+        "description": "Signed checklist covering PPE, splash guard spacing, reagent masses, and vent path before initiating the fizz reaction.",
+        "image": "/assets/safety_goggles_vented_clear.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "a349f069-70fd-477d-a86c-92955fc03db0",
+        "name": "pH calibration record card",
+        "description": "Three-point calibration record with buffer lot numbers, slope %, and electrode rinse intervals.",
+        "image": "/assets/graduated_cylinder_100ml.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "6f4cbf96-3025-4fce-8f6d-5e3884f4b117",
+        "name": "acid dilution lab worksheet",
+        "description": "Stepwise dilution worksheet listing target molarity, C1V1 calculations, and staged add-to-water checkpoints.",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "35ebadf1-d4f2-4b68-aa60-2d0bfb5358d1",
+        "name": "acid spill response log",
+        "description": "Time-stamped spill log with perimeter setup, neutralizer application sequence, and disposal confirmation.",
+        "image": "/assets/nitrile_gloves_pair_on_table.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f0318d5b-82bb-4bd0-ab13-a0d77fbe9db1",
+        "name": "buffer formulation worksheet",
+        "description": "Worksheet with target pH, Henderson-Hasselbalch ratio, and final volumetric flask fill marks.",
+        "image": "/assets/glass_stir_rod_with_beaker.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "d2b38351-f80f-4b9d-8f75-93f8db198386",
+        "name": "incremental titration chart",
+        "description": "Correction chart capturing each micro-addition volume, wait interval, and pH drift trendline.",
+        "image": "/assets/ph_test_strip_indicator.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "53719398-772d-4d39-b65d-8fa049b9724f",
+        "name": "precipitation addition schedule",
+        "description": "Controlled addition schedule with reagent drop rate, stir RPM, and filtration hold times.",
+        "image": "/assets/beaker_250ml_glass.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "8b5f4e3d-a5ab-40d2-9996-751c6c7ce59f",
+        "name": "stevia solvent extraction protocol",
+        "description": "Protocol card detailing grinder screen size, 70% ethanol ratio, extraction temperature, and solvent recovery setpoints.",
+        "image": "/assets/stevia_extract_bottle.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "5f3e89d7-3918-43dd-973b-5de6400074ea",
+        "name": "stevia recrystallization worksheet",
+        "description": "Recrystallization worksheet listing solvent split, cooling profile, seed crystal mass, and vacuum drying time.",
+        "image": "/assets/stevia_crystals.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "2f299754-90d3-4ee3-be7c-348b4f862f59",
+        "name": "stevia sensory panel sheet",
+        "description": "Blind tasting matrix with random sample IDs, palate cleanser cadence, and weighted sweetness scoring.",
+        "image": "/assets/stevia_tasting_notes.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "9f56ea44-607c-44f5-ab15-e84645326448",
+        "name": "macerated stevia ethanol eluate",
+        "description": "Filtered ethanolic eluate containing dissolved steviol glycosides before solvent recovery.",
+        "image": "/assets/stevia_extract_bottle.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Biology & Lab"
     }
 ]

@@ -34,8 +34,8 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "choose-method",
-                    "text": "Bench is staged and PPE is confirmed.",
+                    "goto": "lab-protocol",
+                    "text": "Ready to execute full lab protocol.",
                     "requiresItems": [
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
@@ -51,6 +51,28 @@
                         },
                         {
                             "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "lab-protocol",
+            "text": "Load the dilution worksheet, verify Class A glassware IDs, and stage DI water before any acid transfer.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-stage-acid-dilution-glassware",
+                    "text": "Run acid dilution lab worksheet prep process."
+                },
+                {
+                    "type": "goto",
+                    "goto": "choose-method",
+                    "text": "Protocol staged and logged; continue experiment.",
+                    "requiresItems": [
+                        {
+                            "id": "6f4cbf96-3025-4fce-8f6d-5e3884f4b117",
                             "count": 1
                         }
                     ]
@@ -143,6 +165,10 @@
                         {
                             "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
                             "count": 1
+                        },
+                        {
+                            "id": "6f4cbf96-3025-4fce-8f6d-5e3884f4b117",
+                            "count": 1
                         }
                     ]
                 },
@@ -196,5 +222,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-test"]
+    "requiresQuests": [
+        "chemistry/ph-test"
+    ]
 }

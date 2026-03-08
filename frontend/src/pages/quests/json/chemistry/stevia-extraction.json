@@ -12,8 +12,30 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "lab-protocol",
+                    "text": "Ready to execute full lab protocol."
+                }
+            ]
+        },
+        {
+            "id": "lab-protocol",
+            "text": "Run preflight: Soxhlet body or reflux flask, 70% ethanol solvent batch, rotovap trap cooling, and leaf moisture log.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-stage-stevia-solvent-extraction",
+                    "text": "Run stevia solvent extraction protocol prep process."
+                },
+                {
+                    "type": "goto",
                     "goto": "setup-branch",
-                    "text": "Ready to stage the extraction plan."
+                    "text": "Protocol staged and logged; continue experiment.",
+                    "requiresItems": [
+                        {
+                            "id": "8b5f4e3d-a5ab-40d2-9996-751c6c7ce59f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -35,12 +57,17 @@
         },
         {
             "id": "precision-setup",
-            "text": "Dry and crush leaves, label containers, and stage clean filter media. Keep temperature below a full boil to protect glycosides.",
+            "text": "Mill dried leaves to 0.5-1 mm, charge 70% ethanol at 1:8 leaf-to-solvent mass ratio, hold 55-60\u00b0C with reflux, then polish-filter before concentration.",
             "options": [
                 {
                     "type": "process",
+                    "process": "chemistry-macerate-stevia-leaves",
+                    "text": "Macerate stevia leaves in controlled ethanol bath."
+                },
+                {
+                    "type": "process",
                     "process": "extract-stevia",
-                    "text": "Run controlled extraction pass."
+                    "text": "Recover solvent and concentrate eluate under reduced pressure."
                 },
                 {
                     "type": "goto",
@@ -56,18 +83,23 @@
                 {
                     "type": "goto",
                     "goto": "contamination-recovery",
-                    "text": "Cloudy or scorched notes detected—trigger recovery."
+                    "text": "Cloudy or scorched notes detected\u2014trigger recovery."
                 }
             ]
         },
         {
             "id": "pilot-setup",
-            "text": "Run a short pilot steep with a small batch to validate heat and filter pace before full volume.",
+            "text": "Run a 1/4-scale pilot using identical solvent ratio, agitation cadence, and filter stack to validate yield before full batch.",
             "options": [
                 {
                     "type": "process",
+                    "process": "chemistry-macerate-stevia-leaves",
+                    "text": "Run pilot maceration and primary filtration."
+                },
+                {
+                    "type": "process",
                     "process": "extract-stevia",
-                    "text": "Run pilot extraction."
+                    "text": "Concentrate pilot eluate and recover solvent."
                 },
                 {
                     "type": "goto",
@@ -83,7 +115,7 @@
                 {
                     "type": "goto",
                     "goto": "contamination-recovery",
-                    "text": "Pilot failed or contaminated—enter recovery."
+                    "text": "Pilot failed or contaminated\u2014enter recovery."
                 }
             ]
         },
@@ -98,6 +130,10 @@
                     "requiresItems": [
                         {
                             "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        },
+                        {
+                            "id": "8b5f4e3d-a5ab-40d2-9996-751c6c7ce59f",
                             "count": 1
                         }
                     ]
@@ -116,7 +152,7 @@
                 {
                     "type": "goto",
                     "goto": "setup-branch",
-                    "text": "Recovery actions done—retry setup path."
+                    "text": "Recovery actions done\u2014retry setup path."
                 },
                 {
                     "type": "goto",
@@ -125,6 +161,10 @@
                     "requiresItems": [
                         {
                             "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        },
+                        {
+                            "id": "8b5f4e3d-a5ab-40d2-9996-751c6c7ce59f",
                             "count": 1
                         }
                     ]
@@ -148,11 +188,14 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/stevia", "chemistry/safe-reaction"],
+    "requiresQuests": [
+        "hydroponics/stevia",
+        "chemistry/safe-reaction"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

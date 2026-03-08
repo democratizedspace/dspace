@@ -1441,13 +1441,13 @@
     },
     {
         "id": "extract-stevia",
-        "title": "Steep 10 stevia leaves in hot water for 1h to make stevia extract",
+        "title": "Recover solvent from stevia eluate and concentrate glycosides into extract",
         "image": "/assets/basil_harvested.jpg",
         "requireItems": [],
         "consumeItems": [
             {
-                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
-                "count": 10
+                "id": "9f56ea44-607c-44f5-ab15-e84645326448",
+                "count": 1
             }
         ],
         "createItems": [
@@ -1456,7 +1456,7 @@
                 "count": 1
             }
         ],
-        "duration": "1h",
+        "duration": "1h 20m",
         "hardening": {
             "passes": 1,
             "score": 100,
@@ -10070,6 +10070,349 @@
         "consumeItems": [],
         "createItems": [],
         "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-safe-fizz-rig",
+        "title": "Stage safe fizz reaction rig with containment, vent path, and checklist",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f00fe4dd-e99b-47d0-ad2d-a0b5f83a7afd",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-ph-meter-calibration",
+        "title": "Calibrate pH workstation using pH 4/7/10 buffers and rinse protocol",
+        "requireItems": [
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 3
+            }
+        ],
+        "createItems": [
+            {
+                "id": "a349f069-70fd-477d-a86c-92955fc03db0",
+                "count": 1
+            }
+        ],
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-acid-dilution-glassware",
+        "title": "Prepare acid dilution worksheet, flask staging, and water-first sequence",
+        "requireItems": [
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "6f4cbf96-3025-4fce-8f6d-5e3884f4b117",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-spill-response-kit",
+        "title": "Stage acid spill response perimeter and neutralization log",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "35ebadf1-d4f2-4b68-aa60-2d0bfb5358d1",
+                "count": 1
+            }
+        ],
+        "duration": "9m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-buffer-formulation",
+        "title": "Draft buffer molarity plan and stage conjugate acid/base stocks",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 2
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f0318d5b-82bb-4bd0-ab13-a0d77fbe9db1",
+                "count": 1
+            }
+        ],
+        "duration": "14m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-ph-titration-plan",
+        "title": "Define incremental titration additions and stabilization intervals",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "d2b38351-f80f-4b9d-8f75-93f8db198386",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-precipitation-addition-plan",
+        "title": "Set precipitation reagent order, drop rate, and filtration pore size",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 2
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "53719398-772d-4d39-b65d-8fa049b9724f",
+                "count": 1
+            }
+        ],
+        "duration": "11m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-stevia-solvent-extraction",
+        "title": "Prepare stevia solvent extraction protocol with ethanol ratio and condenser settings",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "8b5f4e3d-a5ab-40d2-9996-751c6c7ce59f",
+                "count": 1
+            }
+        ],
+        "duration": "15m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-macerate-stevia-leaves",
+        "title": "Macerate dried stevia leaves in 70% ethanol with controlled agitation",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 10
+            }
+        ],
+        "createItems": [
+            {
+                "id": "9f56ea44-607c-44f5-ab15-e84645326448",
+                "count": 1
+            }
+        ],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-stevia-recrystallization",
+        "title": "Stage stevia recrystallization solvent split and vacuum filtration settings",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "5f3e89d7-3918-43dd-973b-5de6400074ea",
+                "count": 1
+            }
+        ],
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-stevia-sensory-panel",
+        "title": "Prepare blinded stevia tasting panel sequence and scoring matrix",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "2f299754-90d3-4ee3-be7c-348b4f862f59",
+                "count": 1
+            }
+        ],
+        "duration": "7m",
         "hardening": {
             "passes": 0,
             "score": 90,

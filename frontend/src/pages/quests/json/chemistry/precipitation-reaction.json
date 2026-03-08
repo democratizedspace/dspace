@@ -12,8 +12,30 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "lab-protocol",
+                    "text": "Ready to execute full lab protocol."
+                }
+            ]
+        },
+        {
+            "id": "lab-protocol",
+            "text": "Set reagent addition rates, nucleation hold times, and filtration pore size before combining ionic solutions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-stage-precipitation-addition-plan",
+                    "text": "Run precipitation addition schedule prep process."
+                },
+                {
+                    "type": "goto",
                     "goto": "mix",
-                    "text": "Setup complete\u2014start controlled mixing."
+                    "text": "Protocol staged and logged; continue experiment.",
+                    "requiresItems": [
+                        {
+                            "id": "53719398-772d-4d39-b65d-8fa049b9724f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -74,6 +96,10 @@
                         {
                             "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
                             "count": 5.0
+                        },
+                        {
+                            "id": "53719398-772d-4d39-b65d-8fa049b9724f",
+                            "count": 1
                         }
                     ]
                 },
@@ -101,7 +127,13 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Paused safely after logging repeated failed runs."
+                    "text": "Paused safely after logging repeated failed runs.",
+                    "requiresItems": [
+                        {
+                            "id": "53719398-772d-4d39-b65d-8fa049b9724f",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -122,7 +154,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-adjustment"],
+    "requiresQuests": [
+        "chemistry/ph-adjustment"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

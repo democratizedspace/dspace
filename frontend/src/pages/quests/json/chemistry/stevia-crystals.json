@@ -12,8 +12,30 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "lab-protocol",
+                    "text": "Ready to execute full lab protocol."
+                }
+            ]
+        },
+        {
+            "id": "lab-protocol",
+            "text": "Select ethanol-water recrystallization ratio, confirm vacuum filtration setup, and pre-weigh seed crystals.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-stage-stevia-recrystallization",
+                    "text": "Run stevia recrystallization worksheet prep process."
+                },
+                {
+                    "type": "goto",
                     "goto": "setup-branch",
-                    "text": "Stage refinement workflow."
+                    "text": "Protocol staged and logged; continue experiment.",
+                    "requiresItems": [
+                        {
+                            "id": "5f3e89d7-3918-43dd-973b-5de6400074ea",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -45,7 +67,7 @@
                 {
                     "type": "goto",
                     "goto": "outcome-check",
-                    "text": "Controlled run complete—evaluate crystal outcome.",
+                    "text": "Controlled run complete\u2014evaluate crystal outcome.",
                     "requiresItems": [
                         {
                             "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
@@ -56,7 +78,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Clouding or solvent risk observed—enter recovery protocol."
+                    "text": "Clouding or solvent risk observed\u2014enter recovery protocol."
                 }
             ]
         },
@@ -72,7 +94,7 @@
                 {
                     "type": "goto",
                     "goto": "outcome-check",
-                    "text": "Seed batch produced crystals—review quality gate.",
+                    "text": "Seed batch produced crystals\u2014review quality gate.",
                     "requiresItems": [
                         {
                             "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
@@ -83,7 +105,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Seed batch failed quality signals—recover and rerun."
+                    "text": "Seed batch failed quality signals\u2014recover and rerun."
                 }
             ]
         },
@@ -94,10 +116,14 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Outcome passes—crystals are dry and clean.",
+                    "text": "Outcome passes\u2014crystals are dry and clean.",
                     "requiresItems": [
                         {
                             "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+                            "count": 1
+                        },
+                        {
+                            "id": "5f3e89d7-3918-43dd-973b-5de6400074ea",
                             "count": 1
                         }
                     ]
@@ -105,7 +131,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Outcome fails quality gate—perform corrective recovery."
+                    "text": "Outcome fails quality gate\u2014perform corrective recovery."
                 }
             ]
         },
@@ -121,12 +147,18 @@
                 {
                     "type": "goto",
                     "goto": "setup-branch",
-                    "text": "Recovery complete—retry from route selection."
+                    "text": "Recovery complete\u2014retry from route selection."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Paused safely after documenting repeated instability."
+                    "text": "Paused safely after documenting repeated instability.",
+                    "requiresItems": [
+                        {
+                            "id": "5f3e89d7-3918-43dd-973b-5de6400074ea",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -147,11 +179,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/stevia-extraction"],
+    "requiresQuests": [
+        "chemistry/stevia-extraction"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

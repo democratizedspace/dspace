@@ -12,8 +12,30 @@
             "options": [
                 {
                     "type": "goto",
+                    "goto": "lab-protocol",
+                    "text": "Ready to execute full lab protocol."
+                }
+            ]
+        },
+        {
+            "id": "lab-protocol",
+            "text": "Inventory PPE, secondary containment tray, and vented cylinder setup before running sodium bicarbonate + acid tests.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-stage-safe-fizz-rig",
+                    "text": "Run safe reaction rig checklist prep process."
+                },
+                {
+                    "type": "goto",
                     "goto": "safety",
-                    "text": "Proceed with lab safety checks."
+                    "text": "Protocol staged and logged; continue experiment.",
+                    "requiresItems": [
+                        {
+                            "id": "f00fe4dd-e99b-47d0-ad2d-a0b5f83a7afd",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -149,6 +171,10 @@
                         {
                             "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
                             "count": 1
+                        },
+                        {
+                            "id": "f00fe4dd-e99b-47d0-ad2d-a0b5f83a7afd",
+                            "count": 1
                         }
                     ]
                 }
@@ -177,7 +203,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
