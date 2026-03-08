@@ -5441,11 +5441,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "4a493b38-a9fd-49af-9730-11aa65bd3d48",
+                "count": 1
+            }
+        ],
         "duration": "15m",
         "hardening": {
             "passes": 1,
-            "score": 80,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {

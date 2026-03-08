@@ -1,0 +1,15 @@
+{
+  "id": "OUT-2026-03-08-geothermal-process-missing-output",
+  "date": "2026-03-08",
+  "component": "frontend/processes",
+  "rootCause": "The shared arduino-thermistor-read process had an empty createItems list, which allowed geothermal quest steps (including calibrate-ground-sensor) to advance after running a process without producing a tangible artifact.",
+  "resolution": "Added a tangible output item (ground sensor calibration log) to arduino-thermistor-read, updated geothermal quest gates/docs to require that artifact at calibration checkpoints, and added a regression test requiring every process used by geothermal quests to create a tangible item.",
+  "references": [
+    "frontend/src/pages/processes/base.json",
+    "frontend/src/generated/processes.json",
+    "frontend/src/pages/quests/json/geothermal/calibrate-ground-sensor.json",
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "frontend/src/pages/docs/md/geothermal.md",
+    "tests/geothermalProcessOutputs.test.ts"
+  ]
+}

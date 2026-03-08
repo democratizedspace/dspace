@@ -2203,6 +2203,14 @@
         "category": "Electronics & Robotics"
     },
     {
+        "id": "4a493b38-a9fd-49af-9730-11aa65bd3d48",
+        "name": "ground sensor calibration log",
+        "description": "Paired ice-bath and boiling-point readings from an Arduino thermistor calibration run, recorded with timestamps and pass/fail tolerance notes.",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
         "name": "temperature log CSV",
         "description": "Hourly temperature readings with timestamps exported from your thermistor logging rig.",
