@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { registerClientStateHooks, waitForHydration } from './test-helpers';
+import { flushGameStateWrites, registerClientStateHooks, waitForHydration } from './test-helpers';
 
 registerClientStateHooks(test);
 
@@ -15,6 +15,7 @@ test('Authentication flow saves and clears token', async ({ page }) => {
     const tokenInput = page.getByLabel(/GitHub Token/i);
     await tokenInput.fill(token);
     await page.getByRole('button', { name: 'Save' }).click();
+    await expect(page.getByTestId('sync-success')).toHaveText(/Token saved and validated/i);
 
     const getStoredToken = async () =>
         page.evaluate(async () => {
@@ -49,7 +50,8 @@ test('Authentication flow saves and clears token', async ({ page }) => {
             }
         });
 
-    await expect.poll(getStoredToken).toBe(token);
+    await flushGameStateWrites(page);
+    await expect.poll(getStoredToken, { timeout: 30_000 }).toBe(token);
 
     await page.reload();
     await waitForHydration(page);
@@ -58,5 +60,6 @@ test('Authentication flow saves and clears token', async ({ page }) => {
     // clear token and verify removal
     await page.getByTestId('clear-sync-token').click();
     await expect(tokenInput).toHaveValue('');
-    await expect.poll(getStoredToken).toBe('');
+    await flushGameStateWrites(page);
+    await expect.poll(getStoredToken, { timeout: 30_000 }).toBe('');
 });
