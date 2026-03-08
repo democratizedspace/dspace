@@ -23,11 +23,12 @@ describe('quest process options', () => {
         const questsRoot = path.join(process.cwd(), 'frontend/src/pages/quests/json');
         const violations: string[] = [];
 
-        for (const tree of fs.readdirSync(questsRoot)) {
-            const treePath = path.join(questsRoot, tree);
-            if (!fs.statSync(treePath).isDirectory()) {
+        for (const treeEntry of fs.readdirSync(questsRoot, { withFileTypes: true })) {
+            if (!treeEntry.isDirectory()) {
                 continue;
             }
+
+            const treePath = path.join(questsRoot, treeEntry.name);
 
             for (const file of fs.readdirSync(treePath)) {
                 if (!file.endsWith('.json')) {
@@ -35,7 +36,13 @@ describe('quest process options', () => {
                 }
 
                 const filePath = path.join(treePath, file);
-                const quest = JSON.parse(fs.readFileSync(filePath, 'utf8')) as QuestFile;
+                let quest: QuestFile;
+                try {
+                    quest = JSON.parse(fs.readFileSync(filePath, 'utf8')) as QuestFile;
+                } catch (error) {
+                    const message = error instanceof Error ? error.message : String(error);
+                    throw new Error(`Failed to parse quest JSON: ${filePath}\n${message}`);
+                }
                 const dialogue = Array.isArray(quest.dialogue)
                     ? quest.dialogue
                     : Array.isArray(quest.dialogues)
