@@ -41,7 +41,7 @@
                             "count": 1
                         }
                     ],
-                    "text": "Take the tracker parts kit."
+                    "text": "Take the 200 Wh kit and tracker parts."
                 },
                 {
                     "type": "process",
@@ -72,7 +72,7 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "solar-200Wh",
+                    "process": "solar-tracker-200Wh",
                     "text": "Track and generate."
                 },
                 {

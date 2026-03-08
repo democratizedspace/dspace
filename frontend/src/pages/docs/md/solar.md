@@ -24,7 +24,7 @@ reduces your dCarbon footprint.
 ## Key gear and materials
 
 - Portable solar panel and wired solar kit components
-- Solar tracker control kit (microcontroller + dual stepper motors)
+- Solar tracker control kit (microcontroller + dual stepper drivers)
 - Aluminum extrusion tracker frame hardware for stable one-axis motion
 - Charge controller settings and fused cabling for safe hookups
 - Battery packs to capture dWatt when the sun is strong

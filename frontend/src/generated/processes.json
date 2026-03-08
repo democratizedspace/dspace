@@ -2571,9 +2571,37 @@
         }
     },
     {
+        "id": "solar-tracker-200Wh",
+        "title": "Generate 200 Wh of electricity using a one-axis solar tracker",
+        "requireItems": [
+            {
+                "id": "8ead8821-57e9-4aef-a3fb-b8d6cf2ef326",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 200
+            },
+            {
+                "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                "count": 200
+            }
+        ],
+        "duration": "1h",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "assemble-solar-tracking-unit-200Wh",
         "title": "Assemble a one-axis solar tracking unit with aluminum extrusions, dual steppers, and an Arduino control kit",
-        "image": "/assets/solar_tracker_200Wh_kit.jpg",
+        "image": "/assets/solar_setup_200wh_weatherproof.jpg",
         "requireItems": [],
         "consumeItems": [
             {
