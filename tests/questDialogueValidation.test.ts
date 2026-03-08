@@ -16,6 +16,7 @@ type DialogueOption = {
     text?: string;
     process?: string;
     requiresItems?: ItemCount[];
+    grantsItems?: ItemCount[];
 };
 
 type DialogueNode = {
@@ -37,7 +38,12 @@ type DialogueValidationError = {
     questId: string;
     questPath: string;
     nodeId: string;
-    reason: 'dead-end' | 'unreachable-finish' | 'invalid-start' | 'state-locked';
+    reason:
+        | 'dead-end'
+        | 'unreachable-finish'
+        | 'invalid-start'
+        | 'state-locked'
+        | 'insufficient-step-grants';
     snippet: string;
 };
 
@@ -144,6 +150,52 @@ const satisfiesRequirements = (
     return true;
 };
 
+
+
+const getInsufficientStepGrantErrors = (
+    nodeMap: Map<string, DialogueNode>,
+    reachable: Set<string>,
+    quest: QuestLike,
+    questPath: string
+): DialogueValidationError[] => {
+    const errors: DialogueValidationError[] = [];
+
+    for (const nodeId of reachable) {
+        const node = nodeMap.get(nodeId);
+        if (!node) continue;
+
+        const grantsByItem = new Map<string, number>();
+        for (const option of node.options ?? []) {
+            if (option.type !== 'grantsItems') continue;
+            for (const grant of option.grantsItems ?? []) {
+                if (!grant?.id || typeof grant.count !== 'number') continue;
+                grantsByItem.set(grant.id, (grantsByItem.get(grant.id) ?? 0) + grant.count);
+            }
+        }
+
+        if (grantsByItem.size === 0) continue;
+
+        for (const option of node.options ?? []) {
+            const requirements = toItemCountMap(option.requiresItems);
+            for (const [itemId, requiredCount] of requirements.entries()) {
+                const grantCount = grantsByItem.get(itemId);
+                if (grantCount === undefined || requiredCount <= grantCount) continue;
+
+                errors.push({
+                    questId: quest.id ?? 'unknown-quest',
+                    questPath,
+                    nodeId,
+                    reason: 'insufficient-step-grants',
+                    snippet:
+                        `option requires ${itemId} x${requiredCount}, ` +
+                        `but this step grants only x${grantCount}; ${toNodeSnippet(node)}`,
+                });
+            }
+        }
+    }
+
+    return errors;
+};
 const getStateLockErrors = (
     nodeMap: Map<string, DialogueNode>,
     reachable: Set<string>,
@@ -274,6 +326,7 @@ export const validateQuestDialogueCompletable = (
     }
 
     errors.push(...getStateLockErrors(nodeMap, reachable, quest, questPath, startId));
+    errors.push(...getInsufficientStepGrantErrors(nodeMap, reachable, quest, questPath));
 
     if (hasFinishDefinition && !hasReachableFinish) {
         const startNode = nodeMap.get(startId);
@@ -578,6 +631,51 @@ describe('quest dialogue completable validation', () => {
         ]);
     });
 
+
+
+    it('flags options that require more of an item than sibling claim options can grant', () => {
+        const quest: QuestLike = {
+            id: 'fixture/insufficient-step-grants',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Claim then continue.',
+                    options: [
+                        {
+                            type: 'grantsItems',
+                            text: 'Claim working state',
+                            grantsItems: [{ id: 'working-tub', count: 1 }],
+                        },
+                        {
+                            type: 'goto',
+                            goto: 'finish',
+                            text: 'Continue',
+                            requiresItems: [{ id: 'working-tub', count: 2 }],
+                        },
+                    ],
+                },
+                {
+                    id: 'finish',
+                    text: 'Done',
+                    options: [{ type: 'finish', text: 'Complete' }],
+                },
+            ],
+        };
+
+        expect(
+            validateQuestDialogueCompletable(quest, 'fixtures/insufficient-step-grants.json')
+        ).toEqual([
+            {
+                questId: 'fixture/insufficient-step-grants',
+                questPath: 'fixtures/insufficient-step-grants.json',
+                nodeId: 'start',
+                reason: 'insufficient-step-grants',
+                snippet:
+                    'option requires working-tub x2, but this step grants only x1; text="Claim then continue." options=[grantsItems (Claim working state); goto -> finish (Continue)]',
+            },
+        ]);
+    });
     it('keeps composting/turn-pile completable from temp node to finish', async () => {
         const quests = await loadQuests();
         const quest = quests.find((entry: QuestLike) => entry.id === 'composting/turn-pile');
