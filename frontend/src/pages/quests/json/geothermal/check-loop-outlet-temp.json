@@ -26,7 +26,7 @@
                         },
                         {
                             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
-                            "count": 2
+                            "count": 2.0
                         }
                     ]
                 }
@@ -176,9 +176,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "geothermal/check-loop-inlet-temp"
-    ],
+    "requiresQuests": ["geothermal/check-loop-inlet-temp"],
     "hardening": {
         "passes": 0,
         "score": 95,

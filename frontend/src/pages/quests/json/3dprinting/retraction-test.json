@@ -176,9 +176,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "3dprinting/spool-holder"
-    ],
+    "requiresQuests": ["3dprinting/spool-holder"],
     "hardening": {
         "passes": 0,
         "score": 90,

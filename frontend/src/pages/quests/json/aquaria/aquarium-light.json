@@ -128,13 +128,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "aquaria/sponge-filter"
-    ],
+    "requiresQuests": ["aquaria/sponge-filter"],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-quest-hardening-95-2026-02-26",

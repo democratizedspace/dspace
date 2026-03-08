@@ -245,9 +245,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/nutrient-check"
-    ],
+    "requiresQuests": ["hydroponics/nutrient-check"],
     "hardening": {
         "passes": 2,
         "score": 90,

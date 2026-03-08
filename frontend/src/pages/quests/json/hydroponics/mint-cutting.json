@@ -145,9 +145,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/plug-soak"
-    ],
+    "requiresQuests": ["hydroponics/plug-soak"],
     "hardening": {
         "passes": 0,
         "score": 95,
