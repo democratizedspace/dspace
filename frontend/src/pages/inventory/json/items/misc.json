@@ -1066,6 +1066,30 @@
         "category": "Energy & Power"
     },
     {
+        "id": "aab2d917-b5a6-440a-9281-5251606e7828",
+        "name": "Solar tracking unit",
+        "description": "Single-axis tracker assembly with microcontroller control, paired steppers, and a reinforced frame for 200 Wh class panels.",
+        "image": "/assets/solar_tracker_200Wh_kit.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "9720f280-4ef1-405c-8a95-a2e6b32c5857",
+        "name": "NEMA 17 stepper motor pair",
+        "description": "Matched pair of 12 V NEMA 17 steppers sized for tilt and azimuth control on small solar trackers.",
+        "image": "/assets/servo_motor_small.jpg",
+        "price": "40 dUSD",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "4bdb15b3-7f30-4dd2-bd2d-62f9d6108425",
+        "name": "aluminum extrusion rail kit",
+        "description": "Two 1 m anodized aluminum extrusions with corner plates and hardware for a compact tracker frame.",
+        "image": "/assets/aluminum_camera_tripod_pan_head.jpg",
+        "price": "55 dUSD",
+        "category": "Energy & Power"
+    },
+    {
         "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
         "name": "Solar setup (1 kWh)",
         "description": "A 200 W solar panel, charge controller, and 1 kWh battery in a weatherproof enclosure. Ready to use!",
