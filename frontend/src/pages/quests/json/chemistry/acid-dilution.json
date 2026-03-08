@@ -133,7 +133,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "label-audit",
                     "text": "Reading logged and dilution is stable for storage.",
                     "requiresItems": [
                         {
@@ -170,6 +170,36 @@
             ]
         },
         {
+            "id": "label-audit",
+            "text": "Perform a post-dilution label audit: concentration, prep date, preparer initials, and corrosive storage location must be present.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-verify-acid-labeling",
+                    "text": "Run acid bottle labeling and storage audit checklist."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Audit signed; move to closeout.",
+                    "requiresItems": [
+                        {
+                            "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
+                            "count": 1
+                        },
+                        {
+                            "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                            "count": 1
+                        },
+                        {
+                            "id": "c2b4ab39-13ea-4558-b8a3-6dde7c35cb3c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
             "text": "Label concentration and date, cap securely, and return the bottle to spill-tray storage. Clean chemistry is repeatable chemistry.",
             "options": [
@@ -196,5 +226,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-test"]
+    "requiresQuests": [
+        "chemistry/ph-test"
+    ]
 }

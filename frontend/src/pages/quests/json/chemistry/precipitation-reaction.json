@@ -64,7 +64,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "mass-record",
                     "text": "Pass: precipitate is stable and pH is 6.0\u20138.0.",
                     "requiresItems": [
                         {
@@ -106,6 +106,28 @@
             ]
         },
         {
+            "id": "mass-record",
+            "text": "Dry the filtered solid to constant mass and log yield so the precipitation route can be compared across trials.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-dry-and-weigh-precipitate",
+                    "text": "Dry precipitate and complete mass/yield card."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Mass card logged; finish the exercise.",
+                    "requiresItems": [
+                        {
+                            "id": "dae7564a-7223-4b5f-8b18-4abc85071df9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
             "text": "Good chemistry discipline: you captured evidence, interpreted it against explicit bounds, and used a controlled recovery loop when results were unreliable.",
             "options": [
@@ -122,7 +144,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-adjustment"],
+    "requiresQuests": [
+        "chemistry/ph-adjustment"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

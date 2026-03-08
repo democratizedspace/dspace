@@ -84,7 +84,7 @@
             "options": [
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "trend-log",
                     "text": "Reading is in-range (6.0\u20137.5); safe to proceed.",
                     "requiresItems": [
                         {
@@ -117,6 +117,28 @@
             ]
         },
         {
+            "id": "trend-log",
+            "text": "Add traceability: include strip lot, immersion time, rinse method, and temperature estimate on a trend worksheet.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-log-ph-trend",
+                    "text": "Complete pH trend worksheet with measurement metadata."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Worksheet completed; close the test.",
+                    "requiresItems": [
+                        {
+                            "id": "f7c1c31d-fa90-4eb7-9ff5-d64c4e777bcd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "id": "finish",
             "text": "Good lab discipline. You captured measurement evidence, interpreted against explicit bounds, and used a safe recovery path when readings were unreliable.",
             "options": [
@@ -133,5 +155,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/safe-reaction"]
+    "requiresQuests": [
+        "chemistry/safe-reaction"
+    ]
 }

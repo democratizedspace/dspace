@@ -143,11 +143,37 @@
                 },
                 {
                     "type": "goto",
-                    "goto": "finish",
+                    "goto": "instrument-audit",
                     "text": "Stable run documented; proceed to closeout.",
                     "requiresItems": [
                         {
                             "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "instrument-audit",
+            "text": "Before closure, log vessel temperature checkpoints, venting cadence, and final residue status so the run can be replicated exactly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-log-fizz-thermals",
+                    "text": "Record minute-by-minute thermal and venting log from the run."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Thermal controls documented; proceed to closeout.",
+                    "requiresItems": [
+                        {
+                            "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
+                            "count": 1
+                        },
+                        {
+                            "id": "2db771e2-a3d1-4600-8d6d-a8b368c8078e",
                             "count": 1
                         }
                     ]
@@ -177,7 +203,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["welcome/howtodoquests"],
+    "requiresQuests": [
+        "welcome/howtodoquests"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
