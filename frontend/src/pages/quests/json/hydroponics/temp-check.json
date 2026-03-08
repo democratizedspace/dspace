@@ -23,15 +23,15 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "attach-aquarium-thermometer",
+                    "process": "attach-hydroponic-reservoir-thermometer",
                     "text": "Attach thermometer for a stable reading.",
                     "requiresItems": [
                         {
-                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
                             "count": 1
                         },
                         {
-                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "id": "b32f7ddb-783a-4389-93e5-06369bcdceb4",
                             "count": 1
                         },
                         {
@@ -46,7 +46,7 @@
                     "text": "Thermometer mounted; capture temperature log.",
                     "requiresItems": [
                         {
-                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "id": "b81e67a1-28b0-4cd8-b202-778f66a95a7b",
                             "count": 1
                         }
                     ]
@@ -55,15 +55,15 @@
         },
         {
             "id": "measure",
-            "text": "Log the observed water temperature and classify it: 65-75\u00b0F pass, 60-64\u00b0F or 76-79\u00b0F caution, outside that is fail.",
+            "text": "Log the observed water temperature and classify it: 65-75°F pass, 60-64°F or 76-79°F caution, outside that is fail.",
             "options": [
                 {
                     "type": "process",
-                    "process": "log-walstad-temperature",
+                    "process": "log-hydroponic-reservoir-temperature",
                     "text": "Record temperature log artifact.",
                     "requiresItems": [
                         {
-                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "id": "b81e67a1-28b0-4cd8-b202-778f66a95a7b",
                             "count": 1
                         }
                     ]
@@ -74,8 +74,8 @@
                     "text": "Temperature log captured.",
                     "requiresItems": [
                         {
-                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
-                            "count": 1.0
+                            "id": "6305ae99-c0b2-49f8-8d58-a1d81b765342",
+                            "count": 1
                         }
                     ]
                 }
@@ -91,8 +91,8 @@
                     "text": "In range and stable; close this check.",
                     "requiresItems": [
                         {
-                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
-                            "count": 1.0
+                            "id": "6305ae99-c0b2-49f8-8d58-a1d81b765342",
+                            "count": 1
                         }
                     ]
                 },
@@ -150,7 +150,7 @@
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
