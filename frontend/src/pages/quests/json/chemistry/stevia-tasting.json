@@ -1,26 +1,27 @@
 {
     "id": "chemistry/stevia-tasting",
     "title": "Taste Test Stevia Crystals",
-    "description": "Evaluate the sweetness of your freshly made stevia crystals.",
+    "description": "Calibrate sensory panel baselines, run blind stevia comparisons, and issue a structured panel scorecard.",
     "image": "/assets/quests/stevia-tasting.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Your extraction held together, nice work. For tasting, we separate setup evidence from outcome evidence so bias doesn't contaminate decisions.",
+            "text": "No strong perfumes, coffee, or mint 30 minutes before tasting. Stage coded cups, RO water, and palate reset crackers.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "chemistry-calibrate-stevia-tasting-panel",
+                    "text": "Prepare calibration cups and panel warm-up sequence."
+                },
+                {
                     "type": "goto",
-                    "goto": "setup-route",
-                    "text": "Gloves and goggles on.",
+                    "goto": "mix",
+                    "text": "Calibration cups and panel readiness confirmed.",
                     "requiresItems": [
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "id": "23f49dfd-f7c6-421c-ac29-5b891d57bf97",
                             "count": 1
                         }
                     ]
@@ -28,126 +29,69 @@
             ]
         },
         {
-            "id": "setup-route",
-            "text": "Choose your prep route: precision single-sample or comparative panel. Either way, produce a labeled tasting solution artifact first.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "precision-setup",
-                    "text": "Run precision single-sample prep."
-                },
-                {
-                    "type": "goto",
-                    "goto": "panel-setup",
-                    "text": "Run comparative panel prep."
-                }
-            ]
-        },
-        {
-            "id": "precision-setup",
-            "text": "Rinse tools, prepare a 1% solution, and label concentration plus timestamp.",
+            "id": "mix",
+            "text": "Prepare blinded samples at 0.25%, 0.5%, and 1.0% in coded cups with randomized service order.",
             "options": [
                 {
                     "type": "process",
                     "process": "mix-stevia-tasting-solution",
-                    "text": "Mix precision tasting solution."
+                    "text": "Mix blinded stevia tasting solutions."
                 },
                 {
                     "type": "goto",
-                    "goto": "outcome-check",
-                    "text": "Setup artifact captured; proceed to outcome check.",
+                    "goto": "panel",
+                    "text": "Solutions mixed and coded for panel run.",
                     "requiresItems": [
                         {
                             "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
-                            "count": 2.0
+                            "count": 1
                         }
                     ]
                 }
             ]
         },
         {
-            "id": "panel-setup",
-            "text": "Prepare stevia and control samples side-by-side so you can compare sweetness onset and aftertaste fairly.",
+            "id": "panel",
+            "text": "Run tasting in silence: sweetness onset (seconds), peak intensity (1-10), lingering bitterness (1-10).",
             "options": [
                 {
                     "type": "process",
-                    "process": "mix-stevia-tasting-solution",
-                    "text": "Mix comparative tasting solution."
+                    "process": "chemistry-run-stevia-sensory-panel",
+                    "text": "Capture structured panel scorecard."
                 },
-                {
-                    "type": "goto",
-                    "goto": "outcome-check",
-                    "text": "Comparative setup ready; move to blind taste logging.",
-                    "requiresItems": [
-                        {
-                            "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
-                            "count": 2.0
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "outcome-check",
-            "text": "Run blind tasting and log sweetness, aftertaste, and onset timing. Outcome evidence must exist before completion.",
-            "options": [
                 {
                     "type": "process",
                     "process": "record-stevia-tasting-notes",
-                    "text": "Record tasting outcome notes."
+                    "text": "Store narrative tasting notes."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Outcome artifact logged with clear notes.",
+                    "text": "Calibration, scorecard, and tasting notes complete.",
                     "requiresItems": [
+                        {
+                            "id": "23f49dfd-f7c6-421c-ac29-5b891d57bf97",
+                            "count": 1
+                        },
+                        {
+                            "id": "de3dd21d-af02-4b38-82b7-b65c0f09a984",
+                            "count": 1
+                        },
                         {
                             "id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Panel reported bitterness spike or contaminated cup; run recovery branch."
-                }
-            ]
-        },
-        {
-            "id": "recovery",
-            "text": "Abort the tasting round, sanitize glassware, and re-mix a fresh sample. If two retries fail, defer to next day to avoid palate fatigue bias.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Sanitize station and reset protocol."
-                },
-                {
-                    "type": "goto",
-                    "goto": "setup-route",
-                    "text": "Recovery complete; retry with fresh sample."
-                },
-                {
-                    "type": "goto",
-                    "goto": "setup-route",
-                    "text": "Defer tasting until next session, then restart with fresh setup evidence."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Great notes. You now have both setup and outcome artifacts to tune extraction toward cleaner sweetness.",
+            "text": "Sensory protocol complete with reproducible panel data.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Ready for the next batch.",
-                    "requiresItems": [
-                        {
-                            "id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Publish tasting results."
                 }
             ]
         }
@@ -161,7 +105,7 @@
     "requiresQuests": ["chemistry/stevia-crystals"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

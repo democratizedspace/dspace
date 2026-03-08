@@ -1,30 +1,27 @@
 {
     "id": "chemistry/ph-adjustment",
     "title": "Adjust Solution pH",
-    "description": "Bring a nutrient solution into range using acid or base.",
+    "description": "Plan titration corrections, execute micro-adjustments, and log every correction cycle until the buffer is in spec.",
     "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. We do this like a lab: baseline reading, controlled adjustment, then verification before we trust the batch.",
+            "text": "Review previous buffer lot and target pH window. Stage pipette, stir rod, and correction reagents in separate dropper bottles.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "chemistry-plan-ph-adjustment",
+                    "text": "Create titration adjustment plan with expected drops per cycle."
+                },
+                {
                     "type": "goto",
-                    "goto": "baseline",
-                    "text": "Run baseline measurement with PPE on.",
+                    "goto": "titrate",
+                    "text": "Adjustment plan is documented.",
                     "requiresItems": [
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "id": "3843a2ef-f029-4bd5-b450-828a82d62c8b",
                             "count": 1
                         }
                     ]
@@ -32,136 +29,73 @@
             ]
         },
         {
-            "id": "baseline",
-            "text": "Capture a pH reading before dosing anything. Record the number so your correction has context.",
+            "id": "titrate",
+            "text": "Apply 1-2 drop corrections, stir 30 seconds, then re-sample. Repeat only if trend stays monotonic toward target.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-execute-ph-adjustment-cycle",
+                    "text": "Run controlled adjustment cycles and capture cycle log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Adjustment cycle log ready for final readback.",
+                    "requiresItems": [
+                        {
+                            "id": "f7a90006-26fa-4ef0-b587-93edd963bb84",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Take final pH reading and confirm adjusted buffer is labeled with correction history.",
             "options": [
                 {
                     "type": "process",
                     "process": "chemistry-measure-ph",
-                    "text": "Measure baseline pH."
+                    "text": "Capture final pH reading card."
                 },
-                {
-                    "type": "goto",
-                    "goto": "interpret",
-                    "text": "Baseline recorded, interpret before adjusting.",
-                    "requiresItems": [
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 5.0
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "id": "interpret",
-            "text": "Target band is pH 6.0-7.2. If you're inside it, preserve the batch. If outside, do micro-dosing corrections and re-test.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Reading is within 6.0-7.2; no further adjustment needed.",
-                    "requiresItems": [
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 5.0
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "adjust",
-                    "text": "Out of range: run a correction pass."
-                }
-            ]
-        },
-        {
-            "id": "adjust",
-            "text": "Add tiny doses of pH down or pH up, stir fully, and pause before retesting. No large swings.",
-            "options": [
                 {
                     "type": "process",
                     "process": "chemistry-adjust-buffer-ph",
-                    "text": "Run controlled additions and relabel the adjusted buffer."
-                },
-                {
-                    "type": "goto",
-                    "goto": "retest",
-                    "text": "Adjustment complete, collect verification reading.",
-                    "requiresItems": [
-                        {
-                            "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "safety-stop",
-                    "text": "Unexpected heat or clouding appeared; pause and secure the bench."
-                }
-            ]
-        },
-        {
-            "id": "retest",
-            "text": "Retest and compare against target band. Re-enter correction loop if still out of range.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "chemistry-measure-ph",
-                    "text": "Take post-adjustment pH reading."
+                    "text": "Commit corrected buffer as finished adjusted lot."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Verification is inside 6.0-7.2.",
+                    "text": "Plan, cycle log, adjusted buffer, and pH evidence complete.",
                     "requiresItems": [
+                        {
+                            "id": "3843a2ef-f029-4bd5-b450-828a82d62c8b",
+                            "count": 1
+                        },
+                        {
+                            "id": "f7a90006-26fa-4ef0-b587-93edd963bb84",
+                            "count": 1
+                        },
                         {
                             "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
                             "count": 1
                         },
                         {
                             "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 5.0
+                            "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "adjust",
-                    "text": "Still out of range; apply another micro-dose and re-test."
-                }
-            ]
-        },
-        {
-            "id": "safety-stop",
-            "text": "Good stop-work call. Rinse exposed surfaces, document the anomaly, and only resume with fresh PPE and tools.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Decontaminate and reset."
-                },
-                {
-                    "type": "goto",
-                    "goto": "baseline",
-                    "text": "Bench reset complete; restart from baseline measurement."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Balanced and verified. You used evidence, not guesswork, and left a reproducible trail.",
+            "text": "Adjustment complete with full titration traceability.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Chemistry in harmony.",
-                    "requiresItems": [
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Buffer pH tuned."
                 }
             ]
         }

@@ -1,7 +1,7 @@
 {
     "id": "chemistry/ph-test",
     "title": "Measure Solution pH",
-    "description": "Measure solution pH with PPE, classify the reading, and recover safely when values are out of range.",
+    "description": "Calibrate pH tools, condition a sample aliquot, and produce a traceable pH reading card with method notes.",
     "hardening": {
         "passes": 3,
         "score": 95,
@@ -30,99 +30,85 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Before working with reactive solutions, stage PPE and controls. Put on nitrile gloves, goggles, and a lab coat, keep spill neutralizer nearby, and confirm the bench is dry and labeled.",
+            "text": "Put on coat, gloves, and goggles. Prepare pH strips, distilled rinse water, and a clean vial rack before touching samples.",
             "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-calibrate-ph-kit",
+                    "text": "Calibrate pH kit against reference strip colors and log baseline."
+                },
+                {
+                    "type": "goto",
+                    "goto": "condition",
+                    "text": "Calibration log recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "a0ab6b27-ed3e-4d7d-8d21-3296e9031772",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "condition",
+            "text": "Collect a 20 mL aliquot and condition it: swirl, degas 60 seconds, then cool to room temperature to avoid false readings.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-condition-ph-sample",
+                    "text": "Prepare conditioned aliquot vial for measurement."
+                },
                 {
                     "type": "goto",
                     "goto": "measure",
-                    "text": "Safety setup complete\u2014start the pH measurement run."
+                    "text": "Conditioned aliquot is ready for pH strip test.",
+                    "requiresItems": [
+                        {
+                            "id": "44b6c979-b1e2-493e-bb00-4df7e47a66a2",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "measure",
-            "text": "Dip a fresh strip for one second, compare to the chart immediately, and record the observed value. Keep your face back from the vessel and avoid cross-contaminating the strip packet.",
+            "text": "Dip strip for 2 seconds, wick edge on clean tissue, then compare at 15 seconds under neutral light.",
             "options": [
                 {
                     "type": "process",
                     "process": "chemistry-measure-ph",
-                    "text": "Run `chemistry-measure-ph` and capture a labeled reading card."
+                    "text": "Record pH value and uncertainty band."
                 },
                 {
                     "type": "goto",
-                    "goto": "interpret",
-                    "text": "I logged a stable reading and kept PPE on.",
+                    "goto": "finish",
+                    "text": "Measurement card and prep records complete.",
                     "requiresItems": [
                         {
                             "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
                             "count": 1
                         },
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "id": "a0ab6b27-ed3e-4d7d-8d21-3296e9031772",
                             "count": 1
                         },
                         {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "3455faac-8811-4991-b818-cecb98e8fff7",
+                            "id": "44b6c979-b1e2-493e-bb00-4df7e47a66a2",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "troubleshoot",
-                    "text": "Color band is ambiguous or drifting\u2014need troubleshooting."
-                }
-            ]
-        },
-        {
-            "id": "interpret",
-            "text": "Interpret the reading: target operating window is pH 6.0\u20137.5 for this training solution. Choose the branch that matches your logged result.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Reading is in-range (6.0\u20137.5); safe to proceed.",
-                    "requiresItems": [
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "troubleshoot",
-                    "text": "Reading is out-of-range (<6.0 or >7.5); initiate corrective loop."
-                }
-            ]
-        },
-        {
-            "id": "troubleshoot",
-            "text": "Stop and stabilize: cap reagents, wipe spills, and replace gloves if contaminated. Re-mix gently, wait 30 seconds, then retest with a fresh strip. If the second reading still drifts, pause the experiment and escalate.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "measure",
-                    "text": "Corrective actions complete\u2014retest now."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Escalated safely and logged a deferred run for supervisor review."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Good lab discipline. You captured measurement evidence, interpreted against explicit bounds, and used a safe recovery path when readings were unreliable.",
+            "text": "Great work. You captured calibration, sample handling, and final reading evidence.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "pH check complete."
+                    "text": "pH test complete."
                 }
             ]
         }

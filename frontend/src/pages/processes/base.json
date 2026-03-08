@@ -1482,11 +1482,16 @@
     },
     {
         "id": "purify-stevia",
-        "title": "purify stevia extract into crystals",
-        "requireItems": [],
+        "title": "Polish dried stevia crystal lot into final crystals",
+        "requireItems": [
+            {
+                "id": "13f3f171-076f-4fb0-9a2c-63f61ca41d3f",
+                "count": 1
+            }
+        ],
         "consumeItems": [
             {
-                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "id": "13f3f171-076f-4fb0-9a2c-63f61ca41d3f",
                 "count": 1
             }
         ],
@@ -10412,6 +10417,594 @@
             "passes": 0,
             "score": 90,
             "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-stage-safe-reaction-bench",
+        "title": "Stage safe reaction bench and document equipment readiness",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "8175bd25-244c-433e-b39d-2af223ccbc91",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-dose-safe-reaction-reagents",
+        "title": "Dose safe reaction reagents into staged portions",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "ab36e88b-285a-4ff3-8abd-d73dbb7c3491",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-calibrate-ph-kit",
+        "title": "Calibrate pH strip kit against reference standards",
+        "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
+        "requireItems": [
+            {
+                "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "a0ab6b27-ed3e-4d7d-8d21-3296e9031772",
+                "count": 1
+            }
+        ],
+        "duration": "7m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-condition-ph-sample",
+        "title": "Condition aliquot for stable pH measurement",
+        "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "44b6c979-b1e2-493e-bb00-4df7e47a66a2",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-calculate-hcl-dilution",
+        "title": "Calculate acid dilution worksheet and transfer targets",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "8c19712c-c083-4794-a275-4b4d9c653dfe",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-prechill-dilution-flask",
+        "title": "Pre-chill dilution flask in ice bath",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "82e7baef-9ee9-4d5e-ba23-1ebff5a04388",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-deploy-spill-containment-berm",
+        "title": "Deploy absorbent berm around acid spill zone",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                "count": 1
+            },
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "fea67487-4164-4ff7-969d-356127abbac9",
+                "count": 1
+            }
+        ],
+        "duration": "4m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-package-neutralized-residue",
+        "title": "Package neutralized residue into sealed disposal drum",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requireItems": [
+            {
+                "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "dedfa413-4cb8-4980-a310-820e958325cb",
+                "count": 1
+            }
+        ],
+        "duration": "5m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-calculate-buffer-recipe",
+        "title": "Calculate buffer formulation with Henderson-Hasselbalch ratio",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "fe23b389-42a7-46ef-8793-3d8399362788",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-compound-buffer-stock",
+        "title": "Compound initial buffer stock from measured reagents",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "4721dce9-cd6a-4e3f-8dfb-e7e22f55dc39",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-plan-ph-adjustment",
+        "title": "Plan dropwise pH adjustment titration path",
+        "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
+        "requireItems": [
+            {
+                "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "3843a2ef-f029-4bd5-b450-828a82d62c8b",
+                "count": 1
+            }
+        ],
+        "duration": "6m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-execute-ph-adjustment-cycle",
+        "title": "Execute logged pH adjustment cycles",
+        "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
+        "requireItems": [
+            {
+                "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
+                "count": 1
+            },
+            {
+                "id": "3843a2ef-f029-4bd5-b450-828a82d62c8b",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "f7a90006-26fa-4ef0-b587-93edd963bb84",
+                "count": 1
+            }
+        ],
+        "duration": "9m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-prepare-precipitation-reagent-set",
+        "title": "Prepare stoichiometric reagent set for precipitation",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            },
+            {
+                "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "1774fea1-a066-4617-b2e5-0692e63346d5",
+                "count": 1
+            }
+        ],
+        "duration": "7m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-age-and-wash-precipitate",
+        "title": "Age and wash precipitate cake after filtration",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "requireItems": [
+            {
+                "id": "487c7586-a6f4-4fff-a210-979497f6380f",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "fecde9bf-4b1f-4c95-a809-c888e5c817fa",
+                "count": 1
+            }
+        ],
+        "duration": "8m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-prep-stevia-feedstock",
+        "title": "Dry and mill stevia leaves into extraction feedstock",
+        "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
+        "requireItems": [
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+                "count": 0.3
+            }
+        ],
+        "createItems": [
+            {
+                "id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
+                "count": 1
+            }
+        ],
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-run-stevia-solvent-wash",
+        "title": "Run warm ethanol-water solvent wash on stevia feedstock",
+        "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
+        "requireItems": [
+            {
+                "id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
+                "count": 1
+            },
+            {
+                "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "35ec960e-3048-4429-ad6b-c6afb384d658",
+                "count": 1
+            }
+        ],
+        "duration": "35m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-seed-stevia-crystallization",
+        "title": "Seed concentrated stevia extract for controlled crystallization",
+        "image": "/assets/quests/stevia_crystal_refinement.jpg",
+        "requireItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "3fac389d-178f-4ad1-a0bb-a9c474931c25",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-dry-stevia-crystal-lot",
+        "title": "Dry seeded crystal slurry into stable crystal lot",
+        "image": "/assets/quests/stevia_crystal_refinement.jpg",
+        "requireItems": [
+            {
+                "id": "3fac389d-178f-4ad1-a0bb-a9c474931c25",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "3fac389d-178f-4ad1-a0bb-a9c474931c25",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "13f3f171-076f-4fb0-9a2c-63f61ca41d3f",
+                "count": 1
+            }
+        ],
+        "duration": "40m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-calibrate-stevia-tasting-panel",
+        "title": "Calibrate stevia tasting panel and coded cup set",
+        "image": "/assets/quests/stevia-tasting.jpg",
+        "requireItems": [
+            {
+                "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "23f49dfd-f7c6-421c-ac29-5b891d57bf97",
+                "count": 1
+            }
+        ],
+        "duration": "12m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "chemistry-run-stevia-sensory-panel",
+        "title": "Run blinded sensory panel and capture structured scorecard",
+        "image": "/assets/quests/stevia-tasting.jpg",
+        "requireItems": [
+            {
+                "id": "23f49dfd-f7c6-421c-ac29-5b891d57bf97",
+                "count": 1
+            },
+            {
+                "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "de3dd21d-af02-4b38-82b7-b65c0f09a984",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 90,
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     }

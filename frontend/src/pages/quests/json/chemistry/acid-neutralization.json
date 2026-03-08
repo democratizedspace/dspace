@@ -1,145 +1,92 @@
 {
     "id": "chemistry/acid-neutralization",
     "title": "Neutralize an Acid Spill",
-    "description": "Neutralize an acid spill with staged evidence gates, safe escalation, and a verified re-check.",
+    "description": "Contain an acid spill with a berm, neutralize in controlled passes, and seal residue with disposal metadata.",
     "image": "/assets/quests/acid_spill_neutralization_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Acid spill on bench. Choose your approach, but do not rush: isolate the area, PPE on, and keep ignition sources and unprotected hands away.",
+            "text": "Treat spill as live hazard. Set boundary cones, spill tray, and PPE, then isolate drains with absorbent socks.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "choose-path",
-                    "text": "Area isolated and PPE confirmed."
-                }
-            ]
-        },
-        {
-            "id": "choose-path",
-            "text": "Pick a response path. Main path uses a structured spill kit run; alternate path is manual neutralization with tighter checks.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "kit-response",
-                    "text": "Main path: use spill kit workflow."
+                    "type": "process",
+                    "process": "chemistry-deploy-spill-containment-berm",
+                    "text": "Deploy absorbent berm and mark hot zone perimeter."
                 },
                 {
                     "type": "goto",
-                    "goto": "manual-response",
-                    "text": "Alternate path: manual neutralization and strip checks."
+                    "goto": "neutralize",
+                    "text": "Containment berm is in place.",
+                    "requiresItems": [
+                        {
+                            "id": "fea67487-4164-4ff7-969d-356127abbac9",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "kit-response",
-            "text": "Deploy absorbent perimeter, add neutralizer in small increments, and watch reaction intensity. Stop immediately if vapor or heat spikes.",
+            "id": "neutralize",
+            "text": "Dust sodium bicarbonate from outer edge inward. Wait for fizz to settle each pass; never kneel into the hazard zone.",
             "options": [
                 {
                     "type": "process",
                     "process": "chemistry-neutralize-acid-spill",
-                    "text": "Neutralize spill and package residue for disposal."
+                    "text": "Run neutralization and pH confirmation passes."
                 },
                 {
                     "type": "goto",
-                    "goto": "verify",
-                    "text": "Kit run complete; verify with pH strip.",
+                    "goto": "package",
+                    "text": "Neutralization complete with stable pH checks.",
                     "requiresItems": [
                         {
                             "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
                             "count": 1
-                        },
-                        {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
-                            "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Unexpected fizzing/heat\u2014need recovery protocol."
                 }
             ]
         },
         {
-            "id": "manual-response",
-            "text": "Sprinkle baking soda slowly from the edge inward and avoid splashing. Keep containment in place until fizzing slows, then proceed to verification.",
+            "id": "package",
+            "text": "Transfer residue to rigid drum, add absorbent liner, and tag with contents, date, and handler initials.",
             "options": [
                 {
                     "type": "process",
-                    "process": "chemistry-neutralize-acid-spill",
-                    "text": "Run controlled manual neutralization and package the neutralized residue."
+                    "process": "chemistry-package-neutralized-residue",
+                    "text": "Seal neutralized residue drum for disposal chain."
                 },
                 {
                     "type": "goto",
-                    "goto": "verify",
-                    "text": "Manual neutralization complete; proceed to pH verification.",
+                    "goto": "finish",
+                    "text": "Containment + disposal artifacts complete.",
                     "requiresItems": [
                         {
-                            "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+                            "id": "fea67487-4164-4ff7-969d-356127abbac9",
                             "count": 1
                         },
                         {
-                            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+                            "id": "dedfa413-4cb8-4980-a310-820e958325cb",
                             "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Manual approach unstable\u2014switch to recovery."
-                }
-            ]
-        },
-        {
-            "id": "verify",
-            "text": "Interpret the verification reading. Pass only when strip indicates near-neutral range and no active reaction remains.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Verification passed: spill zone is neutral and controlled.",
-                    "requiresItems": [
+                        },
                         {
                             "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Verification failed: still acidic/basic or active fizzing."
-                }
-            ]
-        },
-        {
-            "id": "recovery",
-            "text": "Recovery branch: back out, refresh PPE, re-contain the zone, and re-run neutralization in smaller doses. If instability persists after one retry, escalate to supervisor and lock the station.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "choose-path",
-                    "text": "Recovery complete\u2014retry with selected path."
-                },
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Escalated and locked out bench safely pending review."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Bench safety restored. You used evidence-backed verification and followed a stop-work recovery path instead of forcing a risky finish.",
+            "text": "Spill response complete and traceable from containment to disposal.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Neutralization protocol complete."
+                    "text": "Hazard closed."
                 }
             ]
         }

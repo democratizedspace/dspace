@@ -1,45 +1,27 @@
 {
     "id": "chemistry/safe-reaction",
     "title": "Demonstrate a Safe Chemical Reaction",
-    "description": "Phoenix guides you through PPE checks, reaction prep, and logging for a safe fizz-reaction demo.",
+    "description": "Run a documented baking-soda and vinegar reaction with explicit equipment checks, measured additions, and logged containment outcomes.",
     "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Today we prove control, not chaos: prep safely, pick a reaction route, and log what the chemistry tells you.",
+            "text": "Phoenix here. Before any fizz, lay out the exact kit: 250 mL beaker, 100 mL graduated cylinder, nitrile gloves, goggles, and a labeled waste cup.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "safety",
-                    "text": "Proceed with lab safety checks."
-                }
-            ]
-        },
-        {
-            "id": "safety",
-            "text": "Before mixing, confirm PPE and clean tools. Gloves, goggles, beaker, and cylinder are non-negotiable.",
-            "options": [
+                    "type": "process",
+                    "process": "chemistry-stage-safe-reaction-bench",
+                    "text": "Run bench staging checklist and sign equipment setup sheet."
+                },
                 {
                     "type": "goto",
-                    "goto": "route-select",
-                    "text": "Safety gear is on and tools are ready.",
+                    "goto": "dose",
+                    "text": "Bench staged and checklist signed.",
                     "requiresItems": [
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
-                            "count": 1
-                        },
-                        {
-                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                            "id": "8175bd25-244c-433e-b39d-2af223ccbc91",
                             "count": 1
                         }
                     ]
@@ -47,105 +29,67 @@
             ]
         },
         {
-            "id": "route-select",
-            "text": "Choose your demonstration mode. Open-beaker is easiest to observe. Controlled-capture emphasizes disciplined gas handling.",
+            "id": "dose",
+            "text": "Measure 40 mL vinegar in the cylinder and 5 g sodium bicarbonate on weigh paper. Keep vessel pointed away from faces and vents.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "open-beaker",
-                    "text": "Run open-beaker observation route."
+                    "type": "process",
+                    "process": "chemistry-dose-safe-reaction-reagents",
+                    "text": "Pre-dose reactants and seal dosing tray."
                 },
                 {
                     "type": "goto",
-                    "goto": "controlled-capture",
-                    "text": "Run controlled-capture route."
+                    "goto": "run",
+                    "text": "Reagents measured and isolated in dosing tray.",
+                    "requiresItems": [
+                        {
+                            "id": "ab36e88b-285a-4ff3-8abd-d73dbb7c3491",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "open-beaker",
-            "text": "Run the fizz protocol in an open vessel and watch for controlled bubble formation and safe temperature behavior.",
+            "id": "run",
+            "text": "Charge bicarbonate into vinegar in three additions while swirling. Capture overflow in the secondary beaker and pause if foaming exceeds one third headspace.",
             "options": [
                 {
                     "type": "process",
                     "process": "run-safe-fizz-reaction",
-                    "text": "Execute open-beaker protocol."
+                    "text": "Execute controlled fizz reaction run."
                 },
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Reaction remained controlled; move to verification and logging.",
+                    "text": "Reaction sample captured for verification.",
                     "requiresItems": [
                         {
                             "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "troubleshoot",
-                    "text": "Foam rise or splash risk detected; move to recovery path."
-                }
-            ]
-        },
-        {
-            "id": "controlled-capture",
-            "text": "Run a slower dosing cadence focused on consistent gas generation and stable handling.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "run-safe-fizz-reaction",
-                    "text": "Execute controlled-capture protocol."
-                },
-                {
-                    "type": "goto",
-                    "goto": "verify",
-                    "text": "Capture route completed with stable behavior; move to verification and logging.",
-                    "requiresItems": [
-                        {
-                            "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "troubleshoot",
-                    "text": "Pressure or bubbling looked unstable; stop and troubleshoot."
-                }
-            ]
-        },
-        {
-            "id": "troubleshoot",
-            "text": "Good catch. Pause additions, vent safely, and decontaminate surfaces before any retry. If repeat instability occurs, escalate instead of improvising.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Run cleanup and reset protocol."
-                },
-                {
-                    "type": "goto",
-                    "goto": "route-select",
-                    "text": "Setup stable again; retry using the safer route."
                 }
             ]
         },
         {
             "id": "verify",
-            "text": "Now document what happened so another tech could reproduce the run and safety checks.",
+            "text": "Record bubble duration, max foam height, and residue state. Only complete when the reaction log and sample both exist.",
             "options": [
                 {
                     "type": "process",
                     "process": "log-safe-reaction",
-                    "text": "Log reaction observations."
+                    "text": "Write observation log with timing and residue notes."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Stable run documented; proceed to closeout.",
+                    "text": "Sample + log complete and hazard-free shutdown confirmed.",
                     "requiresItems": [
+                        {
+                            "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
+                            "count": 1
+                        },
                         {
                             "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
                             "count": 1
@@ -156,17 +100,11 @@
         },
         {
             "id": "finish",
-            "text": "Excellent. You demonstrated a reaction with explicit safety controls, reproducible evidence, and a recovery path.",
+            "text": "Excellent. You controlled dosing, documented equipment, and proved the outcome with traceable records.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Logged and ready for the next experiment.",
-                    "requiresItems": [
-                        {
-                            "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Reaction complete."
                 }
             ]
         }

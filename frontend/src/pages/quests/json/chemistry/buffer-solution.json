@@ -1,164 +1,92 @@
 {
     "id": "chemistry/buffer-solution",
     "title": "Prepare a Buffer Solution",
-    "description": "Build a stable buffer with explicit safety checks, verification evidence, and recovery loops.",
+    "description": "Design a Henderson\u2013Hasselbalch recipe, compound the buffer with calibrated volumetrics, then verify pH and labeling.",
     "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Buffer work is about control, not speed. Stage PPE, label vessels, and choose a prep strategy before any mixing starts.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "choose-path",
-                    "text": "Safety setup complete\u2014pick a buffer prep path."
-                }
-            ]
-        },
-        {
-            "id": "choose-path",
-            "text": "Use either a measured route (main path) or a pilot route (alternate). Both must capture a pH artifact before interpretation.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "measured-mix",
-                    "text": "Main path: measured additions with frequent checks."
-                },
-                {
-                    "type": "goto",
-                    "goto": "pilot-mix",
-                    "text": "Alternate path: run a small pilot batch first."
-                }
-            ]
-        },
-        {
-            "id": "measured-mix",
-            "text": "Dissolve baking soda in measured water, add vinegar dropwise, and keep splashes inside a spill tray. Pause if heat or foaming spikes.",
+            "text": "Select target pH and ionic strength. Stage beaker, graduated cylinder, stir rod, and DI water before reagent handling.",
             "options": [
                 {
                     "type": "process",
-                    "process": "chemistry-prepare-buffer",
-                    "text": "Prepare and label a buffer batch from the diluted reagents."
+                    "process": "chemistry-calculate-buffer-recipe",
+                    "text": "Compute acid/base ratio and print buffer recipe card."
                 },
+                {
+                    "type": "goto",
+                    "goto": "compound",
+                    "text": "Recipe card approved by supervisor.",
+                    "requiresItems": [
+                        {
+                            "id": "fe23b389-42a7-46ef-8793-3d8399362788",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "compound",
+            "text": "Measure conjugate acid and base into separate cylinders, combine in beaker, then top to final volume with DI water.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-compound-buffer-stock",
+                    "text": "Compound initial buffer stock with lot tracking."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Buffer stock prepared for pH verification.",
+                    "requiresItems": [
+                        {
+                            "id": "4721dce9-cd6a-4e3f-8dfb-e7e22f55dc39",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Measure pH on fresh strip, compare against target \u00b10.2, then affix label showing composition and prep date.",
+            "options": [
                 {
                     "type": "process",
                     "process": "chemistry-measure-ph",
-                    "text": "Measure the prepared buffer and record a reading card."
-                },
-                {
-                    "type": "goto",
-                    "goto": "interpret",
-                    "text": "Measured batch logged\u2014review stability window.",
-                    "requiresItems": [
-                        {
-                            "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
-                            "count": 1
-                        },
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 3.0
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recover",
-                    "text": "Foaming or contamination risk spotted\u2014enter recovery loop."
-                }
-            ]
-        },
-        {
-            "id": "pilot-mix",
-            "text": "Run a small pilot in a labeled beaker to tune dosing pace. If the pilot drifts or clouds, recover before scaling up.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "chemistry-prepare-buffer",
-                    "text": "Prepare and label a buffer batch from the diluted reagents."
-                },
-                {
-                    "type": "process",
-                    "process": "chemistry-measure-ph",
-                    "text": "Measure the prepared buffer and record a reading card."
-                },
-                {
-                    "type": "goto",
-                    "goto": "interpret",
-                    "text": "Pilot data captured\u2014evaluate against pass bounds.",
-                    "requiresItems": [
-                        {
-                            "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
-                            "count": 1
-                        },
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 3.0
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recover",
-                    "text": "Pilot unstable or cross-contaminated\u2014recover and retry."
-                }
-            ]
-        },
-        {
-            "id": "interpret",
-            "text": "Interpretation gate: accept only stable pH 6.8\u20137.2 with no active foaming. Out-of-range or unstable readings must go to corrective recovery before finish.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Reading is stable and in-range (6.8\u20137.2).",
-                    "requiresItems": [
-                        {
-                            "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
-                            "count": 1
-                        },
-                        {
-                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
-                            "count": 3.0
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recover",
-                    "text": "Reading drifted or missed range\u2014perform corrective loop."
-                }
-            ]
-        },
-        {
-            "id": "recover",
-            "text": "Recovery protocol: stop additions, cap reagents, rinse any splash zones, and reset with fresh strip + clean stir rod. If a second attempt still drifts, pause the run and escalate.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Complete decontamination and bench reset."
-                },
-                {
-                    "type": "goto",
-                    "goto": "choose-path",
-                    "text": "Recovery complete\u2014restart from strategy selection."
+                    "text": "Generate final pH reading card."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Escalated safely after documenting repeated instability."
+                    "text": "Recipe, stock, and reading card complete.",
+                    "requiresItems": [
+                        {
+                            "id": "fe23b389-42a7-46ef-8793-3d8399362788",
+                            "count": 1
+                        },
+                        {
+                            "id": "4721dce9-cd6a-4e3f-8dfb-e7e22f55dc39",
+                            "count": 1
+                        },
+                        {
+                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Buffer run closed with evidence, interpretation, and safe recovery discipline. Label the batch and store sealed.",
+            "text": "Buffer prep complete with reproducible formulation records.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Buffer ready."
+                    "text": "Buffer batch approved."
                 }
             ]
         }
