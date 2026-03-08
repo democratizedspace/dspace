@@ -40,7 +40,13 @@
                 {
                     "type": "goto",
                     "goto": "wash",
-                    "text": "Slurry formed and ready for wash/filter stage."
+                    "text": "Slurry formed and ready for wash/filter stage.",
+                    "requiresItems": [
+                        {
+                            "id": "d36caabd-ddb7-4634-8d51-751957be80f4",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },

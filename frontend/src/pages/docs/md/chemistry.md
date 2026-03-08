@@ -76,7 +76,6 @@ lab phases (setup -> execution -> verification) with dedicated artifacts for eac
     - [/processes/chemistry-calculate-buffer-recipe](/processes/chemistry-calculate-buffer-recipe)
     - [/processes/chemistry-compound-buffer-stock](/processes/chemistry-compound-buffer-stock)
     - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph)
-    - Existing quest grant remains `buffer solution batch`.
 
 ### 6) `chemistry/ph-adjustment`
 
@@ -104,7 +103,6 @@ lab phases (setup -> execution -> verification) with dedicated artifacts for eac
 ### 8) `chemistry/stevia-extraction`
 
 - New extraction intermediates:
-    - `milled stevia feedstock`
     - `clarified stevia filtrate`
 - Updated process chain:
     - [/processes/chemistry-prep-stevia-feedstock](/processes/chemistry-prep-stevia-feedstock)
@@ -119,7 +117,7 @@ lab phases (setup -> execution -> verification) with dedicated artifacts for eac
 - Updated process chain:
     - [/processes/chemistry-seed-stevia-crystallization](/processes/chemistry-seed-stevia-crystallization)
     - [/processes/chemistry-dry-stevia-crystal-lot](/processes/chemistry-dry-stevia-crystal-lot)
-    - [/processes/purify-stevia](/processes/purify-stevia)
+    - [/processes/purify-stevia](/processes/purify-stevia) *(final polish conversion to crystals; consumes dried lot)*
 
 ### 10) `chemistry/stevia-tasting`
 

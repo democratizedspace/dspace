@@ -62,12 +62,8 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Feedstock, filtrate, and extract artifacts complete.",
+                    "text": "Filtrate and extract artifacts complete.",
                     "requiresItems": [
-                        {
-                            "id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
-                            "count": 1
-                        },
                         {
                             "id": "35ec960e-3048-4429-ad6b-c6afb384d658",
                             "count": 1

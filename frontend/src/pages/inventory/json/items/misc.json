@@ -2913,7 +2913,7 @@
         "id": "3fac389d-178f-4ad1-a0bb-a9c474931c25",
         "name": "seeded stevia crystal slurry",
         "description": "Supersaturated stevia concentrate seeded for controlled crystal nucleation and growth.",
-        "image": "/assets/quests/stevia_crystals_refinement.jpg",
+        "image": "/assets/quests/stevia_crystal_refinement.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2921,7 +2921,7 @@
         "id": "13f3f171-076f-4fb0-9a2c-63f61ca41d3f",
         "name": "dried stevia crystal lot",
         "description": "Partially refined crystal lot dried below 45C prior to final polishing wash.",
-        "image": "/assets/quests/stevia_crystals_refinement.jpg",
+        "image": "/assets/quests/stevia_crystal_refinement.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },

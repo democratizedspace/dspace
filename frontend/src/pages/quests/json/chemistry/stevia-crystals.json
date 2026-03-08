@@ -57,17 +57,13 @@
                 {
                     "type": "process",
                     "process": "purify-stevia",
-                    "text": "Polish crystal lot into final stevia crystals."
+                    "text": "Polish dried crystal lot into final stevia crystals."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Seeded slurry, dried lot, and final crystals complete.",
+                    "text": "Dried lot and final stevia crystals complete.",
                     "requiresItems": [
-                        {
-                            "id": "3fac389d-178f-4ad1-a0bb-a9c474931c25",
-                            "count": 1
-                        },
                         {
                             "id": "13f3f171-076f-4fb0-9a2c-63f61ca41d3f",
                             "count": 1
