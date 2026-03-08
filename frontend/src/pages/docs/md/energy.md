@@ -462,16 +462,24 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar-1kWh`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Tracker balanced and safety stops installed." — Solar setup (200 Wh) ×1
-    - `track` → "Run complete; verify output and mechanical stability." — dSolar ×200
-    - `recover` → "Minor issue fixed; retry the tracking run." — Solar setup (200 Wh) ×1
-    - `verify` → "Verified: tracker is productive and safe." — Solar setup (200 Wh) ×1, dSolar ×200
+    - `prep` → "Tracker assembled, balanced, and safety stops installed." — Solar tracking unit (200 Wh) ×1
+    - `track` → "Run complete; verify output and mechanical stability." — dSolar ×1001
+    - `recover` → "Minor issue fixed; retry the tracking run." — Solar tracking unit (200 Wh) ×1
+    - `verify` → "Verified: tracker is productive and safe." — Solar tracking unit (200 Wh) ×1, dSolar ×1001
 - Grants:
-    - `prep` → "Take the 200 Wh kit." — Solar setup (200 Wh) ×1
+    - `prep` → "Take the 200 Wh kit and tracker parts." — Solar setup (200 Wh) ×1, Solar tracker control kit ×1, NEMA 17 stepper motor pair ×1, Aluminum extrusion tracker frame kit ×1
     - Quest-level `grantsItems`: None
 - Rewards:
-    - portable solar panel ×3
+    - portable solar panel ×1
 - Processes used:
+    - [assemble-solar-tracking-unit-200Wh](/processes/assemble-solar-tracking-unit-200Wh)
+        - Requires: Solar setup (200 Wh) ×1, Solar tracker control kit ×1, NEMA 17 stepper motor pair ×1, Aluminum extrusion tracker frame kit ×1
+        - Consumes: Solar setup (200 Wh) ×1, Solar tracker control kit ×1, NEMA 17 stepper motor pair ×1, Aluminum extrusion tracker frame kit ×1
+        - Creates: Solar tracking unit (200 Wh) ×1
+    - [solar-tracker-200Wh](/processes/solar-tracker-200Wh)
+        - Requires: Solar tracking unit (200 Wh) ×1
+        - Consumes: none
+        - Creates: dWatt ×200, dSolar ×200
     - [solar-200Wh](/processes/solar-200Wh)
         - Requires: Solar setup (200 Wh) ×1
         - Consumes: none
