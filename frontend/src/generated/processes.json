@@ -2543,6 +2543,46 @@
         }
     },
     {
+        "id": "assemble-solar-tracking-unit",
+        "title": "Assemble a dual-axis solar tracking unit with aluminum extrusions, stepper motors, and microcontroller control",
+        "requireItems": [
+            {
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                "count": 1
+            },
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "ed6e7882-15a0-4026-9851-4acd86b249e3",
+                "count": 1
+            },
+            {
+                "id": "2b9d0d39-301e-4926-bba7-e73fff73d759",
+                "count": 1
+            },
+            {
+                "id": "9fdc9d2a-10fc-407d-9a42-aa76b3f569e1",
+                "count": 1
+            }
+        ],
+        "consumeItems": [],
+        "createItems": [
+            {
+                "id": "94349146-9330-4762-ac7d-a73a467ebef3",
+                "count": 1
+            }
+        ],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "solar-200Wh",
         "title": "Generate 200 Wh of electricity using solar",
         "requireItems": [

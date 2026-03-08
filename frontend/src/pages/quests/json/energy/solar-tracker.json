@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Stage the tracker base with ballast, route cables with slack, and mark east-west stops so wind gusts can't whip the panel.",
+            "text": "Gather the tracker parts: aluminum extrusion frame, stepper pair, driver board, and microcontroller before mounting the 200 Wh panel.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -32,12 +32,57 @@
                     "text": "Take the 200 Wh kit."
                 },
                 {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Grab an Arduino Uno controller."
+                },
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "ed6e7882-15a0-4026-9851-4acd86b249e3",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Grab the NEMA 17 stepper motor pair."
+                },
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "2b9d0d39-301e-4926-bba7-e73fff73d759",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Grab the dual stepper motor driver."
+                },
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "9fdc9d2a-10fc-407d-9a42-aa76b3f569e1",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Grab the aluminum extrusion frame kit."
+                },
+                {
+                    "type": "process",
+                    "process": "assemble-solar-tracking-unit",
+                    "text": "Assemble and calibrate the tracking unit."
+                },
+                {
                     "type": "goto",
                     "goto": "track",
-                    "text": "Tracker balanced and safety stops installed.",
+                    "text": "Tracker assembled and limits calibrated.",
                     "requiresItems": [
                         {
-                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "id": "94349146-9330-4762-ac7d-a73a467ebef3",
                             "count": 1
                         }
                     ]
@@ -51,12 +96,18 @@
         },
         {
             "id": "track",
-            "text": "Rotate the panel hourly toward peak sun and log generation windows. Pause if wind rises enough to shake the mast.",
+            "text": "Use the tracking unit to follow sun position hourly while the controller nudges azimuth and tilt without cable snags.",
             "options": [
                 {
                     "type": "process",
                     "process": "solar-200Wh",
-                    "text": "Track and generate."
+                    "text": "Track and generate.",
+                    "requiresItems": [
+                        {
+                            "id": "94349146-9330-4762-ac7d-a73a467ebef3",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -64,8 +115,12 @@
                     "text": "Run complete; verify output and mechanical stability.",
                     "requiresItems": [
                         {
+                            "id": "94349146-9330-4762-ac7d-a73a467ebef3",
+                            "count": 1
+                        },
+                        {
                             "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
-                            "count": 1001.0
+                            "count": 200
                         }
                     ]
                 },
@@ -78,7 +133,7 @@
         },
         {
             "id": "recover",
-            "text": "Recovery branch: lock the tracker flat, retighten pivot hardware, and reset cable routing before another generation cycle.",
+            "text": "Recovery branch: flatten the tracker, retension the frame, re-home both steppers, and recheck controller wiring before retrying.",
             "options": [
                 {
                     "type": "goto",
@@ -91,7 +146,7 @@
                     "text": "Minor issue fixed; retry the tracking run.",
                     "requiresItems": [
                         {
-                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "id": "94349146-9330-4762-ac7d-a73a467ebef3",
                             "count": 1
                         }
                     ]
@@ -100,7 +155,7 @@
         },
         {
             "id": "verify",
-            "text": "Evidence gate: confirm at least 200 dSolar harvested while the tracker remained stable and cables stayed cool through the session.",
+            "text": "Evidence gate: confirm at least 200 dSolar harvested with stable motion logs and no overheating in motors or driver board.",
             "options": [
                 {
                     "type": "goto",
@@ -108,12 +163,12 @@
                     "text": "Verified: tracker is productive and safe.",
                     "requiresItems": [
                         {
-                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "id": "94349146-9330-4762-ac7d-a73a467ebef3",
                             "count": 1
                         },
                         {
                             "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
-                            "count": 1001.0
+                            "count": 200
                         }
                     ]
                 },

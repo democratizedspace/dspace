@@ -1074,6 +1074,38 @@
         "category": "Energy & Power"
     },
     {
+        "id": "ed6e7882-15a0-4026-9851-4acd86b249e3",
+        "name": "NEMA 17 stepper motor pair",
+        "description": "Matched pair of 12 V NEMA 17 steppers for azimuth and tilt movement in a dual-axis solar tracker.",
+        "image": "/assets/servo_motor_small.jpg",
+        "price": "45 dUSD",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "9fdc9d2a-10fc-407d-9a42-aa76b3f569e1",
+        "name": "aluminum extrusion tracker frame kit",
+        "description": "Precut aluminum extrusions, corner brackets, and T-slot hardware for a 200 Wh solar tracker frame.",
+        "image": "/assets/aluminum_camera_tripod_pan_head.jpg",
+        "price": "60 dUSD",
+        "category": "Workshop & Construction"
+    },
+    {
+        "id": "2b9d0d39-301e-4926-bba7-e73fff73d759",
+        "name": "dual stepper motor driver",
+        "description": "Microcontroller-ready dual stepper driver board with current limiting and screw terminals.",
+        "image": "/assets/arduino_uno_board.jpg",
+        "price": "18 dUSD",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "94349146-9330-4762-ac7d-a73a467ebef3",
+        "name": "solar tracking unit",
+        "description": "Assembled dual-axis tracker using aluminum extrusions, stepper drives, and microcontroller control for a 200 Wh panel.",
+        "image": "/assets/solar_tracker_200Wh_kit.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
         "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
         "name": "Model rocket launchpad",
         "description": "A launchpad for model rockets.",

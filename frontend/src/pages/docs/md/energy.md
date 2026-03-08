@@ -462,16 +462,23 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar-1kWh`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Tracker balanced and safety stops installed." — Solar setup (200 Wh) ×1
-    - `track` → "Run complete; verify output and mechanical stability." — dSolar ×200
-    - `recover` → "Minor issue fixed; retry the tracking run." — Solar setup (200 Wh) ×1
-    - `verify` → "Verified: tracker is productive and safe." — Solar setup (200 Wh) ×1, dSolar ×200
+    - `track` → "Run complete; verify output and mechanical stability." — solar tracking unit ×1, dSolar ×200
+    - `recover` → "Minor issue fixed; retry the tracking run." — solar tracking unit ×1
+    - `verify` → "Verified: tracker is productive and safe." — solar tracking unit ×1, dSolar ×200
 - Grants:
     - `prep` → "Take the 200 Wh kit." — Solar setup (200 Wh) ×1
+    - `prep` → "Grab an Arduino Uno controller." — Arduino Uno ×1
+    - `prep` → "Grab the NEMA 17 stepper motor pair." — NEMA 17 stepper motor pair ×1
+    - `prep` → "Grab the dual stepper motor driver." — dual stepper motor driver ×1
+    - `prep` → "Grab the aluminum extrusion frame kit." — aluminum extrusion tracker frame kit ×1
     - Quest-level `grantsItems`: None
 - Rewards:
     - portable solar panel ×3
 - Processes used:
+    - [assemble-solar-tracking-unit](/processes/assemble-solar-tracking-unit)
+        - Requires: Solar setup (200 Wh) ×1, Arduino Uno ×1, NEMA 17 stepper motor pair ×1, dual stepper motor driver ×1, aluminum extrusion tracker frame kit ×1
+        - Consumes: none
+        - Creates: solar tracking unit ×1
     - [solar-200Wh](/processes/solar-200Wh)
         - Requires: Solar setup (200 Wh) ×1
         - Consumes: none
