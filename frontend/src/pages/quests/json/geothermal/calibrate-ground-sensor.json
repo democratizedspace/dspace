@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Kill pump power, keep probe leads dry, and prep two cups: ice slurry near 0°C and boiling water near 100°C. Ready to baseline the thermistor?",
+            "text": "Kill pump power, keep probe leads dry, and prep two cups: ice slurry near 0\u00b0C and boiling water near 100\u00b0C. Ready to baseline the thermistor?",
             "options": [
                 {
                     "type": "goto",
@@ -43,7 +43,7 @@
                     "text": "Captured baseline pair",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
                             "count": 1
                         }
                     ]
@@ -54,7 +54,7 @@
                     "text": "Baseline pair already logged",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
                             "count": 1
                         }
                     ]
@@ -63,7 +63,7 @@
         },
         {
             "id": "interpret",
-            "text": "Pass target: ice reading 0±2°C and boiling reading 100±3°C (adjust for altitude). Are your readings inside tolerance?",
+            "text": "Pass target: ice reading 0\u00b12\u00b0C and boiling reading 100\u00b13\u00b0C (adjust for altitude). Are your readings inside tolerance?",
             "options": [
                 {
                     "type": "goto",
@@ -71,7 +71,7 @@
                     "text": "Both readings are in tolerance",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
                             "count": 1
                         }
                     ]
@@ -103,7 +103,7 @@
                     "text": "Rewired and ready to retest",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
                             "count": 1
                         }
                     ]
@@ -123,7 +123,7 @@
     ],
     "rewards": [
         {
-            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
             "count": 1
         }
     ],
@@ -131,7 +131,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

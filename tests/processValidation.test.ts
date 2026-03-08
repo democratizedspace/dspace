@@ -59,6 +59,9 @@ describe('process validation', () => {
                     expect(entry.count).toBeGreaterThan(0);
                 }
             }
+
+            expect(Array.isArray(process.createItems)).toBe(true);
+            expect((process.createItems ?? []).length).toBeGreaterThan(0);
         }
     });
 });

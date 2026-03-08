@@ -2211,6 +2211,22 @@
         "category": "Digital & Records"
     },
     {
+        "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
+        "name": "thermistor calibration record",
+        "description": "Ice-bath and boiling-point checkpoints captured during thermistor calibration with tolerance notes.",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "36af76d6-2f90-4c6e-98c7-44bf64aadb96",
+        "name": "process completion note",
+        "description": "A tangible run log proving the process completed and produced an auditable outcome.",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
         "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
         "name": "temperature line chart",
         "description": "A simple Matplotlib graph showing your logged temperature readings over time.",

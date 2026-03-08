@@ -56,19 +56,19 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `requiresQuests`: `geothermal/survey-ground-temperature`
 - Dialogue `requiresItems` gates:
     - `start` → "Safety check done, start baseline" — Arduino Uno ×1
-    - `baseline` → "Captured baseline pair" — Arduino Uno ×1
-    - `baseline` → "Baseline pair already logged" — Arduino Uno ×1
-    - `interpret` → "Both readings are in tolerance" — Arduino Uno ×1
+    - `baseline` → "Captured baseline pair" — thermistor calibration record ×1
+    - `baseline` → "Baseline pair already logged" — thermistor calibration record ×1
+    - `interpret` → "Both readings are in tolerance" — thermistor calibration record ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Solarpunk Award ×1
+    - thermistor calibration record ×1
 - Processes used:
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
         - Consumes: none
-        - Creates: none
+        - Creates: thermistor calibration record ×1
 
 ## 3) Check Loop Inlet Temperature (`geothermal/check-loop-inlet-temp`)
 
@@ -207,6 +207,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Added explicit interpretation bounds (3-8°C delta and ±1.5°C drift) before finish can unlock.
     - Added corrective maintenance and mandatory retest loop that requires fresh logging evidence before re-interpretation.
 
+- QA notes:
+    - Calibration flow now requires a tangible thermistor calibration record before interpretation and completion options unlock.
+
 ## 7) Install Backup Thermistor (`geothermal/install-backup-thermistor`)
 
 - Quest link: [/quests/geothermal/install-backup-thermistor](/quests/geothermal/install-backup-thermistor)
@@ -227,7 +230,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
         - Consumes: none
-        - Creates: none
+        - Creates: thermistor calibration record ×1
 
 ## 8) Log Ground Temperature (`geothermal/log-ground-temperature`)
 
