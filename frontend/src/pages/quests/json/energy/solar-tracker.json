@@ -19,7 +19,7 @@
         },
         {
             "id": "prep",
-            "text": "Stage the tracker base with ballast, route cables with slack, and mark east-west stops so wind gusts can't whip the panel.",
+            "text": "Gather the tracker control kit, dual steppers, and aluminum frame parts, then stage ballast and cable slack before assembly.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -27,17 +27,34 @@
                         {
                             "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
                             "count": 1
+                        },
+                        {
+                            "id": "130b5501-459a-48a0-aafa-ba54bc6555a6",
+                            "count": 1
+                        },
+                        {
+                            "id": "648aee3c-907e-4cd1-a361-49c4bd771102",
+                            "count": 1
+                        },
+                        {
+                            "id": "26b4df13-d5eb-44fd-939f-671a2f1aa8f0",
+                            "count": 1
                         }
                     ],
-                    "text": "Take the 200 Wh kit."
+                    "text": "Take the tracker parts kit."
+                },
+                {
+                    "type": "process",
+                    "process": "assemble-solar-tracking-unit-200Wh",
+                    "text": "Assemble the solar tracking unit."
                 },
                 {
                     "type": "goto",
                     "goto": "track",
-                    "text": "Tracker balanced and safety stops installed.",
+                    "text": "Tracker assembled, balanced, and safety stops installed.",
                     "requiresItems": [
                         {
-                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "id": "8ead8821-57e9-4aef-a3fb-b8d6cf2ef326",
                             "count": 1
                         }
                     ]
@@ -91,7 +108,7 @@
                     "text": "Minor issue fixed; retry the tracking run.",
                     "requiresItems": [
                         {
-                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "id": "8ead8821-57e9-4aef-a3fb-b8d6cf2ef326",
                             "count": 1
                         }
                     ]
@@ -108,7 +125,7 @@
                     "text": "Verified: tracker is productive and safe.",
                     "requiresItems": [
                         {
-                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "id": "8ead8821-57e9-4aef-a3fb-b8d6cf2ef326",
                             "count": 1
                         },
                         {

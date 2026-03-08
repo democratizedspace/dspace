@@ -2571,6 +2571,43 @@
         }
     },
     {
+        "id": "assemble-solar-tracking-unit-200Wh",
+        "title": "Assemble a one-axis solar tracking unit with aluminum extrusions, dual steppers, and an Arduino control kit",
+        "image": "/assets/solar_tracker_200Wh_kit.jpg",
+        "requireItems": [],
+        "consumeItems": [
+            {
+                "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                "count": 1
+            },
+            {
+                "id": "130b5501-459a-48a0-aafa-ba54bc6555a6",
+                "count": 1
+            },
+            {
+                "id": "648aee3c-907e-4cd1-a361-49c4bd771102",
+                "count": 1
+            },
+            {
+                "id": "26b4df13-d5eb-44fd-939f-671a2f1aa8f0",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "8ead8821-57e9-4aef-a3fb-b8d6cf2ef326",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
         "id": "harvest-200Wh-portable",
         "title": "Harvest 200 Wh from a wired 200 W portable kit into a LiFePO4 battery",
         "requireItems": [
