@@ -56,9 +56,9 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - `requiresQuests`: `geothermal/survey-ground-temperature`
 - Dialogue `requiresItems` gates:
     - `start` → "Safety check done, start baseline" — Arduino Uno ×1
-    - `baseline` → "Captured baseline pair" — Arduino Uno ×1
-    - `baseline` → "Baseline pair already logged" — Arduino Uno ×1
-    - `interpret` → "Both readings are in tolerance" — Arduino Uno ×1
+    - `baseline` → "Captured baseline pair" — thermistor calibration log sheet ×1
+    - `baseline` → "Baseline pair already logged" — thermistor calibration log sheet ×1
+    - `interpret` → "Both readings are in tolerance" — thermistor calibration log sheet ×1
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
@@ -68,7 +68,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
         - Consumes: none
-        - Creates: none
+        - Creates: thermistor calibration log sheet ×1
 
 ## 3) Check Loop Inlet Temperature (`geothermal/check-loop-inlet-temp`)
 
@@ -227,7 +227,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
         - Consumes: none
-        - Creates: none
+        - Creates: thermistor calibration log sheet ×1
 
 ## 8) Log Ground Temperature (`geothermal/log-ground-temperature`)
 
@@ -466,7 +466,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
         - Consumes: none
-        - Creates: none
+        - Creates: thermistor calibration log sheet ×1
 - QA notes:
     - Completion now requires post-replacement baseline capture and a 10-minute parity verification window against backup probe data.
     - Drift/dropouts branch into reseat/moisture troubleshooting with a required recapture loop before finish.

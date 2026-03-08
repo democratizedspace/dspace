@@ -1,0 +1,14 @@
+{
+  "id": "OUT-2026-03-08-processes-missing-tangible-output",
+  "date": "2026-03-08",
+  "component": "frontend/processes",
+  "rootCause": "Multiple process definitions, including arduino-thermistor-read used by geothermal/calibrate-ground-sensor, had empty createItems arrays, allowing process completion without producing a tangible artifact.",
+  "resolution": "Added a regression test that requires every process to create at least one inventory item, added process completion outputs for all previously empty process definitions, created reusable documentation items (including a thermistor calibration log sheet), and updated geothermal calibration quest/doc gates to require the generated calibration log before finishing.",
+  "references": [
+    "tests/processCreatesItems.test.ts",
+    "frontend/src/pages/processes/base.json",
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "frontend/src/pages/quests/json/geothermal/calibrate-ground-sensor.json",
+    "frontend/src/pages/docs/md/geothermal.md"
+  ]
+}
