@@ -1066,6 +1066,30 @@
         "category": "Energy & Power"
     },
     {
+        "id": "afe63890-fa65-471f-8544-11876532783a",
+        "name": "NEMA 17 stepper motor",
+        "description": "1.8° stepper motor with mounting face and shaft coupler suitable for low-speed solar tracker drives.",
+        "image": "/assets/servo_motor_small.jpg",
+        "price": "18 dUSD",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "c643ef7a-b19c-474f-918f-94949cf8c083",
+        "name": "20x20 aluminum extrusion rail",
+        "description": "500 mm T-slot aluminum extrusion rail used to build rigid, adjustable tracker frames.",
+        "image": "/assets/aluminum_camera_tripod_pan_head.jpg",
+        "price": "12 dUSD",
+        "category": "Fabrication Materials"
+    },
+    {
+        "id": "9276cbd3-46b4-4b0d-a827-6bbecb8b7a7c",
+        "name": "solar tracking unit",
+        "description": "Microcontroller-guided dual-axis frame with stepper drives and aluminum rails that points a 200 Wh solar kit toward peak sun.",
+        "image": "/assets/solar_setup_200wh_weatherproof.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
         "id": "8bfdedf6-79a4-4527-a43d-4d57f793ac52",
         "name": "Solar setup (1 kWh)",
         "description": "A 200 W solar panel, charge controller, and 1 kWh battery in a weatherproof enclosure. Ready to use!",

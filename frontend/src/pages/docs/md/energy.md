@@ -462,20 +462,24 @@ Energy quests build practical progression through the energy skill tree. This pa
 - Unlock prerequisite:
     - `requiresQuests`: `energy/solar-1kWh`
 - Dialogue `requiresItems` gates:
-    - `prep` → "Tracker balanced and safety stops installed." — Solar setup (200 Wh) ×1
+    - `prep` → "Tracker balanced and safety stops installed." — solar tracking unit ×1
     - `track` → "Run complete; verify output and mechanical stability." — dSolar ×200
     - `recover` → "Minor issue fixed; retry the tracking run." — Solar setup (200 Wh) ×1
-    - `verify` → "Verified: tracker is productive and safe." — Solar setup (200 Wh) ×1, dSolar ×200
+    - `verify` → "Verified: tracker is productive and safe." — solar tracking unit ×1, dSolar ×200
 - Grants:
-    - `prep` → "Take the 200 Wh kit." — Solar setup (200 Wh) ×1
+    - `prep` → "Stage the panel kit, controller board, stepper motors, and rails." — Solar setup (200 Wh) ×1, Arduino Uno ×1, NEMA 17 stepper motor ×2, 20x20 aluminum extrusion rail ×4
     - Quest-level `grantsItems`: None
 - Rewards:
     - portable solar panel ×3
 - Processes used:
-    - [solar-200Wh](/processes/solar-200Wh)
-        - Requires: Solar setup (200 Wh) ×1
+    - [assemble-solar-tracking-unit](/processes/assemble-solar-tracking-unit)
+        - Requires: none
+        - Consumes: Solar setup (200 Wh) ×1, Arduino Uno ×1, NEMA 17 stepper motor ×2, 20x20 aluminum extrusion rail ×4
+        - Creates: solar tracking unit ×1
+    - [solar-tracker-200Wh](/processes/solar-tracker-200Wh)
+        - Requires: solar tracking unit ×1
         - Consumes: none
-        - Creates: dWatt ×200, dSolar ×200
+        - Creates: dWatt ×260, dSolar ×260
 
 ## 21) Install a Wind Turbine (`energy/wind-turbine`)
 

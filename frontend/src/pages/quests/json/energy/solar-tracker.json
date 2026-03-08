@@ -27,9 +27,26 @@
                         {
                             "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
                             "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "afe63890-fa65-471f-8544-11876532783a",
+                            "count": 2
+                        },
+                        {
+                            "id": "c643ef7a-b19c-474f-918f-94949cf8c083",
+                            "count": 4
                         }
                     ],
-                    "text": "Take the 200 Wh kit."
+                    "text": "Stage the panel kit, controller board, stepper motors, and rails."
+                },
+                {
+                    "type": "process",
+                    "process": "assemble-solar-tracking-unit",
+                    "text": "Assemble and cable the solar tracking unit."
                 },
                 {
                     "type": "goto",
@@ -37,7 +54,7 @@
                     "text": "Tracker balanced and safety stops installed.",
                     "requiresItems": [
                         {
-                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "id": "9276cbd3-46b4-4b0d-a827-6bbecb8b7a7c",
                             "count": 1
                         }
                     ]
@@ -55,7 +72,7 @@
             "options": [
                 {
                     "type": "process",
-                    "process": "solar-200Wh",
+                    "process": "solar-tracker-200Wh",
                     "text": "Track and generate."
                 },
                 {
@@ -108,7 +125,7 @@
                     "text": "Verified: tracker is productive and safe.",
                     "requiresItems": [
                         {
-                            "id": "e0590418-22c7-4885-9c9e-1d1cdafb78d6",
+                            "id": "9276cbd3-46b4-4b0d-a827-6bbecb8b7a7c",
                             "count": 1
                         },
                         {
