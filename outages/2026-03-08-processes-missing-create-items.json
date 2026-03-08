@@ -1,0 +1,15 @@
+{
+  "id": "OUT-2026-03-08-processes-missing-create-items",
+  "date": "2026-03-08",
+  "component": "quests/processes",
+  "rootCause": "Several process definitions, including arduino-thermistor-read used by geothermal/calibrate-ground-sensor, had empty createItems arrays, allowing process steps with no tangible output.",
+  "resolution": "Added a process validation test requiring at least one created item per process, introduced a thermistor calibration record output for arduino-thermistor-read, backfilled a generic process completion note output for remaining empty-create processes, and updated geothermal quest/docs gates to require the calibration record.",
+  "references": [
+    "tests/processValidation.test.ts",
+    "frontend/src/pages/processes/base.json",
+    "frontend/src/pages/quests/json/geothermal/calibrate-ground-sensor.json",
+    "frontend/src/pages/docs/md/geothermal.md",
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "https://staging.democratized.space/quests/geothermal/calibrate-ground-sensor"
+  ]
+}

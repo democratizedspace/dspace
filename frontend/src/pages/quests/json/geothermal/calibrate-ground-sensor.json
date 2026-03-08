@@ -43,7 +43,7 @@
                     "text": "Captured baseline pair",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
                             "count": 1
                         }
                     ]
@@ -54,7 +54,7 @@
                     "text": "Baseline pair already logged",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
                             "count": 1
                         }
                     ]
@@ -71,7 +71,7 @@
                     "text": "Both readings are in tolerance",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
                             "count": 1
                         }
                     ]
@@ -103,7 +103,7 @@
                     "text": "Rewired and ready to retest",
                     "requiresItems": [
                         {
-                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
                             "count": 1
                         }
                     ]
@@ -121,13 +121,13 @@
             ]
         }
     ],
+    "requiresQuests": ["geothermal/survey-ground-temperature"],
     "rewards": [
         {
             "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
             "count": 1
         }
     ],
-    "requiresQuests": ["geothermal/survey-ground-temperature"],
     "hardening": {
         "passes": 0,
         "score": 95,
