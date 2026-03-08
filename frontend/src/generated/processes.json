@@ -193,11 +193,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 80,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -1138,11 +1143,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -1847,11 +1857,16 @@
                 "count": 0.1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "3m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -3188,7 +3203,12 @@
                 "count": 10
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5s",
         "hardening": {
             "passes": 1,
@@ -3500,11 +3520,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 80,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -3523,11 +3548,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 80,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -3631,11 +3661,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 80,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -3678,11 +3713,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 80,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -3976,11 +4016,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -4004,11 +4049,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 2,
-            "score": 85,
+            "score": 90,
             "emoji": "✅",
             "history": [
                 {
@@ -4039,11 +4089,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "3m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -4069,11 +4124,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -4097,11 +4157,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -4131,11 +4196,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -4215,11 +4285,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -4245,11 +4320,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "3m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -4271,11 +4351,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -4335,11 +4420,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -4380,11 +4470,16 @@
                 "count": 0.05
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -4443,11 +4538,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 1,
-            "score": 90,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -4474,11 +4574,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "30s",
         "hardening": {
             "passes": 1,
-            "score": 90,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -4561,11 +4666,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 2,
-            "score": 90,
+            "score": 95,
             "emoji": "✅",
             "history": [
                 {
@@ -4603,11 +4713,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "20m",
         "hardening": {
             "passes": 2,
-            "score": 80,
+            "score": 85,
             "emoji": "✅",
             "history": [
                 {
@@ -4637,11 +4752,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "20m",
         "hardening": {
             "passes": 1,
-            "score": 80,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -4897,7 +5017,12 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
@@ -5185,7 +5310,12 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
@@ -5210,11 +5340,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1h",
         "hardening": {
             "passes": 1,
-            "score": 90,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -5243,11 +5378,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "45m",
         "hardening": {
             "passes": 1,
-            "score": 90,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -5268,11 +5408,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 80,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -5310,11 +5455,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -5441,11 +5591,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "1ec7945f-ca21-49f6-b8ad-1f3f469f68f2",
+                "count": 1
+            }
+        ],
         "duration": "15m",
         "hardening": {
             "passes": 1,
-            "score": 80,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -5750,11 +5905,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -5803,11 +5963,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 80,
+            "score": 85,
             "emoji": "🌀",
             "history": [
                 {
@@ -5837,11 +6002,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "15m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -5856,11 +6026,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 80,
+            "score": 85,
             "emoji": "🛠️",
             "history": []
         }
@@ -6181,11 +6356,16 @@
                 "count": 15
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1h",
         "hardening": {
             "passes": 1,
-            "score": 95,
+            "score": 100,
             "emoji": "🌀",
             "history": [
                 {
@@ -6502,11 +6682,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "30s",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -6552,11 +6737,16 @@
                 "count": 5
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -6582,11 +6772,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -7061,11 +7256,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "30s",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -7324,11 +7524,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 90,
+            "score": 95,
             "emoji": "🌀",
             "history": [
                 {
@@ -7401,7 +7606,12 @@
                 "count": 10
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1h",
         "hardening": {
             "passes": 1,
@@ -7478,11 +7688,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -7814,11 +8029,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8075,11 +8295,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8105,11 +8330,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8139,11 +8369,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 2,
-            "score": 85,
+            "score": 90,
             "emoji": "✅",
             "history": [
                 {
@@ -8178,11 +8413,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8220,11 +8460,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8250,11 +8495,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "10m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8477,11 +8727,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -8497,11 +8752,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "3m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8527,11 +8787,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8557,11 +8822,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -8581,11 +8851,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -8601,11 +8876,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "3m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -8625,11 +8905,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "5m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8767,11 +9052,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 1,
-            "score": 85,
+            "score": 90,
             "emoji": "🌀",
             "history": [
                 {
@@ -8797,11 +9087,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -8821,11 +9116,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2m",
         "hardening": {
             "passes": 0,
-            "score": 85,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -8846,11 +9146,16 @@
                 "count": 1
             }
         ],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1m",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -9265,11 +9570,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "20m",
         "hardening": {
             "passes": 0,
-            "score": 88,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -9289,11 +9599,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "20m",
         "hardening": {
             "passes": 0,
-            "score": 88,
+            "score": 90,
             "emoji": "🛠️",
             "history": []
         }
@@ -9676,11 +9991,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2d",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -9819,11 +10139,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "1d",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -9900,11 +10225,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "3h",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -9965,11 +10295,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2h",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -9984,11 +10319,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2h",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -10003,11 +10343,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2h",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }
@@ -10068,11 +10413,16 @@
             }
         ],
         "consumeItems": [],
-        "createItems": [],
+        "createItems": [
+            {
+                "id": "3b38f156-e39d-4954-b74d-0342e0f53058",
+                "count": 1
+            }
+        ],
         "duration": "2h",
         "hardening": {
             "passes": 0,
-            "score": 90,
+            "score": 95,
             "emoji": "🛠️",
             "history": []
         }

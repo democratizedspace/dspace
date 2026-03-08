@@ -1,0 +1,12 @@
+{
+  "id": "processes-missing-created-items",
+  "date": "2026-03-08",
+  "component": "content",
+  "rootCause": "Multiple base process definitions had empty createItems arrays, allowing process runs with no tangible output artifact.",
+  "resolution": "Added tangible output items for every process, introduced a regression test that enforces non-empty createItems with valid inventory IDs, and updated geothermal calibration quest gating to require the generated calibration log.",
+  "references": [
+    "frontend/src/pages/processes/base.json",
+    "tests/processOutputs.test.ts",
+    "frontend/src/pages/quests/json/geothermal/calibrate-ground-sensor.json"
+  ]
+}
