@@ -10073,7 +10073,7 @@
     {
         "id": "chemistry-stage-safe-reaction-bench",
         "title": "Stage safe reaction bench and document equipment readiness",
-        "image": "/assets/quests/chemistry_reaction_safety.jpg",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
         "requireItems": [
             {
                 "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
@@ -10110,7 +10110,7 @@
     {
         "id": "chemistry-dose-safe-reaction-reagents",
         "title": "Dose safe reaction reagents into staged portions",
-        "image": "/assets/quests/chemistry_reaction_safety.jpg",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
         "requireItems": [
             {
                 "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
@@ -10139,7 +10139,7 @@
     {
         "id": "chemistry-calibrate-ph-kit",
         "title": "Calibrate pH strip kit against reference standards",
-        "image": "/assets/quests/chemistry_ph_testing.jpg",
+        "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
         "requireItems": [
             {
                 "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
@@ -10172,7 +10172,7 @@
     {
         "id": "chemistry-condition-ph-sample",
         "title": "Condition aliquot for stable pH measurement",
-        "image": "/assets/quests/chemistry_ph_testing.jpg",
+        "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
         "requireItems": [
             {
                 "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
@@ -10313,7 +10313,7 @@
     {
         "id": "chemistry-calculate-buffer-recipe",
         "title": "Calculate buffer formulation with Henderson-Hasselbalch ratio",
-        "image": "/assets/quests/chemistry_buffer_solution.jpg",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
         "requireItems": [
             {
                 "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
@@ -10338,7 +10338,7 @@
     {
         "id": "chemistry-compound-buffer-stock",
         "title": "Compound initial buffer stock from measured reagents",
-        "image": "/assets/quests/chemistry_buffer_solution.jpg",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
         "requireItems": [
             {
                 "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
@@ -10367,7 +10367,7 @@
     {
         "id": "chemistry-plan-ph-adjustment",
         "title": "Plan dropwise pH adjustment titration path",
-        "image": "/assets/quests/chemistry_ph_adjustment.jpg",
+        "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
         "requireItems": [
             {
                 "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
@@ -10392,7 +10392,7 @@
     {
         "id": "chemistry-execute-ph-adjustment-cycle",
         "title": "Execute logged pH adjustment cycles",
-        "image": "/assets/quests/chemistry_ph_adjustment.jpg",
+        "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
         "requireItems": [
             {
                 "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",

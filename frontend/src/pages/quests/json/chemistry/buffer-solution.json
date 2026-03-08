@@ -97,10 +97,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "chemistry/ph-test",
-        "chemistry/acid-dilution"
-    ],
+    "requiresQuests": ["chemistry/ph-test", "chemistry/acid-dilution"],
     "hardening": {
         "passes": 0,
         "score": 95,

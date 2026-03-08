@@ -102,12 +102,10 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "chemistry/stevia-crystals"
-    ],
+    "requiresQuests": ["chemistry/stevia-crystals"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }

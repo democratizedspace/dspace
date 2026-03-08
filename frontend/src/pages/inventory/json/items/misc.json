@@ -2785,7 +2785,7 @@
         "id": "8175bd25-244c-433e-b39d-2af223ccbc91",
         "name": "safe reaction bench setup sheet",
         "description": "Signed checklist confirming beaker, cylinder, PPE, waste cup, and ventilation staging before reaction start.",
-        "image": "/assets/quests/chemistry_reaction_safety.jpg",
+        "image": "/assets/ph_up_solution_dropper.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2793,7 +2793,7 @@
         "id": "ab36e88b-285a-4ff3-8abd-d73dbb7c3491",
         "name": "safe reaction dosing tray",
         "description": "Labeled reagent tray containing pre-measured vinegar and sodium bicarbonate portions for staged addition.",
-        "image": "/assets/quests/chemistry_reaction_safety.jpg",
+        "image": "/assets/ph_up_solution_dropper.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2801,7 +2801,7 @@
         "id": "a0ab6b27-ed3e-4d7d-8d21-3296e9031772",
         "name": "pH kit calibration log",
         "description": "Reference-strip calibration record showing lighting conditions, timestamp, and reader initials.",
-        "image": "/assets/quests/chemistry_ph_testing.jpg",
+        "image": "/assets/hydroponic_ph_strip_reading_sample.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2809,7 +2809,7 @@
         "id": "44b6c979-b1e2-493e-bb00-4df7e47a66a2",
         "name": "conditioned pH sample vial",
         "description": "Room-temperature, degassed aliquot prepared for consistent strip-based pH measurement.",
-        "image": "/assets/quests/chemistry_ph_testing.jpg",
+        "image": "/assets/hydroponic_ph_strip_reading_sample.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2817,7 +2817,7 @@
         "id": "8c19712c-c083-4794-a275-4b4d9c653dfe",
         "name": "HCl dilution molarity worksheet",
         "description": "C1V1 worksheet documenting target molarity, transfer volumes, and hazard labeling details.",
-        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2825,7 +2825,7 @@
         "id": "82e7baef-9ee9-4d5e-ba23-1ebff5a04388",
         "name": "ice-bath dilution flask",
         "description": "Pre-chilled dilution vessel held below 30C to control exothermic heating during acid additions.",
-        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2833,7 +2833,7 @@
         "id": "fea67487-4164-4ff7-969d-356127abbac9",
         "name": "acid spill containment berm",
         "description": "Absorbent perimeter barrier used to isolate spill spread and protect drains during neutralization.",
-        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Safety & Medical"
     },
@@ -2841,7 +2841,7 @@
         "id": "dedfa413-4cb8-4980-a310-820e958325cb",
         "name": "sealed neutralization residue drum",
         "description": "Rigid sealed drum containing neutralized spill solids, absorbent liner, and disposal chain label.",
-        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Safety & Medical"
     },
@@ -2849,7 +2849,7 @@
         "id": "fe23b389-42a7-46ef-8793-3d8399362788",
         "name": "buffer formulation recipe card",
         "description": "Calculated buffer formulation card with acid/base ratio, target pH, and ionic strength assumptions.",
-        "image": "/assets/quests/chemistry_buffer_solution.jpg",
+        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2857,7 +2857,7 @@
         "id": "4721dce9-cd6a-4e3f-8dfb-e7e22f55dc39",
         "name": "compounded buffer stock lot",
         "description": "Initial compounded buffer lot before final pH verification and labeling.",
-        "image": "/assets/quests/chemistry_buffer_solution.jpg",
+        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2865,7 +2865,7 @@
         "id": "3843a2ef-f029-4bd5-b450-828a82d62c8b",
         "name": "buffer adjustment titration plan",
         "description": "Stepwise titration plan estimating dropwise acid/base additions required to hit pH window.",
-        "image": "/assets/quests/chemistry_ph_adjustment.jpg",
+        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2873,7 +2873,7 @@
         "id": "f7a90006-26fa-4ef0-b587-93edd963bb84",
         "name": "buffer adjustment cycle log",
         "description": "Per-cycle log of reagent drops, stir times, and intermediate pH readbacks during adjustment.",
-        "image": "/assets/quests/chemistry_ph_adjustment.jpg",
+        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2881,7 +2881,7 @@
         "id": "1774fea1-a066-4617-b2e5-0692e63346d5",
         "name": "precipitation reagent staging set",
         "description": "Stoichiometrically prepared reagent pair with sequence card for controlled precipitation.",
-        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "image": "/assets/digital_ph_meter_pocket.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2889,7 +2889,7 @@
         "id": "fecde9bf-4b1f-4c95-a809-c888e5c817fa",
         "name": "washed precipitate cake",
         "description": "Twice-rinsed precipitate solids collected before final filtration and sample packaging.",
-        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "image": "/assets/digital_ph_meter_pocket.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2897,7 +2897,7 @@
         "id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
         "name": "milled stevia feedstock",
         "description": "Low-moisture, uniformly milled stevia leaf feedstock prepared for solvent extraction.",
-        "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
+        "image": "/assets/bundle_of_stevia_leaves.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2905,7 +2905,7 @@
         "id": "35ec960e-3048-4429-ad6b-c6afb384d658",
         "name": "clarified stevia filtrate",
         "description": "Ethanol-water stevia extract filtrate after coarse solids removal and first clarification pass.",
-        "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
+        "image": "/assets/stevia_extract_bottle.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2913,7 +2913,7 @@
         "id": "3fac389d-178f-4ad1-a0bb-a9c474931c25",
         "name": "seeded stevia crystal slurry",
         "description": "Supersaturated stevia concentrate seeded for controlled crystal nucleation and growth.",
-        "image": "/assets/quests/stevia_crystal_refinement.jpg",
+        "image": "/assets/stevia_crystals_jar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2921,7 +2921,7 @@
         "id": "13f3f171-076f-4fb0-9a2c-63f61ca41d3f",
         "name": "dried stevia crystal lot",
         "description": "Partially refined crystal lot dried below 45C prior to final polishing wash.",
-        "image": "/assets/quests/stevia_crystal_refinement.jpg",
+        "image": "/assets/stevia_crystals_jar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2929,7 +2929,7 @@
         "id": "23f49dfd-f7c6-421c-ac29-5b891d57bf97",
         "name": "stevia sensory calibration cup set",
         "description": "Coded baseline cups used to align panelists on sweetness scale before blind tasting.",
-        "image": "/assets/quests/stevia-tasting.jpg",
+        "image": "/assets/stevia_tasting_solution_1pct.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -2937,7 +2937,7 @@
         "id": "de3dd21d-af02-4b38-82b7-b65c0f09a984",
         "name": "stevia panel scorecard",
         "description": "Structured sensory scorecard with onset timing, intensity, bitterness, and confidence metrics.",
-        "image": "/assets/quests/stevia-tasting.jpg",
+        "image": "/assets/stevia_tasting_notes.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     }

@@ -117,7 +117,7 @@ lab phases (setup -> execution -> verification) with dedicated artifacts for eac
 - Updated process chain:
     - [/processes/chemistry-seed-stevia-crystallization](/processes/chemistry-seed-stevia-crystallization)
     - [/processes/chemistry-dry-stevia-crystal-lot](/processes/chemistry-dry-stevia-crystal-lot)
-    - [/processes/purify-stevia](/processes/purify-stevia) *(final polish conversion to crystals; consumes dried lot)*
+    - [/processes/purify-stevia](/processes/purify-stevia) _(final polish conversion to crystals; consumes dried lot)_
 
 ### 10) `chemistry/stevia-tasting`
 
