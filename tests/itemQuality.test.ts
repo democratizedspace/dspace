@@ -129,17 +129,14 @@ describe("item quality", () => {
     );
   });
 
-  it("prices the soaked hydroponic starter plug instead of using a beta placeholder", () => {
+  it("treats soaked hydroponic starter plugs as soulbound and non-purchasable", () => {
     const soakedPlug = (items as Array<Record<string, any>>).find(
       (item) => item.name === "soaked hydroponic starter plug"
     );
 
     expect(soakedPlug).toBeDefined();
-    expect(soakedPlug?.price).toBeDefined();
-    expect(soakedPlug?.price).toMatch(/[0-9]/);
-    expect(soakedPlug?.priceExemptionReason ?? null).not.toBe(
-      PriceExemptionReason.BETA_PLACEHOLDER
-    );
+    expect(soakedPlug?.price).toBeUndefined();
+    expect(soakedPlug?.priceExemptionReason).toBe(PriceExemptionReason.SOULBOUND);
   });
 
   it("prices the ISS spotting station instead of using a beta placeholder", () => {

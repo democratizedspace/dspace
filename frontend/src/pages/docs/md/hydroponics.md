@@ -590,6 +590,8 @@ Hydroponics quests build practical progression through the hydroponics skill tre
     - `verify` routes to `recover` for dry-core/crumbly-plug failures, then loops through a fresh soak before re-check
 - Safety/ops checks:
     - PPE gate before soak and explicit "no seeding until verification passes" recovery instruction
+- Economy/lore:
+    - Soaked hydroponic starter plugs are `SOULBOUND` and intentionally non-purchasable; players craft them quickly from dry plugs + bucket water via `rockwool-soak`.
 - Grants:
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
