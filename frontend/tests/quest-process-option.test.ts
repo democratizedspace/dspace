@@ -33,7 +33,10 @@ describe('quest process options', () => {
 
         for (const filePath of getQuestFiles()) {
             const raw = fs.readFileSync(filePath, 'utf8');
-            let quest: { dialogue?: Array<{ id?: string; options?: Array<Record<string, unknown>> }>; dialogues?: Array<{ id?: string; options?: Array<Record<string, unknown>> }> };
+            let quest: {
+                dialogue?: Array<{ id?: string; options?: Array<Record<string, unknown>> }>;
+                dialogues?: Array<{ id?: string; options?: Array<Record<string, unknown>> }>;
+            };
 
             try {
                 quest = JSON.parse(raw);

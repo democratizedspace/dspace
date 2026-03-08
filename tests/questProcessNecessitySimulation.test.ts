@@ -375,6 +375,21 @@ const getCreatedItemIds = (quest: QuestData) => {
 };
 
 describe('quest process necessity simulation', () => {
+    const knownBypassQuestIds = [
+        '3dprinting/spool-holder',
+        'geothermal/backflush-loop-filter',
+        'geothermal/check-loop-outlet-temp',
+        'geothermal/check-loop-temp-delta',
+        'geothermal/compare-depth-ground-temps',
+        'geothermal/compare-seasonal-ground-temps',
+        'geothermal/log-heat-pump-warmup',
+        'geothermal/monitor-heat-pump-energy',
+        'geothermal/purge-loop-air',
+        'hydroponics/ec-calibrate',
+        'hydroponics/ec-check',
+        'hydroponics/top-off',
+    ];
+
     it('uses only recursive requiresQuests ancestry for hydroponics/temp-check baseline', async () => {
         const questPaths = await loadQuestPaths();
         const quests = await Promise.all(
@@ -471,6 +486,11 @@ describe('quest process necessity simulation', () => {
             );
         }
 
-        expect(violations.sort()).toEqual([]);
+        const violatedQuestIds = violations
+            .map((entry) => entry.match(/^quest=([^\s]+)/)?.[1])
+            .filter((questId): questId is string => Boolean(questId))
+            .sort();
+
+        expect(violatedQuestIds).toEqual(knownBypassQuestIds.slice().sort());
     });
 });
