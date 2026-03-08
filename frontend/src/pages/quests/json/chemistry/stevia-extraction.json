@@ -1,128 +1,77 @@
 {
     "id": "chemistry/stevia-extraction",
     "title": "Extract Stevia Sweetener",
-    "description": "Produce stevia extract through staged setup and outcome evidence, with contamination recovery safeguards.",
+    "description": "Dry and mill stevia biomass, run warm ethanol-water extraction, and clarify filtrate before collecting extract.",
     "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
     "npc": "/assets/npc/phoenix.jpg",
     "start": "start",
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. We are extracting sweetness, not cooking sludge. Choose a prep strategy and prove setup before we call any outcome valid.",
+            "text": "Stage drying tray, grinder, 250 mL beaker, filter funnel, and 70% ethanol solvent bottle. Keep ignition sources off bench.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "setup-branch",
-                    "text": "Ready to stage the extraction plan."
-                }
-            ]
-        },
-        {
-            "id": "setup-branch",
-            "text": "Two valid extraction routes: precision prep (measured batches) or low-tech prep (small pilot steep). Both routes must produce extraction evidence before outcome review.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "precision-setup",
-                    "text": "Main path: precision prep and measured steep."
+                    "type": "process",
+                    "process": "chemistry-prep-stevia-feedstock",
+                    "text": "Dry leaves to brittle state and mill to uniform feedstock."
                 },
                 {
                     "type": "goto",
-                    "goto": "pilot-setup",
-                    "text": "Alternate path: pilot steep for quick viability check."
+                    "goto": "solvent",
+                    "text": "Milled feedstock is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "precision-setup",
-            "text": "Dry and crush leaves, label containers, and stage clean filter media. Keep temperature below a full boil to protect glycosides.",
+            "id": "solvent",
+            "text": "Charge milled stevia into beaker, add 70% ethanol at 1:10 mass:volume, and hold at 55C with gentle stirring for 30 minutes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-run-stevia-solvent-wash",
+                    "text": "Run warm solvent wash and first-pass clarification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "concentrate",
+                    "text": "Clarified filtrate collected for concentration.",
+                    "requiresItems": [
+                        {
+                            "id": "35ec960e-3048-4429-ad6b-c6afb384d658",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "concentrate",
+            "text": "Evaporate solvent under low heat with airflow; do not exceed 65C to protect glycosides.",
             "options": [
                 {
                     "type": "process",
                     "process": "extract-stevia",
-                    "text": "Run controlled extraction pass."
-                },
-                {
-                    "type": "goto",
-                    "goto": "outcome-check",
-                    "text": "Extraction evidence captured; evaluate extract clarity.",
-                    "requiresItems": [
-                        {
-                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "contamination-recovery",
-                    "text": "Cloudy or scorched notes detected—trigger recovery."
-                }
-            ]
-        },
-        {
-            "id": "pilot-setup",
-            "text": "Run a short pilot steep with a small batch to validate heat and filter pace before full volume.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "extract-stevia",
-                    "text": "Run pilot extraction."
-                },
-                {
-                    "type": "goto",
-                    "goto": "outcome-check",
-                    "text": "Pilot indicates viable extraction; check outcome evidence.",
-                    "requiresItems": [
-                        {
-                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "contamination-recovery",
-                    "text": "Pilot failed or contaminated—enter recovery."
-                }
-            ]
-        },
-        {
-            "id": "outcome-check",
-            "text": "Outcome gate: accept only if extract is clear-to-amber, aromatic, and free of burnt particulates. If not, you must recover and rerun.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "finish",
-                    "text": "Outcome passes quality check; extract is ready.",
-                    "requiresItems": [
-                        {
-                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "contamination-recovery",
-                    "text": "Outcome fails quality gate; rerun required."
-                }
-            ]
-        },
-        {
-            "id": "contamination-recovery",
-            "text": "Recovery protocol: discard compromised batch, sanitize vessels, reduce heat input, and restart with fresh leaves. If two attempts fail, pause production and log equipment inspection.",
-            "options": [
-                {
-                    "type": "goto",
-                    "goto": "setup-branch",
-                    "text": "Recovery actions done—retry setup path."
+                    "text": "Concentrate clarified filtrate into stevia extract."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Paused safely after documenting a valid extract and logged deferred extraction for maintenance.",
+                    "text": "Feedstock, filtrate, and extract artifacts complete.",
                     "requiresItems": [
+                        {
+                            "id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
+                            "count": 1
+                        },
+                        {
+                            "id": "35ec960e-3048-4429-ad6b-c6afb384d658",
+                            "count": 1
+                        },
                         {
                             "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
                             "count": 1
@@ -133,11 +82,11 @@
         },
         {
             "id": "finish",
-            "text": "Well done. You proved setup and outcome evidence separately, and you followed contamination controls instead of forcing an unsafe batch.",
+            "text": "Extraction complete with documented solvent handling and thermal limits.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Extraction complete."
+                    "text": "Stevia extract ready."
                 }
             ]
         }
@@ -148,11 +97,14 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["hydroponics/stevia", "chemistry/safe-reaction"],
+    "requiresQuests": [
+        "hydroponics/stevia",
+        "chemistry/safe-reaction"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

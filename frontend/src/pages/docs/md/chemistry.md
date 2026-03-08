@@ -3,8 +3,8 @@ title: 'Chemistry'
 slug: 'chemistry'
 ---
 
-Chemistry quests now emphasize **artifact-driven lab work**: every major transformation should leave a tangible
-inventory result (sample, log, adjusted solution, or waste package) that can be validated in later steps.
+Chemistry quests now require **full bench protocol evidence**: apparatus staging, solvent/reagent handling,
+and post-step records. Each quest now adds new process artifacts so QA can verify both setup and outcome.
 
 ## Quest tree
 
@@ -19,102 +19,121 @@ inventory result (sample, log, adjusted solution, or waste package) that can be 
 9. [Refine Stevia Crystals](/quests/chemistry/stevia-crystals)
 10. [Taste Test Stevia Crystals](/quests/chemistry/stevia-tasting)
 
-## 1) Demonstrate a Safe Chemical Reaction (`chemistry/safe-reaction`)
+## Main path + branch notes
 
-- Requires: `welcome/howtodoquests`
-- Key gates now require evidence artifacts:
-    - `open-beaker`/`controlled-capture` → requires `fizz reaction cylinder sample`
-    - `verify`/`finish` → requires `safe fizz reaction log sheet`
-- Processes:
-    - [/processes/run-safe-fizz-reaction](/processes/run-safe-fizz-reaction) → creates `fizz reaction cylinder sample`
-    - [/processes/log-safe-reaction](/processes/log-safe-reaction) → creates `safe fizz reaction log sheet`
+The chemistry tree remains linear in quest unlock order, but each quest now includes explicit multi-process
+lab phases (setup -> execution -> verification) with dedicated artifacts for each phase.
 
-## 2) Measure Solution pH (`chemistry/ph-test`)
+## Per-quest protocol updates
 
-- Requires: `chemistry/safe-reaction`
-- Measurement and interpretation gates now use `chemistry pH reading card`
-- Process:
+### 1) `chemistry/safe-reaction`
+
+- New setup artifacts:
+    - `safe reaction bench setup sheet`
+    - `safe reaction dosing tray`
+- Updated process chain:
+    - [/processes/chemistry-stage-safe-reaction-bench](/processes/chemistry-stage-safe-reaction-bench)
+    - [/processes/chemistry-dose-safe-reaction-reagents](/processes/chemistry-dose-safe-reaction-reagents)
+    - [/processes/run-safe-fizz-reaction](/processes/run-safe-fizz-reaction)
+    - [/processes/log-safe-reaction](/processes/log-safe-reaction)
+
+### 2) `chemistry/ph-test`
+
+- New setup artifacts:
+    - `pH kit calibration log`
+    - `conditioned pH sample vial`
+- Updated process chain:
+    - [/processes/chemistry-calibrate-ph-kit](/processes/chemistry-calibrate-ph-kit)
+    - [/processes/chemistry-condition-ph-sample](/processes/chemistry-condition-ph-sample)
     - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph)
-        - consumes `pH strip`
-        - creates `chemistry pH reading card`
 
-## 3) Dilute Hydrochloric Acid Safely (`chemistry/acid-dilution`)
+### 3) `chemistry/acid-dilution`
 
-- Requires: `chemistry/ph-test`
-- Both route branches now run a dilution process and require `diluted hydrochloric acid solution`
-- Verification/finish now require the diluted solution artifact
-- Process:
+- New setup artifacts:
+    - `HCl dilution molarity worksheet`
+    - `ice-bath dilution flask`
+- Updated process chain:
+    - [/processes/chemistry-calculate-hcl-dilution](/processes/chemistry-calculate-hcl-dilution)
+    - [/processes/chemistry-prechill-dilution-flask](/processes/chemistry-prechill-dilution-flask)
     - [/processes/chemistry-dilute-hcl](/processes/chemistry-dilute-hcl)
-        - consumes concentrated HCl (fractional)
-        - creates `diluted hydrochloric acid solution`
 
-## 4) Neutralize an Acid Spill (`chemistry/acid-neutralization`)
+### 4) `chemistry/acid-neutralization`
 
-- Requires: `chemistry/ph-test`
-- Kit workflow and verification require `neutralized spill waste container`; manual branch can proceed to verification with strip-based checks before confirming the container at pass gate
-- Process:
+- New setup/disposal artifacts:
+    - `acid spill containment berm`
+    - `sealed neutralization residue drum`
+- Updated process chain:
+    - [/processes/chemistry-deploy-spill-containment-berm](/processes/chemistry-deploy-spill-containment-berm)
     - [/processes/chemistry-neutralize-acid-spill](/processes/chemistry-neutralize-acid-spill)
-        - consumes neutralizer + pH strip
-        - creates `neutralized spill waste container`
+    - [/processes/chemistry-package-neutralized-residue](/processes/chemistry-package-neutralized-residue)
 
-## 5) Prepare a Buffer Solution (`chemistry/buffer-solution`)
+### 5) `chemistry/buffer-solution`
 
-- Requires: `chemistry/ph-test`, `chemistry/acid-dilution`
-- Both prep branches now require paired evidence:
-    - `buffer solution batch`
-    - `chemistry pH reading card`
-- Processes:
-    - [/processes/chemistry-prepare-buffer](/processes/chemistry-prepare-buffer) → creates `buffer solution batch`
-    - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph) → creates `chemistry pH reading card`
+- New formulation artifacts:
+    - `buffer formulation recipe card`
+    - `compounded buffer stock lot`
+- Updated process chain:
+    - [/processes/chemistry-calculate-buffer-recipe](/processes/chemistry-calculate-buffer-recipe)
+    - [/processes/chemistry-compound-buffer-stock](/processes/chemistry-compound-buffer-stock)
+    - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph)
+    - Existing quest grant remains `buffer solution batch`.
 
-## 6) Adjust Solution pH (`chemistry/ph-adjustment`)
+### 6) `chemistry/ph-adjustment`
 
-- Requires: `chemistry/buffer-solution`
-- Baseline/retest and completion now depend on `chemistry pH reading card`
-- Adjustment branch still requires/produces transformed batch evidence when corrections are needed:
-    - requires `buffer solution batch`
-    - creates `pH-adjusted buffer solution`
-- Processes:
+- New adjustment artifacts:
+    - `buffer adjustment titration plan`
+    - `buffer adjustment cycle log`
+- Updated process chain:
+    - [/processes/chemistry-plan-ph-adjustment](/processes/chemistry-plan-ph-adjustment)
+    - [/processes/chemistry-execute-ph-adjustment-cycle](/processes/chemistry-execute-ph-adjustment-cycle)
     - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph)
     - [/processes/chemistry-adjust-buffer-ph](/processes/chemistry-adjust-buffer-ph)
 
-## 7) Form a Precipitate (`chemistry/precipitation-reaction`)
+### 7) `chemistry/precipitation-reaction`
 
-- Requires: `chemistry/ph-adjustment`
-- Evidence pair for pass:
-    - `filtered precipitate sample`
-    - `chemistry pH reading card`
-- Processes:
-    - [/processes/chemistry-form-precipitate](/processes/chemistry-form-precipitate) → creates `precipitation reaction slurry`
-    - [/processes/chemistry-filter-precipitate](/processes/chemistry-filter-precipitate) → creates `filtered precipitate sample`
+- New solids-workup artifacts:
+    - `precipitation reagent staging set`
+    - `washed precipitate cake`
+- Updated process chain:
+    - [/processes/chemistry-prepare-precipitation-reagent-set](/processes/chemistry-prepare-precipitation-reagent-set)
+    - [/processes/chemistry-form-precipitate](/processes/chemistry-form-precipitate)
+    - [/processes/chemistry-age-and-wash-precipitate](/processes/chemistry-age-and-wash-precipitate)
+    - [/processes/chemistry-filter-precipitate](/processes/chemistry-filter-precipitate)
     - [/processes/chemistry-measure-ph](/processes/chemistry-measure-ph)
 
-## 8) Extract Stevia Sweetener (`chemistry/stevia-extraction`)
+### 8) `chemistry/stevia-extraction`
 
-- Requires: `hydroponics/stevia`, `chemistry/safe-reaction`
-- Continues to require `stevia extract` evidence across setup/outcome/recovery gates
-- Process:
+- New extraction intermediates:
+    - `milled stevia feedstock`
+    - `clarified stevia filtrate`
+- Updated process chain:
+    - [/processes/chemistry-prep-stevia-feedstock](/processes/chemistry-prep-stevia-feedstock)
+    - [/processes/chemistry-run-stevia-solvent-wash](/processes/chemistry-run-stevia-solvent-wash)
     - [/processes/extract-stevia](/processes/extract-stevia)
 
-## 9) Refine Stevia Crystals (`chemistry/stevia-crystals`)
+### 9) `chemistry/stevia-crystals`
 
-- Requires: `chemistry/stevia-extraction`
-- Continues to require `stevia crystals` evidence before completion
-- Process:
+- New crystallization intermediates:
+    - `seeded stevia crystal slurry`
+    - `dried stevia crystal lot`
+- Updated process chain:
+    - [/processes/chemistry-seed-stevia-crystallization](/processes/chemistry-seed-stevia-crystallization)
+    - [/processes/chemistry-dry-stevia-crystal-lot](/processes/chemistry-dry-stevia-crystal-lot)
     - [/processes/purify-stevia](/processes/purify-stevia)
 
-## 10) Taste Test Stevia Crystals (`chemistry/stevia-tasting`)
+### 10) `chemistry/stevia-tasting`
 
-- Requires: `chemistry/stevia-crystals`
-- Continues staged evidence model:
-    - setup artifact: `stevia tasting solution`
-    - outcome artifact: `stevia tasting notes`
-- Processes:
+- New sensory QA artifacts:
+    - `stevia sensory calibration cup set`
+    - `stevia panel scorecard`
+- Updated process chain:
+    - [/processes/chemistry-calibrate-stevia-tasting-panel](/processes/chemistry-calibrate-stevia-tasting-panel)
     - [/processes/mix-stevia-tasting-solution](/processes/mix-stevia-tasting-solution)
+    - [/processes/chemistry-run-stevia-sensory-panel](/processes/chemistry-run-stevia-sensory-panel)
     - [/processes/record-stevia-tasting-notes](/processes/record-stevia-tasting-notes)
 
 ## QA checklist focus
 
-- Verify every chemistry quest branch has a tangible evidence artifact before finish.
-- Verify transformed states propagate through inventory (`buffer batch` → `adjusted buffer` → `precipitate outputs`).
-- Verify waste/disposal artifacts are produced for hazardous chemistry steps.
+- Verify every chemistry quest now has at least one setup artifact and one outcome artifact.
+- Verify all new process outputs are referenced by quest gates (no orphan artifacts).
+- Verify stevia path records solvent handling, thermal limits, and sensory protocol reproducibility.

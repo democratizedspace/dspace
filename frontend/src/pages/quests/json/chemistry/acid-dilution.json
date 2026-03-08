@@ -1,7 +1,7 @@
 {
     "id": "chemistry/acid-dilution",
     "title": "Dilute Hydrochloric Acid Safely",
-    "description": "Slowly stir 37% hydrochloric acid into water in full PPE over a spill tray. Never add water to acid.",
+    "description": "Compute target molarity, pre-chill dilution glassware, then dilute HCl in an ice bath with staged additions and verification.",
     "hardening": {
         "passes": 3,
         "score": 95,
@@ -30,27 +30,20 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Phoenix here. Safety brief first: lab coat, gloves, goggles, spill tray, and pre-measured water in the beaker. Acid goes into water, never the reverse.",
+            "text": "Full PPE on. Place spill tray, ice bath, stir rod, and labeled receiving flask on bench. Acid always goes into water.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "chemistry-calculate-hcl-dilution",
+                    "text": "Calculate C1V1 and record target volume/molarity worksheet."
+                },
+                {
                     "type": "goto",
-                    "goto": "choose-method",
-                    "text": "Bench is staged and PPE is confirmed.",
+                    "goto": "prechill",
+                    "text": "Dilution worksheet approved.",
                     "requiresItems": [
                         {
-                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
-                            "count": 1
-                        },
-                        {
-                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
-                            "count": 1
-                        },
-                        {
-                            "id": "3455faac-8811-4991-b818-cecb98e8fff7",
-                            "count": 1
-                        },
-                        {
-                            "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+                            "id": "8c19712c-c083-4794-a275-4b4d9c653dfe",
                             "count": 1
                         }
                     ]
@@ -58,84 +51,66 @@
             ]
         },
         {
-            "id": "choose-method",
-            "text": "Pick a dilution strategy based on confidence and setup. Both require a verification reading before closure.",
+            "id": "prechill",
+            "text": "Charge flask with pre-measured water and set into ice bath to keep <30C during addition.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "micro-batch",
-                    "text": "Use micro-batch additions for tight control."
+                    "type": "process",
+                    "process": "chemistry-prechill-dilution-flask",
+                    "text": "Prepare ice-bath dilution flask and temperature checkpoint."
                 },
                 {
                     "type": "goto",
-                    "goto": "staged-pour",
-                    "text": "Use staged pour with cooling pauses."
+                    "goto": "dilute",
+                    "text": "Ice-bath flask staged for controlled addition.",
+                    "requiresItems": [
+                        {
+                            "id": "82e7baef-9ee9-4d5e-ba23-1ebff5a04388",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
-            "id": "micro-batch",
-            "text": "Add acid dropwise down the beaker wall while stirring. Pause between additions to control heat.",
+            "id": "dilute",
+            "text": "Add concentrated HCl in five 10 mL increments while stirring continuously, waiting 20 seconds between additions.",
             "options": [
                 {
                     "type": "process",
                     "process": "chemistry-dilute-hcl",
-                    "text": "Run controlled dilution and label the resulting working solution."
+                    "text": "Execute staged acid-to-water dilution run."
                 },
                 {
                     "type": "goto",
                     "goto": "verify",
-                    "text": "Micro-batch dilution complete; verify pH.",
+                    "text": "Diluted solution obtained for verification.",
                     "requiresItems": [
                         {
                             "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Mixture warmed too quickly or splashed; enter recovery protocol."
-                }
-            ]
-        },
-        {
-            "id": "staged-pour",
-            "text": "Add acid in three short pours with stirring and cooling checks between each stage.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "chemistry-dilute-hcl",
-                    "text": "Run controlled dilution and label the resulting working solution."
-                },
-                {
-                    "type": "goto",
-                    "goto": "verify",
-                    "text": "Staged pour complete; run verification.",
-                    "requiresItems": [
-                        {
-                            "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
-                            "count": 1
-                        }
-                    ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Unexpected fumes or surface contamination; stop and recover."
                 }
             ]
         },
         {
             "id": "verify",
-            "text": "Use a pH strip and record the reading. If the mix is unstable or outside your expected range, troubleshoot before storage.",
+            "text": "Verify with pH strip and container label check (molarity, date, initials, hazard).",
             "options": [
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Reading logged and dilution is stable for storage.",
+                    "text": "Worksheet, prechill record, and diluted solution all verified.",
                     "requiresItems": [
+                        {
+                            "id": "8c19712c-c083-4794-a275-4b4d9c653dfe",
+                            "count": 1
+                        },
+                        {
+                            "id": "82e7baef-9ee9-4d5e-ba23-1ebff5a04388",
+                            "count": 1
+                        },
                         {
                             "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
                             "count": 1
@@ -145,47 +120,16 @@
                             "count": 1
                         }
                     ]
-                },
-                {
-                    "type": "goto",
-                    "goto": "recovery",
-                    "text": "Reading looks off; run recovery and re-verify."
-                }
-            ]
-        },
-        {
-            "id": "recovery",
-            "text": "Contain first, then clean. Rinse exposed skin immediately, wipe the tray perimeter, and restart from method selection with fresh strips.",
-            "options": [
-                {
-                    "type": "process",
-                    "process": "wash-hands",
-                    "text": "Run spill-response hygiene step."
-                },
-                {
-                    "type": "goto",
-                    "goto": "choose-method",
-                    "text": "Bench recovered; retry dilution with tighter pacing."
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Label concentration and date, cap securely, and return the bottle to spill-tray storage. Clean chemistry is repeatable chemistry.",
+            "text": "Dilution complete with thermal control and full documentation.",
             "options": [
                 {
                     "type": "finish",
-                    "text": "Safety first.",
-                    "requiresItems": [
-                        {
-                            "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
-                            "count": 1
-                        },
-                        {
-                            "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Store diluted HCl safely."
                 }
             ]
         }
@@ -196,5 +140,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["chemistry/ph-test"]
+    "requiresQuests": [
+        "chemistry/ph-test"
+    ]
 }
