@@ -16,7 +16,7 @@ const hardeningSchema = JSON.parse(
     readFileSync(join(__dirname, '../frontend/src/pages/sharedSchemas/hardening.json'), 'utf8')
 );
 const processes = JSON.parse(
-    readFileSync(join(__dirname, '../frontend/src/generated/processes.json'), 'utf8')
+    readFileSync(join(__dirname, '../frontend/src/pages/processes/base.json'), 'utf8')
 ) as Array<Record<string, unknown>>;
 
 describe('process validation', () => {
@@ -60,8 +60,9 @@ describe('process validation', () => {
                 }
             }
 
+            expect(process.createItems).toBeDefined();
             expect(Array.isArray(process.createItems)).toBe(true);
-            expect((process.createItems ?? []).length).toBeGreaterThan(0);
+            expect(process.createItems.length).toBeGreaterThan(0);
         }
     });
 });

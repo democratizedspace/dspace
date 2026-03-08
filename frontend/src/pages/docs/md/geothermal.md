@@ -63,7 +63,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - thermistor calibration record ×1
+    - None
 - Processes used:
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
