@@ -58,7 +58,7 @@
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 2
+                            "count": 2.0
                         }
                     ]
                 }
@@ -75,7 +75,7 @@
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 2
+                            "count": 2.0
                         },
                         {
                             "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
@@ -129,9 +129,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/nutrient-check"
-    ],
+    "requiresQuests": ["hydroponics/nutrient-check"],
     "hardening": {
         "passes": 0,
         "score": 95,

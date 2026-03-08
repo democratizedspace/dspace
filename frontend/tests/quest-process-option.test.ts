@@ -1,65 +1,62 @@
-import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-type QuestOption = {
-    type?: string;
-    process?: string;
-    requiresItems?: unknown;
-};
+import { describe, expect, it } from 'vitest';
 
-type QuestDialogueNode = {
-    id?: string;
-    options?: QuestOption[];
-};
+const QUEST_JSON_ROOT = path.join(process.cwd(), 'frontend', 'src', 'pages', 'quests', 'json');
 
-type QuestFile = {
-    dialogue?: QuestDialogueNode[];
-    dialogues?: QuestDialogueNode[];
-};
+function getQuestFiles(): string[] {
+    const questFiles: string[] = [];
+    const trees = fs.readdirSync(QUEST_JSON_ROOT, { withFileTypes: true });
+
+    for (const tree of trees) {
+        if (!tree.isDirectory()) {
+            continue;
+        }
+
+        const treePath = path.join(QUEST_JSON_ROOT, tree.name);
+        const files = fs.readdirSync(treePath, { withFileTypes: true });
+
+        for (const file of files) {
+            if (file.isFile() && file.name.endsWith('.json')) {
+                questFiles.push(path.join(treePath, file.name));
+            }
+        }
+    }
+
+    return questFiles;
+}
 
 describe('quest process options', () => {
-    it('does not allow requiresItems on process dialogue options', () => {
-        const questsRoot = path.join(process.cwd(), 'frontend/src/pages/quests/json');
+    it('does not allow requiresItems on process options', () => {
         const violations: string[] = [];
 
-        for (const treeEntry of fs.readdirSync(questsRoot, { withFileTypes: true })) {
-            if (!treeEntry.isDirectory()) {
-                continue;
+        for (const filePath of getQuestFiles()) {
+            const raw = fs.readFileSync(filePath, 'utf8');
+            let quest: { dialogue?: Array<{ id?: string; options?: Array<Record<string, unknown>> }>; dialogues?: Array<{ id?: string; options?: Array<Record<string, unknown>> }> };
+
+            try {
+                quest = JSON.parse(raw);
+            } catch (error) {
+                throw new Error(`Failed to parse quest JSON: ${filePath}`, {
+                    cause: error,
+                });
             }
 
-            const treePath = path.join(questsRoot, treeEntry.name);
+            const dialogues = quest.dialogue ?? quest.dialogues ?? [];
 
-            for (const file of fs.readdirSync(treePath)) {
-                if (!file.endsWith('.json')) {
-                    continue;
-                }
+            for (const dialogue of dialogues) {
+                const options = dialogue.options ?? [];
 
-                const filePath = path.join(treePath, file);
-                let quest: QuestFile;
-                try {
-                    quest = JSON.parse(fs.readFileSync(filePath, 'utf8')) as QuestFile;
-                } catch (error) {
-                    const message = error instanceof Error ? error.message : String(error);
-                    throw new Error(`Failed to parse quest JSON: ${filePath}\n${message}`);
-                }
-                const dialogue = Array.isArray(quest.dialogue)
-                    ? quest.dialogue
-                    : Array.isArray(quest.dialogues)
-                      ? quest.dialogues
-                      : [];
-
-                for (const node of dialogue) {
-                    for (const option of node.options ?? []) {
-                        if (
-                            option.type === 'process' &&
-                            Object.prototype.hasOwnProperty.call(option, 'requiresItems')
-                        ) {
-                            const relativePath = path.relative(process.cwd(), filePath);
-                            violations.push(
-                                `${relativePath} :: dialogue=${node.id ?? '(unknown)'} :: process=${option.process ?? '(unknown)'}`
-                            );
-                        }
+                for (const option of options) {
+                    if (
+                        option &&
+                        option.type === 'process' &&
+                        Object.prototype.hasOwnProperty.call(option, 'requiresItems')
+                    ) {
+                        violations.push(
+                            `${filePath} -> dialogue "${dialogue.id ?? 'unknown'}" option "${option.process ?? option.text ?? 'unknown'}"`
+                        );
                     }
                 }
             }

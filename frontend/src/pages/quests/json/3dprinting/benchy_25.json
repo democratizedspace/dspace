@@ -156,7 +156,7 @@
         },
         {
             "id": "finish",
-            "text": "Fleet secured. You didn't just grind to 25—you built a production method with evidence and recovery steps.",
+            "text": "Fleet secured. You didn't just grind to 25\u2014you built a production method with evidence and recovery steps.",
             "options": [
                 {
                     "type": "finish",
@@ -171,13 +171,11 @@
             "count": 10000
         }
     ],
-    "requiresQuests": [
-        "3dprinting/benchy_10"
-    ],
+    "requiresQuests": ["3dprinting/benchy_10"],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

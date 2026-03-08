@@ -61,9 +61,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/basil"
-    ],
+    "requiresQuests": ["hydroponics/basil"],
     "hardening": {
         "passes": 4,
         "score": 95,

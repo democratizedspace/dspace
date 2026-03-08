@@ -188,9 +188,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "aquaria/thermometer"
-    ],
+    "requiresQuests": ["aquaria/thermometer"],
     "hardening": {
         "passes": 5,
         "score": 100,

@@ -27,7 +27,7 @@
                     "requiresItems": [
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 2
+                            "count": 2.0
                         }
                     ]
                 }
@@ -58,7 +58,7 @@
                         },
                         {
                             "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
-                            "count": 2
+                            "count": 2.0
                         }
                     ]
                 }
@@ -151,13 +151,11 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "hydroponics/pump-install"
-    ],
+    "requiresQuests": ["hydroponics/pump-install"],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

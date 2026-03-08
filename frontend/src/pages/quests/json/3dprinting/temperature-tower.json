@@ -153,9 +153,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "3dprinting/retraction-test"
-    ],
+    "requiresQuests": ["3dprinting/retraction-test"],
     "hardening": {
         "passes": 0,
         "score": 90,
