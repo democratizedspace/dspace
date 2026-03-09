@@ -35,7 +35,7 @@
         },
         {
             "id": "delivery",
-            "text": "I'm low-maintenance: keep me dry, keep me cool, and toss me a compliment now and then. I don't snoop the internet either—I'm a local legend.",
+            "text": "I'm low-maintenance: keep me dry, keep me cool, and toss me a compliment now and then. I don't snoop the internet either\u2014I'm a local legend.",
             "options": [
                 {
                     "type": "goto",
@@ -46,7 +46,7 @@
         },
         {
             "id": "yourquest",
-            "text": "Your quest, dear player: master the ancient art of questing. Choices, items, processes—boom, hero mode.",
+            "text": "Your quest, dear player: master the ancient art of questing. Choices, items, processes\u2014boom, hero mode.",
             "options": [
                 {
                     "type": "goto",
@@ -110,7 +110,7 @@
         },
         {
             "id": "items",
-            "text": "Next: items. Some options drop loot instantly, others only appear if you have the right gear. Here, take these digital tokens—no carbon required.",
+            "text": "Next: items. Some options drop loot instantly, others only appear if you have the right gear. Here, take these digital tokens\u2014no carbon required.",
             "options": [
                 {
                     "type": "grantsItems",
@@ -173,7 +173,7 @@
         },
         {
             "id": "hangofthis",
-            "text": "You're crushing it! Victory is just a button away! If you ever need a refresher, say the word. I'll be here, ready to cheer. Here's some digital cash—sparkly, but still pretend. Any questions before we wrap? Remember to disconnect the smart plug when you're done.",
+            "text": "You're crushing it! Victory is just a button away! If you ever need a refresher, say the word. I'll be here, ready to cheer. Here's some digital cash\u2014sparkly, but still pretend. Any questions before we wrap? Remember to disconnect the smart plug when you're done.",
             "options": [
                 {
                     "type": "finish",
@@ -186,17 +186,13 @@
         {
             "id": "4910a316-5019-4fcd-b185-1d6ce1c0040b",
             "count": 1
-        },
-        {
-            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
-            "count": 1000
         }
     ],
     "requiresQuests": [],
     "hardening": {
         "passes": 1,
         "score": 95,
-        "emoji": "🌀",
+        "emoji": "\ud83c\udf00",
         "history": [
             {
                 "task": "codex-hardening-2025-08-06",

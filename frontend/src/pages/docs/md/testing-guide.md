@@ -36,6 +36,25 @@ Run it manually with:
 npm run link-check
 ```
 
+
+## Quest quality and reliability suites
+
+Run these focused suites when editing quest JSON or quest docs:
+
+```bash
+npm run test:ci --   questQuality   questCanonical   questSimulation   questDependencies   questDependencyReferences   questDialogueValidation   questProcessCoverage   questProcessNecessitySimulation   questRewardsValidation   questSchemaValidation   questPrerequisites   questCompletableItems   progressionBalance   sysadminQuestQuality   questProcessRecoveryPaths   questRewardGrantSeparation
+```
+
+What these catch:
+
+- dialogue quality/persona and aquarium safety heuristics (`questQuality`)
+- canonical start→middle→finish structure and finish reachability (`questCanonical`, `questSimulation`)
+- prerequisite graph correctness and reference integrity (`questDependencies`, `questDependencyReferences`, `questPrerequisites`, `progressionBalance`)
+- dead-ends, unreachable finish states, and state-lock risks (`questDialogueValidation`, `questCompletableItems`)
+- process coverage/necessity and process-node recovery routes (`questProcessCoverage`, `questProcessNecessitySimulation`, `questProcessRecoveryPaths`)
+- reward/process ID validity plus reward/grant duplication drift (`questRewardsValidation`, `questRewardGrantSeparation`)
+- schema and quest-tree domain baselines (`questSchemaValidation`, `sysadminQuestQuality`)
+
 ## Additional test suites
 
 - `npm test` runs the full suite, including E2E tests.

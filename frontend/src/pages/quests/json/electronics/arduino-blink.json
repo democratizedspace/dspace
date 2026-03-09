@@ -158,11 +158,18 @@
                 {
                     "type": "finish",
                     "text": "Quest complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Re-run verification before I close this out."
                 }
             ]
         }
     ],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
     "rewards": [
         {
             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",

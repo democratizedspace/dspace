@@ -125,6 +125,11 @@
                 {
                     "type": "finish",
                     "text": "Cool, I've got the gist! See you around, dChat!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "earn",
+                    "text": "I will launch it later\u2014walk me back through how dUSD accrues."
                 }
             ]
         }
@@ -139,7 +144,9 @@
             "count": 100
         }
     ],
-    "requiresQuests": ["3dprinting/start"],
+    "requiresQuests": [
+        "3dprinting/start"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,

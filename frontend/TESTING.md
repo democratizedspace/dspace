@@ -222,50 +222,55 @@ describe('ItemForm Component', () => {
 
 ### Content Quality Tests
 
-We have specialized tests to ensure content quality:
+We have specialized tests to ensure quest quality and reliability:
 
-1. **Quest Quality Tests** (`questQuality.test.js`):
-    - Validates NPC dialogue style consistency and fails on mismatches
-    - Checks for ethical considerations in aquarium quests and fails on violations
-    - Verifies proper quest progression and dependencies. Failures now occur if any quest chain issues are detected.
-    - Ensures progression is balanced across quest categories to maintain a consistent difficulty curve
-    - Identifies dialogue that doesn't match NPC personalities
-    - Uses simple heuristics with local fixtures so no external API access is required
+1. **Quest Dialogue & Persona Quality** (`questQuality.test.js`)
+   - Validates dialogue length and option counts
+   - Checks NPC persona keyword alignment
+   - Enforces aquarium ethics constraints
+   - Verifies item/process reference validity and progression balance
 
-2. **Image Reference Tests** (`scripts/tests/imageReferences.test.ts`):
-    - Scans all quest JSON files for image references
-    - Verifies that referenced images exist in the public directory
-    - Checks for proper image naming conventions
-    - Suggests similar images when references are broken
-3. **Quest Canonical Tests** (`questCanonical.test.js`):
-    - Ensures each quest includes a start node
-    - Requires at least one intermediate step and a finish option
-    - Helps keep quest dialogue consistent across repos
-4. **Item Quality Tests** (`itemQuality.test.js`):
-    - Verifies item names, descriptions, and images
-    - Checks price formatting and flags unrealistic values
-5. **Process Quality Tests** (`processQuality.test.js`):
-    - Validates duration strings and item references
-    - Warns when processes lack items or have extreme durations
-6. **Quest Dependency Tests** (`questDependencies.test.js`):
-    - Ensures quest chains reference existing quests
-    - Detects circular dependencies that could block progress
+2. **Quest Structure & Flow Completeness**
+   - `questCanonical.test.js`: start/middle/finish canonical shape + finish path
+   - `questSimulation.test.js`: dialogue simulation to ensure completable paths
+   - `tests/questDialogueValidation.test.ts`: dead-ends, unreachable finish nodes, and state-lock hazards
+   - `tests/questCompletableItems.test.ts`: item-gated completion feasibility
 
-7. **Quest Simulation Tests** (`questCanonical.test.js`, `questSimulation.test.js`):
-    - Simulate dialogue flow to verify a path exists from the start node to a finish option
-    - Prevent quests from having unreachable end states or dead-ends
+3. **Quest Dependency & Progression Integrity**
+   - `questDependencies.test.js`: missing IDs and cycle detection
+   - `tests/questDependencyReferences.test.ts`: cross-file dependency references
+   - `tests/questPrerequisites.test.ts`: prerequisite correctness
+   - `tests/progressionBalance.test.ts`: progression depth balance across trees
 
-Most of these tests produce warnings rather than failures, but quest quality issues now cause the test suite to error, ensuring regressions are caught early.
+4. **Quest Process Reliability**
+   - `tests/questProcessCoverage.test.ts`: process usage coverage expectations
+   - `tests/questProcessNecessitySimulation.test.ts`: process necessity simulation
+   - `tests/questProcessRecoveryPaths.test.ts`: process nodes must expose a recovery path
+
+5. **Quest Rewards/Schema Integrity**
+   - `tests/questRewardsValidation.test.ts`: reward/process IDs and counts are valid
+   - `tests/questRewardGrantSeparation.test.ts`: prevent duplicate grants + quest rewards for same item
+   - `tests/questSchemaValidation.test.ts`: quest JSON schema validation
+   - `tests/sysadminQuestQuality.test.ts`: sysadmin quest baseline guardrails
+
+6. **Related Content Quality Suites**
+   - `scripts/tests/imageReferences.test.ts`: quest image references exist and are named correctly
+   - `itemQuality.test.js`: item quality checks
+   - `processQuality.test.js`: process quality checks
+
+Most of these tests now fail on regressions so quality issues are caught before merge.
 
 To run these tests specifically:
 
 ```bash
-npm test -- questQuality
+npm run test:ci -- questQuality questCanonical questSimulation
+npm run test:ci -- questDependencies questDependencyReferences questPrerequisites progressionBalance
+npm run test:ci -- questDialogueValidation questCompletableItems
+npm run test:ci -- questProcessCoverage questProcessNecessitySimulation questProcessRecoveryPaths
+npm run test:ci -- questRewardsValidation questRewardGrantSeparation questSchemaValidation sysadminQuestQuality
 npm test -- itemQuality
 npm test -- processQuality
 npm test -- imageReferences
-npm test -- questCanonical
-npm test -- questDependencies
 ```
 
 ### Performance Benchmarks
