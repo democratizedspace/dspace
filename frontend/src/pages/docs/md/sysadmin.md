@@ -87,4 +87,5 @@ Sysadmin quests build practical progression through the sysadmin skill tree. Thi
 
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
 - Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
+- Quiz remediation clarity: wrong-answer branches in `resource-monitoring` and `log-analysis` now use explicit retry prompts (for example, "Retry question 3 with a command-focused answer") so players know which question they are re-entering.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.

@@ -268,6 +268,35 @@ npm test -- questCanonical
 npm test -- questDependencies
 ```
 
+
+### Quest quality test catalog
+
+The following quest-focused tests currently enforce quality and reliability:
+
+- `frontend/__tests__/questQuality.test.js`
+- `frontend/__tests__/questCanonical.test.js`
+- `frontend/__tests__/questDependencies.test.js`
+- `frontend/__tests__/questSimulation.test.js`
+- `frontend/__tests__/questTemplateValidation.test.js`
+- `frontend/__tests__/questValidation.test.js`
+- `scripts/tests/questDependencies.test.ts`
+- `scripts/tests/questQuality.test.ts`
+- `tests/questCompletableItems.test.ts`
+- `tests/questCopyRegression.test.ts`
+- `tests/questDependencyReferences.test.ts`
+- `tests/questDialogueValidation.test.ts`
+- `tests/questGraphValidation.test.ts`
+- `tests/questPrerequisites.test.ts`
+- `tests/questProcessCoverage.test.ts`
+- `tests/questProcessNecessitySimulation.test.ts`
+- `tests/questQuizRetryCopyQuality.test.ts`
+- `tests/questRewardsValidation.test.ts`
+- `tests/questSchemaValidation.test.ts`
+- `tests/quest-title-unique.test.ts`
+- `tests/sysadminQuestQuality.test.ts`
+
+Keep this list in sync with `/docs/testing-guide` whenever a new quest quality gate is added.
+
 ### Performance Benchmarks
 
 To gauge the speed of IndexedDB operations, run:
