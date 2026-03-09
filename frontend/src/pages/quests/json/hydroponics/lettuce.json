@@ -177,9 +177,7 @@
             ]
         }
     ],
-    "requiresQuests": [
-        "hydroponics/basil"
-    ],
+    "requiresQuests": ["hydroponics/basil"],
     "rewards": [
         {
             "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
