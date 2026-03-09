@@ -58,6 +58,9 @@ const CRITERIA = {
         goldfish: [18, 22],
         tropical: [24, 28],
     },
+    LIVESTOCK_TRANSFER_QUESTS: ['aquaria/guppy', 'aquaria/goldfish', 'aquaria/net-fish'],
+    TOXICITY_CHECK_TERMS: ['ammonia', 'nitrite'],
+    ACCLIMATION_TERMS: ['acclimate', 'acclimation', 'drip acclimation', 'float the bag'],
     ITEM_USAGE_THRESHOLD: 0.8, // fraction of quests that should use items
     PROCESS_USAGE_THRESHOLD: 0.3, // fraction of quests that should use processes
 };
@@ -228,6 +231,34 @@ function checkAquariumEthics(quest) {
 
     if (!hasEthicalConsideration) {
         issues.push(`Quest ${quest.id} may not include ethical care considerations`);
+    }
+
+    return issues;
+}
+
+function checkLivestockTransferSafety(quest) {
+    const issues = [];
+    if (!CRITERIA.LIVESTOCK_TRANSFER_QUESTS.includes(quest.id)) {
+        return issues;
+    }
+
+    const questText = quest.dialogue
+        .map((node) => `${node.text} ${(node.options || []).map((opt) => opt.text).join(' ')}`)
+        .join(' ')
+        .toLowerCase();
+
+    const hasToxicityChecks = CRITERIA.TOXICITY_CHECK_TERMS.every((term) =>
+        questText.includes(term)
+    );
+    if (!hasToxicityChecks) {
+        issues.push(
+            `Quest ${quest.id} should mention both ammonia and nitrite checks before transfer`
+        );
+    }
+
+    const hasAcclimationCue = CRITERIA.ACCLIMATION_TERMS.some((term) => questText.includes(term));
+    if (!hasAcclimationCue) {
+        issues.push(`Quest ${quest.id} should include explicit acclimation guidance`);
     }
 
     return issues;
@@ -535,5 +566,21 @@ describe('Quest Quality Validation', () => {
     test('Quest progression is balanced across categories', () => {
         const diff = checkProgressionBalance();
         expect(diff).toBeLessThanOrEqual(7);
+    });
+
+    test('Livestock transfer quests include water-toxicity checks and acclimation guidance', () => {
+        const issues = [];
+        for (const [id, quest] of quests.entries()) {
+            if (CRITERIA.LIVESTOCK_TRANSFER_QUESTS.includes(id)) {
+                issues.push(...checkLivestockTransferSafety(quest));
+            }
+        }
+
+        if (issues.length > 0) {
+            console.error('Livestock Transfer Safety Issues:');
+            issues.forEach((issue) => console.error(`- ${issue}`));
+        }
+
+        expect(issues.length).toBe(0);
     });
 });

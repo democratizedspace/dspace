@@ -222,38 +222,39 @@ describe('ItemForm Component', () => {
 
 ### Content Quality Tests
 
-We have specialized tests to ensure content quality:
+We have specialized tests to ensure content quality and quest reliability:
 
-1. **Quest Quality Tests** (`questQuality.test.js`):
-    - Validates NPC dialogue style consistency and fails on mismatches
-    - Checks for ethical considerations in aquarium quests and fails on violations
-    - Verifies proper quest progression and dependencies. Failures now occur if any quest chain issues are detected.
-    - Ensures progression is balanced across quest categories to maintain a consistent difficulty curve
-    - Identifies dialogue that doesn't match NPC personalities
-    - Uses simple heuristics with local fixtures so no external API access is required
+1. **Quest Quality Tests** (`frontend/__tests__/questQuality.test.js`):
+    - Validates NPC dialogue style consistency
+    - Checks ethical care constraints for aquarium quests
+    - Verifies progression logic, reachability, and category balance
+    - Validates item/process reference quality
+    - Enforces livestock transfer safety coverage (ammonia + nitrite + acclimation guidance)
 
-2. **Image Reference Tests** (`scripts/tests/imageReferences.test.ts`):
+2. **Quest Canonical Tests** (`frontend/__tests__/questCanonical.test.js`):
+    - Ensures each quest includes a valid start node
+    - Requires canonical dialogue shape and a finish option path
+
+3. **Quest Dependency Tests** (`frontend/__tests__/questDependencies.test.js`):
+    - Ensures quest chains reference existing quests
+    - Detects circular dependencies
+
+4. **Quest Simulation Tests** (`frontend/__tests__/questSimulation.test.js`):
+    - Simulate dialogue flow to verify a path exists from the start node to a finish option
+    - Flags quests with missing starts or unreachable branches
+
+5. **Quest Schema Tests** (`frontend/__tests__/questValidation.test.js`):
+    - Validates all quest JSON files against `quest.json` schema
+
+6. **Quest Template Tests** (`frontend/__tests__/questTemplateValidation.test.js`):
+    - Validates template quest files against schema
+
+7. **Quest Image Tests** (`frontend/__tests__/questImage.test.js`):
+    - Verifies quest image handling for custom quest creation/retrieval flows
+
+8. **Image Reference Tests** (`scripts/tests/imageReferences.test.ts`):
     - Scans all quest JSON files for image references
     - Verifies that referenced images exist in the public directory
-    - Checks for proper image naming conventions
-    - Suggests similar images when references are broken
-3. **Quest Canonical Tests** (`questCanonical.test.js`):
-    - Ensures each quest includes a start node
-    - Requires at least one intermediate step and a finish option
-    - Helps keep quest dialogue consistent across repos
-4. **Item Quality Tests** (`itemQuality.test.js`):
-    - Verifies item names, descriptions, and images
-    - Checks price formatting and flags unrealistic values
-5. **Process Quality Tests** (`processQuality.test.js`):
-    - Validates duration strings and item references
-    - Warns when processes lack items or have extreme durations
-6. **Quest Dependency Tests** (`questDependencies.test.js`):
-    - Ensures quest chains reference existing quests
-    - Detects circular dependencies that could block progress
-
-7. **Quest Simulation Tests** (`questCanonical.test.js`, `questSimulation.test.js`):
-    - Simulate dialogue flow to verify a path exists from the start node to a finish option
-    - Prevent quests from having unreachable end states or dead-ends
 
 Most of these tests produce warnings rather than failures, but quest quality issues now cause the test suite to error, ensuring regressions are caught early.
 
@@ -261,11 +262,13 @@ To run these tests specifically:
 
 ```bash
 npm test -- questQuality
-npm test -- itemQuality
-npm test -- processQuality
-npm test -- imageReferences
 npm test -- questCanonical
 npm test -- questDependencies
+npm test -- questSimulation
+npm test -- questValidation
+npm test -- questTemplateValidation
+npm test -- questImage
+npm test -- imageReferences
 ```
 
 ### Performance Benchmarks

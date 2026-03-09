@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "The tank needs a quick tidy. We'll do a calm transfer: prep bucket water, dim lights, and avoid chasing fish around decor.",
+            "text": "The tank needs a quick tidy. First verify ammonia and nitrite are at 0 ppm, then prep bucket water, dim lights, and plan a calm acclimation transfer.",
             "options": [
                 {
                     "type": "goto",
@@ -52,7 +52,7 @@
         },
         {
             "id": "baseline",
-            "text": "Before transfer, capture a baseline tank reading so you can verify recovery after reintroduction.",
+            "text": "Before transfer, capture a baseline reading and confirm ammonia/nitrite are still safe so you can verify recovery after reintroduction.",
             "options": [
                 {
                     "type": "process",
@@ -79,7 +79,7 @@
         },
         {
             "id": "catch",
-            "text": "Use one steady scoop, keep the net submerged, and settle the fish in a bucket with matching water. Stop immediately if the fish thrashes against the mesh.",
+            "text": "Use one steady scoop, keep the net submerged, and settle the fish in a bucket with matching water for a brief acclimation pause. Stop immediately if the fish thrashes against the mesh.",
             "options": [
                 {
                     "type": "goto",

@@ -36,6 +36,35 @@ Run it manually with:
 npm run link-check
 ```
 
+## Quest quality and reliability test matrix
+
+Quest content quality is enforced by multiple complementary tests (not just one file).
+When editing quest JSON, ensure these suites remain green and update docs when adding new checks:
+
+- `frontend/__tests__/questQuality.test.js`
+    - Dialogue quality heuristics (length/options/personality alignment)
+    - Aquarium ethical care constraints
+    - Dependency progression checks, reachability, balance, and item/process usage
+    - Livestock transfer safety checks (ammonia + nitrite + acclimation guidance)
+- `frontend/__tests__/questCanonical.test.js`
+    - Canonical node shape and finish-path requirements
+- `frontend/__tests__/questDependencies.test.js`
+    - Dependency existence and cycle detection
+- `frontend/__tests__/questSimulation.test.js`
+    - Runtime path simulation and unreachable-node detection
+- `frontend/__tests__/questValidation.test.js`
+    - JSON schema compliance for all quest files
+- `frontend/__tests__/questTemplateValidation.test.js`
+    - Template schema compliance
+- `frontend/__tests__/questImage.test.js`
+    - Quest image handling behavior in custom content flows
+
+Run the focused command during quest work:
+
+```bash
+npm test -- questQuality questCanonical questDependencies questSimulation questValidation questTemplateValidation questImage
+```
+
 ## Additional test suites
 
 - `npm test` runs the full suite, including E2E tests.

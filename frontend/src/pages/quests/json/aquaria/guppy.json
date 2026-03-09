@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Those shrimp are thriving. Before adding guppies, lock the tank at 24-28°C and keep a net and bucket ready so we can respond if fish show stress.",
+            "text": "Those shrimp are thriving. Before adding guppies, confirm ammonia and nitrite are 0 ppm, lock the tank at 24-28\u00b0C, and keep a net and bucket ready so acclimation stays controlled.",
             "options": [
                 {
                     "type": "process",
@@ -31,7 +31,7 @@
         },
         {
             "id": "acclimate",
-            "text": "Select three females and one male, float the bag for 20 minutes with lights dimmed, and keep store water out of your tank.",
+            "text": "Select three females and one male, float the bag for 20 minutes as acclimation, and keep store water out of your tank.",
             "options": [
                 {
                     "type": "goto",
@@ -47,7 +47,7 @@
         },
         {
             "id": "stress-response",
-            "text": "Troubleshoot before release: extend float time, reduce room light, and confirm the tank still reads 24-28°C before trying again.",
+            "text": "Troubleshoot before release: extend float time, reduce room light, and confirm the tank still reads 24-28\u00b0C before trying again.",
             "options": [
                 {
                     "type": "process",
@@ -148,7 +148,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

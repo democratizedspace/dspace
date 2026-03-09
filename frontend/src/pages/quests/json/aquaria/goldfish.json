@@ -8,7 +8,7 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Goldfish are hardy, but only when we respect space, filtration, and temperature stability. We'll do this in stages so the fish never gets rushed into unsafe water.",
+            "text": "Goldfish transfer starts with water safety: confirm ammonia and nitrite are both 0 ppm, then prep a bucket and dim lights so acclimation stays calm.",
             "options": [
                 {
                     "type": "goto",
@@ -42,7 +42,7 @@
         },
         {
             "id": "verify",
-            "text": "Pre-stock verification: check that filtration runs, temperature is stable, and no electrical cords are wet. If anything drifts, branch to troubleshooting before adding fish.",
+            "text": "Before transfer, log a baseline reading and reconfirm ammonia/nitrite at 0 ppm so you can prove water stayed safe after reintroduction.",
             "options": [
                 {
                     "type": "goto",
@@ -64,7 +64,7 @@
         },
         {
             "id": "troubleshoot",
-            "text": "Good pause. Re-seat tubing and heater placement, confirm thermometer reading, and rerun baseline checks. Never add fish while equipment is unstable.",
+            "text": "Use one steady scoop, keep the net submerged, and run a short acclimation pause in the bucket with matching water. Stop immediately if the fish thrashes against the mesh.",
             "options": [
                 {
                     "type": "process",
@@ -167,7 +167,7 @@
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
