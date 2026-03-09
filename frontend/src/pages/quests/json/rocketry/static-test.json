@@ -49,20 +49,25 @@
             "text": "Ignite remotely and capture the thrust curve. Keep observers behind cover until burnout and cooldown are complete.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "interpret",
-                    "text": "Burn complete; thrust data captured.",
-                    "requiresItems": [
-                        {
-                            "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
-                            "count": 1
-                        }
-                    ]
+                    "type": "process",
+                    "process": "run-static-engine-test",
+                    "text": "Burn complete; thrust data captured."
                 },
                 {
                     "type": "goto",
                     "goto": "safety-hold",
                     "text": "Ignition behavior was unstable. Abort and investigate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Use the captured thrust log to continue analysis.",
+                    "requiresItems": [
+                        {
+                            "id": "4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -124,8 +129,8 @@
     "requiresQuests": ["rocketry/parachute"],
     "hardening": {
         "passes": 0,
-        "score": 90,
-        "emoji": "🛠️",
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

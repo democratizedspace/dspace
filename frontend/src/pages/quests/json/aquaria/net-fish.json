@@ -57,8 +57,18 @@
                 {
                     "type": "process",
                     "process": "log-freshly-changed-walstad-temperature",
-                    "text": "Log pre-transfer baseline reading.",
-                    "goto": "baseline"
+                    "text": "Log pre-transfer baseline reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Baseline log saved. Quick review before netting.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -106,8 +116,18 @@
                 {
                     "type": "process",
                     "process": "log-freshly-changed-walstad-temperature",
-                    "text": "Log recovery reading before retrying.",
-                    "goto": "recovery"
+                    "text": "Log recovery reading before retrying."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Recovery reading logged. Reassess fish behavior before retrying.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -129,8 +149,18 @@
                 {
                     "type": "process",
                     "process": "log-freshly-changed-walstad-temperature",
-                    "text": "Capture post-release verification reading.",
-                    "goto": "release"
+                    "text": "Capture post-release verification reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "release",
+                    "text": "Post-release reading is in. Review stability once more.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "finish",

@@ -81,6 +81,11 @@
                     "text": "UNLIMITED POWER!!! Well, not quite, but it's a start!"
                 },
                 {
+                    "type": "goto",
+                    "goto": "upgrades",
+                    "text": "I want to re-check the enclosure build steps before finishing."
+                },
+                {
                     "type": "finish",
                     "text": "Guess I'll turn in for the day. See you around, Orion!"
                 }

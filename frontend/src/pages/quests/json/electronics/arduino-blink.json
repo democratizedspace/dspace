@@ -156,6 +156,11 @@
                     "text": "Open the detailed blink process"
                 },
                 {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Let's review the blink evidence one more time before closing."
+                },
+                {
                     "type": "finish",
                     "text": "Quest complete."
                 }

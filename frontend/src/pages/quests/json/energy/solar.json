@@ -146,7 +146,7 @@
         },
         {
             "id": "charge-troubleshoot",
-            "text": "Nice stop-call. Shut down input, check polarity and fuse seating, and clear shade from the panel. No hot connectors, no burnt smell, and no bypassing the fuse—then run another charge cycle.",
+            "text": "Nice stop-call. Shut down input, check polarity and fuse seating, and clear shade from the panel. No hot connectors, no burnt smell, and no bypassing the fuse\u2014then run another charge cycle.",
             "options": [
                 {
                     "type": "goto",
@@ -200,10 +200,6 @@
         }
     ],
     "rewards": [
-        {
-            "id": "02b32152-a7b2-458e-9643-7b754c722165",
-            "count": 1
-        },
         {
             "id": "5bba251a-d223-4e22-aa30-b65238b17516",
             "count": 1
