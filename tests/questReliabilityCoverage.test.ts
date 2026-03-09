@@ -14,6 +14,7 @@ type QuestData = {
 
 const RELIABILITY_TEST_QUEST = /(^|\/)([^/]+-)?test(s)?$/i;
 
+// Note: process ID existence is validated separately in questProcessCoverage.test.ts.
 const hasProcessOption = (quest: QuestData) =>
   (quest.dialogue ?? []).some((node) =>
     (node.options ?? []).some(

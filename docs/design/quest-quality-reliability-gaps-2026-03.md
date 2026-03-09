@@ -29,6 +29,7 @@ Coverage set:
 - `tests/questDependencyReferences.test.ts`
 - `tests/questGraphValidation.test.ts`
 - `tests/questGraph.test.ts`
+- `tests/questReliabilityCoverage.test.ts`
 - `tests/sysadminQuestQuality.test.ts`
 
 ## Missing problem class identified

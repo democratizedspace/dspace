@@ -51,14 +51,7 @@
                 {
                     "type": "process",
                     "process": "run-static-engine-test",
-                    "goto": "interpret",
-                    "text": "Burn complete; thrust data captured.",
-                    "requiresItems": [
-                        {
-                            "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Burn complete; thrust data captured."
                 },
                 {
                     "type": "goto",
@@ -71,7 +64,7 @@
                     "text": "Use the captured thrust log to continue analysis.",
                     "requiresItems": [
                         {
-                            "id": "36af76d6-2f90-4c6e-98c7-44bf64aadb96",
+                            "id": "4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d",
                             "count": 1
                         }
                     ]

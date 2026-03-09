@@ -8805,14 +8805,14 @@
         "image": "/assets/quests/model_rocket_static_engine_test.jpg",
         "requireItems": [
             {
-                "id": "80a83ecc-bcd2-400e-a469-8488a6453bb8",
+                "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
                 "count": 1
             }
         ],
         "consumeItems": [],
         "createItems": [
             {
-                "id": "36af76d6-2f90-4c6e-98c7-44bf64aadb96",
+                "id": "4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d",
                 "count": 1
             }
         ],

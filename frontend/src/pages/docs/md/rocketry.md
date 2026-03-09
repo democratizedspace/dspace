@@ -80,9 +80,9 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Rocketeer Award ×1
 - Processes used:
     - [run-static-engine-test](/processes/run-static-engine-test)
-        - Requires: parachute ×1
+        - Requires: launch-capable model rocket (parachute) ×1
         - Consumes: None
-        - Creates: dLaunch ×1
+        - Creates: 4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d ×1 ("static engine thrust log")
 
 ## 3) Add a parachute (`rocketry/parachute`)
 
@@ -229,8 +229,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
 - Unlock prerequisite:
     - `requiresQuests`: `rocketry/parachute`
 - Dialogue `requiresItems` gates:
-    - `burn` → "Burn complete; thrust data captured." — parachute ×1
-    - `burn` → "Use the captured thrust log to continue analysis." — dLaunch ×1
+    - `burn` → "Use the captured thrust log to continue analysis." — 4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d ×1 ("static engine thrust log")
 - Troubleshooting/safety branches:
     - `setup` and `safety-hold` add explicit abort/resume handling for unsafe static-test conditions.
     - `interpret` enforces pass/fail bounds and routes out-of-range outcomes into `corrective` re-test loops.
@@ -241,9 +240,9 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - rocket igniter ×10, hobbyist solid rocket motor ×5, Rocket Descent (animated) ×1
 - Processes used:
     - [run-static-engine-test](/processes/run-static-engine-test)
-        - Requires: parachute ×1
+        - Requires: launch-capable model rocket (parachute) ×1
         - Consumes: None
-        - Creates: dLaunch ×1
+        - Creates: 4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d ×1 ("static engine thrust log")
 
 ## 9) Guided Model Rocket Hop (`rocketry/suborbital-hop`)
 
@@ -304,9 +303,9 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - Rocketeer Award ×1
 - Processes used:
     - [run-static-engine-test](/processes/run-static-engine-test)
-        - Requires: parachute ×1
+        - Requires: launch-capable model rocket (parachute) ×1
         - Consumes: None
-        - Creates: dLaunch ×1
+        - Creates: 4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d ×1 ("static engine thrust log")
 
 ## QA flow notes
 

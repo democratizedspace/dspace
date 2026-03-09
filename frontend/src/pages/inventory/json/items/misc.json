@@ -2259,6 +2259,14 @@
         "category": "Digital & Records"
     },
     {
+        "id": "4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d",
+        "name": "static engine thrust log",
+        "description": "Time-stamped thrust-curve capture from a secured static engine burn used for go/no-go interpretation.",
+        "image": "/assets/model_rocket_static_engine_test.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Rocketry & Flight"
+    },
+    {
         "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
         "name": "temperature line chart",
         "description": "A simple Matplotlib graph showing your logged temperature readings over time.",
