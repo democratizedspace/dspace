@@ -156,13 +156,20 @@
                     "text": "Open the detailed blink process"
                 },
                 {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Let's review the blink evidence one more time before closing."
+                },
+                {
                     "type": "finish",
                     "text": "Quest complete."
                 }
             ]
         }
     ],
-    "requiresQuests": ["electronics/basic-circuit"],
+    "requiresQuests": [
+        "electronics/basic-circuit"
+    ],
     "rewards": [
         {
             "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",

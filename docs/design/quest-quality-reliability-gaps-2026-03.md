@@ -1,19 +1,15 @@
-# Quest quality & reliability gaps: coverage expansion and quest fixes
+# Quest quality & reliability gaps: coverage expansion and targeted hardening
 
 ## Context
 
-This design note audits the quest-quality test surface and aligns contributor-facing docs with the
-actual automated checks. It also captures a reliability gap class that was not explicitly tested,
-then records the quest updates made to close that gap.
+This design note documents a full quest-quality/reliability suite audit, then records the gap
+classes and quest fixes implemented in this PR slice. Scope intentionally stayed narrow: rocketry
+static-test reliability plus concrete guardrails/fixes on currently affected quest content.
 
-## Existing quest quality tests now documented in both QA docs and in-game docs
+## Reviewed quest quality/reliability suite surface
 
-The following quality/reliability suites are now explicitly referenced in:
-
-- Repo QA checklist: `docs/qa/v3.md`
-- In-game contributor docs: `frontend/src/pages/docs/md/quest-guidelines.md`
-
-Coverage set:
+These suites were reviewed across both `frontend/__tests__` and root `tests/`, and are now kept in
+sync in `docs/qa/v3.md` and `frontend/src/pages/docs/md/quest-guidelines.md`:
 
 - `frontend/__tests__/questCanonical.test.js`
 - `frontend/__tests__/questQuality.test.js`
@@ -26,52 +22,72 @@ Coverage set:
 - `tests/questCompletableItems.test.ts`
 - `tests/questProcessCoverage.test.ts`
 - `tests/questProcessNecessitySimulation.test.ts`
+- `tests/questReliabilityCoverage.test.ts`
+- `tests/questProcessRecoveryPaths.test.ts`
+- `tests/questRewardGrantSeparation.test.ts`
 - `tests/questDependencyReferences.test.ts`
 - `tests/questGraphValidation.test.ts`
 - `tests/questGraph.test.ts`
-- `tests/questReliabilityCoverage.test.ts`
-- `tests/questStaticTestRegression.test.ts`
+- `tests/questPrerequisites.test.ts`
+- `tests/progressionBalance.test.ts`
 - `tests/sysadminQuestQuality.test.ts`
 
-## Missing problem class identified
+## Gap classes addressed in this PR
 
-### Class: “test-named quest without process-backed execution”
+### 1) Test-focused quests without process-backed execution
 
-#### Why this is a reliability problem
+- **What was wrong:** test-oriented quest IDs could still be purely narrative.
+- **Fix:** `tests/questReliabilityCoverage.test.ts` now enforces process-backed execution for
+  `*-test`/`*/tests` quest IDs.
+- **Why process-backed is correct for `rocketry/static-test`:** static-burn validation is an
+  execution task; forcing a process option ensures the quest reflects measurable operation rather
+  than click-through narration.
 
-Quests whose IDs are explicitly test-focused (`*-test`, `*/tests`) should model actual execution
-through a process option. Without this, a player can click through measurement/check narration
-without invoking the underlying simulated operation, weakening reproducibility and making the quest
-feel detached from gameplay mechanics.
+### 2) Process nodes without deterministic recovery/review paths
 
-#### Prior detection gap
+- **What was wrong:** some nodes with process options allowed no explicit non-process branch, making
+  recovery flow brittle and less teachable.
+- **Fix:** added `tests/questProcessRecoveryPaths.test.ts` to require at least one explicit `goto`
+  option in nodes that offer process actions.
+- **Affected quest updates:**
+  - `frontend/src/pages/quests/json/ubi/basicincome.json` (`process` node gained review loop)
+  - `frontend/src/pages/quests/json/hydroponics/basil.json` (`regrow` gained review branch)
+  - `frontend/src/pages/quests/json/energy/solar-1kWh.json` (`charge` gained re-check branch)
+  - `frontend/src/pages/quests/json/electronics/arduino-blink.json` (`finish` gained evidence-review branch)
+  - `frontend/src/pages/quests/json/aquaria/position-tank.json` (`verify` split process logging and explicit review `goto`)
+  - `frontend/src/pages/quests/json/aquaria/net-fish.json` (`baseline`/`recovery`/`release` split process logging and explicit review branches)
 
-We had build/install process coverage checks and domain-specific quality checks, but no generalized
-reliability gate for test-named quests.
+### 3) Duplicate item awards via both `grantsItems` and top-level `rewards`
 
-## New automated gate
+- **What was wrong:** some quests double-awarded the same item once in-dialogue and again at quest
+  completion.
+- **Fix:** added `tests/questRewardGrantSeparation.test.ts` to block overlapping IDs across
+  `grantsItems` and top-level `rewards`.
+- **Affected quest updates:**
+  - `frontend/src/pages/quests/json/welcome/howtodoquests.json`
+  - `frontend/src/pages/quests/json/hydroponics/lettuce.json`
+  - `frontend/src/pages/quests/json/energy/solar.json`
+  - `frontend/src/pages/quests/json/energy/offgrid-charger.json`
 
-- Added `tests/questReliabilityCoverage.test.ts`.
-- Rule: every quest with a test-focused ID pattern must include at least one process-backed option.
+## Rocketry static-test reliability recap
 
-## Quests affected and remediation details
+- `frontend/src/pages/quests/json/rocketry/static-test.json` keeps process-backed `burn` execution
+  and explicit proof-gated progression.
+- `frontend/src/pages/processes/base.json` keeps `run-static-engine-test` as the authoritative
+  simulation step powering that progression.
+- `frontend/src/pages/docs/md/rocketry.md` reflects the live process IO and gating semantics.
 
-### 1) `rocketry/static-test`
+## Why these guardrails improve quality
 
-**What was wrong**
+- Process recovery-path enforcement makes process-heavy quests teach resilient operational behavior
+  (review, retry, recover) instead of linear “run then finish”.
+- Reward/grant separation keeps quest economy predictable by eliminating accidental double payouts.
+- Combined with reliability coverage for test-named quests, these checks improve both educational
+  flow and deterministic progression.
 
-- The core static burn step (`burn`) used a `goto` transition instead of a process-backed action.
-- The quest was narratively strong but mechanically skipped the execution simulation.
+## Follow-up reliability classes (not implemented here)
 
-**What changed**
+Potential future additions discovered during audit:
 
-- Updated `burn` option to `type: "process"` with `process: "run-static-engine-test"`.
-- Added new process definition `run-static-engine-test` in the process registry.
-- Updated the rocketry skill doc so “Processes used” for this quest now reflects the new process and
-  IO contract.
-
-## Design outcomes
-
-- Quality docs now enumerate the full quest quality/reliability automated test matrix.
-- Test-focused quest execution now has an explicit reliability gate.
-- `rocketry/static-test` now conforms to process-backed test execution semantics.
+- Guardrail for process options that redundantly gate on process output in the same option.
+- Guardrail for excessive process-output count thresholds that can deadlock first-time completion.

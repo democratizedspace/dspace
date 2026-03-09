@@ -122,12 +122,13 @@ Beyond JSON validation, quest quality relies on these automated suites:
 - `tests/questRewardsValidation.test.ts` and `tests/questCompletableItems.test.ts`
 - `tests/questProcessCoverage.test.ts` and `tests/questProcessNecessitySimulation.test.ts`
 - `tests/questReliabilityCoverage.test.ts`
+- `tests/questProcessRecoveryPaths.test.ts` and `tests/questRewardGrantSeparation.test.ts`
 - `tests/questStaticTestRegression.test.ts` (regression guard for static-test proof gating and process-option traversal semantics)
-- `tests/questDependencyReferences.test.ts`, `tests/questGraphValidation.test.ts`, and
-  `tests/questGraph.test.ts`
+- `tests/questDependencyReferences.test.ts`, `tests/questGraphValidation.test.ts`, `tests/questGraph.test.ts`, and `tests/questPrerequisites.test.ts`
+- `tests/progressionBalance.test.ts`
 - `tests/sysadminQuestQuality.test.ts`
 
-Run them with a command that accepts explicit test file paths, for example `npm run test:root -- frontend/__tests__/questCanonical.test.js frontend/__tests__/questQuality.test.js frontend/__tests__/questSimulation.test.js frontend/__tests__/questDependencies.test.js tests/questDialogueValidation.test.ts tests/questSchemaValidation.test.ts tests/builtinQuestSchema.test.ts tests/questRewardsValidation.test.ts tests/questCompletableItems.test.ts tests/questProcessCoverage.test.ts tests/questProcessNecessitySimulation.test.ts tests/questReliabilityCoverage.test.ts tests/questStaticTestRegression.test.ts tests/questDependencyReferences.test.ts tests/questGraphValidation.test.ts tests/questGraph.test.ts tests/sysadminQuestQuality.test.ts`.
+Run them with a command that accepts explicit test file paths, for example `npm run test:root -- frontend/__tests__/questCanonical.test.js frontend/__tests__/questQuality.test.js frontend/__tests__/questSimulation.test.js frontend/__tests__/questDependencies.test.js tests/questDialogueValidation.test.ts tests/questSchemaValidation.test.ts tests/builtinQuestSchema.test.ts tests/questRewardsValidation.test.ts tests/questCompletableItems.test.ts tests/questProcessCoverage.test.ts tests/questProcessNecessitySimulation.test.ts tests/questReliabilityCoverage.test.ts tests/questProcessRecoveryPaths.test.ts tests/questRewardGrantSeparation.test.ts tests/questStaticTestRegression.test.ts tests/questDependencyReferences.test.ts tests/questGraphValidation.test.ts tests/questGraph.test.ts tests/questPrerequisites.test.ts tests/progressionBalance.test.ts tests/sysadminQuestQuality.test.ts`.
 
 ## Quest Structure Guidelines
 

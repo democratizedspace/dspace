@@ -130,8 +130,18 @@
                 {
                     "type": "process",
                     "process": "log-heated-walstad-temperature",
-                    "text": "Record warmup verification reading.",
-                    "goto": "verify"
+                    "text": "Record warmup verification reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Warmup log captured. Re-check cables and review before closing.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "finish",
@@ -146,7 +156,10 @@
             ]
         }
     ],
-    "requiresQuests": ["aquaria/walstad", "aquaria/thermometer"],
+    "requiresQuests": [
+        "aquaria/walstad",
+        "aquaria/thermometer"
+    ],
     "rewards": [
         {
             "id": "8c0f72a2-db79-4238-b80f-97721def169f",

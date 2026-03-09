@@ -177,17 +177,19 @@
             ]
         }
     ],
-    "requiresQuests": ["hydroponics/basil"],
+    "requiresQuests": [
+        "hydroponics/basil"
+    ],
     "rewards": [
         {
-            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
-            "count": 10
+            "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
+            "count": 1
         }
     ],
     "hardening": {
         "passes": 0,
         "score": 95,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }

@@ -123,6 +123,11 @@
                     "text": "This process right here?"
                 },
                 {
+                    "type": "goto",
+                    "goto": "earn",
+                    "text": "Can we quickly review how UBI funding works before I wrap up?"
+                },
+                {
                     "type": "finish",
                     "text": "Cool, I've got the gist! See you around, dChat!"
                 }
