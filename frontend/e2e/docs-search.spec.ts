@@ -15,7 +15,11 @@ test.describe('Docs search', () => {
         await waitForHydration(page);
 
         const searchInput = page.getByRole('searchbox', { name: /search docs/i });
+        const allLinks = page.locator('.docs-grid .doc-link a');
+        const baselineLinkCount = await allLinks.count();
+
         await expect(searchInput).toBeVisible();
+        expect(baselineLinkCount).toBeGreaterThan(0);
 
         await searchInput.fill('quest');
 
@@ -25,10 +29,13 @@ test.describe('Docs search', () => {
         await expect(
             page.getByRole('link', { name: 'Quest Schema Requirements', exact: true })
         ).toBeVisible();
-        await expect(page.getByRole('link', { name: 'Solar power', exact: true })).toHaveCount(0);
+
+        const filteredLinkCount = await allLinks.count();
+        expect(filteredLinkCount).toBeGreaterThan(0);
+        expect(filteredLinkCount).toBeLessThan(baselineLinkCount);
 
         await searchInput.fill('');
-        await expect(page.getByRole('link', { name: 'Solar power', exact: true })).toBeVisible();
+        await expect(allLinks).toHaveCount(baselineLinkCount);
     });
 
     test('supports has: feature operators for docs content', async ({ page }) => {

@@ -24,8 +24,17 @@ reduces your dCarbon footprint.
 ## Key gear and materials
 
 - Portable solar panel and wired solar kit components
+- Solar tracker control kit (microcontroller + dual stepper drivers)
+- Aluminum extrusion tracker frame hardware for stable one-axis motion
 - Charge controller settings and fused cabling for safe hookups
 - Battery packs to capture dWatt when the sun is strong
+
+## Solar tracker process notes
+
+- **Build a Solar Tracker** now includes an assembly process that consumes a 200 Wh solar setup,
+  a tracker control kit, a stepper motor pair, and an aluminum extrusion frame kit.
+- Completing the assembly process creates a new inventory item: **Solar tracking unit (200 Wh)**,
+  which the quest then uses for the tracking and verification steps.
 
 ## Tips
 

@@ -1074,6 +1074,38 @@
         "category": "Energy & Power"
     },
     {
+        "id": "130b5501-459a-48a0-aafa-ba54bc6555a6",
+        "name": "Solar tracker control kit",
+        "description": "An Arduino-based control kit with dual stepper drivers, limit switches, and weatherproof cable glands for one-axis solar tracking.",
+        "image": "/assets/arduino_uno_board.jpg",
+        "price": "80 dUSD",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "648aee3c-907e-4cd1-a361-49c4bd771102",
+        "name": "NEMA 17 stepper motor pair",
+        "description": "Matched pair of 12 V NEMA 17 stepper motors for azimuth drive and cable-safe panel repositioning.",
+        "image": "/assets/dc_motor_12v.jpg",
+        "price": "60 dUSD",
+        "category": "Electronics & Robotics"
+    },
+    {
+        "id": "26b4df13-d5eb-44fd-939f-671a2f1aa8f0",
+        "name": "Aluminum extrusion tracker frame kit",
+        "description": "Pre-cut aluminum extrusions, corner brackets, pivot hardware, and stainless fasteners for a 200 Wh tracker frame.",
+        "image": "/assets/solar_enclosure_small.jpg",
+        "price": "120 dUSD",
+        "category": "Energy & Power"
+    },
+    {
+        "id": "8ead8821-57e9-4aef-a3fb-b8d6cf2ef326",
+        "name": "Solar tracking unit (200 Wh)",
+        "description": "A one-axis solar tracking unit built around the 200 Wh setup, with stepper-driven motion and controller-defined east-west limits.",
+        "image": "/assets/solar_setup_200wh_weatherproof.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Energy & Power"
+    },
+    {
         "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
         "name": "Model rocket launchpad",
         "description": "A launchpad for model rockets.",
