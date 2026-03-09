@@ -32,25 +32,25 @@ existing tree unless you're intentionally adding a new category.
 
 Current trees include:
 
--   **3D Printing**
--   **Aquaria**
--   **Astronomy**
--   **Chemistry**
--   **Completionist**
--   **Composting**
--   **DevOps**
--   **Electronics**
--   **Energy**
--   **First Aid**
--   **Geothermal**
--   **Hydroponics**
--   **Programming**
--   **Robotics**
--   **Rocketry**
--   **Sysadmin**
--   **UBI**
--   **Welcome**
--   **Woodworking**
+- **3D Printing**
+- **Aquaria**
+- **Astronomy**
+- **Chemistry**
+- **Completionist**
+- **Composting**
+- **DevOps**
+- **Electronics**
+- **Energy**
+- **First Aid**
+- **Geothermal**
+- **Hydroponics**
+- **Programming**
+- **Robotics**
+- **Rocketry**
+- **Sysadmin**
+- **UBI**
+- **Welcome**
+- **Woodworking**
 
 ### Quest Tree Documentation Requirement
 
@@ -60,15 +60,14 @@ reverse-engineering JSON. Use [Composting](/docs/composting) as the reference fo
 
 Each tree doc should include:
 
--   Quest order and `requiresQuests` relationships
--   Dialogue-level `requiresItems` gates that affect progression
--   Quest-level `grantsItems` (or an explicit “None” when absent)
--   Quest `rewards`
--   Linked process references with accurate Requires / Consumes / Creates summaries
+- Quest order and `requiresQuests` relationships
+- Dialogue-level `requiresItems` gates that affect progression
+- Quest-level `grantsItems` (or an explicit “None” when absent)
+- Quest `rewards`
+- Linked process references with accurate Requires / Consumes / Creates summaries
 
 If you change quest gating or inventory flow, update the corresponding Skills doc in the same pull
 request.
-
 
 ## Quest ↔ Docs 1:1 Contract (Required)
 
@@ -79,12 +78,12 @@ change unit in the same pull request.
 ### Required workflow checklist (copy/paste)
 
 - [ ] If a tree directory is added/removed/renamed under `frontend/src/pages/quests/json/<tree>/`:
-  - [ ] Ensure `/docs/<tree>` is present in the `/docs` Skills section via merged auto-discovery.
-  - [ ] Ensure `frontend/src/pages/docs/md/<tree>.md` exists and documents the full tree.
+    - [ ] Ensure `/docs/<tree>` is present in the `/docs` Skills section via merged auto-discovery.
+    - [ ] Ensure `frontend/src/pages/docs/md/<tree>.md` exists and documents the full tree.
 - [ ] If any quest JSON changes:
-  - [ ] Update `frontend/src/pages/docs/md/<tree>.md` in the same PR (gates, grants, rewards,
-        process IO, QA notes).
-  - [ ] Run `npm run lint`, `npm run link-check`, and the bulk quest validator.
+    - [ ] Update `frontend/src/pages/docs/md/<tree>.md` in the same PR (gates, grants, rewards,
+          process IO, QA notes).
+    - [ ] Run `npm run lint`, `npm run link-check`, and the bulk quest validator.
 - [ ] **Don't invent grants**: docs may only list `grantsItems` that exist in quest JSON (quest or
       option level). Process `creates` are process outputs and must not be labeled as quest grants
       unless explicitly granted by quest JSON.
@@ -110,6 +109,25 @@ npm run link-check
 for f in frontend/src/pages/quests/json/*/*.json; do node scripts/validate-quest.js "$f" || exit 1; done
 ```
 
+### Quest quality and reliability test suites
+
+Beyond JSON validation, quest quality relies on these automated suites:
+
+- `frontend/__tests__/questCanonical.test.js`
+- `frontend/__tests__/questQuality.test.js`
+- `frontend/__tests__/questSimulation.test.js`
+- `frontend/__tests__/questDependencies.test.js`
+- `tests/questDialogueValidation.test.ts`
+- `tests/questSchemaValidation.test.ts` and `tests/builtinQuestSchema.test.ts`
+- `tests/questRewardsValidation.test.ts` and `tests/questCompletableItems.test.ts`
+- `tests/questProcessCoverage.test.ts` and `tests/questProcessNecessitySimulation.test.ts`
+- `tests/questReliabilityCoverage.test.ts`
+- `tests/questDependencyReferences.test.ts`, `tests/questGraphValidation.test.ts`, and
+  `tests/questGraph.test.ts`
+- `tests/sysadminQuestQuality.test.ts`
+
+Run them with `npm run test:ci -- questCanonical questQuality questSimulation questDialogueValidation questProcessCoverage questReliabilityCoverage`.
+
 ## Quest Structure Guidelines
 
 ### Progressive Difficulty
@@ -123,14 +141,14 @@ Organize quests in a **clear progression** from beginner to advanced:
 
 ### Quest Dependencies
 
--   Make dependencies clear and logical
--   Only `welcome/howtodoquests` should have an empty `requiresQuests` list. All other quests must
-    depend on it directly or on a downstream quest so new players always learn the mechanics first.
-    This rule is enforced by automated repository tests to prevent regressions.
--   Each category should have a clear entry point that chains back to `welcome/howtodoquests`.
--   Dependencies should mirror the real learning path so prerequisites teach the skills needed for
-    later quests.
--   Advanced quests should require completion of relevant prerequisites
+- Make dependencies clear and logical
+- Only `welcome/howtodoquests` should have an empty `requiresQuests` list. All other quests must
+  depend on it directly or on a downstream quest so new players always learn the mechanics first.
+  This rule is enforced by automated repository tests to prevent regressions.
+- Each category should have a clear entry point that chains back to `welcome/howtodoquests`.
+- Dependencies should mirror the real learning path so prerequisites teach the skills needed for
+  later quests.
+- Advanced quests should require completion of relevant prerequisites
 
 ## Content Guidelines
 
@@ -144,18 +162,18 @@ Organize quests in a **clear progression** from beginner to advanced:
 
 ### Safety First
 
--   Always include appropriate safety warnings
--   Recommend proper protective equipment when needed
--   Never encourage dangerous activities or improper handling of materials
+- Always include appropriate safety warnings
+- Recommend proper protective equipment when needed
+- Never encourage dangerous activities or improper handling of materials
 
 ### Process Duration Realism
 
--   Processes introduce time-based play and should reflect real-world timing. Quick setup actions
-    (plugging in a smart plug, scanning a barcode, initiating a download) should resolve in seconds,
-    while longer projects scale sensibly (filling a bucket in under a minute, printing a Benchy in a
-    couple of hours, growing a plant over weeks).
--   When quests reference processes, double-check durations against the real task to keep the
-    experience grounded and avoid multi-hour waits for introductory tutorials.
+- Processes introduce time-based play and should reflect real-world timing. Quick setup actions
+  (plugging in a smart plug, scanning a barcode, initiating a download) should resolve in seconds,
+  while longer projects scale sensibly (filling a bucket in under a minute, printing a Benchy in a
+  couple of hours, growing a plant over weeks).
+- When quests reference processes, double-check durations against the real task to keep the
+  experience grounded and avoid multi-hour waits for introductory tutorials.
 
 ## Examples of Well-Structured Quest Sequences
 
@@ -189,27 +207,27 @@ Organize quests in a **clear progression** from beginner to advanced:
 
 Every quest JSON file must include:
 
--   `id`: Unique identifier following the pattern `category/name`
--   `title`: Display title of the quest
--   `description`: Brief description explaining the quest purpose
--   `image`: Path to quest image
--   `npc`: Path to NPC avatar image (choose from the NPC list in [/docs/npcs](/docs/npcs))
--   `start`: ID of the starting dialogue node
--   `dialogue`: Array of dialogue nodes, each containing:
-    -   `id`: Node identifier
-    -   `text`: NPC's dialogue text
-    -   `options`: Array of player response options, including:
-        -   `type`: Action type (goto, finish, process, grantsItems)
-        -   `text`: Player's response text
-        -   `goto`: For type:goto, target node ID
-        -   `process`: For type:process, process ID
-        -   `requiresItems`: Optional items needed to select option
-        -   `grantsItems`: Optional items given when selecting option
-        -   `requiresGitHub`: Optional schema field used by the quest runtime to gate an option
--   `rewards`: Items given upon quest completion
--   `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest
-    form under **Quest Requirements**). Automated tests ensure these dependencies reference
-    existing quests and avoid cycles.
+- `id`: Unique identifier following the pattern `category/name`
+- `title`: Display title of the quest
+- `description`: Brief description explaining the quest purpose
+- `image`: Path to quest image
+- `npc`: Path to NPC avatar image (choose from the NPC list in [/docs/npcs](/docs/npcs))
+- `start`: ID of the starting dialogue node
+- `dialogue`: Array of dialogue nodes, each containing:
+    - `id`: Node identifier
+    - `text`: NPC's dialogue text
+    - `options`: Array of player response options, including:
+        - `type`: Action type (goto, finish, process, grantsItems)
+        - `text`: Player's response text
+        - `goto`: For type:goto, target node ID
+        - `process`: For type:process, process ID
+        - `requiresItems`: Optional items needed to select option
+        - `grantsItems`: Optional items given when selecting option
+        - `requiresGitHub`: Optional schema field used by the quest runtime to gate an option
+- `rewards`: Items given upon quest completion
+- `requiresQuests`: Array of quest IDs that must be completed first (select these in the quest
+  form under **Quest Requirements**). Automated tests ensure these dependencies reference
+  existing quests and avoid cycles.
 
 Quest data is validated against a JSON schema. In the in-game editor, titles and descriptions
 reject `<` and `>` characters, and `image` must be a data URL, an absolute HTTP(S) link, or a
@@ -230,9 +248,9 @@ The editor focuses on the fundamentals today and exposes controls to gate dialog
 specific items or grant rewards inline. You can run `npm run generate-quest --template basic`
 (or `branching`) to scaffold a template JSON file with placeholder dialogue.
 
--   Item requirement and reward configuration for dialogue options
--   Process action selection
--   Preview functionality to test dialogue flow
+- Item requirement and reward configuration for dialogue options
+- Process action selection
+- Preview functionality to test dialogue flow
 
 ### In-game editor flow (create + edit)
 
@@ -273,11 +291,11 @@ content, export JSON and use the submission forms described in the [Quest Submis
 
 Before submitting a quest, verify:
 
--   All dialogue paths lead to completion
--   Item grants and requirements function correctly
--   Process integrations work as expected
--   Educational content is accurate and clear
--   Safety warnings are included where appropriate
+- All dialogue paths lead to completion
+- Item grants and requirements function correctly
+- Process integrations work as expected
+- Educational content is accurate and clear
+- Safety warnings are included where appropriate
 
 ## Contribution Workflow
 
@@ -305,12 +323,12 @@ Before submitting a quest, verify:
 
 We're particularly interested in new quests that cover:
 
--   Sustainable energy systems
--   Small-scale biology experiments
--   Chemistry demonstrations relevant to space exploration
--   Sensor systems and data collection
--   Resource recycling and waste management
--   Low-cost astronomy projects
--   Materials testing experiments
+- Sustainable energy systems
+- Small-scale biology experiments
+- Chemistry demonstrations relevant to space exploration
+- Sensor systems and data collection
+- Resource recycling and waste management
+- Low-cost astronomy projects
+- Materials testing experiments
 
 By following these guidelines, you'll create quests that engage players while advancing DSPACE's mission of democratizing space exploration through practical, hands-on education.
