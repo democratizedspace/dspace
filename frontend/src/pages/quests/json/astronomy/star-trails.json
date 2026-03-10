@@ -188,6 +188,10 @@
                     "text": "Unsafe window tonight; log the partial and stand down.",
                     "requiresItems": [
                         {
+                            "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                            "count": 1
+                        },
+                        {
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
                             "count": 1
                         }
@@ -219,7 +223,7 @@
     "requiresQuests": ["astronomy/planetary-alignment"],
     "hardening": {
         "passes": 0,
-        "score": 90,
+        "score": 95,
         "emoji": "🛠️",
         "history": []
     }

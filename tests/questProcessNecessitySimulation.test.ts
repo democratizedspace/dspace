@@ -403,6 +403,7 @@ const getCreatedItemIds = (quest: QuestData) => {
 describe('quest process necessity simulation', () => {
   const knownBypassQuestIds = [
     '3dprinting/spool-holder',
+    'astronomy/star-trails',
     'chemistry/buffer-solution',
     'chemistry/ph-adjustment',
     'chemistry/precipitation-reaction',
