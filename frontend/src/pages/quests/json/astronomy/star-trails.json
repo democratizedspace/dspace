@@ -185,7 +185,13 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Unsafe window tonight; log the partial and stand down."
+                    "text": "Unsafe window tonight; log the partial and stand down.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -210,9 +216,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": [
-        "astronomy/planetary-alignment"
-    ],
+    "requiresQuests": ["astronomy/planetary-alignment"],
     "hardening": {
         "passes": 0,
         "score": 90,

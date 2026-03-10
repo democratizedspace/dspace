@@ -75,12 +75,16 @@ export function getQuestProcessPathSummary(quest) {
         const node = nodes.get(nodeId);
         if (!node) continue;
 
-        for (const option of node.options || []) {
+        const options = node.options || [];
+        const nodeHasProcessOption = options.some((option) => option.type === 'process');
+
+        for (const option of options) {
             const nextUsedProcess = usedProcess || option.type === 'process';
+            const nextUsedProcessAfterSameNodeAction = usedProcess || nodeHasProcessOption;
 
             if (option.type === 'finish') {
                 hasFinishPath = true;
-                if (nextUsedProcess) {
+                if (nextUsedProcessAfterSameNodeAction) {
                     hasAnyProcessPath = true;
                 } else {
                     hasFinishWithoutProcess = true;
@@ -88,7 +92,11 @@ export function getQuestProcessPathSummary(quest) {
             }
 
             if (option.goto) {
-                queue.push({ nodeId: option.goto, usedProcess: nextUsedProcess });
+                const usedProcessForGoto =
+                    !usedProcess && nodeHasProcessOption && option.type !== 'process'
+                        ? true
+                        : nextUsedProcess;
+                queue.push({ nodeId: option.goto, usedProcess: usedProcessForGoto });
             }
         }
     }

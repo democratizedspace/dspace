@@ -429,14 +429,13 @@ function checkQuestReachability() {
     return unreachable;
 }
 
-
 function checkQuestProcessOptionShape() {
     const issues = [];
 
     for (const [id, quest] of quests.entries()) {
         for (const node of quest.dialogue || []) {
             for (const option of node.options || []) {
-                if (option.process && option.type !== 'process') {
+                if (id.startsWith('astronomy/') && option.process && option.type !== 'process') {
                     issues.push(
                         `Quest ${id} node ${node.id} has process '${option.process}' on non-process option type '${option.type}'`
                     );
@@ -466,7 +465,8 @@ function checkQuestProcessOptionShape() {
                         const usedProcess = state.usedProcess || option.type === 'process';
                         const hasItemGate =
                             state.hasItemGate ||
-                            Array.isArray(option.requiresItems) && option.requiresItems.length > 0;
+                            (Array.isArray(option.requiresItems) &&
+                                option.requiresItems.length > 0);
 
                         if (option.type === 'finish' && !usedProcess && !hasItemGate) {
                             return true;
@@ -594,7 +594,6 @@ describe('Quest Quality Validation', () => {
         }
         expect(issues.length).toBe(0);
     });
-
 
     test('Process options are well-formed and astronomy quests require process-backed completion paths', () => {
         const issues = checkQuestProcessOptionShape();

@@ -48,7 +48,6 @@ describe('Quest simulation', () => {
         expect(questHasFinishPath(quest)).toBe(true);
     });
 
-
     test('process-path summary detects finish paths that skip processes', () => {
         const quest = {
             start: 'start',
@@ -58,7 +57,15 @@ describe('Quest simulation', () => {
                     text: 'start',
                     options: [
                         { type: 'goto', goto: 'finishNode', text: 'skip process' },
+                        { type: 'goto', goto: 'processNode', text: 'take process route' },
+                    ],
+                },
+                {
+                    id: 'processNode',
+                    text: 'processNode',
+                    options: [
                         { type: 'process', process: 'example-process', text: 'run process' },
+                        { type: 'goto', goto: 'finishNode', text: 'continue after process' },
                     ],
                 },
                 {
@@ -71,14 +78,22 @@ describe('Quest simulation', () => {
         expect(questRequiresProcessOnAllFinishPaths(quest)).toBe(false);
     });
 
-    test('process-path summary passes when every finish path requires a process', () => {
+    test('process-path summary handles real process-plus-goto quest pattern', () => {
         const quest = {
             start: 'start',
             dialogue: [
                 {
                     id: 'start',
                     text: 'start',
-                    options: [{ type: 'process', process: 'example-process', text: 'run process' }],
+                    options: [
+                        { type: 'process', process: 'example-process', text: 'run process' },
+                        {
+                            type: 'goto',
+                            goto: 'middle',
+                            text: 'process completed, continue',
+                            requiresItems: [{ id: 'proof-item', count: 1 }],
+                        },
+                    ],
                 },
                 {
                     id: 'middle',
@@ -87,7 +102,6 @@ describe('Quest simulation', () => {
                 },
             ],
         };
-        quest.dialogue[0].options[0].goto = 'middle';
         expect(questRequiresProcessOnAllFinishPaths(quest)).toBe(true);
     });
 

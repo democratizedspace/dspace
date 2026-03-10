@@ -256,7 +256,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `focus-route` → "Focus lock achieved; route to evidence logging." — basic telescope ×1, constellation sketch set ×1
     - `log-evidence` → "Observation logged; run interpretation check." — mission logbook ×1, basic telescope ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "Yes—color contrast and repeatability are both confirmed." — mission log entry ×1, mission logbook ×1
-    - `recovery` → "Conditions are unsafe tonight; reschedule and finish with a caution note." — mission log entry ×1
+    - `recovery` → "Conditions are unsafe tonight; reschedule and finish with a caution note." — mission logbook ×1
 - Troubleshooting/safety branches:
     - `choose-route` now requires both evidence capture and an explicit interpretation gate before completion.
     - `recovery` loops back to route selection after tripod/footing/glare safety checks.
@@ -498,7 +498,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `quick-route` → "Order matches prediction; move to evidence capture." — basic telescope ×1, constellation sketch set ×1
     - `capture` → "Evidence logged; move to interpretation." — mission log entry ×1, mission logbook ×1
     - `interpret` → "Yes—logged order is consistent and uncertainty is documented." — mission log entry ×1, basic telescope ×1
-    - `recovery` → "Unsafe window tonight; finish with a logged caution note." — mission log entry ×1
+    - `recovery` → "Unsafe window tonight; finish with a logged caution note." — mission logbook ×1
 - Troubleshooting/safety branches:
     - `plan` now branches to a chart-first main route and a quick-confirm alternate route.
     - `interpret` blocks finish on inconsistent evidence and routes to `recovery`.
@@ -639,7 +639,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `shadow-align` → "Shadow minimized; projection stable." — basic telescope ×1
     - `capture` → "Sketch and notes are complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "All required fields are present." — mission logbook ×1, mission log entry ×1
-    - `recovery` → "Unsafe conditions persist—log a no-observation day and finish." — mission log entry ×1
+    - `recovery` → "Unsafe conditions persist—log a no-observation day and finish." — mission logbook ×1
 - Troubleshooting/safety branches:
     - `setup` branches between chart-assisted and shadow-minimization alignment strategies.
     - `recovery` enforces stand-down when overheating or bystander-safety issues appear and loops to `safety-brief`.
