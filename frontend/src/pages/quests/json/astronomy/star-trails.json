@@ -11,10 +11,28 @@
             "text": "You've mapped constellations; now let's capture their motion. We need a plan before we open the shutter.",
             "options": [
                 {
+                    "type": "process",
+                    "process": "draft-seasonal-star-plan",
+                    "text": "Run the seasonal star-hop planning process.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Plot the hop and gear.",
-                    "process": "draft-seasonal-star-plan",
+                    "text": "Seasonal plan drafted and checked.",
                     "requiresItems": [
                         {
                             "id": "98f6252e-95c2-468a-b110-69d47604df2c",
@@ -37,10 +55,9 @@
             "text": "Mark Polaris on your chart and note your exposure window so you avoid passing planes and neighbor lights.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "setup",
-                    "text": "Tripod leveled and azimuth marked.",
+                    "type": "process",
                     "process": "align-star-trail-rig",
+                    "text": "Run the polar-alignment setup process.",
                     "requiresItems": [
                         {
                             "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
@@ -62,6 +79,17 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "setup",
+                    "text": "Rig aligned and locked for capture.",
+                    "requiresItems": [
+                        {
+                            "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "start",
                     "text": "Recheck my sky window."
                 }
@@ -69,13 +97,12 @@
         },
         {
             "id": "setup",
-            "text": "Dial in a 20–30 second base exposure, use your red light to frame foreground, and lock focus on a bright star.",
+            "text": "Dial in a 20\u201330 second base exposure, use your red light to frame foreground, and lock focus on a bright star.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "interpret",
-                    "text": "Stack captured and color-balanced.",
+                    "type": "process",
                     "process": "capture-star-trail-stack",
+                    "text": "Run the long-exposure capture and stack process.",
                     "requiresItems": [
                         {
                             "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
@@ -89,8 +116,23 @@
                 },
                 {
                     "type": "goto",
+                    "goto": "interpret",
+                    "text": "Stack captured and color-balanced.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
                     "goto": "plan",
-                    "text": "I bumped the tripod—realign."
+                    "text": "I bumped the tripod\u2014realign."
                 },
                 {
                     "type": "goto",
@@ -109,10 +151,9 @@
             "text": "Alternate strategy: run 10-15 second interval bursts with a two-second gap, then stack only the cleanest sequence to reduce cloud and vibration streaks.",
             "options": [
                 {
-                    "type": "goto",
-                    "goto": "interpret",
-                    "text": "Burst set captured and stacked for review.",
+                    "type": "process",
                     "process": "capture-star-trail-stack",
+                    "text": "Run the burst-capture stack process.",
                     "requiresItems": [
                         {
                             "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
@@ -120,6 +161,21 @@
                         },
                         {
                             "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Burst set captured and stacked for review.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
                             "count": 1
                         }
                     ]
@@ -164,7 +220,7 @@
                 {
                     "type": "goto",
                     "goto": "plan",
-                    "text": "Recovery checks complete—replan and retry."
+                    "text": "Recovery checks complete\u2014replan and retry."
                 },
                 {
                     "type": "goto",
@@ -194,11 +250,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/planetary-alignment"],
+    "requiresQuests": [
+        "astronomy/planetary-alignment"
+    ],
     "hardening": {
         "passes": 0,
         "score": 90,
-        "emoji": "🛠️",
+        "emoji": "\ud83d\udee0\ufe0f",
         "history": []
     }
 }
