@@ -46,3 +46,60 @@ export function getQuestSimulationSummary(quest) {
 export function questHasFinishPath(quest) {
     return getQuestSimulationSummary(quest).hasFinishPath;
 }
+
+export function getQuestProcessPathSummary(quest) {
+    const nodes = new Map();
+    (quest.dialogue || []).forEach((node) => nodes.set(node.id, node));
+    const startId = quest.start || 'start';
+
+    if (!nodes.has(startId)) {
+        return {
+            hasFinishPath: false,
+            hasProcessOnEveryFinishPath: false,
+            hasAnyProcessPath: false,
+        };
+    }
+
+    const queue = [{ nodeId: startId, usedProcess: false }];
+    const visited = new Set();
+    let hasFinishPath = false;
+    let hasAnyProcessPath = false;
+    let hasFinishWithoutProcess = false;
+
+    while (queue.length > 0) {
+        const { nodeId, usedProcess } = queue.shift();
+        const stateKey = `${nodeId}|${usedProcess ? 'process' : 'none'}`;
+        if (visited.has(stateKey)) continue;
+        visited.add(stateKey);
+
+        const node = nodes.get(nodeId);
+        if (!node) continue;
+
+        for (const option of node.options || []) {
+            const nextUsedProcess = usedProcess || option.type === 'process';
+
+            if (option.type === 'finish') {
+                hasFinishPath = true;
+                if (nextUsedProcess) {
+                    hasAnyProcessPath = true;
+                } else {
+                    hasFinishWithoutProcess = true;
+                }
+            }
+
+            if (option.goto) {
+                queue.push({ nodeId: option.goto, usedProcess: nextUsedProcess });
+            }
+        }
+    }
+
+    return {
+        hasFinishPath,
+        hasProcessOnEveryFinishPath: hasFinishPath && !hasFinishWithoutProcess,
+        hasAnyProcessPath,
+    };
+}
+
+export function questRequiresProcessOnAllFinishPaths(quest) {
+    return getQuestProcessPathSummary(quest).hasProcessOnEveryFinishPath;
+}

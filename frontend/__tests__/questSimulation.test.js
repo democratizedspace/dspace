@@ -4,7 +4,11 @@
 const fs = require('fs');
 const path = require('path');
 const { globSync } = require('glob');
-const { questHasFinishPath, getQuestSimulationSummary } = require('../src/utils/simulateQuest.js');
+const {
+    questHasFinishPath,
+    getQuestSimulationSummary,
+    questRequiresProcessOnAllFinishPaths,
+} = require('../src/utils/simulateQuest.js');
 
 const questFile = path.join(__dirname, '../test-data/constellations-quest.json');
 const loopQuestFile = path.join(__dirname, '../test-data/loop-quest.json');
@@ -42,6 +46,49 @@ describe('Quest simulation', () => {
     test('quest requiring GitHub token still has finish path', () => {
         const quest = JSON.parse(fs.readFileSync(githubFinishQuestFile));
         expect(questHasFinishPath(quest)).toBe(true);
+    });
+
+
+    test('process-path summary detects finish paths that skip processes', () => {
+        const quest = {
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'start',
+                    options: [
+                        { type: 'goto', goto: 'finishNode', text: 'skip process' },
+                        { type: 'process', process: 'example-process', text: 'run process' },
+                    ],
+                },
+                {
+                    id: 'finishNode',
+                    text: 'end',
+                    options: [{ type: 'finish', text: 'finish' }],
+                },
+            ],
+        };
+        expect(questRequiresProcessOnAllFinishPaths(quest)).toBe(false);
+    });
+
+    test('process-path summary passes when every finish path requires a process', () => {
+        const quest = {
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'start',
+                    options: [{ type: 'process', process: 'example-process', text: 'run process' }],
+                },
+                {
+                    id: 'middle',
+                    text: 'middle',
+                    options: [{ type: 'finish', text: 'finish' }],
+                },
+            ],
+        };
+        quest.dialogue[0].options[0].goto = 'middle';
+        expect(questRequiresProcessOnAllFinishPaths(quest)).toBe(true);
     });
 
     test('simulation summary reports missing start and unreachable nodes', () => {

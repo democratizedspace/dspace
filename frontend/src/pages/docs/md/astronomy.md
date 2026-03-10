@@ -256,6 +256,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `focus-route` → "Focus lock achieved; route to evidence logging." — basic telescope ×1, constellation sketch set ×1
     - `log-evidence` → "Observation logged; run interpretation check." — mission logbook ×1, basic telescope ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "Yes—color contrast and repeatability are both confirmed." — mission log entry ×1, mission logbook ×1
+    - `recovery` → "Conditions are unsafe tonight; reschedule and finish with a caution note." — mission log entry ×1
 - Troubleshooting/safety branches:
     - `choose-route` now requires both evidence capture and an explicit interpretation gate before completion.
     - `recovery` loops back to route selection after tripod/footing/glare safety checks.
@@ -593,14 +594,15 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/planetary-alignment`
 - Dialogue `requiresItems` gates:
-    - `start` → "Plot the hop and gear." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
-    - `plan` → "Tripod leveled and azimuth marked." — seasonal star hop plan ×1, red flashlight ×1, digital camera ×1, camera tripod ×1
-    - `setup` → "Stack captured and color-balanced." — polar-aligned camera rig ×1, Laptop Computer ×1
+    - `start` → "Seasonal plan drafted and gear list confirmed." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+    - `plan` → "Polar alignment confirmed and rig locked." — seasonal star hop plan ×1, red flashlight ×1, digital camera ×1, camera tripod ×1
+    - `setup` → "Stack ready for interpretation review." — polar-aligned camera rig ×1, Laptop Computer ×1
     - `interpret` → "Pass: trails are continuous and drift stayed in bounds." — polar-aligned camera rig ×1, stacked star trail photo ×1
-    - `interval-plan` → "Burst set captured and stacked for review." — polar-aligned camera rig ×1, Laptop Computer ×1
+    - `interval-plan` → "Burst stack prepared for interpretation." — polar-aligned camera rig ×1, Laptop Computer ×1
     - `recovery` → "Unsafe window tonight; log the partial and stand down." — stacked star trail photo ×1
     - `finish` → "Save to the observing log." — stacked star trail photo ×1
 - Troubleshooting/safety branches:
+    - `start`, `plan`, `setup`, and `interval-plan` use explicit `type: process` execution steps with separate gated continuation options.
     - `setup` now branches between full-length captures and `interval-plan` burst strategy when seeing is unstable.
     - Both capture strategies gate advancement through `capture-star-trail-stack` evidence before interpretation.
     - `setup` can route to `recovery` on condensation/cloud/battery failures.
@@ -637,6 +639,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `shadow-align` → "Shadow minimized; projection stable." — basic telescope ×1
     - `capture` → "Sketch and notes are complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "All required fields are present." — mission logbook ×1, mission log entry ×1
+    - `recovery` → "Unsafe conditions persist—log a no-observation day and finish." — mission log entry ×1
 - Troubleshooting/safety branches:
     - `setup` branches between chart-assisted and shadow-minimization alignment strategies.
     - `recovery` enforces stand-down when overheating or bystander-safety issues appear and loops to `safety-brief`.

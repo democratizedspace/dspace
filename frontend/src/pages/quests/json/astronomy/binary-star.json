@@ -64,12 +64,12 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Still a blurry single point\u2014need troubleshooting."
+                    "text": "Still a blurry single point—need troubleshooting."
                 },
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Seeing keeps collapsing\u2014pause and recover."
+                    "text": "Seeing keeps collapsing—pause and recover."
                 }
             ]
         },
@@ -111,7 +111,7 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Yes\u2014color contrast and repeatability are both confirmed.",
+                    "text": "Yes—color contrast and repeatability are both confirmed.",
                     "requiresItems": [
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
@@ -126,7 +126,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "No\u2014the split wasn't repeatable; run recovery and retry."
+                    "text": "No—the split wasn't repeatable; run recovery and retry."
                 }
             ]
         },
@@ -137,12 +137,18 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Safety check done\u2014retry one of the routes."
+                    "text": "Safety check done—retry one of the routes."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Conditions are unsafe tonight; reschedule and finish with a caution note."
+                    "text": "Conditions are unsafe tonight; reschedule and finish with a caution note.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -201,11 +207,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }
