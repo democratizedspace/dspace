@@ -16,7 +16,7 @@
                     "text": "Yeah, let's catalog it",
                     "requiresItems": [
                         {
-                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
                             "count": 1
                         }
                     ]
@@ -38,7 +38,7 @@
                     "text": "I have an entry ready for review",
                     "requiresItems": [
                         {
-                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
                             "count": 1
                         },
                         {

@@ -1,0 +1,14 @@
+{
+  "id": "2026-03-10-completionist-catalog-polished-gate",
+  "date": "2026-03-10",
+  "component": "quests-completionist",
+  "rootCause": "The completionist/catalog dialogue and its logging process still required the raw Completionist Award II item even though common progression consumes that item in completionist/polish and produces Completionist Award II (polished).",
+  "resolution": "Updated completionist/catalog and the record-completionist-award-entry process to require Completionist Award II (polished), synchronized generated process data, and added regression coverage to ensure catalog remains gated on the post-transform polished award.",
+  "references": [
+    "frontend/src/pages/quests/json/completionist/catalog.json",
+    "frontend/src/pages/processes/base.json",
+    "frontend/src/generated/processes.json",
+    "frontend/src/pages/docs/md/completionist.md",
+    "tests/questCompletableItems.test.ts"
+  ]
+}
