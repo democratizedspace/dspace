@@ -566,7 +566,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `focus-route` → "Focus lock holds and the rings are visible." — basic telescope ×1, red flashlight ×1
     - `log-observation` → "Log entry complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "Interpretation passes; session is reproducible." — feather quill ×1, red flashlight ×1
-    - `recovery` → "Unsafe conditions persist; close with a caution log." — mission logbook ×1, mission log entry ×1
+    - `recovery` → "Unsafe conditions persist; close with a caution log." — mission logbook ×1, mission log entry ×1, feather quill ×1
 - Troubleshooting/safety branches:
     - `choose-route` provides chart-first and focus-first acquisition branches.
     - `recovery` enforces tripod stability, footing, and lighting safety checks before any retry.
@@ -637,6 +637,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `shadow-align` → "Shadow minimized; projection stable." — basic telescope ×1
     - `capture` → "Sketch and notes are complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "All required fields are present." — mission logbook ×1, mission log entry ×1
+    - `recovery` → "Unsafe conditions persist—log a no-observation day and finish." — mission log entry ×1
 - Troubleshooting/safety branches:
     - `setup` branches between chart-assisted and shadow-minimization alignment strategies.
     - `recovery` enforces stand-down when overheating or bystander-safety issues appear and loops to `safety-brief`.
