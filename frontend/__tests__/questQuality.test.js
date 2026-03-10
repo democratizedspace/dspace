@@ -431,6 +431,11 @@ function checkQuestReachability() {
 
 function checkQuestProcessOptionShape() {
     const issues = [];
+    const astronomyProcessHardeningTargets = new Set([
+        'astronomy/star-trails',
+        'astronomy/binary-star',
+        'astronomy/sunspot-sketch',
+    ]);
 
     for (const [id, quest] of quests.entries()) {
         for (const node of quest.dialogue || []) {
@@ -443,37 +448,61 @@ function checkQuestProcessOptionShape() {
             }
         }
 
-        if (id.startsWith('astronomy/')) {
+        if (astronomyProcessHardeningTargets.has(id)) {
             const hasUnsafeBareFinishPath = (() => {
                 const nodes = new Map((quest.dialogue || []).map((node) => [node.id, node]));
                 const startId = quest.start || 'start';
                 if (!nodes.has(startId)) return true;
 
-                const queue = [{ nodeId: startId, usedProcess: false, hasItemGate: false }];
+                const queue = [
+                    {
+                        nodeId: startId,
+                        usedProcess: false,
+                        hasProcessBackedEvidenceGate: false,
+                    },
+                ];
                 const visited = new Set();
 
                 while (queue.length > 0) {
                     const state = queue.shift();
-                    const stateKey = `${state.nodeId}|${state.usedProcess}|${state.hasItemGate}`;
+                    const stateKey = `${state.nodeId}|${state.usedProcess}|${state.hasProcessBackedEvidenceGate}`;
                     if (visited.has(stateKey)) continue;
                     visited.add(stateKey);
 
                     const node = nodes.get(state.nodeId);
                     if (!node) continue;
 
+                    const nodeHasProcessOption = (node.options || []).some(
+                        (option) => option.type === 'process'
+                    );
+
                     for (const option of node.options || []) {
                         const usedProcess = state.usedProcess || option.type === 'process';
-                        const hasItemGate =
-                            state.hasItemGate ||
+                        const hasProcessBackedEvidenceGate =
+                            state.hasProcessBackedEvidenceGate ||
+                            (nodeHasProcessOption &&
+                                Array.isArray(option.requiresItems) &&
+                                option.requiresItems.length > 0) ||
                             (Array.isArray(option.requiresItems) &&
-                                option.requiresItems.length > 0);
+                                option.requiresItems.some(
+                                    (requiredItem) =>
+                                        requiredItem.id === '280ed361-ac70-4ab9-bcd9-aee481790faf'
+                                ));
 
-                        if (option.type === 'finish' && !usedProcess && !hasItemGate) {
+                        if (
+                            option.type === 'finish' &&
+                            !usedProcess &&
+                            !hasProcessBackedEvidenceGate
+                        ) {
                             return true;
                         }
 
                         if (option.goto) {
-                            queue.push({ nodeId: option.goto, usedProcess, hasItemGate });
+                            queue.push({
+                                nodeId: option.goto,
+                                usedProcess,
+                                hasProcessBackedEvidenceGate,
+                            });
                         }
                     }
                 }
@@ -483,7 +512,7 @@ function checkQuestProcessOptionShape() {
 
             if (hasUnsafeBareFinishPath) {
                 issues.push(
-                    `Astronomy quest ${id} has a bare finish path without process execution or item gating`
+                    `Astronomy quest ${id} has a finish path without process execution or process-backed evidence gating`
                 );
             }
         }
