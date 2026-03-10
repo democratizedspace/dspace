@@ -106,7 +106,7 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["completionist/catalog"],
+    "requiresQuests": ["completionist/v2"],
     "hardening": {
         "passes": 0,
         "score": 90,

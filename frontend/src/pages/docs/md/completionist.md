@@ -8,8 +8,8 @@ Completionist quests build practical progression through the completionist skill
 ## Quest tree
 
 1. [Congrats on finishing all the quests available in v2!](/quests/completionist/v2)
-2. [Catalog Your Trophy](/quests/completionist/catalog)
-3. [Polish Your Trophy](/quests/completionist/polish)
+2. [Polish Your Trophy](/quests/completionist/polish)
+3. [Catalog Your Trophy](/quests/completionist/catalog)
 4. [Show Off Your Trophy](/quests/completionist/display)
 5. [Check for New Quests](/quests/completionist/reminder)
 
@@ -47,11 +47,32 @@ Completionist quests build practical progression through the completionist skill
         - Consumes: Completionist Award II core ×1, Completionist Award II nameplate ×1, Sandpaper pack ×0.1, superglue ×0.1
         - Creates: Completionist Award II ×1
 
-## 2) Catalog Your Trophy (`completionist/catalog`)
+## 2) Polish Your Trophy (`completionist/polish`)
+
+- Quest link: [/quests/completionist/polish](/quests/completionist/polish)
+- Unlock prerequisite:
+    - `requiresQuests`: `completionist/v2`
+- Dialogue `requiresItems` gates:
+    - `start` → "Absolutely, let's polish it" — Completionist Award II ×1
+    - `prep` → "First polish pass complete" — Completionist Award II (polished) ×1
+    - `inspect` → "Surface is clear and dry, done" — Completionist Award II (polished) ×1
+    - `recovery` → "Second pass done, re-inspect" — Completionist Award II (polished) ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - Completionist Award ×1
+- Processes used:
+    - [polish-completionist-award](/processes/polish-completionist-award)
+        - Requires: liquid soap ×1, Completionist Award II ×1, paper towel ×1
+        - Consumes: paper towel ×0.1, Completionist Award II ×1
+        - Creates: Completionist Award II (polished) ×1
+
+## 3) Catalog Your Trophy (`completionist/catalog`)
 
 - Quest link: [/quests/completionist/catalog](/quests/completionist/catalog)
 - Unlock prerequisite:
-    - `requiresQuests`: `completionist/v2`
+    - `requiresQuests`: `completionist/polish`
 - Dialogue `requiresItems` gates:
     - `start` → "Yeah, let's catalog it" — Completionist Award II (polished) ×1
     - `prep` → "I have an entry ready for review" — Completionist Award II (polished) ×1, completionist trophy log entry ×1
@@ -69,27 +90,6 @@ Completionist quests build practical progression through the completionist skill
         - Requires: mission logbook ×1, smartphone ×1, Completionist Award II (polished) ×1
         - Consumes: none
         - Creates: completionist trophy log entry ×1
-
-## 3) Polish Your Trophy (`completionist/polish`)
-
-- Quest link: [/quests/completionist/polish](/quests/completionist/polish)
-- Unlock prerequisite:
-    - `requiresQuests`: `completionist/catalog`
-- Dialogue `requiresItems` gates:
-    - `start` → "Absolutely, let's polish it" — Completionist Award II ×1
-    - `prep` → "First polish pass complete" — Completionist Award II (polished) ×1
-    - `inspect` → "Surface is clear and dry, done" — Completionist Award II (polished) ×1
-    - `recovery` → "Second pass done, re-inspect" — Completionist Award II (polished) ×1
-- Grants:
-    - Dialogue options/steps grantsItems: None
-    - Quest-level `grantsItems`: None
-- Rewards:
-    - Completionist Award ×1
-- Processes used:
-    - [polish-completionist-award](/processes/polish-completionist-award)
-        - Requires: liquid soap ×1, Completionist Award II ×1, paper towel ×1
-        - Consumes: paper towel ×0.1, Completionist Award II ×1
-        - Creates: Completionist Award II (polished) ×1
 
 ## 4) Show Off Your Trophy (`completionist/display`)
 

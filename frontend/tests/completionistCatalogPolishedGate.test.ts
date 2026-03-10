@@ -26,23 +26,41 @@ describe('completionist catalog polished gate', () => {
         const startDialogue = quest.dialogue.find((step: { id: string }) => step.id === 'start');
         const prepDialogue = quest.dialogue.find((step: { id: string }) => step.id === 'prep');
 
-        const startOption = startDialogue.options.find(
+        expect(startDialogue).toBeDefined();
+        expect(prepDialogue).toBeDefined();
+
+        const startOption = startDialogue?.options.find(
             (option: { goto: string }) => option.goto === 'prep'
         );
-        const prepOption = prepDialogue.options.find(
+        const prepOption = prepDialogue?.options.find(
             (option: { goto: string }) => option.goto === 'review'
         );
 
-        expect(startOption.requiresItems).toEqual([{ id: POLISHED_AWARD_ID, count: 1 }]);
-        expect(prepOption.requiresItems).toContainEqual({ id: POLISHED_AWARD_ID, count: 1 });
+        expect(startOption).toBeDefined();
+        expect(prepOption).toBeDefined();
+
+        expect(startOption?.requiresItems).toEqual([{ id: POLISHED_AWARD_ID, count: 1 }]);
+        expect(prepOption?.requiresItems).toContainEqual({ id: POLISHED_AWARD_ID, count: 1 });
     });
 
     it('requires polished award for the catalog log-entry process', () => {
-        const processes = readJson('src', 'pages', 'processes', 'base.json');
-        const recordProcess = processes.find(
+        const baseProcesses = readJson('src', 'pages', 'processes', 'base.json');
+        const generatedProcesses = readJson('src', 'generated', 'processes.json');
+
+        const baseRecordProcess = baseProcesses.find(
+            (process: { id: string }) => process.id === 'record-completionist-award-entry'
+        );
+        const generatedRecordProcess = generatedProcesses.find(
             (process: { id: string }) => process.id === 'record-completionist-award-entry'
         );
 
-        expect(recordProcess.requireItems).toContainEqual({ id: POLISHED_AWARD_ID, count: 1 });
+        expect(baseRecordProcess).toBeDefined();
+        expect(generatedRecordProcess).toBeDefined();
+
+        expect(baseRecordProcess?.requireItems).toContainEqual({ id: POLISHED_AWARD_ID, count: 1 });
+        expect(generatedRecordProcess?.requireItems).toContainEqual({
+            id: POLISHED_AWARD_ID,
+            count: 1,
+        });
     });
 });
