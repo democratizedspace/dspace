@@ -57,19 +57,19 @@
                         },
                         {
                             "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
-                            "count": 5.0
+                            "count": 5
                         }
                     ]
                 },
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Still a blurry single point\u2014need troubleshooting."
+                    "text": "Still a blurry single point—need troubleshooting."
                 },
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "Seeing keeps collapsing\u2014pause and recover."
+                    "text": "Seeing keeps collapsing—pause and recover."
                 }
             ]
         },
@@ -93,7 +93,7 @@
                         },
                         {
                             "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
-                            "count": 5.0
+                            "count": 5
                         }
                     ]
                 },
@@ -111,14 +111,18 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Yes\u2014color contrast and repeatability are both confirmed.",
+                    "text": "Yes—color contrast and repeatability are both confirmed.",
                     "requiresItems": [
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
-                            "count": 4.0
+                            "count": 4
                         },
                         {
                             "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "9db35820-1243-4567-a8a4-822530fb6328",
                             "count": 1
                         }
                     ]
@@ -126,7 +130,7 @@
                 {
                     "type": "goto",
                     "goto": "recovery",
-                    "text": "No\u2014the split wasn't repeatable; run recovery and retry."
+                    "text": "No—the split wasn't repeatable; run recovery and retry."
                 }
             ]
         },
@@ -137,12 +141,18 @@
                 {
                     "type": "goto",
                     "goto": "choose-route",
-                    "text": "Safety check done\u2014retry one of the routes."
+                    "text": "Safety check done—retry one of the routes."
                 },
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Conditions are unsafe tonight; reschedule and finish with a caution note."
+                    "text": "Conditions are unsafe tonight; reschedule and finish with a caution note.",
+                    "requiresItems": [
+                        {
+                            "id": "9db35820-1243-4567-a8a4-822530fb6328",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -153,7 +163,13 @@
                 {
                     "type": "process",
                     "process": "write-mission-log-entry",
-                    "text": "Mission log entry drafted."
+                    "text": "Mission log entry drafted.",
+                    "grantsItems": [
+                        {
+                            "id": "9db35820-1243-4567-a8a4-822530fb6328",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -170,7 +186,7 @@
                         },
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
-                            "count": 4.0
+                            "count": 4
                         },
                         {
                             "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
@@ -201,11 +217,13 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/constellations"],
+    "requiresQuests": [
+        "astronomy/constellations"
+    ],
     "hardening": {
         "passes": 0,
         "score": 100,
-        "emoji": "\ud83d\udee0\ufe0f",
+        "emoji": "🛠️",
         "history": []
     }
 }

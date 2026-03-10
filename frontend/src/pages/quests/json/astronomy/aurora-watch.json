@@ -128,7 +128,13 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "All fields are complete and readable."
+                    "text": "All fields are complete and readable.",
+                    "requiresItems": [
+                        {
+                            "id": "682c9b29-b16f-4cf1-aaad-861a4aa133f4",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -158,7 +164,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/light-pollution"],
+    "requiresQuests": [
+        "astronomy/light-pollution"
+    ],
     "hardening": {
         "passes": 1,
         "score": 95,

@@ -153,13 +153,13 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `plan` → "Pass window confirmed, gear is staged." — digital camera ×1, camera tripod ×1, ISS pass window ×1
     - `capture` → "Photo saved and metadata logged." — mission logbook ×1, ISS pass window ×1, mission log entry ×1, feather quill ×1
     - `interpret` → "Pass: streak continuous, timing <15s, heading matches plan." — mission logbook ×1, mission log entry ×1, feather quill ×1, iss long-exposure photo print ×1
-    - `recovery` → "Session aborted safely; follow-up logged for next pass." — mission log entry ×1
+    - `recovery` → "Session aborted safely; follow-up logged for next pass." — mission log entry ×1, iss long-exposure photo print ×1
 - Troubleshooting/safety branches:
     - `interpret` fail path forces `retest` when timing, heading, or framing are out of range.
     - `retest` requires corrective stabilization + heading checks before rerunning capture.
     - `recovery` enforces a safety stop/reschedule path for weather or footing risk and requires a logged follow-up note before completion.
 - Grants:
-    - Dialogue options/steps grantsItems: None
+    - Dialogue options/steps grantsItems: iss long-exposure photo print ×1 (granted in `capture` via `capture-iss-memento-photo` option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - ISS pass log ×1
@@ -255,13 +255,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `chart-route` → "I can resolve two stars and distinct colors; move to evidence logging." — basic telescope ×1, planisphere star chart ×1, constellation sketch set ×1
     - `focus-route` → "Focus lock achieved; route to evidence logging." — basic telescope ×1, constellation sketch set ×1
     - `log-evidence` → "Observation logged; run interpretation check." — mission logbook ×1, basic telescope ×1, mission log entry ×1, feather quill ×1
-    - `interpret` → "Yes—color contrast and repeatability are both confirmed." — mission log entry ×1, mission logbook ×1
+    - `interpret` → "Yes—color contrast and repeatability are both confirmed." — mission log entry ×1, mission logbook ×1, binary star split verification card ×1
+    - `recovery` → "Unsafe tonight, but verification card is already logged—finish with caution." — binary star split verification card ×1
 - Troubleshooting/safety branches:
     - `choose-route` now requires both evidence capture and an explicit interpretation gate before completion.
     - `recovery` loops back to route selection after tripod/footing/glare safety checks.
     - Unsafe conditions can still finish only through a caution path, preserving fail-closed safety behavior.
 - Grants:
-    - Dialogue options/steps grantsItems: binary star split verification card ×1 (granted in `finish` via “Record and archive…” option)
+    - Dialogue options/steps grantsItems: binary star split verification card ×1 (granted in `log-evidence` via `write-mission-log-entry` option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - constellation sketch set ×1
@@ -314,6 +315,7 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `forecast` → "Window picked—what should I pack?" — aurora viewing plan ×1
     - `kit` → "Kit is ready—let's step outside." — dark-sky kit packed ×1
     - `observe` → "Entry written with colors and timestamps." — aurora sighting log ×1
+    - `verify-log` → "All fields are complete and readable." — aurora sighting log ×1
 - Troubleshooting and safety flow:
     - `session-check` branches between live observing and `fallback` when weather or site safety degrades.
     - `fallback` re-runs forecast planning before returning to session readiness.
@@ -496,14 +498,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `chart-route` → "Planisphere and telescope are ready for capture." — basic telescope ×1
     - `quick-route` → "Order matches prediction; move to evidence capture." — basic telescope ×1, constellation sketch set ×1
     - `capture` → "Evidence logged; move to interpretation." — mission log entry ×1, mission logbook ×1
-    - `interpret` → "Yes—logged order is consistent and uncertainty is documented." — mission log entry ×1, basic telescope ×1
-    - `recovery` → "Unsafe window tonight; finish with a logged caution note." — mission log entry ×1
+    - `interpret` → "Yes—logged order is consistent and uncertainty is documented." — mission log entry ×1, basic telescope ×1, planetary alignment witness chart ×1
+    - `recovery` → "Unsafe window tonight; finish with a logged caution note." — planetary alignment witness chart ×1
 - Troubleshooting/safety branches:
     - `plan` now branches to a chart-first main route and a quick-confirm alternate route.
     - `interpret` blocks finish on inconsistent evidence and routes to `recovery`.
     - `recovery` enforces stand-down checks (footing/weather/glare) before retry or caution closeout.
 - Grants:
-    - Dialogue options/steps grantsItems: planetary alignment witness chart ×1 (granted in `finish` via “Record and archive…” option)
+    - Dialogue options/steps grantsItems: planetary alignment witness chart ×1 (granted in `capture` via `write-mission-log-entry` option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Polaris alignment note ×1
@@ -593,9 +595,9 @@ Astronomy quests build practical progression through the astronomy skill tree. T
 - Unlock prerequisite:
     - `requiresQuests`: `astronomy/planetary-alignment`
 - Dialogue `requiresItems` gates:
-    - `start` → "Plot the hop and gear." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
-    - `plan` → "Tripod leveled and azimuth marked." — seasonal star hop plan ×1, red flashlight ×1, digital camera ×1, camera tripod ×1
-    - `setup` → "Stack captured and color-balanced." — polar-aligned camera rig ×1, Laptop Computer ×1
+    - `start` → "Plan drafted—move to tripod setup." — planisphere star chart ×1, red flashlight ×1, mission logbook ×1
+    - `plan` → "Rig aligned—ready for captures." — polar-aligned camera rig ×1
+    - `setup` → "Stack captured and color-balanced." — stacked star trail photo ×1
     - `interpret` → "Pass: trails are continuous and drift stayed in bounds." — polar-aligned camera rig ×1, stacked star trail photo ×1
     - `interval-plan` → "Burst set captured and stacked for review." — polar-aligned camera rig ×1, Laptop Computer ×1
     - `recovery` → "Unsafe window tonight; log the partial and stand down." — stacked star trail photo ×1
@@ -636,13 +638,14 @@ Astronomy quests build practical progression through the astronomy skill tree. T
     - `chart-align` → "Projection disk is crisp and stable." — constellation sketch set ×1
     - `shadow-align` → "Shadow minimized; projection stable." — basic telescope ×1
     - `capture` → "Sketch and notes are complete." — mission logbook ×1, mission log entry ×1, feather quill ×1
-    - `interpret` → "All required fields are present." — mission logbook ×1, mission log entry ×1
+    - `interpret` → "All required fields are present." — mission logbook ×1, mission log entry ×1, sunspot transit notebook page ×1
+    - `recovery` → "Unsafe to continue; finish only after notebook evidence is logged." — sunspot transit notebook page ×1
 - Troubleshooting/safety branches:
     - `setup` branches between chart-assisted and shadow-minimization alignment strategies.
     - `recovery` enforces stand-down when overheating or bystander-safety issues appear and loops to `safety-brief`.
     - `interpret` requires structured sketch evidence before finish and sends missing fields back to recovery.
 - Grants:
-    - Dialogue options/steps grantsItems: sunspot transit notebook page ×1 (granted in `finish` via “Record and archive…” option)
+    - Dialogue options/steps grantsItems: sunspot transit notebook page ×1 (granted in `capture` via `write-mission-log-entry` option)
     - Quest-level `grantsItems`: None
 - Rewards:
     - Venus phase sketch ×1

@@ -115,7 +115,13 @@
                 {
                     "type": "process",
                     "process": "write-mission-log-entry",
-                    "text": "Sketch notes captured in mission log."
+                    "text": "Sketch notes captured in mission log.",
+                    "grantsItems": [
+                        {
+                            "id": "ea043858-4d09-4510-a495-3ddae395ce51",
+                            "count": 1
+                        }
+                    ]
                 },
                 {
                     "type": "goto",
@@ -155,7 +161,13 @@
                 {
                     "type": "goto",
                     "goto": "finish",
-                    "text": "Unsafe conditions persist—log a no-observation day and finish."
+                    "text": "Unsafe conditions persist—log a no-observation day and finish.",
+                    "requiresItems": [
+                        {
+                            "id": "ea043858-4d09-4510-a495-3ddae395ce51",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
@@ -174,6 +186,10 @@
                         },
                         {
                             "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "ea043858-4d09-4510-a495-3ddae395ce51",
                             "count": 1
                         }
                     ]
@@ -206,7 +222,9 @@
             "count": 1
         }
     ],
-    "requiresQuests": ["astronomy/saturn-rings"],
+    "requiresQuests": [
+        "astronomy/saturn-rings"
+    ],
     "hardening": {
         "passes": 0,
         "score": 95,
