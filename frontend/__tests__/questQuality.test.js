@@ -429,6 +429,98 @@ function checkQuestReachability() {
     return unreachable;
 }
 
+function checkQuestProcessOptionShape() {
+    const issues = [];
+    const astronomyProcessHardeningTargets = new Set([
+        'astronomy/star-trails',
+        'astronomy/binary-star',
+        'astronomy/sunspot-sketch',
+    ]);
+
+    for (const [id, quest] of quests.entries()) {
+        for (const node of quest.dialogue || []) {
+            for (const option of node.options || []) {
+                if (id.startsWith('astronomy/') && option.process && option.type !== 'process') {
+                    issues.push(
+                        `Quest ${id} node ${node.id} has process '${option.process}' on non-process option type '${option.type}'`
+                    );
+                }
+            }
+        }
+
+        if (astronomyProcessHardeningTargets.has(id)) {
+            const hasUnsafeBareFinishPath = (() => {
+                const nodes = new Map((quest.dialogue || []).map((node) => [node.id, node]));
+                const startId = quest.start || 'start';
+                if (!nodes.has(startId)) return true;
+
+                const queue = [
+                    {
+                        nodeId: startId,
+                        usedProcess: false,
+                        hasProcessBackedEvidenceGate: false,
+                    },
+                ];
+                const visited = new Set();
+
+                while (queue.length > 0) {
+                    const state = queue.shift();
+                    const stateKey = `${state.nodeId}|${state.usedProcess}|${state.hasProcessBackedEvidenceGate}`;
+                    if (visited.has(stateKey)) continue;
+                    visited.add(stateKey);
+
+                    const node = nodes.get(state.nodeId);
+                    if (!node) continue;
+
+                    const nodeHasProcessOption = (node.options || []).some(
+                        (option) => option.type === 'process'
+                    );
+
+                    for (const option of node.options || []) {
+                        const usedProcess = state.usedProcess || option.type === 'process';
+                        const hasProcessBackedEvidenceGate =
+                            state.hasProcessBackedEvidenceGate ||
+                            (nodeHasProcessOption &&
+                                Array.isArray(option.requiresItems) &&
+                                option.requiresItems.length > 0) ||
+                            (Array.isArray(option.requiresItems) &&
+                                option.requiresItems.some(
+                                    (requiredItem) =>
+                                        requiredItem.id === '280ed361-ac70-4ab9-bcd9-aee481790faf'
+                                ));
+
+                        if (
+                            option.type === 'finish' &&
+                            !usedProcess &&
+                            !hasProcessBackedEvidenceGate
+                        ) {
+                            return true;
+                        }
+
+                        if (option.goto) {
+                            queue.push({
+                                nodeId: option.goto,
+                                usedProcess,
+                                hasProcessBackedEvidenceGate,
+                            });
+                        }
+                    }
+                }
+
+                return false;
+            })();
+
+            if (hasUnsafeBareFinishPath) {
+                issues.push(
+                    `Astronomy quest ${id} has a finish path without process execution or process-backed evidence gating`
+                );
+            }
+        }
+    }
+
+    return issues;
+}
+
 // Ensure no single quest category is disproportionately long
 function checkProgressionBalance() {
     const depthCache = new Map();
@@ -529,6 +621,17 @@ describe('Quest Quality Validation', () => {
             console.warn('Item/Process Usage Issues:');
             issues.forEach((issue) => console.warn(`- ${issue}`));
         }
+        expect(issues.length).toBe(0);
+    });
+
+    test('Process options are well-formed and astronomy quests require process-backed completion paths', () => {
+        const issues = checkQuestProcessOptionShape();
+
+        if (issues.length > 0) {
+            console.warn('Process Pathing Issues:');
+            issues.forEach((issue) => console.warn(`- ${issue}`));
+        }
+
         expect(issues.length).toBe(0);
     });
 
