@@ -1,0 +1,20 @@
+{
+  "id": "2026-03-10-completionist-catalog-polished-gate",
+  "date": "2026-03-10",
+  "component": "frontend/quests/completionist",
+  "longForm": "outages/2026-03-10-completionist-catalog-polished-gate.md",
+  "rootCause": "The completionist/catalog dialogue and record-completionist-award-entry process still required the base Completionist Award II item, even though downstream progression and player inventories had moved to the polished award variant.",
+  "resolution": "Updated completionist/catalog gates and record-completionist-award-entry process requirements to use Completionist Award II (polished), and added regression tests to keep those gates aligned.",
+  "references": [
+    "frontend/src/pages/quests/json/completionist/catalog.json",
+    "frontend/src/pages/processes/base.json",
+    "frontend/tests/completionistCatalogPolishedGate.test.ts",
+    "frontend/src/pages/docs/md/completionist.md"
+  ],
+  "dateRanges": [
+    {
+      "start": "2026-03-10",
+      "end": "2026-03-10"
+    }
+  ]
+}
