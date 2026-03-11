@@ -30,7 +30,7 @@ describe('githubToken utils', () => {
 
     test('save before init preserves existing state', async () => {
         await new Promise((resolve, reject) => {
-            const req = indexedDB.open('dspaceGameState', 1);
+            const req = indexedDB.open('dspaceGameState', 2);
             req.onupgradeneeded = () => {
                 const db = req.result;
                 if (!db.objectStoreNames.contains('state')) db.createObjectStore('state');
@@ -73,7 +73,7 @@ describe('githubToken utils', () => {
         await saveGitHubToken('persisted-token');
 
         await new Promise((resolve, reject) => {
-            const req = indexedDB.open('dspaceGameState', 1);
+            const req = indexedDB.open('dspaceGameState', 2);
             req.onupgradeneeded = () => {
                 const db = req.result;
                 if (!db.objectStoreNames.contains('state')) {

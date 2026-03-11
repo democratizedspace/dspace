@@ -138,7 +138,7 @@ describe('gameState - common utilities', () => {
         await saveGameState(updated);
 
         await new Promise((resolve, reject) => {
-            const req = indexedDB.open('dspaceGameState', 1);
+            const req = indexedDB.open('dspaceGameState', 2);
             req.onsuccess = (e) => {
                 const db = e.target.result;
                 const tx = db.transaction('backup', 'readwrite');
@@ -152,6 +152,47 @@ describe('gameState - common utilities', () => {
         await rollbackGameState();
         const rolled = loadGameState();
         expect(rolled.inventory['1']).toBe(4);
+    });
+
+    test('upgrades existing v1 IndexedDB databases to include meta store', async () => {
+        await resetGameState();
+
+        await new Promise((resolve, reject) => {
+            const deleteReq = indexedDB.deleteDatabase('dspaceGameState');
+            deleteReq.onsuccess = () => resolve();
+            deleteReq.onerror = (event) => reject(event.target.error);
+            deleteReq.onblocked = () => resolve();
+        });
+
+        await new Promise((resolve, reject) => {
+            const req = indexedDB.open('dspaceGameState', 1);
+            req.onupgradeneeded = () => {
+                const db = req.result;
+                if (!db.objectStoreNames.contains('state')) db.createObjectStore('state');
+                if (!db.objectStoreNames.contains('backup')) db.createObjectStore('backup');
+            };
+            req.onsuccess = () => {
+                req.result.close();
+                resolve();
+            };
+            req.onerror = (event) => reject(event.target.error);
+        });
+
+        jest.resetModules();
+        const {
+            resetGameState: resetAfterUpgrade,
+            saveGameState: saveAfterUpgrade,
+            loadGameState: loadAfterUpgrade,
+            inspectGameStateStorage,
+        } = require('../../src/utils/gameState/common.js');
+
+        await resetAfterUpgrade();
+        const upgraded = loadAfterUpgrade();
+        upgraded.inventory['meta-upgrade-check'] = 1;
+        await saveAfterUpgrade(upgraded);
+
+        const storageState = await inspectGameStateStorage();
+        expect(storageState.usesLocalStorageFallback).toBe(false);
     });
 
     test('saveGameState persists checksum marker in localStorage', async () => {

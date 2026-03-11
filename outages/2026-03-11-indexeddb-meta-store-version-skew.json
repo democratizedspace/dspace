@@ -1,0 +1,18 @@
+{
+  "id": "indexeddb-meta-store-version-skew",
+  "date": "2026-03-11",
+  "component": "frontend game state persistence",
+  "rootCause": "PR #3933 introduced a new IndexedDB object store (`meta`) in `dspaceGameState` but kept the database version at 1, so browsers with an existing v1 database never ran `onupgradeneeded`. Reads/writes to the missing `meta` store threw transaction errors, forcing localStorage fallback and triggering the user warning dialog on every page load.",
+  "resolution": "Bumped `dspaceGameState` database version from 1 to 2 so existing clients run the IndexedDB upgrade path and create the `meta` store before checksum snapshot reads/writes. Updated IndexedDB-opening tests to version 2 for consistency with production schema.",
+  "regressionTests": [
+    "frontend/e2e/indexeddb-availability.spec.ts",
+    "frontend/__tests__/gameState/common.test.js",
+    "frontend/__tests__/githubToken.test.js"
+  ],
+  "references": [
+    "frontend/src/utils/gameState/common.js",
+    "frontend/e2e/indexeddb-availability.spec.ts",
+    "frontend/__tests__/gameState/common.test.js",
+    "frontend/__tests__/githubToken.test.js"
+  ]
+}
