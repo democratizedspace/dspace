@@ -6,7 +6,7 @@ import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
 import { restoreCustomContentBackup } from '../customContentBackup.js';
 
 const DB_NAME = 'dspaceGameState';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STATE_STORE = 'state';
 const BACKUP_STORE = 'backup';
 const META_STORE = 'meta';
