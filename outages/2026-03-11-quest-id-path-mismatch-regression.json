@@ -1,0 +1,13 @@
+{
+  "id": "OUT-2026-03-11-quest-id-path-mismatch-regression",
+  "date": "2026-03-11",
+  "component": "frontend/quests",
+  "rootCause": "A built-in electronics quest used id `electronics/tin-soldering-iron` but was stored at `frontend/src/pages/quests/json/electronics/soldering-intro.json`, so direct GitHub links based on the canonical quest id 404ed and documentation drifted to the filename alias.",
+  "resolution": "Renamed the quest JSON file to `tin-soldering-iron.json`, updated docs/assets references that still used `soldering-intro`, and added a regression test that enforces id-to-path parity for every built-in quest file.",
+  "references": [
+    "frontend/src/pages/quests/json/electronics/tin-soldering-iron.json",
+    "tests/questIdPathConsistency.test.ts",
+    "frontend/src/pages/docs/md/electronics.md",
+    "frontend/public/assets/quests/electronics_tin_soldering_iron_tip.json"
+  ]
+}
