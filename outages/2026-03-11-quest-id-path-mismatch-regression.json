@@ -1,0 +1,13 @@
+{
+  "id": "quest-id-path-mismatch-regression",
+  "date": "2026-03-11",
+  "component": "quests/electronics file-path routing",
+  "rootCause": "The electronics tin-soldering-iron quest kept a legacy filename (`soldering-intro.json`) while its canonical quest id had already moved to `electronics/tin-soldering-iron`, causing source links and path-derived references to drift.",
+  "resolution": "Renamed the quest JSON file to match its id, updated path-based references, and added a regression test that enforces `quest.id === <tree>/<filename>` across all quest JSON files.",
+  "longForm": "outages/2026-03-11-quest-id-path-mismatch-regression.md",
+  "references": [
+    "frontend/src/pages/quests/json/electronics/tin-soldering-iron.json",
+    "frontend/public/assets/quests/electronics_tin_soldering_iron_tip.json",
+    "tests/questIdPathConsistency.test.ts"
+  ]
+}
