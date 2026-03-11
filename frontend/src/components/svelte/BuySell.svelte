@@ -25,6 +25,7 @@
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
     let refreshIntervalId;
+    let refreshTick = 0;
 
     function handleTypeClick(type) {
         activeType = type;
@@ -61,6 +62,7 @@
     onMount(async () => {
         refreshIntervalId = setInterval(() => {
             syncGameStateFromLocalIfStale();
+            refreshTick += 1;
         }, 3000);
         if (item) {
             return;
@@ -83,7 +85,7 @@
     });
 
     $: {
-        if (item) {
+        if (item && refreshTick >= 0) {
             const components = getPriceStringComponents(item.price);
             price = components.price;
             symbol = components.symbol;

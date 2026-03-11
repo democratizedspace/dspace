@@ -231,7 +231,6 @@
     };
 
     const updateState = () => {
-        syncGameStateFromLocalIfStale();
         if (!process) {
             state = ProcessStates.NOT_STARTED;
             processStartedAt = undefined;

@@ -43,7 +43,7 @@ export const finishQuest = (questId, rewardItems) => {
 };
 
 export const questFinished = (questId) => {
-    const gameState = loadFreshStateForMutation();
+    const gameState = loadGameState();
 
     const finished = gameState.quests[questId] ? gameState.quests[questId].finished : false;
     return finished;
@@ -78,7 +78,7 @@ export const setCurrentDialogueStep = (questId, stepId) => {
 };
 
 export const getCurrentDialogueStep = (questId) => {
-    const gameState = loadFreshStateForMutation();
+    const gameState = loadGameState();
 
     return gameState.quests[questId] ? gameState.quests[questId].stepId : 0;
 };
@@ -226,8 +226,14 @@ export const importV1V2 = (itemList) => {
         count: 1,
     };
 
-    addItems([award, ...itemList]);
-    setVersionNumber(VERSIONS.V2);
+    [award, ...itemList].forEach(({ id, count }) => {
+        if (!id || !Number.isFinite(count) || count <= 0) {
+            return;
+        }
+        gameState.inventory[id] = (gameState.inventory[id] || 0) + count;
+    });
+
+    gameState.versionNumberString = VERSIONS.V2;
     saveGameState(gameState);
 };
 

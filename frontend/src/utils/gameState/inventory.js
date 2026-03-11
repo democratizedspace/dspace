@@ -3,6 +3,7 @@ import {
     saveGameState,
     getGameStateChecksum,
     syncGameStateFromLocalIfStale,
+    LS_STATE_KEY,
 } from './common.js';
 import items from '../../pages/inventory/json/items';
 import {
@@ -89,7 +90,7 @@ export const getPersistedItemCount = (itemId) => {
     }
 
     try {
-        const raw = localStorage.getItem('gameState');
+        const raw = localStorage.getItem(LS_STATE_KEY);
         if (!raw) {
             return 0;
         }
