@@ -20,6 +20,7 @@
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
+    import { refreshGameStateIfStale } from '../../utils/gameState/common.js';
     import { getItemMetadata } from './compactItemListHelpers.js';
     import { getItemMap } from '../../utils/itemResolver.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
@@ -37,6 +38,7 @@
     let state = getProcessState(processId).state;
     let processStartedAt;
     let intervalId;
+    let checksumPollIntervalId;
     let mounted = false;
     let totalDurationSeconds;
     let currentTime = Date.now();
@@ -274,6 +276,7 @@
         }
 
         clearInterval(intervalId);
+        clearInterval(checksumPollIntervalId);
         const startError = getItemCountOperationStartError(processId, process);
         if (startError) {
             startFeedbackMessage = startError;
@@ -286,6 +289,10 @@
             return;
         }
         intervalId = setInterval(updateState, updateIntervalMs);
+        checksumPollIntervalId = setInterval(() => {
+            refreshGameStateIfStale();
+            updateState();
+        }, 3000);
         updateState();
     };
 
@@ -310,6 +317,10 @@
     const onProcessResume = () => {
         resumeProcess(processId);
         intervalId = setInterval(updateState, updateIntervalMs);
+        checksumPollIntervalId = setInterval(() => {
+            refreshGameStateIfStale();
+            updateState();
+        }, 3000);
         updateState();
     };
 
@@ -370,6 +381,10 @@
         mounted = true;
         updateState();
         intervalId = setInterval(updateState, updateIntervalMs);
+        checksumPollIntervalId = setInterval(() => {
+            refreshGameStateIfStale();
+            updateState();
+        }, 3000);
 
         initializeQaCheats();
         unsubscribeCheatsAvailability = qaCheatsAvailability.subscribe((available) => {
@@ -382,6 +397,7 @@
 
     onDestroy(() => {
         clearInterval(intervalId);
+        clearInterval(checksumPollIntervalId);
         clearTimeout(pulseTimeoutId);
         requiresContainer = null;
         consumesContainer = null;
@@ -434,6 +450,10 @@
 
         if (!intervalId && mounted) {
             intervalId = setInterval(updateState, updateIntervalMs);
+            checksumPollIntervalId = setInterval(() => {
+                refreshGameStateIfStale();
+                updateState();
+            }, 3000);
         }
 
         updateState();

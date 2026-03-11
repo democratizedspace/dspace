@@ -37,7 +37,7 @@
         }
     }
 
-    function handleTransactionClick() {
+    async function handleTransactionClick() {
         if (!item) {
             return;
         }
@@ -50,9 +50,9 @@
         const transactionList = [transactionItem];
 
         if (activeType === 'buy') {
-            buyItems(transactionList);
+            await buyItems(transactionList);
         } else {
-            sellItems(transactionList);
+            await sellItems(transactionList);
         }
     }
 

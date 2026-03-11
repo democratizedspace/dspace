@@ -1,7 +1,11 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import { ready, isGameStateReady } from '../../utils/gameState/common.js';
+    import {
+        ready,
+        isGameStateReady,
+        refreshGameStateIfStale,
+    } from '../../utils/gameState/common.js';
     import { getItemCounts } from '../../utils/gameState/inventory.js';
     import { prettyPrintNumber } from '../../utils.js';
     import { buildFullItemList } from './compactItemListHelpers.js';
@@ -96,10 +100,14 @@
     onMount(() => {
         isMounted = true;
         let intervalId;
+        let staleCheckIntervalId;
         let isActive = true;
         const startInterval = () => {
             itemCounts.set(getItemCounts(itemList));
             intervalId = setInterval(() => itemCounts.set(getItemCounts(itemList)), 1000);
+            staleCheckIntervalId = setInterval(() => {
+                refreshGameStateIfStale();
+            }, 3000);
         };
 
         if (isGameStateReady()) {
@@ -118,6 +126,7 @@
         return () => {
             isActive = false;
             clearInterval(intervalId);
+            clearInterval(staleCheckIntervalId);
         };
     });
 

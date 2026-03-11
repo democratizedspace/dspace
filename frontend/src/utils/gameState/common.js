@@ -4,19 +4,24 @@ import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
 import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
 import { restoreCustomContentBackup } from '../customContentBackup.js';
+import items from '../../pages/inventory/json/items';
 
 const DB_NAME = 'dspaceGameState';
 const DB_VERSION = 1;
 const STATE_STORE = 'state';
 const BACKUP_STORE = 'backup';
 const ROOT_KEY = 'root';
+const SUMMARY_KEY = 'summary';
 const LS_STATE_KEY = 'gameState';
 const LS_BACKUP_KEY = 'gameStateBackup';
+const LS_STATE_SUMMARY_KEY = 'gameStateSummary';
 const META_KEY = '_meta';
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
 const CURRENT_VERSION = '3';
+const dUSDId = items.find((item) => item.name === 'dUSD')?.id;
+
 const LEGACY_QUEST_ID_ALIASES = {
     '3dprinter/start': '3dprinting/start',
 };
@@ -108,24 +113,48 @@ function openDB() {
     return dbPromise;
 }
 
-function idbRead(store) {
+const stableSerialize = (value) => {
+    if (Array.isArray(value)) {
+        return `[${value.map((entry) => stableSerialize(entry)).join(',')}]`;
+    }
+
+    if (value && typeof value === 'object') {
+        const keys = Object.keys(value).sort();
+        return `{${keys
+            .map((key) => `${JSON.stringify(key)}:${stableSerialize(value[key])}`)
+            .join(',')}}`;
+    }
+
+    return JSON.stringify(value);
+};
+
+const checksumFromState = (value) => {
+    const serialized = stableSerialize(value);
+    let hash = 0;
+    for (let i = 0; i < serialized.length; i++) {
+        hash = (hash * 31 + serialized.charCodeAt(i)) >>> 0;
+    }
+    return `v1-${hash.toString(16)}`;
+};
+
+function idbRead(store, key = ROOT_KEY) {
     return openDB().then(
         (db) =>
             new Promise((resolve, reject) => {
                 const tx = db.transaction(store, 'readonly');
-                const req = tx.objectStore(store).get(ROOT_KEY);
+                const req = tx.objectStore(store).get(key);
                 req.onsuccess = () => resolve(req.result);
                 req.onerror = (e) => reject(e.target.error);
             })
     );
 }
 
-function idbWrite(store, value) {
+function idbWrite(store, value, key = ROOT_KEY) {
     return openDB().then(
         (db) =>
             new Promise((resolve, reject) => {
                 const tx = db.transaction(store, 'readwrite');
-                tx.objectStore(store).put(value, ROOT_KEY);
+                tx.objectStore(store).put(value, key);
                 tx.oncomplete = () => resolve();
                 tx.onerror = (e) => reject(e.target.error);
             })
@@ -146,6 +175,36 @@ function idbClear(store) {
 
 function lsKey(store) {
     return store === STATE_STORE ? LS_STATE_KEY : LS_BACKUP_KEY;
+}
+
+function readStateSummaryFromLocalStorage() {
+    if (!isBrowser) return undefined;
+    try {
+        const rawSummary = localStorage.getItem(LS_STATE_SUMMARY_KEY);
+        if (rawSummary) {
+            return JSON.parse(rawSummary);
+        }
+    } catch (err) {
+        logPersistenceIssue('Error reading gameState summary from localStorage:', err);
+    }
+
+    const state = lsRead(STATE_STORE);
+    return state?.[META_KEY]
+        ? {
+              lastUpdated: state[META_KEY].lastUpdated,
+              checksum: state[META_KEY].checksum,
+              dUSD: state[META_KEY].dUSD,
+          }
+        : undefined;
+}
+
+function writeStateSummaryToLocalStorage(summary) {
+    if (!isBrowser) return;
+    try {
+        localStorage.setItem(LS_STATE_SUMMARY_KEY, JSON.stringify(summary));
+    } catch (err) {
+        logPersistenceIssue('Error writing gameState summary to localStorage:', err);
+    }
 }
 
 function lsRead(store) {
@@ -252,6 +311,20 @@ const ensureMeta = (state) => {
     if (typeof meta.lastUpdated !== 'number' || Number.isNaN(meta.lastUpdated)) {
         meta.lastUpdated = Date.now();
     }
+
+    if (typeof meta.checksum !== 'string' || !meta.checksum) {
+        const checksumSource = { ...state };
+        delete checksumSource[META_KEY];
+        meta.checksum = checksumFromState(checksumSource);
+    }
+};
+
+const enrichMeta = (state) => {
+    ensureMeta(state);
+    const checksumSource = { ...state };
+    delete checksumSource[META_KEY];
+    state[META_KEY].checksum = checksumFromState(checksumSource);
+    state[META_KEY].dUSD = dUSDId ? (state?.inventory?.[dUSDId] ?? 0) : 0;
 };
 
 export const validateGameState = (state) => {
@@ -308,6 +381,12 @@ export const validateGameState = (state) => {
     return state;
 };
 
+const buildStateSummary = (state) => ({
+    lastUpdated: state?.[META_KEY]?.lastUpdated ?? 0,
+    checksum: state?.[META_KEY]?.checksum ?? '',
+    dUSD: state?.[META_KEY]?.dUSD ?? 0,
+});
+
 let gameState = initializeGameState();
 export const state = writable(gameState);
 
@@ -318,6 +397,7 @@ export const ready = isBrowser
               const stored = await read(STATE_STORE);
               if (stored) {
                   gameState = validateGameState(stored);
+                  enrichMeta(gameState);
                   state.set(gameState);
                   loadedFromPersistence = true;
               }
@@ -341,7 +421,34 @@ if (isBrowser) {
     globalThis.__dspaceFlushGameStateWrites = flushGameStateWritesForTesting;
 }
 
-export const loadGameState = () => structuredClone(gameState);
+const refreshGameStateIfStaleSync = () => {
+    if (!isBrowser) {
+        return false;
+    }
+
+    const latestSummary = readStateSummaryFromLocalStorage();
+    const currentChecksum = gameState?.[META_KEY]?.checksum;
+    if (!latestSummary?.checksum || latestSummary.checksum === currentChecksum) {
+        return false;
+    }
+
+    const latestState = lsRead(STATE_STORE);
+    if (!latestState) {
+        return false;
+    }
+
+    gameState = validateGameState(latestState);
+    enrichMeta(gameState);
+    state.set(gameState);
+    return true;
+};
+
+export const loadGameState = () => {
+    refreshGameStateIfStaleSync();
+    return structuredClone(gameState);
+};
+
+export const getGameStateChecksum = () => gameState?.[META_KEY]?.checksum ?? '';
 
 export const isGameStateReady = () => readyResolved;
 export const hasLoadedPersistedGameState = () => loadedFromPersistence;
@@ -353,21 +460,78 @@ export const saveGameState = async (newState) => {
     const previousSnapshot = structuredClone(gameState);
     const nextState = validateGameState(structuredClone(newState));
     nextState[META_KEY].lastUpdated = Date.now();
+    enrichMeta(nextState);
     gameState = nextState;
     state.set(gameState);
+
+    const stateSummary = buildStateSummary(nextState);
 
     // Persist the latest snapshots to localStorage immediately so data survives
     // page refreshes even if the pending IndexedDB writes are interrupted.
     lsWrite(BACKUP_STORE, previousSnapshot);
     lsWrite(STATE_STORE, gameState);
+    writeStateSummaryToLocalStorage(stateSummary);
 
     writeQueue = writeQueue.then(async () => {
         await write(BACKUP_STORE, previousSnapshot, { skipLocalStorage: true }).catch(
             () => undefined
         );
         await write(STATE_STORE, gameState, { skipLocalStorage: true }).catch(() => undefined);
+        await idbWrite(STATE_STORE, stateSummary, SUMMARY_KEY).catch(() => undefined);
     });
     return writeQueue;
+};
+
+export const getGameStateSummary = async () => {
+    if (!isBrowser) {
+        return undefined;
+    }
+
+    const localSummary = readStateSummaryFromLocalStorage();
+    if (useLocalStorage) {
+        return localSummary;
+    }
+
+    try {
+        return (await idbRead(STATE_STORE, SUMMARY_KEY)) ?? localSummary;
+    } catch {
+        return localSummary;
+    }
+};
+
+export const refreshGameStateIfStale = async () => {
+    if (!isBrowser) {
+        return false;
+    }
+
+    const latestSummary = await getGameStateSummary();
+    const currentChecksum = gameState?.[META_KEY]?.checksum;
+    if (!latestSummary?.checksum || latestSummary.checksum === currentChecksum) {
+        return false;
+    }
+
+    const latestState = await read(STATE_STORE);
+    if (!latestState) {
+        return false;
+    }
+
+    gameState = validateGameState(latestState);
+    enrichMeta(gameState);
+    state.set(gameState);
+    return true;
+};
+
+export const applyGameStateMutation = async (mutator) => {
+    if (!readyResolved) {
+        await ready;
+    }
+
+    await refreshGameStateIfStale();
+
+    const nextState = validateGameState(loadGameState());
+    const result = await mutator(nextState);
+    await saveGameState(nextState);
+    return result;
 };
 
 export const closeGameStateDatabaseForTesting = async () => {
@@ -485,8 +649,12 @@ export const importGameStateString = async (gameStateString) => {
 
 export const resetGameState = async () => {
     gameState = initializeGameState();
+    enrichMeta(gameState);
     state.set(gameState);
+    const summary = buildStateSummary(gameState);
+    writeStateSummaryToLocalStorage(summary);
     await write(STATE_STORE, gameState).catch(() => undefined);
+    await idbWrite(STATE_STORE, summary, SUMMARY_KEY).catch(() => undefined);
     await clearStore(BACKUP_STORE).catch(() => undefined);
 };
 
@@ -495,8 +663,12 @@ export const rollbackGameState = async () => {
         const backup = await read(BACKUP_STORE);
         if (!backup) return;
         gameState = validateGameState(backup);
+        enrichMeta(gameState);
         state.set(gameState);
+        const summary = buildStateSummary(gameState);
+        writeStateSummaryToLocalStorage(summary);
         await write(STATE_STORE, gameState);
+        await idbWrite(STATE_STORE, summary, SUMMARY_KEY).catch(() => undefined);
     } catch (err) {
         logPersistenceIssue('Error rolling back game state:', err);
     }

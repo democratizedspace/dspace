@@ -3,7 +3,7 @@
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
     import { questFinished } from '../../../utils/gameState.js';
-    import { state } from '../../../utils/gameState/common.js';
+    import { state, refreshGameStateIfStale } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
@@ -66,6 +66,9 @@
         '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
     onMount(() => {
+        const checksumPollInterval = setInterval(() => {
+            refreshGameStateIfStale();
+        }, 3000);
         rewardItemsKey = (quest?.rewards ?? []).map((reward) => reward?.id ?? '').join('|');
         isMounted = true;
         // Initialize quest-related data after component is mounted
@@ -86,6 +89,10 @@
 
         clientSideRendered.set(true);
         void loadRewardItems();
+
+        return () => {
+            clearInterval(checksumPollInterval);
+        };
     });
 
     onDestroy(() => {

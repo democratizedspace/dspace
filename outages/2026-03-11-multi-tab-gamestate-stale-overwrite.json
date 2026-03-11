@@ -1,0 +1,16 @@
+{
+  "id": "OUT-2026-03-11-multi-tab-gamestate-stale-overwrite",
+  "date": "2026-03-11",
+  "component": "frontend/game-state",
+  "rootCause": "Each tab mutated in-memory game state captured at initial load; concurrent item buys/sells, process changes, and quest writes could overwrite newer state from another tab because writes did not verify freshness before mutation.",
+  "resolution": "Persist a lightweight game-state summary (checksum + dUSD + lastUpdated), refresh in-memory state when checksums diverge before reads/mutations, and add periodic checksum polling in quest/process/item UI so cross-tab updates are adopted quickly.",
+  "references": [
+    "frontend/src/utils/gameState/common.js",
+    "frontend/src/utils/gameState/inventory.js",
+    "frontend/src/components/svelte/CompactItemList.svelte",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/pages/quests/svelte/QuestChat.svelte",
+    "frontend/tests/gameStateCrossTabSync.test.ts",
+    "frontend/e2e/multi-tab-gamestate-sync.spec.ts"
+  ]
+}
