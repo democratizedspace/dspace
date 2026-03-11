@@ -86,3 +86,26 @@ jobs:
         run: pnpm run check
       - name: Run root tests
         run: pnpm run test:root -- --testTimeout=20000
+
+  frontend-indexeddb-regression-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
+      - name: Setup Playwright environment
+        run: pnpm --dir frontend run setup-test-env
+      - name: Install Playwright Chromium
+        run: pnpm --dir frontend exec playwright install --with-deps chromium
+      - name: Run IndexedDB regression Playwright spec
+        working-directory: frontend
+        run: npx playwright test e2e/indexeddb-availability.spec.ts --project=chromium --reporter=dot
