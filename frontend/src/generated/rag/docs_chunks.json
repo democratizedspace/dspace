@@ -2406,7 +2406,7 @@
         "title": "New Quests in v3",
         "heading": "electronics",
         "anchor": "electronics",
-        "text": "- electronics/arduino-blink - electronics/basic-circuit - electronics/check-battery-voltage - electronics/continuity-test - electronics/data-logger - electronics/desolder-component - electronics/led-polarity - electronics/light-sensor - electronics/measure-arduino-5v - electronics/measure-led-current - electronics/measure-resistance - electronics/potentiometer-dimmer - electronics/resistor-color-check - electronics/servo-sweep - electronics/solder-led-harness - electronics/solder-wire - electronics/soldering-intro - electronics/temperature-plot - electronics/test-gfci-outlet - electronics/thermistor-reading - electronics/thermometer-calibration - electronics/voltage-divider",
+        "text": "- electronics/arduino-blink - electronics/basic-circuit - electronics/check-battery-voltage - electronics/continuity-test - electronics/data-logger - electronics/desolder-component - electronics/led-polarity - electronics/light-sensor - electronics/measure-arduino-5v - electronics/measure-led-current - electronics/measure-resistance - electronics/potentiometer-dimmer - electronics/resistor-color-check - electronics/servo-sweep - electronics/solder-led-harness - electronics/solder-wire - electronics/tin-soldering-iron - electronics/temperature-plot - electronics/test-gfci-outlet - electronics/thermistor-reading - electronics/thermometer-calibration - electronics/voltage-divider",
         "kind": "doc"
     },
     {
