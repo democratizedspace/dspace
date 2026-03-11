@@ -1,10 +1,14 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
     import items from '../../pages/inventory/json/items';
     import { getPriceStringComponents } from '../../utils';
     import { buyItems, sellItems, getSalesTaxPercentage } from '../../utils/gameState/inventory.js';
+    import {
+        getPersistedGameStateLightweight,
+        syncGameStateFromLocalIfStale,
+    } from '../../utils/gameState/common.js';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 
     export let itemId;
@@ -23,6 +27,9 @@
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
+    let refreshIntervalId;
+    let refreshTick = 0;
+    let lastSeenChecksum = '';
 
     function handleTypeClick(type) {
         activeType = type;
@@ -57,6 +64,21 @@
     }
 
     onMount(async () => {
+        refreshIntervalId = setInterval(async () => {
+            const lightweight = await getPersistedGameStateLightweight();
+            if (!lightweight.checksum) {
+                return;
+            }
+
+            if (lightweight.checksum !== lastSeenChecksum) {
+                syncGameStateFromLocalIfStale(lastSeenChecksum);
+                lastSeenChecksum = lightweight.checksum;
+            }
+            refreshTick += 1;
+        }, 3000);
+        const initialLightweight = await getPersistedGameStateLightweight();
+        lastSeenChecksum = initialLightweight.checksum;
+
         if (item) {
             return;
         }
@@ -78,7 +100,7 @@
     });
 
     $: {
-        if (item) {
+        if (item && refreshTick >= 0) {
             const components = getPriceStringComponents(item.price);
             price = components.price;
             symbol = components.symbol;
@@ -91,6 +113,10 @@
             effectiveSellPrice = 0;
         }
     }
+
+    onDestroy(() => {
+        clearInterval(refreshIntervalId);
+    });
 
     $: buyChipActive = activeType === 'buy';
     $: sellChipActive = activeType === 'sell';

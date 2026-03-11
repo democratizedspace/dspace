@@ -15,6 +15,7 @@
         getProcessStartedAt,
         getRuntimeCreateItems,
     } from '../../utils/gameState/processes.js';
+    import { syncGameStateFromLocalIfStale } from '../../utils/gameState/common.js';
     import processes from '../../generated/processes.json';
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
@@ -37,6 +38,7 @@
     let state = getProcessState(processId).state;
     let processStartedAt;
     let intervalId;
+    let refreshIntervalId;
     let mounted = false;
     let totalDurationSeconds;
     let currentTime = Date.now();
@@ -367,6 +369,10 @@
     };
 
     onMount(() => {
+        refreshIntervalId = setInterval(() => {
+            syncGameStateFromLocalIfStale();
+            updateState();
+        }, 3000);
         mounted = true;
         updateState();
         intervalId = setInterval(updateState, updateIntervalMs);
@@ -381,6 +387,7 @@
     });
 
     onDestroy(() => {
+        clearInterval(refreshIntervalId);
         clearInterval(intervalId);
         clearTimeout(pulseTimeoutId);
         requiresContainer = null;

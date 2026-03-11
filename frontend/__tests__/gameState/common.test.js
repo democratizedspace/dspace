@@ -7,6 +7,9 @@ const {
     resetGameState,
     rollbackGameState,
     validateGameState,
+    getGameStateChecksum,
+    getPersistedGameStateChecksum,
+    syncGameStateFromLocalIfStale,
 } = require('../../src/utils/gameState/common.js');
 
 describe('gameState - common utilities', () => {
@@ -149,5 +152,32 @@ describe('gameState - common utilities', () => {
         await rollbackGameState();
         const rolled = loadGameState();
         expect(rolled.inventory['1']).toBe(4);
+    });
+
+    test('saveGameState persists checksum marker in localStorage', async () => {
+        const state = loadGameState();
+        state.inventory['checksum-item'] = 2;
+        await saveGameState(state);
+
+        const checksum = getGameStateChecksum();
+        expect(typeof checksum).toBe('string');
+        expect(checksum.length).toBeGreaterThan(0);
+        expect(getPersistedGameStateChecksum()).toBe(checksum);
+    });
+
+    test('syncGameStateFromLocalIfStale hydrates newer localStorage state', async () => {
+        const initial = loadGameState();
+        initial.inventory['multi-tab-item'] = 1;
+        await saveGameState(initial);
+
+        const localLatest = structuredClone(loadGameState());
+        localLatest.inventory['multi-tab-item'] = 7;
+        localLatest._meta.checksum = 'force-different-checksum';
+        localStorage.setItem('gameState', JSON.stringify(localLatest));
+        localStorage.setItem('gameStateChecksum', 'force-different-checksum');
+
+        const changed = syncGameStateFromLocalIfStale(getGameStateChecksum());
+        expect(changed).toBe(true);
+        expect(loadGameState().inventory['multi-tab-item']).toBe(7);
     });
 });

@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 vi.mock('../frontend/src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(),
     saveGameState: vi.fn(),
+    getGameStateChecksum: vi.fn(() => ''),
+    syncGameStateFromLocalIfStale: vi.fn(),
 }));
 
 import { buyItems } from '../frontend/src/utils/gameState/inventory.js';

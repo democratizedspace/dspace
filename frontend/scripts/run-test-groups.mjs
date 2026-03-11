@@ -190,7 +190,7 @@ const TEST_GROUPS = [
     },
     {
         name: 'Shop Functionality',
-        files: ['shop-functionality.spec.ts', 'savings-jar.spec.ts'],
+        files: ['shop-functionality.spec.ts', 'savings-jar.spec.ts', 'multi-tab-gamestate.spec.ts'],
         parallel: true,
         workers: 2,
     },

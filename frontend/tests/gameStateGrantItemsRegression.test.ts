@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 vi.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(),
     saveGameState: vi.fn(),
+    getGameStateChecksum: vi.fn(() => ''),
+    syncGameStateFromLocalIfStale: vi.fn(),
     validateGameState: (state: unknown) => state,
     isUsingLocalStorage: vi.fn(() => false),
 }));
