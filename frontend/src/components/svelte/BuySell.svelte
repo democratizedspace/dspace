@@ -5,7 +5,10 @@
     import items from '../../pages/inventory/json/items';
     import { getPriceStringComponents } from '../../utils';
     import { buyItems, sellItems, getSalesTaxPercentage } from '../../utils/gameState/inventory.js';
-    import { syncGameStateFromLocalIfStale } from '../../utils/gameState/common.js';
+    import {
+        getPersistedGameStateLightweight,
+        syncGameStateFromLocalIfStale,
+    } from '../../utils/gameState/common.js';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 
     export let itemId;
@@ -26,6 +29,7 @@
     let quantity = 1;
     let refreshIntervalId;
     let refreshTick = 0;
+    let lastSeenChecksum = '';
 
     function handleTypeClick(type) {
         activeType = type;
@@ -60,10 +64,21 @@
     }
 
     onMount(async () => {
-        refreshIntervalId = setInterval(() => {
-            syncGameStateFromLocalIfStale();
+        refreshIntervalId = setInterval(async () => {
+            const lightweight = await getPersistedGameStateLightweight();
+            if (!lightweight.checksum) {
+                return;
+            }
+
+            if (lightweight.checksum !== lastSeenChecksum) {
+                syncGameStateFromLocalIfStale(lastSeenChecksum);
+                lastSeenChecksum = lightweight.checksum;
+            }
             refreshTick += 1;
         }, 3000);
+        const initialLightweight = await getPersistedGameStateLightweight();
+        lastSeenChecksum = initialLightweight.checksum;
+
         if (item) {
             return;
         }

@@ -49,4 +49,31 @@ test.describe('multi-tab game state writes', () => {
         expect(finalState.inventory[ITEM_ID]).toBe(2);
         expect(finalState.inventory[DUSD_ID]).toBe(260);
     });
+
+    test('quest progress from another tab is preserved before a later buy mutation', async ({
+        context,
+    }) => {
+        await context.addInitScript((seed) => {
+            localStorage.setItem('gameState', JSON.stringify(seed.gameState));
+            localStorage.setItem('gameStateChecksum', seed.gameState._meta.checksum);
+        }, seedScript);
+
+        const questTab = await context.newPage();
+        const buyTab = await context.newPage();
+
+        await questTab.goto('/quests/welcome/howtodoquests');
+        await buyTab.goto(`/inventory/item/${ITEM_ID}`);
+
+        await questTab.getByRole('button', { name: /A quest, you say\? Tell me more\./i }).click();
+
+        await buyTab.waitForTimeout(3200);
+        await buyTab.getByTestId('transaction-cta').click();
+
+        const finalState = await buyTab.evaluate(() =>
+            JSON.parse(localStorage.getItem('gameState') || '{}')
+        );
+
+        expect(Object.keys(finalState.quests || {}).length).toBeGreaterThan(0);
+        expect(finalState.inventory[ITEM_ID]).toBe(1);
+    });
 });
