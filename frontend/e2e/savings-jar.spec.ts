@@ -16,7 +16,7 @@ async function seedGameState(page: Page, state: GameStatePayload) {
     await page.goto('/');
     await page.evaluate(async (seed) => {
         const db = await new Promise<IDBDatabase>((resolve, reject) => {
-            const request = indexedDB.open('dspaceGameState', 1);
+            const request = indexedDB.open('dspaceGameState', 2);
             request.onupgradeneeded = () => {
                 const upgradeDb = request.result;
                 if (!upgradeDb.objectStoreNames.contains('state'))
@@ -43,7 +43,7 @@ async function seedGameState(page: Page, state: GameStatePayload) {
 async function readGameState(page: Page): Promise<GameStatePayload> {
     return page.evaluate(async () => {
         const db = await new Promise<IDBDatabase>((resolve, reject) => {
-            const request = indexedDB.open('dspaceGameState', 1);
+            const request = indexedDB.open('dspaceGameState', 2);
             request.onsuccess = () => resolve(request.result);
             request.onerror = () => reject(request.error);
         });

@@ -1,0 +1,14 @@
+{
+  "id": "indexeddb-fallback-alert-regression",
+  "date": "2026-03-11",
+  "component": "frontend game state persistence",
+  "rootCause": "A persistence change introduced a new meta object store but kept the IndexedDB schema version at 1. Existing player databases created before that store existed never ran onupgradeneeded, so writes to meta failed with NotFoundError and the app incorrectly fell back to localStorage with a blocking alert on every page load.",
+  "resolution": "Bumped dspaceGameState DB version to 2 so existing installs run schema upgrade and create the missing meta store before writes. Added a unit regression test that seeds a legacy v1 database without meta and verifies IndexedDB remains primary with no fallback alert, plus a Playwright test that asserts IndexedDB is usable on load and that the fallback alert never appears.",
+  "references": [
+    "frontend/src/utils/gameState/common.js",
+    "frontend/__tests__/gameState/common.test.js",
+    "frontend/e2e/indexeddb-availability.spec.ts",
+    "frontend/e2e/savings-jar.spec.ts",
+    "frontend/__tests__/githubToken.test.js"
+  ]
+}

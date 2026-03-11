@@ -138,7 +138,7 @@ describe('gameState - common utilities', () => {
         await saveGameState(updated);
 
         await new Promise((resolve, reject) => {
-            const req = indexedDB.open('dspaceGameState', 1);
+            const req = indexedDB.open('dspaceGameState', 2);
             req.onsuccess = (e) => {
                 const db = e.target.result;
                 const tx = db.transaction('backup', 'readwrite');
@@ -165,6 +165,49 @@ describe('gameState - common utilities', () => {
         expect(getPersistedGameStateChecksum()).toBe(checksum);
     });
 
+    test('upgrades legacy DB without meta store and keeps IndexedDB as primary storage', async () => {
+        await new Promise((resolve, reject) => {
+            const deleteRequest = indexedDB.deleteDatabase('dspaceGameState');
+            deleteRequest.onsuccess = () => resolve();
+            deleteRequest.onerror = (event) => reject(event.target.error);
+            deleteRequest.onblocked = () => reject(new Error('dspaceGameState deletion blocked'));
+        });
+
+        await new Promise((resolve, reject) => {
+            const req = indexedDB.open('dspaceGameState', 1);
+            req.onupgradeneeded = () => {
+                const db = req.result;
+                if (!db.objectStoreNames.contains('state')) db.createObjectStore('state');
+                if (!db.objectStoreNames.contains('backup')) db.createObjectStore('backup');
+            };
+            req.onsuccess = () => {
+                req.result.close();
+                resolve();
+            };
+            req.onerror = (event) => reject(event.target.error);
+        });
+
+        jest.resetModules();
+        const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => undefined);
+        const {
+            resetGameState: resetAfterUpgrade,
+            inspectGameStateStorage: inspectAfterUpgrade,
+            saveGameState: saveAfterUpgrade,
+            loadGameState: loadAfterUpgrade,
+        } = require('../../src/utils/gameState/common.js');
+
+        await resetAfterUpgrade();
+        const state = loadAfterUpgrade();
+        state.inventory['upgrade-check'] = 1;
+        await saveAfterUpgrade(state);
+
+        const inspection = await inspectAfterUpgrade();
+        expect(inspection.indexedDbSupported).toBe(true);
+        expect(inspection.usesLocalStorageFallback).toBe(false);
+        expect(inspection.indexedDbState?.inventory?.['upgrade-check']).toBe(1);
+        expect(alertSpy).not.toHaveBeenCalled();
+        alertSpy.mockRestore();
+    });
     test('syncGameStateFromLocalIfStale hydrates newer localStorage state', async () => {
         const initial = loadGameState();
         initial.inventory['multi-tab-item'] = 1;
