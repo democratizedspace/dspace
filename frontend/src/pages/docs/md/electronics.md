@@ -22,7 +22,7 @@ Electronics quests build practical progression through the electronics skill tre
 13. [Log Temperature Data](/quests/electronics/data-logger)
 14. [Plot Temperature Data](/quests/electronics/temperature-plot)
 15. [Calibrate a Thermometer](/quests/electronics/thermometer-calibration)
-16. [Tin a Soldering Iron](/quests/electronics/soldering-intro)
+16. [Tin a Soldering Iron](/quests/electronics/tin-soldering-iron)
 17. [Solder an LED Harness](/quests/electronics/solder-led-harness)
 18. [Solder a Wire Connection](/quests/electronics/solder-wire)
 19. [Check USB cable continuity](/quests/electronics/continuity-test)
@@ -365,9 +365,9 @@ Electronics quests build practical progression through the electronics skill tre
 - Processes used:
     - None
 
-## 16) Tin a Soldering Iron (`electronics/soldering-intro`)
+## 16) Tin a Soldering Iron (`electronics/tin-soldering-iron`)
 
-- Quest link: [/quests/electronics/soldering-intro](/quests/electronics/soldering-intro)
+- Quest link: [/quests/electronics/tin-soldering-iron](/quests/electronics/tin-soldering-iron)
 - Unlock prerequisite:
     - `requiresQuests`: `electronics/resistor-color-check`
 - Dialogue `requiresItems` gates:

@@ -1,0 +1,13 @@
+{
+  "id": "quest-id-path-mismatch",
+  "date": "2026-03-11",
+  "component": "quests/json path-to-id mapping",
+  "rootCause": "The electronics tin-soldering-iron quest was stored at frontend/src/pages/quests/json/electronics/soldering-intro.json while its id remained electronics/tin-soldering-iron, creating path/id drift and broken path-based references.",
+  "resolution": "Renamed the quest file to frontend/src/pages/quests/json/electronics/tin-soldering-iron.json, updated docs and asset metadata references, and added a regression test that fails whenever a quest id differs from its category/file path.",
+  "references": [
+    "frontend/src/pages/quests/json/electronics/tin-soldering-iron.json",
+    "tests/questIdPathConsistency.test.ts",
+    "frontend/src/pages/docs/md/electronics.md",
+    "docs/new-quests.md"
+  ]
+}
