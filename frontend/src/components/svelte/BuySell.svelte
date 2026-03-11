@@ -1,10 +1,11 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
     import items from '../../pages/inventory/json/items';
     import { getPriceStringComponents } from '../../utils';
     import { buyItems, sellItems, getSalesTaxPercentage } from '../../utils/gameState/inventory.js';
+    import { syncGameStateFromLocalIfStale } from '../../utils/gameState/common.js';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 
     export let itemId;
@@ -23,6 +24,7 @@
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
+    let refreshIntervalId;
 
     function handleTypeClick(type) {
         activeType = type;
@@ -57,6 +59,9 @@
     }
 
     onMount(async () => {
+        refreshIntervalId = setInterval(() => {
+            syncGameStateFromLocalIfStale();
+        }, 3000);
         if (item) {
             return;
         }
@@ -91,6 +96,10 @@
             effectiveSellPrice = 0;
         }
     }
+
+    onDestroy(() => {
+        clearInterval(refreshIntervalId);
+    });
 
     $: buyChipActive = activeType === 'buy';
     $: sellChipActive = activeType === 'sell';

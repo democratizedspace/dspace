@@ -3,6 +3,8 @@ import {
     saveGameState,
     validateGameState,
     isUsingLocalStorage,
+    getGameStateChecksum,
+    syncGameStateFromLocalIfStale,
 } from './gameState/common.js';
 import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
@@ -16,6 +18,12 @@ import {
 } from './legacySaveParsing.js';
 import { UUID_REGEX } from './uuid.js';
 
+const loadFreshStateForMutation = () => {
+    const checksum = getGameStateChecksum();
+    syncGameStateFromLocalIfStale(checksum);
+    return loadGameState();
+};
+
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
 
@@ -26,7 +34,7 @@ const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Tro
 export const finishQuest = (questId, rewardItems) => {
     addItems(rewardItems);
 
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
     gameState.quests[questId] = {
         ...(gameState.quests[questId] || {}),
         finished: true,
@@ -35,7 +43,7 @@ export const finishQuest = (questId, rewardItems) => {
 };
 
 export const questFinished = (questId) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     const finished = gameState.quests[questId] ? gameState.quests[questId].finished : false;
     return finished;
@@ -60,7 +68,7 @@ export const canStartQuest = (quest) => {
 };
 
 export const setCurrentDialogueStep = (questId, stepId) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     gameState.quests[questId] = {
         ...(gameState.quests[questId] || {}),
@@ -70,13 +78,13 @@ export const setCurrentDialogueStep = (questId, stepId) => {
 };
 
 export const getCurrentDialogueStep = (questId) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     return gameState.quests[questId] ? gameState.quests[questId].stepId : 0;
 };
 
 const setItemsGranted = (questId, stepId, optionIndex) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     const key = `${questId}-${stepId}-${optionIndex}`;
     const questProgress = gameState.quests[questId] || {};
@@ -117,7 +125,7 @@ export const VERSIONS = {
 };
 
 export const setVersionNumber = (versionNumber) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     gameState.versionNumberString = versionNumber;
     saveGameState(gameState);
@@ -211,7 +219,7 @@ const persistMigratedState = async (state) => {
 
 // v1 -> v2
 export const importV1V2 = (itemList) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     const award = {
         id: EARLY_ADOPTER_ID,

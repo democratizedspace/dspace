@@ -1,4 +1,9 @@
-import { loadGameState, saveGameState } from './common.js';
+import {
+    loadGameState,
+    saveGameState,
+    getGameStateChecksum,
+    syncGameStateFromLocalIfStale,
+} from './common.js';
 import { hasItems, burnItems, addItems } from './inventory.js';
 import {
     addStoredItemsToState,
@@ -11,6 +16,12 @@ import { durationInSeconds } from '../../utils.js';
 
 // Using import assertions for JSON imports
 import processes from '../../generated/processes.json' assert { type: 'json' };
+
+const loadFreshStateForMutation = () => {
+    const checksum = getGameStateChecksum();
+    syncGameStateFromLocalIfStale(checksum);
+    return loadGameState();
+};
 
 const resolveProcessDefinition = (processId, processDefinition) =>
     processDefinition ?? processes.find((p) => p.id === processId);
@@ -229,7 +240,7 @@ export const hasRequiredAndConsumedItems = (processId, processDefinition) => {
 };
 
 export const startProcess = (processId, processDefinition) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     const process = resolveProcessDefinition(processId, processDefinition);
     if (!process) {
@@ -376,7 +387,7 @@ export const finishProcess = (processId, processDefinition) => {
     if (!process) {
         return;
     }
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
     const createItems = process.createItems;
 
     if (createItems) {
@@ -390,7 +401,7 @@ export const finishProcess = (processId, processDefinition) => {
 };
 
 export const cancelProcess = (processId, processDefinition) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
     const process = resolveProcessDefinition(processId, processDefinition);
 
     if (!process) {
@@ -421,7 +432,7 @@ export const pauseProcess = (processId) => {
         return;
     }
 
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
     const process = gameState.processes[processId];
     const now = Date.now();
     process.pausedAt = now;
@@ -430,7 +441,7 @@ export const pauseProcess = (processId) => {
 };
 
 export const resumeProcess = (processId) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
     const process = gameState.processes[processId];
     if (!process || process.pausedAt === null) {
         return;
@@ -457,7 +468,7 @@ export const finishProcessNow = (processId, processDefinition) => {
         return;
     }
 
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
     const process = gameState.processes[processId];
     const definition = resolveProcessDefinition(processId, processDefinition);
 
@@ -614,7 +625,7 @@ export const skipProcess = (processId, processDefinition) => {
         burnItems(process.consumeItems);
     }
 
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     if (process.createItems) {
         addItemsToState(gameState, process.createItems);

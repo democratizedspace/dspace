@@ -1,4 +1,9 @@
-import { loadGameState, saveGameState } from './common.js';
+import {
+    loadGameState,
+    saveGameState,
+    getGameStateChecksum,
+    syncGameStateFromLocalIfStale,
+} from './common.js';
 import items from '../../pages/inventory/json/items';
 import {
     addStoredItems,
@@ -7,11 +12,16 @@ import {
     removeAllStoredItems,
 } from './itemContainers.js';
 
+const loadFreshStateForMutation = () => {
+    const checksum = getGameStateChecksum();
+    syncGameStateFromLocalIfStale(checksum);
+    return loadGameState();
+};
 const dUSDId = items.find((i) => i.name === 'dUSD')?.id;
 const dCarbonId = items.find((i) => i.name === 'dCarbon')?.id;
 
 export const addItems = (items) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     items.forEach(({ id, count }) => {
         gameState.inventory[id] = (gameState.inventory[id] || 0) + count;
@@ -20,7 +30,7 @@ export const addItems = (items) => {
 };
 
 export const burnItems = (items) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     items.forEach(({ id, count }) => {
         if (gameState.inventory[id] && gameState.inventory[id] >= count) {
@@ -73,6 +83,26 @@ export const getCurrentdUSD = () => {
     return getItemCount(dUSDId);
 };
 
+export const getPersistedItemCount = (itemId) => {
+    if (typeof window === 'undefined') {
+        return 0;
+    }
+
+    try {
+        const raw = localStorage.getItem('gameState');
+        if (!raw) {
+            return 0;
+        }
+
+        const parsed = JSON.parse(raw);
+        return Number(parsed?.inventory?.[itemId] ?? 0);
+    } catch (error) {
+        return 0;
+    }
+};
+
+export const getPersisteddUSD = () => getPersistedItemCount(dUSDId);
+
 export const getSalesTaxPercentage = () => {
     const gameState = loadGameState();
 
@@ -89,7 +119,7 @@ export const getSalesTaxPercentage = () => {
 };
 
 export const buyItems = (items) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
 
     items.forEach((item) => {
         const { price, quantity } = item;
@@ -112,7 +142,7 @@ export const buyItems = (items) => {
 };
 
 export const sellItems = (items) => {
-    const gameState = loadGameState();
+    const gameState = loadFreshStateForMutation();
     const currencyId = dUSDId;
     const taxPercentage = getSalesTaxPercentage();
 
