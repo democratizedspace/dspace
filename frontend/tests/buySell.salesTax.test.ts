@@ -17,6 +17,11 @@ const { mockItems, mockSellItems } = vi.hoisted(() => ({
     mockSellItems: vi.fn(),
 }));
 
+const { mockGetPersistedGameStateLightweight, mockSyncGameStateFromLocalIfStale } = vi.hoisted(() => ({
+    mockGetPersistedGameStateLightweight: vi.fn(async () => ({ checksum: '' })),
+    mockSyncGameStateFromLocalIfStale: vi.fn(),
+}));
+
 vi.mock('../src/pages/inventory/json/items', () => ({
     default: mockItems,
 }));
@@ -50,11 +55,19 @@ vi.mock('../src/utils/customcontent.js', () => ({
     db: { get: vi.fn() },
 }));
 
+vi.mock('../src/utils/gameState/common.js', () => ({
+    getPersistedGameStateLightweight: mockGetPersistedGameStateLightweight,
+    syncGameStateFromLocalIfStale: mockSyncGameStateFromLocalIfStale,
+}));
+
 import BuySell from '../src/components/svelte/BuySell.svelte';
 
 describe('BuySell sales tax regression', () => {
     beforeEach(() => {
         mockSellItems.mockReset();
+        mockSyncGameStateFromLocalIfStale.mockReset();
+        mockGetPersistedGameStateLightweight.mockReset();
+        mockGetPersistedGameStateLightweight.mockResolvedValue({ checksum: '' });
     });
 
     test('keeps root non-inverted while nested compact list container and buy CTA are inverted', async () => {
@@ -98,5 +111,24 @@ describe('BuySell sales tax regression', () => {
                 }),
             ])
         );
+    });
+
+    test('only syncs on 3s refresh when lightweight checksum changes', async () => {
+        vi.useFakeTimers();
+        mockGetPersistedGameStateLightweight
+            .mockResolvedValueOnce({ checksum: 'initial' })
+            .mockResolvedValueOnce({ checksum: 'initial' })
+            .mockResolvedValueOnce({ checksum: 'next' });
+
+        render(BuySell, { props: { itemId: 'taxed-item' } });
+        await vi.runAllTimersAsync();
+
+        await vi.advanceTimersByTimeAsync(3000);
+        expect(mockSyncGameStateFromLocalIfStale).not.toHaveBeenCalled();
+
+        await vi.advanceTimersByTimeAsync(3000);
+        expect(mockSyncGameStateFromLocalIfStale).toHaveBeenCalledWith('initial');
+
+        vi.useRealTimers();
     });
 });
