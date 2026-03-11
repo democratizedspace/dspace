@@ -23,6 +23,7 @@
     import { getItemMetadata } from './compactItemListHelpers.js';
     import { getItemMap } from '../../utils/itemResolver.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
+    import { refreshGameStateFromPersistence } from '../../utils/gameState/common.js';
 
     export let processId;
     export let processData = null;
@@ -37,6 +38,7 @@
     let state = getProcessState(processId).state;
     let processStartedAt;
     let intervalId;
+    let gameStatePollInterval;
     let mounted = false;
     let totalDurationSeconds;
     let currentTime = Date.now();
@@ -274,6 +276,7 @@
         }
 
         clearInterval(intervalId);
+        clearInterval(gameStatePollInterval);
         const startError = getItemCountOperationStartError(processId, process);
         if (startError) {
             startFeedbackMessage = startError;
@@ -286,23 +289,29 @@
             return;
         }
         intervalId = setInterval(updateState, updateIntervalMs);
+        gameStatePollInterval = setInterval(() => {
+            void refreshGameStateFromPersistence();
+        }, 3000);
         updateState();
     };
 
     const onProcessCancel = () => {
         clearInterval(intervalId);
+        clearInterval(gameStatePollInterval);
         cancelProcess(processId, process);
         updateState();
     };
 
     const onProcessComplete = () => {
         clearInterval(intervalId);
+        clearInterval(gameStatePollInterval);
         finishProcess(processId, process);
         updateState();
     };
 
     const onProcessPause = () => {
         clearInterval(intervalId);
+        clearInterval(gameStatePollInterval);
         pauseProcess(processId);
         updateState();
     };
@@ -310,12 +319,16 @@
     const onProcessResume = () => {
         resumeProcess(processId);
         intervalId = setInterval(updateState, updateIntervalMs);
+        gameStatePollInterval = setInterval(() => {
+            void refreshGameStateFromPersistence();
+        }, 3000);
         updateState();
     };
 
     const onProcessInstantFinish = () => {
         finishProcessNow(processId, process);
         clearInterval(intervalId);
+        clearInterval(gameStatePollInterval);
         updateState();
     };
 
@@ -370,6 +383,9 @@
         mounted = true;
         updateState();
         intervalId = setInterval(updateState, updateIntervalMs);
+        gameStatePollInterval = setInterval(() => {
+            void refreshGameStateFromPersistence();
+        }, 3000);
 
         initializeQaCheats();
         unsubscribeCheatsAvailability = qaCheatsAvailability.subscribe((available) => {
@@ -382,6 +398,7 @@
 
     onDestroy(() => {
         clearInterval(intervalId);
+        clearInterval(gameStatePollInterval);
         clearTimeout(pulseTimeoutId);
         requiresContainer = null;
         consumesContainer = null;
@@ -434,6 +451,9 @@
 
         if (!intervalId && mounted) {
             intervalId = setInterval(updateState, updateIntervalMs);
+        gameStatePollInterval = setInterval(() => {
+            void refreshGameStateFromPersistence();
+        }, 3000);
         }
 
         updateState();

@@ -4,6 +4,10 @@ vi.mock('../../src/utils/gameState/common.js', () => {
     return {
         loadGameState: vi.fn(),
         saveGameState: vi.fn().mockResolvedValue(undefined),
+        runGameStateMutation: vi.fn(async (mutator) => {
+            mutator(loadGameState());
+        }),
+        getPersistedInventoryItemCount: vi.fn(async () => 0),
     };
 });
 
@@ -58,13 +62,13 @@ describe('gameState - inventory', () => {
         saveGameState.mockClear();
     });
 
-    test('addItems should correctly add items to the inventory', () => {
+    test('addItems should correctly add items to the inventory', async () => {
         const itemsToAdd = [
             { id: '1', count: 5 },
             { id: '2', count: 3 },
         ];
 
-        addItems(itemsToAdd);
+        await addItems(itemsToAdd);
 
         const expectedInventory = {
             1: 15, // The count of item "1" should have increased by 5
@@ -76,10 +80,10 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory).toEqual(expectedInventory);
     });
 
-    test('burnItems should correctly burn items from the inventory', () => {
+    test('burnItems should correctly burn items from the inventory', async () => {
         const itemsToBurn = [{ id: '1', count: 5 }];
 
-        burnItems(itemsToBurn);
+        await burnItems(itemsToBurn);
 
         const expectedInventory = {
             1: 5, // The count of item "1" should have decreased by 5
@@ -90,10 +94,10 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory).toEqual(expectedInventory);
     });
 
-    test('burnItems should not burn items when not enough are available', () => {
+    test('burnItems should not burn items when not enough are available', async () => {
         const itemsToBurn = [{ id: '1', count: 15 }];
 
-        burnItems(itemsToBurn);
+        await burnItems(itemsToBurn);
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same as burning more than available was attempted
@@ -140,10 +144,10 @@ describe('gameState - inventory', () => {
         expect(count).toBe(50);
     });
 
-    test('buyItems should correctly deduct the cost from dUSD and add items to the inventory', () => {
+    test('buyItems should correctly deduct the cost from dUSD and add items to the inventory', async () => {
         const itemsToBuy = [{ id: '1', quantity: 2, price: 5 }];
 
-        buyItems(itemsToBuy);
+        await buyItems(itemsToBuy);
 
         const expectedInventory = {
             1: 12, // The count of item "1" should have increased by 2
@@ -154,10 +158,10 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory).toEqual(expectedInventory);
     });
 
-    test('buyItems should not buy items when not enough dUSD is available', () => {
+    test('buyItems should not buy items when not enough dUSD is available', async () => {
         const itemsToBuy = [{ id: '1', quantity: 2, price: 30 }];
 
-        buyItems(itemsToBuy);
+        await buyItems(itemsToBuy);
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same as buying more than available was attempted
@@ -168,14 +172,14 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory).toEqual(expectedInventory);
     });
 
-    test('buyItems should reject free or invalid purchases', () => {
+    test('buyItems should reject free or invalid purchases', async () => {
         const itemsToBuy = [
             { id: '1', quantity: 2, price: 0 },
             { id: '2', quantity: 2, price: -1 },
             { id: '2', quantity: 0, price: 3 },
         ];
 
-        buyItems(itemsToBuy);
+        await buyItems(itemsToBuy);
 
         const expectedInventory = {
             1: 10,
@@ -186,10 +190,10 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory).toEqual(expectedInventory);
     });
 
-    test('buyItems count should equal inventory count if there were no previous items', () => {
+    test('buyItems count should equal inventory count if there were no previous items', async () => {
         const itemsToBuy = [{ id: '1', quantity: 2, price: 5 }];
 
-        buyItems(itemsToBuy);
+        await buyItems(itemsToBuy);
 
         const expectedInventory = {
             1: 12, // The count of item "1" should have increased by 2
@@ -200,10 +204,10 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory).toEqual(expectedInventory);
     });
 
-    test('buyItems count should add to inventory count if there were previous items', () => {
+    test('buyItems count should add to inventory count if there were previous items', async () => {
         const itemsToBuy = [{ id: '1', quantity: 2, price: 5 }];
 
-        buyItems(itemsToBuy);
+        await buyItems(itemsToBuy);
 
         const expectedInventory = {
             1: 12, // The count of item "1" should have increased by 2
@@ -236,10 +240,10 @@ describe('gameState - inventory', () => {
         expect(result).toBe(true); // The function should return true since the inventory has enough of each item
     });
 
-    test('sellItems should silently fail if trying to sell more items than available', () => {
+    test('sellItems should silently fail if trying to sell more items than available', async () => {
         const itemsToSell = [{ id: '1', quantity: 15, price: 5 }];
 
-        sellItems(itemsToSell);
+        await sellItems(itemsToSell);
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since we tried to sell more than we have
@@ -250,10 +254,10 @@ describe('gameState - inventory', () => {
         expect(mockGameState.inventory).toEqual(expectedInventory);
     });
 
-    test('sellItems should correctly sell items if the quantity to sell is less than or equal to the actual count', () => {
+    test('sellItems should correctly sell items if the quantity to sell is less than or equal to the actual count', async () => {
         const itemsToSell = [{ id: '1', quantity: 5, price: 5 }];
 
-        sellItems(itemsToSell);
+        await sellItems(itemsToSell);
 
         const expectedInventory = {
             1: 5, // The count of item "1" should have decreased by 5
@@ -267,7 +271,7 @@ describe('gameState - inventory', () => {
     test('sellItems should correctly increase dUSD after selling items', () => {
         const itemsToSell = [{ id: '1', quantity: 5, price: 5 }];
 
-        sellItems(itemsToSell);
+        await sellItems(itemsToSell);
 
         const expectedInventory = {
             1: 5, // The count of item "1" should have decreased by 5
@@ -282,7 +286,7 @@ describe('gameState - inventory', () => {
     test('sellItems should reject items with negative price', () => {
         const itemsToSell = [{ id: '1', quantity: 5, price: -5 }];
 
-        sellItems(itemsToSell);
+        await sellItems(itemsToSell);
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since the price was negative
@@ -296,7 +300,7 @@ describe('gameState - inventory', () => {
     test('sellItems should reject items with a price of zero', () => {
         const itemsToSell = [{ id: '1', quantity: 5, price: 0 }];
 
-        sellItems(itemsToSell);
+        await sellItems(itemsToSell);
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since the price was negative
@@ -310,7 +314,7 @@ describe('gameState - inventory', () => {
     test('sellItems should reject items with an undefined price', () => {
         const itemsToSell = [{ id: '1', quantity: 5 }];
 
-        sellItems(itemsToSell);
+        await sellItems(itemsToSell);
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since the price was negative
@@ -324,7 +328,7 @@ describe('gameState - inventory', () => {
     test('sellItems should reject items with negative count', () => {
         const itemsToSell = [{ id: '1', quantity: -5, price: 5 }];
 
-        sellItems(itemsToSell);
+        await sellItems(itemsToSell);
 
         const expectedInventory = {
             1: 10, // The count of item "1" should remain the same since the count was negative
@@ -339,7 +343,7 @@ describe('gameState - inventory', () => {
         mockGameState.inventory[dCarbonId] = 500;
         const itemsToSell = [{ id: ITEM1, quantity: 1, price: 10 }];
 
-        sellItems(itemsToSell);
+        await sellItems(itemsToSell);
 
         expect(mockGameState.inventory[ITEM1]).toBe(9);
         expect(mockGameState.inventory[dUSDId]).toBeCloseTo(59.95);
@@ -349,7 +353,7 @@ describe('gameState - inventory', () => {
         mockGameState.inventory[dCarbonId] = 1000000;
         const itemsToSell = [{ id: ITEM1, quantity: 1, price: 10 }];
 
-        sellItems(itemsToSell);
+        await sellItems(itemsToSell);
 
         expect(mockGameState.inventory[ITEM1]).toBe(9);
         expect(mockGameState.inventory[dUSDId]).toBeCloseTo(51);

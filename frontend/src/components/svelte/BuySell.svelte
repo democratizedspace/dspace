@@ -1,11 +1,16 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
     import items from '../../pages/inventory/json/items';
     import { getPriceStringComponents } from '../../utils';
-    import { buyItems, sellItems, getSalesTaxPercentage } from '../../utils/gameState/inventory.js';
+    import {
+        buyItems,
+        sellItems,
+        getSalesTaxPercentage,
+    } from '../../utils/gameState/inventory.js';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
+    import { refreshGameStateFromPersistence } from '../../utils/gameState/common.js';
 
     export let itemId;
 
@@ -20,6 +25,7 @@
     let taxAmount = 0;
     let effectiveSellPrice = 0;
     let isLoading = false;
+    let dusdPollInterval;
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
@@ -37,7 +43,7 @@
         }
     }
 
-    function handleTransactionClick() {
+    async function handleTransactionClick() {
         if (!item) {
             return;
         }
@@ -50,13 +56,17 @@
         const transactionList = [transactionItem];
 
         if (activeType === 'buy') {
-            buyItems(transactionList);
+            await buyItems(transactionList);
         } else {
-            sellItems(transactionList);
+            await sellItems(transactionList);
         }
     }
 
     onMount(async () => {
+        dusdPollInterval = setInterval(() => {
+            void refreshGameStateFromPersistence();
+        }, 3000);
+
         if (item) {
             return;
         }
@@ -95,6 +105,10 @@
     $: buyChipActive = activeType === 'buy';
     $: sellChipActive = activeType === 'sell';
     $: displaySellPriceInRed = sellChipActive && taxAmount > 0;
+
+    onDestroy(() => {
+        clearInterval(dusdPollInterval);
+    });
 </script>
 
 <Chip inverted={false} text="" dataTestId="buy-sell-root">

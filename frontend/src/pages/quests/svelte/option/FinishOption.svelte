@@ -14,10 +14,10 @@
     );
     let isDisabled = false;
 
-    function onClick() {
+    async function onClick() {
         if (option.requiresGitHub && !githubConnected) return;
         if (!$itemRequirementsMet) return;
-        finishQuest(quest.id, quest.rewards || []);
+        await finishQuest(quest.id, quest.rewards || []);
     }
 
     $: {

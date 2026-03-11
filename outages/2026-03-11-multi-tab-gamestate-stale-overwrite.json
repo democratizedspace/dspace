@@ -1,0 +1,17 @@
+{
+  "id": "2026-03-11-multi-tab-gamestate-stale-overwrite",
+  "date": "2026-03-11",
+  "component": "frontend game state persistence",
+  "longForm": "outages/2026-03-11-multi-tab-gamestate-stale-overwrite.md",
+  "rootCause": "Tabs mutated in-memory gameState snapshots without reconciling with the latest persisted IndexedDB state, so later writes could overwrite earlier cross-tab actions.",
+  "resolution": "Added deterministic gameState checksums, checksum-aware mutation reconciliation against persistence, and UI polling to refresh state when checksums diverge across tabs.",
+  "references": [
+    "frontend/src/utils/gameState/common.js",
+    "frontend/src/utils/gameState/inventory.js",
+    "frontend/src/components/svelte/BuySell.svelte",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/pages/quests/svelte/QuestChat.svelte",
+    "frontend/tests/gameStateChecksumSync.test.ts",
+    "frontend/e2e/multi-tab-gamestate-sync.spec.ts"
+  ]
+}

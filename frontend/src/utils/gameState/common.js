@@ -13,6 +13,7 @@ const ROOT_KEY = 'root';
 const LS_STATE_KEY = 'gameState';
 const LS_BACKUP_KEY = 'gameStateBackup';
 const META_KEY = '_meta';
+const CHECKSUM_KEY = 'checksum';
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
@@ -239,18 +240,61 @@ const initializeGameState = () => ({
     itemContainerCounts: {},
     settings: { ...DEFAULT_SETTINGS },
     versionNumberString: CURRENT_VERSION,
-    [META_KEY]: { lastUpdated: Date.now() },
+    [META_KEY]: { lastUpdated: Date.now(), [CHECKSUM_KEY]: '' },
 });
+
+const sortObjectKeys = (value) => {
+    if (Array.isArray(value)) {
+        return value.map((entry) => sortObjectKeys(entry));
+    }
+
+    if (!isPlainObject(value)) {
+        return value;
+    }
+
+    return Object.keys(value)
+        .sort()
+        .reduce((acc, key) => {
+            acc[key] = sortObjectKeys(value[key]);
+            return acc;
+        }, {});
+};
+
+const hashString = (value) => {
+    let hash = 0;
+    for (let index = 0; index < value.length; index += 1) {
+        hash = (hash << 5) - hash + value.charCodeAt(index);
+        hash |= 0;
+    }
+    return `gs:${(hash >>> 0).toString(16).padStart(8, '0')}`;
+};
+
+const computeStateChecksum = (state) => {
+    const checksumSource = structuredClone(state);
+    delete checksumSource[META_KEY];
+    return hashString(JSON.stringify(sortObjectKeys(checksumSource)));
+};
+
+const ensureChecksum = (state) => {
+    ensureMeta(state);
+    const checksum = computeStateChecksum(state);
+    state[META_KEY][CHECKSUM_KEY] = checksum;
+    return checksum;
+};
 
 const ensureMeta = (state) => {
     const meta = state[META_KEY];
     if (!meta || typeof meta !== 'object') {
-        state[META_KEY] = { lastUpdated: Date.now() };
+        state[META_KEY] = { lastUpdated: Date.now(), [CHECKSUM_KEY]: '' };
         return;
     }
 
     if (typeof meta.lastUpdated !== 'number' || Number.isNaN(meta.lastUpdated)) {
         meta.lastUpdated = Date.now();
+    }
+
+    if (typeof meta[CHECKSUM_KEY] !== 'string') {
+        meta[CHECKSUM_KEY] = '';
     }
 };
 
@@ -305,6 +349,7 @@ export const validateGameState = (state) => {
         state.versionNumberString = CURRENT_VERSION;
     }
     ensureMeta(state);
+    ensureChecksum(state);
     return state;
 };
 
@@ -343,6 +388,65 @@ if (isBrowser) {
 
 export const loadGameState = () => structuredClone(gameState);
 
+export const getGameStateChecksum = () => {
+    ensureChecksum(gameState);
+    return gameState[META_KEY][CHECKSUM_KEY];
+};
+
+export const refreshGameStateFromPersistence = async ({ force = false } = {}) => {
+    if (!readyResolved) {
+        await ready;
+    }
+
+    const stored = await read(STATE_STORE);
+    if (!stored) {
+        return { changed: false, checksum: getGameStateChecksum() };
+    }
+
+    const normalized = validateGameState(stored);
+    const persistedChecksum = normalized?.[META_KEY]?.[CHECKSUM_KEY] ?? ensureChecksum(normalized);
+    const currentChecksum = getGameStateChecksum();
+
+    if (!force && persistedChecksum === currentChecksum) {
+        return { changed: false, checksum: currentChecksum };
+    }
+
+    gameState = normalized;
+    state.set(gameState);
+    return { changed: true, checksum: persistedChecksum };
+};
+
+export const runGameStateMutation = async (mutator, options = {}) => {
+    if (typeof mutator !== 'function') {
+        throw new TypeError('runGameStateMutation expects a mutator function');
+    }
+
+    const { expectedChecksum } = options;
+    const checksumBefore = expectedChecksum ?? getGameStateChecksum();
+    await refreshGameStateFromPersistence({ force: false });
+    const latestChecksum = getGameStateChecksum();
+
+    let baseState = loadGameState();
+    if (latestChecksum !== checksumBefore) {
+        baseState = loadGameState();
+    }
+
+    const draft = structuredClone(baseState);
+    const result = await mutator(draft);
+    await saveGameState(draft);
+    return result;
+};
+
+export const getPersistedInventoryItemCount = async (itemId) => {
+    if (!readyResolved) {
+        await ready;
+    }
+
+    const stored = await read(STATE_STORE);
+    const source = stored ? validateGameState(stored) : gameState;
+    return Number(source?.inventory?.[itemId] ?? 0);
+};
+
 export const isGameStateReady = () => readyResolved;
 export const hasLoadedPersistedGameState = () => loadedFromPersistence;
 
@@ -353,6 +457,7 @@ export const saveGameState = async (newState) => {
     const previousSnapshot = structuredClone(gameState);
     const nextState = validateGameState(structuredClone(newState));
     nextState[META_KEY].lastUpdated = Date.now();
+    nextState[META_KEY][CHECKSUM_KEY] = computeStateChecksum(nextState);
     gameState = nextState;
     state.set(gameState);
 

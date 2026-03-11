@@ -1,4 +1,8 @@
-import { loadGameState, saveGameState } from './common.js';
+import {
+    loadGameState,
+    runGameStateMutation,
+    getPersistedInventoryItemCount,
+} from './common.js';
 import items from '../../pages/inventory/json/items';
 import {
     addStoredItems,
@@ -10,24 +14,22 @@ import {
 const dUSDId = items.find((i) => i.name === 'dUSD')?.id;
 const dCarbonId = items.find((i) => i.name === 'dCarbon')?.id;
 
-export const addItems = (items) => {
-    const gameState = loadGameState();
-
-    items.forEach(({ id, count }) => {
-        gameState.inventory[id] = (gameState.inventory[id] || 0) + count;
-    });
-    saveGameState(gameState);
+export const addItems = async (items, options = {}) => {
+    await runGameStateMutation((gameState) => {
+        items.forEach(({ id, count }) => {
+            gameState.inventory[id] = (gameState.inventory[id] || 0) + count;
+        });
+    }, options);
 };
 
-export const burnItems = (items) => {
-    const gameState = loadGameState();
-
-    items.forEach(({ id, count }) => {
-        if (gameState.inventory[id] && gameState.inventory[id] >= count) {
-            gameState.inventory[id] -= count;
-        }
-    });
-    saveGameState(gameState);
+export const burnItems = async (items, options = {}) => {
+    await runGameStateMutation((gameState) => {
+        items.forEach(({ id, count }) => {
+            if (gameState.inventory[id] && gameState.inventory[id] >= count) {
+                gameState.inventory[id] -= count;
+            }
+        });
+    }, options);
 };
 
 export const getItemCounts = (itemList) => {
@@ -73,6 +75,8 @@ export const getCurrentdUSD = () => {
     return getItemCount(dUSDId);
 };
 
+export const getCurrentdUSDPersisted = async () => getPersistedInventoryItemCount(dUSDId);
+
 export const getSalesTaxPercentage = () => {
     const gameState = loadGameState();
 
@@ -88,50 +92,47 @@ export const getSalesTaxPercentage = () => {
     return Math.min(dCarbonCount / 1000, 90);
 };
 
-export const buyItems = (items) => {
-    const gameState = loadGameState();
+export const buyItems = async (items, options = {}) => {
+    await runGameStateMutation((gameState) => {
+        items.forEach((item) => {
+            const { price, quantity } = item;
+            const currencyId = dUSDId;
 
-    items.forEach((item) => {
-        const { price, quantity } = item;
-        const currencyId = dUSDId;
+            const parsedPrice = parseFloat(price);
+            const parsedQuantity = parseFloat(quantity);
+            const totalPrice = parsedPrice * parsedQuantity;
 
-        const parsedPrice = parseFloat(price);
-        const parsedQuantity = parseFloat(quantity);
-        const totalPrice = parsedPrice * parsedQuantity;
+            if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) return;
+            if (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0) return;
 
-        if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) return;
-        if (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0) return;
-
-        if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= totalPrice) {
-            gameState.inventory[currencyId] -= totalPrice; // Subtracting the currency for buying.
-            gameState.inventory[item.id] = (gameState.inventory[item.id] || 0) + parsedQuantity; // Adding the bought item to inventory.
-        }
-    });
-
-    saveGameState(gameState);
+            if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= totalPrice) {
+                gameState.inventory[currencyId] -= totalPrice;
+                gameState.inventory[item.id] = (gameState.inventory[item.id] || 0) + parsedQuantity;
+            }
+        });
+    }, options);
 };
 
-export const sellItems = (items) => {
-    const gameState = loadGameState();
-    const currencyId = dUSDId;
+export const sellItems = async (items, options = {}) => {
     const taxPercentage = getSalesTaxPercentage();
 
-    items.forEach((item) => {
-        const { id, quantity, price } = item;
+    await runGameStateMutation((gameState) => {
+        const currencyId = dUSDId;
+        items.forEach((item) => {
+            const { id, quantity, price } = item;
 
-        if (price === undefined) return;
-        if (quantity <= 0 || price <= 0) return;
+            if (price === undefined) return;
+            if (quantity <= 0 || price <= 0) return;
 
-        if (gameState.inventory[id] && gameState.inventory[id] >= quantity) {
-            const taxedPrice = price * (1 - taxPercentage / 100);
-            const totalPriceAfterTax = taxedPrice * quantity;
+            if (gameState.inventory[id] && gameState.inventory[id] >= quantity) {
+                const taxedPrice = price * (1 - taxPercentage / 100);
+                const totalPriceAfterTax = taxedPrice * quantity;
 
-            gameState.inventory[id] -= quantity; // Subtracting the sold item from inventory.
-            gameState.inventory[currencyId] += totalPriceAfterTax; // Adding the currency from sale.
-        }
-    });
-
-    saveGameState(gameState);
+                gameState.inventory[id] -= quantity;
+                gameState.inventory[currencyId] += totalPriceAfterTax;
+            }
+        });
+    }, options);
 };
 
 export const hasItems = (itemList) => {

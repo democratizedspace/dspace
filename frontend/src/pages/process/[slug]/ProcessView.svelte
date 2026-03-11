@@ -52,7 +52,7 @@
         disableBuy = !hasPurchasableGap;
     };
 
-    const buyItem = (id, qty) => {
+    const buyItem = async (id, qty) => {
         const item = items.find((i) => i.id === id);
         if (!item) return;
 
@@ -61,20 +61,20 @@
             return;
         }
 
-        buyItems([{ id, quantity: qty, price: unitPrice }]);
+        await buyItems([{ id, quantity: qty, price: unitPrice }]);
     };
 
-    const buyRequired = () => {
+    const buyRequired = async () => {
         if (!displayProcess) return;
         let added = 0;
-        displayProcess.requireItems.forEach((req) => {
+        for (const req of displayProcess.requireItems) {
             const have = getItemCount(req.id);
             const need = req.count - have;
             if (need > 0) {
-                buyItem(req.id, need);
+                await buyItem(req.id, need);
                 added += need;
             }
-        });
+        }
         if (added > 0) {
             toastMessage = `\u2713 Added ${added} items to inventory`;
             toastVisible = true;

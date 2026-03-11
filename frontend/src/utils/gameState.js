@@ -3,6 +3,7 @@ import {
     saveGameState,
     validateGameState,
     isUsingLocalStorage,
+    runGameStateMutation,
 } from './gameState/common.js';
 import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
@@ -23,15 +24,15 @@ const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Tro
 // QUESTS
 // ---------------------
 
-export const finishQuest = (questId, rewardItems) => {
-    addItems(rewardItems);
+export const finishQuest = async (questId, rewardItems) => {
+    await addItems(rewardItems);
 
-    const gameState = loadGameState();
-    gameState.quests[questId] = {
-        ...(gameState.quests[questId] || {}),
-        finished: true,
-    };
-    saveGameState(gameState);
+    await runGameStateMutation((gameState) => {
+        gameState.quests[questId] = {
+            ...(gameState.quests[questId] || {}),
+            finished: true,
+        };
+    });
 };
 
 export const questFinished = (questId) => {
@@ -59,14 +60,13 @@ export const canStartQuest = (quest) => {
     return true;
 };
 
-export const setCurrentDialogueStep = (questId, stepId) => {
-    const gameState = loadGameState();
-
-    gameState.quests[questId] = {
-        ...(gameState.quests[questId] || {}),
-        stepId,
-    };
-    saveGameState(gameState);
+export const setCurrentDialogueStep = async (questId, stepId) => {
+    await runGameStateMutation((gameState) => {
+        gameState.quests[questId] = {
+            ...(gameState.quests[questId] || {}),
+            stepId,
+        };
+    });
 };
 
 export const getCurrentDialogueStep = (questId) => {
@@ -75,19 +75,18 @@ export const getCurrentDialogueStep = (questId) => {
     return gameState.quests[questId] ? gameState.quests[questId].stepId : 0;
 };
 
-const setItemsGranted = (questId, stepId, optionIndex) => {
-    const gameState = loadGameState();
-
-    const key = `${questId}-${stepId}-${optionIndex}`;
-    const questProgress = gameState.quests[questId] || {};
-    const claimedItems = Array.isArray(questProgress.itemsClaimed)
-        ? questProgress.itemsClaimed
-        : [];
-    gameState.quests[questId] = {
-        ...questProgress,
-        itemsClaimed: [...claimedItems, key],
-    };
-    saveGameState(gameState);
+const setItemsGranted = async (questId, stepId, optionIndex) => {
+    await runGameStateMutation((gameState) => {
+        const key = `${questId}-${stepId}-${optionIndex}`;
+        const questProgress = gameState.quests[questId] || {};
+        const claimedItems = Array.isArray(questProgress.itemsClaimed)
+            ? questProgress.itemsClaimed
+            : [];
+        gameState.quests[questId] = {
+            ...questProgress,
+            itemsClaimed: [...claimedItems, key],
+        };
+    });
 };
 
 export const getItemsGranted = (questId, stepId, optionIndex) => {
@@ -98,12 +97,12 @@ export const getItemsGranted = (questId, stepId, optionIndex) => {
     return Array.isArray(itemsClaimed) && itemsClaimed.includes(key);
 };
 
-export const grantItems = (questId, stepId, optionIndex, itemList) => {
+export const grantItems = async (questId, stepId, optionIndex, itemList) => {
     if (getItemsGranted(questId, stepId, optionIndex)) {
         return;
     }
-    addItems(itemList);
-    setItemsGranted(questId, stepId, optionIndex);
+    await addItems(itemList);
+    await setItemsGranted(questId, stepId, optionIndex);
 };
 
 // ---------------------
@@ -116,11 +115,10 @@ export const VERSIONS = {
     V3: '3',
 };
 
-export const setVersionNumber = (versionNumber) => {
-    const gameState = loadGameState();
-
-    gameState.versionNumberString = versionNumber;
-    saveGameState(gameState);
+export const setVersionNumber = async (versionNumber) => {
+    await runGameStateMutation((gameState) => {
+        gameState.versionNumberString = versionNumber;
+    });
 };
 
 export const getVersionNumber = () => {

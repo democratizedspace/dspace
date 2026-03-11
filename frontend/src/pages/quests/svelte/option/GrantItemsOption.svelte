@@ -9,8 +9,8 @@
 
     const itemsClaimed = writable(false);
 
-    function onClick() {
-        grantItems(questId, stepId, optionIndex, option.grantsItems);
+    async function onClick() {
+        await grantItems(questId, stepId, optionIndex, option.grantsItems);
     }
 
     $: {

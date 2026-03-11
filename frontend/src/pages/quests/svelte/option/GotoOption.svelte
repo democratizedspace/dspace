@@ -12,9 +12,9 @@
         areItemRequirementsMet(option.requiresItems, get(state)?.inventory, get(state))
     );
 
-    function onClick() {
+    async function onClick() {
         if ($itemRequirementsMet) {
-            setCurrentDialogueStep(questId, option.goto);
+            await setCurrentDialogueStep(questId, option.goto);
         }
     }
 
