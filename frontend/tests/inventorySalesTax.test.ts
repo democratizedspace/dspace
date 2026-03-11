@@ -4,6 +4,8 @@ vi.mock('../src/utils/gameState/common.js', () => {
     return {
         loadGameState: vi.fn(),
         saveGameState: vi.fn(),
+        getGameStateChecksum: vi.fn(() => ''),
+        syncGameStateFromLocalIfStale: vi.fn(),
     };
 });
 
