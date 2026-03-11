@@ -137,11 +137,11 @@ New quests in this release: 225
 -   electronics/servo-sweep
 -   electronics/solder-led-harness
 -   electronics/solder-wire
--   electronics/soldering-intro
 -   electronics/temperature-plot
 -   electronics/test-gfci-outlet
 -   electronics/thermistor-reading
 -   electronics/thermometer-calibration
+-   electronics/tin-soldering-iron
 -   electronics/voltage-divider
 
 ### energy

@@ -1,6 +1,6 @@
 {
     "filename": "/assets/quests/electronics_tin_soldering_iron_tip.jpg",
-    "entity": "frontend/src/pages/quests/json/electronics/soldering-intro.json",
+    "entity": "frontend/src/pages/quests/json/electronics/tin-soldering-iron.json",
     "item_name": "Tin a Soldering Iron",
     "item_id": "electronics/tin-soldering-iron",
     "entity_type": "quest",

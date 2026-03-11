@@ -3,21 +3,29 @@ import path from 'node:path';
 
 const QUESTS_DIR = path.join(process.cwd(), 'frontend/src/pages/quests/json');
 
-export const loadQuestPaths = async (baseDir = QUESTS_DIR) => {
+export const listQuestJsonFiles = async (baseDir = QUESTS_DIR): Promise<string[]> => {
     const entries = await fs.readdir(baseDir, { withFileTypes: true });
-    const paths = new Map<string, string>();
+    const files: string[] = [];
 
     for (const entry of entries) {
         const fullPath = path.join(baseDir, entry.name);
         if (entry.isDirectory()) {
-            const nested = await loadQuestPaths(fullPath);
-            for (const [id, filePath] of nested) {
-                paths.set(id, filePath);
-            }
+            files.push(...(await listQuestJsonFiles(fullPath)));
             continue;
         }
 
         if (!entry.isFile() || !entry.name.endsWith('.json')) continue;
+        files.push(path.relative(QUESTS_DIR, fullPath));
+    }
+
+    return files.sort();
+};
+
+export const loadQuestPaths = async (baseDir = QUESTS_DIR) => {
+    const paths = new Map<string, string>();
+
+    for (const relativePath of await listQuestJsonFiles(baseDir)) {
+        const fullPath = path.join(QUESTS_DIR, relativePath);
         const raw = await fs.readFile(fullPath, 'utf8');
         const quest = JSON.parse(raw);
         if (quest?.id) {
