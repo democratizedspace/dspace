@@ -32,7 +32,7 @@ const seedLegacyVersionOneDb = async () =>
 
 const readMetaSnapshot = async () =>
     await new Promise<Record<string, unknown> | undefined>((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, 2);
+        const request = indexedDB.open(DB_NAME);
         request.onsuccess = () => {
             const db = request.result;
             if (!db.objectStoreNames.contains('meta')) {
@@ -54,20 +54,20 @@ const readMetaSnapshot = async () =>
     });
 
 describe('gameState IndexedDB schema upgrade', () => {
-    let alertSpy: ReturnType<typeof vi.fn>;
+    let alertSpy: ReturnType<typeof vi.spyOn>;
 
     beforeEach(async () => {
         vi.resetModules();
         localStorage.clear();
         await deleteDb();
         await seedLegacyVersionOneDb();
-        alertSpy = vi.fn();
-        window.alert = alertSpy;
+        alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
     });
 
     afterEach(async () => {
         const common = await import('../src/utils/gameState/common.js');
         await common.closeGameStateDatabaseForTesting();
+        alertSpy.mockRestore();
         await deleteDb();
         localStorage.clear();
     });

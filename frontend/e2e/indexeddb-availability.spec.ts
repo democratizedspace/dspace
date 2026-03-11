@@ -12,7 +12,9 @@ test.describe('IndexedDB availability', () => {
         await page.goto('/');
         await page.waitForLoadState('networkidle');
 
-        await expect.poll(() => dialogs.length).toBe(0);
+        // Allow async initialization to surface any late fallback dialogs.
+        await page.waitForTimeout(1000);
+        expect(dialogs).toHaveLength(0);
 
         const indexedDbProbe = await page.evaluate(async () => {
             const supportsIndexedDb = typeof indexedDB !== 'undefined';
@@ -29,7 +31,28 @@ test.describe('IndexedDB availability', () => {
                 request.onerror = () => resolve(false);
             });
 
-            const hasLightweightSnapshot = Boolean(localStorage.getItem('gameStateLite'));
+            const hasLightweightSnapshot = await new Promise<boolean>((resolve) => {
+                const maxWaitMs = 5000;
+                const pollIntervalMs = 100;
+                const startTime = Date.now();
+
+                const check = () => {
+                    if (localStorage.getItem('gameStateLite')) {
+                        resolve(true);
+                        return;
+                    }
+
+                    if (Date.now() - startTime >= maxWaitMs) {
+                        resolve(false);
+                        return;
+                    }
+
+                    setTimeout(check, pollIntervalMs);
+                };
+
+                check();
+            });
+
             return { supportsIndexedDb, canOpenDatabase, hasLightweightSnapshot };
         });
 

@@ -12,7 +12,6 @@ import { isGameStateReady, loadGameState, saveGameState, ready } from './gameSta
 const GAME_STATE_DB_NAME = 'dspaceGameState';
 const GAME_STATE_STORE = 'state';
 const GAME_STATE_ROOT_KEY = 'root';
-const GAME_STATE_DB_VERSION = 1;
 
 const persistGameStateToIndexedDb = async (state) => {
     if (!isBrowser || !('indexedDB' in globalThis)) {
@@ -20,7 +19,7 @@ const persistGameStateToIndexedDb = async (state) => {
     }
 
     await new Promise((resolve) => {
-        const request = indexedDB.open(GAME_STATE_DB_NAME, GAME_STATE_DB_VERSION);
+        const request = indexedDB.open(GAME_STATE_DB_NAME);
         request.onupgradeneeded = () => {
             const db = request.result;
             if (!db.objectStoreNames.contains(GAME_STATE_STORE)) {
