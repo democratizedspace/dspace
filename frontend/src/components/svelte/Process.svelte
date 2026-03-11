@@ -23,6 +23,7 @@
     import { getItemMetadata } from './compactItemListHelpers.js';
     import { getItemMap } from '../../utils/itemResolver.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
+    import { syncGameStateWithPersistence } from '../../utils/gameState/common.js';
 
     export let processId;
     export let processData = null;
@@ -57,6 +58,7 @@
     let requirementItemMap = new Map();
     let requirementItemRequestId = 0;
     let previousRequirementKey = '';
+    let syncIntervalId;
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
@@ -370,6 +372,9 @@
         mounted = true;
         updateState();
         intervalId = setInterval(updateState, updateIntervalMs);
+        syncIntervalId = setInterval(() => {
+            void syncGameStateWithPersistence();
+        }, 3000);
 
         initializeQaCheats();
         unsubscribeCheatsAvailability = qaCheatsAvailability.subscribe((available) => {
@@ -382,6 +387,7 @@
 
     onDestroy(() => {
         clearInterval(intervalId);
+        clearInterval(syncIntervalId);
         clearTimeout(pulseTimeoutId);
         requiresContainer = null;
         consumesContainer = null;

@@ -7,6 +7,7 @@
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
+    import { syncGameStateWithPersistence } from '../../../utils/gameState/common.js';
 
     export let quest;
     export let pointer;
@@ -22,6 +23,7 @@
     let rewardRequestId = 0;
     let rewardItemsKey = '';
     let isMounted = false;
+    let syncIntervalId;
 
     const releaseRewardImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
@@ -86,9 +88,13 @@
 
         clientSideRendered.set(true);
         void loadRewardItems();
+        syncIntervalId = setInterval(() => {
+            void syncGameStateWithPersistence();
+        }, 3000);
     });
 
     onDestroy(() => {
+        clearInterval(syncIntervalId);
         releaseRewardImages(rewardItems);
     });
 

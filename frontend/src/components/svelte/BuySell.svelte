@@ -5,6 +5,7 @@
     import items from '../../pages/inventory/json/items';
     import { getPriceStringComponents } from '../../utils';
     import { buyItems, sellItems, getSalesTaxPercentage } from '../../utils/gameState/inventory.js';
+    import { syncGameStateWithPersistence } from '../../utils/gameState/common.js';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
 
     export let itemId;
@@ -20,6 +21,7 @@
     let taxAmount = 0;
     let effectiveSellPrice = 0;
     let isLoading = false;
+    let dUsdSyncIntervalId;
 
     let activeType = 'buy'; // 'buy' or 'sell'
     let quantity = 1;
@@ -57,24 +59,30 @@
     }
 
     onMount(async () => {
-        if (item) {
-            return;
+        dUsdSyncIntervalId = setInterval(() => {
+            void syncGameStateWithPersistence();
+        }, 3000);
+
+        if (!item) {
+            isLoading = true;
+            try {
+                const loadedItem = await db.get(ENTITY_TYPES.ITEM, itemId);
+                item = loadedItem ?? null;
+            } catch (error) {
+                item = null;
+                console.error('Failed to load item from IndexedDB in BuySell.svelte', {
+                    itemId,
+                    entityType: ENTITY_TYPES.ITEM,
+                    error,
+                });
+            } finally {
+                isLoading = false;
+            }
         }
 
-        isLoading = true;
-        try {
-            const loadedItem = await db.get(ENTITY_TYPES.ITEM, itemId);
-            item = loadedItem ?? null;
-        } catch (error) {
-            item = null;
-            console.error('Failed to load item from IndexedDB in BuySell.svelte', {
-                itemId,
-                entityType: ENTITY_TYPES.ITEM,
-                error,
-            });
-        } finally {
-            isLoading = false;
-        }
+        return () => {
+            clearInterval(dUsdSyncIntervalId);
+        };
     });
 
     $: {
@@ -96,6 +104,7 @@
     $: sellChipActive = activeType === 'sell';
     $: displaySellPriceInRed = sellChipActive && taxAmount > 0;
 </script>
+
 
 <Chip inverted={false} text="" dataTestId="buy-sell-root">
     {#if isLoading}

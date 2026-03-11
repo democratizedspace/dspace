@@ -13,6 +13,7 @@ const ROOT_KEY = 'root';
 const LS_STATE_KEY = 'gameState';
 const LS_BACKUP_KEY = 'gameStateBackup';
 const META_KEY = '_meta';
+const CHECKSUM_KEY = 'gameStateChecksum';
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
@@ -252,6 +253,41 @@ const ensureMeta = (state) => {
     if (typeof meta.lastUpdated !== 'number' || Number.isNaN(meta.lastUpdated)) {
         meta.lastUpdated = Date.now();
     }
+
+    if (typeof meta.checksum !== 'string' || !meta.checksum.trim()) {
+        meta.checksum = '';
+    }
+};
+
+const stableStringify = (value) => {
+    if (value === null || typeof value !== 'object') {
+        return JSON.stringify(value);
+    }
+
+    if (Array.isArray(value)) {
+        return `[${value.map((entry) => stableStringify(entry)).join(',')}]`;
+    }
+
+    const keys = Object.keys(value).sort();
+    const pairs = keys.map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`);
+    return `{${pairs.join(',')}}`;
+};
+
+export const createGameStateChecksum = (inputState) => {
+    const stateForHash = structuredClone(inputState ?? {});
+    if (stateForHash[META_KEY] && typeof stateForHash[META_KEY] === 'object') {
+        delete stateForHash[META_KEY].checksum;
+    }
+
+    const serialized = stableStringify(stateForHash);
+    let hash = 2166136261;
+
+    for (let index = 0; index < serialized.length; index += 1) {
+        hash ^= serialized.charCodeAt(index);
+        hash = Math.imul(hash, 16777619);
+    }
+
+    return `gs-${(hash >>> 0).toString(16).padStart(8, '0')}`;
 };
 
 export const validateGameState = (state) => {
@@ -309,7 +345,19 @@ export const validateGameState = (state) => {
 };
 
 let gameState = initializeGameState();
+let gameStateChecksum = createGameStateChecksum(gameState);
+gameState[META_KEY].checksum = gameStateChecksum;
 export const state = writable(gameState);
+
+const hydrateInMemoryState = (nextState) => {
+    const validated = validateGameState(structuredClone(nextState));
+    const checksum = createGameStateChecksum(validated);
+    validated[META_KEY].checksum = checksum;
+    gameState = validated;
+    gameStateChecksum = checksum;
+    state.set(gameState);
+    return gameState;
+};
 
 // Only execute in browser environment to avoid SSR issues with IndexedDB
 export const ready = isBrowser
@@ -317,8 +365,7 @@ export const ready = isBrowser
           try {
               const stored = await read(STATE_STORE);
               if (stored) {
-                  gameState = validateGameState(stored);
-                  state.set(gameState);
+                  hydrateInMemoryState(stored);
                   loadedFromPersistence = true;
               }
           } catch (err) {
@@ -341,7 +388,49 @@ if (isBrowser) {
     globalThis.__dspaceFlushGameStateWrites = flushGameStateWritesForTesting;
 }
 
-export const loadGameState = () => structuredClone(gameState);
+const getLocalStorageStateSnapshot = () => {
+    const snapshot = lsRead(STATE_STORE);
+    if (!snapshot || typeof snapshot !== 'object') {
+        return undefined;
+    }
+
+    return validateGameState(snapshot);
+};
+
+const getSnapshotChecksum = (snapshot) => {
+    const embedded = snapshot?.[META_KEY]?.checksum;
+    if (typeof embedded === 'string' && embedded.trim()) {
+        return embedded;
+    }
+
+    return createGameStateChecksum(snapshot ?? {});
+};
+
+export const getCurrentGameStateChecksum = () => gameStateChecksum;
+
+export const refreshGameStateFromLocalStorage = () => {
+    if (!isBrowser) {
+        return false;
+    }
+
+    const localSnapshot = getLocalStorageStateSnapshot();
+    if (!localSnapshot) {
+        return false;
+    }
+
+    const localChecksum = getSnapshotChecksum(localSnapshot);
+    if (!localChecksum || localChecksum === gameStateChecksum) {
+        return false;
+    }
+
+    hydrateInMemoryState(localSnapshot);
+    return true;
+};
+
+export const loadGameState = () => {
+    refreshGameStateFromLocalStorage();
+    return structuredClone(gameState);
+};
 
 export const isGameStateReady = () => readyResolved;
 export const hasLoadedPersistedGameState = () => loadedFromPersistence;
@@ -353,13 +442,19 @@ export const saveGameState = async (newState) => {
     const previousSnapshot = structuredClone(gameState);
     const nextState = validateGameState(structuredClone(newState));
     nextState[META_KEY].lastUpdated = Date.now();
+    const checksum = createGameStateChecksum(nextState);
+    nextState[META_KEY].checksum = checksum;
     gameState = nextState;
+    gameStateChecksum = checksum;
     state.set(gameState);
 
     // Persist the latest snapshots to localStorage immediately so data survives
     // page refreshes even if the pending IndexedDB writes are interrupted.
     lsWrite(BACKUP_STORE, previousSnapshot);
     lsWrite(STATE_STORE, gameState);
+    if (isBrowser) {
+        localStorage.setItem(CHECKSUM_KEY, checksum);
+    }
 
     writeQueue = writeQueue.then(async () => {
         await write(BACKUP_STORE, previousSnapshot, { skipLocalStorage: true }).catch(
@@ -368,6 +463,48 @@ export const saveGameState = async (newState) => {
         await write(STATE_STORE, gameState, { skipLocalStorage: true }).catch(() => undefined);
     });
     return writeQueue;
+};
+
+export const getPersistedGameStateChecksum = async () => {
+    if (!isBrowser) {
+        return gameStateChecksum;
+    }
+
+    const localChecksum = localStorage.getItem(CHECKSUM_KEY);
+    if (typeof localChecksum === 'string' && localChecksum.trim()) {
+        return localChecksum;
+    }
+
+    const storedState = await read(STATE_STORE);
+    if (!storedState) {
+        return gameStateChecksum;
+    }
+
+    return getSnapshotChecksum(storedState);
+};
+
+export const syncGameStateWithPersistence = async () => {
+    const persistedChecksum = await getPersistedGameStateChecksum();
+    if (persistedChecksum === gameStateChecksum) {
+        return false;
+    }
+
+    return refreshGameStateFromPersistence();
+};
+
+export const refreshGameStateFromPersistence = async () => {
+    const stored = await read(STATE_STORE);
+    if (!stored) {
+        return false;
+    }
+
+    const storedChecksum = getSnapshotChecksum(stored);
+    if (storedChecksum === gameStateChecksum) {
+        return false;
+    }
+
+    hydrateInMemoryState(stored);
+    return true;
 };
 
 export const closeGameStateDatabaseForTesting = async () => {
@@ -485,9 +622,14 @@ export const importGameStateString = async (gameStateString) => {
 
 export const resetGameState = async () => {
     gameState = initializeGameState();
+    gameStateChecksum = createGameStateChecksum(gameState);
+    gameState[META_KEY].checksum = gameStateChecksum;
     state.set(gameState);
     await write(STATE_STORE, gameState).catch(() => undefined);
     await clearStore(BACKUP_STORE).catch(() => undefined);
+    if (isBrowser) {
+        localStorage.setItem(CHECKSUM_KEY, gameStateChecksum);
+    }
 };
 
 export const rollbackGameState = async () => {
@@ -495,8 +637,13 @@ export const rollbackGameState = async () => {
         const backup = await read(BACKUP_STORE);
         if (!backup) return;
         gameState = validateGameState(backup);
+        gameStateChecksum = createGameStateChecksum(gameState);
+        gameState[META_KEY].checksum = gameStateChecksum;
         state.set(gameState);
         await write(STATE_STORE, gameState);
+        if (isBrowser) {
+            localStorage.setItem(CHECKSUM_KEY, gameStateChecksum);
+        }
     } catch (err) {
         logPersistenceIssue('Error rolling back game state:', err);
     }
