@@ -17,7 +17,7 @@ test.describe('Manage Items', () => {
 
         const aquariumRow = page
             .locator('.item-row')
-            .filter({ has: page.getByRole('heading', { level: 4, name: /aquarium heater/i }) });
+            .filter({ has: page.getByRole('heading', { level: 4, name: /^aquarium heater\b/i }) });
         const toolRow = page
             .locator('.item-row')
             .filter({ has: page.getByRole('heading', { level: 4, name: /^soldering iron kit$/i }) });
