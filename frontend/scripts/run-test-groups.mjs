@@ -54,6 +54,7 @@ const TEST_GROUPS = [
             'failover-status.spec.ts',
             'home-page-basic.spec.ts',
             'inventory-items-bug.spec.ts',
+            'indexeddb-availability.spec.ts',
             'profile-avatar-selection.spec.ts',
             'profile-page.spec.ts',
             'service-worker-update.spec.ts',

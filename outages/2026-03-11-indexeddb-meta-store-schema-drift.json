@@ -1,0 +1,16 @@
+{
+  "id": "indexeddb-meta-store-schema-drift",
+  "date": "2026-03-11",
+  "component": "frontend game state persistence",
+  "rootCause": "PR #3933 added the new IndexedDB `meta` object store for lightweight checksums but left `DB_VERSION` at 1. Browsers with an existing v1 `dspaceGameState` database skipped `onupgradeneeded`, so every read/write to `meta` threw NotFoundError and forced the localStorage fallback alert on every load.",
+  "resolution": "Bumped `dspaceGameState` schema version to 2 so existing installs run an IndexedDB upgrade and create the `meta` store before lightweight checksum writes.",
+  "regressionTests": [
+    "frontend/tests/gameStateIndexedDbSchemaUpgrade.test.ts",
+    "frontend/e2e/indexeddb-availability.spec.ts"
+  ],
+  "references": [
+    "frontend/src/utils/gameState/common.js",
+    "frontend/tests/gameStateIndexedDbSchemaUpgrade.test.ts",
+    "frontend/e2e/indexeddb-availability.spec.ts"
+  ]
+}

@@ -17,14 +17,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-          run_install: false
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          package-manager-cache: false
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@9 --activate
 
       - name: Determine pnpm store path
         id: pnpm-store
@@ -52,14 +53,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-          run_install: false
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          package-manager-cache: false
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@9 --activate
 
       - name: Determine pnpm store path
         id: pnpm-store
@@ -100,14 +102,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-          run_install: false
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          package-manager-cache: false
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@9 --activate
 
       - name: Determine pnpm store path
         id: pnpm-store
