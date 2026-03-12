@@ -18,9 +18,9 @@ test.describe('Manage Items', () => {
         const aquariumRow = page
             .locator('.item-row')
             .filter({ has: page.getByRole('heading', { level: 4, name: /^aquarium heater\b/i }) });
-        const toolRow = page
-            .locator('.item-row')
-            .filter({ has: page.getByRole('heading', { level: 4, name: /^soldering iron kit$/i }) });
+        const toolRow = page.locator('.item-row').filter({
+            has: page.getByRole('heading', { level: 4, name: /^soldering iron kit$/i }),
+        });
 
         await expect(aquariumRow).toHaveCount(1);
         await expect(toolRow).toHaveCount(1);
