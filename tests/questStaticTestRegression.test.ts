@@ -60,5 +60,15 @@ describe('rocketry static-test regressions', () => {
         expect(staticTestProcess?.createItems).toEqual([{ id: STATIC_ENGINE_THRUST_LOG_ID, count: 1 }]);
         expect(staticTestProcess?.createItems).not.toContainEqual({ id: GENERIC_PROCESS_COMPLETION_NOTE_ID, count: 1 });
     });
-});
 
+    it('prevents any process from creating the generic completion note item', async () => {
+        const processes = JSON.parse(await readFile(processPath, 'utf8')) as ProcessDef[];
+
+        for (const process of processes) {
+            expect(process.createItems ?? []).not.toContainEqual({
+                id: GENERIC_PROCESS_COMPLETION_NOTE_ID,
+                count: 1,
+            });
+        }
+    });
+});
