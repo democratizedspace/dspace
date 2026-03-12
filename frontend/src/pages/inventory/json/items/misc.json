@@ -9,7 +9,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -23,14 +23,14 @@
     {
         "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
         "name": "sheet of printer paper",
-        "description": "Single 216 \u00d7 279 mm (8.5 \u00d7 11 in) sheet of 80 g/m\u00b2 letter printer paper.",
+        "description": "Single 216 × 279 mm (8.5 × 11 in) sheet of 80 g/m² letter printer paper.",
         "image": "/assets/letter_printer_paper_sheet.jpg",
         "price": "0.02 dUSD",
         "unit": "sheet",
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -55,7 +55,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-09",
@@ -75,7 +75,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-03",
@@ -94,13 +94,13 @@
     {
         "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
         "name": "200 Wh battery pack",
-        "description": "12 V 16 Ah lithium iron phosphate battery pack (\u2248200 Wh) with built-in BMS for renewable energy storage.",
+        "description": "12 V 16 Ah lithium iron phosphate battery pack (≈200 Wh) with built-in BMS for renewable energy storage.",
         "price": "120 dUSD",
         "image": "/assets/200wh_lifepo4_battery_pack.jpg",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-04",
@@ -120,7 +120,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -134,7 +134,7 @@
         "hardening": {
             "passes": 0,
             "score": 80,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -149,7 +149,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -163,7 +163,7 @@
         "hardening": {
             "passes": 0,
             "score": 88,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -177,7 +177,7 @@
         "hardening": {
             "passes": 0,
             "score": 90,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -191,7 +191,7 @@
         "hardening": {
             "passes": 0,
             "score": 82,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -205,7 +205,7 @@
         "hardening": {
             "passes": 0,
             "score": 85,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Energy & Power"
@@ -220,7 +220,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -240,7 +240,7 @@
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -265,7 +265,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -294,7 +294,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -315,7 +315,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -329,14 +329,14 @@
     {
         "id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
         "name": "3D printing kit",
-        "description": "Assembled FDM printer, 0.4 mm nozzle, 180\u00d7180\u00d7180 mm build with 500 g PLA.",
+        "description": "Assembled FDM printer, 0.4 mm nozzle, 180×180×180 mm build with 500 g PLA.",
         "image": "/assets/3d_printing_starter_kit_fdm_printer_04mm_nozzle_pla.jpg",
         "price": "220 dUSD",
         "type": "tool",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -356,7 +356,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -376,7 +376,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -390,7 +390,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -404,7 +404,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -418,7 +418,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -432,7 +432,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -446,7 +446,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Hydroponics"
@@ -513,13 +513,13 @@
     {
         "id": "799ace33-1336-46c0-904a-9f16778230f1",
         "name": "sink",
-        "description": "Steel sink with faucet; ~50\u00d740\u00d720 cm basin (~5 kg). Provides tap water.",
+        "description": "Steel sink with faucet; ~50×40×20 cm basin (~5 kg). Provides tap water.",
         "image": "/assets/tap.jpg",
         "price": "120 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -540,7 +540,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -561,7 +561,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -597,7 +597,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -619,13 +619,13 @@
     {
         "id": "4d817f1c-d78d-4fac-a514-402bce330693",
         "name": "hobbyist solid rocket motor",
-        "description": "Single-use 18 mm (0.7 in) \u00d7 70 mm (2.8 in) black powder motor weighing 18 g. Delivers ~31 N peak thrust for 0.8 s with ~2.5 N\u00b7s total impulse.",
+        "description": "Single-use 18 mm (0.7 in) × 70 mm (2.8 in) black powder motor weighing 18 g. Delivers ~31 N peak thrust for 0.8 s with ~2.5 N·s total impulse.",
         "image": "/assets/rocket_motor.jpg",
         "price": "5 dUSD",
         "hardening": {
             "passes": 2,
             "score": 80,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-04",
@@ -644,13 +644,13 @@
     {
         "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
         "name": "superglue",
-        "description": "Small 3 g tube of cyanoacrylate adhesive for quick repairs. Bonds plastic and wood in seconds\u2014avoid skin contact.",
+        "description": "Small 3 g tube of cyanoacrylate adhesive for quick repairs. Bonds plastic and wood in seconds—avoid skin contact.",
         "image": "/assets/superglue.jpg",
         "price": "3 dUSD",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -671,7 +671,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-05",
@@ -691,7 +691,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -705,13 +705,13 @@
     {
         "id": "99c0472d-0d95-4030-a529-df3e8e8349f4",
         "name": "rocket launch checklist",
-        "description": "A5 laminated card (148\u00d7210 mm, ~25 g) listing pad setup, arming and 10-sec countdown steps.",
+        "description": "A5 laminated card (148×210 mm, ~25 g) listing pad setup, arming and 10-sec countdown steps.",
         "image": "/assets/rocket_launch_checklist_card.jpg",
         "price": "2 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -739,7 +739,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -761,14 +761,14 @@
     {
         "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
         "name": "pH strip",
-        "description": "Disposable 0\u201314 pH test strip with 1-unit resolution; 0.3 g each.",
+        "description": "Disposable 0–14 pH test strip with 1-unit resolution; 0.3 g each.",
         "image": "/assets/single_ph_test_strip.jpg",
         "price": "0.15 dUSD",
         "unit": "each",
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -805,7 +805,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-16",
@@ -826,7 +826,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-18",
@@ -847,7 +847,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-24",
@@ -894,7 +894,7 @@
     {
         "id": "bdc905f5-c36f-4608-9c7f-da7b0988572f",
         "name": "keychain camera kit",
-        "description": "20 g keychain HD camera, lithium cell, and mounting frame sized for 30\u201335 mm nosecones.",
+        "description": "20 g keychain HD camera, lithium cell, and mounting frame sized for 30–35 mm nosecones.",
         "image": "/assets/keychain_camera_kit_30mm_nosecone.jpg",
         "price": "22 dUSD",
         "category": "Electronics & Robotics"
@@ -989,7 +989,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-24",
@@ -1164,7 +1164,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Electronics & Robotics"
@@ -1204,7 +1204,7 @@
     {
         "id": "6da4a788-b743-4682-8dbe-f23d71435aa4",
         "name": "LED indicator module",
-        "description": "5 mm red LED pre-wired with a 220 \u03a9 resistor and jumper leads for breadboard projects.",
+        "description": "5 mm red LED pre-wired with a 220 Ω resistor and jumper leads for breadboard projects.",
         "image": "/assets/led_indicator_module.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
@@ -1227,7 +1227,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -1289,7 +1289,7 @@
     {
         "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
         "name": "ultrasonic distance sensor",
-        "description": "5 V ultrasonic rangefinder module with trigger/echo pins and 2 cm\u20134 m sensing range.",
+        "description": "5 V ultrasonic rangefinder module with trigger/echo pins and 2 cm–4 m sensing range.",
         "image": "/assets/ultrasonic_distance_sensor_module.jpg",
         "price": "6 dUSD",
         "category": "Electronics & Robotics"
@@ -1313,7 +1313,7 @@
     {
         "id": "9f2109f5-59c8-4309-8a6c-3c60be744985",
         "name": "ultrasonic sweep map",
-        "description": "Logged point cloud from a 180\u00b0 ultrasonic sweep showing obstacles and clear arcs.",
+        "description": "Logged point cloud from a 180° ultrasonic sweep showing obstacles and clear arcs.",
         "image": "/assets/ultrasonic_sweep_obstacle_map.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Electronics & Robotics"
@@ -1351,7 +1351,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-2025-08-06",
@@ -1554,7 +1554,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-coffee-table-item-2026-03-04",
@@ -1574,7 +1574,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-tool-rack-item-2026-03-04",
@@ -1594,7 +1594,7 @@
         "hardening": {
             "passes": 1,
             "score": 70,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-hardening-picture-frame-item-2026-03-04",
@@ -1840,7 +1840,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -2040,7 +2040,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-09-07",
@@ -2070,7 +2070,7 @@
     {
         "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
         "name": "safety goggles",
-        "description": "ANSI Z87.1 polycarbonate goggles with vents, side shields, adjustable strap; fit over glasses, block splashes; 80\u2013100 g.",
+        "description": "ANSI Z87.1 polycarbonate goggles with vents, side shields, adjustable strap; fit over glasses, block splashes; 80–100 g.",
         "image": "/assets/safety_goggles_vented_clear.jpg",
         "price": "8 dUSD",
         "type": "tool",
@@ -2078,7 +2078,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -2107,7 +2107,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Biology & Lab"
@@ -2130,7 +2130,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-18",
@@ -2144,14 +2144,14 @@
     {
         "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",
         "name": "electrical tape",
-        "description": "19 mm \u00d7 20 m PVC electrical tape for insulating wire splices.",
+        "description": "19 mm × 20 m PVC electrical tape for insulating wire splices.",
         "image": "/assets/electrical_tape_roll.jpg",
         "price": "2 dUSD",
         "unit": "roll",
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "\ud83d\udee0\ufe0f",
+            "emoji": "🛠️",
             "history": []
         },
         "category": "Workshop & Construction"
@@ -2176,7 +2176,7 @@
     {
         "id": "97b735d8-0d76-4fe5-908c-781178ff6308",
         "name": "spill tray",
-        "description": "Polypropylene tray with 2 cm lip to contain acid drips; 300 \u00d7 200 mm; ~150 g.",
+        "description": "Polypropylene tray with 2 cm lip to contain acid drips; 300 × 200 mm; ~150 g.",
         "image": "/assets/lab_spill_tray_on_bench.jpg",
         "price": "5 dUSD",
         "category": "Biology & Lab"
@@ -2207,7 +2207,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-13",
@@ -2342,13 +2342,13 @@
     {
         "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
         "name": "camera tripod",
-        "description": "Aluminum tripod with 3-way pan head; extends 0.5\u20131.5 m, supports up to 3 kg, weighs 1.2 kg.",
+        "description": "Aluminum tripod with 3-way pan head; extends 0.5–1.5 m, supports up to 3 kg, weighs 1.2 kg.",
         "image": "/assets/aluminum_camera_tripod_pan_head.jpg",
         "price": "30 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -2378,13 +2378,13 @@
     {
         "id": "b465a7e3-f26d-4416-a598-2f8167557240",
         "name": "astronaut poster",
-        "description": "61\u00d791 cm (24\u00d736 in) matte poster on 150 g/m\u00b2 paper; NASA crew, ~85 g.",
+        "description": "61×91 cm (24×36 in) matte poster on 150 g/m² paper; NASA crew, ~85 g.",
         "image": "/assets/astronauts.jpg",
         "price": "12 dUSD",
         "hardening": {
             "passes": 2,
             "score": 78,
-            "emoji": "\u2705",
+            "emoji": "✅",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -2403,13 +2403,13 @@
     {
         "id": "70bb8d86-2c4e-4330-9705-371891934686",
         "name": "mission logbook",
-        "description": "A5 (148 \u00d7 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
+        "description": "A5 (148 × 210 mm) hardbound logbook with 200 pre-numbered pages for recording mission events and maintenance notes.",
         "image": "/assets/hardbound_mission_logbook_a5.jpg",
         "price": "8 dUSD",
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -2445,7 +2445,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-12",
@@ -2465,7 +2465,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-06",
@@ -2485,7 +2485,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-11",
@@ -2506,7 +2506,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "\ud83c\udf00",
+            "emoji": "🌀",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -2994,6 +2994,558 @@
         "name": "stevia panel scorecard",
         "description": "Structured sensory scorecard with onset timing, intensity, bitterness, and confidence metrics.",
         "image": "/assets/stevia_tasting_notes.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "a710d7d4-e617-414f-bf23-e9683de95264",
+        "name": "set smart plug to a 12 h on off cycle completion note",
+        "description": "Proof log confirming completion of the process: \"Set smart plug to a 12 h on/off cycle\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "9bfc6c80-3ba2-422a-99a9-aeb930896d7f",
+        "name": "clone a mint cutting in a soaked starter plug completion note",
+        "description": "Proof log confirming completion of the process: \"Clone a mint cutting in a soaked starter plug\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "280b8ff4-111b-46cd-aedf-8dc5f47bcacc",
+        "name": "mask a rocket body tube with masking tape for painting completion note",
+        "description": "Proof log confirming completion of the process: \"Mask a rocket body tube with masking tape for painting\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "73838626-9f1c-4ae9-a788-7791ebd348e6",
+        "name": "deposit 10 dusd into savings jar completion note",
+        "description": "Proof log confirming completion of the process: \"Deposit 10 dUSD into savings jar\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "ff17f27a-b75a-4e29-a786-8c6b5031591c",
+        "name": "launch dspace with docker compose completion note",
+        "description": "Proof log confirming completion of the process: \"Launch DSPACE with Docker Compose\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "8ac617a2-efd5-4232-98d5-a2fa24adda06",
+        "name": "create a cloudflare tunnel to port 3002 completion note",
+        "description": "Proof log confirming completion of the process: \"Create a Cloudflare Tunnel to port 3002\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "8f6a5723-38a0-4bf1-8904-3017a4e80d3f",
+        "name": "join nodes to a k3s cluster completion note",
+        "description": "Proof log confirming completion of the process: \"Join nodes to a k3s cluster\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "e5942915-0420-4b40-bfcd-d75d8f212612",
+        "name": "configure daily backups to ssd completion note",
+        "description": "Proof log confirming completion of the process: \"Configure daily backups to SSD\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "9033a5fc-83c8-4d45-9b7b-1848412a5fe6",
+        "name": "measure hydroponic nutrient ec completion note",
+        "description": "Proof log confirming completion of the process: \"Measure hydroponic nutrient EC\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "9c728b33-39cf-4ed5-b540-58dda0849fff",
+        "name": "check a 12 v battery packs voltage with a digital multimeter completion note",
+        "description": "Proof log confirming completion of the process: \"Check a 12 V battery pack's voltage with a digital multimeter\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "0e2ed58d-d0df-48c7-8af8-1a7c58df5f2f",
+        "name": "measure a portable solar panels short circuit current in direct sun completion note",
+        "description": "Proof log confirming completion of the process: \"Measure a portable solar panel's short-circuit current in direct sun\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "b4cce188-8cd9-4213-b3bb-191365b1dddf",
+        "name": "measure a portable solar panels open circuit voltage in direct sun completion note",
+        "description": "Proof log confirming completion of the process: \"Measure a portable solar panel's open-circuit voltage in direct sun\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f006ab79-bed6-428a-8829-e497bef4871b",
+        "name": "measure a 220 resistor with a digital multimeter completion note",
+        "description": "Proof log confirming completion of the process: \"Measure a 220 Ω resistor with a digital multimeter\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "1be33187-dfe3-4dd7-9e78-39ba9ce1efb1",
+        "name": "identify led anode and cathode using a multimeters diode mode completion note",
+        "description": "Proof log confirming completion of the process: \"Identify LED anode and cathode using a multimeter's diode mode\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "94a77059-0f1c-4af7-a182-e315e9739903",
+        "name": "measure a photoresistors resistance using a digital multimeter completion note",
+        "description": "Proof log confirming completion of the process: \"Measure a photoresistor's resistance using a digital multimeter\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "52ea1173-b2ef-402d-ad0b-26a682a87e59",
+        "name": "calibrate a digital multimeter using a 220 reference resistor completion note",
+        "description": "Proof log confirming completion of the process: \"Calibrate a digital multimeter using a 220 Ω reference resistor\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f26e910c-1f6b-4f6b-b994-6b3aedf1a949",
+        "name": "clip an anti static wrist strap to ground before handling electronics completion note",
+        "description": "Proof log confirming completion of the process: \"Clip an anti-static wrist strap to ground before handling electronics\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "7567cf2a-ba49-44f3-bf9f-0af2b8466b00",
+        "name": "calibrate ec meter with 1000 ppm solution completion note",
+        "description": "Proof log confirming completion of the process: \"Calibrate EC meter with 1000 ppm solution\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "6e444d18-aa8a-4f5f-ba29-b104cfbcd77c",
+        "name": "adjust solution ph completion note",
+        "description": "Proof log confirming completion of the process: \"Adjust solution pH\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "8b94b356-82f9-4b6c-8dad-18c440c8bf3f",
+        "name": "wash your hands with soap and running water completion note",
+        "description": "Proof log confirming completion of the process: \"Wash your hands with soap and running water\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "b1bf05e6-d980-409f-95f6-300bae7f3fdc",
+        "name": "dry your hands with a paper towel completion note",
+        "description": "Proof log confirming completion of the process: \"Dry your hands with a paper towel\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "ef043266-1dfb-49a2-962c-8542aa1bb379",
+        "name": "wash and bandage a minor cut completion note",
+        "description": "Proof log confirming completion of the process: \"Wash and bandage a minor cut\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "aebe57e8-e450-4a71-80ad-8410a710c834",
+        "name": "practice 30 2 cpr on a training manikin completion note",
+        "description": "Proof log confirming completion of the process: \"Practice 30:2 CPR on a training manikin\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "e427eafe-7d4b-41ab-bf5a-bd884195894b",
+        "name": "observe jupiters four galilean moons through a basic telescope completion note",
+        "description": "Proof log confirming completion of the process: \"Observe Jupiter's four Galilean moons through a basic telescope\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "885ab6ee-6f7e-403f-8ee5-5e5ab32cd1c4",
+        "name": "archive an incomplete iss pass entry before a fresh retry completion note",
+        "description": "Proof log confirming completion of the process: \"Archive an incomplete ISS pass entry before a fresh retry\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "ffee7fa5-db2e-45bb-8850-f338e4c014fb",
+        "name": "clear an out of range venus sketch before corrective retest completion note",
+        "description": "Proof log confirming completion of the process: \"Clear an out-of-range Venus sketch before corrective retest\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "5be75976-2f20-4957-8531-1508cf1cd74c",
+        "name": "watch a meteor shower with your telescope completion note",
+        "description": "Proof log confirming completion of the process: \"Watch a meteor shower with your telescope\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "ac217095-4f35-4c1a-b886-91c59c13e046",
+        "name": "photograph a lunar eclipse with a telescope completion note",
+        "description": "Proof log confirming completion of the process: \"Photograph a lunar eclipse with a telescope\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "113d9a39-ee3d-47ad-8021-cc78692e6d04",
+        "name": "install the arduino ide completion note",
+        "description": "Proof log confirming completion of the process: \"Install the Arduino IDE\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "3a62d109-bb23-405b-b129-02e3beef1044",
+        "name": "upload and run the servo sweep example on an arduino uno completion note",
+        "description": "Proof log confirming completion of the process: \"Upload and run the Servo Sweep example on an Arduino Uno\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "60c7d951-ee6e-4039-bd3d-380ee9110888",
+        "name": "upload the blink sketch to an arduino uno and flash a 5 mm led on a breadboard completion note",
+        "description": "Proof log confirming completion of the process: \"Upload the Blink sketch to an Arduino Uno and flash a 5 mm LED on a breadboard\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "2e9c88ba-5131-45f9-b380-46227bd82a4f",
+        "name": "dim an led with a potentiometer on arduino completion note",
+        "description": "Proof log confirming completion of the process: \"Dim an LED with a potentiometer on Arduino\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "68f8301f-d6b4-4951-8865-2ecd1a4fd83f",
+        "name": "log arduino temperature data on a raspberry pi completion note",
+        "description": "Proof log confirming completion of the process: \"Log Arduino temperature data on a Raspberry Pi\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "25e5a71c-e36d-4371-aae7-b0c243c41567",
+        "name": "install pyserial on a raspberry pi completion note",
+        "description": "Proof log confirming completion of the process: \"Install pyserial on a Raspberry Pi\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f6ca230c-9c00-427b-9220-dc835be08d0d",
+        "name": "3d print a 20 mm calibration cube on an entry level fdm 3d printer using 15 g of green pla filament completion note",
+        "description": "Proof log confirming completion of the process: \"3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "71414cc9-8cc0-4108-a64f-68a7d4ebd583",
+        "name": "strip 5 mm of insulation from a jumper wire completion note",
+        "description": "Proof log confirming completion of the process: \"Strip 5 mm of insulation from a jumper wire\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "e8580272-e1b2-4245-83f4-1d6cc65b1163",
+        "name": "join two jumper wires using a soldering iron kit flux pen helping hands tool and safety goggles completion note",
+        "description": "Proof log confirming completion of the process: \"Join two jumper wires using a soldering iron kit, flux pen, helping hands tool, and safety goggles\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "319c2b55-bb06-42b6-bee6-0443fa9be344",
+        "name": "confirm a 220 resistors value using a printed color code chart completion note",
+        "description": "Proof log confirming completion of the process: \"Confirm a 220 Ω resistor's value using a printed color code chart\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f47c16b9-dd25-49c2-929a-53cc11ecbe7f",
+        "name": "check aquarium water temperature with an attached strip thermometer completion note",
+        "description": "Proof log confirming completion of the process: \"Check aquarium water temperature with an attached strip thermometer\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "16415031-5cba-4fdf-ae16-fa2db7240921",
+        "name": "use gloves gauze and antiseptic from a first aid kit to control a minor nosebleed completion note",
+        "description": "Proof log confirming completion of the process: \"Use gloves, gauze, and antiseptic from a first aid kit to control a minor nosebleed\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "fc3322ae-5749-4891-8903-3c90f240109c",
+        "name": "fully charge a smartphone from a 200 wh battery pack using a usb cable completion note",
+        "description": "Proof log confirming completion of the process: \"Fully charge a smartphone from a 200 Wh battery pack using a USB cable\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f33fc834-3221-4544-9d5a-10b88baf8952",
+        "name": "verify usb cable continuity with a digital multimeter completion note",
+        "description": "Proof log confirming completion of the process: \"Verify USB cable continuity with a digital multimeter\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "67ff8063-6eeb-43d9-9d4d-2e26724bac83",
+        "name": "measure the 5 v pin on an arduino uno using a digital multimeter completion note",
+        "description": "Proof log confirming completion of the process: \"Measure the 5 V pin on an Arduino Uno using a digital multimeter\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "e030f0d2-1c30-4417-99f2-372435238d60",
+        "name": "heat the soldering iron and melt solder on the tip while wearing safety goggles completion note",
+        "description": "Proof log confirming completion of the process: \"Heat the soldering iron and melt solder on the tip while wearing safety goggles\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "2902c160-6386-467e-ae73-e2661b34f91d",
+        "name": "wipe the soldering iron tip on a damp sponge to remove oxidation completion note",
+        "description": "Proof log confirming completion of the process: \"Wipe the soldering iron tip on a damp sponge to remove oxidation\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "be1a6810-e903-45ec-ba09-149d45878af4",
+        "name": "measure a red flashlights 9 v battery with a digital multimeter completion note",
+        "description": "Proof log confirming completion of the process: \"Measure a red flashlight's 9 V battery with a digital multimeter\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "c98da07b-1db4-43cf-83d3-51988812dd8b",
+        "name": "heat a through hole joint and clear it with a spring loaded pump while wearing safety goggles completion note",
+        "description": "Proof log confirming completion of the process: \"Heat a through-hole joint and clear it with a spring-loaded pump while wearing safety goggles\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "b56dccec-b1cb-41ec-903d-b5c9b2e5abf9",
+        "name": "remove solder from a pcb pad with solder wick and a soldering iron completion note",
+        "description": "Proof log confirming completion of the process: \"Remove solder from a PCB pad with solder wick and a soldering iron\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "c37fcd54-5ff7-4dc4-8b7f-78818e194a10",
+        "name": "bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set completion note",
+        "description": "Proof log confirming completion of the process: \"Bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "569ecc2f-2da9-4247-b827-1d10f7b50c3b",
+        "name": "solder a 220 smd resistor onto a pcb using a flux pen and precision tweezers completion note",
+        "description": "Proof log confirming completion of the process: \"Solder a 220 Ω SMD resistor onto a PCB using a flux pen and precision tweezers\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "89eb70f5-3e14-447b-9087-76570236b099",
+        "name": "test a gfci outlets wiring with a plug in tester and its test reset buttons completion note",
+        "description": "Proof log confirming completion of the process: \"Test a GFCI outlet's wiring with a plug-in tester and its test/reset buttons\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "fb3a21fd-38b8-4484-83a7-3da8162b4480",
+        "name": "place a heat resistant silicone mat on the workbench before powering the soldering iron completion note",
+        "description": "Proof log confirming completion of the process: \"Place a heat-resistant silicone mat on the workbench before powering the soldering iron\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "49ea1801-708a-4701-aaa7-962f2a3eb081",
+        "name": "place a solder fume extractor near the workspace and switch it on before soldering completion note",
+        "description": "Proof log confirming completion of the process: \"Place a solder fume extractor near the workspace and switch it on before soldering\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "4361d8cb-8d7d-49ea-881a-de797ae97e28",
+        "name": "generate an ed25519 ssh key pair on a laptop and copy it to a pi cluster node completion note",
+        "description": "Proof log confirming completion of the process: \"Generate an ed25519 SSH key pair on a laptop and copy it to a Pi cluster node\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "573287df-28a5-4675-9e4f-6e45321c5135",
+        "name": "disable password login and root ssh access then restart sshd completion note",
+        "description": "Proof log confirming completion of the process: \"Disable password login and root SSH access, then restart sshd\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "011fcea2-8149-4723-86e2-6149d41fefca",
+        "name": "use a laptop to install ufw on a pi node and allow only ssh and https completion note",
+        "description": "Proof log confirming completion of the process: \"Use a laptop to install UFW on a Pi node and allow only SSH and HTTPS\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "07c61b24-0c12-4de6-b232-672d46d16b5e",
+        "name": "measure 1 75 mm pla filament at three points with digital calipers completion note",
+        "description": "Proof log confirming completion of the process: \"Measure 1.75 mm PLA filament at three points with digital calipers\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "c3e3e7c6-1d54-4a9c-9013-c2f8ecac9b1e",
+        "name": "clean soldering iron tip using a brass wire sponge completion note",
+        "description": "Proof log confirming completion of the process: \"Clean soldering iron tip using a brass wire sponge\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "14711d84-49cb-411c-ac9b-054357963ae0",
+        "name": "trim excess leads from a soldered 220 resistor using wire cutters completion note",
+        "description": "Proof log confirming completion of the process: \"Trim excess leads from a soldered 220 Ω resistor using wire cutters\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "db97884f-e72c-4c75-a09f-8073585c1e48",
+        "name": "replace the 9 v battery in a model rocket launch controller completion note",
+        "description": "Proof log confirming completion of the process: \"Replace the 9 V battery in a model rocket launch controller\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "0d104521-c9c0-42fe-910b-e06a5bfd8e2b",
+        "name": "calibrate floor versus line reflectance thresholds completion note",
+        "description": "Proof log confirming completion of the process: \"Calibrate floor-versus-line reflectance thresholds\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "30cd503b-3582-4e0b-b2e8-27d45f365771",
+        "name": "validate reflectance thresholds during motion completion note",
+        "description": "Proof log confirming completion of the process: \"Validate reflectance thresholds during motion\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "fc9eb412-4548-4923-81de-8d2a63cae07c",
+        "name": "build and pressure test a small scale biogas digester completion note",
+        "description": "Proof log confirming completion of the process: \"Build and pressure-test a small-scale biogas digester\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "95628fb8-3d7a-4fdd-a47c-cd53fffcdebc",
+        "name": "install aquarium led fixture and run first photoperiod cycle completion note",
+        "description": "Proof log confirming completion of the process: \"Install aquarium LED fixture and run first photoperiod cycle\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "96ae9e51-24bf-47b4-8e8e-de5e21812bf0",
+        "name": "assemble and align a line follower robot chassis completion note",
+        "description": "Proof log confirming completion of the process: \"Assemble and align a line-follower robot chassis\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "bf5d5c67-b9b7-4fda-be66-8d0738e19e3a",
+        "name": "integrate ultrasonic obstacle avoidance on a mobile robot completion note",
+        "description": "Proof log confirming completion of the process: \"Integrate ultrasonic obstacle avoidance on a mobile robot\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "a6d29e20-3414-4484-977e-1658aaef9358",
+        "name": "assemble and calibrate a pan tilt servo mount completion note",
+        "description": "Proof log confirming completion of the process: \"Assemble and calibrate a pan-tilt servo mount\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "94ef35f3-aa5c-4acf-b8ca-6bb2f6800f1e",
+        "name": "assemble and calibrate a servo gripper completion note",
+        "description": "Proof log confirming completion of the process: \"Assemble and calibrate a servo gripper\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "category": "Digital & Records"
+    },
+    {
+        "id": "f6028fe5-90d6-4cc4-8e7c-011c44334c71",
+        "name": "install and calibrate wheel encoders completion note",
+        "description": "Proof log confirming completion of the process: \"Install and calibrate wheel encoders\".",
+        "image": "/assets/temperature_log_csv_export.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     }

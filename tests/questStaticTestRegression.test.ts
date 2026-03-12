@@ -33,6 +33,18 @@ const questPath = 'frontend/src/pages/quests/json/rocketry/static-test.json';
 const processPath = 'frontend/src/pages/processes/base.json';
 
 describe('rocketry static-test regressions', () => {
+    it('does not use the generic process completion note in process rewards', async () => {
+        const processes = JSON.parse(await readFile(processPath, 'utf8')) as ProcessDef[];
+
+        const processesWithGenericNote = processes
+            .filter((process) =>
+                (process.createItems ?? []).some((item) => item.id === GENERIC_PROCESS_COMPLETION_NOTE_ID)
+            )
+            .map((process) => process.id);
+
+        expect(processesWithGenericNote).toEqual([]);
+    });
+
     it('requires explicit goto progression after process completion at burn', async () => {
         const quest = JSON.parse(await readFile(questPath, 'utf8')) as Quest;
         const burn = (quest.dialogue ?? []).find((node) => node.id === 'burn');
@@ -61,4 +73,3 @@ describe('rocketry static-test regressions', () => {
         expect(staticTestProcess?.createItems).not.toContainEqual({ id: GENERIC_PROCESS_COMPLETION_NOTE_ID, count: 1 });
     });
 });
-
