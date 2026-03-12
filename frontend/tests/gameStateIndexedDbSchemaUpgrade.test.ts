@@ -8,7 +8,12 @@ const deleteDb = async () =>
         const request = indexedDB.deleteDatabase(DB_NAME);
         request.onsuccess = () => resolve();
         request.onerror = () => reject(request.error);
-        request.onblocked = () => resolve();
+        request.onblocked = () =>
+            reject(
+                new Error(
+                    'IndexedDB deleteDatabase request was blocked; there may be open connections.'
+                )
+            );
     });
 
 const seedLegacyVersionOneDb = async () =>
