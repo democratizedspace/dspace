@@ -31,6 +31,8 @@ const PARACHUTE_ID = '80a83ecc-bcd2-400e-a469-8488a6453bb8';
 
 const questPath = 'frontend/src/pages/quests/json/rocketry/static-test.json';
 const processPath = 'frontend/src/pages/processes/base.json';
+const generatedProcessesPath = 'frontend/src/generated/processes.json';
+const miscItemsPath = 'frontend/src/pages/inventory/json/items/misc.json';
 
 describe('rocketry static-test regressions', () => {
     it('requires explicit goto progression after process completion at burn', async () => {
@@ -61,8 +63,8 @@ describe('rocketry static-test regressions', () => {
         expect(staticTestProcess?.createItems).not.toContainEqual({ id: GENERIC_PROCESS_COMPLETION_NOTE_ID, count: 1 });
     });
 
-    it('prevents any process from creating the generic completion note item', async () => {
-        const processes = JSON.parse(await readFile(processPath, 'utf8')) as ProcessDef[];
+    it('prevents any generated process from creating the generic completion note item', async () => {
+        const processes = JSON.parse(await readFile(generatedProcessesPath, 'utf8')) as ProcessDef[];
 
         for (const process of processes) {
             expect(process.createItems ?? []).not.toContainEqual({
@@ -70,5 +72,11 @@ describe('rocketry static-test regressions', () => {
                 count: 1,
             });
         }
+    });
+
+    it('retains the legacy generic completion note item definition', async () => {
+        const inventory = JSON.parse(await readFile(miscItemsPath, 'utf8')) as Array<{ id: string }>;
+
+        expect(inventory.some((item) => item.id === GENERIC_PROCESS_COMPLETION_NOTE_ID)).toBe(true);
     });
 });
