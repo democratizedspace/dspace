@@ -481,7 +481,7 @@ const getItemDependencies = (item: any) =>
 const computeObtainableItems = ({
     allItems,
     allQuests,
-    includeBetaPlaceholderItems = true,
+    includeBetaPlaceholderItems = false,
 }: {
     allItems: Array<any>;
     allQuests: Array<any>;
@@ -822,6 +822,53 @@ describe('quest completion item availability', () => {
         expect(failures).toEqual([]);
     });
 
+
+
+    it('ensures quest-required items are directly obtainable by price or process output', async () => {
+        const quests = await loadQuests();
+        const itemMap = new Map((items as Array<any>).map((item) => [item.id, item]));
+        const processOutputs = new Map<string, string[]>();
+
+        for (const process of processes as Array<any>) {
+            for (const created of toItemIds(process.createItems)) {
+                if (!processOutputs.has(created)) {
+                    processOutputs.set(created, []);
+                }
+                processOutputs.get(created)?.push(process.id);
+            }
+        }
+
+        const requiredItemIds = new Set<string>();
+        for (const quest of quests) {
+            for (const itemId of uniqueItemIds([
+                ...getQuestLevelRequiredItemIds(quest),
+                ...getRequiredItemsFromDialoguePath(quest),
+                ...getFinishOptions(quest).flatMap((option: any) => getRequiredItemIds(option)),
+            ])) {
+                requiredItemIds.add(itemId);
+            }
+        }
+
+        const errors: string[] = [];
+        for (const itemId of requiredItemIds) {
+            const item = itemMap.get(itemId);
+            if (!item) continue;
+
+            const hasNumericPrice = typeof item.price === 'number' && item.price > 0;
+            const hasStringPrice =
+                typeof item.price === 'string' && item.price.trim().length > 0;
+            const hasPrice = hasNumericPrice || hasStringPrice;
+            const producerIds = processOutputs.get(itemId) ?? [];
+
+            if (!hasPrice && producerIds.length === 0) {
+                errors.push(
+                    `${item.name} (${itemId}) is required by quests but has no price and is not created by any process.`
+                );
+            }
+        }
+
+        expect(errors).toEqual([]);
+    });
     it('ensures finish requirements are obtainable', async () => {
         const quests = await loadQuests();
         const questPaths = await loadQuestPaths();

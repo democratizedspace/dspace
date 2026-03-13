@@ -361,7 +361,7 @@
         "name": "Lettuce Seeds",
         "description": "Seeds for growing crisp hydroponic lettuce.",
         "image": "/assets/hydroponic_lettuce_seeds_packet.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER"
+        "price": "3 dUSD"
     },
     {
         "id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",

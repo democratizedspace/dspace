@@ -1206,7 +1206,7 @@
         "name": "LED indicator module",
         "description": "5 mm red LED pre-wired with a 220 \u03a9 resistor and jumper leads for breadboard projects.",
         "image": "/assets/led_indicator_module.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "18 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1214,7 +1214,7 @@
         "name": "USB Cable",
         "description": "Standard USB cable for charging or data transfer between devices.",
         "image": "/assets/usb_cable_standard.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "4 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1259,7 +1259,7 @@
         "name": "Servo Motor",
         "description": "A small motor with control circuitry for precise movement.",
         "image": "/assets/servo_motor_small.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "9 dUSD",
         "category": "Electronics & Robotics"
     },
     {
@@ -1267,7 +1267,7 @@
         "name": "Wheel Encoder",
         "description": "Pair of low-resolution quadrature encoders for tracking robot wheel rotation.",
         "image": "/assets/wheel_encoder_pair.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "18 dUSD",
         "category": "Electronics & Robotics"
     },
     {
