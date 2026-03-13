@@ -96,7 +96,9 @@ const setItemsGranted = (questId, stepId, optionIndex) => {
         stepId:
             typeof questProgress.stepId === 'string' && questProgress.stepId.length > 0
                 ? questProgress.stepId
-                : stepId,
+                : typeof stepId === 'string' && stepId.length > 0
+                  ? stepId
+                  : questProgress.stepId,
         itemsClaimed: [...claimedItems, key],
     };
     saveGameState(gameState);

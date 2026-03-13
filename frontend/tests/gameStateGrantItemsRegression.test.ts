@@ -80,6 +80,19 @@ describe('gameState grantsItems claim-once regression', () => {
         expect(vi.mocked(saveGameState)).toHaveBeenCalledTimes(saveCallsBeforeSecondGrant);
     });
 
+
+    test('does not overwrite stored stepId when a grant call receives an invalid stepId argument', () => {
+        mockGameState.quests['aquaria/ph-strip-test'] = {
+            stepId: 'dip',
+            itemsClaimed: [],
+        };
+
+        grantItems('aquaria/ph-strip-test', '', 1, [{ id: 'strip-item', count: 1 }]);
+
+        expect(getCurrentDialogueStep('aquaria/ph-strip-test')).toBe('dip');
+        expect(getItemsGranted('aquaria/ph-strip-test', '', 1)).toBe(true);
+    });
+
     test('normalizes non-array itemsClaimed state before recording claim key', () => {
         mockGameState.quests['aquaria/ph-strip-test'] = {
             stepId: 'start',
