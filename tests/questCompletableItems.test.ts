@@ -232,6 +232,9 @@ const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
 
+// NOTE: Intentionally broad — this collects required items from ALL dialogue options,
+// including dead-end branches that cannot reach finish. The direct-source policy below
+// applies to any item referenced by quest content, not just completion-path requirements.
 const getAllRequiredItemIds = (quest: any) =>
     uniqueItemIds([
         ...getQuestLevelRequiredItemIds(quest),
@@ -853,6 +856,8 @@ describe('quest completion item availability', () => {
                 if (!item) return true;
                 const isBuyable = Boolean(item.price);
                 const isProcessCreated = processCreatedItems.has(itemId);
+                // NOTE: Quest-reward-only sources are intentionally excluded from this
+                // "direct source" policy. If that policy changes, extend this predicate.
                 return !isBuyable && !isProcessCreated;
             });
 
