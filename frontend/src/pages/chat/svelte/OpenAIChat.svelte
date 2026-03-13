@@ -79,6 +79,9 @@
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
+        completedQuestCount: 0,
+        totalOfficialQuestCount: 0,
+        remainingOfficialQuestCount: 0,
         inventoryIncludedCount: 0,
         inventoryTotalCount: 0,
         inventoryTruncated: false,
@@ -583,6 +586,18 @@
                 <div class="debug-meta-row">
                     <span>PlayerState questsFinished</span>
                     <span class="debug-mono">{playerStateSummary.questsFinishedCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState completed official quests</span>
+                    <span class="debug-mono">{playerStateSummary.completedQuestCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState total official quests</span>
+                    <span class="debug-mono">{playerStateSummary.totalOfficialQuestCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState remaining official quests</span>
+                    <span class="debug-mono">{playerStateSummary.remainingOfficialQuestCount}</span>
                 </div>
                 <div class="debug-meta-row">
                     <span>PlayerState inventory entries</span>

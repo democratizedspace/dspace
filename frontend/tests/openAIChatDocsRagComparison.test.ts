@@ -128,6 +128,20 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
         await expectComparisonMessage('✅ in sync');
     });
 
+    it('shows deterministic PlayerState quest stats rows in debug metadata', async () => {
+        process.env.VITE_GIT_SHA = 'abc123def';
+        getDocsRagMeta.mockResolvedValue({
+            docsGitSha: 'abc123def',
+            envName: 'staging',
+        });
+
+        render(OpenAIChat);
+
+        await screen.findByText('PlayerState completed official quests');
+        expect(screen.getByText('PlayerState total official quests')).toBeTruthy();
+        expect(screen.getByText('PlayerState remaining official quests')).toBeTruthy();
+    });
+
     it('shows mismatch when staging SHAs are real and different', async () => {
         process.env.VITE_GIT_SHA = 'abc123def';
         getDocsRagMeta.mockResolvedValue({

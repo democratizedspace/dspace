@@ -1,4 +1,5 @@
 import { loadGameState, ready } from './gameState/common.js';
+import { getOfficialQuestStats } from './gameState/questStats.js';
 import { buildDchatKnowledgePack } from './dchatKnowledge.js';
 import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
@@ -309,6 +310,9 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
             meta: {
                 included: false,
                 questsFinishedCount: 0,
+                completedQuestCount: 0,
+                totalOfficialQuestCount: 0,
+                remainingOfficialQuestCount: 0,
                 inventoryIncludedCount: 0,
                 inventoryTotalCount: 0,
                 inventoryTruncated: false,
@@ -338,6 +342,7 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
         : inventoryEntries;
 
     const versionNumberString = normalizeVersionNumberString(gameState.versionNumberString);
+    const questStats = getOfficialQuestStats(gameState);
     const snapshot = {
         versionNumberString,
         questsFinished,
@@ -349,7 +354,8 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
         snapshot.totalItems = totalItems;
     }
 
-    const block = `PlayerState v${versionNumberString} (authoritative; do not infer beyond this):\n${JSON.stringify(
+    const statsBlock = `PlayerStateStats: completedQuests=${questStats.completedQuestCount}, totalOfficialQuests=${questStats.totalOfficialQuestCount}, remainingOfficialQuests=${questStats.remainingOfficialQuestCount}`;
+    const block = `${statsBlock}\nPlayerState v${versionNumberString} (authoritative; do not infer beyond this):\n${JSON.stringify(
         snapshot,
         null,
         2
@@ -360,6 +366,9 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
         meta: {
             included: true,
             questsFinishedCount: questsFinished.length,
+            completedQuestCount: questStats.completedQuestCount,
+            totalOfficialQuestCount: questStats.totalOfficialQuestCount,
+            remainingOfficialQuestCount: questStats.remainingOfficialQuestCount,
             inventoryIncludedCount: includedInventory.length,
             inventoryTotalCount: totalItems,
             inventoryTruncated: truncated,
