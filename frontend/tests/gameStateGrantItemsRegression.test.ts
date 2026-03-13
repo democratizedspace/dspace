@@ -15,6 +15,7 @@ vi.mock('../src/utils/gameState/inventory.js', () => ({
 
 import {
     finishQuest,
+    getCurrentDialogueStep,
     getItemsGranted,
     grantItems,
     setCurrentDialogueStep,
@@ -67,6 +68,7 @@ describe('gameState grantsItems claim-once regression', () => {
         grantItems('aquaria/ph-strip-test', 'start', 0, grantsItems);
         expect(vi.mocked(addItems)).toHaveBeenCalledTimes(1);
         expect(getItemsGranted('aquaria/ph-strip-test', 'start', 0)).toBe(true);
+        expect(getCurrentDialogueStep('aquaria/ph-strip-test')).toBe('start');
         expect(vi.mocked(saveGameState)).toHaveBeenCalledTimes(1);
 
         setCurrentDialogueStep('aquaria/ph-strip-test', 'dip');
