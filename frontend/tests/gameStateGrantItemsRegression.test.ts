@@ -91,7 +91,6 @@ describe('gameState grantsItems claim-once regression', () => {
         expect(getItemsGranted('aquaria/ph-strip-test', 'start', 0)).toBe(true);
     });
 
-
     test('does not overwrite stored stepId when a grant call receives an invalid stepId argument', () => {
         mockGameState.quests['aquaria/ph-strip-test'] = {
             stepId: 'dip',
