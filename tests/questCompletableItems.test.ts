@@ -481,7 +481,7 @@ const getItemDependencies = (item: any) =>
 const computeObtainableItems = ({
     allItems,
     allQuests,
-    includeBetaPlaceholderItems = true,
+    includeBetaPlaceholderItems = false,
 }: {
     allItems: Array<any>;
     allQuests: Array<any>;
@@ -872,6 +872,7 @@ describe('quest completion item availability', () => {
         const obtainable = computeObtainableItems({
             allItems: items as Array<any>,
             allQuests: quests,
+            includeBetaPlaceholderItems: false,
         });
 
         const errors: string[] = [];

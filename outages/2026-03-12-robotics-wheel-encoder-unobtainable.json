@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-12-robotics-wheel-encoder-unobtainable",
+  "date": "2026-03-12",
+  "component": "quest completion item availability checks",
+  "rootCause": "The generic finish-requirement test treated BETA_PLACEHOLDER items as obtainable, so quests requiring placeholder-priced items could pass tests even when those items had no real acquisition path. The Wheel Encoder used by robotics/reflectance-sensors had no price and was not created by any process.",
+  "resolution": "Make quest completable-item checks default to excluding BETA_PLACEHOLDER exemptions and explicitly run the finish-requirement test in strict mode; set a concrete Wheel Encoder price so it is buyable.",
+  "references": [
+    "tests/questCompletableItems.test.ts",
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "frontend/src/pages/quests/json/robotics/reflectance-sensors.json"
+  ]
+}

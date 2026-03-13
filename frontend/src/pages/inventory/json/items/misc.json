@@ -1267,7 +1267,7 @@
         "name": "Wheel Encoder",
         "description": "Pair of low-resolution quadrature encoders for tracking robot wheel rotation.",
         "image": "/assets/wheel_encoder_pair.jpg",
-        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "price": "15 dUSD",
         "category": "Electronics & Robotics"
     },
     {
