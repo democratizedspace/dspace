@@ -61,6 +61,20 @@ describe('gameState grantsItems claim-once regression', () => {
         expect(getItemsGranted('aquaria/ph-strip-test', 'start', 0)).toBe(true);
     });
 
+    test('keeps current step when grant is claimed before any goto interaction', () => {
+        const questId = 'hydroponics/top-off';
+        mockGameState.quests[questId] = {
+            stepId: 'start',
+        };
+
+        grantItems(questId, 'start', 0, [{ id: 'hydroponics-tub', count: 1 }]);
+
+        expect(mockGameState.quests[questId]).toEqual({
+            stepId: 'start',
+            itemsClaimed: ['hydroponics/top-off-start-0'],
+        });
+    });
+
     test('initializes missing quest progress and prevents repeated grant claims', () => {
         const grantsItems = [{ id: 'strip-item', count: 1 }];
 

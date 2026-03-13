@@ -93,6 +93,7 @@ const setItemsGranted = (questId, stepId, optionIndex) => {
         : [];
     gameState.quests[questId] = {
         ...questProgress,
+        stepId: questProgress.stepId ?? stepId,
         itemsClaimed: [...claimedItems, key],
     };
     saveGameState(gameState);
