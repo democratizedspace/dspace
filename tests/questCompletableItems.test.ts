@@ -231,6 +231,15 @@ const getRequiredItemsFromFinishReachableTransitions = (quest: any) => {
 const getMissingItems = (required: string[], obtainable: Set<string>) =>
     required.filter((itemId) => !obtainable.has(itemId));
 
+
+const getAllRequiredItemIds = (quest: any) =>
+    uniqueItemIds([
+        ...getQuestLevelRequiredItemIds(quest),
+        ...(quest.dialogue ?? []).flatMap((node: any) =>
+            (node.options ?? []).flatMap((option: any) => getRequiredItemIds(option))
+        ),
+    ]);
+
 const getStartNodeId = (quest: any) => {
     if (typeof quest.start === 'string' && quest.start.trim()) {
         return quest.start.trim();
@@ -822,6 +831,49 @@ describe('quest completion item availability', () => {
         expect(failures).toEqual([]);
     });
 
+
+
+    it('requires quest-gating items to be directly obtainable through price or processes', async () => {
+        const quests = await loadQuests();
+        const itemMap = new Map((items as Array<any>).map((item) => [item.id, item]));
+        const questPaths = await loadQuestPaths();
+
+        const processCreatedItems = new Set(
+            (processes as Array<any>).flatMap((process) => toItemIds(process.createItems))
+        );
+
+        const issues: string[] = [];
+
+        for (const quest of quests) {
+            const requiredItemIds = getAllRequiredItemIds(quest);
+            if (requiredItemIds.length === 0) continue;
+
+            const missingDirectSource = requiredItemIds.filter((itemId) => {
+                const item = itemMap.get(itemId);
+                if (!item) return true;
+                const isBuyable = Boolean(item.price);
+                const isProcessCreated = processCreatedItems.has(itemId);
+                return !isBuyable && !isProcessCreated;
+            });
+
+            if (missingDirectSource.length === 0) continue;
+
+            const path = questPaths.get(quest.id) ?? 'unknown path';
+            const details = missingDirectSource
+                .map((itemId) => {
+                    const item = itemMap.get(itemId);
+                    if (!item) return `Unknown item (${itemId})`;
+                    return `${item.name} (${itemId})`;
+                })
+                .join(', ');
+            issues.push(
+                `Quest "${quest.id}" (${path}) requires items that are neither buyable nor produced by any process: ${details}.`
+            );
+        }
+
+        expect(issues).toEqual([]);
+    });
+
     it('ensures finish requirements are obtainable', async () => {
         const quests = await loadQuests();
         const questPaths = await loadQuestPaths();
@@ -872,6 +924,7 @@ describe('quest completion item availability', () => {
         const obtainable = computeObtainableItems({
             allItems: items as Array<any>,
             allQuests: quests,
+            includeBetaPlaceholderItems: false,
         });
 
         const errors: string[] = [];
