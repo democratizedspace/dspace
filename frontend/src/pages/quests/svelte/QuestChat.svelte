@@ -7,6 +7,7 @@
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
+    import { resolveQuestPointer } from '../../../utils/questPointer.ts';
 
     export let quest;
     export let pointer;
@@ -100,7 +101,12 @@
     $: {
         if ($state && quest) {
             if ($state.quests[quest.id]) {
-                pointer = $state.quests[quest.id].stepId;
+                pointer = resolveQuestPointer({
+                    storedStepId: $state.quests[quest.id].stepId,
+                    currentPointer: pointer,
+                    dialogueMap,
+                    questStart: quest.start,
+                });
                 currentDialogue = dialogueMap?.get(pointer);
             }
             if (questFinished(quest.id)) {
