@@ -42,6 +42,7 @@ import {
 import { buildDchatKnowledgePack } from '../src/utils/dchatKnowledge.js';
 import { loadGameState } from '../src/utils/gameState/common.js';
 import { searchDocsRag } from '../src/utils/docsRag.js';
+import { listBuiltInQuestIds } from '../src/utils/builtInQuests.js';
 
 class MockResponseClient {
     constructor(resolver) {
@@ -583,12 +584,25 @@ describe('buildChatPrompt', () => {
         );
         const content = playerStateMessage?.content ?? '';
         const jsonStart = content.indexOf('{');
-        const jsonBody = jsonStart >= 0 ? content.slice(jsonStart) : '';
+        const statsLineIndex = content.indexOf('\nPlayerStateStats:');
+        const jsonBody =
+            jsonStart >= 0
+                ? content.slice(jsonStart, statsLineIndex >= 0 ? statsLineIndex : undefined)
+                : '';
         const snapshot = jsonBody ? JSON.parse(jsonBody) : null;
 
         expect(snapshot?.versionNumberString).toBe('3');
         expect(snapshot?.questsFinished).toEqual(
             expect.arrayContaining(['welcome/howtodoquests', '3dprinter/start'])
+        );
+        const totalOfficialQuestCount = listBuiltInQuestIds().length;
+        expect(snapshot?.stats).toEqual({
+            completedQuests: 1,
+            totalOfficialQuests: totalOfficialQuestCount,
+            remainingOfficialQuests: Math.max(totalOfficialQuestCount - 1, 0),
+        });
+        expect(content).toContain(
+            `PlayerStateStats: completedQuests=1, totalOfficialQuests=${totalOfficialQuestCount}, remainingOfficialQuests=${Math.max(totalOfficialQuestCount - 1, 0)}`
         );
         expect(snapshot?.questsFinished).not.toEqual(
             expect.arrayContaining(['welcome/intro-inventory'])
@@ -603,9 +617,43 @@ describe('buildChatPrompt', () => {
             expect.objectContaining({
                 included: true,
                 questsFinishedCount: 2,
+                completedQuestCount: 1,
+                totalOfficialQuestCount,
+                remainingOfficialQuestCount: Math.max(totalOfficialQuestCount - 1, 0),
                 inventoryIncludedCount: 2,
                 inventoryTruncated: false,
             })
+        );
+    });
+
+    it('counts only official quests in deterministic PlayerState stats', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'custom/player-quest': { finished: true },
+            },
+            inventory: {},
+        });
+
+        const totalOfficialQuestCount = listBuiltInQuestIds().length;
+        const payload = await buildChatPrompt([{ role: 'user', content: 'How many quests?' }]);
+        const playerStateMessage = payload.debugMessages.find((message) =>
+            message.content?.includes('PlayerState v3')
+        );
+        const content = playerStateMessage?.content ?? '';
+
+        expect(payload.playerStateSummary).toEqual(
+            expect.objectContaining({
+                questsFinishedCount: 2,
+                completedQuestCount: 1,
+                totalOfficialQuestCount,
+                remainingOfficialQuestCount: Math.max(totalOfficialQuestCount - 1, 0),
+            })
+        );
+        expect(content).toContain(
+            `PlayerStateStats: completedQuests=1, totalOfficialQuests=${totalOfficialQuestCount}, remainingOfficialQuests=${Math.max(totalOfficialQuestCount - 1, 0)}`
         );
     });
 

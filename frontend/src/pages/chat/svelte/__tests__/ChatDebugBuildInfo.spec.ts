@@ -247,6 +247,18 @@ describe('OpenAIChat build metadata', () => {
         const questsLabel = await screen.findByText('PlayerState questsFinished');
         expect(questsLabel.nextElementSibling).toHaveTextContent('1');
 
+        const completedLabel = await screen.findByText('PlayerState completed quests (official)');
+        expect(completedLabel.nextElementSibling).toHaveTextContent('1');
+
+        const totalLabel = await screen.findByText('PlayerState total official quests');
+        expect(totalLabel.nextElementSibling?.textContent).toMatch(/^\d+$/);
+
+        const remainingLabel = await screen.findByText('PlayerState remaining official quests');
+        const totalValue = Number(totalLabel.nextElementSibling?.textContent ?? '0');
+        expect(remainingLabel.nextElementSibling).toHaveTextContent(
+            String(Math.max(totalValue - 1, 0))
+        );
+
         const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
         expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('1');
     });
@@ -281,6 +293,18 @@ describe('OpenAIChat build metadata', () => {
 
         const questsLabel = await screen.findByText('PlayerState questsFinished');
         expect(questsLabel.nextElementSibling).toHaveTextContent('1');
+
+        const completedLabel = await screen.findByText('PlayerState completed quests (official)');
+        expect(completedLabel.nextElementSibling).toHaveTextContent('1');
+
+        const totalLabel = await screen.findByText('PlayerState total official quests');
+        expect(totalLabel.nextElementSibling?.textContent).toMatch(/^\d+$/);
+
+        const remainingLabel = await screen.findByText('PlayerState remaining official quests');
+        const totalValue = Number(totalLabel.nextElementSibling?.textContent ?? '0');
+        expect(remainingLabel.nextElementSibling).toHaveTextContent(
+            String(Math.max(totalValue - 1, 0))
+        );
 
         const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
         expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('2');

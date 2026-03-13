@@ -5,6 +5,7 @@ import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
+import { computeOfficialQuestStats } from './questStats.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -304,11 +305,15 @@ const normalizeVersionNumberString = (value) => {
 const buildPlayerStateSnapshot = (gameState, options = {}) => {
     const { maxInventoryEntries = MAX_PLAYER_STATE_ITEMS } = options;
     if (!gameState || typeof gameState !== 'object') {
+        const questStats = computeOfficialQuestStats(null);
         return {
             block: null,
             meta: {
                 included: false,
                 questsFinishedCount: 0,
+                completedQuestCount: questStats.completedQuestCount,
+                totalOfficialQuestCount: questStats.totalOfficialQuestCount,
+                remainingOfficialQuestCount: questStats.remainingOfficialQuestCount,
                 inventoryIncludedCount: 0,
                 inventoryTotalCount: 0,
                 inventoryTruncated: false,
@@ -338,9 +343,16 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
         : inventoryEntries;
 
     const versionNumberString = normalizeVersionNumberString(gameState.versionNumberString);
+    const questStats = computeOfficialQuestStats(gameState);
+    const statsSnapshot = {
+        completedQuests: questStats.completedQuestCount,
+        totalOfficialQuests: questStats.totalOfficialQuestCount,
+        remainingOfficialQuests: questStats.remainingOfficialQuestCount,
+    };
     const snapshot = {
         versionNumberString,
         questsFinished,
+        stats: statsSnapshot,
         inventory: includedInventory,
     };
 
@@ -353,13 +365,16 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
         snapshot,
         null,
         2
-    )}`;
+    )}\nPlayerStateStats: completedQuests=${statsSnapshot.completedQuests}, totalOfficialQuests=${statsSnapshot.totalOfficialQuests}, remainingOfficialQuests=${statsSnapshot.remainingOfficialQuests}`;
 
     return {
         block,
         meta: {
             included: true,
             questsFinishedCount: questsFinished.length,
+            completedQuestCount: questStats.completedQuestCount,
+            totalOfficialQuestCount: questStats.totalOfficialQuestCount,
+            remainingOfficialQuestCount: questStats.remainingOfficialQuestCount,
             inventoryIncludedCount: includedInventory.length,
             inventoryTotalCount: totalItems,
             inventoryTruncated: truncated,

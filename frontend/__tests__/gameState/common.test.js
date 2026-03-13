@@ -11,6 +11,7 @@ const {
     getPersistedGameStateChecksum,
     syncGameStateFromLocalIfStale,
 } = require('../../src/utils/gameState/common.js');
+const { computeOfficialQuestStats } = require('../../src/utils/questStats.js');
 
 describe('gameState - common utilities', () => {
     beforeEach(async () => {
@@ -100,6 +101,29 @@ describe('gameState - common utilities', () => {
         const loaded = loadGameState();
         expect(loaded).toMatchObject(newState);
         expect(typeof loaded._meta?.lastUpdated).toBe('number');
+    });
+
+    test('importGameStateString from /gamesaves envelope preserves deterministic official quest stats', async () => {
+        const sourceState = loadGameState();
+        sourceState.quests = {
+            'welcome/howtodoquests': { finished: true },
+            'welcome/intro-inventory': { finished: true },
+            'custom/not-official': { finished: true },
+        };
+        await saveGameState(sourceState);
+
+        const encoded = exportGameStateString({ providerHint: 'gamesaves' });
+        await resetGameState();
+        await importGameStateString(encoded);
+
+        const restored = loadGameState();
+        const stats = computeOfficialQuestStats(restored);
+
+        expect(stats.completedQuestCount).toBe(2);
+        expect(stats.totalOfficialQuestCount).toBeGreaterThanOrEqual(2);
+        expect(stats.remainingOfficialQuestCount).toBe(
+            Math.max(stats.totalOfficialQuestCount - 2, 0)
+        );
     });
 
     test('validateGameState should fill missing sections', () => {

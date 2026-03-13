@@ -149,7 +149,10 @@ describe('chat non-reasoning regression probes', () => {
             );
             const text = playerStateMessage?.content?.[0]?.text ?? '';
             const jsonStart = text.indexOf('{');
-            const snapshot = JSON.parse(text.slice(jsonStart));
+            const statsLineIndex = text.indexOf('\nPlayerStateStats:');
+            const snapshot = JSON.parse(
+                text.slice(jsonStart, statsLineIndex >= 0 ? statsLineIndex : undefined)
+            );
             return {
                 output_text: `Completed quests: ${snapshot.questsFinished.join(', ')}`,
             };

@@ -1,0 +1,14 @@
+{
+  "id": "2026-03-13-chat-quest-count-nondeterministic",
+  "date": "2026-03-13",
+  "component": "chat/player-state-prompt",
+  "longForm": "outages/2026-03-13-chat-quest-count-nondeterministic.md",
+  "rootCause": "The app passed a long PlayerState questsFinished array to dChat and implicitly relied on the LLM to count completed quests and infer remaining quests, even though authoritative state already existed in code.",
+  "resolution": "Added deterministic quest stats derived in-app from validated gameState.quests intersected with the official built-in quest catalog, injected explicit completed/total/remaining values into the PlayerState prompt block and debug metadata, and added regression tests including /gamesaves envelope restore coverage.",
+  "references": [
+    "frontend/src/utils/questStats.js",
+    "frontend/src/utils/openAI.js",
+    "frontend/tests/openAI.test.ts",
+    "frontend/__tests__/gameState/common.test.js"
+  ]
+}
