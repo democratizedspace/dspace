@@ -478,6 +478,19 @@ const detectSiblingTransformSoftLockConflicts = ({
 const getItemDependencies = (item: any) =>
     uniqueItemIds(toItemIdsFromUnknown(item?.dependencies));
 
+const hasPositivePrice = (item: any) => {
+    if (typeof item?.price === 'number') {
+        return Number.isFinite(item.price) && item.price > 0;
+    }
+    if (typeof item?.price === 'string') {
+        const match = item.price.match(/([0-9]+(?:\.[0-9]+)?)/);
+        if (!match) return false;
+        const parsed = Number.parseFloat(match[1]);
+        return Number.isFinite(parsed) && parsed > 0;
+    }
+    return false;
+};
+
 const computeObtainableItems = ({
     allItems,
     allQuests,
@@ -496,7 +509,7 @@ const computeObtainableItems = ({
         return { known, unknown };
     };
 
-    const purchasable = new Set(allItems.filter((item) => item.price).map((item) => item.id));
+    const purchasable = new Set(allItems.filter((item) => hasPositivePrice(item)).map((item) => item.id));
     const betaPlaceholderItems = new Set(
         allItems
             .filter((item) => item.priceExemptionReason === 'BETA_PLACEHOLDER')
@@ -872,6 +885,7 @@ describe('quest completion item availability', () => {
         const obtainable = computeObtainableItems({
             allItems: items as Array<any>,
             allQuests: quests,
+            includeBetaPlaceholderItems: false,
         });
 
         const errors: string[] = [];

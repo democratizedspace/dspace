@@ -1,0 +1,15 @@
+{
+  "id": "OUT-2026-03-12-robotics-wheel-encoder-unobtainable",
+  "date": "2026-03-12",
+  "component": "quests/robotics + tests/quest-completion",
+  "rootCause": "The Wheel Encoder item (71fafa9a-3998-4763-a63a-279acc4ca603) was required by robotics quests but still marked as BETA_PLACEHOLDER with no price, while related processes did not create it. Existing completion checks allowed beta placeholders as obtainable in the broad finish-requirements test path, masking the gap.",
+  "resolution": "Assigned a real inventory price to Wheel Encoder, updated quest completion obtainability to require non-placeholder sources, and added a repository-wide guardrail test that verifies every quest-required item is either buyable with positive price, created by a process, or granted by a quest.",
+  "references": [
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "tests/questCompletableItems.test.ts",
+    "tests/requiredItemObtainability.test.ts",
+    "tests/itemQuality.test.ts",
+    "https://staging.democratized.space/quests/robotics/reflectance-sensors",
+    "https://staging.democratized.space/inventory/item/71fafa9a-3998-4763-a63a-279acc4ca603"
+  ]
+}

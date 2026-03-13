@@ -167,6 +167,20 @@ describe("item quality", () => {
     );
   });
 
+
+  it("prices the Wheel Encoder instead of using a beta placeholder", () => {
+    const wheelEncoder = (items as Array<Record<string, any>>).find(
+      (item) => item.id === "71fafa9a-3998-4763-a63a-279acc4ca603"
+    );
+
+    expect(wheelEncoder).toBeDefined();
+    expect(wheelEncoder?.price).toBeDefined();
+    expect(wheelEncoder?.price).toMatch(/[0-9]/);
+    expect(wheelEncoder?.priceExemptionReason ?? null).not.toBe(
+      PriceExemptionReason.BETA_PLACEHOLDER
+    );
+  });
+
   it("keeps dechlorinated tap water as a non-purchasable time-gated component", () => {
     const dechlorinatedWater = (items as Array<Record<string, any>>).find(
       (item) => item.id === "71efa72a-8c87-4dc2-8e2c-9119bb28fe50"
