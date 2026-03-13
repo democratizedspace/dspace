@@ -24,6 +24,18 @@
     let isMounted = false;
     let refreshIntervalId;
 
+    const resolvePointer = (savedStepId) => {
+        if (savedStepId && dialogueMap?.has(savedStepId)) {
+            return savedStepId;
+        }
+
+        if (pointer && dialogueMap?.has(pointer)) {
+            return pointer;
+        }
+
+        return quest?.start;
+    };
+
     const releaseRewardImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
     };
@@ -100,7 +112,7 @@
     $: {
         if ($state && quest) {
             if ($state.quests[quest.id]) {
-                pointer = $state.quests[quest.id].stepId;
+                pointer = resolvePointer($state.quests[quest.id].stepId);
                 currentDialogue = dialogueMap?.get(pointer);
             }
             if (questFinished(quest.id)) {
