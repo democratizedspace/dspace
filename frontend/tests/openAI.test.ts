@@ -20,6 +20,23 @@ vi.mock('../src/utils/docsRag.js', () => ({
     })),
 }));
 
+vi.mock('../src/utils/questProgressStats.js', () => ({
+    buildQuestProgressStats: vi.fn((gameState) => {
+        const completedOfficialQuestCount = Object.values(gameState?.quests || {}).filter(
+            (questState) => questState?.finished
+        ).length;
+        const totalOfficialQuestCount = 247;
+        return {
+            completedOfficialQuestCount,
+            totalOfficialQuestCount,
+            remainingOfficialQuestCount: Math.max(
+                totalOfficialQuestCount - completedOfficialQuestCount,
+                0
+            ),
+        };
+    }),
+}));
+
 vi.mock('../src/data/npcPersonas.js', () => ({
     npcPersonas: [
         {
@@ -582,9 +599,17 @@ describe('buildChatPrompt', () => {
             message.content?.includes('PlayerState v3')
         );
         const content = playerStateMessage?.content ?? '';
-        const jsonStart = content.indexOf('{');
-        const jsonBody = jsonStart >= 0 ? content.slice(jsonStart) : '';
-        const snapshot = jsonBody ? JSON.parse(jsonBody) : null;
+        const playerStateStart = content.indexOf('PlayerState v3');
+        const playerStateJsonStart =
+            playerStateStart >= 0 ? content.indexOf('{', playerStateStart) : -1;
+        const playerStateJsonBody =
+            playerStateJsonStart >= 0 ? content.slice(playerStateJsonStart) : '';
+        const snapshot = playerStateJsonBody ? JSON.parse(playerStateJsonBody) : null;
+
+        expect(content).toContain('PlayerStateStats (machine-computed; use exact values):');
+        expect(content).toContain('"completedOfficialQuestCount": 2');
+        expect(content).toContain('"totalOfficialQuestCount": 247');
+        expect(content).toContain('"remainingOfficialQuestCount": 245');
 
         expect(snapshot?.versionNumberString).toBe('3');
         expect(snapshot?.questsFinished).toEqual(
@@ -603,6 +628,9 @@ describe('buildChatPrompt', () => {
             expect.objectContaining({
                 included: true,
                 questsFinishedCount: 2,
+                completedOfficialQuestCount: 2,
+                totalOfficialQuestCount: 247,
+                remainingOfficialQuestCount: 245,
                 inventoryIncludedCount: 2,
                 inventoryTruncated: false,
             })

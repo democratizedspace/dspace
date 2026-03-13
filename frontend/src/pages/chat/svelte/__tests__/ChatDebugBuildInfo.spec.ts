@@ -247,6 +247,17 @@ describe('OpenAIChat build metadata', () => {
         const questsLabel = await screen.findByText('PlayerState questsFinished');
         expect(questsLabel.nextElementSibling).toHaveTextContent('1');
 
+        const completedLabel = await screen.findByText('PlayerState completed official quests');
+        expect(completedLabel.nextElementSibling).toHaveTextContent('1');
+
+        const totalLabel = await screen.findByText('PlayerState total official quests');
+        expect(Number(totalLabel.nextElementSibling?.textContent || '0')).toBeGreaterThan(0);
+
+        const remainingLabel = await screen.findByText('PlayerState remaining official quests');
+        expect(
+            Number(remainingLabel.nextElementSibling?.textContent || '0')
+        ).toBeGreaterThanOrEqual(0);
+
         const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
         expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('1');
     });
@@ -281,6 +292,17 @@ describe('OpenAIChat build metadata', () => {
 
         const questsLabel = await screen.findByText('PlayerState questsFinished');
         expect(questsLabel.nextElementSibling).toHaveTextContent('1');
+
+        const completedLabel = await screen.findByText('PlayerState completed official quests');
+        expect(completedLabel.nextElementSibling).toHaveTextContent('1');
+
+        const totalLabel = await screen.findByText('PlayerState total official quests');
+        expect(Number(totalLabel.nextElementSibling?.textContent || '0')).toBeGreaterThan(0);
+
+        const remainingLabel = await screen.findByText('PlayerState remaining official quests');
+        expect(
+            Number(remainingLabel.nextElementSibling?.textContent || '0')
+        ).toBeGreaterThanOrEqual(0);
 
         const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
         expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('2');

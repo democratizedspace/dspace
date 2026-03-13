@@ -9,6 +9,8 @@ import * as cloudSync from '../src/utils/cloudSync.js';
 import * as customContentBackup from '../src/utils/customContentBackup.js';
 import * as githubGists from '../src/lib/cloudsync/githubGists';
 import { getItems, getProcesses, getQuests, openCustomContentDB } from '../src/utils/indexeddb.js';
+import { buildQuestProgressStats } from '../src/utils/questProgressStats.js';
+import { listBuiltInQuestIds } from '../src/utils/builtInQuests.js';
 
 const decodeBackup = (value: string) => {
     const decoded =
@@ -234,5 +236,32 @@ describe('cloud sync custom content', () => {
         expect(quests.find((quest) => quest.id === 'custom-quest-1')?.title).toBe(
             'Cloud Sync Quest'
         );
+    });
+
+    test('restored /gamesaves envelopes preserve deterministic official quest stats', async () => {
+        const [officialQuestId] = listBuiltInQuestIds();
+        const encoded = exportGameStateString({
+            providerHint: 'github-gist',
+            stateOverride: {
+                quests: {
+                    [officialQuestId]: { finished: true },
+                    'custom/finished-quest': { finished: true },
+                },
+                inventory: {},
+                processes: {},
+                itemContainerCounts: {},
+                settings: {},
+                versionNumberString: '3',
+                _meta: { lastUpdated: Date.now() },
+            },
+        });
+
+        await importGameStateString(encoded);
+
+        const importedState = loadGameState();
+        const stats = buildQuestProgressStats(importedState);
+
+        expect(stats.completedOfficialQuestCount).toBe(1);
+        expect(stats.remainingOfficialQuestCount).toBe(stats.totalOfficialQuestCount - 1);
     });
 });

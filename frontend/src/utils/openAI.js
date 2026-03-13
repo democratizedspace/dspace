@@ -5,6 +5,7 @@ import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
+import { buildQuestProgressStats } from './questProgressStats.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -309,6 +310,9 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
             meta: {
                 included: false,
                 questsFinishedCount: 0,
+                completedOfficialQuestCount: 0,
+                totalOfficialQuestCount: 0,
+                remainingOfficialQuestCount: 0,
                 inventoryIncludedCount: 0,
                 inventoryTotalCount: 0,
                 inventoryTruncated: false,
@@ -338,6 +342,7 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
         : inventoryEntries;
 
     const versionNumberString = normalizeVersionNumberString(gameState.versionNumberString);
+    const questStats = buildQuestProgressStats(gameState);
     const snapshot = {
         versionNumberString,
         questsFinished,
@@ -349,17 +354,21 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
         snapshot.totalItems = totalItems;
     }
 
-    const block = `PlayerState v${versionNumberString} (authoritative; do not infer beyond this):\n${JSON.stringify(
-        snapshot,
-        null,
-        2
-    )}`;
+    const block = [
+        'PlayerStateStats (machine-computed; use exact values):',
+        JSON.stringify(questStats, null, 2),
+        `PlayerState v${versionNumberString} (authoritative; do not infer beyond this):`,
+        JSON.stringify(snapshot, null, 2),
+    ].join('\n');
 
     return {
         block,
         meta: {
             included: true,
             questsFinishedCount: questsFinished.length,
+            completedOfficialQuestCount: questStats.completedOfficialQuestCount,
+            totalOfficialQuestCount: questStats.totalOfficialQuestCount,
+            remainingOfficialQuestCount: questStats.remainingOfficialQuestCount,
             inventoryIncludedCount: includedInventory.length,
             inventoryTotalCount: totalItems,
             inventoryTruncated: truncated,
