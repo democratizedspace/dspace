@@ -25,5 +25,6 @@ Prompts for incident response should instruct agents to consult this catalog and
 
 ## Recent narrative entries
 
+- [2026-03-13 – dChat quest-count nondeterminism from raw array counting](/docs/outages/2026-03-13-dchat-quest-count-nondeterminism)
 - [2026-01-02 – Quests SSR glob regression and overflow layout](/docs/outages/2026-01-02-quests-ssr-overflow)
 - [2025-12-02 – v3 UI regressions](/docs/outages/2025-12-02-v3-ui-regressions)

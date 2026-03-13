@@ -9,6 +9,8 @@ import * as cloudSync from '../src/utils/cloudSync.js';
 import * as customContentBackup from '../src/utils/customContentBackup.js';
 import * as githubGists from '../src/lib/cloudsync/githubGists';
 import { getItems, getProcesses, getQuests, openCustomContentDB } from '../src/utils/indexeddb.js';
+import { getPlayerStateSummary } from '../src/utils/openAI.js';
+import { listBuiltInQuestIds } from '../src/utils/builtInQuests.js';
 
 const decodeBackup = (value: string) => {
     const decoded =
@@ -196,6 +198,41 @@ describe('cloud sync custom content', () => {
                 '5247a603-294a-4a34-a884-1ae20969b2a1'
             ]
         ).toBe(7);
+    });
+
+    test('keeps deterministic official quest stats after /gamesaves envelope import', async () => {
+        const officialQuestIds = listBuiltInQuestIds();
+        const [firstQuestId, secondQuestId] = officialQuestIds;
+        expect(firstQuestId).toBeTruthy();
+        expect(secondQuestId).toBeTruthy();
+
+        const encoded = exportGameStateString({
+            providerHint: 'local-export',
+            stateOverride: {
+                quests: {
+                    [firstQuestId]: { finished: true },
+                    [secondQuestId]: { finished: false },
+                    'custom/non-official': { finished: true },
+                },
+                inventory: {},
+                processes: {},
+                itemContainerCounts: {},
+                settings: {},
+                versionNumberString: '3',
+                _meta: { lastUpdated: Date.now() },
+            },
+        });
+
+        await importGameStateString(encoded);
+
+        const importedState = loadGameState();
+        const playerStateSummary = getPlayerStateSummary(importedState);
+
+        expect(playerStateSummary.completedQuestCount).toBe(1);
+        expect(playerStateSummary.totalOfficialQuestCount).toBe(officialQuestIds.length);
+        expect(playerStateSummary.remainingOfficialQuestCount).toBe(
+            Math.max(officialQuestIds.length - 1, 0)
+        );
     });
 
     test('overwrites existing custom content during import', async () => {

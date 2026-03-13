@@ -2,6 +2,7 @@ import { loadGameState, ready } from './gameState/common.js';
 import { buildDchatKnowledgePack } from './dchatKnowledge.js';
 import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
+import { listBuiltInQuestIds } from './builtInQuests.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
@@ -301,14 +302,37 @@ const normalizeVersionNumberString = (value) => {
     return '3';
 };
 
+const buildOfficialQuestStats = (gameState) => {
+    const officialQuestIds = new Set(listBuiltInQuestIds());
+    const totalOfficialQuestCount = officialQuestIds.size;
+    const completedQuestCount = Object.entries(gameState?.quests || {}).reduce(
+        (count, [questId, questState]) => {
+            if (questState?.finished && officialQuestIds.has(questId)) {
+                return count + 1;
+            }
+            return count;
+        },
+        0
+    );
+
+    return {
+        completedQuestCount,
+        totalOfficialQuestCount,
+        remainingOfficialQuestCount: Math.max(totalOfficialQuestCount - completedQuestCount, 0),
+    };
+};
+
 const buildPlayerStateSnapshot = (gameState, options = {}) => {
     const { maxInventoryEntries = MAX_PLAYER_STATE_ITEMS } = options;
+    const questStats = buildOfficialQuestStats(gameState);
+
     if (!gameState || typeof gameState !== 'object') {
         return {
             block: null,
             meta: {
                 included: false,
                 questsFinishedCount: 0,
+                ...questStats,
                 inventoryIncludedCount: 0,
                 inventoryTotalCount: 0,
                 inventoryTruncated: false,
@@ -340,6 +364,7 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
     const versionNumberString = normalizeVersionNumberString(gameState.versionNumberString);
     const snapshot = {
         versionNumberString,
+        officialQuestStats: questStats,
         questsFinished,
         inventory: includedInventory,
     };
@@ -349,17 +374,21 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
         snapshot.totalItems = totalItems;
     }
 
-    const block = `PlayerState v${versionNumberString} (authoritative; do not infer beyond this):\n${JSON.stringify(
-        snapshot,
-        null,
-        2
-    )}`;
+    const block = [
+        `PlayerStateStats: completedOfficialQuests=${questStats.completedQuestCount}, totalOfficialQuests=${questStats.totalOfficialQuestCount}, remainingOfficialQuests=${questStats.remainingOfficialQuestCount}`,
+        `PlayerState v${versionNumberString} (authoritative; do not infer beyond this):\n${JSON.stringify(
+            snapshot,
+            null,
+            2
+        )}`,
+    ].join('\n');
 
     return {
         block,
         meta: {
             included: true,
             questsFinishedCount: questsFinished.length,
+            ...questStats,
             inventoryIncludedCount: includedInventory.length,
             inventoryTotalCount: totalItems,
             inventoryTruncated: truncated,

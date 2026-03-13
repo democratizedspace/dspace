@@ -20,6 +20,14 @@ vi.mock('../src/utils/docsRag.js', () => ({
     })),
 }));
 
+vi.mock('../src/utils/builtInQuests.js', () => ({
+    listBuiltInQuestIds: vi.fn(() => [
+        'welcome/howtodoquests',
+        '3dprinter/start',
+        'hydroponics/start',
+    ]),
+}));
+
 vi.mock('../src/data/npcPersonas.js', () => ({
     npcPersonas: [
         {
@@ -587,6 +595,14 @@ describe('buildChatPrompt', () => {
         const snapshot = jsonBody ? JSON.parse(jsonBody) : null;
 
         expect(snapshot?.versionNumberString).toBe('3');
+        expect(snapshot?.officialQuestStats).toEqual({
+            completedQuestCount: 2,
+            totalOfficialQuestCount: 3,
+            remainingOfficialQuestCount: 1,
+        });
+        expect(content).toContain(
+            'PlayerStateStats: completedOfficialQuests=2, totalOfficialQuests=3, remainingOfficialQuests=1'
+        );
         expect(snapshot?.questsFinished).toEqual(
             expect.arrayContaining(['welcome/howtodoquests', '3dprinter/start'])
         );
@@ -603,9 +619,40 @@ describe('buildChatPrompt', () => {
             expect.objectContaining({
                 included: true,
                 questsFinishedCount: 2,
+                completedQuestCount: 2,
+                totalOfficialQuestCount: 3,
+                remainingOfficialQuestCount: 1,
                 inventoryIncludedCount: 2,
                 inventoryTruncated: false,
             })
+        );
+    });
+
+    it('counts only official completed quests when save includes unknown finished quest ids', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'unknown/custom-quest': { finished: true },
+            },
+            inventory: {},
+        });
+
+        const payload = await buildChatPrompt([{ role: 'user', content: 'How many quests left?' }]);
+        expect(payload.playerStateSummary).toEqual(
+            expect.objectContaining({
+                completedQuestCount: 1,
+                totalOfficialQuestCount: 3,
+                remainingOfficialQuestCount: 2,
+            })
+        );
+
+        const playerStateMessage = payload.debugMessages.find((message) =>
+            message.content?.includes('PlayerState v3')
+        );
+        expect(playerStateMessage?.content).toContain(
+            'PlayerStateStats: completedOfficialQuests=1, totalOfficialQuests=3, remainingOfficialQuests=2'
         );
     });
 
