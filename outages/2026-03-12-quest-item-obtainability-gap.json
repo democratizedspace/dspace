@@ -1,0 +1,14 @@
+{
+  "id": "quest-item-obtainability-gap",
+  "date": "2026-03-12",
+  "component": "tests/quest-completion",
+  "longForm": "outages/2026-03-12-quest-item-obtainability-gap.md",
+  "rootCause": "Quest-gating items could remain non-obtainable when they had BETA_PLACEHOLDER pricing and no producing process because tests did not enforce a direct source contract for required items.",
+  "resolution": "Added direct-source coverage for quest-gating items and assigned concrete prices to affected required items (Wheel Encoder, USB Cable, Servo Motor, Lettuce Seeds).",
+  "references": [
+    "tests/questCompletableItems.test.ts",
+    "frontend/src/pages/inventory/json/items/misc.json",
+    "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "outages/2026-03-12-quest-item-obtainability-gap.md"
+  ]
+}
