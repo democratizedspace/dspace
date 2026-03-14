@@ -2,7 +2,7 @@
 import Page from '../../components/Page.astro';
 import Chip from '../../components/Chip.astro';
 import Card from '../../components/Card.astro';
-import { fixMarkdownText } from '../../utils';
+import { sanitizeDocsHtml } from '../../utils/docsSanitizer';
 
 const escapeHtml = (value = '') =>
     String(value)
@@ -65,7 +65,7 @@ try {
             compiled = compiled.replace('<!--LATEST_RELEASES-->', latestHtml);
         }
 
-        html = fixMarkdownText(compiled);
+        html = sanitizeDocsHtml(compiled);
         title = doc.frontmatter.title;
     }
 } catch (error) {

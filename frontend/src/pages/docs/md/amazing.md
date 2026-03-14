@@ -19,11 +19,3 @@ any shipping delay. In the future, we may add a realtime shipping mechanic (see
 Amazing is designed to be a [hyperstructure](https://jacob.energy/hyperstructures.html). It is a protocol that is unstoppable, free, valuable, expansive, permissionless, positive sum, and credibly neutral.
 
 ## How it works
-
-<style>
-    .amazing {
-        max-width: 100%;
-        width: auto;
-        height: auto;
-    }
-</style>
