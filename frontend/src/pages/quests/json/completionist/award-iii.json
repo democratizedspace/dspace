@@ -1,0 +1,261 @@
+{
+    "id": "completionist/award-iii",
+    "title": "Forge the Completionist Award III",
+    "description": "dChat invites you to fuse every discipline from v3 into one ceremonial build: 3D printed structure, hand-finished woodwork, soldered electronics, robotics motion, and a living planter crown.",
+    "image": "/assets/completionist_award_ii_polished_finish.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You did it. Every v3 quest line, every detour, every late-night debug. Let's celebrate with something worthy of that journey: Completionist Award III.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "vision",
+                    "text": "I'm ready to build the grand trophy."
+                }
+            ]
+        },
+        {
+            "id": "vision",
+            "text": "We'll combine fabrication, woodworking, electronics, robotics, and agriculture. Think of this as a museum piece that still teaches future players how systems connect.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-frame",
+                    "text": "Start with the printed structural frame."
+                }
+            ]
+        },
+        {
+            "id": "print-frame",
+            "text": "Print the lattice spine and engraved skill-ring brackets. Watch first-layer adhesion and dimensional accuracy so later subsystems fit cleanly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-completionist-award-iii-frame",
+                    "text": "Print the lattice frame kit"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wood-base",
+                    "text": "Frame kit printed and test-fit",
+                    "requiresItems": [
+                        {
+                            "id": "1701b862-5ce7-4f31-91ff-7dc5f20e8ec1",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "wood-base",
+            "text": "Now craft the wooden plinth: chamfered edges, sanded faces, and sealed channels for wire routing and planter drainage.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "craft-completionist-award-iii-base",
+                    "text": "Cut, sand, and seal the wood base"
+                },
+                {
+                    "type": "goto",
+                    "goto": "electronics-module",
+                    "text": "Wood base passes fit and finish checks",
+                    "requiresItems": [
+                        {
+                            "id": "c820e674-5856-4998-bbcc-850109d21897",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "electronics-module",
+            "text": "Build the electronics core: solder joints, heat-shrink insulation, LED telemetry ring, and servo-ready harness. Validate continuity before closing the module.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-award-iii-electronics",
+                    "text": "Assemble and solder the electronics module"
+                },
+                {
+                    "type": "goto",
+                    "goto": "agri-module",
+                    "text": "Electronics module powers on and servo sweeps cleanly",
+                    "requiresItems": [
+                        {
+                            "id": "edc06010-a7ff-4597-8df6-d11b45da369b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "agri-module",
+            "text": "Integrate the planter crown using hydroponic skills and compost science. The goal is a stable micro-planter that symbolizes long-term growth.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "prepare-completionist-award-iii-planter",
+                    "text": "Prepare planter crown and seedling module"
+                },
+                {
+                    "type": "goto",
+                    "goto": "final-assembly",
+                    "text": "Planter module is rooted, stable, and leak-checked",
+                    "requiresItems": [
+                        {
+                            "id": "54e79c51-a6a4-445f-8e05-1cb6cf5ecddd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "final-assembly",
+            "text": "Final integration time: mount frame to base, route harnesses, install the module stack, tune lighting angles, and run a full systems check.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "finalize-completionist-award-iii",
+                    "text": "Perform final assembly, calibration, and QA"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Completionist Award III is assembled, tested, and staged",
+                    "requiresItems": [
+                        {
+                            "id": "bc929d85-f263-4546-96d9-064722714de6",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "I'm genuinely proud of you. This trophy is more than a reward—it's a map of your capability. Next quests could branch into autonomous habitats, orbital fabrication, and civic-scale resilience. You're ready for all of it.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Claim Completionist Award III"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "bc929d85-f263-4546-96d9-064722714de6",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "3dprinting/benchy_100",
+        "3dprinting/blob-of-death",
+        "3dprinting/temperature-tower",
+        "3dprinting/x-belt-tension",
+        "aquaria/aquarium-light",
+        "aquaria/balance-ph",
+        "aquaria/filter-rinse",
+        "aquaria/goldfish",
+        "aquaria/net-fish",
+        "aquaria/top-off",
+        "astronomy/aurora-watch",
+        "astronomy/binary-star",
+        "astronomy/comet-tracking",
+        "astronomy/iss-photo",
+        "astronomy/lunar-eclipse",
+        "astronomy/orion-nebula",
+        "astronomy/satellite-pass",
+        "astronomy/star-trails",
+        "astronomy/sunspot-sketch",
+        "astronomy/venus-phases",
+        "chemistry/acid-neutralization",
+        "chemistry/precipitation-reaction",
+        "chemistry/stevia-tasting",
+        "completionist/catalog",
+        "completionist/reminder",
+        "composting/sift-compost",
+        "devops/ci-pipeline",
+        "devops/enable-https",
+        "devops/fail2ban",
+        "devops/log-maintenance",
+        "devops/private-registry",
+        "devops/ssd-boot",
+        "electronics/desolder-component",
+        "electronics/led-polarity",
+        "electronics/measure-arduino-5v",
+        "electronics/measure-resistance",
+        "electronics/servo-sweep",
+        "electronics/solder-led-harness",
+        "electronics/temperature-plot",
+        "electronics/test-gfci-outlet",
+        "electronics/thermometer-calibration",
+        "electronics/voltage-divider",
+        "energy/battery-maintenance",
+        "energy/biogas-digester",
+        "energy/dSolar-100kW",
+        "energy/dWatt-1e8",
+        "energy/power-inverter",
+        "energy/solar-tracker",
+        "energy/wind-turbine",
+        "firstaid/dispose-bandages",
+        "firstaid/dispose-expired",
+        "firstaid/flashlight-battery",
+        "firstaid/remove-splinter",
+        "firstaid/sanitize-pocket-mask",
+        "firstaid/splint-limb",
+        "firstaid/treat-burn",
+        "geothermal/backflush-loop-filter",
+        "geothermal/check-loop-temp-delta",
+        "geothermal/compare-depth-ground-temps",
+        "geothermal/compare-seasonal-ground-temps",
+        "geothermal/log-heat-pump-warmup",
+        "geothermal/replace-faulty-thermistor",
+        "hydroponics/air-stone-soak",
+        "hydroponics/ec-check",
+        "hydroponics/grow-light",
+        "hydroponics/mint-cutting",
+        "hydroponics/netcup-clean",
+        "hydroponics/ph-test",
+        "hydroponics/pump-prime",
+        "hydroponics/regrow-stevia",
+        "hydroponics/root-rinse",
+        "hydroponics/temp-check",
+        "programming/http-post",
+        "programming/moving-avg-temp",
+        "programming/plot-temp-cli",
+        "programming/stddev-temp",
+        "programming/temp-email",
+        "programming/thermistor-calibration",
+        "robotics/gyro-balance",
+        "robotics/maze-navigation",
+        "robotics/servo-arm",
+        "robotics/servo-radar",
+        "rocketry/fuel-mixture",
+        "rocketry/night-launch",
+        "rocketry/static-test",
+        "rocketry/suborbital-hop",
+        "rocketry/wind-check",
+        "sysadmin/log-analysis",
+        "ubi/reminder",
+        "ubi/savings-goal",
+        "welcome/run-tests",
+        "welcome/smart-plug-test",
+        "woodworking/apply-finish",
+        "woodworking/coffee-table",
+        "woodworking/picture-frame"
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

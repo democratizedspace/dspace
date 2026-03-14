@@ -12,6 +12,7 @@ Completionist quests build practical progression through the completionist skill
 3. [Catalog Your Trophy](/quests/completionist/catalog)
 4. [Show Off Your Trophy](/quests/completionist/display)
 5. [Check for New Quests](/quests/completionist/reminder)
+6. [Forge the Completionist Award III](/quests/completionist/award-iii)
 
 ## 1) Congrats on finishing all the quests available in v2! (`completionist/v2`)
 
@@ -133,6 +134,45 @@ Completionist quests build practical progression through the completionist skill
         - Consumes: none
         - Creates: weekly quest reminder ×1
 
+## 6) Forge the Completionist Award III (`completionist/award-iii`)
+
+- Quest link: [/quests/completionist/award-iii](/quests/completionist/award-iii)
+- Unlock prerequisite:
+    - `requiresQuests`: all current v3 DAG leaf quests (95 total), spanning every tree.
+    - This means the quest unlocks only when the player has effectively completed the full v3 quest graph.
+- Dialogue `requiresItems` gates:
+    - `print-frame` → "Frame kit printed and test-fit" — Completionist Award III frame kit ×1
+    - `wood-base` → "Wood base passes fit and finish checks" — Completionist Award III wood plinth ×1
+    - `electronics-module` → "Electronics module powers on and servo sweeps cleanly" — Completionist Award III electronics module ×1
+    - `agri-module` → "Planter module is rooted, stable, and leak-checked" — Completionist Award III planter crown ×1
+    - `final-assembly` → "Completionist Award III is assembled, tested, and staged" — Completionist Award III ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - Completionist Award III ×1
+- Processes used:
+    - [print-completionist-award-iii-frame](/processes/print-completionist-award-iii-frame)
+        - Requires: entry-level FDM 3D printer (leveled bed) ×1
+        - Consumes: white PLA filament ×220, dWatt ×1800
+        - Creates: Completionist Award III frame kit ×1
+    - [craft-completionist-award-iii-base](/processes/craft-completionist-award-iii-base)
+        - Requires: Pine board ×1, Sandpaper pack ×1, Wood glue ×1
+        - Consumes: Pine board ×1, Sandpaper pack ×0.2, Wood glue ×0.2, dWatt ×200
+        - Creates: Completionist Award III wood plinth ×1
+    - [assemble-completionist-award-iii-electronics](/processes/assemble-completionist-award-iii-electronics)
+        - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×1, 220 Ohm Resistor ×1, 5 mm LED ×1, micro servo pair ×1, soldering iron kit ×1, flux pen ×1, helping hands ×1, heat-shrink tubing ×1, safety goggles ×1, digital multimeter ×1
+        - Consumes: 220 Ohm Resistor ×1, 5 mm LED ×1, heat-shrink tubing ×0.2, dWatt ×120
+        - Creates: Completionist Award III electronics module ×1
+    - [prepare-completionist-award-iii-planter](/processes/prepare-completionist-award-iii-planter)
+        - Requires: Pine planter box ×1, hydroponic starter plug ×1, basil seedling ×1, screened compost blend ×1
+        - Consumes: Pine planter box ×0.2, hydroponic starter plug ×1, basil seedling ×1, screened compost blend ×0.2
+        - Creates: Completionist Award III planter crown ×1
+    - [finalize-completionist-award-iii](/processes/finalize-completionist-award-iii)
+        - Requires: frame kit ×1, wood plinth ×1, electronics module ×1, planter crown ×1, superglue ×1
+        - Consumes: frame kit ×1, wood plinth ×1, electronics module ×1, planter crown ×1, superglue ×0.1
+        - Creates: Completionist Award III ×1
+
 ## QA flow notes
 
 - Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
@@ -141,5 +181,6 @@ Completionist quests build practical progression through the completionist skill
 - Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
 - Reminder QA: `completionist/reminder` now adds dry-run verification for cadence/link/timezone plus a backup-alert recovery loop.
+- Completionist III QA: `completionist/award-iii` is intentionally a full-graph capstone unlock keyed to all DAG leaf quests; verify each phase-specific process can be run and each gate item properly unlocks the next dialogue stage.
 - Trophy build QA: `completionist/v2` now includes a safety preflight stop, core verification gate, and retune-and-retry recovery branch.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
