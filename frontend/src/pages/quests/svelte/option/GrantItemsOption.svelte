@@ -26,7 +26,7 @@
 
 <div>
     {#if $state}
-        <Chip disabled={$itemsClaimed} text={option.text}>
+        <Chip disabled={$itemsClaimed} text="">
             <div class="vertical container">
                 <CompactItemList
                     disabled={$itemsClaimed}
@@ -39,6 +39,7 @@
                     text="Claim"
                     onClick={() => onClick()}
                 />
+                <p class="option-text">{option.text}</p>
             </div>
         </Chip>
     {/if}
@@ -55,5 +56,14 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
+    }
+
+    .option-text {
+        border-top: 1px solid rgba(255, 255, 255, 0.35);
+        margin: 0;
+        padding-top: 6px;
+        width: 100%;
+        font-weight: 500;
+        line-height: 1.35;
     }
 </style>

@@ -28,20 +28,23 @@
 </script>
 
 <div>
-    <Chip disabled={!$itemRequirementsMet} text={option.text} {onClick}>
-        {#if option.requiresItems && option.requiresItems.length > 0}
-            <Chip inverted={true} disabled={!$itemRequirementsMet} text="">
-                <div class="vertical">
-                    Requires:
-                    <CompactItemList
-                        itemList={option.requiresItems}
-                        disabled={!$itemRequirementsMet}
-                        increase={false}
-                        noRed={true}
-                    />
-                </div>
-            </Chip>
-        {/if}
+    <Chip disabled={!$itemRequirementsMet} text="" {onClick}>
+        <div class="vertical option-content">
+            {#if option.requiresItems && option.requiresItems.length > 0}
+                <Chip inverted={true} disabled={!$itemRequirementsMet} text="">
+                    <div class="vertical">
+                        Requires:
+                        <CompactItemList
+                            itemList={option.requiresItems}
+                            disabled={!$itemRequirementsMet}
+                            increase={false}
+                            noRed={true}
+                        />
+                    </div>
+                </Chip>
+            {/if}
+            <p class="option-text">{option.text}</p>
+        </div>
     </Chip>
 </div>
 
@@ -49,5 +52,19 @@
     .vertical {
         display: flex;
         flex-direction: column;
+    }
+
+    .option-content {
+        align-items: center;
+        gap: 6px;
+    }
+
+    .option-text {
+        border-top: 1px solid rgba(255, 255, 255, 0.35);
+        margin: 2px 0 0;
+        padding-top: 6px;
+        width: 100%;
+        font-weight: 500;
+        line-height: 1.35;
     }
 </style>
