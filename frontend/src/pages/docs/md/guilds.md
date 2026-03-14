@@ -5,6 +5,8 @@ slug: 'guilds'
 
 # Guilds in v3: current state and roadmap
 
+Guilds were planned for DSPACE v3, but full guild gameplay is still not live yet and remains a 2027+ priority.
+
 Guilds are partially represented in v3 narrative and UI language, but **full guild gameplay is not
 live yet**.
 

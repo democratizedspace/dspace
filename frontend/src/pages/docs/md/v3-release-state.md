@@ -35,7 +35,7 @@ full QA checklist in
 
 ### AI chat
 
-- v3 ships OpenAI-backed chat flows for `/chat` and persona-style in-game NPC chat.
+- v3 ships OpenAI-only chat flows for `/chat` and persona-style in-game NPC chat.
 
 ## Deferred or intentionally limited in v3
 
@@ -55,7 +55,7 @@ full QA checklist in
 
 - `/locations` is still a coming-soon destination in the More menu.
 
-## v2-era assumptions that no longer apply
+## v2-only mechanics removed / not applicable in v3
 
 - **Blockchain/Web3 roadmap assumptions are removed in v3.** dWatt, dUSD, and related units are
   in-game progression currencies, not on-chain assets.
