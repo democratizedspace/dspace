@@ -150,8 +150,8 @@ Completionist quests build practical progression through the completionist skill
 
 - Quest link: [/quests/completionist/award-iii](/quests/completionist/award-iii)
 - Unlock prerequisite:
-    - `requiresQuests`: all leaf quests in the current v3 DAG (95 total), which is the minimal
-      sufficient set to prove all 247 existing quests are complete before this quest unlocks.
+    - `requiresQuests`: all leaf quests in the current v3 DAG, which is the minimal
+      sufficient set to prove all currently reachable quests are complete before this quest unlocks.
 - Dialogue `requiresItems` gates:
     - `print-modules` → "Printed modules are dimensionally accurate" — Completionist Award III module kit ×1
     - `wood-base` → "Pedestal is flat, sealed, and mount-ready" — Completionist Award III wood pedestal ×1
@@ -163,7 +163,7 @@ Completionist quests build practical progression through the completionist skill
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Completionist Award III ×1
+    - None (the final assembly process creates Completionist Award III ×1)
 - Processes used:
     - [print-completionist-iii-modules](/processes/print-completionist-iii-modules)
         - Requires: entry-level FDM 3D printer (leveled bed) ×1
@@ -186,6 +186,6 @@ Completionist quests build practical progression through the completionist skill
         - Consumes: Completionist Award III motion core ×1, hydroponic starter plug ×1, basil seedling ×1
         - Creates: Completionist Award III planter crown ×1
     - [assemble-completionist-award-iii](/processes/assemble-completionist-award-iii)
-        - Requires: Completionist Award III module kit ×1, Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×1
-        - Consumes: Completionist Award III module kit ×1, Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×0.2
+        - Requires: Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×1
+        - Consumes: Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×0.2
         - Creates: Completionist Award III ×1

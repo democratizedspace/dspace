@@ -41,7 +41,7 @@
         },
         {
             "id": "wood-base",
-            "text": "Now craft the walnut pedestal: square, sanded, and oil-finished. This is the structural anchor and the visual warmth beneath the high-tech layers.",
+            "text": "Now craft the pine pedestal: square, sanded, and oil-finished. This is the structural anchor and the visual warmth beneath the high-tech layers.",
             "options": [
                 {
                     "type": "process",
@@ -160,12 +160,7 @@
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "adf69f8d-4b30-4eec-b667-43ff5dfd9892",
-            "count": 1
-        }
-    ],
+    "rewards": [],
     "requiresQuests": [
         "3dprinting/benchy_100",
         "3dprinting/blob-of-death",

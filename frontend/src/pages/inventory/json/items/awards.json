@@ -200,7 +200,7 @@
     {
         "id": "fd54da0d-cf87-4860-bf74-df3be8a95f90",
         "name": "Completionist Award III wood pedestal",
-        "description": "A hand-cut walnut pedestal with chamfered edges, sanded through fine grits and oil-finished to highlight grain while protecting against moisture from the planter top.",
+        "description": "A hand-cut pine pedestal with chamfered edges, sanded through fine grits and oil-finished to protect against moisture from the planter top.",
         "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
@@ -252,7 +252,7 @@
     {
         "id": "adf69f8d-4b30-4eec-b667-43ff5dfd9892",
         "name": "Completionist Award III",
-        "description": "A museum-grade mixed-media trophy celebrating full v3 completion: a matte-white 3D printed geometric spine with inset brass fasteners rises from a hand-oiled walnut pedestal; a translucent circular LED halo wraps the midsection and glows through engraved circuit motifs; a micro-servo rotates a brushed-metal crest featuring layered quest-tree glyphs; exposed sections show neatly loomed, heat-shrunk wiring and labeled debug test pads; the top hosts a living hydroponic basil planter with a black reservoir collar and fresh green leaves. Lighting should emphasize warm wood grain, cool electronic highlights, and the contrast between precision fabrication and organic growth.",
+        "description": "A museum-grade mixed-media trophy celebrating full v3 completion: a matte-white 3D printed geometric spine with inset brass fasteners rises from a hand-oiled pine pedestal; a translucent circular LED halo wraps the midsection and glows through engraved circuit motifs; a micro-servo rotates a brushed-metal crest featuring layered quest-tree glyphs; exposed sections show neatly loomed, heat-shrunk wiring and labeled debug test pads; the top hosts a living hydroponic basil planter with a black reservoir collar and fresh green leaves. Lighting should emphasize warm wood grain, cool electronic highlights, and the contrast between precision fabrication and organic growth.",
         "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
