@@ -313,3 +313,67 @@ test.describe('Quests page horizontal overflow regression', () => {
         expect(paddingRight).toBeGreaterThanOrEqual(MINIMUM_PADDING_RIGHT);
     });
 });
+
+test.describe('Quests page responsive grid centering', () => {
+    test.beforeEach(async ({ page }) => {
+        await clearUserData(page);
+    });
+
+    test('centers quest tiles when the final row is not full on wide screens', async ({ page }) => {
+        await page.setViewportSize({ width: 1920, height: 1080 });
+
+        await page.goto('/quests');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const firstTile = page.locator('.quests-grid > a').first();
+        await expect(firstTile).toBeVisible();
+
+        const layout = await page.evaluate(() => {
+            const grid = document.querySelector('.quests-grid');
+            const tiles = Array.from(document.querySelectorAll('.quests-grid > a'));
+            if (!grid || tiles.length === 0) {
+                return null;
+            }
+
+            const tolerance = 1;
+            const firstTop = tiles[0].getBoundingClientRect().top;
+            const firstRow = tiles.filter(
+                (tile) => Math.abs(tile.getBoundingClientRect().top - firstTop) <= tolerance
+            );
+            const hasPartialFirstRow = firstRow.length === 1;
+
+            const gridRect = grid.getBoundingClientRect();
+            const tileRect = firstRow[0].getBoundingClientRect();
+            const leftSpace = tileRect.left - gridRect.left;
+            const rightSpace = gridRect.right - tileRect.right;
+
+            return { hasPartialFirstRow, leftSpace, rightSpace };
+        });
+
+        expect(layout).toBeTruthy();
+        expect(layout?.hasPartialFirstRow).toBe(true);
+        expect(Math.abs((layout?.leftSpace ?? 0) - (layout?.rightSpace ?? 0))).toBeLessThanOrEqual(3);
+    });
+
+    test('keeps one quest tile per row on mobile screens', async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 844 });
+
+        await page.goto('/quests');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const firstTile = page.locator('.quests-grid > a').first();
+        await expect(firstTile).toBeVisible();
+
+        const rows = await page.evaluate(() => {
+            const tiles = Array.from(document.querySelectorAll('.quests-grid > a'));
+            return Array.from(
+                new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top)))
+            );
+        });
+
+        const tileCount = await page.locator('.quests-grid > a').count();
+        expect(rows.length).toBe(tileCount);
+    });
+});
