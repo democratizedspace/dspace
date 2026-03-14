@@ -68,7 +68,8 @@ async function readStoredDusdFromIdb(page: Page): Promise<number> {
 async function runProcessFromItemPage(page: Page, title: string) {
     const card = page
         .locator('.container')
-        .filter({ has: page.getByRole('heading', { name: title, exact: true }) })
+        .filter({ hasText: title })
+        .filter({ has: page.getByTestId('process-start-button') })
         .first();
     const processGroup = card.locator(
         'xpath=ancestor::details[contains(@class, "process-group")][1]'
@@ -78,6 +79,12 @@ async function runProcessFromItemPage(page: Page, title: string) {
         const isOpen = await processGroup.evaluate((node) => (node as HTMLDetailsElement).open);
         if (!isOpen) {
             await processGroup.locator('summary').first().click();
+            await expect
+                .poll(
+                    () => processGroup.evaluate((node) => (node as HTMLDetailsElement).open),
+                    { timeout: 15000 }
+                )
+                .toBe(true);
         }
     }
 
