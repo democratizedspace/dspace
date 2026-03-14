@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-14-docs-npc-image-paragraph-wrap",
+  "date": "2026-03-14",
+  "component": "frontend-docs",
+  "rootCause": "A standalone HTML <img> tag in the NPC docs lost the trailing blank line, so markdown parsing kept the following text in the same paragraph and rendered content beside the image.",
+  "resolution": "Restored required blank-line separation around standalone doc images and added a regression test that scans all docs markdown files for missing blank lines around <img> tags outside <figure> blocks.",
+  "references": [
+    "frontend/src/pages/docs/md/npcs.md",
+    "tests/docsMarkdownImageSpacing.test.ts"
+  ]
+}

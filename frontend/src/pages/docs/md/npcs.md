@@ -267,6 +267,7 @@ and logs every gust for future flights.
 ## Quill
 
 <img src="/assets/npc/orion.jpg" />
+
 Quill will keep the guild's chronicles, filing every blueprint and battle log.
 They guard accuracy like treasure and steer recruits toward the
 [Quest Submission Guide](/docs/quest-submission) so their feats join the archive.
