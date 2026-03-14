@@ -313,3 +313,157 @@ test.describe('Quests page horizontal overflow regression', () => {
         expect(paddingRight).toBeGreaterThanOrEqual(MINIMUM_PADDING_RIGHT);
     });
 });
+
+test.describe('Quests page responsive grid centering', () => {
+    test.beforeEach(async ({ page }) => {
+        await clearUserData(page);
+    });
+
+    test('centers quest tiles when the final row is not full on wide screens', async ({ page }) => {
+        await page.setViewportSize({ width: 1920, height: 1080 });
+
+        await page.goto('/');
+        const desktopQuestIds = [
+            'quest-grid-centering-a',
+            'quest-grid-centering-b',
+            'quest-grid-centering-c',
+            'quest-grid-centering-d',
+            'quest-grid-centering-e',
+        ];
+
+        for (const [index, id] of desktopQuestIds.entries()) {
+            await seedCustomQuest(page, {
+                id,
+                title: `Quest Grid Centering ${index + 1}`,
+                description:
+                    'Quest seeded to force a deterministic partial final row in desktop centering tests.',
+                image: '/assets/quests/howtodoquests.jpg',
+                npc: '/assets/npc/dChat.jpg',
+                start: 'start',
+                dialogue: [
+                    {
+                        id: 'start',
+                        text: 'Start node',
+                        options: [{ type: 'finish', text: 'Finish' }],
+                    },
+                ],
+                requiresQuests: [],
+            });
+        }
+
+        await page.goto('/quests');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const firstTile = page.locator('[data-testid="quests-grid"] > a').first();
+        await expect(firstTile).toBeVisible();
+
+        const layout = await page.evaluate(() => {
+            const grid = document.querySelector('[data-testid="quests-grid"]');
+            const tiles = Array.from(document.querySelectorAll('[data-testid="quests-grid"] > a'));
+            if (!grid || tiles.length === 0) {
+                return null;
+            }
+
+            const tolerance = 2;
+            const tops = [
+                ...new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top))),
+            ];
+            const rowSizes = tops.map(
+                (top) =>
+                    tiles.filter(
+                        (tile) => Math.abs(tile.getBoundingClientRect().top - top) <= tolerance
+                    ).length
+            );
+
+            const maxRowCount = Math.max(...rowSizes);
+            const lastRowTop = tops[tops.length - 1];
+            const lastRowTiles = tiles.filter(
+                (tile) => Math.abs(tile.getBoundingClientRect().top - lastRowTop) <= tolerance
+            );
+            const hasPartialLastRow =
+                rowSizes.length > 1 &&
+                lastRowTiles.length > 0 &&
+                maxRowCount > 0 &&
+                lastRowTiles.length < maxRowCount;
+
+            const left = Math.min(...lastRowTiles.map((tile) => tile.getBoundingClientRect().left));
+            const right = Math.max(
+                ...lastRowTiles.map((tile) => tile.getBoundingClientRect().right)
+            );
+
+            const gridRect = grid.getBoundingClientRect();
+            const containerCenter = (gridRect.left + gridRect.right) / 2;
+            const lastRowCenter = (left + right) / 2;
+            const centerOffset = Math.abs(lastRowCenter - containerCenter);
+
+            return { centerOffset, hasPartialLastRow, rowSizes };
+        });
+
+        expect(layout).toBeTruthy();
+        expect(layout?.hasPartialLastRow).toBe(true);
+        expect(layout?.centerOffset ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(3);
+    });
+
+    test('keeps one quest tile per row on mobile screens', async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 844 });
+
+        await page.goto('/');
+        const mobileQuestIds = [
+            'quest-grid-mobile-a',
+            'quest-grid-mobile-b',
+            'quest-grid-mobile-c',
+        ];
+
+        for (const [index, id] of mobileQuestIds.entries()) {
+            await seedCustomQuest(page, {
+                id,
+                title: `Quest Grid Mobile ${index + 1}`,
+                description:
+                    'Quest seeded to guarantee multiple one-card rows in mobile layout tests.',
+                image: '/assets/quests/howtodoquests.jpg',
+                npc: '/assets/npc/dChat.jpg',
+                start: 'start',
+                dialogue: [
+                    {
+                        id: 'start',
+                        text: 'Start node',
+                        options: [{ type: 'finish', text: 'Finish' }],
+                    },
+                ],
+                requiresQuests: [],
+            });
+        }
+
+        await page.goto('/quests');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const firstTile = page.locator('[data-testid="quests-grid"] > a').first();
+        await expect(firstTile).toBeVisible();
+
+        const layout = await page.evaluate((tolerance) => {
+            const tiles = Array.from(document.querySelectorAll('[data-testid="quests-grid"] > a'));
+            if (tiles.length === 0) {
+                return null;
+            }
+
+            const roundedRows = new Set(
+                tiles.map((tile) => Math.round(tile.getBoundingClientRect().top))
+            );
+            const docEl = document.documentElement;
+            const hasHorizontalOverflow = docEl.scrollWidth > docEl.clientWidth + tolerance;
+
+            return {
+                tileCount: tiles.length,
+                rowCount: roundedRows.size,
+                hasHorizontalOverflow,
+            };
+        }, OVERFLOW_TOLERANCE);
+
+        expect(layout).toBeTruthy();
+        expect(layout?.tileCount ?? 0).toBeGreaterThanOrEqual(3);
+        expect(layout?.rowCount).toBe(layout?.tileCount);
+        expect(layout?.hasHorizontalOverflow).toBe(false);
+    });
+});
