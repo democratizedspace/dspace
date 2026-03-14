@@ -323,38 +323,33 @@ test.describe('Quests page responsive grid centering', () => {
         await page.setViewportSize({ width: 1920, height: 1080 });
 
         await page.goto('/');
-        await seedCustomQuest(page, {
-            id: 'quest-grid-centering-a',
-            title: 'Quest Grid Centering A',
-            description: 'Quest seeded to force a partial final row in the desktop centering test.',
-            image: '/assets/quests/howtodoquests.jpg',
-            npc: '/assets/npc/dChat.jpg',
-            start: 'start',
-            dialogue: [
-                {
-                    id: 'start',
-                    text: 'Start node',
-                    options: [{ type: 'finish', text: 'Finish' }],
-                },
-            ],
-            requiresQuests: [],
-        });
-        await seedCustomQuest(page, {
-            id: 'quest-grid-centering-b',
-            title: 'Quest Grid Centering B',
-            description: 'Second seeded quest used by the desktop centering regression test.',
-            image: '/assets/quests/howtodoquests.jpg',
-            npc: '/assets/npc/dChat.jpg',
-            start: 'start',
-            dialogue: [
-                {
-                    id: 'start',
-                    text: 'Start node',
-                    options: [{ type: 'finish', text: 'Finish' }],
-                },
-            ],
-            requiresQuests: [],
-        });
+        const desktopQuestIds = [
+            'quest-grid-centering-a',
+            'quest-grid-centering-b',
+            'quest-grid-centering-c',
+            'quest-grid-centering-d',
+            'quest-grid-centering-e',
+        ];
+
+        for (const [index, id] of desktopQuestIds.entries()) {
+            await seedCustomQuest(page, {
+                id,
+                title: `Quest Grid Centering ${index + 1}`,
+                description:
+                    'Quest seeded to force a deterministic partial final row in desktop centering tests.',
+                image: '/assets/quests/howtodoquests.jpg',
+                npc: '/assets/npc/dChat.jpg',
+                start: 'start',
+                dialogue: [
+                    {
+                        id: 'start',
+                        text: 'Start node',
+                        options: [{ type: 'finish', text: 'Finish' }],
+                    },
+                ],
+                requiresQuests: [],
+            });
+        }
 
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
@@ -371,16 +366,23 @@ test.describe('Quests page responsive grid centering', () => {
             }
 
             const tolerance = 1;
-            const firstTop = tiles[0].getBoundingClientRect().top;
-            const firstRowTiles = tiles.filter(
-                (tile) => Math.abs(tile.getBoundingClientRect().top - firstTop) <= tolerance
+            const tops = [...new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top)))];
+            const rowSizes = tops.map(
+                (top) =>
+                    tiles.filter((tile) => Math.abs(tile.getBoundingClientRect().top - top) <= tolerance)
+                        .length
             );
 
-            const lastTop = tiles[tiles.length - 1].getBoundingClientRect().top;
+            const firstRowCount = rowSizes[0] ?? 0;
+            const lastRowTop = tops[tops.length - 1];
             const lastRowTiles = tiles.filter(
-                (tile) => Math.abs(tile.getBoundingClientRect().top - lastTop) <= tolerance
+                (tile) => Math.abs(tile.getBoundingClientRect().top - lastRowTop) <= tolerance
             );
-            const hasPartialLastRow = lastRowTiles.length < firstRowTiles.length;
+            const hasPartialLastRow =
+                rowSizes.length > 1 &&
+                lastRowTiles.length > 0 &&
+                firstRowCount > 0 &&
+                lastRowTiles.length < firstRowCount;
 
             const left = Math.min(...lastRowTiles.map((tile) => tile.getBoundingClientRect().left));
             const right = Math.max(...lastRowTiles.map((tile) => tile.getBoundingClientRect().right));
@@ -389,7 +391,7 @@ test.describe('Quests page responsive grid centering', () => {
             const leftSpace = left - gridRect.left;
             const rightSpace = gridRect.right - right;
 
-            return { hasPartialLastRow, leftSpace, rightSpace };
+            return { hasPartialLastRow, leftSpace, rightSpace, rowSizes };
         });
 
         expect(layout).toBeTruthy();
@@ -401,38 +403,26 @@ test.describe('Quests page responsive grid centering', () => {
         await page.setViewportSize({ width: 390, height: 844 });
 
         await page.goto('/');
-        await seedCustomQuest(page, {
-            id: 'quest-grid-mobile-a',
-            title: 'Quest Grid Mobile A',
-            description: 'Quest seeded to guarantee multiple rows in mobile layout tests.',
-            image: '/assets/quests/howtodoquests.jpg',
-            npc: '/assets/npc/dChat.jpg',
-            start: 'start',
-            dialogue: [
-                {
-                    id: 'start',
-                    text: 'Start node',
-                    options: [{ type: 'finish', text: 'Finish' }],
-                },
-            ],
-            requiresQuests: [],
-        });
-        await seedCustomQuest(page, {
-            id: 'quest-grid-mobile-b',
-            title: 'Quest Grid Mobile B',
-            description: 'Second quest seeded to prevent vacuous one-tile mobile checks.',
-            image: '/assets/quests/howtodoquests.jpg',
-            npc: '/assets/npc/dChat.jpg',
-            start: 'start',
-            dialogue: [
-                {
-                    id: 'start',
-                    text: 'Start node',
-                    options: [{ type: 'finish', text: 'Finish' }],
-                },
-            ],
-            requiresQuests: [],
-        });
+        const mobileQuestIds = ['quest-grid-mobile-a', 'quest-grid-mobile-b', 'quest-grid-mobile-c'];
+
+        for (const [index, id] of mobileQuestIds.entries()) {
+            await seedCustomQuest(page, {
+                id,
+                title: `Quest Grid Mobile ${index + 1}`,
+                description: 'Quest seeded to guarantee multiple one-card rows in mobile layout tests.',
+                image: '/assets/quests/howtodoquests.jpg',
+                npc: '/assets/npc/dChat.jpg',
+                start: 'start',
+                dialogue: [
+                    {
+                        id: 'start',
+                        text: 'Start node',
+                        options: [{ type: 'finish', text: 'Finish' }],
+                    },
+                ],
+                requiresQuests: [],
+            });
+        }
 
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
@@ -441,26 +431,26 @@ test.describe('Quests page responsive grid centering', () => {
         const firstTile = page.locator('[data-testid="quests-grid"] > a').first();
         await expect(firstTile).toBeVisible();
 
-        const layout = await page.evaluate(() => {
-            const grid = document.querySelector('[data-testid="quests-grid"]');
+        const layout = await page.evaluate((tolerance) => {
             const tiles = Array.from(document.querySelectorAll('[data-testid="quests-grid"] > a'));
-            if (!grid || tiles.length === 0) {
+            if (tiles.length === 0) {
                 return null;
             }
 
             const roundedRows = new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top)));
-            const templateColumns = window.getComputedStyle(grid).gridTemplateColumns;
+            const docEl = document.documentElement;
+            const hasHorizontalOverflow = docEl.scrollWidth > docEl.clientWidth + tolerance;
 
             return {
                 tileCount: tiles.length,
                 rowCount: roundedRows.size,
-                templateColumns,
+                hasHorizontalOverflow,
             };
-        });
+        }, OVERFLOW_TOLERANCE);
 
         expect(layout).toBeTruthy();
-        expect(layout?.tileCount ?? 0).toBeGreaterThan(1);
+        expect(layout?.tileCount ?? 0).toBeGreaterThanOrEqual(3);
         expect(layout?.rowCount).toBe(layout?.tileCount);
-        expect(layout?.templateColumns).toBe('none');
+        expect(layout?.hasHorizontalOverflow).toBe(false);
     });
 });
