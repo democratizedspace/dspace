@@ -79,10 +79,9 @@ async function runProcessFromItemPage(page: Page, title: string) {
         if (!isOpen) {
             await processGroup.locator('summary').first().click();
             await expect
-                .poll(
-                    () => processGroup.evaluate((node) => (node as HTMLDetailsElement).open),
-                    { timeout: 15000 }
-                )
+                .poll(() => processGroup.evaluate((node) => (node as HTMLDetailsElement).open), {
+                    timeout: 15000,
+                })
                 .toBe(true);
         }
     }
