@@ -3,41 +3,39 @@ title: 'Guilds'
 slug: 'guilds'
 ---
 
-Guilds are **not live yet**. They are planned for DSPACE v3 (2027+ on the
-[roadmap](/docs/roadmap)) and will arrive after DSPACE integrates ActivityPub
-as the multiplayer foundation. This page outlines the intended direction so
-players know what to expect once guilds ship.
+# Guilds and the Metaguild
 
-## Planned guild experience
+Guild support in v3 is **partially live**: players can see guild-adjacent social surfaces and follow
+Metaguild structure, while full multiplayer mechanics remain future work.
 
-When ActivityPub integration is complete, players will be able to:
+## What is live in v3
 
-- **Create or join guilds** with a shared name, tag, and public profile.
-- **Coordinate multiplayer progress** through guild-specific questlines,
-  shared milestones, and cooperative resource goals.
-- **Unlock guild content** that provides in-game benefits such as tooling
-  access, bonus quest rewards, and specialized support.
-- **Connect to the wider fediverse** so guild identities, announcements, and
-  updates can travel beyond a single DSPACE instance.
+- The [Leaderboard](/leaderboard) highlights donor standings tied to Metaguild support.
+- The docs now define current Metaguild structure so new contributors can align efforts.
+- NPC and content references use guild-wing framing (operations, hydroponics, fabrication, etc.)
+  for narrative consistency.
 
-## The Metaguild vision
+## Metaguild structure (current)
 
-The Metaguild will act as the flagship guild, providing a narrative anchor for
-newcomers and a place to collaborate on global tech tree goals. Specialist
-wings (print farm, hydroponics, rocketry, medicine, and more) will eventually
-host quests, checklists, and ongoing maintenance tasks for the whole crew.
+Use these wings as organizational buckets for contributions:
 
-## What is not available today
+- **Ops wing**: systems reliability, backups, deployment, QA checklists.
+- **Fabrication wing**: 3D printing, woodworking, electronics, robotics.
+- **Life-support wing**: hydroponics, aquaria, composting, first aid.
+- **Energy wing**: electricity, solar, geothermal, power budgeting.
+- **Flight wing**: astronomy + rocketry progression and launch readiness.
 
-The following features are **not implemented yet** in the current build:
+## What is not live yet
 
-- Guild creation, membership, or shared inventories
-- Guild-specific quests, rewards, or benefits
-- Donation boards, UBI funding controls, or live guild leaderboards
-- ActivityPub identities or cross-instance multiplayer coordination
+The following are still roadmap items:
 
-## How to follow progress
+- Creating/joining guilds in-game
+- Shared guild inventory/progression state
+- Guild-specific multiplayer quests and permissions
+- Federated ActivityPub guild identities across instances
 
-Keep an eye on the [roadmap](/docs/roadmap) for milestone updates and join the
-[Discord](https://discord.gg/A3UAfYvnxM) to discuss multiplayer planning. We
-will update this page as soon as guild development begins.
+## How to contribute today
+
+- Pick a wing and contribute quests/docs/tests in that domain.
+- Use [Quest Submission Guide](/docs/quest-submission) for content PR workflow.
+- Track long-term guild milestones on the [Roadmap](/docs/roadmap).

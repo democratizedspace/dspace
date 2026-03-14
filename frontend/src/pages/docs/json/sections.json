@@ -124,6 +124,11 @@
             },
             { "title": "Titles", "href": "/docs/titles", "keywords": ["reputation"] },
             {
+                "title": "Game destinations",
+                "href": "/docs/game-destinations",
+                "keywords": ["navigation", "stats", "toolbox", "leaderboard", "settings"]
+            },
+            {
                 "title": "Processes",
                 "href": "/docs/processes",
                 "keywords": ["automation", "crafting"]
