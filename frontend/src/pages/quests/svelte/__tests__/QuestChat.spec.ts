@@ -175,9 +175,9 @@ describe('QuestChat', () => {
 
         expect(queryByText('You should not see this if the quest is locked.')).toBeNull();
         expect(container.querySelector('.npcDialogue')).toBeNull();
-        expect(getByRole('link', { name: 'How to do quests' }).getAttribute('href')).toBe(
-            '/quests/welcome/howtodoquests'
-        );
+        const howToDoQuestsLink = getByRole('link', { name: 'How to do quests' });
+        expect(howToDoQuestsLink.getAttribute('href')).toBe('/quests/welcome/howtodoquests');
+        expect(howToDoQuestsLink.classList.contains('inverted')).toBe(true);
         expect(
             getByRole('link', { name: 'Set up your first 3D printer' }).getAttribute('href')
         ).toBe('/quests/3dprinting/start');

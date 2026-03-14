@@ -143,7 +143,7 @@
             <div class="vertical unavailable-content" data-testid="quest-unavailable">
                 <h4>Quest not available yet</h4>
                 <p>Complete these quests first:</p>
-                <QuestLinkChips questIds={unmetRequirements} invertChips={false} />
+                <QuestLinkChips questIds={unmetRequirements} />
             </div>
         </div>
     {:else}
