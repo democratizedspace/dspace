@@ -12,6 +12,7 @@ Completionist quests build practical progression through the completionist skill
 3. [Catalog Your Trophy](/quests/completionist/catalog)
 4. [Show Off Your Trophy](/quests/completionist/display)
 5. [Check for New Quests](/quests/completionist/reminder)
+6. [Forge the Completionist Award III](/quests/completionist/award-iii)
 
 ## 1) Congrats on finishing all the quests available in v2! (`completionist/v2`)
 
@@ -142,4 +143,49 @@ Completionist quests build practical progression through the completionist skill
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
 - Reminder QA: `completionist/reminder` now adds dry-run verification for cadence/link/timezone plus a backup-alert recovery loop.
 - Trophy build QA: `completionist/v2` now includes a safety preflight stop, core verification gate, and retune-and-retry recovery branch.
+- Completionist capstone QA: `completionist/award-iii` should only unlock after all DAG leaves are complete and should enforce all multi-skill fabrication checkpoints before finish.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
+
+## 6) Forge the Completionist Award III (`completionist/award-iii`)
+
+- Quest link: [/quests/completionist/award-iii](/quests/completionist/award-iii)
+- Unlock prerequisite:
+    - `requiresQuests`: all leaf quests in the current v3 DAG (95 total), which is the minimal
+      sufficient set to prove all 247 existing quests are complete before this quest unlocks.
+- Dialogue `requiresItems` gates:
+    - `print-modules` → "Printed modules are dimensionally accurate" — Completionist Award III module kit ×1
+    - `wood-base` → "Pedestal is flat, sealed, and mount-ready" — Completionist Award III wood pedestal ×1
+    - `electronics-harness` → "Harness passes continuity and polarity checks" — Completionist Award III smart harness ×1
+    - `robotics-integration` → "Servo sweep is smooth and cable-safe" — Completionist Award III motion core ×1
+    - `planter-integration` → "Planter cup is stable and irrigated" — Completionist Award III planter crown ×1
+    - `final-assembly` → "Award III is complete and fully validated" — Completionist Award III ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - Completionist Award III ×1
+- Processes used:
+    - [print-completionist-iii-modules](/processes/print-completionist-iii-modules)
+        - Requires: entry-level FDM 3D printer (leveled bed) ×1
+        - Consumes: white PLA filament ×260, dWatt ×2100
+        - Creates: Completionist Award III module kit ×1
+    - [mill-completionist-iii-wood-base](/processes/mill-completionist-iii-wood-base)
+        - Requires: Handsaw ×1, Sandpaper pack ×1
+        - Consumes: Pine board ×1, Wood glue ×0.2, Sandpaper pack ×0.3
+        - Creates: Completionist Award III wood pedestal ×1
+    - [solder-completionist-iii-harness](/processes/solder-completionist-iii-harness)
+        - Requires: soldering iron kit ×1, flux pen ×1, safety goggles ×1
+        - Consumes: solder wick ×0.2, dWatt ×40
+        - Creates: Completionist Award III smart harness ×1
+    - [integrate-completionist-iii-robotics](/processes/integrate-completionist-iii-robotics)
+        - Requires: Servo Motor ×1, precision screwdriver set ×1, Completionist Award III smart harness ×1, Completionist Award III module kit ×1
+        - Consumes: Completionist Award III smart harness ×1, Completionist Award III module kit ×1, dWatt ×25
+        - Creates: Completionist Award III motion core ×1
+    - [assemble-completionist-iii-planter](/processes/assemble-completionist-iii-planter)
+        - Requires: Completionist Award III motion core ×1, hydroponic starter plug ×1, basil seedling ×1
+        - Consumes: Completionist Award III motion core ×1, hydroponic starter plug ×1, basil seedling ×1
+        - Creates: Completionist Award III planter crown ×1
+    - [assemble-completionist-award-iii](/processes/assemble-completionist-award-iii)
+        - Requires: Completionist Award III module kit ×1, Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×1
+        - Consumes: Completionist Award III module kit ×1, Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×0.2
+        - Creates: Completionist Award III ×1

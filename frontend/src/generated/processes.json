@@ -11109,5 +11109,267 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "print-completionist-iii-modules",
+        "title": "Print the Completionist Award III structural module kit (crest shell, tray, planter ring)",
+        "requireItems": [
+            {
+                "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 260
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 2100
+            }
+        ],
+        "createItems": [
+            {
+                "id": "be9cb892-f4b2-45fd-ae2b-34d3190acb59",
+                "count": 1
+            }
+        ],
+        "duration": "11h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "mill-completionist-iii-wood-base",
+        "title": "Measure, cut, sand, and oil-finish the Completionist Award III walnut pedestal",
+        "requireItems": [
+            {
+                "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                "count": 1
+            },
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 1
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 0.2
+            },
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 0.3
+            }
+        ],
+        "createItems": [
+            {
+                "id": "fd54da0d-cf87-4860-bf74-df3be8a95f90",
+                "count": 1
+            }
+        ],
+        "duration": "1h 20m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "solder-completionist-iii-harness",
+        "title": "Solder, heat-shrink, and continuity-test the Completionist Award III LED control harness",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+                "count": 0.2
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 40
+            }
+        ],
+        "createItems": [
+            {
+                "id": "37f159f8-e8a2-4721-9608-c4b25855092e",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "integrate-completionist-iii-robotics",
+        "title": "Mount and debug the servo motion core for the Completionist Award III crest",
+        "requireItems": [
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                "count": 1
+            },
+            {
+                "id": "37f159f8-e8a2-4721-9608-c4b25855092e",
+                "count": 1
+            },
+            {
+                "id": "be9cb892-f4b2-45fd-ae2b-34d3190acb59",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "be9cb892-f4b2-45fd-ae2b-34d3190acb59",
+                "count": 1
+            },
+            {
+                "id": "37f159f8-e8a2-4721-9608-c4b25855092e",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 25
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e6f5d8eb-1ce2-4a91-b9f4-3bbac465018b",
+                "count": 1
+            }
+        ],
+        "duration": "55m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-completionist-iii-planter",
+        "title": "Install and prime the hydroponic planter crown on the Completionist Award III",
+        "requireItems": [
+            {
+                "id": "e6f5d8eb-1ce2-4a91-b9f4-3bbac465018b",
+                "count": 1
+            },
+            {
+                "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+                "count": 1
+            },
+            {
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "e6f5d8eb-1ce2-4a91-b9f4-3bbac465018b",
+                "count": 1
+            },
+            {
+                "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+                "count": 1
+            },
+            {
+                "id": "5712947f-716c-4f71-b28d-fcb811631080",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "ba8cc7ec-f6c9-429a-aa7d-4bf8f513f4c9",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-completionist-award-iii",
+        "title": "Final assembly, wiring validation, and calibration for the Completionist Award III",
+        "requireItems": [
+            {
+                "id": "be9cb892-f4b2-45fd-ae2b-34d3190acb59",
+                "count": 1
+            },
+            {
+                "id": "fd54da0d-cf87-4860-bf74-df3be8a95f90",
+                "count": 1
+            },
+            {
+                "id": "ba8cc7ec-f6c9-429a-aa7d-4bf8f513f4c9",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "be9cb892-f4b2-45fd-ae2b-34d3190acb59",
+                "count": 1
+            },
+            {
+                "id": "fd54da0d-cf87-4860-bf74-df3be8a95f90",
+                "count": 1
+            },
+            {
+                "id": "ba8cc7ec-f6c9-429a-aa7d-4bf8f513f4c9",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.2
+            }
+        ],
+        "createItems": [
+            {
+                "id": "adf69f8d-4b30-4eec-b667-43ff5dfd9892",
+                "count": 1
+            }
+        ],
+        "duration": "1h 10m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]
