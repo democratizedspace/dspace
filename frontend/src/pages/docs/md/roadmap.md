@@ -17,7 +17,7 @@ change, timelines are subject to delays, and some things may be reprioritized.
 The v3 milestones below were previously listed across the 2023-2024 roadmap entries and are
 now retargeted to 2026.
 
-- [ ] DSPACE v3 ships (targeting March 2026)
+- [ ] DSPACE v3 ships (targeting April 2026)
 - [ ] [custom quests](/docs/custom-quest-system) launch alongside v3
 - [ ] smarter dChat (knowledge of the game, the items, your inventory, etc.)
 - [ ] 10x more quests
