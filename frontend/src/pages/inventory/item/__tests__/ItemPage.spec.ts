@@ -60,7 +60,7 @@ function ensureChipStaticOpacityStyle() {
 
 function isInsideOpenProcessGroup(element: Element) {
     const group = element.closest('details.process-group');
-    return Boolean(group?.hasAttribute('open'));
+    return group instanceof HTMLDetailsElement && group.open;
 }
 
 const TEST_IMAGE =
@@ -207,6 +207,9 @@ describe('ItemPage', () => {
         const [requiredSummary, consumedSummary, createdSummary] = Array.from(
             container.querySelectorAll('details.process-group > summary')
         );
+        expect(requiredSummary).toBeTruthy();
+        expect(consumedSummary).toBeTruthy();
+        expect(createdSummary).toBeTruthy();
 
         await fireEvent.click(requiredSummary as HTMLElement);
         expect(details[0].hasAttribute('open')).toBe(true);
