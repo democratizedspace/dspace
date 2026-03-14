@@ -66,27 +66,36 @@ async function readStoredDusdFromIdb(page: Page): Promise<number> {
 }
 
 async function runProcessFromItemPage(page: Page, title: string) {
+    await expect(page.getByText('Processes:', { exact: true })).toBeVisible({ timeout: 15000 });
+
+    const processGroups = page.locator('details.process-group');
+    const processGroupCount = await processGroups.count();
+    for (let i = 0; i < processGroupCount; i++) {
+        const processGroup = processGroups.nth(i);
+        const isOpen = await processGroup.evaluate((node) => (node as HTMLDetailsElement).open);
+        if (!isOpen) {
+            await processGroup.locator('summary').first().click();
+        }
+    }
+
+    await expect
+        .poll(
+            () =>
+                page
+                    .getByRole('heading', { name: title, exact: true, includeHidden: true })
+                    .count(),
+            {
+                timeout: 15000,
+            }
+        )
+        .toBeGreaterThan(0);
+
     const card = page
         .locator('.container')
         .filter({
             has: page.getByRole('heading', { name: title, exact: true, includeHidden: true }),
         })
         .first();
-    const processGroup = card.locator(
-        'xpath=ancestor::details[contains(@class, "process-group")][1]'
-    );
-
-    if ((await processGroup.count()) > 0) {
-        const isOpen = await processGroup.evaluate((node) => (node as HTMLDetailsElement).open);
-        if (!isOpen) {
-            await processGroup.locator('summary').first().click();
-            await expect
-                .poll(() => processGroup.evaluate((node) => (node as HTMLDetailsElement).open), {
-                    timeout: 15000,
-                })
-                .toBe(true);
-        }
-    }
 
     await expect(card).toBeVisible({ timeout: 15000 });
 

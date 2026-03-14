@@ -45,17 +45,42 @@ test.describe('Custom Content Management', () => {
 
     async function expandProcessGroupForTitle(page: Page, processTitle: string): Promise<void> {
         const processHeading = page
-            .getByRole('heading', { name: processTitle, exact: true })
+            .getByRole('heading', { name: processTitle, exact: true, includeHidden: true })
             .first();
-        const processGroup = processHeading.locator(
-            'xpath=ancestor::details[contains(@class, "process-group")][1]'
-        );
 
-        if ((await processGroup.count()) > 0) {
+        await expect
+            .poll(
+                () =>
+                    page
+                        .getByRole('heading', {
+                            name: processTitle,
+                            exact: true,
+                            includeHidden: true,
+                        })
+                        .count(),
+                { timeout: 15000 }
+            )
+            .toBeGreaterThan(0);
+
+        const processGroups = page.locator('details.process-group');
+        const processGroupCount = await processGroups.count();
+
+        for (let i = 0; i < processGroupCount; i++) {
+            const processGroup = processGroups.nth(i);
+            const containsHeading =
+                (await processGroup
+                    .getByRole('heading', { name: processTitle, exact: true, includeHidden: true })
+                    .count()) > 0;
+
+            if (!containsHeading) {
+                continue;
+            }
+
             const isOpen = await processGroup.evaluate((node) => (node as HTMLDetailsElement).open);
             if (!isOpen) {
                 await processGroup.locator('summary').first().click();
             }
+            break;
         }
 
         await expect(processHeading).toBeVisible({ timeout: 15000 });
