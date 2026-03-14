@@ -63,6 +63,7 @@ Built-in content is read-only; custom content is editable and removable.
 ## Export, backup, and submission
 
 - Use `/contentbackup` to export/import combined custom content bundles.
+- Submit exported bundle JSON through `/bundles/submit` when preparing contribution PRs.
 - Bundle format docs: [Custom Content Bundles](/docs/custom-bundles).
 - Submission workflow docs: [Quest Submission Guide](/docs/quest-submission).
 

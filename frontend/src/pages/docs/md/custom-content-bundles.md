@@ -5,7 +5,7 @@ slug: 'custom-bundles'
 
 # Custom Content Bundles
 
-To keep quests, items, and processes in sync, submissions should include all related content in a single **bundle** file. Bundles live under `submissions/bundles` and use a simple JSON format:
+To keep quests, items, and processes in sync, submissions should include all related content in a single **bundle** file. In v3, `/contentbackup` exports this bundle shape directly, and repository submissions typically live under `submissions/bundles`.
 
 ```json
 {
@@ -27,13 +27,12 @@ The easiest way to submit a bundle is through the in-game interface:
     - Processes: [/processes/create](/processes/create)
     - Quests: [/quests/create](/quests/create)
 2. Export your custom content from [/contentbackup](/contentbackup) (Prepare backup → Download backup)
-3. Combine them into a bundle JSON following the format above
-4. Submit the bundle at [/bundles/submit](/bundles/submit)
-5. The system will create a pull request for review
+3. Submit the exported bundle JSON at [/bundles/submit](/bundles/submit)
+4. The system will create a pull request for review
 
 ## Command-Line Bundle Creation
 
-You can also create a bundle with the script:
+If you are assembling content from repo files (instead of exporting from `/contentbackup`), you can generate a bundle with the script:
 
 ```bash
 node scripts/create-content-bundle.js submissions/bundles/my-bundle.json path/to/quest.json --items path/to/item.json --processes path/to/process.json

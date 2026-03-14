@@ -3,48 +3,48 @@ title: 'Roadmap'
 slug: 'roadmap'
 ---
 
-This is just a tentative roadmap showing what I'm hoping to work on next. Things are subject to
-change, timelines are subject to delays, and some things may be reprioritized.
+This roadmap tracks what shipped with v3 and what remains post-v3 work. Priorities can change as
+we gather player feedback.
 
-## 2027 and beyond
+## Shipped in v3 (April 2026)
 
-- [ ] guilds (Metaguild recruitment, donation board, and NPC wings)
+- [x] DSPACE v3 released
+- [x] [custom quests](/docs/custom-quest-system) launched with in-game creation and management
+- [x] 10x quest expansion milestone achieved
+- [x] OpenAI-backed NPC chat personas shipped in `/chat`
+- [x] Utility destinations shipped in the More menu (`/stats`, `/leaderboard`, `/titles`,
+      `/toolbox`, `/settings`, `/gamesaves`, `/cloudsync`, `/contentbackup`)
+
+See [v3 release state](/docs/v3-release-state) and the
+[April 2026 changelog](/changelog#20260401) for details.
+
+## Post-v3 priorities (2027 and beyond)
+
+- [ ] guilds (full membership mechanics beyond the current Metaguild framing)
+- [ ] locations gameplay systems
+- [ ] smarter dChat with deeper live game-context awareness
+- [ ] top-down isometric base-building prototype
 - [ ] Multiplayer remains a long-term research area; updates will follow once prototypes reach
       community testing
 
-## 2026
+## Historical milestones
 
-The v3 milestones below were previously listed across the 2023-2024 roadmap entries and are
-now retargeted to 2026.
-
-- [ ] DSPACE v3 ships (targeting April 2026)
-- [ ] [custom quests](/docs/custom-quest-system) launch alongside v3
-- [ ] smarter dChat (knowledge of the game, the items, your inventory, etc.)
-- [ ] 10x more quests
-- [ ] Top-down isometric base building targets late 2026 after the v3 foundation is live
-
-## 2025
+### 2025
 
 The bulk of 2025 was spent developing and stabilizing DSPACE v3 for 2026 delivery.
 
-## 2024
+### 2024
 
 Maintenance and groundwork leading into v3.
 
-## 2023
+### 2023
 
 - [x] in-game guided model rocket hop (servo + camera upgrade)
-- [x] AI-enabled NPCs (chat now supports persona-powered conversations)
-
-## July 2023
-
+- [x] AI-enabled NPCs (chat supports persona-powered conversations)
 - [x] content update (suborbital launch checklist for rockets)
-
-## June 2023
-
 - [x] [DSPACE v2 release notes](/changelog#20230630)
 
-## January 2023
+### Early releases (2022-2023)
 
 - [x] goldfish aquarium
 - [x] rocket with a parachute
@@ -53,13 +53,7 @@ Maintenance and groundwork leading into v3.
 - [x] EV charger
 - [x] carbon offsets
 - [x] 1kwh battery
-
-## October 2022
-
 - [x] Big [docs](/docs) update
 - [x] Make a test print
-
-## September 2022
-
 - [x] [Quest system](/docs/quest-trees)
 - [x] [Docs page](/docs)
