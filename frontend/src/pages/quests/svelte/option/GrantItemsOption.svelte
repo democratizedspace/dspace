@@ -26,7 +26,7 @@
 
 <div>
     {#if $state}
-        <Chip disabled={$itemsClaimed} text={option.text}>
+        <Chip disabled={$itemsClaimed} text={option.text} textBelowSlot={true}>
             <div class="vertical container">
                 <CompactItemList
                     disabled={$itemsClaimed}

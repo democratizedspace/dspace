@@ -28,7 +28,7 @@
 </script>
 
 <div>
-    <Chip disabled={!$itemRequirementsMet} text={option.text} {onClick}>
+    <Chip disabled={!$itemRequirementsMet} text={option.text} textBelowSlot={true} {onClick}>
         {#if option.requiresItems && option.requiresItems.length > 0}
             <Chip inverted={true} disabled={!$itemRequirementsMet} text="">
                 <div class="vertical">

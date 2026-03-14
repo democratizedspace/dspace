@@ -35,7 +35,7 @@
     $: isDisabled = (option.requiresGitHub && !githubConnected) || !$itemRequirementsMet;
 </script>
 
-<Chip text={option.text} {onClick} disabled={isDisabled}>
+<Chip text={option.text} textBelowSlot={true} {onClick} disabled={isDisabled}>
     <div class="vertical">
         Finish this quest and receive the following items:
         <CompactItemList itemList={quest.rewards || []} increase={true} />
