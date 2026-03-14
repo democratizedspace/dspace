@@ -3,41 +3,46 @@ title: 'Guilds'
 slug: 'guilds'
 ---
 
-Guilds are **not live yet**. They are planned for DSPACE v3 (2027+ on the
-[roadmap](/docs/roadmap)) and will arrive after DSPACE integrates ActivityPub
-as the multiplayer foundation. This page outlines the intended direction so
-players know what to expect once guilds ship.
+# Guilds in v3: current state and roadmap
 
-## Planned guild experience
+Guilds are partially represented in v3 narrative and UI language, but **full guild gameplay is not
+live yet**.
 
-When ActivityPub integration is complete, players will be able to:
+## What exists today
 
-- **Create or join guilds** with a shared name, tag, and public profile.
-- **Coordinate multiplayer progress** through guild-specific questlines,
-  shared milestones, and cooperative resource goals.
-- **Unlock guild content** that provides in-game benefits such as tooling
-  access, bonus quest rewards, and specialized support.
-- **Connect to the wider fediverse** so guild identities, announcements, and
-  updates can travel beyond a single DSPACE instance.
+- Guild-themed framing exists in docs and community messaging (especially around the Metaguild).
+- `/leaderboard` provides a live social/progress board experience adjacent to guild-style
+  community goals.
+- Players can already collaborate through shared docs, community quests, and contribution flows,
+  even without first-class guild objects.
 
-## The Metaguild vision
+## What is not live yet
 
-The Metaguild will act as the flagship guild, providing a narrative anchor for
-newcomers and a place to collaborate on global tech tree goals. Specialist
-wings (print farm, hydroponics, rocketry, medicine, and more) will eventually
-host quests, checklists, and ongoing maintenance tasks for the whole crew.
+The following are still deferred:
 
-## What is not available today
+- Guild creation and membership management
+- Shared guild inventories and guild-owned progression state
+- Guild-scoped quests, rewards, and rank ladders
+- ActivityPub-backed federation between DSPACE instances
 
-The following features are **not implemented yet** in the current build:
+In navigation, the **Guilds** destination is still marked coming soon.
 
-- Guild creation, membership, or shared inventories
-- Guild-specific quests, rewards, or benefits
-- Donation boards, UBI funding controls, or live guild leaderboards
-- ActivityPub identities or cross-instance multiplayer coordination
+## Metaguild (v3 framing)
 
-## How to follow progress
+The Metaguild is currently a narrative and coordination concept: a flagship umbrella for
+cross-discipline work (energy, fabrication, hydroponics, robotics, first aid, and launch prep).
 
-Keep an eye on the [roadmap](/docs/roadmap) for milestone updates and join the
-[Discord](https://discord.gg/A3UAfYvnxM) to discuss multiplayer planning. We
-will update this page as soon as guild development begins.
+Think of it as a community operating model in v3, not a fully implemented in-game entity.
+
+## How to prepare for guild-era gameplay now
+
+1. Build strong personal progression through quest trees (`/quests`, `/docs/quest-trees`).
+2. Publish high-quality custom content (`/docs/content-development`).
+3. Track team-facing outcomes in `/leaderboard`, `/stats`, and `/titles`.
+4. Follow roadmap + changelog updates for guild milestone rollout dates.
+
+## Related pages
+
+- [Roadmap](/docs/roadmap)
+- [v3 Release State](/docs/v3-release-state)
+- [Routes](/docs/routes)

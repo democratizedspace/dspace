@@ -5,29 +5,58 @@ slug: 'quest-trees'
 
 # Quest Trees
 
-DSPACE quests are organized into themed trees that build skills over time. This page summarizes the
-current quest categories.
+DSPACE quests are organized into themed trees. This page maps each active tree to its skills doc
+so players and contributors can move between gameplay and reference material without guesswork.
 
-## Existing Quest Trees
+## How to use this page
 
-- **3D Printing** – Printer setup, calibration, and print workflow fundamentals.
-- **Aquaria** – Aquatic habitat setup, care, and maintenance routines.
-- **Astronomy** – Observational practice, instruments, and sky navigation basics.
-- **Chemistry** – Safe lab habits, measurements, and reactions in everyday contexts.
-- **Completionist** – Collection milestones and celebration checkpoints.
-- **Composting** – Compost systems, monitoring, and material balancing.
-- **DevOps** – Deployment fundamentals, automation, and infrastructure hygiene.
-- **Electronics** – Circuits, sensors, and practical electronics troubleshooting.
-- **Energy** – Off-grid power systems, storage, and efficiency practices.
-- **First Aid** – Preparedness skills, injury response, and kit upkeep.
-- **Geothermal** – Ground loop monitoring, sensors, and heat system upkeep.
-- **Hydroponics** – Soilless growing systems, nutrient checks, and upkeep routines.
-- **Programming** – Code fundamentals, automation scripts, and data utilities.
-- **Robotics** – Sensors, motion control, and basic robot behaviors.
-- **Rocketry** – Launch prep, safety checks, and mission fundamentals.
-- **Sysadmin** – Systems basics, monitoring, and operational checklists.
-- **UBI** – Universal basic income concepts and personal planning exercises.
-- **Welcome** – Onboarding quests that introduce core systems and tools.
-- **Woodworking** – Tool safety, joinery basics, and project planning.
+1. Start with **Welcome** if you're new.
+2. Pick 1-2 applied trees (for example, Energy + Electronics).
+3. Layer in systems trees (Programming, DevOps, Sysadmin) as your projects grow.
+4. Use the linked skills docs for detailed checklists, process links, and QA guidance.
 
-Run `node scripts/generate-quest-chart.js` from the repository root to produce a radar chart summarizing the quest tree sizes. The PNG output is ignored by Git, but CI artifacts attach the latest image.
+## Active quest tree catalog
+
+| Tree | Core focus | Skills doc |
+| --- | --- | --- |
+| Welcome | onboarding, inventory, test workflow basics | [/docs/welcome](/docs/welcome) |
+| 3D Printing | fabrication setup + print workflow | [/docs/3dprinting](/docs/3dprinting) |
+| Aquaria | habitat setup and care loops | [/docs/aquaria](/docs/aquaria) |
+| Astronomy | observing and instrumentation basics | [/docs/astronomy](/docs/astronomy) |
+| Chemistry | lab habits and reaction literacy | [/docs/chemistry](/docs/chemistry) |
+| Composting | organics loops and soil inputs | [/docs/composting](/docs/composting) |
+| DevOps | deployment and automation practices | [/docs/devops](/docs/devops) |
+| Electronics | circuits, measurement, and integration | [/docs/electronics](/docs/electronics) |
+| Energy | generation/storage decision loops | [/docs/energy](/docs/energy) |
+| First Aid | preparedness and response skills | [/docs/firstaid](/docs/firstaid) |
+| Geothermal | ground-loop and thermal systems | [/docs/geothermal](/docs/geothermal) |
+| Hydroponics | controlled agriculture lifecycle | [/docs/hydroponics](/docs/hydroponics) |
+| Programming | tooling and scripting foundations | [/docs/programming](/docs/programming) |
+| Robotics | sensing + motion control fundamentals | [/docs/robotics](/docs/robotics) |
+| Rocketry | launch prep and safety sequencing | [/docs/rocketry](/docs/rocketry) |
+| Sysadmin | operations, reliability, and recovery | [/docs/sysadmin](/docs/sysadmin) |
+| UBI | economic literacy and planning | [/docs/ubi](/docs/ubi) |
+| Woodworking | tool safety and build planning | [/docs/woodworking](/docs/woodworking) |
+| Completionist | meta-progression milestones | [/docs/completionist](/docs/completionist) |
+
+## Suggested progression paths
+
+### Practical hardware-first
+
+Welcome → Energy → Electronics → 3D Printing → Robotics → Rocketry
+
+### Life-support-first
+
+Welcome → Hydroponics → Composting → Aquaria → Chemistry → Geothermal
+
+### Ops + contribution-first
+
+Welcome → Programming → DevOps → Sysadmin → custom content contribution
+
+## Contributor validation note
+
+When quests change in any tree, update the matching skills doc in the same PR. Keep quest JSON and
+skills docs synchronized for gates, grants, process I/O, and QA walkthrough notes.
+
+For maintainers, `node scripts/generate-quest-chart.js` generates a tree-size radar chart from the
+current quest catalog.
