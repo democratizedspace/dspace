@@ -9,6 +9,10 @@ releases easy to stage.
 - [v3.1 release QA](./v3.1.md) - placeholder for token.place integration plus a rerun of the v3 suite
 - [Template](./template.md) - copy for new releases
 
+## QA artifacts
+
+- [v3 cheat-enabled quest speedrun log (2026-03-13)](./speedrun_qa-cheats_20260313.csv)
+
 ## How to use this folder
 
 - Copy the latest checklist for each release (`v3.0.1`, `v3.1`, etc.) and tailor the notes for the
