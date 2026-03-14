@@ -322,58 +322,145 @@ test.describe('Quests page responsive grid centering', () => {
     test('centers quest tiles when the final row is not full on wide screens', async ({ page }) => {
         await page.setViewportSize({ width: 1920, height: 1080 });
 
+        await page.goto('/');
+        await seedCustomQuest(page, {
+            id: 'quest-grid-centering-a',
+            title: 'Quest Grid Centering A',
+            description: 'Quest seeded to force a partial final row in the desktop centering test.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Start node',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ],
+            requiresQuests: [],
+        });
+        await seedCustomQuest(page, {
+            id: 'quest-grid-centering-b',
+            title: 'Quest Grid Centering B',
+            description: 'Second seeded quest used by the desktop centering regression test.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Start node',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ],
+            requiresQuests: [],
+        });
+
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const firstTile = page.locator('.quests-grid > a').first();
+        const firstTile = page.locator('[data-testid="quests-grid"] > a').first();
         await expect(firstTile).toBeVisible();
 
         const layout = await page.evaluate(() => {
-            const grid = document.querySelector('.quests-grid');
-            const tiles = Array.from(document.querySelectorAll('.quests-grid > a'));
+            const grid = document.querySelector('[data-testid="quests-grid"]');
+            const tiles = Array.from(document.querySelectorAll('[data-testid="quests-grid"] > a'));
             if (!grid || tiles.length === 0) {
                 return null;
             }
 
             const tolerance = 1;
             const firstTop = tiles[0].getBoundingClientRect().top;
-            const firstRow = tiles.filter(
+            const firstRowTiles = tiles.filter(
                 (tile) => Math.abs(tile.getBoundingClientRect().top - firstTop) <= tolerance
             );
-            const hasPartialFirstRow = firstRow.length === 1;
+
+            const lastTop = tiles[tiles.length - 1].getBoundingClientRect().top;
+            const lastRowTiles = tiles.filter(
+                (tile) => Math.abs(tile.getBoundingClientRect().top - lastTop) <= tolerance
+            );
+            const hasPartialLastRow = lastRowTiles.length < firstRowTiles.length;
+
+            const left = Math.min(...lastRowTiles.map((tile) => tile.getBoundingClientRect().left));
+            const right = Math.max(...lastRowTiles.map((tile) => tile.getBoundingClientRect().right));
 
             const gridRect = grid.getBoundingClientRect();
-            const tileRect = firstRow[0].getBoundingClientRect();
-            const leftSpace = tileRect.left - gridRect.left;
-            const rightSpace = gridRect.right - tileRect.right;
+            const leftSpace = left - gridRect.left;
+            const rightSpace = gridRect.right - right;
 
-            return { hasPartialFirstRow, leftSpace, rightSpace };
+            return { hasPartialLastRow, leftSpace, rightSpace };
         });
 
         expect(layout).toBeTruthy();
-        expect(layout?.hasPartialFirstRow).toBe(true);
+        expect(layout?.hasPartialLastRow).toBe(true);
         expect(Math.abs((layout?.leftSpace ?? 0) - (layout?.rightSpace ?? 0))).toBeLessThanOrEqual(3);
     });
 
     test('keeps one quest tile per row on mobile screens', async ({ page }) => {
         await page.setViewportSize({ width: 390, height: 844 });
 
+        await page.goto('/');
+        await seedCustomQuest(page, {
+            id: 'quest-grid-mobile-a',
+            title: 'Quest Grid Mobile A',
+            description: 'Quest seeded to guarantee multiple rows in mobile layout tests.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Start node',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ],
+            requiresQuests: [],
+        });
+        await seedCustomQuest(page, {
+            id: 'quest-grid-mobile-b',
+            title: 'Quest Grid Mobile B',
+            description: 'Second quest seeded to prevent vacuous one-tile mobile checks.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Start node',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ],
+            requiresQuests: [],
+        });
+
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const firstTile = page.locator('.quests-grid > a').first();
+        const firstTile = page.locator('[data-testid="quests-grid"] > a').first();
         await expect(firstTile).toBeVisible();
 
-        const rows = await page.evaluate(() => {
-            const tiles = Array.from(document.querySelectorAll('.quests-grid > a'));
-            return Array.from(
-                new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top)))
-            );
+        const layout = await page.evaluate(() => {
+            const grid = document.querySelector('[data-testid="quests-grid"]');
+            const tiles = Array.from(document.querySelectorAll('[data-testid="quests-grid"] > a'));
+            if (!grid || tiles.length === 0) {
+                return null;
+            }
+
+            const roundedRows = new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top)));
+            const templateColumns = window.getComputedStyle(grid).gridTemplateColumns;
+
+            return {
+                tileCount: tiles.length,
+                rowCount: roundedRows.size,
+                templateColumns,
+            };
         });
 
-        const tileCount = await page.locator('.quests-grid > a').count();
-        expect(rows.length).toBe(tileCount);
+        expect(layout).toBeTruthy();
+        expect(layout?.tileCount ?? 0).toBeGreaterThan(1);
+        expect(layout?.rowCount).toBe(layout?.tileCount);
+        expect(layout?.templateColumns).toBe('none');
     });
 });

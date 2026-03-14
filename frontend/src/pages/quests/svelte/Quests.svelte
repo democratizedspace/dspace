@@ -190,13 +190,14 @@
     }
 
     .quests-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 400px));
+        display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         gap: 20px;
     }
 
     .quests-grid > a {
+        width: min(400px, 100%);
         height: 100%;
     }
 
@@ -206,7 +207,11 @@
         }
 
         .quests-grid {
-            grid-template-columns: 1fr;
+            justify-content: center;
+        }
+
+        .quests-grid > a {
+            width: 100%;
         }
     }
 
