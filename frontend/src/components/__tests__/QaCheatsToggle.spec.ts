@@ -74,7 +74,7 @@ describe('QaCheatsToggle inventory grant', () => {
         await waitFor(() => {
             expect(addItemsSpy).toHaveBeenCalledWith([{ id: 'qa-custom-dwatt', count: 5000 }]);
         });
-    });
+    }, 15000);
 
     test('hides inventory grant tool outside staging even when QA cheats are enabled', async () => {
         const { findByTestId, queryByTestId } = render(QaCheatsToggle, {

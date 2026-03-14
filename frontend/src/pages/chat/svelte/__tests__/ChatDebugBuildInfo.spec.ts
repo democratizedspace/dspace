@@ -247,6 +247,21 @@ describe('OpenAIChat build metadata', () => {
         const questsLabel = await screen.findByText('PlayerState questsFinished');
         expect(questsLabel.nextElementSibling).toHaveTextContent('1');
 
+        const completedOfficialQuestsLabel = await screen.findByText(
+            'PlayerState completed official quests'
+        );
+        expect(completedOfficialQuestsLabel.nextElementSibling).toHaveTextContent('1');
+
+        const totalOfficialQuestsLabel = await screen.findByText(
+            'PlayerState total official quests'
+        );
+        expect(totalOfficialQuestsLabel.nextElementSibling).toHaveTextContent(/\d+/);
+
+        const remainingOfficialQuestsLabel = await screen.findByText(
+            'PlayerState remaining official quests'
+        );
+        expect(remainingOfficialQuestsLabel.nextElementSibling).toHaveTextContent(/\d+/);
+
         const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
         expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('1');
     });
@@ -281,6 +296,21 @@ describe('OpenAIChat build metadata', () => {
 
         const questsLabel = await screen.findByText('PlayerState questsFinished');
         expect(questsLabel.nextElementSibling).toHaveTextContent('1');
+
+        const completedOfficialQuestsLabel = await screen.findByText(
+            'PlayerState completed official quests'
+        );
+        expect(completedOfficialQuestsLabel.nextElementSibling).toHaveTextContent('1');
+
+        const totalOfficialQuestsLabel = await screen.findByText(
+            'PlayerState total official quests'
+        );
+        expect(totalOfficialQuestsLabel.nextElementSibling).toHaveTextContent(/\d+/);
+
+        const remainingOfficialQuestsLabel = await screen.findByText(
+            'PlayerState remaining official quests'
+        );
+        expect(remainingOfficialQuestsLabel.nextElementSibling).toHaveTextContent(/\d+/);
 
         const inventoryIncludedLabel = await screen.findByText('PlayerState inventory entries');
         expect(inventoryIncludedLabel.nextElementSibling).toHaveTextContent('2');

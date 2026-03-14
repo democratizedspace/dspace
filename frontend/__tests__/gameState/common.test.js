@@ -11,6 +11,8 @@ const {
     getPersistedGameStateChecksum,
     syncGameStateFromLocalIfStale,
 } = require('../../src/utils/gameState/common.js');
+const { listBuiltInQuestIds } = require('../../src/utils/builtInQuests.js');
+const { getOfficialQuestStats } = require('../../src/utils/gameState/questStats.js');
 
 describe('gameState - common utilities', () => {
     beforeEach(async () => {
@@ -77,6 +79,36 @@ describe('gameState - common utilities', () => {
         const loaded = loadGameState();
         expect(loaded).toMatchObject(newState);
         expect(typeof loaded._meta?.lastUpdated).toBe('number');
+    });
+
+    test('imported /gamesaves envelopes produce deterministic official quest stats', async () => {
+        const [firstOfficialQuestId] = listBuiltInQuestIds();
+        expect(firstOfficialQuestId).toBeTruthy();
+
+        const envelope = {
+            schemaVersion: 1,
+            createdAt: '2024-01-01T00:00:00.000Z',
+            providerHint: 'test',
+            payload: {
+                quests: {
+                    [firstOfficialQuestId]: { finished: true },
+                    'custom/non-official': { finished: true },
+                },
+                inventory: {},
+                processes: {},
+            },
+        };
+
+        const encoded = Buffer.from(JSON.stringify(envelope)).toString('base64');
+        await importGameStateString(encoded);
+
+        const loaded = loadGameState();
+        const stats = getOfficialQuestStats(loaded);
+        expect(stats.completedQuestCount).toBe(1);
+        expect(stats.totalOfficialQuestCount).toBe(listBuiltInQuestIds().length);
+        expect(stats.remainingOfficialQuestCount).toBe(
+            stats.totalOfficialQuestCount - stats.completedQuestCount
+        );
     });
 
     test('importGameStateString accepts backup envelopes', async () => {

@@ -1,0 +1,16 @@
+{
+  "id": "2026-03-13-dchat-quest-count-determinism",
+  "date": "2026-03-13",
+  "component": "frontend/chat",
+  "longForm": "outages/2026-03-13-dchat-quest-count-determinism.md",
+  "rootCause": "Chat prompts included raw PlayerState questsFinished arrays but did not include deterministic quest count totals, so exact completed/remaining values were implicitly delegated to LLM counting over long arrays.",
+  "resolution": "Compute official quest stats in code from validated game state plus the built-in quest catalog, inject those numeric stats into prompt/debug metadata, and cover restore/import + prompt regression cases with tests.",
+  "references": [
+    "frontend/src/utils/gameState/questStats.js",
+    "frontend/src/utils/openAI.js",
+    "frontend/src/pages/chat/svelte/OpenAIChat.svelte",
+    "frontend/tests/questStats.test.ts",
+    "frontend/tests/openAI.test.ts",
+    "frontend/__tests__/gameState/common.test.js"
+  ]
+}
