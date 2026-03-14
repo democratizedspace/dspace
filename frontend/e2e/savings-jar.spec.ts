@@ -68,8 +68,7 @@ async function readStoredDusdFromIdb(page: Page): Promise<number> {
 async function runProcessFromItemPage(page: Page, title: string) {
     const card = page
         .locator('.container')
-        .filter({ hasText: title })
-        .filter({ has: page.getByTestId('process-start-button') })
+        .filter({ has: page.getByRole('heading', { name: title, exact: true }) })
         .first();
     const processGroup = card.locator(
         'xpath=ancestor::details[contains(@class, "process-group")][1]'
@@ -88,11 +87,31 @@ async function runProcessFromItemPage(page: Page, title: string) {
         }
     }
 
-    const start = card.getByTestId('process-start-button').first();
+    await expect(card).toBeVisible({ timeout: 15000 });
+
+    let start = card.getByTestId('process-start-button').first();
     const collect = card.getByRole('button', { name: 'Collect' }).first();
 
-    await expect(start).toBeVisible({ timeout: 15000 });
-    await start.click();
+    if ((await start.count()) > 0) {
+        await expect(start).toBeVisible({ timeout: 15000 });
+        await start.click();
+    } else {
+        await expect
+            .poll(
+                async () =>
+                    (await card.getByTestId('process-start-button').count()) > 0 ||
+                    (await collect.count()) > 0,
+                { timeout: 15000 }
+            )
+            .toBe(true);
+
+        start = card.getByTestId('process-start-button').first();
+        if ((await start.count()) > 0) {
+            await expect(start).toBeVisible({ timeout: 15000 });
+            await start.click();
+        }
+    }
+
     await expect(collect).toBeVisible({ timeout: 15000 });
     await collect.click();
     await flushGameStateWrites(page);
