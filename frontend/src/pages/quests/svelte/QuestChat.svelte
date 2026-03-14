@@ -2,11 +2,16 @@
     import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
-    import { questFinished } from '../../../utils/gameState.js';
+    import {
+        canStartQuest,
+        getUnmetQuestRequirements,
+        questFinished,
+    } from '../../../utils/gameState.js';
     import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
+    import QuestLinkChips from '../../../components/svelte/QuestLinkChips.svelte';
 
     export let quest;
     export let pointer;
@@ -14,6 +19,7 @@
 
     const clientSideRendered = writable(false);
     const finished = writable(false);
+    const available = writable(true);
 
     // Move these declarations inside onMount to ensure quest is defined
     let npc;
@@ -99,6 +105,7 @@
 
     $: {
         if ($state && quest) {
+            available.set(canStartQuest(quest));
             if ($state.quests[quest.id]) {
                 pointer = $state.quests[quest.id].stepId;
                 currentDialogue = dialogueMap?.get(pointer);
@@ -132,6 +139,14 @@
                     You have completed this quest. You can now return to the Quests page to start
                     another quest.
                 </p>
+            </div>
+        </div>
+    {:else if !$available}
+        <div class="chat" data-testid="chat-panel">
+            <div class="vertical unavailable-content" data-testid="quest-unavailable">
+                <h4>Quest not available yet</h4>
+                <p>Complete these quests first:</p>
+                <QuestLinkChips questIds={getUnmetQuestRequirements(quest)} invertChips={false} />
             </div>
         </div>
     {:else}
@@ -199,6 +214,10 @@
 
     .temp-container {
         height: 50vh;
+    }
+
+    .unavailable-content {
+        width: 100%;
     }
 
     img {
