@@ -120,4 +120,51 @@ describe('Chip', () => {
         const linkChip = getByRoleLink('link', { name: 'Docs' });
         expect(linkChip.classList.contains('inverted')).toBe(true);
     });
+
+    it('stacks slot content above text when textBelowSlot is enabled', () => {
+        const { getByRole } = render(Chip, {
+            props: {
+                text: 'Go to orbit',
+                textBelowSlot: true,
+            },
+        });
+
+        const buttonChip = getByRole('button', { name: 'Go to orbit' });
+        const slotContainer = buttonChip.querySelector('.slot');
+        const slotContent = document.createElement('span');
+        slotContent.setAttribute('data-testid', 'chip-slot-content');
+        slotContent.textContent = 'Requires Fuel';
+        slotContainer?.appendChild(slotContent);
+        const chipText = buttonChip.querySelector('.chip-text');
+
+        expect(buttonChip.classList.contains('text-below-slot')).toBe(true);
+        expect(slotContainer).toBeTruthy();
+        expect(slotContent).toBeTruthy();
+        expect(chipText?.textContent).toBe('Go to orbit');
+        expect(slotContainer?.compareDocumentPosition(chipText as Node)).toBe(
+            Node.DOCUMENT_POSITION_FOLLOWING
+        );
+    });
+
+    it('keeps default chip layout when textBelowSlot is omitted', () => {
+        const { getByRole } = render(Chip, {
+            props: {
+                text: 'Go to orbit',
+            },
+        });
+
+        const buttonChip = getByRole('button', { name: 'Go to orbit' });
+        const slotContainer = buttonChip.querySelector('.slot');
+        const slotContent = document.createElement('span');
+        slotContent.textContent = 'Requires Fuel';
+        slotContainer?.appendChild(slotContent);
+        const chipText = buttonChip.querySelector('.chip-text');
+
+        expect(buttonChip.classList.contains('text-below-slot')).toBe(false);
+        expect(slotContainer).toBeTruthy();
+        expect(chipText?.textContent).toBe('Go to orbit');
+        expect(slotContainer?.compareDocumentPosition(chipText as Node)).toBe(
+            Node.DOCUMENT_POSITION_FOLLOWING
+        );
+    });
 });
