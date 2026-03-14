@@ -12,6 +12,7 @@ Completionist quests build practical progression through the completionist skill
 3. [Catalog Your Trophy](/quests/completionist/catalog)
 4. [Show Off Your Trophy](/quests/completionist/display)
 5. [Check for New Quests](/quests/completionist/reminder)
+6. [Completionist Award III: The Systems Constellation](/quests/completionist/v3)
 
 ## 1) Congrats on finishing all the quests available in v2! (`completionist/v2`)
 
@@ -141,5 +142,51 @@ Completionist quests build practical progression through the completionist skill
 - Display QA: `completionist/display` now has an explicit wobble/glare recovery branch and a safety verification gate before finish.
 - Polish QA: `completionist/polish` now enforces a post-process inspection gate with a gentler cleanup retry path for residue.
 - Reminder QA: `completionist/reminder` now adds dry-run verification for cadence/link/timezone plus a backup-alert recovery loop.
+- Award III QA: `completionist/v3` requires every current v3 leaf quest, then enforces a six-process capstone build (print, woodwork, electronics, planter, integration, validation) before completion.
 - Trophy build QA: `completionist/v2` now includes a safety preflight stop, core verification gate, and retune-and-retry recovery branch.
 - Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.
+
+
+## 6) Completionist Award III: The Systems Constellation (`completionist/v3`)
+
+- Quest link: [/quests/completionist/v3](/quests/completionist/v3)
+- Unlock prerequisite:
+    - `requiresQuests`: all current leaf quests in the in-game quest DAG debug panel (95 total leaf nodes in v3 before adding this quest), including `completionist/catalog` and `completionist/reminder`.
+- Dialogue `requiresItems` gates:
+    - `print-lattice` → "Lattice print is clean and dimensionally accurate" — Completionist Award III lattice spine ×1
+    - `craft-base` → "Wood base is level, sealed, and ready for assembly" — Completionist Award III wood base ×1
+    - `assemble-electronics` → "Electronics harness passes continuity and servo sweep checks" — Completionist Award III electronics harness ×1
+    - `planter-module` → "Planter module is rooted, watered, and secure" — Completionist Award III planter module ×1
+    - `systems-integration` → "Integrated assembly is structurally stable with clean cable routing" — Completionist Award III integrated assembly ×1
+    - `qa-signoff` → "All subsystems pass and the award is ready for display" — Completionist Award III ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - Completionist Award III ×1
+- Processes used:
+    - [print-completionist-iii-lattice](/processes/print-completionist-iii-lattice)
+        - Requires: entry-level FDM 3D printer (leveled bed) ×1
+        - Consumes: white PLA filament ×220, dWatt ×1800
+        - Creates: Completionist Award III lattice spine ×1
+    - [craft-completionist-iii-wood-base](/processes/craft-completionist-iii-wood-base)
+        - Requires: Pine board ×1, Handsaw ×1, Sandpaper pack ×1, Wood glue ×1
+        - Consumes: Pine board ×1, Sandpaper pack ×0.2, Wood glue ×0.2
+        - Creates: Completionist Award III wood base ×1
+    - [assemble-completionist-iii-electronics](/processes/assemble-completionist-iii-electronics)
+        - Requires: Arduino Uno ×1, soldering iron kit ×1, heat-shrink tubing ×1, wire cutters ×1
+        - Consumes: jumper wires ×8, 220 Ohm Resistor ×2, 5 mm LED ×2, servo motor ×1, heat-shrink tubing ×0.2
+        - Creates: Completionist Award III electronics harness ×1
+    - [assemble-completionist-iii-planter-module](/processes/assemble-completionist-iii-planter-module)
+        - Requires: Pine planter box ×1, harvestable basil plant ×1
+        - Consumes: harvestable basil plant ×1, hydroponic nutrient concentrate (1 L) ×0.05
+        - Creates: Completionist Award III planter module ×1
+    - [integrate-completionist-iii-systems](/processes/integrate-completionist-iii-systems)
+        - Requires: lattice spine ×1, wood base ×1, electronics harness ×1, planter module ×1, Completionist Award II (displayed) ×1, superglue ×1
+        - Consumes: lattice spine ×1, wood base ×1, electronics harness ×1, planter module ×1, Completionist Award II (displayed) ×1, superglue ×0.2
+        - Creates: Completionist Award III integrated assembly ×1
+    - [validate-completionist-iii-award](/processes/validate-completionist-iii-award)
+        - Requires: digital multimeter ×1, Completionist Award III integrated assembly ×1
+        - Consumes: Completionist Award III integrated assembly ×1
+        - Creates: Completionist Award III ×1
+

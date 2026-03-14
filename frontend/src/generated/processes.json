@@ -11109,5 +11109,283 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "print-completionist-iii-lattice",
+        "title": "Print the Completionist Award III lattice spine",
+        "requireItems": [
+            {
+                "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 220
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1800
+            }
+        ],
+        "createItems": [
+            {
+                "id": "0ebe72b8-4332-4268-b453-801f7818845c",
+                "count": 1
+            }
+        ],
+        "duration": "5h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "craft-completionist-iii-wood-base",
+        "title": "Cut, sand, and seal the Completionist Award III wood base",
+        "requireItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 1
+            },
+            {
+                "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                "count": 1
+            },
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 1
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 1
+            },
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 0.2
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 0.2
+            }
+        ],
+        "createItems": [
+            {
+                "id": "4d349318-f76b-4a44-973b-eb7467d0c6d3",
+                "count": 1
+            }
+        ],
+        "duration": "2h",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-completionist-iii-electronics",
+        "title": "Solder, heat-shrink, and test the Completionist Award III electronics harness",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "96083990-f333-4e42-ab04-7eb2a234570e",
+                "count": 1
+            },
+            {
+                "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 8
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 2
+            },
+            {
+                "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                "count": 2
+            },
+            {
+                "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                "count": 1
+            },
+            {
+                "id": "96083990-f333-4e42-ab04-7eb2a234570e",
+                "count": 0.2
+            }
+        ],
+        "createItems": [
+            {
+                "id": "ee5e5a35-f17c-4de1-8053-975fd52c2dd9",
+                "count": 1
+            }
+        ],
+        "duration": "90m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-completionist-iii-planter-module",
+        "title": "Build the Completionist Award III basil planter module",
+        "requireItems": [
+            {
+                "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+                "count": 1
+            },
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
+                "count": 1
+            },
+            {
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "93ea99a9-9e21-4032-aec4-a825f77d23af",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "integrate-completionist-iii-systems",
+        "title": "Integrate all Completionist Award III modules into one assembly",
+        "requireItems": [
+            {
+                "id": "0ebe72b8-4332-4268-b453-801f7818845c",
+                "count": 1
+            },
+            {
+                "id": "4d349318-f76b-4a44-973b-eb7467d0c6d3",
+                "count": 1
+            },
+            {
+                "id": "ee5e5a35-f17c-4de1-8053-975fd52c2dd9",
+                "count": 1
+            },
+            {
+                "id": "93ea99a9-9e21-4032-aec4-a825f77d23af",
+                "count": 1
+            },
+            {
+                "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "0ebe72b8-4332-4268-b453-801f7818845c",
+                "count": 1
+            },
+            {
+                "id": "4d349318-f76b-4a44-973b-eb7467d0c6d3",
+                "count": 1
+            },
+            {
+                "id": "ee5e5a35-f17c-4de1-8053-975fd52c2dd9",
+                "count": 1
+            },
+            {
+                "id": "93ea99a9-9e21-4032-aec4-a825f77d23af",
+                "count": 1
+            },
+            {
+                "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.2
+            }
+        ],
+        "createItems": [
+            {
+                "id": "a96ea2cb-faca-4acd-95c5-39f853fdce36",
+                "count": 1
+            }
+        ],
+        "duration": "75m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "validate-completionist-iii-award",
+        "title": "Run electrical, structural, and irrigation QA on Completionist Award III",
+        "requireItems": [
+            {
+                "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                "count": 1
+            },
+            {
+                "id": "a96ea2cb-faca-4acd-95c5-39f853fdce36",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "a96ea2cb-faca-4acd-95c5-39f853fdce36",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "86b5d4e1-e4f0-40b1-9a5a-e57cbc65640a",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

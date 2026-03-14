@@ -241,5 +241,83 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "0ebe72b8-4332-4268-b453-801f7818845c",
+        "name": "Completionist Award III lattice spine",
+        "description": "A precision 3D printed lattice spine with triangular trusses, hidden cable channels, and keyed mounting tabs that lock into the award's wood base and electronics bay.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "4d349318-f76b-4a44-973b-eb7467d0c6d3",
+        "name": "Completionist Award III wood base",
+        "description": "Hand-cut and sanded pine base with chamfered edges, routed channels for wiring, and a matte protective finish designed to hold the lattice spine and planter module without wobble.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "ee5e5a35-f17c-4de1-8053-975fd52c2dd9",
+        "name": "Completionist Award III electronics harness",
+        "description": "Integrated low-voltage harness featuring an Arduino control node, LED status ring branch, servo branch, heat-shrunk solder joints, and labeled debug header leads for diagnostics.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "93ea99a9-9e21-4032-aec4-a825f77d23af",
+        "name": "Completionist Award III planter module",
+        "description": "Compact living top-module with a micro planter cup, rooted basil seedling, moisture-retaining medium, and capillary feed path for low-flow nutrient watering.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "a96ea2cb-faca-4acd-95c5-39f853fdce36",
+        "name": "Completionist Award III integrated assembly",
+        "description": "Pre-final assembled trophy stack combining the printed lattice, finished pine base, electronics harness, planter module, and centered Completionist Award II heritage core.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "86b5d4e1-e4f0-40b1-9a5a-e57cbc65640a",
+        "name": "Completionist Award III",
+        "description": "A 28 cm mixed-material capstone trophy: matte-black 3D printed lattice tower rising from a hand-finished pine base, wrapped with visible copper-trace styling and a subtle LED halo, with a servo-actuated kinetic vane near the top, a clear front window framing the embedded Completionist Award II as a historical core, and a living basil planter crown with textured growth medium and micro-irrigation channeling. The piece should read as handcrafted yet high-tech: clean chamfers, precision fasteners, tidy heat-shrunk wiring runs, warm wood grain contrast against polymer geometry, and soft studio lighting that highlights both engineering detail and organic growth.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

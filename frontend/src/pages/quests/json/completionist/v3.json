@@ -1,0 +1,272 @@
+{
+    "id": "completionist/v3",
+    "title": "Completionist Award III: The Systems Constellation",
+    "description": "Build a grand mixed-discipline trophy that fuses fabrication, woodworking, electronics, robotics, and living systems into one artifact.",
+    "image": "/assets/quests/completionist_trophy_award.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You did it — every v3 quest path is complete. Let's celebrate by building the Completionist Award III: a living systems trophy that proves you can connect all the disciplines into one coherent build.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-lattice",
+                    "text": "I am ready to build the grand trophy"
+                }
+            ]
+        },
+        {
+            "id": "print-lattice",
+            "text": "First we print the precision lattice spine: interlocking trusses, cable channels, and mounting rails for later modules.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-completionist-iii-lattice",
+                    "text": "Print the lattice spine"
+                },
+                {
+                    "type": "goto",
+                    "goto": "craft-base",
+                    "text": "Lattice print is clean and dimensionally accurate",
+                    "requiresItems": [
+                        {
+                            "id": "0ebe72b8-4332-4268-b453-801f7818845c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "craft-base",
+            "text": "Now craft the wood base from pine. We need flat faces, true corners, and a protected finish so the electronics and planter can mount safely.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "craft-completionist-iii-wood-base",
+                    "text": "Cut, sand, and finish the wood base"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble-electronics",
+                    "text": "Wood base is level, sealed, and ready for assembly",
+                    "requiresItems": [
+                        {
+                            "id": "4d349318-f76b-4a44-973b-eb7467d0c6d3",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "assemble-electronics",
+            "text": "Build the electronics harness: status LED ring, servo-driven accent vane, and a debug header so future quests can extend the trophy.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-iii-electronics",
+                    "text": "Solder and heat-shrink the harness"
+                },
+                {
+                    "type": "goto",
+                    "goto": "planter-module",
+                    "text": "Electronics harness passes continuity and servo sweep checks",
+                    "requiresItems": [
+                        {
+                            "id": "ee5e5a35-f17c-4de1-8053-975fd52c2dd9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "planter-module",
+            "text": "Integrate living systems with a compact planter capsule for basil. This marks the award as a growing artifact, not a static object.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-iii-planter-module",
+                    "text": "Assemble and plant the bio module"
+                },
+                {
+                    "type": "goto",
+                    "goto": "systems-integration",
+                    "text": "Planter module is rooted, watered, and secure",
+                    "requiresItems": [
+                        {
+                            "id": "93ea99a9-9e21-4032-aec4-a825f77d23af",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "systems-integration",
+            "text": "Bring everything together with the displayed Award II as the historical core, then mount the new modules around it.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "integrate-completionist-iii-systems",
+                    "text": "Integrate the full trophy stack"
+                },
+                {
+                    "type": "goto",
+                    "goto": "qa-signoff",
+                    "text": "Integrated assembly is structurally stable with clean cable routing",
+                    "requiresItems": [
+                        {
+                            "id": "a96ea2cb-faca-4acd-95c5-39f853fdce36",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "qa-signoff",
+            "text": "Final QA: verify electronics, structural joints, and planter irrigation. This is your capstone acceptance test.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "validate-completionist-iii-award",
+                    "text": "Run final validation and sign-off"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All subsystems pass and the award is ready for display",
+                    "requiresItems": [
+                        {
+                            "id": "86b5d4e1-e4f0-40b1-9a5a-e57cbc65640a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Completionist Award III is yours. You started with isolated skills and now you are orchestrating whole systems. I cannot wait to see where you take DSPACE next — autonomous habitats, closed-loop cities, or missions we have not even named yet.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Accept the Completionist Award III"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "86b5d4e1-e4f0-40b1-9a5a-e57cbc65640a",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "3dprinting/benchy_100",
+        "3dprinting/blob-of-death",
+        "3dprinting/temperature-tower",
+        "3dprinting/x-belt-tension",
+        "aquaria/aquarium-light",
+        "aquaria/balance-ph",
+        "aquaria/filter-rinse",
+        "aquaria/goldfish",
+        "aquaria/net-fish",
+        "aquaria/top-off",
+        "astronomy/aurora-watch",
+        "astronomy/binary-star",
+        "astronomy/comet-tracking",
+        "astronomy/iss-photo",
+        "astronomy/lunar-eclipse",
+        "astronomy/orion-nebula",
+        "astronomy/satellite-pass",
+        "astronomy/star-trails",
+        "astronomy/sunspot-sketch",
+        "astronomy/venus-phases",
+        "chemistry/acid-neutralization",
+        "chemistry/precipitation-reaction",
+        "chemistry/stevia-tasting",
+        "completionist/catalog",
+        "completionist/reminder",
+        "composting/sift-compost",
+        "devops/ci-pipeline",
+        "devops/enable-https",
+        "devops/fail2ban",
+        "devops/log-maintenance",
+        "devops/private-registry",
+        "devops/ssd-boot",
+        "electronics/desolder-component",
+        "electronics/led-polarity",
+        "electronics/measure-arduino-5v",
+        "electronics/measure-resistance",
+        "electronics/servo-sweep",
+        "electronics/solder-led-harness",
+        "electronics/temperature-plot",
+        "electronics/test-gfci-outlet",
+        "electronics/thermometer-calibration",
+        "electronics/voltage-divider",
+        "energy/battery-maintenance",
+        "energy/biogas-digester",
+        "energy/dSolar-100kW",
+        "energy/dWatt-1e8",
+        "energy/power-inverter",
+        "energy/solar-tracker",
+        "energy/wind-turbine",
+        "firstaid/dispose-bandages",
+        "firstaid/dispose-expired",
+        "firstaid/flashlight-battery",
+        "firstaid/remove-splinter",
+        "firstaid/sanitize-pocket-mask",
+        "firstaid/splint-limb",
+        "firstaid/treat-burn",
+        "geothermal/backflush-loop-filter",
+        "geothermal/check-loop-temp-delta",
+        "geothermal/compare-depth-ground-temps",
+        "geothermal/compare-seasonal-ground-temps",
+        "geothermal/log-heat-pump-warmup",
+        "geothermal/replace-faulty-thermistor",
+        "hydroponics/air-stone-soak",
+        "hydroponics/ec-check",
+        "hydroponics/grow-light",
+        "hydroponics/mint-cutting",
+        "hydroponics/netcup-clean",
+        "hydroponics/ph-test",
+        "hydroponics/pump-prime",
+        "hydroponics/regrow-stevia",
+        "hydroponics/root-rinse",
+        "hydroponics/temp-check",
+        "programming/http-post",
+        "programming/moving-avg-temp",
+        "programming/plot-temp-cli",
+        "programming/stddev-temp",
+        "programming/temp-email",
+        "programming/thermistor-calibration",
+        "robotics/gyro-balance",
+        "robotics/maze-navigation",
+        "robotics/servo-arm",
+        "robotics/servo-radar",
+        "rocketry/fuel-mixture",
+        "rocketry/night-launch",
+        "rocketry/static-test",
+        "rocketry/suborbital-hop",
+        "rocketry/wind-check",
+        "sysadmin/log-analysis",
+        "ubi/reminder",
+        "ubi/savings-goal",
+        "welcome/run-tests",
+        "welcome/smart-plug-test",
+        "woodworking/apply-finish",
+        "woodworking/coffee-table",
+        "woodworking/picture-frame"
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "🛠️",
+        "history": []
+    }
+}
