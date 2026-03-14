@@ -6,9 +6,10 @@ slug: 'about'
 # About DSPACE
 
 DSPACE is an incremental simulation game about resource management and the practical skills
-behind space exploration. The current gameplay is intentionally grounded: you learn real-world
-systems on Earth first, then build toward the space era as new milestones ship. In the game, you
-will learn skills, work on [quests](/quests), and grow a resilient technical foundation.
+behind space exploration. v3 is live, and the current gameplay is intentionally grounded: you
+learn real-world systems on Earth first, then build toward the space era as new milestones ship.
+In the game, you will learn skills, work on [quests](/quests), and grow a resilient technical
+foundation.
 
 **The game is still under active development.** If you would like to get involved in the
 creation of the game, please join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
@@ -35,7 +36,8 @@ chains so that future off-world systems feel earned rather than assumed.
 
 ## Create your own content
 
-DSPACE is designed as an extensible platform where you can create and contribute:
+DSPACE is designed as an extensible platform where you can create and contribute. In v3, all
+custom content tooling below is available in-game:
 
 - **[Custom Quests](/docs/custom-quest-system)** - Create and submit missions with the in-game
   editor
