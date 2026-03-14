@@ -68,7 +68,9 @@ async function readStoredDusdFromIdb(page: Page): Promise<number> {
 async function runProcessFromItemPage(page: Page, title: string) {
     const card = page
         .locator('.container')
-        .filter({ has: page.getByRole('heading', { name: title, exact: true }) })
+        .filter({
+            has: page.getByRole('heading', { name: title, exact: true, includeHidden: true }),
+        })
         .first();
     const processGroup = card.locator(
         'xpath=ancestor::details[contains(@class, "process-group")][1]'
