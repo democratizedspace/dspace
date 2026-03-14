@@ -4,6 +4,7 @@ import { normalizeSettings, DEFAULT_SETTINGS } from '../settingsDefaults.js';
 import { isBrowser } from '../ssr.js';
 import { readLegacyV2LocalStorage } from '../legacySaveParsing.js';
 import { restoreCustomContentBackup } from '../customContentBackup.js';
+import { LEGACY_QUEST_ID_ALIASES } from '../questIdAliases.js';
 
 const DB_NAME = 'dspaceGameState';
 const DB_VERSION = 2;
@@ -20,9 +21,6 @@ const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
 const CURRENT_VERSION = '3';
-const LEGACY_QUEST_ID_ALIASES = {
-    '3dprinter/start': '3dprinting/start',
-};
 
 const isPlainObject = (value) =>
     value !== null && typeof value === 'object' && !Array.isArray(value);

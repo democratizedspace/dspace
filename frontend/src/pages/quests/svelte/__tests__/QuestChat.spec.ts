@@ -178,8 +178,8 @@ describe('QuestChat', () => {
         expect(getByRole('link', { name: 'How to do quests' }).getAttribute('href')).toBe(
             '/quests/welcome/howtodoquests'
         );
-        expect(getByRole('link', { name: '3dprinter/start' }).getAttribute('href')).toBe(
-            '/quests/3dprinter/start'
-        );
+        expect(
+            getByRole('link', { name: 'Set up your first 3D printer' }).getAttribute('href')
+        ).toBe('/quests/3dprinting/start');
     });
 });

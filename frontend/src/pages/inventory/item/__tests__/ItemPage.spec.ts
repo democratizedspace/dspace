@@ -165,6 +165,27 @@ describe('ItemPage', () => {
         });
     });
 
+    it('canonicalizes legacy quest ids when rendering quest chips', async () => {
+        const builtIn = items.find((item) => !item.price) ?? items[0];
+
+        getQuestsForItemMock.mockReturnValue({
+            requires: ['3dprinter/start'],
+            rewards: [],
+        });
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { getByRole } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(
+                getByRole('link', { name: 'Set up your first 3D printer' }).getAttribute('href')
+            ).toBe('/quests/3dprinting/start');
+        });
+    });
+
     it('renders clickable quest chips for required and reward quests', async () => {
         const builtIn = items.find((item) => !item.price) ?? items[0];
 

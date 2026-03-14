@@ -1,9 +1,12 @@
 <script>
     import Chip from './Chip.svelte';
     import { getBuiltInQuest } from '../../utils/builtInQuests.js';
+    import { canonicalizeQuestId } from '../../utils/questIdAliases.js';
 
     export let questIds = [];
     export let invertChips = true;
+
+    let normalizedQuestIds = [];
 
     const normalizeQuestIds = (ids = []) => {
         if (!Array.isArray(ids)) {
@@ -14,15 +17,12 @@
         const normalized = [];
 
         for (const id of ids) {
-            if (typeof id !== 'string') {
+            const canonicalId = canonicalizeQuestId(id);
+            if (!canonicalId || uniqueIds.has(canonicalId)) {
                 continue;
             }
-            const trimmed = id.trim();
-            if (!trimmed || uniqueIds.has(trimmed)) {
-                continue;
-            }
-            uniqueIds.add(trimmed);
-            normalized.push(trimmed);
+            uniqueIds.add(canonicalId);
+            normalized.push(canonicalId);
         }
 
         return normalized;

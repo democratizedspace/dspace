@@ -2,11 +2,7 @@
     import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
-    import {
-        canStartQuest,
-        getUnmetQuestRequirements,
-        questFinished,
-    } from '../../../utils/gameState.js';
+    import { getUnmetQuestRequirements, questFinished } from '../../../utils/gameState.js';
     import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
@@ -19,7 +15,9 @@
 
     const clientSideRendered = writable(false);
     const finished = writable(false);
-    const available = writable(true);
+    const available = writable(null);
+
+    let unmetRequirements = [];
 
     // Move these declarations inside onMount to ensure quest is defined
     let npc;
@@ -105,14 +103,13 @@
 
     $: {
         if ($state && quest) {
-            available.set(canStartQuest(quest));
+            unmetRequirements = getUnmetQuestRequirements(quest);
+            available.set(!questFinished(quest.id) && unmetRequirements.length === 0);
             if ($state.quests[quest.id]) {
                 pointer = $state.quests[quest.id].stepId;
                 currentDialogue = dialogueMap?.get(pointer);
             }
-            if (questFinished(quest.id)) {
-                finished.set(true);
-            }
+            finished.set(questFinished(quest.id));
         }
     }
 
@@ -141,12 +138,12 @@
                 </p>
             </div>
         </div>
-    {:else if !$available}
+    {:else if $available === false}
         <div class="chat" data-testid="chat-panel">
             <div class="vertical unavailable-content" data-testid="quest-unavailable">
                 <h4>Quest not available yet</h4>
                 <p>Complete these quests first:</p>
-                <QuestLinkChips questIds={getUnmetQuestRequirements(quest)} invertChips={false} />
+                <QuestLinkChips questIds={unmetRequirements} invertChips={false} />
             </div>
         </div>
     {:else}
@@ -184,6 +181,8 @@
         <h5>Status:</h5>
         {#if $finished}
             <p class="green">Complete</p>
+        {:else if $available === false}
+            <p class="red">Locked</p>
         {:else}
             <p class="orange">In Progress</p>
         {/if}
