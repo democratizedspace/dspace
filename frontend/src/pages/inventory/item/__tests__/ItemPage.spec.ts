@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { render, waitFor } from '@testing-library/svelte';
+import { fireEvent, render, waitFor } from '@testing-library/svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import items from '../../json/items';
 import ItemPage from '../ItemPage.svelte';
@@ -161,7 +161,7 @@ describe('ItemPage', () => {
         });
     });
 
-    it('groups related processes in collapsed details sections', async () => {
+    it('keeps all process groups collapsed by default and allows multiple groups open', async () => {
         const builtIn = items[0];
 
         mockProcessesByType.requireItem = ['test-require-process'];
@@ -181,12 +181,57 @@ describe('ItemPage', () => {
 
         const details = Array.from(container.querySelectorAll('details.process-group'));
         expect(details).toHaveLength(3);
+
+        const descriptions = Array.from(container.querySelectorAll('.process-group-description'));
+        expect(descriptions).toHaveLength(3);
+
+        const processContent = Array.from(container.querySelectorAll('.process-group-content'));
+        expect(processContent).toHaveLength(3);
+
         for (const group of details) {
             expect(group.hasAttribute('open')).toBe(false);
+        }
+        for (const groupContent of processContent) {
+            expect(groupContent).not.toBeVisible();
+        }
+
+        const [requiredSummary, consumedSummary, createdSummary] = Array.from(
+            container.querySelectorAll('details.process-group > summary')
+        );
+
+        await fireEvent.click(requiredSummary as HTMLElement);
+        expect(details[0].hasAttribute('open')).toBe(true);
+        expect(processContent[0]).toBeVisible();
+
+        await fireEvent.click(consumedSummary as HTMLElement);
+        expect(details[0].hasAttribute('open')).toBe(true);
+        expect(details[1].hasAttribute('open')).toBe(true);
+        expect(processContent[0]).toBeVisible();
+        expect(processContent[1]).toBeVisible();
+        expect(processContent[2]).not.toBeVisible();
+
+        await fireEvent.click(createdSummary as HTMLElement);
+        expect(details[2].hasAttribute('open')).toBe(true);
+        for (const groupContent of processContent) {
+            expect(groupContent).toBeVisible();
         }
 
         expect(getByText('Required by processes')).toBeTruthy();
         expect(getByText('Consumed by processes')).toBeTruthy();
         expect(getByText('Created by processes')).toBeTruthy();
+
+        const remount = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(remount.getByText('Processes:')).toBeTruthy();
+        });
+
+        const remountDetails = Array.from(remount.container.querySelectorAll('details.process-group'));
+        expect(remountDetails).toHaveLength(3);
+        for (const group of remountDetails) {
+            expect(group.hasAttribute('open')).toBe(false);
+        }
     });
 });
