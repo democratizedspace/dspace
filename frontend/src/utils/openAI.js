@@ -305,14 +305,15 @@ const normalizeVersionNumberString = (value) => {
 const buildPlayerStateSnapshot = (gameState, options = {}) => {
     const { maxInventoryEntries = MAX_PLAYER_STATE_ITEMS } = options;
     if (!gameState || typeof gameState !== 'object') {
+        const questStats = getOfficialQuestStats(null);
         return {
             block: null,
             meta: {
                 included: false,
                 questsFinishedCount: 0,
-                completedQuestCount: 0,
-                totalOfficialQuestCount: 0,
-                remainingOfficialQuestCount: 0,
+                completedQuestCount: questStats.completedQuestCount,
+                totalOfficialQuestCount: questStats.totalOfficialQuestCount,
+                remainingOfficialQuestCount: questStats.remainingOfficialQuestCount,
                 inventoryIncludedCount: 0,
                 inventoryTotalCount: 0,
                 inventoryTruncated: false,
@@ -354,7 +355,7 @@ const buildPlayerStateSnapshot = (gameState, options = {}) => {
         snapshot.totalItems = totalItems;
     }
 
-    const statsBlock = `PlayerStateStats: completedQuests=${questStats.completedQuestCount}, totalOfficialQuests=${questStats.totalOfficialQuestCount}, remainingOfficialQuests=${questStats.remainingOfficialQuestCount}`;
+    const statsBlock = `PlayerStateStats: completedOfficialQuests=${questStats.completedQuestCount}, totalOfficialQuests=${questStats.totalOfficialQuestCount}, remainingOfficialQuests=${questStats.remainingOfficialQuestCount}`;
     const block = `${statsBlock}\nPlayerState v${versionNumberString} (authoritative; do not infer beyond this):\n${JSON.stringify(
         snapshot,
         null,

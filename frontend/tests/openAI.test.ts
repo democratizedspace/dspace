@@ -583,7 +583,7 @@ describe('buildChatPrompt', () => {
         );
         const content = playerStateMessage?.content ?? '';
         const statsMatch = content.match(
-            /PlayerStateStats: completedQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
+            /PlayerStateStats: completedOfficialQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
         );
         const jsonStart = content.indexOf('{');
         const jsonBody = jsonStart >= 0 ? content.slice(jsonStart) : '';
@@ -614,6 +614,8 @@ describe('buildChatPrompt', () => {
                 inventoryTruncated: false,
             })
         );
+        // '3dprinter/start' is intentionally non-canonical (real ID is '3dprinting/start').
+        // This verifies only official quest IDs count toward completedQuestCount.
         expect(payload.playerStateSummary.completedQuestCount).toBe(1);
         expect(payload.playerStateSummary.remainingOfficialQuestCount).toBe(
             Math.max(
@@ -641,7 +643,7 @@ describe('buildChatPrompt', () => {
         );
         const content = playerStateMessage?.content ?? '';
         const statsMatch = content.match(
-            /PlayerStateStats: completedQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
+            /PlayerStateStats: completedOfficialQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
         );
 
         expect(statsMatch).not.toBeNull();
