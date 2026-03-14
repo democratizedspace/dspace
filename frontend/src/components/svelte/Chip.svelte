@@ -38,12 +38,16 @@
             class:red={red === true}
             class:hazard={hazard === true}
             class:cheat={cheat === true}
+            class:text-below-slot={textBelowSlot === true}
             aria-disabled={disabled === true}
             tabindex={disabled === true ? -1 : undefined}
             data-testid={dataTestId}
             on:click={handleClick}
         >
-            {text}
+            <div class="slot">
+                <slot />
+            </div>
+            <p class="chip-text">{text}</p>
         </a>
     {:else if isStaticContainer}
         <div
@@ -232,19 +236,23 @@
         line-height: 1.25;
     }
 
-    nav button.text-below-slot {
+    nav :is(a, button).text-below-slot {
         flex-direction: column;
         align-items: stretch;
         text-align: left;
         gap: 6px;
     }
 
-    nav button.text-below-slot .chip-text {
+    nav :is(a, button).text-below-slot .chip-text {
         padding-top: 6px;
-        border-top: 1px solid rgba(255, 255, 255, 0.35);
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
     }
 
-    nav button.text-below-slot .slot {
+    nav :is(a, button).text-below-slot.disabled .chip-text {
+        border-top-color: rgba(255, 255, 255, 0.16);
+    }
+
+    nav :is(a, button).text-below-slot .slot {
         margin-right: 0;
     }
 
