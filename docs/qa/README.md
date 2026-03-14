@@ -6,6 +6,7 @@ releases easy to stage.
 ## Checklists
 
 - [v3 release QA](./v3) - primary checklist for the v3 launch
+  - [v3 quest speedrun artifact (2026-03-13)](./speedrun_qa-cheats_20260313.csv)
 - [v3.1 release QA](./v3.1.md) - placeholder for token.place integration plus a rerun of the v3 suite
 - [Template](./template.md) - copy for new releases
 
