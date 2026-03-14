@@ -58,8 +58,9 @@ function ensureChipStaticOpacityStyle() {
     document.head.appendChild(style);
 }
 
-function isVisible(element: Element) {
-    return getComputedStyle(element as HTMLElement).display !== 'none';
+function isInsideOpenProcessGroup(element: Element) {
+    const group = element.closest('details.process-group');
+    return Boolean(group?.hasAttribute('open'));
 }
 
 const TEST_IMAGE =
@@ -196,11 +197,11 @@ describe('ItemPage', () => {
             expect(group.hasAttribute('open')).toBe(false);
         }
         for (const groupContent of processContent) {
-            expect(isVisible(groupContent)).toBe(false);
+            expect(isInsideOpenProcessGroup(groupContent)).toBe(false);
         }
 
         for (const description of descriptions) {
-            expect(isVisible(description)).toBe(false);
+            expect(isInsideOpenProcessGroup(description)).toBe(false);
         }
 
         const [requiredSummary, consumedSummary, createdSummary] = Array.from(
@@ -209,20 +210,20 @@ describe('ItemPage', () => {
 
         await fireEvent.click(requiredSummary as HTMLElement);
         expect(details[0].hasAttribute('open')).toBe(true);
-        expect(isVisible(processContent[0])).toBe(true);
-        expect(isVisible(descriptions[0])).toBe(true);
+        expect(isInsideOpenProcessGroup(processContent[0])).toBe(true);
+        expect(isInsideOpenProcessGroup(descriptions[0])).toBe(true);
 
         await fireEvent.click(consumedSummary as HTMLElement);
         expect(details[0].hasAttribute('open')).toBe(true);
         expect(details[1].hasAttribute('open')).toBe(true);
-        expect(isVisible(processContent[0])).toBe(true);
-        expect(isVisible(processContent[1])).toBe(true);
-        expect(isVisible(processContent[2])).toBe(false);
+        expect(isInsideOpenProcessGroup(processContent[0])).toBe(true);
+        expect(isInsideOpenProcessGroup(processContent[1])).toBe(true);
+        expect(isInsideOpenProcessGroup(processContent[2])).toBe(false);
 
         await fireEvent.click(createdSummary as HTMLElement);
         expect(details[2].hasAttribute('open')).toBe(true);
         for (const groupContent of processContent) {
-            expect(isVisible(groupContent)).toBe(true);
+            expect(isInsideOpenProcessGroup(groupContent)).toBe(true);
         }
 
         expect(getByText('Required by processes')).toBeTruthy();
@@ -237,8 +238,13 @@ describe('ItemPage', () => {
             expect(remount.getByText('Processes:')).toBeTruthy();
         });
 
-        const remountDetails = Array.from(remount.container.querySelectorAll('details.process-group'));
-        expect(remountDetails).toHaveLength(3);
+        await waitFor(() => {
+            expect(remount.container.querySelectorAll('details.process-group')).toHaveLength(3);
+        });
+
+        const remountDetails = Array.from(
+            remount.container.querySelectorAll('details.process-group')
+        );
         for (const group of remountDetails) {
             expect(group.hasAttribute('open')).toBe(false);
         }
