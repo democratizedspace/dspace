@@ -54,9 +54,13 @@ export const canStartQuest = (quest) => {
         return false;
     }
 
-    const requiresQuests = quest.default.requiresQuests;
+    const requiresQuests = Array.isArray(quest?.default?.requiresQuests)
+        ? quest.default.requiresQuests
+        : Array.isArray(quest?.requiresQuests)
+          ? quest.requiresQuests
+          : [];
 
-    if (requiresQuests) {
+    if (requiresQuests.length > 0) {
         for (let i = 0; i < requiresQuests.length; i++) {
             if (!questFinished(requiresQuests[i])) {
                 return false;

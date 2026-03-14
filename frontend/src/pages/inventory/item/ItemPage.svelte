@@ -2,6 +2,7 @@
     import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import Chip from '../../../components/svelte/Chip.svelte';
+    import QuestLinkList from '../../../components/svelte/QuestLinkList.svelte';
     import BuySell from '../../../components/svelte/BuySell.svelte';
     import {
         getProcessesForItem,
@@ -146,20 +147,10 @@
                     <p>Quests:</p>
                 {/if}
                 {#if quests.requires.length > 0}
-                    <p>Required in:</p>
-                    <ul>
-                        {#each quests.requires as qid}
-                            <li>{qid}</li>
-                        {/each}
-                    </ul>
+                    <QuestLinkList title="Required in" quests={quests.requires} inverted={true} />
                 {/if}
                 {#if quests.rewards.length > 0}
-                    <p>Rewards in:</p>
-                    <ul>
-                        {#each quests.rewards as qid}
-                            <li>{qid}</li>
-                        {/each}
-                    </ul>
+                    <QuestLinkList title="Rewards in" quests={quests.rewards} inverted={true} />
                 {/if}
             </div>
         {/if}

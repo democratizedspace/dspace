@@ -1,5 +1,5 @@
 import { render, waitFor } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import QuestChat from '../QuestChat.svelte';
 
 type QuestState = {
@@ -46,6 +46,7 @@ vi.mock('../../../../utils/gameState/common.js', async (importOriginal) => {
 
 vi.mock('../../../../utils/gameState.js', () => ({
     questFinished: vi.fn(() => false),
+    canStartQuest: vi.fn(() => true),
     getItemsGranted: vi.fn(() => true),
     grantItems: vi.fn(),
     setCurrentDialogueStep: vi.fn(),
@@ -57,6 +58,12 @@ vi.mock('../../../../utils/itemResolver.js', () => ({
 }));
 
 describe('QuestChat', () => {
+    beforeEach(async () => {
+        const gameState = await import('../../../../utils/gameState.js');
+        vi.mocked(gameState.questFinished).mockImplementation(() => false);
+        vi.mocked(gameState.canStartQuest).mockImplementation(() => true);
+    });
+
     it('renders newline and inline code formatting while escaping raw HTML', async () => {
         const quest = {
             id: 'quest-2',
@@ -84,6 +91,47 @@ describe('QuestChat', () => {
             expect(dialogue?.innerHTML).toContain('<br');
             expect(dialogue?.innerHTML).toContain('&lt;img src=x onerror=alert(1)&gt;');
             expect(dialogue?.querySelector('img')).toBeNull();
+        });
+    });
+
+    it('blocks quest chat when quest requirements are not finished and links required quests', async () => {
+        const gameState = await import('../../../../utils/gameState.js');
+        vi.mocked(gameState.canStartQuest).mockReturnValue(false);
+        vi.mocked(gameState.questFinished).mockImplementation(
+            (questId: string) => questId === 'welcome/howtodoquests'
+        );
+
+        const quest = {
+            id: 'hydroponics/bucket_10',
+            title: 'Hydroponics Bucket',
+            description: 'Locked until prerequisites are done',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'This text should not show while locked.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+            requiresQuests: ['hydroponics/basil', '3dprinter/start'],
+        };
+
+        const { getByTestId, queryByText, getByRole } = render(QuestChat, { props: { quest } });
+
+        await waitFor(() => {
+            expect(getByTestId('quest-locked-message').textContent).toContain(
+                'Quest not available yet'
+            );
+            expect(queryByText('This text should not show while locked.')).toBeNull();
+            expect(getByRole('link', { name: 'hydroponics/basil' }).getAttribute('href')).toBe(
+                '/quests/hydroponics/basil'
+            );
+            expect(getByRole('link', { name: '3dprinter/start' }).getAttribute('href')).toBe(
+                '/quests/3dprinter/start'
+            );
         });
     });
 

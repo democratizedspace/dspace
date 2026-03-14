@@ -2,11 +2,12 @@
     import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
-    import { questFinished } from '../../../utils/gameState.js';
+    import { canStartQuest, questFinished } from '../../../utils/gameState.js';
     import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
+    import QuestLinkList from '../../../components/svelte/QuestLinkList.svelte';
 
     export let quest;
     export let pointer;
@@ -14,6 +15,7 @@
 
     const clientSideRendered = writable(false);
     const finished = writable(false);
+    const blockedQuestRequirements = writable([]);
 
     // Move these declarations inside onMount to ensure quest is defined
     let npc;
@@ -66,6 +68,39 @@
         (isBrowser ? localStorage.getItem('avatarUrl') : null) ||
         '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
+    const getRequiresQuests = (questData) => {
+        if (!questData) {
+            return [];
+        }
+
+        const questRequirements = Array.isArray(questData.requiresQuests)
+            ? questData.requiresQuests
+            : Array.isArray(questData.default?.requiresQuests)
+              ? questData.default.requiresQuests
+              : [];
+
+        return questRequirements.filter(
+            (questId) => typeof questId === 'string' && questId.trim() !== ''
+        );
+    };
+
+    const refreshBlockedQuestRequirements = () => {
+        if (!quest) {
+            blockedQuestRequirements.set([]);
+            return;
+        }
+
+        if (canStartQuest(quest)) {
+            blockedQuestRequirements.set([]);
+            return;
+        }
+
+        const unmetRequirements = getRequiresQuests(quest).filter(
+            (questId) => !questFinished(questId)
+        );
+        blockedQuestRequirements.set(unmetRequirements);
+    };
+
     onMount(() => {
         refreshIntervalId = setInterval(() => {
             syncGameStateFromLocalIfStale();
@@ -89,6 +124,7 @@
         }
 
         clientSideRendered.set(true);
+        refreshBlockedQuestRequirements();
         void loadRewardItems();
     });
 
@@ -106,6 +142,7 @@
             if (questFinished(quest.id)) {
                 finished.set(true);
             }
+            refreshBlockedQuestRequirements();
         }
     }
 
@@ -137,7 +174,17 @@
     {:else}
         <div class="chat" data-testid="chat-panel">
             <div class="chat-body">
-                {#if $clientSideRendered && quest && dialogueMap}
+                {#if $blockedQuestRequirements.length > 0}
+                    <div class="vertical gated-message" data-testid="quest-locked-message">
+                        <h4>Quest not available yet</h4>
+                        <p>Complete these quests first to unlock this one:</p>
+                        <QuestLinkList
+                            title="Required quests"
+                            quests={$blockedQuestRequirements}
+                            inverted={true}
+                        />
+                    </div>
+                {:else if $clientSideRendered && quest && dialogueMap}
                     <div class="quest-banner">
                         <img class="banner" src={quest.image} alt={quest.title} />
                     </div>
@@ -266,6 +313,10 @@
 
     .chat-body {
         width: 100%;
+    }
+
+    .gated-message {
+        gap: 8px;
     }
 
     .left {
