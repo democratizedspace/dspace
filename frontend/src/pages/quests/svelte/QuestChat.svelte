@@ -2,11 +2,12 @@
     import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
-    import { questFinished } from '../../../utils/gameState.js';
+    import { getUnmetQuestRequirements, questFinished } from '../../../utils/gameState.js';
     import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
+    import QuestLinkChips from '../../../components/svelte/QuestLinkChips.svelte';
 
     export let quest;
     export let pointer;
@@ -14,6 +15,9 @@
 
     const clientSideRendered = writable(false);
     const finished = writable(false);
+    const available = writable(null);
+
+    let unmetRequirements = [];
 
     // Move these declarations inside onMount to ensure quest is defined
     let npc;
@@ -99,13 +103,13 @@
 
     $: {
         if ($state && quest) {
+            unmetRequirements = getUnmetQuestRequirements(quest);
+            available.set(!questFinished(quest.id) && unmetRequirements.length === 0);
             if ($state.quests[quest.id]) {
                 pointer = $state.quests[quest.id].stepId;
                 currentDialogue = dialogueMap?.get(pointer);
             }
-            if (questFinished(quest.id)) {
-                finished.set(true);
-            }
+            finished.set(questFinished(quest.id));
         }
     }
 
@@ -132,6 +136,14 @@
                     You have completed this quest. You can now return to the Quests page to start
                     another quest.
                 </p>
+            </div>
+        </div>
+    {:else if $available === false}
+        <div class="chat" data-testid="chat-panel">
+            <div class="vertical unavailable-content" data-testid="quest-unavailable">
+                <h4>Quest not available yet</h4>
+                <p>Complete these quests first:</p>
+                <QuestLinkChips questIds={unmetRequirements} />
             </div>
         </div>
     {:else}
@@ -169,6 +181,8 @@
         <h5>Status:</h5>
         {#if $finished}
             <p class="green">Complete</p>
+        {:else if $available === false}
+            <p class="red">Locked</p>
         {:else}
             <p class="orange">In Progress</p>
         {/if}
@@ -199,6 +213,10 @@
 
     .temp-container {
         height: 50vh;
+    }
+
+    .unavailable-content {
+        width: 100%;
     }
 
     img {

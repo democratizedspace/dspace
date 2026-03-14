@@ -16,6 +16,7 @@ import {
     finishQuest,
     questFinished,
     canStartQuest,
+    getUnmetQuestRequirements,
     setCurrentDialogueStep,
     getCurrentDialogueStep,
     grantItems,
@@ -78,6 +79,24 @@ describe('gameState top-level helpers', () => {
     test('canStartQuest returns true without requirements', () => {
         const quest = { id: 'newQuest', default: {} };
         expect(canStartQuest(quest)).toBe(true);
+    });
+
+    test('getUnmetQuestRequirements supports quest root and default requirement shapes', () => {
+        mockGameState.quests['done'] = { finished: true };
+
+        expect(
+            getUnmetQuestRequirements({
+                id: 'root-shape',
+                requiresQuests: ['done', 'missing'],
+            })
+        ).toEqual(['missing']);
+
+        expect(
+            getUnmetQuestRequirements({
+                id: 'default-shape',
+                default: { requiresQuests: ['done', 'missing-two'] },
+            })
+        ).toEqual(['missing-two']);
     });
 
     test('setCurrentDialogueStep and getCurrentDialogueStep work together', () => {
