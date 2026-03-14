@@ -43,6 +43,49 @@ test.describe('Custom Content Management', () => {
         }
     }
 
+    async function expandProcessGroupForTitle(page: Page, processTitle: string): Promise<void> {
+        const processHeading = page
+            .getByRole('heading', { name: processTitle, exact: true, includeHidden: true })
+            .first();
+
+        await expect
+            .poll(
+                () =>
+                    page
+                        .getByRole('heading', {
+                            name: processTitle,
+                            exact: true,
+                            includeHidden: true,
+                        })
+                        .count(),
+                { timeout: 15000 }
+            )
+            .toBeGreaterThan(0);
+
+        const processGroups = page.locator('details.process-group');
+        const processGroupCount = await processGroups.count();
+
+        for (let i = 0; i < processGroupCount; i++) {
+            const processGroup = processGroups.nth(i);
+            const containsHeading =
+                (await processGroup
+                    .getByRole('heading', { name: processTitle, exact: true, includeHidden: true })
+                    .count()) > 0;
+
+            if (!containsHeading) {
+                continue;
+            }
+
+            const isOpen = await processGroup.evaluate((node) => (node as HTMLDetailsElement).open);
+            if (!isOpen) {
+                await processGroup.locator('summary').first().click();
+            }
+            break;
+        }
+
+        await expect(processHeading).toBeVisible({ timeout: 15000 });
+    }
+
     async function findCustomItemIdByName(page: Page, name: string): Promise<string | null> {
         try {
             return await page.evaluate(async (itemName) => {
@@ -512,9 +555,7 @@ test.describe('Custom Content Management', () => {
 
         const processesSection = page.getByText('Processes:', { exact: true });
         await expect(processesSection).toBeVisible({ timeout: 15000 });
-        await expect(page.getByText(processTitle, { exact: true })).toBeVisible({
-            timeout: 15000,
-        });
+        await expandProcessGroupForTitle(page, processTitle);
     });
 
     test('should create and view a custom quest', async ({ page }) => {

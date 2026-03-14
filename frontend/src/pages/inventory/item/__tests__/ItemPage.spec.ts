@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { render, waitFor } from '@testing-library/svelte';
+import { fireEvent, render, waitFor } from '@testing-library/svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import items from '../../json/items';
 import ItemPage from '../ItemPage.svelte';
@@ -9,22 +9,20 @@ import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 const getItemCountsMock = vi.fn();
 const getContainedItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
+const mockProcessesByType = {
+    requireItem: [],
+    consumeItem: [],
+    createItem: [],
+};
 const getQuestsForItemMock = vi.fn();
 
-vi.mock('../../../../utils/gameState/processes.js', () => {
-    const ProcessItemTypes = {
-        REQUIRE_ITEM: 'require',
-        CONSUME_ITEM: 'consume',
-        CREATE_ITEM: 'create',
-    };
+vi.mock('../../../../utils/gameState/processes.js', async (importOriginal) => {
+    const actual = await importOriginal();
 
     return {
-        ProcessItemTypes,
-        getProcessesForItem: () => ({
-            [ProcessItemTypes.REQUIRE_ITEM]: [],
-            [ProcessItemTypes.CONSUME_ITEM]: [],
-            [ProcessItemTypes.CREATE_ITEM]: [],
-        }),
+        ...actual,
+        getProcessesForItem: () => mockProcessesByType,
+        getProcessesForItemIncludingCustom: async () => mockProcessesByType,
     };
 });
 
@@ -61,6 +59,11 @@ function ensureChipStaticOpacityStyle() {
     document.head.appendChild(style);
 }
 
+function isInsideOpenProcessGroup(element: Element) {
+    const group = element.closest('details.process-group');
+    return group instanceof HTMLDetailsElement && group.open;
+}
+
 const TEST_IMAGE =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
 
@@ -79,6 +82,9 @@ afterEach(async () => {
     getItemCountsMock.mockReset();
     getContainedItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
+    mockProcessesByType.requireItem = [];
+    mockProcessesByType.consumeItem = [];
+    mockProcessesByType.createItem = [];
     getQuestsForItemMock.mockReset();
 });
 
@@ -163,6 +169,94 @@ describe('ItemPage', () => {
             expect(getByText('Stored contents:')).toBeTruthy();
             expect(getByText(/dUSD: 42/)).toBeTruthy();
         });
+    });
+
+    it('keeps all process groups collapsed by default and allows multiple groups open', async () => {
+        const builtIn = items[0];
+
+        mockProcessesByType.requireItem = ['test-require-process'];
+        mockProcessesByType.consumeItem = ['test-consume-process'];
+        mockProcessesByType.createItem = ['test-create-process'];
+
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { getByText, container } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(getByText('Processes:')).toBeTruthy();
+        });
+
+        const details = Array.from(container.querySelectorAll('details.process-group'));
+        expect(details).toHaveLength(3);
+
+        const descriptions = Array.from(container.querySelectorAll('.process-group-description'));
+        expect(descriptions).toHaveLength(3);
+
+        const processContent = Array.from(container.querySelectorAll('.process-group-content'));
+        expect(processContent).toHaveLength(3);
+
+        for (const group of details) {
+            expect(group.hasAttribute('open')).toBe(false);
+        }
+        for (const groupContent of processContent) {
+            expect(isInsideOpenProcessGroup(groupContent)).toBe(false);
+        }
+
+        for (const description of descriptions) {
+            expect(isInsideOpenProcessGroup(description)).toBe(false);
+        }
+
+        const [requiredSummary, consumedSummary, createdSummary] = Array.from(
+            container.querySelectorAll('details.process-group > summary')
+        );
+        expect(requiredSummary).toBeTruthy();
+        expect(consumedSummary).toBeTruthy();
+        expect(createdSummary).toBeTruthy();
+
+        await fireEvent.click(requiredSummary as HTMLElement);
+        expect(details[0].hasAttribute('open')).toBe(true);
+        expect(isInsideOpenProcessGroup(processContent[0])).toBe(true);
+        expect(isInsideOpenProcessGroup(descriptions[0])).toBe(true);
+
+        await fireEvent.click(consumedSummary as HTMLElement);
+        expect(details[0].hasAttribute('open')).toBe(true);
+        expect(details[1].hasAttribute('open')).toBe(true);
+        expect(isInsideOpenProcessGroup(processContent[0])).toBe(true);
+        expect(isInsideOpenProcessGroup(processContent[1])).toBe(true);
+        expect(isInsideOpenProcessGroup(processContent[2])).toBe(false);
+
+        await fireEvent.click(createdSummary as HTMLElement);
+        expect(details[2].hasAttribute('open')).toBe(true);
+        for (const groupContent of processContent) {
+            expect(isInsideOpenProcessGroup(groupContent)).toBe(true);
+        }
+
+        expect(getByText('Required by processes')).toBeTruthy();
+        expect(getByText('Consumed by processes')).toBeTruthy();
+        expect(getByText('Created by processes')).toBeTruthy();
+
+        const remount = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(remount.getByText('Processes:')).toBeTruthy();
+        });
+
+        await waitFor(() => {
+            expect(remount.container.querySelectorAll('details.process-group')).toHaveLength(3);
+        });
+
+        const remountDetails = Array.from(
+            remount.container.querySelectorAll('details.process-group')
+        );
+        for (const group of remountDetails) {
+            expect(group.hasAttribute('open')).toBe(false);
+        }
     });
 
     it('canonicalizes legacy quest ids when rendering quest chips', async () => {

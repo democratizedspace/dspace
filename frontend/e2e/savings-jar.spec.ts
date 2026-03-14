@@ -66,14 +66,60 @@ async function readStoredDusdFromIdb(page: Page): Promise<number> {
 }
 
 async function runProcessFromItemPage(page: Page, title: string) {
+    await expect(page.getByText('Processes:', { exact: true })).toBeVisible({ timeout: 15000 });
+
+    const processGroups = page.locator('details.process-group');
+    const processGroupCount = await processGroups.count();
+    for (let i = 0; i < processGroupCount; i++) {
+        const processGroup = processGroups.nth(i);
+        const isOpen = await processGroup.evaluate((node) => (node as HTMLDetailsElement).open);
+        if (!isOpen) {
+            await processGroup.locator('summary').first().click();
+        }
+    }
+
+    await expect
+        .poll(
+            () =>
+                page
+                    .getByRole('heading', { name: title, exact: true, includeHidden: true })
+                    .count(),
+            {
+                timeout: 15000,
+            }
+        )
+        .toBeGreaterThan(0);
+
     const card = page
         .locator('.container')
-        .filter({ has: page.getByRole('heading', { name: title, exact: true }) })
+        .filter({
+            has: page.getByRole('heading', { name: title, exact: true, includeHidden: true }),
+        })
         .first();
+
+    await expect(card).toBeVisible({ timeout: 15000 });
+
     const start = card.getByTestId('process-start-button').first();
     const collect = card.getByRole('button', { name: 'Collect' }).first();
 
-    await start.click();
+    await expect
+        .poll(async () => {
+            if (await collect.isVisible().catch(() => false)) {
+                return 'collect';
+            }
+
+            if (await start.isVisible().catch(() => false)) {
+                return 'start';
+            }
+
+            return null;
+        })
+        .not.toBeNull();
+
+    if (await start.isVisible().catch(() => false)) {
+        await start.click();
+    }
+
     await expect(collect).toBeVisible({ timeout: 15000 });
     await collect.click();
     await flushGameStateWrites(page);
