@@ -1,0 +1,272 @@
+{
+    "id": "completionist/award-iii",
+    "title": "Forge the Completionist Award III",
+    "description": "Build a grand mixed-discipline trophy that celebrates your full v3 journey: printed structure, fine woodworking base, soldered electronics, robotics motion, and a living planter crown.",
+    "image": "/assets/quests/completionist_trophy_award.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You did it. Every current v3 quest is complete. Let's celebrate with something worthy: the Completionist Award III, a multi-skill artifact that reflects your whole path so far and points toward where DSPACE can go next.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-modules",
+                    "text": "I'm ready to build the Award III"
+                }
+            ]
+        },
+        {
+            "id": "print-modules",
+            "text": "First we fabricate the precision shell pieces: crest, electronics tray, and planter ring. Start here so every later subsystem has proper mounting geometry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-completionist-iii-modules",
+                    "text": "3D print Award III modules"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wood-base",
+                    "text": "Printed modules are dimensionally accurate",
+                    "requiresItems": [
+                        {
+                            "id": "be9cb892-f4b2-45fd-ae2b-34d3190acb59",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "wood-base",
+            "text": "Now craft the pine pedestal: square, sanded, and oil-finished. This is the structural anchor and the visual warmth beneath the high-tech layers.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "mill-completionist-iii-wood-base",
+                    "text": "Mill and finish the wood base"
+                },
+                {
+                    "type": "goto",
+                    "goto": "electronics-harness",
+                    "text": "Pedestal is flat, sealed, and mount-ready",
+                    "requiresItems": [
+                        {
+                            "id": "fd54da0d-cf87-4860-bf74-df3be8a95f90",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "electronics-harness",
+            "text": "Time to wire the heartbeat: solder the LED ring and control harness, then heat-shrink each joint for long-term durability.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solder-completionist-iii-harness",
+                    "text": "Solder and heat-shrink the harness"
+                },
+                {
+                    "type": "goto",
+                    "goto": "robotics-integration",
+                    "text": "Harness passes continuity and polarity checks",
+                    "requiresItems": [
+                        {
+                            "id": "37f159f8-e8a2-4721-9608-c4b25855092e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "robotics-integration",
+            "text": "Integrate motion and intelligence: mount a micro servo that slowly rotates the crest while the status LED reflects system health.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "integrate-completionist-iii-robotics",
+                    "text": "Install and tune servo subsystem"
+                },
+                {
+                    "type": "goto",
+                    "goto": "planter-integration",
+                    "text": "Servo sweep is smooth and cable-safe",
+                    "requiresItems": [
+                        {
+                            "id": "e6f5d8eb-1ce2-4a91-b9f4-3bbac465018b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "planter-integration",
+            "text": "Add a living layer: seat the hydroponic micro-planter cup at the top and prime it for herbs. This keeps the trophy connected to growth, not just achievement.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-iii-planter",
+                    "text": "Install and seed the planter crown"
+                },
+                {
+                    "type": "goto",
+                    "goto": "final-assembly",
+                    "text": "Planter cup is stable and irrigated",
+                    "requiresItems": [
+                        {
+                            "id": "ba8cc7ec-f6c9-429a-aa7d-4bf8f513f4c9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "final-assembly",
+            "text": "Final assembly and validation: mechanical fit, electrical safety, cable strain relief, and aesthetics. We're building a trophy that can inspire future builders.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-award-iii",
+                    "text": "Assemble and verify the full Award III"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Award III is complete and fully validated",
+                    "requiresItems": [
+                        {
+                            "id": "adf69f8d-4b30-4eec-b667-43ff5dfd9892",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Congratulations. You've proven mastery across systems, craft, debugging, and stewardship. Today this is Award III. Tomorrow? Autonomous farms, orbital fabrication, community labs on every block. Let's keep building that future together.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Claim the Completionist Award III"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "1394c366-5078-49cf-b24e-c748e8428234",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "3dprinting/benchy_100",
+        "3dprinting/blob-of-death",
+        "3dprinting/temperature-tower",
+        "3dprinting/x-belt-tension",
+        "aquaria/aquarium-light",
+        "aquaria/balance-ph",
+        "aquaria/filter-rinse",
+        "aquaria/goldfish",
+        "aquaria/net-fish",
+        "aquaria/top-off",
+        "astronomy/aurora-watch",
+        "astronomy/binary-star",
+        "astronomy/comet-tracking",
+        "astronomy/iss-photo",
+        "astronomy/lunar-eclipse",
+        "astronomy/orion-nebula",
+        "astronomy/satellite-pass",
+        "astronomy/star-trails",
+        "astronomy/sunspot-sketch",
+        "astronomy/venus-phases",
+        "chemistry/acid-neutralization",
+        "chemistry/precipitation-reaction",
+        "chemistry/stevia-tasting",
+        "completionist/catalog",
+        "completionist/reminder",
+        "composting/sift-compost",
+        "devops/ci-pipeline",
+        "devops/enable-https",
+        "devops/fail2ban",
+        "devops/log-maintenance",
+        "devops/private-registry",
+        "devops/ssd-boot",
+        "electronics/desolder-component",
+        "electronics/led-polarity",
+        "electronics/measure-arduino-5v",
+        "electronics/measure-resistance",
+        "electronics/servo-sweep",
+        "electronics/solder-led-harness",
+        "electronics/temperature-plot",
+        "electronics/test-gfci-outlet",
+        "electronics/thermometer-calibration",
+        "electronics/voltage-divider",
+        "energy/battery-maintenance",
+        "energy/biogas-digester",
+        "energy/dSolar-100kW",
+        "energy/dWatt-1e8",
+        "energy/power-inverter",
+        "energy/solar-tracker",
+        "energy/wind-turbine",
+        "firstaid/dispose-bandages",
+        "firstaid/dispose-expired",
+        "firstaid/flashlight-battery",
+        "firstaid/remove-splinter",
+        "firstaid/sanitize-pocket-mask",
+        "firstaid/splint-limb",
+        "firstaid/treat-burn",
+        "geothermal/backflush-loop-filter",
+        "geothermal/check-loop-temp-delta",
+        "geothermal/compare-depth-ground-temps",
+        "geothermal/compare-seasonal-ground-temps",
+        "geothermal/log-heat-pump-warmup",
+        "geothermal/replace-faulty-thermistor",
+        "hydroponics/air-stone-soak",
+        "hydroponics/ec-check",
+        "hydroponics/grow-light",
+        "hydroponics/mint-cutting",
+        "hydroponics/netcup-clean",
+        "hydroponics/ph-test",
+        "hydroponics/pump-prime",
+        "hydroponics/regrow-stevia",
+        "hydroponics/root-rinse",
+        "hydroponics/temp-check",
+        "programming/http-post",
+        "programming/moving-avg-temp",
+        "programming/plot-temp-cli",
+        "programming/stddev-temp",
+        "programming/temp-email",
+        "programming/thermistor-calibration",
+        "robotics/gyro-balance",
+        "robotics/maze-navigation",
+        "robotics/servo-arm",
+        "robotics/servo-radar",
+        "rocketry/fuel-mixture",
+        "rocketry/night-launch",
+        "rocketry/static-test",
+        "rocketry/suborbital-hop",
+        "rocketry/wind-check",
+        "sysadmin/log-analysis",
+        "ubi/reminder",
+        "ubi/savings-goal",
+        "welcome/run-tests",
+        "welcome/smart-plug-test",
+        "woodworking/apply-finish",
+        "woodworking/coffee-table",
+        "woodworking/picture-frame"
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

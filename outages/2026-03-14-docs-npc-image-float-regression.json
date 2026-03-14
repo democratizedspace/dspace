@@ -1,0 +1,13 @@
+{
+  "id": "docs-npc-image-float-regression",
+  "date": "2026-03-14",
+  "component": "docs/markdown-rendering",
+  "longForm": "outages/2026-03-14-docs-npc-image-float-regression.md",
+  "rootCause": "Embedded markdown <style> blocks included a global img { float: left; ... } rule, which changed docs image layout and caused NPC profile text to wrap beside portraits.",
+  "resolution": "Removed markdown-embedded style blocks and added a docs markdown safety test that rejects embedded <style> tags to prevent recurrence.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/pull/3965",
+    "frontend/src/pages/docs/md/outages/2026-03-14-docs-npc-image-float-regression.md",
+    "frontend/tests/docsMarkdownSafety.test.ts"
+  ]
+}

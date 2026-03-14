@@ -14,6 +14,7 @@ const mockProcessesByType = {
     consumeItem: [],
     createItem: [],
 };
+const getQuestsForItemMock = vi.fn();
 
 vi.mock('../../../../utils/gameState/processes.js', async (importOriginal) => {
     const actual = await importOriginal();
@@ -26,7 +27,7 @@ vi.mock('../../../../utils/gameState/processes.js', async (importOriginal) => {
 });
 
 vi.mock('../../../../utils/itemDependencies.js', () => ({
-    getQuestsForItem: () => ({ requires: [], rewards: [] }),
+    getQuestsForItem: (...args) => getQuestsForItemMock(...args),
 }));
 
 vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
@@ -84,12 +85,14 @@ afterEach(async () => {
     mockProcessesByType.requireItem = [];
     mockProcessesByType.consumeItem = [];
     mockProcessesByType.createItem = [];
+    getQuestsForItemMock.mockReset();
 });
 
 describe('ItemPage', () => {
     it('renders built-in item details', async () => {
         const builtIn = items.find((item) => !item.price) ?? items[0];
 
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
         getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
         isGameStateReadyMock.mockReturnValue(true);
 
@@ -124,6 +127,7 @@ describe('ItemPage', () => {
             image: TEST_IMAGE,
         });
 
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
         getItemCountsMock.mockReturnValue({ [customId]: 1 });
         isGameStateReadyMock.mockReturnValue(true);
 
@@ -150,6 +154,7 @@ describe('ItemPage', () => {
 
         expect(savingsJar).toBeDefined();
 
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
         getItemCountsMock.mockReturnValue({ [savingsJar!.id]: 1 });
         getContainedItemCountsMock.mockReturnValue({
             '5247a603-294a-4a34-a884-1ae20969b2a1': 42,
@@ -173,6 +178,7 @@ describe('ItemPage', () => {
         mockProcessesByType.consumeItem = ['test-consume-process'];
         mockProcessesByType.createItem = ['test-create-process'];
 
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
         getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
         isGameStateReadyMock.mockReturnValue(true);
 
@@ -251,5 +257,54 @@ describe('ItemPage', () => {
         for (const group of remountDetails) {
             expect(group.hasAttribute('open')).toBe(false);
         }
+    });
+
+    it('canonicalizes legacy quest ids when rendering quest chips', async () => {
+        const builtIn = items.find((item) => !item.price) ?? items[0];
+
+        getQuestsForItemMock.mockReturnValue({
+            requires: ['3dprinter/start'],
+            rewards: [],
+        });
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { getByRole } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(
+                getByRole('link', { name: 'Set up your first 3D printer' }).getAttribute('href')
+            ).toBe('/quests/3dprinting/start');
+        });
+    });
+
+    it('renders clickable quest chips for required and reward quests', async () => {
+        const builtIn = items.find((item) => !item.price) ?? items[0];
+
+        getQuestsForItemMock.mockReturnValue({
+            requires: ['welcome/howtodoquests'],
+            rewards: ['hydroponics/bucket_10'],
+        });
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { getByRole, getByText } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(getByRole('heading', { level: 2 }).textContent).toBe(builtIn.name);
+        });
+
+        expect(getByText('Required in:')).toBeTruthy();
+        expect(getByRole('link', { name: 'How to do quests' }).getAttribute('href')).toBe(
+            '/quests/welcome/howtodoquests'
+        );
+        expect(getByText('Rewards in:')).toBeTruthy();
+        expect(getByRole('link', { name: "Bucket, we'll do it live!" }).getAttribute('href')).toBe(
+            '/quests/hydroponics/bucket_10'
+        );
     });
 });

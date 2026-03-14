@@ -1,5 +1,5 @@
 import { render, waitFor } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import QuestChat from '../QuestChat.svelte';
 
 type QuestState = {
@@ -13,7 +13,7 @@ type Store<T> = {
     update: (updater: (value: T) => T) => void;
 };
 
-const { mockState } = vi.hoisted(() => {
+const { mockState, canStartQuestMock, getUnmetQuestRequirementsMock } = vi.hoisted(() => {
     let value: QuestState = { quests: {}, inventory: {} };
     const subscribers = new Set<(current: QuestState) => void>();
     const subscribe = (run: (current: QuestState) => void) => {
@@ -28,8 +28,11 @@ const { mockState } = vi.hoisted(() => {
     const update = (updater: (current: QuestState) => QuestState) => {
         set(updater(value));
     };
+
     return {
         mockState: { subscribe, set, update } as Store<QuestState>,
+        canStartQuestMock: vi.fn(() => true),
+        getUnmetQuestRequirementsMock: vi.fn(() => [] as string[]),
     };
 });
 
@@ -46,6 +49,8 @@ vi.mock('../../../../utils/gameState/common.js', async (importOriginal) => {
 
 vi.mock('../../../../utils/gameState.js', () => ({
     questFinished: vi.fn(() => false),
+    canStartQuest: (...args: unknown[]) => canStartQuestMock(...args),
+    getUnmetQuestRequirements: (...args: unknown[]) => getUnmetQuestRequirementsMock(...args),
     getItemsGranted: vi.fn(() => true),
     grantItems: vi.fn(),
     setCurrentDialogueStep: vi.fn(),
@@ -57,6 +62,11 @@ vi.mock('../../../../utils/itemResolver.js', () => ({
 }));
 
 describe('QuestChat', () => {
+    beforeEach(() => {
+        canStartQuestMock.mockReturnValue(true);
+        getUnmetQuestRequirementsMock.mockReturnValue([]);
+    });
+
     it('renders newline and inline code formatting while escaping raw HTML', async () => {
         const quest = {
             id: 'quest-2',
@@ -129,5 +139,47 @@ describe('QuestChat', () => {
             expect(optionsText).toContain('Claim');
             expect(optionsText).toContain('Finish');
         });
+    });
+
+    it('shows unavailable gate instead of chat when requirements are unmet', async () => {
+        canStartQuestMock.mockReturnValue(false);
+        getUnmetQuestRequirementsMock.mockReturnValue(['welcome/howtodoquests', '3dprinter/start']);
+
+        const quest = {
+            id: 'hydroponics/bucket_10',
+            title: "Bucket, we'll do it live!",
+            description: 'Locked quest',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            requiresQuests: ['welcome/howtodoquests', '3dprinter/start'],
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'You should not see this if the quest is locked.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const { container, getByTestId, getByRole, queryByText } = render(QuestChat, {
+            props: { quest },
+        });
+
+        await waitFor(() => {
+            expect(getByTestId('quest-unavailable').textContent).toContain(
+                'Quest not available yet'
+            );
+        });
+
+        expect(queryByText('You should not see this if the quest is locked.')).toBeNull();
+        expect(container.querySelector('.npcDialogue')).toBeNull();
+        const howToDoQuestsLink = getByRole('link', { name: 'How to do quests' });
+        expect(howToDoQuestsLink.getAttribute('href')).toBe('/quests/welcome/howtodoquests');
+        expect(howToDoQuestsLink.classList.contains('inverted')).toBe(true);
+        expect(
+            getByRole('link', { name: 'Set up your first 3D printer' }).getAttribute('href')
+        ).toBe('/quests/3dprinting/start');
     });
 });

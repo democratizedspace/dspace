@@ -49,22 +49,22 @@ export const questFinished = (questId) => {
     return finished;
 };
 
+export const getUnmetQuestRequirements = (quest) => {
+    const requiresQuests = Array.isArray(quest?.default?.requiresQuests)
+        ? quest.default.requiresQuests
+        : Array.isArray(quest?.requiresQuests)
+          ? quest.requiresQuests
+          : [];
+
+    return requiresQuests.filter((requiredQuestId) => !questFinished(requiredQuestId));
+};
+
 export const canStartQuest = (quest) => {
     if (questFinished(quest.id)) {
         return false;
     }
 
-    const requiresQuests = quest.default.requiresQuests;
-
-    if (requiresQuests) {
-        for (let i = 0; i < requiresQuests.length; i++) {
-            if (!questFinished(requiresQuests[i])) {
-                return false;
-            }
-        }
-    }
-
-    return true;
+    return getUnmetQuestRequirements(quest).length === 0;
 };
 
 export const setCurrentDialogueStep = (questId, stepId) => {

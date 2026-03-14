@@ -120,11 +120,3 @@ In this state, the process is temporarily halted. The countdown stops until you 
 <img src="/assets/docs/process_finished.jpg">
 
 Once a process has been completed, items produced by the process can be collected by clicking the Collect button. When you click Collect, items from the Creates list are added to your inventory.
-
-<style>
-img {
-    max-width: 100%;
-    width: auto;
-    height: auto;
-}
-</style>

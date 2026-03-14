@@ -46,6 +46,8 @@ vi.mock('../src/utils/gameState/common.js', () => ({
 
 vi.mock('../src/utils/gameState.js', () => ({
     questFinished: vi.fn(() => false),
+    canStartQuest: vi.fn(() => true),
+    getUnmetQuestRequirements: vi.fn(() => []),
     setCurrentDialogueStep: vi.fn((questId: string, stepId: string) => {
         mockState.update((current: QuestState) => ({
             ...current,

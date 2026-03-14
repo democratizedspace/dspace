@@ -190,13 +190,22 @@
     }
 
     .quests-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: stretch;
         gap: 20px;
     }
 
     .quests-grid > a {
-        height: 100%;
+        display: flex;
+        align-items: stretch;
+        width: min(400px, 100%);
+    }
+
+    .quests-grid > a :global([data-testid='quest-tile']) {
+        flex: 1 1 auto;
+        height: auto;
     }
 
     @media only screen and (max-width: 640px) {
@@ -204,8 +213,8 @@
             padding-inline: 1rem;
         }
 
-        .quests-grid {
-            grid-template-columns: 1fr;
+        .quests-grid > a {
+            width: 100%;
         }
     }
 

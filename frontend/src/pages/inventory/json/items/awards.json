@@ -8,7 +8,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-07",
@@ -27,7 +27,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-10",
@@ -46,7 +46,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-13",
@@ -65,7 +65,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-14",
@@ -84,7 +84,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-16",
@@ -103,7 +103,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -122,7 +122,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -135,7 +135,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -148,7 +148,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -161,7 +161,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -174,7 +174,7 @@
         "hardening": {
             "passes": 1,
             "score": 60,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -182,6 +182,84 @@
                     "score": 60
                 }
             ]
+        }
+    },
+    {
+        "id": "be9cb892-f4b2-45fd-ae2b-34d3190acb59",
+        "name": "Completionist Award III module kit",
+        "description": "A precision 3D printed module set for the Award III: crest shell, electronics tray, cable channels, planter ring, and engraved spine tabs ready for multi-material assembly.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "fd54da0d-cf87-4860-bf74-df3be8a95f90",
+        "name": "Completionist Award III wood pedestal",
+        "description": "A hand-cut pine pedestal with chamfered edges, sanded through fine grits and oil-finished to protect against moisture from the planter top.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "37f159f8-e8a2-4721-9608-c4b25855092e",
+        "name": "Completionist Award III smart harness",
+        "description": "A soldered and heat-shrunk electronics harness with addressable LEDs, microcontroller leads, fused power input, and labeled signal lines for debugging-friendly service.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "e6f5d8eb-1ce2-4a91-b9f4-3bbac465018b",
+        "name": "Completionist Award III motion core",
+        "description": "Integrated servo and mount stack tuned for smooth, low-noise crest rotation, with balanced linkage travel and strain-relieved wiring paths.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "ba8cc7ec-f6c9-429a-aa7d-4bf8f513f4c9",
+        "name": "Completionist Award III planter crown",
+        "description": "A compact hydroponic crown module with wick-fed reservoir cup, basil starter plug mount, and overflow-safe channel integrated into the trophy top geometry.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "adf69f8d-4b30-4eec-b667-43ff5dfd9892",
+        "name": "Completionist Award III",
+        "description": "A museum-grade mixed-media trophy celebrating full v3 completion: a matte-white 3D printed geometric spine with inset brass fasteners rises from a hand-oiled pine pedestal; a translucent circular LED halo wraps the midsection and glows through engraved circuit motifs; a micro-servo rotates a brushed-metal crest featuring layered quest-tree glyphs; exposed sections show neatly loomed, heat-shrunk wiring and labeled debug test pads; the top hosts a living hydroponic basil planter with a black reservoir collar and fresh green leaves. Lighting should emphasize warm wood grain, cool electronic highlights, and the contrast between precision fabrication and organic growth.",
+        "image": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
         }
     },
     {
@@ -193,7 +271,7 @@
         "hardening": {
             "passes": 1,
             "score": 65,
-            "emoji": "🌀",
+            "emoji": "\ud83c\udf00",
             "history": [
                 {
                     "task": "codex-item-hardening-2025-08-15",
@@ -212,7 +290,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -225,7 +303,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     },
@@ -238,7 +316,7 @@
         "hardening": {
             "passes": 0,
             "score": 0,
-            "emoji": "🛠️",
+            "emoji": "\ud83d\udee0\ufe0f",
             "history": []
         }
     }
