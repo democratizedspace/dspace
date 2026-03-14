@@ -193,12 +193,19 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        align-items: stretch;
         gap: 20px;
     }
 
     .quests-grid > a {
+        display: flex;
+        align-items: stretch;
         width: min(400px, 100%);
-        height: 100%;
+    }
+
+    .quests-grid > a :global([data-testid='quest-tile']) {
+        flex: 1 1 auto;
+        height: auto;
     }
 
     @media only screen and (max-width: 640px) {
