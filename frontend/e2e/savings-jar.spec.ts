@@ -70,9 +70,21 @@ async function runProcessFromItemPage(page: Page, title: string) {
         .locator('.container')
         .filter({ has: page.getByRole('heading', { name: title, exact: true }) })
         .first();
+    const processGroup = card.locator(
+        'xpath=ancestor::details[contains(@class, "process-group")][1]'
+    );
+
+    if ((await processGroup.count()) > 0) {
+        const isOpen = await processGroup.evaluate((node) => (node as HTMLDetailsElement).open);
+        if (!isOpen) {
+            await processGroup.locator('summary').first().click();
+        }
+    }
+
     const start = card.getByTestId('process-start-button').first();
     const collect = card.getByRole('button', { name: 'Collect' }).first();
 
+    await expect(start).toBeVisible({ timeout: 15000 });
     await start.click();
     await expect(collect).toBeVisible({ timeout: 15000 });
     await collect.click();
