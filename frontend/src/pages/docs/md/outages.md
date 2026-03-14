@@ -25,5 +25,6 @@ Prompts for incident response should instruct agents to consult this catalog and
 
 ## Recent narrative entries
 
+- [2026-03-14 – Docs NPC image layout regression from floated markdown styles](/docs/outages/2026-03-14-docs-npcs-image-layout-regression)
 - [2026-01-02 – Quests SSR glob regression and overflow layout](/docs/outages/2026-01-02-quests-ssr-overflow)
 - [2025-12-02 – v3 UI regressions](/docs/outages/2025-12-02-v3-ui-regressions)

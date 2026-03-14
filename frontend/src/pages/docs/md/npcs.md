@@ -20,7 +20,7 @@ bios below describe intended roles rather than live multiplayer features.
 
 ## dChat
 
-<img src="/assets/npc/dChat.jpg" />
+<img src="/assets/npc/dChat.jpg" class="npc-portrait" />
 
 dChat is a compact, spherical smart assistant powered by large language models. Equipped with reasoning
 and information retrieval capabilities, it can answer questions and engage in conversation effortlessly.
@@ -39,7 +39,7 @@ to Metaguild members once guilds launch, and it's fully open source and self-hos
 
 ## Sydney
 
-<img src="/assets/npc/sydney.jpg" />
+<img src="/assets/npc/sydney.jpg" class="npc-portrait" />
 
 Sydney will run the Metaguild's print farm with crisp, no-nonsense focus.
 Raised among engineers, she fell for additive manufacturing early and will
@@ -57,7 +57,7 @@ fabricate and repair future guild gear. She will mentor recruits through quests 
 
 ## Nova
 
-<img src="/assets/npc/nova.jpg" />
+<img src="/assets/npc/nova.jpg" class="npc-portrait" />
 
 Nova, an ingenious engineer with a quick wit, excels at rocketry. She is slated to design and
 construct the spacecraft the Metaguild will use to explore the solar system. After studying
@@ -76,7 +76,7 @@ skills in groundbreaking ways.
 
 ## Hydro
 
-<img src="/assets/npc/hydro.jpg" />
+<img src="/assets/npc/hydro.jpg" class="npc-portrait" />
 
 Hydro will keep the future guild's hydroponic bays stocked with fresh greens.
 Raised on an Earth farm, they traded soil for nutrient baths after studying biology.
@@ -98,7 +98,7 @@ Hydro will guide recruits through quests like [Check Solution pH](/quests/hydrop
 
 ## Orion
 
-<img src="/assets/npc/orion.jpg" />
+<img src="/assets/npc/orion.jpg" class="npc-portrait" />
 
 Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds.
 He specializes in designing and building intelligent robotic systems to assist the future
@@ -117,7 +117,7 @@ in the quest to push the boundaries of space exploration.
 
 ## Vega
 
-<img src="/assets/npc/vega.jpg" />
+<img src="/assets/npc/vega.jpg" class="npc-portrait" />
 
 Vega tends micro-ecologies, coaxing balance from water and soil with patient hands.
 Years of tuning pumps and lights positioned them to be the guild's go-to aquarist.
@@ -134,7 +134,7 @@ processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-resul
 
 ## Phoenix
 
-<img src="/assets/npc/phoenix.jpg" />
+<img src="/assets/npc/phoenix.jpg" class="npc-portrait" />
 
 Phoenix is slated to become the guild's eco-minded chemist, refining propellants without poisoning
 the cosmos.
@@ -165,7 +165,7 @@ They also remind everyone to [Wash Hands](/processes/wash-hands) before leaving 
 
 ## Atlas
 
-<img src="/assets/npc/atlas.jpg" />
+<img src="/assets/npc/atlas.jpg" class="npc-portrait" />
 
 Atlas is slated to be the guild's heavy-lift robot. Shock-absorbing armor and balanced servos let
 Atlas haul crates and steady delicate assemblies. They will often help with aquarium setups like
@@ -182,7 +182,7 @@ Atlas haul crates and steady delicate assemblies. They will often help with aqua
 
 ## Cedar
 
-<img src="/assets/npc/atlas.jpg" />
+<img src="/assets/npc/atlas.jpg" class="npc-portrait" />
 
 Cedar is slated to be the Metaguild's patient carpenter, happiest when turning scavenged planks
 into sturdy kit.
@@ -203,7 +203,7 @@ second nature.
 
 ## Lyra
 
-<img src="/assets/npc/nova.jpg" />
+<img src="/assets/npc/nova.jpg" class="npc-portrait" />
 
 Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision.
 Raised under planetarium domes, she reads constellations like street signs and will keep the guild
@@ -226,7 +226,7 @@ She steers launches through debris fields and teaches patience in stargazing.
 
 ## Helio
 
-<img src="/assets/npc/sydney.jpg" />
+<img src="/assets/npc/sydney.jpg" class="npc-portrait" />
 
 Helio is a cheerful solar tech who chases daylight and rigs compact arrays that keep gear
 humming far from any outlet. They eyeball tilt to within a degree and log every amp-hour.
@@ -247,7 +247,7 @@ Sun](/processes/charge-battery-pack-solar).
 
 ## Nimbus
 
-<img src="/assets/npc/nova.jpg" />
+<img src="/assets/npc/nova.jpg" class="npc-portrait" />
 
 Nimbus forecasts weather for launch windows and orbital transfers.
 Raised beneath gusty plains, they read barometers like diaries.
@@ -266,7 +266,8 @@ and logs every gust for future flights.
 
 ## Quill
 
-<img src="/assets/npc/orion.jpg" />
+<img src="/assets/npc/orion.jpg" class="npc-portrait" />
+
 Quill will keep the guild's chronicles, filing every blueprint and battle log.
 They guard accuracy like treasure and steer recruits toward the
 [Quest Submission Guide](/docs/quest-submission) so their feats join the archive.
@@ -281,7 +282,7 @@ They guard accuracy like treasure and steer recruits toward the
 
 ## Echo
 
-<img src="/assets/npc/nova.jpg" />
+<img src="/assets/npc/nova.jpg" class="npc-portrait" />
 
 Echo will coordinate the guild's sensor drones from a quiet orbital perch.
 They have a calm demeanor and a sharp ear for anomalies.
@@ -298,7 +299,7 @@ Echo routes signals and keeps comms clear for every mission.
 
 ## Lumen
 
-<img src="/assets/npc/vega.jpg" />
+<img src="/assets/npc/vega.jpg" class="npc-portrait" />
 
 Lumen is slated to serve as the guild's calm field medic. Years in remote clinics taught them to
 treat injuries with limited supplies, and their gentle humor keeps crews relaxed even during tense
@@ -314,7 +315,7 @@ missions.
 
 ## Patch
 
-<img src="/assets/npc/orion.jpg" />
+<img src="/assets/npc/orion.jpg" class="npc-portrait" />
 
 Patch is slated to be the Metaguild's cheerful repair drone, always hovering with a toolkit. Built
 from spare
@@ -331,7 +332,7 @@ parts, Patch keeps machinery humming and loves swapping stories about improvised
 
 ## Byte
 
-<img src="/assets/npc/orion.jpg" />
+<img src="/assets/npc/orion.jpg" class="npc-portrait" />
 
 Byte will monitor the guild's networks, hunting bugs and patching holes before enemies find them.
 Raised on open-source firmware, they safeguard mission data and teach recruits secure coding.
@@ -346,10 +347,11 @@ Raised on open-source firmware, they safeguard mission data and teach recruits s
 - "Zero-trust isn't hype—it's how we sleep at night."
 
 <style>
-    img {
-        float: left;
-        width: 150px;
-        margin: 10px;
+    .npc-portrait {
+        display: block;
+        width: min(100%, 420px);
+        height: auto;
+        margin: 1rem 0 1.25rem;
         border-radius: 20px;
     }
 
