@@ -50,6 +50,89 @@ test.describe('Quests page horizontal overflow regression', () => {
         expect(hasOverflow.bodyOverflow).toBe(false);
     });
 
+    test('should center quest tiles when available quests do not fill a full row', async ({
+        page,
+    }) => {
+        await page.setViewportSize({ width: 1920, height: 1080 });
+
+        await page.goto('/');
+        await seedCustomQuest(page, {
+            id: 'quest-grid-centering-only-one',
+            title: 'Quest Grid Centering',
+            description:
+                'Custom quest used to verify desktop centering when only one tile is shown.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Start node',
+                    options: [{ type: 'finish', text: 'Finish' }],
+                },
+            ],
+            requiresQuests: [],
+        });
+
+        await page.goto('/quests?id=quest-grid-centering-only-one');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const firstTile = page.locator('.quests-grid > a').first();
+        await expect(firstTile).toBeVisible();
+
+        const { leftGap, rightGap } = await page.evaluate(() => {
+            const grid = document.querySelector('.quests-grid');
+            const tile = document.querySelector('.quests-grid > a');
+            if (!grid || !tile) {
+                return { leftGap: 0, rightGap: 0 };
+            }
+
+            const gridRect = grid.getBoundingClientRect();
+            const tileRect = tile.getBoundingClientRect();
+            return {
+                leftGap: tileRect.left - gridRect.left,
+                rightGap: gridRect.right - tileRect.right,
+            };
+        });
+
+        expect(Math.abs(leftGap - rightGap)).toBeLessThanOrEqual(2);
+    });
+
+    test('should keep a single-column mobile quest layout without overflow', async ({ page }) => {
+        await page.setViewportSize({ width: 375, height: 812 });
+
+        await page.goto('/quests');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const firstTile = page.locator('.quests-grid > a').first();
+        await expect(firstTile).toBeVisible();
+
+        const layout = await page.evaluate(() => {
+            const grid = document.querySelector('.quests-grid');
+            const first = document.querySelector('.quests-grid > a');
+            if (!grid || !first) {
+                return { hasOverflow: true, columns: '', widthDelta: 999 };
+            }
+
+            const gridStyle = window.getComputedStyle(grid);
+            const gridRect = grid.getBoundingClientRect();
+            const firstRect = first.getBoundingClientRect();
+            const docEl = document.documentElement;
+
+            return {
+                hasOverflow: docEl.scrollWidth > docEl.clientWidth + 1,
+                columns: gridStyle.gridTemplateColumns,
+                widthDelta: Math.abs(gridRect.width - firstRect.width),
+            };
+        });
+
+        expect(layout.hasOverflow).toBe(false);
+        expect(layout.columns.includes(' ')).toBe(false);
+        expect(layout.widthDelta).toBeLessThanOrEqual(2);
+    });
+
     test('should not overflow after clicking Map tab', async ({ page }) => {
         await page.setViewportSize({ width: 1920, height: 1080 });
 
