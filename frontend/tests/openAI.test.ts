@@ -582,11 +582,15 @@ describe('buildChatPrompt', () => {
             message.content?.includes('PlayerState v3')
         );
         const content = playerStateMessage?.content ?? '';
+        const statsMatch = content.match(
+            /PlayerStateStats: completedOfficialQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
+        );
         const jsonStart = content.indexOf('{');
         const jsonBody = jsonStart >= 0 ? content.slice(jsonStart) : '';
         const snapshot = jsonBody ? JSON.parse(jsonBody) : null;
 
         expect(snapshot?.versionNumberString).toBe('3');
+        expect(statsMatch).not.toBeNull();
         expect(snapshot?.questsFinished).toEqual(
             expect.arrayContaining(['welcome/howtodoquests', '3dprinter/start'])
         );
@@ -603,10 +607,49 @@ describe('buildChatPrompt', () => {
             expect.objectContaining({
                 included: true,
                 questsFinishedCount: 2,
+                completedQuestCount: Number(statsMatch?.[1]),
+                totalOfficialQuestCount: Number(statsMatch?.[2]),
+                remainingOfficialQuestCount: Number(statsMatch?.[3]),
                 inventoryIncludedCount: 2,
                 inventoryTruncated: false,
             })
         );
+        // '3dprinter/start' is intentionally non-canonical (real ID is '3dprinting/start').
+        // This verifies only official quest IDs count toward completedQuestCount.
+        expect(payload.playerStateSummary.completedQuestCount).toBe(1);
+        expect(payload.playerStateSummary.remainingOfficialQuestCount).toBe(
+            Math.max(
+                payload.playerStateSummary.totalOfficialQuestCount -
+                    payload.playerStateSummary.completedQuestCount,
+                0
+            )
+        );
+    });
+
+    it('does not count unknown finished quests toward official quest stats', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'custom/non-official': { finished: true },
+            },
+            inventory: {},
+        });
+
+        const payload = await buildChatPrompt([{ role: 'user', content: 'Quest totals?' }]);
+        const playerStateMessage = payload.debugMessages.find((message) =>
+            message.content?.includes('PlayerStateStats:')
+        );
+        const content = playerStateMessage?.content ?? '';
+        const statsMatch = content.match(
+            /PlayerStateStats: completedOfficialQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
+        );
+
+        expect(statsMatch).not.toBeNull();
+        expect(Number(statsMatch?.[1])).toBe(1);
+        expect(Number(statsMatch?.[2])).toBeGreaterThan(1);
+        expect(Number(statsMatch?.[3])).toBe(Number(statsMatch?.[2]) - Number(statsMatch?.[1]));
     });
 
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {
