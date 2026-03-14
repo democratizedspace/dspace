@@ -33,7 +33,31 @@
 
     const hasQuests = quests.requires.length > 0 || quests.rewards.length > 0;
 
+    const processSectionConfig = [
+        {
+            type: ProcessItemTypes.REQUIRE_ITEM,
+            title: 'Required by processes',
+            helper: 'Needed to run (not consumed)',
+        },
+        {
+            type: ProcessItemTypes.CONSUME_ITEM,
+            title: 'Consumed by processes',
+            helper: 'Spent when the process runs',
+        },
+        {
+            type: ProcessItemTypes.CREATE_ITEM,
+            title: 'Created by processes',
+            helper: 'Produced as output',
+        },
+    ];
+
     $: hasProcesses = Object.values(processes).some((arr) => Array.isArray(arr) && arr.length > 0);
+    $: processSections = processSectionConfig
+        .map((section) => ({
+            ...section,
+            processIds: processes[section.type] ?? [],
+        }))
+        .filter((section) => section.processIds.length > 0);
 
     async function loadItem() {
         isLoading = true;
@@ -127,21 +151,26 @@
                 {#if hasProcesses}
                     <p>Processes:</p>
                 {/if}
-                {#if processes[ProcessItemTypes.REQUIRE_ITEM]}
-                    {#each processes[ProcessItemTypes.REQUIRE_ITEM] as processId}
-                        <Process inverted={false} {processId} />
-                    {/each}
-                {/if}
-                {#if processes[ProcessItemTypes.CONSUME_ITEM]}
-                    {#each processes[ProcessItemTypes.CONSUME_ITEM] as processId}
-                        <Process inverted={false} {processId} />
-                    {/each}
-                {/if}
-                {#if processes[ProcessItemTypes.CREATE_ITEM]}
-                    {#each processes[ProcessItemTypes.CREATE_ITEM] as processId}
-                        <Process inverted={false} {processId} />
-                    {/each}
-                {/if}
+                {#each processSections as section}
+                    <details class="process-group" data-testid={`process-group-${section.type}`}>
+                        <summary>
+                            <span class="process-group-title">{section.title}</span>
+                            <span class="process-group-meta">
+                                {section.processIds.length} {section.processIds.length === 1
+                                    ? 'process'
+                                    : 'processes'}
+                            </span>
+                        </summary>
+                        <p class="process-group-helper">{section.helper}</p>
+                        <div class="process-group-body">
+                            <div class="process-group-content">
+                                {#each section.processIds as processId}
+                                    <Process inverted={false} {processId} />
+                                {/each}
+                            </div>
+                        </div>
+                    </details>
+                {/each}
                 {#if hasQuests}
                     <p>Quests:</p>
                 {/if}
@@ -186,5 +215,75 @@
 
     .placeholder {
         color: #d0ffd0;
+    }
+
+    .process-group {
+        width: min(100%, 780px);
+        margin: 8px 0;
+        border-radius: 14px;
+        border: 1px solid rgba(181, 255, 181, 0.55);
+        background: rgba(0, 69, 0, 0.36);
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .process-group summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 14px;
+        font-weight: 700;
+        text-align: left;
+        user-select: none;
+    }
+
+    .process-group summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .process-group summary::after {
+        content: '▸';
+        margin-left: auto;
+        transition: transform 180ms ease;
+    }
+
+    .process-group[open] summary::after {
+        transform: rotate(90deg);
+    }
+
+    .process-group-title {
+        font-size: 1rem;
+    }
+
+    .process-group-meta {
+        opacity: 0.85;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .process-group-helper {
+        margin: 0;
+        padding: 0 14px 8px;
+        font-size: 0.85rem;
+        opacity: 0.85;
+        text-align: left;
+    }
+
+    .process-group-body {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 220ms ease;
+    }
+
+    .process-group[open] .process-group-body {
+        grid-template-rows: 1fr;
+    }
+
+    .process-group-content {
+        overflow: hidden;
+        padding: 0 8px 10px;
     }
 </style>

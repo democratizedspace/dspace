@@ -9,6 +9,11 @@ import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 const getItemCountsMock = vi.fn();
 const getContainedItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
+const getProcessesForItemIncludingCustomMock = vi.fn().mockReturnValue({
+    require: [],
+    consume: [],
+    create: [],
+});
 
 vi.mock('../../../../utils/gameState/processes.js', () => {
     const ProcessItemTypes = {
@@ -24,11 +29,16 @@ vi.mock('../../../../utils/gameState/processes.js', () => {
             [ProcessItemTypes.CONSUME_ITEM]: [],
             [ProcessItemTypes.CREATE_ITEM]: [],
         }),
+        getProcessesForItemIncludingCustom: (...args) => getProcessesForItemIncludingCustomMock(...args),
     };
 });
 
 vi.mock('../../../../utils/itemDependencies.js', () => ({
     getQuestsForItem: () => ({ requires: [], rewards: [] }),
+}));
+
+vi.mock('../../../../components/svelte/Process.svelte', () => ({
+    default: () => '<div data-testid="mock-process"></div>',
 }));
 
 vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
@@ -78,6 +88,12 @@ afterEach(async () => {
     getItemCountsMock.mockReset();
     getContainedItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
+    getProcessesForItemIncludingCustomMock.mockReset();
+    getProcessesForItemIncludingCustomMock.mockReturnValue({
+        require: [],
+        consume: [],
+        create: [],
+    });
 });
 
 describe('ItemPage', () => {
@@ -86,7 +102,6 @@ describe('ItemPage', () => {
 
         getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
         isGameStateReadyMock.mockReturnValue(true);
-
         ensureChipStaticOpacityStyle();
 
         const { container, getByRole, getByTestId } = render(ItemPage, {
@@ -159,4 +174,37 @@ describe('ItemPage', () => {
             expect(getByText(/dUSD: 42/)).toBeTruthy();
         });
     });
+
+    it('renders process groups as collapsed details sections', async () => {
+        const builtIn = items.find((item) => !item.price) ?? items[0];
+
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+        getProcessesForItemIncludingCustomMock.mockReturnValue({
+            require: ['require-process-id'],
+            consume: ['consume-process-id'],
+            create: ['create-process-id'],
+        });
+
+        const { getByText, getByTestId, queryByText } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(getByText('Processes:')).toBeTruthy();
+        });
+
+        const requireGroup = getByTestId('process-group-require') as HTMLDetailsElement;
+        const consumeGroup = getByTestId('process-group-consume') as HTMLDetailsElement;
+        const createGroup = getByTestId('process-group-create') as HTMLDetailsElement;
+
+        expect(requireGroup.open).toBe(false);
+        expect(consumeGroup.open).toBe(false);
+        expect(createGroup.open).toBe(false);
+
+        expect(queryByText('Needed to run (not consumed)')).toBeTruthy();
+        expect(queryByText('Spent when the process runs')).toBeTruthy();
+        expect(queryByText('Produced as output')).toBeTruthy();
+    });
+
 });
