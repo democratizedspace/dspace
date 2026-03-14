@@ -1,0 +1,305 @@
+{
+    "id": "completionist/v3",
+    "title": "Completionist Award III: Constellation Build",
+    "description": "Design and assemble the Completionist Award III by combining advanced 3D printing, precision woodworking, robust electronics, and a living hydroponic planter module into one flagship artifact.",
+    "image": "/assets/quests/completionist_trophy_award.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You did it. Every v3 quest in the current frontier is complete. I'm proud of your patience, grit, and curiosity. Ready to craft Completionist Award III\u2014a monument that braids together what you learned across the entire Metaguild?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "blueprint",
+                    "text": "Let's build the award that tells the whole story"
+                }
+            ]
+        },
+        {
+            "id": "blueprint",
+            "text": "We'll build in disciplined phases: print precision parts, machine a wood base, wire and solder the control board, seal the harness, integrate a living planter module, and then debug the full system like a flight precheck.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-completionist-iii-structural-kit",
+                    "text": "Print the structural and decorative polymer components"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wood-base",
+                    "text": "Printed kit passed dimensional inspection",
+                    "requiresItems": [
+                        {
+                            "id": "e6200ff8-3a4f-4e5c-a169-87f3ef0fa5f8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "wood-base",
+            "text": "Now bring in woodworking: cut, square, and finish a hardwood-style base that can carry the printed lattice, electronics, and planter load without wobble.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "machine-completionist-iii-wood-base",
+                    "text": "Cut, sand, and finish the wood base"
+                },
+                {
+                    "type": "goto",
+                    "goto": "electronics",
+                    "text": "Wood base is flat, sealed, and mount-ready",
+                    "requiresItems": [
+                        {
+                            "id": "969bf58f-b4e6-4f76-be85-6eb8db7f76cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "electronics",
+            "text": "Electronics phase: assemble a status board with soldered joints that report power health and growth-module readiness.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "solder-completionist-iii-control-board",
+                    "text": "Solder and test the control board"
+                },
+                {
+                    "type": "goto",
+                    "goto": "harness",
+                    "text": "Control board boots and passes continuity checks",
+                    "requiresItems": [
+                        {
+                            "id": "84370be5-127b-4dea-a3a2-e7aa4695f6f4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "harness",
+            "text": "Route the harness cleanly so it survives handling. Heat-shrink every splice and enforce strain relief at every bend radius.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "heatshrink-completionist-iii-harness",
+                    "text": "Strip, terminate, and heat-shrink the wiring harness"
+                },
+                {
+                    "type": "goto",
+                    "goto": "planter",
+                    "text": "Harness insulation and pull tests are complete",
+                    "requiresItems": [
+                        {
+                            "id": "53d2e53c-61b9-4eb6-82ee-4e95a95dad66",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "planter",
+            "text": "Agriculture integration: build the micro-planter crown, seed it, and prep nutrient media so this trophy literally grows with the community.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-iii-planter",
+                    "text": "Prepare and seed the living planter module"
+                },
+                {
+                    "type": "goto",
+                    "goto": "integration",
+                    "text": "Planter is planted, watered, and structurally stable",
+                    "requiresItems": [
+                        {
+                            "id": "130badf2-93da-4b69-a102-f00fe81f42cd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "integration",
+            "text": "Integrate all subassemblies into one system. Alignment, fastener torque, and cable routing all matter before power-on.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "integrate-completionist-iii-subassemblies",
+                    "text": "Perform the dry-fit and final mechanical assembly"
+                },
+                {
+                    "type": "goto",
+                    "goto": "debug",
+                    "text": "Subassemblies are integrated with clean fit and finish",
+                    "requiresItems": [
+                        {
+                            "id": "ee77f164-a59f-4a27-b44f-acd57ff5245d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "debug",
+            "text": "Final commissioning: run power checks, LED status diagnostics, and moisture-guard validation. This is your endgame systems test.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "final-debug-completionist-iii",
+                    "text": "Run commissioning diagnostics and reliability checks"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Diagnostics pass and the award is mission-ready",
+                    "requiresItems": [
+                        {
+                            "id": "f04c635f-f576-4f96-bcf5-eb679bc6d56f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Completionist Award III is complete. You didn't just finish quests\u2014you built an ecosystem of skills. The future might hold autonomous habitats, distributed fabrication guilds, orbital workshops, and new branches we haven't even named yet. Wherever we go next, you've already shown you can learn anything.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "finalize-completionist-award-iii",
+                    "text": "Present the completed artifact to dChat"
+                },
+                {
+                    "type": "finish",
+                    "text": "Thank you, dChat. Onward to the next frontier.",
+                    "requiresItems": [
+                        {
+                            "id": "53f8f919-b93a-4f26-a9e4-8ec2e2672339",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "53f8f919-b93a-4f26-a9e4-8ec2e2672339",
+            "count": 1
+        }
+    ],
+    "requiresQuests": [
+        "3dprinting/benchy_100",
+        "3dprinting/blob-of-death",
+        "3dprinting/temperature-tower",
+        "3dprinting/x-belt-tension",
+        "aquaria/aquarium-light",
+        "aquaria/balance-ph",
+        "aquaria/filter-rinse",
+        "aquaria/goldfish",
+        "aquaria/net-fish",
+        "aquaria/top-off",
+        "astronomy/aurora-watch",
+        "astronomy/binary-star",
+        "astronomy/comet-tracking",
+        "astronomy/iss-photo",
+        "astronomy/lunar-eclipse",
+        "astronomy/orion-nebula",
+        "astronomy/satellite-pass",
+        "astronomy/star-trails",
+        "astronomy/sunspot-sketch",
+        "astronomy/venus-phases",
+        "chemistry/acid-neutralization",
+        "chemistry/precipitation-reaction",
+        "chemistry/stevia-tasting",
+        "completionist/catalog",
+        "completionist/reminder",
+        "composting/sift-compost",
+        "devops/ci-pipeline",
+        "devops/enable-https",
+        "devops/fail2ban",
+        "devops/log-maintenance",
+        "devops/private-registry",
+        "devops/ssd-boot",
+        "electronics/desolder-component",
+        "electronics/led-polarity",
+        "electronics/measure-arduino-5v",
+        "electronics/measure-resistance",
+        "electronics/servo-sweep",
+        "electronics/solder-led-harness",
+        "electronics/temperature-plot",
+        "electronics/test-gfci-outlet",
+        "electronics/thermometer-calibration",
+        "electronics/voltage-divider",
+        "energy/battery-maintenance",
+        "energy/biogas-digester",
+        "energy/dSolar-100kW",
+        "energy/dWatt-1e8",
+        "energy/power-inverter",
+        "energy/solar-tracker",
+        "energy/wind-turbine",
+        "firstaid/dispose-bandages",
+        "firstaid/dispose-expired",
+        "firstaid/flashlight-battery",
+        "firstaid/remove-splinter",
+        "firstaid/sanitize-pocket-mask",
+        "firstaid/splint-limb",
+        "firstaid/treat-burn",
+        "geothermal/backflush-loop-filter",
+        "geothermal/check-loop-temp-delta",
+        "geothermal/compare-depth-ground-temps",
+        "geothermal/compare-seasonal-ground-temps",
+        "geothermal/log-heat-pump-warmup",
+        "geothermal/replace-faulty-thermistor",
+        "hydroponics/air-stone-soak",
+        "hydroponics/ec-check",
+        "hydroponics/grow-light",
+        "hydroponics/mint-cutting",
+        "hydroponics/netcup-clean",
+        "hydroponics/ph-test",
+        "hydroponics/pump-prime",
+        "hydroponics/regrow-stevia",
+        "hydroponics/root-rinse",
+        "hydroponics/temp-check",
+        "programming/http-post",
+        "programming/moving-avg-temp",
+        "programming/plot-temp-cli",
+        "programming/stddev-temp",
+        "programming/temp-email",
+        "programming/thermistor-calibration",
+        "robotics/gyro-balance",
+        "robotics/maze-navigation",
+        "robotics/servo-arm",
+        "robotics/servo-radar",
+        "rocketry/fuel-mixture",
+        "rocketry/night-launch",
+        "rocketry/static-test",
+        "rocketry/suborbital-hop",
+        "rocketry/wind-check",
+        "sysadmin/log-analysis",
+        "ubi/reminder",
+        "ubi/savings-goal",
+        "welcome/run-tests",
+        "welcome/smart-plug-test",
+        "woodworking/apply-finish",
+        "woodworking/coffee-table",
+        "woodworking/picture-frame"
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

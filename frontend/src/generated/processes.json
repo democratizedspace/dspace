@@ -11109,5 +11109,313 @@
             "emoji": "🛠️",
             "history": []
         }
+    },
+    {
+        "id": "print-completionist-iii-structural-kit",
+        "title": "Print structural lattice parts for Completionist Award III",
+        "requireItems": [
+            {
+                "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                "count": 260
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 1800
+            }
+        ],
+        "createItems": [
+            {
+                "id": "e6200ff8-3a4f-4e5c-a169-87f3ef0fa5f8",
+                "count": 1
+            }
+        ],
+        "duration": "4h 30m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "machine-completionist-iii-wood-base",
+        "title": "Cut, sand, and finish the wood base for Completionist Award III",
+        "requireItems": [
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 1
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                "count": 1
+            },
+            {
+                "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                "count": 0.15
+            },
+            {
+                "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "969bf58f-b4e6-4f76-be85-6eb8db7f76cf",
+                "count": 1
+            }
+        ],
+        "duration": "1h 20m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "solder-completionist-iii-control-board",
+        "title": "Solder and verify the Completionist Award III control board",
+        "requireItems": [
+            {
+                "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                "count": 1
+            },
+            {
+                "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 4
+            },
+            {
+                "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                "count": 4
+            },
+            {
+                "id": "c687abb3-7b52-4344-97dc-8b7e0881ed9d",
+                "count": 1
+            },
+            {
+                "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
+                "count": 0.05
+            }
+        ],
+        "createItems": [
+            {
+                "id": "84370be5-127b-4dea-a3a2-e7aa4695f6f4",
+                "count": 1
+            }
+        ],
+        "duration": "55m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "heatshrink-completionist-iii-harness",
+        "title": "Build and heat-shrink the Completionist Award III wiring harness",
+        "requireItems": [
+            {
+                "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+                "count": 1
+            },
+            {
+                "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                "count": 3
+            },
+            {
+                "id": "96083990-f333-4e42-ab04-7eb2a234570e",
+                "count": 0.2
+            }
+        ],
+        "createItems": [
+            {
+                "id": "53d2e53c-61b9-4eb6-82ee-4e95a95dad66",
+                "count": 1
+            }
+        ],
+        "duration": "30m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "assemble-completionist-iii-planter",
+        "title": "Assemble and seed the Completionist Award III planter module",
+        "requireItems": [
+            {
+                "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "78a45c1f-a791-44f1-88f4-dc5059c66c89",
+                "count": 1
+            },
+            {
+                "id": "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "130badf2-93da-4b69-a102-f00fe81f42cd",
+                "count": 1
+            }
+        ],
+        "duration": "25m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "integrate-completionist-iii-subassemblies",
+        "title": "Integrate Completionist Award III mechanical and electrical subassemblies",
+        "requireItems": [
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "e6200ff8-3a4f-4e5c-a169-87f3ef0fa5f8",
+                "count": 1
+            },
+            {
+                "id": "969bf58f-b4e6-4f76-be85-6eb8db7f76cf",
+                "count": 1
+            },
+            {
+                "id": "84370be5-127b-4dea-a3a2-e7aa4695f6f4",
+                "count": 1
+            },
+            {
+                "id": "53d2e53c-61b9-4eb6-82ee-4e95a95dad66",
+                "count": 1
+            },
+            {
+                "id": "130badf2-93da-4b69-a102-f00fe81f42cd",
+                "count": 1
+            },
+            {
+                "id": "7bc8b73f-6e66-469d-865f-12d0cb36677a",
+                "count": 0.1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "ee77f164-a59f-4a27-b44f-acd57ff5245d",
+                "count": 1
+            }
+        ],
+        "duration": "45m",
+        "hardening": {
+            "passes": 0,
+            "score": 100,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "final-debug-completionist-iii",
+        "title": "Run final commissioning diagnostics for Completionist Award III",
+        "requireItems": [
+            {
+                "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                "count": 1
+            },
+            {
+                "id": "84370be5-127b-4dea-a3a2-e7aa4695f6f4",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "ee77f164-a59f-4a27-b44f-acd57ff5245d",
+                "count": 1
+            },
+            {
+                "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                "count": 120
+            }
+        ],
+        "createItems": [
+            {
+                "id": "f04c635f-f576-4f96-bcf5-eb679bc6d56f",
+                "count": 1
+            }
+        ],
+        "duration": "20m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "finalize-completionist-award-iii",
+        "title": "Finalize and present Completionist Award III",
+        "requireItems": [
+            {
+                "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
+                "count": 1
+            }
+        ],
+        "consumeItems": [
+            {
+                "id": "f04c635f-f576-4f96-bcf5-eb679bc6d56f",
+                "count": 1
+            }
+        ],
+        "createItems": [
+            {
+                "id": "53f8f919-b93a-4f26-a9e4-8ec2e2672339",
+                "count": 1
+            }
+        ],
+        "duration": "10m",
+        "hardening": {
+            "passes": 0,
+            "score": 95,
+            "emoji": "🛠️",
+            "history": []
+        }
     }
 ]

@@ -1,4 +1,13 @@
 {
+  "0d4a7b77-f241-4c19-9365-c74647066802": {
+    "requires": [
+      "woodworking/step-stool"
+    ],
+    "rewards": [
+      "woodworking/workbench",
+      "woodworking/bookshelf"
+    ]
+  },
   "6c075116-ebd1-4147-8666-ec6338ca251e": {
     "requires": [
       "woodworking/workbench",
@@ -40,11 +49,47 @@
       "woodworking/apply-finish"
     ]
   },
-  "af77fbf2-30bc-499c-a95c-5daa47a47509": {
-    "requires": [],
+  "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e": {
+    "requires": [
+      "woodworking/workbench",
+      "woodworking/tool-rack",
+      "woodworking/step-stool",
+      "woodworking/planter-box",
+      "woodworking/picture-frame",
+      "woodworking/coffee-table",
+      "woodworking/bookshelf",
+      "woodworking/birdhouse"
+    ],
     "rewards": [
-      "woodworking/workbench"
+      "woodworking/workbench",
+      "woodworking/step-stool",
+      "woodworking/coffee-table",
+      "woodworking/bookshelf",
+      "woodworking/birdhouse"
     ]
+  },
+  "2dfe683c-56f6-4026-b9e9-2d01a03b1878": {
+    "requires": [
+      "woodworking/workbench",
+      "woodworking/step-stool",
+      "woodworking/coffee-table",
+      "woodworking/bookshelf",
+      "woodworking/birdhouse",
+      "energy/wind-turbine"
+    ],
+    "rewards": [
+      "woodworking/workbench",
+      "woodworking/step-stool",
+      "woodworking/coffee-table",
+      "woodworking/bookshelf",
+      "woodworking/birdhouse"
+    ]
+  },
+  "af77fbf2-30bc-499c-a95c-5daa47a47509": {
+    "requires": [
+      "woodworking/workbench"
+    ],
+    "rewards": []
   },
   "2770ee5d-f9a0-4dc8-9c79-4f031fefd093": {
     "requires": [
@@ -52,7 +97,8 @@
       "woodworking/planter-box",
       "woodworking/picture-frame",
       "woodworking/finish-sanding",
-      "woodworking/birdhouse"
+      "woodworking/birdhouse",
+      "woodworking/apply-finish"
     ],
     "rewards": [
       "woodworking/tool-rack",
@@ -61,80 +107,80 @@
       "woodworking/apply-finish"
     ]
   },
-  "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e": {
-    "requires": [
-      "woodworking/tool-rack",
-      "woodworking/step-stool",
-      "woodworking/planter-box",
-      "woodworking/picture-frame",
-      "woodworking/coffee-table",
-      "woodworking/bookshelf",
-      "woodworking/birdhouse"
-    ],
-    "rewards": [
-      "woodworking/step-stool",
-      "woodworking/coffee-table",
-      "woodworking/bookshelf",
-      "woodworking/birdhouse"
-    ]
-  },
   "7f78fea7-e017-411d-bb4b-82c8b0940d34": {
     "requires": [
       "woodworking/tool-rack"
     ],
     "rewards": []
   },
-  "2dfe683c-56f6-4026-b9e9-2d01a03b1878": {
+  "fff4b263-806f-4aeb-a862-cbb0d50146e2": {
     "requires": [
-      "woodworking/step-stool",
-      "woodworking/birdhouse"
+      "woodworking/tool-rack"
+    ],
+    "rewards": []
+  },
+  "ea830e47-5996-4886-b5ee-74bb2b932988": {
+    "requires": [
+      "woodworking/planter-box"
     ],
     "rewards": [
       "woodworking/step-stool",
+      "woodworking/planter-box",
+      "woodworking/coffee-table",
       "woodworking/birdhouse"
     ]
   },
   "c9b51052-4594-42d7-a723-82b815ab8cc2": {
     "requires": [
       "woodworking/step-stool",
+      "woodworking/coffee-table",
+      "woodworking/bookshelf",
       "woodworking/birdhouse",
       "robotics/wheel-encoders",
-      "hydroponics/nutrient-check",
+      "robotics/obstacle-avoidance",
+      "robotics/maze-navigation",
+      "robotics/gyro-balance",
+      "hydroponics/reservoir-refresh",
+      "hydroponics/pump-prime",
+      "hydroponics/pump-install",
+      "hydroponics/plug-soak",
+      "hydroponics/ph-test",
+      "hydroponics/ph-check",
+      "hydroponics/netcup-clean",
+      "hydroponics/air-stone-soak",
       "firstaid/dispose-expired",
+      "energy/power-inverter",
+      "energy/battery-maintenance",
       "electronics/solder-wire",
       "electronics/solder-led-harness",
       "electronics/measure-resistance",
+      "electronics/measure-arduino-5v",
       "electronics/light-sensor",
       "electronics/led-polarity",
       "electronics/desolder-component",
       "electronics/data-logger",
       "electronics/continuity-test",
       "electronics/check-battery-voltage",
+      "electronics/basic-circuit",
       "electronics/arduino-blink",
-      "chemistry/ph-test",
-      "chemistry/acid-dilution",
+      "completionist/v2",
       "aquaria/water-testing",
-      "aquaria/water-change",
-      "3dprinting/nozzle-clog",
-      "3dprinting/nozzle-cleaning",
+      "aquaria/balance-ph",
+      "3dprinting/spool-holder",
+      "3dprinting/retraction-test",
       "3dprinting/filament-change",
-      "3dprinting/calibration-cube"
+      "3dprinting/calibration-cube",
+      "3dprinting/cable-clip",
+      "3dprinting/benchy_25",
+      "3dprinting/benchy_100",
+      "3dprinting/benchy_10"
     ],
     "rewards": [
       "woodworking/step-stool",
-      "woodworking/birdhouse"
-    ]
-  },
-  "0d4a7b77-f241-4c19-9365-c74647066802": {
-    "requires": [],
-    "rewards": [
-      "woodworking/step-stool"
-    ]
-  },
-  "ea830e47-5996-4886-b5ee-74bb2b932988": {
-    "requires": [],
-    "rewards": [
-      "woodworking/planter-box"
+      "woodworking/coffee-table",
+      "woodworking/bookshelf",
+      "woodworking/birdhouse",
+      "energy/battery-maintenance"
     ]
   },
   "affa2f80-28f1-422e-a0c8-49e51ce65a1e": {
@@ -153,21 +199,32 @@
       "woodworking/birdhouse"
     ]
   },
+  "7b2c58bc-e484-4110-996c-220cfb7a4ba7": {
+    "requires": [
+      "woodworking/picture-frame"
+    ],
+    "rewards": []
+  },
   "05dd84f7-b9bc-4eac-93c5-5838cab84b32": {
     "requires": [
       "woodworking/apply-finish"
     ],
     "rewards": [
-      "woodworking/picture-frame",
       "woodworking/finish-sanding",
       "woodworking/apply-finish"
     ]
   },
+  "7a8a7f56-e84f-45e0-b321-d9cff33d9ac5": {
+    "requires": [
+      "woodworking/coffee-table"
+    ],
+    "rewards": []
+  },
   "619d485d-803f-4875-a048-157ce28d31c4": {
-    "requires": [],
-    "rewards": [
+    "requires": [
       "woodworking/bookshelf"
-    ]
+    ],
+    "rewards": []
   },
   "0e6f2e1c-1e8a-4c05-b1db-38f1eec6f64a": {
     "requires": [
@@ -187,63 +244,128 @@
     ],
     "rewards": []
   },
-  "7318a5ba-fac3-476e-a532-c813ed9b18e5": {
-    "requires": [],
-    "rewards": [
-      "welcome/smart-plug-test"
-    ]
-  },
   "061fd221-404a-4bd1-9432-3e25b0f17a2c": {
     "requires": [
       "welcome/smart-plug-test",
       "welcome/howtodoquests",
+      "energy/wind-turbine",
       "energy/hand-crank-generator",
       "energy/dWatt-1e8",
       "energy/dWatt-1e7",
       "energy/dWatt-1e6",
       "energy/dWatt-1e5",
       "energy/dWatt-1e4",
-      "energy/dWatt-1e3"
+      "energy/dWatt-1e3",
+      "energy/biogas-digester"
     ],
     "rewards": [
-      "geothermal/monitor-heat-pump-energy"
+      "welcome/smart-plug-test",
+      "geothermal/replace-faulty-thermistor",
+      "geothermal/monitor-heat-pump-energy",
+      "geothermal/log-ground-temperature",
+      "geothermal/compare-depth-ground-temps",
+      "geothermal/check-loop-outlet-temp",
+      "geothermal/backflush-loop-filter",
+      "energy/power-inverter",
+      "energy/hand-crank-generator",
+      "energy/battery-upgrade"
     ]
   },
-  "8aa6dc27-dc42-4622-ac88-cbd57f48625f": {
+  "5247a603-294a-4a34-a884-1ae20969b2a1": {
     "requires": [
-      "3dprinting/x-belt-tension",
-      "3dprinter/start",
-      "3dprinting/spool-holder",
-      "3dprinting/phone-stand",
-      "3dprinting/nozzle-clog",
-      "3dprinting/nozzle-cleaning",
-      "3dprinting/filament-change",
-      "3dprinting/calibration-cube",
-      "3dprinting/cable-clip",
-      "3dprinting/bed-leveling"
+      "ubi/savings-goal",
+      "ubi/first-payment"
     ],
     "rewards": [
+      "welcome/smart-plug-test",
       "welcome/run-tests",
-      "3dprinter/start"
-    ]
-  },
-  "50ada74c-686d-4818-9421-e02d98444579": {
-    "requires": [],
-    "rewards": [
-      "welcome/run-tests"
-    ]
-  },
-  "a5395e29-1862-4eb7-8517-5d161635e032": {
-    "requires": [
       "welcome/intro-inventory",
       "welcome/howtodoquests",
-      "hydroponics/grow-light",
-      "geothermal/monitor-heat-pump-energy"
+      "ubi/savings-goal",
+      "ubi/reminder",
+      "ubi/basicincome",
+      "astronomy/planetary-alignment",
+      "3dprinting/start"
+    ]
+  },
+  "cfe87611-623a-45b0-9243-422cd8a73a16": {
+    "requires": [
+      "energy/wind-turbine",
+      "energy/solar",
+      "energy/power-inverter",
+      "energy/portable-solar-panel",
+      "energy/offgrid-charger",
+      "energy/hand-crank-generator",
+      "energy/charge-controller-setup",
+      "energy/biogas-digester",
+      "energy/battery-upgrade",
+      "energy/battery-maintenance",
+      "electronics/check-battery-voltage"
     ],
     "rewards": [
-      "welcome/howtodoquests",
-      "geothermal/monitor-heat-pump-energy"
+      "welcome/smart-plug-test",
+      "energy/solar",
+      "energy/portable-solar-panel",
+      "energy/offgrid-charger",
+      "energy/charge-controller-setup",
+      "energy/biogas-digester",
+      "energy/battery-upgrade",
+      "energy/battery-maintenance"
     ]
+  },
+  "82b369fe-0ef4-4ca1-881c-14e5a7feeff5": {
+    "requires": [],
+    "rewards": [
+      "welcome/run-tests",
+      "completionist/reminder",
+      "completionist/display"
+    ]
+  },
+  "52593d07-908b-4109-92cf-826b2184ef6f": {
+    "requires": [
+      "welcome/run-tests"
+    ],
+    "rewards": []
+  },
+  "c4807e67-4e40-452f-8cdc-e326f3e34444": {
+    "requires": [
+      "welcome/run-tests"
+    ],
+    "rewards": []
+  },
+  "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef": {
+    "requires": [
+      "welcome/run-tests"
+    ],
+    "rewards": []
+  },
+  "be3aaed8-13cc-4937-95d5-6e2c952c6612": {
+    "requires": [
+      "robotics/servo-radar",
+      "robotics/servo-control",
+      "programming/hello-sensor",
+      "electronics/measure-arduino-5v",
+      "electronics/light-sensor",
+      "electronics/arduino-blink"
+    ],
+    "rewards": [
+      "welcome/intro-inventory"
+    ]
+  },
+  "80d30825-a42b-4add-b715-322e1713952c": {
+    "requires": [
+      "firstaid/flashlight-battery"
+    ],
+    "rewards": [
+      "welcome/intro-inventory"
+    ]
+  },
+  "946bc4dd-32ee-434c-a8ed-d70cdce617f4": {
+    "requires": [
+      "welcome/intro-inventory",
+      "electronics/continuity-test"
+    ],
+    "rewards": []
   },
   "4910a316-5019-4fcd-b185-1d6ce1c0040b": {
     "requires": [],
@@ -251,17 +373,15 @@
       "welcome/howtodoquests"
     ]
   },
-  "5247a603-294a-4a34-a884-1ae20969b2a1": {
+  "a5395e29-1862-4eb7-8517-5d161635e032": {
     "requires": [
-      "ubi/savings-goal"
+      "welcome/howtodoquests",
+      "hydroponics/grow-light",
+      "geothermal/monitor-heat-pump-energy"
     ],
     "rewards": [
       "welcome/howtodoquests",
-      "ubi/basicincome",
-      "astronomy/planetary-alignment",
-      "3dprinter/start",
-      "3dprinting/spool-holder",
-      "3dprinting/cable-clip"
+      "geothermal/monitor-heat-pump-energy"
     ]
   },
   "d88ef09c-9191-4c18-8628-a888bb9f926d": {
@@ -272,42 +392,138 @@
       "welcome/howtodoquests"
     ]
   },
+  "d5d62069-c77d-44b1-8848-b355f8410f74": {
+    "requires": [],
+    "rewards": [
+      "welcome/connect-github"
+    ]
+  },
+  "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec": {
+    "requires": [
+      "ubi/savings-goal"
+    ],
+    "rewards": []
+  },
   "016d4758-d114-4e04-9e6a-853db93a2eee": {
     "requires": [
+      "ubi/reminder",
       "ubi/first-payment"
     ],
     "rewards": [
+      "ubi/first-payment",
       "ubi/basicincome"
     ]
   },
-  "df7e94e2-76b9-4865-b843-2ec21feb258e": {
-    "requires": [
+  "74a0707b-7292-4ac8-95f2-2b258210064f": {
+    "requires": [],
+    "rewards": [
       "sysadmin/resource-monitoring",
+      "devops/ssd-boot",
+      "devops/pi-cluster-hardware",
+      "devops/k3s-deploy",
+      "devops/enable-https",
+      "devops/ci-pipeline"
+    ]
+  },
+  "f5a1b52f-6c31-4dd1-aeb3-4919cb3d6d4b": {
+    "requires": [
+      "sysadmin/resource-monitoring"
+    ],
+    "rewards": []
+  },
+  "d49faf4f-a228-4738-92da-378a2d766238": {
+    "requires": [
+      "sysadmin/resource-monitoring"
+    ],
+    "rewards": []
+  },
+  "aaef54ec-eed4-43d6-a4e4-e1b22fbb5a69": {
+    "requires": [],
+    "rewards": [
       "sysadmin/log-analysis",
-      "sysadmin/basic-commands",
+      "devops/ssh-hardening",
+      "devops/prepare-first-node",
+      "devops/log-maintenance",
+      "devops/fail2ban",
+      "devops/daily-backups"
+    ]
+  },
+  "13061ba3-25af-4548-aab5-eee8bffad8fe": {
+    "requires": [
+      "sysadmin/log-analysis",
       "devops/ssh-hardening",
       "devops/ssd-boot",
       "devops/private-registry",
+      "devops/prepare-first-node",
+      "devops/pi-cluster-hardware",
+      "devops/monitoring",
+      "devops/log-maintenance",
       "devops/k3s-deploy",
-      "devops/firewall-rules",
       "devops/fail2ban",
-      "devops/enable-https",
+      "devops/daily-backups"
+    ],
+    "rewards": []
+  },
+  "d00078e7-1098-4f78-9a96-9fa1f6ef615c": {
+    "requires": [
+      "sysadmin/log-analysis",
+      "devops/ssh-hardening",
+      "devops/ssd-boot",
+      "devops/private-registry",
+      "devops/prepare-first-node",
+      "devops/pi-cluster-hardware",
+      "devops/monitoring",
+      "devops/log-maintenance",
+      "devops/fail2ban",
+      "devops/daily-backups"
+    ],
+    "rewards": []
+  },
+  "d2b39a23-cdfb-428d-a6ed-694ff0c0fc11": {
+    "requires": [],
+    "rewards": [
+      "sysadmin/basic-commands",
+      "programming/temp-logger",
+      "programming/temp-email",
+      "programming/plot-temp-cli",
+      "programming/json-endpoint",
+      "programming/hello-sensor",
+      "programming/avg-temp",
+      "devops/private-registry",
+      "devops/monitoring",
+      "devops/firewall-rules",
       "devops/docker-compose",
       "devops/auto-updates"
+    ]
+  },
+  "91923542-45d5-46f5-82eb-6367b26ef8cc": {
+    "requires": [
+      "sysadmin/basic-commands"
+    ],
+    "rewards": [
+      "programming/thermistor-calibration",
+      "programming/temp-graph",
+      "programming/stddev-temp",
+      "programming/median-temp",
+      "programming/http-post",
+      "programming/graph-temp-data"
+    ]
+  },
+  "f17410cd-8c38-4612-9666-7bd1c399874d": {
+    "requires": [
+      "sysadmin/basic-commands"
     ],
     "rewards": []
   },
   "15e3dd7e-374b-4233-b8c9-117e3057f009": {
-    "requires": [],
-    "rewards": [
-      "rocketry/wind-check"
-    ]
-  },
-  "451d86d9-96e0-4829-af27-8a8b0be65ae4": {
     "requires": [
-      "rocketry/wind-check"
+      "rocketry/wind-check",
+      "rocketry/preflight-check"
     ],
-    "rewards": []
+    "rewards": [
+      "rocketry/wind-check",
+      "rocketry/preflight-check"
+    ]
   },
   "eb9c2a75-a87a-4171-8bc3-088e75936bcf": {
     "requires": [
@@ -330,7 +546,8 @@
       "rocketry/suborbital-hop",
       "rocketry/recovery-run",
       "rocketry/parachute",
-      "rocketry/night-launch"
+      "rocketry/night-launch",
+      "rocketry/fuel-mixture"
     ],
     "rewards": []
   },
@@ -419,21 +636,32 @@
     ],
     "rewards": []
   },
-  "80a83ecc-bcd2-400e-a469-8488a6453bb8": {
+  "946b07b7-2b2c-4507-a725-edb270d8e910": {
+    "requires": [],
+    "rewards": [
+      "rocketry/static-test"
+    ]
+  },
+  "4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d": {
     "requires": [
-      "rocketry/static-test",
-      "rocketry/parachute",
-      "rocketry/fuel-mixture"
+      "rocketry/static-test"
     ],
     "rewards": []
   },
   "c754c1e7-244c-41ec-96d4-ad468b6b3e52": {
     "requires": [],
     "rewards": [
+      "rocketry/recovery-run",
       "rocketry/preflight-check",
       "rocketry/fuel-mixture",
       "rocketry/firstlaunch"
     ]
+  },
+  "99c0472d-0d95-4030-a529-df3e8e8349f4": {
+    "requires": [
+      "rocketry/preflight-check"
+    ],
+    "rewards": []
   },
   "63362e5c-9897-4710-8ef6-26540fabd0ca": {
     "requires": [
@@ -459,6 +687,13 @@
     "requires": [
       "rocketry/parachute",
       "rocketry/firstlaunch"
+    ],
+    "rewards": []
+  },
+  "80a83ecc-bcd2-400e-a469-8488a6453bb8": {
+    "requires": [
+      "rocketry/parachute",
+      "rocketry/fuel-mixture"
     ],
     "rewards": []
   },
@@ -510,27 +745,44 @@
     ],
     "rewards": []
   },
+  "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274": {
+    "requires": [],
+    "rewards": [
+      "robotics/wheel-encoders",
+      "robotics/servo-arm",
+      "robotics/odometry-basics",
+      "robotics/gyro-balance",
+      "electronics/tin-soldering-iron",
+      "electronics/thermistor-reading",
+      "electronics/measure-resistance",
+      "electronics/data-logger"
+    ]
+  },
   "71fafa9a-3998-4763-a63a-279acc4ca603": {
     "requires": [
       "robotics/wheel-encoders",
+      "robotics/reflectance-sensors",
       "robotics/odometry-basics"
     ],
-    "rewards": []
+    "rewards": [
+      "robotics/servo-gripper",
+      "robotics/pan-tilt",
+      "robotics/maze-navigation"
+    ]
   },
   "72b4448e-27d9-4746-bd3a-967ff13f501b": {
     "requires": [
       "robotics/wheel-encoders",
+      "robotics/servo-radar",
+      "robotics/servo-control",
+      "robotics/reflectance-sensors",
       "robotics/odometry-basics",
       "robotics/gyro-balance",
-      "programming/graph-temp-data",
+      "programming/thermistor-calibration",
+      "programming/hello-sensor",
       "geothermal/replace-faulty-thermistor",
-      "geothermal/log-heat-pump-warmup",
-      "geothermal/log-ground-temperature",
       "geothermal/install-backup-thermistor",
-      "geothermal/compare-seasonal-ground-temps",
-      "geothermal/compare-depth-ground-temps",
-      "geothermal/check-loop-temp-delta",
-      "geothermal/check-loop-outlet-temp",
+      "geothermal/check-loop-pressure",
       "geothermal/check-loop-inlet-temp",
       "geothermal/calibrate-ground-sensor",
       "electronics/thermistor-reading",
@@ -551,14 +803,23 @@
     ],
     "rewards": [
       "robotics/ultrasonic-rangefinder",
+      "robotics/servo-radar",
       "robotics/servo-control",
-      "robotics/line-follower",
-      "3dprinting/phone-stand"
+      "robotics/reflectance-sensors",
+      "robotics/obstacle-avoidance",
+      "robotics/line-follower"
     ]
+  },
+  "17edf3f2-8b4a-4c62-b3f5-c17236d53430": {
+    "requires": [
+      "robotics/ultrasonic-rangefinder",
+      "robotics/servo-radar",
+      "robotics/reflectance-sensors"
+    ],
+    "rewards": []
   },
   "e976bae6-e33c-428a-a20d-0aa8fde13c6c": {
     "requires": [
-      "robotics/ultrasonic-rangefinder",
       "robotics/servo-radar",
       "robotics/servo-gripper",
       "robotics/servo-control",
@@ -571,26 +832,224 @@
       "electronics/servo-sweep"
     ],
     "rewards": [
+      "electronics/voltage-divider",
+      "electronics/test-gfci-outlet",
+      "electronics/servo-sweep",
       "electronics/measure-arduino-5v",
+      "electronics/light-sensor",
       "electronics/arduino-blink"
     ]
   },
+  "f22293ab-0553-4f6f-8377-093f2a1351c8": {
+    "requires": [
+      "robotics/servo-radar"
+    ],
+    "rewards": []
+  },
+  "d1105b87-8185-4a30-ba55-406384be169f": {
+    "requires": [
+      "robotics/servo-radar",
+      "robotics/servo-control",
+      "programming/hello-sensor",
+      "geothermal/check-loop-inlet-temp",
+      "electronics/voltage-divider",
+      "electronics/thermistor-reading",
+      "electronics/potentiometer-dimmer",
+      "electronics/measure-led-current",
+      "electronics/light-sensor",
+      "electronics/basic-circuit",
+      "electronics/arduino-blink"
+    ],
+    "rewards": []
+  },
+  "3cd82744-d2aa-414e-9f03-80024b624066": {
+    "requires": [
+      "robotics/servo-radar",
+      "robotics/servo-control",
+      "programming/hello-sensor",
+      "geothermal/check-loop-inlet-temp",
+      "electronics/voltage-divider",
+      "electronics/thermistor-reading",
+      "electronics/solder-wire",
+      "electronics/solder-led-harness",
+      "electronics/servo-sweep",
+      "electronics/potentiometer-dimmer",
+      "electronics/measure-led-current",
+      "electronics/light-sensor",
+      "electronics/basic-circuit",
+      "electronics/arduino-blink"
+    ],
+    "rewards": []
+  },
+  "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d": {
+    "requires": [
+      "robotics/servo-radar",
+      "robotics/servo-control",
+      "programming/web-server",
+      "programming/temp-graph",
+      "programming/hello-sensor",
+      "geothermal/monitor-heat-pump-energy",
+      "geothermal/log-heat-pump-warmup",
+      "electronics/thermistor-reading",
+      "electronics/potentiometer-dimmer",
+      "electronics/measure-arduino-5v",
+      "electronics/light-sensor",
+      "electronics/arduino-blink",
+      "devops/ssh-hardening",
+      "devops/private-registry",
+      "devops/monitoring",
+      "devops/log-maintenance",
+      "devops/k3s-deploy",
+      "devops/firewall-rules",
+      "devops/fail2ban",
+      "devops/docker-compose",
+      "devops/ci-pipeline",
+      "devops/auto-updates",
+      "astronomy/star-trails"
+    ],
+    "rewards": []
+  },
+  "d30d7a65-bd11-42a2-89c1-2828e990a3b2": {
+    "requires": [
+      "robotics/servo-radar",
+      "robotics/servo-control",
+      "robotics/servo-arm",
+      "electronics/light-sensor",
+      "electronics/data-logger"
+    ],
+    "rewards": []
+  },
+  "054d7c58-0e39-4f60-b072-e62cd5e879cf": {
+    "requires": [
+      "robotics/servo-radar"
+    ],
+    "rewards": []
+  },
+  "9f2109f5-59c8-4309-8a6c-3c60be744985": {
+    "requires": [
+      "robotics/servo-radar"
+    ],
+    "rewards": []
+  },
+  "b3857812-f50c-4880-810d-c929698599b3": {
+    "requires": [
+      "robotics/servo-gripper",
+      "robotics/servo-control"
+    ],
+    "rewards": []
+  },
   "8299ac3f-c232-46d4-a007-2ad86ec70361": {
     "requires": [
+      "robotics/servo-control",
+      "robotics/servo-arm",
+      "energy/hand-crank-generator"
+    ],
+    "rewards": []
+  },
+  "8a4ccbcf-ee7d-42ff-bfd8-2ed242379872": {
+    "requires": [
+      "robotics/servo-control"
+    ],
+    "rewards": []
+  },
+  "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363": {
+    "requires": [
       "robotics/servo-arm"
+    ],
+    "rewards": []
+  },
+  "8efbfdc9-3725-46b4-baaf-9b070ca99a5d": {
+    "requires": [
+      "robotics/servo-arm"
+    ],
+    "rewards": []
+  },
+  "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96": {
+    "requires": [
+      "robotics/servo-arm"
+    ],
+    "rewards": []
+  },
+  "f763cb7d-4e1a-4146-b304-4d8bfde4df86": {
+    "requires": [
+      "programming/temp-json-api",
+      "programming/temp-graph",
+      "programming/json-endpoint",
+      "programming/json-api",
+      "programming/http-post",
+      "geothermal/check-loop-temp-delta",
+      "geothermal/check-loop-outlet-temp"
+    ],
+    "rewards": [
+      "programming/web-server",
+      "programming/temp-json-api",
+      "programming/temp-alert",
+      "programming/moving-avg-temp",
+      "programming/json-api",
+      "programming/graph-temp"
+    ]
+  },
+  "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8": {
+    "requires": [
+      "programming/web-server",
+      "programming/temp-logger",
+      "programming/temp-json-api",
+      "programming/temp-email",
+      "programming/temp-alert",
+      "programming/stddev-temp",
+      "programming/plot-temp-cli",
+      "programming/moving-avg-temp",
+      "programming/median-temp",
+      "programming/json-endpoint",
+      "programming/json-api",
+      "programming/hello-sensor",
+      "programming/graph-temp",
+      "programming/graph-temp-data",
+      "programming/avg-temp",
+      "geothermal/survey-ground-temperature",
+      "geothermal/purge-loop-air",
+      "geothermal/monitor-heat-pump-energy",
+      "geothermal/log-heat-pump-warmup",
+      "geothermal/log-ground-temperature",
+      "geothermal/compare-seasonal-ground-temps",
+      "geothermal/compare-depth-ground-temps",
+      "geothermal/check-loop-temp-delta",
+      "geothermal/check-loop-outlet-temp",
+      "geothermal/check-loop-inlet-temp",
+      "geothermal/backflush-loop-filter"
+    ],
+    "rewards": [
+      "geothermal/survey-ground-temperature",
+      "geothermal/log-heat-pump-warmup",
+      "geothermal/compare-seasonal-ground-temps",
+      "geothermal/check-loop-pressure",
+      "geothermal/calibrate-ground-sensor"
+    ]
+  },
+  "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed": {
+    "requires": [
+      "programming/web-server",
+      "programming/temp-alert",
+      "programming/stddev-temp",
+      "programming/plot-temp-cli",
+      "programming/moving-avg-temp",
+      "programming/graph-temp",
+      "programming/graph-temp-data",
+      "programming/avg-temp",
+      "geothermal/compare-depth-ground-temps",
+      "geothermal/check-loop-temp-delta",
+      "geothermal/check-loop-inlet-temp"
     ],
     "rewards": []
   },
   "ce140453-c7ef-42c9-b9f9-38acfb4219cf": {
     "requires": [
       "programming/web-server",
-      "programming/stddev-temp",
+      "programming/temp-json-api",
       "programming/moving-avg-temp",
       "programming/median-temp",
       "programming/json-endpoint",
-      "programming/json-api",
       "programming/http-post",
-      "programming/avg-temp",
       "electronics/temperature-plot",
       "electronics/data-logger",
       "devops/prepare-first-node",
@@ -598,9 +1057,27 @@
     ],
     "rewards": []
   },
+  "50360fd0-e296-4ef8-a3a9-00e049318166": {
+    "requires": [
+      "programming/web-server",
+      "programming/temp-graph",
+      "programming/moving-avg-temp",
+      "programming/json-api",
+      "programming/graph-temp",
+      "programming/graph-temp-data",
+      "programming/avg-temp",
+      "geothermal/log-heat-pump-warmup",
+      "geothermal/log-ground-temperature",
+      "geothermal/compare-depth-ground-temps",
+      "geothermal/check-loop-temp-delta"
+    ],
+    "rewards": []
+  },
   "5a6bb713-ed34-4463-94ee-cfe7b8faa45c": {
     "requires": [
       "programming/thermistor-calibration",
+      "programming/hello-sensor",
+      "geothermal/check-loop-inlet-temp",
       "electronics/thermistor-reading",
       "electronics/data-logger"
     ],
@@ -609,6 +1086,8 @@
   "ffe0b74a-f111-4d66-b4c3-d82965a976ac": {
     "requires": [
       "programming/thermistor-calibration",
+      "programming/hello-sensor",
+      "geothermal/check-loop-inlet-temp",
       "electronics/voltage-divider",
       "electronics/thermistor-reading",
       "electronics/light-sensor",
@@ -616,48 +1095,151 @@
     ],
     "rewards": []
   },
-  "8e81b5e5-4aee-402c-bd04-fed9188f8c07": {
+  "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2": {
     "requires": [
       "programming/temp-logger",
       "programming/temp-json-api",
+      "programming/json-endpoint",
+      "programming/hello-sensor",
+      "geothermal/monitor-heat-pump-energy",
+      "geothermal/log-heat-pump-warmup",
+      "geothermal/log-ground-temperature",
+      "geothermal/compare-depth-ground-temps",
+      "geothermal/check-loop-temp-delta",
+      "geothermal/check-loop-outlet-temp",
+      "geothermal/check-loop-inlet-temp"
+    ],
+    "rewards": []
+  },
+  "c377a2ff-1391-4ad8-a150-1e4531067406": {
+    "requires": [
       "programming/temp-graph",
-      "programming/temp-email",
+      "programming/json-api",
+      "geothermal/check-loop-temp-delta"
+    ],
+    "rewards": []
+  },
+  "8e81b5e5-4aee-402c-bd04-fed9188f8c07": {
+    "requires": [
       "programming/temp-alert",
-      "programming/graph-temp",
-      "hydroponics/temp-check",
       "geothermal/survey-ground-temperature",
+      "geothermal/compare-seasonal-ground-temps",
       "electronics/thermometer-calibration",
-      "aquaria/water-change",
-      "aquaria/thermometer",
-      "aquaria/heater-install"
+      "aquaria/thermometer"
     ],
     "rewards": [
       "geothermal/survey-ground-temperature"
     ]
   },
-  "71efa72a-8c87-4dc2-8e2c-9119bb28fe50": {
+  "978ce094-f4fa-4b55-9e1a-2ea76531989d": {
+    "requires": [
+      "hydroponics/bucket_10"
+    ],
+    "rewards": [
+      "hydroponics/tub-scrub",
+      "hydroponics/stevia",
+      "hydroponics/regrow-stevia",
+      "hydroponics/plug-soak",
+      "hydroponics/nutrient-check",
+      "hydroponics/grow-light",
+      "hydroponics/ec-calibrate",
+      "hydroponics/bucket_10"
+    ]
+  },
+  "68e50400-fa25-4459-9633-2304a67096c9": {
     "requires": [
       "hydroponics/tub-scrub",
+      "hydroponics/netcup-clean"
+    ],
+    "rewards": []
+  },
+  "6498967e-284e-46ff-bee7-10e3907f60fd": {
+    "requires": [
+      "hydroponics/tub-scrub",
+      "hydroponics/netcup-clean"
+    ],
+    "rewards": []
+  },
+  "5599c466-91e9-46fb-8d8b-11388e4f8f9c": {
+    "requires": [],
+    "rewards": [
       "hydroponics/top-off",
       "hydroponics/root-rinse",
+      "hydroponics/pump-prime",
+      "hydroponics/ph-test",
+      "hydroponics/netcup-clean",
+      "hydroponics/lettuce",
+      "hydroponics/filter-clean",
+      "hydroponics/basil",
+      "hydroponics/air-stone-soak"
+    ]
+  },
+  "fc2bb989-f192-4891-8bde-78ae631dae78": {
+    "requires": [
+      "hydroponics/top-off",
+      "hydroponics/reservoir-refresh",
+      "hydroponics/regrow-stevia",
+      "hydroponics/pump-install",
+      "hydroponics/ph-test",
+      "hydroponics/nutrient-check",
+      "hydroponics/basil"
+    ],
+    "rewards": [
+      "hydroponics/top-off"
+    ]
+  },
+  "71efa72a-8c87-4dc2-8e2c-9119bb28fe50": {
+    "requires": [
+      "hydroponics/top-off",
+      "hydroponics/root-rinse",
+      "hydroponics/plug-soak",
       "hydroponics/netcup-clean",
       "hydroponics/mint-cutting",
       "hydroponics/filter-clean",
-      "hydroponics/bucket_10",
       "hydroponics/basil",
       "hydroponics/air-stone-soak",
+      "aquaria/water-change",
+      "aquaria/walstad",
+      "aquaria/top-off",
+      "aquaria/sponge-filter",
+      "aquaria/ph-strip-test",
+      "aquaria/floating-plants",
       "aquaria/filter-rinse"
     ],
+    "rewards": []
+  },
+  "bc979305-53ef-4be8-9d21-c59e3bfa7f06": {
+    "requires": [
+      "hydroponics/top-off",
+      "hydroponics/ec-check",
+      "hydroponics/ec-calibrate"
+    ],
+    "rewards": []
+  },
+  "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57": {
+    "requires": [
+      "hydroponics/lettuce"
+    ],
     "rewards": [
-      "aquaria/goldfish"
+      "hydroponics/temp-check",
+      "hydroponics/reservoir-refresh",
+      "hydroponics/pump-install",
+      "hydroponics/ph-check",
+      "hydroponics/mint-cutting",
+      "hydroponics/lettuce",
+      "hydroponics/ec-check",
+      "composting/start"
     ]
   },
-  "ca7c1069-4ba3-4339-9a10-0b690a690e60": {
+  "b81e67a1-28b0-4cd8-b202-778f66a95a7b": {
     "requires": [
-      "hydroponics/temp-check",
-      "aquaria/thermometer",
-      "aquaria/ph-strip-test",
-      "aquaria/goldfish"
+      "hydroponics/temp-check"
+    ],
+    "rewards": []
+  },
+  "6305ae99-c0b2-49f8-8d58-a1d81b765342": {
+    "requires": [
+      "hydroponics/temp-check"
     ],
     "rewards": []
   },
@@ -674,20 +1256,90 @@
     ],
     "rewards": []
   },
-  "fc2bb989-f192-4891-8bde-78ae631dae78": {
+  "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae": {
+    "requires": [
+      "hydroponics/stevia"
+    ],
+    "rewards": []
+  },
+  "11aa585c-fdeb-41ba-9191-be4bcdaa23c4": {
+    "requires": [
+      "hydroponics/root-rinse",
+      "hydroponics/basil"
+    ],
+    "rewards": [
+      "hydroponics/basil"
+    ]
+  },
+  "15ff1896-7a19-4060-bfb3-77b62ec4fd5a": {
+    "requires": [
+      "hydroponics/root-rinse"
+    ],
+    "rewards": []
+  },
+  "dc765172-c2e4-40dd-bb5a-a399bf6d6d77": {
     "requires": [
       "hydroponics/reservoir-refresh",
-      "hydroponics/nutrient-check",
-      "hydroponics/ec-check",
-      "hydroponics/basil"
+      "hydroponics/regrow-stevia"
+    ],
+    "rewards": []
+  },
+  "997eaba9-25ee-43d5-bbdc-5d6adf03adfa": {
+    "requires": [
+      "hydroponics/reservoir-refresh",
+      "hydroponics/pump-prime",
+      "hydroponics/pump-install",
+      "hydroponics/plug-soak",
+      "hydroponics/ph-test",
+      "hydroponics/ph-check",
+      "hydroponics/netcup-clean",
+      "hydroponics/mint-cutting",
+      "hydroponics/filter-clean",
+      "hydroponics/air-stone-soak",
+      "firstaid/stop-nosebleed",
+      "firstaid/sanitize-pocket-mask",
+      "firstaid/remove-splinter",
+      "firstaid/learn-cpr",
+      "firstaid/dispose-expired",
+      "firstaid/dispose-bandages",
+      "firstaid/change-bandage",
+      "composting/turn-pile",
+      "composting/sift-compost",
+      "aquaria/water-testing",
+      "aquaria/water-change",
+      "aquaria/sponge-filter",
+      "aquaria/ph-strip-test",
+      "aquaria/log-water-parameters",
+      "aquaria/floating-plants",
+      "aquaria/filter-rinse",
+      "aquaria/balance-ph"
+    ],
+    "rewards": []
+  },
+  "b2248af9-151b-4268-989d-4bb408a6147c": {
+    "requires": [
+      "hydroponics/regrow-stevia"
+    ],
+    "rewards": []
+  },
+  "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076": {
+    "requires": [
+      "hydroponics/pump-prime",
+      "hydroponics/pump-install",
+      "hydroponics/ph-check"
+    ],
+    "rewards": []
+  },
+  "bd215e1e-5477-4b2f-8420-0227180a3531": {
+    "requires": [
+      "hydroponics/pump-prime",
+      "hydroponics/pump-install"
     ],
     "rewards": []
   },
   "584ca717-4ce1-4ca1-bcd3-38272a52768a": {
     "requires": [
-      "hydroponics/pump-prime",
       "hydroponics/pump-install",
-      "hydroponics/nutrient-check",
       "geothermal/purge-loop-air",
       "geothermal/backflush-loop-filter"
     ],
@@ -700,6 +1352,7 @@
     "requires": [
       "hydroponics/plug-soak",
       "hydroponics/mint-cutting",
+      "hydroponics/lettuce",
       "hydroponics/basil"
     ],
     "rewards": []
@@ -710,69 +1363,23 @@
     ],
     "rewards": []
   },
-  "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04": {
+  "5456a6a5-5da9-46a0-aa4e-a74b6814404a": {
     "requires": [
-      "hydroponics/ph-test"
+      "hydroponics/ph-test",
+      "hydroponics/ph-check"
     ],
     "rewards": []
   },
-  "13167d6a-5617-4931-8a6e-6f463c6b8835": {
+  "cad7d051-e3fb-4f1c-9d72-358076ee732e": {
     "requires": [
-      "hydroponics/ph-check",
-      "chemistry/precipitation-reaction",
-      "chemistry/ph-test",
-      "chemistry/ph-adjustment",
-      "chemistry/buffer-solution",
-      "chemistry/acid-neutralization",
-      "chemistry/acid-dilution",
-      "aquaria/ph-strip-test",
-      "aquaria/balance-ph"
-    ],
-    "rewards": [
-      "aquaria/ph-strip-test"
-    ]
-  },
-  "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150": {
-    "requires": [
-      "hydroponics/nutrient-check"
-    ],
-    "rewards": [
-      "hydroponics/basil"
-    ]
-  },
-  "997eaba9-25ee-43d5-bbdc-5d6adf03adfa": {
-    "requires": [
-      "hydroponics/nutrient-check",
-      "firstaid/wound-care",
-      "firstaid/stop-nosebleed",
-      "firstaid/remove-splinter",
-      "firstaid/learn-cpr",
-      "firstaid/dispose-expired",
-      "chemistry/ph-test",
-      "chemistry/acid-dilution",
-      "aquaria/water-testing",
-      "aquaria/water-change",
-      "aquaria/log-water-parameters"
+      "hydroponics/ph-test",
+      "hydroponics/ph-check"
     ],
     "rewards": []
   },
-  "f1d1b5ad-ef3b-4ba7-9e69-4b8c97043d62": {
+  "4d1a3894-e471-4483-8ae6-c6e12db1afae": {
     "requires": [
-      "hydroponics/nutrient-check"
-    ],
-    "rewards": []
-  },
-  "092dae11-237a-43cc-b342-246aabbba258": {
-    "requires": [
-      "hydroponics/nutrient-check"
-    ],
-    "rewards": []
-  },
-  "71655665-4a59-41f4-9084-dad4d976df91": {
-    "requires": [
-      "hydroponics/nutrient-check",
-      "hydroponics/ec-check",
-      "hydroponics/ec-calibrate"
+      "hydroponics/ph-check"
     ],
     "rewards": []
   },
@@ -782,13 +1389,37 @@
     ],
     "rewards": []
   },
-  "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57": {
+  "d4a73557-e5a8-458a-80d9-6c1b46667428": {
+    "requires": [
+      "hydroponics/netcup-clean"
+    ],
+    "rewards": []
+  },
+  "78a45c1f-a791-44f1-88f4-dc5059c66c89": {
     "requires": [
       "hydroponics/lettuce"
     ],
     "rewards": [
       "hydroponics/lettuce"
     ]
+  },
+  "021c1c24-06f6-4917-b054-0fa3e33868f0": {
+    "requires": [
+      "hydroponics/lettuce"
+    ],
+    "rewards": []
+  },
+  "7d119fa6-26e3-42c5-bbe4-3e7be458ab96": {
+    "requires": [
+      "hydroponics/lettuce"
+    ],
+    "rewards": []
+  },
+  "fbf2d3a5-1d80-431b-84f4-6bf4677ed619": {
+    "requires": [
+      "hydroponics/lettuce"
+    ],
+    "rewards": []
   },
   "c8946a5f-caff-4e6d-9b9b-4dbf02bcd000": {
     "requires": [
@@ -804,44 +1435,48 @@
     ],
     "rewards": []
   },
+  "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56": {
+    "requires": [
+      "hydroponics/filter-clean",
+      "aquaria/sponge-filter",
+      "aquaria/filter-rinse"
+    ],
+    "rewards": []
+  },
+  "606c4f47-ca8f-4458-bc7f-0ab2957ef641": {
+    "requires": [
+      "hydroponics/filter-clean",
+      "aquaria/sponge-filter",
+      "aquaria/filter-rinse"
+    ],
+    "rewards": []
+  },
+  "6f08e704-1086-4fef-ad0a-f48922a5cfd0": {
+    "requires": [
+      "hydroponics/filter-clean",
+      "aquaria/sponge-filter",
+      "aquaria/heater-install",
+      "aquaria/filter-rinse"
+    ],
+    "rewards": []
+  },
+  "71655665-4a59-41f4-9084-dad4d976df91": {
+    "requires": [
+      "hydroponics/ec-calibrate"
+    ],
+    "rewards": []
+  },
   "d3d8bb59-8364-46b2-ad42-c5f56cc72b40": {
     "requires": [
       "hydroponics/ec-calibrate"
     ],
     "rewards": []
   },
-  "978ce094-f4fa-4b55-9e1a-2ea76531989d": {
-    "requires": [],
-    "rewards": [
+  "86b5d874-a04e-426f-be77-0f7047789faf": {
+    "requires": [
       "hydroponics/bucket_10"
-    ]
-  },
-  "0564d441-7367-412e-b709-dad770814a39": {
-    "requires": [
-      "composting/turn-pile",
-      "composting/start",
-      "aquaria/water-change",
-      "aquaria/top-off",
-      "aquaria/shrimp"
     ],
-    "rewards": [
-      "hydroponics/bucket_10",
-      "composting/start"
-    ]
-  },
-  "5599c466-91e9-46fb-8d8b-11388e4f8f9c": {
-    "requires": [],
-    "rewards": [
-      "hydroponics/basil"
-    ]
-  },
-  "11aa585c-fdeb-41ba-9191-be4bcdaa23c4": {
-    "requires": [
-      "hydroponics/basil"
-    ],
-    "rewards": [
-      "hydroponics/basil"
-    ]
+    "rewards": []
   },
   "799ace33-1336-46c0-904a-9f16778230f1": {
     "requires": [
@@ -863,6 +1498,12 @@
     ],
     "rewards": []
   },
+  "ef5a843f-0a9d-41e2-b2bc-81fc9f99a150": {
+    "requires": [],
+    "rewards": [
+      "hydroponics/basil"
+    ]
+  },
   "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be": {
     "requires": [
       "hydroponics/basil"
@@ -875,7 +1516,13 @@
     ],
     "rewards": []
   },
-  "9f91173d-2609-4127-896d-7578078135db": {
+  "3b094479-ed97-46d6-8cab-ea91752972dd": {
+    "requires": [
+      "hydroponics/air-stone-soak"
+    ],
+    "rewards": []
+  },
+  "bd887124-605d-4268-8a6c-684cb48de1a6": {
     "requires": [
       "hydroponics/air-stone-soak"
     ],
@@ -885,44 +1532,21 @@
     "requires": [],
     "rewards": [
       "geothermal/survey-ground-temperature",
-      "energy/solar"
+      "geothermal/purge-loop-air",
+      "geothermal/install-backup-thermistor",
+      "geothermal/check-loop-temp-delta",
+      "geothermal/check-loop-inlet-temp",
+      "energy/wind-turbine",
+      "energy/solar",
+      "energy/portable-solar-panel",
+      "energy/offgrid-charger",
+      "energy/charge-controller-setup",
+      "energy/battery-maintenance"
     ]
   },
-  "55ace400-79ee-4b24-b7da-0b0435ab7d72": {
+  "63738dd8-757a-49c5-b161-e124e3eac3be": {
     "requires": [
-      "firstaid/wound-care"
-    ],
-    "rewards": []
-  },
-  "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a": {
-    "requires": [
-      "firstaid/wound-care",
-      "firstaid/stop-nosebleed",
-      "firstaid/restock-kit",
-      "firstaid/remove-splinter",
-      "firstaid/learn-cpr",
-      "firstaid/change-bandage"
-    ],
-    "rewards": []
-  },
-  "0dde854e-7fcb-40ac-88ea-9afd9196f856": {
-    "requires": [
-      "firstaid/wound-care"
-    ],
-    "rewards": []
-  },
-  "1b1030bf-9767-4b16-9ff6-a8e7de28b689": {
-    "requires": [
-      "firstaid/wound-care",
-      "firstaid/restock-kit",
-      "firstaid/change-bandage"
-    ],
-    "rewards": []
-  },
-  "7a4b8892-365f-4a56-93ce-127aa989f50d": {
-    "requires": [
-      "firstaid/wound-care",
-      "firstaid/dispose-bandages"
+      "geothermal/calibrate-ground-sensor"
     ],
     "rewards": []
   },
@@ -932,14 +1556,51 @@
       "firstaid/treat-burn",
       "firstaid/stop-nosebleed",
       "firstaid/splint-limb",
+      "firstaid/sanitize-pocket-mask",
+      "firstaid/remove-splinter",
       "firstaid/learn-cpr",
+      "firstaid/dispose-expired",
+      "firstaid/change-bandage",
       "firstaid/assemble-kit"
     ],
-    "rewards": []
+    "rewards": [
+      "firstaid/wound-care",
+      "firstaid/splint-limb",
+      "firstaid/remove-splinter",
+      "firstaid/dispose-expired",
+      "firstaid/assemble-kit"
+    ]
+  },
+  "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a": {
+    "requires": [
+      "firstaid/stop-nosebleed",
+      "firstaid/restock-kit",
+      "firstaid/remove-splinter",
+      "firstaid/learn-cpr"
+    ],
+    "rewards": [
+      "firstaid/treat-burn",
+      "firstaid/sanitize-pocket-mask",
+      "firstaid/learn-cpr",
+      "firstaid/dispose-bandages"
+    ]
+  },
+  "1b1030bf-9767-4b16-9ff6-a8e7de28b689": {
+    "requires": [
+      "firstaid/restock-kit",
+      "firstaid/change-bandage"
+    ],
+    "rewards": [
+      "firstaid/stop-nosebleed",
+      "firstaid/restock-kit",
+      "firstaid/flashlight-battery",
+      "firstaid/change-bandage"
+    ]
   },
   "cc7d36e7-c66d-466f-9390-f7a365d857b9": {
     "requires": [
       "firstaid/stop-nosebleed",
+      "firstaid/splint-limb",
       "firstaid/restock-kit"
     ],
     "rewards": []
@@ -966,8 +1627,11 @@
   "9a72fb16-fc69-45c5-beca-f25c27028977": {
     "requires": [
       "firstaid/flashlight-battery",
+      "astronomy/star-trails",
+      "astronomy/saturn-rings",
       "astronomy/orion-nebula",
       "astronomy/observe-moon",
+      "astronomy/north-star",
       "astronomy/meteor-shower",
       "astronomy/light-pollution",
       "astronomy/andromeda"
@@ -977,7 +1641,12 @@
   "5127e156-3009-4db4-85ac-e3ea070b68f2": {
     "requires": [
       "firstaid/flashlight-battery",
+      "energy/wind-turbine",
+      "energy/power-inverter",
+      "energy/hand-crank-generator",
+      "energy/battery-maintenance",
       "electronics/voltage-divider",
+      "electronics/resistor-color-check",
       "electronics/measure-resistance",
       "electronics/measure-led-current",
       "electronics/measure-arduino-5v",
@@ -986,11 +1655,13 @@
       "electronics/continuity-test",
       "electronics/check-battery-voltage"
     ],
-    "rewards": []
+    "rewards": [
+      "energy/battery-maintenance"
+    ]
   },
-  "80d30825-a42b-4add-b715-322e1713952c": {
+  "7a4b8892-365f-4a56-93ce-127aa989f50d": {
     "requires": [
-      "firstaid/flashlight-battery"
+      "firstaid/dispose-bandages"
     ],
     "rewards": []
   },
@@ -998,18 +1669,72 @@
     "requires": [
       "energy/wind-turbine"
     ],
+    "rewards": []
+  },
+  "67a682f8-a8a4-4a14-8806-5ccd3620fd3b": {
+    "requires": [
+      "energy/wind-turbine",
+      "energy/solar",
+      "energy/portable-solar-panel",
+      "energy/offgrid-charger",
+      "energy/charge-controller-setup",
+      "energy/battery-maintenance"
+    ],
     "rewards": [
-      "energy/wind-turbine"
+      "energy/solar",
+      "energy/portable-solar-panel",
+      "energy/offgrid-charger",
+      "energy/charge-controller-setup",
+      "energy/battery-maintenance"
     ]
+  },
+  "0ccc4a37-b719-4f7c-ba73-9e4becdcd778": {
+    "requires": [
+      "energy/wind-turbine",
+      "energy/power-inverter",
+      "energy/portable-solar-panel",
+      "energy/offgrid-charger",
+      "energy/hand-crank-generator",
+      "energy/charge-controller-setup"
+    ],
+    "rewards": [
+      "energy/portable-solar-panel",
+      "energy/offgrid-charger",
+      "energy/charge-controller-setup"
+    ]
+  },
+  "6a3772b6-2550-434f-89f9-2eb53d5b139f": {
+    "requires": [
+      "energy/wind-turbine",
+      "electronics/solder-wire",
+      "electronics/solder-led-harness"
+    ],
+    "rewards": []
+  },
+  "ce92a1a9-c817-40f0-92b1-24aff053903d": {
+    "requires": [
+      "energy/wind-turbine",
+      "electronics/continuity-test"
+    ],
+    "rewards": []
+  },
+  "34540aad-4c25-4268-a158-a291283bc7a0": {
+    "requires": [
+      "energy/wind-turbine"
+    ],
+    "rewards": []
   },
   "02b32152-a7b2-458e-9643-7b754c722165": {
     "requires": [
       "energy/solar",
       "energy/portable-solar-panel",
-      "energy/offgrid-charger"
+      "energy/offgrid-charger",
+      "energy/charge-controller-setup",
+      "energy/battery-maintenance"
     ],
     "rewards": [
       "energy/solar",
+      "energy/solar-tracker",
       "energy/solar-1kWh",
       "energy/portable-solar-panel",
       "energy/offgrid-charger",
@@ -1021,37 +1746,10 @@
       "energy/dWatt-1e3",
       "energy/dSolar-1kW",
       "energy/dSolar-10kW",
-      "energy/dSolar-100kW"
-    ]
-  },
-  "cfe87611-623a-45b0-9243-422cd8a73a16": {
-    "requires": [
-      "energy/solar",
-      "energy/power-inverter",
-      "energy/offgrid-charger",
-      "energy/hand-crank-generator",
+      "energy/dSolar-100kW",
+      "energy/charge-controller-setup",
       "energy/biogas-digester",
-      "energy/battery-upgrade",
-      "energy/battery-maintenance",
-      "electronics/check-battery-voltage"
-    ],
-    "rewards": [
-      "energy/solar",
-      "energy/offgrid-charger",
-      "energy/hand-crank-generator",
-      "energy/biogas-digester"
-    ]
-  },
-  "67a682f8-a8a4-4a14-8806-5ccd3620fd3b": {
-    "requires": [
-      "energy/solar",
-      "energy/offgrid-charger",
-      "energy/charge-controller-setup"
-    ],
-    "rewards": [
-      "energy/solar",
-      "energy/offgrid-charger",
-      "energy/charge-controller-setup"
+      "energy/battery-maintenance"
     ]
   },
   "3720a674-e205-4950-aa1d-b10dca1885ca": {
@@ -1064,8 +1762,7 @@
   },
   "e0590418-22c7-4885-9c9e-1d1cdafb78d6": {
     "requires": [
-      "energy/solar",
-      "energy/solar-tracker"
+      "energy/solar"
     ],
     "rewards": [
       "energy/solar-tracker"
@@ -1074,17 +1771,78 @@
   "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a": {
     "requires": [
       "energy/solar",
+      "energy/solar-tracker",
       "energy/portable-solar-panel",
+      "energy/offgrid-charger",
       "energy/dSolar-1kW",
       "energy/dSolar-10kW",
       "energy/dSolar-100kW",
-      "energy/charge-controller-setup"
+      "energy/charge-controller-setup",
+      "energy/battery-upgrade",
+      "energy/battery-maintenance"
+    ],
+    "rewards": []
+  },
+  "130b5501-459a-48a0-aafa-ba54bc6555a6": {
+    "requires": [],
+    "rewards": [
+      "energy/solar-tracker"
+    ]
+  },
+  "648aee3c-907e-4cd1-a361-49c4bd771102": {
+    "requires": [],
+    "rewards": [
+      "energy/solar-tracker"
+    ]
+  },
+  "26b4df13-d5eb-44fd-939f-671a2f1aa8f0": {
+    "requires": [],
+    "rewards": [
+      "energy/solar-tracker"
+    ]
+  },
+  "8ead8821-57e9-4aef-a3fb-b8d6cf2ef326": {
+    "requires": [
+      "energy/solar-tracker"
     ],
     "rewards": []
   },
   "8bfdedf6-79a4-4527-a43d-4d57f793ac52": {
     "requires": [
-      "energy/solar-1kWh"
+      "energy/solar-1kWh",
+      "energy/battery-upgrade"
+    ],
+    "rewards": []
+  },
+  "082481a4-5e40-43e6-8542-0e64a3bd92d7": {
+    "requires": [
+      "energy/power-inverter"
+    ],
+    "rewards": []
+  },
+  "466cb507-6beb-4c20-967b-4f1fda1d6463": {
+    "requires": [
+      "energy/power-inverter"
+    ],
+    "rewards": []
+  },
+  "2e6f7453-6b8a-4e04-8ea6-1ddba490019f": {
+    "requires": [
+      "energy/power-inverter"
+    ],
+    "rewards": []
+  },
+  "8e540f94-91e0-47a1-b6ca-78e8b48aefac": {
+    "requires": [
+      "energy/portable-solar-panel",
+      "energy/offgrid-charger",
+      "energy/charge-controller-setup"
+    ],
+    "rewards": []
+  },
+  "82577af7-6724-4cb2-8922-f7140e550145": {
+    "requires": [
+      "energy/offgrid-charger"
     ],
     "rewards": []
   },
@@ -1107,10 +1865,35 @@
       "electronics/basic-circuit"
     ]
   },
-  "82577af7-6724-4cb2-8922-f7140e550145": {
+  "22a50cfd-4433-4ce7-bbed-e4038338191b": {
     "requires": [
       "energy/offgrid-charger",
-      "astronomy/iss-photo"
+      "energy/charge-controller-setup"
+    ],
+    "rewards": []
+  },
+  "2a9083b7-8578-45e3-8d76-7a298462f847": {
+    "requires": [
+      "energy/offgrid-charger"
+    ],
+    "rewards": []
+  },
+  "8aa6dc27-dc42-4622-ac88-cbd57f48625f": {
+    "requires": [
+      "energy/hand-crank-generator",
+      "3dprinting/temperature-tower",
+      "3dprinting/start",
+      "3dprinting/calibration-cube",
+      "3dprinting/blob-of-death"
+    ],
+    "rewards": [
+      "3dprinting/start"
+    ]
+  },
+  "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6": {
+    "requires": [
+      "energy/hand-crank-generator",
+      "completionist/v2"
     ],
     "rewards": []
   },
@@ -1132,21 +1915,9 @@
     ],
     "rewards": []
   },
-  "dc9c057e-2bd1-4bcc-b06c-2e18344ce3e5": {
+  "afb2b5a3-60e2-4863-b2db-e4d280145128": {
     "requires": [
-      "energy/biogas-digester"
-    ],
-    "rewards": []
-  },
-  "d1105b87-8185-4a30-ba55-406384be169f": {
-    "requires": [
-      "electronics/voltage-divider",
-      "electronics/thermistor-reading",
-      "electronics/potentiometer-dimmer",
-      "electronics/measure-led-current",
-      "electronics/light-sensor",
-      "electronics/basic-circuit",
-      "electronics/arduino-blink"
+      "energy/hand-crank-generator"
     ],
     "rewards": []
   },
@@ -1163,21 +1934,6 @@
     ],
     "rewards": []
   },
-  "3cd82744-d2aa-414e-9f03-80024b624066": {
-    "requires": [
-      "electronics/voltage-divider",
-      "electronics/thermistor-reading",
-      "electronics/solder-wire",
-      "electronics/solder-led-harness",
-      "electronics/servo-sweep",
-      "electronics/potentiometer-dimmer",
-      "electronics/measure-led-current",
-      "electronics/light-sensor",
-      "electronics/basic-circuit",
-      "electronics/arduino-blink"
-    ],
-    "rewards": []
-  },
   "828d6c3b-66a5-4064-b221-97630274502b": {
     "requires": [
       "electronics/voltage-divider",
@@ -1186,26 +1942,6 @@
       "electronics/basic-circuit"
     ],
     "rewards": []
-  },
-  "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d": {
-    "requires": [
-      "electronics/thermistor-reading",
-      "electronics/potentiometer-dimmer",
-      "electronics/measure-arduino-5v",
-      "electronics/light-sensor",
-      "electronics/arduino-blink",
-      "devops/ssh-hardening",
-      "devops/firewall-rules"
-    ],
-    "rewards": []
-  },
-  "5562d728-8e62-43b2-9b3d-77cebd2ab481": {
-    "requires": [
-      "electronics/test-gfci-outlet"
-    ],
-    "rewards": [
-      "electronics/continuity-test"
-    ]
   },
   "4379a2f8-7cec-4bea-949b-ad50514d36ff": {
     "requires": [
@@ -1218,7 +1954,8 @@
   },
   "87f670ce-3630-42bb-84c0-9243cf630d05": {
     "requires": [
-      "electronics/tin-soldering-iron"
+      "electronics/tin-soldering-iron",
+      "electronics/solder-led-harness"
     ],
     "rewards": []
   },
@@ -1238,25 +1975,33 @@
   "f6bb2c1a-0001-46bd-998a-388a488b5b5c": {
     "requires": [],
     "rewards": [
+      "electronics/thermometer-calibration",
+      "electronics/temperature-plot",
       "electronics/solder-wire",
-      "electronics/solder-led-harness"
+      "electronics/solder-led-harness",
+      "electronics/potentiometer-dimmer",
+      "electronics/desolder-component"
     ]
   },
-  "6a3772b6-2550-434f-89f9-2eb53d5b139f": {
+  "5562d728-8e62-43b2-9b3d-77cebd2ab481": {
     "requires": [
-      "electronics/solder-wire"
+      "electronics/test-gfci-outlet"
     ],
-    "rewards": []
+    "rewards": [
+      "electronics/continuity-test"
+    ]
   },
   "96083990-f333-4e42-ab04-7eb2a234570e": {
     "requires": [
-      "electronics/solder-wire"
+      "electronics/solder-wire",
+      "electronics/solder-led-harness"
     ],
     "rewards": []
   },
   "dad7f853-ccc9-40be-b226-89272708db84": {
     "requires": [
       "electronics/solder-wire",
+      "electronics/solder-led-harness",
       "electronics/desolder-component"
     ],
     "rewards": []
@@ -1275,8 +2020,7 @@
   },
   "5029f7cb-3359-4153-b7ca-4b53988ac086": {
     "requires": [
-      "electronics/solder-wire",
-      "3dprinting/nozzle-clog"
+      "electronics/solder-wire"
     ],
     "rewards": []
   },
@@ -1288,6 +2032,12 @@
       "electronics/led-polarity",
       "electronics/basic-circuit",
       "electronics/arduino-blink"
+    ],
+    "rewards": []
+  },
+  "6da4a788-b743-4682-8dbe-f23d71435aa4": {
+    "requires": [
+      "electronics/solder-led-harness"
     ],
     "rewards": []
   },
@@ -1305,24 +2055,9 @@
     ],
     "rewards": []
   },
-  "be3aaed8-13cc-4937-95d5-6e2c952c6612": {
-    "requires": [
-      "electronics/measure-arduino-5v",
-      "electronics/light-sensor",
-      "electronics/arduino-blink"
-    ],
-    "rewards": []
-  },
   "6301ff22-49c9-468b-88aa-cafedfd5dcd3": {
     "requires": [
       "electronics/light-sensor"
-    ],
-    "rewards": []
-  },
-  "d30d7a65-bd11-42a2-89c1-2828e990a3b2": {
-    "requires": [
-      "electronics/light-sensor",
-      "electronics/data-logger"
     ],
     "rewards": []
   },
@@ -1338,16 +2073,33 @@
     ],
     "rewards": []
   },
-  "ce92a1a9-c817-40f0-92b1-24aff053903d": {
+  "df7e94e2-76b9-4865-b843-2ec21feb258e": {
     "requires": [
-      "electronics/continuity-test",
-      "3dprinting/filament-change"
+      "devops/ssh-hardening",
+      "devops/ssd-boot",
+      "devops/private-registry",
+      "devops/monitoring",
+      "devops/k3s-deploy",
+      "devops/firewall-rules",
+      "devops/fail2ban",
+      "devops/enable-https",
+      "devops/docker-compose",
+      "devops/daily-backups",
+      "devops/auto-updates"
     ],
     "rewards": []
   },
-  "946bc4dd-32ee-434c-a8ed-d70cdce617f4": {
+  "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c": {
     "requires": [
-      "electronics/continuity-test"
+      "devops/ssd-boot",
+      "devops/prepare-first-node"
+    ],
+    "rewards": []
+  },
+  "b93065cb-d91e-4712-8edd-a6cfce5fee45": {
+    "requires": [
+      "devops/ssd-boot",
+      "devops/pi-cluster-hardware"
     ],
     "rewards": []
   },
@@ -1357,25 +2109,14 @@
     ],
     "rewards": []
   },
-  "e1d61ad5-7f27-4e9b-bfc1-31853d073f5c": {
+  "36042a2b-861a-4192-a991-98778898963a": {
     "requires": [
-      "devops/prepare-first-node"
+      "devops/prepare-first-node",
+      "devops/pi-cluster-hardware"
     ],
     "rewards": []
   },
   "926cd4e3-3704-423b-96d9-d3da0421b67a": {
-    "requires": [
-      "devops/pi-cluster-hardware"
-    ],
-    "rewards": []
-  },
-  "b93065cb-d91e-4712-8edd-a6cfce5fee45": {
-    "requires": [
-      "devops/pi-cluster-hardware"
-    ],
-    "rewards": []
-  },
-  "36042a2b-861a-4192-a991-98778898963a": {
     "requires": [
       "devops/pi-cluster-hardware"
     ],
@@ -1409,46 +2150,284 @@
     ],
     "rewards": []
   },
+  "afd6a926-bd21-4242-ba79-d25fc152de03": {
+    "requires": [
+      "devops/enable-https",
+      "devops/auto-updates"
+    ],
+    "rewards": []
+  },
+  "fc89727c-8fd9-4b40-a186-40a0c56c6063": {
+    "requires": [
+      "devops/enable-https"
+    ],
+    "rewards": []
+  },
+  "d3d0a7bd-e338-48f1-86ab-ddcc3626cecc": {
+    "requires": [
+      "devops/enable-https"
+    ],
+    "rewards": []
+  },
   "306793ac-e420-4859-9742-9076fff6ab57": {
     "requires": [
       "devops/ci-pipeline"
     ],
     "rewards": []
   },
+  "d8346735-7f1c-4309-a400-6cf6801534f7": {
+    "requires": [
+      "devops/auto-updates"
+    ],
+    "rewards": []
+  },
   "4d21c498-9225-4d0b-9a1a-ed65e349f0a8": {
+    "requires": [
+      "composting/turn-pile"
+    ],
+    "rewards": [
+      "composting/turn-pile"
+    ]
+  },
+  "2b57a38d-0486-40e8-a50d-d893541b50e9": {
+    "requires": [
+      "composting/turn-pile"
+    ],
+    "rewards": [
+      "composting/turn-pile"
+    ]
+  },
+  "0564d441-7367-412e-b709-dad770814a39": {
+    "requires": [
+      "composting/turn-pile",
+      "aquaria/water-change",
+      "aquaria/walstad",
+      "aquaria/top-off",
+      "aquaria/sponge-filter",
+      "aquaria/ph-strip-test"
+    ],
+    "rewards": []
+  },
+  "025862b3-8377-4396-ab32-aa572bdc3260": {
+    "requires": [
+      "composting/turn-pile",
+      "composting/start"
+    ],
+    "rewards": []
+  },
+  "ff89afa1-2f88-44f2-a414-7fb1eda08735": {
     "requires": [
       "composting/turn-pile",
       "composting/check-temperature"
     ],
     "rewards": []
   },
-  "2b57a38d-0486-40e8-a50d-d893541b50e9": {
+  "e034d081-a29e-4040-830f-a192304db50d": {
     "requires": [
-      "composting/turn-pile"
+      "composting/turn-pile",
+      "composting/check-temperature"
+    ],
+    "rewards": []
+  },
+  "723f5795-735c-46ee-8a33-30a3a403cdfd": {
+    "requires": [
+      "composting/turn-pile",
+      "composting/check-temperature"
     ],
     "rewards": []
   },
   "4796b4a9-0927-4b46-a41f-076ebaff01bb": {
+    "requires": [],
+    "rewards": [
+      "composting/start"
+    ]
+  },
+  "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1": {
     "requires": [
       "composting/sift-compost"
+    ],
+    "rewards": [
+      "composting/sift-compost",
+      "composting/check-temperature"
+    ]
+  },
+  "b281360b-2ecc-4fea-a248-36a61c5f7399": {
+    "requires": [
+      "composting/sift-compost",
+      "composting/check-temperature"
+    ],
+    "rewards": []
+  },
+  "53f8f919-b93a-4f26-a9e4-8ec2e2672339": {
+    "requires": [
+      "completionist/v3"
+    ],
+    "rewards": [
+      "completionist/v3"
+    ]
+  },
+  "e6200ff8-3a4f-4e5c-a169-87f3ef0fa5f8": {
+    "requires": [
+      "completionist/v3"
+    ],
+    "rewards": []
+  },
+  "969bf58f-b4e6-4f76-be85-6eb8db7f76cf": {
+    "requires": [
+      "completionist/v3"
+    ],
+    "rewards": []
+  },
+  "84370be5-127b-4dea-a3a2-e7aa4695f6f4": {
+    "requires": [
+      "completionist/v3"
+    ],
+    "rewards": []
+  },
+  "53d2e53c-61b9-4eb6-82ee-4e95a95dad66": {
+    "requires": [
+      "completionist/v3"
+    ],
+    "rewards": []
+  },
+  "130badf2-93da-4b69-a102-f00fe81f42cd": {
+    "requires": [
+      "completionist/v3"
+    ],
+    "rewards": []
+  },
+  "ee77f164-a59f-4a27-b44f-acd57ff5245d": {
+    "requires": [
+      "completionist/v3"
+    ],
+    "rewards": []
+  },
+  "f04c635f-f576-4f96-bcf5-eb679bc6d56f": {
+    "requires": [
+      "completionist/v3"
+    ],
+    "rewards": []
+  },
+  "1394c366-5078-49cf-b24e-c748e8428234": {
+    "requires": [],
+    "rewards": [
+      "completionist/v2",
+      "completionist/polish",
+      "completionist/catalog"
+    ]
+  },
+  "a42e441a-5569-490c-86e4-ce711117cd22": {
+    "requires": [
+      "completionist/v2",
+      "3dprinting/x-belt-tension",
+      "3dprinting/spool-holder",
+      "3dprinting/filament-change",
+      "3dprinting/bed-leveling"
+    ],
+    "rewards": []
+  },
+  "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6": {
+    "requires": [
+      "completionist/v2"
+    ],
+    "rewards": []
+  },
+  "a0fc23b6-3460-404f-bd16-dfb5700f7326": {
+    "requires": [
+      "completionist/v2"
     ],
     "rewards": []
   },
   "c01676ec-27e5-4a53-9a47-24bf6c5a56a9": {
     "requires": [
+      "completionist/v2",
+      "completionist/polish"
+    ],
+    "rewards": []
+  },
+  "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07": {
+    "requires": [
       "completionist/reminder",
+      "completionist/display"
+    ],
+    "rewards": []
+  },
+  "07d9b966-da28-465e-81b6-d6bd774326aa": {
+    "requires": [
+      "completionist/reminder"
+    ],
+    "rewards": []
+  },
+  "1030a6c5-88b9-46e9-b38a-b20d8d326764": {
+    "requires": [
       "completionist/polish",
       "completionist/display",
       "completionist/catalog"
     ],
-    "rewards": [
-      "completionist/v2"
-    ]
+    "rewards": []
+  },
+  "78896eea-e4a6-40d1-9b93-522482b71f4f": {
+    "requires": [
+      "completionist/catalog"
+    ],
+    "rewards": []
   },
   "e1714868-aa17-4f04-ac09-13ac4d7ecea0": {
     "requires": [
-      "chemistry/stevia-tasting",
       "chemistry/stevia-crystals"
+    ],
+    "rewards": [
+      "chemistry/stevia-tasting",
+      "chemistry/safe-reaction",
+      "chemistry/ph-adjustment",
+      "chemistry/acid-dilution"
+    ]
+  },
+  "23f49dfd-f7c6-421c-ac29-5b891d57bf97": {
+    "requires": [
+      "chemistry/stevia-tasting"
+    ],
+    "rewards": []
+  },
+  "d8e22b52-4807-4f8d-b901-5aee64a5770c": {
+    "requires": [
+      "chemistry/stevia-tasting"
+    ],
+    "rewards": [
+      "chemistry/stevia-crystals",
+      "chemistry/ph-test",
+      "chemistry/acid-neutralization"
+    ]
+  },
+  "de3dd21d-af02-4b38-82b7-b65c0f09a984": {
+    "requires": [
+      "chemistry/stevia-tasting"
+    ],
+    "rewards": []
+  },
+  "fe146f9d-d912-4841-bf1f-1675c3aa93f3": {
+    "requires": [
+      "chemistry/stevia-tasting"
+    ],
+    "rewards": []
+  },
+  "10fab5e7-036b-4f8f-9f35-84117bc8ef09": {
+    "requires": [],
+    "rewards": [
+      "chemistry/stevia-extraction",
+      "chemistry/precipitation-reaction",
+      "chemistry/buffer-solution"
+    ]
+  },
+  "2e1dda41-1b4b-4d00-9d54-8669a49b3441": {
+    "requires": [
+      "chemistry/stevia-extraction"
+    ],
+    "rewards": []
+  },
+  "35ec960e-3048-4429-ad6b-c6afb384d658": {
+    "requires": [
+      "chemistry/stevia-extraction"
     ],
     "rewards": []
   },
@@ -1458,41 +2437,181 @@
     ],
     "rewards": []
   },
-  "3455faac-8811-4991-b818-cecb98e8fff7": {
+  "3fac389d-178f-4ad1-a0bb-a9c474931c25": {
     "requires": [
+      "chemistry/stevia-crystals"
+    ],
+    "rewards": []
+  },
+  "13f3f171-076f-4fb0-9a2c-63f61ca41d3f": {
+    "requires": [
+      "chemistry/stevia-crystals"
+    ],
+    "rewards": []
+  },
+  "8175bd25-244c-433e-b39d-2af223ccbc91": {
+    "requires": [
+      "chemistry/safe-reaction"
+    ],
+    "rewards": []
+  },
+  "ab36e88b-285a-4ff3-8abd-d73dbb7c3491": {
+    "requires": [
+      "chemistry/safe-reaction"
+    ],
+    "rewards": []
+  },
+  "092afbdb-1c9b-4e08-9498-20e4f2ba5f93": {
+    "requires": [
+      "chemistry/safe-reaction"
+    ],
+    "rewards": []
+  },
+  "265f7c6d-c345-44af-936c-8bba8ea08de2": {
+    "requires": [
+      "chemistry/safe-reaction"
+    ],
+    "rewards": []
+  },
+  "1774fea1-a066-4617-b2e5-0692e63346d5": {
+    "requires": [
+      "chemistry/precipitation-reaction"
+    ],
+    "rewards": []
+  },
+  "d36caabd-ddb7-4634-8d51-751957be80f4": {
+    "requires": [
+      "chemistry/precipitation-reaction"
+    ],
+    "rewards": []
+  },
+  "487c7586-a6f4-4fff-a210-979497f6380f": {
+    "requires": [
+      "chemistry/precipitation-reaction"
+    ],
+    "rewards": []
+  },
+  "fecde9bf-4b1f-4c95-a809-c888e5c817fa": {
+    "requires": [
+      "chemistry/precipitation-reaction"
+    ],
+    "rewards": []
+  },
+  "27f43446-04e7-46e8-a11c-4f57c449118a": {
+    "requires": [
+      "chemistry/precipitation-reaction",
       "chemistry/ph-test",
-      "chemistry/acid-dilution"
+      "chemistry/ph-adjustment",
+      "chemistry/buffer-solution"
     ],
     "rewards": []
   },
-  "10fab5e7-036b-4f8f-9f35-84117bc8ef09": {
+  "a0ab6b27-ed3e-4d7d-8d21-3296e9031772": {
+    "requires": [
+      "chemistry/ph-test"
+    ],
+    "rewards": []
+  },
+  "44b6c979-b1e2-493e-bb00-4df7e47a66a2": {
+    "requires": [
+      "chemistry/ph-test"
+    ],
+    "rewards": []
+  },
+  "3843a2ef-f029-4bd5-b450-828a82d62c8b": {
+    "requires": [
+      "chemistry/ph-adjustment"
+    ],
+    "rewards": []
+  },
+  "f7a90006-26fa-4ef0-b587-93edd963bb84": {
+    "requires": [
+      "chemistry/ph-adjustment"
+    ],
+    "rewards": []
+  },
+  "8f50d94c-cd39-48bb-8f0c-abb24c51ffff": {
+    "requires": [
+      "chemistry/ph-adjustment"
+    ],
+    "rewards": []
+  },
+  "fe23b389-42a7-46ef-8793-3d8399362788": {
+    "requires": [
+      "chemistry/buffer-solution"
+    ],
+    "rewards": []
+  },
+  "4721dce9-cd6a-4e3f-8dfb-e7e22f55dc39": {
+    "requires": [
+      "chemistry/buffer-solution"
+    ],
+    "rewards": []
+  },
+  "fea67487-4164-4ff7-969d-356127abbac9": {
+    "requires": [
+      "chemistry/acid-neutralization"
+    ],
+    "rewards": []
+  },
+  "d6238643-7e42-4b40-89c0-15f72f3d3dc3": {
+    "requires": [
+      "chemistry/acid-neutralization"
+    ],
+    "rewards": []
+  },
+  "dedfa413-4cb8-4980-a310-820e958325cb": {
+    "requires": [
+      "chemistry/acid-neutralization"
+    ],
+    "rewards": []
+  },
+  "8c19712c-c083-4794-a275-4b4d9c653dfe": {
     "requires": [
       "chemistry/acid-dilution"
     ],
     "rewards": []
   },
-  "c46e98b4-0c1a-478b-988c-8c9260dce434": {
+  "82e7baef-9ee9-4d5e-ba23-1ebff5a04388": {
     "requires": [
       "chemistry/acid-dilution"
     ],
     "rewards": []
   },
-  "7311a2ab-59b2-49cb-93cd-d59aab9dc68a": {
+  "4e4e190e-0a6e-4162-bc5b-918970dbbcc8": {
     "requires": [
       "chemistry/acid-dilution"
     ],
     "rewards": []
   },
-  "97b735d8-0d76-4fe5-908c-781178ff6308": {
+  "13167d6a-5617-4931-8a6e-6f463c6b8835": {
     "requires": [
-      "chemistry/acid-dilution"
+      "chemistry/acid-dilution",
+      "aquaria/ph-strip-test"
     ],
-    "rewards": []
+    "rewards": [
+      "aquaria/walstad",
+      "aquaria/sponge-filter",
+      "aquaria/ph-strip-test",
+      "aquaria/log-water-parameters",
+      "aquaria/filter-rinse"
+    ]
   },
   "85d4fb76-9591-4b70-b88d-e74ff133215d": {
     "requires": [
       "astronomy/venus-phases"
     ],
+    "rewards": [
+      "astronomy/venus-phases",
+      "astronomy/saturn-rings",
+      "astronomy/observe-moon",
+      "astronomy/light-pollution",
+      "astronomy/comet-tracking",
+      "astronomy/andromeda"
+    ]
+  },
+  "7e9cc033-a1bd-40fc-92b1-7d55b9dba295": {
+    "requires": [],
     "rewards": [
       "astronomy/venus-phases"
     ]
@@ -1500,36 +2619,44 @@
   "98f6252e-95c2-468a-b110-69d47604df2c": {
     "requires": [
       "astronomy/venus-phases",
+      "astronomy/star-trails",
       "astronomy/saturn-rings",
+      "astronomy/planetary-alignment",
       "astronomy/orion-nebula",
+      "astronomy/north-star",
       "astronomy/meteor-shower",
       "astronomy/light-pollution",
+      "astronomy/jupiter-moons",
+      "astronomy/comet-tracking",
       "astronomy/binary-star",
       "astronomy/andromeda"
     ],
-    "rewards": []
+    "rewards": [
+      "astronomy/sunspot-sketch",
+      "astronomy/satellite-pass",
+      "astronomy/meteor-shower",
+      "astronomy/jupiter-moons",
+      "astronomy/binary-star"
+    ]
   },
   "f439b57a-9df3-4bd9-9b6e-042476ceecf5": {
     "requires": [
       "astronomy/venus-phases",
       "astronomy/sunspot-sketch",
-      "astronomy/star-trails",
       "astronomy/saturn-rings",
       "astronomy/satellite-pass",
       "astronomy/planetary-alignment",
       "astronomy/orion-nebula",
       "astronomy/observe-moon",
+      "astronomy/north-star",
       "astronomy/meteor-shower",
       "astronomy/lunar-eclipse",
       "astronomy/jupiter-moons",
       "astronomy/comet-tracking",
       "astronomy/binary-star",
-      "astronomy/basic-telescope",
-      "astronomy/andromeda"
+      "astronomy/basic-telescope"
     ],
-    "rewards": [
-      "astronomy/planetary-alignment"
-    ]
+    "rewards": []
   },
   "4b328572-69f2-4fa6-8005-dc64ac434cef": {
     "requires": [
@@ -1537,21 +2664,182 @@
     ],
     "rewards": []
   },
+  "ea043858-4d09-4510-a495-3ddae395ce51": {
+    "requires": [],
+    "rewards": [
+      "astronomy/sunspot-sketch"
+    ]
+  },
   "70bb8d86-2c4e-4330-9705-371891934686": {
     "requires": [
       "astronomy/sunspot-sketch",
+      "astronomy/star-trails",
+      "astronomy/saturn-rings",
+      "astronomy/satellite-pass",
+      "astronomy/planetary-alignment",
+      "astronomy/orion-nebula",
       "astronomy/observe-moon",
+      "astronomy/north-star",
       "astronomy/meteor-shower",
+      "astronomy/lunar-eclipse",
       "astronomy/light-pollution",
-      "astronomy/iss-photo"
+      "astronomy/jupiter-moons",
+      "astronomy/iss-photo",
+      "astronomy/iss-flyover",
+      "astronomy/constellations",
+      "astronomy/comet-tracking",
+      "astronomy/binary-star",
+      "astronomy/basic-telescope"
+    ],
+    "rewards": []
+  },
+  "b73f795b-7abb-4a0c-950b-7f8ad82012b8": {
+    "requires": [
+      "astronomy/sunspot-sketch",
+      "astronomy/satellite-pass",
+      "astronomy/planetary-alignment",
+      "astronomy/orion-nebula",
+      "astronomy/north-star",
+      "astronomy/jupiter-moons",
+      "astronomy/constellations",
+      "astronomy/binary-star",
+      "astronomy/andromeda"
+    ],
+    "rewards": [
+      "astronomy/constellations"
+    ]
+  },
+  "280ed361-ac70-4ab9-bcd9-aee481790faf": {
+    "requires": [
+      "astronomy/sunspot-sketch",
+      "astronomy/saturn-rings",
+      "astronomy/satellite-pass",
+      "astronomy/planetary-alignment",
+      "astronomy/orion-nebula",
+      "astronomy/observe-moon",
+      "astronomy/north-star",
+      "astronomy/meteor-shower",
+      "astronomy/lunar-eclipse",
+      "astronomy/light-pollution",
+      "astronomy/jupiter-moons",
+      "astronomy/iss-photo",
+      "astronomy/iss-flyover",
+      "astronomy/constellations",
+      "astronomy/comet-tracking",
+      "astronomy/binary-star",
+      "astronomy/basic-telescope",
+      "3dprinting/calibration-cube",
+      "3dprinting/cable-clip",
+      "3dprinting/benchy_100"
     ],
     "rewards": []
   },
   "aa82b02f-2617-4474-a91b-29647e4a9780": {
     "requires": [
-      "astronomy/observe-moon"
+      "astronomy/sunspot-sketch",
+      "astronomy/saturn-rings",
+      "astronomy/satellite-pass",
+      "astronomy/orion-nebula",
+      "astronomy/observe-moon",
+      "astronomy/north-star",
+      "astronomy/meteor-shower",
+      "astronomy/lunar-eclipse",
+      "astronomy/light-pollution",
+      "astronomy/jupiter-moons",
+      "astronomy/iss-photo",
+      "astronomy/comet-tracking",
+      "astronomy/binary-star",
+      "astronomy/basic-telescope"
     ],
     "rewards": []
+  },
+  "067aa8eb-b5a4-4bef-a307-7dde10e981f5": {
+    "requires": [
+      "astronomy/iss-flyover"
+    ],
+    "rewards": [
+      "astronomy/star-trails",
+      "astronomy/orion-nebula",
+      "astronomy/lunar-eclipse",
+      "astronomy/iss-photo",
+      "astronomy/iss-flyover",
+      "astronomy/basic-telescope"
+    ]
+  },
+  "684ec366-e0b1-4425-94fd-7dd9775dac08": {
+    "requires": [],
+    "rewards": [
+      "astronomy/star-trails"
+    ]
+  },
+  "60da6648-c22e-466e-9789-9e1d4635fd46": {
+    "requires": [
+      "astronomy/star-trails",
+      "astronomy/satellite-pass",
+      "astronomy/constellations"
+    ],
+    "rewards": []
+  },
+  "a96ce9ed-b9e0-44e5-bd9f-c068643e6749": {
+    "requires": [
+      "astronomy/star-trails",
+      "astronomy/lunar-eclipse",
+      "astronomy/iss-photo"
+    ],
+    "rewards": []
+  },
+  "49fb255e-a4c3-48e4-bca7-4c3781fdb98b": {
+    "requires": [
+      "astronomy/star-trails",
+      "astronomy/north-star",
+      "astronomy/lunar-eclipse",
+      "astronomy/iss-photo",
+      "astronomy/comet-tracking",
+      "astronomy/basic-telescope"
+    ],
+    "rewards": []
+  },
+  "dfbd9155-1c06-4951-9a32-4520107a88fb": {
+    "requires": [
+      "astronomy/star-trails"
+    ],
+    "rewards": []
+  },
+  "2ab80a53-6a2a-4e51-b1f7-fa78620a0132": {
+    "requires": [
+      "astronomy/star-trails"
+    ],
+    "rewards": []
+  },
+  "b30925da-0fa5-4ecd-ba18-af6ff7c70e23": {
+    "requires": [],
+    "rewards": [
+      "astronomy/saturn-rings"
+    ]
+  },
+  "f537cbd4-e5f0-4ef9-a776-b126894988cf": {
+    "requires": [],
+    "rewards": [
+      "astronomy/satellite-pass"
+    ]
+  },
+  "40b059e7-a11d-49da-8aed-05570804c036": {
+    "requires": [],
+    "rewards": [
+      "astronomy/planetary-alignment"
+    ]
+  },
+  "31a986a6-537d-42d4-856f-274e6cb38c69": {
+    "requires": [],
+    "rewards": [
+      "astronomy/orion-nebula"
+    ]
+  },
+  "55851b57-86b7-4b16-a341-6a831aff0da5": {
+    "requires": [],
+    "rewards": [
+      "astronomy/observe-moon"
+    ]
   },
   "4729b96d-5057-40d8-83a4-25a4fa122d98": {
     "requires": [
@@ -1567,35 +2855,54 @@
       "astronomy/north-star"
     ]
   },
-  "b73f795b-7abb-4a0c-950b-7f8ad82012b8": {
-    "requires": [
-      "astronomy/north-star",
-      "astronomy/constellations"
-    ],
+  "8615b34c-f00e-4258-b94a-67bd58d11ece": {
+    "requires": [],
     "rewards": [
-      "astronomy/constellations"
+      "astronomy/north-star"
     ]
   },
-  "49fb255e-a4c3-48e4-bca7-4c3781fdb98b": {
-    "requires": [
-      "astronomy/iss-photo",
-      "astronomy/basic-telescope"
-    ],
-    "rewards": []
-  },
-  "067aa8eb-b5a4-4bef-a307-7dde10e981f5": {
-    "requires": [
-      "astronomy/iss-flyover"
-    ],
+  "6aa2c7a1-f604-4bf6-93f8-5a37d017301f": {
+    "requires": [],
     "rewards": [
-      "astronomy/iss-flyover"
+      "astronomy/meteor-shower"
+    ]
+  },
+  "7019df00-c069-4644-9189-71340620ffba": {
+    "requires": [],
+    "rewards": [
+      "astronomy/lunar-eclipse"
+    ]
+  },
+  "78bd4b60-a932-4d22-9b34-ecf9c3d46a75": {
+    "requires": [],
+    "rewards": [
+      "astronomy/light-pollution"
+    ]
+  },
+  "be314ec9-c289-42e9-a6d6-5acc56779412": {
+    "requires": [],
+    "rewards": [
+      "astronomy/jupiter-moons"
     ]
   },
   "16478015-5213-4b3f-960c-c0fdaaa91297": {
     "requires": [
+      "astronomy/iss-photo",
       "astronomy/iss-flyover"
     ],
     "rewards": []
+  },
+  "3d92d73f-271e-4f8c-a482-4fc51cc69abf": {
+    "requires": [
+      "astronomy/iss-photo"
+    ],
+    "rewards": []
+  },
+  "aa8d4075-2959-4b9d-84a4-85524e432b0b": {
+    "requires": [],
+    "rewards": [
+      "astronomy/iss-flyover"
+    ]
   },
   "bb97e755-4337-4e9d-8063-4a0cff4649b5": {
     "requires": [
@@ -1603,11 +2910,29 @@
     ],
     "rewards": []
   },
-  "60da6648-c22e-466e-9789-9e1d4635fd46": {
-    "requires": [
+  "eefbf274-67f1-4ea8-8253-25f85c0db336": {
+    "requires": [],
+    "rewards": [
       "astronomy/constellations"
-    ],
-    "rewards": []
+    ]
+  },
+  "71ff4717-2def-43bf-8f13-cf249bf86f24": {
+    "requires": [],
+    "rewards": [
+      "astronomy/comet-tracking"
+    ]
+  },
+  "9db35820-1243-4567-a8a4-822530fb6328": {
+    "requires": [],
+    "rewards": [
+      "astronomy/binary-star"
+    ]
+  },
+  "f293d45c-49bd-4c53-a73f-88233c5b6acc": {
+    "requires": [],
+    "rewards": [
+      "astronomy/basic-telescope"
+    ]
   },
   "0254a829-9002-4a75-8af2-03cd961601da": {
     "requires": [
@@ -1641,6 +2966,12 @@
       "astronomy/aurora-watch"
     ]
   },
+  "2e856b2e-cd35-44ed-b7e0-76a781c47bb9": {
+    "requires": [],
+    "rewards": [
+      "astronomy/aurora-watch"
+    ]
+  },
   "808f8298-ba98-43d6-907b-1b34a7daffb8": {
     "requires": [
       "astronomy/aurora-watch"
@@ -1653,10 +2984,22 @@
     ],
     "rewards": []
   },
-  "c5a7574e-515f-4e9a-83fc-350703131f25": {
+  "82edf24f-3a5b-442d-8214-191454a6bc52": {
     "requires": [],
     "rewards": [
+      "astronomy/andromeda"
+    ]
+  },
+  "c5a7574e-515f-4e9a-83fc-350703131f25": {
+    "requires": [
+      "aquaria/walstad"
+    ],
+    "rewards": [
       "aquaria/water-testing",
+      "aquaria/top-off",
+      "aquaria/ph-strip-test",
+      "aquaria/heater-install",
+      "aquaria/breeding",
       "aquaria/aquarium-light"
     ]
   },
@@ -1671,27 +3014,70 @@
   "b8602362-2035-4f00-9376-f48d8668cf38": {
     "requires": [
       "aquaria/water-testing",
+      "aquaria/balance-ph"
+    ],
+    "rewards": []
+  },
+  "9748fccc-ec16-4664-982e-c79b1c082e5e": {
+    "requires": [
+      "aquaria/water-testing",
       "aquaria/log-water-parameters"
     ],
     "rewards": []
   },
-  "8c0f72a2-db79-4238-b80f-97721def169f": {
+  "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c": {
+    "requires": [
+      "aquaria/water-testing",
+      "aquaria/log-water-parameters",
+      "aquaria/breeding"
+    ],
+    "rewards": []
+  },
+  "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f": {
+    "requires": [
+      "aquaria/water-testing",
+      "aquaria/water-change",
+      "aquaria/ph-strip-test",
+      "aquaria/log-water-parameters"
+    ],
+    "rewards": []
+  },
+  "a07b75e3-f828-4cb1-81d6-1ab0e9857a79": {
     "requires": [],
     "rewards": [
       "aquaria/water-change",
+      "aquaria/thermometer",
+      "aquaria/net-fish",
+      "aquaria/goldfish",
+      "aquaria/floating-plants",
+      "aquaria/balance-ph"
+    ]
+  },
+  "8c0f72a2-db79-4238-b80f-97721def169f": {
+    "requires": [
+      "aquaria/water-change",
+      "aquaria/position-tank",
+      "aquaria/ph-strip-test",
+      "aquaria/heater-install",
+      "aquaria/guppy"
+    ],
+    "rewards": [
       "aquaria/position-tank"
     ]
   },
   "97317bc3-507a-4e2c-912b-507d586cee87": {
     "requires": [
       "aquaria/water-change",
-      "aquaria/top-off"
+      "aquaria/top-off",
+      "aquaria/ph-strip-test"
     ],
     "rewards": []
   },
   "16eb261b-9d93-4aff-ab31-40f6a78d04f1": {
     "requires": [
-      "aquaria/water-change"
+      "aquaria/water-change",
+      "aquaria/walstad",
+      "aquaria/sponge-filter"
     ],
     "rewards": []
   },
@@ -1701,13 +3087,59 @@
     ],
     "rewards": []
   },
-  "785fa6f3-bb66-4197-a43f-52fea9cebd48": {
+  "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2": {
     "requires": [
+      "aquaria/water-change",
+      "aquaria/top-off",
+      "aquaria/thermometer",
+      "aquaria/shrimp",
+      "aquaria/position-tank",
+      "aquaria/net-fish",
+      "aquaria/heater-install",
+      "aquaria/guppy"
+    ],
+    "rewards": []
+  },
+  "83fe7eee-135e-4885-9ce0-9042b9fb860a": {
+    "requires": [
+      "aquaria/walstad"
+    ],
+    "rewards": []
+  },
+  "98609b23-4811-4275-8d83-ad59a2797753": {
+    "requires": [
+      "aquaria/walstad",
       "aquaria/position-tank"
     ],
-    "rewards": [
+    "rewards": []
+  },
+  "75cec98f-fcf0-4d73-8d31-5a53571317b2": {
+    "requires": [
       "aquaria/walstad"
-    ]
+    ],
+    "rewards": []
+  },
+  "62757412-be94-48c0-a1c0-8fad9bdb8c4a": {
+    "requires": [
+      "aquaria/walstad",
+      "aquaria/aquarium-light"
+    ],
+    "rewards": []
+  },
+  "0704e829-ce72-4c7d-91b0-8a774b11575d": {
+    "requires": [
+      "aquaria/walstad",
+      "aquaria/floating-plants"
+    ],
+    "rewards": []
+  },
+  "785fa6f3-bb66-4197-a43f-52fea9cebd48": {
+    "requires": [
+      "aquaria/walstad",
+      "aquaria/thermometer",
+      "aquaria/shrimp"
+    ],
+    "rewards": []
   },
   "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50": {
     "requires": [
@@ -1715,7 +3147,7 @@
     ],
     "rewards": []
   },
-  "0b85f058-38f2-4e9a-93e9-d47441608619": {
+  "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7": {
     "requires": [
       "aquaria/thermometer",
       "aquaria/position-tank",
@@ -1723,25 +3155,16 @@
     ],
     "rewards": []
   },
-  "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56": {
-    "requires": [
-      "aquaria/sponge-filter",
-      "aquaria/filter-rinse"
-    ],
-    "rewards": [
-      "aquaria/sponge-filter"
-    ]
-  },
   "60e517b4-5807-4983-afb8-e2aad1566587": {
     "requires": [
-      "aquaria/sponge-filter",
-      "aquaria/shrimp"
+      "aquaria/sponge-filter"
     ],
     "rewards": []
   },
   "5d5e4e29-94b7-4a03-b73d-7420841ae686": {
     "requires": [
-      "aquaria/sponge-filter"
+      "aquaria/sponge-filter",
+      "aquaria/filter-rinse"
     ],
     "rewards": []
   },
@@ -1751,36 +3174,65 @@
       "aquaria/shrimp"
     ]
   },
+  "011129b7-2190-47dd-b541-8123a2e8a9a3": {
+    "requires": [
+      "aquaria/shrimp"
+    ],
+    "rewards": []
+  },
+  "1b63146c-5cb3-4c75-bb31-ac4bb2e2bebe": {
+    "requires": [
+      "aquaria/shrimp"
+    ],
+    "rewards": []
+  },
+  "35aeac1d-e26e-475b-8b05-b74562e90173": {
+    "requires": [
+      "aquaria/shrimp"
+    ],
+    "rewards": []
+  },
+  "2d1b7889-b28c-4970-8be9-5de092cfd4d9": {
+    "requires": [
+      "aquaria/ph-strip-test",
+      "aquaria/balance-ph"
+    ],
+    "rewards": []
+  },
+  "9c392043-4067-4f49-8038-38eef00e0b24": {
+    "requires": [
+      "aquaria/ph-strip-test",
+      "aquaria/balance-ph"
+    ],
+    "rewards": []
+  },
   "ee7d437d-7426-47cd-b691-386dd20f4e47": {
     "requires": [
-      "aquaria/shrimp",
-      "aquaria/net-fish"
+      "aquaria/net-fish",
+      "aquaria/floating-plants"
     ],
     "rewards": []
   },
-  "98609b23-4811-4275-8d83-ad59a2797753": {
+  "0b85f058-38f2-4e9a-93e9-d47441608619": {
     "requires": [
-      "aquaria/position-tank"
-    ],
-    "rewards": []
-  },
-  "83fe7eee-135e-4885-9ce0-9042b9fb860a": {
-    "requires": [
-      "aquaria/log-water-parameters"
+      "aquaria/heater-install"
     ],
     "rewards": []
   },
   "21247ab3-427f-4448-8b68-4d8ad742cb7a": {
-    "requires": [],
+    "requires": [
+      "aquaria/guppy",
+      "aquaria/breeding"
+    ],
     "rewards": [
       "aquaria/guppy"
     ]
   },
-  "a07b75e3-f828-4cb1-81d6-1ab0e9857a79": {
-    "requires": [],
-    "rewards": [
+  "ca7c1069-4ba3-4339-9a10-0b690a690e60": {
+    "requires": [
       "aquaria/goldfish"
-    ]
+    ],
+    "rewards": []
   },
   "76307a8e-4e0e-4dfa-abc2-7917d384d82c": {
     "requires": [
@@ -1788,63 +3240,145 @@
     ],
     "rewards": []
   },
-  "0704e829-ce72-4c7d-91b0-8a774b11575d": {
+  "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9": {
     "requires": [
       "aquaria/floating-plants"
     ],
     "rewards": []
   },
-  "3f1cc002-1f7a-4301-a1c6-343f65e7f21a": {
-    "requires": [],
-    "rewards": [
+  "1bdcb22a-17e2-42f8-b990-b842f9684169": {
+    "requires": [
+      "aquaria/floating-plants",
       "aquaria/breeding"
+    ],
+    "rewards": []
+  },
+  "bda9e450-499d-41d6-ab32-df73528dc68f": {
+    "requires": [
+      "aquaria/breeding"
+    ],
+    "rewards": []
+  },
+  "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb": {
+    "requires": [
+      "aquaria/breeding"
+    ],
+    "rewards": []
+  },
+  "18a20f4e-a351-448e-837b-3caca90f71f4": {
+    "requires": [
+      "aquaria/breeding"
+    ],
+    "rewards": []
+  },
+  "269d2cfb-25de-417b-8e29-64e80aff934c": {
+    "requires": [
+      "3dprinting/cable-clip"
+    ],
+    "rewards": [
+      "3dprinting/x-belt-tension",
+      "3dprinting/retraction-test",
+      "3dprinting/nozzle-cleaning",
+      "3dprinting/cable-clip"
     ]
   },
-  "62757412-be94-48c0-a1c0-8fad9bdb8c4a": {
+  "e37c86b0-caaf-485d-b5c1-c15f7029973c": {
     "requires": [
-      "aquaria/aquarium-light"
+      "3dprinting/x-belt-tension",
+      "3dprinting/temperature-tower",
+      "3dprinting/retraction-test",
+      "3dprinting/phone-stand"
     ],
     "rewards": []
   },
   "60409c3f-56cf-4b9e-9e60-ca480d4896d0": {
     "requires": [
       "3dprinting/x-belt-tension",
+      "3dprinting/temperature-tower",
+      "3dprinting/spool-holder",
+      "3dprinting/phone-stand",
+      "3dprinting/nozzle-clog",
+      "3dprinting/nozzle-cleaning",
+      "3dprinting/filament-change",
+      "3dprinting/blob-of-death",
+      "3dprinting/benchy_25",
+      "3dprinting/benchy_10",
       "3dprinting/bed-leveling"
     ],
     "rewards": []
   },
-  "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6": {
+  "448e9fbb-8464-4799-956d-cc465a4a8376": {
     "requires": [
-      "3dprinting/temperature-tower",
-      "3dprinting/phone-stand"
+      "3dprinting/x-belt-tension"
     ],
     "rewards": []
   },
   "fe46e236-5d03-4c95-9b38-68b045a0df03": {
     "requires": [],
     "rewards": [
-      "3dprinter/start"
+      "3dprinting/temperature-tower",
+      "3dprinting/start",
+      "3dprinting/phone-stand",
+      "3dprinting/filament-change",
+      "3dprinting/blob-of-death"
     ]
+  },
+  "141581bf-be69-4522-973b-3d22292a85fa": {
+    "requires": [
+      "3dprinting/temperature-tower",
+      "3dprinting/retraction-test"
+    ],
+    "rewards": []
+  },
+  "efcf79a5-1616-490e-add7-40f7fdb628b4": {
+    "requires": [
+      "3dprinting/temperature-tower"
+    ],
+    "rewards": []
   },
   "d3590107-25ff-4de5-af3a-46e2497bfc52": {
     "requires": [
-      "3dprinter/start",
-      "3dprinting/spool-holder",
-      "3dprinting/filament-change",
-      "3dprinting/calibration-cube",
-      "3dprinting/cable-clip"
+      "3dprinting/start",
+      "3dprinting/calibration-cube"
     ],
     "rewards": [
-      "3dprinter/start",
+      "3dprinting/start",
+      "3dprinting/spool-holder",
+      "3dprinting/nozzle-clog",
+      "3dprinting/calibration-cube",
       "3dprinting/benchy_25",
       "3dprinting/benchy_100",
-      "3dprinting/benchy_10"
+      "3dprinting/benchy_10",
+      "3dprinting/bed-leveling"
     ]
   },
   "7892ffc6-c651-445f-946b-7edc998cf389": {
     "requires": [
-      "3dprinter/start",
+      "3dprinting/start",
+      "3dprinting/benchy_25",
+      "3dprinting/benchy_100",
+      "3dprinting/benchy_10"
+    ],
+    "rewards": []
+  },
+  "06b405f2-1728-4428-bc1c-abcf7ef36bcf": {
+    "requires": [
+      "3dprinting/spool-holder",
+      "3dprinting/phone-stand",
+      "3dprinting/cable-clip"
+    ],
+    "rewards": []
+  },
+  "3721d5e0-a148-4f67-9150-55492873a576": {
+    "requires": [
+      "3dprinting/spool-holder"
+    ],
+    "rewards": []
+  },
+  "97ec3b0b-1be0-4260-bbaf-62ccb935807e": {
+    "requires": [
       "3dprinting/retraction-test",
+      "3dprinting/filament-change",
       "3dprinting/benchy_25",
       "3dprinting/benchy_100",
       "3dprinting/benchy_10"
@@ -1853,13 +3387,15 @@
   },
   "564a76de-925b-4457-a548-d015168abe0c": {
     "requires": [
-      "3dprinting/nozzle-clog"
+      "3dprinting/nozzle-clog",
+      "3dprinting/nozzle-cleaning"
     ],
     "rewards": []
   },
-  "fbecc523-fb93-4d00-be08-2ed9f53f158c": {
+  "45f6f1ce-18e4-481d-8635-23ea51e0c2fd": {
     "requires": [
-      "3dprinting/nozzle-clog"
+      "3dprinting/nozzle-clog",
+      "3dprinting/nozzle-cleaning"
     ],
     "rewards": []
   },
@@ -1869,9 +3405,9 @@
     ],
     "rewards": []
   },
-  "e37c86b0-caaf-485d-b5c1-c15f7029973c": {
+  "8896a0ef-edd8-4d19-ac14-19ee66470e54": {
     "requires": [
-      "3dprinting/calibration-cube"
+      "3dprinting/blob-of-death"
     ],
     "rewards": []
   }
