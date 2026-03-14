@@ -2,7 +2,7 @@
     "id": "completionist/award-iii",
     "title": "Forge the Completionist Award III",
     "description": "Build a grand mixed-discipline trophy that celebrates your full v3 journey: printed structure, fine woodworking base, soldered electronics, robotics motion, and a living planter crown.",
-    "image": "/assets/quests/completionist_v2_print.jpg",
+    "image": "/assets/quests/completionist_trophy_award.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
@@ -160,7 +160,12 @@
             ]
         }
     ],
-    "rewards": [],
+    "rewards": [
+        {
+            "id": "1394c366-5078-49cf-b24e-c748e8428234",
+            "count": 1
+        }
+    ],
     "requiresQuests": [
         "3dprinting/benchy_100",
         "3dprinting/blob-of-death",

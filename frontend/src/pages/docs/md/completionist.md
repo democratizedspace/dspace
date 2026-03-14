@@ -163,7 +163,7 @@ Completionist quests build practical progression through the completionist skill
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - None (the final assembly process creates Completionist Award III ×1)
+    - Completionist Award ×1 (legacy completion badge)
 - Processes used:
     - [print-completionist-iii-modules](/processes/print-completionist-iii-modules)
         - Requires: entry-level FDM 3D printer (leveled bed) ×1

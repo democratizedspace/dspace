@@ -11,8 +11,8 @@ These quests exist in the `v3` branch but are not present on `main` yet.
 Use this list when upgrading quests or proposing follow-up content.
 
 Prev quest count: 22
-Current quest count: 247
-New quests in this release: 225
+Current quest count: 248
+New quests in this release: 226
 
 ### 3dprinting
 
@@ -89,6 +89,7 @@ New quests in this release: 225
 
 ### completionist
 
+-   completionist/award-iii
 -   completionist/catalog
 -   completionist/display
 -   completionist/polish
