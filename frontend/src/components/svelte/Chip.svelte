@@ -14,6 +14,7 @@
 
     const dispatch = createEventDispatcher();
     const isStaticContainer = !href && typeof onClick !== 'function' && !text;
+    const hasSlotContent = Boolean($$slots.default);
 
     const handleClick = (event) => {
         if (disabled === true) {
@@ -47,6 +48,7 @@
     {:else if isStaticContainer}
         <div
             class="chip-container static-container"
+            class:has-slot-content={hasSlotContent}
             class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
@@ -61,6 +63,7 @@
     {:else}
         <button
             type="button"
+            class:has-slot-content={hasSlotContent}
             class:disabled={disabled === true}
             class:inverted={inverted === true}
             class:red={red === true}
@@ -72,10 +75,14 @@
             aria-pressed={pressed}
             data-testid={dataTestId}
         >
-            <div class="slot">
-                <slot />
-            </div>
-            <p>{text}</p>
+            {#if hasSlotContent}
+                <div class="slot">
+                    <slot />
+                </div>
+            {/if}
+            {#if text}
+                <p class="chip-text" class:with-slot={hasSlotContent}>{text}</p>
+            {/if}
         </button>
     {/if}
 </nav>
@@ -135,6 +142,13 @@
         border: none;
         padding: 6px 5px;
         font-size: 1em;
+        flex-direction: column;
+        gap: 6px;
+        align-items: stretch;
+    }
+
+    nav button:not(.has-slot-content) {
+        align-items: center;
     }
 
     nav a:hover,
@@ -226,11 +240,19 @@
         margin: 0;
     }
 
+    .chip-text.with-slot {
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        padding-top: 4px;
+        text-align: left;
+    }
+
+    nav button.inverted .chip-text.with-slot {
+        border-top-color: rgba(0, 0, 0, 0.25);
+    }
+
     .slot {
-        margin-right: 5px;
-        /* text align left */
         display: flex;
-        /* bold */
         font-weight: 1000;
+        justify-content: center;
     }
 </style>
