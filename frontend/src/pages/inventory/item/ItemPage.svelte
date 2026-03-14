@@ -31,6 +31,12 @@
     const quests = getQuestsForItem(itemId);
     let hasProcesses = false;
 
+    const processGroups = [
+        { key: ProcessItemTypes.REQUIRE_ITEM, label: 'Required for processes' },
+        { key: ProcessItemTypes.CONSUME_ITEM, label: 'Consumed by processes' },
+        { key: ProcessItemTypes.CREATE_ITEM, label: 'Created by processes' },
+    ];
+
     const hasQuests = quests.requires.length > 0 || quests.rewards.length > 0;
 
     $: hasProcesses = Object.values(processes).some((arr) => Array.isArray(arr) && arr.length > 0);
@@ -127,21 +133,22 @@
                 {#if hasProcesses}
                     <p>Processes:</p>
                 {/if}
-                {#if processes[ProcessItemTypes.REQUIRE_ITEM]}
-                    {#each processes[ProcessItemTypes.REQUIRE_ITEM] as processId}
-                        <Process inverted={false} {processId} />
-                    {/each}
-                {/if}
-                {#if processes[ProcessItemTypes.CONSUME_ITEM]}
-                    {#each processes[ProcessItemTypes.CONSUME_ITEM] as processId}
-                        <Process inverted={false} {processId} />
-                    {/each}
-                {/if}
-                {#if processes[ProcessItemTypes.CREATE_ITEM]}
-                    {#each processes[ProcessItemTypes.CREATE_ITEM] as processId}
-                        <Process inverted={false} {processId} />
-                    {/each}
-                {/if}
+                {#each processGroups as group}
+                    {@const groupProcesses = processes[group.key] ?? []}
+                    {#if groupProcesses.length > 0}
+                        <details class="process-group">
+                            <summary>
+                                <span>{group.label}</span>
+                                <span class="count">{groupProcesses.length}</span>
+                            </summary>
+                            <div class="details-content">
+                                {#each groupProcesses as processId}
+                                    <Process inverted={false} {processId} />
+                                {/each}
+                            </div>
+                        </details>
+                    {/if}
+                {/each}
                 {#if hasQuests}
                     <p>Quests:</p>
                 {/if}
@@ -186,5 +193,71 @@
 
     .placeholder {
         color: #d0ffd0;
+    }
+
+    .process-group {
+        width: 100%;
+        max-width: 660px;
+        margin: 8px 0;
+        border: 1px solid rgba(200, 255, 200, 0.5);
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.12);
+        overflow: hidden;
+    }
+
+    .process-group summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 700;
+        list-style: none;
+    }
+
+    .process-group summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .process-group summary::before {
+        content: '▸';
+        font-size: 0.9rem;
+        margin-right: 8px;
+        transition: transform 220ms ease;
+    }
+
+    .process-group[open] summary::before {
+        transform: rotate(90deg);
+    }
+
+    .process-group .count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.8rem;
+        height: 1.8rem;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(200, 255, 200, 0.5);
+        font-size: 0.9rem;
+        padding: 0 8px;
+    }
+
+    .details-content {
+        padding: 0 10px 0;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transition:
+            max-height 260ms ease,
+            opacity 260ms ease,
+            padding 260ms ease;
+    }
+
+    .process-group[open] .details-content {
+        max-height: 2000px;
+        opacity: 1;
+        padding: 0 10px 10px;
     }
 </style>

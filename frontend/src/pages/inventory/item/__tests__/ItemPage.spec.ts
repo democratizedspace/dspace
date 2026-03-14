@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto';
 import { render, waitFor } from '@testing-library/svelte';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import items from '../../json/items';
 import ItemPage from '../ItemPage.svelte';
 import { db } from '../../../../utils/customcontent.js';
@@ -9,21 +9,17 @@ import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 const getItemCountsMock = vi.fn();
 const getContainedItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
+const getProcessesForItemMock = vi.fn();
+const getProcessesForItemIncludingCustomMock = vi.fn();
 
-vi.mock('../../../../utils/gameState/processes.js', () => {
-    const ProcessItemTypes = {
-        REQUIRE_ITEM: 'require',
-        CONSUME_ITEM: 'consume',
-        CREATE_ITEM: 'create',
-    };
+vi.mock('../../../../utils/gameState/processes.js', async (importOriginal) => {
+    const actual = await importOriginal();
 
     return {
-        ProcessItemTypes,
-        getProcessesForItem: () => ({
-            [ProcessItemTypes.REQUIRE_ITEM]: [],
-            [ProcessItemTypes.CONSUME_ITEM]: [],
-            [ProcessItemTypes.CREATE_ITEM]: [],
-        }),
+        ...actual,
+        getProcessesForItem: (...args) => getProcessesForItemMock(...args),
+        getProcessesForItemIncludingCustom: (...args) =>
+            getProcessesForItemIncludingCustomMock(...args),
     };
 });
 
@@ -72,12 +68,24 @@ async function deleteCustomContentDb() {
     });
 }
 
+beforeEach(() => {
+    const emptyMap = {
+        requireItem: [],
+        consumeItem: [],
+        createItem: [],
+    };
+    getProcessesForItemMock.mockReturnValue(emptyMap);
+    getProcessesForItemIncludingCustomMock.mockResolvedValue(emptyMap);
+});
+
 afterEach(async () => {
     clearItemResolverCache();
     await deleteCustomContentDb();
     getItemCountsMock.mockReset();
     getContainedItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
+    getProcessesForItemMock.mockReset();
+    getProcessesForItemIncludingCustomMock.mockReset();
 });
 
 describe('ItemPage', () => {
@@ -136,6 +144,35 @@ describe('ItemPage', () => {
         await waitFor(() => {
             const iconImage = container.querySelector('img.icon');
             expect(iconImage?.getAttribute('src')).toBe(heroImage?.getAttribute('src'));
+        });
+    });
+
+    it('renders process groups as collapsed details sections by default', async () => {
+        const builtIn = items.find((item) => !item.price) ?? items[0];
+
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+        getProcessesForItemIncludingCustomMock.mockResolvedValue({
+            requireItem: ['process-require-1', 'process-require-2'],
+            consumeItem: ['process-consume-1'],
+            createItem: [],
+        });
+
+        const { container, findByText } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await findByText('Processes:');
+
+        const details = container.querySelectorAll('details.process-group');
+        expect(details).toHaveLength(2);
+
+        const firstSummary = details[0].querySelector('summary');
+        expect(firstSummary?.textContent).toContain('Required for processes');
+        expect(firstSummary?.textContent).toContain('2');
+
+        details.forEach((section) => {
+            expect(section.hasAttribute('open')).toBe(false);
         });
     });
 
