@@ -58,6 +58,10 @@ function ensureChipStaticOpacityStyle() {
     document.head.appendChild(style);
 }
 
+function isVisible(element: Element) {
+    return getComputedStyle(element as HTMLElement).display !== 'none';
+}
+
 const TEST_IMAGE =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
 
@@ -192,7 +196,11 @@ describe('ItemPage', () => {
             expect(group.hasAttribute('open')).toBe(false);
         }
         for (const groupContent of processContent) {
-            expect(groupContent).not.toBeVisible();
+            expect(isVisible(groupContent)).toBe(false);
+        }
+
+        for (const description of descriptions) {
+            expect(isVisible(description)).toBe(false);
         }
 
         const [requiredSummary, consumedSummary, createdSummary] = Array.from(
@@ -201,19 +209,20 @@ describe('ItemPage', () => {
 
         await fireEvent.click(requiredSummary as HTMLElement);
         expect(details[0].hasAttribute('open')).toBe(true);
-        expect(processContent[0]).toBeVisible();
+        expect(isVisible(processContent[0])).toBe(true);
+        expect(isVisible(descriptions[0])).toBe(true);
 
         await fireEvent.click(consumedSummary as HTMLElement);
         expect(details[0].hasAttribute('open')).toBe(true);
         expect(details[1].hasAttribute('open')).toBe(true);
-        expect(processContent[0]).toBeVisible();
-        expect(processContent[1]).toBeVisible();
-        expect(processContent[2]).not.toBeVisible();
+        expect(isVisible(processContent[0])).toBe(true);
+        expect(isVisible(processContent[1])).toBe(true);
+        expect(isVisible(processContent[2])).toBe(false);
 
         await fireEvent.click(createdSummary as HTMLElement);
         expect(details[2].hasAttribute('open')).toBe(true);
         for (const groupContent of processContent) {
-            expect(groupContent).toBeVisible();
+            expect(isVisible(groupContent)).toBe(true);
         }
 
         expect(getByText('Required by processes')).toBeTruthy();
