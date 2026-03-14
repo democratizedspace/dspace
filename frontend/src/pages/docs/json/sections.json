@@ -2,22 +2,56 @@
     {
         "title": "The basics",
         "links": [
-            { "title": "About", "href": "/docs/about", "keywords": ["overview", "intro"] },
-            { "title": "Mission", "href": "/docs/mission", "keywords": ["vision", "values"] },
-            { "title": "Roadmap", "href": "/docs/roadmap", "keywords": ["plan", "future"] },
+            {
+                "title": "About",
+                "href": "/docs/about",
+                "keywords": ["overview", "intro"]
+            },
+            {
+                "title": "Mission",
+                "href": "/docs/mission",
+                "keywords": ["vision", "values"]
+            },
+            {
+                "title": "Roadmap",
+                "href": "/docs/roadmap",
+                "keywords": ["plan", "future"]
+            },
             {
                 "title": "Changelog",
                 "href": "/docs/changelog",
                 "keywords": ["release notes", "updates"]
             },
-            { "title": "FAQ", "href": "/docs/faq", "keywords": ["questions"] },
+            {
+                "title": "v3 release state",
+                "href": "/docs/v3-release-state",
+                "keywords": ["v3", "status", "launch"]
+            },
+            {
+                "title": "FAQ",
+                "href": "/docs/faq",
+                "keywords": ["questions"]
+            },
             {
                 "title": "Docs search",
                 "href": "/docs/docs-search",
                 "keywords": ["search", "filter", "snippets"]
             },
-            { "title": "Glossary", "href": "/docs/glossary", "keywords": ["definitions"] },
-            { "title": "Contribute", "href": "/docs/contribute", "keywords": ["get involved"] },
+            {
+                "title": "Routes",
+                "href": "/docs/routes",
+                "keywords": ["navigation", "paths", "urls"]
+            },
+            {
+                "title": "Glossary",
+                "href": "/docs/glossary",
+                "keywords": ["definitions"]
+            },
+            {
+                "title": "Contribute",
+                "href": "/docs/contribute",
+                "keywords": ["get involved"]
+            },
             {
                 "title": "Meet the team",
                 "href": "/docs/team",
@@ -28,7 +62,11 @@
     {
         "title": "Skills",
         "links": [
-            { "title": "3D printing", "href": "/docs/3dprinting", "keywords": ["fabrication"] },
+            {
+                "title": "3D printing",
+                "href": "/docs/3dprinting",
+                "keywords": ["fabrication"]
+            },
             {
                 "title": "Aquaria",
                 "href": "/docs/aquaria",
@@ -59,13 +97,21 @@
                 "href": "/docs/energy-systems",
                 "keywords": ["batteries", "inverters", "off-grid"]
             },
-            { "title": "Solar power", "href": "/docs/solar", "keywords": ["energy", "panels"] },
+            {
+                "title": "Solar power",
+                "href": "/docs/solar",
+                "keywords": ["energy", "panels"]
+            },
             {
                 "title": "Electricity",
                 "href": "/docs/electricity",
                 "keywords": ["power", "generation"]
             },
-            { "title": "First Aid", "href": "/docs/first-aid", "keywords": ["safety", "medical"] },
+            {
+                "title": "First Aid",
+                "href": "/docs/first-aid",
+                "keywords": ["safety", "medical"]
+            },
             {
                 "title": "Geothermal",
                 "href": "/docs/geothermal",
@@ -86,7 +132,11 @@
                 "href": "/docs/robotics",
                 "keywords": ["sensors", "actuators", "motion"]
             },
-            { "title": "Rocketry", "href": "/docs/rockets", "keywords": ["launch", "propulsion"] },
+            {
+                "title": "Rocketry",
+                "href": "/docs/rockets",
+                "keywords": ["launch", "propulsion"]
+            },
             {
                 "title": "Sysadmin & DevOps",
                 "href": "/docs/sysadmin-devops",
@@ -102,16 +152,36 @@
     {
         "title": "Game systems",
         "links": [
-            { "title": "NPCs", "href": "/docs/npcs", "keywords": ["characters"] },
+            {
+                "title": "NPCs",
+                "href": "/docs/npcs",
+                "keywords": ["characters"]
+            },
             {
                 "title": "Everything is real-time",
                 "href": "/docs/realtime",
                 "keywords": ["time", "simulation"]
             },
-            { "title": "Inventory", "href": "/docs/inventory", "keywords": ["items", "storage"] },
-            { "title": "Cloud Sync", "href": "/docs/cloud-sync", "keywords": ["sync", "backup"] },
-            { "title": "Backups", "href": "/docs/backups", "keywords": ["saves", "safety"] },
-            { "title": "Game state rollback", "href": "/docs/rollback", "keywords": ["restore"] },
+            {
+                "title": "Inventory",
+                "href": "/docs/inventory",
+                "keywords": ["items", "storage"]
+            },
+            {
+                "title": "Cloud Sync",
+                "href": "/docs/cloud-sync",
+                "keywords": ["sync", "backup"]
+            },
+            {
+                "title": "Backups",
+                "href": "/docs/backups",
+                "keywords": ["saves", "safety"]
+            },
+            {
+                "title": "Game state rollback",
+                "href": "/docs/rollback",
+                "keywords": ["restore"]
+            },
             {
                 "title": "Authentication",
                 "href": "/docs/authentication",
@@ -122,16 +192,36 @@
                 "href": "/docs/achievements",
                 "keywords": ["milestones", "badges"]
             },
-            { "title": "Titles", "href": "/docs/titles", "keywords": ["reputation"] },
+            {
+                "title": "Titles",
+                "href": "/docs/titles",
+                "keywords": ["reputation"]
+            },
             {
                 "title": "Processes",
                 "href": "/docs/processes",
                 "keywords": ["automation", "crafting"]
             },
-            { "title": "Guilds", "href": "/docs/guilds", "keywords": ["teams", "co-op"] },
-            { "title": "Amazing", "href": "/docs/amazing", "keywords": ["wonder", "delight"] },
-            { "title": "dWatt", "href": "/docs/dwatt", "keywords": ["energy", "token"] },
-            { "title": "dCarbon", "href": "/docs/dCarbon", "keywords": ["carbon", "token"] }
+            {
+                "title": "Guilds",
+                "href": "/docs/guilds",
+                "keywords": ["teams", "co-op"]
+            },
+            {
+                "title": "Amazing",
+                "href": "/docs/amazing",
+                "keywords": ["wonder", "delight"]
+            },
+            {
+                "title": "dWatt",
+                "href": "/docs/dwatt",
+                "keywords": ["energy", "token"]
+            },
+            {
+                "title": "dCarbon",
+                "href": "/docs/dCarbon",
+                "keywords": ["carbon", "token"]
+            }
         ]
     },
     {
@@ -182,16 +272,36 @@
     {
         "title": "Dev",
         "links": [
-            { "title": "Pull Requests", "href": "/docs/prs", "keywords": ["contribution"] },
-            { "title": "Bounties", "href": "/docs/bounties", "keywords": ["rewards"] },
-            { "title": "User journeys", "href": "/docs/user-journeys", "keywords": ["testing"] },
-            { "title": "Self-hosting", "href": "/docs/self-hosting", "keywords": ["setup"] },
+            {
+                "title": "Pull Requests",
+                "href": "/docs/prs",
+                "keywords": ["contribution"]
+            },
+            {
+                "title": "Bounties",
+                "href": "/docs/bounties",
+                "keywords": ["rewards"]
+            },
+            {
+                "title": "User journeys",
+                "href": "/docs/user-journeys",
+                "keywords": ["testing"]
+            },
+            {
+                "title": "Self-hosting",
+                "href": "/docs/self-hosting",
+                "keywords": ["setup"]
+            },
             {
                 "title": "Database benchmark",
                 "href": "/docs/db-benchmark",
                 "keywords": ["performance", "database"]
             },
-            { "title": "token.place API", "href": "/docs/token-place", "keywords": ["api"] },
+            {
+                "title": "token.place API",
+                "href": "/docs/token-place",
+                "keywords": ["api"]
+            },
             {
                 "title": "Schema versioning",
                 "href": "/docs/schema-versioning",
@@ -202,7 +312,11 @@
                 "href": "/docs/legacy-save-storage",
                 "keywords": ["storage", "migration", "saves"]
             },
-            { "title": "UI lifecycle", "href": "/docs/ui-lifecycle", "keywords": ["frontend"] },
+            {
+                "title": "UI lifecycle",
+                "href": "/docs/ui-lifecycle",
+                "keywords": ["frontend"]
+            },
             {
                 "title": "Codex prompt library",
                 "href": "/docs/prompts-codex",

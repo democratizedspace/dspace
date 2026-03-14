@@ -5,23 +5,35 @@ slug: 'v3-release-state'
 
 # v3 Release State
 
-## Chat provider reality
+This page is the player-facing status summary for what v3 shipped, what is live now, and what is
+explicitly deferred.
 
-- v3 ships **OpenAI-only chat** in production today.
-- token.place is deferred to v3.1 because the token.place API v1 is not live yet; once it ships,
-  v3.1 will enable the integration. See [/docs/token-place](/docs/token-place) for the
-  authoritative integration status and opt-in details.
+## Live in v3
 
-## v2-only mechanics removed / not applicable in v3
+- Expanded quest catalog and skill tree coverage
+- In-game custom content editors for quests, items, and processes
+- Local-first save architecture (IndexedDB primary, legacy migration support)
+- Backup workflows: game saves, custom content backups, and cloud sync
+- NPC persona chat with OpenAI-backed context grounding
+- More-menu destinations promoted from placeholders to live surfaces (Stats, Titles, Toolbox,
+  Leaderboard)
 
-- **Blockchain/Web3 integration plans are removed in v3.** The v3 release notes explicitly
-  remove blockchain integration plans and keep the virtual units (dWatt, dUSD, etc.) as plain
-  progress metrics without tokenization. See [/changelog#20260401](/changelog#20260401).
-- **Primary save storage moved from v2 localStorage to v3 IndexedDB.** v3 stores game state in
-  IndexedDB, migrates legacy `gameState` from localStorage on first launch, and clears the legacy
-  keys; localStorage is only a fallback when IndexedDB is unavailable. See
-  [/docs/state-migration](/docs/state-migration).
-- **Legacy behavior (historical): v2 localStorage keys are cleared during v2 → v3 migration.**
-  The legacy storage guide notes that v3 deletes `gameState`/`gameStateBackup` during the
-  migration flow; treat those keys as legacy artifacts, not current v3 behavior. See
-  [/docs/legacy-save-storage](/docs/legacy-save-storage).
+## Deferred / constrained in v3
+
+- Chat provider support is **OpenAI-only** in production today
+- token.place integration is deferred pending token.place API v1 readiness
+- Full multiplayer guild mechanics and ActivityPub federation are still roadmap work
+
+## Data/storage reality check
+
+- v3 writes canonical save state to IndexedDB.
+- Legacy v1 cookies and v2 localStorage saves can be detected and migrated via Settings.
+- localStorage is treated as legacy/fallback, not the canonical long-term store.
+
+## Where to verify details
+
+- [April 1, 2026 changelog](/changelog#20260401)
+- [State migration](/docs/state-migration)
+- [Legacy save storage](/docs/legacy-save-storage)
+- [Cloud Sync](/docs/cloud-sync)
+- [Routes](/docs/routes)

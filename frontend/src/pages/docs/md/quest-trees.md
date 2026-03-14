@@ -3,31 +3,45 @@ title: 'Quest Trees'
 slug: 'quest-trees'
 ---
 
-# Quest Trees
+# Quest Trees (v3)
 
-DSPACE quests are organized into themed trees that build skills over time. This page summarizes the
-current quest categories.
+DSPACE quests are organized into skill trees under
+`frontend/src/pages/quests/json/<tree>/`.
 
-## Existing Quest Trees
+The table below reflects the current v3 catalog.
 
-- **3D Printing** – Printer setup, calibration, and print workflow fundamentals.
-- **Aquaria** – Aquatic habitat setup, care, and maintenance routines.
-- **Astronomy** – Observational practice, instruments, and sky navigation basics.
-- **Chemistry** – Safe lab habits, measurements, and reactions in everyday contexts.
-- **Completionist** – Collection milestones and celebration checkpoints.
-- **Composting** – Compost systems, monitoring, and material balancing.
-- **DevOps** – Deployment fundamentals, automation, and infrastructure hygiene.
-- **Electronics** – Circuits, sensors, and practical electronics troubleshooting.
-- **Energy** – Off-grid power systems, storage, and efficiency practices.
-- **First Aid** – Preparedness skills, injury response, and kit upkeep.
-- **Geothermal** – Ground loop monitoring, sensors, and heat system upkeep.
-- **Hydroponics** – Soilless growing systems, nutrient checks, and upkeep routines.
-- **Programming** – Code fundamentals, automation scripts, and data utilities.
-- **Robotics** – Sensors, motion control, and basic robot behaviors.
-- **Rocketry** – Launch prep, safety checks, and mission fundamentals.
-- **Sysadmin** – Systems basics, monitoring, and operational checklists.
-- **UBI** – Universal basic income concepts and personal planning exercises.
-- **Welcome** – Onboarding quests that introduce core systems and tools.
-- **Woodworking** – Tool safety, joinery basics, and project planning.
+| Tree          | Quests | Skills doc                                 |
+| ------------- | -----: | ------------------------------------------ |
+| 3D Printing   |     16 | [/docs/3dprinting](/docs/3dprinting)       |
+| Aquaria       |     19 | [/docs/aquaria](/docs/aquaria)             |
+| Astronomy     |     21 | [/docs/astronomy](/docs/astronomy)         |
+| Chemistry     |     10 | [/docs/chemistry](/docs/chemistry)         |
+| Completionist |      6 | [/docs/completionist](/docs/completionist) |
+| Composting    |      4 | [/docs/composting](/docs/composting)       |
+| DevOps        |     15 | [/docs/devops](/docs/devops)               |
+| Electronics   |     22 | [/docs/electronics](/docs/electronics)     |
+| Energy        |     21 | [/docs/energy](/docs/energy)               |
+| First Aid     |     13 | [/docs/firstaid](/docs/firstaid)           |
+| Geothermal    |     15 | [/docs/geothermal](/docs/geothermal)       |
+| Hydroponics   |     23 | [/docs/hydroponics](/docs/hydroponics)     |
+| Programming   |     18 | [/docs/programming](/docs/programming)     |
+| Robotics      |     13 | [/docs/robotics](/docs/robotics)           |
+| Rocketry      |     10 | [/docs/rocketry](/docs/rocketry)           |
+| Sysadmin      |      3 | [/docs/sysadmin](/docs/sysadmin)           |
+| UBI           |      4 | [/docs/ubi](/docs/ubi)                     |
+| Welcome       |      5 | [/docs/welcome](/docs/welcome)             |
+| Woodworking   |     10 | [/docs/woodworking](/docs/woodworking)     |
 
-Run `node scripts/generate-quest-chart.js` from the repository root to produce a radar chart summarizing the quest tree sizes. The PNG output is ignored by Git, but CI artifacts attach the latest image.
+**Total quests:** 248
+
+## How this stays up to date
+
+- Quest pages are auto-discovered from the quest JSON directory structure.
+- The Docs index merges curated skill links with generated tree links.
+- If a quest tree exists without a matching docs page, the docs index reports it during build.
+
+## Related docs
+
+- [New quests list](/docs/new-quests)
+- [Quest guidelines](/docs/quest-guidelines)
+- [Quest submission guide](/docs/quest-submission)
