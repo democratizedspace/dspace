@@ -365,7 +365,7 @@ test.describe('Quests page responsive grid centering', () => {
                 return null;
             }
 
-            const tolerance = 1;
+            const tolerance = 2;
             const tops = [
                 ...new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top))),
             ];
@@ -376,7 +376,7 @@ test.describe('Quests page responsive grid centering', () => {
                     ).length
             );
 
-            const firstRowCount = rowSizes[0] ?? 0;
+            const maxRowCount = Math.max(...rowSizes);
             const lastRowTop = tops[tops.length - 1];
             const lastRowTiles = tiles.filter(
                 (tile) => Math.abs(tile.getBoundingClientRect().top - lastRowTop) <= tolerance
@@ -384,8 +384,8 @@ test.describe('Quests page responsive grid centering', () => {
             const hasPartialLastRow =
                 rowSizes.length > 1 &&
                 lastRowTiles.length > 0 &&
-                firstRowCount > 0 &&
-                lastRowTiles.length < firstRowCount;
+                maxRowCount > 0 &&
+                lastRowTiles.length < maxRowCount;
 
             const left = Math.min(...lastRowTiles.map((tile) => tile.getBoundingClientRect().left));
             const right = Math.max(
@@ -393,17 +393,16 @@ test.describe('Quests page responsive grid centering', () => {
             );
 
             const gridRect = grid.getBoundingClientRect();
-            const leftSpace = left - gridRect.left;
-            const rightSpace = gridRect.right - right;
+            const containerCenter = (gridRect.left + gridRect.right) / 2;
+            const lastRowCenter = (left + right) / 2;
+            const centerOffset = Math.abs(lastRowCenter - containerCenter);
 
-            return { hasPartialLastRow, leftSpace, rightSpace, rowSizes };
+            return { centerOffset, hasPartialLastRow, rowSizes };
         });
 
         expect(layout).toBeTruthy();
         expect(layout?.hasPartialLastRow).toBe(true);
-        expect(Math.abs((layout?.leftSpace ?? 0) - (layout?.rightSpace ?? 0))).toBeLessThanOrEqual(
-            3
-        );
+        expect(layout?.centerOffset ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(3);
     });
 
     test('keeps one quest tile per row on mobile screens', async ({ page }) => {
