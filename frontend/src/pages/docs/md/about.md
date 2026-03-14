@@ -5,60 +5,47 @@ slug: 'about'
 
 # About DSPACE
 
-DSPACE is an incremental simulation game about resource management and the practical skills
-behind space exploration. The current gameplay is intentionally grounded: you learn real-world
-systems on Earth first, then build toward the space era as new milestones ship. In the game, you
-will learn skills, work on [quests](/quests), and grow a resilient technical foundation.
+DSPACE is an incremental, local-first simulation game about building practical skills that support
+long-term space civilization. v3 expands the game from a small prototype into a full learning
+platform with deep quest progression, custom content creation tools, and integrated companion docs.
 
-**The game is still under active development.** If you would like to get involved in the
-creation of the game, please join the [Discord](https://discord.gg/A3UAfYvnxM) and say hello!
+## What v3 includes
 
-## Start with the basics
+- **248 official quests** across 19 themed trees
+- **In-game creators** for custom quests, items, and processes
+- **Bundle submission flow** for shipping related custom content together
+- **Local-first saves** in IndexedDB with backup/export and optional Cloud Sync
+- **AI chat personas** for guided help and roleplay
+- **Operational game pages** for Stats, Titles, Toolbox, Leaderboard, and Settings
 
-Learn skills related to resource management, energy, fabrication, and life support. Current
-quests center on grounded systems like electricity, solar, aquaria, hydroponics, chemistry,
-electronics, and operations, so you build a working toolkit before heading off-world.
+See [v3 release notes](/changelog#20260401) and the [v3 release state](/docs/v3-release-state) for
+current status details.
 
-## Gain momentum
+## Learning model
 
-Build confidence by assembling and validating real infrastructure: power systems, tools,
-monitoring, and small-scale manufacturing. The game is expanding bottom-up, so space-based
-orbital and suborbital launches are not playable yet; today’s rocketry content is educational,
-model-rocket scale. When we introduce launch systems, you will already have the energy,
-materials, and operational habits needed to support them.
+DSPACE focuses on grounded systems first: energy, food production, fabrication, emergency response,
+programming, and operations. Space-adjacent quests (especially rocketry and astronomy) build on that
+foundation so progression feels earned and transferable.
 
-## Research
+## Custom content is first-class
 
-In-situ resource utilization (ISRU), lunar mining, and deep-space fuel production are long-term
-goals. We are laying the groundwork first with terrestrial resource loops, storage, and process
-chains so that future off-world systems feel earned rather than assumed.
+You can design your own quests, items, and processes in the game UI, test them locally, and then
+submit them for canon review:
 
-## Create your own content
+- [Custom Quest System](/docs/custom-quest-system)
+- [Content Development Guide](/docs/content-development)
+- [Quest Submission Guide](/docs/quest-submission)
+- [Custom Content Bundles](/docs/custom-bundles)
 
-DSPACE is designed as an extensible platform where you can create and contribute:
+## Project values
 
-- **[Custom Quests](/docs/custom-quest-system)** - Create and submit missions with the in-game
-  editor
-- **[Custom Items](/docs/item-guidelines)** - Create virtual resources, tools, and components
-- **[Custom Processes](/docs/process-guidelines)** - Build activities that transform or utilize
-  items
-
-Our [Content Development Guide](/docs/content-development) provides a comprehensive overview of
-all content creation options, workflows, and best practices.
-
-## Educational Foundation
-
-All content in DSPACE is designed with education in mind. Through gameplay, you'll learn about:
-
-- Sustainable resource management
-- Closed-loop life support systems
-- Energy generation and storage
-- Manufacturing techniques relevant to space
-- Biology and agriculture in controlled environments
-- Physics principles that govern space exploration
+- **Practical learning**: teach usable skills, not just lore.
+- **Transparency**: docs and changelog should match shipped behavior.
+- **Local ownership**: your save and custom content stay on your device unless you opt into sync.
+- **Community contribution**: players can help extend official content.
 
 ## Where to go next
 
-Check out the [mission statement](/docs/mission) and take a look at the
-[roadmap](/docs/roadmap). If you'd like to contribute, visit our
-[contribution guide](/docs/contribute).
+- Start with [Quest Trees](/docs/quest-trees).
+- Review [FAQ](/docs/faq) for common workflows.
+- Visit [Contribute](/docs/contribute) if you want to help build v3.x and beyond.

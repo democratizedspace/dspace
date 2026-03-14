@@ -3,41 +3,31 @@ title: 'Guilds'
 slug: 'guilds'
 ---
 
-Guilds are **not live yet**. They are planned for DSPACE v3 (2027+ on the
-[roadmap](/docs/roadmap)) and will arrive after DSPACE integrates ActivityPub
-as the multiplayer foundation. This page outlines the intended direction so
-players know what to expect once guilds ship.
+# Guilds in v3
 
-## Planned guild experience
+Guilds are in an **early social layer** in v3. The Metaguild exists today as a coordination concept
+and leaderboard identity, while full multiplayer guild mechanics remain future work.
 
-When ActivityPub integration is complete, players will be able to:
+## Live now
 
-- **Create or join guilds** with a shared name, tag, and public profile.
-- **Coordinate multiplayer progress** through guild-specific questlines,
-  shared milestones, and cooperative resource goals.
-- **Unlock guild content** that provides in-game benefits such as tooling
-  access, bonus quest rewards, and specialized support.
-- **Connect to the wider fediverse** so guild identities, announcements, and
-  updates can travel beyond a single DSPACE instance.
+- **Metaguild framing in docs and narrative** so players share a common coordination language.
+- **Donation leaderboard page** at [/leaderboard](/leaderboard), which highlights top supporters.
+- **Guild-oriented quest storytelling** across skills docs and NPC dialog.
 
-## The Metaguild vision
+## Not live yet
 
-The Metaguild will act as the flagship guild, providing a narrative anchor for
-newcomers and a place to collaborate on global tech tree goals. Specialist
-wings (print farm, hydroponics, rocketry, medicine, and more) will eventually
-host quests, checklists, and ongoing maintenance tasks for the whole crew.
+The following are still roadmap items:
 
-## What is not available today
+- Guild creation/join flows
+- Shared guild inventories or co-op quest state
+- ActivityPub federation and cross-instance guild identities
+- Real-time multiplayer quest progression
 
-The following features are **not implemented yet** in the current build:
+## How to participate today
 
-- Guild creation, membership, or shared inventories
-- Guild-specific quests, rewards, or benefits
-- Donation boards, UBI funding controls, or live guild leaderboards
-- ActivityPub identities or cross-instance multiplayer coordination
+- Use [Leaderboard](/docs/leaderboard) to track donation momentum.
+- Coordinate through the community [Discord](https://discord.gg/A3UAfYvnxM).
+- Contribute quest/content updates that strengthen Metaguild learning paths.
 
-## How to follow progress
-
-Keep an eye on the [roadmap](/docs/roadmap) for milestone updates and join the
-[Discord](https://discord.gg/A3UAfYvnxM) to discuss multiplayer planning. We
-will update this page as soon as guild development begins.
+As guild infrastructure ships, this page will move from concept + coordination into a full gameplay
+manual.
