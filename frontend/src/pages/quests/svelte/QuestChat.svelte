@@ -3,6 +3,7 @@
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
     import { questFinished } from '../../../utils/gameState.js';
+    import QuestLinkChips from '../../../components/svelte/QuestLinkChips.svelte';
     import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
@@ -14,6 +15,7 @@
 
     const clientSideRendered = writable(false);
     const finished = writable(false);
+    const missingRequiredQuests = writable([]);
 
     // Move these declarations inside onMount to ensure quest is defined
     let npc;
@@ -26,6 +28,20 @@
 
     const releaseRewardImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
+    };
+
+    const getMissingRequirements = () => {
+        const requiresQuests = Array.isArray(quest?.requiresQuests)
+            ? quest.requiresQuests
+            : Array.isArray(quest?.default?.requiresQuests)
+              ? quest.default.requiresQuests
+              : [];
+
+        return requiresQuests.filter((requiredQuestId) => {
+            return typeof requiredQuestId === 'string' && requiredQuestId.length > 0
+                ? !questFinished(requiredQuestId)
+                : false;
+        });
     };
 
     const loadRewardItems = async () => {
@@ -88,6 +104,7 @@
             currentDialogue = dialogueMap.get(pointer);
         }
 
+        missingRequiredQuests.set(getMissingRequirements());
         clientSideRendered.set(true);
         void loadRewardItems();
     });
@@ -103,9 +120,8 @@
                 pointer = $state.quests[quest.id].stepId;
                 currentDialogue = dialogueMap?.get(pointer);
             }
-            if (questFinished(quest.id)) {
-                finished.set(true);
-            }
+            finished.set(questFinished(quest.id));
+            missingRequiredQuests.set(getMissingRequirements());
         }
     }
 
@@ -141,24 +157,32 @@
                     <div class="quest-banner">
                         <img class="banner" src={quest.image} alt={quest.title} />
                     </div>
-                    <div class="left">
-                        <img src={npc} alt="NPC" />
-                        <div class="npcDialogue left">
-                            {@html formatDialogue(dialogueMap.get(pointer)?.text)}
+                    {#if $missingRequiredQuests.length > 0}
+                        <div class="quest-locked" data-testid="quest-locked-message">
+                            <h4>This quest is not available yet.</h4>
+                            <p>Complete these quests to unlock it:</p>
+                            <QuestLinkChips questIds={$missingRequiredQuests} />
                         </div>
-                    </div>
-                    <div class="right options">
-                        <img src={avatar} alt="Avatar" />
-                        {#each dialogueMap.get(pointer)?.options || [] as option, index}
-                            <QuestChatOption
-                                {quest}
-                                {option}
-                                questId={quest.id}
-                                stepId={pointer}
-                                optionIndex={index}
-                            />
-                        {/each}
-                    </div>
+                    {:else}
+                        <div class="left">
+                            <img src={npc} alt="NPC" />
+                            <div class="npcDialogue left">
+                                {@html formatDialogue(dialogueMap.get(pointer)?.text)}
+                            </div>
+                        </div>
+                        <div class="right options">
+                            <img src={avatar} alt="Avatar" />
+                            {#each dialogueMap.get(pointer)?.options || [] as option, index}
+                                <QuestChatOption
+                                    {quest}
+                                    {option}
+                                    questId={quest.id}
+                                    stepId={pointer}
+                                    optionIndex={index}
+                                />
+                            {/each}
+                        </div>
+                    {/if}
                 {:else}
                     <div class="temp-container"></div>
                 {/if}
@@ -169,6 +193,8 @@
         <h5>Status:</h5>
         {#if $finished}
             <p class="green">Complete</p>
+        {:else if $missingRequiredQuests.length > 0}
+            <p class="orange">Locked</p>
         {:else}
             <p class="orange">In Progress</p>
         {/if}
@@ -267,6 +293,22 @@
     .chat-body {
         width: 100%;
     }
+
+    .quest-locked {
+        background-color: #a4f1b1;
+        border: 1px solid #24cf2f;
+        border-radius: 20px;
+        padding: 20px;
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    .quest-locked h4,
+    .quest-locked p {
+        margin: 0 0 0.5rem;
+        text-align: center;
+    }
+
 
     .left {
         display: flex;

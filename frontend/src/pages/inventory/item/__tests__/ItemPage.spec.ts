@@ -9,6 +9,7 @@ import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 const getItemCountsMock = vi.fn();
 const getContainedItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
+const getQuestsForItemMock = vi.fn(() => ({ requires: [], rewards: [] }));
 
 vi.mock('../../../../utils/gameState/processes.js', () => {
     const ProcessItemTypes = {
@@ -28,7 +29,7 @@ vi.mock('../../../../utils/gameState/processes.js', () => {
 });
 
 vi.mock('../../../../utils/itemDependencies.js', () => ({
-    getQuestsForItem: () => ({ requires: [], rewards: [] }),
+    getQuestsForItem: (...args) => getQuestsForItemMock(...args),
 }));
 
 vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
@@ -78,6 +79,8 @@ afterEach(async () => {
     getItemCountsMock.mockReset();
     getContainedItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
+    getQuestsForItemMock.mockReset();
+    getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
 });
 
 describe('ItemPage', () => {
@@ -136,6 +139,31 @@ describe('ItemPage', () => {
         await waitFor(() => {
             const iconImage = container.querySelector('img.icon');
             expect(iconImage?.getAttribute('src')).toBe(heroImage?.getAttribute('src'));
+        });
+    });
+
+
+    it('renders quest dependency chips as clickable links', async () => {
+        const builtIn = items.find((entry) => !entry.price) ?? items[0];
+
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+        getQuestsForItemMock.mockReturnValue({
+            requires: ['welcome/howtodoquests'],
+            rewards: ['hydroponics/basil'],
+        });
+
+        const { getByRole } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(getByRole('link', { name: 'welcome/howtodoquests' }).getAttribute('href')).toBe(
+                '/quests/welcome/howtodoquests'
+            );
+            expect(getByRole('link', { name: 'hydroponics/basil' }).getAttribute('href')).toBe(
+                '/quests/hydroponics/basil'
+            );
         });
     });
 

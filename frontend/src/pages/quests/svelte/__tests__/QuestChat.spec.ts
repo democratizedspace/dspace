@@ -1,5 +1,5 @@
 import { render, waitFor } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import QuestChat from '../QuestChat.svelte';
 
 type QuestState = {
@@ -13,7 +13,7 @@ type Store<T> = {
     update: (updater: (value: T) => T) => void;
 };
 
-const { mockState } = vi.hoisted(() => {
+const { mockState, questFinishedMock } = vi.hoisted(() => {
     let value: QuestState = { quests: {}, inventory: {} };
     const subscribers = new Set<(current: QuestState) => void>();
     const subscribe = (run: (current: QuestState) => void) => {
@@ -30,6 +30,7 @@ const { mockState } = vi.hoisted(() => {
     };
     return {
         mockState: { subscribe, set, update } as Store<QuestState>,
+        questFinishedMock: vi.fn(() => false),
     };
 });
 
@@ -45,7 +46,7 @@ vi.mock('../../../../utils/gameState/common.js', async (importOriginal) => {
 });
 
 vi.mock('../../../../utils/gameState.js', () => ({
-    questFinished: vi.fn(() => false),
+    questFinished: questFinishedMock,
     getItemsGranted: vi.fn(() => true),
     grantItems: vi.fn(),
     setCurrentDialogueStep: vi.fn(),
@@ -57,6 +58,47 @@ vi.mock('../../../../utils/itemResolver.js', () => ({
 }));
 
 describe('QuestChat', () => {
+    beforeEach(() => {
+        questFinishedMock.mockReset();
+        questFinishedMock.mockImplementation(() => false);
+        mockState.set({ quests: {}, inventory: {} });
+    });
+
+    it('shows locked message and required quest chips when prerequisites are missing', async () => {
+        questFinishedMock.mockImplementation((questId: string) => questId === 'welcome/howtodoquests');
+
+        const quest = {
+            id: 'hydroponics/bucket_10',
+            title: 'Bucket Farm Level 10',
+            description: 'Locked quest fixture',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            requiresQuests: ['welcome/howtodoquests', 'hydroponics/basil', '3dprinter/start'],
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'You should not see this before unlock.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const { container, getByText, queryByText } = render(QuestChat, { props: { quest } });
+
+        await waitFor(() => {
+            expect(getByText('This quest is not available yet.')).toBeTruthy();
+            expect(getByText('hydroponics/basil')).toBeTruthy();
+            expect(getByText('3dprinter/start')).toBeTruthy();
+            expect(queryByText('You should not see this before unlock.')).toBeNull();
+            const links = Array.from(container.querySelectorAll('[data-testid="quest-link-chips"] a'));
+            const hrefs = links.map((link) => link.getAttribute('href'));
+            expect(hrefs).toContain('/quests/hydroponics/basil');
+            expect(hrefs).toContain('/quests/3dprinter/start');
+        });
+    });
+
     it('renders newline and inline code formatting while escaping raw HTML', async () => {
         const quest = {
             id: 'quest-2',
