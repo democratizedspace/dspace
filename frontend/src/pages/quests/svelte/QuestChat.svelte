@@ -2,11 +2,12 @@
     import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
-    import { questFinished } from '../../../utils/gameState.js';
+    import { canStartQuest, questFinished } from '../../../utils/gameState.js';
     import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
+    import QuestLinkChips from '../../../components/svelte/QuestLinkChips.svelte';
 
     export let quest;
     export let pointer;
@@ -14,6 +15,14 @@
 
     const clientSideRendered = writable(false);
     const finished = writable(false);
+
+    $: requiredQuests = Array.isArray(quest?.requiresQuests)
+        ? quest.requiresQuests.filter((id) => typeof id === 'string' && id.trim() !== '')
+        : [];
+
+    $: questIsLocked = quest
+        ? !canStartQuest({ ...quest, default: { requiresQuests: requiredQuests } })
+        : false;
 
     // Move these declarations inside onMount to ensure quest is defined
     let npc;
@@ -132,6 +141,14 @@
                     You have completed this quest. You can now return to the Quests page to start
                     another quest.
                 </p>
+            </div>
+        </div>
+    {:else if questIsLocked}
+        <div class="chat" data-testid="chat-panel">
+            <div class="vertical lock-message">
+                <h4>Quest not available yet</h4>
+                <p>Complete these quests first to unlock this quest:</p>
+                <QuestLinkChips heading="Required quests" questIds={requiredQuests} />
             </div>
         </div>
     {:else}
@@ -298,5 +315,14 @@
 
     .options > img {
         margin: 5px;
+    }
+
+    .lock-message {
+        gap: 12px;
+        width: 100%;
+    }
+
+    .lock-message p {
+        margin: 0;
     }
 </style>

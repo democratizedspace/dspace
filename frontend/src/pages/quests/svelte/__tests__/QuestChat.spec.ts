@@ -45,6 +45,7 @@ vi.mock('../../../../utils/gameState/common.js', async (importOriginal) => {
 });
 
 vi.mock('../../../../utils/gameState.js', () => ({
+    canStartQuest: vi.fn(() => true),
     questFinished: vi.fn(() => false),
     getItemsGranted: vi.fn(() => true),
     grantItems: vi.fn(),
@@ -129,5 +130,40 @@ describe('QuestChat', () => {
             expect(optionsText).toContain('Claim');
             expect(optionsText).toContain('Finish');
         });
+    });
+
+    it('shows prerequisites and hides dialogue when quest is locked', async () => {
+        const { canStartQuest } = await import('../../../../utils/gameState.js');
+        vi.mocked(canStartQuest).mockReturnValue(false);
+
+        const quest = {
+            id: 'hydroponics/bucket_10',
+            title: 'Bucket Ten',
+            description: 'Locked quest fixture',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            requiresQuests: ['hydroponics/basil', '3dprinting/start'],
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Should not render when locked.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const { getByText, queryByText } = render(QuestChat, { props: { quest } });
+
+        await waitFor(() => {
+            expect(getByText('Quest not available yet')).toBeTruthy();
+            expect(getByText('hydroponics/basil')).toBeTruthy();
+            expect(getByText('3dprinting/start')).toBeTruthy();
+            expect(queryByText('Should not render when locked.')).toBeNull();
+            expect(queryByText('Finish')).toBeNull();
+        });
+
+        vi.mocked(canStartQuest).mockReturnValue(true);
     });
 });

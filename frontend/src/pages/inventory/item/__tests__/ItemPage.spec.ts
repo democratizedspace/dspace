@@ -9,6 +9,7 @@ import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 const getItemCountsMock = vi.fn();
 const getContainedItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
+const getQuestsForItemMock = vi.fn();
 
 vi.mock('../../../../utils/gameState/processes.js', () => {
     const ProcessItemTypes = {
@@ -28,7 +29,7 @@ vi.mock('../../../../utils/gameState/processes.js', () => {
 });
 
 vi.mock('../../../../utils/itemDependencies.js', () => ({
-    getQuestsForItem: () => ({ requires: [], rewards: [] }),
+    getQuestsForItem: (...args) => getQuestsForItemMock(...args),
 }));
 
 vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
@@ -78,6 +79,7 @@ afterEach(async () => {
     getItemCountsMock.mockReset();
     getContainedItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
+    getQuestsForItemMock.mockReset();
 });
 
 describe('ItemPage', () => {
@@ -85,6 +87,7 @@ describe('ItemPage', () => {
         const builtIn = items.find((item) => !item.price) ?? items[0];
 
         getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
         isGameStateReadyMock.mockReturnValue(true);
 
         ensureChipStaticOpacityStyle();
@@ -119,6 +122,7 @@ describe('ItemPage', () => {
         });
 
         getItemCountsMock.mockReturnValue({ [customId]: 1 });
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
         isGameStateReadyMock.mockReturnValue(true);
 
         const { container, getByRole } = render(ItemPage, {
@@ -145,6 +149,7 @@ describe('ItemPage', () => {
         expect(savingsJar).toBeDefined();
 
         getItemCountsMock.mockReturnValue({ [savingsJar!.id]: 1 });
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
         getContainedItemCountsMock.mockReturnValue({
             '5247a603-294a-4a34-a884-1ae20969b2a1': 42,
         });
@@ -157,6 +162,30 @@ describe('ItemPage', () => {
         await waitFor(() => {
             expect(getByText('Stored contents:')).toBeTruthy();
             expect(getByText(/dUSD: 42/)).toBeTruthy();
+        });
+    });
+
+    it('renders clickable quest chips for quest dependencies', async () => {
+        const builtIn = items.find((entry) => !entry.price) ?? items[0];
+
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        getQuestsForItemMock.mockReturnValue({
+            requires: ['hydroponics/basil'],
+            rewards: ['3dprinting/start'],
+        });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { getByRole } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(getByRole('link', { name: 'hydroponics/basil' }).getAttribute('href')).toBe(
+                '/quests/hydroponics/basil'
+            );
+            expect(getByRole('link', { name: '3dprinting/start' }).getAttribute('href')).toBe(
+                '/quests/3dprinting/start'
+            );
         });
     });
 });

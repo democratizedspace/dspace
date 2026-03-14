@@ -12,6 +12,7 @@
     import { getQuestsForItem } from '../../../utils/itemDependencies.js';
     import Process from '../../../components/svelte/Process.svelte';
     import CompactItemList from '../../../components/svelte/CompactItemList.svelte';
+    import QuestLinkChips from '../../../components/svelte/QuestLinkChips.svelte';
     import { getItemById, getItemMap } from '../../../utils/itemResolver.js';
 
     export let itemId;
@@ -146,20 +147,10 @@
                     <p>Quests:</p>
                 {/if}
                 {#if quests.requires.length > 0}
-                    <p>Required in:</p>
-                    <ul>
-                        {#each quests.requires as qid}
-                            <li>{qid}</li>
-                        {/each}
-                    </ul>
+                    <QuestLinkChips heading="Required in:" questIds={quests.requires} />
                 {/if}
                 {#if quests.rewards.length > 0}
-                    <p>Rewards in:</p>
-                    <ul>
-                        {#each quests.rewards as qid}
-                            <li>{qid}</li>
-                        {/each}
-                    </ul>
+                    <QuestLinkChips heading="Rewards in:" questIds={quests.rewards} />
                 {/if}
             </div>
         {/if}
