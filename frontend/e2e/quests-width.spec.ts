@@ -366,11 +366,14 @@ test.describe('Quests page responsive grid centering', () => {
             }
 
             const tolerance = 1;
-            const tops = [...new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top)))];
+            const tops = [
+                ...new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top))),
+            ];
             const rowSizes = tops.map(
                 (top) =>
-                    tiles.filter((tile) => Math.abs(tile.getBoundingClientRect().top - top) <= tolerance)
-                        .length
+                    tiles.filter(
+                        (tile) => Math.abs(tile.getBoundingClientRect().top - top) <= tolerance
+                    ).length
             );
 
             const firstRowCount = rowSizes[0] ?? 0;
@@ -385,7 +388,9 @@ test.describe('Quests page responsive grid centering', () => {
                 lastRowTiles.length < firstRowCount;
 
             const left = Math.min(...lastRowTiles.map((tile) => tile.getBoundingClientRect().left));
-            const right = Math.max(...lastRowTiles.map((tile) => tile.getBoundingClientRect().right));
+            const right = Math.max(
+                ...lastRowTiles.map((tile) => tile.getBoundingClientRect().right)
+            );
 
             const gridRect = grid.getBoundingClientRect();
             const leftSpace = left - gridRect.left;
@@ -396,20 +401,27 @@ test.describe('Quests page responsive grid centering', () => {
 
         expect(layout).toBeTruthy();
         expect(layout?.hasPartialLastRow).toBe(true);
-        expect(Math.abs((layout?.leftSpace ?? 0) - (layout?.rightSpace ?? 0))).toBeLessThanOrEqual(3);
+        expect(Math.abs((layout?.leftSpace ?? 0) - (layout?.rightSpace ?? 0))).toBeLessThanOrEqual(
+            3
+        );
     });
 
     test('keeps one quest tile per row on mobile screens', async ({ page }) => {
         await page.setViewportSize({ width: 390, height: 844 });
 
         await page.goto('/');
-        const mobileQuestIds = ['quest-grid-mobile-a', 'quest-grid-mobile-b', 'quest-grid-mobile-c'];
+        const mobileQuestIds = [
+            'quest-grid-mobile-a',
+            'quest-grid-mobile-b',
+            'quest-grid-mobile-c',
+        ];
 
         for (const [index, id] of mobileQuestIds.entries()) {
             await seedCustomQuest(page, {
                 id,
                 title: `Quest Grid Mobile ${index + 1}`,
-                description: 'Quest seeded to guarantee multiple one-card rows in mobile layout tests.',
+                description:
+                    'Quest seeded to guarantee multiple one-card rows in mobile layout tests.',
                 image: '/assets/quests/howtodoquests.jpg',
                 npc: '/assets/npc/dChat.jpg',
                 start: 'start',
@@ -437,7 +449,9 @@ test.describe('Quests page responsive grid centering', () => {
                 return null;
             }
 
-            const roundedRows = new Set(tiles.map((tile) => Math.round(tile.getBoundingClientRect().top)));
+            const roundedRows = new Set(
+                tiles.map((tile) => Math.round(tile.getBoundingClientRect().top))
+            );
             const docEl = document.documentElement;
             const hasHorizontalOverflow = docEl.scrollWidth > docEl.clientWidth + tolerance;
 
