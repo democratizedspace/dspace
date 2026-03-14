@@ -23,7 +23,8 @@ describe('Docs markdown safety', () => {
                 content: fs.readFileSync(file, 'utf8'),
             }))
             .filter(({ content }) => {
-                const withoutInlineCode = content.replace(/`[^`]*`/g, '');
+                const withoutFencedCode = content.replace(/```[\s\S]*?```/g, '');
+                const withoutInlineCode = withoutFencedCode.replace(/`[^`]*`/g, '');
                 return /<style\b[^>]*>/i.test(withoutInlineCode);
             })
             .map(({ file }) => path.relative(process.cwd(), file));

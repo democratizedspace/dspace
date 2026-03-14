@@ -3,7 +3,7 @@ title: 'Amazing'
 slug: 'amazing'
 ---
 
-<img class="amazing" src="/assets/amazing1.jpg">
+<img src="/assets/amazing1.jpg">
 
 Amazing is the in-lore distribution layer that fulfills item buys and sells, connecting
 buyers and sellers. The entire organization is automated by AI and robots, and it is
