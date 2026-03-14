@@ -35,31 +35,34 @@
     $: isDisabled = (option.requiresGitHub && !githubConnected) || !$itemRequirementsMet;
 </script>
 
-<Chip text={option.text} {onClick} disabled={isDisabled}>
-    <div class="vertical">
-        Finish this quest and receive the following items:
-        <CompactItemList itemList={quest.rewards || []} increase={true} />
-        {#if option.requiresItems && option.requiresItems.length > 0}
-            <Chip inverted={true} disabled={isDisabled} text="">
-                <div class="vertical requirements">
-                    Requires:
-                    <CompactItemList
-                        itemList={option.requiresItems}
-                        disabled={isDisabled}
-                        increase={false}
-                        noRed={true}
-                    />
-                </div>
-            </Chip>
-        {/if}
-        {#if option.requiresGitHub && !githubConnected}
-            <Chip inverted={true} disabled={isDisabled} text="">
-                <div class="vertical requirements">
-                    Requires:
-                    <span>Connect GitHub to finish this quest.</span>
-                </div>
-            </Chip>
-        {/if}
+<Chip {onClick} disabled={isDisabled}>
+    <div class="option-layout">
+        <div class="vertical">
+            Finish this quest and receive the following items:
+            <CompactItemList itemList={quest.rewards || []} increase={true} />
+            {#if option.requiresItems && option.requiresItems.length > 0}
+                <Chip inverted={true} disabled={isDisabled} text="">
+                    <div class="vertical requirements">
+                        Requires:
+                        <CompactItemList
+                            itemList={option.requiresItems}
+                            disabled={isDisabled}
+                            increase={false}
+                            noRed={true}
+                        />
+                    </div>
+                </Chip>
+            {/if}
+            {#if option.requiresGitHub && !githubConnected}
+                <Chip inverted={true} disabled={isDisabled} text="">
+                    <div class="vertical requirements">
+                        Requires:
+                        <span>Connect GitHub to finish this quest.</span>
+                    </div>
+                </Chip>
+            {/if}
+        </div>
+        <p class="option-text">{option.text}</p>
     </div>
 </Chip>
 
@@ -71,5 +74,20 @@
 
     .requirements {
         gap: 4px;
+    }
+
+    .option-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .option-text {
+        margin: 0;
+        padding-top: 6px;
+        border-top: 1px solid rgba(255, 255, 255, 0.35);
+        text-align: left;
+        font-weight: 400;
+        line-height: 1.35;
     }
 </style>

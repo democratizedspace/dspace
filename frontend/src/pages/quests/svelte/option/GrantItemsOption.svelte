@@ -26,19 +26,22 @@
 
 <div>
     {#if $state}
-        <Chip disabled={$itemsClaimed} text={option.text}>
-            <div class="vertical container">
-                <CompactItemList
-                    disabled={$itemsClaimed}
-                    itemList={option.grantsItems}
-                    increase={true}
-                />
-                <Chip
-                    disabled={$itemsClaimed}
-                    inverted={true}
-                    text="Claim"
-                    onClick={() => onClick()}
-                />
+        <Chip disabled={$itemsClaimed}>
+            <div class="option-layout">
+                <div class="vertical container">
+                    <CompactItemList
+                        disabled={$itemsClaimed}
+                        itemList={option.grantsItems}
+                        increase={true}
+                    />
+                    <Chip
+                        disabled={$itemsClaimed}
+                        inverted={true}
+                        text="Claim"
+                        onClick={() => onClick()}
+                    />
+                </div>
+                <p class="option-text">{option.text}</p>
             </div>
         </Chip>
     {/if}
@@ -55,5 +58,20 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
+    }
+
+    .option-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .option-text {
+        margin: 0;
+        padding-top: 6px;
+        border-top: 1px solid rgba(255, 255, 255, 0.35);
+        text-align: left;
+        font-weight: 400;
+        line-height: 1.35;
     }
 </style>
