@@ -216,7 +216,6 @@
         border-radius: 14px;
         background: rgba(124, 228, 124, 0.15);
         margin: 8px 0;
-        overflow: hidden;
     }
 
     .process-group summary {
@@ -232,6 +231,10 @@
 
     .process-group summary::-webkit-details-marker {
         display: none;
+    }
+
+    .process-group summary::marker {
+        content: '';
     }
 
     .process-group summary::after {

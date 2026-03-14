@@ -2,7 +2,6 @@ import 'fake-indexeddb/auto';
 import { render, waitFor } from '@testing-library/svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import items from '../../json/items';
-import processes from '../../../../generated/processes.json';
 import ItemPage from '../ItemPage.svelte';
 import { db } from '../../../../utils/customcontent.js';
 import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
@@ -11,22 +10,16 @@ const getItemCountsMock = vi.fn();
 const getContainedItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
 const mockProcessesByType = {
-    require: [],
-    consume: [],
-    create: [],
+    requireItem: [],
+    consumeItem: [],
+    createItem: [],
 };
 
 vi.mock('../../../../utils/gameState/processes.js', async (importOriginal) => {
     const actual = await importOriginal();
-    const ProcessItemTypes = {
-        REQUIRE_ITEM: 'require',
-        CONSUME_ITEM: 'consume',
-        CREATE_ITEM: 'create',
-    };
 
     return {
         ...actual,
-        ProcessItemTypes,
         getProcessesForItem: () => mockProcessesByType,
         getProcessesForItemIncludingCustom: async () => mockProcessesByType,
     };
@@ -83,9 +76,9 @@ afterEach(async () => {
     getItemCountsMock.mockReset();
     getContainedItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
-    mockProcessesByType.require = [];
-    mockProcessesByType.consume = [];
-    mockProcessesByType.create = [];
+    mockProcessesByType.requireItem = [];
+    mockProcessesByType.consumeItem = [];
+    mockProcessesByType.createItem = [];
 });
 
 describe('ItemPage', () => {
@@ -170,11 +163,10 @@ describe('ItemPage', () => {
 
     it('groups related processes in collapsed details sections', async () => {
         const builtIn = items[0];
-        const [requireProcess, consumeProcess, createProcess] = processes;
 
-        mockProcessesByType.require = [requireProcess.id];
-        mockProcessesByType.consume = [consumeProcess.id];
-        mockProcessesByType.create = [createProcess.id];
+        mockProcessesByType.requireItem = ['test-require-process'];
+        mockProcessesByType.consumeItem = ['test-consume-process'];
+        mockProcessesByType.createItem = ['test-create-process'];
 
         getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
         isGameStateReadyMock.mockReturnValue(true);
