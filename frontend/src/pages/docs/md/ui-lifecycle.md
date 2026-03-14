@@ -64,3 +64,10 @@ sets `window.dspaceStart = performance.now()` via an inline script in
 
 For additional details on testing strategies, see the [Testing Guide](/docs/testing-guide) and the
 broader [Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md).
+
+## Quest card grid responsiveness
+
+The quests list (`frontend/src/pages/quests/svelte/Quests.svelte`) uses a responsive CSS Grid
+configuration that centers cards on wider screens when the final row is not full. On small screens
+(`max-width: 640px`), it falls back to a single-column layout to preserve mobile readability.
+

@@ -191,7 +191,8 @@
 
     .quests-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 400px));
+        justify-content: center;
         gap: 20px;
     }
 
