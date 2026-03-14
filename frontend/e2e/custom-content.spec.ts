@@ -43,6 +43,24 @@ test.describe('Custom Content Management', () => {
         }
     }
 
+    async function expandProcessGroupForTitle(page: Page, processTitle: string): Promise<void> {
+        const processHeading = page
+            .getByRole('heading', { name: processTitle, exact: true })
+            .first();
+        const processGroup = processHeading.locator(
+            'xpath=ancestor::details[contains(@class, "process-group")][1]'
+        );
+
+        if ((await processGroup.count()) > 0) {
+            const isOpen = await processGroup.evaluate((node) => (node as HTMLDetailsElement).open);
+            if (!isOpen) {
+                await processGroup.locator('summary').first().click();
+            }
+        }
+
+        await expect(processHeading).toBeVisible({ timeout: 15000 });
+    }
+
     async function findCustomItemIdByName(page: Page, name: string): Promise<string | null> {
         try {
             return await page.evaluate(async (itemName) => {
@@ -512,9 +530,7 @@ test.describe('Custom Content Management', () => {
 
         const processesSection = page.getByText('Processes:', { exact: true });
         await expect(processesSection).toBeVisible({ timeout: 15000 });
-        await expect(page.getByText(processTitle, { exact: true })).toBeVisible({
-            timeout: 15000,
-        });
+        await expandProcessGroupForTitle(page, processTitle);
     });
 
     test('should create and view a custom quest', async ({ page }) => {
