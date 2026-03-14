@@ -31,6 +31,24 @@
     const quests = getQuestsForItem(itemId);
     let hasProcesses = false;
 
+    const processGroups = [
+        {
+            type: ProcessItemTypes.REQUIRE_ITEM,
+            title: 'Required by processes',
+            description: 'Must be in inventory to run the process, but is not consumed.',
+        },
+        {
+            type: ProcessItemTypes.CONSUME_ITEM,
+            title: 'Consumed by processes',
+            description: 'Used up when the process runs.',
+        },
+        {
+            type: ProcessItemTypes.CREATE_ITEM,
+            title: 'Created by processes',
+            description: 'Produced when the process completes.',
+        },
+    ];
+
     const hasQuests = quests.requires.length > 0 || quests.rewards.length > 0;
 
     $: hasProcesses = Object.values(processes).some((arr) => Array.isArray(arr) && arr.length > 0);
@@ -127,21 +145,25 @@
                 {#if hasProcesses}
                     <p>Processes:</p>
                 {/if}
-                {#if processes[ProcessItemTypes.REQUIRE_ITEM]}
-                    {#each processes[ProcessItemTypes.REQUIRE_ITEM] as processId}
-                        <Process inverted={false} {processId} />
-                    {/each}
-                {/if}
-                {#if processes[ProcessItemTypes.CONSUME_ITEM]}
-                    {#each processes[ProcessItemTypes.CONSUME_ITEM] as processId}
-                        <Process inverted={false} {processId} />
-                    {/each}
-                {/if}
-                {#if processes[ProcessItemTypes.CREATE_ITEM]}
-                    {#each processes[ProcessItemTypes.CREATE_ITEM] as processId}
-                        <Process inverted={false} {processId} />
-                    {/each}
-                {/if}
+                {#each processGroups as group}
+                    {@const processIds = processes[group.type]}
+                    {#if Array.isArray(processIds) && processIds.length > 0}
+                        <details class="process-group">
+                            <summary>
+                                <span>{group.title}</span>
+                                <span class="count">({processIds.length})</span>
+                            </summary>
+                            <div class="process-group-content">
+                                <div class="process-group-content-inner">
+                                    <p class="process-group-description">{group.description}</p>
+                                    {#each processIds as processId}
+                                        <Process inverted={false} {processId} />
+                                    {/each}
+                                </div>
+                            </div>
+                        </details>
+                    {/if}
+                {/each}
                 {#if hasQuests}
                     <p>Quests:</p>
                 {/if}
@@ -186,5 +208,71 @@
 
     .placeholder {
         color: #d0ffd0;
+    }
+
+    .process-group {
+        width: min(100%, 680px);
+        border: 2px solid rgba(148, 255, 166, 0.45);
+        border-radius: 14px;
+        background: rgba(124, 228, 124, 0.15);
+        margin: 8px 0;
+        overflow: hidden;
+    }
+
+    .process-group summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        font-weight: 700;
+        padding: 12px 16px;
+    }
+
+    .process-group summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .process-group summary::after {
+        content: '▾';
+        font-size: 1rem;
+        line-height: 1;
+        transition: transform 0.2s ease;
+    }
+
+    .process-group[open] summary::after {
+        transform: rotate(180deg);
+    }
+
+    .process-group .count {
+        margin-right: auto;
+        font-weight: 500;
+        opacity: 0.9;
+    }
+
+    .process-group-content {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.25s ease;
+    }
+
+    .process-group[open] .process-group-content {
+        grid-template-rows: 1fr;
+    }
+
+    .process-group-content-inner {
+        overflow: hidden;
+        padding: 0 12px;
+    }
+
+    .process-group[open] .process-group-content-inner {
+        padding: 0 12px 12px;
+    }
+
+    .process-group-description {
+        margin: 0 0 8px;
+        opacity: 0.95;
+        font-size: 0.95rem;
     }
 </style>

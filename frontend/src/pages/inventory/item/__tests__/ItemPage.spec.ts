@@ -2,6 +2,7 @@ import 'fake-indexeddb/auto';
 import { render, waitFor } from '@testing-library/svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import items from '../../json/items';
+import processes from '../../../../generated/processes.json';
 import ItemPage from '../ItemPage.svelte';
 import { db } from '../../../../utils/customcontent.js';
 import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
@@ -9,8 +10,14 @@ import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 const getItemCountsMock = vi.fn();
 const getContainedItemCountsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
+const mockProcessesByType = {
+    require: [],
+    consume: [],
+    create: [],
+};
 
-vi.mock('../../../../utils/gameState/processes.js', () => {
+vi.mock('../../../../utils/gameState/processes.js', async (importOriginal) => {
+    const actual = await importOriginal();
     const ProcessItemTypes = {
         REQUIRE_ITEM: 'require',
         CONSUME_ITEM: 'consume',
@@ -18,12 +25,10 @@ vi.mock('../../../../utils/gameState/processes.js', () => {
     };
 
     return {
+        ...actual,
         ProcessItemTypes,
-        getProcessesForItem: () => ({
-            [ProcessItemTypes.REQUIRE_ITEM]: [],
-            [ProcessItemTypes.CONSUME_ITEM]: [],
-            [ProcessItemTypes.CREATE_ITEM]: [],
-        }),
+        getProcessesForItem: () => mockProcessesByType,
+        getProcessesForItemIncludingCustom: async () => mockProcessesByType,
     };
 });
 
@@ -78,6 +83,9 @@ afterEach(async () => {
     getItemCountsMock.mockReset();
     getContainedItemCountsMock.mockReset();
     isGameStateReadyMock.mockReset();
+    mockProcessesByType.require = [];
+    mockProcessesByType.consume = [];
+    mockProcessesByType.create = [];
 });
 
 describe('ItemPage', () => {
@@ -158,5 +166,35 @@ describe('ItemPage', () => {
             expect(getByText('Stored contents:')).toBeTruthy();
             expect(getByText(/dUSD: 42/)).toBeTruthy();
         });
+    });
+
+    it('groups related processes in collapsed details sections', async () => {
+        const builtIn = items[0];
+        const [requireProcess, consumeProcess, createProcess] = processes;
+
+        mockProcessesByType.require = [requireProcess.id];
+        mockProcessesByType.consume = [consumeProcess.id];
+        mockProcessesByType.create = [createProcess.id];
+
+        getItemCountsMock.mockReturnValue({ [builtIn.id]: 1 });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { getByText, container } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(getByText('Processes:')).toBeTruthy();
+        });
+
+        const details = Array.from(container.querySelectorAll('details.process-group'));
+        expect(details).toHaveLength(3);
+        for (const group of details) {
+            expect(group.hasAttribute('open')).toBe(false);
+        }
+
+        expect(getByText('Required by processes')).toBeTruthy();
+        expect(getByText('Consumed by processes')).toBeTruthy();
+        expect(getByText('Created by processes')).toBeTruthy();
     });
 });
