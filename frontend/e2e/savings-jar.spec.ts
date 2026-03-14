@@ -88,27 +88,25 @@ async function runProcessFromItemPage(page: Page, title: string) {
 
     await expect(card).toBeVisible({ timeout: 15000 });
 
-    let start = card.getByTestId('process-start-button').first();
+    const start = card.getByTestId('process-start-button').first();
     const collect = card.getByRole('button', { name: 'Collect' }).first();
 
-    if ((await start.count()) > 0) {
-        await expect(start).toBeVisible({ timeout: 15000 });
-        await start.click();
-    } else {
-        await expect
-            .poll(
-                async () =>
-                    (await card.getByTestId('process-start-button').count()) > 0 ||
-                    (await collect.count()) > 0,
-                { timeout: 15000 }
-            )
-            .toBe(true);
+    await expect
+        .poll(async () => {
+            if (await collect.isVisible().catch(() => false)) {
+                return 'collect';
+            }
 
-        start = card.getByTestId('process-start-button').first();
-        if ((await start.count()) > 0) {
-            await expect(start).toBeVisible({ timeout: 15000 });
-            await start.click();
-        }
+            if (await start.isVisible().catch(() => false)) {
+                return 'start';
+            }
+
+            return null;
+        })
+        .not.toBeNull();
+
+    if (await start.isVisible().catch(() => false)) {
+        await start.click();
     }
 
     await expect(collect).toBeVisible({ timeout: 15000 });
