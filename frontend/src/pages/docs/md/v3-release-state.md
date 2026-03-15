@@ -5,71 +5,70 @@ slug: 'v3-release-state'
 
 # v3 Release State
 
-This page is the source-of-truth snapshot for what shipped in v3 and what remains deferred.
-Use it alongside the v3 launch notes at [/changelog#20260401](/changelog#20260401) and the
-full QA checklist in
-[docs/qa/v3.md](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md).
+This page is the concise, player-facing v3 ship-state snapshot. It should stay aligned with:
 
-## What is fully live in v3
+- [April 2026 release notes](/changelog#20260401)
+- [v3 QA checklist](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md)
+- [Routes](/docs/routes)
 
-### Core player systems
+## Fully live in v3
 
-- Quest, inventory, and process gameplay loops are live.
-- New utility destinations are live from the **More** menu: `/stats`, `/leaderboard`, `/titles`,
-  `/toolbox`, `/settings`, `/cloudsync`, `/contentbackup`, and `/gamesaves`.
-- Achievements and title progression are live and tied to real gameplay state.
+### Core loops and progression
 
-### Custom content tooling (v3 headline)
+- Quest, process, and inventory loops are fully playable.
+- Expanded quest trees (including chemistry and programming) are part of the active catalog.
+- Achievements and titles are live and connected to progression state.
 
-- Players can create and edit custom quests, items, and processes in-game.
-- Player-created content is stored locally and can be exported/imported through
-  `/contentbackup`.
-- Quest submissions can be prepared through in-game contribution tooling and the
-  [Quest Submission Guide](/docs/quest-submission).
+### Utility destinations
 
-### Save safety + migration
+The following routes are live from nav/More utilities:
 
-- Primary storage is IndexedDB in v3.
-- Legacy save upgrade paths exist for v1 cookies and v2 localStorage saves.
-- Import/export and backup routes are available to reduce save loss risk before major changes.
+- `/gamesaves`
+- `/cloudsync`
+- `/contentbackup`
+- `/stats`
+- `/leaderboard`
+- `/titles`
+- `/toolbox`
+- `/settings`
+
+### Custom content tooling
+
+- In-game creation/edit flows exist for custom quests, items, and processes.
+- Custom content can be exported/imported through `/contentbackup`.
+- Quest contribution docs and schema validation workflows are published.
+
+### Save architecture
+
+- IndexedDB is the primary v3 save backend.
+- Legacy import paths exist for v1 cookies and v2 localStorage saves.
+- Cloud sync and local import/export provide recovery redundancy.
 
 ### AI chat
 
-- v3 ships OpenAI-only chat flows for `/chat` and persona-style in-game NPC chat.
+- v3 ships OpenAI-backed chat flows and NPC persona chat support.
 
-## Deferred or intentionally limited in v3
+## Limited or deferred in v3
 
-### token.place integration
+### Guild gameplay
 
-- token.place is deferred to v3.1.
-- Current status and onboarding requirements are tracked in [/docs/token-place](/docs/token-place).
-
-### Full guild gameplay
-
-- Guild route and mechanics are still marked as coming soon in navigation.
-- Leaderboard support and Metaguild narrative framing are present, but full guild membership,
-  cooperative guild inventories, and ActivityPub-connected multiplayer are not live yet.
-- See [/docs/guilds](/docs/guilds) for the current plan and boundaries.
+- Guild systems remain non-playable in v3 (menu entry still coming soon).
+- Social/community framing is represented through docs and `/leaderboard`.
 
 ### Locations destination
 
-- `/locations` is still a coming-soon destination in the More menu.
+- `/locations` is still a coming-soon nav entry.
 
-## v2-only mechanics removed / not applicable in v3
+### token.place
 
-- **Blockchain/Web3 roadmap assumptions are removed in v3.** dWatt, dUSD, and related units are
-  in-game progression currencies, not on-chain assets.
-- **LocalStorage is no longer primary storage.** It is legacy import material; v3 uses IndexedDB.
-- **Legacy migration behavior is explicit.** Legacy keys/artifacts are treated as migration sources,
-  not active storage.
+- Integration scaffolding exists, but the player-facing rollout is deferred beyond v3 launch.
 
-## Verification checklist for docs and QA
+## v3 documentation correctness checklist
 
-When you update gameplay docs, verify these points against the current build:
+Use this checklist when editing in-game docs:
 
-1. Route is actually reachable and not marked coming soon.
-2. Behavior matches either the v3 changelog or `docs/qa/v3.md` checklist outcomes.
-3. If a system is partially live (for example, guild framing vs guild mechanics), document both the
-   available and unavailable parts.
-4. Include links to the canonical docs pages (`/docs/routes`, `/docs/quest-trees`,
+1. Route status matches current menu configuration (`live` vs `coming soon`).
+2. Claims about systems map to tested behavior in the QA checklist.
+3. Partial systems clearly separate available features from deferred roadmap items.
+4. Cross-link to canonical references (`/docs/routes`, `/docs/quest-trees`,
    `/docs/content-development`) so players can self-serve details.

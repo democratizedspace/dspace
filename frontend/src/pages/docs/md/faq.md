@@ -5,123 +5,80 @@ slug: 'faq'
 
 ## What is DSPACE?
 
-DSPACE is an incremental simulation game about resource management and space exploration. It
-focuses on learning by doing through quests, processes, and real-world inspired projects. For a
-full overview, start with [About](/docs/about) and the [Mission](/docs/mission).
+DSPACE is an incremental simulation game about practical systems thinking: quests teach real-world
+workflows, processes transform resources over time, and your inventory reflects what you can build.
+Start with [About](/docs/about) and [Mission](/docs/mission).
 
-## What changed with v3?
+## What changed in v3?
 
-v3 introduced the largest docs + systems expansion so far: custom content editors (quests/items/
-processes), better backup and cloud sync tooling, expanded utility routes, and broader quest
-coverage. Start with [v3 Release State](/docs/v3-release-state),
-[Quest Trees](/docs/quest-trees), and [Content Development](/docs/content-development).
+v3 is the largest systems update so far. Highlights include:
+
+- In-game custom content editors for quests, items, and processes.
+- Local-first saves in IndexedDB with migration paths from legacy v1/v2 saves.
+- Save safety utilities (`/gamesaves`, `/cloudsync`, `/contentbackup`).
+- Expanded progression routes including `/stats`, `/titles`, `/leaderboard`, and `/toolbox`.
+- Docs/search improvements and a much larger quest catalog.
+
+Reference pages: [v3 Release State](/docs/v3-release-state),
+[Quest Trees](/docs/quest-trees), [Content Development](/docs/content-development).
 
 ## Is DSPACE still in development?
 
-Yes. The game is under active development, and new quests, systems, and improvements ship
-regularly. If you want to help shape what’s next, join the community on
-[Discord](https://discord.gg/A3UAfYvnxM) or see the [Roadmap](/docs/roadmap).
+Yes. v3 is live, and content/system updates continue. See [Roadmap](/docs/roadmap),
+[Changelog](/changelog), and [Contribute](/docs/contribute).
 
-## How do I get started?
+## How should new players start?
 
-Begin with the Welcome quest tree, which teaches the basics of accepting quests, completing
-objectives, and collecting rewards. Then use [Quest Trees](/docs/quest-trees) to pick your next
-skill path.
+1. Complete the Welcome quests.
+2. Pick one practical tree from [Quest Trees](/docs/quest-trees).
+3. Use [Processes](/docs/processes) to convert resources for your next quest gates.
+4. Watch progress in `/stats`, `/achievements`, and `/titles`.
 
-## How do I make progress?
+## How does progression work?
 
-[Quests](/quests) are the main progression system. They introduce prerequisites, rewards, and
-new [processes](/docs/processes). Processes then transform items over time so you can unlock more
-complex quests.
+Quests unlock via `requiresQuests` dependencies and item/process gates. Completing them grants
+rewards (items/currency) and opens additional trees.
 
-## What are quest trees?
+## What are processes?
 
-Quest trees group related quests into themed learning paths such as energy systems, hydroponics,
-robotics, and rocketry. Browse the current catalog and doc mappings on
-[Quest Trees](/docs/quest-trees).
+Processes are timed transformations with `requires`, `consumes`, and `creates` item relationships.
+See [Processes](/docs/processes) and [Process Guidelines](/docs/process-guidelines).
 
-## What are processes and how do they work?
+## Where are saves stored in v3?
 
-[Processes](/docs/processes) are timed activities that require and/or consume items, then create
-new items. Process progress is real-time and tied to your save state.
+Primary save storage is IndexedDB. Legacy v1 cookies and v2 localStorage saves can be imported
+through Settings migration tooling. See [Backups](/docs/backups),
+[Legacy Save Storage](/docs/legacy-save-storage), and [Cloud Sync](/docs/cloud-sync).
 
-## Where do items live and how does inventory work?
+## Can I make custom quests/items/processes?
 
-Your [inventory](/docs/inventory) holds everything you earn from quests and processes. In v3,
-save data is primarily stored in IndexedDB.
+Yes.
 
-## Can I create custom quests, items, or processes?
+- Create: `/quests/create`, `/inventory/create`, `/processes/create`
+- Manage: `/quests/manage`, `/inventory/manage`, `/processes/manage`
+- Backup/export/import: `/contentbackup`
 
-Yes. DSPACE includes in-game editors for all three:
+Start here: [Content Development](/docs/content-development).
 
-- `/quests/create`
-- `/inventory/create`
-- `/processes/create`
+## How does cloud sync work?
 
-Use the matching manage pages (`/quests/manage`, `/inventory/manage`, `/processes/manage`) for
-editing and cleanup. See [Content Development](/docs/content-development) for the full workflow.
+Cloud sync uses a GitHub gist token flow and can upload/download both game state and custom
+content. Credentials are stored locally so you can reuse them without re-entry. See
+[Cloud Sync](/docs/cloud-sync).
 
-## How do I submit custom quests?
+## Are guilds playable in v3?
 
-Use the [Quest Submission Guide](/docs/quest-submission) to package your quest, process, or item
-for review. The guide covers export, validation, and pull request handoff.
+Not as a full game system. The menu entry is still coming soon, but guild-style community framing
+and social progression signals are reflected through docs plus `/leaderboard`.
+See [Guilds](/docs/guilds).
 
-## What are custom content bundles?
+## Is token.place live in v3?
 
-Bundles let you submit related quests, items, and processes as one JSON payload so dependencies
-stay aligned. Learn the format in [Custom Content Bundles](/docs/custom-bundles).
+token.place integration exists in code paths but is deferred for player-facing use in v3.
+Track status on [token.place](/docs/token-place).
 
-## Where is my save data stored?
+## Where do I track what changed and what is validated?
 
-Game state and custom content are stored locally in your browser (IndexedDB primary). DSPACE does
-not upload save data unless you explicitly configure [Cloud Sync](/docs/cloud-sync).
-
-## How do I back up or restore data?
-
-Use `/gamesaves` for game-state export/import and `/contentbackup` for custom content bundle
-export/import. See [Backups](/docs/backups) and [Cloud Sync](/docs/cloud-sync).
-
-## How does Cloud Sync work?
-
-Cloud Sync stores encrypted backups in a private GitHub gist. You provide a GitHub token and gist
-ID, and DSPACE syncs save snapshots using your configuration.
-
-## Do I need a GitHub token?
-
-Only for GitHub-backed features (for example, Cloud Sync and contribution workflows). Tokens are
-stored locally and can be cleared at any time. See [Authentication](/docs/authentication).
-
-## What are dUSD, dWatt, and dCarbon?
-
-- **[dUSD](/docs/dusd)** is the in-game currency used for buying and selling.
-- **[dWatt](/docs/dwatt)** tracks generated/available energy.
-- **[dCarbon](/docs/dcarbon)** tracks emissions pressure from non-renewable power choices.
-
-## How do achievements, titles, stats, and leaderboard fit together?
-
-- `/achievements`: milestone unlocks.
-- `/titles`: title progression tied to achievement completion.
-- `/stats`: high-level quest/item/process totals.
-- `/leaderboard`: donation-oriented ranking board.
-
-Related references: [Achievements](/docs/achievements), [Titles](/docs/titles), and
-[Routes](/docs/routes).
-
-## Are guilds live?
-
-Not as a full gameplay system yet. Guilds are still marked coming soon in navigation; the current
-Metaguild framing is documented on [Guilds](/docs/guilds).
-
-## How do I search docs quickly?
-
-Use `/docs` search for title + body matches. Feature filters like `has:image` and `has:link` are
-also supported. See [Docs search](/docs/docs-search).
-
-## Can I self-host DSPACE?
-
-Yes. Use Docker or local Node-based workflows from [Self-hosting](/docs/self-hosting).
-
-## Where can I learn more?
-
-Explore [docs](/docs), join [Discord](https://discord.gg/A3UAfYvnxM), and review
-[Contribute](/docs/contribute).
+- Release notes: [Changelog](/changelog)
+- Ship-state snapshot: [v3 Release State](/docs/v3-release-state)
+- QA verification checklist: [docs/qa/v3.md](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md)

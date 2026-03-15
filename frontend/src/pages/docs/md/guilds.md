@@ -3,48 +3,41 @@ title: 'Guilds'
 slug: 'guilds'
 ---
 
-# Guilds in v3: current state and roadmap
+# Guilds in v3
 
-Guilds were planned for DSPACE v3, but full guild gameplay is still not live yet and remains a 2027+ priority.
+Guilds in v3 are a **narrative/community layer**, not a fully playable progression system yet.
+This page clarifies what is live vs deferred so players and contributors avoid mixed expectations.
 
-Guilds are partially represented in v3 narrative and UI language, but **full guild gameplay is not
-live yet**.
+## What is live today
 
-## What exists today
-
-- Guild-themed framing exists in docs and community messaging (especially around the Metaguild).
-- `/leaderboard` provides a live social/progress board experience adjacent to guild-style
-  community goals.
-- Players can already collaborate through shared docs, community quests, and contribution flows,
-  even without first-class guild objects.
+- Metaguild framing is used in docs and community coordination.
+- `/leaderboard` provides a live social board for contribution visibility.
+- Players can collaborate via shared quest docs, QA walkthroughs, and custom content contribution
+  workflows.
 
 ## What is not live yet
 
-The following are still deferred:
+The following are deferred beyond v3 launch scope:
 
-- Guild creation and membership management
-- Shared guild inventories and guild-owned progression state
-- Guild-scoped quests, rewards, and rank ladders
-- ActivityPub-backed federation between DSPACE instances
+- In-game guild creation/join/leave flows
+- Guild-owned inventories or shared persistence state
+- Guild-scoped quest trees and rank ladders
+- ActivityPub/federated guild networking
 
-In navigation, the **Guilds** destination is still marked coming soon.
+## Route and navigation status
 
-## Metaguild (v3 framing)
+- The menu entry for **Guilds** (`/guilds`) is currently marked **Coming soon**.
+- The practical social destination in v3 is `/leaderboard`.
 
-The Metaguild is currently a narrative and coordination concept: a flagship umbrella for
-cross-discipline work (energy, fabrication, hydroponics, robotics, first aid, and launch prep).
+## Recommended v3 team workflow (until full guild mechanics ship)
 
-Think of it as a community operating model in v3, not a fully implemented in-game entity.
+1. Coordinate goals using quest-tree docs and changelog planning.
+2. Share reusable custom content bundles and test notes.
+3. Track individual and collective momentum with `/leaderboard`, `/stats`, and `/titles`.
+4. Keep an eye on [Roadmap](/docs/roadmap) and [Changelog](/changelog) for guild milestone updates.
 
-## How to prepare for guild-era gameplay now
+## Related docs
 
-1. Build strong personal progression through quest trees (`/quests`, `/docs/quest-trees`).
-2. Publish high-quality custom content (`/docs/content-development`).
-3. Track team-facing outcomes in `/leaderboard`, `/stats`, and `/titles`.
-4. Follow roadmap + changelog updates for guild milestone rollout dates.
-
-## Related pages
-
-- [Roadmap](/docs/roadmap)
 - [v3 Release State](/docs/v3-release-state)
 - [Routes](/docs/routes)
+- [Content Development](/docs/content-development)
