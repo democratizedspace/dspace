@@ -3,34 +3,42 @@ title: 'Cloud Sync'
 slug: 'cloud-sync'
 ---
 
-DSPACE can back up your progress to a private GitHub gist.
+# Cloud Sync
 
-1. Generate a GitHub personal access token with the `gist` scope (see [GitHub's token guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)).
-2. Enter the token in the form and click **Save**.
-3. Click **Upload** to create/update the gist and store your save data.
-4. Copy the resulting Gist ID to use on other devices.
-5. On another device, enter the same token and Gist ID and click **Download**.
+Cloud Sync backs up DSPACE saves to private GitHub gists using credentials stored locally in your
+browser.
 
-## Enable Cloud Sync
+## Setup checklist
 
-1. Create a new secret gist on GitHub.
-2. Copy the gist URL or ID.
-3. In DSPACE, open the **Settings** page and provide a GitHub token with gist scope.
-4. Enter your gist ID to start syncing.
+1. Open `/cloudsync`.
+2. Create a GitHub personal access token (PAT).
+   - Classic PAT with `gist` scope, or
+   - Fine-grained PAT with read/write gist permissions
+3. Connect token in the Cloud Sync UI.
+4. Optionally provide a known Gist ID for manual restore targeting.
+5. Upload and verify the backup appears in the list.
 
-### Token storage
+## What Cloud Sync does
 
-The token and gist ID are stored in IndexedDB and load after the game initialises.
-Remove them at any time from the Settings page.
+- Stores encrypted save snapshots in private gists.
+- Lists backups created through DSPACE sync flows.
+- Supports restore from listed backups or manual gist-id targeting.
 
-## What gets synced?
+## Important safety notes
 
-- Game save data
-- Custom quests, items, and processes
+- Tokens are sensitive credentials; never share screenshots containing them.
+- Credentials are stored client-side and can be cleared from Settings.
+- Keep at least one local `/gamesaves` export as an offline fallback.
 
-Syncs happen in the background whenever changes occur.
+## Troubleshooting
 
-## Disable Cloud Sync
+- **No backups listed:** verify token permissions and gist visibility.
+- **Restore fails:** confirm gist ID is correct and backup payload is intact.
+- **Token revoked/expired:** generate a new token and reconnect.
 
-Use the **Log out** button on the Settings page to clear the token and gist ID. Local progress
-remains on your device.
+## Related docs
+
+- [Backups](/docs/backups)
+- [Gamesaves](/docs/gamesaves)
+- [Authentication](/docs/authentication)
+- [Settings](/docs/settings)

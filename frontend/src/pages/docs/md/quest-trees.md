@@ -5,63 +5,40 @@ slug: 'quest-trees'
 
 # Quest Trees
 
-DSPACE quests are organized into themed trees. This page maps each active tree to its skills doc
-so players and contributors can move between gameplay and reference material without guesswork.
+DSPACE quests are grouped into themed trees. This page maps every active built-in tree to its
+skills documentation so players and contributors can cross-reference gameplay and docs quickly.
 
-## How to use this page
+## Active tree catalog (v3)
 
-1. Start with **Welcome** if you're new.
-2. Pick 1-2 applied trees (for example, Energy + Electronics).
-3. Layer in systems trees (Programming, DevOps, Sysadmin) as your projects grow.
-4. Use the linked skills docs for detailed checklists, process links, and QA guidance.
+| Tree | Focus | Skills doc |
+| --- | --- | --- |
+| Welcome | onboarding and baseline progression | [/docs/welcome](/docs/welcome) |
+| 3D Printing | fabrication setup and print operations | [/docs/3dprinting](/docs/3dprinting) |
+| Aquaria | aquarium habitats and care loops | [/docs/aquaria](/docs/aquaria) |
+| Astronomy | observing and imaging basics | [/docs/astronomy](/docs/astronomy) |
+| Chemistry | lab habits and reaction literacy | [/docs/chemistry](/docs/chemistry) |
+| Composting | organic cycle and soil inputs | [/docs/composting](/docs/composting) |
+| DevOps | deployment and automation practices | [/docs/devops](/docs/devops) |
+| Electronics | circuits and instrumentation | [/docs/electronics](/docs/electronics) |
+| Energy | generation, storage, and budgeting | [/docs/energy](/docs/energy) |
+| First Aid | emergency readiness and response | [/docs/firstaid](/docs/firstaid) |
+| Geothermal | thermal-loop and ground systems | [/docs/geothermal](/docs/geothermal) |
+| Hydroponics | controlled-environment agriculture | [/docs/hydroponics](/docs/hydroponics) |
+| Programming | scripting and automation fundamentals | [/docs/programming](/docs/programming) |
+| Robotics | control, sensing, and motion systems | [/docs/robotics](/docs/robotics) |
+| Rocketry | model-scale launch prep and safety | [/docs/rocketry](/docs/rocketry) |
+| Sysadmin | operations and reliability workflows | [/docs/sysadmin](/docs/sysadmin) |
+| UBI | economic literacy and planning | [/docs/ubi](/docs/ubi) |
+| Woodworking | tool safety and build planning | [/docs/woodworking](/docs/woodworking) |
+| Completionist | meta milestones and endgame tracking | [/docs/completionist](/docs/completionist) |
 
-## Quick availability highlights
+## Suggested routes through the catalog
 
-- **Chemistry** – available today in the active quest catalog.
-- **Programming** – available today in the active quest catalog.
+- **Hardware-first:** Welcome → Energy → Electronics → 3D Printing → Robotics → Rocketry
+- **Life-support-first:** Welcome → Hydroponics → Composting → Aquaria → Chemistry → Geothermal
+- **Ops-first:** Welcome → Programming → DevOps → Sysadmin → contribution workflows
 
-## Active quest tree catalog
+## Contributor requirement
 
-| Tree          | Core focus                                  | Skills doc                                 |
-| ------------- | ------------------------------------------- | ------------------------------------------ |
-| Welcome       | onboarding, inventory, test workflow basics | [/docs/welcome](/docs/welcome)             |
-| 3D Printing   | fabrication setup + print workflow          | [/docs/3dprinting](/docs/3dprinting)       |
-| Aquaria       | habitat setup and care loops                | [/docs/aquaria](/docs/aquaria)             |
-| Astronomy     | observing and instrumentation basics        | [/docs/astronomy](/docs/astronomy)         |
-| Chemistry     | lab habits and reaction literacy            | [/docs/chemistry](/docs/chemistry)         |
-| Composting    | organics loops and soil inputs              | [/docs/composting](/docs/composting)       |
-| DevOps        | deployment and automation practices         | [/docs/devops](/docs/devops)               |
-| Electronics   | circuits, measurement, and integration      | [/docs/electronics](/docs/electronics)     |
-| Energy        | generation/storage decision loops           | [/docs/energy](/docs/energy)               |
-| First Aid     | preparedness and response skills            | [/docs/firstaid](/docs/firstaid)           |
-| Geothermal    | ground-loop and thermal systems             | [/docs/geothermal](/docs/geothermal)       |
-| Hydroponics   | controlled agriculture lifecycle            | [/docs/hydroponics](/docs/hydroponics)     |
-| Programming   | tooling and scripting foundations           | [/docs/programming](/docs/programming)     |
-| Robotics      | sensing + motion control fundamentals       | [/docs/robotics](/docs/robotics)           |
-| Rocketry      | launch prep and safety sequencing           | [/docs/rocketry](/docs/rocketry)           |
-| Sysadmin      | operations, reliability, and recovery       | [/docs/sysadmin](/docs/sysadmin)           |
-| UBI           | economic literacy and planning              | [/docs/ubi](/docs/ubi)                     |
-| Woodworking   | tool safety and build planning              | [/docs/woodworking](/docs/woodworking)     |
-| Completionist | meta-progression milestones                 | [/docs/completionist](/docs/completionist) |
-
-## Suggested progression paths
-
-### Practical hardware-first
-
-Welcome → Energy → Electronics → 3D Printing → Robotics → Rocketry
-
-### Life-support-first
-
-Welcome → Hydroponics → Composting → Aquaria → Chemistry → Geothermal
-
-### Ops + contribution-first
-
-Welcome → Programming → DevOps → Sysadmin → custom content contribution
-
-## Contributor validation note
-
-When quests change in any tree, update the matching skills doc in the same PR. Keep quest JSON and
-skills docs synchronized for gates, grants, process I/O, and QA walkthrough notes.
-
-For maintainers, `node scripts/generate-quest-chart.js` generates a tree-size radar chart from the
-current quest catalog.
+When any quest JSON changes in a tree, update that tree's docs page in the same PR. Keep gates,
+rewards, branching notes, and process links synchronized with real quest data.
