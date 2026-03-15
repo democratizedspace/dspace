@@ -3,63 +3,39 @@ title: 'Authentication Flow'
 slug: 'authentication'
 ---
 
-DSPACE uses GitHub authentication only for features that talk directly to GitHub. Most of the game
-works offline. Authentication is required when you submit content to the official repository,
-sync your save data with **Cloud Sync**, or choose quest options that are gated by GitHub access.
+# Authentication Flow
 
-## Where you'll see authentication prompts
+Most of DSPACE works offline and unauthenticated. Authentication is only required for
+GitHub-integrated features.
 
-Authentication appears in the following places today:
+## Features that require authentication
 
-- **Quest submissions** at `/quests/submit` (creates a pull request in the
-  `democratizedspace/dspace` repo).
-- **Custom content bundle submissions** at `/bundles/submit` (creates a pull request with bundle
-  JSON).
-- **Cloud Sync** at `/cloudsync` (reads/writes private GitHub gists for backups).
-- **Quest options that require GitHub** (options flagged with `requiresGitHub` stay disabled until
-  a valid token is saved).
-- **Settings → Log out** (clears saved GitHub credentials, Cloud Sync gist ID, and avatar URL from
-  this device).
+- `/cloudsync` for gist-backed backup sync
+- `/bundles/submit` for custom content submissions
+- `/quests/submit` for quest-focused submission flows
+- Quest options explicitly gated by `requiresGitHub`
 
-## Personal Access Tokens
+## Token types and minimum scopes
 
-To authenticate, generate a GitHub personal access token. The token is used client-side only and
-never sent anywhere except directly to GitHub's API.
+### Cloud Sync
 
-1. Visit [GitHub Settings → Developer settings → Personal access tokens](https://github.com/settings/tokens).
-2. Create a token with the scopes you need (see below).
-3. Paste the token into the relevant form in DSPACE and click **Save**.
+- Scope: `gist` (read/write)
 
-### Token scopes by feature
+### Submission flows
 
-- **Quest submissions** (`/quests/submit`): needs repository access for the DSPACE repo. Classic
-  PATs should include `repo`. Fine-grained tokens should grant read/write access to the DSPACE
-  repository (contents + pull requests).
-- **Bundle submissions** (`/bundles/submit`): same requirements as quest submissions.
-- **Cloud Sync** (`/cloudsync`): needs `gist` access (read/write) to create and list private
-  gists. You can use a separate gist-only token if you prefer.
+- Classic PAT: `repo` (and optionally `gist` if reused for cloud sync)
+- Fine-grained PAT: repository content + pull request permissions for
+  `democratizedspace/dspace`
 
-If you want a single token for all surfaces, a classic PAT with `repo` + `gist` is sufficient.
+## Local credential storage
 
-## Token Storage
+- Credentials are stored in IndexedDB so players do not need to re-enter tokens every session.
+- Token values are persisted under game-state credential keys (for example `gameState.github.token`).
+- Settings provides Clear and Log out controls that remove saved credentials from the device.
 
-Your token is stored in IndexedDB under `gameState.github.token` so you don't need to re-enter it
-each time you open the game. Cloud Sync also stores the selected gist ID at
-`gameState.cloudSync.gistId`. You can clear the saved token using the **Clear** button next to the
-input field.
+## Security practices
 
-## Security Considerations
-
-- The token never leaves your browser except when making authenticated requests to GitHub.
-- You can revoke the token at any time from your GitHub settings.
-- If you share your device, remember to clear the token to prevent unauthorized submissions.
-- User-generated markdown is sanitized with DOMPurify before rendering to prevent XSS.
-
-With a valid token saved, features like quest submission, bundle submission, gated quest options,
-and Cloud Sync will work seamlessly.
-
-## Logging out
-
-If you're using a shared machine, open the **Settings** page and click **Log out** to clear the
-saved GitHub token, Cloud Sync gist ID, and stored `avatarUrl` from the device. This removes access
-to your synced data until you sign in again.
+- Use separate tokens for sync and submissions when possible.
+- Revoke tokens in GitHub settings if a device is compromised.
+- Clear credentials after using shared machines.
+- Never paste tokens into quest text, docs markdown, or issue comments.

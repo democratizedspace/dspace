@@ -1,11 +1,14 @@
 ---
 title: 'Custom Content Bundles'
-slug: 'custom-bundles'
+slug: 'custom-content-bundles'
 ---
 
 # Custom Content Bundles
 
-To keep quests, items, and processes in sync, submissions should include all related content in a single **bundle** file. In v3, `/contentbackup` exports this bundle shape directly, and repository submissions typically live under `submissions/bundles`.
+Bundles package related custom quests, items, and processes so dependency chains stay intact during
+backup, transfer, and review.
+
+## Bundle shape
 
 ```json
 {
@@ -15,43 +18,29 @@ To keep quests, items, and processes in sync, submissions should include all rel
 }
 ```
 
-Each array contains standard objects that follow the existing schemas for quests, items, and
-processes.
+Each entry must satisfy its corresponding schema validation rules.
 
-## In-Game Bundle Submission
+## In-game workflow (recommended)
 
-The easiest way to submit a bundle is through the in-game interface:
+1. Create/edit content at `/quests/create`, `/inventory/create`, `/processes/create`.
+2. Export from `/contentbackup`.
+3. Validate by importing the bundle into a clean profile.
+4. Submit at `/bundles/submit`.
 
-1. Create your custom content using the in-game editors:
-    - Items: [/inventory/create](/inventory/create)
-    - Processes: [/processes/create](/processes/create)
-    - Quests: [/quests/create](/quests/create)
-2. Export your custom content from [/contentbackup](/contentbackup) (Prepare backup → Download backup)
-3. Submit the exported bundle JSON at [/bundles/submit](/bundles/submit)
-4. The system will create a pull request for review
-
-## Command-Line Bundle Creation
-
-If you are assembling content from repo files (instead of exporting from `/contentbackup`), you can generate a bundle with the script:
+## CLI workflow (repo contributors)
 
 ```bash
 node scripts/create-content-bundle.js submissions/bundles/my-bundle.json path/to/quest.json --items path/to/item.json --processes path/to/process.json
 ```
 
-The script resolves glob patterns so multiple files can be included at once. Commit the generated
-file in your pull request. Reviewers can load the bundle locally to verify your custom content.
+Use globs to include multiple files and commit the resulting bundle with your PR.
 
-An example quest JSON used in our automated tests lives at
-`frontend/test-data/constellations-quest.json`. You can reference this file when experimenting
-with the bundle script.
+## Validation checklist
 
-## Testing custom content locally
+- All referenced item/process IDs exist inside the bundle or in built-in content.
+- Quest prerequisites resolve correctly.
+- No malformed IDs or broken dialogue node links.
+- Bundle re-import succeeds before submission.
 
-Use the seeding script to populate IndexedDB with sample data:
-
-```bash
-npm run seed:custom
-```
-
-The command adds a demo item, process, and quest using `fake-indexeddb`, giving you a safe
-environment to experiment with the custom content APIs.
+Related docs: [Content Development](/docs/content-development),
+[Quest Submission Guide](/docs/quest-submission), [Quest Schema](/docs/quest-schema).

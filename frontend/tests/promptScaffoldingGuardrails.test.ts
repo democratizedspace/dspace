@@ -16,7 +16,7 @@ const forbiddenKeyPattern = /\b(no key needed|key not required)\b/i;
 const allowedFuturePattern = /\bv3\.1\b|\bfuture\b|\bexperimental\b/i;
 const bundleSubmissionAnchor = '/docs/quest-submission#option-1-bundle-submission-recommended';
 const questOnlySubmissionAnchor = '/docs/quest-submission#option-2-quest-only-submission';
-const customBundlesAnchor = '/docs/custom-bundles';
+const customBundlesAnchor = '/docs/custom-content-bundles';
 
 const collectPromptStrings = () => {
     const personaStrings = npcPersonas.flatMap((persona) =>

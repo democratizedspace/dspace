@@ -3,34 +3,39 @@ title: 'Cloud Sync'
 slug: 'cloud-sync'
 ---
 
-DSPACE can back up your progress to a private GitHub gist.
+# Cloud Sync
 
-1. Generate a GitHub personal access token with the `gist` scope (see [GitHub's token guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)).
-2. Enter the token in the form and click **Save**.
-3. Click **Upload** to create/update the gist and store your save data.
-4. Copy the resulting Gist ID to use on other devices.
-5. On another device, enter the same token and Gist ID and click **Download**.
+Cloud Sync stores sanitized backups in a private GitHub gist so you can recover across browsers or
+devices.
 
-## Enable Cloud Sync
+## What Cloud Sync handles
 
-1. Create a new secret gist on GitHub.
-2. Copy the gist URL or ID.
-3. In DSPACE, open the **Settings** page and provide a GitHub token with gist scope.
-4. Enter your gist ID to start syncing.
+- Game-state backups
+- Custom content backups (Custom quests, items, and processes)
+- Upload/download operations tied to your configured gist
 
-### Token storage
+## Setup
 
-The token and gist ID are stored in IndexedDB and load after the game initialises.
-Remove them at any time from the Settings page.
+1. Create a GitHub personal access token with `gist` scope.
+2. Create or choose a private gist.
+3. Open `/cloudsync` (or Settings cloud-sync controls).
+4. Save token and Gist ID.
+5. Run an upload, then verify a download from another profile/device.
 
-## What gets synced?
+## Credentials and storage
 
-- Game save data
-- Custom quests, items, and processes
+- Token and gist ID are stored locally in IndexedDB.
+- Credentials stay on your device except for authenticated requests to GitHub APIs.
+- In Settings, use Clear / Log out actions to remove them from the device.
 
-Syncs happen in the background whenever changes occur.
+## Operational guidance
 
-## Disable Cloud Sync
+- Keep manual exports from `/gamesaves` and `/contentbackup` as a fallback.
+- Rotate tokens if a device is lost or shared.
+- Use separate tokens for Cloud Sync and contribution actions if you want tighter least-privilege.
 
-Use the **Log out** button on the Settings page to clear the token and gist ID. Local progress
-remains on your device.
+## Troubleshooting
+
+- **401/403:** token scope invalid or token revoked.
+- **404 gist:** incorrect gist ID or missing access rights.
+- **Sync appears stale:** verify current profile writes before uploading and reload after download.

@@ -3,10 +3,10 @@ title: 'Routes'
 slug: 'routes'
 ---
 
-# DSPACE Routes
+# DSPACE Routes (v3)
 
-This page lists canonical in-app routes and click paths for v3.
-It mirrors `docs/ROUTES.md` and `frontend/src/config/menu.json`.
+This page lists canonical player-facing routes for v3 and mirrors the runtime menu config.
+Use this as the docs-facing companion to `docs/ROUTES.md`.
 
 ## Top navigation (pinned)
 
@@ -39,40 +39,36 @@ It mirrors `docs/ROUTES.md` and `frontend/src/config/menu.json`.
 | Toolbox                 | `/toolbox`       | live        |
 | Settings                | `/settings`      | live        |
 
-External links: Discord, Twitter, and GitHub open off-site.
+External links in the More menu:
 
-## Authoring + management entry points
+- Discord → `https://discord.gg/A3UAfYvnxM`
+- Twitter → `https://twitter.com/dspacegame`
+- GitHub → `https://github.com/democratizedspace/dspace`
 
-- Quests: `/quests/create`, `/quests/manage`, `/quests/:id/edit`
+## Content authoring and management routes
+
+- Quests: `/quests/create`, `/quests/manage`, `/quests/:pathId/:questId`, `/quests/:id/edit`
 - Items: `/inventory/create`, `/inventory/manage`, `/inventory/item/:itemId/edit`
 - Processes: `/processes/create`, `/processes/manage`, `/processes/:processId/edit`
+- Bundles: `/bundles/submit`
 
-## Core static pages
+## Utility routes and diagnostics
 
-- Settings/utility: `/settings`, `/stats`, `/toolbox`, `/gamesaves`, `/cloudsync`, `/contentbackup`
-- Social/meta: `/leaderboard`, `/titles`, `/achievements`, `/profile`
-- Chat/debug: `/chat`, `/dchat`, `/debug`
+- Save portability: `/gamesaves`, `/cloudsync`, `/contentbackup`
+- Progress visibility: `/stats`, `/achievements`, `/titles`, `/leaderboard`
+- Configuration/tools: `/settings`, `/toolbox`
+- Debug: `/debug`
 
 ## Dynamic route patterns
 
 - Docs: `/docs/:slug`
-- Quest detail: `/quests/:pathId/:questId` (and `/edit`, `/finished` variants)
+- Quest detail: `/quests/:pathId/:questId`
+- Quest completion view: `/quests/:pathId/:questId/finished`
 - Process detail: `/processes/:processId`
 - Inventory detail: `/inventory/item/:itemId`
-- Shop flows: `/shop/buy/:itemId/:count`, `/shop/sell/:itemId/:count`, error variants
+- Shop flow: `/shop/buy/:itemId/:count`, `/shop/sell/:itemId/:count`
 
-## Link-checking behavior
-
-Internal markdown links are validated by `scripts/link-check.mjs` without starting the dev server.
-Dynamic segments are resolved against Astro file routes.
-
-Run from repo root:
-
-```bash
-node scripts/link-check.mjs
-```
-
-## Common click paths
+## Canonical click-path navigation strings
 
 - More → Processes opens /processes.
 - More → Import/export gamesaves opens /gamesaves.
@@ -95,3 +91,12 @@ node scripts/link-check.mjs
 - Inventory manage page → Create button opens /inventory/create.
 - Processes page → Manage button opens /processes/manage.
 - Processes manage page → Create button opens /processes/create.
+
+## Link-checking behavior
+
+Internal markdown links are validated by `scripts/link-check.mjs` without starting the dev server.
+Dynamic segments are resolved against Astro file routes.
+
+```bash
+node scripts/link-check.mjs
+```
