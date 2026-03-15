@@ -3,66 +3,57 @@ title: 'Backups'
 slug: 'backups'
 ---
 
-DSPACE offers backup options that protect both your overall game state and any custom content you
-create. This guide explains what gets saved, where the data lives, and how to restore it on another
-device.
+# Backups and Restore (v3)
 
-## What gets backed up
+DSPACE has separate backup paths for gameplay state and custom content. Use both.
 
-- **Game saves** – quest progress, inventory, and processes.
-- **Custom content** – player-created items, quests, and processes.
-- **Cloud Sync (optional)** – automatic encrypted cloud storage for the above data. Cloud Sync is
-  covered in more detail at [Cloud Sync](/docs/cloud-sync).
+## Backup surfaces
 
-Backups use a stable JSON schema so exports from older releases remain compatible with newer
-clients.
+### 1) Game-state backup (`/gamesaves`)
 
-## Exporting and importing game saves
+Backs up core progression data such as:
 
-1. Open [Import/export gamesaves](/gamesaves).
-2. Click **Copy** to place a Base64-encoded JSON snapshot on your clipboard. The export panel shows
-   the backup envelope so you can paste it into a notes app if needed.
-3. To restore, paste the backup string into the field and select **Import**. Your quests,
-   inventory, and processes will be replaced with the imported data.
-   Field label: **Paste a game state backup string (envelope or raw state) here:**
+- quests
+- inventory
+- processes
 
-The encoded JSON stores `quests`, `inventory`, and `processes` keys. Keep the output somewhere you
-control (password manager, notes app, or version-controlled gist).
+Import is replace-style for the game-state payload.
 
-## Exporting and importing custom content
+### 2) Custom content backup (`/contentbackup`)
 
-1. Open [Custom Content Backup](/contentbackup).
-2. Under **Export custom content**, click **Prepare backup**. Wait for the prepared summary to
-   appear.
-   Status text: **Preparing backup…**
-3. Click **Download backup** to save the `.json` file to your device.
-4. To restore, drag and drop the `.json` or `.dspace-backup` backup file onto the import area or
-   click **Choose backup file** to browse.
-   Status text: **Importing…** and **Import complete** when the import finishes.
+Backs up player-authored content:
 
-The backup file contains `items`, `processes`, and `quests` records. Use this path if you want to
-move custom creations between profiles without touching your main save.
+- custom quests
+- custom items
+- custom processes
 
-## Automated backups with Cloud Sync
+Use this when moving custom authoring work across profiles/devices.
 
-For hands-off backups, enable Cloud Sync from [Settings](/settings) (see the dedicated
-[Cloud Sync](/docs/cloud-sync) doc). Once configured, the client periodically uploads encrypted
-snapshots so you do not need to manage strings manually. Local exports remain available as a manual
-failsafe.
+### 3) Optional cloud backup (`/cloudsync`)
 
-## Best practices
+Cloud Sync stores encrypted backups using a private GitHub gist you control.
 
-- **Version regularly:** Export after finishing a quest chain or before testing mods.
-- **Store safely:** Treat exports like save files—keep them in a private repo or password manager.
-- **Validate imports:** After restoring on a new device, open `/quests` and `/inventory` to confirm
-  expected progress and items.
-- **Keep both modes:** Even with Cloud Sync enabled, keep occasional manual exports so you have an
-  offline backup.
+## Recommended backup routine
 
-## Troubleshooting
+1. Export from `/gamesaves` before major progression changes.
+2. Export from `/contentbackup` before editing large quest/process/item sets.
+3. If enabled, verify `/cloudsync` last sync status after major sessions.
+4. Keep at least one offline/manual copy.
 
-- **Import fails:** Ensure the string is complete (no trimmed whitespace) and comes from the matching
-  export path (gamesaves vs. custom content).
-- **Old backup, new client:** The schema is backward compatible. If a restore still fails, try a
-  newer backup or contact support via the in-app **Help → Contact support** option.
-- **Clipboard blocked:** Manually select and copy the text area contents; the export remains valid.
+## Restore guidance
+
+- Restore game-state and custom content separately using their matching pages.
+- After restoring, sanity check `/quests`, `/inventory`, and `/processes`.
+- For migration testing (v1/v2 to v3), prefer Settings migration controls and QA seeding paths.
+
+## Security and privacy notes
+
+- Backups may include meaningful progression and authored content.
+- Store exported files/strings in private locations (password manager/private storage).
+- Clear cloud tokens from Settings when using shared devices.
+
+## Related docs
+
+- [Cloud Sync](/docs/cloud-sync)
+- [Legacy save storage](/docs/legacy-save-storage)
+- [State migration](/docs/state-migration)

@@ -3,34 +3,46 @@ title: 'Cloud Sync'
 slug: 'cloud-sync'
 ---
 
-DSPACE can back up your progress to a private GitHub gist.
+# Cloud Sync (GitHub Gist)
 
-1. Generate a GitHub personal access token with the `gist` scope (see [GitHub's token guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)).
-2. Enter the token in the form and click **Save**.
-3. Click **Upload** to create/update the gist and store your save data.
-4. Copy the resulting Gist ID to use on other devices.
-5. On another device, enter the same token and Gist ID and click **Download**.
+Cloud Sync is an optional v3 feature that uploads encrypted backup snapshots to a private GitHub
+Gist you control.
 
-## Enable Cloud Sync
+## What you need
 
-1. Create a new secret gist on GitHub.
-2. Copy the gist URL or ID.
-3. In DSPACE, open the **Settings** page and provide a GitHub token with gist scope.
-4. Enter your gist ID to start syncing.
+1. A GitHub personal access token with `gist` scope.
+2. A private gist ID (or URL).
 
-### Token storage
+## Setup flow
 
-The token and gist ID are stored in IndexedDB and load after the game initialises.
-Remove them at any time from the Settings page.
+1. Open `/cloudsync` (or use Settings shortcuts).
+2. Enter token and gist ID.
+3. Save credentials.
+4. Run upload/download to verify connectivity.
 
-## What gets synced?
+## What gets synced
 
-- Game save data
-- Custom quests, items, and processes
+- game save data
+- custom content records (quests/items/processes)
 
-Syncs happen in the background whenever changes occur.
+## Where credentials are stored
 
-## Disable Cloud Sync
+- Token and gist metadata are stored locally in IndexedDB.
+- You can clear credentials from Settings/Cloud Sync controls.
 
-Use the **Log out** button on the Settings page to clear the token and gist ID. Local progress
-remains on your device.
+## Operational tips
+
+- Keep one manual offline backup even when Cloud Sync is active.
+- If sync appears stale, run manual upload then download verification.
+- Rotate your GitHub token periodically.
+
+## Troubleshooting
+
+- **401/403 from GitHub:** token missing `gist` scope or expired.
+- **404 gist not found:** wrong gist ID or inaccessible gist.
+- **No sync effect:** verify token + gist saved before running upload/download.
+
+## Related docs
+
+- [Backups](/docs/backups)
+- [Authentication](/docs/authentication)

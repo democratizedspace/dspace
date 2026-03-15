@@ -1,48 +1,33 @@
 ---
-title: 'token.place Integration'
+title: 'token.place (v3 status)'
 slug: 'token-place'
 ---
 
-DSPACE ships with a token.place integration for in-game chat, but it is **disabled by default**.
-In v3, the reason is simple: the token.place API v1 is not yet implemented or live in production,
-so DSPACE v3 ships with **OpenAI-only chat** while token.place is deferred to v3.1. After v3 is in
-production, we will finish the token.place API v1 and deploy it; only then does DSPACE v3.1
-complete and enable the integration.
+# token.place status in v3
 
-Once token.place API v1 is in production, DSPACE v3.1 will complete the integration and enable
-the opt-in path described below.
+token.place support exists in code but is not the default chat path for v3 players.
 
-## How it works
+## Current v3 policy
 
-- The chat client calls `tokenPlaceChat` (see `frontend/src/utils/tokenPlace.js`), which posts to
-  `${baseUrl}/chat` and returns the `reply` field from the JSON response. If the feature is
-  disabled, the helper throws with a message that points back to the opt-in options.
-- The default base URL is `https://token.place/api` (the value of `DEFAULT_URL` in
-  `frontend/src/utils/tokenPlace.js`).
-- The integration is enabled only when an explicit opt-in flag is set via
-  `isTokenPlaceEnabled` (see `getEnabledOverride` and `isTokenPlaceEnabled` in
-  `frontend/src/utils/tokenPlace.js`).
-- The OpenAI API key chat integration is configured separately (see
-  `frontend/src/pages/chat/svelte/OpenAIChat.svelte`), so leaving token.place disabled keeps
-  chat on the OpenAI-backed flow.
+- v3 ships OpenAI-first chat experience.
+- token.place remains feature-gated/opt-in for controlled testing and future rollout.
+- Planned broader availability target is post-v3.0 (tracked toward v3.1+).
 
-## Opt-in options
+## Enablement model
 
-Token.place can be enabled in two ways (once the v1 API is live in production):
+token.place can be enabled only via explicit overrides:
 
-- **Environment variable**: set `VITE_TOKEN_PLACE_ENABLED=true`. You can also point to a custom URL
-  with `VITE_TOKEN_PLACE_URL`.
-- **Game state**: persist `tokenPlace.enabled=true` in saved game state. Optionally pair this with
-  a custom `tokenPlace.url`.
+1. Environment flags (`VITE_TOKEN_PLACE_ENABLED`, optional `VITE_TOKEN_PLACE_URL`)
+2. Saved game-state tokenPlace settings
 
-```bash
-VITE_TOKEN_PLACE_ENABLED=true VITE_TOKEN_PLACE_URL=$TOKEN_PLACE_API_URL npm run dev
-```
+Environment overrides take precedence over saved state.
 
-The environment flag takes precedence over game state (see `getEnabledOverride` and
-`isTokenPlaceEnabled` in `frontend/src/utils/tokenPlace.js`). If you set
-`VITE_TOKEN_PLACE_ENABLED=false`, token.place stays disabled even if game state is enabled. When
-enabled, the URL preference order in `tokenPlaceChat` is `tokenPlace.url` (game state), then
-`VITE_TOKEN_PLACE_URL`, then the default URL.
+## Operator note
 
-You can clear the saved URL (or the opt-in flag) by resetting your game state.
+Do not assume token.place availability in player-facing docs unless the feature gate policy
+changes and this page is updated.
+
+## Related docs
+
+- [v3 Release State](/docs/v3-release-state)
+- [Authentication](/docs/authentication)

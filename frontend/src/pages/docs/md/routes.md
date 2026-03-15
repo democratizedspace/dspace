@@ -3,10 +3,11 @@ title: 'Routes'
 slug: 'routes'
 ---
 
-# DSPACE Routes
+# DSPACE Routes (v3)
 
-This page lists canonical in-app routes and click paths for v3.
-It mirrors `docs/ROUTES.md` and `frontend/src/config/menu.json`.
+This page documents the canonical in-app route surface for v3.
+
+It is aligned to `docs/ROUTES.md` and the active menu configuration.
 
 ## Top navigation (pinned)
 
@@ -39,59 +40,57 @@ It mirrors `docs/ROUTES.md` and `frontend/src/config/menu.json`.
 | Toolbox                 | `/toolbox`       | live        |
 | Settings                | `/settings`      | live        |
 
-External links: Discord, Twitter, and GitHub open off-site.
+External links in More: Discord, Twitter, GitHub.
 
-## Authoring + management entry points
+## Custom content authoring + management routes
 
-- Quests: `/quests/create`, `/quests/manage`, `/quests/:id/edit`
-- Items: `/inventory/create`, `/inventory/manage`, `/inventory/item/:itemId/edit`
-- Processes: `/processes/create`, `/processes/manage`, `/processes/:processId/edit`
+### Quests
 
-## Core static pages
+- `/quests/create`
+- `/quests/manage`
+- `/quests/:id/edit`
+- `/quests/:pathId/:questId`
+- `/quests/:pathId/:questId/edit`
+- `/quests/:pathId/:questId/finished`
 
-- Settings/utility: `/settings`, `/stats`, `/toolbox`, `/gamesaves`, `/cloudsync`, `/contentbackup`
-- Social/meta: `/leaderboard`, `/titles`, `/achievements`, `/profile`
-- Chat/debug: `/chat`, `/dchat`, `/debug`
+### Items
 
-## Dynamic route patterns
+- `/inventory/create`
+- `/inventory/manage`
+- `/inventory/item/:itemId`
+- `/inventory/item/:itemId/edit`
 
-- Docs: `/docs/:slug`
-- Quest detail: `/quests/:pathId/:questId` (and `/edit`, `/finished` variants)
-- Process detail: `/processes/:processId`
-- Inventory detail: `/inventory/item/:itemId`
-- Shop flows: `/shop/buy/:itemId/:count`, `/shop/sell/:itemId/:count`, error variants
+### Processes
 
-## Link-checking behavior
+- `/processes/create`
+- `/processes/manage`
+- `/processes/:processId`
+- `/processes/:processId/edit`
+
+## High-use utility routes
+
+- `/gamesaves` — game save import/export
+- `/cloudsync` — cloud backup config + sync controls
+- `/contentbackup` — custom content backup import/export
+- `/settings` — preferences, auth/token controls, migration tools
+- `/toolbox` — utilities and diagnostics entrypoint
+
+## Documentation routes
+
+- `/docs` — docs landing + search
+- `/docs/:slug` — docs detail pages (for example `/docs/about`, `/docs/quest-trees`)
+
+## Link checking
 
 Internal markdown links are validated by `scripts/link-check.mjs` without starting the dev server.
-Dynamic segments are resolved against Astro file routes.
-
-Run from repo root:
 
 ```bash
 node scripts/link-check.mjs
 ```
 
-## Common click paths
+## Canonical source and contribution note
 
-- More → Processes opens /processes.
-- More → Import/export gamesaves opens /gamesaves.
-- More → Cloud Sync opens /cloudsync.
-- More → Custom Content Backup opens /contentbackup.
-- More → Guilds is marked Coming soon (no navigation yet).
-- More → Stats opens /stats.
-- More → Achievements opens /achievements.
-- More → Leaderboard opens /leaderboard.
-- More → Locations is marked Coming soon (no navigation yet).
-- More → Titles opens /titles.
-- More → Toolbox opens /toolbox.
-- More → Settings opens /settings.
-- More → Discord opens https://discord.gg/A3UAfYvnxM.
-- More → Twitter opens https://twitter.com/dspacegame.
-- More → Github opens https://github.com/democratizedspace/dspace.
-- Quests page → Manage button opens /quests/manage.
-- Quests manage page → Create button opens /quests/create.
-- Inventory page → Manage button opens /inventory/manage.
-- Inventory manage page → Create button opens /inventory/create.
-- Processes page → Manage button opens /processes/manage.
-- Processes manage page → Create button opens /processes/create.
+If this page conflicts with a route currently served by Astro, update both:
+
+1. `docs/ROUTES.md`
+2. this page (`/docs/routes`)

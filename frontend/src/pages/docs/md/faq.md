@@ -5,123 +5,98 @@ slug: 'faq'
 
 ## What is DSPACE?
 
-DSPACE is an incremental simulation game about resource management and space exploration. It
-focuses on learning by doing through quests, processes, and real-world inspired projects. For a
-full overview, start with [About](/docs/about) and the [Mission](/docs/mission).
+DSPACE is an incremental learning/simulation game focused on resource systems, practical skills,
+and quest-based progression. Start with [About](/docs/about) and [Mission](/docs/mission).
 
-## What changed with v3?
+## What is new in v3?
 
-v3 introduced the largest docs + systems expansion so far: custom content editors (quests/items/
-processes), better backup and cloud sync tooling, expanded utility routes, and broader quest
-coverage. Start with [v3 Release State](/docs/v3-release-state),
-[Quest Trees](/docs/quest-trees), and [Content Development](/docs/content-development).
+v3 introduced:
 
-## Is DSPACE still in development?
+- custom content creation (quests, items, processes)
+- local-first IndexedDB saves with migration and backup flows
+- expanded utility pages (`/stats`, `/titles`, `/toolbox`, `/settings`, `/leaderboard`)
+- broader quest coverage and docs infrastructure updates
 
-Yes. The game is under active development, and new quests, systems, and improvements ship
-regularly. If you want to help shape what’s next, join the community on
-[Discord](https://discord.gg/A3UAfYvnxM) or see the [Roadmap](/docs/roadmap).
+Recommended overview docs:
 
-## How do I get started?
+- [v3 Release State](/docs/v3-release-state)
+- [Quest Trees](/docs/quest-trees)
+- [Content Development](/docs/content-development)
 
-Begin with the Welcome quest tree, which teaches the basics of accepting quests, completing
-objectives, and collecting rewards. Then use [Quest Trees](/docs/quest-trees) to pick your next
-skill path.
+## How do I start playing?
 
-## How do I make progress?
-
-[Quests](/quests) are the main progression system. They introduce prerequisites, rewards, and
-new [processes](/docs/processes). Processes then transform items over time so you can unlock more
-complex quests.
-
-## What are quest trees?
-
-Quest trees group related quests into themed learning paths such as energy systems, hydroponics,
-robotics, and rocketry. Browse the current catalog and doc mappings on
+Open [Quests](/quests), complete the Welcome tree, then pick a follow-up path from
 [Quest Trees](/docs/quest-trees).
 
-## What are processes and how do they work?
+## How does progression work?
 
-[Processes](/docs/processes) are timed activities that require and/or consume items, then create
-new items. Process progress is real-time and tied to your save state.
+1. Complete quests to unlock prerequisites and rewards.
+2. Use inventory items and processes to satisfy future quest gates.
+3. Expand into specialized trees (energy, hydroponics, programming, etc.).
 
-## Where do items live and how does inventory work?
+References: [Processes](/docs/processes), [Inventory](/docs/inventory).
 
-Your [inventory](/docs/inventory) holds everything you earn from quests and processes. In v3,
-save data is primarily stored in IndexedDB.
+## Can I create custom content?
 
-## Can I create custom quests, items, or processes?
+Yes. v3 has in-game editors for all core content types:
 
-Yes. DSPACE includes in-game editors for all three:
+- Quests: `/quests/create`
+- Items: `/inventory/create`
+- Processes: `/processes/create`
 
-- `/quests/create`
-- `/inventory/create`
-- `/processes/create`
+Use `/quests/manage`, `/inventory/manage`, and `/processes/manage` to maintain custom entries.
 
-Use the matching manage pages (`/quests/manage`, `/inventory/manage`, `/processes/manage`) for
-editing and cleanup. See [Content Development](/docs/content-development) for the full workflow.
+## How do I submit custom content?
 
-## How do I submit custom quests?
+Use:
 
-Use the [Quest Submission Guide](/docs/quest-submission) to package your quest, process, or item
-for review. The guide covers export, validation, and pull request handoff.
+- [Quest Submission Guide](/docs/quest-submission)
+- [Custom Content Bundles](/docs/custom-bundles)
 
-## What are custom content bundles?
+## Where is save data stored?
 
-Bundles let you submit related quests, items, and processes as one JSON payload so dependencies
-stay aligned. Learn the format in [Custom Content Bundles](/docs/custom-bundles).
+v3 primarily stores game state and custom content in IndexedDB.
 
-## Where is my save data stored?
+## How do backups work?
 
-Game state and custom content are stored locally in your browser (IndexedDB primary). DSPACE does
-not upload save data unless you explicitly configure [Cloud Sync](/docs/cloud-sync).
+- `/gamesaves`: game-state import/export
+- `/contentbackup`: custom content bundle import/export
+- `/cloudsync`: optional encrypted backup flow via private GitHub gist
 
-## How do I back up or restore data?
-
-Use `/gamesaves` for game-state export/import and `/contentbackup` for custom content bundle
-export/import. See [Backups](/docs/backups) and [Cloud Sync](/docs/cloud-sync).
-
-## How does Cloud Sync work?
-
-Cloud Sync stores encrypted backups in a private GitHub gist. You provide a GitHub token and gist
-ID, and DSPACE syncs save snapshots using your configuration.
+See [Backups](/docs/backups) and [Cloud Sync](/docs/cloud-sync).
 
 ## Do I need a GitHub token?
 
-Only for GitHub-backed features (for example, Cloud Sync and contribution workflows). Tokens are
-stored locally and can be cleared at any time. See [Authentication](/docs/authentication).
+Only for GitHub-backed features (cloud sync and some contribution flows). Tokens are stored
+locally and can be cleared from Settings.
+
+## Are guilds fully live?
+
+Not yet. Guild framing and destination links exist, but full guild gameplay is still planned.
+See [Guilds](/docs/guilds).
+
+## Is token.place required in v3?
+
+No. v3 ships OpenAI-first chat. token.place remains feature-gated and optional.
+See [token.place status](/docs/token-place).
 
 ## What are dUSD, dWatt, and dCarbon?
 
-- **[dUSD](/docs/dusd)** is the in-game currency used for buying and selling.
-- **[dWatt](/docs/dwatt)** tracks generated/available energy.
-- **[dCarbon](/docs/dcarbon)** tracks emissions pressure from non-renewable power choices.
+- [dUSD](/docs/dusd): in-game currency for buying/selling
+- [dWatt](/docs/dwatt): generated/available energy
+- [dCarbon](/docs/dcarbon): emissions pressure signal
 
-## How do achievements, titles, stats, and leaderboard fit together?
+## How do stats, achievements, titles, and leaderboard connect?
 
-- `/achievements`: milestone unlocks.
-- `/titles`: title progression tied to achievement completion.
-- `/stats`: high-level quest/item/process totals.
-- `/leaderboard`: donation-oriented ranking board.
+- `/stats`: aggregate progress
+- `/achievements`: milestone unlocks
+- `/titles`: rank/title progression
+- `/leaderboard`: donor/recognition board
 
-Related references: [Achievements](/docs/achievements), [Titles](/docs/titles), and
-[Routes](/docs/routes).
+## How do I browse docs quickly?
 
-## Are guilds live?
-
-Not as a full gameplay system yet. Guilds are still marked coming soon in navigation; the current
-Metaguild framing is documented on [Guilds](/docs/guilds).
-
-## How do I search docs quickly?
-
-Use `/docs` search for title + body matches. Feature filters like `has:image` and `has:link` are
-also supported. See [Docs search](/docs/docs-search).
+Use `/docs` search and browse routes from [Routes](/docs/routes).
 
 ## Can I self-host DSPACE?
 
-Yes. Use Docker or local Node-based workflows from [Self-hosting](/docs/self-hosting).
-
-## Where can I learn more?
-
-Explore [docs](/docs), join [Discord](https://discord.gg/A3UAfYvnxM), and review
-[Contribute](/docs/contribute).
+Yes. Start with [Self-hosting](/docs/self-hosting).

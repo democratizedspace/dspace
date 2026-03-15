@@ -5,71 +5,81 @@ slug: 'v3-release-state'
 
 # v3 Release State
 
-This page is the source-of-truth snapshot for what shipped in v3 and what remains deferred.
-Use it alongside the v3 launch notes at [/changelog#20260401](/changelog#20260401) and the
-full QA checklist in
-[docs/qa/v3.md](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md).
+This page is the canonical status snapshot for DSPACE v3.
 
-## What is fully live in v3
+Use it together with the launch notes at [/changelog#20260401](/changelog#20260401) and the QA
+checklist at
+[`docs/qa/v3.md`](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md).
 
-### Core player systems
+## What shipped and is live in v3
 
-- Quest, inventory, and process gameplay loops are live.
-- New utility destinations are live from the **More** menu: `/stats`, `/leaderboard`, `/titles`,
-  `/toolbox`, `/settings`, `/cloudsync`, `/contentbackup`, and `/gamesaves`.
-- Achievements and title progression are live and tied to real gameplay state.
+### Core gameplay loops
 
-### Custom content tooling (v3 headline)
+- Quest progression (`/quests`) is live with active tree-based progression.
+- Inventory and process loops (`/inventory`, `/processes`) are live.
+- Achievement/title progression (`/achievements`, `/titles`) is live.
+- Player metrics (`/stats`) are live.
 
-- Players can create and edit custom quests, items, and processes in-game.
-- Player-created content is stored locally and can be exported/imported through
-  `/contentbackup`.
-- Quest submissions can be prepared through in-game contribution tooling and the
-  [Quest Submission Guide](/docs/quest-submission).
+### Utility + operations pages
 
-### Save safety + migration
+All of these are now reachable from the **More** menu:
 
-- Primary storage is IndexedDB in v3.
-- Legacy save upgrade paths exist for v1 cookies and v2 localStorage saves.
-- Import/export and backup routes are available to reduce save loss risk before major changes.
+- `/gamesaves` (save import/export)
+- `/cloudsync` (GitHub gist sync)
+- `/contentbackup` (custom content backup)
+- `/toolbox` (save/content/diagnostics hub)
+- `/settings` (preferences + migration + auth controls)
+- `/leaderboard` (metaguild donor board)
 
-### AI chat
+### v3 custom content system
 
-- v3 ships OpenAI-only chat flows for `/chat` and persona-style in-game NPC chat.
+v3 includes first-class custom authoring and management:
 
-## Deferred or intentionally limited in v3
+- Quest create/manage/edit: `/quests/create`, `/quests/manage`, `/quests/:id/edit`
+- Item create/manage/edit: `/inventory/create`, `/inventory/manage`,
+  `/inventory/item/:itemId/edit`
+- Process create/manage/edit: `/processes/create`, `/processes/manage`,
+  `/processes/:processId/edit`
+- Content backup + transfer: `/contentbackup`
 
-### token.place integration
+### Save architecture + safety
 
-- token.place is deferred to v3.1.
-- Current status and onboarding requirements are tracked in [/docs/token-place](/docs/token-place).
+- v3 uses IndexedDB as primary storage.
+- Legacy upgrade paths are available for v1 cookie and v2 localStorage saves.
+- Manual game-save export/import remains available through `/gamesaves`.
 
-### Full guild gameplay
+### AI and NPC chat
 
-- Guild route and mechanics are still marked as coming soon in navigation.
-- Leaderboard support and Metaguild narrative framing are present, but full guild membership,
-  cooperative guild inventories, and ActivityPub-connected multiplayer are not live yet.
-- See [/docs/guilds](/docs/guilds) for the current plan and boundaries.
+- v3 ships with OpenAI-backed chat flows in `/chat`.
+- Persona NPC chat support is live for in-game companion interactions.
+
+## Intentionally deferred after v3.0.0
+
+### token.place
+
+- token.place is integrated behind feature-gated config but not enabled for default v3 gameplay.
+- See [/docs/token-place](/docs/token-place) for current opt-in status and boundaries.
+
+### Guild gameplay depth
+
+- `/guilds` still serves as a planning/landing destination.
+- Full guild mechanics (membership gameplay, shared inventories, federated guild play) remain
+  deferred.
+- See [/docs/guilds](/docs/guilds).
 
 ### Locations destination
 
-- `/locations` is still a coming-soon destination in the More menu.
+- `/locations` remains marked coming soon.
 
-## v2-only mechanics removed / not applicable in v3
+## Notes on removed assumptions from older docs
 
-- **Blockchain/Web3 roadmap assumptions are removed in v3.** dWatt, dUSD, and related units are
-  in-game progression currencies, not on-chain assets.
-- **LocalStorage is no longer primary storage.** It is legacy import material; v3 uses IndexedDB.
-- **Legacy migration behavior is explicit.** Legacy keys/artifacts are treated as migration sources,
-  not active storage.
+- dUSD/dWatt/dCarbon are in-game progression currencies in v3, not on-chain assets.
+- localStorage is no longer the primary game-state store.
 
-## Verification checklist for docs and QA
+## Documentation update checklist (v3 correctness)
 
-When you update gameplay docs, verify these points against the current build:
+When editing gameplay docs, verify all three:
 
-1. Route is actually reachable and not marked coming soon.
-2. Behavior matches either the v3 changelog or `docs/qa/v3.md` checklist outcomes.
-3. If a system is partially live (for example, guild framing vs guild mechanics), document both the
-   available and unavailable parts.
-4. Include links to the canonical docs pages (`/docs/routes`, `/docs/quest-trees`,
-   `/docs/content-development`) so players can self-serve details.
+1. The route exists and is reachable from current UI navigation.
+2. The described behavior matches either the v3 changelog or `docs/qa/v3.md`.
+3. Partial systems are described explicitly (what works now vs what is planned).

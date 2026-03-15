@@ -3,79 +3,82 @@ title: 'Content Development Guide'
 slug: 'content-development'
 ---
 
-# DSPACE Content Development Guide
+# DSPACE Content Development (v3)
 
-This is the canonical hub for creating v3 custom content.
+This is the canonical authoring hub for custom quests, items, and processes.
 
-## v3 custom content model
+## Scope and model
 
-DSPACE supports three content types that can be authored in-game:
+DSPACE v3 supports three custom content types:
 
-1. **Quests** – branching progression and rewards
-2. **Items** – resources/tools used by quests and processes
-3. **Processes** – timed transformations between items
+1. **Quests** — progression/dialogue structures
+2. **Items** — inventory entities used by quests/processes
+3. **Processes** — timed transformations and production loops
 
-All three are first-class in v3 and can be created, edited, exported, and re-imported.
+All are first-class: create, edit, export, import, and validate.
 
-## Where to create and manage content
+## In-game creation + management routes
 
-### Create routes
+### Create
 
 - Quests: `/quests/create`
 - Items: `/inventory/create`
 - Processes: `/processes/create`
 
-### Manage routes
+### Manage
 
 - Quests: `/quests/manage`
 - Items: `/inventory/manage`
 - Processes: `/processes/manage`
 
-Built-in content is read-only; custom content is editable and removable.
+Built-in content is read-only; custom content is editable/removable.
 
-## Storage and persistence (v3)
+## Storage behavior
 
-- Custom content is stored in the `CustomContent` IndexedDB database.
-- If IndexedDB is unavailable, the app falls back to in-memory storage (non-persistent).
-- New records are tagged as custom and carry timestamps; edits update `updatedAt`.
+- Custom content is persisted in IndexedDB (`CustomContent`).
+- If IndexedDB is unavailable, the app can fall back to non-persistent memory mode.
+- Custom records include metadata such as `createdAt`/`updatedAt` and custom flags.
 
-## Editor-specific behavior
+## Validation and quality expectations
 
-### Quest editor
+Before submitting content changes, run:
 
-- Requires title + description + valid dialogue node graph.
-- Dialogue options support goto, finish, process links, and item grants/requirements.
-- New quests default to a built-in quest image when no image is supplied.
-- Validation prevents broken node links and malformed item/process references.
+```bash
+npm run lint
+npm run type-check
+npm run build
+npm run test:ci
+node scripts/link-check.mjs
+```
 
-### Item editor
+For quest-heavy updates, run full quest validation loops used by CI tooling.
 
-- Requires name, description, and image.
-- Supports optional pricing, unit, type, and dependencies.
-- New custom items default to the `Custom` category if not specified.
+## Bundle export/import workflow
 
-### Process editor
+Use `/contentbackup` to export/import bundle JSON with this high-level shape:
 
-- Requires title, duration, and at least one item relationship.
-- Duration parser supports shorthand (`45s`, `1h 30m`, `0.5h`) and normalizes values.
-- Positive item counts are enforced for requires/consumes/creates lists.
+```json
+{
+    "quests": [],
+    "items": [],
+    "processes": []
+}
+```
 
-## Export, backup, and submission
+Related docs:
 
-- Use `/contentbackup` to export/import combined custom content bundles.
-- Submit exported bundle JSON through `/bundles/submit` when preparing contribution PRs.
-- Bundle format docs: [Custom Content Bundles](/docs/custom-bundles).
-- Submission workflow docs: [Quest Submission Guide](/docs/quest-submission).
+- [Custom Content Bundles](/docs/custom-bundles)
+- [Quest Submission Guide](/docs/quest-submission)
 
-## Contributor workflow (recommended)
+## Recommended contributor flow
 
-1. Draft content in-game and validate it locally.
-2. Run gameplay checks: progression logic, item/process dependencies, reward balance.
-3. Export a bundle and verify import on a clean profile.
-4. Prepare submission artifacts (docs, screenshots, tests as needed).
-5. Open a PR with clear scope and verification notes.
+1. Draft content in-game.
+2. Validate dependencies, unlock flow, and rewards locally.
+3. Export a bundle from `/contentbackup`.
+4. Verify clean import on a fresh profile.
+5. Submit with docs + tests in one PR.
 
-## Deep-dive docs
+## Deep-dive references
 
 - [Quest Guidelines](/docs/quest-guidelines)
 - [Quest Schema](/docs/quest-schema)
@@ -83,16 +86,3 @@ Built-in content is read-only; custom content is editable and removable.
 - [Quest Contribution Guide](/docs/quest-contribution)
 - [Item Guidelines](/docs/item-guidelines)
 - [Process Guidelines](/docs/process-guidelines)
-
-## QA and correctness expectations
-
-Before submitting content changes, run repo checks from the project root:
-
-```bash
-npm run lint
-npm run type-check
-npm run build
-npm run test:ci
-```
-
-For quest-heavy updates, also run link + quest validation checks noted in the AGENTS guide.
