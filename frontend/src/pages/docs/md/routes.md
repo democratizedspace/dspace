@@ -47,7 +47,7 @@ External links in the More menu:
 
 ## Content authoring and management routes
 
-- Quests: `/quests/create`, `/quests/manage`, `/quests/:id/edit (custom), /quests/:pathId/:questId (built-in detail)`
+- Quests: `/quests/create`, `/quests/manage`, `/quests/:pathId/:questId`, `/quests/:id/edit`
 - Items: `/inventory/create`, `/inventory/manage`, `/inventory/item/:itemId/edit`
 - Processes: `/processes/create`, `/processes/manage`, `/processes/:processId/edit`
 - Bundles: `/bundles/submit`
