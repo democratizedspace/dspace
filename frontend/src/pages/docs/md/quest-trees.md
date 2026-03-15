@@ -14,6 +14,11 @@ skills doc and provides planning guidance for players and contributors.
 - **19 active quest trees**
 - Newer v3-era growth areas include chemistry, astronomy, and programming expansions
 
+## Highlighted available trees
+
+- **Chemistry** – available now at [/docs/chemistry](/docs/chemistry).
+- **Programming** – available now at [/docs/programming](/docs/programming).
+
 ## Active quest tree catalog
 
 | Tree          | Core focus                                | Skills doc                                 |

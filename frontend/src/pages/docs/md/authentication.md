@@ -30,7 +30,8 @@ GitHub-integrated features.
 ## Local credential storage
 
 - Credentials are stored in IndexedDB so players do not need to re-enter tokens every session.
-- Settings provides clear/log-out controls that remove saved credentials from the device.
+- Token values are persisted under game-state credential keys (for example `gameState.github.token`).
+- Settings provides Clear and Log out controls that remove saved credentials from the device.
 
 ## Security practices
 

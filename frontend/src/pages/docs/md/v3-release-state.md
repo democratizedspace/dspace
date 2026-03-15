@@ -52,7 +52,7 @@ The More menu now includes live routes for:
 ### NPC chat and AI
 
 - v3 ships persona-style chat experiences (for example Sydney, Nova, Hydro).
-- OpenAI-backed chat is the supported provider path in v3.
+- OpenAI-only chat is the supported provider path in v3.
 - Chat surfaces include `/chat` and `/dchat`.
 
 ## Deferred or intentionally limited in v3
@@ -76,6 +76,12 @@ The More menu now includes live routes for:
 - dUSD, dWatt, and dCarbon are in-game progression currencies (not on-chain tokens).
 - localStorage is no longer the primary save layer.
 - Legacy artifacts are migration sources, not active state.
+
+## v2-only mechanics removed / not applicable in v3
+
+- v2 localStorage-first saving is replaced by IndexedDB-first persistence in v3.
+- Cookie-based v1/v2 save behavior is migration-only and no longer an active save path.
+- Legacy token/currency assumptions from pre-v3 docs are not applicable to v3 progression.
 
 ## Documentation quality gate for v3 changes
 

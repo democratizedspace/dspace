@@ -11,22 +11,22 @@ devices.
 ## What Cloud Sync handles
 
 - Game-state backups
-- Custom content backups
+- Custom content backups (Custom quests, items, and processes)
 - Upload/download operations tied to your configured gist
 
 ## Setup
 
-1. Create a GitHub personal access token with **gist** scope.
+1. Create a GitHub personal access token with `gist` scope.
 2. Create or choose a private gist.
 3. Open `/cloudsync` (or Settings cloud-sync controls).
-4. Save token and gist ID.
+4. Save token and Gist ID.
 5. Run an upload, then verify a download from another profile/device.
 
 ## Credentials and storage
 
 - Token and gist ID are stored locally in IndexedDB.
 - Credentials stay on your device except for authenticated requests to GitHub APIs.
-- You can clear credentials from Settings (logout/clear actions).
+- In Settings, use Clear / Log out actions to remove them from the device.
 
 ## Operational guidance
 

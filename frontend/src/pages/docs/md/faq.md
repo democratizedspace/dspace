@@ -64,6 +64,11 @@ Optional automation is available at `/cloudsync`. See [Backups](/docs/backups).
 Bundles combine custom quests, items, and processes into one JSON payload so dependencies stay
 aligned. See [Custom Content Bundles](/docs/custom-content-bundles).
 
+## How do I submit custom quests?
+
+Start with the [Quest Submission Guide](/docs/quest-submission), then use `/quests/submit` for
+quest-only submissions or `/bundles/submit` when your quest depends on custom items/processes.
+
 ## Do I need GitHub credentials?
 
 Only for GitHub-connected features (bundle submission and cloud sync). See

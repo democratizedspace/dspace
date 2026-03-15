@@ -68,6 +68,30 @@ External links in the More menu:
 - Inventory detail: `/inventory/item/:itemId`
 - Shop flow: `/shop/buy/:itemId/:count`, `/shop/sell/:itemId/:count`
 
+## Canonical click-path navigation strings
+
+- More → Processes opens /processes.
+- More → Import/export gamesaves opens /gamesaves.
+- More → Cloud Sync opens /cloudsync.
+- More → Custom Content Backup opens /contentbackup.
+- More → Guilds is marked Coming soon (no navigation yet).
+- More → Stats opens /stats.
+- More → Achievements opens /achievements.
+- More → Leaderboard opens /leaderboard.
+- More → Locations is marked Coming soon (no navigation yet).
+- More → Titles opens /titles.
+- More → Toolbox opens /toolbox.
+- More → Settings opens /settings.
+- More → Discord opens https://discord.gg/A3UAfYvnxM.
+- More → Twitter opens https://twitter.com/dspacegame.
+- More → Github opens https://github.com/democratizedspace/dspace.
+- Quests page → Manage button opens /quests/manage.
+- Quests manage page → Create button opens /quests/create.
+- Inventory page → Manage button opens /inventory/manage.
+- Inventory manage page → Create button opens /inventory/create.
+- Processes page → Manage button opens /processes/manage.
+- Processes manage page → Create button opens /processes/create.
+
 ## Link-checking behavior
 
 Internal markdown links are validated by `scripts/link-check.mjs` without starting the dev server.

@@ -20,22 +20,26 @@ content safely.
 2. Export from `/contentbackup` after custom content editing sessions.
 3. Keep at least one offline local copy and one cloud copy.
 
-## Gamesave export/import
+## Exporting and importing game saves
 
 At `/gamesaves`:
 
-- **Export** produces a portable encoded payload.
-- **Import** restores from either envelope or raw game-state payload.
+- Export creates a Base64-encoded JSON snapshot that preserves quest progress, inventory, and processes.
+- Paste a game state backup string (envelope or raw state) here: the import textarea accepts either format.
+- Use Copy to copy the exported backup string to your clipboard.
+- Use Import to restore a backup into the current profile.
 
 Use this route for full-profile migration between devices.
 
-## Custom content export/import
+## Exporting and importing custom content
 
 At `/contentbackup`:
 
-- **Prepare backup** builds a bundle from local custom content.
-- **Download backup** writes a `.json` bundle file.
-- **Import** accepts supported bundle files and merges content into local custom storage.
+- Prepare backup builds a bundle from local custom content.
+- The UI shows Preparing backup… while collecting records.
+- Download backup writes a `.json` or `.dspace-backup` file depending on selected format.
+- Import supports Drag and drop or Choose backup file workflows.
+- During restore, the UI shows Importing… and then Import complete on success.
 
 Use this route for creator workflows and submission preparation.
 
