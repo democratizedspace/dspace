@@ -3,66 +3,50 @@ title: 'Backups'
 slug: 'backups'
 ---
 
-DSPACE offers backup options that protect both your overall game state and any custom content you
-create. This guide explains what gets saved, where the data lives, and how to restore it on another
-device.
+# Backups
 
-## What gets backed up
+v3 separates backup concerns into two routes so you can protect both gameplay state and custom
+content safely.
 
-- **Game saves** – quest progress, inventory, and processes.
-- **Custom content** – player-created items, quests, and processes.
-- **Cloud Sync (optional)** – automatic encrypted cloud storage for the above data. Cloud Sync is
-  covered in more detail at [Cloud Sync](/docs/cloud-sync).
+## Backup surfaces
 
-Backups use a stable JSON schema so exports from older releases remain compatible with newer
-clients.
+- **`/gamesaves`**: full game-state snapshot (quests, inventory, processes, wallet progress)
+- **`/contentbackup`**: custom content snapshot (custom quests, items, processes)
+- **`/cloudsync`**: optional GitHub gist automation layer for syncing backups
 
-## Exporting and importing game saves
+## Recommended backup cadence
 
-1. Open [Import/export gamesaves](/gamesaves).
-2. Click **Copy** to place a Base64-encoded JSON snapshot on your clipboard. The export panel shows
-   the backup envelope so you can paste it into a notes app if needed.
-3. To restore, paste the backup string into the field and select **Import**. Your quests,
-   inventory, and processes will be replaced with the imported data.
-   Field label: **Paste a game state backup string (envelope or raw state) here:**
+1. Export from `/gamesaves` before large quest/progression sessions.
+2. Export from `/contentbackup` after custom content editing sessions.
+3. Keep at least one offline local copy and one cloud copy.
 
-The encoded JSON stores `quests`, `inventory`, and `processes` keys. Keep the output somewhere you
-control (password manager, notes app, or version-controlled gist).
+## Gamesave export/import
 
-## Exporting and importing custom content
+At `/gamesaves`:
 
-1. Open [Custom Content Backup](/contentbackup).
-2. Under **Export custom content**, click **Prepare backup**. Wait for the prepared summary to
-   appear.
-   Status text: **Preparing backup…**
-3. Click **Download backup** to save the `.json` file to your device.
-4. To restore, drag and drop the `.json` or `.dspace-backup` backup file onto the import area or
-   click **Choose backup file** to browse.
-   Status text: **Importing…** and **Import complete** when the import finishes.
+- **Export** produces a portable encoded payload.
+- **Import** restores from either envelope or raw game-state payload.
 
-The backup file contains `items`, `processes`, and `quests` records. Use this path if you want to
-move custom creations between profiles without touching your main save.
+Use this route for full-profile migration between devices.
 
-## Automated backups with Cloud Sync
+## Custom content export/import
 
-For hands-off backups, enable Cloud Sync from [Settings](/settings) (see the dedicated
-[Cloud Sync](/docs/cloud-sync) doc). Once configured, the client periodically uploads encrypted
-snapshots so you do not need to manage strings manually. Local exports remain available as a manual
-failsafe.
+At `/contentbackup`:
 
-## Best practices
+- **Prepare backup** builds a bundle from local custom content.
+- **Download backup** writes a `.json` bundle file.
+- **Import** accepts supported bundle files and merges content into local custom storage.
 
-- **Version regularly:** Export after finishing a quest chain or before testing mods.
-- **Store safely:** Treat exports like save files—keep them in a private repo or password manager.
-- **Validate imports:** After restoring on a new device, open `/quests` and `/inventory` to confirm
-  expected progress and items.
-- **Keep both modes:** Even with Cloud Sync enabled, keep occasional manual exports so you have an
-  offline backup.
+Use this route for creator workflows and submission preparation.
 
-## Troubleshooting
+## Cloud Sync pairing
 
-- **Import fails:** Ensure the string is complete (no trimmed whitespace) and comes from the matching
-  export path (gamesaves vs. custom content).
-- **Old backup, new client:** The schema is backward compatible. If a restore still fails, try a
-  newer backup or contact support via the in-app **Help → Contact support** option.
-- **Clipboard blocked:** Manually select and copy the text area contents; the export remains valid.
+Cloud Sync can automate backup upload/download after you configure a GitHub token + gist ID.
+For setup details, see [Cloud Sync](/docs/cloud-sync) and [Authentication](/docs/authentication).
+
+## Safety checklist
+
+- Confirm restore on a second profile/device before deleting original data.
+- Keep dated backups during major updates.
+- Treat exports as sensitive personal save data.
+- Use Settings logout when testing on shared machines.

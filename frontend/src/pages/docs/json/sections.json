@@ -158,6 +158,11 @@
                 "keywords": ["navigation", "paths", "urls"]
             },
             {
+                "title": "Utility surfaces",
+                "href": "/docs/utility-surfaces",
+                "keywords": ["stats", "toolbox", "settings", "leaderboard"]
+            },
+            {
                 "title": "Everything is real-time",
                 "href": "/docs/realtime",
                 "keywords": ["time", "simulation"]

@@ -74,6 +74,11 @@
             "type": "formatting",
             "description": "Moved ship-ready v3 release summary content into changelog notes to preserve historical markdown.",
             "date": "2026-03-01"
+        },
+        {
+            "type": "link",
+            "description": "Corrected Custom Content Bundles docs route from /docs/custom-bundles to /docs/custom-content-bundles.",
+            "date": "2026-03-14"
         }
     ]
 }
