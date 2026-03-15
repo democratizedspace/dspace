@@ -5,7 +5,7 @@ slug: 'cloud-sync'
 
 # Cloud Sync
 
-Cloud Sync stores encrypted backups in a private GitHub gist so you can recover across browsers or
+Cloud Sync stores sanitized backups in a private GitHub gist so you can recover across browsers or
 devices.
 
 ## What Cloud Sync handles

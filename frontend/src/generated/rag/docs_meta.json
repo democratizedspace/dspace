@@ -1,5 +1,5 @@
 {
-    "generatedAt": "2026-02-02T22:25:57.774Z",
+    "generatedAt": "2026-03-15T06:58:42.968Z",
     "envName": "test",
     "sourceRef": null,
     "generatedFrom": {
@@ -21,9 +21,13 @@
             "frontend/src/pages/docs/md/changelog/20230131.md",
             "frontend/src/pages/docs/md/changelog/20230630.md",
             "frontend/src/pages/docs/md/changelog/20230915.md",
+            "frontend/src/pages/docs/md/changelog/20260301.md",
             "frontend/src/pages/docs/md/changelog/20260401.md"
         ],
-        "v3Changelog": ["frontend/src/pages/docs/md/changelog/20260401.md"]
+        "v3Changelog": [
+            "frontend/src/pages/docs/md/changelog/20260301.md",
+            "frontend/src/pages/docs/md/changelog/20260401.md"
+        ]
     },
     "legacy": {
         "changelogAnchors": [
@@ -53,7 +57,7 @@
             "frontend/src/pages/docs/md/changelog/20230915.md"
         ]
     },
-    "counts": { "totalChunks": 562, "docs": 506, "routes": 1, "changelog": 55 },
-    "gitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d",
-    "docsGitSha": "b30e72b44be1c572df9100711bd1ee8150e0345d"
+    "counts": { "totalChunks": 805, "docs": 748, "routes": 1, "changelog": 56 },
+    "gitSha": "8be79db0553744e35df5e4e7322c23b005fd3b4e",
+    "docsGitSha": "8be79db0553744e35df5e4e7322c23b005fd3b4e"
 }

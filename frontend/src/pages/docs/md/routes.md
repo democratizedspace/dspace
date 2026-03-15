@@ -43,11 +43,11 @@ External links in the More menu:
 
 - Discord → `https://discord.gg/A3UAfYvnxM`
 - Twitter → `https://twitter.com/dspacegame`
-- Github → `https://github.com/democratizedspace/dspace`
+- GitHub → `https://github.com/democratizedspace/dspace`
 
 ## Content authoring and management routes
 
-- Quests: `/quests/create`, `/quests/manage`, `/quests/:pathId/:questId/edit`
+- Quests: `/quests/create`, `/quests/manage`, `/quests/:id/edit (custom), /quests/:pathId/:questId (built-in detail)`
 - Items: `/inventory/create`, `/inventory/manage`, `/inventory/item/:itemId/edit`
 - Processes: `/processes/create`, `/processes/manage`, `/processes/:processId/edit`
 - Bundles: `/bundles/submit`

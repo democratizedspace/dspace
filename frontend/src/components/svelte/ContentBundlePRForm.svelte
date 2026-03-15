@@ -81,7 +81,8 @@
             related content together and are easier to review.
         </p>
         <p>
-            See the <a href="/docs/custom-bundles">Custom Content Bundles guide</a> for the JSON format.
+            See the <a href="/docs/custom-content-bundles">Custom Content Bundles guide</a> for the JSON
+            format.
         </p>
     </div>
     <div class="form-group token-group">

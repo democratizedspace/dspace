@@ -80,7 +80,7 @@ Create quests, items, and processes for the game:
 - [Item Guidelines](https://democratized.space/docs/item-guidelines) - Defining game items
 - [Process Guidelines](https://democratized.space/docs/process-guidelines) - Building game processes
 - [Quest Submission](https://democratized.space/docs/quest-submission) - How to submit your content
-- [Custom Content Bundles](https://democratized.space/docs/custom-bundles) - Packaging related content
+- [Custom Content Bundles](https://democratized.space/docs/custom-content-bundles) - Packaging related content
 
 ### Operations & Deployment
 
