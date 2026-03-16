@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Sequence
+from typing import Mapping, Sequence
 
 from . import (
     DuplicateImageError,
@@ -63,6 +63,15 @@ def build_parser() -> argparse.ArgumentParser:
             ),
         )
         subparser.add_argument(
+            "--image-count",
+            type=int,
+            default=None,
+            help=(
+                "Optional limit for report entries per section. "
+                "When set, only the first N sorted entries are shown."
+            ),
+        )
+        subparser.add_argument(
             "--json",
             action="store_true",
             help=(
@@ -80,6 +89,12 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _limit_entries(mapping: Mapping[str, object], limit: int | None) -> dict[str, object]:
+    if limit is None or limit <= 0 or len(mapping) <= limit:
+        return dict(mapping)
+    return {key: mapping[key] for key in sorted(mapping)[:limit]}
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -89,6 +104,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         duplicates = find_duplicates(usages)
         identical_files = find_identical_files(usages, args.root)
         missing_images = find_missing_images(usages, args.root)
+
+        if args.image_count is not None:
+            if args.image_count <= 0:
+                parser.exit(status=2, message="error: --image-count must be greater than zero\n")
+            duplicates = _limit_entries(duplicates, args.image_count)
+            identical_files = _limit_entries(identical_files, args.image_count)
+            missing_images = _limit_entries(missing_images, args.image_count)
 
         if args.json:
             output = json.dumps(

@@ -282,6 +282,95 @@ def test_cli_reports_identical_file_usage_counts(tmp_path: Path) -> None:
     assert "Total image issue occurrences: 2" in stdout
 
 
+
+
+def test_cli_image_count_limits_text_output(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
+
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.image_issues",
+        "find-image-issues",
+        "--root",
+        str(repo_root),
+        "--quests-dir",
+        str(quests_dir),
+        "--items-dir",
+        str(items_dir),
+        "--image-count",
+        "1",
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert "/assets/shared-path.jpg (2 uses)" in stdout
+    assert "hash " in stdout
+    assert "/assets/missing-quest.jpg" not in stdout
+
+
+def test_cli_image_count_limits_json_output(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
+
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.image_issues",
+        "find-image-issues",
+        "--root",
+        str(repo_root),
+        "--quests-dir",
+        str(quests_dir),
+        "--items-dir",
+        str(items_dir),
+        "--json",
+        "--image-count",
+        "1",
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    assert result.returncode == 0
+    output = json.loads(result.stdout)
+    assert len(output["duplicates"]) == 1
+    assert len(output["identicalFiles"]) == 1
+    assert len(output["missingImages"]) == 0
+
+
+def test_cli_image_count_must_be_positive(tmp_path: Path) -> None:
+    (tmp_path / "quests").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "items").mkdir(parents=True, exist_ok=True)
+
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.image_issues",
+        "find-image-issues",
+        "--root",
+        str(tmp_path),
+        "--quests-dir",
+        str(tmp_path / "quests"),
+        "--items-dir",
+        str(tmp_path / "items"),
+        "--image-count",
+        "0",
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    assert result.returncode == 2
+    assert "--image-count must be greater than zero" in result.stderr
+
 def test_cli_reports_missing_images(tmp_path: Path) -> None:
     quests_dir = tmp_path / "quests"
     items_dir = tmp_path / "items"
