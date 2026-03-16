@@ -46,7 +46,8 @@
     "backup": "node scripts/backup.mjs",
     "helm:lint": "helm lint charts/dspace",
     "helm:template": "helm template dspace charts/dspace -f charts/dspace/values.dev.yaml",
-    "test:quest-validation": "npm run test:root -- tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts"
+    "test:quest-validation": "npm run test:root -- tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts",
+    "spellcheck": "cspell \"docs/qa/**/*.md\""
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
@@ -79,7 +80,8 @@
     "vitest": "^3.2.4",
     "wait-on": "^7.0.1",
     "yaml": "^2.8.1",
-    "zimmerframe": "^1.1.4"
+    "zimmerframe": "^1.1.4",
+    "cspell": "^8.17.1"
   },
   "dependencies": {
     "@dspace/feature-flags": "file:packages/feature-flags",
