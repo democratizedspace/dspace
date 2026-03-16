@@ -27,13 +27,15 @@ type IndexedDbDatabase = {
             clear: () => void;
             put: (value: unknown) => void;
             getAll: () => {
-                onsuccess: (() => void) | null;
-                onerror: (() => void) | null;
+                onsuccess: ((event: Event) => void) | null;
+                onerror: ((event: Event) => void) | null;
+                error?: unknown;
                 result?: unknown;
             };
         };
-        oncomplete: (() => void) | null;
-        onerror: (() => void) | null;
+        oncomplete: ((event: Event) => void) | null;
+        onerror: ((event: Event) => void) | null;
+        error?: unknown;
     };
     close: () => void;
 };

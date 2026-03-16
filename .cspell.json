@@ -8,7 +8,9 @@
       "addWords": true
     }
   ],
-  "dictionaries": ["dspace-terms"],
+  "dictionaries": [
+    "dspace-terms"
+  ],
   "ignorePaths": [
     "node_modules",
     "frontend/node_modules",
@@ -24,7 +26,42 @@
   "words": [
     "NPCs",
     "MPPT",
-    "SOULBOUND"
+    "SOULBOUND",
+    "subpaths",
+    "Upgrader",
+    "sandboxed",
+    "WCAG",
+    "Sugarkube",
+    "Sugarkube's",
+    "chatbots",
+    "behaviour",
+    "llms",
+    "sugarkube",
+    "healthz",
+    "livez",
+    "shortsha",
+    "kustomizations",
+    "letsencrypt",
+    "hostnames",
+    "headlessly",
+    "lockfiles",
+    "LSTART",
+    "automatable",
+    "regens",
+    "ripsecrets",
+    "parentheticals",
+    "dedup",
+    "speedrun",
+    "cloudsync",
+    "miscredit",
+    "cutover",
+    "duplicative",
+    "desolder",
+    "gfci",
+    "offgrid",
+    "backflush",
+    "netcup",
+    "stddev"
   ],
   "useGitignore": true
 }
