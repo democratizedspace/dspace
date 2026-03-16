@@ -167,7 +167,7 @@
         "id": "6305ae99-c0b2-49f8-8d58-a1d81b765342",
         "name": "hydroponic reservoir temperature reading log",
         "description": "Timestamped hydroponic reservoir temperature-reading log artifact for hydroponic nutrient-reservoir QA decisions and retest evidence (not aquarium data).",
-        "image": "/assets/aquarium_temperature_strip_reading.jpg",
+        "image": "/assets/hydroponic_reservoir_temperature_reading_log.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -230,7 +230,7 @@
         "id": "5712947f-716c-4f71-b28d-fcb811631080",
         "name": "basil seedling",
         "description": "Two-week-old Genovese basil in a 3 cm rockwool plug, ~5 cm tall and ~5 g.",
-        "image": "/assets/basil_seedling_rockwool_plug.jpg",
+        "image": "/assets/basil_seedling_genovese_rockwool_plug.jpg",
         "price": "1 dUSD",
         "hardening": {
             "passes": 1,
@@ -559,7 +559,7 @@
         "id": "021c1c24-06f6-4917-b054-0fa3e33868f0",
         "name": "lettuce seedling",
         "description": "Young lettuce seedling rooted in a soaked starter plug, ready for transplant into a hydroponic tub.",
-        "image": "/assets/basil_seedling_rockwool_plug.jpg",
+        "image": "/assets/lettuce_seedling_hydroponic_plug.jpg",
         "price": "1 dUSD"
     },
     {

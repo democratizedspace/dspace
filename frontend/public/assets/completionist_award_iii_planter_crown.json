@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/completionist_award_iii_planter_crown.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Completionist Award III planter crown",
+    "item_id": "ba8cc7ec-f6c9-429a-aa7d-4bf8f513f4c9",
+    "entity_type": "item",
+    "prompt": "A compact hydroponic planter crown module designed for the top of an advanced trophy, shown as a clean 3D printed assembly with a wick-fed reservoir cup, a central starter-plug mount for basil, and a discreet overflow-safe channel integrated into the ring geometry. The piece sits on a fabrication bench beside a small basil starter plug and a few assembly tools, making it clear this is a living-plant support module rather than a normal flower pot. The geometry should look purpose-built, precise, and compatible with a larger sculptural object.\n\nUltra-detailed, photorealistic 512×512 image with a near-future solarpunk fabrication aesthetic: soft workshop lighting, realistic printed plastic texture, subtle green accents from the plant starter, no logos, no readable markings, and no faces. Keep the planter crown centered and uncluttered so it reads cleanly as a distinct DSPACE award subsystem icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/lettuce_seedling_hydroponic_plug.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "lettuce seedling",
+    "item_id": "021c1c24-06f6-4917-b054-0fa3e33868f0",
+    "entity_type": "item",
+    "prompt": "A young lettuce seedling growing from a soaked starter plug, with pale green leaves just beginning to spread above a damp fibrous cube ready for transplant into a hydroponic tub. The plug sits in a small nursery tray beside net cups and a shallow nutrient reservoir lid, making the hydroponic context unmistakable. Tiny roots peeking from the underside help communicate that this plant is at the seedling stage and nearly ready to move.\n\nUltra-detailed, photorealistic 512×512 image with a bright near-future hydroponics aesthetic: soft greenhouse lighting, realistic moisture on the plug surface, fresh natural greens, no logos, no text, and no identifiable faces. The composition should feel clean and hopeful, centered tightly on the seedling so it reads clearly as an early-growth inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
