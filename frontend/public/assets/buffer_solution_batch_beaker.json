@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/buffer_solution_batch_beaker.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "buffer solution batch",
+    "item_id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
+    "entity_type": "item",
+    "prompt": "A prepared laboratory buffer solution in a clear glass beaker, partially filled with a pale translucent liquid and placed on a tidy chemistry workstation. Nearby are a glass stirring rod, a capped reagent bottle, a pH meter probe resting on its stand, and a small handwritten composition note card with non-legible markings. The scene should make it obvious this is a freshly mixed buffer batch awaiting final tuning rather than a generic aquarium chemical.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab aesthetic: soft cinematic bench lighting, realistic liquid meniscus and glass reflections, clean neutral surfaces, no brand logos, no readable labels, and no faces. The beaker should be the central focal point, with surrounding tools giving just enough scientific context for a precise, high-signal DSPACE inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

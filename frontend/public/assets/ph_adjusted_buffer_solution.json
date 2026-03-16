@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ph_adjusted_buffer_solution.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "pH-adjusted buffer solution",
+    "item_id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+    "entity_type": "item",
+    "prompt": "A carefully tuned buffer solution in a small clear bottle and companion beaker on a chemistry bench, showing a recently adjusted mixture prepared to hit a target pH. Beside it are a pH strip with before-and-after color changes, a dropper bottle used for reagent additions, and a lab notebook page with non-legible marks indicating iterative tuning. The setup should clearly distinguish this from a raw buffer batch by emphasizing refinement, testing, and final calibration.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab aesthetic: soft cinematic task lighting, clean glassware, realistic fluid transparency, no logos, no readable labels, and no identifiable faces. The final tuned solution should feel precise and deliberate, with a tidy composition that reads well as a DSPACE chemistry inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

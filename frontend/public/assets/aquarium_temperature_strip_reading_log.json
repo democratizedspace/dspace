@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_temperature_strip_reading_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Aquarium temperature reading",
+    "item_id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+    "entity_type": "item",
+    "prompt": "A close-up of an aquarium thermometer strip after it has stabilized on dry glass, with one temperature band glowing more distinctly than the others to indicate the most recent reading. The tank wall, waterline, and a soft blur of substrate and aquatic plants behind the glass make it clear this is a recorded aquarium temperature result rather than the tool by itself. The image should emphasize the interpreted reading state, not just the physical strip.\n\nUltra-detailed, photorealistic 512×512 image with a calm near-future aquaria aesthetic: soft indoor lighting, realistic reflections and moisture residue on glass, no logos, no readable numbers, and no faces. The scene should be uncluttered and highly legible at small size, focusing on the active temperature-reading look of the strip as a monitoring artifact.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

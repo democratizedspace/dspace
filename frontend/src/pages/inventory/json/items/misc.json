@@ -592,7 +592,7 @@
         "id": "563956c2-17d1-4b82-8fce-48b07dc8a71b",
         "name": "3D printed fincan",
         "description": "80 mm PLA fincan for 35 mm rockets; four fins, ~12 g; fits 18 mm motors.",
-        "image": "/assets/3d_printed_rocket_fincan_35mm_80mm_length.jpg",
+        "image": "/assets/rocket_fincan_35mm_80mm_pla.jpg",
         "price": "4 dUSD",
         "hardening": {
             "passes": 1,
@@ -1077,7 +1077,7 @@
         "id": "130b5501-459a-48a0-aafa-ba54bc6555a6",
         "name": "Solar tracker control kit",
         "description": "An Arduino-based control kit with dual stepper drivers, limit switches, and weatherproof cable glands for one-axis solar tracking.",
-        "image": "/assets/arduino_uno_board.jpg",
+        "image": "/assets/solar_tracker_control_kit.jpg",
         "price": "80 dUSD",
         "category": "Electronics & Robotics"
     },
@@ -1149,7 +1149,7 @@
         "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
         "name": "Arduino Uno",
         "description": "A beginner-friendly microcontroller board ideal for electronics projects.",
-        "image": "/assets/arduino_uno_board.jpg",
+        "image": "/assets/arduino_uno_microcontroller_board.jpg",
         "price": "30 dUSD",
         "category": "Electronics & Robotics"
     },
@@ -1632,7 +1632,7 @@
         "id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
         "name": "bundle of stevia leaves",
         "description": "Fresh stevia leaves with natural sweetness.",
-        "image": "/assets/bundle_of_stevia_leaves.jpg",
+        "image": "/assets/fresh_bundle_of_stevia_leaves.jpg",
         "price": "3 dUSD",
         "category": "Biology & Lab"
     },
@@ -2764,7 +2764,7 @@
     },
     {
         "id": "9a72ba0f-bc9e-5e0c-8fc4-a3ad3d55777d",
-        "name": "Install aquarium LED fixture and run first photoperiod cycle completion note",
+        "name": "Install 1ED fixture and run first photoperiod cycle completion note",
         "description": "A process-specific completion note documenting successful execution of \"Install aquarium LED fixture and run first photoperiod cycle\".",
         "image": "/assets/temperature_log_csv_export.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
@@ -2887,7 +2887,7 @@
         "id": "2794503d-fbe7-4031-a63e-deac531f9784",
         "name": "cardboard mailing tube",
         "description": "Sturdy cardboard tube about 40 cm long to hold telescope optics.",
-        "image": "/assets/cardboard_mailing_tube_telescope_body.jpg",
+        "image": "/assets/cardboard_mailing_tube_telescope_body_40cm.jpg",
         "price": "5 dUSD",
         "category": "Workshop & Construction"
     },
@@ -3097,7 +3097,7 @@
         "id": "d2b39a23-cdfb-428d-a6ed-694ff0c0fc11",
         "name": "basic shell operator badge",
         "description": "Credential proving you can navigate Linux fundamentals and document your output.",
-        "image": "/assets/completionist_award_ii_pla_core_print.jpg",
+        "image": "/assets/basic_shell_operator_badge.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3137,7 +3137,7 @@
         "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
         "name": "incident log extract",
         "description": "Focused tail output containing the most recent high-signal lines from a system log.",
-        "image": "/assets/3d_printed_rocket_fincan_35mm_80mm_length.jpg",
+        "image": "/assets/incident_log_extract_terminal_tail.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3193,7 +3193,7 @@
         "id": "78b71b2d-4ac7-4f1a-a0ed-83e827cc3c2f",
         "name": "buffer solution batch",
         "description": "A prepared buffer in a labeled beaker with composition notes and expected pH range before final tuning.",
-        "image": "/assets/aquarium_liquid_reagent_test_kit.jpg",
+        "image": "/assets/buffer_solution_batch_beaker.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3201,7 +3201,7 @@
         "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
         "name": "pH-adjusted buffer solution",
         "description": "Buffer solution tuned to target pH and labeled with before/after readings, reagent additions, and handling notes.",
-        "image": "/assets/aquarium_ph_strip_reading.jpg",
+        "image": "/assets/ph_adjusted_buffer_solution.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3233,7 +3233,7 @@
         "id": "f293d45c-49bd-4c53-a73f-88233c5b6acc",
         "name": "telescope build alignment card",
         "description": "Stiff cardstock alignment card with measured focal spacing marks, tube centering notes, and tripod balance settings used to tune a hand-built telescope for stable nighttime viewing.",
-        "image": "/assets/cardboard_mailing_tube_telescope_body.jpg",
+        "image": "/assets/telescope_build_alignment_card.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3505,7 +3505,7 @@
         "id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
         "name": "milled stevia feedstock",
         "description": "Low-moisture, uniformly milled stevia leaf feedstock prepared for solvent extraction.",
-        "image": "/assets/bundle_of_stevia_leaves.jpg",
+        "image": "/assets/milled_stevia_feedstock.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },

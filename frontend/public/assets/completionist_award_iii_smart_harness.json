@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/completionist_award_iii_smart_harness.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Completionist Award III smart harness",
+    "item_id": "37f159f8-e8a2-4721-9608-c4b25855092e",
+    "entity_type": "item",
+    "prompt": "A soldered and heat-shrunk electronics harness for an advanced trophy assembly, arranged neatly on an anti-static mat with bundled addressable LED wiring, a fused power lead, microcontroller signal lines, and clearly differentiated connector branches. Small labels are present as colored tabs only, not readable text, and the harness includes service loops and strain relief to communicate debugging-friendly craftsmanship. The scene should make it clear this is a premium internal wiring loom for a mixed-media interactive award.\n\nUltra-detailed, photorealistic 512×512 image with a near-future fabrication-lab aesthetic: soft cinematic bench lighting, realistic heat-shrink and wire insulation textures, no logos, no readable labels, and no faces. Keep the composition clean and centered so the harness reads as a sophisticated, high-value electronics subassembly for DSPACE.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

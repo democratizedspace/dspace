@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/completionist_award_iii_wood_pedestal.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Completionist Award III wood pedestal",
+    "item_id": "fd54da0d-cf87-4860-bf74-df3be8a95f90",
+    "entity_type": "item",
+    "prompt": "A hand-cut pine pedestal for a mixed-media trophy, shown as a finely sanded wooden base with chamfered edges, warm oil finish, and a flat top prepared to support a more complex upper assembly. The wood grain should be prominent and tactile, with subtle joinery details and a workshop backdrop that hints at recent fabrication. A few brass fasteners or alignment inserts nearby help suggest its role in a larger award structure.\n\nUltra-detailed, photorealistic 512×512 image with a premium near-future craft aesthetic: soft warm lighting, realistic pine grain and oil sheen, muted background, no logos, no readable text, and no faces. The composition should remain simple and centered so the pedestal reads clearly as a polished structural component within the DSPACE award system.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }
