@@ -16,25 +16,31 @@ const DEFAULT_MAX_LOG_ATTEMPTS = 4;
 const DEFAULT_MAX_DURATION_MS = 10_000;
 const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
 type CryptoLike = { randomUUID?: () => string };
+type IndexedDbRequest<T = unknown> = {
+    onsuccess: ((event: Event) => void) | null;
+    onerror: ((event: Event) => void) | null;
+    result?: T;
+    error?: unknown;
+};
+
+type IndexedDbTransaction = {
+    objectStore: (name: string) => {
+        clear: () => void;
+        put: (value: unknown) => void;
+        getAll: () => IndexedDbRequest<unknown[]>;
+    };
+    oncomplete: (() => void) | null;
+    onerror: (() => void) | null;
+    error?: unknown;
+};
+
 type IndexedDbDatabase = {
     objectStoreNames: { contains: (name: string) => boolean } & Iterable<string>;
     createObjectStore: (name: string, options?: { keyPath?: string }) => void;
     transaction: (
         storeNames: string | string[],
         mode: 'readonly' | 'readwrite'
-    ) => {
-        objectStore: (name: string) => {
-            clear: () => void;
-            put: (value: unknown) => void;
-            getAll: () => {
-                onsuccess: (() => void) | null;
-                onerror: (() => void) | null;
-                result?: unknown;
-            };
-        };
-        oncomplete: (() => void) | null;
-        onerror: (() => void) | null;
-    };
+    ) => IndexedDbTransaction;
     close: () => void;
 };
 
@@ -368,7 +374,7 @@ export async function seedCustomQuest(page: Page, quest: Record<string, unknown>
             const db = (await new Promise<unknown>((resolve, reject) => {
                 const request = indexedDB.open(databaseName, databaseVersion);
                 request.onupgradeneeded = () => {
-                    const upgradeDb = request.result as IndexedDbDatabase;
+                    const upgradeDb = request.result as unknown as IndexedDbDatabase;
                     if (!upgradeDb.objectStoreNames.contains('meta')) {
                         upgradeDb.createObjectStore('meta');
                     }
@@ -384,7 +390,7 @@ export async function seedCustomQuest(page: Page, quest: Record<string, unknown>
                 };
                 request.onsuccess = () => resolve(request.result);
                 request.onerror = () => reject(request.error);
-            })) as IndexedDbDatabase;
+            })) as unknown as IndexedDbDatabase;
 
             await new Promise<void>((resolve, reject) => {
                 const tx = db.transaction('quests', 'readwrite');
@@ -415,7 +421,7 @@ export async function waitForQuestRecordByTitle(
                 openRequest.onsuccess = () => resolve(openRequest.result);
                 openRequest.onerror = () => reject(openRequest.error);
                 openRequest.onupgradeneeded = () => resolve(openRequest.result);
-            })) as IndexedDbDatabase;
+            })) as unknown as IndexedDbDatabase;
 
             try {
                 if (!db.objectStoreNames.contains('quests')) {
@@ -468,7 +474,7 @@ async function customQuestExists(page: Page, questTitle: string): Promise<boolea
             openRequest.onsuccess = () => resolve(openRequest.result);
             openRequest.onerror = () => reject(openRequest.error);
             openRequest.onupgradeneeded = () => resolve(openRequest.result);
-        })) as IndexedDbDatabase;
+        })) as unknown as IndexedDbDatabase;
 
         try {
             if (!db.objectStoreNames.contains('quests')) {
