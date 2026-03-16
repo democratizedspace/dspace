@@ -7,4 +7,4 @@
     "prompt": "A close-up monitoring view of a strip thermometer on a hydroponic nutrient reservoir, with one band visibly active to indicate the latest stabilized temperature reading used for QA tracking. The reservoir wall is translucent with nutrient solution behind it, and nearby tubing, an air line, and a lid opening hint at a controlled hydroponic setup. This should clearly read as a logged reservoir temperature evidence artifact, not aquarium data.\n\nUltra-detailed, photorealistic 512×512 image with a near-future hydroponics-lab aesthetic: soft greenhouse or workshop lighting, realistic condensation and plastic textures, clean muted colors, no logos, and no readable labels. The image should be tidy and icon-friendly, centered on the active temperature strip so it feels precise and suitable for DSPACE quality-assurance workflows.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

@@ -7,4 +7,4 @@
     "prompt": "An Arduino-based solar tracker control kit laid out on a workbench, including a central microcontroller board, two compact stepper motor driver modules, bundled control wiring, limit switches, weatherproof cable glands, and a small junction enclosure. The arrangement should suggest a one-axis tracker control system ready for field installation, with connectors and screw terminals visible but no branding. A small actuator arm or motor bracket in the background helps clarify the renewable-energy use case.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-energy aesthetic: soft workshop lighting, realistic electronics textures, tidy cable routing, no logos, no readable PCB text, and no identifiable faces. The composition should feel practical, modular, and clean, with the full kit centered so it reads immediately as a solar automation control package.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

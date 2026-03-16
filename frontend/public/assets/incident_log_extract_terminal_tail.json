@@ -7,4 +7,4 @@
     "prompt": "A focused terminal-style incident log extract shown on a slim diagnostic display sitting on a clean operations desk, with only the last few high-signal lines visible in a compact scrolling pane. The scene includes a keyboard, a small status light, and a notebook with timestamp scribbles, suggesting active debugging and observability work. The display content should look like dense structured system output without any legible words, emphasizing that this is a curated log tail artifact rather than a generic computer monitor.\n\nUltra-detailed, photorealistic 512×512 image with a near-future reliability-engineering aesthetic: dim but soft control-room lighting, subtle reflections on the display glass, muted colors, and no large readable text or logos. Keep the frame clean and uncluttered, with the monitor and recent-log visual treatment doing the storytelling while preserving a polished DSPACE solarpunk-tech atmosphere.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}
