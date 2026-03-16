@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Sequence
+from typing import Mapping, Sequence, TypeVar
 
 from . import (
     DuplicateImageError,
@@ -27,6 +27,19 @@ DEFAULT_QUESTS_DIR = DEFAULT_ROOT / "frontend" / "src" / "pages" / "quests" / "j
 DEFAULT_ITEMS_DIR = (
     DEFAULT_ROOT / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
 )
+
+KeyT = TypeVar("KeyT")
+ValueT = TypeVar("ValueT")
+
+
+def _truncate_mapping(
+    mapping: Mapping[KeyT, ValueT],
+    image_count: int | None,
+) -> dict[KeyT, ValueT]:
+    if image_count is None or image_count > len(mapping):
+        return dict(mapping)
+
+    return {key: mapping[key] for key in sorted(mapping)[:image_count]}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -70,6 +83,16 @@ def build_parser() -> argparse.ArgumentParser:
                 "identical files, and missing assets"
             ),
         )
+        subparser.add_argument(
+            "--image-count",
+            type=int,
+            default=None,
+            help=(
+                "Optional maximum number of image issue entries per report section. "
+                "When provided and less than or equal to the total entries, output is "
+                "truncated to the first N sorted items."
+            ),
+        )
 
     analyze_parser = subparsers.add_parser(
         "find-image-issues",
@@ -84,11 +107,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
+    if args.image_count is not None and args.image_count <= 0:
+        parser.exit(status=2, message="error: --image-count must be a positive integer\n")
+
     try:
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)
         duplicates = find_duplicates(usages)
         identical_files = find_identical_files(usages, args.root)
         missing_images = find_missing_images(usages, args.root)
+
+        duplicates = _truncate_mapping(duplicates, args.image_count)
+        identical_files = _truncate_mapping(identical_files, args.image_count)
+        missing_images = _truncate_mapping(missing_images, args.image_count)
 
         if args.json:
             output = json.dumps(
