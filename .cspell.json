@@ -8,7 +8,9 @@
       "addWords": true
     }
   ],
-  "dictionaries": ["dspace-terms"],
+  "dictionaries": [
+    "dspace-terms"
+  ],
   "ignorePaths": [
     "node_modules",
     "frontend/node_modules",
@@ -22,9 +24,24 @@
     "frontend/src/pages/processes/processes.json"
   ],
   "words": [
-    "NPCs",
     "MPPT",
-    "SOULBOUND"
+    "NPCs",
+    "SOULBOUND",
+    "backflush",
+    "cloudsync",
+    "cutover",
+    "desolder",
+    "duplicative",
+    "flexbox",
+    "gfci",
+    "minmax",
+    "miscredit",
+    "netcup",
+    "offgrid",
+    "speedrun",
+    "stddev",
+    "sugarkube",
+    "viewports"
   ],
   "useGitignore": true
 }

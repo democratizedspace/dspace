@@ -46,7 +46,8 @@
     "backup": "node scripts/backup.mjs",
     "helm:lint": "helm lint charts/dspace",
     "helm:template": "helm template dspace charts/dspace -f charts/dspace/values.dev.yaml",
-    "test:quest-validation": "npm run test:root -- tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts"
+    "test:quest-validation": "npm run test:root -- tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts",
+    "spellcheck": "cspell --no-progress \"docs/qa/**/*.md\" \"frontend/src/pages/docs/md/outages/**/*.md\""
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
@@ -63,6 +64,7 @@
     "chart.js": "^4.5.0",
     "chartjs-node-canvas": "^5.0.0",
     "cross-env": "^10.1.0",
+    "cspell": "8.13.3",
     "estree-walker": "^3.0.3",
     "fake-indexeddb": "^6.1.0",
     "github-slugger": "^2.0.0",
