@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Mapping, Sequence, TypeVar
+from typing import Mapping, Sequence
 
 from . import (
     DuplicateImageError,
@@ -28,17 +28,44 @@ DEFAULT_ITEMS_DIR = (
     DEFAULT_ROOT / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
 )
 
-ValueT = TypeVar("ValueT")
-
-
-def _truncate_mapping(
-    mapping: Mapping[str, ValueT],
+def _apply_global_image_count(
+    duplicates: Mapping[str, object],
+    identical_files: Mapping[str, list[str]],
+    missing_images: Mapping[str, object],
     image_count: int | None,
-) -> dict[str, ValueT]:
-    if image_count is None or image_count >= len(mapping):
-        return dict(mapping)
+) -> tuple[dict[str, object], dict[str, list[str]], dict[str, object]]:
+    if image_count is None:
+        return (
+            dict(duplicates),
+            {digest: list(paths) for digest, paths in identical_files.items() if len(paths) > 1},
+            dict(missing_images),
+        )
 
-    return {key: mapping[key] for key in sorted(mapping)[:image_count]}
+    remaining = image_count
+    truncated_duplicates: dict[str, object] = {}
+    for image in sorted(duplicates):
+        if remaining == 0:
+            break
+        truncated_duplicates[image] = duplicates[image]
+        remaining -= 1
+
+    truncated_identical_files: dict[str, list[str]] = {}
+    for digest in sorted(identical_files):
+        if remaining == 0:
+            break
+        paths = list(identical_files[digest])
+        if len(paths) > 1:
+            truncated_identical_files[digest] = paths
+            remaining -= 1
+
+    truncated_missing_images: dict[str, object] = {}
+    for image in sorted(missing_images):
+        if remaining == 0:
+            break
+        truncated_missing_images[image] = missing_images[image]
+        remaining -= 1
+
+    return truncated_duplicates, truncated_identical_files, truncated_missing_images
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -87,9 +114,9 @@ def build_parser() -> argparse.ArgumentParser:
             type=int,
             default=None,
             help=(
-                "Optional maximum number of image issue entries per report section. "
-                "When provided and less than or equal to the total entries, output is "
-                "truncated to the first N sorted items."
+                "Optional maximum number of top-level image issue report entries. "
+                "When provided, output is truncated to the first N sorted entries in "
+                "report order: duplicates, identical files, then missing images."
             ),
         )
 
@@ -115,9 +142,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         identical_files = find_identical_files(usages, args.root)
         missing_images = find_missing_images(usages, args.root)
 
-        duplicates = _truncate_mapping(duplicates, args.image_count)
-        identical_files = _truncate_mapping(identical_files, args.image_count)
-        missing_images = _truncate_mapping(missing_images, args.image_count)
+        duplicates, identical_files, missing_images = _apply_global_image_count(
+            duplicates,
+            identical_files,
+            missing_images,
+            args.image_count,
+        )
 
         if args.json:
             output = json.dumps(
