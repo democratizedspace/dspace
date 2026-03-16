@@ -855,6 +855,9 @@ as Python needs to resolve the `scripts` package from the root.
 ```bash
 # From the repository root directory
 python -m scripts.image_issues find-image-issues
+
+# Optional: limit report output to the first N image issues
+python -m scripts.image_issues find-image-issues --image-count 25
 ```
 
 The report lists each reused image URL, how many times it appears, the quest or item entries that
@@ -864,8 +867,17 @@ assets that still need unique replacements, and the missing output as the to-do 
 image assets to create. When using `--json`, the output fields are named `duplicates`,
 `identicalFiles`, and `missingImages`.
 
+Use `--image-count N` to truncate output to the first `N` image issue items from the original
+report order (duplicates first, then identical-file paths, then missing images). If `N` is
+greater than or equal to the total item count, output is unchanged.
+
 **Windows/PowerShell**: The command works the same way on Windows. Ensure you're in the root
 directory (`C:\Users\...\dspace\`) before running the command, not in the `frontend` subdirectory.
+
+```powershell
+# From repository root in PowerShell
+python -m scripts.image_issues find-image-issues --image-count 25
+```
 
 ### Testing Environment Limitations
 

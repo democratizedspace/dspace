@@ -29,6 +29,58 @@ DEFAULT_ITEMS_DIR = (
 )
 
 
+def _non_negative_int(value: str) -> int:
+    parsed = int(value)
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("--image-count must be 0 or greater")
+    return parsed
+
+
+def _truncate_report_items(
+    duplicates: dict,
+    identical_files: dict,
+    missing_images: dict,
+    image_count: int | None,
+) -> tuple[dict, dict, dict]:
+    if image_count is None:
+        return duplicates, identical_files, missing_images
+
+    total_items = (
+        len(duplicates) + sum(len(paths) for paths in identical_files.values()) + len(missing_images)
+    )
+    if image_count >= total_items:
+        return duplicates, identical_files, missing_images
+
+    remaining = image_count
+    truncated_duplicates = {}
+    for image in sorted(duplicates):
+        if remaining <= 0:
+            break
+        truncated_duplicates[image] = duplicates[image]
+        remaining -= 1
+
+    truncated_identical = {}
+    for digest in sorted(identical_files):
+        if remaining <= 0:
+            break
+        paths = sorted(identical_files[digest])
+        if not paths:
+            continue
+        limited_paths = paths[:remaining]
+        if limited_paths:
+            truncated_identical[digest] = limited_paths
+            remaining -= len(limited_paths)
+
+    truncated_missing = {}
+    for image in sorted(missing_images):
+        if remaining <= 0:
+            break
+        truncated_missing[image] = missing_images[image]
+        remaining -= 1
+
+    return truncated_duplicates, truncated_identical, truncated_missing
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
@@ -70,6 +122,14 @@ def build_parser() -> argparse.ArgumentParser:
                 "identical files, and missing assets"
             ),
         )
+        subparser.add_argument(
+            "--image-count",
+            type=_non_negative_int,
+            help=(
+                "Limit report output to the first N image items across duplicates, identical "
+                "files, and missing assets"
+            ),
+        )
 
     analyze_parser = subparsers.add_parser(
         "find-image-issues",
@@ -89,6 +149,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         duplicates = find_duplicates(usages)
         identical_files = find_identical_files(usages, args.root)
         missing_images = find_missing_images(usages, args.root)
+        duplicates, identical_files, missing_images = _truncate_report_items(
+            duplicates,
+            identical_files,
+            missing_images,
+            args.image_count,
+        )
 
         if args.json:
             output = json.dumps(

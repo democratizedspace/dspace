@@ -326,3 +326,92 @@ def test_cli_reports_missing_images(tmp_path: Path) -> None:
     assert "/assets/existing.png" not in stdout
     assert "Total missing images: 2" in stdout
     assert "Total image issue occurrences: 3" in stdout
+
+
+def test_cli_image_count_truncates_text_output(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
+
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.image_issues",
+        "find-image-issues",
+        "--root",
+        str(repo_root),
+        "--quests-dir",
+        str(quests_dir),
+        "--items-dir",
+        str(items_dir),
+        "--image-count",
+        "2",
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    assert result.returncode == 0
+    stdout = result.stdout
+    assert "/assets/shared-path.jpg (2 uses)" in stdout
+    assert "Identical image files (same content, different paths):" in stdout
+    assert "  - /assets/duplicate-content.jpg (1 uses)" in stdout
+    assert "  - /assets/quests/duplicate-content.jpg" not in stdout
+    assert "Total path-based duplicates: 1" in stdout
+    assert "Total identical-file duplicates: 0" in stdout
+    assert "Total duplicates remaining: 1" in stdout
+    assert "Total image issue occurrences: 1" in stdout
+
+
+def test_cli_image_count_truncates_json_output(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
+
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.image_issues",
+        "find-image-issues",
+        "--root",
+        str(repo_root),
+        "--quests-dir",
+        str(quests_dir),
+        "--items-dir",
+        str(items_dir),
+        "--json",
+        "--image-count",
+        "2",
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    assert result.returncode == 0
+    output = json.loads(result.stdout)
+    assert list(output["duplicates"].keys()) == ["/assets/shared-path.jpg"]
+    assert len(output["identicalFiles"]) == 1
+    digest, paths = next(iter(output["identicalFiles"].items()))
+    assert len(digest) == 64
+    assert paths == ["/assets/duplicate-content.jpg"]
+    assert output["missingImages"] == {}
+
+
+def test_cli_image_count_rejects_negative_values(tmp_path: Path) -> None:
+    command = [
+        sys.executable,
+        "-m",
+        "scripts.image_issues",
+        "find-image-issues",
+        "--root",
+        str(tmp_path),
+        "--image-count",
+        "-1",
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+    assert result.returncode != 0
+    assert "--image-count must be 0 or greater" in result.stderr
