@@ -326,3 +326,76 @@ def test_cli_reports_missing_images(tmp_path: Path) -> None:
     assert "/assets/existing.png" not in stdout
     assert "Total missing images: 2" in stdout
     assert "Total image issue occurrences: 3" in stdout
+
+
+def test_cli_respects_image_count_for_text_and_json(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
+
+    base_command = [
+        sys.executable,
+        "-m",
+        "scripts.image_issues",
+        "find-image-issues",
+        "--root",
+        str(repo_root),
+        "--quests-dir",
+        str(quests_dir),
+        "--items-dir",
+        str(items_dir),
+        "--image-count",
+        "1",
+    ]
+
+    text_result = subprocess.run(base_command, capture_output=True, text=True, check=False)
+
+    assert text_result.returncode == 0
+    text_stdout = text_result.stdout
+    assert text_stdout.count(" uses)") == 2
+    assert text_stdout.count(" references)") == 0
+
+    json_result = subprocess.run(
+        [*base_command, "--json"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert json_result.returncode == 0
+    output = json.loads(json_result.stdout)
+    assert len(output["duplicates"]) == 1
+    assert len(output["identicalFiles"]) == 1
+    assert len(output["missingImages"]) == 0
+
+
+def test_cli_rejects_invalid_image_count(tmp_path: Path) -> None:
+    quests_dir = tmp_path / "quests"
+    items_dir = tmp_path / "items"
+    quests_dir.mkdir(parents=True)
+    items_dir.mkdir(parents=True)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.image_issues",
+            "find-image-issues",
+            "--root",
+            str(tmp_path),
+            "--quests-dir",
+            str(quests_dir),
+            "--items-dir",
+            str(items_dir),
+            "--image-count",
+            "0",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    assert "--image-count must be a positive integer" in result.stderr
