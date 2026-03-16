@@ -28,15 +28,14 @@ DEFAULT_ITEMS_DIR = (
     DEFAULT_ROOT / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
 )
 
-KeyT = TypeVar("KeyT")
 ValueT = TypeVar("ValueT")
 
 
 def _truncate_mapping(
-    mapping: Mapping[KeyT, ValueT],
+    mapping: Mapping[str, ValueT],
     image_count: int | None,
-) -> dict[KeyT, ValueT]:
-    if image_count is None or image_count > len(mapping):
+) -> dict[str, ValueT]:
+    if image_count is None or image_count >= len(mapping):
         return dict(mapping)
 
     return {key: mapping[key] for key in sorted(mapping)[:image_count]}
@@ -108,7 +107,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.image_count is not None and args.image_count <= 0:
-        parser.exit(status=2, message="error: --image-count must be a positive integer\n")
+        parser.error("--image-count must be a positive integer")
 
     try:
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)

@@ -871,6 +871,9 @@ image assets to create. When using `--json`, the output fields are named `duplic
 a section, output is truncated to the first `N` sorted entries for each section (`duplicates`,
 `identicalFiles`, and `missingImages`).
 
+When `--image-count` truncates a section, the summary totals in that run reflect the truncated
+results shown in the report (not the full untruncated scan output).
+
 **Windows/PowerShell**: The command works the same way on Windows. Ensure you're in the root
 directory (`C:\Users\...\dspace\`) before running the command, not in the `frontend` subdirectory.
 
