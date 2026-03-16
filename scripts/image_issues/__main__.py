@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from typing import Sequence
+from typing import Mapping, Sequence
 
 from . import (
     DuplicateImageError,
@@ -27,6 +27,45 @@ DEFAULT_QUESTS_DIR = DEFAULT_ROOT / "frontend" / "src" / "pages" / "quests" / "j
 DEFAULT_ITEMS_DIR = (
     DEFAULT_ROOT / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
 )
+
+def _apply_global_image_count(
+    duplicates: Mapping[str, object],
+    identical_files: Mapping[str, list[str]],
+    missing_images: Mapping[str, object],
+    image_count: int | None,
+) -> tuple[dict[str, object], dict[str, list[str]], dict[str, object]]:
+    if image_count is None:
+        return (
+            dict(duplicates),
+            {digest: list(paths) for digest, paths in identical_files.items() if len(paths) > 1},
+            dict(missing_images),
+        )
+
+    remaining = image_count
+    truncated_duplicates: dict[str, object] = {}
+    for image in sorted(duplicates):
+        if remaining == 0:
+            break
+        truncated_duplicates[image] = duplicates[image]
+        remaining -= 1
+
+    truncated_identical_files: dict[str, list[str]] = {}
+    for digest in sorted(identical_files):
+        if remaining == 0:
+            break
+        paths = list(identical_files[digest])
+        if len(paths) > 1:
+            truncated_identical_files[digest] = paths
+            remaining -= 1
+
+    truncated_missing_images: dict[str, object] = {}
+    for image in sorted(missing_images):
+        if remaining == 0:
+            break
+        truncated_missing_images[image] = missing_images[image]
+        remaining -= 1
+
+    return truncated_duplicates, truncated_identical_files, truncated_missing_images
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -70,6 +109,16 @@ def build_parser() -> argparse.ArgumentParser:
                 "identical files, and missing assets"
             ),
         )
+        subparser.add_argument(
+            "--image-count",
+            type=int,
+            default=None,
+            help=(
+                "Optional maximum number of top-level image issue report entries. "
+                "When provided, output is truncated to the first N sorted entries in "
+                "report order: duplicates, identical files, then missing images."
+            ),
+        )
 
     analyze_parser = subparsers.add_parser(
         "find-image-issues",
@@ -84,11 +133,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
+    if args.image_count is not None and args.image_count <= 0:
+        parser.error("--image-count must be a positive integer")
+
     try:
         usages = collect_image_references(args.quests_dir, args.items_dir, args.root)
         duplicates = find_duplicates(usages)
         identical_files = find_identical_files(usages, args.root)
         missing_images = find_missing_images(usages, args.root)
+
+        duplicates, identical_files, missing_images = _apply_global_image_count(
+            duplicates,
+            identical_files,
+            missing_images,
+            args.image_count,
+        )
 
         if args.json:
             output = json.dumps(

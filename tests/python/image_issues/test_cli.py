@@ -326,3 +326,191 @@ def test_cli_reports_missing_images(tmp_path: Path) -> None:
     assert "/assets/existing.png" not in stdout
     assert "Total missing images: 2" in stdout
     assert "Total image issue occurrences: 3" in stdout
+
+
+def test_cli_image_count_limits_text_output(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.image_issues",
+            "find-image-issues",
+            "--root",
+            str(tmp_path),
+            "--quests-dir",
+            str(quests_dir),
+            "--items-dir",
+            str(items_dir),
+            "--image-count",
+            "1",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    assert "/assets/shared-path.jpg (2 uses)" in result.stdout
+    assert "Identical image files (same content, different paths):" not in result.stdout
+    assert "Missing image files" not in result.stdout
+    assert "Total path-based duplicates: 1" in result.stdout
+    assert "Total identical-file duplicates" not in result.stdout
+    assert "Total missing images" not in result.stdout
+    assert "Total duplicates remaining: 1" in result.stdout
+    assert "Total image issue occurrences: 1" in result.stdout
+
+    untruncated = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.image_issues",
+            "find-image-issues",
+            "--root",
+            str(repo_root),
+            "--quests-dir",
+            str(quests_dir),
+            "--items-dir",
+            str(items_dir),
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert untruncated.returncode == 0
+
+    not_truncated = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.image_issues",
+            "find-image-issues",
+            "--root",
+            str(repo_root),
+            "--quests-dir",
+            str(quests_dir),
+            "--items-dir",
+            str(items_dir),
+            "--image-count",
+            "2",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert not_truncated.returncode == 0
+    assert not_truncated.stdout == untruncated.stdout
+
+
+def test_cli_image_count_limits_json_output(tmp_path: Path) -> None:
+    repo_root = tmp_path
+    quests_dir = repo_root / "frontend" / "src" / "pages" / "quests" / "json"
+    items_dir = repo_root / "frontend" / "src" / "pages" / "inventory" / "json" / "items"
+
+    shutil.copytree(FIXTURE_ROOT, repo_root, dirs_exist_ok=True)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.image_issues",
+            "find-image-issues",
+            "--root",
+            str(repo_root),
+            "--quests-dir",
+            str(quests_dir),
+            "--items-dir",
+            str(items_dir),
+            "--json",
+            "--image-count",
+            "1",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    output = json.loads(result.stdout)
+
+    assert len(output["duplicates"]) == 1
+    assert output["identicalFiles"] == {}
+    assert output["missingImages"] == {}
+
+    no_truncation_result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.image_issues",
+            "find-image-issues",
+            "--root",
+            str(repo_root),
+            "--quests-dir",
+            str(quests_dir),
+            "--items-dir",
+            str(items_dir),
+            "--json",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert no_truncation_result.returncode == 0
+
+    boundary_result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.image_issues",
+            "find-image-issues",
+            "--root",
+            str(repo_root),
+            "--quests-dir",
+            str(quests_dir),
+            "--items-dir",
+            str(items_dir),
+            "--json",
+            "--image-count",
+            "2",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert boundary_result.returncode == 0
+    assert json.loads(boundary_result.stdout) == json.loads(no_truncation_result.stdout)
+
+
+def test_cli_image_count_rejects_non_positive_values(tmp_path: Path) -> None:
+    quests_dir = tmp_path / "quests"
+    items_dir = tmp_path / "items"
+    quests_dir.mkdir(parents=True, exist_ok=True)
+    items_dir.mkdir(parents=True, exist_ok=True)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "scripts.image_issues",
+            "find-image-issues",
+            "--root",
+            str(tmp_path),
+            "--quests-dir",
+            str(quests_dir),
+            "--items-dir",
+            str(items_dir),
+            "--image-count",
+            "0",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    assert "--image-count must be a positive integer" in result.stderr
