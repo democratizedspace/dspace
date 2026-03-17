@@ -495,7 +495,7 @@
         "id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
         "name": "savings jar",
         "description": "Glass jar for storing dUSD. Breaking the jar releases all stored dUSD and leaves broken glass.",
-        "image": "/assets/stevia_crystals_jar.jpg",
+        "image": "/assets/savings_jar_dusd.jpg",
         "price": "2 dUSD",
         "itemCounts": {
             "5247a603-294a-4a34-a884-1ae20969b2a1": 0
@@ -506,7 +506,7 @@
         "id": "f797d8de-11c5-4f89-a725-c2ac2255d173",
         "name": "broken savings jar",
         "description": "Shattered remains of a savings jar after cashing out stored dUSD.",
-        "image": "/assets/stevia_crystals_jar.jpg",
+        "image": "/assets/broken_savings_jar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital Currency & Tokens"
     },
@@ -726,7 +726,7 @@
         "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
         "name": "wind log",
         "description": "Field note card capturing two launch-pad wind readings, gust spread, and a go/no-go decision (uses temporary shared card artwork).",
-        "image": "/assets/rocket_launch_checklist_card.jpg",
+        "image": "/assets/wind_log_field_card.jpg",
         "price": "1 dUSD",
         "category": "Rocketry & Flight"
     },
@@ -734,7 +734,7 @@
         "id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
         "name": "launch-capable model rocket",
         "description": "35 cm rocket with B6-4 motor and recovery wadding; launch remotely via controller.",
-        "image": "/assets/rocket_field.jpg",
+        "image": "/assets/launch_capable_model_rocket.jpg",
         "price": "20 dUSD",
         "hardening": {
             "passes": 1,
@@ -762,7 +762,7 @@
         "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
         "name": "pH strip",
         "description": "Disposable 0\u201314 pH test strip with 1-unit resolution; 0.3 g each.",
-        "image": "/assets/single_ph_test_strip.jpg",
+        "image": "/assets/ph_strip_single.jpg",
         "price": "0.15 dUSD",
         "unit": "each",
         "hardening": {
@@ -1053,7 +1053,7 @@
         "id": "3720a674-e205-4950-aa1d-b10dca1885ca",
         "name": "Small solar enclosure",
         "description": "A solar enclosure with enough room for a single panel, a charge controller, and a 200 Wh battery pack.",
-        "image": "/assets/solar_enclosure_small.jpg",
+        "image": "/assets/small_solar_enclosure.jpg",
         "price": "100 dUSD",
         "category": "Energy & Power"
     },
@@ -1093,7 +1093,7 @@
         "id": "26b4df13-d5eb-44fd-939f-671a2f1aa8f0",
         "name": "Aluminum extrusion tracker frame kit",
         "description": "Pre-cut aluminum extrusions, corner brackets, pivot hardware, and stainless fasteners for a 200 Wh tracker frame.",
-        "image": "/assets/solar_enclosure_small.jpg",
+        "image": "/assets/aluminum_extrusion_tracker_frame_kit.jpg",
         "price": "120 dUSD",
         "category": "Energy & Power"
     },
@@ -1101,7 +1101,7 @@
         "id": "8ead8821-57e9-4aef-a3fb-b8d6cf2ef326",
         "name": "Solar tracking unit (200 Wh)",
         "description": "A one-axis solar tracking unit built around the 200 Wh setup, with stepper-driven motion and controller-defined east-west limits.",
-        "image": "/assets/solar_setup_200wh_weatherproof.jpg",
+        "image": "/assets/solar_tracking_unit_200wh.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Energy & Power"
     },
@@ -1568,7 +1568,7 @@
         "id": "fff4b263-806f-4aeb-a862-cbb0d50146e2",
         "name": "Tool rack",
         "description": "Wall-mounted rack that keeps hand tools organized and easy to reach.",
-        "image": "/assets/poe_plus_switch_on_rack.jpg",
+        "image": "/assets/tool_rack_wall_mounted.jpg",
         "price": "40 dUSD",
         "category": "Workshop & Construction",
         "hardening": {
@@ -1648,7 +1648,7 @@
         "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
         "name": "stevia extract",
         "description": "Concentrated sweetener derived from stevia leaves.",
-        "image": "/assets/stevia_extract_bottle.jpg",
+        "image": "/assets/stevia_extract_concentrate.jpg",
         "price": "8 dUSD",
         "category": "Biology & Lab"
     },
@@ -1688,7 +1688,7 @@
         "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
         "name": "PoE+ switch",
         "description": "Powers multiple devices and provides network connectivity.",
-        "image": "/assets/poe_plus_switch_on_rack.jpg",
+        "image": "/assets/poe_plus_switch.jpg",
         "price": "60 dUSD",
         "category": "Electronics & Robotics"
     },
@@ -1826,7 +1826,7 @@
         "id": "98f6252e-95c2-468a-b110-69d47604df2c",
         "name": "planisphere star chart",
         "description": "A rotating sky map for matching constellations to the current date and time.",
-        "image": "/assets/planisphere_star_chart.jpg",
+        "image": "/assets/planisphere_star_chart_rotating.jpg",
         "price": "14 dUSD",
         "category": "Astronomy & Observation"
     },
@@ -1983,7 +1983,7 @@
         "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
         "name": "stevia crystals",
         "description": "Highly concentrated sweetener purified from stevia extract.",
-        "image": "/assets/stevia_crystals_jar.jpg",
+        "image": "/assets/stevia_crystals_refined.jpg",
         "price": "12 dUSD",
         "category": "Biology & Lab"
     },
@@ -1999,7 +1999,7 @@
         "id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
         "name": "stevia tasting notes",
         "description": "Logged sweetness, onset, and aftertaste impressions from a blind stevia test.",
-        "image": "/assets/stevia_tasting_notes.jpg",
+        "image": "/assets/stevia_tasting_notes_sheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3105,7 +3105,7 @@
         "id": "f5a1b52f-6c31-4dd1-aeb3-4919cb3d6d4b",
         "name": "resource snapshot",
         "description": "Timestamped CPU, memory, and disk baseline collected from Ubuntu monitoring commands.",
-        "image": "/assets/rocket_field.jpg",
+        "image": "/assets/resource_snapshot_monitoring_report.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3161,7 +3161,7 @@
         "id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
         "name": "safe fizz reaction log sheet",
         "description": "A lab notebook page recording reagent ratios, bubbling profile, peak temperature, and disposal note for the spent fizz solution.",
-        "image": "/assets/lab_spill_tray_on_bench.jpg",
+        "image": "/assets/safe_fizz_reaction_log_sheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3169,7 +3169,7 @@
         "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
         "name": "chemistry pH reading card",
         "description": "A timestamped pH strip card taped to a note with sample source and interpretation range for chemistry lab verification.",
-        "image": "/assets/single_ph_test_strip.jpg",
+        "image": "/assets/chemistry_ph_reading_card.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3217,7 +3217,7 @@
         "id": "487c7586-a6f4-4fff-a210-979497f6380f",
         "name": "filtered precipitate sample",
         "description": "Recovered precipitate and decanted liquid documented for follow-up analysis and disposal routing.",
-        "image": "/assets/lab_spill_tray_on_bench.jpg",
+        "image": "/assets/filtered_precipitate_sample.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3329,7 +3329,7 @@
         "id": "8615b34c-f00e-4258-b94a-67bd58d11ece",
         "name": "north-star alignment card",
         "description": "Durable card documenting Polaris lock procedure, improvised sightline checks, and landmark bearings used to establish reliable nighttime orientation in the field.",
-        "image": "/assets/planisphere_star_chart.jpg",
+        "image": "/assets/north_star_alignment_card.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3345,7 +3345,7 @@
         "id": "40b059e7-a11d-49da-8aed-05570804c036",
         "name": "planetary alignment witness chart",
         "description": "Witness chart recording relative planetary spacing, altitude bands, and horizon reference objects during a narrow alignment window for later verification.",
-        "image": "/assets/planisphere_star_chart.jpg",
+        "image": "/assets/planetary_alignment_witness_chart.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3457,7 +3457,7 @@
         "id": "fe23b389-42a7-46ef-8793-3d8399362788",
         "name": "buffer formulation recipe card",
         "description": "Calculated buffer formulation card with acid/base ratio, target pH, and ionic strength assumptions.",
-        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
+        "image": "/assets/buffer_formulation_recipe_card.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3465,7 +3465,7 @@
         "id": "4721dce9-cd6a-4e3f-8dfb-e7e22f55dc39",
         "name": "compounded buffer stock lot",
         "description": "Initial compounded buffer lot before final pH verification and labeling.",
-        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
+        "image": "/assets/compounded_buffer_stock_lot.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3473,7 +3473,7 @@
         "id": "3843a2ef-f029-4bd5-b450-828a82d62c8b",
         "name": "buffer adjustment titration plan",
         "description": "Stepwise titration plan estimating dropwise acid/base additions required to hit pH window.",
-        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
+        "image": "/assets/buffer_adjustment_titration_plan.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3481,7 +3481,7 @@
         "id": "f7a90006-26fa-4ef0-b587-93edd963bb84",
         "name": "buffer adjustment cycle log",
         "description": "Per-cycle log of reagent drops, stir times, and intermediate pH readbacks during adjustment.",
-        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
+        "image": "/assets/buffer_adjustment_cycle_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3513,7 +3513,7 @@
         "id": "35ec960e-3048-4429-ad6b-c6afb384d658",
         "name": "clarified stevia filtrate",
         "description": "Ethanol-water stevia extract filtrate after coarse solids removal and first clarification pass.",
-        "image": "/assets/stevia_extract_bottle.jpg",
+        "image": "/assets/clarified_stevia_filtrate.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3521,7 +3521,7 @@
         "id": "3fac389d-178f-4ad1-a0bb-a9c474931c25",
         "name": "seeded stevia crystal slurry",
         "description": "Supersaturated stevia concentrate seeded for controlled crystal nucleation and growth.",
-        "image": "/assets/stevia_crystals_jar.jpg",
+        "image": "/assets/seeded_stevia_crystal_slurry.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3529,7 +3529,7 @@
         "id": "13f3f171-076f-4fb0-9a2c-63f61ca41d3f",
         "name": "dried stevia crystal lot",
         "description": "Partially refined crystal lot dried below 45C prior to final polishing wash.",
-        "image": "/assets/stevia_crystals_jar.jpg",
+        "image": "/assets/dried_stevia_crystal_lot.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3537,7 +3537,7 @@
         "id": "23f49dfd-f7c6-421c-ac29-5b891d57bf97",
         "name": "stevia sensory calibration cup set",
         "description": "Coded baseline cups used to align panelists on sweetness scale before blind tasting.",
-        "image": "/assets/stevia_tasting_solution_1pct.jpg",
+        "image": "/assets/stevia_sensory_calibration_cup_set.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3545,7 +3545,7 @@
         "id": "de3dd21d-af02-4b38-82b7-b65c0f09a984",
         "name": "stevia panel scorecard",
         "description": "Structured sensory scorecard with onset timing, intensity, bitterness, and confidence metrics.",
-        "image": "/assets/stevia_tasting_notes.jpg",
+        "image": "/assets/stevia_panel_scorecard.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     }

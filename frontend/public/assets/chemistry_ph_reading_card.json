@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/chemistry_ph_reading_card.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "chemistry pH reading card",
+    "item_id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+    "entity_type": "item",
+    "prompt": "A timestamped chemistry verification card with a used pH strip taped onto it, accompanied by sample-source markings and an interpretation band shown through layout, color references, and simple symbols rather than readable text. The card sits on a clean lab bench with a small sample cup nearby, making it clear this is a documented reading artifact for traceability rather than a loose test strip. The taped strip and note-card format should be visually central.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future chemistry aesthetic: soft task lighting, realistic cardstock, tape, and paper-strip textures, no logos, no readable text, and no identifiable faces. Keep the card centered and uncluttered so it reads clearly as a documented pH reading record.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

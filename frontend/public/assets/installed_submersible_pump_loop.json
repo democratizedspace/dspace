@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/installed_submersible_pump_loop.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "installed submersible pump loop",
+    "item_id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+    "entity_type": "item",
+    "prompt": "A small hydroponic reservoir showing an installed submersible pump loop, with the pump mounted underwater and return tubing routed cleanly for nutrient circulation. The scene should clearly show the in-reservoir placement, tubing path, and working loop geometry rather than focusing on the pump alone. Net cups, roots, or a simple grow tray can appear in the background to anchor it in a hydroponic system.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future hydroponics aesthetic: soft grow-room lighting, realistic water, tubing, and polymer pump textures, no logos, no readable labels, and no identifiable faces. Keep the circulation loop readable and uncluttered so it works well as a systems-installation icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

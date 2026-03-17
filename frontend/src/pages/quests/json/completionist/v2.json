@@ -2,7 +2,7 @@
     "id": "completionist/v2",
     "title": "Congrats on finishing all the quests available in v2!",
     "description": "Print, plate, and assemble a real Completionist Award II for your shelf.",
-    "image": "/assets/quests/completionist_trophy_award.jpg",
+    "image": "/assets/quests/completionist_award_ii_shelf_trophy.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [

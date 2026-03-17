@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/seeded_stevia_crystal_slurry.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "seeded stevia crystal slurry",
+    "item_id": "3fac389d-178f-4ad1-a0bb-a9c474931c25",
+    "entity_type": "item",
+    "prompt": "A small vessel containing a seeded stevia crystal slurry, with visible suspended crystals in a supersaturated concentrate and a controlled crystal-growth appearance. The scene should suggest intentional nucleation for refinement, with a stir rod, seed crystal dish, or temperature-controlled prep context nearby. Make the mixture look denser and wetter than finished crystals so it clearly represents an intermediate growth stage.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future food-chemistry aesthetic: soft bench lighting, realistic viscous liquid, suspended crystal textures, and glass reflections, no logos, no readable labels, and no identifiable faces. Keep the slurry vessel centered and uncluttered so it reads clearly as a crystallization-stage item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

@@ -287,7 +287,7 @@
         "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
         "name": "submersible water pump",
         "description": "12 V DC pump rated at 200 L/h (53 gph) for circulating nutrient solution in small hydroponic systems; draws 3 W and includes 8 mm outlet barb.",
-        "image": "/assets/submersible_hydroponic_water_pump.jpg",
+        "image": "/assets/submersible_water_pump.jpg",
         "price": "15 dUSD",
         "hardening": {
             "passes": 1,
@@ -459,7 +459,7 @@
         "id": "6360b1e7-84d6-4256-b085-f36fc53ef299",
         "name": "digital pH meter",
         "description": "Pocket-sized meter measures pH 0\u201314 with \u00b10.1 accuracy; includes calibration solution.",
-        "image": "/assets/pocket_digital_ph_meter_calibration.jpg",
+        "image": "/assets/digital_ph_meter.jpg",
         "price": "15 dUSD",
         "hardening": {
             "passes": 1,
@@ -580,14 +580,14 @@
         "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
         "name": "installed submersible pump loop",
         "description": "Submersible pump mounted in-reservoir with return tubing installed for hydroponic circulation.",
-        "image": "/assets/submersible_hydroponic_water_pump.jpg",
+        "image": "/assets/installed_submersible_pump_loop.jpg",
         "price": "20 dUSD"
     },
     {
         "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
         "name": "verified hydroponic circulation loop",
         "description": "Pump loop after commissioning run confirms steady nutrient circulation.",
-        "image": "/assets/submersible_hydroponic_water_pump.jpg",
+        "image": "/assets/verified_hydroponic_circulation_loop.jpg",
         "price": "25 dUSD"
     }
 ]

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stevia_tasting_notes_sheet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia tasting notes",
+    "item_id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
+    "entity_type": "item",
+    "prompt": "A tasting notes sheet documenting a blind stevia test, with several impression marks and simple flavor-profile sketches indicating sweetness, onset, and aftertaste without readable words. A few coded sample cups nearby help show that the notes came from a controlled comparison. The page should feel more narrative and impression-based than a formal panel scorecard, while still structured and deliberate.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future food-lab aesthetic: soft tabletop lighting, realistic paper, glassware, and pencil textures, no logos, no readable text, and no identifiable faces. Keep the notes sheet centered and uncluttered so it reads clearly as a tasting-record item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

@@ -311,7 +311,7 @@
         "id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
         "name": "Test Suite Triumph Trophy",
         "description": "Anodized aluminum trophy for a clean, tested-and-verified CI-parity run.",
-        "image": "/assets/rocket_award.jpg",
+        "image": "/assets/test_suite_triumph_trophy.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
             "passes": 0,

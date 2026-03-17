@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/rocket_award_trophy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Rocket Award",
+    "item_id": "946b07b7-2b2c-4507-a725-edb270d8e910",
+    "entity_type": "item",
+    "prompt": "A 15 cm tall brushed aluminum rocket trophy displayed upright on a small base, clearly shaped like a stylized model rocket and intended as a celebratory award for a first successful print. The object should look polished but handmade enough to belong in a maker ecosystem, with subtle workshop context such as a print bed or model rocket parts softly blurred in the background. Emphasize the trophy nature over an actual flyable rocket.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker aesthetic: soft indoor lighting, realistic brushed metal and base textures, no logos, no readable text, and no identifiable faces. Keep the trophy centered and uncluttered so it reads instantly as an award item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/dried_stevia_crystal_lot.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "dried stevia crystal lot",
+    "item_id": "13f3f171-076f-4fb0-9a2c-63f61ca41d3f",
+    "entity_type": "item",
+    "prompt": "A glass jar or shallow dish holding a partially refined lot of dried stevia crystals, with pale translucent granules that look food-safe and carefully processed. The setup should suggest low-temperature drying before a final polishing wash, with a drying tray, fine mesh, or clean lab spatula nearby to reinforce the refinement stage. The crystals should look distinct from table sugar while still clearly crystalline.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future food-lab aesthetic: soft bench lighting, realistic crystal sparkle, glass reflections, and clean prep surfaces, no logos, no readable labels, and no identifiable faces. Keep the crystal lot centered and uncluttered so it reads as a specific processing-stage inventory item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

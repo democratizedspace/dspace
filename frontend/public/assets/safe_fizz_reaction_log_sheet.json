@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/safe_fizz_reaction_log_sheet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "safe fizz reaction log sheet",
+    "item_id": "265f7c6d-c345-44af-936c-8bba8ea08de2",
+    "entity_type": "item",
+    "prompt": "A lab notebook page laid flat inside or beside a shallow spill tray on a clean chemistry bench, clearly documenting a completed fizz-reaction run. The page shows hand-drawn bubbling curves, temperature checkpoints, reagent ratio sketches, and a disposal routing note implied through marks and diagram structure rather than readable words. Nearby are a pen, a graduated cylinder with a small amount of clear spent liquid, and a beaker with residue, making it obvious this is a reaction log sheet rather than a generic notebook page.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future DSPACE lab aesthetic: soft bench lighting, realistic paper fibers, polypropylene tray texture, subtle glass reflections, no logos, no readable text, and no identifiable faces. Keep the composition centered and uncluttered so the notebook page reads instantly as a documented experimental artifact.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

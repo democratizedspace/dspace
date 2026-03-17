@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/completionist_award_ii_shelf_trophy.jpg",
+    "entity": "frontend/src/pages/quests/json/completionist/v2.json",
+    "item_name": "Congrats on finishing all the quests available in v2!",
+    "item_id": "completionist/v2",
+    "entity_type": "quest",
+    "prompt": "A finished Completionist Award II trophy presented neatly on a shelf or bench, with a polished plated surface, carefully assembled components, and a celebratory handcrafted feel. The design should suggest a real printed-and-finished award object made for display, with subtle workshop traces nearby such as finishing cloth, plating supplies, or print support remnants to hint at the making process. It should feel proudly completed and ready for a shelf.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker aesthetic: soft cinematic indoor lighting, realistic metallic sheen, printed plastic detail, and shelf textures, no logos, no readable text, and no identifiable faces. Keep the trophy centered and uncluttered so it reads instantly as a completed quest reward.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

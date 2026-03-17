@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stevia_extract_concentrate.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia extract",
+    "item_id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+    "entity_type": "item",
+    "prompt": "A bottle of concentrated stevia extract presented as a usable sweetener ingredient, with a richer translucent liquid appearance than the clarified filtrate stage. The vessel should look clean and refined, suggesting concentration and preparation for later formulation or tasting. Include subtle stevia-leaf context or clean processing tools nearby without turning it into a branding shot.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future food-lab aesthetic: soft bench lighting, realistic glass, liquid depth, and clean prep surfaces, no logos, no readable labels, and no identifiable faces. Keep the extract bottle centered and uncluttered so it reads as a finished concentrate item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

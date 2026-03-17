@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/verified_hydroponic_circulation_loop.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "verified hydroponic circulation loop",
+    "item_id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+    "entity_type": "item",
+    "prompt": "A commissioned hydroponic circulation loop in operation, showing steady nutrient flow through tubing with a visible return stream into the reservoir. The scene should suggest that the pump loop has already been verified for reliable circulation, with a clean, stable setup and subtle cues of successful commissioning such as orderly routing and consistent water motion. Include enough system context to distinguish it from a bare installed pump loop.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future hydroponics aesthetic: soft grow-room lighting, realistic moving water, tubing, reservoir, and plant-support textures, no logos, no readable labels, and no identifiable faces. Keep the loop centered and uncluttered so it reads clearly as a verified working system.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

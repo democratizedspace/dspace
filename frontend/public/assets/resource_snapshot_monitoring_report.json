@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/resource_snapshot_monitoring_report.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "resource snapshot",
+    "item_id": "f5a1b52f-6c31-4dd1-aeb3-4919cb3d6d4b",
+    "entity_type": "item",
+    "prompt": "A printed or tablet-style monitoring snapshot laid on a desk beside a compact computer node, showing abstract charts, telemetry blocks, and system health panels that imply CPU, memory, and disk baseline collection from Ubuntu monitoring commands. The layout should communicate a timestamped resource baseline and comparative metrics review without any readable text. Nearby cabling and a small status display help anchor it in a real homelab or systems environment.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future infrastructure aesthetic: soft desk lighting, realistic paper or glass screen surfaces, metal chassis detail, no logos, no readable labels, and no identifiable faces. Keep the report centered and uncluttered so it clearly reads as a systems resource snapshot artifact.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
