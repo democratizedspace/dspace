@@ -2382,7 +2382,7 @@
         "id": "e8b3953c-943e-5a71-821a-a84f206c072a",
         "name": "Calibrate a digital multimeter using a 220 \u03a9 reference resistor completion note",
         "description": "A process-specific completion note documenting successful execution of \"Calibrate a digital multimeter using a 220 \u03a9 reference resistor\".",
-        "image": "/assets/flashlight_9v_measurement_completion_note.jpg",
+        "image": "/assets/temperature_log_csv_export.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2398,7 +2398,7 @@
         "id": "d43f0faa-1506-5266-8879-fb14b1819146",
         "name": "Calibrate EC meter with 1000 ppm solution completion note",
         "description": "A process-specific completion note documenting successful execution of \"Calibrate EC meter with 1000 ppm solution\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/flashlight_9v_measurement_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2622,7 +2622,7 @@
         "id": "38c83665-caa7-55bd-a138-8858bbac0e66",
         "name": "Measure a red flashlight's 9 V battery with a digital multimeter completion note",
         "description": "A process-specific completion note documenting successful execution of \"Measure a red flashlight's 9 V battery with a digital multimeter\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/flashlight_9v_measurement_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
