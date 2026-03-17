@@ -7,4 +7,4 @@
     "prompt": "A monitoring report page laid on a desk beside a small single-board computer node and a status display, showing comparative charts and telemetry blocks implied by shapes and layout. The scene should clearly communicate local-versus-remote metrics review without readable text.\n\nPhotorealistic 512×512 image with soft desk lighting, realistic paper, metal, and PCB textures, no logos, no readable labels, and no identifiable faces. Keep the report centered and uncluttered.",
     "image_model": "ChatGPT Create Image",
     "resolution": "512x512"
-  }
+}

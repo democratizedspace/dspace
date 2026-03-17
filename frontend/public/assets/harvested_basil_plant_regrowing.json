@@ -1,10 +1,10 @@
 {
-  "filename": "/assets/harvested_basil_plant_regrowing.jpg",
-  "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
-  "item_name": "harvested basil plant",
-  "item_id": "29190faf-8581-4769-b871-f0ee283840e1",
-  "entity_type": "item",
-  "prompt": "A hydroponic basil plant just after harvest, with several stems cut back cleanly and fresh remaining leaves still visible above the reservoir. The image should communicate recent pruning and regrowth potential, with trimmed stems and a few removed leaves nearby making it obvious this is not a fully mature untouched plant.\n\nUltra-detailed, photorealistic 512×512 image with a bright near-future hydroponics aesthetic: soft greenhouse lighting, realistic cut stems and leaf texture, no logos, no readable text, and no identifiable faces. Keep the plant centered and tidy so it reads clearly as a DSPACE post-harvest crop icon.",
-  "image_model": "ChatGPT Create Image",
-  "resolution": "512x512"
+    "filename": "/assets/harvested_basil_plant_regrowing.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "harvested basil plant",
+    "item_id": "29190faf-8581-4769-b871-f0ee283840e1",
+    "entity_type": "item",
+    "prompt": "A hydroponic basil plant just after harvest, with several stems cut back cleanly and fresh remaining leaves still visible above the reservoir. The image should communicate recent pruning and regrowth potential, with trimmed stems and a few removed leaves nearby making it obvious this is not a fully mature untouched plant.\n\nUltra-detailed, photorealistic 512×512 image with a bright near-future hydroponics aesthetic: soft greenhouse lighting, realistic cut stems and leaf texture, no logos, no readable text, and no identifiable faces. Keep the plant centered and tidy so it reads clearly as a DSPACE post-harvest crop icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
 }
