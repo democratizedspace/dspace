@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/green_pla_calibration_cube_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament completion note",
+    "item_id": "31ec9f48-17e7-5177-a133-552f465f2ac4",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting a successful 3D print of a 20 mm calibration cube on an entry-level FDM printer using green PLA. The image shows a compact desktop 3D printer, a freshly printed green cube on or beside the build plate, calipers for checking dimensions, and a printed completion note with cube outlines, layer markers, and verification stamps without readable text. The scene should clearly signal dimensional accuracy and beginner fabrication success.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future fabrication-lab aesthetic: soft workshop lighting, realistic PLA sheen, metal rails, and textured paper surfaces, no logos, no readable labels, and no identifiable faces. Keep the cube and note centered and visually clean so the image works well as a DSPACE inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

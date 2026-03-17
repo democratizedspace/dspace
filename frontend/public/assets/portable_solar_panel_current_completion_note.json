@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/portable_solar_panel_current_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Measure a portable solar panel's short-circuit current in direct sun completion note",
+    "item_id": "77772dc2-a10a-5523-9383-b8541c6e8019",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting measurement of a portable solar panel's short-circuit current in direct sun. The image shows a foldable or compact solar panel outdoors in bright sunlight, test leads connected through a meter setup, and a nearby rugged clipboard or completion card with current bars and measurement symbols implied without readable text. The panel should clearly read as a small personal solar device, not a rooftop installation.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future renewable-energy field-test aesthetic: soft natural daylight, realistic glass, polymer fabric, wire, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the panel, test setup, and note centered and uncluttered so the measurement task is unmistakable.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

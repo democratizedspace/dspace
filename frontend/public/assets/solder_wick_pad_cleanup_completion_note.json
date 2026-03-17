@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/solder_wick_pad_cleanup_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Remove solder from a PCB pad with solder wick and a soldering iron completion note",
+    "item_id": "976d6af7-76ab-5f12-aad9-f78080a40c6a",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting removal of solder from a PCB pad with solder wick and a soldering iron. The image shows a close-up board with a copper braid wick touching a pad, soldering iron positioned safely in-use, and a nearby completion note with pad-cleanup stages and absorbent-braid icons implied without readable text. The scene should clearly distinguish desoldering cleanup from fresh solder assembly.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-rework aesthetic: soft task lighting, realistic copper braid texture, metallic solder shine, matte PCB finish, and paper surfaces, no logos, no readable labels, no unsafe behavior, and no identifiable faces. Keep the pad, wick, and note central and highly legible so the desoldering action is obvious.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

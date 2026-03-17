@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ed25519_ssh_key_pi_node_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Generate an ed25519 SSH key pair on a laptop and copy it to a Pi cluster node completion note",
+    "item_id": "0beb2e5d-5677-516d-9b8c-b735f06c09b7",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting generation of an ed25519 SSH key pair on a laptop and successful copy to a Pi cluster node. The image shows an open laptop, a compact Raspberry Pi-style node, an Ethernet-connected workspace, and a completion note with key icons, transfer arrows, and verification stamps suggested by visual symbols rather than readable terminal text. The setup should clearly communicate secure remote access being established between personal computer and cluster node.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future cybersecurity homelab aesthetic: soft desk lighting, realistic aluminum laptop, PCB, and cable textures, no logos, no readable labels, and no identifiable faces. Keep the note central and the laptop-to-node relationship obvious so the image works as a secure-access completion artifact.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

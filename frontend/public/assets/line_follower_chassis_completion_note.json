@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/line_follower_chassis_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Assemble and align a line-follower robot chassis completion note",
+    "item_id": "469f56ef-ac13-5544-9ed3-bbc7827f913f",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting assembly and alignment of a line-follower robot chassis. The image shows a small wheeled robot chassis with reflectance sensors underneath or at the front, carefully aligned wheels, a screwdriver, and a completion note featuring chassis outlines, wheel alignment arcs, and sensor placement diagrams without readable text. The robot should clearly look like an educational line-following platform rather than a generic toy.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future robotics-lab aesthetic: soft workshop lighting, realistic acrylic or metal chassis parts, rubber tires, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the robot centered and the note close by so the assembly milestone is obvious.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

@@ -2246,7 +2246,7 @@
         "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
         "name": "thermistor calibration record",
         "description": "Ice-bath and boiling-point checkpoints captured during thermistor calibration with tolerance notes.",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/thermistor_calibration_record.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2270,7 +2270,7 @@
         "id": "98880266-a304-503f-829d-d32f7c7a10cd",
         "name": "Clone a mint cutting in a soaked starter plug completion note",
         "description": "A process-specific completion note documenting successful execution of \"Clone a mint cutting in a soaked starter plug\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/mint_cutting_clone_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2278,7 +2278,7 @@
         "id": "603d3b76-8101-5d36-86ca-26d51a57fae2",
         "name": "Mask a rocket body tube with masking tape for painting completion note",
         "description": "A process-specific completion note documenting successful execution of \"Mask a rocket body tube with masking tape for painting\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/rocket_body_tube_masking_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2286,7 +2286,7 @@
         "id": "06d1e7c0-24b2-5d9b-98b0-0e01013e93df",
         "name": "Deposit 10 dUSD into savings jar completion note",
         "description": "A process-specific completion note documenting successful execution of \"Deposit 10 dUSD into savings jar\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/dusd_savings_jar_deposit_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2294,7 +2294,7 @@
         "id": "706914bf-3a54-5dfc-86fd-4ee0504dbd88",
         "name": "Launch DSPACE with Docker Compose completion note",
         "description": "A process-specific completion note documenting successful execution of \"Launch DSPACE with Docker Compose\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/dspace_docker_compose_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2302,7 +2302,7 @@
         "id": "00f13389-718f-54f0-a898-2fe80c2e399f",
         "name": "Create a Cloudflare Tunnel to port 3002 completion note",
         "description": "A process-specific completion note documenting successful execution of \"Create a Cloudflare Tunnel to port 3002\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/cloudflare_tunnel_port_3002_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2310,7 +2310,7 @@
         "id": "0aa3fa16-e283-547b-921d-a2846487452c",
         "name": "Join nodes to a k3s cluster completion note",
         "description": "A process-specific completion note documenting successful execution of \"Join nodes to a k3s cluster\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/k3s_join_nodes_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2342,7 +2342,7 @@
         "id": "77772dc2-a10a-5523-9383-b8541c6e8019",
         "name": "Measure a portable solar panel's short-circuit current in direct sun completion note",
         "description": "A process-specific completion note documenting successful execution of \"Measure a portable solar panel's short-circuit current in direct sun\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/portable_solar_panel_current_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2358,7 +2358,7 @@
         "id": "817a5a34-d910-5e86-8405-1616e4784a96",
         "name": "Measure a 220 \u03a9 resistor with a digital multimeter completion note",
         "description": "A process-specific completion note documenting successful execution of \"Measure a 220 \u03a9 resistor with a digital multimeter\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/resistor_220ohm_measurement_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2374,7 +2374,7 @@
         "id": "369d6803-3bc1-531b-8111-40f905408fe6",
         "name": "Measure a photoresistor's resistance using a digital multimeter completion note",
         "description": "A process-specific completion note documenting successful execution of \"Measure a photoresistor's resistance using a digital multimeter\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/photoresistor_resistance_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2382,7 +2382,7 @@
         "id": "e8b3953c-943e-5a71-821a-a84f206c072a",
         "name": "Calibrate a digital multimeter using a 220 \u03a9 reference resistor completion note",
         "description": "A process-specific completion note documenting successful execution of \"Calibrate a digital multimeter using a 220 \u03a9 reference resistor\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/flashlight_9v_measurement_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2390,7 +2390,7 @@
         "id": "40e6a342-00d1-593b-bf63-369c48254237",
         "name": "Clip an anti-static wrist strap to ground before handling electronics completion note",
         "description": "A process-specific completion note documenting successful execution of \"Clip an anti-static wrist strap to ground before handling electronics\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/antistatic_wrist_strap_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2430,7 +2430,7 @@
         "id": "75fa5fa4-b260-53a4-9f22-9c6da3fc08c4",
         "name": "Wash and bandage a minor cut completion note",
         "description": "A process-specific completion note documenting successful execution of \"Wash and bandage a minor cut\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/minor_cut_bandage_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2446,7 +2446,7 @@
         "id": "5a68e242-1f01-5040-b12b-0cd8e3a44ae2",
         "name": "Observe Jupiter's four Galilean moons through a basic telescope completion note",
         "description": "A process-specific completion note documenting successful execution of \"Observe Jupiter's four Galilean moons through a basic telescope\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/jupiter_galilean_moons_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2462,7 +2462,7 @@
         "id": "809ef57c-b9e6-55a9-93ce-7c6b34491a4e",
         "name": "Clear an out-of-range Venus sketch before corrective retest completion note",
         "description": "A process-specific completion note documenting successful execution of \"Clear an out-of-range Venus sketch before corrective retest\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/venus_sketch_correction_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2494,7 +2494,7 @@
         "id": "7781533e-65c3-57dd-88ae-b8361849f874",
         "name": "Upload and run the Servo Sweep example on an Arduino Uno completion note",
         "description": "A process-specific completion note documenting successful execution of \"Upload and run the Servo Sweep example on an Arduino Uno\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/arduino_servo_sweep_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2502,7 +2502,7 @@
         "id": "28a02dff-9e19-5cc6-a14c-c26db1ab8ae2",
         "name": "Upload the Blink sketch to an Arduino Uno and flash a 5 mm LED on a breadboard completion note",
         "description": "A process-specific completion note documenting successful execution of \"Upload the Blink sketch to an Arduino Uno and flash a 5 mm LED on a breadboard\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/arduino_blink_led_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2510,7 +2510,7 @@
         "id": "0556d7cb-ba19-5cfb-8f20-fac2d29cd986",
         "name": "Dim an LED with a potentiometer on Arduino completion note",
         "description": "A process-specific completion note documenting successful execution of \"Dim an LED with a potentiometer on Arduino\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/arduino_led_potentiometer_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2518,7 +2518,7 @@
         "id": "5c53be8c-2ae7-51bf-ba5a-74871facfc46",
         "name": "Log Arduino temperature data on a Raspberry Pi completion note",
         "description": "A process-specific completion note documenting successful execution of \"Log Arduino temperature data on a Raspberry Pi\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/arduino_temperature_logging_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2526,7 +2526,7 @@
         "id": "496be601-fcab-5e9e-ad1b-09d28b9ffb2a",
         "name": "Install pyserial on a Raspberry Pi completion note",
         "description": "A process-specific completion note documenting successful execution of \"Install pyserial on a Raspberry Pi\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/pyserial_raspberry_pi_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2534,7 +2534,7 @@
         "id": "31ec9f48-17e7-5177-a133-552f465f2ac4",
         "name": "3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament completion note",
         "description": "A process-specific completion note documenting successful execution of \"3D print a 20 mm calibration cube on an entry-level FDM 3D printer using 15 g of green PLA filament\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/green_pla_calibration_cube_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2542,7 +2542,7 @@
         "id": "143d4159-f518-56d1-9400-f7b0440e9fa1",
         "name": "Strip 5 mm of insulation from a jumper wire completion note",
         "description": "A process-specific completion note documenting successful execution of \"Strip 5 mm of insulation from a jumper wire\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/jumper_wire_stripping_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2550,7 +2550,7 @@
         "id": "8ebca648-48b9-500c-bf46-194218bde9b2",
         "name": "Join two jumper wires using a soldering iron kit, flux pen, helping hands tool, and safety goggles completion note",
         "description": "A process-specific completion note documenting successful execution of \"Join two jumper wires using a soldering iron kit, flux pen, helping hands tool, and safety goggles\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/jumper_wire_solder_join_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2574,7 +2574,7 @@
         "id": "1bcac360-c46d-5679-b660-0556797bb92b",
         "name": "Use gloves, gauze, and antiseptic from a first aid kit to control a minor nosebleed completion note",
         "description": "A process-specific completion note documenting successful execution of \"Use gloves, gauze, and antiseptic from a first aid kit to control a minor nosebleed\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/first_aid_nosebleed_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2590,7 +2590,7 @@
         "id": "553c77af-517f-5abc-b120-7ad62a1c2fa7",
         "name": "Verify USB cable continuity with a digital multimeter completion note",
         "description": "A process-specific completion note documenting successful execution of \"Verify USB cable continuity with a digital multimeter\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/usb_cable_continuity_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2598,7 +2598,7 @@
         "id": "071bb96b-7bd4-5ba1-9d67-89ffc3c3d430",
         "name": "Measure the 5 V pin on an Arduino Uno using a digital multimeter completion note",
         "description": "A process-specific completion note documenting successful execution of \"Measure the 5 V pin on an Arduino Uno using a digital multimeter\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/arduino_5v_multimeter_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2606,7 +2606,7 @@
         "id": "5c36c724-c8ea-5e57-9e12-9ce1337f57be",
         "name": "Heat the soldering iron and melt solder on the tip while wearing safety goggles completion note",
         "description": "A process-specific completion note documenting successful execution of \"Heat the soldering iron and melt solder on the tip while wearing safety goggles\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/soldering_iron_tinning_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2638,7 +2638,7 @@
         "id": "976d6af7-76ab-5f12-aad9-f78080a40c6a",
         "name": "Remove solder from a PCB pad with solder wick and a soldering iron completion note",
         "description": "A process-specific completion note documenting successful execution of \"Remove solder from a PCB pad with solder wick and a soldering iron\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/solder_wick_pad_cleanup_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2646,7 +2646,7 @@
         "id": "0c89e49a-2640-5678-8413-61a9fc13cf95",
         "name": "Bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set completion note",
         "description": "A process-specific completion note documenting successful execution of \"Bolt a micro servo to a base and attach its plastic horn as an arm with a precision screwdriver set\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/micro_servo_mount_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2654,7 +2654,7 @@
         "id": "86d96762-f9ea-550e-8077-fc522e4b5e32",
         "name": "Solder a 220 \u03a9 SMD resistor onto a PCB using a flux pen and precision tweezers completion note",
         "description": "A process-specific completion note documenting successful execution of \"Solder a 220 \u03a9 SMD resistor onto a PCB using a flux pen and precision tweezers\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/smd_resistor_soldering_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2670,7 +2670,7 @@
         "id": "7621a455-4501-51be-83d7-96a9e3310e96",
         "name": "Place a heat-resistant silicone mat on the workbench before powering the soldering iron completion note",
         "description": "A process-specific completion note documenting successful execution of \"Place a heat-resistant silicone mat on the workbench before powering the soldering iron\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/silicone_mat_soldering_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2678,7 +2678,7 @@
         "id": "820e84da-b4f7-5554-8ccf-28c4c21942d6",
         "name": "Place a solder fume extractor near the workspace and switch it on before soldering completion note",
         "description": "A process-specific completion note documenting successful execution of \"Place a solder fume extractor near the workspace and switch it on before soldering\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/fume_extractor_setup_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2686,7 +2686,7 @@
         "id": "0beb2e5d-5677-516d-9b8c-b735f06c09b7",
         "name": "Generate an ed25519 SSH key pair on a laptop and copy it to a Pi cluster node completion note",
         "description": "A process-specific completion note documenting successful execution of \"Generate an ed25519 SSH key pair on a laptop and copy it to a Pi cluster node\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/ed25519_ssh_key_pi_node_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2694,7 +2694,7 @@
         "id": "79122cb3-a9a5-571c-a363-3f6a63a3f35c",
         "name": "Disable password login and root SSH access, then restart sshd completion note",
         "description": "A process-specific completion note documenting successful execution of \"Disable password login and root SSH access, then restart sshd\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/ssh_hardening_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2726,7 +2726,7 @@
         "id": "872613aa-d953-5e8e-8ce3-ec699b0be6a5",
         "name": "Trim excess leads from a soldered 220 \u03a9 resistor using wire cutters completion note",
         "description": "A process-specific completion note documenting successful execution of \"Trim excess leads from a soldered 220 \u03a9 resistor using wire cutters\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/resistor_lead_trimming_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2734,7 +2734,7 @@
         "id": "36599833-8570-5f18-b6cf-0ab2040fc673",
         "name": "Replace the 9 V battery in a model rocket launch controller completion note",
         "description": "A process-specific completion note documenting successful execution of \"Replace the 9 V battery in a model rocket launch controller\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/rocket_launch_controller_battery_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2742,7 +2742,7 @@
         "id": "6724897a-9d96-5948-a36e-b184434a909b",
         "name": "Calibrate floor-versus-line reflectance thresholds completion note",
         "description": "A process-specific completion note documenting successful execution of \"Calibrate floor-versus-line reflectance thresholds\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/line_reflectance_threshold_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2766,7 +2766,7 @@
         "id": "9a72ba0f-bc9e-5e0c-8fc4-a3ad3d55777d",
         "name": "Install aquarium LED fixture and run first photoperiod cycle completion note",
         "description": "A process-specific completion note documenting successful execution of \"Install aquarium LED fixture and run first photoperiod cycle\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/aquarium_led_photoperiod_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2774,7 +2774,7 @@
         "id": "469f56ef-ac13-5544-9ed3-bbc7827f913f",
         "name": "Assemble and align a line-follower robot chassis completion note",
         "description": "A process-specific completion note documenting successful execution of \"Assemble and align a line-follower robot chassis\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/line_follower_chassis_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2790,7 +2790,7 @@
         "id": "2cbdb1b9-0cd3-508d-aa3f-5485b78c8117",
         "name": "Assemble and calibrate a pan-tilt servo mount completion note",
         "description": "A process-specific completion note documenting successful execution of \"Assemble and calibrate a pan-tilt servo mount\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/pan_tilt_servo_mount_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/photoresistor_resistance_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Measure a photoresistor's resistance using a digital multimeter completion note",
+    "item_id": "369d6803-3bc1-531b-8111-40f905408fe6",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting measurement of a photoresistor's resistance using a digital multimeter. The image shows a small light-dependent resistor on a work mat, multimeter probes contacting its leads, and a nearby note with light-level diagrams and resistance verification blocks suggested through shapes and icons rather than readable text. The setup should make the sensor itself visually clear and distinct from other common components.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-lab aesthetic: soft task lighting, realistic ceramic sensor face, copper leads, meter probes, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the composition simple, centered, and precise so the sensor measurement task is unmistakable.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

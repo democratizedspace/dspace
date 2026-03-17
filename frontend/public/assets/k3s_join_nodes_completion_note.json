@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/k3s_join_nodes_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Join nodes to a k3s cluster completion note",
+    "item_id": "0aa3fa16-e283-547b-921d-a2846487452c",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting worker nodes successfully joining a k3s cluster. The scene shows a compact cluster of small computer nodes with network cables, tiny status LEDs, and a nearby printed or tablet-based completion record featuring a cluster topology sketch, node icons, and successful join markers without readable text. The equipment should feel like a real homelab: practical, slightly rugged, and carefully organized.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future homelab aesthetic: soft cool lighting, realistic metal heatsinks, Ethernet cables, and plastic enclosures, no logos, no readable labels, and no clear faces. Keep the note and cluster hardware prominent so the image reads as infrastructure setup proof for DSPACE.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

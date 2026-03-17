@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/silicone_mat_soldering_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Place a heat-resistant silicone mat on the workbench before powering the soldering iron completion note",
+    "item_id": "7621a455-4501-51be-83d7-96a9e3310e96",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting placement of a heat-resistant silicone mat on the workbench before powering the soldering iron. The image shows a neatly arranged electronics bench with a prominent silicone work mat, soldering station still safe and idle, small tools, and a completion note with setup-order blocks and heat-safety symbols implied without readable text. The scene should emphasize preparation and hazard reduction before active soldering begins.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-workshop aesthetic: soft task lighting, realistic silicone surface texture, metal tools, and matte paper detail, no logos, no readable labels, no unsafe behavior, and no identifiable faces. Keep the mat and note central so the pre-solder setup step is clear at a glance.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

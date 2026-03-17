@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/pan_tilt_servo_mount_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Assemble and calibrate a pan-tilt servo mount completion note",
+    "item_id": "2cbdb1b9-0cd3-508d-aa3f-5485b78c8117",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting assembly and calibration of a pan-tilt servo mount. The scene shows a compact two-axis servo bracket on a bench, a small controller board nearby, a screwdriver and hex tools, and a completion note with angle arcs, calibration marks, and alignment diagrams implied without readable text. The pose of the mount should clearly communicate motion range and mechanical tuning.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future robotics-workshop aesthetic: soft bench lighting, realistic anodized metal, servo plastic, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the pan-tilt mechanism centered and uncluttered so the calibration artifact reads immediately.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

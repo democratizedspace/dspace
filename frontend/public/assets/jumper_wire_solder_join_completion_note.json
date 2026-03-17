@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/jumper_wire_solder_join_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Join two jumper wires using a soldering iron kit, flux pen, helping hands tool, and safety goggles completion note",
+    "item_id": "8ebca648-48b9-500c-bf46-194218bde9b2",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting joining two jumper wires using a soldering iron kit, flux pen, helping hands tool, and safety goggles. The image shows two colored wires aligned in a helping-hands clamp, soldering tools arranged neatly nearby, protective goggles partly visible, and a completion note with splice diagrams and staged join icons implied without readable text. The scene should read as a careful beginner-to-intermediate electronics repair milestone.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-workshop aesthetic: soft bench lighting, realistic copper strands, insulation sleeves, metal clamps, and paper textures, no logos, no readable labels, no unsafe behavior, and no identifiable faces. Keep the wire splice and completion note centered so the successful join is visually unambiguous.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

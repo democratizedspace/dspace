@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/minor_cut_bandage_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Wash and bandage a minor cut completion note",
+    "item_id": "75fa5fa4-b260-53a4-9f22-9c6da3fc08c4",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting washing and bandaging a minor cut. The image shows a clean first-aid setup with bandages, water or rinse supplies, and a small care log card with step icons and completion checkmarks implied by layout rather than readable text. Keep the scene non-graphic and focused on the supplies and result, emphasizing calm self-care and proper basic treatment.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future home first-aid aesthetic: soft bathroom or tabletop lighting, realistic fabric bandage, paper packaging, and skin-safe material textures, no logos, no readable labels, no gore, and no identifiable faces. Keep the supplies and note centered and reassuring so the image reads as a safe completion artifact.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

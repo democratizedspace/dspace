@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/pyserial_raspberry_pi_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Install pyserial on a Raspberry Pi completion note",
+    "item_id": "496be601-fcab-5e9e-ad1b-09d28b9ffb2a",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting installation of pyserial on a Raspberry Pi. The image shows a Raspberry Pi-style computer on a desk, a nearby laptop or monitor, a USB cable ready for serial work, and a completion note with package, terminal, and serial-link symbols arranged as non-readable visual blocks. The scene should feel like a small software-and-hardware integration task completed successfully in a homelab.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future homelab coding aesthetic: soft desk lighting, realistic PCB, cable insulation, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the Pi board and completion note prominent and uncluttered so the software installation context comes through clearly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

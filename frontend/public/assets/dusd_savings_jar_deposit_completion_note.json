@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/dusd_savings_jar_deposit_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Deposit 10 dUSD into savings jar completion note",
+    "item_id": "06d1e7c0-24b2-5d9b-98b0-0e01013e93df",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting a deposit of 10 dUSD into a savings jar. The scene shows a clear or tinted jar with a few digital-physical token markers, coin-like objects, and a small ledger slip or tablet confirmation resting beside it, implying a personal finance ritual completed successfully. The arrangement should feel intentional and budget-oriented, with the savings jar as the hero object and subtle visual cues of measured progress rather than consumerism.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future personal-finance aesthetic: soft home-desk lighting, realistic glass, ceramic, and paper textures, muted solarpunk colors, no bank logos, no readable labels, and no identifiable faces. Keep the composition simple and centered so it reads as a financial completion artifact for DSPACE.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

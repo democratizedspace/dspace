@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mint_cutting_clone_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Clone a mint cutting in a soaked starter plug completion note",
+    "item_id": "98880266-a304-503f-829d-d32f7c7a10cd",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting cloning a mint cutting in a soaked starter plug. The image shows a fresh mint sprig inserted into a moist starter plug or propagation cube, a small tray or humidity setup nearby, and a completion note with root-growth stage icons and propagation checks implied without readable text. The scene should feel lush, careful, and clearly botanical rather than generic gardening.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk horticulture aesthetic: soft greenhouse or windowsill lighting, realistic leaf veins, moist growing media, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the mint cutting and note centered and uncluttered so the propagation milestone reads clearly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
