@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/poe_plus_switch.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "PoE+ switch",
+    "item_id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+    "entity_type": "item",
+    "prompt": "A compact PoE+ network switch resting on a tidy rack shelf or bench, with multiple Ethernet ports populated by clean cables and subtle status lights implied by tiny glows. The device should clearly read as infrastructure hardware that powers multiple devices while providing data connectivity, with cable routing and airflow space suggesting real deployment in a homelab or workshop environment. Keep the form factor practical and unbranded.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future infrastructure aesthetic: soft workshop lighting, realistic metal housing, cable jackets, and indicator lights, no logos, no readable labels, and no identifiable faces. Keep the switch centered and uncluttered so it works well as a hardware inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

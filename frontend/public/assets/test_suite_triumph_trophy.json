@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/test_suite_triumph_trophy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Test Suite Triumph Trophy",
+    "item_id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
+    "entity_type": "item",
+    "prompt": "An anodized aluminum trophy on a clean desk or build bench, designed to celebrate a fully tested and verified CI-parity run. The form should feel sleek and technical, with crisp machined surfaces, stable base geometry, and a subtle sense of software achievement without showing readable text. Nearby hints like a keyboard, test dashboard glow, or cable neatly out of focus can reinforce the theme of validated engineering success.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future engineering aesthetic: soft desk lighting, realistic brushed and anodized metal textures, no logos, no readable labels, and no identifiable faces. Keep the trophy centered and elegant so it reads as a distinct software-achievement award item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

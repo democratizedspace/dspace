@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stevia_sensory_calibration_cup_set.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia sensory calibration cup set",
+    "item_id": "23f49dfd-f7c6-421c-ac29-5b891d57bf97",
+    "entity_type": "item",
+    "prompt": "A set of coded baseline tasting cups arranged in a neat row for sensory calibration before a blind stevia panel. The cups should contain subtly different clear or faintly tinted solutions, with the arrangement clearly communicating reference standards used to align panelists on sweetness scale. Keep the setup clean and procedural, with a tasting mat or tray nearby but no readable codes.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future food-testing aesthetic: soft tabletop lighting, realistic cup materials, liquid reflections, and clean tray surfaces, no logos, no readable text, and no identifiable faces. Keep the cup set centered and uncluttered so it reads instantly as a sensory calibration item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

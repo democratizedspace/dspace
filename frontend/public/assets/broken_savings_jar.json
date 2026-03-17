@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/broken_savings_jar.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "broken savings jar",
+    "item_id": "f797d8de-11c5-4f89-a725-c2ac2255d173",
+    "entity_type": "item",
+    "prompt": "A shattered glass savings jar on a tabletop, with scattered coin-like tokens or abstract value markers spilled out around the broken remains. The composition should clearly show that the savings jar has been intentionally broken open to release stored value, while keeping the scene safe and non-gory with no hands in frame. Make the glass fragments and spilled contents visually central and distinct from any chemistry lab context.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future domestic-tech aesthetic: soft indoor lighting, realistic broken glass and scattered token textures, no logos, no readable text, and no identifiable faces. Keep the composition clear and uncluttered so it reads instantly as a broken savings jar item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

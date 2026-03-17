@@ -41,7 +41,7 @@
         "id": "946b07b7-2b2c-4507-a725-edb270d8e910",
         "name": "Rocket Award",
         "description": "15 cm tall brushed aluminum rocket trophy awarded for printing your first model rocket.",
-        "image": "/assets/rocket_award.jpg",
+        "image": "/assets/rocket_award_trophy.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
             "passes": 1,
@@ -311,7 +311,7 @@
         "id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
         "name": "Test Suite Triumph Trophy",
         "description": "Anodized aluminum trophy for a clean, tested-and-verified CI-parity run.",
-        "image": "/assets/rocket_award.jpg",
+        "image": "/assets/test_suite_triumph_trophy.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
             "passes": 0,

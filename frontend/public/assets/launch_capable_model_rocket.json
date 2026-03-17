@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/launch_capable_model_rocket.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "launch-capable model rocket",
+    "item_id": "aaa5fbca-54a1-40a5-8461-24dc2ef81d4d",
+    "entity_type": "item",
+    "prompt": "A 35 cm launch-capable model rocket standing upright on a small launch pad in an open field, with a compact remote controller nearby, recovery wadding implied through packing materials, and proportions suited to a B6-4 motor class hobby rocket. The airframe should look practical and ready for flight, with fins, nose cone, launch rod guide, and light prep gear visible. Make it clearly a hobby launch setup rather than a fantasy spacecraft.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future rocketry aesthetic: soft outdoor lighting, realistic painted tube body, metal pad hardware, and grassy field textures, no logos, no readable text, and no identifiable faces. Keep the rocket centered and the scene uncluttered so it reads cleanly as a launch-ready inventory item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

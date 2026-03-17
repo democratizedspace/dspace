@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ph_strip_single.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "pH strip",
+    "item_id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+    "entity_type": "item",
+    "prompt": "A single disposable pH test strip presented on a clean chemistry surface, with distinct segmented color zones and a small droplet test context implying broad-range pH measurement from 0 to 14. The strip should look lightweight and clearly disposable, with simple supporting lab context such as a sample droplet or small dish nearby. Make it unmistakable that this is a paper test strip rather than an electronic probe.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future chemistry aesthetic: soft bench lighting, realistic paper fibers, tiny liquid reflections, no logos, no readable labels, and no identifiable faces. Keep the strip centered and uncluttered so it reads instantly as a consumable pH testing item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

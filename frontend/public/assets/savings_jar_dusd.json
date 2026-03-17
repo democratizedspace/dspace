@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/savings_jar_dusd.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "savings jar",
+    "item_id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
+    "entity_type": "item",
+    "prompt": "A sturdy glass savings jar on a shelf or desk, partially filled with stylized coin-like tokens or abstract value markers representing stored dUSD. The jar should feel symbolic but grounded, with a simple reusable household form and a sense of accumulated savings. Make it clearly intact and functional, distinct from laboratory sweetener jars and not branded like a commercial bank prop.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future domestic-tech aesthetic: soft indoor lighting, realistic clear glass, subtle metallic or token textures, no logos, no readable text, and no identifiable faces. Keep the jar centered and uncluttered so it reads instantly as a savings container item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

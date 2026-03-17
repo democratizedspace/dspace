@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/planetary_alignment_witness_chart.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "planetary alignment witness chart",
+    "item_id": "40b059e7-a11d-49da-8aed-05570804c036",
+    "entity_type": "item",
+    "prompt": "A carefully prepared star-observation witness chart resting on a field clipboard at dusk, showing circular sky geometry, horizon reference silhouettes, altitude bands, and plotted planetary spacing implied by dots, arcs, and guide lines rather than readable text. A red flashlight, compact pencil, and distant tripod silhouette hint that the chart was used during a narrow alignment window for later verification. The sheet should feel like a real observational record, not a decorative star map.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future astronomy aesthetic: soft twilight lighting, realistic paper and clipboard textures, subtle sky glow, no logos, no readable text, and no identifiable faces. Keep the chart dominant in frame with a clean composition so it reads immediately as a planetary alignment witness document.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

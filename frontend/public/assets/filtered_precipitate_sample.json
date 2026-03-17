@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/filtered_precipitate_sample.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "filtered precipitate sample",
+    "item_id": "487c7586-a6f4-4fff-a210-979497f6380f",
+    "entity_type": "item",
+    "prompt": "A small laboratory sample setup showing recovered precipitate collected after filtration, with a shallow dish or filter paper holding damp solid residue beside a clear vessel of decanted liquid. The arrangement suggests follow-up analysis and disposal routing, with a labeled-by-layout sample note card, pipette, and simple bench tools nearby. The contrast between the separated solid and clarified liquid should make it unmistakable that this is a filtered precipitate sample rather than a raw reagent.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future chemistry bench aesthetic: soft task lighting, realistic glass, paper, and damp mineral textures, no logos, no readable labels, and no identifiable faces. Keep the sample centered and the background minimal so the solid-liquid separation reads clearly at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/buffer_adjustment_cycle_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "buffer adjustment cycle log",
+    "item_id": "f7a90006-26fa-4ef0-b587-93edd963bb84",
+    "entity_type": "item",
+    "prompt": "A lab log sheet tracking repeated buffer adjustment cycles, with structured rows for reagent drops, stir intervals, and intermediate pH readbacks shown through boxes, arrows, and plotted marks rather than readable text. A stirring rod, dropper bottle, and compact pH meter sit nearby, making it clear this document records iterative adjustment passes rather than a final recipe. The page should look methodical, with several cycles visibly completed.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future chemistry bench aesthetic: soft task lighting, realistic paper and instrument textures, no logos, no readable text, and no identifiable faces. Keep the cycle log central and uncluttered so it reads clearly as a repeated-process record.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
