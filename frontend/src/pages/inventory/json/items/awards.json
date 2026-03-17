@@ -41,7 +41,7 @@
         "id": "946b07b7-2b2c-4507-a725-edb270d8e910",
         "name": "Rocket Award",
         "description": "15 cm tall brushed aluminum rocket trophy awarded for printing your first model rocket.",
-        "image": "/assets/rocket_award.jpg",
+        "image": "/assets/rocket_award_trophy.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
             "passes": 1,

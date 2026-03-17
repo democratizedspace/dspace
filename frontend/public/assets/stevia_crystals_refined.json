@@ -1,10 +1,10 @@
 {
-  "filename": "/assets/stevia_crystals_refined.jpg",
-  "entity": "frontend/src/pages/inventory/json/items/misc.json",
-  "item_name": "stevia crystals",
-  "item_id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
-  "entity_type": "item",
-  "prompt": "A clean jar or small dish of highly concentrated refined stevia crystals, with bright pale crystals that look purified and ready for use as a sweetener. The presentation should emphasize the final usable form, more polished and uniform than an intermediate crystal lot or slurry. A clean scoop or precise spoon nearby can help communicate this as a finished ingredient.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future food-lab aesthetic: soft bench lighting, realistic crystalline detail, clean glass and utensil textures, no logos, no readable labels, and no identifiable faces. Keep the crystals centered and uncluttered so they read clearly as a finished sweetener item.",
-  "image_model": "Nano Banana Pro",
-  "resolution": "512x512"
+    "filename": "/assets/stevia_crystals_refined.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia crystals",
+    "item_id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+    "entity_type": "item",
+    "prompt": "A clean jar or small dish of highly concentrated refined stevia crystals, with bright pale crystals that look purified and ready for use as a sweetener. The presentation should emphasize the final usable form, more polished and uniform than an intermediate crystal lot or slurry. A clean scoop or precise spoon nearby can help communicate this as a finished ingredient.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future food-lab aesthetic: soft bench lighting, realistic crystalline detail, clean glass and utensil textures, no logos, no readable labels, and no identifiable faces. Keep the crystals centered and uncluttered so they read clearly as a finished sweetener item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
 }
