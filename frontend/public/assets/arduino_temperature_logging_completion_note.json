@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting Arduino temperature data logging on a Raspberry Pi. The scene shows an Arduino-compatible board connected to a Raspberry Pi, a temperature sensor or small probe, and a nearby run log page featuring chart blocks, sensor icons, and captured sample rows implied by shapes rather than readable text. The equipment layout should clearly communicate a successful local data acquisition setup bridging microcontroller and Linux device.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-homelab aesthetic: soft desk lighting, realistic PCB, cable, and paper textures, subtle solarpunk high-tech styling, no logos, no readable labels, and no identifiable faces. Keep the log page centered with the sensor hardware surrounding it so the data-recording purpose is immediately clear.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

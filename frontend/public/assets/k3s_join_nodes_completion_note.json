@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting worker nodes successfully joining a k3s cluster. The scene shows a compact cluster of small computer nodes with network cables, tiny status LEDs, and a nearby printed or tablet-based completion record featuring a cluster topology sketch, node icons, and successful join markers without readable text. The equipment should feel like a real homelab: practical, slightly rugged, and carefully organized.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future homelab aesthetic: soft cool lighting, realistic metal heatsinks, Ethernet cables, and plastic enclosures, no logos, no readable labels, and no clear faces. Keep the note and cluster hardware prominent so the image reads as infrastructure setup proof for DSPACE.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

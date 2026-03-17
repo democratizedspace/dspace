@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting upload and execution of the Servo Sweep example on an Arduino Uno. The image shows an Arduino-style board driving a small servo whose horn is posed at an angle, with jumper wires, a breadboard or direct connection, and a completion note showing arc motion diagrams and timing marks implied without readable text. The setup should clearly communicate periodic back-and-forth servo motion as the tested behavior.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-lab aesthetic: soft workbench lighting, realistic servo plastic, PCB surfaces, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the servo and note centered, with a clean layout that reads immediately as a successful motion-control demo.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

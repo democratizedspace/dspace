@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting calibration of floor-versus-line reflectance thresholds for a line-following robot. The image shows a small reflectance sensor aimed at contrasting dark and light strips, with a nearby robot or test jig and a completion note featuring threshold bars, sensor arcs, and comparison blocks implied without readable text. The setup should make it obvious that the task is sensor tuning for following a line on the ground.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future robotics-lab aesthetic: soft bench lighting, realistic matte surfaces, sensor housings, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the dark-versus-light test surface and note clearly visible so the calibration purpose is unmistakable.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

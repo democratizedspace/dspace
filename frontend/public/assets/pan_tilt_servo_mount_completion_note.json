@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting assembly and calibration of a pan-tilt servo mount. The scene shows a compact two-axis servo bracket on a bench, a small controller board nearby, a screwdriver and hex tools, and a completion note with angle arcs, calibration marks, and alignment diagrams implied without readable text. The pose of the mount should clearly communicate motion range and mechanical tuning.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future robotics-workshop aesthetic: soft bench lighting, realistic anodized metal, servo plastic, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the pan-tilt mechanism centered and uncluttered so the calibration artifact reads immediately.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

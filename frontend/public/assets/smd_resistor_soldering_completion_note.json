@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting soldering a 220 ohm SMD resistor onto a PCB using a flux pen and precision tweezers. The image shows a close-up PCB on a work mat, fine tweezers holding a tiny rectangular resistor, a flux pen nearby, and a small completion note with pad diagrams and staged soldering markers implied without readable text. The scene should communicate fine-motor precision and controlled bench work.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-fabrication aesthetic: soft task lighting, realistic solder sheen, matte PCB soldermask, metal tweezer texture, and paper detail, no logos, no readable labels, no unsafe behavior, and no identifiable faces. Keep the PCB, tiny resistor, and completion note centered and sharply rendered so the micro-soldering task reads clearly.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

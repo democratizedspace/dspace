@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting replacement of the 9 V battery in a model rocket launch controller. The image shows a hobby rocketry launch controller open on a bench, a fresh 9 V battery beside the battery compartment, simple hand tools, and a nearby completion note with battery swap diagrams and continuity-style verification blocks implied by layout rather than text. The scene should feel safe, methodical, and unmistakably tied to amateur rocketry prep.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-workshop aesthetic: soft bench lighting, realistic molded plastic, spring terminals, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the controller and note prominent and uncluttered so the maintenance step reads clearly.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

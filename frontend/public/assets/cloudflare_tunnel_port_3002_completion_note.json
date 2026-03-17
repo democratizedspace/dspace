@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting successful creation of a Cloudflare tunnel forwarding traffic to local port 3002. The scene shows a neat workstation with a laptop terminal window, a small single-board computer or compact server node, a network status display, and a printed or tablet-based completion record featuring diagrams, timestamps, checkmarks, and a tunnel connection flow implied by layout rather than readable text. Ethernet cabling, a small router, and a calm “task finished” arrangement make it clear this is a verified networking setup artifact rather than a generic report.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future homelab aesthetic: soft desk lighting, realistic metal, plastic, and paper textures, subtle solarpunk / high-tech styling, no logos, no readable labels, no clear identifiable faces. Keep the completion note visually central and uncluttered so it reads as a DSPACE proof-of-completion artifact.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

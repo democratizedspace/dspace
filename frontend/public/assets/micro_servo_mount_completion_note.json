@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting a micro servo bolted to a base with its plastic horn attached as an arm using a precision screwdriver set. The image shows a small servo mounted to a bracket or base plate, tiny screws, a compact screwdriver kit, and a nearby completion record with assembly-stage sketches and torque or alignment checkmarks implied by layout rather than readable text. The object should look like a real beginner robotics assembly milestone.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-workshop aesthetic: soft bench lighting, realistic plastic servo housing, small metal fasteners, and textured tools, no logos, no readable labels, and no identifiable faces. Keep the servo assembly and note centered and uncluttered so it reads clearly as a robotics build completion artifact.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

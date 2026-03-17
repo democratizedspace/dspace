@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting placement of a solder fume extractor near the workspace and switching it on before soldering. The image shows an electronics bench with a compact fume extractor positioned beside a soldering area, airflow implied by subtle motion cues, and a completion note with ventilation and prep icons arranged without readable text. The scene should emphasize safe soldering setup before any active joint work begins.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-safety aesthetic: soft task lighting, realistic fan grill, carbon filter housing, metal tools, and paper textures, no logos, no readable labels, no unsafe behavior, and no identifiable faces. Keep the extractor and note central and uncluttered so the safety preparation reads immediately.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

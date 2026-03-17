@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting successful stripping of 5 mm of insulation from a jumper wire. The scene shows a close-up electronics bench with a single colored jumper wire, wire strippers, trimmed insulation offcut, and a small completion note featuring measurement ticks and tool diagrams without readable text. The setup should emphasize precision handwork and careful preparation for low-voltage prototyping.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-workshop aesthetic: soft task lighting, realistic copper, PVC insulation, and hand-tool textures, no logos, no readable labels, and no clear faces. Keep the composition simple and tightly framed so the stripped wire and proof note are instantly readable.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

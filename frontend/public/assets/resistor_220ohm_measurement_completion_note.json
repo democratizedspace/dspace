@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note documenting measurement of a 220 ohm resistor with a digital multimeter. The image shows a single banded resistor centered on a work mat, multimeter probes contacting its leads, and a small completion note with resistor symbols, color-band references, and verification check blocks implied without readable text. The setup should feel like a basic electronics measurement exercise executed carefully.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-bench aesthetic: soft task lighting, realistic resistor coating, metal leads, probe tips, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the resistor and note large in frame so the component measurement is instantly legible.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

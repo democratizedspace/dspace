@@ -7,4 +7,4 @@
     "prompt": "An instrumented thermistor calibration record showing ice-bath and boiling-point checkpoints captured with tolerance notes during sensor calibration. The image centers on a calibration sheet or lab notebook page beside a thermistor probe, a cup or vessel with ice water, a steaming hot vessel for boiling reference, and simple plotted checkpoints and tolerance bands implied through lines and marks rather than readable text. The arrangement should clearly communicate two-point calibration and measured rigor.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab-bench aesthetic: soft task lighting, realistic water, stainless steel, probe cable, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the record page central and uncluttered so it reads as a serious experimental artifact for DSPACE.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}
