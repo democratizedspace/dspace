@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/journalctl_report_page.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "journalctl report",
+    "item_id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+    "entity_type": "item",
+    "prompt": "A printed journal report page lying on a workstation desk beside a keyboard and terminal-lit monitor, showing dense structured service events and timestamps implied by short lines and aligned columns. It should feel like an exported incident-triage artifact, with no readable words.\n\nPhotorealistic 512×512 image with soft desk lighting, realistic paper and keyboard textures, no logos, no readable text, and no identifiable faces. Keep the page centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

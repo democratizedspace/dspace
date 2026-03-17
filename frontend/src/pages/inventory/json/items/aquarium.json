@@ -255,7 +255,7 @@
         "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
         "name": "Dwarf shrimp",
         "description": "Neocaridina davidi (~1.5 cm) algae grazer for 20-26°C planted tanks.",
-        "image": "/assets/dwarf_shrimp_glass_closeup.jpg",
+        "image": "/assets/dwarf_shrimp_neocaridina_closeup.jpg",
         "price": "3 dUSD",
         "unit": "each",
         "hardening": {
@@ -275,7 +275,7 @@
         "id": "011129b7-2190-47dd-b541-8123a2e8a9a3",
         "name": "Drip-acclimated dwarf shrimp",
         "description": "Dwarf shrimp adjusted slowly to tank parameters and ready for net transfer.",
-        "image": "/assets/dwarf_shrimp_glass_closeup.jpg",
+        "image": "/assets/drip_acclimated_dwarf_shrimp.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {

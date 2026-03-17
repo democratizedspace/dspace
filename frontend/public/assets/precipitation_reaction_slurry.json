@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/precipitation_reaction_slurry.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "precipitation reaction slurry",
+    "item_id": "d36caabd-ddb7-4634-8d51-751957be80f4",
+    "entity_type": "item",
+    "prompt": "A cloudy reaction slurry in a beaker placed within a spill tray, with suspended newly formed solids making the liquid visibly opaque and active-looking. Pipettes, reagent containers, and a calm chemistry bench context clarify that this is the moment before filtration in a precipitation workflow.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab aesthetic: soft bench lighting, realistic cloudy liquid and glass textures, no logos, no readable labels, and no identifiable faces. Keep the beaker centered so it reads clearly as a DSPACE reaction-state artifact.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/pine_board_plank_lightweight.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Pine board",
+    "item_id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+    "entity_type": "item",
+    "prompt": "A lightweight pine board plank resting on a maker workbench, with straight edges, visible grain, and a smooth unfinished surface suitable for beginner woodworking projects. A tape measure and simple hand tools nearby hint at practical DIY use.\n\nPhotorealistic 512×512 image with soft task lighting, realistic pine grain and saw-cut texture, no logos, no readable markings, and no identifiable faces. Keep the plank centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

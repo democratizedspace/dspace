@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/galilean_moon_position_chart.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "galilean moon position chart",
+    "item_id": "be314ec9-c289-42e9-a6d6-5acc56779412",
+    "entity_type": "item",
+    "prompt": "A session chart showing Jupiter at center with four moon positions plotted at several times, connected by neat marks showing motion through the night. The page includes mirrored orientation cues and sits near an eyepiece and clipboard, clearly reading as a tracking artifact.\n\nPhotorealistic 512×512 image with soft low field lighting, realistic paper and graphite texture, no logos, no readable text, and no identifiable faces. Keep the chart centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

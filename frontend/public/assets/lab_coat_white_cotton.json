@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/lab_coat_white_cotton.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "lab coat",
+    "item_id": "3455faac-8811-4991-b818-cecb98e8fff7",
+    "entity_type": "item",
+    "prompt": "A clean white knee-length lab coat hanging on a hook or mannequin stand, with snap buttons and two front pockets clearly visible. The coat should look functional and lightly used, suitable for chemistry or workshop safety, without any embroidered names or institutional markings.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab aesthetic: soft even lighting, realistic cotton folds and stitching, no logos, no readable text, and no identifiable faces. Keep the coat centered and uncluttered so it reads clearly as a DSPACE PPE inventory icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/moon_crater_sketch_sheet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "moon crater sketch sheet",
+    "item_id": "55851b57-86b7-4b16-a341-6a831aff0da5",
+    "entity_type": "item",
+    "prompt": "A lunar observation sheet on A5 paper showing a hand-drawn crater rim with shaded interior and directional lighting marks. A telescope eyepiece, pencil, and small clipboard nearby make it clearly a structured moon-observation record rather than casual doodling.\n\nPhotorealistic 512×512 image with soft warm field lighting, realistic paper and graphite texture, no logos, no readable labels, and no identifiable faces. Keep the page centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

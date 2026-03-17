@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ph_down_solution_500ml.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "pH down solution (500 mL)",
+    "item_id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
+    "entity_type": "item",
+    "prompt": "A compact bottle of acidic pH-down solution standing on a hydroponics bench beside a dropper cap and a nutrient sample cup. The bottle should look practical and purpose-built for small controlled adjustments, with nearby reservoir context but no readable labels.\n\nPhotorealistic 512×512 image with soft bench lighting, realistic plastic and liquid textures, no logos, no readable text, and no identifiable faces. Keep the bottle centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

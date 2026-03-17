@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/picture_frame_wooden_square_miter.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Picture frame",
+    "item_id": "7b2c58bc-e484-4110-996c-220cfb7a4ba7",
+    "entity_type": "item",
+    "prompt": "A simple wooden picture frame shown upright on a clean workbench, with square mitered corners, smooth sanded wood grain, and small secure hanging hardware visible on the back edge. The frame should be empty or contain a plain neutral insert with no artwork or readable text, making it unmistakably a generic display frame rather than a compost tool. A few small woodworking details such as a corner clamp, fine sandpaper, or tiny brass hanging parts nearby can reinforce its crafted, household-object identity.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-home aesthetic: soft workshop lighting, realistic wood grain, clean shadows, no logos, no readable labels, and no identifiable faces. Keep the composition uncluttered and centered on the frame so it reads clearly as a simple framed object for DSPACE.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

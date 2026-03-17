@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/conditioned_ph_sample_vial.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "conditioned pH sample vial",
+    "item_id": "44b6c979-b1e2-493e-bb00-4df7e47a66a2",
+    "entity_type": "item",
+    "prompt": "A small clear vial containing a conditioned pH sample resting on a chemistry bench, with a test strip nearby and a calm preparation setup suggesting room-temperature, degassed handling for consistent measurement. Tiny bubbles should be absent or minimal, reinforcing that the sample has been prepared deliberately rather than taken hastily.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab aesthetic: soft bench lighting, realistic glass and liquid transparency, no logos, no readable labels, and no identifiable faces. Keep the vial centered and uncluttered so it reads clearly as a DSPACE measurement-prep artifact.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

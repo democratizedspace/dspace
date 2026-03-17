@@ -22,7 +22,7 @@
         "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
         "name": "Motor Award",
         "description": "12 cm tall brushed aluminum trophy shaped like an Edison Model M motor; awarded to early buyers.",
-        "image": "/assets/motor_award.jpg",
+        "image": "/assets/motor_award_trophy.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
             "passes": 1,
@@ -298,7 +298,7 @@
         "id": "d5d62069-c77d-44b1-8848-b355f8410f74",
         "name": "GitHub Link-Up Trophy",
         "description": "A celebratory Octocat badge awarded for securely connecting GitHub and enabling cloud sync.",
-        "image": "/assets/motor_award.jpg",
+        "image": "/assets/github_link_up_trophy.jpg",
         "priceExemptionReason": "TROPHY",
         "hardening": {
             "passes": 0,
