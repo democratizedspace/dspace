@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/harvestable_hydroponic_lettuce_head.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "harvestable lettuce head",
+    "item_id": "7d119fa6-26e3-42c5-bbe4-3e7be458ab96",
+    "entity_type": "item",
+    "prompt": "A mature hydroponic lettuce head with dense layered leaves growing from a net cup or raft opening above a nutrient reservoir. The plant should look crisp, full, and ready for cut-and-come-again harvesting, with subtle greenhouse or indoor growing context that clearly distinguishes it from soil-grown lettuce.\n\nUltra-detailed, photorealistic 512×512 image with a bright near-future hydroponics aesthetic: soft diffuse lighting, realistic leaf texture and gentle moisture highlights, no logos, no readable text, and no identifiable faces. Keep the lettuce centered and uncluttered so it reads clearly as a DSPACE hydroponic crop icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

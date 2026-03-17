@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/harvested_hydroponic_lettuce_leaves.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "harvested lettuce leaves",
+    "item_id": "fbf2d3a5-1d80-431b-84f4-6bf4677ed619",
+    "entity_type": "item",
+    "prompt": "A small pile of freshly harvested lettuce leaves resting in a clean tray or colander beside a hydroponic setup, with crisp cut edges and varied leaf shapes visible. The composition should make it obvious these are harvested crop leaves rather than a whole intact plant, with reservoir or raft elements softly blurred in the background.\n\nUltra-detailed, photorealistic 512×512 image with a bright near-future hydroponics aesthetic: soft natural or greenhouse lighting, realistic leaf texture and moisture, no logos, no readable text, and no identifiable faces. Keep the leaves centered and uncluttered so they read clearly as a DSPACE harvest artifact.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

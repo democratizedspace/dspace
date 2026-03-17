@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/fizz_reaction_cylinder_sample.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "fizz reaction cylinder sample",
+    "item_id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
+    "entity_type": "item",
+    "prompt": "A graduated cylinder standing in a polypropylene spill tray, containing a clear post-reaction liquid left after a fizzing acid-carbonate reaction. Nearby neutralization supplies and a waste cup suggest this is an intermediate waste-handling sample rather than a fresh reagent or decorative lab glassware.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab aesthetic: soft task lighting, realistic clear liquid, glass, and plastic textures, no logos, no readable labels, and no identifiable faces. Keep the cylinder centered and the tray clearly visible so it reads as a DSPACE lab-process artifact.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

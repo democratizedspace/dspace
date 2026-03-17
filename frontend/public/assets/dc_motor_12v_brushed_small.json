@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/dc_motor_12v_brushed_small.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "12 V DC motor",
+    "item_id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
+    "entity_type": "item",
+    "prompt": "A small brushed 12 V DC motor shown in close-up on a workshop surface, with its cylindrical metal body, simple shaft, vent slots, and two power terminals clearly visible. A hand-crank generator handle and small test leads nearby suggest human-powered generation experiments rather than automated precision motion.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-energy aesthetic: soft task lighting, realistic metal textures and subtle wear, no logos, no readable labels, and no identifiable faces. Keep the motor centered and uncluttered so it works clearly as a DSPACE electronics inventory icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

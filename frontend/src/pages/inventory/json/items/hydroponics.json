@@ -132,21 +132,21 @@
         "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
         "name": "hydroponic pH reading",
         "description": "Latest pH strip reading for the nutrient reservoir, logged with sample notes.",
-        "image": "/assets/hydroponic_ph_strip_reading_sample.jpg",
+        "image": "/assets/hydroponic_ph_strip_reading_reservoir.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
         "id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
         "name": "hydroponic pH log",
         "description": "Timestamped entry showing the reservoir at 5.5\u20136.5 pH after adjustment and verification.",
-        "image": "/assets/hydroponic_ph_log_entry.jpg",
+        "image": "/assets/hydroponic_ph_log_entry_reservoir.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
         "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
         "name": "hydroponic nutrient solution EC log",
         "description": "EC meter reading log entry for the nutrient reservoir with timestamp and calibration note.",
-        "image": "/assets/hydroponic_ph_log_entry.jpg",
+        "image": "/assets/hydroponic_ec_log_entry.jpg",
         "priceExemptionReason": "SOULBOUND"
     },
     {
@@ -249,7 +249,7 @@
         "id": "79f1ea64-c58f-4f7a-8e7e-8dcca24fd1be",
         "name": "harvestable basil plant",
         "description": "Mature Genovese basil in a 4 cm rockwool cube, ~20 cm tall and ready to harvest.",
-        "image": "/assets/hydroponic_basil_plant_harvestable.jpg",
+        "image": "/assets/harvestable_basil_plant_hydroponic.jpg",
         "price": "5 dUSD",
         "hardening": {
             "passes": 1,
@@ -478,7 +478,7 @@
         "id": "d5fbffe6-7e22-4cbc-84d3-f8f5bf023d04",
         "name": "pH down solution (500 mL)",
         "description": "500 mL bottle of 30% phosphoric acid; add ~1 mL per L to lower reservoir pH; dropper cap included.",
-        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
+        "image": "/assets/ph_down_solution_500ml.jpg",
         "price": "8 dUSD",
         "unit": "bottle",
         "hardening": {
@@ -566,14 +566,14 @@
         "id": "7d119fa6-26e3-42c5-bbe4-3e7be458ab96",
         "name": "harvestable lettuce head",
         "description": "Mature hydroponic lettuce head with dense leaves, ready for cut-and-come-again harvesting.",
-        "image": "/assets/hydroponic_basil_plant_harvestable.jpg",
+        "image": "/assets/harvestable_hydroponic_lettuce_head.jpg",
         "price": "5 dUSD"
     },
     {
         "id": "fbf2d3a5-1d80-431b-84f4-6bf4677ed619",
         "name": "harvested lettuce leaves",
         "description": "Freshly harvested lettuce leaves from your hydroponic crop.",
-        "image": "/assets/hydroponic_basil_plant_harvested.jpg",
+        "image": "/assets/harvested_hydroponic_lettuce_leaves.jpg",
         "price": "6 dUSD"
     },
     {

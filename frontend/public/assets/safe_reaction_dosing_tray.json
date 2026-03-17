@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/safe_reaction_dosing_tray.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "safe reaction dosing tray",
+    "item_id": "ab36e88b-285a-4ff3-8abd-d73dbb7c3491",
+    "entity_type": "item",
+    "prompt": "A reagent dosing tray arranged with pre-measured portions in small containers, clearly set up for staged addition during a safe bench reaction. The layout should communicate deliberate sequencing and controlled handling, with separate portions and simple tools nearby.\n\nPhotorealistic 512×512 image with soft bench lighting, realistic tray, glass, and powder or liquid textures, no logos, no readable labels, and no identifiable faces. Keep the tray centered and uncluttered.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

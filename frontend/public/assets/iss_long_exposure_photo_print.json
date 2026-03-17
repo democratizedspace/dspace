@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/iss_long_exposure_photo_print.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "iss long-exposure photo print",
+    "item_id": "3d92d73f-271e-4f8c-a482-4fc51cc69abf",
+    "entity_type": "item",
+    "prompt": "A 4x6 archival photo print resting on a dark tabletop, showing a bright continuous streak crossing a starry night sky above a simple horizon silhouette, clearly representing a long-exposure ISS pass. A corner of the print curls slightly, and a pencil plus small notebook nearby suggest it is preserved as documented evidence of a successful flyover capture.\n\nUltra-detailed, photorealistic 512×512 image with a calm near-future astronomy aesthetic: soft indoor lighting, realistic photo-paper sheen, no logos, no readable annotations, and no identifiable faces. Keep the print centered and uncluttered so it reads clearly as a DSPACE astrophotography proof artifact.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

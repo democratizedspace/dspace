@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/motor_award_trophy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Motor Award",
+    "item_id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+    "entity_type": "item",
+    "prompt": "A compact brushed-metal trophy inspired by an old electric motor form, with a cylindrical body, visible endcaps, and a polished base, displayed like a small premium award. It should feel like a stylized motor homage rather than a literal branded object.\n\nPhotorealistic 512×512 image with soft cinematic lighting, realistic brushed aluminum and base textures, no logos, no readable text, and no identifiable faces. Keep the trophy centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }

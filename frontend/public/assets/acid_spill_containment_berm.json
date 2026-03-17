@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/acid_spill_containment_berm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "acid spill containment berm",
+    "item_id": "fea67487-4164-4ff7-969d-356127abbac9",
+    "entity_type": "item",
+    "prompt": "An absorbent containment berm arranged in a loop on a lab or workshop floor, clearly positioned to isolate the spread of a small chemical spill and protect nearby drains. The material should look practical and purpose-built, with no splashy disaster melodrama.\n\nPhotorealistic 512×512 image with soft neutral lighting, realistic absorbent and floor textures, no logos, no readable labels, and no identifiable faces. Keep the berm centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }

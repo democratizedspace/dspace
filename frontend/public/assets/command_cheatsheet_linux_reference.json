@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/command_cheatsheet_linux_reference.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "command cheatsheet",
+    "item_id": "f17410cd-8c38-4612-9666-7bd1c399874d",
+    "entity_type": "item",
+    "prompt": "A concise Linux command cheatsheet page laid on a workstation desk beside a keyboard and terminal window glow, showing a compact reference layout with grouped commands and usage examples. The sheet should look practical and frequently consulted, with a few highlighted sections and fold marks, but no legible text so it remains an icon rather than a literal document scan.\n\nUltra-detailed, photorealistic 512×512 image with a near-future ops-workstation aesthetic: soft desk lighting, realistic paper and keyboard textures, no logos, no readable words, and no identifiable faces. Keep the cheatsheet centered and uncluttered so it reads instantly as a DSPACE sysadmin reference artifact.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

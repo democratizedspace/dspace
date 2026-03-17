@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ph_kit_calibration_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "pH kit calibration log",
+    "item_id": "a0ab6b27-ed3e-4d7d-8d21-3296e9031772",
+    "entity_type": "item",
+    "prompt": "A calibration log sheet for a strip-based pH kit laid on a bench beside neutral sample cups and reference strips, with lighting notes and recorded checks implied by highlighted sections and pen marks. The setup should clearly read as a reproducibility and calibration artifact rather than a generic notebook page.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab aesthetic: soft overhead lighting, realistic paper, pen, and strip textures, no logos, no readable text, and no identifiable faces. Keep the sheet centered and uncluttered so it works clearly as a DSPACE QA artifact.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

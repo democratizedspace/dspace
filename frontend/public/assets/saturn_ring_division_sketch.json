@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/saturn_ring_division_sketch.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "saturn ring division sketch",
+    "item_id": "b30925da-0fa5-4ecd-ba18-af6ff7c70e23",
+    "entity_type": "item",
+    "prompt": "A telescope sketch page showing Saturn with ring tilt, a faint dark ring division, and small focus-comparison studies. A pencil, eyepiece cap, and red light nearby make it clearly a patient visual observation record rather than stylized space art.\n\nPhotorealistic 512×512 image with soft low lighting, realistic paper and graphite textures, no logos, no readable words, and no identifiable faces. Keep the sketch centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }

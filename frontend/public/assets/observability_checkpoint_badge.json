@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/observability_checkpoint_badge.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "observability checkpoint badge",
+    "item_id": "74a0707b-7292-4ac8-95f2-2b258210064f",
+    "entity_type": "item",
+    "prompt": "A compact achievement badge displayed on a dark desk mat near a small monitoring dashboard screen and notebook, suggesting completion of multi-node health monitoring drills. The badge should feature abstract signal-wave and node-link iconography without any readable text, making it feel like a systems-observability credential rather than a lab uniform accessory.\n\nUltra-detailed, photorealistic 512×512 image with a near-future ops-workstation aesthetic: soft moody desk lighting, realistic metal or enamel texture, no logos, no readable characters, and no identifiable faces. Keep the badge centered and uncluttered so it reads clearly as a DSPACE achievement token.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

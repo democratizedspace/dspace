@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/venus_phase_progression_card.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "venus phase progression card",
+    "item_id": "7e9cc033-a1bd-40fc-92b1-7d55b9dba295",
+    "entity_type": "item",
+    "prompt": "A progression card showing hand-drawn Venus crescents and gibbous shapes across different dates, with orientation arrows and neat shape comparisons. A small eyepiece cap and red light nearby make it clearly a repeated visual observation record from telescope sessions.\n\nPhotorealistic 512×512 image with soft low lighting, realistic paper and graphite texture, no logos, no readable text, and no identifiable faces. Keep the card centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }

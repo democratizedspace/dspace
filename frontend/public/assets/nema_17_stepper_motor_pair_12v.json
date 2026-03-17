@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/nema_17_stepper_motor_pair_12v.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "NEMA 17 stepper motor pair",
+    "item_id": "648aee3c-907e-4cd1-a361-49c4bd771102",
+    "entity_type": "item",
+    "prompt": "A matched pair of NEMA 17 stepper motors placed side by side on a clean electronics bench, with square metal housings, mounting faces, and short bundled wires visible on both units. The pair should look identical and intentionally matched for use in a solar tracker or precision motion system, with perhaps a pulley, mounting bracket, or cable-safe repositioning hardware nearby. Make it visually obvious that these are steppers rather than a generic round DC motor.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future mechatronics aesthetic: soft workshop lighting, realistic brushed metal and wire insulation textures, no logos, no readable markings, and no faces. Keep the composition clean and centered on the two motors so they read clearly as a paired motion-control inventory item for DSPACE.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

@@ -1085,7 +1085,7 @@
         "id": "648aee3c-907e-4cd1-a361-49c4bd771102",
         "name": "NEMA 17 stepper motor pair",
         "description": "Matched pair of 12 V NEMA 17 stepper motors for azimuth drive and cable-safe panel repositioning.",
-        "image": "/assets/dc_motor_12v.jpg",
+        "image": "/assets/nema_17_stepper_motor_pair_12v.jpg",
         "price": "60 dUSD",
         "category": "Electronics & Robotics"
     },
@@ -1125,7 +1125,7 @@
         "id": "7cbb9db5-1d15-481e-b0bb-a1eed889063b",
         "name": "Early Adopter Token",
         "description": "The early bird gets the worm.",
-        "image": "/assets/early_adopter_award.jpg",
+        "image": "/assets/early_adopter_token_award.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital Currency & Tokens"
     },
@@ -1346,7 +1346,7 @@
         "id": "6caa08d8-815c-4a0e-9297-0fda4516659d",
         "name": "12 V DC motor",
         "description": "Small brushed 12 V DC motor suited for hand-crank generators.",
-        "image": "/assets/dc_motor_12v.jpg",
+        "image": "/assets/dc_motor_12v_brushed_small.jpg",
         "price": "12 dUSD",
         "hardening": {
             "passes": 1,
@@ -1501,7 +1501,7 @@
         "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
         "name": "Pine board",
         "description": "A lightweight plank ideal for beginner projects.",
-        "image": "/assets/pine_board_plank.jpg",
+        "image": "/assets/pine_board_plank_lightweight.jpg",
         "price": "8 dUSD",
         "category": "Workshop & Construction"
     },
@@ -1588,7 +1588,7 @@
         "id": "7b2c58bc-e484-4110-996c-220cfb7a4ba7",
         "name": "Picture frame",
         "description": "Simple wooden frame with square miters and secure hanging hardware.",
-        "image": "/assets/compost_sifter_wooden_frame.jpg",
+        "image": "/assets/picture_frame_wooden_square_miter.jpg",
         "price": "22 dUSD",
         "category": "Workshop & Construction",
         "hardening": {
@@ -1903,7 +1903,7 @@
         "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
         "name": "constellation sketch set",
         "description": "Logbook page of traced stick figures for Orion, Ursa Major, and Cassiopeia with orientation arrows.",
-        "image": "/assets/constellation_sketch_set.jpg",
+        "image": "/assets/constellation_sketch_set_logbook.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2160,7 +2160,7 @@
         "id": "3455faac-8811-4991-b818-cecb98e8fff7",
         "name": "lab coat",
         "description": "Knee-length cotton lab coat with snap buttons and two pockets; one size fits most.",
-        "image": "/assets/lab_coat_white.jpg",
+        "image": "/assets/lab_coat_white_cotton.jpg",
         "price": "15 dUSD",
         "category": "Biology & Lab"
     },
@@ -2168,7 +2168,7 @@
         "id": "7311a2ab-59b2-49cb-93cd-d59aab9dc68a",
         "name": "hydrochloric acid (37%, 500 mL)",
         "description": "Lab-grade 37% HCl in a vented plastic bottle; always add acid to water when diluting.",
-        "image": "/assets/hydrochloric_acid_37pct_safety_bottle.jpg",
+        "image": "/assets/hydrochloric_acid_37pct_lab_bottle.jpg",
         "price": "12 dUSD",
         "unit": "bottle",
         "category": "Biology & Lab"
@@ -2185,7 +2185,7 @@
         "id": "9cdd41b1-392e-40c2-8072-0c1351b1a26b",
         "name": "pH up solution (potassium carbonate)",
         "description": "Alkaline solution used to raise nutrient solution pH.",
-        "image": "/assets/ph_up_solution_dropper.jpg",
+        "image": "/assets/ph_up_solution_potassium_carbonate.jpg",
         "price": "8 dUSD",
         "category": "Biology & Lab"
     },
@@ -2923,7 +2923,7 @@
         "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
         "name": "digital camera",
         "description": "Mirrorless camera capable of long-exposure astrophotography.",
-        "image": "/assets/digital_camera_astrophotography.jpg",
+        "image": "/assets/digital_camera_mirrorless_astrophotography.jpg",
         "price": "120 dUSD",
         "category": "Astronomy & Observation"
     },
@@ -3073,7 +3073,7 @@
         "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
         "name": "mission log entry",
         "description": "One handwritten entry recording a mission event in the logbook.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/mission_log_entry_handwritten_notebook.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3081,7 +3081,7 @@
         "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
         "name": "shell transcript",
         "description": "Captured command session showing pwd, ls, grep, awk, and sed usage in a reproducible sequence.",
-        "image": "/assets/mission_log_entry_page.json",
+        "image": "/assets/shell_transcript_terminal_capture.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3089,7 +3089,7 @@
         "id": "f17410cd-8c38-4612-9666-7bd1c399874d",
         "name": "command cheatsheet",
         "description": "Concise reference mapping core Linux commands to practical sysadmin use cases.",
-        "image": "/assets/early_adopter_award.jpg",
+        "image": "/assets/command_cheatsheet_linux_reference.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3113,7 +3113,7 @@
         "id": "d49faf4f-a228-4738-92da-378a2d766238",
         "name": "remote node telemetry report",
         "description": "Monitoring dossier comparing local metrics with readings from a dedicated Raspberry Pi colony node.",
-        "image": "/assets/mission_log_entry_page.json",
+        "image": "/assets/remote_node_telemetry_report.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3121,7 +3121,7 @@
         "id": "74a0707b-7292-4ac8-95f2-2b258210064f",
         "name": "observability checkpoint badge",
         "description": "Issued after completing multi-node health monitoring and baseline interpretation drills.",
-        "image": "/assets/lab_coat_white.jpg",
+        "image": "/assets/observability_checkpoint_badge.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3129,7 +3129,7 @@
         "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
         "name": "journalctl report",
         "description": "Exported journal slice capturing the latest service events for incident triage.",
-        "image": "/assets/pine_board_plank.jpg",
+        "image": "/assets/journalctl_report_page.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3145,7 +3145,7 @@
         "id": "aaef54ec-eed4-43d6-a4e4-e1b22fbb5a69",
         "name": "incident response analyst badge",
         "description": "Recognition for turning journalctl and tail outputs into actionable incident evidence.",
-        "image": "/assets/mission_log_entry_page.json",
+        "image": "/assets/incident_response_analyst_badge.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3153,7 +3153,7 @@
         "id": "092afbdb-1c9b-4e08-9498-20e4f2ba5f93",
         "name": "fizz reaction cylinder sample",
         "description": "A labeled graduated cylinder holding the post-fizz solution (water, weak acid, dissolved carbonate salts). Marked as chemical waste requiring neutralization and proper disposal.",
-        "image": "/assets/lab_spill_tray_on_bench.jpg",
+        "image": "/assets/fizz_reaction_cylinder_sample.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3177,7 +3177,7 @@
         "id": "4e4e190e-0a6e-4162-bc5b-918970dbbcc8",
         "name": "diluted hydrochloric acid solution",
         "description": "A clearly labeled beaker of diluted HCl prepared by adding acid to water. Includes concentration/date label and storage/disposal caution.",
-        "image": "/assets/hydrochloric_acid_37pct_safety_bottle.jpg",
+        "image": "/assets/diluted_hydrochloric_acid_solution_beaker.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3185,7 +3185,7 @@
         "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
         "name": "neutralized spill waste container",
         "description": "Collected absorbent and salts from a neutralized acid spill, sealed and tagged for hazardous-waste pickup.",
-        "image": "/assets/lab_spill_tray_on_bench.jpg",
+        "image": "/assets/neutralized_spill_waste_container.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3209,7 +3209,7 @@
         "id": "d36caabd-ddb7-4634-8d51-751957be80f4",
         "name": "precipitation reaction slurry",
         "description": "Cloudy reaction mixture showing newly formed solids suspended in solution before filtration.",
-        "image": "/assets/lab_spill_tray_on_bench.jpg",
+        "image": "/assets/precipitation_reaction_slurry.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3225,7 +3225,7 @@
         "id": "55851b57-86b7-4b16-a341-6a831aff0da5",
         "name": "moon crater sketch sheet",
         "description": "Detailed A5 observation sheet documenting lunar phase, local seeing conditions (1-5 scale), and labeled crater rim shading from a 20-minute telescope session; includes timestamp, azimuth, and weather notes for repeatability.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/moon_crater_sketch_sheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3241,7 +3241,7 @@
         "id": "82edf24f-3a5b-442d-8214-191454a6bc52",
         "name": "andromeda acquisition log",
         "description": "Two-page star-hop record tracing Mirach to Andromeda with eyepiece orientation arrows, estimated surface brightness notes, and a confidence score for re-acquisition on future nights.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/andromeda_acquisition_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3257,7 +3257,7 @@
         "id": "3d92d73f-271e-4f8c-a482-4fc51cc69abf",
         "name": "iss long-exposure photo print",
         "description": "4x6 in archival print of a continuous ISS trail crossing a dark sky with annotated exposure settings, capture timestamp, and compass heading to preserve photographic proof of the flyover for posterity.",
-        "image": "/assets/digital_camera_astrophotography.jpg",
+        "image": "/assets/iss_long_exposure_photo_print.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3265,7 +3265,7 @@
         "id": "be314ec9-c289-42e9-a6d6-5acc56779412",
         "name": "galilean moon position chart",
         "description": "Session chart plotting Io, Europa, Ganymede, and Callisto positions relative to Jupiter across multiple timestamps, with seeing notes and mirror-flip correction markings.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/galilean_moon_position_chart.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3273,7 +3273,7 @@
         "id": "eefbf274-67f1-4ea8-8253-25f85c0db336",
         "name": "constellation route atlas page",
         "description": "Annotated atlas page showing completed seasonal star-hop route, naked-eye anchor stars, and fallback waypoints used when haze obscured intermediate patterns.",
-        "image": "/assets/constellation_sketch_set.jpg",
+        "image": "/assets/constellation_route_atlas_page.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3281,7 +3281,7 @@
         "id": "9db35820-1243-4567-a8a4-822530fb6328",
         "name": "binary star split verification card",
         "description": "Observation card recording magnification used, focus micro-adjustments, and color contrast notes confirming repeated visual separation of a binary pair over multiple attempts.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/binary_star_split_verification_card.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3289,7 +3289,7 @@
         "id": "78bd4b60-a932-4d22-9b34-ecf9c3d46a75",
         "name": "skyglow gradient worksheet",
         "description": "Site worksheet capturing horizon-by-horizon sky brightness estimates, glare source directions, and mitigation ideas (screening, timing, shielding) for future observations.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/skyglow_gradient_worksheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3297,7 +3297,7 @@
         "id": "2e856b2e-cd35-44ed-b7e0-76a781c47bb9",
         "name": "aurora activity timeline",
         "description": "Timeline sheet correlating aurora arc brightness changes with local time, camera settings, and cloud cover windows to support later analysis and storytelling.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/aurora_activity_timeline_sheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3305,7 +3305,7 @@
         "id": "7019df00-c069-4644-9189-71340620ffba",
         "name": "lunar eclipse phase sequence strip",
         "description": "Sequential strip of hand-timed eclipse phase notes (penumbral, partial, totality) with color descriptions and edge-shadow sketches captured at regular intervals.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/lunar_eclipse_phase_sequence_strip.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3313,7 +3313,7 @@
         "id": "6aa2c7a1-f604-4bf6-93f8-5a37d017301f",
         "name": "meteor tally board",
         "description": "Night tally board with directional radiant estimates, brightness classes, and minute-by-minute meteor counts, including excluded false positives like aircraft traces.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/meteor_tally_board.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3321,7 +3321,7 @@
         "id": "71ff4717-2def-43bf-8f13-cf249bf86f24",
         "name": "comet drift comparison sheet",
         "description": "Comparison sheet overlaying comet position against fixed stars across nights, including tail length estimates and transparency ratings for each session.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/comet_drift_comparison_sheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3337,7 +3337,7 @@
         "id": "31a986a6-537d-42d4-856f-274e6cb38c69",
         "name": "orion nebula glow sketch",
         "description": "Field sketch capturing the Orion Nebula core brightness gradient, wing structure hints, and star anchor references used to validate the observation under varying seeing.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/orion_nebula_glow_sketch.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3353,7 +3353,7 @@
         "id": "f537cbd4-e5f0-4ef9-a776-b126894988cf",
         "name": "satellite pass classification notes",
         "description": "Classification notes distinguishing likely satellites from aircraft by steady brightness, non-blinking tracks, and predicted path agreement.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/satellite_pass_classification_notes.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3361,7 +3361,7 @@
         "id": "b30925da-0fa5-4ecd-ba18-af6ff7c70e23",
         "name": "saturn ring division sketch",
         "description": "Observation sketch marking ring tilt angle, Cassini-division visibility confidence, and focusing tweaks that produced the clearest ring separation.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/saturn_ring_division_sketch.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3369,7 +3369,7 @@
         "id": "684ec366-e0b1-4425-94fd-7dd9775dac08",
         "name": "star trail composition plan",
         "description": "Long-exposure composition plan with tripod orientation, foreground framing marks, and interval timing strategy used to build clean circular or arcing trails.",
-        "image": "/assets/digital_camera_astrophotography.jpg",
+        "image": "/assets/star_trail_composition_plan.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3377,7 +3377,7 @@
         "id": "ea043858-4d09-4510-a495-3ddae395ce51",
         "name": "sunspot transit notebook page",
         "description": "Solar session notebook page with filtered-view safety checklist, sunspot group coordinates, and progression arrows showing apparent transit across the disk.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/sunspot_transit_notebook_page.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3385,7 +3385,7 @@
         "id": "7e9cc033-a1bd-40fc-92b1-7d55b9dba295",
         "name": "venus phase progression card",
         "description": "Progression card comparing observed Venus crescent/gibbous outlines over time, with elongation notes and atmospheric steadiness comments for each attempt.",
-        "image": "/assets/mission_log_entry_handwritten.jpg",
+        "image": "/assets/venus_phase_progression_card.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },
@@ -3393,7 +3393,7 @@
         "id": "8175bd25-244c-433e-b39d-2af223ccbc91",
         "name": "safe reaction bench setup sheet",
         "description": "Signed checklist confirming beaker, cylinder, PPE, waste cup, and ventilation staging before reaction start.",
-        "image": "/assets/ph_up_solution_dropper.jpg",
+        "image": "/assets/safe_reaction_bench_setup_sheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3401,7 +3401,7 @@
         "id": "ab36e88b-285a-4ff3-8abd-d73dbb7c3491",
         "name": "safe reaction dosing tray",
         "description": "Labeled reagent tray containing pre-measured vinegar and sodium bicarbonate portions for staged addition.",
-        "image": "/assets/ph_up_solution_dropper.jpg",
+        "image": "/assets/safe_reaction_dosing_tray.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3409,7 +3409,7 @@
         "id": "a0ab6b27-ed3e-4d7d-8d21-3296e9031772",
         "name": "pH kit calibration log",
         "description": "Reference-strip calibration record showing lighting conditions, timestamp, and reader initials.",
-        "image": "/assets/hydroponic_ph_strip_reading_sample.jpg",
+        "image": "/assets/ph_kit_calibration_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3417,7 +3417,7 @@
         "id": "44b6c979-b1e2-493e-bb00-4df7e47a66a2",
         "name": "conditioned pH sample vial",
         "description": "Room-temperature, degassed aliquot prepared for consistent strip-based pH measurement.",
-        "image": "/assets/hydroponic_ph_strip_reading_sample.jpg",
+        "image": "/assets/conditioned_ph_sample_vial.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3425,7 +3425,7 @@
         "id": "8c19712c-c083-4794-a275-4b4d9c653dfe",
         "name": "HCl dilution molarity worksheet",
         "description": "C1V1 worksheet documenting target molarity, transfer volumes, and hazard labeling details.",
-        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
+        "image": "/assets/hcl_dilution_molarity_worksheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3433,7 +3433,7 @@
         "id": "82e7baef-9ee9-4d5e-ba23-1ebff5a04388",
         "name": "ice-bath dilution flask",
         "description": "Pre-chilled dilution vessel held below 30C to control exothermic heating during acid additions.",
-        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
+        "image": "/assets/ice_bath_dilution_flask.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3441,7 +3441,7 @@
         "id": "fea67487-4164-4ff7-969d-356127abbac9",
         "name": "acid spill containment berm",
         "description": "Absorbent perimeter barrier used to isolate spill spread and protect drains during neutralization.",
-        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
+        "image": "/assets/acid_spill_containment_berm.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Safety & Medical"
     },
@@ -3449,7 +3449,7 @@
         "id": "dedfa413-4cb8-4980-a310-820e958325cb",
         "name": "sealed neutralization residue drum",
         "description": "Rigid sealed drum containing neutralized spill solids, absorbent liner, and disposal chain label.",
-        "image": "/assets/ph_down_phosphoric_500ml_bottle.jpg",
+        "image": "/assets/sealed_neutralization_residue_drum.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Safety & Medical"
     },
@@ -3489,7 +3489,7 @@
         "id": "1774fea1-a066-4617-b2e5-0692e63346d5",
         "name": "precipitation reagent staging set",
         "description": "Stoichiometrically prepared reagent pair with sequence card for controlled precipitation.",
-        "image": "/assets/digital_ph_meter_pocket.jpg",
+        "image": "/assets/precipitation_reagent_staging_set.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },
@@ -3497,7 +3497,7 @@
         "id": "fecde9bf-4b1f-4c95-a809-c888e5c817fa",
         "name": "washed precipitate cake",
         "description": "Twice-rinsed precipitate solids collected before final filtration and sample packaging.",
-        "image": "/assets/digital_ph_meter_pocket.jpg",
+        "image": "/assets/washed_precipitate_cake_filtered.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Biology & Lab"
     },

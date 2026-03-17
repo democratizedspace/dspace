@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/binary_star_split_verification_card.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "binary star split verification card",
+    "item_id": "9db35820-1243-4567-a8a4-822530fb6328",
+    "entity_type": "item",
+    "prompt": "A compact observation card showing repeated notes and tiny paired-star sketches used to verify a binary split across multiple attempts. An eyepiece and focusing tool nearby make it clearly a telescope verification artifact about magnification, focus, and color contrast.\n\nPhotorealistic 512×512 image with soft warm field lighting, realistic paper and pencil texture, no logos, no readable text, and no identifiable faces. Keep the card centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }

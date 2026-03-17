@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/precipitation_reagent_staging_set.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "precipitation reagent staging set",
+    "item_id": "1774fea1-a066-4617-b2e5-0692e63346d5",
+    "entity_type": "item",
+    "prompt": "A controlled precipitation staging setup on a chemistry bench, with two small reagent containers, a sample vial, pipettes, and an order-of-addition card laid out neatly on a spill tray. The scene should clearly communicate stoichiometric preparation and deliberate sequencing, with clean glassware and measured aliquots ready for a controlled reaction.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab aesthetic: soft bench lighting, realistic glass and liquid textures, no logos, no readable text, and no identifiable faces. Keep the arrangement centered and tidy so it reads clearly as a DSPACE chemistry setup artifact.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+  }

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/andromeda_acquisition_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "andromeda acquisition log",
+    "item_id": "82edf24f-3a5b-442d-8214-191454a6bc52",
+    "entity_type": "item",
+    "prompt": "A two-page star-hop record open on a desk, showing a path from a bright anchor star toward a faint target galaxy with orientation arrows and confidence marks. Pencil lines, star dots, and a compact atlas nearby make it clearly a deep-sky re-acquisition log.\n\nPhotorealistic 512×512 image with soft low field lighting, realistic paper and graphite texture, no logos, no readable text, and no identifiable faces. Keep the open pages centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }

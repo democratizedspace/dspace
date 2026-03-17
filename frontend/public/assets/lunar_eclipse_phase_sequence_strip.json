@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/lunar_eclipse_phase_sequence_strip.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "lunar eclipse phase sequence strip",
+    "item_id": "7019df00-c069-4644-9189-71340620ffba",
+    "entity_type": "item",
+    "prompt": "A long narrow notebook strip showing hand-drawn moon phases progressing through an eclipse, with subtle shading changes and timing ticks implied by layout. A clipboard and red observing light nearby make it clearly a timed phase-sequence record.\n\nPhotorealistic 512×512 image with soft low light, realistic paper and pencil texture, no logos, no readable text, and no identifiable faces. Keep the strip centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }

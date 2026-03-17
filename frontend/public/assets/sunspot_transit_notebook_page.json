@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/sunspot_transit_notebook_page.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "sunspot transit notebook page",
+    "item_id": "ea043858-4d09-4510-a495-3ddae395ce51",
+    "entity_type": "item",
+    "prompt": "A solar observation notebook page showing a circular sun disk with plotted sunspot groups and directional arrows indicating apparent transit over time. Nearby solar-safe accessories and a clipboard suggest careful filtered observation without unsafe behavior.\n\nPhotorealistic 512×512 image with soft neutral lighting, realistic paper and pencil texture, no logos, no readable text, and no identifiable faces. Keep the page centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }

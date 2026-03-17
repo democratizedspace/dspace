@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/meteor_tally_board.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "meteor tally board",
+    "item_id": "6aa2c7a1-f604-4bf6-93f8-5a37d017301f",
+    "entity_type": "item",
+    "prompt": "A handwritten tally board showing grouped marks, directional arrows, and brightness classes for meteors seen across a night. A red flashlight and simple star chart nearby make it clearly a meteor-watch record that separates real meteors from false positives.\n\nPhotorealistic 512×512 image with low soft lighting, realistic paper and pen textures, no logos, no readable text, and no identifiable faces. Keep the tally page centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/safe_reaction_bench_setup_sheet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "safe reaction bench setup sheet",
+    "item_id": "8175bd25-244c-433e-b39d-2af223ccbc91",
+    "entity_type": "item",
+    "prompt": "A signed-off preparation sheet clipped to a chemistry bench, with beaker, graduated cylinder, PPE, waste cup, and ventilation staging visible around it in an orderly layout. It should clearly read as a preflight-style safety checklist without readable text.\n\nPhotorealistic 512×512 image with soft bench lighting, realistic paper, glass, and PPE textures, no logos, no readable words, and no identifiable faces. Keep the checklist centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+  }
