@@ -280,9 +280,9 @@ Normalization happens in `normalizeLegacyV2State`: it keeps `quests`, `inventory
 
 The QA cheats panel uses `frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`
 to seed `localStorage["gameState"]` for testing. The fixture includes three profiles
-(minimal, in-progress, messy) to exercise inventory remapping, process compensation behavior, and
-unknown keys. These fixtures are intentionally small, representative samples — real-world saves
-may include additional keys.
+(minimal, in-progress, messy) to exercise inventory remapping, legacy process cleanup paths, and
+unknown keys. These fixtures are intentionally small, representative samples — real-world saves may
+include additional keys.
 
 ## QA: v2 → v3 migration checklist
 

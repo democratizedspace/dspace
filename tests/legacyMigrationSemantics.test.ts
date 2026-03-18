@@ -9,9 +9,14 @@ import {
 import { importV2V3, VERSIONS } from '../frontend/src/utils/gameState.js';
 import { readLegacyV2LocalStorage } from '../frontend/src/utils/legacySaveParsing.js';
 import { V1_ITEM_ID_TO_V3_UUID } from '../frontend/src/utils/legacyV1ItemIdMap.js';
+import processes from '../frontend/src/generated/processes.json' assert { type: 'json' };
 
-const DWATT_ID = '061fd221-404a-4bd1-9432-3e25b0f17a2c';
-const DCARBON_ID = 'd88ef09c-9191-4c18-8628-a888bb9f926d';
+const OUTLET_PROCESS_ID = 'outlet-dWatt-1e3';
+const BENCHY_LEGACY_PROCESS_ID = 'processes/benchy';
+const outletCreateItems =
+  processes.find((process) => process.id === OUTLET_PROCESS_ID)?.createItems ?? [];
+const benchyCreateItems =
+  processes.find((process) => process.id === '3dprint-benchy')?.createItems ?? [];
 
 describe('legacy migration semantics', () => {
   beforeEach(async () => {
@@ -93,7 +98,7 @@ describe('legacy migration semantics', () => {
         inventory: {},
         quests: {},
         processes: {
-          'outlet-dWatt-1e3': {
+          [OUTLET_PROCESS_ID]: {
             startedAt: Date.now() - 10_000,
             duration: 5_000,
           },
@@ -103,8 +108,38 @@ describe('legacy migration semantics', () => {
 
     const migrated = await importV2V3();
 
-    expect(migrated?.processes['outlet-dWatt-1e3']).toBeUndefined();
-    expect(migrated?.inventory[DWATT_ID]).toBe(1000);
-    expect(migrated?.inventory[DCARBON_ID]).toBe(0.98);
+    expect(migrated?.processes[OUTLET_PROCESS_ID]).toBeUndefined();
+    outletCreateItems.forEach(({ id, count }) => {
+      expect(migrated?.inventory[id]).toBe(count);
+    });
+  });
+
+  test('importV2V3 compensates legacy process IDs and removes unresolved in-progress entries', async () => {
+    localStorage.setItem(
+      'gameState',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: {},
+        quests: {},
+        processes: {
+          [BENCHY_LEGACY_PROCESS_ID]: {
+            startedAt: Date.now() - 10_000,
+            duration: 5_000,
+          },
+          'processes/no-longer-exists': {
+            startedAt: Date.now() - 10_000,
+            duration: 5_000,
+          },
+        },
+      })
+    );
+
+    const migrated = await importV2V3();
+
+    expect(migrated?.processes[BENCHY_LEGACY_PROCESS_ID]).toBeUndefined();
+    expect(migrated?.processes['processes/no-longer-exists']).toBeUndefined();
+    benchyCreateItems.forEach(({ id, count }) => {
+      expect(migrated?.inventory[id]).toBe(count);
+    });
   });
 });

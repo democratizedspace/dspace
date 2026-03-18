@@ -9,9 +9,9 @@ import {
 import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
-import processes from '../generated/processes.json' assert { type: 'json' };
 import { normalizeSettings } from './settingsDefaults.js';
 import { V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID, V1_ITEM_ID_TO_V3_UUID } from './legacyV1ItemIdMap.js';
+import { resolveLegacyV2ItemBase } from './legacyV2ItemResolution.js';
 import {
     LEGACY_V2_SEED_SKIP_KEY,
     normalizeLegacyV2State,
@@ -27,12 +27,57 @@ const loadFreshStateForMutation = () => {
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
-const PROCESS_CREATE_ITEMS_BY_ID = new Map(
-    (Array.isArray(processes) ? processes : []).map((process) => [
-        process?.id,
-        process?.createItems ?? [],
-    ])
-);
+const LEGACY_V2_PROCESS_ID_MAP = {
+    'processes/benchy': '3dprint-benchy',
+};
+let processCreateItemsByIdPromise;
+
+const getProcessCreateItemsById = async () => {
+    if (!processCreateItemsByIdPromise) {
+        processCreateItemsByIdPromise = import('../generated/processes.json', {
+            assert: { type: 'json' },
+        })
+            .then(({ default: processCatalog }) =>
+                new Map(
+                    (Array.isArray(processCatalog) ? processCatalog : []).map((process) => [
+                        process?.id,
+                        process?.createItems ?? [],
+                    ])
+                )
+            )
+            .catch(() => new Map());
+    }
+
+    return processCreateItemsByIdPromise;
+};
+
+const resolveLegacyProcessId = (processId, processCreateItemsById) => {
+    if (!processId || !processCreateItemsById?.size) {
+        return null;
+    }
+
+    const trimmed = String(processId).trim();
+    if (!trimmed) return null;
+    if (processCreateItemsById.has(trimmed)) {
+        return trimmed;
+    }
+
+    const mappedProcessId = LEGACY_V2_PROCESS_ID_MAP[trimmed];
+    if (mappedProcessId && processCreateItemsById.has(mappedProcessId)) {
+        return mappedProcessId;
+    }
+
+    const withoutPrefix = trimmed.replace(/^processes\//, '');
+    if (processCreateItemsById.has(withoutPrefix)) {
+        return withoutPrefix;
+    }
+
+    const suffixMatches = Array.from(processCreateItemsById.keys()).filter(
+        (candidateId) => candidateId === withoutPrefix || candidateId.endsWith(`-${withoutPrefix}`)
+    );
+
+    return suffixMatches.length === 1 ? suffixMatches[0] : null;
+};
 
 // ---------------------
 // QUESTS
@@ -210,7 +255,7 @@ const resolveUpgradeOptions = (options = {}) => ({
     grantUpgradeTrophy: Boolean(options.grantUpgradeTrophy),
 });
 
-const applyLegacyInProgressProcessCompensation = (state) => {
+const applyLegacyInProgressProcessCompensation = async (state) => {
     if (
         !state ||
         typeof state !== 'object' ||
@@ -220,6 +265,7 @@ const applyLegacyInProgressProcessCompensation = (state) => {
         return;
     }
 
+    const processCreateItemsById = await getProcessCreateItemsById();
     state.inventory = state.inventory ?? {};
     const remainingProcesses = {};
 
@@ -233,21 +279,22 @@ const applyLegacyInProgressProcessCompensation = (state) => {
             return;
         }
 
-        const fallbackCreateItems = PROCESS_CREATE_ITEMS_BY_ID.get(processId) ?? [];
+        const resolvedProcessId = resolveLegacyProcessId(processId, processCreateItemsById);
+        const fallbackCreateItems =
+            resolvedProcessId && processCreateItemsById.has(resolvedProcessId)
+                ? processCreateItemsById.get(resolvedProcessId)
+                : [];
         const createItems = Array.isArray(processState?.createItemsSnapshot)
             ? processState.createItemsSnapshot
             : fallbackCreateItems;
         const hasPayout = Array.isArray(createItems) && createItems.length > 0;
 
-        if (!hasPayout) {
-            remainingProcesses[processId] = processState;
-            return;
-        }
-
-        createItems.forEach(({ id, count }) => {
+        (hasPayout ? createItems : []).forEach(({ id, count }) => {
+            const resolvedItem = resolveLegacyV2ItemBase(id);
+            const normalizedId = resolvedItem?.v3Id ?? (UUID_REGEX.test(String(id)) ? id : null);
             const parsedCount = normalizeCount(count);
-            if (!id || parsedCount <= 0) return;
-            state.inventory[id] = (state.inventory[id] || 0) + parsedCount;
+            if (!normalizedId || parsedCount <= 0) return;
+            state.inventory[normalizedId] = (state.inventory[normalizedId] || 0) + parsedCount;
         });
     });
 
@@ -341,7 +388,7 @@ export const importV2V3 = async (legacyState, options = {}) => {
     }
     if (!migrated) return null;
     const normalized = validateGameState(structuredClone(normalizeLegacyV2State(migrated)));
-    applyLegacyInProgressProcessCompensation(normalized);
+    await applyLegacyInProgressProcessCompensation(normalized);
     if (grantUpgradeTrophy) {
         grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
     }
@@ -354,7 +401,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
 
     const current = validateGameState(loadGameState());
     const incoming = validateGameState(structuredClone(normalizeLegacyV2State(legacyState)));
-    applyLegacyInProgressProcessCompensation(incoming);
+    await applyLegacyInProgressProcessCompensation(incoming);
     const merged = validateGameState(structuredClone(current));
 
     merged.inventory = merged.inventory ?? {};
@@ -394,7 +441,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
 try {
     if (
         isBrowser &&
-        localStorage.getItem('gameState') &&
+        (localStorage.getItem('gameState') || localStorage.getItem('gameStateBackup')) &&
         !localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)
     ) {
         importV2V3();
