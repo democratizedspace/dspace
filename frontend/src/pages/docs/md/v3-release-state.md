@@ -5,12 +5,13 @@ slug: 'v3-release-state'
 
 # v3 Release State
 
-This page is the source-of-truth snapshot for what shipped in v3 and what remains intentionally
-limited. Use it alongside the v3 launch notes at [/changelog#20260401](/changelog#20260401) and
+This page is the source-of-truth snapshot for v3 release scope and what remains intentionally
+limited at cutover time. Use it alongside the v3 launch notes at
+[/changelog#20260401](/changelog#20260401) and
 the full release QA checklist in
 [docs/qa/v3.md](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md).
 
-## v3 shipped systems (live now)
+## v3 in-scope systems (release-candidate baseline)
 
 ### Core gameplay and progression
 
@@ -18,7 +19,7 @@ the full release QA checklist in
 - Official content now includes **248 quests across 19 quest trees**.
 - Quest details render from canonical quest JSON, including branching dialogue, rewards, and
   requirements.
-- Completionist Award III (`completionist/award-iii`) is in the shipped v3 capstone lane and
+- Completionist Award III (`completionist/award-iii`) is in the v3 capstone lane and
   remains part of launch sign-off (not a v3.1 deferral); the canonical item is created by
   `assemble-completionist-award-iii`, and quest completion does not grant a second copy.
 
