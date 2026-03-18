@@ -15,7 +15,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          package-manager-cache: false
       - name: Enable pnpm via Corepack
         run: |
           corepack enable
@@ -65,7 +64,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          package-manager-cache: false
       - name: Enable pnpm via Corepack
         run: |
           corepack enable
@@ -96,7 +94,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          package-manager-cache: false
       - name: Enable pnpm via Corepack
         run: |
           corepack enable
