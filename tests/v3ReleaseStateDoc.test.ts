@@ -18,6 +18,7 @@ describe('v3 release state doc', () => {
 
         expect(doc).toMatch(/OpenAI-only chat/i);
         expect(doc).toMatch(/token\.place.*deferred to v3\.1/i);
+        expect(doc).toMatch(/Completionist Award III[\s\S]*launch sign-off/i);
     });
 
     it('lists multiple v2-only mechanics removed or not applicable', () => {
