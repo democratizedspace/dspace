@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/confirm_220_ohm_resistor_color_code_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Confirm a 220 Ω resistor's value using a printed color code chart completion note",
+    "item_id": "d8fa4993-0090-53ed-a837-aed50b940895",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for confirming a 220 ohm resistor’s value using a printed color code chart, shown as a small electronics worksheet beside a resistor, a printed band-color reference card, and a tidy bench surface. The note should imply the resistor value was verified successfully, with band-order sketches and a check result that clearly link the scene to resistor identification by color code, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-bench aesthetic: soft warm lighting, realistic paper, ceramic coating, and metal lead textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the resistor and chart arranged simply around it.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

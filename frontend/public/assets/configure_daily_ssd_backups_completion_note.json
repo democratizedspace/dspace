@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/configure_daily_ssd_backups_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Configure daily backups to SSD completion note",
+    "item_id": "cd0701e7-b365-5b2f-aeb1-7604d5cdc14f",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for configuring daily backups to SSD, shown as a backup verification sheet beside an external SSD, a compact computer node or laptop, and a cable-connected workstation setup. The note should suggest successful scheduling and storage validation, with stacked drive icons, sync arrows, and a repeated-day motif that clearly conveys automated backup configuration, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future data-ops aesthetic: soft monitor and desk lighting, realistic paper, metal, plastic, and cable textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the storage hardware neatly arranged to maintain a clean, icon-friendly composition.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
