@@ -24,6 +24,8 @@ describe('v3 release state doc', () => {
         const doc = readFileSync(docPath, 'utf8');
 
         expect(doc).toMatch(/Completionist Award III[\s\S]*launch sign-off/i);
+        expect(doc).toMatch(/assemble-completionist-award-iii/i);
+        expect(doc).toMatch(/does not grant a second copy/i);
     });
 
     it('lists multiple v2-only mechanics removed or not applicable', () => {

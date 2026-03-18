@@ -160,12 +160,7 @@
             ]
         }
     ],
-    "rewards": [
-        {
-            "id": "adf69f8d-4b30-4eec-b667-43ff5dfd9892",
-            "count": 1
-        }
-    ],
+    "rewards": [],
     "requiresQuests": [
         "3dprinting/benchy_100",
         "3dprinting/blob-of-death",

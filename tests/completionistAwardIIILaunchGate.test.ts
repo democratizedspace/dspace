@@ -110,12 +110,38 @@ describe('completionist award III launch-gate semantics', () => {
         expect(assembleAward?.createItems).toContainEqual({ id: AWARD_III_ITEM_ID, count: 1 });
     });
 
-    it('grants exactly one Completionist Award III reward and has a clean finish path', async () => {
+    it('yields exactly one Completionist Award III overall after the full chain plus quest finish', async () => {
         const quests = await loadQuests();
+        const processById = new Map(processes.map((process) => [process.id, process]));
         const capstone = quests.find((quest: any) => quest.id === CAPSTONE_QUEST_ID);
         expect(capstone).toBeDefined();
 
-        expect(capstone.rewards).toEqual([{ id: AWARD_III_ITEM_ID, count: 1 }]);
+        // Canonical ownership: the final assembly process creates Award III; quest finish does not duplicate it.
+        expect(capstone.rewards ?? []).toEqual([]);
+
+        const inventory = new Map<string, number>();
+        const bumpItem = (id: string, count: number) => {
+            inventory.set(id, (inventory.get(id) ?? 0) + count);
+        };
+
+        for (const processId of PROCESS_SEQUENCE) {
+            const process = processById.get(processId);
+            expect(process, `missing process ${processId}`).toBeDefined();
+
+            for (const item of process?.consumeItems ?? []) {
+                bumpItem(item.id, -item.count);
+            }
+            for (const item of process?.createItems ?? []) {
+                bumpItem(item.id, item.count);
+            }
+        }
+
+        // Simulate quest completion reward application after running the six-step process chain.
+        for (const reward of capstone.rewards ?? []) {
+            bumpItem(reward.id, reward.count);
+        }
+
+        expect(inventory.get(AWARD_III_ITEM_ID) ?? 0).toBe(1);
 
         const finalAssemblyNode = (capstone.dialogue ?? []).find(
             (node: any) => node.id === 'final-assembly'

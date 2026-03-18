@@ -19,7 +19,8 @@ the full release QA checklist in
 - Quest details render from canonical quest JSON, including branching dialogue, rewards, and
   requirements.
 - Completionist Award III (`completionist/award-iii`) is in the shipped v3 capstone lane and
-  remains part of launch sign-off (not a v3.1 deferral).
+  remains part of launch sign-off (not a v3.1 deferral); the canonical item is created by
+  `assemble-completionist-award-iii`, and quest completion does not grant a second copy.
 
 ### Navigation and utility surfaces
 
