@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/reflectance_threshold_motion_validation_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Validate reflectance thresholds during motion completion note",
+    "item_id": "b3211a41-dda9-5af7-a370-61ccde9ae9fc",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for validating reflectance thresholds during motion, shown as a robotics test sheet beside a line-following sensor rig mounted near a moving wheel assembly or small chassis. The document should imply successful calibration and dynamic threshold checks, with simple reflectance bars, sensor path diagrams, and motion arrows that clearly tie it to real-time sensing validation, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future robotics lab aesthetic: soft workshop lighting, realistic paper, matte plastic, PCB, and rubber textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the motion-sensing hardware secondary but clearly recognizable.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

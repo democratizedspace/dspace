@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/measure_hydroponic_nutrient_ec_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Measure hydroponic nutrient EC completion note",
+    "item_id": "c534d720-bc39-5ac7-9f77-db37edd044d8",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for measuring hydroponic nutrient EC, shown as a tidy lab sheet beside a nutrient reservoir sample cup, a digital EC meter, and a hydroponic bench setup. The note should imply a successful reading and completion of the water-quality check, with a conductivity graph motif and simple sample-handling diagrams that make it clearly specific to hydroponic nutrient monitoring, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future hydroponics aesthetic: soft diffused bench lighting, realistic paper, glass, nutrient solution, and plastic textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the hydroponic tools cleanly arranged around it.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

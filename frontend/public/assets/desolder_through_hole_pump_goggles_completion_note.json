@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/desolder_through_hole_pump_goggles_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Heat a through-hole joint and clear it with a spring-loaded pump while wearing safety goggles completion note",
+    "item_id": "aae06865-0452-5f92-854f-9702130dd778",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for heating a through-hole joint and clearing it with a spring-loaded pump while wearing safety goggles, shown as a bench record sheet beside a soldering iron, desoldering pump, perforated circuit board, and clear safety goggles. The note should imply the joint was successfully cleared, with small sketched solder-hole diagrams and completion checks that make the procedure specific to safe desoldering work, without any legible text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics lab aesthetic: soft bench lighting, realistic paper, glass, PCB, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the document centered and the tools neatly arranged so the scene remains clean and icon-friendly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

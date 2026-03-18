@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/gfci_outlet_wiring_test_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Test a GFCI outlet's wiring with a plug-in tester and its test/reset buttons completion note",
+    "item_id": "b2bb5a31-3ad5-5cbb-8f33-c8a614b20fa6",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for testing a GFCI outlet’s wiring with a plug-in tester and its test and reset buttons, shown as a verification sheet on a countertop beside a wall outlet, a compact outlet tester, and a hand-press scale diagram on the page. The note should communicate successful wiring verification with clear outlet-specific cues such as plug alignment, button icons, and test flow sketches, while avoiding readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future home-electrical aesthetic: soft interior lighting, realistic paper, plastic, and wall textures, no logos, no readable labels, and no identifiable faces. Keep the note prominent and the outlet scene clean so the image remains icon-like and easy to parse.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

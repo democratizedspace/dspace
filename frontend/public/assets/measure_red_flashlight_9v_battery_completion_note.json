@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/measure_red_flashlight_9v_battery_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Measure a red flashlight's 9 V battery with a digital multimeter completion note",
+    "item_id": "38c83665-caa7-55bd-a138-8858bbac0e66",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for measuring a red flashlight’s 9 V battery with a digital multimeter, shown as a clean paper verification sheet on a workbench beside a red flashlight, a detached rectangular 9 V battery, and a compact handheld multimeter with probes resting nearby. The document should clearly read as proof of a finished electronics check, with a tidy checkbox layout, a simple measurement sketch, and subtle evidence that the voltage test was completed successfully, without any legible text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-lab aesthetic: soft cinematic bench lighting, realistic paper, plastic, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the completion note centered and uncluttered so it reads clearly as a DSPACE process artifact.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

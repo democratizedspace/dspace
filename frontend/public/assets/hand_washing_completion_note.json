@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hand_washing_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Wash your hands with soap and running water completion note",
+    "item_id": "dfa9eea1-49f6-55e1-8248-572ca507b6ff",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for washing your hands with soap and running water, shown as a hygiene checklist card resting near a sink with soap dispenser, flowing tap water, and neatly arranged towel area. The note should communicate that the washing step was completed, with simple hand-rinse icons and lather-motion graphics that make it clearly about proper hygiene practice, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future clinical-home aesthetic: soft bathroom lighting, realistic paper, ceramic, water, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the sink scene clean, bright, and uncluttered.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

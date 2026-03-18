@@ -216,14 +216,14 @@
         "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
         "name": "Walstad aquarium (80 L)",
         "description": "A planted tank using the low-tech Walstad method.",
-        "image": "/assets/walstad_aquarium_80l.jpg",
+        "image": "/assets/walstad_aquarium_80l_planted.jpg",
         "price": "80 dUSD"
     },
     {
         "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
         "name": "Walstad aquarium with thermometer (80 L)",
         "description": "An 80 L Walstad tank with a strip thermometer attached on the outside glass for quick checks.",
-        "image": "/assets/walstad_aquarium_strip_thermometer_80L.jpg",
+        "image": "/assets/walstad_aquarium_with_strip_thermometer_80l.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "hardening": {
             "passes": 0,
@@ -282,14 +282,14 @@
         "id": "35aeac1d-e26e-475b-8b05-b74562e90173",
         "name": "Walstad aquarium with dwarf shrimp (80 L)",
         "description": "An 80 L Walstad aquarium stocked with drip-acclimated dwarf shrimp.",
-        "image": "/assets/walstad_aquarium_80l.jpg",
+        "image": "/assets/walstad_aquarium_dwarf_shrimp_80l.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {
         "id": "1b63146c-5cb3-4c75-bb31-ac4bb2e2bebe",
         "name": "Walstad aquarium with dead dwarf shrimp (80 L)",
         "description": "An 80 L Walstad aquarium after a failed shrimp transfer that caused a total die-off.",
-        "image": "/assets/walstad_aquarium_80l.jpg",
+        "image": "/assets/walstad_aquarium_dead_dwarf_shrimp_80l.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER"
     },
     {

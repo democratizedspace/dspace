@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_strip_thermometer_check_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Check aquarium water temperature with an attached strip thermometer completion note",
+    "item_id": "fca68306-48c9-5957-ae17-28754a4b718a",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for checking aquarium water temperature with an attached strip thermometer, shown as a small aquarium care sheet beside a planted tank wall with an external thermometer strip visible on the glass. The note should imply a successful quick temperature check, with a simple tank outline, thermometer strip motif, and checkmark layout that clearly place it in routine aquarium maintenance, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future aquaria aesthetic: soft indoor lighting, realistic paper, glass, water, plant, and substrate textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the tank edge as clean contextual framing.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

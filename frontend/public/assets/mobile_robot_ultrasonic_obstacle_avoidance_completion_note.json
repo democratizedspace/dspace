@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/mobile_robot_ultrasonic_obstacle_avoidance_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Integrate ultrasonic obstacle avoidance on a mobile robot completion note",
+    "item_id": "9d00d309-9e29-5772-b099-fa299c65874f",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for integrating ultrasonic obstacle avoidance on a mobile robot, shown as a checklist sheet beside a small wheeled robot with front-facing ultrasonic sensors, tidy wiring, and a compact controller board. The note should imply successful installation and validation, with simple diagrams of sensor spacing and movement testing, making it visually obvious that the documented process involved a robot navigation upgrade, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future robotics workshop aesthetic: soft cinematic lighting, realistic paper, rubber wheel, PCB, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the note as the focal point with the robot slightly behind it for a clear DSPACE inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

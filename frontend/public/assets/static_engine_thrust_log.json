@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/static_engine_thrust_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "static engine thrust log",
+    "item_id": "4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d",
+    "entity_type": "item",
+    "prompt": "A time-stamped thrust-curve capture from a secured static model rocket engine burn, shown as a printed thrust log sheet beside a restrained test stand, a small spent model rocket motor, load-cell hardware, and soot-marked but orderly test equipment. The page should clearly communicate a completed static engine test used for go and no-go interpretation, with curve plotting and timing blocks implied by shapes and layout rather than readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future rocketry workshop aesthetic: soft task lighting, realistic paper, metal, wiring, and scorched test-rig textures, no logos, no readable labels, and no identifiable faces. Keep the thrust log centered and the secured test hardware visible but clean and controlled in the background.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

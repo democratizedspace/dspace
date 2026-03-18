@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/install_arduino_ide_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Install the Arduino IDE completion note",
+    "item_id": "9f58f2d1-7b61-520f-b1f5-eba6131ea9e4",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for installing the Arduino IDE, shown as a confirmation sheet on a laptop desk beside a small microcontroller board, a USB cable, and a laptop with an abstract code-like interface visible but no readable text. The document should convey successful software setup with simple step boxes and a completed install flow, making it clearly about toolchain setup for embedded development rather than general computing.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future developer-workstation aesthetic: soft monitor glow and desk lighting, realistic paper, aluminum, and plastic textures, no logos, no readable labels, and no identifiable faces. Keep the paper note centered with the laptop and board as contextual elements only.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

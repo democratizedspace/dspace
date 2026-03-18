@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/pla_filament_caliper_measurement_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Measure 1.75 mm PLA filament at three points with digital calipers completion note",
+    "item_id": "b46778b4-7cfe-5ed1-acb1-99c3f9997433",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for measuring 1.75 mm PLA filament at three points with digital calipers, shown as a neat bench sheet beside a spool of filament, three short sample segments, and a pair of digital calipers opened around one strand. The note should suggest quality-control verification with three marked measurement points and a tidy pass result, making it clearly about 3D printing material inspection, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future fabrication-lab aesthetic: soft bench lighting, realistic paper, polymer, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the calipers and filament cleanly arranged around it.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

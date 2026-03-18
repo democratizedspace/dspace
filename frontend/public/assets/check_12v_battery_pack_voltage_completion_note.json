@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/check_12v_battery_pack_voltage_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Check a 12 V battery pack's voltage with a digital multimeter completion note",
+    "item_id": "b5ef1c4d-a2f6-58cb-95f0-4785155e59d6",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for checking a 12 V battery pack’s voltage with a digital multimeter, shown as a tidy test sheet beside a compact battery pack, a handheld multimeter, and red and black probe leads set against a workshop surface. The note should imply a completed electrical verification with a battery icon sketch, probe-contact diagram, and pass confirmation layout that clearly ties it to low-voltage DC measurement, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-electronics aesthetic: soft bench lighting, realistic paper, wire insulation, plastic, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the note central and the instrument arrangement clean and uncluttered.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

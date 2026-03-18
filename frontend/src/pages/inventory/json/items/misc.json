@@ -1454,7 +1454,7 @@
         "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
         "name": "Workbench",
         "description": "A sturdy table that provides a safe space for sawing and assembly.",
-        "image": "/assets/woodworking_workbench_sturdy.jpg",
+        "image": "/assets/sturdy_workbench.jpg",
         "price": "120 dUSD",
         "category": "Workshop & Construction"
     },
@@ -1548,7 +1548,7 @@
         "id": "7a8a7f56-e84f-45e0-b321-d9cff33d9ac5",
         "name": "Coffee table",
         "description": "A low pine coffee table with leveled legs and a stable top.",
-        "image": "/assets/woodworking_workbench_sturdy.jpg",
+        "image": "/assets/pine_coffee_table_stable.jpg",
         "price": "65 dUSD",
         "category": "Workshop & Construction",
         "hardening": {
@@ -2238,7 +2238,7 @@
         "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
         "name": "temperature log CSV",
         "description": "Hourly temperature readings with timestamps exported from your thermistor logging rig.",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/temperature_log_csv_export_unique.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2254,7 +2254,7 @@
         "id": "36af76d6-2f90-4c6e-98c7-44bf64aadb96",
         "name": "process completion note",
         "description": "A tangible run log proving the process completed and produced an auditable outcome.",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/process_completion_note_auditable_run_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2262,7 +2262,7 @@
         "id": "e3554a74-63cd-501d-a243-a912d3373608",
         "name": "Set smart plug to a 12 h on/off cycle completion note",
         "description": "A process-specific completion note documenting successful execution of \"Set smart plug to a 12 h on/off cycle\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/smart_plug_12h_cycle_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2318,7 +2318,7 @@
         "id": "cd0701e7-b365-5b2f-aeb1-7604d5cdc14f",
         "name": "Configure daily backups to SSD completion note",
         "description": "A process-specific completion note documenting successful execution of \"Configure daily backups to SSD\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/configure_daily_ssd_backups_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2326,7 +2326,7 @@
         "id": "c534d720-bc39-5ac7-9f77-db37edd044d8",
         "name": "Measure hydroponic nutrient EC completion note",
         "description": "A process-specific completion note documenting successful execution of \"Measure hydroponic nutrient EC\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/measure_hydroponic_nutrient_ec_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2334,7 +2334,7 @@
         "id": "b5ef1c4d-a2f6-58cb-95f0-4785155e59d6",
         "name": "Check a 12 V battery pack's voltage with a digital multimeter completion note",
         "description": "A process-specific completion note documenting successful execution of \"Check a 12 V battery pack's voltage with a digital multimeter\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/check_12v_battery_pack_voltage_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2350,7 +2350,7 @@
         "id": "b2314191-e296-53ee-a218-959738d7379f",
         "name": "Measure a portable solar panel's open-circuit voltage in direct sun completion note",
         "description": "A process-specific completion note documenting successful execution of \"Measure a portable solar panel's open-circuit voltage in direct sun\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/solar_panel_open_circuit_voltage_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2366,7 +2366,7 @@
         "id": "d23ac2d2-7db2-5b44-a84c-277413b93fa4",
         "name": "Identify LED anode and cathode using a multimeter's diode mode completion note",
         "description": "A process-specific completion note documenting successful execution of \"Identify LED anode and cathode using a multimeter's diode mode\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/identify_led_polarity_diode_mode_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2382,7 +2382,7 @@
         "id": "e8b3953c-943e-5a71-821a-a84f206c072a",
         "name": "Calibrate a digital multimeter using a 220 \u03a9 reference resistor completion note",
         "description": "A process-specific completion note documenting successful execution of \"Calibrate a digital multimeter using a 220 \u03a9 reference resistor\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/calibrate_multimeter_220_ohm_reference_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2398,7 +2398,7 @@
         "id": "d43f0faa-1506-5266-8879-fb14b1819146",
         "name": "Calibrate EC meter with 1000 ppm solution completion note",
         "description": "A process-specific completion note documenting successful execution of \"Calibrate EC meter with 1000 ppm solution\".",
-        "image": "/assets/flashlight_9v_measurement_completion_note.jpg",
+        "image": "/assets/calibrate_ec_meter_1000ppm_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2406,7 +2406,7 @@
         "id": "d60a767f-21f4-54f7-8659-8ee6adf165f6",
         "name": "Adjust solution pH completion note",
         "description": "A process-specific completion note documenting successful execution of \"Adjust solution pH\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/adjust_solution_ph_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2414,7 +2414,7 @@
         "id": "dfa9eea1-49f6-55e1-8248-572ca507b6ff",
         "name": "Wash your hands with soap and running water completion note",
         "description": "A process-specific completion note documenting successful execution of \"Wash your hands with soap and running water\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/hand_washing_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2422,7 +2422,7 @@
         "id": "faf1a10b-f5af-5d19-905c-149fee8892de",
         "name": "Dry your hands with a paper towel completion note",
         "description": "A process-specific completion note documenting successful execution of \"Dry your hands with a paper towel\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/dry_hands_paper_towel_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2438,7 +2438,7 @@
         "id": "b0bac679-10a2-59c6-ae97-468112b99913",
         "name": "Practice 30:2 CPR on a training manikin completion note",
         "description": "A process-specific completion note documenting successful execution of \"Practice 30:2 CPR on a training manikin\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/cpr_training_manikin_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2454,7 +2454,7 @@
         "id": "ae177c8a-c33c-58ed-a719-def6bfa82d11",
         "name": "Archive an incomplete ISS pass entry before a fresh retry completion note",
         "description": "A process-specific completion note documenting successful execution of \"Archive an incomplete ISS pass entry before a fresh retry\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/archive_incomplete_iss_pass_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2470,7 +2470,7 @@
         "id": "c5c230f7-7498-53b6-88f5-02e9fcf36dfb",
         "name": "Watch a meteor shower with your telescope completion note",
         "description": "A process-specific completion note documenting successful execution of \"Watch a meteor shower with your telescope\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/meteor_shower_telescope_watch_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2478,7 +2478,7 @@
         "id": "acc5539a-5edf-5927-aca1-bd8117b385eb",
         "name": "Photograph a lunar eclipse with a telescope completion note",
         "description": "A process-specific completion note documenting successful execution of \"Photograph a lunar eclipse with a telescope\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/lunar_eclipse_telescope_photography_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2486,7 +2486,7 @@
         "id": "9f58f2d1-7b61-520f-b1f5-eba6131ea9e4",
         "name": "Install the Arduino IDE completion note",
         "description": "A process-specific completion note documenting successful execution of \"Install the Arduino IDE\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/install_arduino_ide_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2558,7 +2558,7 @@
         "id": "d8fa4993-0090-53ed-a837-aed50b940895",
         "name": "Confirm a 220 \u03a9 resistor's value using a printed color code chart completion note",
         "description": "A process-specific completion note documenting successful execution of \"Confirm a 220 \u03a9 resistor's value using a printed color code chart\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/confirm_220_ohm_resistor_color_code_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2566,7 +2566,7 @@
         "id": "fca68306-48c9-5957-ae17-28754a4b718a",
         "name": "Check aquarium water temperature with an attached strip thermometer completion note",
         "description": "A process-specific completion note documenting successful execution of \"Check aquarium water temperature with an attached strip thermometer\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/aquarium_strip_thermometer_check_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2582,7 +2582,7 @@
         "id": "c1567e58-a130-58fc-af2c-89afe332cf2c",
         "name": "Fully charge a smartphone from a 200 Wh battery pack using a USB cable completion note",
         "description": "A process-specific completion note documenting successful execution of \"Fully charge a smartphone from a 200 Wh battery pack using a USB cable\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/smartphone_charge_from_200wh_pack_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2614,7 +2614,7 @@
         "id": "bc8428ac-f8b7-5df3-b683-70d976143fe7",
         "name": "Wipe the soldering iron tip on a damp sponge to remove oxidation completion note",
         "description": "A process-specific completion note documenting successful execution of \"Wipe the soldering iron tip on a damp sponge to remove oxidation\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/wipe_soldering_iron_tip_damp_sponge_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2622,7 +2622,7 @@
         "id": "38c83665-caa7-55bd-a138-8858bbac0e66",
         "name": "Measure a red flashlight's 9 V battery with a digital multimeter completion note",
         "description": "A process-specific completion note documenting successful execution of \"Measure a red flashlight's 9 V battery with a digital multimeter\".",
-        "image": "/assets/flashlight_9v_measurement_completion_note.jpg",
+        "image": "/assets/measure_red_flashlight_9v_battery_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2630,7 +2630,7 @@
         "id": "aae06865-0452-5f92-854f-9702130dd778",
         "name": "Heat a through-hole joint and clear it with a spring-loaded pump while wearing safety goggles completion note",
         "description": "A process-specific completion note documenting successful execution of \"Heat a through-hole joint and clear it with a spring-loaded pump while wearing safety goggles\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/desolder_through_hole_pump_goggles_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2662,7 +2662,7 @@
         "id": "b2bb5a31-3ad5-5cbb-8f33-c8a614b20fa6",
         "name": "Test a GFCI outlet's wiring with a plug-in tester and its test/reset buttons completion note",
         "description": "A process-specific completion note documenting successful execution of \"Test a GFCI outlet's wiring with a plug-in tester and its test/reset buttons\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/gfci_outlet_wiring_test_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2702,7 +2702,7 @@
         "id": "c7ab89a4-49b0-5c0d-b1be-9ff93429ae93",
         "name": "Use a laptop to install UFW on a Pi node and allow only SSH and HTTPS completion note",
         "description": "A process-specific completion note documenting successful execution of \"Use a laptop to install UFW on a Pi node and allow only SSH and HTTPS\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/install_ufw_on_pi_node_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2710,7 +2710,7 @@
         "id": "b46778b4-7cfe-5ed1-acb1-99c3f9997433",
         "name": "Measure 1.75 mm PLA filament at three points with digital calipers completion note",
         "description": "A process-specific completion note documenting successful execution of \"Measure 1.75 mm PLA filament at three points with digital calipers\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/pla_filament_caliper_measurement_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2718,7 +2718,7 @@
         "id": "f936cd30-c001-5b9a-980a-58aaead87f98",
         "name": "Clean soldering iron tip using a brass wire sponge completion note",
         "description": "A process-specific completion note documenting successful execution of \"Clean soldering iron tip using a brass wire sponge\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/clean_soldering_iron_tip_brass_sponge_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2750,7 +2750,7 @@
         "id": "b3211a41-dda9-5af7-a370-61ccde9ae9fc",
         "name": "Validate reflectance thresholds during motion completion note",
         "description": "A process-specific completion note documenting successful execution of \"Validate reflectance thresholds during motion\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/reflectance_threshold_motion_validation_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2758,7 +2758,7 @@
         "id": "cd460004-af9f-51f9-8a01-6d98779870a5",
         "name": "Build and pressure-test a small-scale biogas digester completion note",
         "description": "A process-specific completion note documenting successful execution of \"Build and pressure-test a small-scale biogas digester\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/biogas_digester_pressure_test_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2782,7 +2782,7 @@
         "id": "9d00d309-9e29-5772-b099-fa299c65874f",
         "name": "Integrate ultrasonic obstacle avoidance on a mobile robot completion note",
         "description": "A process-specific completion note documenting successful execution of \"Integrate ultrasonic obstacle avoidance on a mobile robot\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/mobile_robot_ultrasonic_obstacle_avoidance_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2798,7 +2798,7 @@
         "id": "f98c972e-a6b3-5687-a1b2-71d4f7f4cd71",
         "name": "Assemble and calibrate a servo gripper completion note",
         "description": "A process-specific completion note documenting successful execution of \"Assemble and calibrate a servo gripper\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/servo_gripper_assembly_calibration_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2806,7 +2806,7 @@
         "id": "bec23bf5-2ac6-58ae-a561-72b9710edc2d",
         "name": "Install and calibrate wheel encoders completion note",
         "description": "A process-specific completion note documenting successful execution of \"Install and calibrate wheel encoders\".",
-        "image": "/assets/temperature_log_csv_export.jpg",
+        "image": "/assets/wheel_encoder_install_calibration_completion_note.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -2814,7 +2814,7 @@
         "id": "4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d",
         "name": "static engine thrust log",
         "description": "Time-stamped thrust-curve capture from a secured static engine burn used for go/no-go interpretation.",
-        "image": "/assets/model_rocket_static_engine_test.jpg",
+        "image": "/assets/static_engine_thrust_log.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Rocketry & Flight"
     },
@@ -2984,7 +2984,7 @@
         "id": "07d9b966-da28-465e-81b6-d6bd774326aa",
         "name": "weekly quest reminder",
         "description": "Calendar reminder pointing to the quest board each week with your chosen day and time.",
-        "image": "/assets/weekly_quest_reminder_calendar_phone.jpg",
+        "image": "/assets/weekly_quest_reminder_calendar.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Digital & Records"
     },
@@ -3249,7 +3249,7 @@
         "id": "aa8d4075-2959-4b9d-84a4-85524e432b0b",
         "name": "iss timing callout sheet",
         "description": "Field checklist listing pass start/end times, maximum elevation, compass bearings, and verbal timing cues used to coordinate eyes-up spotting without losing situational awareness.",
-        "image": "/assets/weekly_quest_reminder_calendar_phone.jpg",
+        "image": "/assets/iss_timing_callout_sheet.jpg",
         "priceExemptionReason": "BETA_PLACEHOLDER",
         "category": "Astronomy & Observation"
     },

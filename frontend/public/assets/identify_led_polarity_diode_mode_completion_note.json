@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/identify_led_polarity_diode_mode_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Identify LED anode and cathode using a multimeter's diode mode completion note",
+    "item_id": "d23ac2d2-7db2-5b44-a84c-277413b93fa4",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for identifying LED anode and cathode using a multimeter’s diode mode, shown as a small electronics verification sheet beside a loose LED, a multimeter, and probe tips aligned to the LED leads. The note should imply the polarity check was completed successfully, with simple LED symbol sketches and lead-orientation diagrams that clearly tie it to diode-mode testing, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics bench aesthetic: soft task lighting, realistic paper, translucent epoxy, probe wire, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the note centered with the LED and multimeter arranged cleanly nearby.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

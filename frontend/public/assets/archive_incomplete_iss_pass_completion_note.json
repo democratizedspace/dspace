@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/archive_incomplete_iss_pass_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Archive an incomplete ISS pass entry before a fresh retry completion note",
+    "item_id": "ae177c8a-c33c-58ed-a719-def6bfa82d11",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for archiving an incomplete ISS pass entry before a fresh retry, shown as a field tracking sheet with a crossed-out prior pass diagram, a clean archive indicator, and astronomy timing marks beside binoculars, a clipboard, and a dim red-light observing setup. The document should clearly feel like an observational record that was intentionally archived rather than discarded, with visual cues of incomplete tracking and a planned retry, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future citizen-science aesthetic: soft low-light illumination, realistic paper, metal clip, and field gear textures, no logos, no readable labels, and no identifiable faces. Keep the sheet central and legible in form while the surrounding equipment remains minimal and atmospheric.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

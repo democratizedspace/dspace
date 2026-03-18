@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/lunar_eclipse_telescope_photography_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Photograph a lunar eclipse with a telescope completion note",
+    "item_id": "acc5539a-5edf-5927-aca1-bd8117b385eb",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for photographing a lunar eclipse with a telescope, shown as a field log sheet clipped to a small board beside a telescope, camera attachment, and a night-sky setup with the eclipsed moon softly visible in the background. The note should communicate a successfully completed observation session, with exposure blocks, phase sketches, and timing marks that clearly relate to astrophotography, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future astronomy aesthetic: soft moonlit lighting with subtle equipment highlights, realistic paper, glass, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the completion log prominent while the telescope and sky provide clear but uncluttered context.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

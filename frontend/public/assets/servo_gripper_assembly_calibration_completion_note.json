@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/servo_gripper_assembly_calibration_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Assemble and calibrate a servo gripper completion note",
+    "item_id": "f98c972e-a6b3-5687-a1b2-71d4f7f4cd71",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for assembling and calibrating a servo gripper, shown as a robotics bench sheet beside a small two-finger gripper mechanism, a mounted servo, linkage hardware, and a compact controller. The note should imply successful assembly and motion-range calibration, with angle marks and open-close diagrams that clearly indicate manipulator setup and tuning, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future robotics workshop aesthetic: soft focused lighting, realistic paper, metal, polymer, and PCB textures, no logos, no readable labels, and no identifiable faces. Keep the note central and the gripper hardware cleanly arranged around it.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/adjust_solution_ph_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Adjust solution pH completion note",
+    "item_id": "d60a767f-21f4-54f7-8659-8ee6adf165f6",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for adjusting solution pH, shown as a hydroponics lab sheet beside a beaker or reservoir sample, a pH meter, and small dosing tools for acid or base correction. The note should indicate that the target range was reached, with a simple pH scale motif, droplet arrows, and a final balanced-state diagram that makes it clearly about careful solution adjustment, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future wet-lab aesthetic: soft bench lighting, realistic paper, glass, liquid, and plastic textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the surrounding measurement tools tidy and minimal.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+  }
