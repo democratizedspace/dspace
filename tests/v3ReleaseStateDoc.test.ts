@@ -20,6 +20,14 @@ describe('v3 release state doc', () => {
         expect(doc).toMatch(/token\.place.*deferred to v3\.1/i);
     });
 
+    it('mentions Completionist Award III as part of v3 launch sign-off scope', () => {
+        const doc = readFileSync(docPath, 'utf8');
+
+        expect(doc).toMatch(/Completionist Award III[\s\S]*launch sign-off/i);
+        expect(doc).toMatch(/assemble-completionist-award-iii/i);
+        expect(doc).toMatch(/does not grant a second copy/i);
+    });
+
     it('lists multiple v2-only mechanics removed or not applicable', () => {
         const doc = readFileSync(docPath, 'utf8');
         const sectionMatch = doc.match(
