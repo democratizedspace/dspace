@@ -439,9 +439,11 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
 
 // Auto-migrate legacy v2 state on first v3 load when localStorage data is present.
 try {
+    const hasLegacyV2Seed =
+        localStorage.getItem('gameState') || localStorage.getItem('gameStateBackup');
     if (
         isBrowser &&
-        (localStorage.getItem('gameState') || localStorage.getItem('gameStateBackup')) &&
+        hasLegacyV2Seed &&
         !localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)
     ) {
         importV2V3();

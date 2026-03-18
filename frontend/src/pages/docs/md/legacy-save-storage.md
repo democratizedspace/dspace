@@ -371,6 +371,8 @@ backup and fallback for unsupported environments.
 - V2 localStorage detection reads `gameState` / `gameStateBackup`, parses JSON safely, and
   accepts either a `versionNumberString`/`versionNumber` prefix of `1`/`2` or a v2-shaped payload
   containing `inventory`, `quests`, or `processes`.
+- On first v3 load, auto-migration starts when either key is present (primary `gameState`,
+  fallback `gameStateBackup`) unless `LEGACY_V2_SEED_SKIP_KEY` is set for QA seeding.
 - Shared detection entry point:
   `frontend/src/utils/legacySaveDetection.ts`
   (`detectLegacyArtifacts`).
@@ -384,6 +386,8 @@ backup and fallback for unsupported environments.
   `frontend/src/utils/gameState.js`).
 - **V2 → V3:** `importV2V3` replaces the current save with the legacy state, and
   `mergeLegacyStateIntoCurrent` combines inventory while preserving existing quests/processes.
+- Both actions persist through `saveGameState`, which rewrites `gameState` / `gameStateBackup`
+  mirrors as v3 snapshots instead of retaining raw legacy payload JSON.
 - **In-progress process handling:** during v2 migration, in-progress process entries are compensated
   by granting each process `createItems` output into inventory; those compensated process entries
   are removed from migrated `processes`.

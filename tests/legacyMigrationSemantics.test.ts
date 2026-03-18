@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { afterEach, beforeEach, describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import {
   closeGameStateDatabaseForTesting,
@@ -7,6 +7,7 @@ import {
   resetGameState,
 } from '../frontend/src/utils/gameState/common.js';
 import { importV2V3, VERSIONS } from '../frontend/src/utils/gameState.js';
+import { LEGACY_V2_SEED_SKIP_KEY } from '../frontend/src/utils/legacySaveParsing.js';
 import { readLegacyV2LocalStorage } from '../frontend/src/utils/legacySaveParsing.js';
 import { V1_ITEM_ID_TO_V3_UUID } from '../frontend/src/utils/legacyV1ItemIdMap.js';
 import processes from '../frontend/src/generated/processes.json' assert { type: 'json' };
@@ -17,6 +18,21 @@ const outletCreateItems =
   processes.find((process) => process.id === OUTLET_PROCESS_ID)?.createItems ?? [];
 const benchyCreateItems =
   processes.find((process) => process.id === '3dprint-benchy')?.createItems ?? [];
+const waitForAssertion = async (assertion, timeoutMs = 1500) => {
+  const start = Date.now();
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    try {
+      assertion();
+      return;
+    } catch (error) {
+      if (Date.now() - start >= timeoutMs) {
+        throw error;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+  }
+};
 
 describe('legacy migration semantics', () => {
   beforeEach(async () => {
@@ -140,6 +156,54 @@ describe('legacy migration semantics', () => {
     expect(migrated?.processes['processes/no-longer-exists']).toBeUndefined();
     benchyCreateItems.forEach(({ id, count }) => {
       expect(migrated?.inventory[id]).toBe(count);
+    });
+  });
+
+  test('first-load bootstrap auto-migrates when only gameStateBackup is present', async () => {
+    localStorage.setItem(
+      'gameStateBackup',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: { 1: 7 },
+        quests: {},
+        processes: {},
+      })
+    );
+
+    vi.resetModules();
+    await import('../frontend/src/utils/gameState.js');
+    const { loadGameState: loadReloadedState } = await import(
+      '../frontend/src/utils/gameState/common.js'
+    );
+
+    await waitForAssertion(() => {
+      expect(localStorage.getItem('gameState')).toBeNull();
+      expect(localStorage.getItem('gameStateBackup')).toBeNull();
+      expect(loadReloadedState().inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(7);
+    });
+  });
+
+  test('first-load bootstrap skip key suppresses backup-only auto-migration', async () => {
+    localStorage.setItem(
+      'gameStateBackup',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: { 1: 11 },
+        quests: {},
+        processes: {},
+      })
+    );
+    localStorage.setItem(LEGACY_V2_SEED_SKIP_KEY, '1');
+
+    vi.resetModules();
+    await import('../frontend/src/utils/gameState.js');
+    const { loadGameState: loadReloadedState } = await import(
+      '../frontend/src/utils/gameState/common.js'
+    );
+
+    await waitForAssertion(() => {
+      expect(localStorage.getItem('gameStateBackup')).not.toBeNull();
+      expect(loadReloadedState().inventory[V1_ITEM_ID_TO_V3_UUID[1]] ?? 0).toBe(0);
     });
   });
 });

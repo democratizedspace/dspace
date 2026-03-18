@@ -13,8 +13,9 @@ On first launch, the app checks localStorage for legacy v2 payloads using
 - fallback key: `gameStateBackup`
 
 If a legacy payload is detected and QA seeding skip mode is not enabled, `importV2V3`
-runs automatically. Migration writes a validated v3 state first, then removes legacy v2
-keys when IndexedDB is active.
+runs automatically, including backup-only cases where `gameState` is missing but
+`gameStateBackup` is present. Migration writes a validated v3 state first, then removes
+legacy v2 keys when IndexedDB is active.
 
 If IndexedDB is unavailable, DSPACE falls back to localStorage-backed persistence and
 shows a warning that storage space may be limited.
@@ -23,6 +24,9 @@ shows a warning that storage space may be limited.
 
 - **Replace migration (`importV2V3`)**: replaces the current v3 state with normalized v2
   `quests`, `inventory`, `processes`, and `settings`.
+- **Manual merge/replace persistence**: both migration actions persist a v3 snapshot via
+  `saveGameState`, so `gameState`/`gameStateBackup` are rewritten as v3 mirrors rather
+  than preserving raw legacy payloads.
 - **In-progress v2 processes**: migration compensates in-progress entries by granting
   each process `createItems` outputs into inventory and removing those migrated process
   entries from the v3 `processes` map.

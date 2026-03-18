@@ -36,6 +36,8 @@ Use this route for full-profile migration between devices.
 - Canonical v3 save: IndexedDB database `dspaceGameState` (stores: `state`, `backup`, `meta`).
 - Local mirrors: localStorage `gameState` and `gameStateBackup` are written as resilience mirrors.
 - Legacy v2 detection keys: `gameState` and `gameStateBackup` are both scanned for v1/v2-shaped payloads.
+- First-load v2 auto-migration checks `gameState` first and falls back to `gameStateBackup`, so
+  backup-only legacy storage still migrates unless QA skip mode is enabled.
 
 For QA resets:
 
