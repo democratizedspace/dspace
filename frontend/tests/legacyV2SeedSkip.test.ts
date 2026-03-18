@@ -15,6 +15,22 @@ const getStoredGameState = () => {
     return raw ? JSON.parse(raw) : null;
 };
 
+const waitForAssertion = async (assertion: () => void, timeoutMs = 2000) => {
+    const started = Date.now();
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+        try {
+            assertion();
+            return;
+        } catch (error) {
+            if (Date.now() - started >= timeoutMs) {
+                throw error;
+            }
+            await new Promise((resolve) => setTimeout(resolve, 25));
+        }
+    }
+};
+
 beforeEach(() => {
     vi.resetModules();
     localStorage.clear();
@@ -45,7 +61,9 @@ test('auto-migration runs when QA seed flag is absent', async () => {
     await ready;
     await Promise.resolve();
 
-    const stored = getStoredGameState();
-    expect(stored?.versionNumberString).toBe('3');
-    expect(localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)).toBeNull();
+    await waitForAssertion(() => {
+        const stored = getStoredGameState();
+        expect(stored?.versionNumberString).toBe('3');
+        expect(localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)).toBeNull();
+    });
 });

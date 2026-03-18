@@ -6,11 +6,32 @@ slug: 'state-migration'
 # Game State Migration
 
 DSPACE v3 stores quests, inventory and processes in IndexedDB instead of `localStorage`.
-On first launch, the app checks for the legacy `gameState` key in `localStorage`. If it
-exists and no IndexedDB data has been saved yet, the `importV2V3` helper copies the old
-state into IndexedDB and clears the legacy keys. The migration runs automatically and
-needs no manual action. If IndexedDB is unavailable, the game falls back to
-`localStorage` and warns the player that storage space will be limited.
+On first launch, the app checks localStorage for legacy v2 payloads using
+`readLegacyV2LocalStorage`:
+
+- primary key: `gameState`
+- fallback key: `gameStateBackup`
+
+If a legacy payload is detected and QA seeding skip mode is not enabled, `importV2V3`
+runs automatically, including backup-only cases where `gameState` is missing but
+`gameStateBackup` is present. Migration writes a validated v3 state first, then removes
+legacy v2 keys when IndexedDB is active.
+
+If IndexedDB is unavailable, DSPACE falls back to localStorage-backed persistence and
+shows a warning that storage space may be limited.
+
+## v2 migration semantics
+
+- **Replace migration (`importV2V3`)**: replaces the current v3 state with normalized v2
+  `quests`, `inventory`, `processes`, and `settings`.
+- **Manual merge/replace persistence**: both migration actions persist a v3 snapshot via
+  `saveGameState`, so `gameState`/`gameStateBackup` are rewritten as v3 mirrors rather
+  than preserving raw legacy payloads.
+- **In-progress v2 processes**: migration compensates in-progress entries by granting
+  each process `createItems` outputs into inventory and removing those migrated process
+  entries from the v3 `processes` map.
+- **Re-run protection**: once migration completes, legacy v2 keys are removed (IndexedDB
+  mode), which prevents automatic re-runs from the same legacy source.
 
 > **Note:** New persistence features should favor IndexedDB end-to-end. Use
 > `localStorage` strictly as a resilience fallback when IndexedDB cannot be
