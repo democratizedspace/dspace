@@ -24,6 +24,10 @@ describe('completionist award III launch-gate semantics', () => {
         const capstone = quests.find((quest: any) => quest.id === CAPSTONE_QUEST_ID);
         expect(capstone).toBeDefined();
 
+        // INTENT: Completionist Award III must require every pre-capstone "leaf" quest
+        // (a quest that no other pre-capstone quest depends on). This deliberately
+        // couples the capstone gate to the full quest graph so adding a new standalone
+        // quest requires an explicit product decision about capstone inclusion.
         const preCapstoneQuests = quests.filter((quest: any) => quest.id !== CAPSTONE_QUEST_ID);
         const dependedUpon = new Set<string>();
 

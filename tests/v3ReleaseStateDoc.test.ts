@@ -18,6 +18,11 @@ describe('v3 release state doc', () => {
 
         expect(doc).toMatch(/OpenAI-only chat/i);
         expect(doc).toMatch(/token\.place.*deferred to v3\.1/i);
+    });
+
+    it('mentions Completionist Award III as part of v3 launch sign-off scope', () => {
+        const doc = readFileSync(docPath, 'utf8');
+
         expect(doc).toMatch(/Completionist Award III[\s\S]*launch sign-off/i);
     });
 
