@@ -18,6 +18,8 @@ the full release QA checklist in
 - Official content now includes **248 quests across 19 quest trees**.
 - Quest details render from canonical quest JSON, including branching dialogue, rewards, and
   requirements.
+- v3 launch sign-off includes the `completionist/award-iii` capstone (Completionist Award III)
+  as part of the shipped quest critical path.
 
 ### Navigation and utility surfaces
 
