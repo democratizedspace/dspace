@@ -31,6 +31,15 @@ At `/gamesaves`:
 
 Use this route for full-profile migration between devices.
 
+## Where v3 data lives and QA inspection/reset
+
+- Primary v3 game-state storage is IndexedDB (`dspaceGameState`, `state` store, `root` key).
+- `localStorage.gameState` and `localStorage.gameStateBackup` are maintained as mirrors/fallback
+  snapshots.
+- For QA inspection: open DevTools → Application → IndexedDB / Local Storage and compare values.
+- For QA resets: use `/settings` legacy/QA controls to clear v3 IndexedDB state intentionally, then
+  re-seed legacy fixtures as needed.
+
 ## Exporting and importing custom content
 
 At `/contentbackup`:

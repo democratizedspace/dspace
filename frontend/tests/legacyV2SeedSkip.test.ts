@@ -49,3 +49,17 @@ test('auto-migration runs when QA seed flag is absent', async () => {
     expect(stored?.versionNumberString).toBe('3');
     expect(localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)).toBeNull();
 });
+
+test('auto-migration runs when only gameStateBackup contains legacy v2 data', async () => {
+    localStorage.setItem('gameStateBackup', JSON.stringify(legacyState));
+
+    await import('../src/utils/gameState.js');
+    const { ready } = await import('../src/utils/gameState/common.js');
+    await ready;
+    await Promise.resolve();
+
+    const stored = getStoredGameState();
+    expect(stored?.versionNumberString).toBe('3');
+    expect(localStorage.getItem('gameStateBackup')).toContain('"versionNumberString":"3"');
+    expect(localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)).toBeNull();
+});

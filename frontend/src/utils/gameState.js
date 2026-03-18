@@ -207,6 +207,8 @@ const persistMigratedState = async (state) => {
     const migrated = validateGameState(structuredClone(state));
     migrated.versionNumberString = VERSIONS.V3;
 
+    await saveGameState(migrated);
+
     if (isBrowser) {
         try {
             localStorage.removeItem(LEGACY_V2_SEED_SKIP_KEY);
@@ -218,8 +220,6 @@ const persistMigratedState = async (state) => {
             /* ignore */
         }
     }
-
-    await saveGameState(migrated);
     return migrated;
 };
 
@@ -339,12 +339,11 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
 
 // Auto-migrate legacy v2 state on first v3 load when localStorage data is present.
 try {
-    if (
-        isBrowser &&
-        localStorage.getItem('gameState') &&
-        !localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)
-    ) {
-        importV2V3();
+    if (isBrowser && !localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)) {
+        const legacyRead = readLegacyV2LocalStorage();
+        if (legacyRead.state) {
+            importV2V3(legacyRead.state);
+        }
     }
 } catch {
     /* ignore */
