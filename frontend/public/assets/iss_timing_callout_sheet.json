@@ -7,4 +7,4 @@
     "prompt": "A field checklist sheet for ISS spotting, listing pass start and end timing, peak elevation cues, compass bearing markers, and verbal timing prompts implied through layout and symbols rather than readable text. The sheet should rest on a clipboard with a red-light field setup, compass, and skywatching gear nearby, making it clear this is a practical eyes-up coordination aid for tracking a fast satellite pass.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future citizen-science aesthetic: soft dusk or night lighting, realistic paper, clip, and outdoor gear textures, no logos, no readable labels, and no identifiable faces. Keep the callout sheet centered and uncluttered so it reads clearly as a dedicated DSPACE field artifact.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

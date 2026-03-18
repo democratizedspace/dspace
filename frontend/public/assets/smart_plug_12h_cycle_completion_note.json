@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note for setting a smart plug to a 12 hour on and off cycle, shown as a home automation verification sheet beside a smart plug, a lamp or small appliance cord, and a smartphone displaying an abstract scheduling interface with no readable text. The note should imply the schedule was configured successfully, with simple clock arcs and power-cycle icons that clearly place it in timed home automation setup.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future home-tech aesthetic: soft indoor lighting, realistic paper, plastic, cord, and glass textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the smart plug arrangement neat and uncluttered.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

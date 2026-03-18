@@ -7,4 +7,4 @@
     "prompt": "A generic process completion note shown as a tangible run log proving that a procedure finished and produced an auditable outcome, displayed as a printed sheet with timestamp blocks, checkmarks, a simple plotted line, and a completion stamp motif beside a pen and a small workstation tool. The page should feel universal and reusable across many technical workflows, clearly representing documented completion rather than a specific machine or experiment, with no readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future operations-lab aesthetic: soft task lighting, realistic paper fibers, subtle shadows, and clean desk materials, no logos, no readable labels, and no identifiable faces. Keep the run log centered and uncluttered so it reads immediately as a DSPACE completion artifact.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

@@ -7,4 +7,4 @@
     "prompt": "A weekly quest reminder shown as a calendar reminder scene on a phone beside a small quest board or notebook, with a clearly scheduled recurring reminder indicated by a highlighted weekly time slot and an arrow-like visual link toward the quest-tracking area. The scene should communicate a habit-building weekly prompt rather than a generic phone notification, without any readable text on the phone screen.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future productivity aesthetic: soft desk lighting, realistic glass, paper, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the phone and reminder composition centered and uncluttered so it works well as a DSPACE item icon.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note for confirming a 220 ohm resistor’s value using a printed color code chart, shown as a small electronics worksheet beside a resistor, a printed band-color reference card, and a tidy bench surface. The note should imply the resistor value was verified successfully, with band-order sketches and a check result that clearly link the scene to resistor identification by color code, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-bench aesthetic: soft warm lighting, realistic paper, ceramic coating, and metal lead textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the resistor and chart arranged simply around it.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

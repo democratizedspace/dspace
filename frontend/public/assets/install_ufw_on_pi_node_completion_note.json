@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note for using a laptop to install UFW on a Pi node and allow only SSH and HTTPS, shown as a network-setup sheet beside a small single-board computer node, ethernet cable, and laptop with an abstract terminal-like interface that contains no readable text. The note should imply a successfully hardened configuration, with simple port icons, connection arrows, and a locked-shield motif that makes it clearly about firewall setup on a small server.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future homelab aesthetic: soft desk lighting, realistic paper, PCB, metal, and cable textures, no logos, no readable labels, and no identifiable faces. Keep the note central with the laptop and Pi hardware cleanly staged in the background.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

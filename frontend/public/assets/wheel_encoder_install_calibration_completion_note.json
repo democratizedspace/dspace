@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note for installing and calibrating wheel encoders, shown as a robotics bench sheet beside a small wheeled chassis with encoder discs or sensor modules mounted near the axles. The note should imply that both hardware installation and calibration succeeded, with simple wheel-rotation diagrams and tick-mark patterns that clearly signal motion sensing and odometry setup, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future robotics workshop aesthetic: soft directional lighting, realistic paper, rubber, metal, and PCB textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the chassis visible but not cluttering the frame.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

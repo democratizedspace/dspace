@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note for calibrating an EC meter with 1000 ppm solution, shown as a neat lab record sheet beside a digital EC meter, a small calibration solution bottle, and a sample cup on a hydroponics bench. The note should communicate that the calibration was successfully completed, with simple drawn calibration steps, check marks, and a clean bench arrangement that makes the process visually specific to water-quality instrumentation, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk lab aesthetic: soft diffused lighting, realistic paper, glass, and plastic textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the surrounding tools minimal so the image works well as a distinct DSPACE item icon.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}

@@ -7,4 +7,4 @@
     "prompt": "A process-specific completion note for validating reflectance thresholds during motion, shown as a robotics test sheet beside a line-following sensor rig mounted near a moving wheel assembly or small chassis. The document should imply successful calibration and dynamic threshold checks, with simple reflectance bars, sensor path diagrams, and motion arrows that clearly tie it to real-time sensing validation, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future robotics lab aesthetic: soft workshop lighting, realistic paper, matte plastic, PCB, and rubber textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the motion-sensing hardware secondary but clearly recognizable.",
     "image_model": "Nano Banana Pro",
     "resolution": "512x512"
-  }
+}
