@@ -9,6 +9,7 @@ import {
 import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
+import processes from '../pages/processes/base.json';
 import { normalizeSettings } from './settingsDefaults.js';
 import { V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID, V1_ITEM_ID_TO_V3_UUID } from './legacyV1ItemIdMap.js';
 import {
@@ -26,6 +27,12 @@ const loadFreshStateForMutation = () => {
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
+const BUILT_IN_PROCESS_CREATE_ITEMS = new Map(
+    (Array.isArray(processes) ? processes : []).map((process) => [
+        process?.id,
+        Array.isArray(process?.createItems) ? process.createItems : [],
+    ])
+);
 
 // ---------------------
 // QUESTS
@@ -203,6 +210,55 @@ const resolveUpgradeOptions = (options = {}) => ({
     grantUpgradeTrophy: Boolean(options.grantUpgradeTrophy),
 });
 
+const isLegacyProcessInProgress = (processState) =>
+    Boolean(
+        processState &&
+            typeof processState === 'object' &&
+            Number.isFinite(processState.startedAt) &&
+            Number.isFinite(processState.duration) &&
+            processState.duration > 0 &&
+            processState.finished !== true &&
+            processState.state !== 'finished'
+    );
+
+const resolveLegacyProcessCreateItems = (processId, processState) => {
+    const inlineCreateItems = Array.isArray(processState?.createItems)
+        ? processState.createItems
+        : [];
+    if (inlineCreateItems.length > 0) {
+        return inlineCreateItems;
+    }
+
+    if (!processId || typeof processId !== 'string') {
+        return [];
+    }
+
+    return BUILT_IN_PROCESS_CREATE_ITEMS.get(processId) ?? [];
+};
+
+const applyLegacyInProgressProcessCompensation = (state, legacyProcesses) => {
+    if (!state || typeof state !== 'object') return;
+
+    const processEntries = Object.entries(legacyProcesses ?? {});
+    if (!processEntries.length) return;
+
+    state.inventory = state.inventory ?? {};
+
+    processEntries.forEach(([processId, processState]) => {
+        if (!isLegacyProcessInProgress(processState)) {
+            return;
+        }
+
+        const createItems = resolveLegacyProcessCreateItems(processId, processState);
+        createItems.forEach(({ id, count }) => {
+            if (!id) return;
+            const parsedCount = normalizeCount(count);
+            if (parsedCount <= 0) return;
+            state.inventory[id] = (state.inventory[id] || 0) + parsedCount;
+        });
+    });
+};
+
 const persistMigratedState = async (state) => {
     const migrated = validateGameState(structuredClone(state));
     migrated.versionNumberString = VERSIONS.V3;
@@ -289,7 +345,9 @@ export const importV2V3 = async (legacyState, options = {}) => {
         migrated = legacyRead.state;
     }
     if (!migrated) return null;
-    const normalized = validateGameState(structuredClone(normalizeLegacyV2State(migrated)));
+    const normalizedLegacyState = normalizeLegacyV2State(migrated);
+    const normalized = validateGameState(structuredClone(normalizedLegacyState));
+    applyLegacyInProgressProcessCompensation(normalized, normalizedLegacyState.processes);
     if (grantUpgradeTrophy) {
         grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
     }
@@ -301,7 +359,8 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
     const { grantUpgradeTrophy } = resolveUpgradeOptions(options);
 
     const current = validateGameState(loadGameState());
-    const incoming = validateGameState(structuredClone(normalizeLegacyV2State(legacyState)));
+    const normalizedLegacyState = normalizeLegacyV2State(legacyState);
+    const incoming = validateGameState(structuredClone(normalizedLegacyState));
     const merged = validateGameState(structuredClone(current));
 
     merged.inventory = merged.inventory ?? {};
@@ -329,6 +388,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
         ...normalizeSettings(current.settings),
         ...normalizeSettings(incoming.settings),
     });
+    applyLegacyInProgressProcessCompensation(merged, normalizedLegacyState.processes);
 
     if (grantUpgradeTrophy) {
         grantTrophyIfMissing(merged, LEGACY_V2_UPGRADE_TROPHY_ID);

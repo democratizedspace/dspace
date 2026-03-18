@@ -212,6 +212,66 @@ describe('LegacySaveUpgrade', () => {
         }
     });
 
+    test('replacing with v2 clears legacy gameState and gameStateBackup', async () => {
+        const legacyProfile = legacyV2Fixtures.profiles.minimal.gameState;
+        localStorage.setItem('gameState', JSON.stringify(legacyProfile));
+        localStorage.setItem('gameStateBackup', JSON.stringify(legacyProfile));
+
+        const originalLocation = window.location;
+        const reloadMock = vi.fn();
+        const mockLocation = {
+            ...originalLocation,
+            reload: reloadMock,
+        };
+        try {
+            Object.defineProperty(window, 'location', {
+                configurable: true,
+                value: mockLocation,
+            });
+        } catch {
+            delete (window as { location?: Location }).location;
+            (window as Window).location = mockLocation;
+        }
+        vi.useFakeTimers();
+        try {
+            const { findByRole } = render(LegacySaveUpgrade, {
+                legacyV1Items: [],
+                legacyCookieKeys: [],
+                cheatsAvailable: false,
+            });
+
+            await vi.runAllTimersAsync();
+
+            const replaceButton = await findByRole('button', {
+                name: /replace current save with v2/i,
+            });
+            await fireEvent.click(replaceButton);
+
+            await vi.runAllTimersAsync();
+
+            await waitFor(() => {
+                const legacyRead = readLegacyV2LocalStorage();
+                expect(legacyRead.state).toBeNull();
+                expect(localStorage.getItem('gameState')).toContain('"versionNumberString":"3"');
+                expect(localStorage.getItem('gameStateBackup')).toContain(
+                    '"versionNumberString":"3"'
+                );
+            });
+            expect(reloadMock).toHaveBeenCalled();
+        } finally {
+            vi.useRealTimers();
+            try {
+                Object.defineProperty(window, 'location', {
+                    configurable: true,
+                    value: originalLocation,
+                });
+            } catch {
+                delete (window as { location?: Location }).location;
+                (window as Window).location = originalLocation;
+            }
+        }
+    });
+
     test('removes legacy v2 data when discarding localStorage saves', async () => {
         const legacyProfile = legacyV2Fixtures.profiles.minimal.gameState;
         localStorage.setItem('gameState', JSON.stringify(legacyProfile));

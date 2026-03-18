@@ -14,6 +14,13 @@ content safely.
 - **`/contentbackup`**: custom content snapshot (custom quests, items, processes)
 - **`/cloudsync`**: optional GitHub gist automation layer for syncing backups
 
+## Where v3 save data lives
+
+- Primary save: IndexedDB database `dspaceGameState` (`state`, `backup`, `meta` stores).
+- Compatibility mirrors: localStorage keys `gameState`, `gameStateBackup`, and `gameStateLite`.
+- Legacy detection: v2 migration logic checks `gameState` and `gameStateBackup` for v1/v2-shaped
+  payloads.
+
 ## Recommended backup cadence
 
 1. Export from `/gamesaves` before large quest/progression sessions.
@@ -30,6 +37,22 @@ At `/gamesaves`:
 - Use Import to restore a backup into the current profile.
 
 Use this route for full-profile migration between devices.
+
+### QA inspection / reset steps
+
+1. Open browser DevTools → **Application**.
+2. Inspect IndexedDB → `dspaceGameState` (`state`/`backup` stores, key `root`).
+3. Inspect Local Storage keys (`gameState`, `gameStateBackup`, `gameStateLite`).
+4. For a full QA reset, clear cookies, localStorage, and IndexedDB for the site origin.
+5. For legacy-only cleanup, use `/settings` → **Legacy save upgrades** → **Delete v2 localStorage
+   data**.
+
+### Merge vs replace semantics for v2 legacy imports
+
+- **Merge v2 into current save**: inventory counts are additive, existing quests/processes are kept,
+  and missing quest/process entries from legacy are added.
+- **Replace current save with v2**: v3 state is replaced by migrated legacy v2 state.
+- Both actions clear legacy `gameState` / `gameStateBackup` keys when IndexedDB is active.
 
 ## Exporting and importing custom content
 
