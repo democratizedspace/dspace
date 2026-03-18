@@ -280,7 +280,7 @@ Normalization happens in `normalizeLegacyV2State`: it keeps `quests`, `inventory
 
 The QA cheats panel uses `frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json`
 to seed `localStorage["gameState"]` for testing. The fixture includes three profiles
-(minimal, in-progress, messy) to exercise inventory remapping, quest/process preservation, and
+(minimal, in-progress, messy) to exercise inventory remapping, process compensation behavior, and
 unknown keys. These fixtures are intentionally small, representative samples — real-world saves
 may include additional keys.
 
@@ -290,12 +290,12 @@ may include additional keys.
 2. **Seed each v2 profile** via the QA cheats panel (or manually set `localStorage["gameState"]`),
    then reload and confirm `/settings` → **Legacy save upgrades** reports legacy v2 data.
 3. **Merge into existing v3 save:** validate additive inventory behavior and that quests/processes
-   are preserved (no overwrites).
+   are preserved when IDs are missing on v3. Existing v3 quest/process IDs remain unchanged.
 4. **Replace into existing v3 save:** validate replacement behavior and that the v3 save is written
    to IndexedDB after import.
-5. **Legacy data cleanup:** `persistMigratedState` removes `gameState` and `gameStateBackup` when
-   IndexedDB is in use; confirm that behavior matches runtime storage mode (localStorage-only
-   environments retain legacy keys).
+5. **Legacy data cleanup:** `persistMigratedState` writes the validated v3 state first, then removes
+   legacy `gameState` and `gameStateBackup` when IndexedDB is in use. In localStorage fallback mode,
+   keys are retained.
 
 ## V1 storage (cookies) vs v2/v3
 
@@ -341,8 +341,8 @@ may include additional keys.
 **Schema:** The canonical v3 save lives in IndexedDB, with localStorage used as a lightweight
 backup and fallback for unsupported environments.
 
-- **Database:** `dspaceGameState` (version `1`).
-- **Object stores:** `state`, `backup`.
+- **Database:** `dspaceGameState` (version `2`).
+- **Object stores:** `state`, `backup`, `meta`.
 - **Key:** `root` (the game state blob is stored under a fixed key).
 - **LocalStorage mirrors:** `gameState` and `gameStateBackup` are still written after every save to
   provide a recovery path when IndexedDB is unavailable.
@@ -384,6 +384,9 @@ backup and fallback for unsupported environments.
   `frontend/src/utils/gameState.js`).
 - **V2 → V3:** `importV2V3` replaces the current save with the legacy state, and
   `mergeLegacyStateIntoCurrent` combines inventory while preserving existing quests/processes.
+- **In-progress process handling:** during v2 migration, in-progress process entries are compensated
+  by granting each process `createItems` output into inventory; those compensated process entries
+  are removed from migrated `processes`.
 - Both flows update `versionNumberString` to `3` and persist to IndexedDB via
   `persistMigratedState` in `frontend/src/utils/gameState.js`.
 
@@ -393,7 +396,7 @@ backup and fallback for unsupported environments.
   `frontend/src/components/svelte/LegacySaveUpgrade.svelte`).
   Other legacy cookies (ex: `quest-`, `checkpoint-`) are not cleared.
 - V2 cleanup deletes `gameState` / `gameStateBackup` during v2 → v3 migrations (when IndexedDB is
-  in use) and also via the **Delete v2 localStorage** action in the Legacy Save Upgrade UI. Both
+  in use) and also via the **Discard legacy v2 data** action in the Legacy Save Upgrade UI. Both
   flows are best-effort (they skip removal if IndexedDB is unavailable or the browser is already
   using localStorage for the active save).
 - The **Clear v3 save for testing** action (available when QA cheats are enabled) only removes v3
