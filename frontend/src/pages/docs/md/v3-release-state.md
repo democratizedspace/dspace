@@ -5,16 +5,16 @@ slug: 'v3-release-state'
 
 # v3 Release State
 
-This page is the source-of-truth snapshot for what shipped in v3 and what remains intentionally
+This page is the source-of-truth snapshot for v3 release scope and what remains intentionally
 limited. Use it alongside the v3 launch notes at [/changelog#20260401](/changelog#20260401) and
 the full release QA checklist in
 [docs/qa/v3.md](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md).
 
-## v3 shipped systems (live now)
+## v3 in-scope systems
 
 ### Core gameplay and progression
 
-- The quest + inventory + process loop is fully live in v3.
+- The quest + inventory + process loop is fully implemented for v3 release scope.
 - Official content now includes **248 quests across 19 quest trees**.
 - Quest details render from canonical quest JSON, including branching dialogue, rewards, and
   requirements.
