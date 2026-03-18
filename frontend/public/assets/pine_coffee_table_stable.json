@@ -5,6 +5,6 @@
     "item_id": "7a8a7f56-e84f-45e0-b321-d9cff33d9ac5",
     "entity_type": "item",
     "prompt": "A low pine coffee table with leveled legs and a stable top, shown in a simple interior setting where the proportions and sturdy construction are clearly visible. The table should feel handmade or workshop-built, with clean joinery, natural wood grain, and an emphasis on its low height and balanced stance rather than decorative styling.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-furniture aesthetic: soft indoor lighting, realistic wood grain and floor textures, no logos, no readable labels, and no identifiable faces. Keep the coffee table centered and uncluttered so it reads clearly as a distinct inventory item.",
-    "image_model": "Nano Banana Pro",
+    "image_model": "ChatGPT Create Image",
     "resolution": "512x512"
 }
