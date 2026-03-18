@@ -16,6 +16,8 @@ the full release QA checklist in
 
 - The quest + inventory + process loop is fully live in v3.
 - Official content now includes **248 quests across 19 quest trees**.
+- The Completionist Award III capstone (`completionist/award-iii`) is part of the v3 launch path,
+  including its full six-step fabrication process chain.
 - Quest details render from canonical quest JSON, including branching dialogue, rewards, and
   requirements.
 
