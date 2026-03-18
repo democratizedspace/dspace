@@ -116,8 +116,13 @@ describe('completionist award III launch-gate semantics', () => {
         const capstone = quests.find((quest: any) => quest.id === CAPSTONE_QUEST_ID);
         expect(capstone).toBeDefined();
 
-        // Canonical ownership: the final assembly process creates Award III; quest finish does not duplicate it.
-        expect(capstone.rewards ?? []).toEqual([]);
+        // Canonical ownership: the final assembly process creates Award III; quest finish rewards may exist,
+        // but they must not include a second Award III copy.
+        const rewardAwardIIIQuantity = (capstone.rewards ?? [])
+            .filter((reward: any) => reward.id === AWARD_III_ITEM_ID)
+            .reduce((sum: number, reward: any) => sum + (reward.count ?? 1), 0);
+        expect(rewardAwardIIIQuantity).toBe(0);
+        expect((capstone.rewards ?? []).length).toBeGreaterThan(0);
 
         const inventory = new Map<string, number>();
         const bumpItem = (id: string, count: number) => {
