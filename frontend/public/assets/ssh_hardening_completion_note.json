@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ssh_hardening_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Disable password login and root SSH access, then restart sshd completion note",
+    "item_id": "79122cb3-a9a5-571c-a363-3f6a63a3f35c",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting disabling password login and root SSH access, then restarting sshd. The image shows a secure homelab workstation with a laptop terminal, a small Linux server or Pi node, and a completion note featuring lock icons, user-access diagrams, and service-restart sequence blocks implied by layout rather than readable text. The scene should communicate successful SSH hardening and improved remote-access security.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future cybersecurity homelab aesthetic: soft desk lighting, realistic metal, cable, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the note central and the server equipment nearby so the security-completion context is obvious.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

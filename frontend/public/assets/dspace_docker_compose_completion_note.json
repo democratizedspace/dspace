@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/dspace_docker_compose_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Launch DSPACE with Docker Compose completion note",
+    "item_id": "706914bf-3a54-5dfc-86fd-4ee0504dbd88",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting successful launch of DSPACE with Docker Compose. The scene shows a laptop or mini server on a desk with a subtle container-stack visualization on screen, a small homelab node, and a printed or tablet-based completion note featuring stacked service blocks, startup sequence checks, and a final healthy-state panel implied without readable text. The environment should feel like a calm deployment success in a personal infrastructure workspace.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future homelab-devops aesthetic: soft desk lighting, realistic aluminum, PCB, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the completion note centered with the containerized setup around it so the deployment milestone is immediately legible.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

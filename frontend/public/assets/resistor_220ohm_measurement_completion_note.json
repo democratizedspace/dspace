@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/resistor_220ohm_measurement_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Measure a 220 Ω resistor with a digital multimeter completion note",
+    "item_id": "817a5a34-d910-5e86-8405-1616e4784a96",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting measurement of a 220 ohm resistor with a digital multimeter. The image shows a single banded resistor centered on a work mat, multimeter probes contacting its leads, and a small completion note with resistor symbols, color-band references, and verification check blocks implied without readable text. The setup should feel like a basic electronics measurement exercise executed carefully.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-bench aesthetic: soft task lighting, realistic resistor coating, metal leads, probe tips, and paper textures, no logos, no readable labels, and no identifiable faces. Keep the resistor and note large in frame so the component measurement is instantly legible.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

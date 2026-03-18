@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/arduino_blink_led_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Upload the Blink sketch to an Arduino Uno and flash a 5 mm LED on a breadboard completion note",
+    "item_id": "28a02dff-9e19-5cc6-a14c-c26db1ab8ae2",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting upload of the Blink sketch to an Arduino Uno and successful flashing of a 5 mm LED on a breadboard. The image shows an Arduino-style board connected to a laptop, a breadboard with a single lit LED and resistor, jumper wires, and a completion sheet with timing marks, upload confirmation symbols, and a tiny schematic implied by shapes instead of text. The setup should feel like a classic first embedded-systems success.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-lab aesthetic: soft workbench lighting, realistic PCB soldermask, translucent LED plastic, and paper textures, no logos, no readable labels, and no clear faces. Keep the electronics arrangement and note centered, tidy, and easy to parse at small size.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

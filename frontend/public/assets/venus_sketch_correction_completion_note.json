@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/venus_sketch_correction_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Clear an out-of-range Venus sketch before corrective retest completion note",
+    "item_id": "809ef57c-b9e6-55a9-93ce-7c6b34491a4e",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting clearing an out-of-range Venus sketch before a corrective retest. The image shows an astronomy observation desk or field notebook with a sketch page being reset or marked for redo, a modest telescope or observing kit nearby, and a completion note featuring crossed-out orbit arcs, corrected observation markers, and retest symbols without readable text. The scene should feel like careful scientific self-correction rather than failure.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future observational-science aesthetic: soft evening lighting, realistic notebook paper, graphite marks, telescope hardware, and matte accessories, no logos, no readable labels, and no identifiable faces. Keep the note and sketch materials centered so the corrective-retest purpose is visually clear.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

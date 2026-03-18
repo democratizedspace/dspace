@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/resistor_lead_trimming_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Trim excess leads from a soldered 220 Ω resistor using wire cutters completion note",
+    "item_id": "872613aa-d953-5e8e-8ce3-ec699b0be6a5",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting trimming excess leads from a soldered 220 ohm resistor using wire cutters. The image shows a through-hole resistor already soldered to a small board, diagonal cutters poised near the protruding leads, and a nearby completion note with before-and-after lead-length diagrams implied without readable text. The scene should emphasize neat finishing work after a successful solder joint.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-workbench aesthetic: soft task lighting, realistic clipped metal leads, PCB surfaces, cutter jaws, and paper textures, no logos, no readable labels, no unsafe behavior, and no identifiable faces. Keep the board, cutters, and note close together and centered so the cleanup step reads clearly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

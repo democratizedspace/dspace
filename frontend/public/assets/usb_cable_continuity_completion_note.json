@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/usb_cable_continuity_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Verify USB cable continuity with a digital multimeter completion note",
+    "item_id": "553c77af-517f-5abc-b120-7ad62a1c2fa7",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting verification of USB cable continuity with a digital multimeter. The image shows a coiled USB cable laid across a work mat, multimeter probes or breakout leads connected for continuity testing, and a nearby note with connector pin diagrams and pass/fail symbols conveyed without readable text. The scene should emphasize cable diagnostics and careful troubleshooting rather than flashy hardware.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-diagnostic aesthetic: soft bench lighting, realistic braided or rubber cable textures, metal probe tips, and matte paper surfaces, no logos, no readable labels, and no identifiable faces. Keep the cable, probes, and note centered and clearly separated so the diagnostic action reads instantly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

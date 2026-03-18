@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/antistatic_wrist_strap_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Clip an anti-static wrist strap to ground before handling electronics completion note",
+    "item_id": "40e6a342-00d1-593b-bf63-369c48254237",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting clipping an anti-static wrist strap to ground before handling electronics. The image shows an electronics bench with a coiled anti-static wrist strap clipped to a grounded point, a circuit board waiting nearby, and a small completion note with grounding symbols and safe-handling sequence blocks implied without readable text. The setup should communicate caution and electrostatic discharge protection clearly.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-safety aesthetic: soft task lighting, realistic braided strap, alligator clip, PCB, and mat textures, no logos, no readable labels, and no clear faces. Keep the wrist strap and note central and uncluttered so the safety step is instantly legible.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
