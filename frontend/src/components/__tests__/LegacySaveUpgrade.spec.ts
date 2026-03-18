@@ -174,7 +174,6 @@ describe('LegacySaveUpgrade', () => {
             delete (window as { location?: Location }).location;
             (window as Window).location = mockLocation;
         }
-        vi.useFakeTimers();
         try {
             const { findByRole, queryByText } = render(LegacySaveUpgrade, {
                 legacyV1Items: [],
@@ -182,24 +181,24 @@ describe('LegacySaveUpgrade', () => {
                 cheatsAvailable: false,
             });
 
-            await vi.runAllTimersAsync();
-
             const mergeButton = await findByRole('button', {
                 name: /merge v2 into current save/i,
             });
             await fireEvent.click(mergeButton);
-
-            await vi.runAllTimersAsync();
 
             await waitFor(() => {
                 const legacyRead = readLegacyV2LocalStorage();
                 expect(legacyRead.state).toBeNull();
                 expect(legacyRead.errors).toHaveLength(0);
             });
-            expect(queryByText(/save conflict detected/i)).toBeNull();
-            expect(reloadMock).toHaveBeenCalled();
+            await waitFor(
+                () => {
+                    expect(queryByText(/save conflict detected/i)).toBeNull();
+                    expect(reloadMock).toHaveBeenCalled();
+                },
+                { timeout: 3500 }
+            );
         } finally {
-            vi.useRealTimers();
             try {
                 Object.defineProperty(window, 'location', {
                     configurable: true,

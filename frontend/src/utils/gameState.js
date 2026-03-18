@@ -37,13 +37,14 @@ const getProcessCreateItemsById = async () => {
         processCreateItemsByIdPromise = import('../generated/processes.json', {
             assert: { type: 'json' },
         })
-            .then(({ default: processCatalog }) =>
-                new Map(
-                    (Array.isArray(processCatalog) ? processCatalog : []).map((process) => [
-                        process?.id,
-                        process?.createItems ?? [],
-                    ])
-                )
+            .then(
+                ({ default: processCatalog }) =>
+                    new Map(
+                        (Array.isArray(processCatalog) ? processCatalog : []).map((process) => [
+                            process?.id,
+                            process?.createItems ?? [],
+                        ])
+                    )
             )
             .catch(() => new Map());
     }
@@ -441,11 +442,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
 try {
     const hasLegacyV2Seed =
         localStorage.getItem('gameState') || localStorage.getItem('gameStateBackup');
-    if (
-        isBrowser &&
-        hasLegacyV2Seed &&
-        !localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)
-    ) {
+    if (isBrowser && hasLegacyV2Seed && !localStorage.getItem(LEGACY_V2_SEED_SKIP_KEY)) {
         importV2V3();
     }
 } catch {
