@@ -16,6 +16,8 @@ the full release QA checklist in
 
 - The quest + inventory + process loop is fully live in v3.
 - Official content now includes **248 quests across 19 quest trees**.
+- The `completionist/award-iii` capstone is in the v3 launch lane and remains locked until its
+  prerequisite quest set is complete.
 - Quest details render from canonical quest JSON, including branching dialogue, rewards, and
   requirements.
 
