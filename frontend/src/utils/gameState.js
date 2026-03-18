@@ -9,6 +9,7 @@ import {
 import { addItems } from './gameState/inventory.js';
 import { isBrowser } from './ssr.js';
 import items from '../pages/inventory/json/items';
+import processes from '../pages/processes/base.json';
 import { normalizeSettings } from './settingsDefaults.js';
 import { V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID, V1_ITEM_ID_TO_V3_UUID } from './legacyV1ItemIdMap.js';
 import {
@@ -26,6 +27,9 @@ const loadFreshStateForMutation = () => {
 
 const EARLY_ADOPTER_ID = items.find((i) => i.name === 'Early Adopter Token')?.id;
 const LEGACY_V2_UPGRADE_TROPHY_ID = items.find((i) => i.name === 'V2 Upgrade Trophy')?.id;
+const BUILT_IN_PROCESSES_BY_ID = new Map(
+    (Array.isArray(processes) ? processes : []).map((process) => [process.id, process])
+);
 
 // ---------------------
 // QUESTS
@@ -203,6 +207,47 @@ const resolveUpgradeOptions = (options = {}) => ({
     grantUpgradeTrophy: Boolean(options.grantUpgradeTrophy),
 });
 
+const isInProgressLegacyProcess = (processState) =>
+    processState &&
+    typeof processState === 'object' &&
+    Number.isFinite(processState.startedAt) &&
+    Number.isFinite(processState.duration) &&
+    processState.duration > 0;
+
+const resolveProcessDefinition = (processId) => {
+    if (typeof processId !== 'string' || !processId) return null;
+    if (BUILT_IN_PROCESSES_BY_ID.has(processId)) {
+        return BUILT_IN_PROCESSES_BY_ID.get(processId);
+    }
+    const bareId = processId.startsWith('processes/') ? processId.slice('processes/'.length) : null;
+    if (bareId && BUILT_IN_PROCESSES_BY_ID.has(bareId)) {
+        return BUILT_IN_PROCESSES_BY_ID.get(bareId);
+    }
+    return null;
+};
+
+const compensateInProgressLegacyProcesses = (state, legacyProcesses) => {
+    if (!state || typeof state !== 'object' || !legacyProcesses || typeof legacyProcesses !== 'object') {
+        return;
+    }
+    state.inventory = state.inventory ?? {};
+
+    Object.entries(legacyProcesses).forEach(([processId, processState]) => {
+        if (!isInProgressLegacyProcess(processState)) {
+            return;
+        }
+        const definition = resolveProcessDefinition(processId);
+        const creates = Array.isArray(definition?.createItems) ? definition.createItems : [];
+
+        creates.forEach(({ id, count }) => {
+            if (!id) return;
+            const parsedCount = normalizeCount(count);
+            if (parsedCount <= 0) return;
+            state.inventory[id] = (state.inventory[id] || 0) + parsedCount;
+        });
+    });
+};
+
 const persistMigratedState = async (state) => {
     const migrated = validateGameState(structuredClone(state));
     migrated.versionNumberString = VERSIONS.V3;
@@ -290,6 +335,7 @@ export const importV2V3 = async (legacyState, options = {}) => {
     }
     if (!migrated) return null;
     const normalized = validateGameState(structuredClone(normalizeLegacyV2State(migrated)));
+    compensateInProgressLegacyProcesses(normalized, normalized.processes);
     if (grantUpgradeTrophy) {
         grantTrophyIfMissing(normalized, LEGACY_V2_UPGRADE_TROPHY_ID);
     }
@@ -324,6 +370,7 @@ export const mergeLegacyStateIntoCurrent = async (legacyState, options = {}) => 
             merged.processes[processId] = processState;
         }
     });
+    compensateInProgressLegacyProcesses(merged, incoming.processes);
 
     merged.settings = normalizeSettings({
         ...normalizeSettings(current.settings),

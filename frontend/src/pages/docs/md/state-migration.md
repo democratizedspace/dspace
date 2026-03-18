@@ -6,11 +6,17 @@ slug: 'state-migration'
 # Game State Migration
 
 DSPACE v3 stores quests, inventory and processes in IndexedDB instead of `localStorage`.
-On first launch, the app checks for the legacy `gameState` key in `localStorage`. If it
-exists and no IndexedDB data has been saved yet, the `importV2V3` helper copies the old
-state into IndexedDB and clears the legacy keys. The migration runs automatically and
-needs no manual action. If IndexedDB is unavailable, the game falls back to
-`localStorage` and warns the player that storage space will be limited.
+On launch, the app checks legacy localStorage payloads in both `gameState` and
+`gameStateBackup`. If either key contains a v1/v2-shaped payload, `importV2V3` normalizes it,
+writes canonical v3 state, and stamps `versionNumberString: "3"`. In IndexedDB-capable browsers,
+the migration persists to IndexedDB and also rewrites localStorage mirrors to v3-formatted
+payloads (for resilience/fallback), so legacy keys are neutralized rather than left as v2 data.
+If IndexedDB is unavailable, the game falls back to localStorage and warns the player that storage
+space will be limited.
+
+v2 imports also include launch compensation for unfinished legacy processes: for each migrated
+process with `startedAt` + `duration`, v3 grants that process's `createItems` outputs to inventory
+while still preserving the process entry.
 
 > **Note:** New persistence features should favor IndexedDB end-to-end. Use
 > `localStorage` strictly as a resilience fallback when IndexedDB cannot be

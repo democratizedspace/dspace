@@ -31,6 +31,23 @@ At `/gamesaves`:
 
 Use this route for full-profile migration between devices.
 
+## Where v3 data lives (and QA inspection/reset)
+
+- Canonical runtime save: IndexedDB database `dspaceGameState` (stores `state` and `backup`).
+- LocalStorage mirrors: `gameState` and `gameStateBackup` hold v3 snapshots for fallback/recovery.
+- Legacy v1/v2 detection for migration also reads those localStorage keys, but only treats them as
+  legacy when they parse as pre-v3 payloads.
+
+For QA storage inspection/reset:
+
+1. Open DevTools → **Application**.
+2. Inspect **IndexedDB** → `dspaceGameState` for canonical v3 data.
+3. Inspect **Local Storage** for `gameState` / `gameStateBackup` mirrors.
+4. Use `/settings`:
+   - **Legacy save upgrades** for merge/replace/discard legacy flows.
+   - **Clear v3 save for testing** (QA cheats) to clear v3 persistence while preserving seeded
+     legacy fixtures.
+
 ## Exporting and importing custom content
 
 At `/contentbackup`:
