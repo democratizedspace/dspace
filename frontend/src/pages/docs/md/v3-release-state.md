@@ -6,7 +6,7 @@ slug: 'v3-release-state'
 # v3 Release State
 
 This page is the source-of-truth snapshot for what shipped in v3 and what remains intentionally
-limited. Use it alongside the v3 launch notes at [/changelog#20260401](/changelog#20260401) and
+limited. Use it alongside the v3 launch notes at [/docs/changelog/20260401](/docs/changelog/20260401) and
 the full release QA checklist in
 [docs/qa/v3.md](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md).
 
