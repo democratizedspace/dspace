@@ -42,12 +42,20 @@ to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not overrid
 
 3. **Verify locally (no tunnel by default):**
    - Port-forward the Service: `kubectl -n dspace port-forward svc/dspace 3000:8080`
-   - In another shell, run `curl -fsS http://localhost:3000/healthz` and
-     `curl -fsS http://localhost:3000/livez` (or open
-     http://localhost:3000/ in a browser)
+   - In another shell, run `curl -fsS http://localhost:3000/healthz`,
+     `curl -fsS http://localhost:3000/livez`, and `curl -fsS http://localhost:3000/config.json`
+     (or open http://localhost:3000/ in a browser).
 
    If you prefer ingress, set a local hostname in the dev values file and route it through Traefik,
    but keep it non-public.
+
+
+## Tag strategy (dev)
+
+- Default day-to-day developer flow can use `v3-latest` for convenience and quick iteration.
+- For reproducible bug hunts, pair testing, or rollback drills, deploy immutable `v3-<shortsha>`
+  tags so everyone tests the same artifact.
+- Do not reuse staging/prod immutable tags as mutable aliases; keep environment intent explicit.
 
 ## Notes for dev environments
 

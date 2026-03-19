@@ -81,6 +81,26 @@ The Helm chart (`charts/dspace`) and docker-compose use port 8080 by default. Al
 configuration files (Dockerfile, Helm values, k8s manifests, docs) are validated by the
 `tests/configConsistency.test.ts` test to ensure they stay in sync.
 
+### Deployment environment flags and chat-provider fallback
+
+For deployment docs and release QA, treat these as the current v3 source of truth:
+
+- Runtime environment is controlled by `DSPACE_ENV` (set by Helm `environment`).
+  - `dev` and `staging` keep QA Cheats enabled for test workflows.
+  - `prod`/`production` keeps QA Cheats disabled.
+- Chat provider scope for v3 is OpenAI by default. token.place is implemented but intentionally
+  deferred for v3 rollout.
+- token.place opt-in remains feature-flag gated:
+  - `VITE_TOKEN_PLACE_ENABLED=true|false` explicitly enables/disables token.place
+  - `VITE_TOKEN_PLACE_URL=<url>` sets a custom token.place endpoint
+  - persisted game-state `tokenPlace.enabled` / `tokenPlace.url` can opt in locally when env flags
+    do not force disable
+- Fallback behavior for v3 launch: if token.place is not explicitly enabled, chat stays on the
+  OpenAI path.
+
+See `/docs/v3-release-state` and `/docs/token-place` for release-scope details and exact opt-in
+precedence rules.
+
 ## Architecture Overview
 
 DSPACE uses Astro's Server-Side Rendering (SSR) with partial hydration of Svelte components on the client side.

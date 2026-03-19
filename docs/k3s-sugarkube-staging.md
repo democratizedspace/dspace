@@ -120,6 +120,7 @@ published by CI.
 3. **Verify**:
    - `curl -fsS https://staging.democratized.space/healthz`
    - `curl -fsS https://staging.democratized.space/livez`
+   - `curl -fsS https://staging.democratized.space/config.json`
    - Open `https://staging.democratized.space` in a browser.
 
 The sections below provide full context for each step, branch-specific tag conventions, and
@@ -321,8 +322,8 @@ sudo kubectl -n dspace port-forward svc/dspace 8080:8080
 curl -s http://localhost:8080/healthz | jq
 ```
 
-For staging release-candidate validation, prefer immutable `v3-<shortsha>` tags so repeated QA
-cycles are reproducible and easily comparable over time.
+For staging release-candidate validation, use immutable `v3-<shortsha>` tags as the default so repeated QA
+cycles remain reproducible and comparable over time. Reserve `v3-latest` for non-blocking convenience checks only.
 
 ### Verification
 
@@ -337,17 +338,21 @@ through the Cloudflare Tunnel and Traefik.
 
 ### Repeated RC validation loop (recommended for staging)
 
-Use this flow for every candidate build you want QA to validate in staging:
+Use this loop for every RC candidate. This is the normal staging flow (not a one-time setup):
 
-1. Trigger `ci-image.yml` from branch `v3` and record the generated immutable tag
-   (`v3-<shortsha>`).
-2. Deploy that exact tag with `just helm-oci-install ... default_tag=v3-REPLACE_SHORTSHA`.
-3. Validate staging behavior and record pass/fail against the tag.
-4. If a fix is needed, produce a new `v3-<shortsha>` and repeat.
+1. Trigger `ci-image.yml` from branch `v3` and capture the immutable tag (`v3-<shortsha>`).
+2. Deploy exactly that tag (`default_tag=v3-REPLACE_SHORTSHA`).
+3. Run validation checks:
+   - `https://staging.democratized.space/healthz`
+   - `https://staging.democratized.space/livez`
+   - `https://staging.democratized.space/config.json`
+   - representative UI smoke pass
+4. Record result in your RC log (`tag`, `chart version`, `pass/fail`, `notes`).
+5. If fixes are needed, build a new immutable tag and repeat.
 
-Only use `v3-latest` for convenience checks where reproducibility is not required.
+Treat `v3-latest` as optional convenience only; do not use it as the canonical QA sign-off artifact.
 
-### Fast manual redeploy (emergency push)
+### Fast manual redeploy (non-RC convenience path)
 
 Use this when you already have dspace running on sugarkube and want the latest `v3-latest` image
 rolled out quickly (normal Kubernetes rolling behavior is fine). This reuses the existing chart
@@ -404,6 +409,10 @@ Use this quick runbook to confirm staging is healthy after a deploy:
 - DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
 - dspace Helm release deployed in `dspace` (or your chosen) namespace.
 - `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
+- App endpoints return 200:
+  - `curl -fsS https://staging.democratized.space/healthz`
+  - `curl -fsS https://staging.democratized.space/livez`
+  - `curl -fsS https://staging.democratized.space/config.json`
 - Browsing `https://staging.democratized.space` shows the dspace v3 UI.
 
 ## Troubleshooting
