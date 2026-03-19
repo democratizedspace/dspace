@@ -41,6 +41,7 @@ The More menu includes in-scope routes for:
 
 - Players can create custom quests at `/quests/create`.
 - Players can create custom items at `/inventory/create`.
+- `/items/create` remains available as a legacy alias that resolves to the same custom item form.
 - Players can create custom processes at `/processes/create`.
 - Players can manage custom content from each matching `/manage` route.
 - Players can export/import custom content bundles from `/contentbackup`.
