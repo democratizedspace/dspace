@@ -42,8 +42,10 @@ to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not overrid
 
 3. **Verify locally (no tunnel by default):**
    - Port-forward the Service: `kubectl -n dspace port-forward svc/dspace 3000:80`
-   - In another shell, run `curl -fsS http://localhost:3000/ready` (or open
-     http://localhost:3000/ in a browser)
+   - In another shell, run:
+     - `curl -fsS http://localhost:3000/healthz`
+     - `curl -fsS http://localhost:3000/livez`
+     - (optional) open http://localhost:3000/ in a browser
 
    If you prefer ingress, set a local hostname in the dev values file and route it through Traefik,
    but keep it non-public.
@@ -53,5 +55,6 @@ to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not overrid
 - Keep tokens scoped: use `SUGARKUBE_TOKEN_DEV` for dev clusters; do not reuse staging/prod tokens.
 - Cloudflare tunnels are optional in dev. If you add one, align it with `env=dev` and a non-public
   hostname.
-- Use versioned or short-SHA image tags when testing rollout behavior; `v3-latest` is fine for
-  day-to-day dev iteration.
+- `v3-latest` is fine for day-to-day dev iteration.
+- Prefer immutable tags (`v3-<shortsha>`) when reproducing a bug, testing rollback behavior, or
+  comparing two specific builds.
