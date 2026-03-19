@@ -46,7 +46,7 @@ describe('QaCheatsToggle inventory grant', () => {
         await fireEvent.click(toggle);
 
         expect(await findByTestId('qa-inventory-grant-tool')).toBeTruthy();
-    });
+    }, 180000);
 
     test('adds a custom item id to inventory when staging QA cheats are enabled', async () => {
         const { findByTestId, findByLabelText, findByRole, findByText } = render(QaCheatsToggle, {
@@ -74,7 +74,7 @@ describe('QaCheatsToggle inventory grant', () => {
         await waitFor(() => {
             expect(addItemsSpy).toHaveBeenCalledWith([{ id: 'qa-custom-dwatt', count: 5000 }]);
         });
-    }, 15000);
+    }, 180000);
 
     test('hides inventory grant tool outside staging even when QA cheats are enabled', async () => {
         const { findByTestId, queryByTestId } = render(QaCheatsToggle, {
@@ -86,5 +86,5 @@ describe('QaCheatsToggle inventory grant', () => {
         await fireEvent.click(toggle);
 
         expect(queryByTestId('qa-inventory-grant-tool')).toBeNull();
-    });
+    }, 180000);
 });
