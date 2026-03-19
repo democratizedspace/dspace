@@ -72,6 +72,13 @@ describe('LegacySaveUpgrade', () => {
             expect(state.inventory[V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD]).toBe(12.5);
             expect(state.inventory[EARLY_ADOPTER_ID]).toBe(1);
         });
+
+        await waitFor(() => {
+            expect(document.cookie).not.toContain('item-3=');
+            expect(document.cookie).not.toContain('item-10=');
+            expect(document.cookie).not.toContain('item-21=');
+            expect(document.cookie).not.toContain('currency-balance-dUSD=');
+        });
     });
 
     test('surfaces invalid v1 cookie values with a notice', async () => {

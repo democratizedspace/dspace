@@ -106,6 +106,27 @@ describe('legacy migration semantics', () => {
     expect(loadGameState().inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(4);
   });
 
+  test('importV2V3 is idempotent for the same legacy source once keys are removed', async () => {
+    localStorage.setItem(
+      'gameState',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: { 1: 4 },
+        quests: { q1: { finished: true } },
+        processes: {},
+      })
+    );
+
+    const first = await importV2V3();
+    const second = await importV2V3();
+
+    expect(first?.inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(4);
+    expect(second).toBeNull();
+    expect(loadGameState().inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(4);
+    expect(localStorage.getItem('gameState')).toBeNull();
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+  });
+
   test('importV2V3 compensates in-progress v2 processes and removes those migrated entries', async () => {
     localStorage.setItem(
       'gameState',
@@ -157,6 +178,28 @@ describe('legacy migration semantics', () => {
     benchyCreateItems.forEach(({ id, count }) => {
       expect(migrated?.inventory[id]).toBe(count);
     });
+  });
+
+  test('importV2V3 does not clear legacy keys when v3 persistence fails', async () => {
+    localStorage.setItem(
+      'gameState',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: { 1: 5 },
+        quests: {},
+        processes: {},
+      })
+    );
+
+    const saveSpy = vi
+      .spyOn(await import('../frontend/src/utils/gameState/common.js'), 'saveGameState')
+      .mockRejectedValueOnce(new Error('save failed'));
+
+    await expect(importV2V3()).rejects.toThrow('save failed');
+    expect(localStorage.getItem('gameState')).not.toBeNull();
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+
+    saveSpy.mockRestore();
   });
 
   test('first-load bootstrap auto-migrates when only gameStateBackup is present', async () => {
