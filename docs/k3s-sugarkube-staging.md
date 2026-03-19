@@ -118,6 +118,7 @@ Replace `REPLACE_SHORTSHA` with the exact immutable suffix from the `v3-<shortsh
 published by CI.
 
 3. **Verify**:
+   - `curl -fsS https://staging.democratized.space/config.json`
    - `curl -fsS https://staging.democratized.space/healthz`
    - `curl -fsS https://staging.democratized.space/livez`
    - Open `https://staging.democratized.space` in a browser.
@@ -343,15 +344,21 @@ Use this flow for every candidate build you want QA to validate in staging:
    (`v3-<shortsha>`).
 2. Deploy that exact tag with `just helm-oci-install ... default_tag=v3-REPLACE_SHORTSHA`.
 3. Validate staging behavior and record pass/fail against the tag.
+   - `curl -fsS https://staging.democratized.space/config.json`
+   - `curl -fsS https://staging.democratized.space/healthz`
+   - `curl -fsS https://staging.democratized.space/livez`
 4. If a fix is needed, produce a new `v3-<shortsha>` and repeat.
+5. If the candidate fails, roll back immediately by redeploying the prior known-good
+   `v3-<shortsha>` tag and re-running the three endpoint checks above.
 
 Only use `v3-latest` for convenience checks where reproducibility is not required.
 
-### Fast manual redeploy (emergency push)
+### Fast manual redeploy (emergency push only)
 
-Use this when you already have dspace running on sugarkube and want the latest `v3-latest` image
-rolled out quickly (normal Kubernetes rolling behavior is fine). This reuses the existing chart
-version and values; it simply forces Helm to pull the refreshed image tag.
+Use this only when you already have dspace running on sugarkube and explicitly accept
+non-reproducible validation with `v3-latest`. For RC sign-off, use the repeated immutable-tag loop
+above. This reuses the existing chart version and values; it simply forces Helm to pull the
+refreshed mutable tag.
 
 1. **Build and publish a new image:** Follow [Step 1](#step-1-build-and-publish-ghcr-artifacts-from-the-right-branch)
    to trigger the GHCR image workflow for `v3`. Ensure the run publishes both `v3-<shortsha>` and
@@ -374,6 +381,7 @@ version and values; it simply forces Helm to pull the refreshed image tag.
    ```bash
    kubectl get pods -n dspace -o wide
    kubectl get deploy -n dspace dspace -o yaml | grep "image:"
+   curl -fsS https://staging.democratized.space/config.json
    curl -fsS https://staging.democratized.space/healthz
    curl -fsS https://staging.democratized.space/livez
    ```
@@ -404,6 +412,10 @@ Use this quick runbook to confirm staging is healthy after a deploy:
 - DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
 - dspace Helm release deployed in `dspace` (or your chosen) namespace.
 - `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
+- dspace endpoints return success:
+  - `https://staging.democratized.space/config.json` (runtime config surface used by CI smoke)
+  - `https://staging.democratized.space/healthz` (readiness)
+  - `https://staging.democratized.space/livez` (liveness)
 - Browsing `https://staging.democratized.space` shows the dspace v3 UI.
 
 ## Troubleshooting
