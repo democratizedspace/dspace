@@ -106,6 +106,43 @@ describe('legacy migration semantics', () => {
     expect(loadGameState().inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(4);
   });
 
+  test('importV2V3 is idempotent after legacy keys are cleaned up', async () => {
+    localStorage.setItem(
+      'gameState',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: { 1: 5 },
+        quests: {},
+        processes: {},
+      })
+    );
+
+    const first = await importV2V3();
+    const second = await importV2V3();
+
+    expect(first?.inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(5);
+    expect(second).toBeNull();
+    expect(localStorage.getItem('gameState')).toBeNull();
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+    expect(loadGameState().inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(5);
+  });
+
+  test('importV2V3 logs parse issues and keeps raw legacy keys when JSON is invalid', async () => {
+    localStorage.setItem('gameState', '{invalid-json');
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const migrated = await importV2V3();
+
+    expect(migrated).toBeNull();
+    expect(localStorage.getItem('gameState')).toBe('{invalid-json');
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Error reading legacy v2 gameState:'),
+      expect.stringContaining('JSON')
+    );
+    warnSpy.mockRestore();
+  });
+
   test('importV2V3 compensates in-progress v2 processes and removes those migrated entries', async () => {
     localStorage.setItem(
       'gameState',

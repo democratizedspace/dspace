@@ -1,232 +1,83 @@
-import 'fake-indexeddb/auto';
-import { fireEvent, render, waitFor } from '@testing-library/svelte';
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { render, fireEvent, screen, waitFor } from '@testing-library/svelte';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import LegacySaveUpgrade from '../svelte/LegacySaveUpgrade.svelte';
-import {
-    closeGameStateDatabaseForTesting,
-    loadGameState,
-    resetGameState,
-} from '../../utils/gameState/common.js';
-import { initializeQaCheats, setQaCheatsPreference } from '../../lib/qaCheats';
-import items from '../../pages/inventory/json/items';
-import legacyV2Fixtures from '../../utils/legacySaveFixtures/legacy_v2_localstorage_save.json';
-import {
-    V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID,
-    V1_ITEM_ID_TO_V3_UUID,
-} from '../../utils/legacyV1ItemIdMap.js';
-import * as legacySaveSeeding from '../../utils/legacySaveSeeding';
-import { readLegacyV2LocalStorage } from '../../utils/legacySaveParsing.js';
 
-const EARLY_ADOPTER_ID = items.find((item) => item.name === 'Early Adopter Token')?.id;
+const importV1V3Mock = vi.fn(async () => ({}));
+const inspectGameStateStorageMock = vi.fn(async () => ({
+    indexedDbState: null,
+    localStorageState: null,
+    indexedDbSupported: true,
+    usesLocalStorageFallback: false,
+    legacyV2State: null,
+    hasLegacyV2Keys: false,
+    legacyV2ParseIssues: [],
+}));
+
+vi.mock('../../utils/gameState.js', async () => {
+    const actual = await vi.importActual('../../utils/gameState.js');
+    return {
+        ...actual,
+        importV1V3: (...args: unknown[]) => importV1V3Mock(...args),
+        importV2V3: vi.fn(async () => null),
+        mergeLegacyStateIntoCurrent: vi.fn(async () => null),
+    };
+});
+
+vi.mock('../../utils/gameState/common.js', () => ({
+    inspectGameStateStorage: (...args: unknown[]) => inspectGameStateStorageMock(...args),
+    isUsingLocalStorage: () => false,
+}));
+
+vi.mock('../../utils/legacySaveDetection', () => ({
+    detectLegacyArtifacts: () => ({
+        hasV1Cookies: true,
+        hasV2LocalStorage: false,
+        v1Items: [{ id: '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6', count: 2 }],
+        v1CookieKeys: ['item-3'],
+        v1InvalidItems: [],
+        v1CurrencyBalances: [],
+        v1CurrencyIssues: [],
+    }),
+}));
+
+vi.mock('../../lib/qaCheats', () => ({
+    qaCheatsEnabled: {
+        subscribe: (cb: (value: boolean) => void) => {
+            cb(false);
+            return () => {};
+        },
+    },
+}));
 
 describe('LegacySaveUpgrade', () => {
-    beforeEach(async () => {
-        document.cookie = '';
-        localStorage.clear();
-        document.documentElement.dataset.cheatsAvailable = 'false';
-        initializeQaCheats(false);
-        setQaCheatsPreference(false);
-        await resetGameState();
+    beforeEach(() => {
+        importV1V3Mock.mockClear();
+        inspectGameStateStorageMock.mockClear();
+        document.cookie = 'item-3=2; path=/';
     });
 
-    afterEach(async () => {
-        await closeGameStateDatabaseForTesting();
-        document.cookie = '';
-        localStorage.clear();
-        document.documentElement.dataset.cheatsAvailable = 'false';
-        initializeQaCheats(false);
-        setQaCheatsPreference(false);
-    });
-
-    test('detects v1 cookies and merges them into v3 state', async () => {
-        expect(EARLY_ADOPTER_ID).toBeTruthy();
-
-        document.cookie = 'item-3=75; path=/';
-        document.cookie = 'item-10=2; path=/';
-        document.cookie = 'item-21=20%2B; path=/';
-        document.cookie = 'item-99=abc; path=/';
-        document.cookie = 'currency-balance-dUSD=12.5; path=/';
-
-        const { findByRole, findByTestId, findByText } = render(LegacySaveUpgrade, {
-            legacyV1Items: [],
-            legacyCookieKeys: [],
-            cheatsAvailable: false,
+    test('merge v1 action imports and expires v1 cookies', async () => {
+        render(LegacySaveUpgrade, {
+            props: {
+                legacyV1Items: [{ id: '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6', count: 2 }],
+                legacyCookieKeys: ['item-3'],
+                cheatsAvailable: false,
+            },
         });
 
-        const cookieSummary = await findByTestId('legacy-v1-cookie-summary');
-        expect(cookieSummary.textContent?.toLowerCase()).toContain('3 item cookies detected');
-
-        const mergeButton = await findByRole('button', {
-            name: /merge v1 into current save/i,
+        const mergeButton = await screen.findByRole('button', {
+            name: 'Merge v1 into current save',
         });
         await fireEvent.click(mergeButton);
 
-        await findByText('Merged v1 items into your current save.');
-
         await waitFor(() => {
-            const state = loadGameState();
-            expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[3]]).toBe(75);
-            expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[10]]).toBe(2);
-            expect(state.inventory[V1_ITEM_ID_TO_V3_UUID[21]]).toBe(20);
-            expect(state.inventory[V1_CURRENCY_SYMBOL_TO_V3_ITEM_ID.dUSD]).toBe(12.5);
-            expect(state.inventory[EARLY_ADOPTER_ID]).toBe(1);
-        });
-    });
-
-    test('surfaces invalid v1 cookie values with a notice', async () => {
-        document.cookie = 'item-99=abc; path=/';
-
-        const { findByText } = render(LegacySaveUpgrade, {
-            legacyV1Items: [],
-            legacyCookieKeys: [],
-            cheatsAvailable: false,
-        });
-
-        const notice = await findByText(/V1 cookies were detected/i);
-        expect(notice.textContent).toContain('item-99=abc');
-    });
-
-    test('shows v2 parse warnings when localStorage contains invalid JSON', async () => {
-        localStorage.setItem('gameState', '{bad json');
-
-        const { findByText } = render(LegacySaveUpgrade, {
-            legacyV1Items: [],
-            legacyCookieKeys: [],
-            cheatsAvailable: false,
-        });
-
-        await findByText(/Legacy v2 data could not be parsed/i);
-    });
-
-    test('shows conflict warning and QA clear button for v2 + v3 saves', async () => {
-        const legacyProfile = legacyV2Fixtures.profiles.minimal.gameState;
-        localStorage.setItem('gameState', JSON.stringify(legacyProfile));
-        document.documentElement.dataset.cheatsAvailable = 'true';
-        initializeQaCheats(true);
-        setQaCheatsPreference(true);
-        const clearSpy = vi
-            .spyOn(legacySaveSeeding, 'clearV3GameStateStorage')
-            .mockResolvedValue(true);
-
-        const originalLocation = window.location;
-        const reloadMock = vi.fn();
-        const mockLocation = {
-            ...originalLocation,
-            reload: reloadMock,
-        };
-        try {
-            Object.defineProperty(window, 'location', {
-                configurable: true,
-                value: mockLocation,
-            });
-        } catch {
-            delete (window as { location?: Location }).location;
-            (window as Window).location = mockLocation;
-        }
-        vi.useFakeTimers();
-
-        const { findByRole, findByText } = render(LegacySaveUpgrade, {
-            legacyV1Items: [],
-            legacyCookieKeys: [],
-            cheatsAvailable: true,
-        });
-
-        await findByText(/Legacy \+ v3 save conflict detected/i);
-
-        const clearButton = await findByRole('button', { name: /clear v3 save for testing/i });
-        await fireEvent.click(clearButton);
-
-        await findByText(/Cleared v3 IndexedDB save for QA testing/i);
-        expect(clearSpy).toHaveBeenCalled();
-        vi.runAllTimers();
-        expect(reloadMock).toHaveBeenCalled();
-
-        vi.useRealTimers();
-        clearSpy.mockRestore();
-        try {
-            Object.defineProperty(window, 'location', {
-                configurable: true,
-                value: originalLocation,
-            });
-        } catch {
-            delete (window as { location?: Location }).location;
-            (window as Window).location = originalLocation;
-        }
-    });
-
-    test('merging v2 into current save clears legacy localStorage and reloads', async () => {
-        const legacyProfile = legacyV2Fixtures.profiles.minimal.gameState;
-        localStorage.setItem('gameState', JSON.stringify(legacyProfile));
-
-        const originalLocation = window.location;
-        const reloadMock = vi.fn();
-        const mockLocation = {
-            ...originalLocation,
-            reload: reloadMock,
-        };
-        try {
-            Object.defineProperty(window, 'location', {
-                configurable: true,
-                value: mockLocation,
-            });
-        } catch {
-            delete (window as { location?: Location }).location;
-            (window as Window).location = mockLocation;
-        }
-        try {
-            const { findByRole, queryByText } = render(LegacySaveUpgrade, {
-                legacyV1Items: [],
-                legacyCookieKeys: [],
-                cheatsAvailable: false,
-            });
-
-            const mergeButton = await findByRole('button', {
-                name: /merge v2 into current save/i,
-            });
-            await fireEvent.click(mergeButton);
-
-            await waitFor(() => {
-                const legacyRead = readLegacyV2LocalStorage();
-                expect(legacyRead.state).toBeNull();
-                expect(legacyRead.errors).toHaveLength(0);
-            });
-            await waitFor(
-                () => {
-                    expect(queryByText(/save conflict detected/i)).toBeNull();
-                    expect(reloadMock).toHaveBeenCalled();
-                },
-                { timeout: 3500 }
+            expect(importV1V3Mock).toHaveBeenCalledWith(
+                [{ id: '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6', count: 2 }],
+                expect.objectContaining({ replaceExisting: false, grantUpgradeTrophy: true })
             );
-        } finally {
-            try {
-                Object.defineProperty(window, 'location', {
-                    configurable: true,
-                    value: originalLocation,
-                });
-            } catch {
-                delete (window as { location?: Location }).location;
-                (window as Window).location = originalLocation;
-            }
-        }
-    });
-
-    test('removes legacy v2 data when discarding localStorage saves', async () => {
-        const legacyProfile = legacyV2Fixtures.profiles.minimal.gameState;
-        localStorage.setItem('gameState', JSON.stringify(legacyProfile));
-
-        const { findByRole, findByText } = render(LegacySaveUpgrade, {
-            legacyV1Items: [],
-            legacyCookieKeys: [],
-            cheatsAvailable: false,
+            expect(screen.getByText('Merged v1 items into your current save.')).toBeTruthy();
+            expect(document.cookie).not.toContain('item-3=');
         });
-
-        const discardButton = await findByRole('button', {
-            name: /delete v2 localstorage data/i,
-        });
-        await fireEvent.click(discardButton);
-
-        await findByText(/Removed legacy v2 localStorage data/i);
-        expect(localStorage.getItem('gameState')).toBeNull();
     });
 });

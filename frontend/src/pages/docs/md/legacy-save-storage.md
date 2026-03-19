@@ -403,6 +403,10 @@ backup and fallback for unsupported environments.
   in use) and also via the **Discard legacy v2 data** action in the Legacy Save Upgrade UI. Both
   flows are best-effort (they skip removal if IndexedDB is unavailable or the browser is already
   using localStorage for the active save).
+- Idempotence follows key cleanup: after successful migration removes legacy v2 keys, re-running
+  `importV2V3` returns `null` because no legacy source remains.
+- Parse failures are non-destructive: invalid JSON in legacy localStorage is logged and left
+  untouched, so users can inspect or discard it explicitly.
 - The **Clear v3 save for testing** action (available when QA cheats are enabled) only removes v3
   persistence data; it preserves legacy v2 `gameState` / `gameStateBackup` entries if they still
   contain v2-formatted saves.
