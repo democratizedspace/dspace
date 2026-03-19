@@ -63,17 +63,18 @@ The site will be available at `http://localhost:3002`.
 
 ### Local Development vs Production/Staging
 
-| Environment | Port | Server | Health Endpoints |
-|-------------|------|--------|------------------|
-| Local dev   | 3002 | `astro dev` | `/healthz`, `/livez` |
-| Production/Staging | 8080 | Built Astro server | `/healthz`, `/livez` |
+| Environment | Port | Server | Runtime/Health Endpoints |
+|-------------|------|--------|--------------------------|
+| Local dev   | 3002 | `astro dev` | `/config.json`, `/healthz`, `/livez` |
+| Production/Staging | 8080 | Built Astro server | `/config.json`, `/healthz`, `/livez` |
 
 **Local development** uses the Astro dev server (`npm run dev`) on port 3002 with hot module
 replacement for fast iteration.
 
 **Production/Staging containers** (built from the root `Dockerfile`) run the compiled Astro
-server on port 8080. The container exposes health endpoints for Kubernetes probes:
+server on port 8080. The container exposes runtime/health endpoints:
 
+- `/config.json` – Runtime config payload used by deployment smoke checks
 - `/healthz` – Readiness probe (HTTP 200 when ready to serve traffic)
 - `/livez` – Liveness probe (HTTP 200 when the process is alive)
 
@@ -258,6 +259,13 @@ The `ci-image.yml` workflow includes a smoke test that:
 The `/config.json` endpoint is a simple API route that doesn't depend on the game state
 system or complex SSR. If this endpoint works but `/` returns 500, it indicates an SSR
 issue in the page components rather than a fundamental server problem.
+
+### AI provider defaults and fallback documentation
+
+For v3 launch, OpenAI remains the default chat provider and token.place stays deferred to v3.1.
+If provider configuration is missing or unavailable, the app must fail with a user-visible error
+state instead of hanging. Keep deployment docs and release QA notes aligned with that behavior so
+staging/prod validation confirms both provider selection and graceful fallback behavior.
 
 #### Debugging CI Failures
 

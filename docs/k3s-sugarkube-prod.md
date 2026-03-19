@@ -67,6 +67,7 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
      validation, then `democratized.space` after cutover) →
      `traefik.kube-system.svc.cluster.local`
    - `kubectl -n dspace get deploy,po,ingress`
+   - `curl -fsS https://<active-host>/config.json`
    - `curl -fsS https://<active-host>/healthz`
    - `curl -fsS https://<active-host>/livez`
 
@@ -76,7 +77,13 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
   ready before switching traffic.
 - Keep staging/dev values and tokens out of production. Use only `SUGARKUBE_TOKEN_PROD` and the
   production values file.
-- Roll back Phase A (`prod.democratized.space`) by redeploying the previous `v3-<shortsha>` tag to
-  `prod.democratized.space`.
-- Roll back Phase B (`democratized.space`) by redeploying the previous `main-<shortsha>` tag to
-  `democratized.space`.
+- **Phase A rollback (alias validation host):**
+  - Keep apex (`democratized.space`) unchanged.
+  - Redeploy the previous known-good `v3-<shortsha>` tag to `prod.democratized.space`.
+  - Re-check `config.json`, `healthz`, and `livez` on `prod.democratized.space`.
+- **Phase B rollback (post-merge apex host):**
+  - Redeploy the previous known-good `main-<shortsha>` tag to `democratized.space`.
+  - Keep `prod.democratized.space` as a live validation host until apex is stable.
+  - Re-check `config.json`, `healthz`, and `livez` on `democratized.space`.
+- **Redirect safety rule:** only enable the `prod.democratized.space` → `democratized.space`
+  redirect after apex passes validation on the intended `main-<shortsha>` tag.
