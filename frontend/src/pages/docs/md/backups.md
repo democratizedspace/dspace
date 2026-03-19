@@ -38,6 +38,8 @@ Use this route for full-profile migration between devices.
 - Legacy v2 detection keys: `gameState` and `gameStateBackup` are both scanned for v1/v2-shaped payloads.
 - First-load v2 auto-migration checks `gameState` first and falls back to `gameStateBackup`, so
   backup-only legacy storage still migrates unless QA skip mode is enabled.
+- Migration parse/read issues surface in `/settings` → **Legacy save upgrades** as inline warnings,
+  and migration read errors are also emitted to the browser console.
 
 For QA resets:
 
