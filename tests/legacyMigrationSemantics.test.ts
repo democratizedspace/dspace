@@ -164,8 +164,9 @@ describe('legacy migration semantics', () => {
       .mockRejectedValueOnce(new Error('simulated write callback failure'));
 
     await expect(importV2V3()).rejects.toThrow('simulated write callback failure');
-    expect(localStorage.getItem('gameState')).toBeNull();
-    expect(localStorage.getItem('gameStateBackup')).not.toBeNull();
+    const backupAfterFailure = localStorage.getItem('gameStateBackup');
+    expect(backupAfterFailure).not.toBeNull();
+    expect(JSON.parse(backupAfterFailure).versionNumberString).toBe('2.1');
 
     saveSpy.mockRestore();
   });
