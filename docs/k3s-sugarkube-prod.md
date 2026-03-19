@@ -30,13 +30,17 @@ Production must use immutable tags so every rollout is reproducible and auditabl
 
 Use this exact sequence to keep the apex stable while validating v3 in production infrastructure:
 
-1. **Deploy v3 to `prod.democratized.space` first** from branch `v3` using immutable tag
-   `v3-<shortsha>`.
-2. **Validate v3 on the prod subdomain** (health checks, smoke flow, logs).
+1. **Phase A (validation host): deploy v3 to `prod.democratized.space` first** from branch `v3`
+   using immutable tag `v3-<shortsha>`.
+   - For this validation deploy, production ingress hostname/routing must point to
+     `prod.democratized.space` while still running `env=prod` with QA Cheats OFF.
+2. **Validate Phase A on `prod.democratized.space` using `v3-<shortsha>`** (health checks, smoke
+   flow, logs).
 3. **Merge `v3` into `main`** after validation sign-off.
-4. **Deploy apex `democratized.space` from `main`** with immutable `main-<shortsha>`.
+4. **Phase B (apex host): deploy `democratized.space` from `main`** with immutable
+   `main-<shortsha>`.
 5. **Convert `prod.democratized.space` to a redirect** pointing to `https://democratized.space`
-   once apex is confirmed healthy.
+   once Phase B (`democratized.space` on `main-<shortsha>`) is confirmed healthy.
 
 ## Deployment steps
 
@@ -72,5 +76,7 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
   ready before switching traffic.
 - Keep staging/dev values and tokens out of production. Use only `SUGARKUBE_TOKEN_PROD` and the
   production values file.
-- Roll back by redeploying the previous immutable tag with the same Helm command (first on
-  `prod.democratized.space`, then apex only if needed).
+- Roll back Phase A (`prod.democratized.space`) by redeploying the previous `v3-<shortsha>` tag to
+  `prod.democratized.space`.
+- Roll back Phase B (`democratized.space`) by redeploying the previous `main-<shortsha>` tag to
+  `democratized.space`.
