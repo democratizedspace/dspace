@@ -80,10 +80,10 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
 - **Phase A rollback (alias validation host):**
   - Keep apex (`democratized.space`) unchanged.
   - Redeploy the previous known-good `v3-<shortsha>` tag to `prod.democratized.space`.
-  - Re-check `config.json`, `healthz`, and `livez` on `prod.democratized.space`.
+  - Re-check `/config.json`, `/healthz`, and `/livez` on `prod.democratized.space`.
 - **Phase B rollback (post-merge apex host):**
   - Redeploy the previous known-good `main-<shortsha>` tag to `democratized.space`.
   - Keep `prod.democratized.space` as a live validation host until apex is stable.
-  - Re-check `config.json`, `healthz`, and `livez` on `democratized.space`.
+  - Re-check `/config.json`, `/healthz`, and `/livez` on `democratized.space`.
 - **Redirect safety rule:** only enable the `prod.democratized.space` → `democratized.space`
   redirect after apex passes validation on the intended `main-<shortsha>` tag.
