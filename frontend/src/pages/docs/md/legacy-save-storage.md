@@ -403,9 +403,18 @@ backup and fallback for unsupported environments.
   in use) and also via the **Discard legacy v2 data** action in the Legacy Save Upgrade UI. Both
   flows are best-effort (they skip removal if IndexedDB is unavailable or the browser is already
   using localStorage for the active save).
+- Because cleanup removes the legacy source keys in IndexedDB mode, auto-migration is effectively
+  one-shot per source payload unless legacy data is re-seeded manually.
+- If writing migrated v3 state fails, the legacy source keys are retained so the user can retry
+  migration; cleanup happens only after a successful migrated-state write.
 - The **Clear v3 save for testing** action (available when QA cheats are enabled) only removes v3
   persistence data; it preserves legacy v2 `gameState` / `gameStateBackup` entries if they still
   contain v2-formatted saves.
+
+**Minimal observability for failures:**
+
+- Invalid legacy JSON is surfaced in the `/settings` legacy upgrade panel as a warning.
+- Import-time parse issues are also logged with `console.warn` for QA/dev triage.
 
 ## QA seeding
 

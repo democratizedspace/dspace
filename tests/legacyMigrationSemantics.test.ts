@@ -106,6 +106,27 @@ describe('legacy migration semantics', () => {
     expect(loadGameState().inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(4);
   });
 
+  test('importV2V3 is effectively one-shot per legacy source after key cleanup', async () => {
+    localStorage.setItem(
+      'gameState',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: { 1: 2 },
+        quests: { q1: { finished: true } },
+        processes: {},
+      })
+    );
+
+    const firstMigration = await importV2V3();
+    const secondMigration = await importV2V3();
+
+    expect(firstMigration?.versionNumberString).toBe(VERSIONS.V3);
+    expect(secondMigration).toBeNull();
+    expect(localStorage.getItem('gameState')).toBeNull();
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+    expect(loadGameState().inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(2);
+  });
+
   test('importV2V3 compensates in-progress v2 processes and removes those migrated entries', async () => {
     localStorage.setItem(
       'gameState',
@@ -206,4 +227,5 @@ describe('legacy migration semantics', () => {
       expect(loadReloadedState().inventory[V1_ITEM_ID_TO_V3_UUID[1]] ?? 0).toBe(0);
     });
   });
+
 });
