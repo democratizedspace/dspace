@@ -31,8 +31,10 @@ prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugark
 
 - dspace multi-arch container images are published to GHCR at
   `ghcr.io/democratizedspace/dspace`.
-  - Tags include `v3-latest`, `v3-<short-sha>`, and semantic versions such as `v3.0.0`.
-  - Example image reference: `ghcr.io/democratizedspace/dspace:v3-latest`.
+  - Tags include `v3-<short-sha>`, `v3-latest`, and semantic versions such as `v3.0.0`.
+  - **Staging RC recommendation:** deploy `v3-<shortsha>` so QA can repeatedly validate a fixed
+    candidate build.
+  - `v3-latest` remains available for convenience/non-RC iteration.
 - The Helm chart is published as an OCI artifact to
   `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
   from `charts/dspace/Chart.yaml`. The chart version is mirrored in
@@ -99,8 +101,9 @@ and configured your Cloudflare Tunnel, deploying dspace from the `v3` branch req
    - [Build and publish GHCR image](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
    - [Publish Helm chart](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
 
-2. **Deploy to cluster**: On a sugarkube control node (e.g., `sugarkube0`), run the following from
-   `~/sugarkube`. The staging host (`staging.democratized.space`) is defined in
+2. **Deploy to cluster (RC flow)**: On a sugarkube control node (e.g., `sugarkube0`), run the
+   following from `~/sugarkube`. Replace `<shortsha>` with the exact commit SHA suffix published by
+   the image workflow. The staging host (`staging.democratized.space`) is defined in
    `docs/examples/dspace.values.staging.yaml`:
 
 ```bash
@@ -110,7 +113,7 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-latest
+  default_tag=v3-<shortsha>
 ```
 
 3. **Verify**: Check the deployment and open the site at `staging.democratized.space`.
@@ -262,7 +265,10 @@ manual creation of a values file is required.
 ## Step 5: Install or upgrade the Helm release
 
 Deploy via the sugarkube justfile wrapper (recommended so chart versions stay aligned with the
-sugarkube app guide). From `~/sugarkube` on a sugarkube control node:
+sugarkube app guide). For repeatable RC validation, pin an immutable `v3-<shortsha>` tag from the
+selected workflow run.
+
+From `~/sugarkube` on a sugarkube control node:
 
 ```bash
 cd ~/sugarkube
@@ -271,11 +277,12 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-latest
+  default_tag=v3-<shortsha>
 ```
 
-To target a specific image build, add `tag=<branch>-<shortsha>` or use `just helm-oci-upgrade` with
-the same arguments. If you are running Helm directly, mirror the same values files:
+Use `just helm-oci-upgrade` with the same arguments to move from one RC candidate to another
+(`v3-<shortsha-A>` → `v3-<shortsha-B>`). If you are running Helm directly, mirror the same values
+files:
 
 ```bash
 helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
@@ -289,7 +296,7 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
 > `dspace.values.staging.yaml` overrides it to `staging` so QA Cheats stay enabled here. Production
 > should keep `DSPACE_ENV=prod` so cheats remain disabled.
 
-### Force a rollout restart when using mutable tags (e.g., `v3-latest`)
+### Convenience flow only: force a rollout restart when using mutable tags (e.g., `v3-latest`)
 
 When redeploying with a mutable tag such as `v3-latest`, Helm may report an upgrade without
 changing the Deployment template because the chart version and image tag stay the same. In that
@@ -314,14 +321,18 @@ sudo kubectl -n dspace port-forward svc/dspace 8080:8080
 curl -s http://localhost:8080/healthz | jq
 ```
 
-For production, prefer immutable tags (for example `v3.0.0+<sha>`) so Helm-driven manifest changes
-automatically roll pods without a manual restart.
+For release-candidate validation and production readiness sign-off, prefer immutable tags
+(`v3-<shortsha>`) so Helm-driven manifest changes automatically roll pods without a manual restart.
 
 ### Verification
 
 ```bash
 kubectl -n dspace get pods
 kubectl -n dspace get svc,ingress
+kubectl -n dspace port-forward svc/dspace 8080:8080
+# in a second shell:
+curl -fsS http://localhost:8080/healthz
+curl -fsS http://localhost:8080/livez
 ```
 
 Confirm the ingress shows `staging.democratized.space` as the host and the `traefik` ingress class,
