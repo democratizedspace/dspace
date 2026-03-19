@@ -24,7 +24,15 @@ RUN apt-get update \
         python3 \
     && rm -rf /var/lib/apt/lists/* \
     && ln -sf python3 /usr/bin/python \
-    && npm install -g pnpm@9.0.0
+    && for attempt in 1 2 3 4 5; do \
+        npm install -g pnpm@9.0.0 && break; \
+        if [ "$attempt" -eq 5 ]; then \
+            echo "Failed to install pnpm after ${attempt} attempts." >&2; \
+            exit 1; \
+        fi; \
+        echo "npm install failed (attempt ${attempt}); retrying..." >&2; \
+        sleep $((attempt * 2)); \
+    done
 WORKDIR /workspace
 
 FROM base AS deps
