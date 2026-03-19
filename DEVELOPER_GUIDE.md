@@ -263,9 +263,12 @@ issue in the page components rather than a fundamental server problem.
 ### AI provider defaults and fallback documentation
 
 For v3 launch, OpenAI remains the default chat provider and token.place stays deferred to v3.1.
+Environment-specific behavior is controlled by `DSPACE_ENV`; use `docs/config.md` as the canonical
+reference for runtime configuration and environment variables before validating provider behavior.
+Provider reality and fallback expectations are documented in the release-state docs:
+`/docs/v3-release-state` and `/docs/token-place` (OpenAI-first in v3, token.place deferred to v3.1).
 If provider configuration is missing or unavailable, the app must fail with a user-visible error
-state instead of hanging. Keep deployment docs and release QA notes aligned with that behavior so
-staging/prod validation confirms both provider selection and graceful fallback behavior.
+state instead of hanging.
 
 #### Debugging CI Failures
 
