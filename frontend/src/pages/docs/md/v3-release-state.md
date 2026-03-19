@@ -5,26 +5,26 @@ slug: 'v3-release-state'
 
 # v3 Release State
 
-This page is the source-of-truth snapshot for what shipped in v3 and what remains intentionally
-limited. Use it alongside the v3 launch notes at [/docs/changelog/20260401](/docs/changelog/20260401) and
+This page is the source-of-truth snapshot for v3 release scope and current release-state limits.
+Use it alongside the v3 release notes at [/docs/changelog/20260401](/docs/changelog/20260401) and
 the full release QA checklist in
 [docs/qa/v3.md](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md).
 
-## v3 shipped systems (live now)
+## v3 in-scope systems
 
 ### Core gameplay and progression
 
-- The quest + inventory + process loop is fully live in v3.
+- The quest + inventory + process loop is fully in scope for v3.
 - Official content now includes **248 quests across 19 quest trees**.
 - Quest details render from canonical quest JSON, including branching dialogue, rewards, and
   requirements.
-- Completionist Award III (`completionist/award-iii`) is in the shipped v3 capstone lane and
-  remains part of launch sign-off (not a v3.1 deferral); the canonical item is created by
+- Completionist Award III (`completionist/award-iii`) is in the v3 capstone lane and remains part
+  of launch sign-off (not a v3.1 deferral); the canonical item is created by
   `assemble-completionist-award-iii`, and quest completion does not grant a second copy.
 
 ### Navigation and utility surfaces
 
-The More menu now includes live routes for:
+The More menu includes in-scope routes for:
 
 - `/processes`
 - `/gamesaves`
@@ -54,7 +54,7 @@ The More menu now includes live routes for:
 
 ### NPC chat and AI
 
-- v3 ships persona-style chat experiences (for example Sydney, Nova, Hydro).
+- v3 includes persona-style chat experiences (for example Sydney, Nova, Hydro).
 - OpenAI-only chat is the supported provider path in v3.
 - Chat surfaces include `/chat` and `/dchat`.
 
@@ -91,6 +91,6 @@ The More menu now includes live routes for:
 When changing gameplay docs, verify all of the following:
 
 1. Route is reachable and not marked coming soon.
-2. Behavior matches shipped implementation.
+2. Behavior matches implemented behavior.
 3. Partially-live systems clearly call out live vs deferred scope.
 4. Linked docs avoid duplicate guidance and defer to canonical pages for details.
