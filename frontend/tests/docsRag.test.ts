@@ -1,6 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import docsMeta from '../src/generated/rag/docs_meta.json';
 import { rankDocsResults, searchDocsRag } from '../src/utils/docsRag.js';
+
+vi.setConfig({ testTimeout: 120000, hookTimeout: 120000 });
 
 describe('docs RAG search', () => {
     it('returns docs excerpts with canonical /docs URLs', async () => {

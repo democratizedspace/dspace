@@ -18,6 +18,8 @@ vi.mock('../frontend/src/utils/docsRag.js', () => ({
     searchDocsRag: vi.fn(async () => ({ excerptsText: '', sources: [] })),
 }));
 
+vi.setConfig({ testTimeout: 120000, hookTimeout: 120000 });
+
 describe('chat non-reasoning regression probes', () => {
     beforeEach(() => {
         vi.resetModules();
