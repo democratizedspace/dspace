@@ -127,7 +127,7 @@ describe('legacy migration semantics', () => {
     expect(localStorage.getItem('gameStateBackup')).toBeNull();
   });
 
-  test('importV2V3 keeps legacy keys when v3 persistence fails', async () => {
+  test('importV2V3 keeps legacy keys when the v3 write callback reports a failure (throws)', async () => {
     localStorage.setItem(
       'gameState',
       JSON.stringify({
@@ -140,15 +140,15 @@ describe('legacy migration semantics', () => {
 
     const saveSpy = vi
       .spyOn(gameStateCommon, 'saveGameState')
-      .mockRejectedValueOnce(new Error('simulated write failure'));
+      .mockRejectedValueOnce(new Error('simulated write callback failure'));
 
-    await expect(importV2V3()).rejects.toThrow('simulated write failure');
+    await expect(importV2V3()).rejects.toThrow('simulated write callback failure');
     expect(localStorage.getItem('gameState')).not.toBeNull();
 
     saveSpy.mockRestore();
   });
 
-  test('importV2V3 keeps backup-only legacy keys when v3 persistence fails', async () => {
+  test('importV2V3 keeps backup-only legacy keys when the v3 write callback reports a failure (throws)', async () => {
     localStorage.setItem(
       'gameStateBackup',
       JSON.stringify({
@@ -161,9 +161,9 @@ describe('legacy migration semantics', () => {
 
     const saveSpy = vi
       .spyOn(gameStateCommon, 'saveGameState')
-      .mockRejectedValueOnce(new Error('simulated write failure'));
+      .mockRejectedValueOnce(new Error('simulated write callback failure'));
 
-    await expect(importV2V3()).rejects.toThrow('simulated write failure');
+    await expect(importV2V3()).rejects.toThrow('simulated write callback failure');
     expect(localStorage.getItem('gameState')).toBeNull();
     expect(localStorage.getItem('gameStateBackup')).not.toBeNull();
 

@@ -403,8 +403,11 @@ backup and fallback for unsupported environments.
   in use) and also via the **Discard legacy v2 data** action in the Legacy Save Upgrade UI. Both
   flows are best-effort (they skip removal if IndexedDB is unavailable or the browser is already
   using localStorage for the active save).
-- If a v2 migration write fails before `saveGameState` completes, legacy keys remain untouched so
-  the same legacy payload can be retried safely on the next attempt.
+- During v2 → v3 migration, `saveGameState` writes localStorage mirrors synchronously and treats
+  IndexedDB write failures as best-effort fallbacks. In those cases, legacy payload slots are
+  typically rewritten as v3 snapshots rather than preserved byte-for-byte for retry.
+- Legacy keys remain untouched only when an unexpected exception aborts migration before cleanup
+  (for example, a thrown write callback in tests).
 - The **Clear v3 save for testing** action (available when QA cheats are enabled) only removes v3
   persistence data; it preserves legacy v2 `gameState` / `gameStateBackup` entries if they still
   contain v2-formatted saves.
