@@ -1,8 +1,8 @@
 # Deploying dspace v3 to k3s with sugarkube
 
-> **Scope:** This runbook covers **staging** (`staging.democratized.space`) using the `v3` branch.
-> The production site (`democratized.space`) currently runs v2.x from the `main` branch and is
-> managed separately.
+> **Scope:** This runbook covers **staging** (`staging.democratized.space`) using the `v3` branch
+> for repeated release-candidate (RC) validation. Production cutover is documented separately in
+> [`docs/k3s-sugarkube-prod.md`](./k3s-sugarkube-prod.md).
 
 Use this runbook to take [`dspace@v3`](https://github.com/democratizedspace/dspace/tree/v3) from source to a running web server on the sugarkube
 three-server HA k3s cluster. It links directly to the sugarkube recipes, GHCR build workflows,
@@ -31,8 +31,9 @@ prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugark
 
 - dspace multi-arch container images are published to GHCR at
   `ghcr.io/democratizedspace/dspace`.
-  - Tags include `v3-latest`, `v3-<short-sha>`, and semantic versions such as `v3.0.0`.
-  - Example image reference: `ghcr.io/democratizedspace/dspace:v3-latest`.
+  - For RC validation, prefer immutable tags: `v3-<shortsha>` (or a pinned release tag).
+  - `v3-latest` remains available for convenience redeploys but should be treated as a non-RC
+    fast path.
 - The Helm chart is published as an OCI artifact to
   `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
   from `charts/dspace/Chart.yaml`. The chart version is mirrored in
@@ -101,7 +102,8 @@ and configured your Cloudflare Tunnel, deploying dspace from the `v3` branch req
 
 2. **Deploy to cluster**: On a sugarkube control node (e.g., `sugarkube0`), run the following from
    `~/sugarkube`. The staging host (`staging.democratized.space`) is defined in
-   `docs/examples/dspace.values.staging.yaml`:
+   `docs/examples/dspace.values.staging.yaml`. For RC validation, pin `default_tag` to an immutable
+   `v3-<shortsha>`:
 
 ```bash
 cd ~/sugarkube
@@ -110,10 +112,14 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-latest
+  default_tag=v3-<shortsha>
 ```
 
-3. **Verify**: Check the deployment and open the site at `staging.democratized.space`.
+3. **Verify**:
+   - `kubectl -n dspace get deploy,po,svc,ingress`
+   - `curl -fsS https://staging.democratized.space/healthz`
+   - `curl -fsS https://staging.democratized.space/livez`
+   - Open `https://staging.democratized.space` for a UI smoke check.
 
 The sections below provide full context for each step, branch-specific tag conventions, and
 troubleshooting guidance. Keep the values list scoped to `dspace.values.staging.yaml`; mixing in the
@@ -128,6 +134,14 @@ Both workflows accept a branch selector (`v3` or `main`) and produce branch-spec
 - **For `main` builds**: tags are `main-<shortsha>` and `main-latest`
 
 This prevents `main` builds from overwriting `v3-latest` and keeps environments isolated.
+
+### Staging tag strategy
+
+- **Default for RC runs:** Deploy immutable `v3-<shortsha>` so failures are reproducible and easy to
+  compare across retests.
+- **Convenience flow only:** Use `v3-latest` when you need a quick non-RC refresh.
+- **Promotion context:** After `v3` merges to `main`, production should use immutable
+  `main-<shortsha>` tags (see the prod runbook).
 
 ### Running the workflows
 
@@ -271,7 +285,7 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-latest
+  default_tag=v3-<shortsha>
 ```
 
 To target a specific image build, add `tag=<branch>-<shortsha>` or use `just helm-oci-upgrade` with
@@ -328,6 +342,11 @@ Confirm the ingress shows `staging.democratized.space` as the host and the `trae
 then open `https://staging.democratized.space` in a browser. You should see the dspace v3 UI served
 through the Cloudflare Tunnel and Traefik.
 
+For app-level probe checks, the chart uses:
+
+- Readiness: `/healthz`
+- Liveness: `/livez`
+
 ### Fast manual redeploy (emergency push)
 
 Use this when you already have dspace running on sugarkube and want the latest `v3-latest` image
@@ -382,6 +401,8 @@ Use this quick runbook to confirm staging is healthy after a deploy:
 - DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
 - dspace Helm release deployed in `dspace` (or your chosen) namespace.
 - `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
+- `curl -fsS https://staging.democratized.space/healthz` returns success.
+- `curl -fsS https://staging.democratized.space/livez` returns success.
 - Browsing `https://staging.democratized.space` shows the dspace v3 UI.
 
 ## Troubleshooting
