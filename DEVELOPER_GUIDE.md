@@ -81,6 +81,24 @@ The Helm chart (`charts/dspace`) and docker-compose use port 8080 by default. Al
 configuration files (Dockerfile, Helm values, k8s manifests, docs) are validated by the
 `tests/configConsistency.test.ts` test to ensure they stay in sync.
 
+### Deployment runbooks (dev/staging/prod)
+
+For k3s + sugarkube operations, use the environment-specific runbooks:
+
+- `docs/k3s-sugarkube-dev.md` (dev: QA cheats on, `v3-latest` allowed for fast iteration)
+- `docs/k3s-sugarkube-staging.md` (staging: RC validation loops with immutable `v3-<shortsha>`)
+- `docs/k3s-sugarkube-prod.md` (prod: alias-first rollout on `prod.democratized.space`, then apex)
+
+All runbooks assume app/container health checks use `/healthz` and `/livez`, with `/config.json`
+as a runtime-configuration verification endpoint.
+
+### Feature flags and chat provider fallback documentation
+
+- Runtime feature flag behavior is documented in `docs/config.md` (`DSPACE_FEATURE_FLAGS`,
+  `DSPACE_TELEMETRY_ENABLED`, and `/config.json` contract).
+- Chat provider behavior for v3 is documented in `frontend/src/pages/docs/md/token-place.md`:
+  OpenAI is the active provider in v3, while token.place remains deferred to v3.1.
+
 ## Architecture Overview
 
 DSPACE uses Astro's Server-Side Rendering (SSR) with partial hydration of Svelte components on the client side.

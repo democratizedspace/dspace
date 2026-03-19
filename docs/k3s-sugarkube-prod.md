@@ -69,6 +69,18 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
    - `kubectl -n dspace get deploy,po,ingress`
    - `curl -fsS https://<active-host>/healthz`
    - `curl -fsS https://<active-host>/livez`
+   - `curl -fsS https://<active-host>/config.json`
+
+## Alias-first rollout details
+
+- During Phase A, `prod.democratized.space` should route to the production dspace ingress while the
+  apex `democratized.space` remains unchanged.
+- Complete all production-grade smoke checks against `https://prod.democratized.space` before
+  merging `v3` into `main`.
+- During Phase B, switch production ingress/routing to `democratized.space` and deploy the
+  immutable `main-<shortsha>` build.
+- Only after Phase B validation should `prod.democratized.space` be changed to an HTTP redirect to
+  `https://democratized.space`.
 
 ## Safe rollout/rollback
 
@@ -80,3 +92,5 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
   `prod.democratized.space`.
 - Roll back Phase B (`democratized.space`) by redeploying the previous `main-<shortsha>` tag to
   `democratized.space`.
+- If Phase B fails after alias redirect is configured, revert `prod.democratized.space` from
+  redirect back to a live route, then redeploy the last known-good immutable production tag.
