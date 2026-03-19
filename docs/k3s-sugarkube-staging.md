@@ -31,8 +31,10 @@ prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugark
 
 - dspace multi-arch container images are published to GHCR at
   `ghcr.io/democratizedspace/dspace`.
-  - Tags include `v3-latest`, `v3-<short-sha>`, and semantic versions such as `v3.0.0`.
-  - Example image reference: `ghcr.io/democratizedspace/dspace:v3-latest`.
+  - Tags include branch SHA tags (`v3-<short-sha>`, `main-<short-sha>`), branch latest tags
+    (`v3-latest`, `main-latest`), and semantic versions such as `v3.0.0`.
+  - For staging release-candidate validation, prefer immutable SHA tags (for example,
+    `ghcr.io/democratizedspace/dspace:v3-a1b2c3d`).
 - The Helm chart is published as an OCI artifact to
   `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
   from `charts/dspace/Chart.yaml`. The chart version is mirrored in
@@ -110,7 +112,7 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-latest
+  default_tag=v3-<shortsha>
 ```
 
 3. **Verify**: Check the deployment and open the site at `staging.democratized.space`.
@@ -128,6 +130,7 @@ Both workflows accept a branch selector (`v3` or `main`) and produce branch-spec
 - **For `main` builds**: tags are `main-<shortsha>` and `main-latest`
 
 This prevents `main` builds from overwriting `v3-latest` and keeps environments isolated.
+For staging RC verification, deploy `v3-<shortsha>` so each test run is reproducible.
 
 ### Running the workflows
 
@@ -271,11 +274,11 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-latest
+  default_tag=v3-<shortsha>
 ```
 
-To target a specific image build, add `tag=<branch>-<shortsha>` or use `just helm-oci-upgrade` with
-the same arguments. If you are running Helm directly, mirror the same values files:
+Use `v3-<shortsha>` for release-candidate validation and keep `v3-latest` for convenience-only,
+non-RC smoke pushes. If you are running Helm directly, mirror the same values files:
 
 ```bash
 helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
@@ -289,7 +292,7 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
 > `dspace.values.staging.yaml` overrides it to `staging` so QA Cheats stay enabled here. Production
 > should keep `DSPACE_ENV=prod` so cheats remain disabled.
 
-### Force a rollout restart when using mutable tags (e.g., `v3-latest`)
+### Optional convenience flow: mutable-tag redeploy (`v3-latest`, non-RC only)
 
 When redeploying with a mutable tag such as `v3-latest`, Helm may report an upgrade without
 changing the Deployment template because the chart version and image tag stay the same. In that
@@ -314,8 +317,8 @@ sudo kubectl -n dspace port-forward svc/dspace 8080:8080
 curl -s http://localhost:8080/healthz | jq
 ```
 
-For production, prefer immutable tags (for example `v3.0.0+<sha>`) so Helm-driven manifest changes
-automatically roll pods without a manual restart.
+For staging RC work and production promotions, use immutable tags so Helm-driven manifest changes
+roll pods without a manual restart.
 
 ### Verification
 
@@ -327,6 +330,13 @@ kubectl -n dspace get svc,ingress
 Confirm the ingress shows `staging.democratized.space` as the host and the `traefik` ingress class,
 then open `https://staging.democratized.space` in a browser. You should see the dspace v3 UI served
 through the Cloudflare Tunnel and Traefik.
+
+For app health checks, use:
+
+```bash
+curl -fsS https://staging.democratized.space/healthz
+curl -fsS https://staging.democratized.space/livez
+```
 
 ### Fast manual redeploy (emergency push)
 
@@ -373,7 +383,7 @@ Use this quick runbook to confirm staging is healthy after a deploy:
 - Sugarkube cluster: `just cluster-status` is healthy.
 - Traefik: `just traefik-status` is healthy.
 - Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and `/ready`
-  returns 200. Verify with a two-shell port-forward:
+  returns 200 for the tunnel service itself. Verify with a two-shell port-forward:
   - Shell 1: `kubectl -n cloudflare port-forward deploy/cloudflare-tunnel 2000:2000`
   - Shell 2: `curl -fsS http://localhost:2000/ready`
   - A JSON response containing `"status":200` confirms the tunnel is healthy.
@@ -382,7 +392,19 @@ Use this quick runbook to confirm staging is healthy after a deploy:
 - DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
 - dspace Helm release deployed in `dspace` (or your chosen) namespace.
 - `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
+- `curl -fsS https://staging.democratized.space/healthz` and
+  `curl -fsS https://staging.democratized.space/livez` both return HTTP 200.
 - Browsing `https://staging.democratized.space` shows the dspace v3 UI.
+
+## Repeated RC validation loop (staging standard flow)
+
+Use this loop for each release candidate instead of a one-off launch flow:
+
+1. Build/publish from `v3`, producing `v3-<shortsha>` and `v3-latest`.
+2. Deploy `default_tag=v3-<shortsha>` to staging.
+3. Run the QA checklist and record the tested SHA in release notes.
+4. If fixes are required, repeat with the next `v3-<shortsha>`.
+5. Keep `v3-latest` for quick exploratory checks only; do not treat it as the RC signoff artifact.
 
 ## Troubleshooting
 
