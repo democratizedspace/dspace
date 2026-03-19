@@ -32,6 +32,8 @@ shows a warning that storage space may be limited.
   entries from the v3 `processes` map.
 - **Re-run protection**: once migration completes, legacy v2 keys are removed (IndexedDB
   mode), which prevents automatic re-runs from the same legacy source.
+- **Failure behavior**: if persisting migrated v3 state fails, migration throws and legacy
+  `gameState`/`gameStateBackup` keys are left in place so users can retry.
 
 > **Note:** New persistence features should favor IndexedDB end-to-end. Use
 > `localStorage` strictly as a resilience fallback when IndexedDB cannot be

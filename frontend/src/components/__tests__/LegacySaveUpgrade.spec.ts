@@ -74,6 +74,43 @@ describe('LegacySaveUpgrade', () => {
         });
     });
 
+    test('v1 merge attempts to expire migrated v1 cookies', async () => {
+        document.cookie = 'item-3=75; path=/';
+        document.cookie = 'currency-balance-dUSD=12.5; path=/';
+
+        const cookieSetter = vi.spyOn(document, 'cookie', 'set');
+        const { findByRole } = render(LegacySaveUpgrade, {
+            legacyV1Items: [],
+            legacyCookieKeys: [],
+            cheatsAvailable: false,
+        });
+
+        const mergeButton = await findByRole('button', {
+            name: /merge v1 into current save/i,
+        });
+        await fireEvent.click(mergeButton);
+
+        await waitFor(() => {
+            const writes = cookieSetter.mock.calls.map(([value]) => String(value));
+            expect(
+                writes.some(
+                    (value) =>
+                        value.startsWith('item-3=;') &&
+                        value.includes('expires=Thu, 01 Jan 1970 00:00:00 GMT')
+                )
+            ).toBe(true);
+            expect(
+                writes.some(
+                    (value) =>
+                        value.startsWith('currency-balance-dUSD=;') &&
+                        value.includes('expires=Thu, 01 Jan 1970 00:00:00 GMT')
+                )
+            ).toBe(true);
+        });
+
+        cookieSetter.mockRestore();
+    });
+
     test('surfaces invalid v1 cookie values with a notice', async () => {
         document.cookie = 'item-99=abc; path=/';
 

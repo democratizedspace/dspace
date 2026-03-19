@@ -6,6 +6,7 @@ import {
   loadGameState,
   resetGameState,
 } from '../frontend/src/utils/gameState/common.js';
+import * as gameStateCommon from '../frontend/src/utils/gameState/common.js';
 import { importV2V3, VERSIONS } from '../frontend/src/utils/gameState.js';
 import { LEGACY_V2_SEED_SKIP_KEY } from '../frontend/src/utils/legacySaveParsing.js';
 import { readLegacyV2LocalStorage } from '../frontend/src/utils/legacySaveParsing.js';
@@ -104,6 +105,48 @@ describe('legacy migration semantics', () => {
     expect(migrated?.versionNumberString).toBe(VERSIONS.V3);
     expect(localStorage.getItem('gameStateBackup')).toBeNull();
     expect(loadGameState().inventory[V1_ITEM_ID_TO_V3_UUID[1]]).toBe(4);
+  });
+
+  test('importV2V3 runs once per legacy source by deleting legacy keys after success', async () => {
+    localStorage.setItem(
+      'gameState',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: { 1: 4 },
+        quests: {},
+        processes: {},
+      })
+    );
+
+    const firstMigration = await importV2V3();
+    const secondMigration = await importV2V3();
+
+    expect(firstMigration?.versionNumberString).toBe(VERSIONS.V3);
+    expect(secondMigration).toBeNull();
+    expect(localStorage.getItem('gameState')).toBeNull();
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+  });
+
+  test('importV2V3 keeps legacy keys when v3 persistence fails', async () => {
+    localStorage.setItem(
+      'gameState',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: { 1: 4 },
+        quests: {},
+        processes: {},
+      })
+    );
+
+    const saveSpy = vi
+      .spyOn(gameStateCommon, 'saveGameState')
+      .mockRejectedValueOnce(new Error('simulated write failure'));
+
+    await expect(importV2V3()).rejects.toThrow('simulated write failure');
+    expect(localStorage.getItem('gameState')).not.toBeNull();
+    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+
+    saveSpy.mockRestore();
   });
 
   test('importV2V3 compensates in-progress v2 processes and removes those migrated entries', async () => {
