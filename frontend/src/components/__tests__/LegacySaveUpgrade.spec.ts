@@ -90,25 +90,27 @@ describe('LegacySaveUpgrade', () => {
         });
         await fireEvent.click(mergeButton);
 
-        await waitFor(() => {
-            const writes = cookieSetter.mock.calls.map(([value]) => String(value));
-            expect(
-                writes.some(
-                    (value) =>
-                        value.startsWith('item-3=;') &&
-                        value.includes('expires=Thu, 01 Jan 1970 00:00:00 GMT')
-                )
-            ).toBe(true);
-            expect(
-                writes.some(
-                    (value) =>
-                        value.startsWith('currency-balance-dUSD=;') &&
-                        value.includes('expires=Thu, 01 Jan 1970 00:00:00 GMT')
-                )
-            ).toBe(true);
-        });
-
-        cookieSetter.mockRestore();
+        try {
+            await waitFor(() => {
+                const writes = cookieSetter.mock.calls.map(([value]) => String(value));
+                expect(
+                    writes.some(
+                        (value) =>
+                            value.startsWith('item-3=;') &&
+                            value.includes('expires=Thu, 01 Jan 1970 00:00:00 GMT')
+                    )
+                ).toBe(true);
+                expect(
+                    writes.some(
+                        (value) =>
+                            value.startsWith('currency-balance-dUSD=;') &&
+                            value.includes('expires=Thu, 01 Jan 1970 00:00:00 GMT')
+                    )
+                ).toBe(true);
+            });
+        } finally {
+            cookieSetter.mockRestore();
+        }
     });
 
     test('surfaces invalid v1 cookie values with a notice', async () => {

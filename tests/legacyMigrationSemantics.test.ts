@@ -144,7 +144,28 @@ describe('legacy migration semantics', () => {
 
     await expect(importV2V3()).rejects.toThrow('simulated write failure');
     expect(localStorage.getItem('gameState')).not.toBeNull();
-    expect(localStorage.getItem('gameStateBackup')).toBeNull();
+
+    saveSpy.mockRestore();
+  });
+
+  test('importV2V3 keeps backup-only legacy keys when v3 persistence fails', async () => {
+    localStorage.setItem(
+      'gameStateBackup',
+      JSON.stringify({
+        versionNumberString: '2.1',
+        inventory: { 1: 4 },
+        quests: {},
+        processes: {},
+      })
+    );
+
+    const saveSpy = vi
+      .spyOn(gameStateCommon, 'saveGameState')
+      .mockRejectedValueOnce(new Error('simulated write failure'));
+
+    await expect(importV2V3()).rejects.toThrow('simulated write failure');
+    expect(localStorage.getItem('gameState')).toBeNull();
+    expect(localStorage.getItem('gameStateBackup')).not.toBeNull();
 
     saveSpy.mockRestore();
   });
