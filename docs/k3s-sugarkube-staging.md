@@ -111,8 +111,11 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-<shortsha>
+  default_tag=v3-REPLACE_SHORTSHA
 ```
+
+Replace `REPLACE_SHORTSHA` with the exact immutable suffix from the `v3-<shortsha>` image tag
+published by CI.
 
 3. **Verify**:
    - `curl -fsS https://staging.democratized.space/healthz`
@@ -275,7 +278,7 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-<shortsha>
+  default_tag=v3-REPLACE_SHORTSHA
 ```
 
 To target a specific image build, add `tag=<branch>-<shortsha>` or use `just helm-oci-upgrade` with
@@ -338,7 +341,7 @@ Use this flow for every candidate build you want QA to validate in staging:
 
 1. Trigger `ci-image.yml` from branch `v3` and record the generated immutable tag
    (`v3-<shortsha>`).
-2. Deploy that exact tag with `just helm-oci-install ... default_tag=v3-<shortsha>`.
+2. Deploy that exact tag with `just helm-oci-install ... default_tag=v3-REPLACE_SHORTSHA`.
 3. Validate staging behavior and record pass/fail against the tag.
 4. If a fix is needed, produce a new `v3-<shortsha>` and repeat.
 
