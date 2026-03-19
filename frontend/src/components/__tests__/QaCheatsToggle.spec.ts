@@ -59,7 +59,7 @@ describe('QaCheatsToggle inventory grant', () => {
 
         const itemSelector = await findByTestId('qa-inventory-item-selector');
         const selectorQueries = within(itemSelector);
-        const customIdInput = await selectorQueries.findByPlaceholderText('Enter a custom item ID');
+        const customIdInput = await selectorQueries.findByLabelText('Custom item ID');
         await fireEvent.input(customIdInput, { target: { value: 'qa-custom-dwatt' } });
 
         const useCustomIdButton = await selectorQueries.findByRole('button', {
@@ -74,6 +74,7 @@ describe('QaCheatsToggle inventory grant', () => {
         await fireEvent.click(addButton);
 
         expect(await findByText('Added 5000 × qa-custom-dwatt to inventory.')).toBeTruthy();
+        expect(addItemsSpy).toHaveBeenCalledWith([{ id: 'qa-custom-dwatt', count: 5000 }]);
     }, 20000);
 
     test('hides inventory grant tool outside staging even when QA cheats are enabled', async () => {
