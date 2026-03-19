@@ -6,6 +6,8 @@ slug: 'changelog'
 Stay up to date with the latest improvements to DSPACE. Every entry links to a
 full set of release notes so you can dive into gameplay updates, docs refreshes,
 and tooling changes as they land.
+For v3 launch readiness context (including the Completionist Award III capstone scope),
+cross-check [v3 Release State](/docs/v3-release-state).
 
 ## Latest releases
 
