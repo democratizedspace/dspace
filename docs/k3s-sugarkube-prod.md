@@ -34,9 +34,9 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
    using immutable tag `v3-<shortsha>`.
    - For this validation deploy, production ingress hostname/routing must point to
      `prod.democratized.space` while still running `env=prod` with QA Cheats OFF.
-2. **Validate Phase A on `prod.democratized.space` using `v3-<shortsha>`** (health checks, smoke
-   flow, logs).
-3. **Merge `v3` into `main`** after validation sign-off.
+2. **Validate Phase A on `prod.democratized.space` using `v3-<shortsha>`** (health checks,
+   `/config.json` runtime config check, smoke flow, logs).
+3. **Merge `v3` into `main`** after validation sign-off on `prod.democratized.space`.
 4. **Phase B (apex host): deploy `democratized.space` from `main`** with immutable
    `main-<shortsha>`.
 5. **Convert `prod.democratized.space` to a redirect** pointing to `https://democratized.space`
@@ -62,13 +62,14 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
      default_tag=<immutable-tag-from-step-1>
    ```
 
-3. **Verify ingress and health endpoints:**
+3. **Verify ingress and runtime endpoints:**
    - Confirm the Cloudflare route targets the active host (`prod.democratized.space` during
      validation, then `democratized.space` after cutover) →
      `traefik.kube-system.svc.cluster.local`
    - `kubectl -n dspace get deploy,po,ingress`
    - `curl -fsS https://<active-host>/healthz`
    - `curl -fsS https://<active-host>/livez`
+   - `curl -fsS https://<active-host>/config.json`
 
 ## Safe rollout/rollback
 
@@ -76,7 +77,36 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
   ready before switching traffic.
 - Keep staging/dev values and tokens out of production. Use only `SUGARKUBE_TOKEN_PROD` and the
   production values file.
-- Roll back Phase A (`prod.democratized.space`) by redeploying the previous `v3-<shortsha>` tag to
-  `prod.democratized.space`.
-- Roll back Phase B (`democratized.space`) by redeploying the previous `main-<shortsha>` tag to
-  `democratized.space`.
+
+### Roll back Phase A (`prod.democratized.space` validation host)
+
+If validation fails before merge, keep apex traffic unchanged and redeploy the previous v3 RC tag:
+
+```bash
+cd ~/sugarkube
+just helm-oci-upgrade \
+  release=dspace namespace=dspace \
+  chart=oci://ghcr.io/democratizedspace/charts/dspace \
+  values=docs/examples/dspace.values.prod.yaml \
+  version_file=docs/apps/dspace.version \
+  default_tag=v3-PREVIOUS_SHORTSHA
+```
+
+Then re-check `https://prod.democratized.space/healthz`, `/livez`, and `/config.json`.
+
+### Roll back Phase B (`democratized.space` apex host after merge)
+
+If post-merge apex deploy fails, redeploy the prior immutable `main-<shortsha>` tag:
+
+```bash
+cd ~/sugarkube
+just helm-oci-upgrade \
+  release=dspace namespace=dspace \
+  chart=oci://ghcr.io/democratizedspace/charts/dspace \
+  values=docs/examples/dspace.values.prod.yaml \
+  version_file=docs/apps/dspace.version \
+  default_tag=main-PREVIOUS_SHORTSHA
+```
+
+After rollback is healthy, keep `prod.democratized.space` on the validation route (not redirect)
+until the next validated apex candidate is ready.

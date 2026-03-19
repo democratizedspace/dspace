@@ -35,16 +35,20 @@ to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not overrid
      chart=oci://ghcr.io/democratizedspace/charts/dspace \
      values=docs/examples/dspace.values.dev.yaml \
      version_file=docs/apps/dspace.version \
-     default_tag=v3-latest
+     default_tag=v3-REPLACE_SHORTSHA
    ```
+
+   Replace `REPLACE_SHORTSHA` with the immutable image tag suffix from `v3-<shortsha>` if you
+   want reproducible debug sessions. For quick local iteration, `default_tag=v3-latest` is still acceptable.
 
    This uses `environment: dev` from the values file, which keeps QA Cheats available.
 
 3. **Verify locally (no tunnel by default):**
    - Port-forward the Service: `kubectl -n dspace port-forward svc/dspace 3000:8080`
    - In another shell, run `curl -fsS http://localhost:3000/healthz` and
-     `curl -fsS http://localhost:3000/livez` (or open
-     http://localhost:3000/ in a browser)
+     `curl -fsS http://localhost:3000/livez` (Kubernetes readiness/liveness endpoints from the chart)
+   - Optional smoke endpoint parity check: `curl -fsS http://localhost:3000/config.json`
+   - Or open http://localhost:3000/ in a browser
 
    If you prefer ingress, set a local hostname in the dev values file and route it through Traefik,
    but keep it non-public.
@@ -54,5 +58,5 @@ to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not overrid
 - Keep tokens scoped: use `SUGARKUBE_TOKEN_DEV` for dev clusters; do not reuse staging/prod tokens.
 - Cloudflare tunnels are optional in dev. If you add one, align it with `env=dev` and a non-public
   hostname.
-- `v3-latest` is fine for day-to-day dev iteration, but prefer `v3-<shortsha>` when you want
-  reproducible debugging, pair-testing, or rollback drills.
+- Tag guidance in dev: use immutable `v3-<shortsha>` tags for repro/rollback drills; use
+  `v3-latest` only for quick convenience refreshes.

@@ -512,6 +512,20 @@ release. Keep the automation commands handy:
 - `python -m scripts.image_issues find-image-issues` — required release gate for missing or
   duplicated images (see [Image Analysis CLI](#image-analysis-cli))
 
+### Feature flags and AI provider fallback (release docs requirement)
+
+Document these items in release notes/QA docs before RC sign-off:
+
+- **Environment flag:** `DSPACE_ENV` controls QA-cheat visibility.
+  - `dev` and `staging` keep QA Cheats enabled.
+  - `prod`/`production` keep QA Cheats disabled.
+- **v3 provider reality:** v3 ships OpenAI as the active chat provider. token.place remains
+  deferred to v3.1 unless explicitly enabled for a later release plan.
+- **Fallback expectation:** `/chat` must fail politely with user-facing error messaging for network,
+  auth, rate-limit, model-access, and provider-outage scenarios; it must not hard-crash the page.
+- **Deploy verification endpoints:** container/Kubernetes readiness and liveness checks are
+  `/healthz` and `/livez`; CI smoke also checks `/config.json` for runtime-config availability.
+
 ## Code Standards
 
 ### Formatting and Linting

@@ -1,8 +1,7 @@
 # Deploying dspace v3 to k3s with sugarkube
 
-> **Scope:** This runbook covers **staging** (`staging.democratized.space`) using the `v3` branch.
-> The production site (`democratized.space`) currently runs v2.x from the `main` branch and is
-> managed separately.
+> **Scope:** This runbook covers **staging** (`staging.democratized.space`) for repeated v3
+> release-candidate (RC) validation using immutable image tags.
 
 Use this runbook to take [`dspace@v3`](https://github.com/democratizedspace/dspace/tree/v3) from source to a running web server on the sugarkube
 three-server HA k3s cluster. It links directly to the sugarkube recipes, GHCR build workflows,
@@ -120,6 +119,7 @@ published by CI.
 3. **Verify**:
    - `curl -fsS https://staging.democratized.space/healthz`
    - `curl -fsS https://staging.democratized.space/livez`
+   - `curl -fsS https://staging.democratized.space/config.json` (same runtime-config smoke endpoint used in CI image checks)
    - Open `https://staging.democratized.space` in a browser.
 
 The sections below provide full context for each step, branch-specific tag conventions, and
@@ -134,7 +134,7 @@ Both workflows accept a branch selector (`v3` or `main`) and produce branch-spec
 - **For `v3` builds**: tags are `v3-<shortsha>` (immutable RC tag) and `v3-latest` (mutable convenience tag)
 - **For `main` builds**: tags are `main-<shortsha>` (immutable promotion tag) and `main-latest` (mutable convenience tag)
 
-For staging RC verification, deploy `v3-<shortsha>` so QA runs are reproducible and rollback is explicit.
+For staging RC verification, deploy immutable `v3-<shortsha>` tags so QA runs are reproducible and rollback is explicit. Treat `v3-latest` as optional convenience only, never as the source of truth for RC sign-off.
 
 ### Running the workflows
 
@@ -296,11 +296,11 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
 > `dspace.values.staging.yaml` overrides it to `staging` so QA Cheats stay enabled here. Production
 > should keep `DSPACE_ENV=prod` so cheats remain disabled.
 
-### Force a rollout restart when using mutable tags (e.g., `v3-latest`)
+### Mutable tag note (`v3-latest`)
 
 When redeploying with a mutable tag such as `v3-latest`, Helm may report an upgrade without
 changing the Deployment template because the chart version and image tag stay the same. In that
-case Kubernetes will not create a new ReplicaSet, and pods keep running the previous image digest.
+case Kubernetes may not create a new ReplicaSet, and pods can keep running the previous image digest.
 
 After triggering the Sugarkube helper, explicitly roll the Deployment to ensure pods pull the
 latest digest:
@@ -321,8 +321,7 @@ sudo kubectl -n dspace port-forward svc/dspace 8080:8080
 curl -s http://localhost:8080/healthz | jq
 ```
 
-For staging release-candidate validation, prefer immutable `v3-<shortsha>` tags so repeated QA
-cycles are reproducible and easily comparable over time.
+For release-candidate validation, the recommended loop is immutable-tag only (see next section).
 
 ### Verification
 
@@ -347,45 +346,25 @@ Use this flow for every candidate build you want QA to validate in staging:
 
 Only use `v3-latest` for convenience checks where reproducibility is not required.
 
-### Fast manual redeploy (emergency push)
+### Staging rollback
 
-Use this when you already have dspace running on sugarkube and want the latest `v3-latest` image
-rolled out quickly (normal Kubernetes rolling behavior is fine). This reuses the existing chart
-version and values; it simply forces Helm to pull the refreshed image tag.
+If an RC fails validation, roll staging back to the previous known-good immutable tag:
 
-1. **Build and publish a new image:** Follow [Step 1](#step-1-build-and-publish-ghcr-artifacts-from-the-right-branch)
-   to trigger the GHCR image workflow for `v3`. Ensure the run publishes both `v3-<shortsha>` and
-   moves `v3-latest` to that build.
-2. **Redeploy the Helm release:** From `~/sugarkube` on a control node, rerun the same install
-   command used above (chart version stays `3.0.0`; the image comes from `v3-latest`):
+```bash
+cd ~/sugarkube
+just helm-oci-upgrade \
+  release=dspace namespace=dspace \
+  chart=oci://ghcr.io/democratizedspace/charts/dspace \
+  values=docs/examples/dspace.values.staging.yaml \
+  version_file=docs/apps/dspace.version \
+  default_tag=v3-PREVIOUS_SHORTSHA
 
-   ```bash
-   cd ~/sugarkube
-   just helm-oci-install \
-     release=dspace namespace=dspace \
-     chart=oci://ghcr.io/democratizedspace/charts/dspace \
-     values=docs/examples/dspace.values.staging.yaml \
-     version_file=docs/apps/dspace.version \
-     default_tag=v3-latest
-   ```
+kubectl -n dspace rollout status deploy/dspace --timeout=180s
+curl -fsS https://staging.democratized.space/healthz
+curl -fsS https://staging.democratized.space/livez
+```
 
-3. **Verify the new image is live:**
-
-   ```bash
-   kubectl get pods -n dspace -o wide
-   kubectl get deploy -n dspace dspace -o yaml | grep "image:"
-   curl -fsS https://staging.democratized.space/healthz
-   curl -fsS https://staging.democratized.space/livez
-   ```
-
-   You should see the Deployment and pods referencing `ghcr.io/democratizedspace/dspace:v3-latest`
-   (which should point at your newest `v3-<shortsha>` build). Load the site to confirm the expected
-   version or build SHA if your UI exposes it, and use `/settings` → chat debug to view the prompt
-   version, app build SHA, and Docs RAG sync status in `/chat`.
-
-> This is the fast path and may cause brief downtime while the Deployment rolls pods. More gradual
-> rollouts (canary/blue-green) can be layered on later using native Kubernetes strategies or
-> additional sugarkube automation.
+Record both the failed and rollback tags in your QA notes so candidate history remains auditable.
 
 ## End-to-end verification for dspace staging
 
