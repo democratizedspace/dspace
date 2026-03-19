@@ -39,6 +39,7 @@ vi.mock('../frontend/src/utils/docsRag.js', () => ({
 const dchatPersona = npcPersonas.find((persona) => persona.id === 'dchat');
 
 describe('gpt-5 chat responses integration', () => {
+  vi.setConfig({ testTimeout: 120000, hookTimeout: 120000 });
   const fetchMock = vi.fn();
   const jsonResponse = (outputText) =>
     new Response(

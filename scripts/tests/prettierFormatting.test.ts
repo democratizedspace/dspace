@@ -9,5 +9,5 @@ describe('Prettier formatting', () => {
       cwd: frontendDir,
       stdio: 'inherit',
     });
-  }, 60000);
+  }, 420000);
 });

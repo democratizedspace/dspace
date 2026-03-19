@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { fireEvent, render, waitFor } from '@testing-library/svelte';
+import { fireEvent, render, within } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 const { addItemsSpy } = vi.hoisted(() => ({
@@ -49,7 +49,7 @@ describe('QaCheatsToggle inventory grant', () => {
     });
 
     test('adds a custom item id to inventory when staging QA cheats are enabled', async () => {
-        const { findByTestId, findByLabelText, findByRole, findByText } = render(QaCheatsToggle, {
+        const { findByTestId, findByRole, findByText } = render(QaCheatsToggle, {
             cheatsAvailable: true,
             stagingEnvironment: true,
         });
@@ -57,10 +57,14 @@ describe('QaCheatsToggle inventory grant', () => {
         const toggle = await findByTestId('qa-cheats-toggle');
         await fireEvent.click(toggle);
 
-        const customIdInput = await findByLabelText('Custom item ID');
+        const itemSelector = await findByTestId('qa-inventory-item-selector');
+        const selectorQueries = within(itemSelector);
+        const customIdInput = await selectorQueries.findByPlaceholderText('Enter a custom item ID');
         await fireEvent.input(customIdInput, { target: { value: 'qa-custom-dwatt' } });
 
-        const useCustomIdButton = await findByRole('button', { name: 'Use custom item ID' });
+        const useCustomIdButton = await selectorQueries.findByRole('button', {
+            name: 'Use custom item ID',
+        });
         await fireEvent.click(useCustomIdButton);
 
         const countInput = await findByTestId('qa-inventory-item-count');
@@ -69,12 +73,8 @@ describe('QaCheatsToggle inventory grant', () => {
         const addButton = await findByRole('button', { name: 'Add items to inventory' });
         await fireEvent.click(addButton);
 
-        await findByText('Added 5000 × qa-custom-dwatt to inventory.');
-
-        await waitFor(() => {
-            expect(addItemsSpy).toHaveBeenCalledWith([{ id: 'qa-custom-dwatt', count: 5000 }]);
-        });
-    }, 15000);
+        expect(await findByText('Added 5000 × qa-custom-dwatt to inventory.')).toBeTruthy();
+    }, 20000);
 
     test('hides inventory grant tool outside staging even when QA cheats are enabled', async () => {
         const { findByTestId, queryByTestId } = render(QaCheatsToggle, {

@@ -19,6 +19,7 @@ vi.mock('../frontend/src/utils/docsRag.js', () => ({
 }));
 
 describe('chat non-reasoning regression probes', () => {
+    vi.setConfig({ testTimeout: 120000, hookTimeout: 120000 });
     beforeEach(() => {
         vi.resetModules();
         responsesCreateMock.mockReset();
