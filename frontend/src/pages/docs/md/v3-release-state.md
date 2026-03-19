@@ -71,7 +71,9 @@ The More menu includes in-scope routes for:
 
 ### token.place integration
 
-- token.place integration is deferred to v3.1.
+- v3 ships with OpenAI as the active chat provider path.
+- token.place integration is implemented behind v3.1 rollout gates and is **not** active in the v3
+  launch release.
 - Current status is tracked at [/docs/token-place](/docs/token-place).
 
 ## What changed from earlier versions
