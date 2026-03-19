@@ -31,8 +31,9 @@ prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugark
 
 - dspace multi-arch container images are published to GHCR at
   `ghcr.io/democratizedspace/dspace`.
-  - Tags include `v3-latest`, `v3-<short-sha>`, and semantic versions such as `v3.0.0`.
-  - Example image reference: `ghcr.io/democratizedspace/dspace:v3-latest`.
+  - Tags include immutable branch SHA tags (`v3-<shortsha>`, `main-<shortsha>`), mutable convenience tags
+    (`v3-latest`, `main-latest`), and semantic versions such as `v3.0.0`.
+  - For release-candidate validation in staging, use immutable `v3-<shortsha>` tags.
 - The Helm chart is published as an OCI artifact to
   `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
   from `charts/dspace/Chart.yaml`. The chart version is mirrored in
@@ -110,10 +111,16 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-latest
+  default_tag=v3-REPLACE_SHORTSHA
 ```
 
-3. **Verify**: Check the deployment and open the site at `staging.democratized.space`.
+Replace `REPLACE_SHORTSHA` with the exact immutable suffix from the `v3-<shortsha>` image tag
+published by CI.
+
+3. **Verify**:
+   - `curl -fsS https://staging.democratized.space/healthz`
+   - `curl -fsS https://staging.democratized.space/livez`
+   - Open `https://staging.democratized.space` in a browser.
 
 The sections below provide full context for each step, branch-specific tag conventions, and
 troubleshooting guidance. Keep the values list scoped to `dspace.values.staging.yaml`; mixing in the
@@ -124,10 +131,10 @@ hostnames for staging.
 
 Both workflows accept a branch selector (`v3` or `main`) and produce branch-specific tags:
 
-- **For `v3` builds**: tags are `v3-<shortsha>` and `v3-latest`
-- **For `main` builds**: tags are `main-<shortsha>` and `main-latest`
+- **For `v3` builds**: tags are `v3-<shortsha>` (immutable RC tag) and `v3-latest` (mutable convenience tag)
+- **For `main` builds**: tags are `main-<shortsha>` (immutable promotion tag) and `main-latest` (mutable convenience tag)
 
-This prevents `main` builds from overwriting `v3-latest` and keeps environments isolated.
+For staging RC verification, deploy `v3-<shortsha>` so QA runs are reproducible and rollback is explicit.
 
 ### Running the workflows
 
@@ -271,7 +278,7 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-latest
+  default_tag=v3-REPLACE_SHORTSHA
 ```
 
 To target a specific image build, add `tag=<branch>-<shortsha>` or use `just helm-oci-upgrade` with
@@ -314,8 +321,8 @@ sudo kubectl -n dspace port-forward svc/dspace 8080:8080
 curl -s http://localhost:8080/healthz | jq
 ```
 
-For production, prefer immutable tags (for example `v3.0.0+<sha>`) so Helm-driven manifest changes
-automatically roll pods without a manual restart.
+For staging release-candidate validation, prefer immutable `v3-<shortsha>` tags so repeated QA
+cycles are reproducible and easily comparable over time.
 
 ### Verification
 
@@ -327,6 +334,18 @@ kubectl -n dspace get svc,ingress
 Confirm the ingress shows `staging.democratized.space` as the host and the `traefik` ingress class,
 then open `https://staging.democratized.space` in a browser. You should see the dspace v3 UI served
 through the Cloudflare Tunnel and Traefik.
+
+### Repeated RC validation loop (recommended for staging)
+
+Use this flow for every candidate build you want QA to validate in staging:
+
+1. Trigger `ci-image.yml` from branch `v3` and record the generated immutable tag
+   (`v3-<shortsha>`).
+2. Deploy that exact tag with `just helm-oci-install ... default_tag=v3-REPLACE_SHORTSHA`.
+3. Validate staging behavior and record pass/fail against the tag.
+4. If a fix is needed, produce a new `v3-<shortsha>` and repeat.
+
+Only use `v3-latest` for convenience checks where reproducibility is not required.
 
 ### Fast manual redeploy (emergency push)
 
@@ -355,6 +374,8 @@ version and values; it simply forces Helm to pull the refreshed image tag.
    ```bash
    kubectl get pods -n dspace -o wide
    kubectl get deploy -n dspace dspace -o yaml | grep "image:"
+   curl -fsS https://staging.democratized.space/healthz
+   curl -fsS https://staging.democratized.space/livez
    ```
 
    You should see the Deployment and pods referencing `ghcr.io/democratizedspace/dspace:v3-latest`
@@ -372,8 +393,9 @@ Use this quick runbook to confirm staging is healthy after a deploy:
 
 - Sugarkube cluster: `just cluster-status` is healthy.
 - Traefik: `just traefik-status` is healthy.
-- Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and `/ready`
-  returns 200. Verify with a two-shell port-forward:
+- Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and its own admin
+  endpoint `/ready` returns 200 (this checks the tunnel process, not dspace). Verify with a
+  two-shell port-forward:
   - Shell 1: `kubectl -n cloudflare port-forward deploy/cloudflare-tunnel 2000:2000`
   - Shell 2: `curl -fsS http://localhost:2000/ready`
   - A JSON response containing `"status":200` confirms the tunnel is healthy.
