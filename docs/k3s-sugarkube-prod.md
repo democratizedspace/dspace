@@ -21,7 +21,6 @@ Production must use immutable tags so every rollout is reproducible and auditabl
 
 - During `v3` validation, use `v3-<shortsha>` tags.
 - After merging `v3` into `main`, use `main-<shortsha>` tags for apex deploys.
-- Semantic tags (for example `v3.0.0`) are also valid when they map to an immutable digest.
 - Avoid mutable tags like `*-latest`. Mutable tags do not trigger a new rollout on image republish,
   and they make it harder to confirm which build is running during an incident.
 - Pin `default_tag` in the Helm helper to one of the immutable tags above (for example,
@@ -41,7 +40,7 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
 
 ## Deployment steps
 
-1. **Select the tag:** Use a SHA tag published by the GHCR workflows
+1. **Select an immutable tag:** Use an immutable branch SHA tag published by the GHCR workflows
    ([ci-image.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml) and
    [ci-helm.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)).
    - Subdomain validation phase: `v3-<shortsha>`

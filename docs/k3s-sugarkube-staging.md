@@ -31,7 +31,7 @@ prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugark
 
 - dspace multi-arch container images are published to GHCR at
   `ghcr.io/democratizedspace/dspace`.
-  - Tags include immutable branch SHA tags (`v3-<short-sha>`, `main-<short-sha>`), mutable convenience tags
+  - Tags include immutable branch SHA tags (`v3-<shortsha>`, `main-<shortsha>`), mutable convenience tags
     (`v3-latest`, `main-latest`), and semantic versions such as `v3.0.0`.
   - For release-candidate validation in staging, use immutable `v3-<shortsha>` tags.
 - The Helm chart is published as an OCI artifact to
