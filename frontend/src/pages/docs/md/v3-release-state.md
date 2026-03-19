@@ -15,7 +15,7 @@ the full release QA checklist in
 ### Core gameplay and progression
 
 - The quest + inventory + process loop is fully in scope for v3.
-- Official content now includes **248 quests across 19 quest trees**.
+- Official content now includes **248 quests across 19 quest trees** (current v3 branch snapshot).
 - Quest details render from canonical quest JSON, including branching dialogue, rewards, and
   requirements.
 - Completionist Award III (`completionist/award-iii`) is in the v3 capstone lane and remains part
@@ -41,6 +41,7 @@ The More menu includes in-scope routes for:
 
 - Players can create custom quests at `/quests/create`.
 - Players can create custom items at `/inventory/create`.
+- `/items/create` remains available as a legacy alias that resolves to the same custom item form.
 - Players can create custom processes at `/processes/create`.
 - Players can manage custom content from each matching `/manage` route.
 - Players can export/import custom content bundles from `/contentbackup`.
@@ -71,7 +72,8 @@ The More menu includes in-scope routes for:
 
 ### token.place integration
 
-- token.place integration is deferred to v3.1.
+- token.place integration exists behind flags but remains disabled for the v3 launch release.
+- token.place activation is deferred to v3.1.
 - Current status is tracked at [/docs/token-place](/docs/token-place).
 
 ## What changed from earlier versions
