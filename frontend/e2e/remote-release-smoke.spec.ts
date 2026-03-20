@@ -73,27 +73,20 @@ async function openFirstQuest(page: Page): Promise<void> {
     await page.waitForLoadState('domcontentloaded');
     await waitForHydration(page);
 
-    const questHeading = page
-        .locator('main h1:visible, main h2:visible, [data-testid="quest-title"]:visible')
-        .filter({ hasText: /\S+/ })
-        .first();
-    const hasVisibleQuestHeading = await questHeading.isVisible({ timeout: 3_000 }).catch(() => false);
-
     const optionButtons = page.locator(
-        'button:has-text("Continue"), button:has-text("Start"), .options button'
+        [
+            '.options button',
+            'main nav button:has(.chip-text)',
+            'main button:has-text("Continue")',
+            'main button:has-text("Start")',
+            'main button:has-text("Finish")',
+            'main button:has-text("Next")',
+        ].join(', ')
     );
-    await expect(
-        optionButtons.first(),
-        'Expected at least one quest interaction button'
-    ).toBeVisible();
-
-    if (!hasVisibleQuestHeading) {
-        test.info().annotations.push({
-            type: 'warning',
-            description:
-                'Quest heading was not visible/non-empty; relied on visible quest interaction options instead.',
-        });
-    }
+    const firstVisibleOption = optionButtons.filter({ visible: true }).first();
+    await expect(firstVisibleOption, 'Expected at least one quest interaction button').toBeVisible();
+    await firstVisibleOption.click();
+    await expect(page).toHaveURL(/\/quests\//);
 }
 
 async function runProcessLifecycle(page: Page): Promise<void> {
