@@ -64,7 +64,12 @@ async function openFirstQuest(page: Page): Promise<void> {
 
     const firstQuest = page
         .locator(
-            'a[href^="/quests/"]:not([href="/quests"]):not([href="/quests/create"]):not([href*="/quests/manage"])'
+            [
+                'a[href^="/quests/"]',
+                ':not([href="/quests"])',
+                ':not([href="/quests/create"])',
+                ':not([href*="/quests/manage"])',
+            ].join('')
         )
         .first();
 
@@ -156,7 +161,10 @@ async function runProcessLifecycle(page: Page): Promise<void> {
     }
 
     if (state === 'active') {
-        await expect(activeMarker.first(), 'Expected process to enter an active state').toBeVisible();
+        await expect(
+            activeMarker.first(),
+            'Expected process to enter an active state'
+        ).toBeVisible();
         return;
     }
 
