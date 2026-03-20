@@ -36,8 +36,20 @@ type HarnessReport = {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const frontendRoot = join(__dirname, '..');
-const v1FixturePath = join(frontendRoot, 'src', 'utils', 'legacySaveFixtures', 'legacy_v1_cookie_save.json');
-const v2FixturePath = join(frontendRoot, 'src', 'utils', 'legacySaveFixtures', 'legacy_v2_localstorage_save.json');
+const v1FixturePath = join(
+    frontendRoot,
+    'src',
+    'utils',
+    'legacySaveFixtures',
+    'legacy_v1_cookie_save.json'
+);
+const v2FixturePath = join(
+    frontendRoot,
+    'src',
+    'utils',
+    'legacySaveFixtures',
+    'legacy_v2_localstorage_save.json'
+);
 const reportPath = join(frontendRoot, 'test-results', 'remote-migration-harness-report.json');
 
 const v1Fixture = JSON.parse(readFileSync(v1FixturePath, 'utf8')) as {
@@ -64,12 +76,7 @@ function readRealV2Payload(): string {
     return readFileSync(REAL_V2_JSON_PATH, 'utf8').trim();
 }
 
-function addResult(
-    id: string,
-    label: string,
-    status: HarnessResult['status'],
-    detail = ''
-): void {
+function addResult(id: string, label: string, status: HarnessResult['status'], detail = ''): void {
     harnessResults.push({ id, label, status, detail: detail || undefined });
 }
 
@@ -86,14 +93,18 @@ async function seedV1Profile(page: Page, profileId: string): Promise<void> {
         throw new Error(`Unknown v1 fixture profile: ${profileId}`);
     }
 
-    await page.evaluate(({ cookies }) => {
-        cookies.forEach((cookie) => {
-            const value = cookie.encodeValue === false
-                ? String(cookie.value)
-                : encodeURIComponent(String(cookie.value));
-            document.cookie = `${cookie.name}=${value}; path=/;`;
-        });
-    }, { cookies: profile.cookies });
+    await page.evaluate(
+        ({ cookies }) => {
+            cookies.forEach((cookie) => {
+                const value =
+                    cookie.encodeValue === false
+                        ? String(cookie.value)
+                        : encodeURIComponent(String(cookie.value));
+                document.cookie = `${cookie.name}=${value}; path=/;`;
+            });
+        },
+        { cookies: profile.cookies }
+    );
 }
 
 async function seedV2State(page: Page, state: Record<string, unknown>): Promise<void> {
@@ -162,7 +173,11 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
         };
 
         const failedSteps: string[] = [];
-        const runStep = async (id: string, label: string, step: () => Promise<void>): Promise<void> => {
+        const runStep = async (
+            id: string,
+            label: string,
+            step: () => Promise<void>
+        ): Promise<void> => {
             const passed = await tryStep(id, label, step);
             if (!passed) {
                 failedSteps.push(`${id} (${label})`);
@@ -203,16 +218,22 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
             await seedV1Profile(page, 'maximal');
             await goToSettings(page);
             await page.getByRole('button', { name: 'Replace current save with v1' }).click();
-            await expect(page.getByText('Replaced current save with converted v1 data.')).toBeVisible();
+            await expect(
+                page.getByText('Replaced current save with converted v1 data.')
+            ).toBeVisible();
         });
 
-        await runStep('B.v1-cleanup-button', 'v1 delete cookie action clears detection', async () => {
-            await page.getByRole('button', { name: 'Delete v1 cookie data' }).click();
-            await expect(page.getByText('Removed legacy v1 cookies.')).toBeVisible();
-            await expect(page.getByTestId('legacy-v1-cookie-summary')).toHaveText(
-                /No v1 cookie data detected/
-            );
-        });
+        await runStep(
+            'B.v1-cleanup-button',
+            'v1 delete cookie action clears detection',
+            async () => {
+                await page.getByRole('button', { name: 'Delete v1 cookie data' }).click();
+                await expect(page.getByText('Removed legacy v1 cookies.')).toBeVisible();
+                await expect(page.getByTestId('legacy-v1-cookie-summary')).toHaveText(
+                    /No v1 cookie data detected/
+                );
+            }
+        );
 
         await runStep('C.v2-detect', 'v2 minimal fixture detection', async () => {
             await purgeClientState(page);
@@ -222,16 +243,24 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
             await expect(page.getByText('Legacy v2 localStorage data detected')).toBeVisible();
         });
 
-        await runStep('C.v2-merge-manual-cleanup', 'v2 merge upgrades state and clears v2 detection', async () => {
-            await page.getByRole('button', { name: 'Merge v2 into current save' }).click();
-            await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({ timeout: 10_000 });
-            await goToSettings(page);
-            const storage = await readStorageSnapshot(page);
-            if (storage.gameState !== null) {
-                const parsed = JSON.parse(storage.gameState || '{}');
-                expect(String(parsed.versionNumberString || parsed.version || '')).toMatch(/^3/);
+        await runStep(
+            'C.v2-merge-manual-cleanup',
+            'v2 merge upgrades state and clears v2 detection',
+            async () => {
+                await page.getByRole('button', { name: 'Merge v2 into current save' }).click();
+                await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
+                    timeout: 10_000,
+                });
+                await goToSettings(page);
+                const storage = await readStorageSnapshot(page);
+                if (storage.gameState !== null) {
+                    const parsed = JSON.parse(storage.gameState || '{}');
+                    expect(String(parsed.versionNumberString || parsed.version || '')).toMatch(
+                        /^3/
+                    );
+                }
             }
-        });
+        );
 
         await runStep('C.v2-replace-manual-cleanup', 'v2 replace path succeeds', async () => {
             await purgeClientState(page);
@@ -239,34 +268,44 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
             await seedV2State(page, v2Fixture.profiles.inProgress.gameState);
             await goToSettings(page);
             await page.getByRole('button', { name: 'Replace current save with v2' }).click();
-            await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({ timeout: 10_000 });
+            await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
+                timeout: 10_000,
+            });
             await goToSettings(page);
             await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
         });
 
-        await runStep('C.v2-auto-cleanup-backup', 'Auto migration cleans backup-only legacy keys', async () => {
-            await purgeClientState(page);
-            await page.goto('/');
-            await page.evaluate((legacyState) => {
-                localStorage.removeItem('legacyV2Seeded');
-                localStorage.setItem('gameStateBackup', JSON.stringify(legacyState));
-                localStorage.removeItem('gameState');
-            }, v2Fixture.profiles.minimal.gameState);
-            await page.goto('/quests');
-            await page.waitForLoadState('networkidle');
-            const storage = await readStorageSnapshot(page);
-            expect(storage.gameStateBackup).toBeNull();
-        });
+        await runStep(
+            'C.v2-auto-cleanup-backup',
+            'Auto migration cleans backup-only legacy keys',
+            async () => {
+                await purgeClientState(page);
+                await page.goto('/');
+                await page.evaluate((legacyState) => {
+                    localStorage.removeItem('legacyV2Seeded');
+                    localStorage.setItem('gameStateBackup', JSON.stringify(legacyState));
+                    localStorage.removeItem('gameState');
+                }, v2Fixture.profiles.minimal.gameState);
+                await page.goto('/quests');
+                await page.waitForLoadState('networkidle');
+                const storage = await readStorageSnapshot(page);
+                expect(storage.gameStateBackup).toBeNull();
+            }
+        );
 
-        await runStep('D.v2-malformed-json', 'Invalid v2 JSON is surfaced without crash', async () => {
-            await purgeClientState(page);
-            await page.goto('/');
-            await page.evaluate(() => {
-                localStorage.setItem('gameState', '{oops');
-            });
-            await goToSettings(page);
-            await expect(page.getByText(/Legacy v2 data could not be parsed/)).toBeVisible();
-        });
+        await runStep(
+            'D.v2-malformed-json',
+            'Invalid v2 JSON is surfaced without crash',
+            async () => {
+                await purgeClientState(page);
+                await page.goto('/');
+                await page.evaluate(() => {
+                    localStorage.setItem('gameState', '{oops');
+                });
+                await goToSettings(page);
+                await expect(page.getByText(/Legacy v2 data could not be parsed/)).toBeVisible();
+            }
+        );
 
         await runStep('D.v2-missing-keys', 'Missing v2 keys handled safely', async () => {
             await purgeClientState(page);
@@ -277,7 +316,9 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
             });
             await goToSettings(page);
             await page.getByRole('button', { name: 'Merge v2 into current save' }).click();
-            await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({ timeout: 10_000 });
+            await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
+                timeout: 10_000,
+            });
             await goToSettings(page);
             await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
         });
@@ -292,20 +333,28 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
                 'No REMOTE_MIGRATION_REAL_V2_JSON_PATH payload provided for this run.'
             );
         } else {
-            await runStep('C.v2-real-save', 'Real v2 payload detection + replace path', async () => {
-                const parsed = JSON.parse(realV2JsonRaw) as Record<string, unknown>;
-                await purgeClientState(page);
-                await page.goto('/');
-                await seedV2State(page, parsed);
-                await goToSettings(page);
-                await expect(page.getByText('Legacy v2 localStorage data detected')).toBeVisible();
-                await page.getByRole('button', { name: 'Replace current save with v2' }).click();
-                await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
-                    timeout: 10_000,
-                });
-                await goToSettings(page);
-                await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
-            });
+            await runStep(
+                'C.v2-real-save',
+                'Real v2 payload detection + replace path',
+                async () => {
+                    const parsed = JSON.parse(realV2JsonRaw) as Record<string, unknown>;
+                    await purgeClientState(page);
+                    await page.goto('/');
+                    await seedV2State(page, parsed);
+                    await goToSettings(page);
+                    await expect(
+                        page.getByText('Legacy v2 localStorage data detected')
+                    ).toBeVisible();
+                    await page
+                        .getByRole('button', { name: 'Replace current save with v2' })
+                        .click();
+                    await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
+                        timeout: 10_000,
+                    });
+                    await goToSettings(page);
+                    await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
+                }
+            );
         }
 
         expect(

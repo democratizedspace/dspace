@@ -25,6 +25,7 @@ declare const process: {
         REMOTE_SMOKE?: string;
         REMOTE_SMOKE_USE_WEBSERVER?: string;
         REMOTE_MIGRATION?: string;
+        REMOTE_MIGRATION_USE_WEBSERVER?: string;
     };
     argv: string[];
 };
@@ -210,7 +211,8 @@ const remoteMigrationMode = process.env.REMOTE_MIGRATION === '1';
 const useWebServerForRemoteSmoke = process.env.REMOTE_SMOKE_USE_WEBSERVER === '1';
 const useWebServerForRemoteMigration = process.env.REMOTE_MIGRATION_USE_WEBSERVER === '1';
 const remoteRunMode = remoteSmokeMode || remoteMigrationMode;
-const shouldUseWebServer = !remoteRunMode || useWebServerForRemoteSmoke || useWebServerForRemoteMigration;
+const shouldUseWebServer =
+    !remoteRunMode || useWebServerForRemoteSmoke || useWebServerForRemoteMigration;
 
 if (shouldUseWebServer) {
     ensureAstroBuildArtifacts();
