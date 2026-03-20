@@ -98,9 +98,15 @@ async function runProcessLifecycle(page: Page): Promise<void> {
     await expect(startButton, 'Expected at least one process start button').toBeVisible();
     await startButton.click();
 
-    const cancelButton = processRow.locator('button').filter({ hasText: /cancel/i }).first();
+    const cancelButton = processRow
+        .locator('button')
+        .filter({ hasText: /cancel/i })
+        .first();
 
-    const collectButton = processRow.locator('button').filter({ hasText: /collect/i }).first();
+    const collectButton = processRow
+        .locator('button')
+        .filter({ hasText: /collect/i })
+        .first();
 
     if (await cancelButton.isVisible({ timeout: 5_000 }).catch(() => false)) {
         await cancelButton.click();
