@@ -11,14 +11,15 @@ const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
-const DEFAULT_REAL_SAVE_ENV = 'QA_REMOTE_MIGRATION_REAL_V2_JSON';
+const PRIMARY_REAL_SAVE_ENV = 'REMOTE_MIGRATION_REAL_V2_JSON';
+const LEGACY_REAL_SAVE_ENV = 'QA_REMOTE_MIGRATION_REAL_V2_JSON';
 
 function parseArgs(argv) {
   const parsed = {
     baseURL: DEFAULT_BASE_URL,
     project: 'chromium',
     realV2JsonPath: '',
-    realV2EnvVar: DEFAULT_REAL_SAVE_ENV,
+    realV2EnvVar: PRIMARY_REAL_SAVE_ENV,
     passthrough: [],
   };
 
@@ -51,13 +52,13 @@ function parseArgs(argv) {
       continue;
     }
 
-    if (arg === '--real-v2-json') {
+    if (arg === '--real-v2-save' || arg === '--real-v2-json') {
       parsed.realV2JsonPath = argv[index + 1] || '';
       index += 1;
       continue;
     }
 
-    if (arg.startsWith('--real-v2-json=')) {
+    if (arg.startsWith('--real-v2-save=') || arg.startsWith('--real-v2-json=')) {
       parsed.realV2JsonPath = arg.slice(arg.indexOf('=') + 1) || '';
       continue;
     }
@@ -83,18 +84,18 @@ function readRealV2Json(options) {
   if (options.realV2JsonPath) {
     const absolutePath = resolve(process.cwd(), options.realV2JsonPath);
     if (!existsSync(absolutePath)) {
-      throw new Error(`--real-v2-json file does not exist: ${absolutePath}`);
+      throw new Error(`--real-v2-save file does not exist: ${absolutePath}`);
     }
 
     const raw = readFileSync(absolutePath, 'utf8').trim();
     if (!raw) {
-      throw new Error(`--real-v2-json file is empty: ${absolutePath}`);
+      throw new Error(`--real-v2-save file is empty: ${absolutePath}`);
     }
 
     try {
       JSON.parse(raw);
     } catch {
-      throw new Error(`--real-v2-json file is not valid JSON: ${absolutePath}`);
+      throw new Error(`--real-v2-save file is not valid JSON: ${absolutePath}`);
     }
     return {
       payload: raw,
@@ -102,7 +103,11 @@ function readRealV2Json(options) {
     };
   }
 
-  const envValue = process.env[options.realV2EnvVar];
+  const envValue =
+    process.env[options.realV2EnvVar] ||
+    (options.realV2EnvVar === PRIMARY_REAL_SAVE_ENV ? process.env[LEGACY_REAL_SAVE_ENV] : '');
+  const sourceEnvVar =
+    process.env[options.realV2EnvVar] ? options.realV2EnvVar : LEGACY_REAL_SAVE_ENV;
   if (!envValue) {
     return {
       payload: '',
@@ -117,7 +122,7 @@ function readRealV2Json(options) {
   }
   return {
     payload: envValue,
-    source: `env:${options.realV2EnvVar}`,
+    source: `env:${sourceEnvVar}`,
   };
 }
 
