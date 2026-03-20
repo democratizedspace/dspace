@@ -24,6 +24,7 @@ declare const process: {
         PLAYWRIGHT_SKIP_INSTALL_DEPS?: string;
         REMOTE_SMOKE?: string;
         REMOTE_SMOKE_USE_WEBSERVER?: string;
+        REMOTE_MIGRATION?: string;
     };
     argv: string[];
 };
@@ -228,6 +229,15 @@ if (remoteSmokeMode) {
         'json',
         {
             outputFile: './test-results/remote-smoke-summary.json',
+        },
+    ]);
+}
+
+if (process.env.REMOTE_MIGRATION === '1') {
+    reporter.push([
+        'json',
+        {
+            outputFile: './test-results/remote-migration-playwright-summary.json',
         },
     ]);
 }
