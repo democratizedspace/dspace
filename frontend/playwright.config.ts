@@ -206,8 +206,11 @@ function resolveProjects(): PlaywrightProjectConfig[] {
 const projects = resolveProjects();
 
 const remoteSmokeMode = process.env.REMOTE_SMOKE === '1';
+const remoteMigrationMode = process.env.REMOTE_MIGRATION === '1';
 const useWebServerForRemoteSmoke = process.env.REMOTE_SMOKE_USE_WEBSERVER === '1';
-const shouldUseWebServer = !remoteSmokeMode || useWebServerForRemoteSmoke;
+const useWebServerForRemoteMigration = process.env.REMOTE_MIGRATION_USE_WEBSERVER === '1';
+const remoteRunMode = remoteSmokeMode || remoteMigrationMode;
+const shouldUseWebServer = !remoteRunMode || useWebServerForRemoteSmoke || useWebServerForRemoteMigration;
 
 if (shouldUseWebServer) {
     ensureAstroBuildArtifacts();
@@ -224,7 +227,7 @@ const reporter: PlaywrightConfig['reporter'] = [
     ],
 ];
 
-if (remoteSmokeMode) {
+if (remoteSmokeMode && !remoteMigrationMode) {
     reporter.push([
         'json',
         {
@@ -233,7 +236,7 @@ if (remoteSmokeMode) {
     ]);
 }
 
-if (process.env.REMOTE_MIGRATION === '1') {
+if (remoteMigrationMode) {
     reporter.push([
         'json',
         {

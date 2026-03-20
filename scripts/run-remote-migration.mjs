@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawn } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -91,7 +91,11 @@ function readRealV2Json(options) {
       throw new Error(`--real-v2-json file is empty: ${absolutePath}`);
     }
 
-    JSON.parse(raw);
+    try {
+      JSON.parse(raw);
+    } catch {
+      throw new Error(`--real-v2-json file is not valid JSON: ${absolutePath}`);
+    }
     return {
       payload: raw,
       source: `file:${absolutePath}`,
@@ -106,11 +110,27 @@ function readRealV2Json(options) {
     };
   }
 
-  JSON.parse(envValue);
+  try {
+    JSON.parse(envValue);
+  } catch {
+    throw new Error(`Environment variable ${options.realV2EnvVar} is not valid JSON`);
+  }
   return {
     payload: envValue,
     source: `env:${options.realV2EnvVar}`,
   };
+}
+
+function writeRealV2PayloadFile(payload) {
+  if (!payload) {
+    return '';
+  }
+
+  const outputDir = join(frontendDir, 'test-results');
+  const outputPath = join(outputDir, 'remote-migration-real-v2.json');
+  mkdirSync(outputDir, { recursive: true });
+  writeFileSync(outputPath, `${payload.trim()}\n`, 'utf8');
+  return outputPath;
 }
 
 function printChecklistSummary(reportPath) {
@@ -152,7 +172,15 @@ if (!/^https?:\/\//i.test(options.baseURL)) {
   process.exit(1);
 }
 
-const realV2 = readRealV2Json(options);
+let realV2;
+try {
+  realV2 = readRealV2Json(options);
+} catch (error) {
+  const detail = error instanceof Error ? error.message : String(error);
+  console.error(`[qa:remote-migration] ${detail}`);
+  process.exit(1);
+}
+const realV2PayloadPath = writeRealV2PayloadFile(realV2.payload);
 const url = new URL(options.baseURL);
 const isLocalHost =
   url.hostname === '127.0.0.1' ||
@@ -165,10 +193,9 @@ const env = {
   ...process.env,
   BASE_URL: options.baseURL,
   PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
-  REMOTE_SMOKE: '1',
   REMOTE_MIGRATION: '1',
-  REMOTE_SMOKE_USE_WEBSERVER: isLocalHost ? '1' : '0',
-  REMOTE_MIGRATION_REAL_V2_JSON: realV2.payload,
+  REMOTE_MIGRATION_USE_WEBSERVER: isLocalHost ? '1' : '0',
+  REMOTE_MIGRATION_REAL_V2_JSON_PATH: realV2PayloadPath,
 };
 
 const playwrightArgs = [
@@ -183,7 +210,10 @@ console.log(`[qa:remote-migration] baseURL=${options.baseURL}`);
 console.log(`[qa:remote-migration] project=${options.project}`);
 console.log(`[qa:remote-migration] realV2Source=${realV2.source}`);
 console.log(
-  `[qa:remote-migration] webServer=${env.REMOTE_SMOKE_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
+  `[qa:remote-migration] realV2PayloadPath=${realV2PayloadPath || 'none'}`
+);
+console.log(
+  `[qa:remote-migration] webServer=${env.REMOTE_MIGRATION_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
 );
 
 const child = spawn('node', playwrightArgs, {
