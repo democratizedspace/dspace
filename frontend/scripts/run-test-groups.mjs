@@ -35,6 +35,12 @@ const TEST_GROUPS = [
         workers: 1,
     },
     {
+        name: 'Remote Release Smoke',
+        files: ['remote-release-smoke.spec.ts'],
+        parallel: false,
+        workers: 1,
+    },
+    {
         name: 'Structure Tests',
         files: [
             'page-structure.spec.ts',

@@ -41,7 +41,13 @@ test('surfaces GitHub scope errors when the API rejects the token', async ({ pag
 });
 
 test('keeps form state when network errors occur', async ({ page }) => {
-    await page.route('https://api.github.com/**', (route) => route.abort());
+    await page.route('https://api.github.com/**', async (route) => {
+        await route.fulfill({
+            status: 503,
+            contentType: 'application/json',
+            body: JSON.stringify({ message: 'Service unavailable' }),
+        });
+    });
     await page.goto('/quests/submit');
     await waitForHydration(page);
     const questInput = page.getByLabel('Quest JSON*');
