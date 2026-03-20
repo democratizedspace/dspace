@@ -1,8 +1,8 @@
 # Deploying dspace v3 to k3s with sugarkube
 
 > **Scope:** This runbook covers **staging** (`staging.democratized.space`) using the `v3` branch.
-> The production site (`democratized.space`) currently runs v2.x from the `main` branch and is
-> managed separately.
+> Production (`democratized.space`) is handled by the separate prod runbook and should not be
+> changed from this staging guide.
 
 Use this runbook to take [`dspace@v3`](https://github.com/democratizedspace/dspace/tree/v3) from source to a running web server on the sugarkube
 three-server HA k3s cluster. It links directly to the sugarkube recipes, GHCR build workflows,
@@ -351,7 +351,7 @@ Use this flow for every candidate build you want QA to validate in staging:
 5. If the candidate fails, roll back immediately by redeploying the prior known-good
    `v3-<shortsha>` tag and re-running the three endpoint checks above.
 
-Only use `v3-latest` for convenience checks where reproducibility is not required.
+Only use `v3-latest` for convenience checks where reproducibility is not required; for repeated RC validation and sign-off, keep using immutable `v3-<shortsha>` tags.
 
 ### Fast manual redeploy (emergency push only)
 

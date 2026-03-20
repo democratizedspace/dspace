@@ -73,7 +73,7 @@ The More menu includes in-scope routes for:
 ### token.place integration
 
 - token.place integration exists behind flags but remains disabled for the v3 launch release.
-- token.place activation is deferred to v3.1.
+- token.place activation is deferred to v3.1 and should stay out of v3 launch sign-off.
 - Current status is tracked at [/docs/token-place](/docs/token-place).
 
 ## What changed from earlier versions
