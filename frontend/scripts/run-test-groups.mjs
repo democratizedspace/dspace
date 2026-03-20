@@ -41,6 +41,12 @@ const TEST_GROUPS = [
         workers: 1,
     },
     {
+        name: 'Remote Legacy Migration',
+        files: ['remote-legacy-migration.spec.ts'],
+        parallel: false,
+        workers: 1,
+    },
+    {
         name: 'Structure Tests',
         files: [
             'page-structure.spec.ts',
