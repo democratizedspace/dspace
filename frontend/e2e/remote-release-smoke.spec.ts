@@ -73,8 +73,11 @@ async function openFirstQuest(page: Page): Promise<void> {
     await page.waitForLoadState('domcontentloaded');
     await waitForHydration(page);
 
-    const questHeading = page.locator('main h1, main h2, [data-testid="quest-title"]');
-    await expect(questHeading.first()).toBeVisible();
+    const questHeading = page
+        .locator('main h1, main h2, [data-testid="quest-title"]')
+        .filter({ hasText: /\S+/ })
+        .first();
+    await expect(questHeading, 'Expected a visible, non-empty quest heading').toBeVisible();
 
     const optionButtons = page.locator(
         'button:has-text("Continue"), button:has-text("Start"), .options button'
