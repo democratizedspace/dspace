@@ -297,7 +297,7 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
 > `dspace.values.staging.yaml` overrides it to `staging` so QA Cheats stay enabled here. Production
 > should keep `DSPACE_ENV=prod` so cheats remain disabled.
 
-### Force a rollout restart when using mutable tags (e.g., `v3-latest`)
+### Mutable-tag redeploys (non-RC convenience only)
 
 When redeploying with a mutable tag such as `v3-latest`, Helm may report an upgrade without
 changing the Deployment template because the chart version and image tag stay the same. In that
@@ -322,8 +322,9 @@ sudo kubectl -n dspace port-forward svc/dspace 8080:8080
 curl -s http://localhost:8080/healthz | jq
 ```
 
-For staging release-candidate validation, prefer immutable `v3-<shortsha>` tags so repeated QA
-cycles are reproducible and easily comparable over time.
+For staging release-candidate validation, use immutable `v3-<shortsha>` tags so repeated QA cycles
+are reproducible and easily comparable over time. Treat `v3-latest` as convenience-only and never
+as a release-signoff source of truth.
 
 ### Verification
 

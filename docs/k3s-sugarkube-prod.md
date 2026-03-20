@@ -66,6 +66,8 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
    - Confirm the Cloudflare route targets the active host (`prod.democratized.space` during
      validation, then `democratized.space` after cutover) →
      `traefik.kube-system.svc.cluster.local`
+   - Keep `prod.democratized.space` as the first validation host; do not flip apex traffic until
+     Phase A is clean and signed off.
    - `kubectl -n dspace get deploy,po,ingress`
    - `curl -fsS https://<active-host>/config.json`
    - `curl -fsS https://<active-host>/healthz`
