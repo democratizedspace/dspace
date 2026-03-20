@@ -42,7 +42,7 @@ to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not overrid
 
 3. **Verify locally (no tunnel by default):**
    - Port-forward the Service: `kubectl -n dspace port-forward svc/dspace 3000:8080`
-   - In another shell, run `curl -fsS http://localhost:3000/config.json`,
+   - In another shell, run `curl -fsS http://localhost:3000/config.json` first, then
      `curl -fsS http://localhost:3000/healthz`, and
      `curl -fsS http://localhost:3000/livez` (or open
      http://localhost:3000/ in a browser)
