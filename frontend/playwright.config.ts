@@ -24,6 +24,8 @@ declare const process: {
         PLAYWRIGHT_SKIP_INSTALL_DEPS?: string;
         REMOTE_SMOKE?: string;
         REMOTE_SMOKE_USE_WEBSERVER?: string;
+        REMOTE_MIGRATION?: string;
+        REMOTE_MIGRATION_USE_WEBSERVER?: string;
     };
     argv: string[];
 };
@@ -206,7 +208,11 @@ const projects = resolveProjects();
 
 const remoteSmokeMode = process.env.REMOTE_SMOKE === '1';
 const useWebServerForRemoteSmoke = process.env.REMOTE_SMOKE_USE_WEBSERVER === '1';
-const shouldUseWebServer = !remoteSmokeMode || useWebServerForRemoteSmoke;
+const remoteMigrationMode = process.env.REMOTE_MIGRATION === '1';
+const useWebServerForRemoteMigration = process.env.REMOTE_MIGRATION_USE_WEBSERVER === '1';
+const shouldUseWebServer =
+    (!remoteSmokeMode || useWebServerForRemoteSmoke) &&
+    (!remoteMigrationMode || useWebServerForRemoteMigration);
 
 if (shouldUseWebServer) {
     ensureAstroBuildArtifacts();
@@ -228,6 +234,15 @@ if (remoteSmokeMode) {
         'json',
         {
             outputFile: './test-results/remote-smoke-summary.json',
+        },
+    ]);
+}
+
+if (remoteMigrationMode) {
+    reporter.push([
+        'json',
+        {
+            outputFile: './test-results/remote-migration-summary.json',
         },
     ]);
 }
