@@ -22,6 +22,7 @@ declare const process: {
         PW_PROJECT?: string;
         PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?: string;
         PLAYWRIGHT_SKIP_INSTALL_DEPS?: string;
+        PLAYWRIGHT_REMOTE?: string;
     };
     argv: string[];
 };
@@ -81,6 +82,7 @@ process.env.PORT = String(port);
 // net::ERR_CONNECTION_REFUSED failures when the preview server binds only to
 // 0.0.0.0). CI can still override BASE_URL when running behind tunnels.
 const baseURL = process.env.BASE_URL || `${protocol}://127.0.0.1:${port}`;
+const isRemoteRun = process.env.PLAYWRIGHT_REMOTE === '1';
 
 // Allow setting workers via environment variable for CI and local runs
 const isCI = Boolean(process.env.CI);
@@ -202,7 +204,9 @@ function resolveProjects(): PlaywrightProjectConfig[] {
 
 const projects = resolveProjects();
 
-ensureAstroBuildArtifacts();
+if (!isRemoteRun) {
+    ensureAstroBuildArtifacts();
+}
 
 export default defineConfig({
     testDir: './e2e',
@@ -240,18 +244,20 @@ export default defineConfig({
     // Set directories for artifacts at the project level
     projects,
     // Configure webServer to start the app server before running tests
-    webServer: {
-        // Use production preview server so grouped E2E tests don't restart the dev server
-        command: `node scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
-        cwd: frontendDir,
-        url: baseURL,
-        reuseExistingServer: !isCI,
-        timeout: 60000,
-        env: {
-            ...process.env,
-            PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
-        },
-    },
+    webServer: isRemoteRun
+        ? undefined
+        : {
+              // Use production preview server so grouped E2E tests don't restart the dev server
+              command: `node scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
+              cwd: frontendDir,
+              url: baseURL,
+              reuseExistingServer: !isCI,
+              timeout: 60000,
+              env: {
+                  ...process.env,
+                  PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
+              },
+          },
     // Group tests to improve parallelization
     fullyParallel: !isCI, // Keep serial runs in CI to avoid cross-test interference
 });
