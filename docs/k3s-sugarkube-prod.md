@@ -42,6 +42,9 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
 5. **Convert `prod.democratized.space` to a redirect** pointing to `https://democratized.space`
    once Phase B (`democratized.space` on `main-<shortsha>`) is confirmed healthy.
 
+This alias-first sequence is mandatory for v3 rollout safety; do not cut apex traffic directly to a
+new `v3-<shortsha>` candidate.
+
 ## Deployment steps
 
 1. **Select an immutable tag:** Use an immutable branch SHA tag published by the GHCR workflows

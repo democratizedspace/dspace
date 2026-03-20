@@ -323,7 +323,8 @@ curl -s http://localhost:8080/healthz | jq
 ```
 
 For staging release-candidate validation, prefer immutable `v3-<shortsha>` tags so repeated QA
-cycles are reproducible and easily comparable over time.
+cycles are reproducible and easily comparable over time. Treat `v3-latest` as convenience-only,
+not sign-off evidence.
 
 ### Verification
 
@@ -412,7 +413,8 @@ Use this quick runbook to confirm staging is healthy after a deploy:
 - DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
 - dspace Helm release deployed in `dspace` (or your chosen) namespace.
 - `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
-- dspace endpoints return success:
+- dspace endpoints return success (these are the app health/runtime checks; do not substitute
+  tunnel `/ready` for these):
   - `https://staging.democratized.space/config.json` (runtime config surface used by CI smoke)
   - `https://staging.democratized.space/healthz` (readiness)
   - `https://staging.democratized.space/livez` (liveness)
