@@ -40,7 +40,7 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
 4. **Phase B (apex host): deploy `democratized.space` from `main`** with immutable
    `main-<shortsha>`.
 5. **Convert `prod.democratized.space` to a redirect** pointing to `https://democratized.space`
-   once Phase B (`democratized.space` on `main-<shortsha>`) is confirmed healthy.
+   only after Phase B (`democratized.space` on `main-<shortsha>`) is confirmed healthy.
 
 ## Deployment steps
 
@@ -62,7 +62,7 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
      default_tag=<immutable-tag-from-step-1>
    ```
 
-3. **Verify ingress and health endpoints:**
+3. **Verify ingress and health endpoints (dspace app probes, not tunnel `/ready`):**
    - Confirm the Cloudflare route targets the active host (`prod.democratized.space` during
      validation, then `democratized.space` after cutover) →
      `traefik.kube-system.svc.cluster.local`
