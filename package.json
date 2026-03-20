@@ -49,7 +49,8 @@
     "test:quest-validation": "npm run test:root -- tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts",
     "spellcheck": "cspell --no-progress --no-summary \"docs/**/*.md\" \"frontend/src/pages/docs/**/*.md\" \"README.md\" \"AGENTS.md\"",
     "qa:remote-smoke": "node scripts/run-remote-smoke.mjs",
-    "qa:remote-migration": "node scripts/run-remote-migration.mjs"
+    "qa:remote-migration": "node scripts/run-remote-migration.mjs",
+    "qa:remote-completionist-award-iii": "node scripts/run-remote-completionist-award-iii.mjs"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
