@@ -202,21 +202,38 @@ function resolveProjects(): PlaywrightProjectConfig[] {
 
 const projects = resolveProjects();
 
-ensureAstroBuildArtifacts();
+const remoteSmokeMode = process.env.REMOTE_SMOKE === '1';
+const useWebServerForRemoteSmoke = process.env.REMOTE_SMOKE_USE_WEBSERVER === '1';
+const shouldUseWebServer = !remoteSmokeMode || useWebServerForRemoteSmoke;
+
+if (shouldUseWebServer) {
+    ensureAstroBuildArtifacts();
+}
+
+const reporter: PlaywrightConfig['reporter'] = [
+    ['list'],
+    [
+        'html',
+        {
+            outputFolder: './test-results/html-report/',
+            open: 'never',
+        },
+    ],
+];
+
+if (remoteSmokeMode) {
+    reporter.push([
+        'json',
+        {
+            outputFile: './test-results/remote-smoke-summary.json',
+        },
+    ]);
+}
 
 export default defineConfig({
     testDir: './e2e',
     workers,
-    reporter: [
-        ['list'],
-        [
-            'html',
-            {
-                outputFolder: './test-results/html-report/',
-                open: 'never',
-            },
-        ],
-    ],
+    reporter,
     retries: RETRIES,
     timeout: TEST_TIMEOUT_MS,
     expect: {
@@ -240,18 +257,20 @@ export default defineConfig({
     // Set directories for artifacts at the project level
     projects,
     // Configure webServer to start the app server before running tests
-    webServer: {
-        // Use production preview server so grouped E2E tests don't restart the dev server
-        command: `node scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
-        cwd: frontendDir,
-        url: baseURL,
-        reuseExistingServer: !isCI,
-        timeout: 60000,
-        env: {
-            ...process.env,
-            PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
-        },
-    },
+    webServer: shouldUseWebServer
+        ? {
+              // Use production preview server so grouped E2E tests don't restart the dev server
+              command: `node scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
+              cwd: frontendDir,
+              url: baseURL,
+              reuseExistingServer: !isCI,
+              timeout: 60000,
+              env: {
+                  ...process.env,
+                  PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
+              },
+          }
+        : undefined,
     // Group tests to improve parallelization
     fullyParallel: !isCI, // Keep serial runs in CI to avoid cross-test interference
 });
