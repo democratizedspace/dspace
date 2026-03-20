@@ -136,12 +136,8 @@ async function runProcessLifecycle(page: Page): Promise<void> {
         '[data-status="active"], .process-running, :text("In progress")'
     );
     const state = await Promise.race([
-        cancelButton
-            .waitFor({ state: 'visible', timeout: 12_000 })
-            .then(() => 'cancel' as const),
-        collectButton
-            .waitFor({ state: 'visible', timeout: 12_000 })
-            .then(() => 'collect' as const),
+        cancelButton.waitFor({ state: 'visible', timeout: 12_000 }).then(() => 'cancel' as const),
+        collectButton.waitFor({ state: 'visible', timeout: 12_000 }).then(() => 'collect' as const),
         activeMarker
             .first()
             .waitFor({ state: 'visible', timeout: 12_000 })
