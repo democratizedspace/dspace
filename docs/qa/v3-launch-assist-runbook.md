@@ -7,7 +7,7 @@ calls.
 ## 1) Remote smoke (non-destructive default)
 
 ```bash
-pnpm run qa:remote-smoke -- --baseURL=https://staging.democratized.space
+npm run qa:remote-smoke -- --baseURL=https://staging.democratized.space
 ```
 
 - Covers app-shell route health, quest/process interaction sanity, and chat UI availability.
@@ -16,7 +16,7 @@ pnpm run qa:remote-smoke -- --baseURL=https://staging.democratized.space
 ## 2) Remote migration matrix
 
 ```bash
-pnpm run qa:remote-migration -- --baseURL=https://staging.democratized.space
+npm run qa:remote-migration -- --baseURL=https://staging.democratized.space
 ```
 
 - Covers v1/v2 legacy save detection, merge/replace paths, cleanup, and malformed-payload safety.
@@ -25,7 +25,7 @@ pnpm run qa:remote-migration -- --baseURL=https://staging.democratized.space
 ## 3) Remote Completionist Award III launch-gate harness
 
 ```bash
-pnpm run qa:remote-completionist-award-iii -- --baseURL=https://staging.democratized.space
+npm run qa:remote-completionist-award-iii -- --baseURL=https://staging.democratized.space
 ```
 
 Automated by harness:

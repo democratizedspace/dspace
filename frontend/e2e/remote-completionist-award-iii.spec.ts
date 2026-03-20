@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { purgeClientState, waitForHydration } from './test-helpers';
+import { flushGameStateWrites, purgeClientState, waitForHydration } from './test-helpers';
 
 type QuestDefinition = {
     id: string;
@@ -14,6 +14,7 @@ type ProcessDefinition = {
     id: string;
     requireItems?: Array<{ id: string; count: number }>;
     consumeItems?: Array<{ id: string; count: number }>;
+    createItems?: Array<{ id: string; count: number }>;
 };
 
 type HarnessResult = {
@@ -120,6 +121,18 @@ function passResult(id: string, label: string, detail = ''): void {
 
 function buildSeedInventory(): Record<string, number> {
     const aggregate = new Map<string, number>();
+    const producedItemIds = new Set<string>();
+
+    for (const processId of PROCESS_CHAIN.map((entry) => entry.processId)) {
+        const process = processCatalog.find((candidate) => candidate.id === processId);
+        if (!process) {
+            throw new Error(`Missing process definition for ${processId}`);
+        }
+
+        for (const created of process.createItems ?? []) {
+            producedItemIds.add(created.id);
+        }
+    }
 
     for (const processId of PROCESS_CHAIN.map((entry) => entry.processId)) {
         const process = processCatalog.find((candidate) => candidate.id === processId);
@@ -128,11 +141,19 @@ function buildSeedInventory(): Record<string, number> {
         }
 
         for (const requirement of process.requireItems ?? []) {
+            if (producedItemIds.has(requirement.id)) {
+                continue;
+            }
+
             const current = aggregate.get(requirement.id) ?? 0;
             aggregate.set(requirement.id, current + Number(requirement.count || 0));
         }
 
         for (const consumed of process.consumeItems ?? []) {
+            if (producedItemIds.has(consumed.id)) {
+                continue;
+            }
+
             const current = aggregate.get(consumed.id) ?? 0;
             aggregate.set(consumed.id, current + Number(consumed.count || 0));
         }
@@ -203,7 +224,7 @@ async function primeCapstoneState(
     );
 
     const seededState: GameStateLike = {
-        versionNumberString: '3.0.0',
+        versionNumberString: '3',
         inventory,
         quests: prerequisiteCompletions,
         processes: {},
@@ -229,6 +250,7 @@ async function startAndCollectProcess(page: Page, processId: string): Promise<vo
 
     await expect(startButton).toBeVisible();
     await startButton.click();
+    await flushGameStateWrites(page);
 
     await page.evaluate(async (activeProcessId) => {
         const db = await new Promise<IDBDatabase>((resolve, reject) => {
@@ -304,12 +326,18 @@ test.describe('Remote Completionist Award III harness (4.7 launch-gate coverage)
 
     test.afterAll(async ({ baseURL }) => {
         mkdirSync(join(frontendRoot, 'test-results'), { recursive: true });
+        const resultById = new Map<string, HarnessResult>();
+        for (const result of harnessResults) {
+            resultById.set(result.id, result);
+        }
+        const dedupedResults = Array.from(resultById.values());
+
         const report = {
             generatedAt: new Date().toISOString(),
             baseURL: baseURL ?? process.env.BASE_URL ?? 'unknown',
             automatedChecks: AUTOMATED_CHECK_LABELS,
             manualChecks: MANUAL_ONLY_CHECKS,
-            results: [...harnessResults, ...MANUAL_ONLY_CHECKS],
+            results: [...dedupedResults, ...MANUAL_ONLY_CHECKS],
         };
         writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
     });
@@ -322,7 +350,16 @@ test.describe('Remote Completionist Award III harness (4.7 launch-gate coverage)
         }
 
         const withheldPrerequisite = prerequisites[0];
-        const awardIIIItemId = 'adf69f8d-4b30-4eec-b667-43ff5dfd9892';
+        const assembleAwardProcess = processCatalog.find(
+            (candidate) => candidate.id === 'assemble-completionist-award-iii'
+        );
+        const awardIIIItemId = assembleAwardProcess?.createItems?.[0]?.id;
+        if (!awardIIIItemId) {
+            throw new Error(
+                'Cannot derive Completionist Award III item ID from process catalog (assemble-completionist-award-iii.createItems[0].id).'
+            );
+        }
+
         const questRewardId = awardQuest.rewards?.[0]?.id;
 
         await runStep('A.locked', AUTOMATED_CHECK_LABELS.locked, async () => {
@@ -355,6 +392,7 @@ test.describe('Remote Completionist Award III harness (4.7 launch-gate coverage)
             const preFinishAwardCount = Number(beforeFinishState.inventory?.[awardIIIItemId] ?? 0);
             expect(preFinishAwardCount).toBe(1);
 
+            await openCapstoneQuest(page);
             await expect(page.getByRole('button', { name: 'Claim the Completionist Award III' })).toBeVisible();
             await page.getByRole('button', { name: 'Claim the Completionist Award III' }).click();
 
