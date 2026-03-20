@@ -8,6 +8,14 @@ type QuestDefinition = {
     id: string;
     requiresQuests?: string[];
     rewards?: Array<{ id: string; count: number }>;
+    dialogue?: Array<{
+        id: string;
+        options?: Array<{
+            type?: string;
+            goto?: string;
+            requiresItems?: Array<{ id: string; count: number }>;
+        }>;
+    }>;
 };
 
 type ProcessDefinition = {
@@ -160,6 +168,51 @@ function buildSeedInventory(): Record<string, number> {
     }
 
     return Object.fromEntries(Array.from(aggregate.entries()).map(([id, count]) => [id, count + 1]));
+}
+
+function deriveCanonicalRewardExpectation(): { builtAwardItemId: string; questRewardId: string; questRewardCount: number } {
+    const finalAssemblyProcessId = PROCESS_CHAIN[PROCESS_CHAIN.length - 1]?.processId;
+    if (!finalAssemblyProcessId) {
+        throw new Error('PROCESS_CHAIN is empty; unable to derive final award process.');
+    }
+
+    const finalAssemblyProcess = processCatalog.find((candidate) => candidate.id === finalAssemblyProcessId);
+    const builtAwardItemId = finalAssemblyProcess?.createItems?.[0]?.id;
+    if (!builtAwardItemId) {
+        throw new Error(
+            `Cannot derive Completionist Award III item ID from process catalog (${finalAssemblyProcessId}.createItems[0].id).`
+        );
+    }
+
+    const finalAssemblyDialogue = awardQuest.dialogue?.find((node) => node.id === 'final-assembly');
+    const finishGateItemIds = new Set(
+        (finalAssemblyDialogue?.options ?? [])
+            .filter((option) => option.type === 'goto' && option.goto === 'finish')
+            .flatMap((option) => option.requiresItems ?? [])
+            .map((item) => item.id)
+    );
+    if (!finishGateItemIds.has(builtAwardItemId)) {
+        throw new Error(
+            `Quest finish gate does not require derived award item ${builtAwardItemId}; update completionist/award-iii canonical data.`
+        );
+    }
+
+    const [questReward, ...extraRewards] = awardQuest.rewards ?? [];
+    if (!questReward || extraRewards.length > 0) {
+        throw new Error(
+            'completionist/award-iii rewards must contain exactly one entry for deterministic remote harness assertions.'
+        );
+    }
+    const questRewardCount = Number(questReward.count ?? 0);
+    if (!Number.isFinite(questRewardCount) || questRewardCount <= 0) {
+        throw new Error('completionist/award-iii reward count must be a positive number.');
+    }
+
+    return {
+        builtAwardItemId,
+        questRewardId: questReward.id,
+        questRewardCount,
+    };
 }
 
 async function writeGameState(page: Page, nextState: GameStateLike): Promise<void> {
@@ -350,17 +403,7 @@ test.describe('Remote Completionist Award III harness (4.7 launch-gate coverage)
         }
 
         const withheldPrerequisite = prerequisites[0];
-        const assembleAwardProcess = processCatalog.find(
-            (candidate) => candidate.id === 'assemble-completionist-award-iii'
-        );
-        const awardIIIItemId = assembleAwardProcess?.createItems?.[0]?.id;
-        if (!awardIIIItemId) {
-            throw new Error(
-                'Cannot derive Completionist Award III item ID from process catalog (assemble-completionist-award-iii.createItems[0].id).'
-            );
-        }
-
-        const questRewardId = awardQuest.rewards?.[0]?.id;
+        const canonicalReward = deriveCanonicalRewardExpectation();
 
         await runStep('A.locked', AUTOMATED_CHECK_LABELS.locked, async () => {
             await purgeClientState(page);
@@ -389,20 +432,20 @@ test.describe('Remote Completionist Award III harness (4.7 launch-gate coverage)
 
         await runStep('D.reward-singleton', AUTOMATED_CHECK_LABELS.rewardSingleton, async () => {
             const beforeFinishState = await readGameState(page);
-            const preFinishAwardCount = Number(beforeFinishState.inventory?.[awardIIIItemId] ?? 0);
+            const preFinishAwardCount = Number(beforeFinishState.inventory?.[canonicalReward.builtAwardItemId] ?? 0);
             expect(preFinishAwardCount).toBe(1);
+            expect(Number(beforeFinishState.inventory?.[canonicalReward.questRewardId] ?? 0)).toBe(0);
 
             await openCapstoneQuest(page);
             await expect(page.getByRole('button', { name: 'Claim the Completionist Award III' })).toBeVisible();
             await page.getByRole('button', { name: 'Claim the Completionist Award III' }).click();
 
             const afterFinishState = await readGameState(page);
-            const postFinishAwardCount = Number(afterFinishState.inventory?.[awardIIIItemId] ?? 0);
+            const postFinishAwardCount = Number(afterFinishState.inventory?.[canonicalReward.builtAwardItemId] ?? 0);
             expect(postFinishAwardCount).toBe(1);
-
-            if (questRewardId) {
-                expect(Number(afterFinishState.inventory?.[questRewardId] ?? 0)).toBe(1);
-            }
+            expect(Number(afterFinishState.inventory?.[canonicalReward.questRewardId] ?? 0)).toBe(
+                canonicalReward.questRewardCount
+            );
         }, failedSteps);
 
         await runStep('E.finish-path', AUTOMATED_CHECK_LABELS.finishPath, async () => {
