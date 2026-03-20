@@ -47,6 +47,12 @@ const TEST_GROUPS = [
         workers: 1,
     },
     {
+        name: 'Remote Completionist Award III',
+        files: ['remote-completionist-award-iii.spec.ts'],
+        parallel: false,
+        workers: 1,
+    },
+    {
         name: 'Structure Tests',
         files: [
             'page-structure.spec.ts',

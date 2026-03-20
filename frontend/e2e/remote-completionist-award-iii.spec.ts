@@ -167,16 +167,24 @@ function buildSeedInventory(): Record<string, number> {
         }
     }
 
-    return Object.fromEntries(Array.from(aggregate.entries()).map(([id, count]) => [id, count + 1]));
+    return Object.fromEntries(
+        Array.from(aggregate.entries()).map(([id, count]) => [id, count + 1])
+    );
 }
 
-function deriveCanonicalRewardExpectation(): { builtAwardItemId: string; questRewardId: string; questRewardCount: number } {
+function deriveCanonicalRewardExpectation(): {
+    builtAwardItemId: string;
+    questRewardId: string;
+    questRewardCount: number;
+} {
     const finalAssemblyProcessId = PROCESS_CHAIN[PROCESS_CHAIN.length - 1]?.processId;
     if (!finalAssemblyProcessId) {
         throw new Error('PROCESS_CHAIN is empty; unable to derive final award process.');
     }
 
-    const finalAssemblyProcess = processCatalog.find((candidate) => candidate.id === finalAssemblyProcessId);
+    const finalAssemblyProcess = processCatalog.find(
+        (candidate) => candidate.id === finalAssemblyProcessId
+    );
     const builtAwardItemId = finalAssemblyProcess?.createItems?.[0]?.id;
     if (!builtAwardItemId) {
         throw new Error(
@@ -268,7 +276,10 @@ async function readGameState(page: Page): Promise<GameStateLike> {
 
 async function primeCapstoneState(
     page: Page,
-    { omitPrerequisite = '', inventory = {} }: { omitPrerequisite?: string; inventory?: Record<string, number> }
+    {
+        omitPrerequisite = '',
+        inventory = {},
+    }: { omitPrerequisite?: string; inventory?: Record<string, number> }
 ): Promise<void> {
     const prerequisiteCompletions = Object.fromEntries(
         (awardQuest.requiresQuests ?? [])
@@ -294,7 +305,9 @@ async function openCapstoneQuest(page: Page): Promise<void> {
     await page.goto('/quests/completionist/award-iii');
     await page.waitForLoadState('domcontentloaded');
     await waitForHydration(page);
-    await expect(page.getByRole('heading', { name: /Forge the Completionist Award III/i })).toBeVisible();
+    await expect(
+        page.getByRole('heading', { name: /Forge the Completionist Award III/i })
+    ).toBeVisible();
 }
 
 async function startAndCollectProcess(page: Page, processId: string): Promise<void> {
@@ -395,63 +408,108 @@ test.describe('Remote Completionist Award III harness (4.7 launch-gate coverage)
         writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
     });
 
-    test('validates Completionist Award III lock, process chain, and singleton reward', async ({ page }) => {
+    test('validates Completionist Award III lock, process chain, and singleton reward', async ({
+        page,
+    }) => {
         const failedSteps: string[] = [];
         const prerequisites = awardQuest.requiresQuests ?? [];
         if (prerequisites.length === 0) {
-            throw new Error('completionist/award-iii requiresQuests is empty; harness expects capstone prerequisites.');
+            throw new Error(
+                'completionist/award-iii requiresQuests is empty; harness expects capstone prerequisites.'
+            );
         }
 
         const withheldPrerequisite = prerequisites[0];
         const canonicalReward = deriveCanonicalRewardExpectation();
 
-        await runStep('A.locked', AUTOMATED_CHECK_LABELS.locked, async () => {
-            await purgeClientState(page);
-            await primeCapstoneState(page, { omitPrerequisite: withheldPrerequisite });
-            await openCapstoneQuest(page);
-            await expect(page.getByTestId('quest-unavailable')).toBeVisible();
-            await expect(page.getByText('Quest not available yet')).toBeVisible();
-        }, failedSteps);
+        await runStep(
+            'A.locked',
+            AUTOMATED_CHECK_LABELS.locked,
+            async () => {
+                await purgeClientState(page);
+                await primeCapstoneState(page, { omitPrerequisite: withheldPrerequisite });
+                await openCapstoneQuest(page);
+                await expect(page.getByTestId('quest-unavailable')).toBeVisible();
+                await expect(page.getByText('Quest not available yet')).toBeVisible();
+            },
+            failedSteps
+        );
 
-        await runStep('B.unlocked', AUTOMATED_CHECK_LABELS.unlocked, async () => {
-            const inventory = buildSeedInventory();
-            await primeCapstoneState(page, { inventory });
-            await openCapstoneQuest(page);
-            await expect(page.getByTestId('quest-unavailable')).toHaveCount(0);
-            await expect(page.getByRole('button', { name: "I'm ready to build the Award III" })).toBeVisible();
-            await page.getByRole('button', { name: "I'm ready to build the Award III" }).click();
-        }, failedSteps);
+        await runStep(
+            'B.unlocked',
+            AUTOMATED_CHECK_LABELS.unlocked,
+            async () => {
+                const inventory = buildSeedInventory();
+                await primeCapstoneState(page, { inventory });
+                await openCapstoneQuest(page);
+                await expect(page.getByTestId('quest-unavailable')).toHaveCount(0);
+                await expect(
+                    page.getByRole('button', { name: "I'm ready to build the Award III" })
+                ).toBeVisible();
+                await page
+                    .getByRole('button', { name: "I'm ready to build the Award III" })
+                    .click();
+            },
+            failedSteps
+        );
 
-        await runStep('C.process-chain', AUTOMATED_CHECK_LABELS.processChain, async () => {
-            for (const step of PROCESS_CHAIN) {
-                await startAndCollectProcess(page, step.processId);
-                await expect(page.getByRole('button', { name: step.continueText })).toBeVisible();
-                await page.getByRole('button', { name: step.continueText }).click();
-            }
-        }, failedSteps);
+        await runStep(
+            'C.process-chain',
+            AUTOMATED_CHECK_LABELS.processChain,
+            async () => {
+                for (const step of PROCESS_CHAIN) {
+                    await startAndCollectProcess(page, step.processId);
+                    await expect(
+                        page.getByRole('button', { name: step.continueText })
+                    ).toBeVisible();
+                    await page.getByRole('button', { name: step.continueText }).click();
+                }
+            },
+            failedSteps
+        );
 
-        await runStep('D.reward-singleton', AUTOMATED_CHECK_LABELS.rewardSingleton, async () => {
-            const beforeFinishState = await readGameState(page);
-            const preFinishAwardCount = Number(beforeFinishState.inventory?.[canonicalReward.builtAwardItemId] ?? 0);
-            expect(preFinishAwardCount).toBe(1);
-            expect(Number(beforeFinishState.inventory?.[canonicalReward.questRewardId] ?? 0)).toBe(0);
+        await runStep(
+            'D.reward-singleton',
+            AUTOMATED_CHECK_LABELS.rewardSingleton,
+            async () => {
+                const beforeFinishState = await readGameState(page);
+                const preFinishAwardCount = Number(
+                    beforeFinishState.inventory?.[canonicalReward.builtAwardItemId] ?? 0
+                );
+                expect(preFinishAwardCount).toBe(1);
+                expect(
+                    Number(beforeFinishState.inventory?.[canonicalReward.questRewardId] ?? 0)
+                ).toBe(0);
 
-            await openCapstoneQuest(page);
-            await expect(page.getByRole('button', { name: 'Claim the Completionist Award III' })).toBeVisible();
-            await page.getByRole('button', { name: 'Claim the Completionist Award III' }).click();
+                await openCapstoneQuest(page);
+                await expect(
+                    page.getByRole('button', { name: 'Claim the Completionist Award III' })
+                ).toBeVisible();
+                await page
+                    .getByRole('button', { name: 'Claim the Completionist Award III' })
+                    .click();
 
-            const afterFinishState = await readGameState(page);
-            const postFinishAwardCount = Number(afterFinishState.inventory?.[canonicalReward.builtAwardItemId] ?? 0);
-            expect(postFinishAwardCount).toBe(1);
-            expect(Number(afterFinishState.inventory?.[canonicalReward.questRewardId] ?? 0)).toBe(
-                canonicalReward.questRewardCount
-            );
-        }, failedSteps);
+                const afterFinishState = await readGameState(page);
+                const postFinishAwardCount = Number(
+                    afterFinishState.inventory?.[canonicalReward.builtAwardItemId] ?? 0
+                );
+                expect(postFinishAwardCount).toBe(1);
+                expect(
+                    Number(afterFinishState.inventory?.[canonicalReward.questRewardId] ?? 0)
+                ).toBe(canonicalReward.questRewardCount);
+            },
+            failedSteps
+        );
 
-        await runStep('E.finish-path', AUTOMATED_CHECK_LABELS.finishPath, async () => {
-            await openCapstoneQuest(page);
-            await expect(page.getByText('Quest Complete!')).toBeVisible();
-        }, failedSteps);
+        await runStep(
+            'E.finish-path',
+            AUTOMATED_CHECK_LABELS.finishPath,
+            async () => {
+                await openCapstoneQuest(page);
+                await expect(page.getByText('Quest Complete!')).toBeVisible();
+            },
+            failedSteps
+        );
 
         if (failedSteps.length > 0) {
             throw new Error(`Completionist Award III harness failed: ${failedSteps.join(', ')}`);
