@@ -30,12 +30,12 @@ function parseArgs(argv) {
     }
 
     if (arg.startsWith('--baseURL=')) {
-      parsed.baseURL = arg.split('=')[1] || parsed.baseURL;
+      parsed.baseURL = arg.slice(arg.indexOf('=') + 1) || parsed.baseURL;
       continue;
     }
 
     if (arg.startsWith('--base-url=')) {
-      parsed.baseURL = arg.split('=')[1] || parsed.baseURL;
+      parsed.baseURL = arg.slice(arg.indexOf('=') + 1) || parsed.baseURL;
       continue;
     }
 
@@ -46,7 +46,7 @@ function parseArgs(argv) {
     }
 
     if (arg.startsWith('--chat-mode=')) {
-      parsed.chatMode = arg.split('=')[1] || parsed.chatMode;
+      parsed.chatMode = arg.slice(arg.indexOf('=') + 1) || parsed.chatMode;
       continue;
     }
 
@@ -62,7 +62,7 @@ function parseArgs(argv) {
     }
 
     if (arg.startsWith('--project=')) {
-      parsed.project = arg.split('=')[1] || parsed.project;
+      parsed.project = arg.slice(arg.indexOf('=') + 1) || parsed.project;
       continue;
     }
 
@@ -93,6 +93,7 @@ const isLocalHost =
   url.hostname === '127.0.0.1' ||
   url.hostname === 'localhost' ||
   url.hostname === '0.0.0.0' ||
+  url.hostname === '::1' ||
   url.hostname.endsWith('.local');
 
 const env = {
@@ -127,6 +128,11 @@ const child = spawn('node', playwrightArgs, {
   cwd: frontendDir,
   stdio: 'inherit',
   env,
+});
+
+child.on('error', (err) => {
+  console.error(`[qa:remote-smoke] Failed to start Playwright process: ${err.message}`);
+  process.exit(1);
 });
 
 child.on('exit', (code, signal) => {

@@ -89,20 +89,18 @@ async function runProcessLifecycle(page: Page): Promise<void> {
     await page.goto('/processes');
     await waitForHydration(page);
 
-    const startButton = page.locator('button').filter({ hasText: /start/i }).first();
+    const processRow = page
+        .locator('tr, .process-row, [data-testid="process-row"], li, article, section, div')
+        .filter({ has: page.locator('button').filter({ hasText: /start/i }) })
+        .first();
+    const startButton = processRow.locator('button').filter({ hasText: /start/i }).first();
 
     await expect(startButton, 'Expected at least one process start button').toBeVisible();
     await startButton.click();
 
-    const cancelButton = page
-        .locator('button')
-        .filter({ hasText: /cancel/i })
-        .first();
+    const cancelButton = processRow.locator('button').filter({ hasText: /cancel/i }).first();
 
-    const collectButton = page
-        .locator('button')
-        .filter({ hasText: /collect/i })
-        .first();
+    const collectButton = processRow.locator('button').filter({ hasText: /collect/i }).first();
 
     if (await cancelButton.isVisible({ timeout: 5_000 }).catch(() => false)) {
         await cancelButton.click();
@@ -116,7 +114,9 @@ async function runProcessLifecycle(page: Page): Promise<void> {
         return;
     }
 
-    const activeMarker = page.locator('[data-status="active"], .process-running, text=In progress');
+    const activeMarker = processRow.locator(
+        '[data-status="active"], .process-running, :text("In progress")'
+    );
     await expect(activeMarker.first(), 'Expected process to enter an active state').toBeVisible();
 }
 
@@ -152,15 +152,26 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
         .filter({ hasText: /delete/i })
         .first();
     await expect(deleteButton, 'Expected custom item row to include a delete action').toBeVisible();
+
+    const dialogHandled = page
+        .waitForEvent('dialog', { timeout: 3_000 })
+        .then(async (dialog) => {
+            await dialog.accept();
+            return true;
+        })
+        .catch(() => false);
+
     await deleteButton.click();
 
-    const confirmDelete = page
-        .getByRole('button', { name: /confirm|delete/i })
-        .filter({ hasNotText: /cancel/i })
-        .first();
+    if (!(await dialogHandled)) {
+        const confirmDelete = page
+            .getByRole('button', { name: /confirm|delete/i })
+            .filter({ hasNotText: /cancel/i })
+            .first();
 
-    if (await confirmDelete.isVisible({ timeout: 2_000 }).catch(() => false)) {
-        await confirmDelete.click();
+        if (await confirmDelete.isVisible({ timeout: 2_000 }).catch(() => false)) {
+            await confirmDelete.click();
+        }
     }
 
     await expect(row).toHaveCount(0);
@@ -191,10 +202,20 @@ async function verifyChat(page: Page): Promise<void> {
     const assistantReply = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
     const errorBanner = panel.locator('.chat-error, [data-error-type]');
 
-    await Promise.race([
-        assistantReply.first().waitFor({ state: 'visible', timeout: 30_000 }),
-        errorBanner.first().waitFor({ state: 'visible', timeout: 30_000 }),
+    const winner = await Promise.race([
+        assistantReply
+            .first()
+            .waitFor({ state: 'visible', timeout: 30_000 })
+            .then(() => 'assistant' as const),
+        errorBanner
+            .first()
+            .waitFor({ state: 'visible', timeout: 30_000 })
+            .then(() => 'error' as const),
     ]);
+
+    expect(winner, 'Chat returned an error instead of an assistant reply').toBe('assistant');
+    await expect(errorBanner.first(), 'Expected no chat error banner').not.toBeVisible();
+    await expect(assistantReply.first(), 'Expected an assistant reply to be visible').toBeVisible();
 }
 
 test.describe('Remote release smoke', () => {

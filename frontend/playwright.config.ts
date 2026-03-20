@@ -22,6 +22,8 @@ declare const process: {
         PW_PROJECT?: string;
         PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?: string;
         PLAYWRIGHT_SKIP_INSTALL_DEPS?: string;
+        REMOTE_SMOKE?: string;
+        REMOTE_SMOKE_USE_WEBSERVER?: string;
     };
     argv: string[];
 };
