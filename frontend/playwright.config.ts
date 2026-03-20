@@ -26,6 +26,8 @@ declare const process: {
         REMOTE_SMOKE_USE_WEBSERVER?: string;
         REMOTE_MIGRATION?: string;
         REMOTE_MIGRATION_USE_WEBSERVER?: string;
+        REMOTE_COMPLETIONIST_AWARD_III?: string;
+        REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER?: string;
     };
     argv: string[];
 };
@@ -208,11 +210,17 @@ const projects = resolveProjects();
 
 const remoteSmokeMode = process.env.REMOTE_SMOKE === '1';
 const remoteMigrationMode = process.env.REMOTE_MIGRATION === '1';
+const remoteCompletionistMode = process.env.REMOTE_COMPLETIONIST_AWARD_III === '1';
 const useWebServerForRemoteSmoke = process.env.REMOTE_SMOKE_USE_WEBSERVER === '1';
 const useWebServerForRemoteMigration = process.env.REMOTE_MIGRATION_USE_WEBSERVER === '1';
-const remoteRunMode = remoteSmokeMode || remoteMigrationMode;
+const useWebServerForRemoteCompletionist =
+    process.env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1';
+const remoteRunMode = remoteSmokeMode || remoteMigrationMode || remoteCompletionistMode;
 const shouldUseWebServer =
-    !remoteRunMode || useWebServerForRemoteSmoke || useWebServerForRemoteMigration;
+    !remoteRunMode ||
+    useWebServerForRemoteSmoke ||
+    useWebServerForRemoteMigration ||
+    useWebServerForRemoteCompletionist;
 
 if (shouldUseWebServer) {
     ensureAstroBuildArtifacts();
@@ -243,6 +251,15 @@ if (remoteMigrationMode) {
         'json',
         {
             outputFile: './test-results/remote-migration-playwright-summary.json',
+        },
+    ]);
+}
+
+if (remoteCompletionistMode) {
+    reporter.push([
+        'json',
+        {
+            outputFile: './test-results/remote-completionist-award-iii-playwright-summary.json',
         },
     ]);
 }
