@@ -84,7 +84,10 @@ async function openFirstQuest(page: Page): Promise<void> {
         ].join(', ')
     );
     const firstVisibleOption = optionButtons.filter({ visible: true }).first();
-    await expect(firstVisibleOption, 'Expected at least one quest interaction button').toBeVisible();
+    await expect(
+        firstVisibleOption,
+        'Expected at least one quest interaction button'
+    ).toBeVisible();
     await firstVisibleOption.click();
     await expect(page).toHaveURL(/\/quests\//);
 }
