@@ -33,7 +33,8 @@ prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugark
   `ghcr.io/democratizedspace/dspace`.
   - Tags include immutable branch SHA tags (`v3-<shortsha>`, `main-<shortsha>`), mutable convenience tags
     (`v3-latest`, `main-latest`), and semantic versions such as `v3.0.0`.
-  - For release-candidate validation in staging, use immutable `v3-<shortsha>` tags.
+  - For release-candidate validation in staging, use immutable `v3-<shortsha>` tags (treat
+    `*-latest` as non-sign-off convenience only).
 - The Helm chart is published as an OCI artifact to
   `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
   from `charts/dspace/Chart.yaml`. The chart version is mirrored in
@@ -353,7 +354,7 @@ Use this flow for every candidate build you want QA to validate in staging:
 
 Only use `v3-latest` for convenience checks where reproducibility is not required.
 
-### Fast manual redeploy (emergency push only)
+### Fast manual redeploy (emergency push only; not for RC sign-off)
 
 Use this only when you already have dspace running on sugarkube and explicitly accept
 non-reproducible validation with `v3-latest`. For RC sign-off, use the repeated immutable-tag loop
@@ -412,8 +413,8 @@ Use this quick runbook to confirm staging is healthy after a deploy:
 - DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
 - dspace Helm release deployed in `dspace` (or your chosen) namespace.
 - `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
-- dspace endpoints return success:
-  - `https://staging.democratized.space/config.json` (runtime config surface used by CI smoke)
+- dspace endpoints return success (check in this order):
+  - `https://staging.democratized.space/config.json` (primary runtime smoke endpoint)
   - `https://staging.democratized.space/healthz` (readiness)
   - `https://staging.democratized.space/livez` (liveness)
 - Browsing `https://staging.democratized.space` shows the dspace v3 UI.

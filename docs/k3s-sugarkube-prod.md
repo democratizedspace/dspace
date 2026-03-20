@@ -34,9 +34,9 @@ Use this exact sequence to keep the apex stable while validating v3 in productio
    using immutable tag `v3-<shortsha>`.
    - For this validation deploy, production ingress hostname/routing must point to
      `prod.democratized.space` while still running `env=prod` with QA Cheats OFF.
-2. **Validate Phase A on `prod.democratized.space` using `v3-<shortsha>`** (health checks, smoke
-   flow, logs).
-3. **Merge `v3` into `main`** after validation sign-off.
+2. **Validate Phase A on `prod.democratized.space` using `v3-<shortsha>`** (repeatable health
+   checks + smoke flow + logs); keep apex traffic untouched until this passes.
+3. **Merge `v3` into `main`** only after `prod.democratized.space` sign-off on that immutable tag.
 4. **Phase B (apex host): deploy `democratized.space` from `main`** with immutable
    `main-<shortsha>`.
 5. **Convert `prod.democratized.space` to a redirect** pointing to `https://democratized.space`

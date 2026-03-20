@@ -82,6 +82,10 @@ The Helm chart (`charts/dspace`) and docker-compose use port 8080 by default. Al
 configuration files (Dockerfile, Helm values, k8s manifests, docs) are validated by the
 `tests/configConsistency.test.ts` test to ensure they stay in sync.
 
+For k3s/sugarkube deploy policy, treat `/config.json` as the primary smoke endpoint, prefer
+immutable image tags (`<branch>-<shortsha>`) for RC/prod validation, and run production cutover
+alias-first (`prod.democratized.space` before `democratized.space`).
+
 ## Architecture Overview
 
 DSPACE uses Astro's Server-Side Rendering (SSR) with partial hydration of Svelte components on the client side.
