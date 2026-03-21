@@ -2,6 +2,7 @@
 
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -9,6 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
+const requireFromScript = createRequire(import.meta.url);
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 
@@ -107,8 +109,22 @@ const env = {
   REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER: isLocalHost ? '1' : '0',
 };
 
+function resolvePlaywrightCli() {
+  const searchPaths = [frontendDir, repoRoot];
+
+  for (const searchPath of searchPaths) {
+    try {
+      return requireFromScript.resolve('@playwright/test/cli', { paths: [searchPath] });
+    } catch {
+      // continue searching
+    }
+  }
+
+  return './node_modules/@playwright/test/cli.js';
+}
+
 const playwrightArgs = [
-  './node_modules/@playwright/test/cli.js',
+  resolvePlaywrightCli(),
   'test',
   'e2e/remote-completionist-award-iii.spec.ts',
   `--project=${options.project}`,
