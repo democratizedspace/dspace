@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-21-remote-qa-node-version-preflight",
+  "date": "2026-03-21",
+  "component": "scripts:remote-qa-runner",
+  "rootCause": "The remote completionist QA harness did not validate the repository Node engine range before launching Playwright. On unsupported runtimes, execution reached Playwright config loading and failed there with an opaque tool-level ESM version error instead of a harness-owned preflight failure.",
+  "resolution": "Added a harness-level Node preflight in scripts/run-remote-completionist-award-iii.mjs that enforces >=20 <22, emits a concise harness-prefixed remediation message including current version and nvm/pnpm guidance, and exits non-zero before Playwright resolution/spawn. Added deterministic regression coverage for supported/unsupported versions and preflight short-circuit behavior.",
+  "references": [
+    "scripts/run-remote-completionist-award-iii.mjs",
+    "tests/runRemoteCompletionistAwardIIIResolver.test.ts"
+  ]
+}

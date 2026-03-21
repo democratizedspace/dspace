@@ -12,6 +12,7 @@ const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
+const SUPPORTED_NODE_RANGE = '>=20 <22';
 
 const require = createRequire(import.meta.url);
 
@@ -23,6 +24,20 @@ export function resolvePlaywrightCli(searchPaths = [frontendDir, repoRoot], reso
   } catch {
     return null;
   }
+}
+
+export function isSupportedNodeVersion(version = process.versions.node) {
+  const [major] = String(version).split('.');
+  const majorNumber = Number.parseInt(major, 10);
+  return Number.isInteger(majorNumber) && majorNumber >= 20 && majorNumber < 22;
+}
+
+function getUnsupportedNodeMessage(version = process.versions.node) {
+  return (
+    `[qa:remote-completionist-award-iii] Unsupported Node.js version ${version}. ` +
+    `Supported range is ${SUPPORTED_NODE_RANGE}. ` +
+    'Run `nvm use` and reinstall dependencies with `pnpm install` before retrying.'
+  );
 }
 
 function parseArgs(argv) {
@@ -97,12 +112,30 @@ function printChecklistSummary(reportPath) {
   }
 }
 
-function main() {
-  const options = parseArgs(process.argv.slice(2));
+export function runRemoteCompletionistAwardIII(
+  argv = process.argv.slice(2),
+  dependencies = {
+    nodeVersion: process.versions.node,
+    spawnFn: spawn,
+    exitFn: process.exit,
+    errorFn: console.error,
+    logFn: console.log,
+    env: process.env,
+    resolvePlaywrightCliFn: resolvePlaywrightCli,
+  }
+) {
+  const options = parseArgs(argv);
 
   if (!/^https?:\/\//i.test(options.baseURL)) {
-    console.error(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
-    process.exit(1);
+    dependencies.errorFn(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
+    dependencies.exitFn(1);
+    return null;
+  }
+
+  if (!isSupportedNodeVersion(dependencies.nodeVersion)) {
+    dependencies.errorFn(getUnsupportedNodeMessage(dependencies.nodeVersion));
+    dependencies.exitFn(1);
+    return null;
   }
 
   const url = new URL(options.baseURL);
@@ -114,21 +147,22 @@ function main() {
     url.hostname.endsWith('.local');
 
   const env = {
-    ...process.env,
+    ...dependencies.env,
     BASE_URL: options.baseURL,
     PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
     REMOTE_COMPLETIONIST_AWARD_III: '1',
     REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER: isLocalHost ? '1' : '0',
   };
 
-  const playwrightCli = resolvePlaywrightCli();
+  const playwrightCli = dependencies.resolvePlaywrightCliFn();
 
   if (!playwrightCli) {
-    console.error(
+    dependencies.errorFn(
       '[qa:remote-completionist-award-iii] Could not resolve @playwright/test/cli. ' +
         'Install dependencies with Node 20 (for example: `nvm use && pnpm install`).'
     );
-    process.exit(1);
+    dependencies.exitFn(1);
+    return null;
   }
 
   const playwrightArgs = [
@@ -139,13 +173,13 @@ function main() {
     ...options.passthrough,
   ];
 
-  console.log(`[qa:remote-completionist-award-iii] baseURL=${options.baseURL}`);
-  console.log(`[qa:remote-completionist-award-iii] project=${options.project}`);
-  console.log(
+  dependencies.logFn(`[qa:remote-completionist-award-iii] baseURL=${options.baseURL}`);
+  dependencies.logFn(`[qa:remote-completionist-award-iii] project=${options.project}`);
+  dependencies.logFn(
     `[qa:remote-completionist-award-iii] webServer=${env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
   );
 
-  const child = spawn('node', playwrightArgs, {
+  const child = dependencies.spawnFn('node', playwrightArgs, {
     cwd: frontendDir,
     stdio: 'inherit',
     env,
@@ -155,7 +189,7 @@ function main() {
     console.error(
       `[qa:remote-completionist-award-iii] Failed to start Playwright process: ${err.message}`
     );
-    process.exit(1);
+    dependencies.exitFn(1);
   });
 
   child.on('exit', (code, signal) => {
@@ -165,8 +199,14 @@ function main() {
     }
 
     printChecklistSummary('test-results/remote-completionist-award-iii-harness-report.json');
-    process.exit(code ?? 1);
+    dependencies.exitFn(code ?? 1);
   });
+
+  return child;
+}
+
+function main() {
+  runRemoteCompletionistAwardIII();
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

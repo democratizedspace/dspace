@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolvePlaywrightCli } from '../scripts/run-remote-completionist-award-iii.mjs';
+import {
+  isSupportedNodeVersion,
+  resolvePlaywrightCli,
+  runRemoteCompletionistAwardIII,
+} from '../scripts/run-remote-completionist-award-iii.mjs';
 
 describe('resolvePlaywrightCli', () => {
   it('looks up the Playwright CLI package via require.resolve search paths', () => {
@@ -49,5 +53,55 @@ describe('resolvePlaywrightCli', () => {
     });
 
     expect(resolved).toBeNull();
+  });
+});
+
+describe('isSupportedNodeVersion', () => {
+  it('rejects unsupported node major versions', () => {
+    expect(isSupportedNodeVersion('18.19.0')).toBe(false);
+    expect(isSupportedNodeVersion('22.0.0')).toBe(false);
+  });
+
+  it('accepts supported node major versions', () => {
+    expect(isSupportedNodeVersion('20.11.1')).toBe(true);
+    expect(isSupportedNodeVersion('21.7.3')).toBe(true);
+  });
+});
+
+describe('runRemoteCompletionistAwardIII node preflight', () => {
+  it('fails before Playwright spawn for unsupported node versions', () => {
+    const errors: string[] = [];
+    let exitCode: number | null = null;
+    let spawnCalled = false;
+    let resolveCalled = false;
+
+    runRemoteCompletionistAwardIII(['--baseURL=https://staging.democratized.space'], {
+      nodeVersion: '18.18.0',
+      spawnFn: () => {
+        spawnCalled = true;
+        throw new Error('spawn should not be called');
+      },
+      exitFn: (code: number) => {
+        exitCode = code;
+      },
+      errorFn: (message: string) => {
+        errors.push(message);
+      },
+      logFn: () => {},
+      env: {},
+      resolvePlaywrightCliFn: () => {
+        resolveCalled = true;
+        return '/fake/playwright/cli.js';
+      },
+    });
+
+    expect(exitCode).toBe(1);
+    expect(spawnCalled).toBe(false);
+    expect(resolveCalled).toBe(false);
+    expect(errors[0]).toContain('[qa:remote-completionist-award-iii]');
+    expect(errors[0]).toContain('Unsupported Node.js version 18.18.0');
+    expect(errors[0]).toContain('Supported range is >=20 <22');
+    expect(errors[0]).toContain('nvm use');
+    expect(errors[0]).toContain('pnpm install');
   });
 });
