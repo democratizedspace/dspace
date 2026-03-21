@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-21-remote-qa-child-node-runtime-mismatch",
+  "date": "2026-03-21",
+  "component": "scripts:remote-qa-runner",
+  "rootCause": "The remote completionist QA harness validated the parent Node runtime but spawned Playwright with the literal `node` command. On Windows hosts where PATH still pointed to Node 18, the child process executed under an unsupported runtime and failed while loading Playwright config despite the wrapper being started on Node 20.",
+  "resolution": "Updated the runner to spawn Playwright with `process.execPath` so child execution always uses the same Node binary as the preflight-validated parent process, changed the npm script to invoke the harness with Node 20 via `npx -y node@20`, and added a regression test that asserts spawn receives `process.execPath`.",
+  "references": [
+    "package.json",
+    "scripts/run-remote-completionist-award-iii.mjs",
+    "tests/runRemoteCompletionistAwardIIIResolver.test.ts"
+  ]
+}

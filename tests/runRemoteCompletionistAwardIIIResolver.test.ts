@@ -104,4 +104,34 @@ describe('Node version preflight', () => {
     expect(errorLog).toHaveBeenCalledTimes(1);
     expect(errorLog.mock.calls[0][0]).toContain('Unsupported Node.js version 18.18.0');
   });
+
+  it('uses the current Node runtime to launch Playwright', () => {
+    const events = new Map<string, (...args: unknown[]) => void>();
+    const child = {
+      on: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
+        events.set(event, handler);
+        return child;
+      }),
+    };
+    const spawnFn = vi.fn(() => child);
+    const exitFn = vi.fn();
+
+    main({
+      argv: ['--baseURL=https://staging.democratized.space'],
+      nodeVersion: '20.11.0',
+      spawnFn,
+      resolvePlaywrightCliFn: () => '/repo/node_modules/@playwright/test/cli.js',
+      errorLog: vi.fn(),
+      infoLog: vi.fn(),
+      exitFn,
+    });
+
+    expect(spawnFn).toHaveBeenCalledTimes(1);
+    expect(spawnFn.mock.calls[0][0]).toBe(process.execPath);
+
+    const exitHandler = events.get('exit');
+    expect(exitHandler).toBeDefined();
+    exitHandler?.(0, null);
+    expect(exitFn).toHaveBeenCalledWith(0);
+  });
 });

@@ -65,7 +65,7 @@ export function getUnsupportedNodeVersionMessage(version = process.versions.node
   return (
     `[qa:remote-completionist-award-iii] Unsupported Node.js version ${version}. ` +
     `Required range: ${SUPPORTED_NODE_RANGE}. ` +
-    'Run `nvm use` and reinstall dependencies with `pnpm install` before rerunning.'
+    'Run `nvm use` (or invoke with `npx -y node@20`) and reinstall dependencies with `pnpm install` before rerunning.'
   );
 }
 
@@ -206,7 +206,8 @@ function main(runtime = {}) {
     `[qa:remote-completionist-award-iii] webServer=${env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
   );
 
-  const child = spawnFn('node', playwrightArgs, {
+  // Keep Playwright on the same Node runtime used for this script.
+  const child = spawnFn(process.execPath, playwrightArgs, {
     cwd: frontendDir,
     stdio: 'inherit',
     env,
