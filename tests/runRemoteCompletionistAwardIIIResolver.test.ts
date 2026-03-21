@@ -1,6 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { resolvePlaywrightCli } from '../scripts/run-remote-completionist-award-iii.mjs';
+import {
+  getUnsupportedNodeVersionMessage,
+  isSupportedNodeVersion,
+  main,
+  resolvePlaywrightCli,
+} from '../scripts/run-remote-completionist-award-iii.mjs';
 
 describe('resolvePlaywrightCli', () => {
   it('looks up the Playwright CLI package via require.resolve search paths', () => {
@@ -49,5 +54,47 @@ describe('resolvePlaywrightCli', () => {
     });
 
     expect(resolved).toBeNull();
+  });
+});
+
+describe('Node version preflight', () => {
+  it('rejects unsupported versions and reports guidance', () => {
+    expect(isSupportedNodeVersion('18.18.0')).toBe(false);
+
+    const message = getUnsupportedNodeVersionMessage('18.18.0');
+    expect(message).toContain('[qa:remote-completionist-award-iii]');
+    expect(message).toContain('18.18.0');
+    expect(message).toContain('>=20 <22');
+    expect(message).toContain('nvm use');
+    expect(message).toContain('pnpm install');
+  });
+
+  it('accepts supported versions in the declared engine range', () => {
+    expect(isSupportedNodeVersion('20.0.0')).toBe(true);
+    expect(isSupportedNodeVersion('21.9.0')).toBe(true);
+    expect(isSupportedNodeVersion('22.0.0')).toBe(false);
+  });
+
+  it('fails before attempting Playwright launch on unsupported Node', () => {
+    const spawnFn = vi.fn();
+    const resolvePlaywrightCliFn = vi.fn();
+    const errorLog = vi.fn();
+    const exitFn = vi.fn();
+
+    main({
+      argv: ['--baseURL=https://staging.democratized.space'],
+      nodeVersion: '18.18.0',
+      spawnFn,
+      resolvePlaywrightCliFn,
+      errorLog,
+      infoLog: vi.fn(),
+      exitFn,
+    });
+
+    expect(resolvePlaywrightCliFn).not.toHaveBeenCalled();
+    expect(spawnFn).not.toHaveBeenCalled();
+    expect(exitFn).toHaveBeenCalledWith(1);
+    expect(errorLog).toHaveBeenCalledTimes(1);
+    expect(errorLog.mock.calls[0][0]).toContain('Unsupported Node.js version 18.18.0');
   });
 });
