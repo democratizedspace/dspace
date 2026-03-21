@@ -10,8 +10,31 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
+const packageJsonPath = join(repoRoot, 'package.json');
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
+
+const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+const SUPPORTED_NODE_RANGE = packageJson?.engines?.node ?? '>=20 <22';
+
+function parseNodeMajorBounds(range) {
+  const lowerMatch = />=\s*(\d+)/.exec(String(range));
+  const upperMatch = /<\s*(\d+)/.exec(String(range));
+
+  if (!lowerMatch || !upperMatch) {
+    return null;
+  }
+
+  return {
+    minMajor: Number(lowerMatch[1]),
+    maxExclusiveMajor: Number(upperMatch[1]),
+  };
+}
+
+const SUPPORTED_NODE_MAJOR_BOUNDS = parseNodeMajorBounds(SUPPORTED_NODE_RANGE) ?? {
+  minMajor: 20,
+  maxExclusiveMajor: 22,
+};
 
 const require = createRequire(import.meta.url);
 
@@ -23,6 +46,27 @@ export function resolvePlaywrightCli(searchPaths = [frontendDir, repoRoot], reso
   } catch {
     return null;
   }
+}
+
+export function isSupportedNodeVersion(version = process.versions.node) {
+  const majorMatch = /^v?(\d+)\./.exec(String(version));
+  if (!majorMatch) {
+    return false;
+  }
+
+  const major = Number(majorMatch[1]);
+  return (
+    major >= SUPPORTED_NODE_MAJOR_BOUNDS.minMajor &&
+    major < SUPPORTED_NODE_MAJOR_BOUNDS.maxExclusiveMajor
+  );
+}
+
+export function getUnsupportedNodeVersionMessage(version = process.versions.node) {
+  return (
+    `[qa:remote-completionist-award-iii] Unsupported Node.js version ${version}. ` +
+    `Required range: ${SUPPORTED_NODE_RANGE}. ` +
+    'Run `nvm use` and reinstall dependencies with `pnpm install` before rerunning.'
+  );
 }
 
 function parseArgs(argv) {
@@ -97,12 +141,27 @@ function printChecklistSummary(reportPath) {
   }
 }
 
-function main() {
-  const options = parseArgs(process.argv.slice(2));
+function main(runtime = {}) {
+  const argv = runtime.argv ?? process.argv.slice(2);
+  const nodeVersion = runtime.nodeVersion ?? process.versions.node;
+  const spawnFn = runtime.spawnFn ?? spawn;
+  const resolvePlaywrightCliFn = runtime.resolvePlaywrightCliFn ?? resolvePlaywrightCli;
+  const exitFn = runtime.exitFn ?? ((code) => process.exit(code));
+  const errorLog = runtime.errorLog ?? console.error;
+  const infoLog = runtime.infoLog ?? console.log;
+
+  const options = parseArgs(argv);
 
   if (!/^https?:\/\//i.test(options.baseURL)) {
-    console.error(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
-    process.exit(1);
+    errorLog(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
+    exitFn(1);
+    return;
+  }
+
+  if (!isSupportedNodeVersion(nodeVersion)) {
+    errorLog(getUnsupportedNodeVersionMessage(nodeVersion));
+    exitFn(1);
+    return;
   }
 
   const url = new URL(options.baseURL);
@@ -121,14 +180,16 @@ function main() {
     REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER: isLocalHost ? '1' : '0',
   };
 
-  const playwrightCli = resolvePlaywrightCli();
+  const playwrightCli = resolvePlaywrightCliFn();
 
   if (!playwrightCli) {
-    console.error(
+    errorLog(
       '[qa:remote-completionist-award-iii] Could not resolve @playwright/test/cli. ' +
-        'Install dependencies with Node 20 (for example: `nvm use && pnpm install`).'
+        `Install dependencies with a supported Node.js version (${SUPPORTED_NODE_RANGE}; ` +
+        'for example: `nvm use && pnpm install`).'
     );
-    process.exit(1);
+    exitFn(1);
+    return;
   }
 
   const playwrightArgs = [
@@ -139,23 +200,21 @@ function main() {
     ...options.passthrough,
   ];
 
-  console.log(`[qa:remote-completionist-award-iii] baseURL=${options.baseURL}`);
-  console.log(`[qa:remote-completionist-award-iii] project=${options.project}`);
-  console.log(
+  infoLog(`[qa:remote-completionist-award-iii] baseURL=${options.baseURL}`);
+  infoLog(`[qa:remote-completionist-award-iii] project=${options.project}`);
+  infoLog(
     `[qa:remote-completionist-award-iii] webServer=${env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
   );
 
-  const child = spawn('node', playwrightArgs, {
+  const child = spawnFn('node', playwrightArgs, {
     cwd: frontendDir,
     stdio: 'inherit',
     env,
   });
 
   child.on('error', (err) => {
-    console.error(
-      `[qa:remote-completionist-award-iii] Failed to start Playwright process: ${err.message}`
-    );
-    process.exit(1);
+    errorLog(`[qa:remote-completionist-award-iii] Failed to start Playwright process: ${err.message}`);
+    exitFn(1);
   });
 
   child.on('exit', (code, signal) => {
@@ -165,10 +224,12 @@ function main() {
     }
 
     printChecklistSummary('test-results/remote-completionist-award-iii-harness-report.json');
-    process.exit(code ?? 1);
+    exitFn(code ?? 1);
   });
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
 }
+
+export { main };

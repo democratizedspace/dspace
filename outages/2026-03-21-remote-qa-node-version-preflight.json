@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-21-remote-qa-node-version-preflight",
+  "date": "2026-03-21",
+  "component": "scripts:remote-qa-runner",
+  "rootCause": "The remote completionist QA harness did not enforce the repository Node engine contract before delegating to Playwright. On unsupported runtimes (for example Node 18), execution reached frontend/playwright.config.ts and failed with Playwright's ESM loader minimum-version error, which obscured the actual repo-level requirement and remediation.",
+  "resolution": "Added a harness-level Node version preflight for >=20 <22 that exits early with a concise, harness-prefixed message including the current version and actionable recovery steps (`nvm use` and `pnpm install`), and added deterministic regression coverage that asserts unsupported Node exits before resolver/spawn are attempted.",
+  "references": [
+    "scripts/run-remote-completionist-award-iii.mjs",
+    "tests/runRemoteCompletionistAwardIIIResolver.test.ts"
+  ]
+}
