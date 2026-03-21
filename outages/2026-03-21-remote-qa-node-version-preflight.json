@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-21-remote-qa-node-version-preflight",
+  "date": "2026-03-21",
+  "component": "scripts:remote-qa-runner",
+  "rootCause": "The remote completionist harness did not preflight the repo Node engine contract (>=20 <22), so unsupported Node runtimes could progress into Playwright config loading and fail with a Playwright ESM loader error instead of a harness-level failure. User-visible symptom: `npm run qa:remote-completionist-award-iii -- --baseURL=https://staging.democratized.space` crashed with `Playwright requires Node.js 18.19 or higher` while loading frontend/playwright.config.ts.",
+  "resolution": "Added a harness-level Node-version preflight in scripts/run-remote-completionist-award-iii.mjs that rejects unsupported versions before Playwright launch, prints a concise harness-prefixed message including current version and required range (>=20 <22), and provides remediation (`nvm use` then `pnpm install`). Added deterministic regression coverage in tests/runRemoteCompletionistAwardIIIResolver.test.ts for unsupported/supported version classification and unsupported-version user-facing messaging.",
+  "references": [
+    "scripts/run-remote-completionist-award-iii.mjs",
+    "tests/runRemoteCompletionistAwardIIIResolver.test.ts"
+  ]
+}

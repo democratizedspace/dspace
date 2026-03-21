@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolvePlaywrightCli } from '../scripts/run-remote-completionist-award-iii.mjs';
+import {
+  formatUnsupportedNodeVersionMessage,
+  isSupportedNodeVersion,
+  resolvePlaywrightCli,
+} from '../scripts/run-remote-completionist-award-iii.mjs';
 
 describe('resolvePlaywrightCli', () => {
   it('looks up the Playwright CLI package via require.resolve search paths', () => {
@@ -49,5 +53,27 @@ describe('resolvePlaywrightCli', () => {
     });
 
     expect(resolved).toBeNull();
+  });
+});
+
+describe('remote completionist harness node preflight', () => {
+  it('rejects unsupported Node.js versions', () => {
+    expect(isSupportedNodeVersion('18.18.0')).toBe(false);
+    expect(isSupportedNodeVersion('22.0.0')).toBe(false);
+  });
+
+  it('accepts supported Node.js versions', () => {
+    expect(isSupportedNodeVersion('20.0.0')).toBe(true);
+    expect(isSupportedNodeVersion('21.9.1')).toBe(true);
+  });
+
+  it('surfaces a harness-prefixed remediation message for unsupported versions', () => {
+    const message = formatUnsupportedNodeVersionMessage('18.18.0');
+
+    expect(message).toContain('[qa:remote-completionist-award-iii]');
+    expect(message).toContain('Unsupported Node.js version 18.18.0');
+    expect(message).toContain('requires >=20 <22');
+    expect(message).toContain('nvm use');
+    expect(message).toContain('pnpm install');
   });
 });

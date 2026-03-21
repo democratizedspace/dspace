@@ -14,6 +14,7 @@ const frontendDir = join(repoRoot, 'frontend');
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 
 const require = createRequire(import.meta.url);
+const SUPPORTED_NODE_RANGE = '>=20 <22';
 
 export function resolvePlaywrightCli(searchPaths = [frontendDir, repoRoot], resolveFn = require.resolve) {
   try {
@@ -23,6 +24,23 @@ export function resolvePlaywrightCli(searchPaths = [frontendDir, repoRoot], reso
   } catch {
     return null;
   }
+}
+
+export function isSupportedNodeVersion(version = process.versions.node) {
+  const majorSegment = String(version).split('.')[0];
+  const major = Number.parseInt(majorSegment, 10);
+  return Number.isInteger(major) && major >= 20 && major < 22;
+}
+
+export function formatUnsupportedNodeVersionMessage(
+  version = process.versions.node,
+  supportedRange = SUPPORTED_NODE_RANGE
+) {
+  return (
+    `[qa:remote-completionist-award-iii] Unsupported Node.js version ${version}. ` +
+    `This harness requires ${supportedRange}. ` +
+    'Run `nvm use` and reinstall dependencies with `pnpm install`, then rerun this command.'
+  );
 }
 
 function parseArgs(argv) {
@@ -102,6 +120,11 @@ function main() {
 
   if (!/^https?:\/\//i.test(options.baseURL)) {
     console.error(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
+    process.exit(1);
+  }
+
+  if (!isSupportedNodeVersion(process.versions.node)) {
+    console.error(formatUnsupportedNodeVersionMessage(process.versions.node));
     process.exit(1);
   }
 
