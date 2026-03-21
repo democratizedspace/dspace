@@ -2,7 +2,7 @@
 
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 
@@ -15,10 +15,10 @@ const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 
 const require = createRequire(import.meta.url);
 
-function resolvePlaywrightCli() {
+export function resolvePlaywrightCli(searchPaths = [frontendDir, repoRoot], resolveFn = require.resolve) {
   try {
-    return require.resolve('@playwright/test/cli', {
-      paths: [frontendDir, repoRoot],
+    return resolveFn('@playwright/test/cli', {
+      paths: searchPaths,
     });
   } catch {
     return null;
@@ -97,72 +97,78 @@ function printChecklistSummary(reportPath) {
   }
 }
 
-const options = parseArgs(process.argv.slice(2));
+function main() {
+  const options = parseArgs(process.argv.slice(2));
 
-if (!/^https?:\/\//i.test(options.baseURL)) {
-  console.error(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
-  process.exit(1);
-}
-
-const url = new URL(options.baseURL);
-const isLocalHost =
-  url.hostname === '127.0.0.1' ||
-  url.hostname === 'localhost' ||
-  url.hostname === '0.0.0.0' ||
-  url.hostname === '::1' ||
-  url.hostname.endsWith('.local');
-
-const env = {
-  ...process.env,
-  BASE_URL: options.baseURL,
-  PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
-  REMOTE_COMPLETIONIST_AWARD_III: '1',
-  REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER: isLocalHost ? '1' : '0',
-};
-
-const playwrightCli = resolvePlaywrightCli();
-
-if (!playwrightCli) {
-  console.error(
-    '[qa:remote-completionist-award-iii] Could not resolve @playwright/test/cli. ' +
-      'Install dependencies with Node 20 (for example: `nvm use && pnpm install`).'
-  );
-  process.exit(1);
-}
-
-const playwrightArgs = [
-  playwrightCli,
-  'test',
-  'e2e/remote-completionist-award-iii.spec.ts',
-  `--project=${options.project}`,
-  ...options.passthrough,
-];
-
-console.log(`[qa:remote-completionist-award-iii] baseURL=${options.baseURL}`);
-console.log(`[qa:remote-completionist-award-iii] project=${options.project}`);
-console.log(
-  `[qa:remote-completionist-award-iii] webServer=${env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
-);
-
-const child = spawn('node', playwrightArgs, {
-  cwd: frontendDir,
-  stdio: 'inherit',
-  env,
-});
-
-child.on('error', (err) => {
-  console.error(
-    `[qa:remote-completionist-award-iii] Failed to start Playwright process: ${err.message}`
-  );
-  process.exit(1);
-});
-
-child.on('exit', (code, signal) => {
-  if (signal) {
-    process.kill(process.pid, signal);
-    return;
+  if (!/^https?:\/\//i.test(options.baseURL)) {
+    console.error(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
+    process.exit(1);
   }
 
-  printChecklistSummary('test-results/remote-completionist-award-iii-harness-report.json');
-  process.exit(code ?? 1);
-});
+  const url = new URL(options.baseURL);
+  const isLocalHost =
+    url.hostname === '127.0.0.1' ||
+    url.hostname === 'localhost' ||
+    url.hostname === '0.0.0.0' ||
+    url.hostname === '::1' ||
+    url.hostname.endsWith('.local');
+
+  const env = {
+    ...process.env,
+    BASE_URL: options.baseURL,
+    PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
+    REMOTE_COMPLETIONIST_AWARD_III: '1',
+    REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER: isLocalHost ? '1' : '0',
+  };
+
+  const playwrightCli = resolvePlaywrightCli();
+
+  if (!playwrightCli) {
+    console.error(
+      '[qa:remote-completionist-award-iii] Could not resolve @playwright/test/cli. ' +
+        'Install dependencies with Node 20 (for example: `nvm use && pnpm install`).'
+    );
+    process.exit(1);
+  }
+
+  const playwrightArgs = [
+    playwrightCli,
+    'test',
+    'e2e/remote-completionist-award-iii.spec.ts',
+    `--project=${options.project}`,
+    ...options.passthrough,
+  ];
+
+  console.log(`[qa:remote-completionist-award-iii] baseURL=${options.baseURL}`);
+  console.log(`[qa:remote-completionist-award-iii] project=${options.project}`);
+  console.log(
+    `[qa:remote-completionist-award-iii] webServer=${env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
+  );
+
+  const child = spawn('node', playwrightArgs, {
+    cwd: frontendDir,
+    stdio: 'inherit',
+    env,
+  });
+
+  child.on('error', (err) => {
+    console.error(
+      `[qa:remote-completionist-award-iii] Failed to start Playwright process: ${err.message}`
+    );
+    process.exit(1);
+  });
+
+  child.on('exit', (code, signal) => {
+    if (signal) {
+      process.kill(process.pid, signal);
+      return;
+    }
+
+    printChecklistSummary('test-results/remote-completionist-award-iii-harness-report.json');
+    process.exit(code ?? 1);
+  });
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}
