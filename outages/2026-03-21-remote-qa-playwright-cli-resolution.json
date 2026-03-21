@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-21-remote-qa-playwright-cli-resolution",
+  "date": "2026-03-21",
+  "component": "scripts:remote-qa-runner",
+  "rootCause": "The remote completionist QA runner assumed the Playwright CLI always existed at frontend/node_modules/@playwright/test/cli.js. That hard-coded relative path worked in local layouts but failed when dependencies were hoisted to the workspace root, and no deterministic script-level regression test validated resolver behavior across both install topologies.",
+  "resolution": "Resolved @playwright/test/cli with require.resolve using frontend and repo-root search paths, added targeted resolver regression coverage, and introduced a repo-level npm script reachability test that validates documented/CI-invoked npm scripts are defined and statically sanity-checks nested script entrypoints.",
+  "references": [
+    "scripts/run-remote-completionist-award-iii.mjs",
+    "tests/runRemoteCompletionistAwardIIIResolver.test.ts",
+    "tests/npmScriptReachability.test.ts"
+  ]
+}
