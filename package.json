@@ -27,6 +27,7 @@
     "lint": "cd frontend && npm run lint",
     "lint:fix": "cd frontend && npm run lint:fix",
     "format": "cd frontend && npm run format",
+    "format:check": "cd frontend && npm run format:check",
     "format:check:frontend-canary": "npx prettier --check frontend/__tests__/offlineWorkerRegistration.test.js",
     "type-check": "tsc --noEmit",
     "build:docs-rag": "node scripts/build-docs-rag-index.mjs",
@@ -50,7 +51,11 @@
     "spellcheck": "cspell --no-progress --no-summary \"docs/**/*.md\" \"frontend/src/pages/docs/**/*.md\" \"README.md\" \"AGENTS.md\"",
     "qa:remote-smoke": "node scripts/run-remote-smoke.mjs",
     "qa:remote-migration": "node scripts/run-remote-migration.mjs",
-    "qa:remote-completionist-award-iii": "node scripts/run-remote-completionist-award-iii.mjs"
+    "qa:remote-completionist-award-iii": "node scripts/run-remote-completionist-award-iii.mjs",
+    "generate-quest": "cd frontend && npm run generate-quest",
+    "preview": "cd frontend && npm run preview",
+    "lint:a11y": "cd frontend && npm run lint:a11y",
+    "dev:legacy": "npm run dev"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
