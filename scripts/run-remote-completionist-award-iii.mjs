@@ -65,7 +65,7 @@ export function getUnsupportedNodeVersionMessage(version = process.versions.node
   return (
     `[qa:remote-completionist-award-iii] Unsupported Node.js version ${version}. ` +
     `Required range: ${SUPPORTED_NODE_RANGE}. ` +
-    'Run `nvm use` (or invoke with `npx -y node@20`) and reinstall dependencies with `pnpm install` before rerunning.'
+    'Run `nvm use` and reinstall dependencies with `pnpm install` before rerunning.'
   );
 }
 
@@ -149,6 +149,7 @@ function main(runtime = {}) {
   const exitFn = runtime.exitFn ?? ((code) => process.exit(code));
   const errorLog = runtime.errorLog ?? console.error;
   const infoLog = runtime.infoLog ?? console.log;
+  const printChecklistSummaryFn = runtime.printChecklistSummaryFn ?? printChecklistSummary;
 
   const options = parseArgs(argv);
 
@@ -224,7 +225,7 @@ function main(runtime = {}) {
       return;
     }
 
-    printChecklistSummary('test-results/remote-completionist-award-iii-harness-report.json');
+    printChecklistSummaryFn('test-results/remote-completionist-award-iii-harness-report.json');
     exitFn(code ?? 1);
   });
 }
