@@ -26,9 +26,9 @@ describe('resolvePlaywrightCli', () => {
     ]);
   });
 
-  it('resolves when Playwright CLI is available from repo root', () => {
-    const resolved = resolvePlaywrightCli(['/repo/frontend', '/repo'], (_id, options) => {
-      if (options?.paths?.[1] === '/repo') {
+  it('resolves when the search path is repo root only', () => {
+    const resolved = resolvePlaywrightCli(['/repo'], (_id, options) => {
+      if (options?.paths?.[0] === '/repo') {
         return '/repo/node_modules/@playwright/test/cli.js';
       }
       throw new Error('not found');
@@ -37,8 +37,8 @@ describe('resolvePlaywrightCli', () => {
     expect(resolved).toBe('/repo/node_modules/@playwright/test/cli.js');
   });
 
-  it('resolves when Playwright CLI is available from frontend', () => {
-    const resolved = resolvePlaywrightCli(['/repo/frontend', '/repo'], (_id, options) => {
+  it('resolves when the search path is frontend only', () => {
+    const resolved = resolvePlaywrightCli(['/repo/frontend'], (_id, options) => {
       if (options?.paths?.[0] === '/repo/frontend') {
         return '/repo/frontend/node_modules/@playwright/test/cli.js';
       }
@@ -103,5 +103,40 @@ describe('Node version preflight', () => {
     expect(exitFn).toHaveBeenCalledWith(1);
     expect(errorLog).toHaveBeenCalledTimes(1);
     expect(errorLog.mock.calls[0][0]).toContain('Unsupported Node.js version 18.18.0');
+  });
+
+  it('uses the current Node runtime to launch Playwright', () => {
+    const events = new Map<string, (...args: unknown[]) => void>();
+    const printChecklistSummaryFn = vi.fn();
+    const child = {
+      on: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
+        events.set(event, handler);
+        return child;
+      }),
+    };
+    const spawnFn = vi.fn(() => child);
+    const exitFn = vi.fn();
+
+    main({
+      argv: ['--baseURL=https://staging.democratized.space'],
+      nodeVersion: '20.11.0',
+      spawnFn,
+      resolvePlaywrightCliFn: () => '/repo/node_modules/@playwright/test/cli.js',
+      errorLog: vi.fn(),
+      infoLog: vi.fn(),
+      printChecklistSummaryFn,
+      exitFn,
+    });
+
+    expect(spawnFn).toHaveBeenCalledTimes(1);
+    expect(spawnFn.mock.calls[0][0]).toBe(process.execPath);
+
+    const exitHandler = events.get('exit');
+    expect(exitHandler).toBeDefined();
+    exitHandler?.(0, null);
+    expect(printChecklistSummaryFn).toHaveBeenCalledWith(
+      'test-results/remote-completionist-award-iii-harness-report.json'
+    );
+    expect(exitFn).toHaveBeenCalledWith(0);
   });
 });

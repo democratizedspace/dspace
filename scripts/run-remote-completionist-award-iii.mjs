@@ -149,6 +149,7 @@ function main(runtime = {}) {
   const exitFn = runtime.exitFn ?? ((code) => process.exit(code));
   const errorLog = runtime.errorLog ?? console.error;
   const infoLog = runtime.infoLog ?? console.log;
+  const printChecklistSummaryFn = runtime.printChecklistSummaryFn ?? printChecklistSummary;
 
   const options = parseArgs(argv);
 
@@ -206,7 +207,8 @@ function main(runtime = {}) {
     `[qa:remote-completionist-award-iii] webServer=${env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
   );
 
-  const child = spawnFn('node', playwrightArgs, {
+  // Keep Playwright on the same Node runtime used for this script.
+  const child = spawnFn(process.execPath, playwrightArgs, {
     cwd: frontendDir,
     stdio: 'inherit',
     env,
@@ -223,7 +225,7 @@ function main(runtime = {}) {
       return;
     }
 
-    printChecklistSummary('test-results/remote-completionist-award-iii-harness-report.json');
+    printChecklistSummaryFn('test-results/remote-completionist-award-iii-harness-report.json');
     exitFn(code ?? 1);
   });
 }
