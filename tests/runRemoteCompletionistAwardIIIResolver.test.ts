@@ -70,9 +70,16 @@ describe('Node version preflight', () => {
   });
 
   it('accepts supported versions in the declared engine range', () => {
+    expect(isSupportedNodeVersion('19.9.0')).toBe(false);
     expect(isSupportedNodeVersion('20.0.0')).toBe(true);
     expect(isSupportedNodeVersion('21.9.0')).toBe(true);
     expect(isSupportedNodeVersion('22.0.0')).toBe(false);
+  });
+
+  it('rejects malformed versions and accepts optional v-prefix versions', () => {
+    expect(isSupportedNodeVersion('')).toBe(false);
+    expect(isSupportedNodeVersion('not-a-version')).toBe(false);
+    expect(isSupportedNodeVersion('v20.11.0')).toBe(true);
   });
 
   it('fails before attempting Playwright launch on unsupported Node', () => {

@@ -10,9 +10,31 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
+const packageJsonPath = join(repoRoot, 'package.json');
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
-const SUPPORTED_NODE_RANGE = '>=20 <22';
+
+const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+const SUPPORTED_NODE_RANGE = packageJson?.engines?.node ?? '>=20 <22';
+
+function parseNodeMajorBounds(range) {
+  const lowerMatch = />=\s*(\d+)/.exec(String(range));
+  const upperMatch = /<\s*(\d+)/.exec(String(range));
+
+  if (!lowerMatch || !upperMatch) {
+    return null;
+  }
+
+  return {
+    minMajor: Number(lowerMatch[1]),
+    maxExclusiveMajor: Number(upperMatch[1]),
+  };
+}
+
+const SUPPORTED_NODE_MAJOR_BOUNDS = parseNodeMajorBounds(SUPPORTED_NODE_RANGE) ?? {
+  minMajor: 20,
+  maxExclusiveMajor: 22,
+};
 
 const require = createRequire(import.meta.url);
 
@@ -27,13 +49,16 @@ export function resolvePlaywrightCli(searchPaths = [frontendDir, repoRoot], reso
 }
 
 export function isSupportedNodeVersion(version = process.versions.node) {
-  const majorMatch = /^(\d+)\./.exec(String(version));
+  const majorMatch = /^v?(\d+)\./.exec(String(version));
   if (!majorMatch) {
     return false;
   }
 
   const major = Number(majorMatch[1]);
-  return major >= 20 && major < 22;
+  return (
+    major >= SUPPORTED_NODE_MAJOR_BOUNDS.minMajor &&
+    major < SUPPORTED_NODE_MAJOR_BOUNDS.maxExclusiveMajor
+  );
 }
 
 export function getUnsupportedNodeVersionMessage(version = process.versions.node) {
@@ -160,7 +185,8 @@ function main(runtime = {}) {
   if (!playwrightCli) {
     errorLog(
       '[qa:remote-completionist-award-iii] Could not resolve @playwright/test/cli. ' +
-        'Install dependencies with Node 20 (for example: `nvm use && pnpm install`).'
+        `Install dependencies with a supported Node.js version (${SUPPORTED_NODE_RANGE}; ` +
+        'for example: `nvm use && pnpm install`).'
     );
     exitFn(1);
     return;
