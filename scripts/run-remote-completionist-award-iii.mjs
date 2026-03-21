@@ -4,11 +4,13 @@ import { spawn } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { createRequire } from 'node:module';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
+const require = createRequire(import.meta.url);
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 
@@ -84,6 +86,23 @@ function printChecklistSummary(reportPath) {
   }
 }
 
+function resolvePlaywrightCli() {
+  const resolutionTargets = [frontendDir, repoRoot];
+
+  for (const target of resolutionTargets) {
+    try {
+      return require.resolve('@playwright/test/cli.js', { paths: [target] });
+    } catch {
+      // Continue searching; we'll throw a helpful error if no path resolves.
+    }
+  }
+
+  throw new Error(
+    'Unable to resolve @playwright/test/cli.js from frontend/ or repo root. ' +
+      'Install dependencies in one of those locations before running this script.'
+  );
+}
+
 const options = parseArgs(process.argv.slice(2));
 
 if (!/^https?:\/\//i.test(options.baseURL)) {
@@ -107,8 +126,17 @@ const env = {
   REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER: isLocalHost ? '1' : '0',
 };
 
+let playwrightCli;
+
+try {
+  playwrightCli = resolvePlaywrightCli();
+} catch (error) {
+  console.error(`[qa:remote-completionist-award-iii] ${error.message}`);
+  process.exit(1);
+}
+
 const playwrightArgs = [
-  './node_modules/@playwright/test/cli.js',
+  playwrightCli,
   'test',
   'e2e/remote-completionist-award-iii.spec.ts',
   `--project=${options.project}`,
