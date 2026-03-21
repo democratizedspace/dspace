@@ -11,6 +11,8 @@ const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
+const PLAYWRIGHT_CLI_RELATIVE_PATH = './node_modules/@playwright/test/cli.js';
+const PLAYWRIGHT_CLI_PATH = join(frontendDir, 'node_modules', '@playwright', 'test', 'cli.js');
 
 function parseArgs(argv) {
   const parsed = {
@@ -84,7 +86,53 @@ function printChecklistSummary(reportPath) {
   }
 }
 
+function isNodeVersionSupported(version = process.versions.node) {
+  const [major = '0', minor = '0'] = String(version).split('.');
+  const majorNumber = Number.parseInt(major, 10);
+  const minorNumber = Number.parseInt(minor, 10);
+
+  if (!Number.isFinite(majorNumber) || !Number.isFinite(minorNumber)) {
+    return false;
+  }
+
+  if (majorNumber < 20 || majorNumber >= 22) {
+    return false;
+  }
+
+  return minorNumber >= 0;
+}
+
+function printEnvironmentHelpAndExit() {
+  const nodeVersion = process.versions.node;
+  const nodeSupported = isNodeVersionSupported(nodeVersion);
+  const playwrightInstalled = existsSync(PLAYWRIGHT_CLI_PATH);
+  const problems = [];
+
+  if (!nodeSupported) {
+    problems.push(`Node.js ${nodeVersion} is not supported (required: >=20 <22).`);
+  }
+
+  if (!playwrightInstalled) {
+    problems.push(`Playwright CLI not found at ${PLAYWRIGHT_CLI_PATH}.`);
+  }
+
+  if (problems.length === 0) {
+    return;
+  }
+
+  console.error('[qa:remote-completionist-award-iii] Environment check failed:');
+  for (const problem of problems) {
+    console.error(`  - ${problem}`);
+  }
+  console.error('Suggested fix:');
+  console.error('  1) Switch to Node 20 LTS (repo requires >=20 <22).');
+  console.error('  2) Install dependencies from repo root: pnpm install (or npm run ci:install).');
+  console.error('  3) Install browser binaries if needed: npx playwright install chromium.');
+  process.exit(1);
+}
+
 const options = parseArgs(process.argv.slice(2));
+printEnvironmentHelpAndExit();
 
 if (!/^https?:\/\//i.test(options.baseURL)) {
   console.error(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
@@ -108,7 +156,7 @@ const env = {
 };
 
 const playwrightArgs = [
-  './node_modules/@playwright/test/cli.js',
+  PLAYWRIGHT_CLI_RELATIVE_PATH,
   'test',
   'e2e/remote-completionist-award-iii.spec.ts',
   `--project=${options.project}`,
