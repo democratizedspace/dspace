@@ -3,6 +3,24 @@ import { describe, expect, it } from 'vitest';
 import { resolvePlaywrightCli } from '../scripts/run-remote-completionist-award-iii.mjs';
 
 describe('resolvePlaywrightCli', () => {
+  it('looks up the Playwright CLI package via require.resolve search paths', () => {
+    const calls = [];
+    const resolved = resolvePlaywrightCli(['/repo/frontend', '/repo'], (id, options) => {
+      calls.push({ id, options });
+      return '/repo/node_modules/@playwright/test/cli.js';
+    });
+
+    expect(resolved).toBe('/repo/node_modules/@playwright/test/cli.js');
+    expect(calls).toEqual([
+      {
+        id: '@playwright/test/cli',
+        options: {
+          paths: ['/repo/frontend', '/repo'],
+        },
+      },
+    ]);
+  });
+
   it('resolves when Playwright CLI is available from repo root', () => {
     const resolved = resolvePlaywrightCli(['/repo/frontend', '/repo'], (_id, options) => {
       if (options?.paths?.[1] === '/repo') {
