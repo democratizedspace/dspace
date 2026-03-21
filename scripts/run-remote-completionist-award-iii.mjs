@@ -3,6 +3,7 @@
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -11,6 +12,18 @@ const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
+
+const require = createRequire(import.meta.url);
+
+function resolvePlaywrightCli() {
+  try {
+    return require.resolve('@playwright/test/cli', {
+      paths: [frontendDir, repoRoot],
+    });
+  } catch {
+    return null;
+  }
+}
 
 function parseArgs(argv) {
   const parsed = {
@@ -107,8 +120,18 @@ const env = {
   REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER: isLocalHost ? '1' : '0',
 };
 
+const playwrightCli = resolvePlaywrightCli();
+
+if (!playwrightCli) {
+  console.error(
+    '[qa:remote-completionist-award-iii] Could not resolve @playwright/test/cli. ' +
+      'Install dependencies with Node 20 (for example: `nvm use && pnpm install`).'
+  );
+  process.exit(1);
+}
+
 const playwrightArgs = [
-  './node_modules/@playwright/test/cli.js',
+  playwrightCli,
   'test',
   'e2e/remote-completionist-award-iii.spec.ts',
   `--project=${options.project}`,
