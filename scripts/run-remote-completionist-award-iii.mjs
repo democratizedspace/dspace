@@ -12,6 +12,7 @@ const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
+const SUPPORTED_NODE_RANGE = '>=20 <22';
 
 const require = createRequire(import.meta.url);
 
@@ -23,6 +24,19 @@ export function resolvePlaywrightCli(searchPaths = [frontendDir, repoRoot], reso
   } catch {
     return null;
   }
+}
+
+export function isSupportedNodeVersion(version = process.versions.node) {
+  const [major = 0] = String(version).split('.').map((segment) => Number.parseInt(segment, 10));
+  return Number.isInteger(major) && major >= 20 && major < 22;
+}
+
+export function getUnsupportedNodeVersionMessage(version = process.versions.node) {
+  return (
+    `[qa:remote-completionist-award-iii] Unsupported Node.js version ${version}. ` +
+    `Supported range: ${SUPPORTED_NODE_RANGE}. ` +
+    'Run `nvm use` and reinstall dependencies with `pnpm install`.'
+  );
 }
 
 function parseArgs(argv) {
@@ -97,12 +111,31 @@ function printChecklistSummary(reportPath) {
   }
 }
 
-function main() {
-  const options = parseArgs(process.argv.slice(2));
+export function main(
+  argv = process.argv.slice(2),
+  {
+    nodeVersion = process.versions.node,
+    spawnFn = spawn,
+    resolvePlaywrightCliFn = resolvePlaywrightCli,
+    envSource = process.env,
+    logFn = console.log,
+    warnFn = console.warn,
+    errorFn = console.error,
+    exitFn = (code) => process.exit(code),
+  } = {}
+) {
+  const options = parseArgs(argv);
 
   if (!/^https?:\/\//i.test(options.baseURL)) {
-    console.error(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
-    process.exit(1);
+    errorFn(`Invalid --baseURL value: "${options.baseURL}". Include http:// or https://.`);
+    exitFn(1);
+    return;
+  }
+
+  if (!isSupportedNodeVersion(nodeVersion)) {
+    errorFn(getUnsupportedNodeVersionMessage(nodeVersion));
+    exitFn(1);
+    return;
   }
 
   const url = new URL(options.baseURL);
@@ -114,21 +147,22 @@ function main() {
     url.hostname.endsWith('.local');
 
   const env = {
-    ...process.env,
+    ...envSource,
     BASE_URL: options.baseURL,
     PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
     REMOTE_COMPLETIONIST_AWARD_III: '1',
     REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER: isLocalHost ? '1' : '0',
   };
 
-  const playwrightCli = resolvePlaywrightCli();
+  const playwrightCli = resolvePlaywrightCliFn();
 
   if (!playwrightCli) {
-    console.error(
+    errorFn(
       '[qa:remote-completionist-award-iii] Could not resolve @playwright/test/cli. ' +
         'Install dependencies with Node 20 (for example: `nvm use && pnpm install`).'
     );
-    process.exit(1);
+    exitFn(1);
+    return;
   }
 
   const playwrightArgs = [
@@ -139,23 +173,23 @@ function main() {
     ...options.passthrough,
   ];
 
-  console.log(`[qa:remote-completionist-award-iii] baseURL=${options.baseURL}`);
-  console.log(`[qa:remote-completionist-award-iii] project=${options.project}`);
-  console.log(
+  logFn(`[qa:remote-completionist-award-iii] baseURL=${options.baseURL}`);
+  logFn(`[qa:remote-completionist-award-iii] project=${options.project}`);
+  logFn(
     `[qa:remote-completionist-award-iii] webServer=${env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
   );
 
-  const child = spawn('node', playwrightArgs, {
+  const child = spawnFn('node', playwrightArgs, {
     cwd: frontendDir,
     stdio: 'inherit',
     env,
   });
 
   child.on('error', (err) => {
-    console.error(
+    errorFn(
       `[qa:remote-completionist-award-iii] Failed to start Playwright process: ${err.message}`
     );
-    process.exit(1);
+    exitFn(1);
   });
 
   child.on('exit', (code, signal) => {
@@ -164,8 +198,18 @@ function main() {
       return;
     }
 
-    printChecklistSummary('test-results/remote-completionist-award-iii-harness-report.json');
-    process.exit(code ?? 1);
+    if (warnFn !== console.warn) {
+      const originalWarn = console.warn;
+      console.warn = warnFn;
+      try {
+        printChecklistSummary('test-results/remote-completionist-award-iii-harness-report.json');
+      } finally {
+        console.warn = originalWarn;
+      }
+    } else {
+      printChecklistSummary('test-results/remote-completionist-award-iii-harness-report.json');
+    }
+    exitFn(code ?? 1);
   });
 }
 

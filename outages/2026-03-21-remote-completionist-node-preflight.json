@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-21-remote-completionist-node-preflight",
+  "date": "2026-03-21",
+  "component": "tests",
+  "rootCause": "The remote completionist harness launched Playwright before checking the repo Node engine range (>=20 <22)",
+  "resolution": "Added a harness-level Node preflight that rejects unsupported versions with clear remediation before Playwright spawn",
+  "references": [
+    "scripts/run-remote-completionist-award-iii.mjs",
+    "tests/runRemoteCompletionistAwardIIIResolver.test.ts"
+  ]
+}

@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolvePlaywrightCli } from '../scripts/run-remote-completionist-award-iii.mjs';
+import {
+  getUnsupportedNodeVersionMessage,
+  isSupportedNodeVersion,
+  main,
+  resolvePlaywrightCli,
+} from '../scripts/run-remote-completionist-award-iii.mjs';
 
 describe('resolvePlaywrightCli', () => {
   it('looks up the Playwright CLI package via require.resolve search paths', () => {
@@ -49,5 +54,39 @@ describe('resolvePlaywrightCli', () => {
     });
 
     expect(resolved).toBeNull();
+  });
+});
+
+describe('node version preflight', () => {
+  it('rejects unsupported Node versions', () => {
+    expect(isSupportedNodeVersion('18.18.0')).toBe(false);
+    expect(isSupportedNodeVersion('22.0.0')).toBe(false);
+  });
+
+  it('accepts supported Node versions', () => {
+    expect(isSupportedNodeVersion('20.0.0')).toBe(true);
+    expect(isSupportedNodeVersion('21.9.1')).toBe(true);
+  });
+
+  it('fails before Playwright spawn for unsupported Node versions', () => {
+    const errors: string[] = [];
+    let spawnCalled = false;
+    let exitCode: number | null = null;
+
+    main(['--baseURL=https://staging.democratized.space'], {
+      nodeVersion: '18.19.0',
+      spawnFn: () => {
+        spawnCalled = true;
+        throw new Error('spawn should not be called for unsupported Node versions');
+      },
+      errorFn: (message: string) => errors.push(message),
+      exitFn: (code: number) => {
+        exitCode = code;
+      },
+    });
+
+    expect(spawnCalled).toBe(false);
+    expect(exitCode).toBe(1);
+    expect(errors).toEqual([getUnsupportedNodeVersionMessage('18.19.0')]);
   });
 });
