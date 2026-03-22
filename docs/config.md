@@ -83,9 +83,9 @@ Flux consumption details:
   `offlineWorker.enabled=false` disables service worker registration while keeping the rest of the
   app online, and opting into telemetry requires either `DSPACE_TELEMETRY_ENABLED=true` or the
   feature flag override `telemetry.enabled=true`.
-- Launch review expectation: after each staging/prod deploy, confirm `/config.json` reflects the
-  intended runtime flags through the CDN path and that offline cache behavior does not pin stale
-  flag values.
+- Launch review expectation (not a claim of new infrastructure): after each staging/prod deploy,
+  confirm `/config.json` stays network-first/fresh through the CDN path and that offline cache
+  behavior does not pin stale flag values.
 
 ## Scaling & Resources
 
