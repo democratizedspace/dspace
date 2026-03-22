@@ -4,6 +4,16 @@ Use this runbook as the operator-facing sequence for v3 launch assists. It inten
 clear command per remote harness and explicitly separates automated checks from manual judgment
 calls.
 
+## Preflight (before remote harness runs)
+
+- Compare staging/prod `GET /config.json` responses for `featureFlags`, `telemetry.enabled`, and
+  `offlineWorker.enabled`; only secrets, endpoints/hostnames, and `DSPACE_ENV` / QA Cheats policy
+  should differ at launch review.
+- Record immutable deploy provenance in the launch log: deployed image tag (`v3-<shortsha>` or
+  `main-<shortsha>`) plus the chart/version source used for that rollout.
+- Verify `/config.json` refreshes through the CDN path after deploy and confirm service-worker
+  updates do not pin stale runtime flags between releases.
+
 ## 1) Remote smoke (non-destructive default)
 
 ```bash
