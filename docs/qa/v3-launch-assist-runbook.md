@@ -4,6 +4,19 @@ Use this runbook as the operator-facing sequence for v3 launch assists. It inten
 clear command per remote harness and explicitly separates automated checks from manual judgment
 calls.
 
+
+## 0) Parity preflight (before remote harnesses)
+
+- Compare staging and target prod `GET /config.json` payloads for critical runtime toggles
+  (`featureFlags`, `telemetry.enabled`, `offlineWorker.enabled`); only keys/endpoints should differ.
+- Capture immutable deploy provenance in the launch note: deployed image tag (`v3-<shortsha>` or
+  `main-<shortsha>`) plus chart version from CI/Helm publish output.
+- Confirm operational logs are reachable for both environments during launch observation; centralized
+  error reporting remains a post-v3.0.0 improvement.
+- Review caching behavior after each deploy:
+  - `GET /config.json` should refresh without requiring a hard reload.
+  - Service worker should update app shell assets without pinning stale runtime flags.
+
 ## 1) Remote smoke (non-destructive default)
 
 ```bash
