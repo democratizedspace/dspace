@@ -71,7 +71,9 @@ Flux consumption details:
   from the namespace configured via `networkPolicy.metricsScraper` (default `monitoring`) so the
   collector can reach the metrics port.
 - **Logs**: The container emits structured JSON logs (fields: `time`, `level`, `msg`, etc.) and
-  includes feature-flag metadata during startup and shutdown.
+  includes feature-flag metadata during startup and shutdown. For v3.0.0 launch readiness, rely on
+  these operational logs in staging/prod; centralized error-reporting aggregation is deferred to a
+  post-v3.0.0 follow-up.
 
 ## Runtime configuration service
 
@@ -81,6 +83,9 @@ Flux consumption details:
   `offlineWorker.enabled=false` disables service worker registration while keeping the rest of the
   app online, and opting into telemetry requires either `DSPACE_TELEMETRY_ENABLED=true` or the
   feature flag override `telemetry.enabled=true`.
+- Launch review expectation: after each staging/prod deploy, confirm `/config.json` reflects the
+  intended runtime flags through the CDN path and that offline cache behavior does not pin stale
+  flag values.
 
 ## Scaling & Resources
 
