@@ -121,7 +121,6 @@ describe('ensurePlaywrightBrowsers', () => {
           path.join('node_modules', '@playwright', 'test', 'cli.js')
         ),
         'install',
-        '--with-deps',
         'chromium',
         'chromium-headless-shell',
       ]),

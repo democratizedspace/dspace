@@ -3,7 +3,7 @@ import { existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
-const INSTALL_ARGS = ['install', '--with-deps', 'chromium', 'chromium-headless-shell'];
+const INSTALL_ARGS = ['install', 'chromium', 'chromium-headless-shell'];
 const INSTALL_DEPS_ARGS = ['install-deps'];
 const INSTALL_DEPS_SENTINEL = '.playwright-deps-installed';
 const PROXY_ENV_KEYS = [

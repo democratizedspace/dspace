@@ -211,7 +211,6 @@ describe('ensurePlaywrightBrowsers', () => {
         expect(execFileSyncMock.mock.calls[1][1]).toEqual([
             cliPath,
             'install',
-            '--with-deps',
             'chromium',
             'chromium-headless-shell',
         ]);
