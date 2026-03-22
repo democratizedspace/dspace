@@ -107,8 +107,11 @@ function readRealV2Json(options) {
   const envValue =
     process.env[options.realV2EnvVar] ||
     (options.realV2EnvVar === PRIMARY_REAL_SAVE_ENV ? process.env[LEGACY_REAL_SAVE_ENV] : '');
-  const sourceEnvVar =
-    process.env[options.realV2EnvVar] ? options.realV2EnvVar : LEGACY_REAL_SAVE_ENV;
+  const sourceEnvVar = process.env[options.realV2EnvVar]
+    ? options.realV2EnvVar
+    : options.realV2EnvVar === PRIMARY_REAL_SAVE_ENV
+      ? LEGACY_REAL_SAVE_ENV
+      : options.realV2EnvVar;
   if (!envValue) {
     return {
       payload: '',

@@ -233,6 +233,10 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
                 if (deleteButtonCount > 0) {
                     await deleteButton.first().click();
                     await expect(page.getByText('Removed legacy v1 cookies.')).toBeVisible();
+                } else {
+                    console.log(
+                        '[B.v1-cleanup-button] Delete button absent; cookies were likely cleared by a prior step, so click was skipped.'
+                    );
                 }
 
                 await expect(page.getByTestId('legacy-v1-cookie-summary')).toHaveText(
