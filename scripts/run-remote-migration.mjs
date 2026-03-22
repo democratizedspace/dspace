@@ -9,6 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const repoRoot = join(__dirname, '..');
 const frontendDir = join(repoRoot, 'frontend');
+const nodeExecutable = process.execPath;
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 const PRIMARY_REAL_SAVE_ENV = 'REMOTE_MIGRATION_REAL_V2_JSON';
@@ -138,6 +139,23 @@ function writeRealV2PayloadFile(payload) {
   return outputPath;
 }
 
+function resolvePlaywrightCliPath() {
+  const candidates = [
+    join(frontendDir, 'node_modules', '@playwright', 'test', 'cli.js'),
+    join(repoRoot, 'node_modules', '@playwright', 'test', 'cli.js'),
+  ];
+
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) {
+      return candidate;
+    }
+  }
+
+  throw new Error(
+    'Playwright CLI was not found. Run `pnpm install` in the repo root (or `npm install` with workspaces enabled).'
+  );
+}
+
 function printChecklistSummary(reportPath) {
   const absolutePath = join(frontendDir, reportPath);
   if (!existsSync(absolutePath)) {
@@ -203,8 +221,17 @@ const env = {
   REMOTE_MIGRATION_REAL_V2_JSON_PATH: realV2PayloadPath,
 };
 
+let playwrightCliPath;
+try {
+  playwrightCliPath = resolvePlaywrightCliPath();
+} catch (error) {
+  const detail = error instanceof Error ? error.message : String(error);
+  console.error(`[qa:remote-migration] ${detail}`);
+  process.exit(1);
+}
+
 const playwrightArgs = [
-  './node_modules/@playwright/test/cli.js',
+  playwrightCliPath,
   'test',
   'e2e/remote-legacy-migration.spec.ts',
   `--project=${options.project}`,
@@ -221,7 +248,7 @@ console.log(
   `[qa:remote-migration] webServer=${env.REMOTE_MIGRATION_USE_WEBSERVER === '1' ? 'managed by Playwright (local)' : 'disabled (remote target)'}`
 );
 
-const child = spawn('node', playwrightArgs, {
+const child = spawn(nodeExecutable, playwrightArgs, {
   cwd: frontendDir,
   stdio: 'inherit',
   env,

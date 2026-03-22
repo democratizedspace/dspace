@@ -102,6 +102,8 @@ describe('backups doc alignment', () => {
             inventory: { i1: 2 },
             processes: { p1: { status: 'in_progress' } },
             settings: { theme: 'dark' },
+            openAI: { apiKey: 'sk-test-export-me' },
+            github: { token: 'ghp_test_should_not_export' },
             _meta: { lastUpdated: 0 },
         };
         const encodedSave = exportGameStateString({
@@ -114,6 +116,8 @@ describe('backups doc alignment', () => {
             inventory: baseState.inventory,
             processes: baseState.processes,
         });
+        expect(decodedEnvelope.payload.openAI?.apiKey).toBeUndefined();
+        expect(decodedEnvelope.payload.github?.token).toBeUndefined();
 
         const customExport = await exportCustomContentString();
         const decodedCustom = decodeBase64Json(customExport);
