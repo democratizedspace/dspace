@@ -71,7 +71,9 @@ Flux consumption details:
   from the namespace configured via `networkPolicy.metricsScraper` (default `monitoring`) so the
   collector can reach the metrics port.
 - **Logs**: The container emits structured JSON logs (fields: `time`, `level`, `msg`, etc.) and
-  includes feature-flag metadata during startup and shutdown.
+  includes feature-flag metadata during startup and shutdown. For v3.0.0 launch readiness, these
+  operational logs are the required baseline in staging and prod; centralized error reporting is a
+  post-v3.0.0 enhancement.
 
 ## Runtime configuration service
 
