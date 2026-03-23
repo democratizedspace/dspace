@@ -4,12 +4,13 @@
 const fs = require('fs');
 const path = require('path');
 const globModule = require('glob');
+const { resolveGlobSync } = require('./helpers/resolveGlobSync');
 const {
     questHasFinishPath,
     getQuestSimulationSummary,
     questRequiresProcessOnAllFinishPaths,
 } = require('../src/utils/simulateQuest.js');
-const globSync = globModule.globSync || globModule.sync || globModule;
+const globSync = resolveGlobSync(globModule, 'questSimulation.test.js');
 
 const questFile = path.join(__dirname, '../test-data/constellations-quest.json');
 const loopQuestFile = path.join(__dirname, '../test-data/loop-quest.json');

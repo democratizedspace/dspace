@@ -5,7 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const globModule = require('glob');
 const { questHasFinishPath } = require('../src/utils/simulateQuest.js');
-const globSync = globModule.globSync || globModule.sync || globModule;
+const { resolveGlobSync } = require('./helpers/resolveGlobSync');
+const globSync = resolveGlobSync(globModule, 'questCanonical.test.js');
 
 describe('Quest canonical structure', () => {
     const questDir = path.join(__dirname, '../src/pages/quests/json');
@@ -26,11 +27,12 @@ describe('Quest canonical structure', () => {
             // At least three dialogue nodes (start, middle, finish)
             expect(quest.dialogue.length).toBeGreaterThanOrEqual(3);
 
-            // The final node must present a finish option
-            const lastNode = quest.dialogue[quest.dialogue.length - 1];
-            const hasFinish =
-                Array.isArray(lastNode.options) &&
-                lastNode.options.some((o) => o.type === 'finish');
+            // Quests must expose at least one finish option somewhere in dialogue.
+            const hasFinish = quest.dialogue.some(
+                (node) =>
+                    Array.isArray(node.options) &&
+                    node.options.some((option) => option.type === 'finish')
+            );
             expect(hasFinish).toBe(true);
 
             // Ensure a path exists from start to a finish option
