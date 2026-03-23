@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { chromium, defineConfig } from '@playwright/test';
 import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -77,7 +77,8 @@ function ensureAstroBuildArtifacts(): void {
 
 // Determine the base URL from environment variables or use default
 const protocol = process.env.PROTOCOL || 'http';
-const port = process.env.PLAYWRIGHT_PORT ? parseInt(process.env.PLAYWRIGHT_PORT, 10) : 4173;
+const fallbackPort = 4173 + (process.pid % 1000);
+const port = process.env.PLAYWRIGHT_PORT ? parseInt(process.env.PLAYWRIGHT_PORT, 10) : fallbackPort;
 // Propagate the resolved port so preview/server commands and downstream tools
 // stay aligned even when the host sets a default PORT.
 process.env.PLAYWRIGHT_PORT = String(port);
@@ -103,13 +104,15 @@ type PlaywrightProjectConfig = NonNullable<PlaywrightConfig['projects']>[number]
 const chromiumExecutable =
     process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH &&
     process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH.trim();
+const detectedChromiumExecutable = chromium.executablePath();
+const resolvedChromiumExecutable = chromiumExecutable || detectedChromiumExecutable;
 
 const AVAILABLE_PROJECTS: PlaywrightProjectConfig[] = [
     {
         name: 'chromium',
         use: {
             launchOptions: {
-                executablePath: chromiumExecutable || undefined,
+                executablePath: resolvedChromiumExecutable || undefined,
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
@@ -299,7 +302,9 @@ export default defineConfig({
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,
-              timeout: isCI ? 180000 : 30000,
+              // Local preview startup can exceed 30s after cache resets or fresh installs.
+              // Keep parity with CI timeout so webServer startup does not fail before route assertions run.
+              timeout: 180000,
               env: {
                   ...process.env,
                   PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',

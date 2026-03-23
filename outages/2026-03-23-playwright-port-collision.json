@@ -1,0 +1,10 @@
+{
+  "id": "OUT-2026-03-23-playwright-port-collision",
+  "date": "2026-03-23",
+  "component": "frontend Playwright preview webServer",
+  "rootCause": "Playwright reused a fixed default port (4173) for all local runs. Interrupted or parallel sessions could leave the port occupied, causing EADDRINUSE and aborting E2E suites before assertions executed.",
+  "resolution": "Default Playwright port now derives from process PID when no explicit PLAYWRIGHT_PORT is provided, reducing local collisions while still allowing deterministic override via environment variables.",
+  "references": [
+    "docs/qa/v3.md#21-ci--local-automation-must-be-green"
+  ]
+}

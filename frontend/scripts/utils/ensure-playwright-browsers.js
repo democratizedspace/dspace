@@ -6,6 +6,7 @@ const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test',
 const INSTALL_ARGS = ['install', 'chromium', 'chromium-headless-shell'];
 const INSTALL_DEPS_ARGS = ['install-deps'];
 const INSTALL_DEPS_SENTINEL = '.playwright-deps-installed';
+const LINUX_SHARED_LIB_MARKERS = ['/usr/lib/x86_64-linux-gnu/libatk-1.0.so.0'];
 const PROXY_ENV_KEYS = [
     'HTTP_PROXY',
     'http_proxy',
@@ -189,10 +190,6 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         return;
     }
 
-    if (hasChromiumExecutable(browser)) {
-        return;
-    }
-
     const cliPath = resolvePlaywrightCLI(cwd, fs);
 
     if (installSystemDeps) {
@@ -205,6 +202,10 @@ export async function ensurePlaywrightBrowsers(options = {}) {
             exec,
             fs,
         });
+    }
+
+    if (hasChromiumExecutable(browser)) {
+        return;
     }
 
     exec(process.execPath, [cliPath, ...installArgs], {
@@ -245,6 +246,10 @@ export function ensurePlaywrightSystemDeps(options = {}) {
     }
 
     if (env.PLAYWRIGHT_SKIP_INSTALL_DEPS === '1') {
+        return false;
+    }
+
+    if (LINUX_SHARED_LIB_MARKERS.some((libPath) => fsExistsSync(libPath))) {
         return false;
     }
 

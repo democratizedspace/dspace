@@ -1,0 +1,10 @@
+{
+  "id": "OUT-2026-03-23-quest-graph-map-interaction-coverage-gap",
+  "date": "2026-03-23",
+  "component": "frontend grouped Playwright test runner",
+  "rootCause": "Quest graph map interaction specs were listed in the broad Quest Tests group but filtered out by a restrictive grep expression targeting only custom quest-management flows. As a result, viewport and keyboard interaction coverage did not execute in grouped E2E runs.",
+  "resolution": "Created a dedicated Quest Graph Map Interactions test group without grep filtering and moved map viewport/keyboard specs into it, ensuring grouped E2E and one-command PR runs execute this coverage every time.",
+  "references": [
+    "docs/qa/v3.md#22-data-validation-automation-content-is-code"
+  ]
+}

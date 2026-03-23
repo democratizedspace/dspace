@@ -48,6 +48,15 @@ function writeQuestGraphDebugMarker(rootDir, enabled) {
     }
 }
 
+function removeDistArtifacts(rootDir, logger) {
+    const distDir = path.join(rootDir, 'dist');
+    try {
+        fs.rmSync(distDir, { recursive: true, force: true });
+    } catch (error) {
+        logger.warn?.(`Failed to clear dist artifacts before rebuild: ${error.message}`);
+    }
+}
+
 export function ensureAstroBuild(options = {}) {
     const { root = defaultRootDir, exec = execSync, logger = console } = options;
 
@@ -70,6 +79,7 @@ export function ensureAstroBuild(options = {}) {
         : 'Astro build artifacts missing or incomplete. Building the app for Playwright preview...';
 
     logger.log?.(rebuildReason);
+    removeDistArtifacts(root, logger);
 
     try {
         exec('npm run build', { cwd: root, stdio: 'inherit' });

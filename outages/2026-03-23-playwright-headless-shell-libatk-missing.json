@@ -1,0 +1,10 @@
+{
+  "id": "OUT-2026-03-23-playwright-headless-shell-libatk-missing",
+  "date": "2026-03-23",
+  "component": "frontend Playwright Chromium launcher",
+  "rootCause": "Playwright defaulted to chromium_headless_shell in headless mode, but the execution environment lacked libatk system libraries required by that binary. Grouped E2E runs failed before tests executed meaningful assertions.",
+  "resolution": "Resolved Chromium launch configuration to always use the full Chromium executable path when available (env override first, then Playwright-detected executable), bypassing the headless-shell binary that requires unavailable system libs.",
+  "references": [
+    "docs/qa/v3.md#21-ci--local-automation-must-be-green"
+  ]
+}

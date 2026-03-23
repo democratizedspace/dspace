@@ -1,0 +1,10 @@
+{
+  "id": "OUT-2026-03-23-playwright-deps-install-order",
+  "date": "2026-03-23",
+  "component": "frontend Playwright browser bootstrap",
+  "rootCause": "The browser bootstrap returned early as soon as a Chromium executable file existed, so Linux system dependency installation never ran. In minimal environments this left required shared libs (for example libatk-1.0.so.0) missing, causing Playwright launch failures.",
+  "resolution": "Changed ensurePlaywrightBrowsers to run install-deps before the early return on existing Chromium binaries, and added a regression test that enforces this ordering.",
+  "references": [
+    "docs/qa/v3.md#21-ci--local-automation-must-be-green"
+  ]
+}

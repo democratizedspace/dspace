@@ -1,0 +1,10 @@
+{
+  "id": "OUT-2026-03-23-astro-dist-stale-manifest",
+  "date": "2026-03-23",
+  "component": "frontend Playwright build bootstrap",
+  "rootCause": "Repeated preview rebuilds reused stale dist artifacts, which could leave a manifest referencing chunk filenames that no longer existed. Playwright setup then failed before any E2E assertions ran.",
+  "resolution": "ensure-astro-build now clears the dist directory before invoking npm run build, and a regression test verifies stale build artifacts are removed before rebuild.",
+  "references": [
+    "docs/qa/v3.md#21-ci--local-automation-must-be-green"
+  ]
+}

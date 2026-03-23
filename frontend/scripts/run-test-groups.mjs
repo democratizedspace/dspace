@@ -179,8 +179,6 @@ const TEST_GROUPS = [
             'quest-graph-visibility-toggle.spec.ts',
             'quest-graph-ancestry.spec.ts',
             'quest-graph-unreachable.spec.ts',
-            'quest-graph-map-viewport.spec.ts',
-            'quest-graph-map-keyboard.spec.ts',
             'quest-graph-diagnostics-copy.spec.ts',
             'quest-graph-download.spec.ts',
             'quest-grant-items.spec.ts',
@@ -195,6 +193,12 @@ const TEST_GROUPS = [
         grep: 'create and view a custom quest|Quest Management|quest PR form',
         parallel: true,
         workers: 2,
+    },
+    {
+        name: 'Quest Graph Map Interactions',
+        files: ['quest-graph-map-viewport.spec.ts', 'quest-graph-map-keyboard.spec.ts'],
+        parallel: false,
+        workers: 1,
     },
     {
         name: 'Quest PR Validation',

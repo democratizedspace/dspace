@@ -1,0 +1,10 @@
+{
+  "id": "OUT-2026-03-23-playwright-webserver-timeout",
+  "date": "2026-03-23",
+  "component": "frontend Playwright webServer bootstrap",
+  "rootCause": "Playwright's local webServer timeout was capped at 30 seconds outside CI, but Astro preview startup can exceed that window after fresh installs or rebuilt artifacts. The test runner aborted before E2E specs started, creating false-red CI parity checks.",
+  "resolution": "Raised Playwright webServer timeout to 180 seconds for all environments so startup jitter does not preempt test execution. This aligns local behavior with CI and lets route/E2E assertions run reliably.",
+  "references": [
+    "docs/qa/v3.md#21-ci--local-automation-must-be-green"
+  ]
+}
