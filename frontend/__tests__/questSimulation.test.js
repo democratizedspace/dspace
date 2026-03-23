@@ -9,7 +9,15 @@ const {
     getQuestSimulationSummary,
     questRequiresProcessOnAllFinishPaths,
 } = require('../src/utils/simulateQuest.js');
-const globSync = globModule.globSync || globModule.sync;
+const globSync =
+    (typeof globModule.globSync === 'function' && globModule.globSync) ||
+    (typeof globModule.sync === 'function' && globModule.sync);
+
+if (typeof globSync !== 'function') {
+    throw new Error(
+        'Unsupported "glob" module API: expected globSync or sync to be a function.'
+    );
+}
 
 const questFile = path.join(__dirname, '../test-data/constellations-quest.json');
 const loopQuestFile = path.join(__dirname, '../test-data/loop-quest.json');

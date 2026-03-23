@@ -293,13 +293,13 @@ export default defineConfig({
     // Configure webServer to start the app server before running tests
     webServer: shouldUseWebServer
         ? {
-              // setup-test-env already ensures build artifacts exist; preview directly to avoid
-              // redundant rebuilds that can exceed Playwright's startup timeout in CI containers.
-              command: `npx astro preview --host 0.0.0.0 --port ${port}`,
+              // Ensure preview always has complete, test-compatible build artifacts, including
+              // quest-graph debug marker checks for direct Playwright invocation.
+              command: `node ./scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,
-              timeout: 180000,
+              timeout: isCI ? 180000 : 30000,
               env: {
                   ...process.env,
                   PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',

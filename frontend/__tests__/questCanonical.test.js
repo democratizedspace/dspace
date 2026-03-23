@@ -5,7 +5,15 @@ const fs = require('fs');
 const path = require('path');
 const globModule = require('glob');
 const { questHasFinishPath } = require('../src/utils/simulateQuest.js');
-const globSync = globModule.globSync || globModule.sync;
+const globSync =
+    (typeof globModule.globSync === 'function' && globModule.globSync) ||
+    (typeof globModule.sync === 'function' && globModule.sync);
+
+if (typeof globSync !== 'function') {
+    throw new Error(
+        'Unsupported "glob" module API: expected globSync or sync to be a function.'
+    );
+}
 
 describe('Quest canonical structure', () => {
     const questDir = path.join(__dirname, '../src/pages/quests/json');
