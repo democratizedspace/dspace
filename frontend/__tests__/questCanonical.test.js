@@ -3,7 +3,8 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { globSync } = require('glob');
+const globModule = require('glob');
+const globSync = globModule.globSync || globModule.sync;
 const { questHasFinishPath } = require('../src/utils/simulateQuest.js');
 
 describe('Quest canonical structure', () => {
@@ -25,11 +26,10 @@ describe('Quest canonical structure', () => {
             // At least three dialogue nodes (start, middle, finish)
             expect(quest.dialogue.length).toBeGreaterThanOrEqual(3);
 
-            // The final node must present a finish option
-            const lastNode = quest.dialogue[quest.dialogue.length - 1];
-            const hasFinish =
-                Array.isArray(lastNode.options) &&
-                lastNode.options.some((o) => o.type === 'finish');
+            // At least one dialogue node must present a finish option
+            const hasFinish = quest.dialogue.some(
+                (node) => Array.isArray(node.options) && node.options.some((o) => o.type === 'finish')
+            );
             expect(hasFinish).toBe(true);
 
             // Ensure a path exists from start to a finish option

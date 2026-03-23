@@ -3,7 +3,8 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { globSync } = require('glob');
+const globModule = require('glob');
+const globSync = globModule.globSync || globModule.sync;
 
 // Define paths
 const questDirectoryRelativePath = '../src/pages/quests/json/';
