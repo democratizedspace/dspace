@@ -26,6 +26,37 @@ if (!process.env.BASE_URL) {
     process.env.BASE_URL = `http://127.0.0.1:${DEFAULT_PLAYWRIGHT_PORT}`;
 }
 
+function clearStalePreviewServer(port) {
+    try {
+        const pidOutput = execSync(`lsof -tiTCP:${port} -sTCP:LISTEN`, {
+            stdio: ['ignore', 'pipe', 'ignore'],
+        })
+            .toString()
+            .trim();
+        if (!pidOutput) {
+            return;
+        }
+
+        const pids = pidOutput
+            .split('\n')
+            .map((value) => value.trim())
+            .filter(Boolean);
+        for (const pid of pids) {
+            try {
+                process.kill(Number(pid), 'SIGTERM');
+            } catch {
+                // best-effort cleanup only
+            }
+        }
+    } catch {
+        // No listener found (or lsof unavailable); continue.
+    }
+}
+
+const includeRemoteSmoke = process.env.REMOTE_SMOKE === '1';
+const includeRemoteMigration = process.env.REMOTE_MIGRATION === '1';
+const includeRemoteCompletionistAwardIII = process.env.REMOTE_COMPLETIONIST_AWARD_III === '1';
+
 // Configuration: Test groups
 const TEST_GROUPS = [
     {
@@ -34,24 +65,36 @@ const TEST_GROUPS = [
         parallel: false,
         workers: 1,
     },
-    {
-        name: 'Remote Release Smoke',
-        files: ['remote-release-smoke.spec.ts'],
-        parallel: false,
-        workers: 1,
-    },
-    {
-        name: 'Remote Legacy Migration',
-        files: ['remote-legacy-migration.spec.ts'],
-        parallel: false,
-        workers: 1,
-    },
-    {
-        name: 'Remote Completionist Award III',
-        files: ['remote-completionist-award-iii.spec.ts'],
-        parallel: false,
-        workers: 1,
-    },
+    ...(includeRemoteSmoke
+        ? [
+              {
+                  name: 'Remote Release Smoke',
+                  files: ['remote-release-smoke.spec.ts'],
+                  parallel: false,
+                  workers: 1,
+              },
+          ]
+        : []),
+    ...(includeRemoteMigration
+        ? [
+              {
+                  name: 'Remote Legacy Migration',
+                  files: ['remote-legacy-migration.spec.ts'],
+                  parallel: false,
+                  workers: 1,
+              },
+          ]
+        : []),
+    ...(includeRemoteCompletionistAwardIII
+        ? [
+              {
+                  name: 'Remote Completionist Award III',
+                  files: ['remote-completionist-award-iii.spec.ts'],
+                  parallel: false,
+                  workers: 1,
+              },
+          ]
+        : []),
     {
         name: 'Structure Tests',
         files: [
@@ -81,8 +124,8 @@ const TEST_GROUPS = [
             'leaderboard.spec.ts',
             'settings-page.spec.ts',
         ],
-        parallel: true,
-        workers: MAX_WORKERS,
+        parallel: false,
+        workers: 1,
     },
     {
         name: 'Docs Experience',
@@ -246,6 +289,7 @@ const PLAYWRIGHT_COMMAND = `node ${JSON.stringify(PLAYWRIGHT_CLI)} test`;
 
 // Function to run a test group
 function runTestGroup(group) {
+    clearStalePreviewServer(DEFAULT_PLAYWRIGHT_PORT);
     console.log(`${colors.bright}${colors.blue}Running ${group.name}${colors.reset}`);
 
     let command = PLAYWRIGHT_COMMAND;

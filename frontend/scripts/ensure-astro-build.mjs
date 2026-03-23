@@ -71,14 +71,29 @@ export function ensureAstroBuild(options = {}) {
 
     logger.log?.(rebuildReason);
 
+    const runBuild = () => exec('npm run build', { cwd: root, stdio: 'inherit' });
+
     try {
-        exec('npm run build', { cwd: root, stdio: 'inherit' });
+        runBuild();
         writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
     } catch (error) {
-        (logger.error ?? console.error)(
-            'Failed to build Astro project required for Playwright preview.'
+        const shouldRetryCleanBuild =
+            error instanceof Error &&
+            /ENOENT|no such file or directory/i.test(error.message || '');
+
+        if (!shouldRetryCleanBuild) {
+            (logger.error ?? console.error)(
+                'Failed to build Astro project required for Playwright preview.'
+            );
+            throw error;
+        }
+
+        logger.warn?.(
+            'Astro build encountered missing dist artifacts. Removing dist/ and retrying once...'
         );
-        throw error;
+        fs.rmSync(path.join(root, 'dist'), { recursive: true, force: true });
+        runBuild();
+        writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
     }
 }
 

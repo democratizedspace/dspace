@@ -93,7 +93,14 @@ describe('run-test-groups', () => {
       TEST_GROUPS.flatMap((group: any) => (group.files ? group.files : []))
     );
 
-    const missingFiles = specFiles.filter((file) => !groupedFiles.has(file));
+    const optionalRemoteSpecs = new Set([
+      'remote-release-smoke.spec.ts',
+      'remote-legacy-migration.spec.ts',
+      'remote-completionist-award-iii.spec.ts',
+    ]);
+    const missingFiles = specFiles.filter(
+      (file) => !groupedFiles.has(file) && !optionalRemoteSpecs.has(file)
+    );
 
     expect(missingFiles).toEqual([]);
   });
