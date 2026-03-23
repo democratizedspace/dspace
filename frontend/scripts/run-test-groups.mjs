@@ -286,10 +286,23 @@ function runTestGroup(group) {
 }
 
 function main() {
+    const activeGroups = TEST_GROUPS.filter((group) => {
+        if (group.name === 'Remote Release Smoke') {
+            return process.env.REMOTE_SMOKE === '1';
+        }
+        if (group.name === 'Remote Legacy Migration') {
+            return process.env.REMOTE_MIGRATION === '1';
+        }
+        if (group.name === 'Remote Completionist Award III') {
+            return process.env.REMOTE_COMPLETIONIST_AWARD_III === '1';
+        }
+        return true;
+    });
+
     console.log(
         `${colors.bright}${colors.magenta}Starting DSpace Test Suite in Groups${colors.reset}`
     );
-    console.log(`${colors.yellow}Total groups: ${TEST_GROUPS.length}${colors.reset}`);
+    console.log(`${colors.yellow}Total groups: ${activeGroups.length}${colors.reset}`);
     console.log(
         `${colors.yellow}System has ${CPU_CORES} CPU cores, using up to ${MAX_WORKERS} workers for parallel tests${colors.reset}\n`
     );
@@ -299,10 +312,10 @@ function main() {
     let failureCount = 0;
 
     // Run each group in sequence
-    for (let i = 0; i < TEST_GROUPS.length; i++) {
-        const group = TEST_GROUPS[i];
+    for (let i = 0; i < activeGroups.length; i++) {
+        const group = activeGroups[i];
         console.log(
-            `${colors.yellow}Group ${i + 1}/${TEST_GROUPS.length}: ${group.name}${colors.reset}`
+            `${colors.yellow}Group ${i + 1}/${activeGroups.length}: ${group.name}${colors.reset}`
         );
 
         const groupStartTime = Date.now();

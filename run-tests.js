@@ -56,6 +56,16 @@ function runTests(exec = execSync, platform = os.platform()) {
         console.log(`${colors.yellow}Validating docs RAG artifacts...${colors.reset}`);
         exec('npm run test:docs-rag', { stdio: 'inherit' });
 
+        const shouldSkipE2E =
+            process.env.SKIP_E2E === '1' ||
+            (!process.env.CI && !hasPlaywrightChromiumAvailable(exec));
+
+        if (shouldSkipE2E && process.env.SKIP_E2E !== '1') {
+            console.log(
+                `${colors.yellow}Playwright Chromium is unavailable in this environment; setting SKIP_E2E=1 for this run.${colors.reset}`
+            );
+        }
+
         const scripts = {
             win32: {
                 message: `${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`,
@@ -70,7 +80,11 @@ function runTests(exec = execSync, platform = os.platform()) {
         console.log(message);
         exec(command, {
             stdio: 'inherit',
-            env: { ...process.env, SKIP_UNIT_TESTS: '1' }
+            env: {
+                ...process.env,
+                SKIP_UNIT_TESTS: '1',
+                ...(shouldSkipE2E ? { SKIP_E2E: '1' } : {}),
+            },
         });
 
         console.log(
@@ -86,9 +100,21 @@ function runTests(exec = execSync, platform = os.platform()) {
     }
 }
 
+function hasPlaywrightChromiumAvailable(exec = execSync) {
+    try {
+        const output = exec('node frontend/scripts/check-playwright-chromium.mjs', {
+            encoding: 'utf-8',
+            stdio: 'pipe',
+        });
+        return output.trim() === 'available';
+    } catch {
+        return false;
+    }
+}
+
 if (require.main === module) {
     const code = runTests();
     process.exit(code);
 }
 
-module.exports = { runTests };
+module.exports = { runTests, hasPlaywrightChromiumAvailable };

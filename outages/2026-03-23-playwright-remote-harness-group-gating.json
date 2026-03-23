@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-23-playwright-remote-harness-group-gating",
+  "date": "2026-03-23",
+  "component": "frontend-playwright-group-runner",
+  "longForm": "outages/2026-03-23-playwright-remote-harness-group-gating.md",
+  "rootCause": "run-test-groups executed remote harness groups during default local grouped runs, relying only on in-spec skip guards instead of orchestration-level gating.",
+  "resolution": "Filtered active test groups in run-test-groups main() so remote harness groups run only when their corresponding REMOTE_* env flag is set. Added a regression test to keep the gating in place.",
+  "references": [
+    "frontend/scripts/run-test-groups.mjs",
+    "tests/run-test-groups.test.ts"
+  ]
+}

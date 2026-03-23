@@ -106,4 +106,16 @@ describe('run-test-groups', () => {
     expect(integrationGroup.grep).toContain('integrate custom items, processes, and quests');
     expect(integrationGroup.parallel).toBe(false);
   });
+
+  it('gates remote harness groups behind explicit environment flags', () => {
+    const scriptPath = path.resolve(__dirname, '../frontend/scripts/run-test-groups.mjs');
+    const script = fs.readFileSync(scriptPath, 'utf8');
+
+    expect(script).toContain("group.name === 'Remote Release Smoke'");
+    expect(script).toContain("process.env.REMOTE_SMOKE === '1'");
+    expect(script).toContain("group.name === 'Remote Legacy Migration'");
+    expect(script).toContain("process.env.REMOTE_MIGRATION === '1'");
+    expect(script).toContain("group.name === 'Remote Completionist Award III'");
+    expect(script).toContain("process.env.REMOTE_COMPLETIONIST_AWARD_III === '1'");
+  });
 });

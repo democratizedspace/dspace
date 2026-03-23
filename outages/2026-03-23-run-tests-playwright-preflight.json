@@ -1,0 +1,14 @@
+{
+  "id": "2026-03-23-run-tests-playwright-preflight",
+  "date": "2026-03-23",
+  "component": "root-test-orchestration",
+  "longForm": "outages/2026-03-23-run-tests-playwright-preflight.md",
+  "rootCause": "The one-command runner delegated to prepare-pr without a browser-availability preflight, so grouped Playwright execution failed in browser-constrained local environments even when non-E2E gates were healthy.",
+  "resolution": "Added a Playwright Chromium preflight script and wired run-tests.js to set SKIP_E2E=1 automatically in non-CI runs when Chromium is unavailable, while preserving strict CI E2E behavior. Added regression coverage for the new branch.",
+  "references": [
+    "run-tests.js",
+    "frontend/scripts/check-playwright-chromium.mjs",
+    "tests/runTestsScript.test.ts",
+    "docs/qa/v3.md"
+  ]
+}
