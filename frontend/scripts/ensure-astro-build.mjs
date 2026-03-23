@@ -48,6 +48,19 @@ function writeQuestGraphDebugMarker(rootDir, enabled) {
     }
 }
 
+function removeDistDirectory(rootDir, logger) {
+    const distDir = path.join(rootDir, 'dist');
+    if (!fs.existsSync(distDir)) {
+        return;
+    }
+
+    try {
+        fs.rmSync(distDir, { recursive: true, force: true });
+    } catch (error) {
+        logger.warn?.(`Failed to remove stale dist directory: ${error.message}`);
+    }
+}
+
 export function ensureAstroBuild(options = {}) {
     const { root = defaultRootDir, exec = execSync, logger = console } = options;
 
@@ -72,6 +85,7 @@ export function ensureAstroBuild(options = {}) {
     logger.log?.(rebuildReason);
 
     try {
+        removeDistDirectory(root, logger);
         exec('npm run build', { cwd: root, stdio: 'inherit' });
         writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
     } catch (error) {

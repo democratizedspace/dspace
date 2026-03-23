@@ -1,6 +1,7 @@
 import { defineConfig } from '@playwright/test';
 import { execSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync, rmSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ensurePlaywrightBrowsers } from './scripts/utils/ensure-playwright-browsers.js';
@@ -35,6 +36,51 @@ declare const process: {
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
 
+function resolveCachedChromiumExecutable(): string | null {
+    const candidates = [
+        process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+        process.env.CHROME_BIN,
+        process.env.CHROMIUM_BIN,
+    ]
+        .map((value) => value?.trim())
+        .filter(Boolean) as string[];
+
+    for (const candidate of candidates) {
+        if (existsSync(candidate)) {
+            return candidate;
+        }
+    }
+
+    const msPlaywrightCache = join(homedir(), '.cache', 'ms-playwright');
+    if (!existsSync(msPlaywrightCache)) {
+        return null;
+    }
+
+    const chromiumDirs = readdirSync(msPlaywrightCache)
+        .filter((entry) => entry.startsWith('chromium-'))
+        .sort((a, b) => b.localeCompare(a));
+
+    for (const dir of chromiumDirs) {
+        const executableCandidates = [
+            join(msPlaywrightCache, dir, 'chrome-linux', 'chrome'),
+            join(msPlaywrightCache, dir, 'chrome-linux64', 'chrome'),
+        ];
+
+        for (const executablePath of executableCandidates) {
+            if (existsSync(executablePath)) {
+                return executablePath;
+            }
+        }
+    }
+
+    return null;
+}
+
+const cachedChromiumExecutable = resolveCachedChromiumExecutable();
+if (cachedChromiumExecutable && !process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH) {
+    process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH = cachedChromiumExecutable;
+}
+
 // Try to ensure Playwright browsers are available
 // In CI, browsers may be pre-installed or handled separately
 const skipSystemDepsInstall =
@@ -68,6 +114,7 @@ function ensureAstroBuildArtifacts(): void {
 
     console.log('Astro build artifacts not found. Building before Playwright preview.');
     try {
+        rmSync(join(frontendDir, 'dist'), { recursive: true, force: true });
         execSync('npm run build', { cwd: frontendDir, stdio: 'inherit' });
     } catch (error) {
         console.error('Failed to build Astro project required for Playwright preview.');

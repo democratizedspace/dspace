@@ -26,6 +26,53 @@ if (!process.env.BASE_URL) {
     process.env.BASE_URL = `http://127.0.0.1:${DEFAULT_PLAYWRIGHT_PORT}`;
 }
 
+function findCachedChromiumExecutable() {
+    const explicitCandidates = [
+        process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+        process.env.CHROME_BIN,
+        process.env.CHROMIUM_BIN,
+    ]
+        .map((value) => value?.trim())
+        .filter(Boolean);
+
+    for (const candidate of explicitCandidates) {
+        if (fs.existsSync(candidate)) {
+            return candidate;
+        }
+    }
+
+    const cacheDir = path.join(os.homedir(), '.cache', 'ms-playwright');
+    if (!fs.existsSync(cacheDir)) {
+        return null;
+    }
+
+    const chromiumDirs = fs
+        .readdirSync(cacheDir)
+        .filter((entry) => entry.startsWith('chromium-'))
+        .sort((a, b) => b.localeCompare(a));
+
+    for (const dir of chromiumDirs) {
+        const candidates = [
+            path.join(cacheDir, dir, 'chrome-linux', 'chrome'),
+            path.join(cacheDir, dir, 'chrome-linux64', 'chrome'),
+        ];
+
+        for (const candidate of candidates) {
+            if (fs.existsSync(candidate)) {
+                return candidate;
+            }
+        }
+    }
+
+    return null;
+}
+
+const cachedChromiumExecutable = findCachedChromiumExecutable();
+if (cachedChromiumExecutable) {
+    process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH = cachedChromiumExecutable;
+    process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS = process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS || '1';
+}
+
 // Configuration: Test groups
 const TEST_GROUPS = [
     {
