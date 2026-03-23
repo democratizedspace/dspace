@@ -71,15 +71,19 @@ export function ensureAstroBuild(options = {}) {
 
     logger.log?.(rebuildReason);
 
-    const runBuild = () => exec('npm run build', { cwd: root, stdio: 'inherit' });
+    const runBuild = () => exec('npm run build', { cwd: root, stdio: ['inherit', 'inherit', 'pipe'] });
 
     try {
         runBuild();
         writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
     } catch (error) {
+        const errorOutput =
+            (error instanceof Error ? error.message : '') +
+            (error && typeof error === 'object' && error.stderr
+                ? `\n${error.stderr.toString()}`
+                : '');
         const shouldRetryCleanBuild =
-            error instanceof Error &&
-            /ENOENT|no such file or directory/i.test(error.message || '');
+            /ENOENT|no such file or directory/i.test(errorOutput);
 
         if (!shouldRetryCleanBuild) {
             (logger.error ?? console.error)(
@@ -91,9 +95,16 @@ export function ensureAstroBuild(options = {}) {
         logger.warn?.(
             'Astro build encountered missing dist artifacts. Removing dist/ and retrying once...'
         );
-        fs.rmSync(path.join(root, 'dist'), { recursive: true, force: true });
-        runBuild();
-        writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
+        try {
+            fs.rmSync(path.join(root, 'dist'), { recursive: true, force: true });
+            runBuild();
+            writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
+        } catch (retryError) {
+            (logger.error ?? console.error)(
+                'Failed to build Astro project required for Playwright preview (retry after dist/ removal).'
+            );
+            throw retryError;
+        }
     }
 }
 

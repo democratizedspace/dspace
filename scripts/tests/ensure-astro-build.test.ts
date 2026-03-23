@@ -46,4 +46,40 @@ describe('ensureAstroBuild', () => {
 
         expect(execSpy).not.toHaveBeenCalled();
     });
+
+    it('retries once after removing dist when stderr includes ENOENT', () => {
+        const buildError = new Error('Command failed: npm run build') as Error & { stderr?: Buffer };
+        buildError.stderr = Buffer.from('ENOENT: no such file or directory');
+        execSpy
+            .mockImplementationOnce(() => {
+                throw buildError;
+            })
+            .mockImplementationOnce(() => undefined);
+
+        ensureAstroBuild({ root: tempDir, exec: execSpy, logger });
+
+        expect(execSpy).toHaveBeenCalledTimes(2);
+        expect(logger.warn).toHaveBeenCalledWith(
+            'Astro build encountered missing dist artifacts. Removing dist/ and retrying once...'
+        );
+    });
+
+    it('logs a retry-specific error message when retry build fails', () => {
+        const firstError = new Error('Command failed: npm run build') as Error & { stderr?: Buffer };
+        firstError.stderr = Buffer.from('ENOENT: no such file or directory');
+        const secondError = new Error('second build failed');
+
+        execSpy
+            .mockImplementationOnce(() => {
+                throw firstError;
+            })
+            .mockImplementationOnce(() => {
+                throw secondError;
+            });
+
+        expect(() => ensureAstroBuild({ root: tempDir, exec: execSpy, logger })).toThrow(secondError);
+        expect(logger.error).toHaveBeenCalledWith(
+            'Failed to build Astro project required for Playwright preview (retry after dist/ removal).'
+        );
+    });
 });

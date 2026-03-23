@@ -26,9 +26,21 @@ if (!process.env.BASE_URL) {
     process.env.BASE_URL = `http://127.0.0.1:${DEFAULT_PLAYWRIGHT_PORT}`;
 }
 
+const shouldClearStalePreviewServer = process.env.CLEAR_STALE_PREVIEW_SERVER === '1';
+
 function clearStalePreviewServer(port) {
+    if (!shouldClearStalePreviewServer) {
+        return;
+    }
+
+    const safePort = String(port).trim();
+    if (!/^\d{2,5}$/.test(safePort)) {
+        console.warn(`Skipping stale preview cleanup due to invalid port value: ${safePort}`);
+        return;
+    }
+
     try {
-        const pidOutput = execSync(`lsof -tiTCP:${port} -sTCP:LISTEN`, {
+        const pidOutput = execSync(`lsof -tiTCP:${safePort} -sTCP:LISTEN`, {
             stdio: ['ignore', 'pipe', 'ignore'],
         })
             .toString()
@@ -41,6 +53,7 @@ function clearStalePreviewServer(port) {
             .split('\n')
             .map((value) => value.trim())
             .filter(Boolean);
+        console.log(`Clearing stale preview listener(s) on port ${safePort}: ${pids.join(', ')}`);
         for (const pid of pids) {
             try {
                 process.kill(Number(pid), 'SIGTERM');
