@@ -3,8 +3,10 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { globSync } = require('glob');
+const globModule = require('glob');
 const { findQuestDependencyIssues } = require('../src/utils/questDependencies.js');
+const { resolveGlobSync } = require('./helpers/resolveGlobSync');
+const globSync = resolveGlobSync(globModule, 'questDependencies.test.js');
 
 describe('Quest dependency integrity', () => {
     const questDir = path.join(__dirname, '../src/pages/quests/json');
