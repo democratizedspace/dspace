@@ -76,6 +76,12 @@ function openDB() {
     if (!dbPromise) {
         dbPromise = new Promise((resolve, reject) => {
             const request = indexedDB.open(DB_NAME, DB_VERSION);
+            const timeoutMs = 3000;
+            const timeoutId = setTimeout(() => {
+                reject(new Error(`IndexedDB open timed out after ${timeoutMs}ms`));
+            }, timeoutMs);
+
+            const clearTimeoutGuard = () => clearTimeout(timeoutId);
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
                 if (!db.objectStoreNames.contains(STATE_STORE)) {
@@ -89,6 +95,7 @@ function openDB() {
                 }
             };
             request.onsuccess = () => {
+                clearTimeoutGuard();
                 const db = request.result;
                 dbInstance = db;
                 db.onclose = () => {
@@ -106,7 +113,14 @@ function openDB() {
                 };
                 resolve(db);
             };
-            request.onerror = () => reject(request.error);
+            request.onblocked = () => {
+                clearTimeoutGuard();
+                reject(new Error('IndexedDB open blocked by another context'));
+            };
+            request.onerror = () => {
+                clearTimeoutGuard();
+                reject(request.error);
+            };
         });
     }
     return dbPromise;
