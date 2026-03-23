@@ -36,7 +36,7 @@ const TOOLBOX_AND_EDITORS = [
 ];
 
 test.describe('Nav route smoke', () => {
-    test.setTimeout(120_000);
+    test.setTimeout(300_000);
 
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);

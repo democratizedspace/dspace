@@ -10,17 +10,26 @@ const defaultRootDir = path.resolve(__dirname, '..');
 const questGraphDebugEnvFlag = process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true';
 
 function hasClientAssets(rootDir, logger) {
-    const clientAssetsDir = path.join(rootDir, 'dist', 'client', '_astro');
+    const candidateDirs = [
+        path.join(rootDir, 'dist', 'client', '_astro'),
+        path.join(rootDir, 'dist', '_astro'),
+        path.join(rootDir, 'dist', 'server', '_astro'),
+    ];
 
-    try {
-        const entries = fs.readdirSync(clientAssetsDir, { withFileTypes: true });
-        return entries.some((entry) => entry.isFile());
-    } catch (error) {
-        if (error.code !== 'ENOENT') {
-            logger.warn?.(`Failed to inspect client assets directory: ${error.message}`);
+    for (const clientAssetsDir of candidateDirs) {
+        try {
+            const entries = fs.readdirSync(clientAssetsDir, { withFileTypes: true });
+            if (entries.some((entry) => entry.isFile())) {
+                return true;
+            }
+        } catch (error) {
+            if (error.code !== 'ENOENT') {
+                logger.warn?.(`Failed to inspect client assets directory: ${error.message}`);
+            }
         }
-        return false;
     }
+
+    return false;
 }
 
 function getQuestGraphDebugMarker(rootDir) {

@@ -1,0 +1,10 @@
+{
+  "id": "2026-03-23-process-catalog-import-attributes",
+  "date": "2026-03-23",
+  "component": "frontend/build",
+  "rootCause": "The process catalog JSON was imported with `assert { type: 'json' }` in one code path and without attributes elsewhere. Vite/Rollup requires consistent import attributes for the same module, and the mismatch destabilized Astro server builds used by Playwright.",
+  "resolution": "Removed the one-off import assertion from gameState's lazy process-catalog import so all imports of src/generated/processes.json use the same module resolution path.",
+  "references": [
+    "docs/qa/v3.md#21-ci--local-automation-must-be-green"
+  ]
+}

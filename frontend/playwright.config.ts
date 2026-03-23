@@ -293,9 +293,10 @@ export default defineConfig({
     // Configure webServer to start the app server before running tests
     webServer: shouldUseWebServer
         ? {
-              // Ensure preview always has complete, test-compatible build artifacts, including
-              // quest-graph debug marker checks for direct Playwright invocation.
-              command: `node ./scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
+              // setup-test-env already guarantees build artifacts for scripted runs; keep the
+              // webServer startup path lightweight so grouped suites do not trigger redundant
+              // rebuilds and timeout before assertions execute.
+              command: `npx astro preview --host 0.0.0.0 --port ${port}`,
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,

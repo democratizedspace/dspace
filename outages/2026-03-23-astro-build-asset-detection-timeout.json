@@ -1,0 +1,10 @@
+{
+  "id": "2026-03-23-astro-build-asset-detection-timeout",
+  "date": "2026-03-23",
+  "component": "frontend/e2e",
+  "rootCause": "The Playwright preflight script only considered dist/client/_astro as proof of a built Astro app. Astro server output in this repo stores built assets under dist/server/_astro, so the preflight check falsely treated every run as unbuilt and triggered a full rebuild before each Playwright group.",
+  "resolution": "Expanded build-artifact detection to accept dist/client/_astro, dist/_astro, and dist/server/_astro, then added unit coverage to lock in the no-rebuild behavior for server-mode builds.",
+  "references": [
+    "docs/qa/v3.md#21-ci--local-automation-must-be-green"
+  ]
+}
