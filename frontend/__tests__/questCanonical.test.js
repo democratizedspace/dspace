@@ -3,8 +3,9 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { globSync } = require('glob');
+const globModule = require('glob');
 const { questHasFinishPath } = require('../src/utils/simulateQuest.js');
+const globSync = globModule.globSync || globModule.sync;
 
 describe('Quest canonical structure', () => {
     const questDir = path.join(__dirname, '../src/pages/quests/json');

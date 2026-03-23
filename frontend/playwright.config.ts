@@ -293,12 +293,13 @@ export default defineConfig({
     // Configure webServer to start the app server before running tests
     webServer: shouldUseWebServer
         ? {
-              // Use production preview server so grouped E2E tests don't restart the dev server
-              command: `node scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
+              // setup-test-env already ensures build artifacts exist; preview directly to avoid
+              // redundant rebuilds that can exceed Playwright's startup timeout in CI containers.
+              command: `npx astro preview --host 0.0.0.0 --port ${port}`,
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,
-              timeout: 60000,
+              timeout: 180000,
               env: {
                   ...process.env,
                   PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
