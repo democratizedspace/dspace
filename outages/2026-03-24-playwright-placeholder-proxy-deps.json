@@ -1,0 +1,14 @@
+{
+  "id": "2026-03-24-playwright-placeholder-proxy-deps",
+  "date": "2026-03-24",
+  "component": "frontend/e2e-automation",
+  "longForm": "outages/2026-03-24-playwright-placeholder-proxy-deps.md",
+  "rootCause": "The Playwright system dependency bootstrap treated placeholder proxy values (for example `http://proxy:8080`) as a hard stop and skipped `install-deps`. Browser binaries could download, but Chromium launch still failed due to missing host libraries, keeping E2E and pre-PR automation red.",
+  "resolution": "Updated the Playwright bootstrap to continue with a sanitized environment instead of skipping dependency installation when placeholder proxy values are detected, then added regression coverage in both frontend and root script tests to lock in the behavior.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "frontend/tests/ensure-playwright-browsers.test.ts",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts",
+    "docs/qa/v3.md"
+  ]
+}

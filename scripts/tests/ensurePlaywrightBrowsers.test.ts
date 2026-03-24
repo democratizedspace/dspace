@@ -149,7 +149,7 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(result).toEqual({ SOME_OTHER: 'value' });
   });
 
-  it('skips system dependency install when only placeholder proxies are present', async () => {
+  it('installs system dependency packages with sanitized env when only placeholder proxies are present', async () => {
     const envWithProxy = {
       HTTPS_PROXY: 'http://proxy:8080',
       HTTP_PROXY: 'http://proxy:8080',
@@ -158,20 +158,31 @@ describe('ensurePlaywrightBrowsers', () => {
     };
     const execFileSync = vi.fn();
     const writeFileSync = vi.fn();
-    const existsSync = vi.fn(() => false);
 
     const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
 
-    const skipped = ensurePlaywrightSystemDeps({
+    const installed = ensurePlaywrightSystemDeps({
       cwd: repoRoot,
       env: envWithProxy,
+      cliPath: path.join(repoRoot, 'node_modules', '@playwright', 'test', 'cli.js'),
       exec: execFileSync,
-      fs: { existsSync, writeFileSync },
+      fs: {
+        existsSync: vi.fn((candidate: string) => {
+          return candidate === path.join(repoRoot, 'node_modules', '@playwright', 'test', 'cli.js');
+        }),
+        writeFileSync,
+      },
     });
 
-    expect(skipped).toBe(false);
-    expect(execFileSync).not.toHaveBeenCalled();
-    expect(writeFileSync).not.toHaveBeenCalled();
+    expect(installed).toBe(true);
+    expect(execFileSync).toHaveBeenCalledTimes(1);
+    expect(execFileSync.mock.calls[0][2]).toMatchObject({
+      cwd: repoRoot,
+      stdio: 'inherit',
+    });
+    expect(execFileSync.mock.calls[0][2]?.env?.HTTP_PROXY).toBeUndefined();
+    expect(execFileSync.mock.calls[0][2]?.env?.HTTPS_PROXY).toBeUndefined();
+    expect(writeFileSync).toHaveBeenCalledTimes(1);
   });
 
   it('warns but continues when headless shell is missing', async () => {
