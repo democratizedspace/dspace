@@ -55,7 +55,8 @@
     "generate-quest": "cd frontend && npm run generate-quest",
     "preview": "cd frontend && npm run preview",
     "lint:a11y": "cd frontend && npm run lint:a11y",
-    "dev:legacy": "npm run dev"
+    "dev:legacy": "npm run dev",
+    "playwright:install": "npm --prefix frontend run playwright:install"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
