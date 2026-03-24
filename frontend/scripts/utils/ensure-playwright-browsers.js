@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
 const INSTALL_ARGS = ['install', 'chromium', 'chromium-headless-shell'];
@@ -254,19 +255,9 @@ export function ensurePlaywrightSystemDeps(options = {}) {
 
     const sanitizedEnv = sanitizeProxyEnv(env);
     const hadPlaceholderProxy = hasPlaceholderProxyEnv(env);
-    const hasProxiesAfterSanitize = PROXY_ENV_KEYS.some((key) => Boolean(sanitizedEnv[key]));
-
-    if (hadPlaceholderProxy && !hasProxiesAfterSanitize) {
-        console.warn(
-            'Proxy environment variables point to the placeholder proxy:8080 host. Skipping Playwright system dependency install.'
-        );
-
-        return false;
-    }
-
     if (hadPlaceholderProxy) {
         console.warn(
-            'Proxy environment variables point to the placeholder proxy:8080 host. Attempting install with sanitized env.'
+            'Proxy environment variables point to the placeholder proxy:8080 host. Proceeding with sanitized env.'
         );
     }
 
@@ -299,4 +290,18 @@ export function ensurePlaywrightSystemDeps(options = {}) {
     }
 
     return true;
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    try {
+        await ensurePlaywrightBrowsers({
+            cwd: process.cwd(),
+            installSystemDeps: process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS !== '1',
+        });
+    } catch (error) {
+        console.error(
+            `Failed to ensure Playwright browsers via bootstrap helper: ${error.message}`
+        );
+        process.exitCode = 1;
+    }
 }

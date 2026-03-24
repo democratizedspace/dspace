@@ -1,0 +1,16 @@
+{
+  "id": "2026-03-24-prepare-pr-bootstrap-bypass",
+  "date": "2026-03-24",
+  "component": "frontend/pre-pr-automation",
+  "longForm": "outages/2026-03-24-prepare-pr-bootstrap-bypass.md",
+  "rootCause": "The pre-PR scripts (`prepare-pr.sh` and `prepare-pr.ps1`) called the Playwright CLI directly (`node .../cli.js install`) instead of the shared bootstrap helper, so proxy sanitization and system-dependency bootstrap protections in `ensure-playwright-browsers.js` were bypassed.",
+  "resolution": "Updated both prepare scripts to call the shared bootstrap helper (`scripts/utils/ensure-playwright-browsers.js`) and added regression tests that assert the scripts route Playwright setup through that helper.",
+  "references": [
+    "frontend/scripts/prepare-pr.sh",
+    "frontend/scripts/prepare-pr.ps1",
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/preparePrScripts.test.ts",
+    "tests/preparePrScriptSteps.test.ts",
+    "docs/qa/v3.md"
+  ]
+}

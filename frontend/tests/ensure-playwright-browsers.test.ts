@@ -143,6 +143,45 @@ describe('ensurePlaywrightSystemDeps', () => {
             })
         ).toThrow('install-deps failed');
     });
+
+    it('installs deps with sanitized env when placeholder proxy is set', async () => {
+        existsSyncMock.mockImplementation((target: string) => {
+            if (target === cliPath) {
+                return true;
+            }
+            if (target === depsStampPath) {
+                return false;
+            }
+            return false;
+        });
+
+        const { ensurePlaywrightSystemDeps } = await importModule();
+
+        const env = {
+            PLAYWRIGHT_SKIP_INSTALL_DEPS: '0',
+            HTTP_PROXY: 'http://proxy:8080',
+            HTTPS_PROXY: 'http://proxy:8080',
+        };
+
+        const result = ensurePlaywrightSystemDeps({
+            cwd,
+            env,
+            platform: 'linux',
+            cliPath,
+            depsStampPath,
+            exec: execFileSyncMock,
+            fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
+        });
+
+        expect(result).toBe(true);
+        expect(execFileSyncMock).toHaveBeenCalledTimes(1);
+        expect(execFileSyncMock.mock.calls[0][2]).toMatchObject({
+            cwd,
+            stdio: 'inherit',
+        });
+        expect(execFileSyncMock.mock.calls[0][2]?.env?.HTTP_PROXY).toBeUndefined();
+        expect(execFileSyncMock.mock.calls[0][2]?.env?.HTTPS_PROXY).toBeUndefined();
+    });
 });
 
 describe('ensurePlaywrightBrowsers', () => {
