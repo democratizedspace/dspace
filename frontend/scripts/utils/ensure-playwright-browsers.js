@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
 const INSTALL_ARGS = ['install', 'chromium', 'chromium-headless-shell'];
@@ -289,4 +290,18 @@ export function ensurePlaywrightSystemDeps(options = {}) {
     }
 
     return true;
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    try {
+        await ensurePlaywrightBrowsers({
+            cwd: process.cwd(),
+            installSystemDeps: process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS !== '1',
+        });
+    } catch (error) {
+        console.error(
+            `Failed to ensure Playwright browsers via bootstrap helper: ${error.message}`
+        );
+        process.exitCode = 1;
+    }
 }

@@ -1,21 +1,23 @@
 import { readFileSync } from 'fs';
 import { expect, test } from 'vitest';
 
-test('prepare-pr scripts install Playwright browsers and run root tests', () => {
+test('prepare-pr scripts call Playwright bootstrap helper and run root tests', () => {
   const sh = readFileSync('frontend/scripts/prepare-pr.sh', 'utf8');
   const ps = readFileSync('frontend/scripts/prepare-pr.ps1', 'utf8');
 
-  // PLAYWRIGHT_CLI assignment allows optional quotes/spacing
-  expect(sh).toMatch(/PLAYWRIGHT_CLI\s*=\s*"?node_modules\/@playwright\/test\/cli\.js"?/);
+  // Shell helper assignment allows optional quotes/spacing
+  expect(sh).toMatch(/PLAYWRIGHT_BOOTSTRAP\s*=\s*"?scripts\/utils\/ensure-playwright-browsers\.js"?/);
 
-  // PowerShell path expectation
-  expect(ps).toMatch(/@playwright\\test\\cli\.js/);
+  // PowerShell helper path expectation
+  expect(ps).toMatch(/ensure-playwright-browsers\.js/);
 
-  // Ensure install is invoked via *local* CLI, tolerant to quotes and $ var syntax
-  expect(sh).toMatch(/node\s+"?\$?PLAYWRIGHT_CLI"?\s+install/);
-  expect(ps).toMatch(/node\s+\$playwrightCli\s+install/);
+  // Ensure bootstrap helper is invoked via node, tolerant to quotes and $ var syntax
+  expect(sh).toMatch(/node\s+"?\$?PLAYWRIGHT_BOOTSTRAP"?/);
+  expect(ps).toMatch(/node\s+\$playwrightBootstrap/);
 
-  // Do not include deprecated --with-deps flag
+  // Do not include deprecated direct CLI install paths/flags
+  expect(sh).not.toMatch(/@playwright\/test\/cli\.js/);
+  expect(ps).not.toMatch(/@playwright\\test\\cli\.js/);
   expect(sh).not.toMatch(/--with-deps/);
   expect(ps).not.toMatch(/--with-deps/);
 
