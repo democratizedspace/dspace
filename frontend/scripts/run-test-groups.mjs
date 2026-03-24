@@ -26,46 +26,6 @@ if (!process.env.BASE_URL) {
     process.env.BASE_URL = `http://127.0.0.1:${DEFAULT_PLAYWRIGHT_PORT}`;
 }
 
-const shouldClearStalePreviewServer = process.env.CLEAR_STALE_PREVIEW_SERVER === '1';
-
-function clearStalePreviewServer(port) {
-    if (!shouldClearStalePreviewServer) {
-        return;
-    }
-
-    const safePort = String(port).trim();
-    if (!/^\d{2,5}$/.test(safePort)) {
-        console.warn(`Skipping stale preview cleanup due to invalid port value: ${safePort}`);
-        return;
-    }
-
-    try {
-        const pidOutput = execSync(`lsof -tiTCP:${safePort} -sTCP:LISTEN`, {
-            stdio: ['ignore', 'pipe', 'ignore'],
-        })
-            .toString()
-            .trim();
-        if (!pidOutput) {
-            return;
-        }
-
-        const pids = pidOutput
-            .split('\n')
-            .map((value) => value.trim())
-            .filter(Boolean);
-        console.log(`Clearing stale preview listener(s) on port ${safePort}: ${pids.join(', ')}`);
-        for (const pid of pids) {
-            try {
-                process.kill(Number(pid), 'SIGTERM');
-            } catch {
-                // best-effort cleanup only
-            }
-        }
-    } catch {
-        // No listener found (or lsof unavailable); continue.
-    }
-}
-
 const includeRemoteSmoke = process.env.REMOTE_SMOKE === '1';
 const includeRemoteMigration = process.env.REMOTE_MIGRATION === '1';
 const includeRemoteCompletionistAwardIII = process.env.REMOTE_COMPLETIONIST_AWARD_III === '1';
@@ -137,8 +97,8 @@ const TEST_GROUPS = [
             'leaderboard.spec.ts',
             'settings-page.spec.ts',
         ],
-        parallel: false,
-        workers: 1,
+        parallel: true,
+        workers: MAX_WORKERS,
     },
     {
         name: 'Docs Experience',
@@ -302,7 +262,6 @@ const PLAYWRIGHT_COMMAND = `node ${JSON.stringify(PLAYWRIGHT_CLI)} test`;
 
 // Function to run a test group
 function runTestGroup(group) {
-    clearStalePreviewServer(DEFAULT_PLAYWRIGHT_PORT);
     console.log(`${colors.bright}${colors.blue}Running ${group.name}${colors.reset}`);
 
     let command = PLAYWRIGHT_COMMAND;
