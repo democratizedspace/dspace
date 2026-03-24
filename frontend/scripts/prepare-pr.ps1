@@ -15,12 +15,9 @@ try {
     # Ensure Playwright browsers are installed when E2E is enabled
     if (-not $env:SKIP_E2E) {
         Write-Host "Ensuring Playwright browsers are installed..."
-        $playwrightCli = Join-Path $PSScriptRoot "..\node_modules\@playwright\test\cli.js"
-        if (Test-Path $playwrightCli) {
-            node $playwrightCli install > $null 2>&1
-        }
-        else {
-            Write-Error "Playwright CLI not found at $playwrightCli. Please run npm install."
+        node scripts/ensure-playwright-browsers.mjs
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Could not ensure Playwright browsers. Please run npm install and retry."
             Set-Location -Path $originalDir
             exit 1
         }

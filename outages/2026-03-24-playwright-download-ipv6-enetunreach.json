@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-24-playwright-download-ipv6-enetunreach",
+  "date": "2026-03-24",
+  "component": "frontend/playwright-install",
+  "rootCause": "Playwright browser downloads intermittently resolved CDN hosts to IPv6-only routes in this CI-like environment, producing ENETUNREACH failures and leaving required Chromium binaries missing.",
+  "resolution": "Updated Playwright browser bootstrap environment shaping to append `--dns-result-order=ipv4first` to NODE_OPTIONS when absent, forcing IPv4-first resolution for installer subprocesses and stabilizing browser fetches.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "2026-03-24-prepare-pr-playwright-cli-resolution",
+  "date": "2026-03-24",
+  "component": "frontend/prepare-pr",
+  "rootCause": "prepare-pr shell and PowerShell scripts hardcoded a frontend-local Playwright CLI path that does not exist under the repo's mixed install topologies, causing one-command automation to fail before E2E execution.",
+  "resolution": "Switched both prepare-pr scripts to call a shared Node bootstrap (`frontend/scripts/ensure-playwright-browsers.mjs`) that reuses the resilient browser installer utility and centralizes Playwright CLI resolution.",
+  "references": [
+    "frontend/scripts/prepare-pr.sh",
+    "frontend/scripts/prepare-pr.ps1",
+    "frontend/scripts/ensure-playwright-browsers.mjs",
+    "scripts/tests/preparePrScripts.test.ts"
+  ]
+}

@@ -1,6 +1,9 @@
 import path from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { sanitizeProxyEnv } from '../../frontend/scripts/utils/ensure-playwright-browsers.js';
+import {
+  sanitizeProxyEnv,
+  withPlaywrightDownloadEnv,
+} from '../../frontend/scripts/utils/ensure-playwright-browsers.js';
 
 const MODULE_PATH =
   '../../frontend/scripts/utils/ensure-playwright-browsers.js';
@@ -45,7 +48,7 @@ describe('ensurePlaywrightBrowsers', () => {
       HTTPS_PROXY: 'http://legit-proxy:3128',
       npm_config_https_proxy: 'http://legit-proxy:3128',
     };
-    const sanitizedEnv = sanitizeProxyEnv(envWithProxy);
+    const sanitizedEnv = withPlaywrightDownloadEnv(sanitizeProxyEnv(envWithProxy));
     const execFileSync = vi.fn((_command, args: string[]) => {
       const action = args[1];
       if (action === 'install-deps') {
@@ -147,6 +150,12 @@ describe('ensurePlaywrightBrowsers', () => {
     const result = sanitizeProxyEnv(envWithProxy);
 
     expect(result).toEqual({ SOME_OTHER: 'value' });
+  });
+
+  it('forces IPv4-first DNS ordering when NODE_OPTIONS does not set dns-result-order', () => {
+    const env = withPlaywrightDownloadEnv({ NODE_OPTIONS: '--max-old-space-size=2048' });
+    expect(env.NODE_OPTIONS).toContain('--max-old-space-size=2048');
+    expect(env.NODE_OPTIONS).toContain('--dns-result-order=ipv4first');
   });
 
   it('skips system dependency install when only placeholder proxies are present', async () => {

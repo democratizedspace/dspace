@@ -16,11 +16,9 @@ cd "$SCRIPT_DIR/.." || exit 1
 # Ensure Playwright browsers are installed before running tests when needed
 if [ -z "$SKIP_E2E" ]; then
   echo "Ensuring Playwright browsers are installed..."
-  PLAYWRIGHT_CLI="node_modules/@playwright/test/cli.js"
-  if [ -f "$PLAYWRIGHT_CLI" ]; then
-    node "$PLAYWRIGHT_CLI" install > /dev/null 2>&1
-  else
-    echo "Playwright CLI not found at $PLAYWRIGHT_CLI. Please run npm install." >&2
+  node scripts/ensure-playwright-browsers.mjs
+  if [ $? -ne 0 ]; then
+    echo "❌ Could not ensure Playwright browsers. Please run npm install and retry." >&2
     cd "$ORIGINAL_DIR" || exit 1
     exit 1
   fi

@@ -17,6 +17,7 @@ const PROXY_ENV_KEYS = [
     'npm_config_https_proxy',
 ];
 const PROXY_PLACEHOLDERS = new Set(['http://proxy:8080', 'https://proxy:8080', 'proxy:8080']);
+const DNS_RESULT_ORDER_OPTION = '--dns-result-order=ipv4first';
 
 function hasPlaceholderProxyEnv(env = process.env) {
     return PROXY_ENV_KEYS.some((key) => {
@@ -46,6 +47,19 @@ export function sanitizeProxyEnv(env = process.env) {
     }
 
     return sanitized;
+}
+
+export function withPlaywrightDownloadEnv(env = process.env) {
+    const nextEnv = { ...env };
+    const nodeOptions = String(nextEnv.NODE_OPTIONS || '').trim();
+
+    if (!nodeOptions.includes('--dns-result-order')) {
+        nextEnv.NODE_OPTIONS = nodeOptions
+            ? `${nodeOptions} ${DNS_RESULT_ORDER_OPTION}`
+            : DNS_RESULT_ORDER_OPTION;
+    }
+
+    return nextEnv;
 }
 
 export function resolvePlaywrightCLI(cwd, fs = { existsSync }) {
@@ -167,7 +181,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         fs = { existsSync, writeFileSync },
     } = options;
 
-    const sanitizedEnv = sanitizeProxyEnv(env);
+    const sanitizedEnv = withPlaywrightDownloadEnv(sanitizeProxyEnv(env));
     const browser = providedBrowser ?? (await getChromiumBrowser());
 
     const executableOverride = env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
@@ -252,7 +266,7 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         return false;
     }
 
-    const sanitizedEnv = sanitizeProxyEnv(env);
+    const sanitizedEnv = withPlaywrightDownloadEnv(sanitizeProxyEnv(env));
     const hadPlaceholderProxy = hasPlaceholderProxyEnv(env);
     const hasProxiesAfterSanitize = PROXY_ENV_KEYS.some((key) => Boolean(sanitizedEnv[key]));
 
