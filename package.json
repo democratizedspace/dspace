@@ -15,6 +15,7 @@
     "coverage": "vitest run --config vitest.config.mts --coverage",
     "test:watch": "cd frontend && npm run test:watch",
     "test:e2e": "cd frontend && npm run test:e2e",
+    "playwright:install": "cd frontend && npm run playwright:install",
     "test:e2e:coverage": "cd frontend && npm run test:e2e:coverage",
     "test:e2e:groups": "cd frontend && npm run test:e2e:groups",
     "test:e2e:custom": "cd frontend && npm run test:e2e:custom",

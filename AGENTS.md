@@ -51,7 +51,8 @@ SKIP_E2E=1 npm test
 ```
 
 - The CI workflow always runs E2E tests and will fail pull requests when they fail.
-- Install Playwright browsers with `npx playwright install chromium` when E2E tests require it.
+- In fresh/Codex Cloud/container environments, run `npm run playwright:install` **before**
+  Playwright E2E or remote smoke/migration harness commands.
 - Use `npm run check` to verify formatting and linting.
 - Use `npm run audit:ci` to fail on high-severity dependency vulnerabilities.
 - Quest JSON files are validated via a pre-commit hook (`scripts/validate-staged-quests.js`).
