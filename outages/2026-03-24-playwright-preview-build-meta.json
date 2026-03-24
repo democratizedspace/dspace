@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-24-playwright-preview-build-meta",
+  "date": "2026-03-24",
+  "component": "frontend/scripts/setup-test-env",
+  "rootCause": "Playwright preview builds invoked Astro directly without refreshing frontend/src/generated/build_meta.json. Routes that fetch /build-meta.json (notably chat) returned HTTP 503, which surfaced as console errors and caused nav-route smoke automation to fail despite otherwise healthy navigation.",
+  "resolution": "Updated setup-test-env to resolve and write build metadata before ensuring Astro build artifacts, so Playwright preview runs always include valid build metadata and /build-meta.json responds successfully during E2E suites.",
+  "references": [
+    "frontend/scripts/setup-test-env.js",
+    "docs/qa/v3.md"
+  ]
+}
