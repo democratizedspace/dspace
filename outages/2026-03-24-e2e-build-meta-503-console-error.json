@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-24-e2e-build-meta-503-console-error",
+  "date": "2026-03-24",
+  "component": "frontend/e2e-chat-build-meta",
+  "rootCause": "Playwright preview builds run frontend-only `npm run build`, which does not stamp runtime build metadata. The chat page fetches `/build-meta.json`; when metadata is missing the endpoint returns 503, producing console errors that fail nav smoke checks.",
+  "resolution": "Seeded `VITE_GIT_SHA=local-e2e-build` in frontend test environment setup so local/CI E2E preview runs always expose a non-placeholder build SHA and `/build-meta.json` returns 200.",
+  "references": [
+    "frontend/scripts/setup-test-env.js",
+    "frontend/src/utils/buildMetaServer.js",
+    "frontend/e2e/nav-route-smoke.spec.ts"
+  ]
+}

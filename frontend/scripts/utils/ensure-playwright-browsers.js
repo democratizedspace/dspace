@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 
 const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
@@ -144,6 +145,52 @@ export function hasChromiumExecutable(browser) {
     }
 }
 
+function resolveChromiumExecutableRelativePath(platform = process.platform) {
+    if (platform === 'win32') {
+        return path.join('chrome-win', 'chrome.exe');
+    }
+
+    if (platform === 'darwin') {
+        return path.join('chrome-mac', 'Chromium.app', 'Contents', 'MacOS', 'Chromium');
+    }
+
+    return path.join('chrome-linux', 'chrome');
+}
+
+export function findFallbackChromiumExecutable(options = {}) {
+    const {
+        env = process.env,
+        fs = { existsSync, readdirSync },
+        platform = process.platform,
+        homeDir = os.homedir(),
+    } = options;
+    const fsExistsSync = fs?.existsSync || existsSync;
+    const fsReadDirSync = fs?.readdirSync || readdirSync;
+    const browsersRoot =
+        env.PLAYWRIGHT_BROWSERS_PATH || path.join(homeDir, '.cache', 'ms-playwright');
+    const executableRelativePath = resolveChromiumExecutableRelativePath(platform);
+
+    let chromiumDirs = [];
+    try {
+        chromiumDirs = fsReadDirSync(browsersRoot, { withFileTypes: true })
+            .filter((entry) => entry.isDirectory() && entry.name.startsWith('chromium-'))
+            .map((entry) => entry.name);
+    } catch {
+        return '';
+    }
+
+    chromiumDirs.sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+
+    for (const chromiumDir of chromiumDirs) {
+        const candidateExecutable = path.join(browsersRoot, chromiumDir, executableRelativePath);
+        if (fsExistsSync(candidateExecutable)) {
+            return candidateExecutable;
+        }
+    }
+
+    return '';
+}
+
 async function getChromiumBrowser() {
     try {
         const { chromium } = await import('@playwright/test');
@@ -190,6 +237,12 @@ export async function ensurePlaywrightBrowsers(options = {}) {
     }
 
     if (hasChromiumExecutable(browser)) {
+        return;
+    }
+
+    const fallbackExecutable = findFallbackChromiumExecutable({ env, fs, platform });
+    if (fallbackExecutable) {
+        process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH = fallbackExecutable;
         return;
     }
 

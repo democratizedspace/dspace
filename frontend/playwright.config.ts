@@ -34,6 +34,9 @@ declare const process: {
 
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
+if (!process.env.VITE_GIT_SHA) {
+    process.env.VITE_GIT_SHA = 'local-e2e-build';
+}
 
 // Try to ensure Playwright browsers are available
 // In CI, browsers may be pre-installed or handled separately

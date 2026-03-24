@@ -22,6 +22,12 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
     process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG = 'true';
 }
 
+// Ensure /build-meta.json resolves to a non-placeholder SHA during local E2E.
+// Production builds should still stamp metadata via scripts/build-with-sha.mjs.
+if (!process.env.VITE_GIT_SHA) {
+    process.env.VITE_GIT_SHA = 'local-e2e-build';
+}
+
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
 ensureAstroBuild();

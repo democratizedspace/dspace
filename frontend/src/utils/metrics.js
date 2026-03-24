@@ -1,6 +1,6 @@
 let register;
 
-const defaultLoader = () => import(/* @vite-ignore */ 'prom-client');
+const defaultLoader = () => import('prom-client');
 
 async function initMetrics(loader = defaultLoader) {
     try {

@@ -1,0 +1,8 @@
+{
+  "id": "2026-03-24-metrics-prom-client-build-resolution",
+  "date": "2026-03-24",
+  "component": "frontend/build-metrics",
+  "rootCause": "The metrics loader used a dynamic import with /* @vite-ignore */ on the bare module specifier 'prom-client'. Vite/Rollup could not statically resolve the dependency during Astro builds used by Playwright setup, causing build failures before E2E could run.",
+  "resolution": "Removed the Vite ignore directive so bundlers can resolve prom-client at build time while keeping the runtime fallback path in initMetrics for environments where metrics collection is unavailable.",
+  "references": ["frontend/src/utils/metrics.js", "docs/qa/v3.md"]
+}
