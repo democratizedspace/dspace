@@ -9,7 +9,7 @@
 When proxy environment variables were set to placeholder values (`http://proxy:8080`),
 `ensurePlaywrightSystemDeps()` exited early and did not run `playwright install-deps`.
 That left Linux browser runtime libraries missing even when Chromium binaries were present,
-so Playwright launched failed and blocked E2E/`run-tests.js` verification.
+so Playwright failed to launch and blocked E2E/`run-tests.js` verification.
 
 ## Resolution
 

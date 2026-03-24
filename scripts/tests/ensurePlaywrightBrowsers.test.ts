@@ -164,6 +164,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const installed = ensurePlaywrightSystemDeps({
       cwd: repoRoot,
       env: envWithProxy,
+      platform: 'linux',
       cliPath: path.join(repoRoot, 'node_modules', '@playwright', 'test', 'cli.js'),
       exec: execFileSync,
       fs: {
