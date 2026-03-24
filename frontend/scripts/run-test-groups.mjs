@@ -26,6 +26,10 @@ if (!process.env.BASE_URL) {
     process.env.BASE_URL = `http://127.0.0.1:${DEFAULT_PLAYWRIGHT_PORT}`;
 }
 
+const includeRemoteSmoke = process.env.REMOTE_SMOKE === '1';
+const includeRemoteMigration = process.env.REMOTE_MIGRATION === '1';
+const includeRemoteCompletionistAwardIII = process.env.REMOTE_COMPLETIONIST_AWARD_III === '1';
+
 // Configuration: Test groups
 const TEST_GROUPS = [
     {
@@ -34,24 +38,36 @@ const TEST_GROUPS = [
         parallel: false,
         workers: 1,
     },
-    {
-        name: 'Remote Release Smoke',
-        files: ['remote-release-smoke.spec.ts'],
-        parallel: false,
-        workers: 1,
-    },
-    {
-        name: 'Remote Legacy Migration',
-        files: ['remote-legacy-migration.spec.ts'],
-        parallel: false,
-        workers: 1,
-    },
-    {
-        name: 'Remote Completionist Award III',
-        files: ['remote-completionist-award-iii.spec.ts'],
-        parallel: false,
-        workers: 1,
-    },
+    ...(includeRemoteSmoke
+        ? [
+              {
+                  name: 'Remote Release Smoke',
+                  files: ['remote-release-smoke.spec.ts'],
+                  parallel: false,
+                  workers: 1,
+              },
+          ]
+        : []),
+    ...(includeRemoteMigration
+        ? [
+              {
+                  name: 'Remote Legacy Migration',
+                  files: ['remote-legacy-migration.spec.ts'],
+                  parallel: false,
+                  workers: 1,
+              },
+          ]
+        : []),
+    ...(includeRemoteCompletionistAwardIII
+        ? [
+              {
+                  name: 'Remote Completionist Award III',
+                  files: ['remote-completionist-award-iii.spec.ts'],
+                  parallel: false,
+                  workers: 1,
+              },
+          ]
+        : []),
     {
         name: 'Structure Tests',
         files: [

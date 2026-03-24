@@ -299,7 +299,7 @@ export default defineConfig({
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,
-              timeout: isCI ? 180000 : 30000,
+              timeout: 180000,
               env: {
                   ...process.env,
                   PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',

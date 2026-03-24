@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-23-run-test-groups-remote-harness-gating",
+  "date": "2026-03-23",
+  "component": "frontend:scripts-run-test-groups",
+  "rootCause": "Remote harness groups (remote release smoke, legacy migration, completionist award III) were always included in the local grouped E2E runner, even when remote harness env flags were not enabled.",
+  "resolution": "Made remote harness groups opt-in via REMOTE_SMOKE/REMOTE_MIGRATION/REMOTE_COMPLETIONIST_AWARD_III so default grouped E2E runs execute only local suites.",
+  "references": [
+    "frontend/scripts/run-test-groups.mjs",
+    "tests/run-test-groups.test.ts"
+  ]
+}

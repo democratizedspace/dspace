@@ -35,7 +35,18 @@ beforeAll(async () => {
 afterEach(() => {
   execSyncMock.mockReset();
   existsSyncMock.mockClear();
+  delete process.env.REMOTE_SMOKE;
+  delete process.env.REMOTE_MIGRATION;
+  delete process.env.REMOTE_COMPLETIONIST_AWARD_III;
 });
+
+async function loadTestGroupsWithEnv(env: Record<string, string>) {
+  vi.resetModules();
+  Object.assign(process.env, env);
+  const fileUrl = pathToFileURL(path.resolve(__dirname, '../frontend/scripts/run-test-groups.mjs'));
+  const mod = await import(fileUrl.toString());
+  return mod.TEST_GROUPS;
+}
 
 // Basic sanity check that TEST_GROUPS is populated
 describe('run-test-groups', () => {
@@ -93,7 +104,14 @@ describe('run-test-groups', () => {
       TEST_GROUPS.flatMap((group: any) => (group.files ? group.files : []))
     );
 
-    const missingFiles = specFiles.filter((file) => !groupedFiles.has(file));
+    const optionalRemoteSpecs = new Set([
+      'remote-release-smoke.spec.ts',
+      'remote-legacy-migration.spec.ts',
+      'remote-completionist-award-iii.spec.ts',
+    ]);
+    const missingFiles = specFiles.filter(
+      (file) => !groupedFiles.has(file) && !optionalRemoteSpecs.has(file)
+    );
 
     expect(missingFiles).toEqual([]);
   });
@@ -105,5 +123,18 @@ describe('run-test-groups', () => {
     expect(integrationGroup.files).toContain('custom-content.spec.ts');
     expect(integrationGroup.grep).toContain('integrate custom items, processes, and quests');
     expect(integrationGroup.parallel).toBe(false);
+  });
+
+  it('includes remote harness groups when remote env flags are enabled', async () => {
+    const groups = await loadTestGroupsWithEnv({
+      REMOTE_SMOKE: '1',
+      REMOTE_MIGRATION: '1',
+      REMOTE_COMPLETIONIST_AWARD_III: '1',
+    });
+    const allGroupedFiles = new Set(groups.flatMap((group: any) => group.files || []));
+
+    expect(allGroupedFiles.has('remote-release-smoke.spec.ts')).toBe(true);
+    expect(allGroupedFiles.has('remote-legacy-migration.spec.ts')).toBe(true);
+    expect(allGroupedFiles.has('remote-completionist-award-iii.spec.ts')).toBe(true);
   });
 });

@@ -1,0 +1,10 @@
+{
+  "id": "2026-03-23-ensure-astro-build-dist-retry",
+  "date": "2026-03-23",
+  "component": "frontend:scripts-ensure-astro-build",
+  "rootCause": "Incremental Astro builds used for Playwright setup could fail with transient ENOENT errors when stale/partial dist artifacts remained from prior interrupted runs.",
+  "resolution": "Added one automatic retry path: if build fails with ENOENT/no-such-file errors, remove dist/ and rerun the build once to recover from inconsistent artifacts.",
+  "references": [
+    "frontend/scripts/ensure-astro-build.mjs"
+  ]
+}
