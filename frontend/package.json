@@ -19,6 +19,7 @@
         "test:e2e": "npm run setup-test-env && playwright test",
         "test:e2e:debug": "npm run setup-test-env && PWDEBUG=1 playwright test",
         "test:e2e:ui": "npm run setup-test-env && playwright test --ui",
+        "playwright:install": "playwright install --with-deps chromium chromium-headless-shell",
         "test:all": "npm run check && npm run test && npm run test:e2e:groups",
         "test:quick": "npm test && npm run test:e2e:fast",
         "test:e2e:coverage": "npm run setup-test-env && c8 -o coverage/e2e --reporter=lcov --reporter=text playwright test",
