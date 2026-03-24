@@ -1,0 +1,13 @@
+{
+  "id": "2026-03-24-e2e-build-meta-503",
+  "date": "2026-03-24",
+  "component": "frontend/e2e-automation",
+  "longForm": "outages/2026-03-24-e2e-build-meta-503.md",
+  "rootCause": "The E2E setup script prepared artifacts but did not refresh generated build metadata, so `/build-meta.json` served a 503 placeholder response and `/chat` emitted console errors that failed nav smoke automation.",
+  "resolution": "Refresh build metadata in setup-test-env before Astro build checks and add regression assertions that the metadata refresh happens before `ensureAstroBuild()`.",
+  "references": [
+    "frontend/scripts/setup-test-env.js",
+    "tests/preparePrScriptSteps.test.ts",
+    "docs/qa/v3.md"
+  ]
+}

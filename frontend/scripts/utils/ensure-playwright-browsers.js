@@ -1,11 +1,13 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
 const INSTALL_ARGS = ['install', 'chromium', 'chromium-headless-shell'];
 const INSTALL_DEPS_ARGS = ['install-deps'];
 const INSTALL_DEPS_SENTINEL = '.playwright-deps-installed';
+const IPV4_DNS_OPTION = '--dns-result-order=ipv4first';
 const PROXY_ENV_KEYS = [
     'HTTP_PROXY',
     'http_proxy',
@@ -46,6 +48,22 @@ export function sanitizeProxyEnv(env = process.env) {
     }
 
     return sanitized;
+}
+
+export function ensureNodePrefersIpv4(env = process.env) {
+    const nodeOptions = String(env.NODE_OPTIONS || '').trim();
+    if (!nodeOptions) {
+        return { ...env, NODE_OPTIONS: IPV4_DNS_OPTION };
+    }
+
+    if (nodeOptions.includes(IPV4_DNS_OPTION)) {
+        return { ...env };
+    }
+
+    return {
+        ...env,
+        NODE_OPTIONS: `${nodeOptions} ${IPV4_DNS_OPTION}`,
+    };
 }
 
 export function resolvePlaywrightCLI(cwd, fs = { existsSync }) {
@@ -167,7 +185,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         fs = { existsSync, writeFileSync },
     } = options;
 
-    const sanitizedEnv = sanitizeProxyEnv(env);
+    const sanitizedEnv = ensureNodePrefersIpv4(sanitizeProxyEnv(env));
     const browser = providedBrowser ?? (await getChromiumBrowser());
 
     const executableOverride = env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
@@ -252,7 +270,7 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         return false;
     }
 
-    const sanitizedEnv = sanitizeProxyEnv(env);
+    const sanitizedEnv = ensureNodePrefersIpv4(sanitizeProxyEnv(env));
     const hadPlaceholderProxy = hasPlaceholderProxyEnv(env);
     if (hadPlaceholderProxy) {
         console.warn(
@@ -289,4 +307,18 @@ export function ensurePlaywrightSystemDeps(options = {}) {
     }
 
     return true;
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    try {
+        await ensurePlaywrightBrowsers({
+            cwd: process.cwd(),
+            installSystemDeps: process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS !== '1',
+        });
+    } catch (error) {
+        console.error(
+            `Failed to ensure Playwright browsers via bootstrap helper: ${error.message}`
+        );
+        process.exitCode = 1;
+    }
 }

@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-24-playwright-nav-timeout",
+  "date": "2026-03-24",
+  "component": "frontend/e2e-automation",
+  "longForm": "outages/2026-03-24-playwright-nav-timeout.md",
+  "rootCause": "Nav smoke used a 15s Playwright navigation timeout while the local web server startup + route hydration path can exceed that in containerized runs, producing intermittent `page.goto` timeouts despite healthy routes.",
+  "resolution": "Raised Playwright `actionTimeout` and `navigationTimeout` to 60s in shared config so slow local/CI startup does not create false negatives.",
+  "references": [
+    "frontend/playwright.config.ts",
+    "docs/qa/v3.md"
+  ]
+}

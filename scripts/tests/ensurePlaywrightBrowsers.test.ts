@@ -1,6 +1,9 @@
 import path from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { sanitizeProxyEnv } from '../../frontend/scripts/utils/ensure-playwright-browsers.js';
+import {
+  ensureNodePrefersIpv4,
+  sanitizeProxyEnv,
+} from '../../frontend/scripts/utils/ensure-playwright-browsers.js';
 
 const MODULE_PATH =
   '../../frontend/scripts/utils/ensure-playwright-browsers.js';
@@ -111,7 +114,10 @@ describe('ensurePlaywrightBrowsers', () => {
       expect.objectContaining({
         cwd: repoRoot,
         stdio: 'inherit',
-        env: sanitizedEnv,
+        env: expect.objectContaining({
+          ...sanitizedEnv,
+          NODE_OPTIONS: expect.stringContaining('--dns-result-order=ipv4first'),
+        }),
       }),
     ]);
     expect(execFileSync.mock.calls[1]).toEqual([
@@ -127,7 +133,10 @@ describe('ensurePlaywrightBrowsers', () => {
       expect.objectContaining({
         cwd: repoRoot,
         stdio: 'inherit',
-        env: sanitizedEnv,
+        env: expect.objectContaining({
+          ...sanitizedEnv,
+          NODE_OPTIONS: expect.stringContaining('--dns-result-order=ipv4first'),
+        }),
       }),
     ]);
     expect(executablePath).toHaveBeenCalledTimes(2);
@@ -147,6 +156,21 @@ describe('ensurePlaywrightBrowsers', () => {
     const result = sanitizeProxyEnv(envWithProxy);
 
     expect(result).toEqual({ SOME_OTHER: 'value' });
+  });
+
+  it('adds IPv4 DNS preference to NODE_OPTIONS when missing', () => {
+    const result = ensureNodePrefersIpv4({ SOME_OTHER: 'value' });
+
+    expect(result.NODE_OPTIONS).toContain('--dns-result-order=ipv4first');
+    expect(result.SOME_OTHER).toBe('value');
+  });
+
+  it('preserves existing NODE_OPTIONS while adding IPv4 DNS preference once', () => {
+    const once = ensureNodePrefersIpv4({ NODE_OPTIONS: '--max-old-space-size=4096' });
+    const twice = ensureNodePrefersIpv4(once);
+
+    expect(once.NODE_OPTIONS).toBe('--max-old-space-size=4096 --dns-result-order=ipv4first');
+    expect(twice.NODE_OPTIONS).toBe('--max-old-space-size=4096 --dns-result-order=ipv4first');
   });
 
   it('installs system dependency packages with sanitized env when only placeholder proxies are present', async () => {
@@ -183,6 +207,42 @@ describe('ensurePlaywrightBrowsers', () => {
     });
     expect(execFileSync.mock.calls[0][2]?.env?.HTTP_PROXY).toBeUndefined();
     expect(execFileSync.mock.calls[0][2]?.env?.HTTPS_PROXY).toBeUndefined();
+    expect(execFileSync.mock.calls[0][2]?.env?.NODE_OPTIONS).toContain('--dns-result-order=ipv4first');
+    expect(writeFileSync).toHaveBeenCalledTimes(1);
+  });
+
+  it('preserves non-placeholder proxies during system deps install', async () => {
+    const envWithProxy = {
+      PLAYWRIGHT_SKIP_INSTALL_DEPS: '0',
+      HTTPS_PROXY: 'http://corp-proxy.internal:8443',
+      HTTP_PROXY: 'http://corp-proxy.internal:8080',
+    };
+    const execFileSync = vi.fn();
+    const writeFileSync = vi.fn();
+
+    const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
+
+    const installed = ensurePlaywrightSystemDeps({
+      cwd: repoRoot,
+      env: envWithProxy,
+      platform: 'linux',
+      cliPath: path.join(repoRoot, 'node_modules', '@playwright', 'test', 'cli.js'),
+      exec: execFileSync,
+      fs: {
+        existsSync: vi.fn((candidate: string) => {
+          return candidate === path.join(repoRoot, 'node_modules', '@playwright', 'test', 'cli.js');
+        }),
+        writeFileSync,
+      },
+    });
+
+    expect(installed).toBe(true);
+    expect(execFileSync).toHaveBeenCalledTimes(1);
+    expect(execFileSync.mock.calls[0][2]?.env).toMatchObject({
+      HTTP_PROXY: envWithProxy.HTTP_PROXY,
+      HTTPS_PROXY: envWithProxy.HTTPS_PROXY,
+    });
+    expect(execFileSync.mock.calls[0][2]?.env?.NODE_OPTIONS).toContain('--dns-result-order=ipv4first');
     expect(writeFileSync).toHaveBeenCalledTimes(1);
   });
 

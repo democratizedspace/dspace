@@ -13,5 +13,7 @@ describe('playwright.config browser setup', () => {
     expect(contents).toMatch(
       /ensurePlaywrightBrowsers\(\{\s*cwd:\s*frontendDir,\s*env:\s*ensureEnv,\s*installArgs,\s*installSystemDeps:\s*!skipSystemDepsInstall,\s*\}\);/s
     );
+    expect(contents).toMatch(/reuseExistingServer:\s*false/);
+    expect(contents).toMatch(/4173 \+ \(process\.pid % 1000\)/);
   });
 });

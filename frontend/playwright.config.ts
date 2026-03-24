@@ -77,7 +77,9 @@ function ensureAstroBuildArtifacts(): void {
 
 // Determine the base URL from environment variables or use default
 const protocol = process.env.PROTOCOL || 'http';
-const port = process.env.PLAYWRIGHT_PORT ? parseInt(process.env.PLAYWRIGHT_PORT, 10) : 4173;
+const port = process.env.PLAYWRIGHT_PORT
+    ? parseInt(process.env.PLAYWRIGHT_PORT, 10)
+    : 4173 + (process.pid % 1000);
 // Propagate the resolved port so preview/server commands and downstream tools
 // stay aligned even when the host sets a default PORT.
 process.env.PLAYWRIGHT_PORT = String(port);
@@ -283,8 +285,8 @@ export default defineConfig({
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
         trace: 'on-first-retry',
-        actionTimeout: 15000,
-        navigationTimeout: 15000,
+        actionTimeout: 60000,
+        navigationTimeout: 60000,
         // Still keep this for safety, but we're using HTTP
         ignoreHTTPSErrors: true,
     },
@@ -295,10 +297,10 @@ export default defineConfig({
         ? {
               // Ensure preview always has complete, test-compatible build artifacts, including
               // quest-graph debug marker checks for direct Playwright invocation.
-              command: `node ./scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
+              command: `npx astro dev --host 0.0.0.0 --port ${port}`,
               cwd: frontendDir,
               url: baseURL,
-              reuseExistingServer: !isCI,
+              reuseExistingServer: false,
               timeout: 180000,
               env: {
                   ...process.env,

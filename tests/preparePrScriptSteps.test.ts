@@ -42,3 +42,13 @@ describe('qa:smoke shortcut', () => {
         );
     });
 });
+
+describe('setup-test-env automation', () => {
+    const setupPath = path.join(__dirname, '..', 'frontend', 'scripts', 'setup-test-env.js');
+    const setupScript = fs.readFileSync(setupPath, 'utf8');
+
+    it('refreshes build metadata during setup', () => {
+        expect(setupScript).toMatch(/resolveBuildMeta[\s\S]*writeBuildMeta/);
+        expect(setupScript).toMatch(/writeBuildMeta\(\{ gitSha, source \}\);/);
+    });
+});
