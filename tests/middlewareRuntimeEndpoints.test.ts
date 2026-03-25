@@ -124,4 +124,20 @@ describe('runtime middleware fallback', () => {
     expect(payload.method).toBe('GET');
     expect(payload.context.status).toBe(500);
   });
+
+  it('forces no-store caching for service worker bootstrap assets', async () => {
+    const serviceWorkerResponse = await onRequest(
+      createContext('/service-worker.js'),
+      async () => new Response('// sw', { status: 200 })
+    );
+    const cacheVersionResponse = await onRequest(
+      createContext('/cache-version.js'),
+      async () => new Response('self.CACHE_VERSION="2025-02-15";', { status: 200 })
+    );
+
+    expect(serviceWorkerResponse.headers.get('cache-control')).toBe(
+      'no-cache, no-store, must-revalidate'
+    );
+    expect(cacheVersionResponse.headers.get('cache-control')).toBe('no-store');
+  });
 });

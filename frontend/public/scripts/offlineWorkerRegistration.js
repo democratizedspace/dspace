@@ -182,8 +182,11 @@ export function registerOfflineWorker() {
         }
 
         navigator.serviceWorker
-            .register('/service-worker.js')
+            .register('/service-worker.js', { updateViaCache: 'none' })
             .then((registration) => {
+                registration.update().catch((error) => {
+                    console.warn('Service worker update check failed:', error);
+                });
                 setupUpdateHandling(registration);
                 installStylesheetRecovery();
             })

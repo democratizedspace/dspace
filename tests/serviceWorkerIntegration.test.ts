@@ -22,8 +22,24 @@ describe('offline service worker integration', () => {
     );
     expect(layoutContents).toMatch(/<script\s+type="module"\s+src=\{offlineWorkerRegistrationUrl\}\s*>/);
     expect(registrationModuleContents).toMatch(
-      /navigator\.serviceWorker\s*\.\s*register\(['"]\/service-worker\.js['"]\)/
+      /navigator\.serviceWorker\s*\.\s*register\(\s*['"]\/service-worker\.js['"]/
     );
+  });
+
+  it('forces fresh service-worker update checks on each registration', () => {
+    const registrationModulePath = join(
+      repoRoot,
+      'frontend',
+      'public',
+      'scripts',
+      'offlineWorkerRegistration.js'
+    );
+    const registrationModuleContents = readFileSync(registrationModulePath, 'utf8');
+
+    expect(registrationModuleContents).toMatch(
+      /register\(\s*['"]\/service-worker\.js['"]\s*,\s*\{\s*updateViaCache:\s*['"]none['"]\s*\}\s*\)/
+    );
+    expect(registrationModuleContents).toMatch(/registration\.update\(\)\.catch\(/);
   });
 
   it('imports the cache version script and references versioned caches', () => {
