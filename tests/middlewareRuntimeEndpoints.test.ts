@@ -74,6 +74,47 @@ describe('runtime middleware fallback', () => {
     expect(await response.text()).toBe('ok');
   });
 
+  it('forces service worker script revalidation headers', async () => {
+    const context = createContext('/service-worker.js');
+    const response = await onRequest(
+      context,
+      async () =>
+        new Response('// sw', {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/javascript',
+            'Cache-Control': 'public, max-age=31536000',
+          },
+        })
+    );
+
+    expect(response.headers.get('cache-control')).toBe('no-cache, no-store, must-revalidate');
+  });
+
+  it('sets no-store headers for cache-version and html documents', async () => {
+    const cacheVersionContext = createContext('/cache-version.js');
+    const cacheVersionResponse = await onRequest(
+      cacheVersionContext,
+      async () =>
+        new Response('self.CACHE_VERSION = "x";', {
+          status: 200,
+          headers: { 'Content-Type': 'application/javascript' },
+        })
+    );
+    expect(cacheVersionResponse.headers.get('cache-control')).toBe('no-store');
+
+    const htmlContext = createContext('/docs/about');
+    const htmlResponse = await onRequest(
+      htmlContext,
+      async () =>
+        new Response('<html><body>ok</body></html>', {
+          status: 200,
+          headers: { 'Content-Type': 'text/html; charset=utf-8' },
+        })
+    );
+    expect(htmlResponse.headers.get('cache-control')).toBe('no-store');
+  });
+
   it('logs and rethrows errors from downstream handlers', async () => {
     const context = createContext('/error');
     const logSpy = vi.spyOn(console, 'error').mockImplementation(() => {});

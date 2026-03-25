@@ -24,6 +24,9 @@ describe('offline service worker integration', () => {
     expect(registrationModuleContents).toMatch(
       /navigator\.serviceWorker\s*\.\s*register\(['"]\/service-worker\.js['"]\)/
     );
+    expect(registrationModuleContents).toMatch(
+      /registration\s*\.\s*update\(\)\s*\.catch/
+    );
   });
 
   it('imports the cache version script and references versioned caches', () => {

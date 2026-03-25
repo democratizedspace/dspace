@@ -121,6 +121,16 @@ export function registerOfflineWorker() {
         }
     }
 
+    function requestImmediateUpdate(registration) {
+        if (!registration || typeof registration.update !== 'function') {
+            return;
+        }
+
+        registration.update().catch((error) => {
+            console.warn('Service worker update check failed:', error);
+        });
+    }
+
     function installStylesheetRecovery() {
         if (!navigator.serviceWorker.controller) {
             return;
@@ -185,6 +195,7 @@ export function registerOfflineWorker() {
             .register('/service-worker.js')
             .then((registration) => {
                 setupUpdateHandling(registration);
+                requestImmediateUpdate(registration);
                 installStylesheetRecovery();
             })
             .catch((error) => {
