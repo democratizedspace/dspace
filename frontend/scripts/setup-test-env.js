@@ -8,12 +8,59 @@
 
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { ensureAstroBuild } from './ensure-astro-build.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
+const buildMetaPath = path.join(rootDir, 'src', 'generated', 'build_meta.json');
+
+const isPlaceholderBuildMeta = (payload) => {
+    const gitSha = String(payload?.gitSha || '')
+        .trim()
+        .toLowerCase();
+    const source = String(payload?.source || '')
+        .trim()
+        .toLowerCase();
+
+    return (
+        !gitSha ||
+        gitSha === 'missing' ||
+        gitSha === 'unknown' ||
+        gitSha === 'missing-sha' ||
+        gitSha === 'dev-local' ||
+        source === 'static'
+    );
+};
+
+const hasValidBuildMeta = () => {
+    try {
+        const payload = JSON.parse(fs.readFileSync(buildMetaPath, 'utf8'));
+        return !isPlaceholderBuildMeta(payload);
+    } catch {
+        return false;
+    }
+};
+
+const ensureBuildMeta = () => {
+    try {
+        execSync('node ../scripts/write-build-meta.mjs', {
+            cwd: rootDir,
+            stdio: 'pipe',
+            env: process.env,
+        });
+    } catch (error) {
+        if (hasValidBuildMeta()) {
+            console.warn('Warning: failed to refresh build_meta.json, using existing metadata.');
+            return;
+        }
+        throw new Error(
+            `Unable to generate frontend/src/generated/build_meta.json for Playwright setup: ${error.message}`
+        );
+    }
+};
 
 // Ensure the quest graph debug handle is available in test builds
 // even though Astro builds with production settings for preview.
@@ -24,6 +71,7 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
+ensureBuildMeta();
 ensureAstroBuild();
 
 // Directories to ensure exist

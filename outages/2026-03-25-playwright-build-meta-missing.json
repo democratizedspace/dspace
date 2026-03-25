@@ -1,0 +1,14 @@
+{
+  "id": "2026-03-25-playwright-build-meta-missing",
+  "date": "2026-03-25",
+  "component": "frontend/e2e-chat-build-metadata",
+  "rootCause": "`frontend/scripts/setup-test-env.js` ensured Astro build artifacts but did not refresh `frontend/src/generated/build_meta.json`. In fresh environments this file remained as the checked-in static placeholder (`gitSha: \"missing\", source: \"static\"), causing `/build-meta.json` to return HTTP 503 during Playwright runs and surfacing as a nav smoke console error on `/chat`.",
+  "resolution": "Updated `frontend/scripts/setup-test-env.js` to run `scripts/write-build-meta.mjs` before the Astro build check, with placeholder detection and a guarded fallback to existing valid metadata. This guarantees non-placeholder build metadata for Playwright E2E runs in fresh/container environments.",
+  "references": [
+    "frontend/scripts/setup-test-env.js",
+    "frontend/src/utils/buildMetaServer.js",
+    "frontend/src/generated/build_meta.json",
+    "frontend/e2e/nav-route-smoke.spec.ts",
+    "docs/qa/v3.md"
+  ]
+}
