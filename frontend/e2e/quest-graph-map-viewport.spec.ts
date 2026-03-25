@@ -97,11 +97,17 @@ test.describe('Quest graph map viewport controls', () => {
         await loadQuestMap(page);
 
         const showUnreachableCheckbox = page.getByLabel(/Show unreachable/);
-        if (!(await showUnreachableCheckbox.isEnabled())) {
-            test.skip();
-        }
-
         const initialViewport = await setViewport(page);
+
+        if (!(await showUnreachableCheckbox.isEnabled())) {
+            await expect(showUnreachableCheckbox).toBeDisabled();
+            await page.getByRole('tab', { name: 'Diagnostics' }).click();
+            await page.getByRole('tab', { name: 'Map' }).click();
+            await waitForLayoutStop(page);
+            const afterTabSwitch = await getViewport(page);
+            expectViewportClose(afterTabSwitch, initialViewport);
+            return;
+        }
 
         await showUnreachableCheckbox.check();
         await waitForLayoutStop(page);

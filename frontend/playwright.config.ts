@@ -1,9 +1,7 @@
 import { defineConfig } from '@playwright/test';
-import { execSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ensurePlaywrightBrowsers } from './scripts/utils/ensure-playwright-browsers.js';
+import { ensureAstroBuild } from './scripts/ensure-astro-build.mjs';
 
 if (process.env.CI) {
     await import('fake-indexeddb/auto');
@@ -60,24 +58,14 @@ try {
 }
 
 function ensureAstroBuildArtifacts(): void {
-    const serverEntrypoint = join(frontendDir, 'dist', 'server', 'entry.mjs');
-
-    if (existsSync(serverEntrypoint)) {
-        return;
-    }
-
-    console.log('Astro build artifacts not found. Building before Playwright preview.');
-    try {
-        execSync('npm run build', { cwd: frontendDir, stdio: 'inherit' });
-    } catch (error) {
-        console.error('Failed to build Astro project required for Playwright preview.');
-        throw error;
-    }
+    ensureAstroBuild({ root: frontendDir });
 }
 
 // Determine the base URL from environment variables or use default
 const protocol = process.env.PROTOCOL || 'http';
-const port = process.env.PLAYWRIGHT_PORT ? parseInt(process.env.PLAYWRIGHT_PORT, 10) : 4173;
+const isCI = Boolean(process.env.CI);
+const defaultPort = isCI ? 4173 : 4173 + (process.pid % 1000);
+const port = process.env.PLAYWRIGHT_PORT ? parseInt(process.env.PLAYWRIGHT_PORT, 10) : defaultPort;
 // Propagate the resolved port so preview/server commands and downstream tools
 // stay aligned even when the host sets a default PORT.
 process.env.PLAYWRIGHT_PORT = String(port);
@@ -89,7 +77,6 @@ process.env.PORT = String(port);
 const baseURL = process.env.BASE_URL || `${protocol}://127.0.0.1:${port}`;
 
 // Allow setting workers via environment variable for CI and local runs
-const isCI = Boolean(process.env.CI);
 const workers = process.env.PW_WORKERS ? parseInt(process.env.PW_WORKERS, 10) : undefined;
 const RETRIES = isCI ? 2 : 0;
 const EXPECT_TIMEOUT_MS = 15_000;

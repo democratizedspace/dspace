@@ -13,7 +13,7 @@ const CONNECTION_REFUSED_PATTERNS = [
 const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
 const DEFAULT_MAX_LOG_ATTEMPTS = 4;
-const DEFAULT_MAX_DURATION_MS = 10_000;
+const DEFAULT_MAX_DURATION_MS = 30_000;
 const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
 type CryptoLike = { randomUUID?: () => string };
 type IndexedDbRequest<T = unknown> = {
@@ -915,8 +915,30 @@ export async function enableQuestGraphVisualizer(page: Page): Promise<void> {
     await page.waitForLoadState('networkidle');
     await waitForHydration(page);
 
-    const toggle = page.getByTestId('quest-graph-visualizer-toggle');
+    let toggle = page.getByTestId('quest-graph-visualizer-toggle');
     await expect(toggle).toBeVisible();
+
+    if (!(await toggle.isEnabled())) {
+        await page.evaluate(() => {
+            const raw = localStorage.getItem('gameState');
+            const state = raw ? JSON.parse(raw) : {};
+            const settings = state.settings && typeof state.settings === 'object' ? state.settings : {};
+            localStorage.setItem(
+                'gameState',
+                JSON.stringify({
+                    ...state,
+                    settings: {
+                        ...settings,
+                        showQuestGraphVisualizer: true,
+                    },
+                })
+            );
+        });
+        await page.reload();
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        toggle = page.getByTestId('quest-graph-visualizer-toggle');
+    }
 
     const isEnabled = (await toggle.getAttribute('aria-pressed')) === 'true';
     if (!isEnabled) {

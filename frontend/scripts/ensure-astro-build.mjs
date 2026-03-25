@@ -83,7 +83,7 @@ export function ensureAstroBuild(options = {}) {
                 ? `\n${error.stderr.toString()}`
                 : '');
         const shouldRetryCleanBuild =
-            /ENOENT|no such file or directory/i.test(errorOutput);
+            /ENOENT|no such file or directory|Cannot find module/i.test(errorOutput);
 
         if (!shouldRetryCleanBuild) {
             (logger.error ?? console.error)(
