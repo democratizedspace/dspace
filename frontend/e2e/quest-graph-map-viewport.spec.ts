@@ -97,22 +97,25 @@ test.describe('Quest graph map viewport controls', () => {
         await loadQuestMap(page);
 
         const showUnreachableCheckbox = page.getByLabel(/Show unreachable/);
-        if (!(await showUnreachableCheckbox.isEnabled())) {
-            test.skip();
-        }
-
         const initialViewport = await setViewport(page);
 
-        await showUnreachableCheckbox.check();
-        await waitForLayoutStop(page);
-        const afterEnable = await getViewport(page);
+        if (await showUnreachableCheckbox.isEnabled()) {
+            await showUnreachableCheckbox.check();
+            await waitForLayoutStop(page);
+            const afterEnable = await getViewport(page);
 
-        await showUnreachableCheckbox.uncheck();
-        await waitForLayoutStop(page);
-        const afterDisable = await getViewport(page);
+            await showUnreachableCheckbox.uncheck();
+            await waitForLayoutStop(page);
+            const afterDisable = await getViewport(page);
 
-        expectViewportClose(afterEnable, initialViewport);
-        expectViewportClose(afterDisable, initialViewport);
+            expectViewportClose(afterEnable, initialViewport);
+            expectViewportClose(afterDisable, initialViewport);
+            return;
+        }
+
+        await expect(showUnreachableCheckbox).toBeDisabled();
+        const currentViewport = await getViewport(page);
+        expectViewportClose(currentViewport, initialViewport);
     });
 
     test('fit graph adjusts zoom level', async ({ page }) => {

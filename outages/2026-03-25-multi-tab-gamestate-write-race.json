@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-25-multi-tab-gamestate-write-race",
+  "date": "2026-03-25",
+  "component": "frontend:e2e-multi-tab",
+  "rootCause": "The multi-tab game-state E2E asserted final inventory counts immediately after purchase clicks, creating a race with async persistence/merge propagation between tabs.",
+  "resolution": "Stabilized the test using expect.poll checkpoints: first tab waits for its purchase write before closing, and second tab polls until merged inventory totals are persisted.",
+  "references": [
+    "frontend/e2e/multi-tab-gamestate.spec.ts",
+    "frontend/scripts/run-test-groups.mjs"
+  ]
+}

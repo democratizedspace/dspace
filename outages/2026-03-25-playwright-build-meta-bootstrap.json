@@ -1,0 +1,12 @@
+{
+  "id": "2026-03-25-playwright-build-meta-bootstrap",
+  "date": "2026-03-25",
+  "component": "frontend:playwright-setup",
+  "rootCause": "Playwright E2E setup rebuilt Astro artifacts but did not generate frontend/src/generated/build_meta.json, so /build-meta.json returned HTTP 503 and /chat navigation smoke reported console resource failures.",
+  "resolution": "Updated frontend/scripts/setup-test-env.js to resolve and write build metadata via scripts/write-build-meta.mjs after ensureAstroBuild(), guaranteeing runtime build metadata exists for preview/E2E runs.",
+  "references": [
+    "frontend/scripts/setup-test-env.js",
+    "frontend/src/utils/buildMetaServer.js",
+    "frontend/e2e/nav-route-smoke.spec.ts"
+  ]
+}

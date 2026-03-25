@@ -10,6 +10,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { ensureAstroBuild } from './ensure-astro-build.mjs';
+import { resolveBuildMeta, writeBuildMeta } from '../../scripts/write-build-meta.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +26,11 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
 ensureAstroBuild();
+
+const ensureBuildMetaForPreview = async () => {
+    const { gitSha, source } = resolveBuildMeta();
+    await writeBuildMeta({ gitSha, source });
+};
 
 // Directories to ensure exist
 const directories = [
@@ -100,5 +106,7 @@ if (!fs.existsSync(gitignorePath)) {
         console.warn(`Warning: Could not create .gitignore file: ${error.message}`);
     }
 }
+
+await ensureBuildMetaForPreview();
 
 console.log('Test environment setup complete.');
