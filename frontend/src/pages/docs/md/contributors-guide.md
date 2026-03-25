@@ -18,6 +18,19 @@ checklist for full coverage.
 - Enable the [recommended VS Code extensions](https://github.com/democratizedspace/dspace/blob/v3/frontend/.vscode/extensions.json)
   for linting, formatting, and Svelte language support.
 
+### Dependency warning troubleshooting
+
+If you run `npm install` and see warnings like `inflight@1.0.6` or
+`glob@7.2.3` being deprecated, those currently come from upstream transitive
+dependencies (for example, Jest/Babel tooling), not from a direct DSPACE
+runtime dependency.
+
+- Prefer `pnpm install` at the repo root to use the lockfile CI validates.
+- Treat those specific warnings as informational unless `npm audit` or tests
+  fail.
+- Do not remove tooling dependencies just to silence deprecation warnings;
+  upgrade paths should be done in a focused dependency PR with full CI coverage.
+
 ## 2. Branching & workflow
 
 1. Create a feature branch from `main` (for example, `git checkout -b feature/my-change`).
