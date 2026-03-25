@@ -9,7 +9,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { ensureAstroBuild } from './ensure-astro-build.mjs';
 import fsPromises from 'fs/promises';
 import { resolveBuildMeta, writeBuildMeta } from '../../scripts/write-build-meta.mjs';
 
@@ -26,6 +25,7 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
+const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
 ensureAstroBuild();
 
 const readExistingBuildMetaSha = async () => {
