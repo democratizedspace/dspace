@@ -44,6 +44,31 @@ export function registerOfflineWorker() {
         return true;
     };
 
+    const resolveServiceWorkerUrl = () => {
+        const baseUrl = '/service-worker.js';
+        const cacheVersionKey = 'dspace-cache-version';
+
+        let cacheVersion = null;
+
+        if (typeof self !== 'undefined' && typeof self.CACHE_VERSION === 'string') {
+            cacheVersion = self.CACHE_VERSION;
+        }
+
+        if (!cacheVersion) {
+            try {
+                cacheVersion = localStorage.getItem(cacheVersionKey);
+            } catch (error) {
+                console.warn('Failed to read cache version for service worker URL:', error);
+            }
+        }
+
+        if (!cacheVersion) {
+            return baseUrl;
+        }
+
+        return `${baseUrl}?v=${encodeURIComponent(cacheVersion)}`;
+    };
+
     function attachControllerReload() {
         let refreshing = false;
 
@@ -182,7 +207,7 @@ export function registerOfflineWorker() {
         }
 
         navigator.serviceWorker
-            .register('/service-worker.js')
+            .register(resolveServiceWorkerUrl())
             .then((registration) => {
                 setupUpdateHandling(registration);
                 installStylesheetRecovery();

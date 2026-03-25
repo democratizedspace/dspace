@@ -22,7 +22,7 @@ describe('offline service worker integration', () => {
     );
     expect(layoutContents).toMatch(/<script\s+type="module"\s+src=\{offlineWorkerRegistrationUrl\}\s*>/);
     expect(registrationModuleContents).toMatch(
-      /navigator\.serviceWorker\s*\.\s*register\(['"]\/service-worker\.js['"]\)/
+      /navigator\.serviceWorker\s*\.\s*register\(resolveServiceWorkerUrl\(\)\)/
     );
   });
 
