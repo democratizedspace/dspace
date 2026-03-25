@@ -126,12 +126,14 @@ test.describe('chat RAG context', () => {
         await expect(chatPanel).toBeVisible();
         await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
 
-        const docsEnvLabel = chatPanel.getByText('Docs pack env');
-        const docsEnvValue = docsEnvLabel.locator('..').locator('.debug-mono');
+        const docsEnvValue = chatPanel
+            .locator('.debug-meta-row', { hasText: 'Docs pack env' })
+            .locator('.debug-mono');
         await expect(docsEnvValue).toHaveText(/.+/);
 
-        const docsHostLabel = chatPanel.getByText('Docs host');
-        const docsHostValue = docsHostLabel.locator('..').locator('.debug-mono');
+        const docsHostValue = chatPanel
+            .locator('.debug-meta-row', { hasText: 'Docs host' })
+            .locator('.debug-mono');
         await expect(docsHostValue).toHaveText(/.+/);
     });
 });

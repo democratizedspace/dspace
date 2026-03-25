@@ -9,7 +9,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { ensureAstroBuild } from './ensure-astro-build.mjs';
+import fsPromises from 'fs/promises';
+import { resolveBuildMeta, writeBuildMeta } from '../../scripts/write-build-meta.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +25,38 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
+const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
 ensureAstroBuild();
+
+const readExistingBuildMetaSha = async () => {
+    const buildMetaPath = path.join(rootDir, 'src', 'generated', 'build_meta.json');
+
+    try {
+        const rawBuildMeta = await fsPromises.readFile(buildMetaPath, 'utf8');
+        const parsedBuildMeta = JSON.parse(rawBuildMeta);
+        return String(parsedBuildMeta?.gitSha || '').trim();
+    } catch {
+        return '';
+    }
+};
+
+const ensureBuildMetaForPreview = async () => {
+    try {
+        const { gitSha, source } = resolveBuildMeta();
+        const existingGitSha = await readExistingBuildMetaSha();
+
+        if (existingGitSha === gitSha) {
+            return;
+        }
+
+        await writeBuildMeta({ gitSha, source });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn(
+            `Warning: could not refresh build metadata (safe to ignore outside E2E/preview): ${message}`
+        );
+    }
+};
 
 // Directories to ensure exist
 const directories = [
@@ -100,5 +132,7 @@ if (!fs.existsSync(gitignorePath)) {
         console.warn(`Warning: Could not create .gitignore file: ${error.message}`);
     }
 }
+
+await ensureBuildMetaForPreview();
 
 console.log('Test environment setup complete.');

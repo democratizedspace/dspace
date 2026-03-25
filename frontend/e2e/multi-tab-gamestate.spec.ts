@@ -38,16 +38,34 @@ test.describe('multi-tab game state writes', () => {
         await secondTab.goto(`/inventory/item/${ITEM_ID}`);
 
         await firstTab.getByTestId('transaction-cta').click();
+        await expect
+            .poll(
+                async () =>
+                    firstTab.evaluate(() => JSON.parse(localStorage.getItem('gameState') || '{}')),
+                { timeout: 10_000 }
+            )
+            .toMatchObject({
+                inventory: {
+                    [ITEM_ID]: 1,
+                    [DUSD_ID]: 380,
+                },
+            });
         await firstTab.close();
 
         await secondTab.getByTestId('transaction-cta').click();
 
-        const finalState = await secondTab.evaluate(() =>
-            JSON.parse(localStorage.getItem('gameState') || '{}')
-        );
-
-        expect(finalState.inventory[ITEM_ID]).toBe(2);
-        expect(finalState.inventory[DUSD_ID]).toBe(260);
+        await expect
+            .poll(
+                async () =>
+                    secondTab.evaluate(() => JSON.parse(localStorage.getItem('gameState') || '{}')),
+                { timeout: 10_000 }
+            )
+            .toMatchObject({
+                inventory: {
+                    [ITEM_ID]: 2,
+                    [DUSD_ID]: 260,
+                },
+            });
     });
 
     test('quest progress from another tab is preserved before a later buy mutation', async ({
