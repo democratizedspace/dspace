@@ -32,6 +32,22 @@ npm run dev  # Start development server on http://localhost:3002
 
 For comprehensive setup instructions, see the [Developer Guide](./DEVELOPER_GUIDE.md).
 
+### npm deprecation warnings during install
+
+If you install dependencies with npm, you may see warnings like:
+
+- `inflight@1.0.6` is deprecated
+- `glob@7.2.3` is deprecated
+
+These are currently pulled in by transitive test tooling (for example, Jest 29-era packages), not
+by DSPACE runtime code. They are warnings, not install failures.
+
+For reproducible local and CI installs, prefer the repository standard command:
+
+```bash
+pnpm install --frozen-lockfile --reporter=append-only
+```
+
 ### Essential Commands
 
 ```bash
