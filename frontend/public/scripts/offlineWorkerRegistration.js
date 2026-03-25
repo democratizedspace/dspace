@@ -45,6 +45,7 @@ export function registerOfflineWorker() {
     };
 
     const SW_REGISTRATION_OPTIONS = { updateViaCache: 'none' };
+    const UPDATE_CHECK_SESSION_KEY = 'offlineWorkerUpdateChecked';
 
     function attachControllerReload() {
         let refreshing = false;
@@ -123,6 +124,37 @@ export function registerOfflineWorker() {
         }
     }
 
+    function shouldRunUpdateCheck(registration) {
+        if (!registration || typeof registration.update !== 'function') {
+            return false;
+        }
+
+        const hasActiveController = !!navigator.serviceWorker.controller;
+        const isInstalling = !!registration.installing;
+
+        if (!hasActiveController && isInstalling) {
+            return false;
+        }
+
+        try {
+            if (window.sessionStorage?.getItem(UPDATE_CHECK_SESSION_KEY) === 'true') {
+                return false;
+            }
+        } catch (error) {
+            // Ignore storage access errors and continue with update attempt.
+        }
+
+        return true;
+    }
+
+    function markUpdateCheckAttempted() {
+        try {
+            window.sessionStorage?.setItem(UPDATE_CHECK_SESSION_KEY, 'true');
+        } catch (error) {
+            // Ignore storage access errors.
+        }
+    }
+
     function installStylesheetRecovery() {
         if (!navigator.serviceWorker.controller) {
             return;
@@ -188,9 +220,12 @@ export function registerOfflineWorker() {
             .then((registration) => {
                 setupUpdateHandling(registration);
                 installStylesheetRecovery();
-                registration.update().catch((error) => {
-                    console.warn('Service worker update check failed:', error);
-                });
+                if (shouldRunUpdateCheck(registration)) {
+                    markUpdateCheckAttempted();
+                    registration.update().catch((error) => {
+                        console.warn('Service worker update check failed:', error);
+                    });
+                }
             })
             .catch((error) => {
                 console.warn('Service worker registration failed:', error);
