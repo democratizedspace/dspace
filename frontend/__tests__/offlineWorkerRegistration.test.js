@@ -93,7 +93,9 @@ describe('registerOfflineWorker', () => {
         registerOfflineWorker();
         await dispatchLoad();
 
-        expect(serviceWorker.register).toHaveBeenCalledWith('/service-worker.js');
+        expect(serviceWorker.register).toHaveBeenCalledWith('/service-worker.js', {
+            updateViaCache: 'none',
+        });
         expect(waitingWorker.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
         expect(controllerChangeHandlers).toHaveLength(1);
 
@@ -223,6 +225,31 @@ describe('registerOfflineWorker', () => {
             expect(consoleWarnSpy).toHaveBeenCalledWith(
                 'Service worker registration failed:',
                 expect.any(Error)
+            );
+        });
+    });
+
+    it('warns when explicit update check fails after registration', async () => {
+        const updateError = new Error('update timeout');
+        serviceWorker.register.mockResolvedValue({
+            waiting: null,
+            installing: null,
+            addEventListener: vi.fn(),
+            update: vi.fn().mockRejectedValue(updateError),
+        });
+        fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
+
+        const { registerOfflineWorker } = await import(
+            '../public/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        await vi.waitFor(() => {
+            expect(consoleWarnSpy).toHaveBeenCalledWith(
+                'Service worker update check failed:',
+                updateError
             );
         });
     });

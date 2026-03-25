@@ -44,6 +44,8 @@ export function registerOfflineWorker() {
         return true;
     };
 
+    const SW_REGISTRATION_OPTIONS = { updateViaCache: 'none' };
+
     function attachControllerReload() {
         let refreshing = false;
 
@@ -182,10 +184,13 @@ export function registerOfflineWorker() {
         }
 
         navigator.serviceWorker
-            .register('/service-worker.js')
+            .register('/service-worker.js', SW_REGISTRATION_OPTIONS)
             .then((registration) => {
                 setupUpdateHandling(registration);
                 installStylesheetRecovery();
+                registration.update().catch((error) => {
+                    console.warn('Service worker update check failed:', error);
+                });
             })
             .catch((error) => {
                 console.warn('Service worker registration failed:', error);
