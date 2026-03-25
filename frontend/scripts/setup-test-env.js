@@ -8,12 +8,29 @@
 
 import fs from 'fs';
 import path from 'path';
+import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { ensureAstroBuild } from './ensure-astro-build.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
+
+function ensureBuildMeta() {
+    const writeBuildMetaScript = path.resolve(rootDir, '..', 'scripts', 'write-build-meta.mjs');
+    const result = spawnSync('node', [writeBuildMetaScript], {
+        cwd: rootDir,
+        stdio: 'inherit',
+        env: process.env,
+    });
+
+    if (result.error) {
+        throw result.error;
+    }
+    if (result.status !== 0) {
+        throw new Error(`Failed to run ${writeBuildMetaScript} (exit ${result.status ?? 1})`);
+    }
+}
 
 // Ensure the quest graph debug handle is available in test builds
 // even though Astro builds with production settings for preview.
@@ -24,6 +41,7 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
+ensureBuildMeta();
 ensureAstroBuild();
 
 // Directories to ensure exist

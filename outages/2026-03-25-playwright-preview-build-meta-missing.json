@@ -1,0 +1,13 @@
+{
+  "id": "playwright-preview-build-meta-missing",
+  "date": "2026-03-25",
+  "component": "frontend:e2e-preview-build-meta",
+  "rootCause": "The Playwright setup path rebuilt Astro via frontend/scripts/setup-test-env.js without regenerating frontend/src/generated/build_meta.json, so /build-meta.json returned HTTP 503 and nav-route smoke failed with a console resource error on /chat.",
+  "resolution": "Updated frontend/scripts/setup-test-env.js to run scripts/write-build-meta.mjs before ensureAstroBuild(), ensuring runtime build metadata is present for preview-based E2E runs.",
+  "references": [
+    "frontend/scripts/setup-test-env.js",
+    "frontend/src/pages/build-meta.json.ts",
+    "frontend/src/utils/buildMetaServer.js",
+    "frontend/e2e/nav-route-smoke.spec.ts"
+  ]
+}
