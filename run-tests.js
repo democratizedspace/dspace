@@ -11,84 +11,127 @@ const { hasZeroTests } = require('./scripts/utils/detect-zero-tests');
 
 // ANSI color codes for pretty output
 const colors = Object.freeze({
-    reset: '\x1b[0m',
-    bright: '\x1b[1m',
-    green: '\x1b[32m',
-    yellow: '\x1b[33m',
-    blue: '\x1b[34m',
-    magenta: '\x1b[35m',
-    cyan: '\x1b[36m',
-    red: '\x1b[31m'
+  reset: '\x1b[0m',
+  bright: '\x1b[1m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
+  red: '\x1b[31m',
 });
 
-function runTests(exec = execSync, platform = os.platform()) {
-    console.log(`${colors.bright}${colors.magenta}DSPACE Testing Suite${colors.reset}`);
+function runRootUnitTests(exec) {
+  const rootCommand = 'npm run test:root';
+  const execOptions = {
+    encoding: 'utf-8',
+    stdio: 'pipe',
+    maxBuffer: 200 * 1024 * 1024,
+  };
+
+  try {
+    const output = exec(rootCommand, execOptions);
+    return { output, retried: false };
+  } catch (error) {
+    const combinedOutput = `${error.stdout ?? ''}${error.stderr ?? ''}`;
+    process.stdout.write(combinedOutput);
+
+    const timedOutOnTaskUpdate =
+      typeof combinedOutput === 'string' &&
+      combinedOutput.includes('Timeout calling "onTaskUpdate"');
+
+    if (!timedOutOnTaskUpdate) {
+      throw error;
+    }
+
     console.log(
-        `${colors.cyan}Running comprehensive tests before PR submission...${colors.reset}\n`
+      `${colors.yellow}Detected transient Vitest worker timeout; retrying root unit tests once...${colors.reset}`
     );
 
-    try {
-        const skipRootUnitTests = process.env.CI_COVERAGE_DONE === '1';
-        if (!skipRootUnitTests) {
-            console.log(`${colors.yellow}Running root unit tests...${colors.reset}`);
-            const rootOutput = exec('npm run test:root', {
-                encoding: 'utf-8',
-                stdio: 'pipe',
-                maxBuffer: 200 * 1024 * 1024
-            });
-            process.stdout.write(rootOutput);
-            if (hasZeroTests(rootOutput)) {
-                console.error(`${colors.red}Error: no root tests were run.${colors.reset}`);
-                return 1;
-            }
+    const retryOutput = exec(rootCommand, execOptions);
+    return { output: retryOutput, retried: true };
+  }
+}
 
-            console.log(`${colors.yellow}Running quest validation regression tests...${colors.reset}`);
-            exec('npm run test:quest-validation', { stdio: 'inherit' });
-        } else {
-            console.log(
-                `${colors.yellow}Skipping root unit tests — coverage already generated in CI.${colors.reset}`
-            );
-        }
+function runTests(exec = execSync, platform = os.platform()) {
+  console.log(
+    `${colors.bright}${colors.magenta}DSPACE Testing Suite${colors.reset}`
+  );
+  console.log(
+    `${colors.cyan}Running comprehensive tests before PR submission...${colors.reset}\n`
+  );
 
-        console.log(`${colors.yellow}Validating hardening metadata...${colors.reset}`);
-        exec('npm run hardening:validate', { stdio: 'inherit' });
-
-        console.log(`${colors.yellow}Validating docs RAG artifacts...${colors.reset}`);
-        exec('npm run test:docs-rag', { stdio: 'inherit' });
-
-        const scripts = {
-            win32: {
-                message: `${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`,
-                command: 'powershell -File .\\frontend\\scripts\\prepare-pr.ps1'
-            },
-            default: {
-                message: `${colors.yellow}Detected Unix-like OS, running Bash script...${colors.reset}`,
-                command: 'bash ./frontend/scripts/prepare-pr.sh'
-            }
-        };
-        const { message, command } = scripts[platform] || scripts.default;
-        console.log(message);
-        exec(command, {
-            stdio: 'inherit',
-            env: { ...process.env, SKIP_UNIT_TESTS: '1' }
-        });
-
+  try {
+    const skipRootUnitTests = process.env.CI_COVERAGE_DONE === '1';
+    if (!skipRootUnitTests) {
+      console.log(`${colors.yellow}Running root unit tests...${colors.reset}`);
+      const { output: rootOutput, retried } = runRootUnitTests(exec);
+      process.stdout.write(rootOutput);
+      if (retried) {
         console.log(
-            `\n${colors.bright}${colors.green}All tests completed successfully!${colors.reset}`
+          `${colors.green}Root unit test retry succeeded.${colors.reset}`
         );
-        return 0;
-    } catch (error) {
+      }
+      if (hasZeroTests(rootOutput)) {
         console.error(
-            `\n${colors.bright}${colors.red}Tests failed with error:${colors.reset}`
+          `${colors.red}Error: no root tests were run.${colors.reset}`
         );
-        console.error(error.message);
         return 1;
+      }
+
+      console.log(
+        `${colors.yellow}Running quest validation regression tests...${colors.reset}`
+      );
+      exec('npm run test:quest-validation', { stdio: 'inherit' });
+    } else {
+      console.log(
+        `${colors.yellow}Skipping root unit tests — coverage already generated in CI.${colors.reset}`
+      );
     }
+
+    console.log(
+      `${colors.yellow}Validating hardening metadata...${colors.reset}`
+    );
+    exec('npm run hardening:validate', { stdio: 'inherit' });
+
+    console.log(
+      `${colors.yellow}Validating docs RAG artifacts...${colors.reset}`
+    );
+    exec('npm run test:docs-rag', { stdio: 'inherit' });
+
+    const scripts = {
+      win32: {
+        message: `${colors.yellow}Detected Windows OS, running PowerShell script...${colors.reset}`,
+        command: 'powershell -File .\\frontend\\scripts\\prepare-pr.ps1',
+      },
+      default: {
+        message: `${colors.yellow}Detected Unix-like OS, running Bash script...${colors.reset}`,
+        command: 'bash ./frontend/scripts/prepare-pr.sh',
+      },
+    };
+    const { message, command } = scripts[platform] || scripts.default;
+    console.log(message);
+    exec(command, {
+      stdio: 'inherit',
+      env: { ...process.env, SKIP_UNIT_TESTS: '1' },
+    });
+
+    console.log(
+      `\n${colors.bright}${colors.green}All tests completed successfully!${colors.reset}`
+    );
+    return 0;
+  } catch (error) {
+    console.error(
+      `\n${colors.bright}${colors.red}Tests failed with error:${colors.reset}`
+    );
+    console.error(error.message);
+    return 1;
+  }
 }
 
 if (require.main === module) {
-    const code = runTests();
-    process.exit(code);
+  const code = runTests();
+  process.exit(code);
 }
 
-module.exports = { runTests };
+module.exports = { runTests, runRootUnitTests };
