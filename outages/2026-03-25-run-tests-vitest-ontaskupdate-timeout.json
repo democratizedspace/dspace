@@ -1,0 +1,14 @@
+{
+  "id": "2026-03-25-run-tests-vitest-ontaskupdate-timeout",
+  "date": "2026-03-25",
+  "component": "root test harness (run-tests.js / npm run test:root)",
+  "longForm": "outages/2026-03-25-run-tests-vitest-ontaskupdate-timeout.md",
+  "rootCause": "The one-command harness treated an intermittent Vitest worker RPC timeout (\"Timeout calling \\\"onTaskUpdate\\\"\") as a hard failure even when test files passed, causing npm run test:root to exit non-zero.",
+  "resolution": "Added a targeted one-time retry for the specific Vitest timeout signature in run-tests.js and added regression coverage so transient worker timeout flakes do not fail the full harness when retry succeeds.",
+  "references": [
+    "run-tests.js",
+    "scripts/tests/run-tests.test.ts",
+    "docs/qa/v3.md",
+    "outages/2026-03-25-run-tests-vitest-ontaskupdate-timeout.md"
+  ]
+}
