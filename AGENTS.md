@@ -51,7 +51,7 @@ SKIP_E2E=1 npm test
 ```
 
 - The CI workflow always runs E2E tests and will fail pull requests when they fail.
-- In fresh/cloud/container environments, run `npm run playwright:install` from the repo root before any Playwright-driven E2E or remote smoke harness command.
+- In fresh/cloud/container environments, after installing dependencies with `pnpm install` in the repo root, run `npm run playwright:install` before any Playwright-driven E2E or remote smoke harness command.
 - Use `npm run check` to verify formatting and linting.
 - Use `npm run audit:ci` to fail on high-severity dependency vulnerabilities.
 - Quest JSON files are validated via a pre-commit hook (`scripts/validate-staged-quests.js`).
