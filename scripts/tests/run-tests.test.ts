@@ -68,6 +68,9 @@ describe('runTests', () => {
       .mockReturnValueOnce('')
       .mockReturnValueOnce('')
       .mockReturnValueOnce('');
+    const write = vi
+      .spyOn(process.stdout, 'write')
+      .mockImplementation(() => true);
 
     const code = runTests(exec, 'linux');
 
@@ -90,5 +93,36 @@ describe('runTests', () => {
         maxBuffer: 200 * 1024 * 1024,
       })
     );
+    write.mockRestore();
+  });
+
+  test('fails when retry also fails after vitest worker onTaskUpdate timeout', () => {
+    const timeoutError = Object.assign(new Error('first pass failed'), {
+      stdout:
+        'Errors 1 error\nError: [vitest-worker]: Timeout calling "onTaskUpdate"\n',
+      stderr: '',
+    });
+    const retryError = Object.assign(new Error('retry also failed'), {
+      stdout: 'Error: another failure\n',
+      stderr: '',
+    });
+    const exec = vi
+      .fn()
+      .mockImplementationOnce(() => {
+        throw timeoutError;
+      })
+      .mockImplementationOnce(() => {
+        throw retryError;
+      });
+    const write = vi
+      .spyOn(process.stdout, 'write')
+      .mockImplementation(() => true);
+
+    const code = runTests(exec, 'linux');
+
+    expect(code).toBe(1);
+    expect(exec).toHaveBeenCalledTimes(2);
+    expect(write).toHaveBeenCalledWith(timeoutError.stdout);
+    write.mockRestore();
   });
 });

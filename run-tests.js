@@ -34,11 +34,9 @@ function runRootUnitTests(exec) {
     return { output, retried: false };
   } catch (error) {
     const combinedOutput = `${error.stdout ?? ''}${error.stderr ?? ''}`;
-    process.stdout.write(combinedOutput);
-
-    const timedOutOnTaskUpdate =
-      typeof combinedOutput === 'string' &&
-      combinedOutput.includes('Timeout calling "onTaskUpdate"');
+    const timedOutOnTaskUpdate = combinedOutput.includes(
+      'Timeout calling "onTaskUpdate"'
+    );
 
     if (!timedOutOnTaskUpdate) {
       throw error;
@@ -48,8 +46,13 @@ function runRootUnitTests(exec) {
       `${colors.yellow}Detected transient Vitest worker timeout; retrying root unit tests once...${colors.reset}`
     );
 
-    const retryOutput = exec(rootCommand, execOptions);
-    return { output: retryOutput, retried: true };
+    try {
+      const retryOutput = exec(rootCommand, execOptions);
+      return { output: retryOutput, retried: true };
+    } catch (retryError) {
+      process.stdout.write(combinedOutput);
+      throw retryError;
+    }
   }
 }
 
