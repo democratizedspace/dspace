@@ -124,4 +124,42 @@ describe('runtime middleware fallback', () => {
     expect(payload.method).toBe('GET');
     expect(payload.context.status).toBe(500);
   });
+
+  it('forces service worker responses to bypass caches', async () => {
+    const context = createContext('/service-worker.js');
+    const response = await onRequest(
+      context,
+      async () =>
+        new Response('// sw', {
+          headers: { 'Content-Type': 'application/javascript' },
+          status: 200,
+        })
+    );
+
+    expect(response.headers.get('cache-control')).toBe('no-cache, no-store, must-revalidate');
+  });
+
+  it('forces cache-version script responses to no-store', async () => {
+    const context = createContext('/cache-version.js');
+    const response = await onRequest(
+      context,
+      async () =>
+        new Response('self.CACHE_VERSION = "test";', {
+          headers: { 'Content-Type': 'application/javascript' },
+          status: 200,
+        })
+    );
+
+    expect(response.headers.get('cache-control')).toBe('no-store');
+  });
+
+  it('forces html responses to no-store', async () => {
+    const context = createContext('/docs/example');
+    const response = await onRequest(
+      context,
+      async () => new Response('<html></html>', { headers: { 'Content-Type': 'text/html' }, status: 200 })
+    );
+
+    expect(response.headers.get('cache-control')).toBe('no-store');
+  });
 });

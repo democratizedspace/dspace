@@ -22,8 +22,10 @@ describe('offline service worker integration', () => {
     );
     expect(layoutContents).toMatch(/<script\s+type="module"\s+src=\{offlineWorkerRegistrationUrl\}\s*>/);
     expect(registrationModuleContents).toMatch(
-      /navigator\.serviceWorker\s*\.\s*register\(['"]\/service-worker\.js['"]\)/
+      /navigator\.serviceWorker\s*\.\s*register\(['"]\/service-worker\.js['"],\s*SW_REGISTRATION_OPTIONS\)/
     );
+    expect(registrationModuleContents).toMatch(/updateViaCache:\s*['"]none['"]/);
+    expect(registrationModuleContents).toMatch(/registration\.update\(\)/);
   });
 
   it('imports the cache version script and references versioned caches', () => {

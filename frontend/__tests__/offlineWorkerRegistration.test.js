@@ -83,7 +83,10 @@ describe('registerOfflineWorker', () => {
             }
         });
 
-        serviceWorker.register.mockResolvedValue({ waiting: waitingWorker });
+        serviceWorker.register.mockResolvedValue({
+            waiting: waitingWorker,
+            update: vi.fn().mockResolvedValue(undefined),
+        });
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
         const { registerOfflineWorker } = await import(
@@ -93,7 +96,9 @@ describe('registerOfflineWorker', () => {
         registerOfflineWorker();
         await dispatchLoad();
 
-        expect(serviceWorker.register).toHaveBeenCalledWith('/service-worker.js');
+        expect(serviceWorker.register).toHaveBeenCalledWith('/service-worker.js', {
+            updateViaCache: 'none',
+        });
         expect(waitingWorker.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
         expect(controllerChangeHandlers).toHaveLength(1);
 
@@ -120,6 +125,7 @@ describe('registerOfflineWorker', () => {
         const registration = {
             installing: installingWorker,
             waiting: waitingWorker,
+            update: vi.fn().mockResolvedValue(undefined),
         };
 
         serviceWorker.register.mockResolvedValue(registration);
@@ -180,7 +186,10 @@ describe('registerOfflineWorker', () => {
 
     it('retries stylesheets that 404 shortly after load when controlled by service worker', async () => {
         const waitingWorker = { postMessage: vi.fn() };
-        serviceWorker.register.mockResolvedValue({ waiting: waitingWorker });
+        serviceWorker.register.mockResolvedValue({
+            waiting: waitingWorker,
+            update: vi.fn().mockResolvedValue(undefined),
+        });
 
         fetch.mockImplementation((url) => {
             if (typeof url === 'string' && url.includes('_astro/')) {
@@ -225,5 +234,51 @@ describe('registerOfflineWorker', () => {
                 expect.any(Error)
             );
         });
+    });
+
+    it('warns when explicit update check fails after registration', async () => {
+        const updateError = new Error('update timeout');
+        serviceWorker.register.mockResolvedValue({
+            waiting: null,
+            installing: null,
+            addEventListener: vi.fn(),
+            update: vi.fn().mockRejectedValue(updateError),
+        });
+        fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
+
+        const { registerOfflineWorker } = await import(
+            '../public/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        await vi.waitFor(() => {
+            expect(consoleWarnSpy).toHaveBeenCalledWith(
+                'Service worker update check failed:',
+                updateError
+            );
+        });
+    });
+
+    it('skips explicit update check when already attempted in the current session', async () => {
+        const updateSpy = vi.fn().mockResolvedValue(undefined);
+        window.sessionStorage.setItem('offlineWorkerUpdateChecked', 'true');
+        serviceWorker.register.mockResolvedValue({
+            waiting: null,
+            installing: null,
+            addEventListener: vi.fn(),
+            update: updateSpy,
+        });
+        fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
+
+        const { registerOfflineWorker } = await import(
+            '../public/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        expect(updateSpy).not.toHaveBeenCalled();
     });
 });
