@@ -98,12 +98,14 @@
   },
   "overrides": {
     "esbuild": "0.25.8",
-    "@esbuild/linux-x64": "0.25.8"
+    "@esbuild/linux-x64": "0.25.8",
+    "glob": "^10.4.5"
   },
   "pnpm": {
     "overrides": {
       "esbuild": "0.25.8",
-      "@esbuild/linux-x64": "0.25.8"
+      "@esbuild/linux-x64": "0.25.8",
+      "glob": "^10.4.5"
     }
   },
   "license": "MIT"
