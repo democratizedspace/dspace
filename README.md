@@ -30,6 +30,10 @@ pnpm install
 npm run dev  # Start development server on http://localhost:3002
 ```
 
+If you run `npm install`/`npm ci` instead of `pnpm install`, you may see deprecation warnings for
+transitive packages such as `inflight@1.0.6` and `glob@7.x` (via older Jest/Babel internals). These
+warnings are expected in the current dependency graph and do not block local development.
+
 For comprehensive setup instructions, see the [Developer Guide](./DEVELOPER_GUIDE.md).
 
 ### Essential Commands
