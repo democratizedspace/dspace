@@ -43,7 +43,8 @@
         "loadtest:custom-content": "node scripts/custom-content-load-test.js",
         "check": "npm run lint && npm run format:check",
         "sync": "node scripts/sync-package.js",
-        "postinstall": "node scripts/postinstall.js"
+        "postinstall": "node scripts/postinstall.js",
+        "playwright:install": "playwright install --with-deps chromium chromium-headless-shell"
     },
     "devDependencies": {
         "@astrojs/svelte": "^6.0.0",
