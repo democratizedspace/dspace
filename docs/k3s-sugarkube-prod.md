@@ -141,14 +141,23 @@ cd ~/sugarkube
 cat docs/examples/dspace.values.prod.yaml
 ```
 
+Pre-flight grep (run before Phase A deploy):
+
+```bash
+cd ~/sugarkube
+rg -n 'prod\.democratized\.space|democratized\.space|ingress\.host|environment:' docs/examples/dspace.values.prod.yaml docs/apps/dspace.version
+```
+
 Verify all of the following before install:
 
 - `environment: prod`
 - `ingress.enabled: true`
 - `ingress.className: traefik`
-- `ingress.host: prod.democratized.space` (**Phase A only**)
+- `ingress.host: prod.democratized.space` (**required for Phase A**)
 
-If `ingress.host` is not `prod.democratized.space`, update it before deployment.
+This runbook requires an intentional in-place phase switch in the same file:
+set `ingress.host: prod.democratized.space` in
+`docs/examples/dspace.values.prod.yaml` before the Phase A deploy.
 
 ---
 
@@ -181,8 +190,17 @@ Proceed only if all checks pass.
 ## Step 5: Promote to apex (`democratized.space`) for Phase B
 
 1. Merge `v3` to `main` after Phase A sign-off.
-2. Update sugarkube prod values host from `prod.democratized.space` to `democratized.space`.
-3. Configure/verify Cloudflare for apex `democratized.space`:
+2. In the same values file used in Phase A (`docs/examples/dspace.values.prod.yaml`),
+   change `ingress.host` back from `prod.democratized.space` to `democratized.space`
+   before continuing. This is a required in-place phase switch, not an optional check.
+3. Pre-flight grep (run before Phase B Helm upgrade):
+
+   ```bash
+   cd ~/sugarkube
+   rg -n 'prod\.democratized\.space|democratized\.space|ingress\.host|environment:' docs/examples/dspace.values.prod.yaml docs/apps/dspace.version
+   ```
+
+4. Configure/verify Cloudflare for apex `democratized.space` (must be complete before Helm upgrade):
    1. In Cloudflare dashboard → **Zero Trust** → **Networks** → **Tunnels** → your production
       tunnel, confirm or add a public hostname route for apex:
       - **Subdomain:** *(blank for apex)*
@@ -190,16 +208,18 @@ Proceed only if all checks pass.
       - **Path:** *(blank)*
       - **Service Type:** `HTTP`
       - **URL:** `traefik.kube-system.svc.cluster.local`
-   2. In Cloudflare dashboard → **DNS** → **Records**, confirm a proxied apex record exists
-      for `democratized.space` that targets the tunnel endpoint
-      (`<tunnel-UUID>.cfargotunnel.com`).
+   2. In Cloudflare dashboard → **DNS** → **Records**, confirm or add the apex tunnel DNS record:
+      - **Type:** `CNAME`
+      - **Name:** `@` (Cloudflare UI may also render this as `democratized.space`)
+      - **Target:** `<tunnel-UUID>.cfargotunnel.com`
+      - **Proxy status:** **Proxied** (orange cloud)
    3. Optional CLI spot-check:
 
       ```bash
       # Should resolve successfully (typically returning Cloudflare proxy IPs)
       nslookup democratized.space
       ```
-4. Deploy immutable `main-<shortsha>`:
+5. Deploy immutable `main-<shortsha>`:
 
 ```bash
 cd ~/sugarkube
@@ -211,7 +231,7 @@ just helm-oci-upgrade \
   default_tag=main-REPLACE_SHORTSHA
 ```
 
-5. Validate apex:
+6. Validate apex:
 
 ```bash
 kubectl -n dspace rollout status deploy/dspace
