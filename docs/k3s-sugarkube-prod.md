@@ -22,8 +22,8 @@ This is an operator runbook for deploying dspace to production with a safe two-p
 - sugarkube Cloudflare tunnel setup:
   [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md)
 - Cloudflare official docs used in this runbook:
-  - Tunnel public hostnames:
-    [Configure public hostnames](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/routing-to-tunnel/public-hostname/)
+  - Tunnel hostname + DNS routing:
+    [Route traffic to a Tunnel with DNS](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/dns/)
   - Tunnel DNS routing:
     [Route traffic to a Tunnel with DNS](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/routing-to-tunnel/dns/)
   - DNS records UI reference:
@@ -106,7 +106,7 @@ In Cloudflare dashboard:
 5. Save.
 
 Cloudflare reference:
-[Configure public hostnames](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/routing-to-tunnel/public-hostname/).
+[Route traffic to a Tunnel with DNS](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/dns/).
 
 ### 2B) Verify DNS record was created (or create it manually)
 
