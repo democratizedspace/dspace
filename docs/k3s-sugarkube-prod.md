@@ -40,8 +40,9 @@ This is an operator runbook for deploying dspace to production with a safe two-p
   - `ghcr.io/democratizedspace/dspace`
   - `oci://ghcr.io/democratizedspace/charts/dspace`
 - You have `kubectl` and `just` on the control host where `~/sugarkube` is checked out.
-- The sugarkube production values file exists and is current:
-  `docs/examples/dspace.values.prod.yaml`.
+- The sugarkube production values file exists and is current in your `sugarkube` checkout:
+  `~/sugarkube/docs/examples/dspace.values.prod.yaml` (see
+  [`docs/examples/dspace.values.prod.yaml` in the sugarkube repo](https://github.com/futuroptimist/sugarkube/blob/main/docs/examples/dspace.values.prod.yaml)).
 
 ## QA Cheats policy (prod)
 
@@ -123,7 +124,9 @@ Cloudflare references:
 ### 2C) Optional CLI verification from your operator machine
 
 ```bash
-# Should return a proxied CNAME to cfargotunnel.com
+# NOTE: Because this record is Proxied (orange cloud), nslookup should resolve
+# to Cloudflare anycast IPs, not the underlying cfargotunnel.com CNAME target.
+# Verify the CNAME target in Cloudflare DNS UI (Step 2B above).
 nslookup prod.democratized.space
 ```
 
@@ -135,7 +138,7 @@ On the sugarkube control host:
 
 ```bash
 cd ~/sugarkube
-sed -n '1,220p' docs/examples/dspace.values.prod.yaml
+cat docs/examples/dspace.values.prod.yaml
 ```
 
 Verify all of the following before install:
@@ -179,8 +182,23 @@ Proceed only if all checks pass.
 
 1. Merge `v3` to `main` after Phase A sign-off.
 2. Update sugarkube prod values host from `prod.democratized.space` to `democratized.space`.
-3. Confirm Cloudflare tunnel route for apex points to
-   `traefik.kube-system.svc.cluster.local`.
+3. Configure/verify Cloudflare for apex `democratized.space`:
+   1. In Cloudflare dashboard → **Zero Trust** → **Networks** → **Tunnels** → your production
+      tunnel, confirm or add a public hostname route for apex:
+      - **Subdomain:** *(blank for apex)*
+      - **Domain:** `democratized.space`
+      - **Path:** *(blank)*
+      - **Service Type:** `HTTP`
+      - **URL:** `traefik.kube-system.svc.cluster.local`
+   2. In Cloudflare dashboard → **DNS** → **Records**, confirm a proxied apex record exists
+      for `democratized.space` that targets the tunnel endpoint
+      (`<tunnel-UUID>.cfargotunnel.com`).
+   3. Optional CLI spot-check:
+
+      ```bash
+      # Should resolve successfully (typically returning Cloudflare proxy IPs)
+      nslookup democratized.space
+      ```
 4. Deploy immutable `main-<shortsha>`:
 
 ```bash
