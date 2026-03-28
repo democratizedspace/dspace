@@ -1,8 +1,7 @@
 ---
 import Page from '../components/Page.astro';
 import WhatsNew from '../components/WhatsNew.astro';
-import UIResponsiveness from '../components/svelte/UIResponsiveness.svelte';
-import FailoverStatus from '../components/svelte/FailoverStatus.svelte';
+import HomeRuntimeMeta from '../components/svelte/HomeRuntimeMeta.svelte';
 
 const version = process.env.DSPACE_VERSION ?? process.env.npm_package_version ?? 'unknown';
 const environment = process.env.DSPACE_ENV ?? 'unknown';
@@ -13,21 +12,10 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 
 <Page title="Home" columns="1">
     <li class="page-section">
-        <section class="build-meta-wrapper" aria-label="Build metadata">
-            <div class="build-meta">
-                <span class="env">{environment}</span>
-                <span class="version">{version}</span>
-            </div>
-        </section>
-    </li>
-    <li class="page-section">
         <WhatsNew />
     </li>
-    <li class="page-section">
-        <FailoverStatus client:load />
-    </li>
-    <li class="page-section">
-        <UIResponsiveness client:load />
+    <li class="page-section page-section--runtime-meta">
+        <HomeRuntimeMeta environment={environment} version={version} client:load />
     </li>
 </Page>
 
@@ -47,42 +35,7 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         text-align: center;
     }
 
-    .build-meta-wrapper {
-        display: flex;
-        justify-content: flex-end;
-        width: 100%;
-    }
-
-    .build-meta {
-        display: inline-flex;
-        gap: 0.5rem;
-        align-items: center;
-        padding: 0.25rem 0.75rem;
-        margin-bottom: 0.5rem;
-        font-size: 0.85rem;
-        border-radius: 9999px;
-        background-color: #f4f4f5;
-        color: #1f2933;
-        max-width: min(100%, 100vw - 2rem);
-        min-width: 0;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        text-align: right;
-        overflow-wrap: anywhere;
-    }
-
-    .build-meta .env {
-        font-weight: 600;
-        text-transform: lowercase;
-    }
-
-    .build-meta > span {
-        min-width: 0;
-    }
-
-    @media (max-width: 720px) {
-        .build-meta {
-            display: flex;
-        }
+    .page-section--runtime-meta {
+        padding: 0.6rem 1rem;
     }
 </style>
