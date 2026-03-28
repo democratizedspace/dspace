@@ -67,15 +67,6 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         min-width: 0;
     }
 
-    .status-strip :global(.connection-status),
-    .status-strip :global(.hydration-time) {
-        font-size: 0.9rem;
-    }
-
-    .status-strip :global(.hydration-time) {
-        white-space: nowrap;
-    }
-
     @media (max-width: 720px) {
         .status-strip-content {
             align-items: flex-start;
