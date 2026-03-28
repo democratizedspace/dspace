@@ -13,21 +13,19 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 
 <Page title="Home" columns="1">
     <li class="page-section">
-        <section class="build-meta-wrapper" aria-label="Build metadata">
-            <div class="build-meta">
-                <span class="env">{environment}</span>
-                <span class="version">{version}</span>
-            </div>
-        </section>
-    </li>
-    <li class="page-section">
         <WhatsNew />
     </li>
-    <li class="page-section">
-        <FailoverStatus client:load />
-    </li>
-    <li class="page-section">
-        <UIResponsiveness client:load />
+    <li class="page-section status-footer-section">
+        <section class="status-footer" aria-label="Build and runtime status">
+            <div class="build-meta-wrapper">
+                <div class="build-meta">
+                    <span class="env">{environment}</span>
+                    <span class="version">{version}</span>
+                </div>
+            </div>
+            <FailoverStatus client:load />
+            <UIResponsiveness client:load />
+        </section>
     </li>
 </Page>
 
@@ -47,10 +45,21 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         text-align: center;
     }
 
+    .status-footer-section {
+        padding: 0.75rem 1rem;
+    }
+
+    .status-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 0.9rem;
+        align-items: center;
+    }
+
     .build-meta-wrapper {
         display: flex;
-        justify-content: flex-end;
-        width: 100%;
+        min-width: 0;
+        justify-content: flex-start;
     }
 
     .build-meta {
@@ -58,16 +67,15 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         gap: 0.5rem;
         align-items: center;
         padding: 0.25rem 0.75rem;
-        margin-bottom: 0.5rem;
         font-size: 0.85rem;
         border-radius: 9999px;
         background-color: #f4f4f5;
         color: #1f2933;
-        max-width: min(100%, 100vw - 2rem);
+        max-width: 100%;
         min-width: 0;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        text-align: right;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        text-align: left;
         overflow-wrap: anywhere;
     }
 
@@ -80,9 +88,18 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         min-width: 0;
     }
 
+    :global(.status-footer [data-testid='connection-status']),
+    :global(.status-footer [data-testid='hydration-time']) {
+        margin-top: 0;
+    }
+
     @media (max-width: 720px) {
+        .status-footer-section {
+            padding: 0.6rem 0.8rem;
+        }
+
         .build-meta {
-            display: flex;
+            flex-wrap: wrap;
         }
     }
 </style>
