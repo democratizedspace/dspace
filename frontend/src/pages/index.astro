@@ -13,21 +13,21 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 
 <Page title="Home" columns="1">
     <li class="page-section">
-        <section class="build-meta-wrapper" aria-label="Build metadata">
-            <div class="build-meta">
-                <span class="env">{environment}</span>
-                <span class="version">{version}</span>
-            </div>
+        <section class="content-card">
+            <WhatsNew />
         </section>
     </li>
     <li class="page-section">
-        <WhatsNew />
-    </li>
-    <li class="page-section">
-        <FailoverStatus client:load />
-    </li>
-    <li class="page-section">
-        <UIResponsiveness client:load />
+        <section class="status-card" aria-label="Runtime status">
+            <div class="build-meta-wrapper" aria-label="Build metadata">
+                <div class="build-meta">
+                    <span class="env">{environment}</span>
+                    <span class="version">{version}</span>
+                </div>
+            </div>
+            <FailoverStatus client:load />
+            <UIResponsiveness client:load />
+        </section>
     </li>
 </Page>
 
@@ -36,7 +36,7 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 </script>
 
 <style>
-    div {
+    .content-card {
         background-color: white;
         padding: 20px;
         border-radius: 20px;
@@ -45,6 +45,13 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
 
     .fallback {
         text-align: center;
+    }
+
+    .status-card {
+        background-color: white;
+        padding: 12px 16px;
+        border-radius: 20px;
+        color: black;
     }
 
     .build-meta-wrapper {
