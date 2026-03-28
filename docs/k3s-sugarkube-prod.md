@@ -149,7 +149,7 @@ Pre-flight grep (run before Phase A deploy):
 
 ```bash
 cd ~/sugarkube
-rg -n 'prod\.democratized\.space|democratized\.space|ingress\.host|environment:|ingress\.enabled|className' docs/examples/dspace.values.prod-subdomain.yaml docs/apps/dspace.version
+rg -n 'ingress\.host:\s*prod\.democratized\.space|ingress\.className:\s*traefik|environment:\s*prod|ingress\.enabled:\s*true' docs/examples/dspace.values.prod-subdomain.yaml docs/apps/dspace.version
 ```
 
 Verify all of the following before install:
@@ -207,12 +207,14 @@ Proceed only if all checks pass.
 
    ```bash
    cd ~/sugarkube
-   rg -n 'prod\.democratized\.space|democratized\.space|ingress\.host|environment:' docs/examples/dspace.values.prod.yaml docs/apps/dspace.version
+   rg -n 'ingress\.host:\s*democratized\.space|ingress\.className:\s*traefik|environment:\s*prod|ingress\.enabled:\s*true|prod\.democratized\.space' docs/examples/dspace.values.prod.yaml docs/apps/dspace.version
    ```
 
    Confirm at minimum:
    - `environment: prod`
-   - `ingress.host: democratized.space`
+   - `ingress.enabled: true`
+   - `ingress.className: traefik`
+   - `ingress.host: democratized.space` (must be exact — `prod.democratized.space` must **not** appear as `ingress.host`)
 
 5. Configure/verify Cloudflare for apex `democratized.space` (must be complete before Helm upgrade):
    1. In Cloudflare dashboard → **Zero Trust** → **Networks** → **Tunnels** → your production
@@ -276,12 +278,14 @@ Cloudflare reference:
 ### Phase A rollback (`prod.democratized.space` validation failed)
 
 - Keep apex `democratized.space` untouched.
-- Redeploy previous known-good `v3-<shortsha>` to prod subdomain.
+- Redeploy previous known-good `v3-<shortsha>` to prod subdomain using
+  `values=docs/examples/dspace.values.prod-subdomain.yaml`.
 - Re-run `/config.json`, `/healthz`, `/livez` checks on `prod.democratized.space`.
 
 ### Phase B rollback (apex failed after promotion)
 
-- Redeploy previous known-good `main-<shortsha>` to apex.
+- Redeploy previous known-good `main-<shortsha>` to apex using
+  `values=docs/examples/dspace.values.prod.yaml`.
 - Keep `prod.democratized.space` as live validation host until apex is stable.
 - Only enable/retain redirect once apex is healthy.
 
