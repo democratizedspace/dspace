@@ -2,6 +2,7 @@
     import { onMount, onDestroy } from 'svelte';
     export let onlineText = 'Online';
     export let offlineText = 'Offline - changes will sync when connection restores';
+    export let compact = false;
 
     let online = true;
     let isClientSide = false;
@@ -31,6 +32,7 @@
 <div
     data-testid="connection-status"
     class="connection-status"
+    class:compact
     data-hydrated={isClientSide ? 'true' : 'false'}
 >
     {#if online}
@@ -44,5 +46,9 @@
     .connection-status {
         margin-top: 1rem;
         font-size: 0.9rem;
+    }
+
+    .connection-status.compact {
+        margin-top: 0;
     }
 </style>
