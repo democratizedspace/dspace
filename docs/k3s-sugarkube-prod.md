@@ -40,9 +40,12 @@ This is an operator runbook for deploying dspace to production with a safe two-p
   - `ghcr.io/democratizedspace/dspace`
   - `oci://ghcr.io/democratizedspace/charts/dspace`
 - You have `kubectl` and `just` on the control host where `~/sugarkube` is checked out.
-- The sugarkube production values file exists and is current in your `sugarkube` checkout:
-  `~/sugarkube/docs/examples/dspace.values.prod.yaml` (see
-  [`docs/examples/dspace.values.prod.yaml` in the sugarkube repo](https://github.com/futuroptimist/sugarkube/blob/main/docs/examples/dspace.values.prod.yaml)).
+- The sugarkube production values files exist and are current in your `sugarkube` checkout:
+  - `~/sugarkube/docs/examples/dspace.values.prod-subdomain.yaml` (Phase A preview host)
+  - `~/sugarkube/docs/examples/dspace.values.prod.yaml` (Phase B apex host)
+  - See sugarkube examples:
+    [`docs/examples/dspace.values.prod-subdomain.yaml` in the sugarkube repo](https://github.com/futuroptimist/sugarkube/blob/main/docs/examples/dspace.values.prod-subdomain.yaml),
+    [`docs/examples/dspace.values.prod.yaml` in the sugarkube repo](https://github.com/futuroptimist/sugarkube/blob/main/docs/examples/dspace.values.prod.yaml).
 
 ## QA Cheats policy (prod)
 
@@ -132,20 +135,21 @@ nslookup prod.democratized.space
 
 ---
 
-## Step 3: Ensure sugarkube production values are correct for Phase A
+## Step 3: Ensure Phase A preview values are correct (`prod.democratized.space`)
 
 On the sugarkube control host:
 
 ```bash
 cd ~/sugarkube
 cat docs/examples/dspace.values.prod.yaml
+cat docs/examples/dspace.values.prod-subdomain.yaml
 ```
 
 Pre-flight grep (run before Phase A deploy):
 
 ```bash
 cd ~/sugarkube
-rg -n 'prod\.democratized\.space|democratized\.space|ingress\.host|environment:' docs/examples/dspace.values.prod.yaml docs/apps/dspace.version
+rg -n 'prod\.democratized\.space|democratized\.space|ingress\.enabled|ingress\.className|ingress\.host|environment:' docs/examples/dspace.values.prod-subdomain.yaml docs/apps/dspace.version
 ```
 
 Verify all of the following before install:
@@ -155,9 +159,8 @@ Verify all of the following before install:
 - `ingress.className: traefik`
 - `ingress.host: prod.democratized.space` (**required for Phase A**)
 
-This runbook requires an intentional in-place phase switch in the same file:
-set `ingress.host: prod.democratized.space` in
-`docs/examples/dspace.values.prod.yaml` before the Phase A deploy.
+Use `docs/examples/dspace.values.prod-subdomain.yaml` for Phase A. Do **not** use the apex file in
+this phase.
 
 ---
 
@@ -168,7 +171,7 @@ cd ~/sugarkube
 just helm-oci-install \
   release=dspace namespace=dspace \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
-  values=docs/examples/dspace.values.prod.yaml \
+  values=docs/examples/dspace.values.prod-subdomain.yaml \
   version_file=docs/apps/dspace.version \
   default_tag=v3-REPLACE_SHORTSHA
 ```
@@ -190,15 +193,22 @@ Proceed only if all checks pass.
 ## Step 5: Promote to apex (`democratized.space`) for Phase B
 
 1. Merge `v3` to `main` after Phase A sign-off.
-2. In the same values file used in Phase A (`docs/examples/dspace.values.prod.yaml`),
-   change `ingress.host` back from `prod.democratized.space` to `democratized.space`
-   before continuing. This is a required in-place phase switch, not an optional check.
+2. **Phase switch safety check (required):** confirm you are switching from the preview values file
+   to the apex values file before promotion.
+   - Phase A file: `docs/examples/dspace.values.prod-subdomain.yaml`
+   - Phase B file: `docs/examples/dspace.values.prod.yaml`
+   - Using `docs/examples/dspace.values.prod-subdomain.yaml` during apex promotion is incorrect and
+     will route ingress to the wrong host (`prod.democratized.space`).
 3. Pre-flight grep (run before Phase B Helm upgrade):
 
    ```bash
    cd ~/sugarkube
    rg -n 'prod\.democratized\.space|democratized\.space|ingress\.host|environment:' docs/examples/dspace.values.prod.yaml docs/apps/dspace.version
    ```
+
+   Verify:
+   - `environment: prod`
+   - `ingress.host: democratized.space` (**required for Phase B**)
 
 4. Configure/verify Cloudflare for apex `democratized.space` (must be complete before Helm upgrade):
    1. In Cloudflare dashboard → **Zero Trust** → **Networks** → **Tunnels** → your production
@@ -213,13 +223,14 @@ Proceed only if all checks pass.
       - **Name:** `@` (Cloudflare UI may also render this as `democratized.space`)
       - **Target:** `<tunnel-UUID>.cfargotunnel.com`
       - **Proxy status:** **Proxied** (orange cloud)
-   3. Optional CLI spot-check:
+   3. Confirm both route + DNS are active before deploying `main-<shortsha>`.
+   4. Optional CLI spot-check:
 
       ```bash
       # Should resolve successfully (typically returning Cloudflare proxy IPs)
       nslookup democratized.space
       ```
-5. Deploy immutable `main-<shortsha>`:
+5. Deploy immutable `main-<shortsha>` **only after Step 5.4 is complete**:
 
 ```bash
 cd ~/sugarkube
@@ -276,7 +287,9 @@ Cloudflare reference:
 - [ ] Immutable tag selected (`v3-<shortsha>` Phase A, `main-<shortsha>` Phase B)
 - [ ] Cloudflare tunnel public hostname routes configured for active host
 - [ ] DNS CNAME present and proxied for active host
-- [ ] `docs/examples/dspace.values.prod.yaml` host matches active phase
+- [ ] Phase A uses `docs/examples/dspace.values.prod-subdomain.yaml` with `ingress.host: prod.democratized.space`
+- [ ] Phase B uses `docs/examples/dspace.values.prod.yaml` with `ingress.host: democratized.space`
+- [ ] Confirmed file switch from preview values to apex values before Phase B Helm upgrade
 - [ ] `environment: prod` confirmed
 - [ ] Helm install/upgrade completed
 - [ ] `/config.json`, `/healthz`, `/livez` all pass
