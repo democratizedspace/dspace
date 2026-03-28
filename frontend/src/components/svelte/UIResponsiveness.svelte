@@ -3,6 +3,7 @@
     import { calculateHydrationTime } from '../../utils/uiMetrics.js';
 
     export let startTime = 0;
+    export let compact = false;
     let hydration = 0;
     let hydrated = false;
 
@@ -13,13 +14,22 @@
     });
 </script>
 
-<div data-testid="hydration-time" data-hydrated={hydrated ? 'true' : 'false'}>
+<div
+    data-testid="hydration-time"
+    class="hydration-time"
+    class:compact
+    data-hydrated={hydrated ? 'true' : 'false'}
+>
     Hydration time: {Math.round(hydration)} ms
 </div>
 
 <style>
-    div {
+    .hydration-time {
         margin-top: 1rem;
         font-size: 0.9rem;
+    }
+
+    .hydration-time.compact {
+        margin-top: 0;
     }
 </style>

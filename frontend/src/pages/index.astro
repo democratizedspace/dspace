@@ -17,12 +17,12 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
     </li>
     <li class="page-section status-strip" aria-label="Build and runtime metadata">
         <div class="status-strip-content">
-            <div class="build-meta" aria-label="Build metadata">
+            <div class="build-meta" aria-label="Build metadata" role="group">
                 <span class="env">{environment}</span>
                 <span class="version">{version}</span>
             </div>
-            <FailoverStatus client:load />
-            <UIResponsiveness client:load />
+            <FailoverStatus client:load compact={true} />
+            <UIResponsiveness client:load compact={true} />
         </div>
     </li>
 </Page>
@@ -67,10 +67,12 @@ const environment = process.env.DSPACE_ENV ?? 'unknown';
         min-width: 0;
     }
 
-    .status-strip :global([data-testid='connection-status']),
-    .status-strip :global([data-testid='hydration-time']) {
-        margin-top: 0 !important;
+    .status-strip :global(.connection-status),
+    .status-strip :global(.hydration-time) {
         font-size: 0.9rem;
+    }
+
+    .status-strip :global(.hydration-time) {
         white-space: nowrap;
     }
 
