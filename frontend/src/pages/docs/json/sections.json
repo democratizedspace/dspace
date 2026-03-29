@@ -183,6 +183,11 @@
                 "keywords": ["saves", "safety"]
             },
             {
+                "title": "Custom content",
+                "href": "/docs/custom-content",
+                "keywords": ["quests", "items", "processes", "creation", "bundles"]
+            },
+            {
                 "title": "Game state rollback",
                 "href": "/docs/rollback",
                 "keywords": ["restore"]
