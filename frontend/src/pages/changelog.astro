@@ -142,7 +142,8 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
     }
 
     .entry-body :global(img) {
-        max-width: 100%;
+        max-width: min(100%, 512px);
+        width: auto;
         height: auto;
         border-radius: 20px;
     }
