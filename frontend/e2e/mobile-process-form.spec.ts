@@ -56,5 +56,38 @@ test('process creation page is usable on mobile', async ({ page }) => {
 
     expect(Math.abs(buttonMetrics.clientWidth - availableWidth)).toBeLessThanOrEqual(2);
 
+    const overflowDiagnostics = await page.evaluate(() => {
+        const form = document.querySelector('form.process-form');
+        const controls = Array.from(
+            document.querySelectorAll(
+                'form.process-form input[type="text"], form.process-form input[type="number"], form.process-form textarea'
+            )
+        );
+        const docEl = document.documentElement;
+        const formRect = form?.getBoundingClientRect();
+        const maxControlRight = controls.reduce((max, control) => {
+            const rect = control.getBoundingClientRect();
+            return Math.max(max, rect.right);
+        }, 0);
+
+        return {
+            docScrollWidth: docEl.scrollWidth,
+            docClientWidth: docEl.clientWidth,
+            bodyScrollWidth: document.body.scrollWidth,
+            formRight: formRect?.right ?? 0,
+            maxControlRight,
+        };
+    });
+
+    expect(overflowDiagnostics.docScrollWidth).toBeLessThanOrEqual(
+        overflowDiagnostics.docClientWidth + 1
+    );
+    expect(overflowDiagnostics.bodyScrollWidth).toBeLessThanOrEqual(
+        overflowDiagnostics.docClientWidth + 1
+    );
+    expect(overflowDiagnostics.maxControlRight).toBeLessThanOrEqual(
+        overflowDiagnostics.formRight + 1
+    );
+
     await page.screenshot({ path: './test-artifacts/mobile-process-form.png' });
 });

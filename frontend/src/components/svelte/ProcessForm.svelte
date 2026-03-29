@@ -548,6 +548,8 @@
         color: black;
         font-size: 16px;
         border: 2px solid #007006;
+        box-sizing: border-box;
+        max-width: 100%;
         transition:
             border-color 0.2s,
             box-shadow 0.2s;
