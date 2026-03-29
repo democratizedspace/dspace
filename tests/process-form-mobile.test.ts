@@ -7,6 +7,11 @@ const source = readFileSync(
 );
 
 describe('ProcessForm mobile layout', () => {
+  it('keeps form and text inputs within container width', () => {
+    expect(source).toMatch(/\.process-form\s*{[\s\S]*width:\s*min\(100%,\s*600px\)/);
+    expect(source).toMatch(/input\s*{[\s\S]*width:\s*100%[\s\S]*box-sizing:\s*border-box/);
+  });
+
   it('stacks submit buttons on narrow screens', () => {
     expect(source).toMatch(/\.form-submit\s*{[\s\S]*display:\s*flex/);
     expect(source).toMatch(

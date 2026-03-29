@@ -463,7 +463,8 @@
 
 <style>
     .process-form {
-        max-width: 600px;
+        width: min(100%, 600px);
+        box-sizing: border-box;
         margin: 0 auto;
         padding: 20px;
         background: #2c5837;
@@ -476,7 +477,8 @@
 
     .success-message {
         margin: 0 auto 20px auto;
-        max-width: 600px;
+        width: min(100%, 600px);
+        box-sizing: border-box;
         padding: 12px 16px;
         border-radius: 8px;
         background: #1f7a1f;
@@ -501,7 +503,8 @@
 
     .form-error {
         margin: 0 auto 20px auto;
-        max-width: 600px;
+        width: min(100%, 600px);
+        box-sizing: border-box;
         padding: 12px 16px;
         border-radius: 8px;
         background: #441414;
@@ -511,7 +514,8 @@
     }
 
     .loading-container {
-        max-width: 600px;
+        width: min(100%, 600px);
+        box-sizing: border-box;
         margin: 0 auto;
         padding: 40px 20px;
         background: #2c5837;
@@ -542,6 +546,8 @@
     }
 
     input {
+        width: 100%;
+        box-sizing: border-box;
         padding: 10px;
         border-radius: 8px;
         background: #68d46d;
@@ -551,10 +557,6 @@
         transition:
             border-color 0.2s,
             box-shadow 0.2s;
-    }
-
-    input[type='text'] {
-        width: 85%;
     }
 
     input.error {
