@@ -463,7 +463,9 @@
 
 <style>
     .process-form {
+        width: 100%;
         max-width: 600px;
+        box-sizing: border-box;
         margin: 0 auto;
         padding: 20px;
         background: #2c5837;
