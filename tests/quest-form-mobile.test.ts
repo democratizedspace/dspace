@@ -13,5 +13,10 @@ describe('QuestForm mobile layout', () => {
       /@media \(max-width: 480px\)[\s\S]*\.form-submit\s*{[\s\S]*flex-direction: column/
     );
   });
-});
 
+  it('keeps form controls constrained with border-box sizing', () => {
+    expect(source).toMatch(
+      /\.quest-form,\s*[\r\n]+\s*\.quest-form \*\s*{[\s\S]*box-sizing:\s*border-box/
+    );
+  });
+});

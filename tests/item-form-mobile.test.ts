@@ -13,4 +13,9 @@ describe('ItemForm mobile layout', () => {
       /@media \(max-width: 480px\)[\s\S]*\.form-submit\s*{[\s\S]*flex-direction:\s*column/,
     );
   });
+
+  it('keeps form controls constrained with border-box sizing', () => {
+    expect(source).toMatch(/\.item-form\s*{[\s\S]*box-sizing:\s*border-box/);
+    expect(source).toMatch(/input,\s*[\r\n]+\s*textarea,\s*[\r\n]+\s*select\s*{[\s\S]*box-sizing:\s*border-box/);
+  });
 });

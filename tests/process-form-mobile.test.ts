@@ -13,4 +13,9 @@ describe('ProcessForm mobile layout', () => {
       /@media \(max-width: 480px\)[\s\S]*\.form-submit\s*{[\s\S]*flex-direction:\s*column/
     );
   });
+
+  it('uses border-box sizing to prevent mobile input overflow', () => {
+    expect(source).toMatch(/\.process-form,\s*[\r\n]+\s*\.process-form \*\s*{[\s\S]*box-sizing:\s*border-box/);
+    expect(source).toMatch(/input\[type='text'\]\s*{[\s\S]*max-width:\s*100%/);
+  });
 });

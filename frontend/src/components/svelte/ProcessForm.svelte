@@ -462,6 +462,11 @@
 </div>
 
 <style>
+    .process-form,
+    .process-form * {
+        box-sizing: border-box;
+    }
+
     .process-form {
         max-width: 600px;
         margin: 0 auto;
@@ -555,6 +560,7 @@
 
     input[type='text'] {
         width: 85%;
+        max-width: 100%;
     }
 
     input.error {
