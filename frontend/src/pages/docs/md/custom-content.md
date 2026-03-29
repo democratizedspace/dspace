@@ -81,7 +81,7 @@ In-progress note:
   into canonical built-in content remains a maintainer-governed step and may continue evolving.
 
 <figure>
-    <img src="/assets/changelog/20260401/customcontent.jpg" alt="A screenshot of the Custom Content Bundle submission page in DSPACE." />
+    <img src="/assets/changelog/20260401/ccbundles.jpg" alt="A screenshot of the Custom Content Bundle submission page in DSPACE." />
     <figcaption align="center">Submit Custom Content Bundle</figcaption>
 </figure>
 
