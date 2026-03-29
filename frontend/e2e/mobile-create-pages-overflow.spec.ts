@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const MOBILE_VIEWPORT = { width: 375, height: 812 };
+const MOBILE_VIEWPORT = { width: 375, height: 667 };
 const CREATE_ROUTES = ['/processes/create', '/inventory/create', '/quests/create'];
 
 test.describe('mobile create-page overflow guardrails', () => {

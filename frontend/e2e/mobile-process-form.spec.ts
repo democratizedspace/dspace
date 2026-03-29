@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 // Verify the process creation form layout on mobile
+const MOBILE_VIEWPORT = { width: 375, height: 667 };
 
 test('process creation page is usable on mobile', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
+    await page.setViewportSize(MOBILE_VIEWPORT);
     await page.goto('/processes/create');
     await page.waitForLoadState('networkidle');
 
@@ -76,9 +77,11 @@ test('process creation page is usable on mobile', async ({ page }) => {
             bodyScrollWidth: document.body.scrollWidth,
             formRight: formRect?.right ?? 0,
             maxControlRight,
+            controlCount: controls.length,
         };
     });
 
+    expect(overflowDiagnostics.controlCount).toBeGreaterThan(0);
     expect(overflowDiagnostics.docScrollWidth).toBeLessThanOrEqual(
         overflowDiagnostics.docClientWidth + 1
     );
