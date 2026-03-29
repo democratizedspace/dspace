@@ -88,7 +88,9 @@ test('process creation page is usable on mobile', async ({ page }) => {
     expect(overflowDiagnostics.bodyScrollWidth).toBeLessThanOrEqual(
         overflowDiagnostics.docClientWidth + 1
     );
-    expect(overflowDiagnostics.formRight).toBeLessThanOrEqual(overflowDiagnostics.docClientWidth + 1);
+    expect(overflowDiagnostics.formRight).toBeLessThanOrEqual(
+        overflowDiagnostics.docClientWidth + 1
+    );
     expect(overflowDiagnostics.maxControlRight).toBeLessThanOrEqual(
         overflowDiagnostics.formRight + 1
     );

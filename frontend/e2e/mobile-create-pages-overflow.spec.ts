@@ -14,31 +14,34 @@ test.describe('mobile create-page overflow guardrails', () => {
             await page.goto(route);
             await page.waitForLoadState('networkidle');
 
-            const metrics = await page.evaluate(({ formSelector }) => {
-                const docEl = document.documentElement;
-                const form = document.querySelector(formSelector);
-                const formRect = form?.getBoundingClientRect();
-                const controls = Array.from(
-                    document.querySelectorAll(
-                        `${formSelector} input:not([type="hidden"]), ${formSelector} textarea, ${formSelector} select, ${formSelector} button`
-                    )
-                );
+            const metrics = await page.evaluate(
+                ({ formSelector }) => {
+                    const docEl = document.documentElement;
+                    const form = document.querySelector(formSelector);
+                    const formRect = form?.getBoundingClientRect();
+                    const controls = Array.from(
+                        document.querySelectorAll(
+                            `${formSelector} input:not([type="hidden"]), ${formSelector} textarea, ${formSelector} select, ${formSelector} button`
+                        )
+                    );
 
-                const rightmostControl = controls.reduce(
-                    (max, element) => Math.max(max, element.getBoundingClientRect().right),
-                    0
-                );
+                    const rightmostControl = controls.reduce(
+                        (max, element) => Math.max(max, element.getBoundingClientRect().right),
+                        0
+                    );
 
-                return {
-                    docScrollWidth: docEl.scrollWidth,
-                    docClientWidth: docEl.clientWidth,
-                    bodyScrollWidth: document.body.scrollWidth,
-                    formRight: formRect?.right ?? 0,
-                    rightmostControl,
-                    controlCount: controls.length,
-                    formFound: Boolean(form),
-                };
-            }, { formSelector });
+                    return {
+                        docScrollWidth: docEl.scrollWidth,
+                        docClientWidth: docEl.clientWidth,
+                        bodyScrollWidth: document.body.scrollWidth,
+                        formRight: formRect?.right ?? 0,
+                        rightmostControl,
+                        controlCount: controls.length,
+                        formFound: Boolean(form),
+                    };
+                },
+                { formSelector }
+            );
 
             expect(metrics.formFound).toBeTruthy();
             expect(metrics.controlCount).toBeGreaterThan(0);
