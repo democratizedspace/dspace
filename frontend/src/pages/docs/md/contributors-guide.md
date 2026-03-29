@@ -15,7 +15,7 @@ checklist for full coverage.
 - Use Node.js 20 LTS (`nvm use`) and run `pnpm install` at the repo root.
 - Install Playwright browsers with `npx playwright install chromium` if
   you plan to run end-to-end tests locally.
-- Enable the [recommended VS Code extensions](https://github.com/democratizedspace/dspace/blob/v3/frontend/.vscode/extensions.json)
+- Enable the [recommended VS Code extensions](https://raw.githubusercontent.com/democratizedspace/dspace/v3/frontend/.vscode/extensions.json)
   for linting, formatting, and Svelte language support.
 
 ## 2. Branching & workflow
