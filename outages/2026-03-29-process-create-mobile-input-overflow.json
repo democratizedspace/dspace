@@ -1,0 +1,14 @@
+{
+    "id": "process-create-mobile-input-overflow",
+    "date": "2026-03-29",
+    "component": "frontend/process-form",
+    "rootCause": "The create process form used a text input width of 85% without global border-box sizing on the form container and inputs. On narrow mobile viewports, input padding and borders increased rendered width beyond the card container, causing horizontal overflow.",
+    "resolution": "Updated ProcessForm layout styles to enforce width: 100% and box-sizing: border-box on the form container and inputs, removed the overflow-prone 85% text width rule, and added regression tests to enforce bounded form/input sizing across ProcessForm, ItemForm, and QuestForm.",
+    "references": [
+        "frontend/src/components/svelte/ProcessForm.svelte",
+        "tests/mobile-overflow-guards.test.ts",
+        "tests/process-form-mobile.test.ts",
+        "tests/item-form-mobile.test.ts",
+        "tests/quest-form-mobile.test.ts"
+    ]
+}

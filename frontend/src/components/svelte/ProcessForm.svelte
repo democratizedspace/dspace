@@ -463,9 +463,11 @@
 
 <style>
     .process-form {
+        width: 100%;
         max-width: 600px;
         margin: 0 auto;
         padding: 20px;
+        box-sizing: border-box;
         background: #2c5837;
         border-radius: 12px;
         border: 2px solid #007006;
@@ -542,6 +544,9 @@
     }
 
     input {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
         padding: 10px;
         border-radius: 8px;
         background: #68d46d;
@@ -553,10 +558,6 @@
             box-shadow 0.2s;
     }
 
-    input[type='text'] {
-        width: 85%;
-    }
-
     input.error {
         border-color: #ff3e3e;
         background-color: #ffecec;
@@ -564,6 +565,7 @@
 
     input[type='number'] {
         width: 80px;
+        max-width: 100%;
         text-align: center;
     }
 
@@ -678,7 +680,6 @@
         }
 
         input[type='text'] {
-            width: 100%;
             font-size: 14px;
         }
 
