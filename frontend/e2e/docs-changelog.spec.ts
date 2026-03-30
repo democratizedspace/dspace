@@ -95,7 +95,7 @@ const getLatestChangelogMeta = () => {
 };
 
 const latestChangelog = getLatestChangelogMeta();
-const CHANGELOG_HERO_IMAGE_PATH = '/assets/changelog/20260401/democratizedspace.jpg';
+const CHANGELOG_HERO_IMAGE_CLASS = 'changelog-hero-image--20260401';
 
 const waitForImageReady = async (locator: Locator) => {
     await locator.evaluate(async (node) => {
@@ -200,11 +200,19 @@ test.describe('docs changelog page', () => {
         page,
     }) => {
         await page.setViewportSize({ width: 1400, height: 1000 });
+        await page.goto('/');
+        await page.waitForLoadState('domcontentloaded');
+
+        const homeImage = page.locator(`.latest-update-html img.${CHANGELOG_HERO_IMAGE_CLASS}`);
+        await expect(homeImage).toBeVisible();
+        await waitForImageReady(homeImage);
+        const homeWidth = await homeImage.evaluate((node) => Math.ceil(node.getBoundingClientRect().width));
+        expect(homeWidth).toBeLessThanOrEqual(512);
+
         await page.goto('/changelog');
         await page.waitForLoadState('domcontentloaded');
 
-        // One-off cap target for the 2026-04-01 changelog hero image. Keep in sync with CSS selectors.
-        const changelogImage = page.locator(`.entry-body img[src*="${CHANGELOG_HERO_IMAGE_PATH}"]`);
+        const changelogImage = page.locator(`.entry-body img.${CHANGELOG_HERO_IMAGE_CLASS}`);
         await expect(changelogImage).toBeVisible();
         await waitForImageReady(changelogImage);
         const changelogWidth = await changelogImage.evaluate((node) =>
