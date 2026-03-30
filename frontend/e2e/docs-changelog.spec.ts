@@ -206,7 +206,9 @@ test.describe('docs changelog page', () => {
         const homeImage = page.locator(`.latest-update-html img.${CHANGELOG_HERO_IMAGE_CLASS}`);
         await expect(homeImage).toBeVisible();
         await waitForImageReady(homeImage);
-        const homeWidth = await homeImage.evaluate((node) => Math.ceil(node.getBoundingClientRect().width));
+        const homeWidth = await homeImage.evaluate((node) =>
+            Math.ceil(node.getBoundingClientRect().width)
+        );
         expect(homeWidth).toBeLessThanOrEqual(512);
 
         await page.goto('/changelog');
