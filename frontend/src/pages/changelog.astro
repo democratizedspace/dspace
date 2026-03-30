@@ -142,9 +142,19 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
     }
 
     .entry-body :global(img) {
-        max-width: min(100%, 512px);
+        max-width: 100%;
         height: auto;
         border-radius: 20px;
+    }
+
+    /*
+     * One-off cap for the 2026-04-01 changelog hero image hook.
+     * Keep this selector in sync with homepage latest-update styles and E2E coverage.
+     */
+    .entry-body :global(img.changelog-hero-image--20260401) {
+        max-width: min(100%, 512px);
+        display: block;
+        margin: 0.75rem auto;
     }
 
     .entry-body :global(pre) {

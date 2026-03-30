@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -95,6 +95,41 @@ const getLatestChangelogMeta = () => {
 };
 
 const latestChangelog = getLatestChangelogMeta();
+const CHANGELOG_HERO_IMAGE_CLASS = 'changelog-hero-image--20260401';
+
+const waitForImageReady = async (locator: Locator) => {
+    await locator.evaluate(async (node) => {
+        const image = node;
+        if (image.complete && image.naturalWidth > 0) {
+            return;
+        }
+
+        if (typeof image.decode === 'function') {
+            await image.decode().catch(() => undefined);
+            if (image.complete && image.naturalWidth > 0) {
+                return;
+            }
+        }
+
+        await new Promise((resolve, reject) => {
+            const onLoad = () => {
+                cleanup();
+                resolve(undefined);
+            };
+            const onError = () => {
+                cleanup();
+                reject(new Error('Failed to load image before measurement.'));
+            };
+            const cleanup = () => {
+                image.removeEventListener('load', onLoad);
+                image.removeEventListener('error', onError);
+            };
+
+            image.addEventListener('load', onLoad, { once: true });
+            image.addEventListener('error', onError, { once: true });
+        });
+    });
+};
 
 // The changelog doc should render real release notes instead of the placeholder CTA.
 test.describe('docs changelog page', () => {
@@ -161,14 +196,25 @@ test.describe('docs changelog page', () => {
         ).toHaveCount(0);
     });
 
-    test('caps markdown image render width on changelog and custom docs pages', async ({
-        page,
-    }) => {
+    test('keeps changelog hero image readable without shrinking docs images', async ({ page }) => {
+        await page.setViewportSize({ width: 1400, height: 1000 });
+        await page.goto('/');
+        await page.waitForLoadState('domcontentloaded');
+
+        const homeImage = page.locator(`.latest-update-html img.${CHANGELOG_HERO_IMAGE_CLASS}`);
+        await expect(homeImage).toBeVisible();
+        await waitForImageReady(homeImage);
+        const homeWidth = await homeImage.evaluate((node) =>
+            Math.ceil(node.getBoundingClientRect().width)
+        );
+        expect(homeWidth).toBeLessThanOrEqual(512);
+
         await page.goto('/changelog');
         await page.waitForLoadState('domcontentloaded');
 
-        const changelogImage = page.locator('.entry-body img').first();
+        const changelogImage = page.locator(`.entry-body img.${CHANGELOG_HERO_IMAGE_CLASS}`);
         await expect(changelogImage).toBeVisible();
+        await waitForImageReady(changelogImage);
         const changelogWidth = await changelogImage.evaluate((node) =>
             Math.ceil(node.getBoundingClientRect().width)
         );
@@ -179,9 +225,12 @@ test.describe('docs changelog page', () => {
 
         const docImage = page.locator('.doc-content img').first();
         await expect(docImage).toBeVisible();
-        const docWidth = await docImage.evaluate((node) =>
-            Math.ceil(node.getBoundingClientRect().width)
-        );
-        expect(docWidth).toBeLessThanOrEqual(512);
+        await waitForImageReady(docImage);
+        const docMetrics = await docImage.evaluate((node) => ({
+            width: Math.ceil(node.getBoundingClientRect().width),
+            naturalWidth: node.naturalWidth,
+        }));
+        expect(docMetrics.naturalWidth).toBeGreaterThan(512);
+        expect(docMetrics.width).toBeGreaterThan(512);
     });
 });
