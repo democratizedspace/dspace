@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -95,6 +95,41 @@ const getLatestChangelogMeta = () => {
 };
 
 const latestChangelog = getLatestChangelogMeta();
+const CHANGELOG_HERO_IMAGE_PATH = '/assets/changelog/20260401/democratizedspace.jpg';
+
+const waitForImageReady = async (locator: Locator) => {
+    await locator.evaluate(async (node) => {
+        const image = node;
+        if (image.complete && image.naturalWidth > 0) {
+            return;
+        }
+
+        if (typeof image.decode === 'function') {
+            await image.decode().catch(() => undefined);
+            if (image.complete && image.naturalWidth > 0) {
+                return;
+            }
+        }
+
+        await new Promise((resolve, reject) => {
+            const onLoad = () => {
+                cleanup();
+                resolve(undefined);
+            };
+            const onError = () => {
+                cleanup();
+                reject(new Error('Failed to load image before measurement.'));
+            };
+            const cleanup = () => {
+                image.removeEventListener('load', onLoad);
+                image.removeEventListener('error', onError);
+            };
+
+            image.addEventListener('load', onLoad, { once: true });
+            image.addEventListener('error', onError, { once: true });
+        });
+    });
+};
 
 // The changelog doc should render real release notes instead of the placeholder CTA.
 test.describe('docs changelog page', () => {
@@ -164,13 +199,14 @@ test.describe('docs changelog page', () => {
     test('keeps changelog hero image readable without shrinking docs images', async ({
         page,
     }) => {
+        await page.setViewportSize({ width: 1400, height: 1000 });
         await page.goto('/changelog');
         await page.waitForLoadState('domcontentloaded');
 
-        const changelogImage = page.locator(
-            '.entry-body img[src*="/assets/changelog/20260401/democratizedspace.jpg"]'
-        );
+        // One-off cap target for the 2026-04-01 changelog hero image. Keep in sync with CSS selectors.
+        const changelogImage = page.locator(`.entry-body img[src*="${CHANGELOG_HERO_IMAGE_PATH}"]`);
         await expect(changelogImage).toBeVisible();
+        await waitForImageReady(changelogImage);
         const changelogWidth = await changelogImage.evaluate((node) =>
             Math.ceil(node.getBoundingClientRect().width)
         );
@@ -181,14 +217,12 @@ test.describe('docs changelog page', () => {
 
         const docImage = page.locator('.doc-content img').first();
         await expect(docImage).toBeVisible();
+        await waitForImageReady(docImage);
         const docMetrics = await docImage.evaluate((node) => ({
             width: Math.ceil(node.getBoundingClientRect().width),
             naturalWidth: node.naturalWidth,
-            computedMaxWidth: getComputedStyle(node).maxWidth,
         }));
-        expect(docMetrics.computedMaxWidth).not.toBe('512px');
-        if (docMetrics.naturalWidth > 512) {
-            expect(docMetrics.width).toBeGreaterThan(512);
-        }
+        expect(docMetrics.naturalWidth).toBeGreaterThan(512);
+        expect(docMetrics.width).toBeGreaterThan(512);
     });
 });

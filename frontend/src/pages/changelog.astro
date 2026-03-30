@@ -147,6 +147,10 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
         border-radius: 20px;
     }
 
+    /*
+     * One-off cap for the 2026-04-01 changelog hero image.
+     * Keep this selector in sync with homepage latest-update styles and E2E coverage.
+     */
     .entry-body :global(img[src*="/assets/changelog/20260401/democratizedspace.jpg"]) {
         max-width: min(100%, 512px);
         display: block;

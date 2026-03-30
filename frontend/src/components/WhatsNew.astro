@@ -15,14 +15,18 @@ function prepareHtml(html, slug) {
     const withNotes = appendChangelogNotes(html, slug);
     return withNotes + `
         <style>
-            img {
+            .latest-update-html img {
                 max-width: 100%;
                 width: auto;
                 height: auto;
                 border-radius: 20px;
             }
 
-            img[src*="/assets/changelog/20260401/democratizedspace.jpg"] {
+            /*
+             * One-off cap for the 2026-04-01 changelog hero image.
+             * Keep this selector in sync with /changelog styles and E2E coverage.
+             */
+            .latest-update-html img[src*="/assets/changelog/20260401/democratizedspace.jpg"] {
                 max-width: min(100%, 512px);
                 display: block;
                 margin: 0.75rem auto;
@@ -83,7 +87,7 @@ try {
     {latestUpdateHtml && latestUpdateTitle ? (
         <>
             <h3>Latest update: {latestUpdateTitle}</h3>
-            <span set:html={latestUpdateHtml}></span>
+            <span class="latest-update-html" set:html={latestUpdateHtml}></span>
         </>
     ) : (
         <p class="fallback">Unable to load the latest updates right now.</p>
@@ -95,13 +99,6 @@ try {
 </span>
 
 <style>
-    img {
-        max-width: 100%;
-        width: auto;
-        height: auto;
-        border-radius: 20px;
-    }
-
     span {
         background-color: white;
         color: black;
