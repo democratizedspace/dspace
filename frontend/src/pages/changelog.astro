@@ -142,9 +142,15 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
     }
 
     .entry-body :global(img) {
-        max-width: min(100%, 512px);
+        max-width: 100%;
         height: auto;
         border-radius: 20px;
+    }
+
+    .entry-body :global(img[src*="/assets/changelog/20260401/democratizedspace.jpg"]) {
+        max-width: min(100%, 512px);
+        display: block;
+        margin: 0.75rem auto;
     }
 
     .entry-body :global(pre) {

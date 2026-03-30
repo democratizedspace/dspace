@@ -16,8 +16,16 @@ function prepareHtml(html, slug) {
     return withNotes + `
         <style>
             img {
-                width: 100%;
+                max-width: 100%;
+                width: auto;
+                height: auto;
                 border-radius: 20px;
+            }
+
+            img[src*="/assets/changelog/20260401/democratizedspace.jpg"] {
+                max-width: min(100%, 512px);
+                display: block;
+                margin: 0.75rem auto;
             }
 
             .changelog-note {
@@ -88,7 +96,9 @@ try {
 
 <style>
     img {
-        width: 100%;
+        max-width: 100%;
+        width: auto;
+        height: auto;
         border-radius: 20px;
     }
 

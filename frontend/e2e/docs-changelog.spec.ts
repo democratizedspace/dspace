@@ -161,13 +161,15 @@ test.describe('docs changelog page', () => {
         ).toHaveCount(0);
     });
 
-    test('caps markdown image render width on changelog and custom docs pages', async ({
+    test('keeps changelog hero image readable without shrinking docs images', async ({
         page,
     }) => {
         await page.goto('/changelog');
         await page.waitForLoadState('domcontentloaded');
 
-        const changelogImage = page.locator('.entry-body img').first();
+        const changelogImage = page.locator(
+            '.entry-body img[src*="/assets/changelog/20260401/democratizedspace.jpg"]'
+        );
         await expect(changelogImage).toBeVisible();
         const changelogWidth = await changelogImage.evaluate((node) =>
             Math.ceil(node.getBoundingClientRect().width)
@@ -179,9 +181,14 @@ test.describe('docs changelog page', () => {
 
         const docImage = page.locator('.doc-content img').first();
         await expect(docImage).toBeVisible();
-        const docWidth = await docImage.evaluate((node) =>
-            Math.ceil(node.getBoundingClientRect().width)
-        );
-        expect(docWidth).toBeLessThanOrEqual(512);
+        const docMetrics = await docImage.evaluate((node) => ({
+            width: Math.ceil(node.getBoundingClientRect().width),
+            naturalWidth: node.naturalWidth,
+            computedMaxWidth: getComputedStyle(node).maxWidth,
+        }));
+        expect(docMetrics.computedMaxWidth).not.toBe('512px');
+        if (docMetrics.naturalWidth > 512) {
+            expect(docMetrics.width).toBeGreaterThan(512);
+        }
     });
 });
