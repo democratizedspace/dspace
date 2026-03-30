@@ -196,9 +196,7 @@ test.describe('docs changelog page', () => {
         ).toHaveCount(0);
     });
 
-    test('keeps changelog hero image readable without shrinking docs images', async ({
-        page,
-    }) => {
+    test('keeps changelog hero image readable without shrinking docs images', async ({ page }) => {
         await page.setViewportSize({ width: 1400, height: 1000 });
         await page.goto('/');
         await page.waitForLoadState('domcontentloaded');
