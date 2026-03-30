@@ -142,9 +142,16 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
     }
 
     .entry-body :global(img) {
-        max-width: min(100%, 512px);
+        max-width: 100%;
         height: auto;
         border-radius: 20px;
+    }
+
+    .entry-body :global(img.release-art) {
+        width: min(100%, 512px);
+        max-width: min(100%, 512px);
+        margin-inline: auto;
+        display: block;
     }
 
     .entry-body :global(pre) {
