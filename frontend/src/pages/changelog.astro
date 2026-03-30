@@ -141,10 +141,14 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
         word-break: break-word;
     }
 
-    .entry-body :global(img) {
-        max-width: min(100%, 512px);
+    :global(.entry-body img) {
+        max-width: 100%;
         height: auto;
         border-radius: 20px;
+    }
+
+    :global(.entry-body img.changelog-feature-image) {
+        max-width: min(100%, 512px);
     }
 
     .entry-body :global(pre) {

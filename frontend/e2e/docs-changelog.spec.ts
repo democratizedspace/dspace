@@ -161,13 +161,13 @@ test.describe('docs changelog page', () => {
         ).toHaveCount(0);
     });
 
-    test('caps markdown image render width on changelog and custom docs pages', async ({
+    test('uses route-specific markdown image sizing for changelog and docs pages', async ({
         page,
     }) => {
         await page.goto('/changelog');
         await page.waitForLoadState('domcontentloaded');
 
-        const changelogImage = page.locator('.entry-body img').first();
+        const changelogImage = page.locator('.entry-body img.changelog-feature-image').first();
         await expect(changelogImage).toBeVisible();
         const changelogWidth = await changelogImage.evaluate((node) =>
             Math.ceil(node.getBoundingClientRect().width)
@@ -182,6 +182,6 @@ test.describe('docs changelog page', () => {
         const docWidth = await docImage.evaluate((node) =>
             Math.ceil(node.getBoundingClientRect().width)
         );
-        expect(docWidth).toBeLessThanOrEqual(512);
+        expect(docWidth).toBeGreaterThan(512);
     });
 });
