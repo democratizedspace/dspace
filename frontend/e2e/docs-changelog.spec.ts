@@ -160,4 +160,28 @@ test.describe('docs changelog page', () => {
             page.getByRole('link', { name: 'Write the Changelog doc', exact: true })
         ).toHaveCount(0);
     });
+
+    test('caps markdown image render width on changelog and custom docs pages', async ({
+        page,
+    }) => {
+        await page.goto('/changelog');
+        await page.waitForLoadState('domcontentloaded');
+
+        const changelogImage = page.locator('.entry-body img').first();
+        await expect(changelogImage).toBeVisible();
+        const changelogWidth = await changelogImage.evaluate((node) =>
+            Math.ceil(node.getBoundingClientRect().width)
+        );
+        expect(changelogWidth).toBeLessThanOrEqual(512);
+
+        await page.goto('/docs/custom-content');
+        await page.waitForLoadState('domcontentloaded');
+
+        const docImage = page.locator('.doc-content img').first();
+        await expect(docImage).toBeVisible();
+        const docWidth = await docImage.evaluate((node) =>
+            Math.ceil(node.getBoundingClientRect().width)
+        );
+        expect(docWidth).toBeLessThanOrEqual(512);
+    });
 });
