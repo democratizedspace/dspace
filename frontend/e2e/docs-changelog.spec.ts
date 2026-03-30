@@ -161,7 +161,9 @@ test.describe('docs changelog page', () => {
         ).toHaveCount(0);
     });
 
-    test('caps markdown image render width on changelog and custom docs pages', async ({ page }) => {
+    test('caps markdown image render width on changelog and custom docs pages', async ({
+        page,
+    }) => {
         await page.goto('/changelog');
         await page.waitForLoadState('domcontentloaded');
 
@@ -182,5 +184,4 @@ test.describe('docs changelog page', () => {
         );
         expect(docWidth).toBeLessThanOrEqual(512);
     });
-
 });
