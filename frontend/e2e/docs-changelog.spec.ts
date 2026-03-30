@@ -161,13 +161,15 @@ test.describe('docs changelog page', () => {
         ).toHaveCount(0);
     });
 
-    test('caps markdown image render width on changelog and custom docs pages', async ({
+    test('preserves natural docs image sizing while capping targeted changelog hero image', async ({
         page,
     }) => {
         await page.goto('/changelog');
         await page.waitForLoadState('domcontentloaded');
 
-        const changelogImage = page.locator('.entry-body img').first();
+        const changelogImage = page.locator(
+            '.entry-body img[src="/assets/changelog/20260401/democratizedspace.jpg"]'
+        );
         await expect(changelogImage).toBeVisible();
         const changelogWidth = await changelogImage.evaluate((node) =>
             Math.ceil(node.getBoundingClientRect().width)
@@ -182,6 +184,6 @@ test.describe('docs changelog page', () => {
         const docWidth = await docImage.evaluate((node) =>
             Math.ceil(node.getBoundingClientRect().width)
         );
-        expect(docWidth).toBeLessThanOrEqual(512);
+        expect(docWidth).toBeGreaterThan(512);
     });
 });
