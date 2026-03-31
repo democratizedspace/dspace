@@ -138,7 +138,7 @@ The following fields define a common shape across corpora.
 | `provenance_detail` | e.g. `human_commissioned`, `human_contest`, `ai_generated` |
 | `artist_credit` | Displayable attribution metadata |
 | `license` | License id + usage scope + exclusivity notes |
-| `status` | `active`, `deprecated`, `superseded`, `archived`, `draft` |
+| `status` | `active`, `superseded`, `deprecated`, `archived`, `draft` |
 | `tags` | Style/theme tags for filtering |
 | `priority` | Numeric ordering weight |
 | `pinned` | Top-order boost independent of recency |
@@ -151,10 +151,18 @@ The following fields define a common shape across corpora.
 | `moderation_state` | `pending`, `approved`, `rejected`, `needs_review` |
 | `visibility` | `public`, `staff_only`, `legacy_opt_in`, etc. |
 | `preference_eligible` | Boolean for settings selector eligibility |
-| `asset_uri` | Storage path reference |
+| `asset_uri` | Logical storage key or public URL reference (resolver may map key → served URL) |
 | `checksum` | Optional content hash for provenance/audit |
 
 ### Example A: NPC with older AI default superseded by newer AI + human variant
+
+Status semantics used in this doc:
+
+- `active`: eligible for normal selection (subject to moderation/visibility/settings filters).
+- `superseded`: replaced by a newer preferred variant but still preserved and potentially visible.
+- `deprecated`: intentionally legacy-only (hidden from normal pools unless legacy opt-in is enabled).
+- `archived`: retained for audit/history; not expected in normal player-facing selection.
+- `draft`: pre-publication and never player-visible.
 
 ```json
 {
@@ -169,7 +177,7 @@ The following fields define a common shape across corpora.
       "provenance_detail": "ai_generated",
       "artist_credit": { "display": "DSPACE model pipeline (legacy)" },
       "license": { "id": "internal-commercial", "usage_scope": "game-and-marketing" },
-      "status": "deprecated",
+      "status": "superseded",
       "tags": ["portrait", "legacy"],
       "priority": 10,
       "pinned": false,
@@ -182,7 +190,7 @@ The following fields define a common shape across corpora.
       "moderation_state": "approved",
       "visibility": "legacy_opt_in",
       "preference_eligible": true,
-      "asset_uri": "assets/npcs/captain-nyra/v1.png"
+      "asset_uri": "/assets/npc/captain-nyra-v1.png"
     },
     {
       "variant_id": "npc-captain-nyra-ai-v2",
@@ -203,7 +211,7 @@ The following fields define a common shape across corpora.
       "moderation_state": "approved",
       "visibility": "public",
       "preference_eligible": true,
-      "asset_uri": "assets/npcs/captain-nyra/v2.png"
+      "asset_uri": "/assets/npc/captain-nyra-v2.png"
     },
     {
       "variant_id": "npc-captain-nyra-human-commission-01",
@@ -227,7 +235,7 @@ The following fields define a common shape across corpora.
       "moderation_state": "approved",
       "visibility": "public",
       "preference_eligible": true,
-      "asset_uri": "assets/npcs/captain-nyra/human-commission-01.png"
+      "asset_uri": "/assets/npc/captain-nyra-human-commission-01.png"
     }
   ]
 }
@@ -246,12 +254,13 @@ The following fields define a common shape across corpora.
       "is_default": true,
       "provenance": "hybrid",
       "provenance_detail": "human_overpaint_ai_base",
+      "artist_credit": { "display": "DSPACE hybrid pipeline + paintover artist (example)" },
       "status": "active",
       "priority": 100,
       "moderation_state": "approved",
       "visibility": "public",
       "preference_eligible": true,
-      "asset_uri": "assets/quests/hydroponics/2/default-v1.webp"
+      "asset_uri": "/assets/quests/hydroponics-2-default-v1.webp"
     },
     {
       "variant_id": "quest-hydroponics-2-contest-2027",
@@ -271,7 +280,7 @@ The following fields define a common shape across corpora.
       "moderation_state": "approved",
       "visibility": "public",
       "preference_eligible": true,
-      "asset_uri": "assets/quests/hydroponics/2/contest-2027.webp"
+      "asset_uri": "/assets/quests/hydroponics-2-contest-2027.webp"
     },
     {
       "variant_id": "quest-hydroponics-2-legacy-beta",
@@ -284,7 +293,7 @@ The following fields define a common shape across corpora.
       "moderation_state": "approved",
       "visibility": "legacy_opt_in",
       "preference_eligible": false,
-      "asset_uri": "assets/quests/hydroponics/2/legacy-beta.webp"
+      "asset_uri": "/assets/quests/hydroponics-2-legacy-beta.webp"
     }
   ]
 }
@@ -358,9 +367,20 @@ Given `(entity_id, corpus, player_settings)`:
 2. Filter to matching corpus/entity type.
 3. Filter by moderation gate (`approved` only for player-visible).
 4. Filter by visibility gate (`public` plus any allowed legacy scope).
-5. Filter by player provenance preference (`human`, `ai`, `mixed`, `default-only`).
+5. Filter by player provenance preference (`human`, `ai`, `mixed`, `default-only`) using explicit
+   provenance mapping:
+   - `human`: only `provenance=human` variants.
+   - `ai`: only `provenance=ai` variants.
+   - `mixed`: `human`, `ai`, or `hybrid` variants.
+   - `default-only`: only `is_default=true` variants (regardless of provenance).
+   - `hybrid` is treated as mixed provenance (eligible for `mixed` and for `default-only` when it is
+     the default), not as strict `human` or strict `ai`.
 6. Filter by license/usage eligibility if runtime context requires it.
-7. If empty, relax preferences in a controlled order (never bypass moderation gate).
+7. If empty, relax preferences in this controlled order (never bypass moderation gate):
+   - `human` → `mixed` → `ai` → `default-only`.
+   - `ai` → `mixed` → `human` → `default-only`.
+   - `mixed` → `default-only`.
+   - `default-only` has no provenance relaxation; continue to hard fallback rules below.
 8. Sort by `pinned desc`, `is_default desc`, `priority desc`, `created_at desc`.
 9. If randomization enabled, randomize within top eligible tier per sticky policy.
 10. If still empty, hard fallback to canonical default active variant.
@@ -451,7 +471,8 @@ Future contributor systems should include compensated and community channels.
 Likely implementation surfaces for future milestones:
 
 - Content metadata and JSON schema extensions for variants.
-- Asset storage/layout conventions per corpus.
+- Asset storage/layout conventions per corpus (`asset_uri` can be a logical key mapped by the
+  resolver; examples here use current public URL-style paths for readability).
 - Render-time selection resolver in image rendering paths.
 - `/settings` integration for global/per-corpus variant preferences.
 - Migration/admin utilities for legacy variant tagging and lineage backfill.
