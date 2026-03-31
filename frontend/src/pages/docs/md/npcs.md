@@ -182,7 +182,7 @@ Atlas haul crates and steady delicate assemblies. They will often help with aqua
 
 ## Cedar
 
-<img src="/assets/npc/atlas.jpg" />
+<img src="/assets/npc/cedar.jpg" />
 
 Cedar is slated to be the Metaguild's patient carpenter, happiest when turning scavenged planks
 into sturdy kit.
@@ -203,7 +203,7 @@ second nature.
 
 ## Lyra
 
-<img src="/assets/npc/nova.jpg" />
+<img src="/assets/npc/lyra.jpg" />
 
 Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision.
 Raised under planetarium domes, she reads constellations like street signs and will keep the guild
@@ -226,7 +226,7 @@ She steers launches through debris fields and teaches patience in stargazing.
 
 ## Helio
 
-<img src="/assets/npc/sydney.jpg" />
+<img src="/assets/npc/helio.jpg" />
 
 Helio is a cheerful solar tech who chases daylight and rigs compact arrays that keep gear
 humming far from any outlet. They eyeball tilt to within a degree and log every amp-hour.
@@ -247,7 +247,7 @@ Sun](/processes/charge-battery-pack-solar).
 
 ## Nimbus
 
-<img src="/assets/npc/nova.jpg" />
+<img src="/assets/npc/nimbus.jpg" />
 
 Nimbus forecasts weather for launch windows and orbital transfers.
 Raised beneath gusty plains, they read barometers like diaries.
@@ -266,7 +266,7 @@ and logs every gust for future flights.
 
 ## Quill
 
-<img src="/assets/npc/orion.jpg" />
+<img src="/assets/npc/quill.jpg" />
 Quill will keep the guild's chronicles, filing every blueprint and battle log.
 They guard accuracy like treasure and steer recruits toward the
 [Quest Submission Guide](/docs/quest-submission) so their feats join the archive.
@@ -281,7 +281,7 @@ They guard accuracy like treasure and steer recruits toward the
 
 ## Echo
 
-<img src="/assets/npc/nova.jpg" />
+<img src="/assets/npc/echo.jpg" />
 
 Echo will coordinate the guild's sensor drones from a quiet orbital perch.
 They have a calm demeanor and a sharp ear for anomalies.
@@ -298,7 +298,7 @@ Echo routes signals and keeps comms clear for every mission.
 
 ## Lumen
 
-<img src="/assets/npc/vega.jpg" />
+<img src="/assets/npc/lumen.jpg" />
 
 Lumen is slated to serve as the guild's calm field medic. Years in remote clinics taught them to
 treat injuries with limited supplies, and their gentle humor keeps crews relaxed even during tense
@@ -314,7 +314,7 @@ missions.
 
 ## Patch
 
-<img src="/assets/npc/orion.jpg" />
+<img src="/assets/npc/patch.jpg" />
 
 Patch is slated to be the Metaguild's cheerful repair drone, always hovering with a toolkit. Built
 from spare
@@ -331,7 +331,7 @@ parts, Patch keeps machinery humming and loves swapping stories about improvised
 
 ## Byte
 
-<img src="/assets/npc/orion.jpg" />
+<img src="/assets/npc/byte.jpg" />
 
 Byte will monitor the guild's networks, hunting bugs and patching holes before enemies find them.
 Raised on open-source firmware, they safeguard mission data and teach recruits secure coding.
