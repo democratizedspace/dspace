@@ -9,7 +9,7 @@ Custom content is the player-created layer of DSPACE. You can build your own que
 processes directly in the game, test them locally, back them up, and package them for contribution.
 
 <figure>
-    <img src="/assets/changelog/20260401/ccsbs.jpg" alt="A screenshot showing the forms for creating custom quests, items, and processes, side by side." />
+    <img src="/assets/docs/ccsbs.jpg" alt="A screenshot showing the forms for creating custom quests, items, and processes, side by side." />
     <figcaption align="center">Custom Content creation side by side</figcaption>
 </figure>
 
@@ -59,7 +59,7 @@ Recommended workflow:
 3. Re-import into a clean profile to verify integrity before sharing.
 
 <figure>
-    <img src="/assets/changelog/20260401/customcontent.jpg" alt="A screenshot of the Custom Content Backup page in DSPACE." />
+    <img src="/assets/docs/customcontent.jpg" alt="A screenshot of the Custom Content Backup page in DSPACE." />
     <figcaption align="center">Custom Content Backup</figcaption>
 </figure>
 
@@ -81,7 +81,7 @@ In-progress note:
   into canonical built-in content remains a maintainer-governed step and may continue evolving.
 
 <figure>
-    <img src="/assets/changelog/20260401/ccbundles.jpg" alt="A screenshot of the Custom Content Bundle submission page in DSPACE." />
+    <img src="/assets/docs/ccbundles.jpg" alt="A screenshot of the Custom Content Bundle submission page in DSPACE." />
     <figcaption align="center">Submit Custom Content Bundle</figcaption>
 </figure>
 
