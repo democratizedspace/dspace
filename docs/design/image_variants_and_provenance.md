@@ -449,6 +449,14 @@ Future contributor systems should include compensated and community channels.
 - Curated featured variant rotations.
 - Potential future crowdfunding/reward tie-ins (design consideration only).
 
+### Corpus-specific contributor workflow mapping
+
+| Corpus | Commission lane | Contest/community lane | Curated official alternates |
+|---|---|---|---|
+| NPCs | Bespoke portrait commissions and targeted identity refreshes for canonical characters. | Limited campaign/community submissions with strict character sheet adherence. | Curated alternates remain lore-consistent and preserve recognizable character identity. |
+| items | Constrained style-pack commissions for readability-critical inventory assets. | Readability-focused contests/community submissions constrained by iconography and silhouette rules. | Curated alternates must preserve quick recognition at inventory/card/list scales. |
+| quests | Scene/banner commissions for narrative moments and key quest beats. | Event/seasonal contests and community submissions for narrative scene art. | Curated alternates can explore broader style range once narrative clarity and safety checks pass. |
+
 ### Operational requirements (non-legal)
 
 - Attribution required and user-visible where appropriate.
@@ -457,6 +465,9 @@ Future contributor systems should include compensated and community channels.
 - Contest entry metadata should capture exclusive/non-exclusive status.
 - Portfolio-right indicators should be explicit.
 - Provenance and moderation actions should be auditable.
+- **NPC-specific:** enforce stricter identity consistency checks (facial markers, silhouette, canonical costume cues) before approval.
+- **item-specific:** enforce stronger readability/style constraints (contrast, icon clarity, small-size legibility) for commission and contest entries.
+- **quest-specific:** route scene/banner submissions through broader moderation review (content safety + narrative context + event appropriateness).
 
 ## Policy, moderation, and provenance transparency
 
