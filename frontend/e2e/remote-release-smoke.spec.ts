@@ -45,16 +45,19 @@ const MOCK_LIVE_CHAT_REPLY = 'Remote smoke mock assistant reply.';
 
 async function configureLiveChatTransport(page: Page): Promise<void> {
     if (CHAT_LIVE_BACKEND !== 'real') {
-        await page.addInitScript(({ reply }) => {
-            // @ts-expect-error test hook for OpenAI client
-            window.__DSpaceOpenAIClient = function () {
-                return {
-                    responses: {
-                        create: async () => ({ output_text: reply }),
-                    },
+        await page.addInitScript(
+            ({ reply }) => {
+                // @ts-expect-error test hook for OpenAI client
+                window.__DSpaceOpenAIClient = function () {
+                    return {
+                        responses: {
+                            create: async () => ({ output_text: reply }),
+                        },
+                    };
                 };
-            };
-        }, { reply: MOCK_LIVE_CHAT_REPLY });
+            },
+            { reply: MOCK_LIVE_CHAT_REPLY }
+        );
         return;
     }
 
