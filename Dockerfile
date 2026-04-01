@@ -104,6 +104,14 @@ ENV HOST=0.0.0.0
 # preserve that structure in the runtime image.
 COPY --from=prod-deps /workspace/frontend/node_modules ./node_modules
 COPY --from=prod-deps /workspace/node_modules/.pnpm ../node_modules/.pnpm
+RUN if [ ! -e /app/node_modules/canvas ]; then \
+        CANVAS_DIR="$(find /node_modules/.pnpm -maxdepth 3 -type d -path '*/canvas@*/node_modules/canvas' | head -n 1)"; \
+        if [ -z "$CANVAS_DIR" ]; then \
+            echo "canvas package was not installed in prod deps" >&2; \
+            exit 1; \
+        fi; \
+        ln -s "$CANVAS_DIR" /app/node_modules/canvas; \
+    fi
 COPY --from=build /workspace/frontend/dist ./dist
 COPY --from=build /workspace/frontend/package.json ./package.json
 COPY --from=build /workspace/frontend/src/generated/build_meta.json ./build_meta.json
