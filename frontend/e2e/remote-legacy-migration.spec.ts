@@ -353,9 +353,9 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
             const storage = await readStorageSnapshot(page);
             if (storage.gameState !== null) {
                 const migratedState = JSON.parse(storage.gameState) as Record<string, unknown>;
-                expect(String(migratedState.versionNumberString || migratedState.version || '')).toMatch(
-                    /^3/
-                );
+                expect(
+                    String(migratedState.versionNumberString || migratedState.version || '')
+                ).toMatch(/^3/);
                 expect(storage.gameState).not.toContain('REDACTED_V2_TEST_KEY');
                 expect(storage.gameState).not.toContain('"apiKey"');
             }
