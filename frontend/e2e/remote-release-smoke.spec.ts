@@ -1,4 +1,6 @@
+import { fileURLToPath } from 'url';
 import { expect, test, type Page } from '@playwright/test';
+import path from 'path';
 import { waitForHydration } from './test-helpers';
 
 const TOP_NAV_ROUTES = [
@@ -42,6 +44,10 @@ const CHAT_API_KEY = process.env.REMOTE_SMOKE_CHAT_API_KEY || ''; // scan-secret
 const CHAT_PROMPT =
     process.env.REMOTE_SMOKE_CHAT_PROMPT || 'Remote smoke check: respond with one short sentence.';
 const MOCK_LIVE_CHAT_REPLY = 'Remote smoke mock assistant reply.';
+const TEST_ITEM_IMAGE_PATH = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    '../test-data/test-image.jpg'
+);
 
 async function configureLiveChatTransport(page: Page): Promise<void> {
     if (CHAT_LIVE_BACKEND !== 'real') {
@@ -221,17 +227,18 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
     await page.locator('#price-currency').selectOption('dUSD');
     await page.locator('#unit').fill('unit');
     await page.locator('#type').fill('resource');
+    await page.locator('#image').setInputFiles(TEST_ITEM_IMAGE_PATH);
 
     await page.getByRole('button', { name: /create item/i }).click();
     await page.waitForLoadState('networkidle');
+    await expect(page.getByRole('status')).toContainText(/item created successfully/i);
 
     await page.goto('/inventory/manage');
     await waitForHydration(page);
 
-    const row = page
-        .locator('.item-row, [data-testid="item-row"]')
-        .filter({ hasText: uniqueName })
-        .first();
+    const itemHeading = page.getByRole('heading', { level: 4, name: uniqueName }).first();
+    await expect(itemHeading, 'Expected newly created custom item heading to appear').toBeVisible();
+    const row = page.locator('.item-row').filter({ has: itemHeading }).first();
     await expect(row, 'Expected newly created custom item to appear on manage page').toBeVisible();
 
     const deleteButton = row
