@@ -384,13 +384,17 @@ test.describe('Remote release smoke', () => {
         await runProcessLifecycle(page);
     });
 
-    test('creates and deletes one custom item (default, opt-out with --no-mutate)', async ({ page }) => {
-        test.skip(
-            !SHOULD_MUTATE,
-            'Set REMOTE_SMOKE_MUTATION=1 (or run qa:remote-smoke without --no-mutate/--safe) to enable custom-item create/delete checks.'
-        );
-        await createAndDeleteCustomItem(page);
-    });
+    test(
+        'creates and deletes one custom item (default, opt-out with --no-mutate)',
+        async ({ page }) => {
+            test.skip(
+                !SHOULD_MUTATE,
+                'Set REMOTE_SMOKE_MUTATION=1 (or run qa:remote-smoke without --no-mutate/--safe) ' +
+                    'to enable custom-item create/delete checks.'
+            );
+            await createAndDeleteCustomItem(page);
+        }
+    );
 
     test('verifies chat page UI (with optional live send/receive)', async ({ page }) => {
         await verifyChat(page);
