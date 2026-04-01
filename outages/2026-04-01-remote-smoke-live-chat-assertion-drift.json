@@ -1,0 +1,10 @@
+{
+  "id": "2026-04-01-remote-smoke-live-chat-assertion-drift",
+  "date": "2026-04-01",
+  "component": "frontend:e2e-chat",
+  "rootCause": "remote-release-smoke.spec.ts asserted that the exact prompt text node remained visible after Send, but live chat rendering can normalize or reflow content, causing a false-negative even when send/receive succeeds.",
+  "resolution": "Updated verifyChat() to assert a durable contract: user-message count increments after Send, spinner appears while pending, and the next assistant bubble (not an error banner) becomes visible.",
+  "references": [
+    "frontend/e2e/remote-release-smoke.spec.ts"
+  ]
+}

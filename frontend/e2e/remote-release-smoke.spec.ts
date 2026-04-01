@@ -245,17 +245,22 @@ async function verifyChat(page: Page): Promise<void> {
         return;
     }
 
+    const userMessages = panel.locator('.message-bubble.user, [data-role="user"]');
+    const assistantMessages = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
+    const errorBanner = panel.locator('.chat-error, [data-error-type]');
+    const spinner = panel.locator('.spinner-container');
+    const userCountBeforeSend = await userMessages.count();
+    const assistantCountBeforeSend = await assistantMessages.count();
+
     await textbox.fill(CHAT_PROMPT);
     await sendButton.click();
 
-    await expect(panel.getByText(CHAT_PROMPT)).toBeVisible();
-
-    const assistantReply = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
-    const errorBanner = panel.locator('.chat-error, [data-error-type]');
+    await expect(userMessages).toHaveCount(userCountBeforeSend + 1, { timeout: 10_000 });
+    await expect(spinner).toBeVisible();
 
     const winner = await Promise.race([
-        assistantReply
-            .first()
+        assistantMessages
+            .nth(assistantCountBeforeSend)
             .waitFor({ state: 'visible', timeout: 30_000 })
             .then(() => 'assistant' as const),
         errorBanner
@@ -266,7 +271,10 @@ async function verifyChat(page: Page): Promise<void> {
 
     expect(winner, 'Chat returned an error instead of an assistant reply').toBe('assistant');
     await expect(errorBanner.first(), 'Expected no chat error banner').not.toBeVisible();
-    await expect(assistantReply.first(), 'Expected an assistant reply to be visible').toBeVisible();
+    await expect(
+        assistantMessages.nth(assistantCountBeforeSend),
+        'Expected a fresh assistant reply to be visible'
+    ).toBeVisible();
 }
 
 test.describe('Remote release smoke', () => {
