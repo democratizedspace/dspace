@@ -111,6 +111,27 @@ export function parseArgs(argv) {
   return parsed;
 }
 
+export function buildRemoteSmokeEnv(options, baseEnv = process.env) {
+  const url = new URL(options.baseURL);
+  const isLocalHost =
+    url.hostname === '127.0.0.1' ||
+    url.hostname === 'localhost' ||
+    url.hostname === '0.0.0.0' ||
+    url.hostname === '::1' ||
+    url.hostname.endsWith('.local');
+
+  return {
+    ...baseEnv,
+    BASE_URL: options.baseURL,
+    PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
+    REMOTE_SMOKE: '1',
+    REMOTE_SMOKE_CHAT_MODE: options.chatMode,
+    REMOTE_SMOKE_CHAT_LIVE_BACKEND: options.chatLiveBackend,
+    REMOTE_SMOKE_MUTATION: options.mutate ? '1' : '0',
+    REMOTE_SMOKE_USE_WEBSERVER: isLocalHost ? '1' : '0',
+  };
+}
+
 export function main(argv = process.argv.slice(2)) {
   const options = parseArgs(argv);
 
@@ -141,24 +162,7 @@ export function main(argv = process.argv.slice(2)) {
     );
   }
 
-  const url = new URL(options.baseURL);
-  const isLocalHost =
-    url.hostname === '127.0.0.1' ||
-    url.hostname === 'localhost' ||
-    url.hostname === '0.0.0.0' ||
-    url.hostname === '::1' ||
-    url.hostname.endsWith('.local');
-
-  const env = {
-    ...process.env,
-    BASE_URL: options.baseURL,
-    PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
-    REMOTE_SMOKE: '1',
-    REMOTE_SMOKE_CHAT_MODE: options.chatMode,
-    REMOTE_SMOKE_CHAT_LIVE_BACKEND: options.chatLiveBackend,
-    REMOTE_SMOKE_MUTATION: options.mutate ? '1' : '0',
-    REMOTE_SMOKE_USE_WEBSERVER: isLocalHost ? '1' : '0',
-  };
+  const env = buildRemoteSmokeEnv(options);
 
   const playwrightArgs = [
     './node_modules/@playwright/test/cli.js',
