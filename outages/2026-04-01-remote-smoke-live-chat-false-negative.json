@@ -1,0 +1,10 @@
+{
+  "id": "2026-04-01-remote-smoke-live-chat-false-negative",
+  "date": "2026-04-01",
+  "component": "frontend/e2e remote smoke harness",
+  "rootCause": "The live chat branch in `remote-release-smoke.spec.ts` asserted an exact `CHAT_PROMPT` text match immediately after Send. In production, the message renderer can normalize markdown and line wrapping so exact-text lookup is not a durable DOM contract, which produced a false-negative even when user send/assistant receive succeeded.",
+  "resolution": "Replaced the brittle prompt-text assertion with a durable message-flow contract: assert the user message count increments after Send, then wait for assistant reply vs. error banner and require assistant success with no error banner visible.",
+  "references": [
+    "frontend/e2e/remote-release-smoke.spec.ts"
+  ]
+}

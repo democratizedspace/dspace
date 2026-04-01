@@ -245,10 +245,16 @@ async function verifyChat(page: Page): Promise<void> {
         return;
     }
 
+    const userMessages = panel.locator('.message-bubble.user, [data-role="user"]');
+    const userCountBefore = await userMessages.count();
+
     await textbox.fill(CHAT_PROMPT);
     await sendButton.click();
 
-    await expect(panel.getByText(CHAT_PROMPT)).toBeVisible();
+    await expect(
+        userMessages,
+        'Expected a new user message bubble after sending a live chat prompt'
+    ).toHaveCount(userCountBefore + 1, { timeout: 15_000 });
 
     const assistantReply = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
     const errorBanner = panel.locator('.chat-error, [data-error-type]');
