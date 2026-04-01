@@ -28,6 +28,11 @@ describe('frontend/package.json', () => {
       .map(([name]) => name);
     expect(duplicates).toEqual([]);
   });
+
+  it('does not declare canvas directly', () => {
+    const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'frontend', 'package.json'), 'utf8'));
+    expect(pkg.dependencies?.canvas).toBeUndefined();
+  });
 });
 
 describe('.npmrc', () => {
