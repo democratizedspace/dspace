@@ -32,6 +32,12 @@ npm run dev  # Start development server on http://localhost:3002
 
 For comprehensive setup instructions, see the [Developer Guide](./DEVELOPER_GUIDE.md).
 
+If your environment cannot download prebuilt `canvas` binaries (used by quest-chart tooling via
+`chartjs-node-canvas`), install native prerequisites before re-running `pnpm install`:
+
+- macOS (Homebrew): `brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman`
+- Debian/Ubuntu: `sudo apt-get install -y build-essential pkg-config libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libpixman-1-dev`
+
 ### Essential Commands
 
 ```bash
