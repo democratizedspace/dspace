@@ -14,6 +14,14 @@ const nodeExecutable = process.execPath;
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 const PRIMARY_REAL_SAVE_ENV = 'REMOTE_MIGRATION_REAL_V2_JSON';
 const LEGACY_REAL_SAVE_ENV = 'QA_REMOTE_MIGRATION_REAL_V2_JSON';
+const DEFAULT_REAL_V2_FIXTURE = join(
+  repoRoot,
+  'frontend',
+  'src',
+  'utils',
+  'legacySaveFixtures',
+  'legacy_v2_real_remote_save.json'
+);
 
 function parseArgs(argv) {
   const parsed = {
@@ -112,21 +120,36 @@ function readRealV2Json(options) {
     : options.realV2EnvVar === PRIMARY_REAL_SAVE_ENV
       ? LEGACY_REAL_SAVE_ENV
       : options.realV2EnvVar;
-  if (!envValue) {
+  if (envValue) {
+    try {
+      JSON.parse(envValue);
+    } catch {
+      throw new Error(`Environment variable ${options.realV2EnvVar} is not valid JSON`);
+    }
     return {
-      payload: '',
-      source: 'none',
+      payload: envValue,
+      source: `env:${sourceEnvVar}`,
     };
   }
 
-  try {
-    JSON.parse(envValue);
-  } catch {
-    throw new Error(`Environment variable ${options.realV2EnvVar} is not valid JSON`);
+  if (!existsSync(DEFAULT_REAL_V2_FIXTURE)) {
+    throw new Error(`Default real v2 fixture does not exist: ${DEFAULT_REAL_V2_FIXTURE}`);
   }
+
+  const fixtureRaw = readFileSync(DEFAULT_REAL_V2_FIXTURE, 'utf8').trim();
+  if (!fixtureRaw) {
+    throw new Error(`Default real v2 fixture is empty: ${DEFAULT_REAL_V2_FIXTURE}`);
+  }
+
+  try {
+    JSON.parse(fixtureRaw);
+  } catch {
+    throw new Error(`Default real v2 fixture is not valid JSON: ${DEFAULT_REAL_V2_FIXTURE}`);
+  }
+
   return {
-    payload: envValue,
-    source: `env:${sourceEnvVar}`,
+    payload: fixtureRaw,
+    source: `fixture:${DEFAULT_REAL_V2_FIXTURE}`,
   };
 }
 

@@ -335,37 +335,67 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
 
         const realV2JsonRaw = readRealV2Payload();
 
-        if (!realV2JsonRaw) {
-            addResult(
-                'C.v2-real-save',
-                'Real v2 payload path/env input is wired',
-                'skip',
-                'No REMOTE_MIGRATION_REAL_V2_JSON_PATH payload provided for this run.'
-            );
-        } else {
-            await runStep(
-                'C.v2-real-save',
-                'Real v2 payload detection + replace path',
-                async () => {
-                    const parsed = JSON.parse(realV2JsonRaw) as Record<string, unknown>;
-                    await purgeClientState(page);
-                    await page.goto('/');
-                    await seedV2State(page, parsed);
-                    await goToSettings(page);
-                    await expect(
-                        page.getByText('Legacy v2 localStorage data detected')
-                    ).toBeVisible();
-                    await page
-                        .getByRole('button', { name: 'Replace current save with v2' })
-                        .click();
-                    await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
-                        timeout: 10_000,
-                    });
-                    await goToSettings(page);
-                    await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
+        await runStep(
+            'C.v2-real-save',
+            'Real v2 payload detection + replace path',
+            async () => {
+                const parsed = JSON.parse(realV2JsonRaw) as Record<string, unknown>;
+                await purgeClientState(page);
+                await page.goto('/');
+                await seedV2State(page, parsed);
+                await goToSettings(page);
+                await expect(page.getByText('Legacy v2 localStorage data detected')).toBeVisible();
+                await page.getByRole('button', { name: 'Replace current save with v2' }).click();
+                await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
+                    timeout: 10_000,
+                });
+                await goToSettings(page);
+                await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
+
+                const migratedStorage = await readStorageSnapshot(page);
+                const persistedRaw = migratedStorage.gameState ?? migratedStorage.gameStateBackup;
+                if (persistedRaw) {
+                    const migratedState = JSON.parse(persistedRaw);
+                    expect(
+                        String(migratedState.versionNumberString || migratedState.version || '')
+                    ).toMatch(/^3/);
+                    expect(migratedState.openAI?.apiKey).toBeUndefined();
                 }
-            );
-        }
+
+                const indexedDbOpenAiValue = await page.evaluate(async () => {
+                    const request = window.indexedDB.open('dspaceGameState');
+                    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+                        request.onsuccess = () => resolve(request.result);
+                        request.onerror = () => reject(request.error ?? new Error('IndexedDB open failed'));
+                    });
+
+                    try {
+                        if (!db.objectStoreNames.contains('state')) {
+                            return null;
+                        }
+
+                        return await new Promise<unknown>((resolve, reject) => {
+                            const tx = db.transaction('state', 'readonly');
+                            const store = tx.objectStore('state');
+                            const getRequest = store.get('root');
+                            getRequest.onsuccess = () => {
+                                const state = getRequest.result as Record<string, unknown> | undefined;
+                                const openAi = (state?.openAI as Record<string, unknown> | undefined) ?? {};
+                                resolve(openAi.apiKey ?? null);
+                            };
+                            getRequest.onerror = () =>
+                                reject(getRequest.error ?? new Error('IndexedDB read failed'));
+                        });
+                    } finally {
+                        db.close();
+                    }
+                });
+
+                expect(indexedDbOpenAiValue).toBeNull();
+                expect(migratedStorage.gameState ?? '').not.toContain('REDACTED_V2_TEST_KEY');
+                expect(migratedStorage.gameStateBackup ?? '').not.toContain('REDACTED_V2_TEST_KEY');
+            }
+        );
 
         expect(
             failedSteps,
