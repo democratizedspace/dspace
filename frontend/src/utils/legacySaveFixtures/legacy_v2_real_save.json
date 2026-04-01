@@ -81,7 +81,7 @@
         },
         "bucket-water-chlorinated": {
             "startedAt": 1718258049924,
-            "duation": 30000
+            "duration": 30000
         },
         "3dprint-rocket-nosecone": {
             "startedAt": 1727932072495,
@@ -105,7 +105,7 @@
         },
         "setup-solar-enclosure-200Wh": {
             "startedAt": 1749540315845,
-            "duation": 300000
+            "duration": 300000
         }
     },
     "openAI": {
