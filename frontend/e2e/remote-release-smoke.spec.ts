@@ -42,6 +42,14 @@ const CHAT_API_KEY = process.env.REMOTE_SMOKE_CHAT_API_KEY || ''; // scan-secret
 const CHAT_PROMPT =
     process.env.REMOTE_SMOKE_CHAT_PROMPT || 'Remote smoke check: respond with one short sentence.';
 const MOCK_LIVE_CHAT_REPLY = 'Remote smoke mock assistant reply.';
+const REMOTE_SMOKE_ITEM_IMAGE = {
+    name: 'remote-smoke-item.png',
+    mimeType: 'image/png',
+    buffer: Buffer.from(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
+        'base64'
+    ),
+};
 
 async function configureLiveChatTransport(page: Page): Promise<void> {
     if (CHAT_LIVE_BACKEND !== 'real') {
@@ -221,16 +229,20 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
     await page.locator('#price-currency').selectOption('dUSD');
     await page.locator('#unit').fill('unit');
     await page.locator('#type').fill('resource');
+    await page.locator('#image').setInputFiles(REMOTE_SMOKE_ITEM_IMAGE);
 
     await page.getByRole('button', { name: /create item/i }).click();
     await page.waitForLoadState('networkidle');
+    await expect(page.getByText(/item created successfully/i)).toBeVisible();
 
     await page.goto('/inventory/manage');
     await waitForHydration(page);
 
     const row = page
-        .locator('.item-row, [data-testid="item-row"]')
-        .filter({ hasText: uniqueName })
+        .locator('.item-row')
+        .filter({
+            has: page.getByRole('heading', { level: 4, name: uniqueName, exact: true }),
+        })
         .first();
     await expect(row, 'Expected newly created custom item to appear on manage page').toBeVisible();
 
