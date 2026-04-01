@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-01-remote-smoke-live-chat-clean-session-false-negative",
+  "date": "2026-04-01",
+  "component": "qa/remote-smoke-chat",
+  "longForm": "outages/2026-04-01-remote-smoke-live-chat-clean-session-false-negative.md",
+  "rootCause": "The remote smoke live-chat assertion executed in a clean Playwright browser context with no previously saved chat credentials/config, so the production chat send path returned the expected in-app error state for that anonymous session even while manual browsers with existing settings could send/receive successfully.",
+  "resolution": "Made remote smoke live mode credential-free by default with a Playwright-scoped OpenAI client stub that still exercises chat textbox/send/user-message/assistant-message UI flow; added an explicit opt-in `--chat-live-backend=real` mode for true provider-backed validation when intentionally requested.",
+  "references": [
+    "scripts/run-remote-smoke.mjs",
+    "frontend/e2e/remote-release-smoke.spec.ts"
+  ]
+}

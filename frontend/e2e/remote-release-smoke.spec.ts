@@ -37,8 +37,23 @@ const TOOLBOX_AND_EDITORS = [
 
 const SHOULD_MUTATE = process.env.REMOTE_SMOKE_MUTATION === '1';
 const CHAT_MODE = process.env.REMOTE_SMOKE_CHAT_MODE === 'live' ? 'live' : 'ui';
+const CHAT_LIVE_BACKEND = process.env.REMOTE_SMOKE_CHAT_LIVE_BACKEND === 'real' ? 'real' : 'mock';
 const CHAT_PROMPT =
     process.env.REMOTE_SMOKE_CHAT_PROMPT || 'Remote smoke check: respond with one short sentence.';
+const MOCKED_LIVE_REPLY = 'Remote smoke mock assistant reply.';
+
+async function installMockedLiveChatClient(page: Page): Promise<void> {
+    await page.addInitScript(({ replyText }) => {
+        // @ts-expect-error smoke-test hook for OpenAI client
+        window.__DSpaceOpenAIClient = function () {
+            return {
+                responses: {
+                    create: async () => ({ output_text: replyText }),
+                },
+            };
+        };
+    }, { replyText: MOCKED_LIVE_REPLY });
+}
 
 async function visitRouteAndAssert(page: Page, route: string): Promise<void> {
     const response = await page.goto(route);
@@ -229,6 +244,10 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
 }
 
 async function verifyChat(page: Page): Promise<void> {
+    if (CHAT_MODE === 'live' && CHAT_LIVE_BACKEND === 'mock') {
+        await installMockedLiveChatClient(page);
+    }
+
     await page.goto('/chat');
     await waitForHydration(page);
 
@@ -294,6 +313,12 @@ async function verifyChat(page: Page): Promise<void> {
         assistantReplies.first(),
         'Expected the new assistant reply to be visible'
     ).toBeVisible();
+    if (CHAT_LIVE_BACKEND === 'mock') {
+        await expect(
+            assistantReplies.first(),
+            'Expected mocked live chat backend to return the smoke-test reply'
+        ).toContainText(MOCKED_LIVE_REPLY);
+    }
 }
 
 test.describe('Remote release smoke', () => {
