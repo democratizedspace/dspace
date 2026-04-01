@@ -15,6 +15,7 @@ function parseArgs(argv) {
   const parsed = {
     baseURL: DEFAULT_BASE_URL,
     chatMode: 'ui',
+    chatLiveBackend: 'mock',
     mutate: false,
     project: 'chromium',
     passthrough: [],
@@ -55,6 +56,18 @@ function parseArgs(argv) {
       continue;
     }
 
+    if (arg === '--chat-live-backend') {
+      parsed.chatLiveBackend = argv[index + 1] || parsed.chatLiveBackend;
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith('--chat-live-backend=')) {
+      parsed.chatLiveBackend =
+        arg.slice(arg.indexOf('=') + 1) || parsed.chatLiveBackend;
+      continue;
+    }
+
     if (arg === '--project') {
       parsed.project = argv[index + 1] || parsed.project;
       index += 1;
@@ -88,6 +101,13 @@ if (!['ui', 'live'].includes(options.chatMode)) {
   process.exit(1);
 }
 
+if (!['mock', 'real'].includes(options.chatLiveBackend)) {
+  console.error(
+    `Invalid --chat-live-backend value: "${options.chatLiveBackend}". Use "mock" or "real".`
+  );
+  process.exit(1);
+}
+
 const url = new URL(options.baseURL);
 const isLocalHost =
   url.hostname === '127.0.0.1' ||
@@ -102,6 +122,7 @@ const env = {
   PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
   REMOTE_SMOKE: '1',
   REMOTE_SMOKE_CHAT_MODE: options.chatMode,
+  REMOTE_SMOKE_CHAT_LIVE_BACKEND: options.chatLiveBackend,
   REMOTE_SMOKE_MUTATION: options.mutate ? '1' : '0',
   REMOTE_SMOKE_USE_WEBSERVER: isLocalHost ? '1' : '0',
 };
@@ -116,6 +137,11 @@ const playwrightArgs = [
 
 console.log(`[qa:remote-smoke] baseURL=${options.baseURL}`);
 console.log(`[qa:remote-smoke] chatMode=${options.chatMode}`);
+if (options.chatMode === 'live') {
+  console.log(
+    `[qa:remote-smoke] chatLiveBackend=${options.chatLiveBackend} (${options.chatLiveBackend === 'mock' ? 'credential-free Playwright stub' : 'real provider request'})`
+  );
+}
 console.log(
   `[qa:remote-smoke] mutation=${options.mutate ? 'enabled' : 'disabled'}`
 );
@@ -131,7 +157,9 @@ const child = spawn('node', playwrightArgs, {
 });
 
 child.on('error', (err) => {
-  console.error(`[qa:remote-smoke] Failed to start Playwright process: ${err.message}`);
+  console.error(
+    `[qa:remote-smoke] Failed to start Playwright process: ${err.message}`
+  );
   process.exit(1);
 });
 

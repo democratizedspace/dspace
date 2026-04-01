@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-01-remote-smoke-live-chat-clean-context-false-negative",
+  "date": "2026-04-01",
+  "component": "frontend/e2e-automation",
+  "longForm": "outages/2026-04-01-remote-smoke-live-chat-clean-context-false-negative.md",
+  "rootCause": "`qa:remote-smoke --chat-mode=live` executed in a clean Playwright browser context without persisted chat credentials/config present in normal browsers. The test treated provider auth/config failures as production chat outages and failed with an assistant-vs-error mismatch even though manual production chat send/receive worked.",
+  "resolution": "Kept `--chat-mode=live` focused on send/receive UI behavior while making the default backend path credential-free: remote smoke now injects a Playwright-scoped OpenAI client mock unless `--chat-live-backend=real` is explicitly requested. This preserves user-visible send/receive assertions without requiring local secrets by default.",
+  "references": [
+    "scripts/run-remote-smoke.mjs",
+    "frontend/e2e/remote-release-smoke.spec.ts",
+    "outages/2026-03-24-playwright-placeholder-proxy-deps.json"
+  ]
+}

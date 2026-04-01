@@ -37,8 +37,30 @@ const TOOLBOX_AND_EDITORS = [
 
 const SHOULD_MUTATE = process.env.REMOTE_SMOKE_MUTATION === '1';
 const CHAT_MODE = process.env.REMOTE_SMOKE_CHAT_MODE === 'live' ? 'live' : 'ui';
+const CHAT_LIVE_BACKEND =
+    process.env.REMOTE_SMOKE_CHAT_LIVE_BACKEND === 'real' ? 'real' : 'mock';
 const CHAT_PROMPT =
     process.env.REMOTE_SMOKE_CHAT_PROMPT || 'Remote smoke check: respond with one short sentence.';
+const MOCK_LIVE_CHAT_REPLY =
+    'Remote smoke mock assistant reply: chat send/receive UI path is healthy.';
+
+async function installRemoteSmokeLiveChatMock(page: Page): Promise<void> {
+    await page.addInitScript(({ replyText }) => {
+        const createResponse = async () => {
+            await new Promise((resolve) => setTimeout(resolve, 120));
+            return { output_text: replyText };
+        };
+
+        // @ts-expect-error test-scoped OpenAI client hook
+        window.__DSpaceOpenAIClient = function () {
+            return {
+                responses: {
+                    create: createResponse,
+                },
+            };
+        };
+    }, { replyText: MOCK_LIVE_CHAT_REPLY });
+}
 
 async function visitRouteAndAssert(page: Page, route: string): Promise<void> {
     const response = await page.goto(route);
@@ -229,6 +251,10 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
 }
 
 async function verifyChat(page: Page): Promise<void> {
+    if (CHAT_MODE === 'live' && CHAT_LIVE_BACKEND === 'mock') {
+        await installRemoteSmokeLiveChatMock(page);
+    }
+
     await page.goto('/chat');
     await waitForHydration(page);
 
@@ -299,6 +325,14 @@ async function verifyChat(page: Page): Promise<void> {
 test.describe('Remote release smoke', () => {
     test.describe.configure({ mode: 'serial' });
     test.setTimeout(180_000);
+
+    test.beforeAll(() => {
+        if (CHAT_MODE === 'live' && CHAT_LIVE_BACKEND === 'mock') {
+            console.log(
+                '[remote-smoke] chat live mode using credential-free Playwright mock response'
+            );
+        }
+    });
 
     test('covers app shell + route smoke', async ({ page }) => {
         const consoleErrors: Array<{ route: string; message: string }> = [];
