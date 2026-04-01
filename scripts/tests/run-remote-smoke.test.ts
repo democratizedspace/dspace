@@ -26,4 +26,20 @@ describe('run-remote-smoke parseArgs', () => {
 
     expect(reEnabled.mutate).toBe(true);
   });
+
+  it('honors REMOTE_SMOKE_MUTATION=0 as an explicit non-mutating default', () => {
+    const original = process.env.REMOTE_SMOKE_MUTATION;
+    process.env.REMOTE_SMOKE_MUTATION = '0';
+    try {
+      const parsed = parseArgs(['--baseURL=https://democratized.space']);
+      expect(parsed.mutate).toBe(false);
+      expect(parsed.mutateSource).toBe('env');
+    } finally {
+      if (original === undefined) {
+        delete process.env.REMOTE_SMOKE_MUTATION;
+      } else {
+        process.env.REMOTE_SMOKE_MUTATION = original;
+      }
+    }
+  });
 });

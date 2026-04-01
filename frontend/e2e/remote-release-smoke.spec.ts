@@ -387,7 +387,7 @@ test.describe('Remote release smoke', () => {
     test('creates and deletes one custom item (default, opt-out with --no-mutate)', async ({ page }) => {
         test.skip(
             !SHOULD_MUTATE,
-            'Set REMOTE_SMOKE_MUTATION=0 (or run qa:remote-smoke with --no-mutate/--safe) to skip custom-item create/delete checks.'
+            'Set REMOTE_SMOKE_MUTATION=1 (or run qa:remote-smoke without --no-mutate/--safe) to enable custom-item create/delete checks.'
         );
         await createAndDeleteCustomItem(page);
     });

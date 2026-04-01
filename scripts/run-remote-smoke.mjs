@@ -11,12 +11,32 @@ const frontendDir = join(repoRoot, 'frontend');
 
 const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 
+function getEnvMutateDefault() {
+  const raw = process.env.REMOTE_SMOKE_MUTATION;
+  if (raw === undefined) {
+    return { mutate: true, source: 'default' };
+  }
+
+  const normalized = raw.trim().toLowerCase();
+  if (['0', 'false', 'no', 'off'].includes(normalized)) {
+    return { mutate: false, source: 'env' };
+  }
+
+  if (['1', 'true', 'yes', 'on'].includes(normalized)) {
+    return { mutate: true, source: 'env' };
+  }
+
+  return { mutate: true, source: 'default' };
+}
+
 export function parseArgs(argv) {
+  const envMutateDefault = getEnvMutateDefault();
   const parsed = {
     baseURL: DEFAULT_BASE_URL,
     chatMode: 'ui',
     chatLiveBackend: process.env.REMOTE_SMOKE_CHAT_LIVE_BACKEND || 'mock',
-    mutate: true,
+    mutate: envMutateDefault.mutate,
+    mutateSource: envMutateDefault.source,
     project: 'chromium',
     passthrough: [],
   };
@@ -53,11 +73,13 @@ export function parseArgs(argv) {
 
     if (arg === '--mutate') {
       parsed.mutate = true;
+      parsed.mutateSource = 'flag';
       continue;
     }
 
     if (arg === '--no-mutate' || arg === '--safe') {
       parsed.mutate = false;
+      parsed.mutateSource = 'flag';
       continue;
     }
 
@@ -165,7 +187,15 @@ export function main(argv = process.argv.slice(2)) {
     }
   }
   console.log(
-    `[qa:remote-smoke] customItemMutationCheck=${options.mutate ? 'enabled (default)' : 'disabled (--no-mutate/--safe)'}`
+    `[qa:remote-smoke] customItemMutationCheck=${
+      options.mutate
+        ? options.mutateSource === 'default'
+          ? 'enabled (default)'
+          : 'enabled'
+        : options.mutateSource === 'env'
+          ? 'disabled (REMOTE_SMOKE_MUTATION=0)'
+          : 'disabled (--no-mutate/--safe)'
+    }`
   );
   console.log(`[qa:remote-smoke] project=${options.project}`);
   console.log(
