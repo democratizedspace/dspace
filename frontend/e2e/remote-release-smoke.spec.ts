@@ -209,6 +209,10 @@ async function runProcessLifecycle(page: Page): Promise<void> {
 
 async function createAndDeleteCustomItem(page: Page): Promise<void> {
     const uniqueName = `Remote Smoke Item ${Date.now()}`;
+    const testImageBuffer = Buffer.from(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO7W2XcAAAAASUVORK5CYII=',
+        'base64'
+    );
 
     await page.goto('/inventory/create');
     await waitForHydration(page);
@@ -221,11 +225,19 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
     await page.locator('#price-currency').selectOption('dUSD');
     await page.locator('#unit').fill('unit');
     await page.locator('#type').fill('resource');
+    await page.locator('#image').setInputFiles({
+        name: 'remote-smoke-item.png',
+        mimeType: 'image/png',
+        buffer: testImageBuffer,
+    });
 
     await page.getByRole('button', { name: /create item/i }).click();
-    await page.waitForLoadState('networkidle');
+    const successMessage = page.getByRole('status').filter({ hasText: /item created successfully/i });
+    await expect(successMessage, 'Expected custom item creation to succeed').toBeVisible();
 
-    await page.goto('/inventory/manage');
+    const manageItemsLink = successMessage.getByRole('link', { name: /manage items/i });
+    await expect(manageItemsLink).toBeVisible();
+    await Promise.all([page.waitForURL('**/inventory/manage'), manageItemsLink.click()]);
     await waitForHydration(page);
 
     const row = page
