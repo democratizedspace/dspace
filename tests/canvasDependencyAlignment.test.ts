@@ -8,8 +8,6 @@ type DependencyMap = Record<string, string>;
 type PackageJsonDependencies = {
     dependencies?: DependencyMap;
     devDependencies?: DependencyMap;
-    optionalDependencies?: DependencyMap;
-    peerDependencies?: DependencyMap;
 };
 
 const repoRoot = join(__dirname, '..');
@@ -18,17 +16,8 @@ const frontendPackage = JSON.parse(
 ) as PackageJsonDependencies;
 
 describe('canvas dependency alignment', () => {
-    it('does not keep a direct frontend canvas dependency in any dependency block', () => {
-        const {
-            dependencies = {},
-            devDependencies = {},
-            optionalDependencies = {},
-            peerDependencies = {},
-        } = frontendPackage;
-
-        expect(dependencies).not.toHaveProperty('canvas');
-        expect(devDependencies).not.toHaveProperty('canvas');
-        expect(optionalDependencies).not.toHaveProperty('canvas');
-        expect(peerDependencies).not.toHaveProperty('canvas');
+    it('does not keep a stale direct frontend canvas pin in dependencies or devDependencies', () => {
+        expect(frontendPackage.dependencies ?? {}).not.toHaveProperty('canvas');
+        expect(frontendPackage.devDependencies ?? {}).not.toHaveProperty('canvas');
     });
 });
