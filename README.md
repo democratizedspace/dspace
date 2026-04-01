@@ -22,6 +22,11 @@ A free and open-source web-based space exploration idle game combining resource 
 
 **Prerequisites**: Node.js 20 LTS or later (required for development dependencies)
 
+If your machine cannot use prebuilt `canvas` binaries, install native build prerequisites first:
+
+- macOS (Homebrew): `brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman`
+- Debian/Ubuntu: `sudo apt-get install -y pkg-config libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev libpixman-1-dev`
+
 ```bash
 git clone https://github.com/democratizedspace/dspace.git
 cd dspace

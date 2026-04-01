@@ -10,6 +10,14 @@ describe('package.json', () => {
 });
 
 describe('frontend/package.json', () => {
+  it('does not pin a direct canvas dependency', () => {
+    const pkgPath = join(__dirname, '..', 'frontend', 'package.json');
+    const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as {
+      dependencies?: Record<string, string>;
+    };
+    expect(pkg.dependencies?.canvas).toBeUndefined();
+  });
+
   it('has no duplicate devDependencies', () => {
     const pkgPath = join(__dirname, '..', 'frontend', 'package.json');
     const text = readFileSync(pkgPath, 'utf8');
