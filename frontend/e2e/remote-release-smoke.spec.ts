@@ -209,6 +209,11 @@ async function runProcessLifecycle(page: Page): Promise<void> {
 
 async function createAndDeleteCustomItem(page: Page): Promise<void> {
     const uniqueName = `Remote Smoke Item ${Date.now()}`;
+    const tinyPng = Buffer.from(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO7Z3VwAAAAASUVORK5CYII=',
+        'base64'
+    );
+    const escapedName = uniqueName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
     await page.goto('/inventory/create');
     await waitForHydration(page);
@@ -221,16 +226,26 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
     await page.locator('#price-currency').selectOption('dUSD');
     await page.locator('#unit').fill('unit');
     await page.locator('#type').fill('resource');
+    await page.locator('#image').setInputFiles({
+        name: 'remote-smoke-item.png',
+        mimeType: 'image/png',
+        buffer: tinyPng,
+    });
 
     await page.getByRole('button', { name: /create item/i }).click();
-    await page.waitForLoadState('networkidle');
+    const successMessage = page.locator('.success-message');
+    await expect(
+        successMessage,
+        'Expected successful custom-item create confirmation before opening manage page'
+    ).toContainText(/item created successfully/i);
 
     await page.goto('/inventory/manage');
     await waitForHydration(page);
 
+    const itemLink = page.getByRole('link', { name: new RegExp(`^${escapedName}$`) }).first();
     const row = page
-        .locator('.item-row, [data-testid="item-row"]')
-        .filter({ hasText: uniqueName })
+        .locator('.item-row, [data-testid="item-row"], .items-list > div, .items-list article, .items-list li')
+        .filter({ has: itemLink })
         .first();
     await expect(row, 'Expected newly created custom item to appear on manage page').toBeVisible();
 
