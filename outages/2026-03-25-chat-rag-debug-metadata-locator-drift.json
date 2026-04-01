@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-25-chat-rag-debug-metadata-locator-drift",
+  "date": "2026-03-25",
+  "component": "frontend:e2e-chat",
+  "rootCause": "chat-rag-context.spec.ts selected metadata values via parent traversal from text labels, which became non-unique after debug metadata growth and triggered strict-mode locator violations.",
+  "resolution": "Updated the E2E assertions to target .debug-meta-row rows with hasText filters and read the scoped .debug-mono value from each row.",
+  "references": [
+    "frontend/e2e/chat-rag-context.spec.ts",
+    "frontend/src/pages/chat/svelte/OpenAIChat.svelte"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/compost_sifter_wooden_frame.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "compost sifter",
+    "item_id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
+    "entity_type": "item",
+    "prompt": "A square wooden compost sifter with a 40×40 cm frame and 1 cm wire mesh is shown resting at an angle over a wheelbarrow or large tub. A small shovel of compost is being shaken across the mesh, with fine material falling through and larger twigs and clumps remaining on top. The frame looks sturdy but lightweight, with simple corner joints and no branding or text.\n\nThe scene is a near-future solarpunk garden area with soft daylight, lush plants, and raised beds in the background. The 512×512 image is photorealistic with gentle stylization, no logos or readable markings on the sifter, and a composition that centers the wooden frame, mesh, and falling compost while the rest of the garden and tools remain softly blurred, highlighting its role in screening finished compost.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

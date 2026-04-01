@@ -1,0 +1,213 @@
+{
+    "id": "astronomy/jupiter-moons",
+    "title": "Track Jupiter's Moons",
+    "description": "Track Jupiter's four Galilean moons across multiple sessions with logged evidence, safety checks, and a recovery loop for poor seeing.",
+    "image": "/assets/quests/jupiter_moons_orbital_tracking.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "With your telescope assembled, let's track Io, Europa, Ganymede, and Callisto over several nights without rushing safety checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Let's set the observation plan."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Pick your approach: use a chart-first route or a quick telescope-first route. Both must end with repeatable notes in the mission log.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart-route",
+                    "text": "Main path: chart route first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "quick-route",
+                    "text": "Alternate path: telescope sweep first."
+                }
+            ]
+        },
+        {
+            "id": "chart-route",
+            "text": "Confirm Jupiter's position against your planisphere and establish a stable tripod stance before collecting moon positions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Chart corridor confirmed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Ready to log moon positions.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Clouds or vibration are ruining the view."
+                }
+            ]
+        },
+        {
+            "id": "quick-route",
+            "text": "Acquire Jupiter at low magnification first, then refine focus and note the moon order before committing to the full log set.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "observe-jupiter-moons",
+                    "text": "Initial observation pass recorded."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "I can separate all four moons clearly.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Moon order is unclear; I need to reset."
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Log at least two timed snapshots of moon order and spacing so the motion can be compared between sessions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Mission log entry drafted with timestamp and moon order."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Evidence captured across sessions.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "One session is missing key notes."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery branch: stand down if footing, weather, or glare are unsafe; otherwise reset to low magnification and retry from the plan.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Conditions are safe again—retry with a planned route."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Unsafe tonight, but evidence is already logged—finish with caution.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: compare logged positions between nights and confirm the order changed as expected before completion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Orbital movement confirmed in the log.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Evidence is inconsistent—run another logged session."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent diligence. You logged reproducible evidence, handled unstable conditions safely, and proved orbital motion without guessing.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Space feels closer already."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+            "count": 1
+        },
+        {
+            "id": "be314ec9-c289-42e9-a6d6-5acc56779412",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/basic-telescope"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

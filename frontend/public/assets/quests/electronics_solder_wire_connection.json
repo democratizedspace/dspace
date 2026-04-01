@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_solder_wire_connection.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/solder-wire.json",
+    "item_name": "Solder a Wire Connection",
+    "item_id": "electronics/solder-wire",
+    "entity_type": "quest",
+    "prompt": "Two jumper wires are joined mid-span over a dry, non-conductive mat, their stripped ends twisted together and covered with a freshly soldered joint that is smooth and shiny. A short length of heat-shrink tubing has been slid into place over the cooled joint, and a small heat gun is being used to shrink it snugly around the connection. Nearby sit a soldering iron on its stand, a brass tip cleaner, and a few additional pieces of colored heat-shrink tubing ready for future joints.\n\nThe scene is set in a near-future solarpunk electronics lab: soft, even lighting, well-organized tools, and a small fume extractor or fan visible in the blurred background to suggest ventilation. The 512×512 photorealistic composition focuses on the soldered joint, shrinking tubing, and careful hand positioning of the heat gun, with everything else gently out of focus. No brand logos or legible text appear anywhere, and no faces are shown—only hands, safety goggles, and forearms—emphasizing clean, safe wire splicing technique.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

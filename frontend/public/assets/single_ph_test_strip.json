@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/single_ph_test_strip.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "pH strip",
+    "item_id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+    "entity_type": "item",
+    "prompt": "A single pH test strip rests on a neutral-colored lab bench beside a narrow glass of clear liquid, its indicator pads showing a multicolored gradient across the length of the strip. A small plastic tray holds a few additional unused strips in the background, but the main strip is centered and clearly visible, emphasizing that it is a disposable, one-time-use test. Nearby, a simple glass dropper or pipette hints at how a drop of solution was placed onto the strip.\n\nThe environment is a clean near-future home lab with a solarpunk aesthetic: soft daylight, a leafy plant near the edge of the frame, and a few neatly organized lab tools and containers. The 512×512 image is photorealistic with light stylization, no brands or readable text, and a minimal composition that centers the single pH strip and its subtle color pattern while the rest of the workspace remains softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

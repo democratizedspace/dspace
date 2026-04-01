@@ -1,0 +1,253 @@
+{
+    "id": "energy/power-inverter",
+    "title": "Install a Power Inverter",
+    "description": "Convert your battery's DC output into AC for household gear.",
+    "image": "/assets/quests/power_inverter_installation.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your battery bank works great. Let's add a 300 W pure sine inverter so you can run AC gadgets without cooking the wiring.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "I'm ready.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "gather",
+            "text": "Grab the inverter, fused 8 AWG leads, your 200 Wh pack, and a multimeter. Mount the inverter within 30 cm of the pack to keep voltage drop tiny.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Parts staged and vent fans are clear.",
+                    "requiresItems": [
+                        {
+                            "id": "082481a4-5e40-43e6-8542-0e64a3bd92d7",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "lockout",
+                    "text": "I found a loose lug. Pause and run lockout checks first.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "lockout",
+            "text": "Good stop. Isolate the battery, pull the fuse, and verify zero voltage at the inverter input before touching terminals.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Lockout complete; return to staging.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "mount",
+            "text": "Crimp the ring lugs, fuse the positive lead, torque the battery terminals, and mount the inverter to a board or bulkhead with airflow. No loose copper, no sparks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "mount-inverter-300w",
+                    "text": "Mount and fuse it"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-mount",
+                    "text": "Inverter mounted, fuse in, cables secure.",
+                    "requiresItems": [
+                        {
+                            "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-mount",
+            "text": "Inspect strain relief and confirm all terminals are cool after a short idle run. If anything loosens, rollback and re-torque before load testing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "test",
+                    "text": "Mount verification passed; proceed to load test.",
+                    "requiresItems": [
+                        {
+                            "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Terminal temperature drifted; rollback and rework.",
+                    "requiresItems": [
+                        {
+                            "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Power down, pull the fuse, shorten or reroute the leads, and re-mount with better ventilation before trying again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Rollback complete; re-run installation.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "test",
+            "text": "Plug in a 150 W load and check voltage with your multimeter. If voltage sags below 11.5 V or the fuse warms, stop and shorten the leads.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "load-test-inverter-300w",
+                    "text": "Load test at 150 W"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-output",
+                    "text": "AC holds steady and nothing smells toasty.",
+                    "requiresItems": [
+                        {
+                            "id": "2e6f7453-6b8a-4e04-8ea6-1ddba490019f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-output",
+            "text": "Log AC stability for a second run window. If voltage wanders, cool down, inspect terminations, and retry before declaring the inverter production-ready.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification run passed with stable output.",
+                    "requiresItems": [
+                        {
+                            "id": "2e6f7453-6b8a-4e04-8ea6-1ddba490019f",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Output drifted; run recovery and re-test.",
+                    "requiresItems": [
+                        {
+                            "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Disconnect the load, let the inverter cool, then inspect cable torque and airflow before re-running the load test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "test",
+                    "text": "Recovery complete; re-run load test.",
+                    "requiresItems": [
+                        {
+                            "id": "466cb507-6beb-4c20-967b-4f1fda1d6463",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Coil any slack, label the fuse rating, and keep ventilation clear. Your inverter is ready for laptops and lights—no toasters yet.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Time to plug in."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["energy/battery-upgrade"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

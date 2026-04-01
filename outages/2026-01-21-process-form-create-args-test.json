@@ -1,0 +1,12 @@
+{
+  "id": "2026-01-21-process-form-create-args-test",
+  "date": "2026-01-21",
+  "component": "process form unit tests",
+  "rootCause": "ProcessForm createProcess calls now pass title, duration, and item arrays as positional arguments, but the ProcessForm unit test still expected a single object payload.",
+  "resolution": "Updated the ProcessForm test to assert the positional argument signature used by createProcess.",
+  "references": [
+    "frontend/src/components/__tests__/ProcessForm.spec.ts",
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/src/utils/customcontent.js"
+  ]
+}

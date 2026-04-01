@@ -1,0 +1,230 @@
+{
+    "id": "astronomy/north-star",
+    "title": "Locate the North Star",
+    "description": "Find Polaris via two route options, record a navigation artifact, and recover safely when conditions drift.",
+    "image": "/assets/quests/north_star_polaris_location.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here. Polaris anchors the night sky. Want the quick pointer-star method or a tripod-assisted alignment run?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Show both routes.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 5.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "choose-route",
+            "text": "Both routes end with a logged heading check. Pick one and prove repeatability before we close.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pointer-route",
+                    "text": "Pointer stars from the Big Dipper (main path).",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "tripod-route",
+                    "text": "Tripod alignment first (alternate path).",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 5.0
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "pointer-route",
+            "text": "Trace from Dubhe and Merak to Polaris, then confirm the bearing with a stable stance and low red-light discipline.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Pointer-star trace complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "Polaris is stable and the heading is repeatable.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 5.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "I lost orientation or footing while tracing."
+                }
+            ]
+        },
+        {
+            "id": "tripod-route",
+            "text": "Level the tripod, lock azimuth in small increments, then reacquire Polaris without over-correcting.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "mark-polaris-alignment",
+                    "text": "Tripod-assisted alignment run complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "Alignment note captured and Polaris confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Alignment drifted or stars are obscured."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety reset: pause movement, dim lights, and re-check footing. If clouds or glare persist, stand down and try another window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Conditions are safe again\u2014retry a route."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Unsafe tonight; log a caution closeout.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 4.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log-evidence",
+            "text": "Record timestamp, compass heading, and one nearby reference star so another observer can reproduce your fix.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Navigation log drafted."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Evidence logged and verified.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 4.0
+                        },
+                        {
+                            "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent. You located Polaris with repeatable evidence and used a safe recovery protocol when conditions shifted.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Polaris fix complete."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "6102f07b-384b-437f-b78f-d1e9b5431e97",
+            "count": 1
+        },
+        {
+            "id": "8615b34c-f00e-4258-b94a-67bd58d11ece",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/constellations"],
+    "hardening": {
+        "passes": 1,
+        "score": 95,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-02-17",
+                "date": "2025-02-17",
+                "score": 95
+            }
+        ]
+    }
+}

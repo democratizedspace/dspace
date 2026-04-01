@@ -1,0 +1,14 @@
+{
+  "id": "completionist-catalog-polished-gate",
+  "date": "2026-03-10",
+  "component": "quests/completionist/catalog item gating",
+  "rootCause": "Catalog quest dialogue and the log-entry process required the unpolished Completionist Award II item, while players in the normal progression path only retained Completionist Award II (polished).",
+  "resolution": "Switched completionist/catalog gates and the record-completionist-award-entry process requirement to Completionist Award II (polished), added regression coverage, and synced completionist docs with the new gate.",
+  "longForm": "outages/2026-03-10-completionist-catalog-polished-gate.md",
+  "references": [
+    "frontend/src/pages/quests/json/completionist/catalog.json",
+    "frontend/src/pages/processes/base.json",
+    "frontend/src/pages/docs/md/completionist.md",
+    "frontend/tests/completionistCatalogPolishedGate.test.ts"
+  ]
+}

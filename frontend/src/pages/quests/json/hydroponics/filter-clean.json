@@ -1,0 +1,161 @@
+{
+    "id": "hydroponics/filter-clean",
+    "title": "Rinse Grow Bed Filter",
+    "description": "Restore sponge filter flow without nuking beneficial bacteria.",
+    "image": "/assets/quests/hydroponics_grow_bed_filter_rinse.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Flow is slowing. We'll document a safe rinse cycle with before/after evidence so roots keep oxygen and biofilter bacteria survive.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Start filter service."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Prep dechlorinated rinse water, gloves, and the sponge filter. Safety rule: never use chlorinated tap water on biological media.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Kit is staged.",
+                    "requiresItems": [
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Capture pre-clean baseline: weak flow, trapped debris, and odor notes. This becomes your before snapshot for maintenance logs.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Baseline captured; begin rinse."
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Rinse by squeezing and swishing in dechlorinated water until sludge clears while keeping foam wet.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-aquarium-filter",
+                    "text": "Perform rinse cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "restart",
+                    "text": "Core is rinsed and still wet.",
+                    "requiresItems": [
+                        {
+                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Water stays black or sulfur smell persists."
+                }
+            ]
+        },
+        {
+            "id": "contamination",
+            "text": "Contamination branch: isolate livestock intake, discard dirty rinse water safely, and run a second controlled rinse before restart.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-aquarium-filter",
+                    "text": "Run second rinse with fresh dechlorinated water."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Second rinse complete; re-evaluate media."
+                }
+            ]
+        },
+        {
+            "id": "restart",
+            "text": "Reassemble and restart aeration. Confirm steady bubbling for at least one observation window before calling it done.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "restart-sponge-filter",
+                    "text": "Restart sponge filter."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Flow restored; verify post-clean evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Compare baseline vs post-clean state. If bubbles are uneven or flow collapses again, return to rinse and troubleshoot before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Post-check failed; loop back to rinse."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Before/after evidence shows stable recovery."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Filter service complete with pre/post proof and a contamination recovery path.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Maintenance log closed."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/top-off"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

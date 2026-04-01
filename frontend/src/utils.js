@@ -1,87 +1,49 @@
-import items from './pages/inventory/json/items.json';
+import items from './pages/inventory/json/items';
+import { questFinished, canStartQuest } from './utils/gameState.js';
+
+const markdownEncodingReplacements = [
+    // Common mojibake sequences from UTF-8 text misread as Windows-1252
+    { pattern: /\u00e2\u0080\u0099/g, replacement: "'" }, // mojibake apostrophe
+    { pattern: /\u00e2\u0080\u0098/g, replacement: "'" }, // mojibake opening apostrophe
+    { pattern: /\u00e2\u0080\u009c/g, replacement: '"' }, // mojibake opening quote
+    { pattern: /\u00e2\u0080\u009d/g, replacement: '"' }, // mojibake closing quote
+    { pattern: /\u00e2\u0080\u0093/g, replacement: '-' }, // mojibake en dash (UTF-8 read as Windows-1252)
+    { pattern: /\u00e2\u0080\u0094/g, replacement: '-' }, // mojibake em dash (UTF-8 read as Windows-1252)
+    { pattern: /\u00e2\u0080\u00a6/g, replacement: '...' }, // mojibake ellipsis
+    { pattern: /\u00e2\u009c\u0094/g, replacement: '✔' }, // mojibake check mark
+    { pattern: /\u00e2\u009d\u008c/g, replacement: '❌' }, // mojibake cross mark
+    { pattern: /\u00ef\u00b8\u008f/g, replacement: '' }, // mojibake emoji variation selector
+    { pattern: /\u00c2 /g, replacement: ' ' }, // U+00C2 followed by space
+    { pattern: /\u00c2/g, replacement: '' }, // stray U+00C2
+    // Straighten curly punctuation to ASCII to avoid charset issues
+    { pattern: /’/g, replacement: "'" },
+    { pattern: /‘/g, replacement: "'" },
+    { pattern: /“/g, replacement: '"' },
+    { pattern: /”/g, replacement: '"' },
+    { pattern: /–/g, replacement: '-' },
+    { pattern: /—/g, replacement: '-' },
+    { pattern: /\u00a0/g, replacement: ' ' },
+];
 
 export const prettyPrintNumber = (number) => {
     const n = parseFloat(number);
 
     if (n !== 0 && (n < 0.005 || n > 9999)) {
-        return n.toExponential(2)
-            .replace('e', 'E').
-            replace(/\+/, '')
+        return n
+            .toExponential(2)
+            .replace('e', 'E')
+            .replace(/\+/, '')
             .replace(/\.?0*$/, '')
             .replace(/0*E/, 'E');
     }
     return n.toFixed(3).replace(/\.?0*$/, '');
 };
 
-export const parseCookie = (cookie) => {
-    try {
-        return cookie.split(/[;] */).reduce(function(result, pairStr) {
-            const arr = pairStr.split('=');
-            if (arr.length === 2) {
-                result[arr[0]] = arr[1];
-            }
-            return result;
-        }, {});
-    } catch (e) {
-        return {};
-    }
-}
-
-export const getCookieValue = (cookie, key) => {
-    const c = parseCookie(cookie);
-    if (c) {
-        return c[key];
-    }
-    return null;
-}
-
-export const getCookie = (req, key) => {
-    const cookie = req.headers.get('cookie');
-    return getCookieValue(cookie, key);
-}
-
-export const setCookieValue = (res, key, value) => {
-    res.headers.append('Set-Cookie', `${key}=${value}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`);
-}
-
-export const deleteCookie = (res, key) => {
-    res.headers.append('Set-Cookie', `${key}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`);
-}
-
 export const parseBool = (value) => {
     if (value === 'true') {
         return true;
     }
     return false;
-}
-
-export const hasAcceptedCookies = (req) => {
-    const cookie = req.headers.get('cookie');
-    const acceptedCookies = parseBool(getCookieValue(cookie, 'acceptedCookies'));
-    return acceptedCookies || false;
-};
-
-export const getCookies = (cookie) => {
-    const parsedCookie = parseCookie(cookie);
-    // return as an array of objects
-    return Object.keys(parsedCookie).map(key => {
-        return {
-            key,
-            value: parsedCookie[key]
-        };
-    });
-}
-
-export const getCookieItems = (cookie) => {
-    const parsedCookie = parseCookie(cookie);
-    return Object.keys(parsedCookie)
-        .filter(key => /^item-\d+$/.test(key) && parseFloat(parsedCookie[key]) > 0)
-        .map(key => {
-            return {
-                id: key.split('-')[1], // Extract the number after 'item-'
-                count: parseFloat(parsedCookie[key]) // Convert the string value to a number
-            };
-        });
 };
 
 export const prettyPrintDuration = (durationSeconds) => {
@@ -107,80 +69,60 @@ export const prettyPrintDuration = (durationSeconds) => {
         }
     }
     return duration.join(' ');
-}
-
+};
 
 export const datetimeAfterDuration = (durationSeconds) => {
-    const futureDatetime = new Date(Date.now() + durationSeconds);
     return new Date(Date.now() + durationSeconds * 1000);
-}
+};
 
 export const durationInSeconds = (durationString) => {
     try {
-        const durationComponents = durationString.split(' ');
-
-        // for each item in durationComponents, get the number and the unit
-        // then convert the number to seconds
+        const regex = /(\d*\.?\d+)([dhms])/gi;
         let durationSeconds = 0;
-        for (const component of durationComponents) {
-            const number = parseInt(component);
-            const unit = component.replace(number, '');
-            let seconds = 0;
+        let match;
+        while ((match = regex.exec(durationString)) !== null) {
+            const number = parseFloat(match[1]);
+            const unit = match[2].toLowerCase();
             switch (unit) {
                 case 'd':
-                    seconds = number * 86400;
+                    durationSeconds += number * 86400;
                     break;
                 case 'h':
-                    seconds = number * 3600;
+                    durationSeconds += number * 3600;
                     break;
                 case 'm':
-                    seconds = number * 60;
+                    durationSeconds += number * 60;
                     break;
                 case 's':
-                    seconds = number;
+                    durationSeconds += number;
                     break;
+                /* istanbul ignore next */
                 default:
                     break;
             }
-            durationSeconds += seconds;
         }
-        
+
         return durationSeconds;
     } catch (e) {
         return 0;
     }
-}
-
-export const getWalletBalance = (req, symbol) => {
-    const cookie = req.headers.get('cookie');
-    const balance = parseFloat(getCookieValue(cookie, `currency-balance-${symbol}`));
-    if (balance !== undefined && !isNaN(balance)) {
-        return balance;
-    }
-    return 0;
-}
-
-export const burnCurrency = (req, res, symbol, burnAmount) => {
-    const balance = getWalletBalance(req, symbol);
-    const newBalance = balance - burnAmount;
-    if (newBalance < 0) {
-        return false;
-    }
-    setCookieValue(res, `currency-balance-${symbol}`, newBalance);
-    return true;
-}
-
-export const addWalletBalance = (req, res, symbol, addBalance) => {
-    const balance = getWalletBalance(req, symbol);
-    const newBalance = Math.max(0, balance + addBalance);
-    // TODO: start here
-    setCookieValue(res, `currency-balance-${symbol}`, newBalance);
 };
 
 export const fixMarkdownText = (text) => {
-    // replace ’ with '
-    const fixedText = text.replace(/’/g, '\'');
-    return fixedText;
+    if (typeof text !== 'string') {
+        return typeof text === 'undefined' || text === null ? '' : String(text);
+    }
+
+    return (
+        markdownEncodingReplacements
+            .reduce(
+                (normalized, { pattern, replacement }) => normalized.replace(pattern, replacement),
+                text
+            )
+            // Callers render compiled Markdown/HTML where surrounding whitespace is non-significant,
+            // so trimming removes mojibake padding without altering meaningful content.
+            .trim()
+    );
 };
 
 export const getPriceStringComponents = (currency) => {
@@ -194,19 +136,19 @@ export const getPriceStringComponents = (currency) => {
     const symbol = priceString[1];
 
     return {
-        price, symbol
+        price,
+        symbol,
     };
 };
-
 
 export const getSymbolFromId = (itemId) => {
     const item = items.find((item) => item.id === itemId);
     if (item) {
-        const { _, symbol } = getPriceStringComponents(item.price);
+        const { symbol } = getPriceStringComponents(item.price);
         return symbol;
     }
     return undefined;
-}
+};
 
 export const constructLink = (astroRedirect, url, redirectLink) => {
     if (redirectLink) {
@@ -215,10 +157,81 @@ export const constructLink = (astroRedirect, url, redirectLink) => {
     return url;
 };
 
+const WALLET_COOKIE_PREFIX = 'currency-balance-';
+const WALLET_COOKIE_EXPIRES = 'Fri, 31 Dec 9999 23:59:59 GMT';
+
+const getCookieHeader = (req) => {
+    if (!req || !req.headers) {
+        return '';
+    }
+
+    const headerValue =
+        typeof req.headers.get === 'function'
+            ? (req.headers.get('cookie') ?? req.headers.get('Cookie'))
+            : (req.headers.cookie ?? req.headers.Cookie);
+
+    return typeof headerValue === 'string' ? headerValue : '';
+};
+
+const parseWalletBalance = (req, symbol) => {
+    if (!symbol) {
+        return 0;
+    }
+
+    const cookieHeader = getCookieHeader(req);
+    if (!cookieHeader) {
+        return 0;
+    }
+
+    const match = cookieHeader.match(new RegExp(`${WALLET_COOKIE_PREFIX}${symbol}=([^;]+)`, 'i'));
+    const balance = match ? parseFloat(match[1]) : 0;
+    return Number.isFinite(balance) ? balance : 0;
+};
+
+const setWalletBalanceCookie = (res, symbol, balance) => {
+    if (!res?.headers?.append || !symbol) {
+        return;
+    }
+    res.headers.append(
+        'Set-Cookie',
+        `${WALLET_COOKIE_PREFIX}${symbol}=${balance}; expires=${WALLET_COOKIE_EXPIRES}; path=/`
+    );
+};
+
+export const getWalletBalance = (req, symbol) => parseWalletBalance(req, symbol);
+
+export const burnCurrency = (req, res, symbol, amount) => {
+    const debit = Number(amount) || 0;
+    if (!symbol || debit <= 0) {
+        return false;
+    }
+
+    const balance = getWalletBalance(req, symbol);
+    if (balance < debit) {
+        return false;
+    }
+
+    const updatedBalance = balance - debit;
+    setWalletBalanceCookie(res, symbol, updatedBalance);
+    return true;
+};
+
+export const addWalletBalance = (req, res, symbol, amount) => {
+    const credit = Number(amount) || 0;
+    const updatedBalance = getWalletBalance(req, symbol) + credit;
+    setWalletBalanceCookie(res, symbol, updatedBalance);
+    return updatedBalance;
+};
+
 export const base64ToObject = (base64) => {
     try {
-        // decode base64 string
-        const urlEncoded = atob(base64);
+        // decode base64 string - use Buffer on server, atob in browser
+        let urlEncoded;
+        if (typeof atob !== 'undefined') {
+            urlEncoded = atob(base64);
+        } else {
+            urlEncoded = Buffer.from(base64, 'base64').toString('binary');
+        }
 
         // URL decode
         const urlDecoded = decodeURIComponent(urlEncoded);
@@ -229,7 +242,9 @@ export const base64ToObject = (base64) => {
         if (json) {
             return json;
         }
-    } catch (e) {}
+    } catch (e) {
+        // Silently fail and return empty object for invalid base64 or JSON
+    }
     return {};
 };
 
@@ -245,11 +260,353 @@ export const queryToJson = (query) => {
     return JSON.parse(queryStr);
 };
 
-export const acceptCookiesPath = '/accept_cookies';
-
 export const MS = 1000;
 export const SECOND = 1 * MS;
 export const MINUTE = 60 * SECOND;
 export const HOUR = 60 * MINUTE;
 
 export const DEFAULT_COOLDOWN = 5 * MINUTE;
+
+// Define the delay promise
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Get elapsed time based on timeStart, timeEnd, and pausedTime
+export function getElapsedTime(timeStart, timeEnd = new Date(), pausedTime = 0) {
+    return Math.max(0, timeEnd - timeStart - pausedTime);
+}
+
+// Get the time left based on timeStart, timeElapsed, and timeMs
+export function getTimeLeft(timeStart, timeElapsed, timeMs) {
+    const now = new Date();
+    const diff = getElapsedTime(timeStart, now, timeElapsed);
+    return Math.max(0, timeMs - diff);
+}
+
+// Convert MS to a nice readable string
+export function msToTime(s) {
+    const ms = s % 1000;
+    s = (s - ms) / 1000;
+    const secs = s % 60;
+    s = (s - secs) / 60;
+    const mins = s % 60;
+    const hrs = (s - mins) / 60;
+
+    const showMs = hrs === 0 && mins === 0 && secs < 10;
+
+    let str = '';
+
+    if (hrs > 0) str += hrs + 'h ';
+    if (mins > 0 || hrs > 0) str += mins + 'm ';
+    if (secs > 0 || mins > 0 || hrs > 0) str += secs + 's';
+    if (showMs && ms > 0) str += ' ' + ms + 'ms';
+
+    return str.trim();
+}
+
+// Format a number to be kinda nice
+export function formatNumber(n) {
+    return Number(n).toLocaleString();
+}
+
+// Format a number to be kinda nice
+export function formatNumberK(n) {
+    if (n < 1e3) return n;
+    if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + 'K';
+    if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + 'M';
+    if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + 'B';
+    if (n >= 1e12) return +(n / 1e12).toFixed(1) + 'T';
+}
+
+// Get price string
+export function getPriceString(price) {
+    const components = getPriceStringComponents(price);
+    return `${components.symbol}${components.price}`;
+}
+
+/**
+ * Converts a date object into various time formats.
+ * @param {Date} date - The date to convert.
+ * @returns {Object} timeFormats - The formatted time strings.
+ * @returns {string} timeFormats.iso - ISO format.
+ * @returns {string} timeFormats.utc - UTC format.
+ * @returns {string} timeFormats.full - Full format.
+ * @returns {string} timeFormats.short - Short format.
+ * @returns {string} timeFormats.tinyTime - Tiny time format.
+ * @returns {string} timeFormats.timeOnly - Time only format.
+ * @returns {string} timeFormats.dateOnly - Date only format.
+ */
+export function formatTime(date) {
+    if (!date) {
+        date = new Date();
+    }
+    // Pad with a zero if needed
+    const pad = (n) => (n < 10 ? '0' + n : n);
+
+    const hours = date.getHours();
+    const hoursFormat = hours % 12 === 0 ? 12 : hours % 12;
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const month = date.getMonth() + 1; // JavaScript months are 0-11
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    const timeFormats = {
+        iso: date.toISOString(),
+        utc: date.toUTCString(),
+        full: `${month}/${day}/${year} ${hoursFormat}:${pad(minutes)}:${pad(seconds)} ${ampm}`,
+        short: `${month}/${day}/${year} ${hoursFormat}:${pad(minutes)} ${ampm}`,
+        tinyTime: `${hoursFormat}:${pad(minutes)}${ampm}`,
+        timeOnly: `${hoursFormat}:${pad(minutes)}:${pad(seconds)} ${ampm}`,
+        dateOnly: `${month}/${day}/${year}`,
+    };
+
+    return timeFormats;
+}
+
+export function getRelativeTimeString(date, lang = undefined) {
+    // Use navigator.language in browser, fall back to 'en' on server
+    if (lang === undefined) {
+        lang = typeof navigator !== 'undefined' ? navigator.language : 'en';
+    }
+    // Allow dates or times to be passed
+    const timeMs = typeof date === 'number' ? date : date.getTime();
+
+    // Get the time difference in seconds
+    const deltaSeconds = Math.round((timeMs - Date.now()) / 1000);
+
+    // Array of time divisions
+    const divisions = [
+        { amount: 31536000, name: 'year' },
+        { amount: 2592000, name: 'month' },
+        { amount: 86400, name: 'day' },
+        { amount: 3600, name: 'hour' },
+        { amount: 60, name: 'minute' },
+        { amount: 1, name: 'second' },
+    ];
+
+    // Absolute delta in seconds
+    const deltaSec = Math.abs(deltaSeconds);
+
+    // Find the appropriate division
+    const division = divisions.find((division) => division.amount <= deltaSec);
+
+    if (!division) {
+        return 'just now';
+    }
+
+    const count = Math.round(deltaSec / division.amount);
+    const formatted = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' }).format(
+        deltaSeconds > 0 ? count : -count,
+        division.name
+    );
+
+    return formatted;
+}
+
+// Clamp a number
+export function clamp(min, max, n) {
+    return Math.min(Math.max(n, min), max);
+}
+
+// Interpolate between min and max (0, 1 => 0, 0.5, 1 => min, (min+max)/2, max)
+export function lerp(min, max, t) {
+    return min + (max - min) * clamp(0, 1, t);
+}
+
+// Get a random item from an array
+export function choice(arr) {
+    return arr.length === 0 ? undefined : arr[Math.floor(Math.random() * arr.length)];
+}
+
+// Get a random int between min and max (inclusive)
+export function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function getRandomInts(min, max, n) {
+    const result = Array(n).fill(0);
+    for (let i = 0; i < n; i++) {
+        result[i] = getRandomInt(min, max);
+    }
+    return result;
+}
+
+// Shuffles an array
+export function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+// Generate a random string
+export function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    Array(length)
+        .fill(0)
+        .forEach(() => {
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
+        });
+    return result;
+}
+
+export function getQuestPossibleChoices(quest) {
+    if (!quest) return {};
+    const possibleChoices = {};
+
+    for (const section of quest.quest) {
+        if (section.goto) {
+            possibleChoices[section.name] = section.goto.options || [];
+        }
+    }
+
+    return possibleChoices;
+}
+
+export function getQuestByID(id, questList) {
+    if (!questList) return null;
+    for (const quest of questList) {
+        if (quest && quest.id === id) {
+            return quest;
+        }
+    }
+    return null;
+}
+
+export function getQuestCategory(quest) {
+    return quest.tags ? quest.tags[0] : 'Unknown';
+}
+
+export function getQuestCategories(quests) {
+    if (!quests || !quests.length) return [];
+    const categories = new Set();
+    for (const quest of quests) {
+        categories.add(getQuestCategory(quest));
+    }
+    // Convert it to an array
+    return Array.from(categories);
+}
+
+// Function to filter quests by available, finished, or all
+export function filterQuests(quests, filter = 'all') {
+    if (!quests) return [];
+    let result = [];
+
+    switch (filter) {
+        case 'available':
+            result = quests.filter((quest) => !questFinished(quest.id) && canStartQuest(quest));
+            break;
+        case 'finished':
+            result = quests.filter((quest) => questFinished(quest.id));
+            break;
+        case 'all':
+        default:
+            result = [...quests];
+            break;
+    }
+
+    return result;
+}
+
+export function getQuestsByCategory(quests, category) {
+    if (!quests || !quests.length) return [];
+    return quests.filter((quest) => getQuestCategory(quest) === category);
+}
+
+// Get URL slug
+export function getUrlSlug(str) {
+    return str
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-');
+}
+
+// Get random ID
+export function getRandomId() {
+    return Math.random().toString(36).substr(2, 9);
+}
+
+// Get file extension
+export function getFileExtension(filename) {
+    return filename.slice(((filename.lastIndexOf('.') - 1) >>> 0) + 2);
+}
+
+// Returns a truncated string
+export function truncateString(str, n, useWordBoundary = true) {
+    if (!str) return '';
+    if (str.length <= n) {
+        return str;
+    }
+    const subString = str.slice(0, n - 1);
+    return (
+        (useWordBoundary ? subString.slice(0, subString.lastIndexOf(' ')) : subString) + '&hellip;'
+    );
+}
+
+export function arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    // Use Buffer on server, btoa in browser
+    if (typeof btoa !== 'undefined') {
+        return btoa(binary);
+    }
+    return Buffer.from(binary, 'binary').toString('base64');
+}
+
+export async function getFileAsBase64(filename) {
+    if (!filename) {
+        return '';
+    }
+    // FileReader is browser-only, return empty string on server
+    if (typeof FileReader === 'undefined') {
+        return '';
+    }
+    try {
+        const response = await fetch(filename);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            try {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(blob);
+                /* istanbul ignore next */
+            } catch (err) {
+                reject(err);
+            }
+        });
+    } catch (err) {
+        console.error('Error fetching file:', err);
+        return '';
+    }
+}
+
+export function formatCurrency(value, symbol = '$') {
+    if (value === undefined || value === null) return `${symbol}0`;
+    const numberFormat = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+    });
+    return `${symbol}${numberFormat.format(value)}`;
+}
+
+export function isArrayEqual(a, b) {
+    if (a === b) return true;
+    if (a === null || b === null) return false;
+    if (a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
+}

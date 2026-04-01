@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/glass_stir_rod_with_beaker.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "glass stir rod",
+    "item_id": "c46e98b4-0c1a-478b-988c-8c9260dce434",
+    "entity_type": "item",
+    "prompt": "A 25 cm solid glass stir rod rests diagonally across the rim of a clear beaker filled with a colorless solution on a smooth lab bench. One end of the rod dips slightly into the liquid, with tiny droplets clinging to the glass to show that it has just been used for mixing. The rod is perfectly straight and transparent, catching highlights from the ambient light, while nearby a small bottle and additional glassware blur softly, emphasizing its role as a clean, non-reactive tool for stirring.\n\nThe setting is a serene, near-future solarpunk home lab with light wood shelving, neatly arranged bottles, and a small plant in the background, all lit by soft daylight through a window. The image is photorealistic at 512×512 resolution with gentle, cinematic lighting and no visible logos or text. The composition keeps the beaker and stir rod in crisp focus, clearly conveying a precise, contamination-free mixing tool in a calm, high-tech workspace.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

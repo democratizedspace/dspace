@@ -1,0 +1,233 @@
+{
+    "id": "aquaria/shrimp",
+    "title": "Add dwarf shrimp",
+    "description": "Introduce hardy shrimp with drip acclimation to keep the tank clean and water stable.",
+    "image": "/assets/quests/dwarf_shrimp_drip_acclimation.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your Walstad tank reads 0 ammonia and nitrite when checked with a liquid test kit. Dwarf shrimp graze algae and reveal any stability issues.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "acquire",
+                    "text": "Tank checks passed and I'm ready to stage acclimation gear.",
+                    "requiresItems": [
+                        {
+                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "acquire",
+            "text": "Pick up healthy shrimp in a sealed, shaded bag. Verify the water shows 0 ammonia and nitrite, then float it in your tank for 15 minutes to match temperature.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "acclimate",
+                    "text": "Bag is floating and temperature equalization started."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress-response",
+                    "text": "Bag temperature drifted or shrimp look stressed during float."
+                }
+            ]
+        },
+        {
+            "id": "acclimate",
+            "text": "Set up drip acclimation with airline tubing and a clean 5 gallon bucket reserved for aquarium use. Start a siphon at 2–4 drops per second for about an hour until parameters match.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "drip-acclimate-shrimp",
+                    "text": "Start drip acclimation"
+                },
+                {
+                    "type": "goto",
+                    "goto": "release",
+                    "text": "Drip acclimation complete; move shrimp with a net.",
+                    "requiresItems": [
+                        {
+                            "id": "011129b7-2190-47dd-b541-8123a2e8a9a3",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "process",
+                    "process": "release-unacclimated-shrimp",
+                    "text": "Skip drip acclimation and add shrimp directly (risky)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "die-off",
+                    "text": "Direct-add caused a die-off; begin recovery.",
+                    "requiresItems": [
+                        {
+                            "id": "1b63146c-5cb3-4c75-bb31-ac4bb2e2bebe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress-response",
+                    "text": "Shrimp are darting, lying still, or breathing rapidly."
+                }
+            ]
+        },
+        {
+            "id": "stress-response",
+            "text": "Pause transfer. Dim lights, recheck heater stability, and extend acclimation in 15-minute blocks until movement normalizes. Never dump bag water into the display tank.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-heated-walstad-temperature",
+                    "text": "Log a stability reading before retrying.",
+                    "goto": "stress-response"
+                },
+                {
+                    "type": "goto",
+                    "goto": "acclimate",
+                    "text": "Reading logged and behavior recovered; resume controlled acclimation.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "release",
+            "text": "Use an aquarium net to move drip-acclimated shrimp into the tank. Never pour store water into your aquarium; discard it down a drain, rinse the bucket, and wash your hands.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "release-drip-acclimated-shrimp",
+                    "text": "Transfer the drip-acclimated shrimp with a net."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Transfer complete; begin post-release verification.",
+                    "requiresItems": [
+                        {
+                            "id": "35aeac1d-e26e-475b-8b05-b74562e90173",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "die-off",
+            "text": "You added non-acclimated shrimp directly to the tank. Osmotic shock caused a die-off, so remove carcasses, run a partial water change, and reset before trying again.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "recover-shrimp-die-off",
+                    "text": "Net out shrimp carcasses and complete a corrective water change."
+                },
+                {
+                    "type": "goto",
+                    "goto": "lesson-learned",
+                    "text": "Recovery complete; review what to change before retrying.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "lesson-learned",
+            "text": "Lesson learned: skipping acclimation can crash livestock quickly. Restabilize the tank and restart with a controlled drip acclimation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "acclimate",
+                    "text": "Tank recovered; retry with drip acclimation."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run a post-release observation window and capture a fresh reading before closure. If shrimp hide unusually or gasp at the surface, go back to recovery.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-heated-walstad-temperature",
+                    "text": "Capture post-release verification reading.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress-response",
+                    "text": "Stress signs observed; pause and recover before finishing."
+                },
+                {
+                    "type": "finish",
+                    "text": "Shrimp are active, temperature is logged, and the transfer is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        },
+                        {
+                            "id": "35aeac1d-e26e-475b-8b05-b74562e90173",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+            "count": 3
+        }
+    ],
+    "requiresQuests": [
+        "aquaria/ph-strip-test",
+        "aquaria/heater-install",
+        "aquaria/log-water-parameters"
+    ],
+    "hardening": {
+        "passes": 4,
+        "score": 100,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 78
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-12",
+                "date": "2025-08-12",
+                "score": 92
+            }
+        ]
+    }
+}

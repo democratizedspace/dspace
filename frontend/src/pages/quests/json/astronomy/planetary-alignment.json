@@ -1,0 +1,205 @@
+{
+    "id": "astronomy/planetary-alignment",
+    "title": "Planetary Alignment",
+    "description": "Document a planetary lineup with a route plan, logged evidence, and safety-first recovery loops.",
+    "image": "/assets/quests/planetary_alignment_star_chart.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Several planets are lining up tonight. We'll only call it complete if you can document the lineup and explain whether haze or glare distorted what you saw.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Absolutely, let's choose a route."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Choose the detailed route if you want precise bearings, or a fast confirm route if the window is short.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart-route",
+                    "text": "Main path: chart bearings before observing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "quick-route",
+                    "text": "Alternate path: quick field confirmation."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Cloud cover and glare look risky; pause and recover first."
+                }
+            ]
+        },
+        {
+            "id": "chart-route",
+            "text": "Log target azimuths and altitude order before you slew the telescope.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Route charted and targets framed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Planisphere and telescope are ready for capture."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Targets drifted; I need to reset and retry."
+                }
+            ]
+        },
+        {
+            "id": "quick-route",
+            "text": "Use known bright references to verify planet order quickly, then capture a mission-log artifact.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Quick confirmation run complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 6
+                        }
+                    ],
+                    "text": "Order matches prediction; move to evidence capture."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Too much atmospheric shimmer; take the recovery branch."
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Write a mission-log entry with observed order, time window, and one uncertainty note.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Mission log entry drafted."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 4.0
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Evidence logged; move to interpretation."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: does your log show matching planet order and a clear note about any haze/glare uncertainty?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 4.0
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Yes\u2014logged order is consistent and uncertainty is documented."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "No\u2014evidence is inconsistent; rerun with safer conditions."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery: stand down if footing, weather, or nearby glare is unsafe. Re-cap optics, wait for safer conditions, then retry from route selection.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Conditions stabilized\u2014retry via one of the routes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 4.0
+                        }
+                    ],
+                    "text": "Unsafe window tonight; finish with a logged caution note."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work. You documented the alignment with traceable evidence and handled adverse conditions safely.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Alignment run complete."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 100
+        },
+        {
+            "id": "40b059e7-a11d-49da-8aed-05570804c036",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/north-star"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

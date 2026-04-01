@@ -1,0 +1,217 @@
+{
+    "id": "astronomy/binary-star",
+    "title": "Split a Binary Star",
+    "description": "Use charting and focus checks to split Albireo, verify interpretation, and recover safely when seeing is poor.",
+    "image": "/assets/quests/binary_star_albireo_observation.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Albireo is a colorful binary in Cygnus. Want a fast star-hop route or a careful calibration-first setup?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Give me the two route options."
+                }
+            ]
+        },
+        {
+            "id": "choose-route",
+            "text": "Both routes work. Pick one, then prove the split with a mission-log entry and an interpretation check before we call it complete.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "chart-route",
+                    "text": "Use planisphere star-hop (main path)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "focus-route",
+                    "text": "Do a focus-first sweep (alternate path)."
+                }
+            ]
+        },
+        {
+            "id": "chart-route",
+            "text": "Trace Cygnus on the planisphere, then center Albireo with low magnification before zooming in.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Cygnus traced and Albireo centered."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "I can resolve two stars and distinct colors; move to evidence logging.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 5.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Still a blurry single point—need troubleshooting."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Seeing keeps collapsing—pause and recover."
+                }
+            ]
+        },
+        {
+            "id": "focus-route",
+            "text": "Start with lower power, refocus slowly, and let the scope settle before trying to split the pair.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Focus sweep complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "log-evidence",
+                    "text": "Focus lock achieved; route to evidence logging.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 5.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Colors are washed out or stars still merge."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: do your logged notes clearly separate the primary and secondary star colors, and can you repeat the split?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes—color contrast and repeatability are both confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 4.0
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "No—the split wasn't repeatable; run recovery and retry."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Pause and run a safety check: steady tripod, safe footing, and no bright-horizon glare. Then retry with lower magnification or reschedule.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "choose-route",
+                    "text": "Safety check done—retry one of the routes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Conditions are unsafe tonight; reschedule and finish with a caution note.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log-evidence",
+            "text": "Record the observed color contrast and timestamp so another observer could repeat your result.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Mission log entry drafted."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Observation logged; run interpretation check.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 4.0
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great split. You proved the observation with logged evidence, interpretation, and a safe recovery plan for poor seeing.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Logged and ready for the next target."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+            "count": 1
+        },
+        {
+            "id": "9db35820-1243-4567-a8a4-822530fb6328",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/constellations"],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

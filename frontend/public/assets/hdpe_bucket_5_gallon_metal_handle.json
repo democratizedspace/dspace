@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hdpe_bucket_5_gallon_metal_handle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "5 gallon bucket",
+    "item_id": "0564d441-7367-412e-b709-dad770814a39",
+    "entity_type": "item",
+    "prompt": "A single 5-gallon (19 L) high-density polyethylene bucket with a sturdy metal handle, shown as a clean standalone utility container. Emphasize the thick rim, slight scuffs from use, and the curved metal handle with side lugs; the bucket should look capable of carrying liquids without any branding or readable markings. Place it on a simple workshop floor or bench with soft shadows to keep the object clearly legible.\n\nUltra-detailed, photorealistic 512×512 image with a minimal near-future solarpunk workshop aesthetic: soft cinematic lighting, realistic plastic texture, no logos, no readable text, no overlays. Keep the composition centered and uncluttered so the bucket reads instantly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

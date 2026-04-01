@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aurora_activity_timeline_sheet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "aurora activity timeline",
+    "item_id": "2e856b2e-cd35-44ed-b7e0-76a781c47bb9",
+    "entity_type": "item",
+    "prompt": "A handwritten observation timeline sheet showing changing aurora brightness over time with simple graph marks, cloud-window notes, and camera-setting blocks implied by shapes. A dim red flashlight and camera gear nearby make it clearly an aurora-analysis record.\n\nPhotorealistic 512×512 image with soft low light, realistic paper and pencil textures, no logos, no readable text, and no identifiable faces. Keep the sheet centered and clean.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

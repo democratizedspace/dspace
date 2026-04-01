@@ -1,0 +1,161 @@
+{
+    "id": "hydroponics/top-off",
+    "title": "Top Off the Reservoir",
+    "description": "Add fresh water to keep nutrient levels stable.",
+    "image": "/assets/quests/hydroponics_reservoir_top_off.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Evaporation and thirsty roots drop water level fast. We'll top off, then verify EC so concentration drift does not sneak in.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Sync the working reservoir state before top-off."
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the top-off checklist.",
+                    "requiresItems": [
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Stage dechlorinated water and inspect the reservoir. If level dropped hard or bubbles look weak, branch to diagnostics before filling.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prepare dechlorinated top-off water."
+                },
+                {
+                    "type": "goto",
+                    "goto": "diagnose",
+                    "text": "Level dropped fast or pump sounds rough; diagnose first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fill",
+                    "text": "Supplies ready and system looks stable.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "diagnose",
+            "text": "Troubleshoot before refill: check tubing seats, look for leaks around fittings, and clear intake obstructions. Re-enter only when flow noise normalizes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Issue corrected; return to prep gate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "pause",
+                    "text": "Leak persists or pump still cavitates."
+                }
+            ]
+        },
+        {
+            "id": "pause",
+            "text": "Pause nutrient dosing and keep roots moist while you repair hardware. Do not continue until leak/cavitation is resolved.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Repairs complete; resume checklist."
+                }
+            ]
+        },
+        {
+            "id": "fill",
+            "text": "Add water slowly to the marked line, avoiding root shock. If EC drifted, re-balance nutrients first, then capture a fresh EC log.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Re-balance nutrients before measuring EC."
+                },
+                {
+                    "type": "process",
+                    "process": "measure-ec-solution",
+                    "text": "Record post-top-off EC."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Water added and EC measured.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Interpret before closing: if EC is outside your crop band, return to fill for nutrient re-balance and re-test. If in band, lock in cadence.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fill",
+                    "text": "EC still off-target; return to fill for correction + re-check."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "EC remains in band; close top-off."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. Top-off is only complete when water level and EC evidence both check out.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Top-off complete with verification."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/pump-install"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

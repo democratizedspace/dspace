@@ -1,0 +1,149 @@
+{
+    "id": "hydroponics/pump-install",
+    "title": "Install Submersible Pump",
+    "description": "Install and validate a reservoir pump loop so nutrients circulate evenly.",
+    "image": "/assets/quests/hydroponics_submersible_pump_install.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Stagnant reservoirs drift fast. We will install, verify flow, and keep a rollback path if priming fails.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Start install checklist."
+                }
+            ]
+        },
+        {
+            "id": "kit",
+            "text": "Gather pump, ready tub, and PPE. Confirm power is off before touching waterline hardware.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "install",
+                    "text": "Kit is assembled and power is isolated.",
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        },
+                        {
+                            "id": "fc2bb989-f192-4891-8bde-78ae631dae78",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Missing PPE or unsafe wiring near reservoir."
+                }
+            ]
+        },
+        {
+            "id": "install",
+            "text": "Seat pump, route tubing, and secure return path to prevent splash and siphon backflow.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "install-submersible-pump",
+                    "text": "Install pump assembly now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Pump is physically installed.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run flow verification. If cavitation or dry spots appear, branch to rollback before retrying install.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-hydroponic-flow",
+                    "text": "Run circulation verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Flow is stable and documented.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Flow unstable, noisy, or intake pulling air."
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Rollback path: power down, reseat intake depth, clear kinked tubing, and recheck seals before reinstall attempt.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Hardware corrected; return to safety gate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Re-verify after corrective changes.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice commissioning run. Install plus verified flow means your reservoir is ready for stable dosing.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Pump loop commissioned with rollback checks."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/reservoir-refresh"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

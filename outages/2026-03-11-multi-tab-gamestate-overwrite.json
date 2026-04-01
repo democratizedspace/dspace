@@ -1,0 +1,18 @@
+{
+  "id": "multi-tab-gamestate-overwrite",
+  "date": "2026-03-11",
+  "component": "frontend game state persistence",
+  "rootCause": "Each tab mutated an in-memory snapshot loaded at tab start, so later writes could overwrite earlier tab changes when both tabs operated on stale game state.",
+  "resolution": "Game state now stores a checksum alongside persisted state and mutating helpers re-sync from persisted storage when checksums diverge. Buy/sell, quest, and process flows now refresh before writes, and item/process/quest UIs poll for checksum-driven updates to keep cross-tab state (including dUSD) current.",
+  "references": [
+    "frontend/src/utils/gameState/common.js",
+    "frontend/src/utils/gameState/inventory.js",
+    "frontend/src/utils/gameState/processes.js",
+    "frontend/src/utils/gameState.js",
+    "frontend/src/components/svelte/BuySell.svelte",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/pages/quests/svelte/QuestChat.svelte",
+    "frontend/__tests__/gameState/common.test.js",
+    "frontend/e2e/multi-tab-gamestate.spec.ts"
+  ]
+}

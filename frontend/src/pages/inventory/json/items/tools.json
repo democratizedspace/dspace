@@ -1,0 +1,744 @@
+[
+    {
+        "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+        "name": "entry-level FDM 3D printer",
+        "description": "Entry-level FDM printer with a 220×220×250 mm build volume, heated bed, and 0.4 mm nozzle.",
+        "image": "/assets/entry_level_fdm_printer_220x220x250_heated_bed.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 80
+                }
+            ]
+        }
+    },
+    {
+        "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+        "name": "entry-level FDM 3D printer (leveled bed)",
+        "description": "Printer with bed leveling completed cold using a sheet of paper; ready for a first-layer check.",
+        "image": "/assets/entry_level_fdm_printer_bed_leveled_paper_test.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+        "name": "entry-level FDM 3D printer (clean nozzle)",
+        "description": "Printer with the hotend cleared or a fresh 0.4 mm nozzle installed and torqued at temp.",
+        "image": "/assets/entry_level_fdm_printer_clean_nozzle_0_4mm.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+        "name": "entry-level FDM 3D printer (green PLA loaded)",
+        "description": "Printer with green PLA purged through the hotend and gears tensioned after a filament swap.",
+        "image": "/assets/entry_level_fdm_printer_green_pla_loaded.jpg",
+        "price": "230 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+        "name": "entry-level FDM 3D printer (white PLA loaded)",
+        "description": "Printer purged with white PLA and the extruder tension reset after swapping spools.",
+        "image": "/assets/entry_level_fdm_printer_white_pla_loaded.jpg",
+        "price": "230 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "fbecc523-fb93-4d00-be08-2ed9f53f158c",
+        "name": "0.4 mm brass nozzle",
+        "description": "Replacement 0.4 mm brass nozzle compatible with entry-level FDM printers.",
+        "image": "/assets/brass_nozzle_0_4mm_replacement.jpg",
+        "price": "2 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "564a76de-925b-4457-a548-d015168abe0c",
+        "name": "entry-level FDM 3D printer (clogged nozzle)",
+        "description": "Printer with a nozzle clogged by a failed first layer; requires cleaning before use.",
+        "image": "/assets/entry_level_fdm_printer_clogged_nozzle.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "448e9fbb-8464-4799-956d-cc465a4a8376",
+        "name": "entry-level FDM 3D printer (belt tensioned)",
+        "description": "Printer with X- and Y-axis belts tensioned evenly and gantry re-squared after adjustments.",
+        "image": "/assets/entry_level_fdm_printer_belt_tensioned.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "141581bf-be69-4522-973b-3d22292a85fa",
+        "name": "stringing-tuned Benchy",
+        "description": "A Benchy printed after retraction tuning; hull and cabin show crisp edges with minimal stringing.",
+        "image": "/assets/benchy_stringing_tuned_retraction_test.jpg",
+        "price": "0.35 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
+        "name": "temperature tower sample",
+        "description": "Stacked calibration tower labeled by nozzle temperature, showing gloss, bridging, and stringing per band.",
+        "image": "/assets/temperature_tower_calibration_sample.jpg",
+        "price": "0.60 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+        "name": "entry-level FDM 3D printer (blob of death)",
+        "description": "Printer whose hotend is engulfed in melted plastic after a mid-air extrusion.",
+        "image": "/assets/entry_level_fdm_printer_blob_of_death.jpg",
+        "price": "220 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "7892ffc6-c651-445f-946b-7edc998cf389",
+        "name": "Benchy",
+        "description": "60 mm long calibration tugboat 3D printed in PLA; weighs about 15 g and uses about 5 m of filament.",
+        "image": "/assets/benchy_calibration_tugboat_60mm_pla.jpg",
+        "price": "0.30 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 65
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-21",
+                    "date": "2025-08-21",
+                    "score": 80
+                }
+            ]
+        }
+    },
+    {
+        "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+        "name": "launch controller",
+        "description": "Handheld launch controller uses a 9 V battery, safety key, LED, and 6 m (20 ft) of 18 AWG leads.",
+        "image": "/assets/launch_controller.jpg",
+        "price": "25 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 80
+                }
+            ]
+        }
+    },
+    {
+        "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+        "name": "soldering iron kit",
+        "description": "30 W fixed-temp pen iron with metal stand, cellulose sponge, and 1 m of 0.8 mm lead-free solder.",
+        "image": "/assets/soldering_iron_kit_30w.jpg",
+        "price": "25 dUSD",
+        "type": "tool",
+        "unit": "kit",
+        "hardening": {
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 80
+                }
+            ]
+        }
+    },
+    {
+        "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
+        "name": "desoldering pump",
+        "description": "190 mm aluminum vacuum pump with spring and PTFE tip; 70 g; removes molten solder from PCB joints.",
+        "image": "/assets/desoldering_pump_vacuum.jpg",
+        "price": "8 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+        "name": "solder wick",
+        "description": "2 mm wide no-clean copper braid for removing solder from pads; sold in 1 m rolls.",
+        "image": "/assets/solder_wick_copper_braid_2mm.jpg",
+        "price": "3 dUSD",
+        "type": "tool",
+        "unit": "1.5 m spool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "a8f184ec-c9d0-4a4b-b6a1-c58c1c297b26",
+        "name": "heat gun",
+        "description": "1200 W heat gun with 300 °C and 600 °C settings and a built-in stand for shrinking tubing.",
+        "image": "/assets/heat_gun_two_setting.jpg",
+        "price": "20 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+        "name": "digital multimeter",
+        "description": "Handheld multimeter with manual 20 V DC range, measures up to 600 V, 10 A and 2 MΩ. Includes test probes and replaceable fuse.",
+        "image": "/assets/digital_multimeter_handheld_tool.jpg",
+        "price": "20 dUSD",
+        "type": "tool",
+        "unit": "meter",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+        "name": "digital calipers",
+        "description": "150 mm stainless steel digital calipers with 0.01 mm resolution and auto-off.",
+        "image": "/assets/digital_calipers_150mm.jpg",
+        "price": "15 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
+        "name": "print removal scraper",
+        "description": "Thin spring-steel scraper with ergonomic handle lifts prints off the build plate without gouging.",
+        "image": "/assets/print_removal_scraper_tool.jpg",
+        "price": "6 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "5fbabfcf-27d0-48f5-a89e-7aba8ca4b913",
+        "name": "claw hammer (16 oz)",
+        "description": "450 g (16 oz) drop-forged steel head, curved claw and 330 mm (13 in) fiberglass handle for nails.",
+        "image": "/assets/claw_hammer_16oz.jpg",
+        "price": "10 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-09",
+                    "date": "2025-08-09",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+        "name": "wire stripper",
+        "description": "Spring-loaded tool strips 24–10 AWG insulation; built-in cutter; 120 mm, 75 g.",
+        "image": "/assets/wire_stripper_multi_gauge.jpg",
+        "price": "15 dUSD",
+        "type": "tool",
+        "unit": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-08",
+                    "date": "2025-08-08",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
+        "name": "utility cart",
+        "description": "Two-shelf steel cart, 90×50×80 cm, weighs 15 kg and holds up to 120 kg of lab equipment.",
+        "image": "/assets/cart.jpg",
+        "price": "80 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+        "name": "wire cutters",
+        "description": "Angled-cutting pliers for trimming component leads and wires cleanly.",
+        "image": "/assets/wire_cutters_angled_electronics.jpg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-09",
+                    "date": "2025-08-09",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+        "name": "helping hands",
+        "description": "Adjustable dual-arm third-hand tool with alligator clips, magnifier, and weighted base; holds small parts while soldering; 150 g.",
+        "image": "/assets/helping_hands_soldering_tool.jpg",
+        "price": "10 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+        "name": "tape measure",
+        "description": "3 m (10 ft) retractable steel tape measure with metric and imperial markings.",
+        "image": "/assets/tape_measure_3m_retractable.jpg",
+        "price": "8 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+        "name": "precision screwdriver set",
+        "description": "Four-piece set with #00/#0 Phillips and 1.5/2.5 mm flathead drivers for electronics and robots.",
+        "image": "/assets/precision_screwdriver_set_4pc.jpg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+        "name": "anti-static wrist strap",
+        "description": "Adjustable wrist strap with grounding cord to prevent electrostatic discharge while handling components.",
+        "image": "/assets/anti_static_wrist_strap_grounding_cord.jpg",
+        "price": "7 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
+        "name": "paintbrush",
+        "description": "50 mm natural-bristle brush for applying wood paint and finishes.",
+        "image": "/assets/paintbrush_50mm_natural_bristle.jpg",
+        "price": "3 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+        "name": "compost thermometer",
+        "description": "Stainless compost thermometer with 30 cm probe and 0–100 °C/32–212 °F dial to check pile core heat.",
+        "image": "/assets/compost_thermometer_30cm_probe.jpg",
+        "price": "15 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "dad7f853-ccc9-40be-b226-89272708db84",
+        "name": "flux pen",
+        "description": "10 mL no-clean flux pen with fine or chisel tip (2% solids) to improve solder flow and wetting on PCB pads; ~15 g.",
+        "image": "/assets/flux_pen_no_clean_10ml.jpg",
+        "price": "5 dUSD",
+        "type": "tool",
+        "unit": "pen",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "3b3d40e9-24bc-419e-97b6-a32dcf3e27f1",
+        "name": "lead-free solder spool",
+        "description": "100 g spool of 0.8 mm Sn99.3 Cu0.7 rosin-core solder wire (~14 m) for electronics prototyping.",
+        "image": "/assets/lead_free_solder_spool_0_8mm.jpg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "unit": "100 g spool",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+        "name": "GFCI outlet tester",
+        "description": "Compact plug-in tester with three LEDs and a test button to check GFCI wiring; 50 g (1.8 oz).",
+        "image": "/assets/gfci_outlet_tester.jpg",
+        "price": "12 dUSD",
+        "type": "tool",
+        "unit": "tester",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "cd0e1512-9b4e-4450-92ab-b298852ca5e7",
+        "name": "silicone soldering mat",
+        "description": "300 × 200 × 3 mm silicone work mat with screw trays; heat‑resistant to 500 °C (932 °F); ~180 g.",
+        "image": "/assets/silicone_soldering_mat_300x200.jpg",
+        "price": "15 dUSD",
+        "type": "tool",
+        "unit": "mat",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+        "name": "precision tweezers",
+        "description": "ESD-safe stainless steel tweezers with 0.1 mm fine tips for placing tiny SMD parts; 120 mm long and 15 g.",
+        "image": "/assets/precision_tweezers_esd_safe.jpg",
+        "price": "5 dUSD",
+        "type": "tool",
+        "unit": "pair",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+        "name": "compost moisture meter",
+        "description": "Analog probe with 20 cm stainless steel sensor that reads 0–100% moisture to gauge compost dampness.",
+        "image": "/assets/compost_moisture_meter_probe.jpg",
+        "price": "18 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "5029f7cb-3359-4153-b7ca-4b53988ac086",
+        "name": "needle-nose pliers",
+        "description": "125 mm steel pliers with 1 mm tips for gripping and bending leads in tight spaces.",
+        "image": "/assets/needle_nose_pliers_125mm.jpg",
+        "price": "6 dUSD",
+        "type": "tool",
+        "unit": "pair",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "3dbf1701-5cc0-4443-b9bf-4275b33513d0",
+        "name": "brass tip cleaner",
+        "description": "50 mm brass wire sponge in a weighted steel holder; 40 g; cleans iron tips without water.",
+        "image": "/assets/brass_tip_cleaner_sponge_holder.jpg",
+        "price": "5 dUSD",
+        "type": "tool",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-09-20",
+                    "date": "2025-09-20",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "4796b4a9-0927-4b46-a41f-076ebaff01bb",
+        "name": "compost sifter",
+        "description": "Wooden frame with 1 cm mesh to screen finished compost; 40×40 cm, 1 kg.",
+        "image": "/assets/compost_sifter_wooden_frame_mesh.jpg",
+        "price": "20 dUSD",
+        "type": "tool",
+        "unit": "sifter",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "593fc442-f437-4449-94e5-17b7b4625c41",
+        "name": "solder fume extractor",
+        "description": "120 mm fan with activated carbon filter draws solder fumes away; USB powered; 200 g.",
+        "image": "/assets/solder_fume_extractor_fan.jpg",
+        "price": "30 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    }
+]

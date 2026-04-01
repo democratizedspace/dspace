@@ -1,0 +1,24 @@
+{
+  "id": "process-progress-bar-contrast-regression",
+  "date": "2026-03-02",
+  "component": "frontend/ui/process-progress",
+  "longForm": "outages/2026-03-02-process-progress-bar-contrast-regression.md",
+  "rootCause": "Process cards started rendering in inverted/light mode after prior contrast PRs, but ProgressBar.svelte still used a single light-on-light palette and did not receive the process inverted state from Process.svelte.",
+  "resolution": "Added an inverted prop to ProgressBar, passed inversion state from Process for in-progress and paused states, and introduced inverted-specific progress bar/text colors plus regression coverage.",
+  "references": [
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/src/components/svelte/ProgressBar.svelte",
+    "frontend/src/components/__tests__/ProgressBar.spec.ts",
+    "outages/2026-03-01-chip-inverted-contrast-specificity-regression.json",
+    "outages/2026-03-01-chip-inverted-contrast-specificity-regression.md",
+    "outages/2026-02-16-item-page-contrast-regression.json",
+    "https://github.com/democratizedspace/dspace/pull/3816",
+    "https://github.com/democratizedspace/dspace/pull/3823"
+  ],
+  "dateRanges": [
+    {
+      "start": "2026-03-01",
+      "end": "2026-03-01"
+    }
+  ]
+}

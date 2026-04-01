@@ -1,0 +1,147 @@
+{
+    "id": "electronics/voltage-divider",
+    "title": "Build a Voltage Divider",
+    "description": "Split 5 V to about 2.5 V using 220 Ω and 10 kΩ resistors on a Breadboard.",
+    "image": "/assets/quests/electronics_voltage_divider_breadboard.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Orion here. Gather a breadboard, 220 Ω resistor, 10 kΩ resistor, two jumper wires, a 5 V power supply, and a digital multimeter. Keep the supply unplugged while wiring.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "I'm ready."
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Place the 220 Ω and 10 kΩ resistors in series. Connect the supply rails and clip the multimeter to the resistor junction. Verify color bands before you energize anything.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-resistor-color-code",
+                    "text": "Check resistor colors"
+                },
+                {
+                    "type": "goto",
+                    "goto": "thresholds",
+                    "text": "Divider assembled and probes clipped.",
+                    "requiresItems": [
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 2
+                        },
+                        {
+                            "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "thresholds",
+            "text": "Define acceptance before power-on: with a 5 V source, your divider output should land between 2.40 V and 2.60 V and stay within ±0.05 V over two consecutive checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Thresholds recorded."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Power the circuit and record the junction voltage twice, 30 seconds apart. Stop immediately if a resistor heats up, smoke appears, or the reading spikes above 3.0 V.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Two measurements recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the evidence: pass only when both readings are between 2.40 V and 2.60 V and differ by no more than 0.05 V.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Readings are within 2.40-2.60 V and stable."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Readings are out-of-range or drifting."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: power down, re-seat resistors, confirm rail polarity, and inspect for accidental parallel paths. Re-measure only after the board is cool and wiring is corrected.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Corrections complete; run the re-test."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. You proved divider behavior with explicit thresholds and a stable two-reading check.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Cool!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/tin-soldering-iron"],
+    "hardening": {
+        "passes": 1,
+        "score": 90,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-18",
+                "date": "2025-08-18",
+                "score": 60
+            }
+        ]
+    }
+}

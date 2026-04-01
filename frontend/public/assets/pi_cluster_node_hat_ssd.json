@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/pi_cluster_node_hat_ssd.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Pi cluster node",
+    "item_id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+    "entity_type": "item",
+    "prompt": "A single compact compute node assembled on a bench: a small board with a stacked HAT-style expansion, a slim SSD attached, and a low-profile cooling solution with visible heatsink fins. Clean power and data cables route neatly away; no branding or readable markings.\n\nUltra-detailed, photorealistic 512×512 with a clean near-future maker lab aesthetic: soft cinematic lighting, minimal clutter, no logos, no readable text, no overlays. Frame the assembled node prominently so the HAT stack and SSD are clearly visible at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

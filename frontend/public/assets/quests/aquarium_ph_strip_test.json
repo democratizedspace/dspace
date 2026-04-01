@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/aquarium_ph_strip_test.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/ph-strip-test.json",
+    "item_name": "Check aquarium pH",
+    "item_id": "aquaria/ph-strip-test",
+    "entity_type": "quest",
+    "prompt": "A close-up view of a pH test strip freshly dipped into a small glass of aquarium water, held between the fingers of a hand in front of a blurred fish tank. The colored pads on the strip clearly show several hues, and next to it on the table lies a simple pH reference card with multicolored bars but no readable numbers or letters. In the background, the aquarium itself is softly out of focus, with a few fish and aquatic plants visible, emphasizing that this quick test is for routine tank monitoring.\n\nThe image uses a near-future, gently stylized solarpunk aesthetic, with soft ambient lighting and a clean, uncluttered environment around the tank. Photorealistic 512×512 composition centers the strip and the water sample, with the card and tank providing contextual support. No brand logos or explicit text are present, and the hand is only partially shown to avoid an identifiable face, keeping the focus on the simple act of checking aquarium pH.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

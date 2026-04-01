@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/completionist_trophy_display_shelf.jpg",
+    "entity": "frontend/src/pages/quests/json/completionist/display.json",
+    "item_name": "Show Off Your Trophy",
+    "item_id": "completionist/display",
+    "entity_type": "quest",
+    "prompt": "A cozy room corner with a wooden display shelf where the Completionist Award II trophy is given a special place of honor: the crystalline trophy sits centered on a dedicated riser or small stand, with a few other abstract trophies and memorabilia arranged more modestly around it. Soft directional lighting highlights the main trophy so it catches the light and sparkles slightly, drawing the eye to its status as the player’s top achievement.\n\nNear-future solarpunk home-office aesthetic with warm tones, plants, and clean lines. Photorealistic 512×512 rendering, no brand logos or readable text; the focus is entirely on the elegant arrangement of the trophies on the shelf. No people are visible, reinforcing the idea of a quiet personal display space.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

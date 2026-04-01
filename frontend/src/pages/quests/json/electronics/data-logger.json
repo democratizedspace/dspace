@@ -1,0 +1,171 @@
+{
+    "id": "electronics/data-logger",
+    "title": "Log Temperature Data",
+    "description": "Use a Raspberry Pi to record readings from your thermistor.",
+    "image": "/assets/quests/electronics_pi_temperature_data_logger.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your thermistor circuit works. We'll produce a usable monitoring log with clear thresholds and anomaly handling.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Let's do it."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Set the rig on a dry, static-safe surface. Wear safety goggles and an anti-static wrist strap. Keep power disconnected until wiring is checked.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "pyserial-install",
+                    "text": "Install pyserial"
+                },
+                {
+                    "type": "goto",
+                    "goto": "define-log",
+                    "text": "Hardware ready",
+                    "requiresItems": [
+                        {
+                            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "define-log",
+            "text": "Log requirements: capture timestamp, sensor_id, temp_c, and status once per minute for at least 10 rows. Mark status=ALERT when temp is <18 C or >30 C.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "run-log",
+                    "text": "Logging spec documented."
+                }
+            ]
+        },
+        {
+            "id": "run-log",
+            "text": "Create `log_temp.py` for `/dev/ttyACM0` at 9600 baud, emit the required fields, and append to `temps.csv` each minute.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "raspberry-pi-serial-log",
+                    "text": "Collect temps.csv with 10+ rows."
+                },
+                {
+                    "type": "goto",
+                    "goto": "review-log",
+                    "text": "Review collected log data."
+                }
+            ]
+        },
+        {
+            "id": "review-log",
+            "text": "Review the log and classify outcome: all rows NORMAL, intermittent ALERT spikes, or persistent ALERT trend.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "normal-close",
+                    "text": "All rows NORMAL."
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly-branch",
+                    "text": "I observed ALERT entries."
+                }
+            ]
+        },
+        {
+            "id": "anomaly-branch",
+            "text": "Anomaly response: check thermistor seating, confirm reference resistor value, and verify wiring strain relief. Pause if casing gets hot or smell appears.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "follow-up-window",
+                    "text": "Applied corrective action; start follow-up window."
+                }
+            ]
+        },
+        {
+            "id": "follow-up-window",
+            "text": "Run a 5-minute follow-up capture. Completion requires the new window to show stable readings in the expected band and no repeated ALERT trend.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "raspberry-pi-serial-log",
+                    "text": "Collect follow-up window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "review-log",
+                    "text": "Re-classify follow-up readings."
+                }
+            ]
+        },
+        {
+            "id": "normal-close",
+            "text": "Great work. You produced a thresholded monitoring artifact and verified system stability.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/thermistor-reading"],
+    "hardening": {
+        "passes": 2,
+        "score": 90,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-09",
+                "date": "2025-08-09",
+                "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-12",
+                "date": "2025-08-12",
+                "score": 80
+            }
+        ]
+    }
+}

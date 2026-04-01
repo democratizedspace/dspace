@@ -1,0 +1,206 @@
+{
+    "id": "aquaria/balance-ph",
+    "title": "Balance aquarium pH",
+    "description": "Capture a baseline pH reading, dose buffer safely, then re-test and log a stable window before declaring the tank recovered.",
+    "image": "/assets/quests/aquarium_ph_balance.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before we dose anything, suit up and capture a baseline. Gloves and goggles stay on, and every reading goes in the logbook so we can prove the trend.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Safety gear and logbook are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Start baseline capture checklist."
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Run a pH strip now and mark the value as your baseline. If the strip color is ambiguous, repeat before dosing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-aquarium-ph",
+                    "text": "Take baseline pH reading.",
+                    "goto": "baseline-log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline-log",
+                    "text": "Baseline strip reading is captured.",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline-log",
+            "text": "Log the baseline before dosing so we can compare pre/post values instead of guessing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-ph-reading",
+                    "text": "Record baseline in the logbook.",
+                    "goto": "adjust"
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Baseline entry is logged with date/time.",
+                    "requiresItems": [
+                        {
+                            "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Dose in tiny increments, circulate, then wait before retesting. Never mix pH-up and pH-down concentrates directly, and keep livestock observed for stress.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Dose and circulate buffer safely.",
+                    "goto": "retest"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Dose complete; ready to re-test.",
+                    "requiresItems": [
+                        {
+                            "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Take a post-dose pH reading and compare against baseline. Stable range is 6.8-7.6 with no sudden swing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-aquarium-ph",
+                    "text": "Capture post-dose reading.",
+                    "goto": "interpret"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Post-dose reading captured.",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the result before closing: in-range and gentle drift means success; out-of-range or fish stress means troubleshoot first.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-ph-reading",
+                    "text": "Log stable result (6.8-7.6) and close.",
+                    "goto": "finish"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Reading still out of range or livestock looks stressed.",
+                    "requiresItems": [
+                        {
+                            "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Result logged; close remediation cycle."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Pause feeding for one cycle, re-check KH source water, and dose only half-steps until the drift settles. Re-test after each correction.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Apply a smaller corrective dose.",
+                    "goto": "retest"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Correction step staged; proceed to re-test."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice recovery. You captured baseline and post-dose evidence, logged the result, and stabilized pH without shock swings.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Tank chemistry is back under control."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "a07b75e3-f828-4cb1-81d6-1ab0e9857a79",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["aquaria/ph-strip-test"],
+    "hardening": {
+        "passes": 1,
+        "score": 95,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2026-02-19",
+                "date": "2026-02-19",
+                "score": 90
+            }
+        ]
+    }
+}

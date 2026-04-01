@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_temperature_email_alert.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/temp-email.json",
+    "item_name": "Email Temperature Alert",
+    "item_id": "programming/temp-email",
+    "entity_type": "quest",
+    "prompt": "A laptop screen shows a code editor with a small script that combines sensor reading logic with an email-sending function, highlighted where the alert is triggered when temperature exceeds a threshold. Beside it, an email client window is open displaying a new message in the inbox with a subject line represented by an abstract warning icon and thermometer symbol instead of readable text. On the desk, a compact sensor board with a thermistor and a small Wi-Fi-enabled microcontroller hint at how the readings reach the script.\n\nThe setting is a near-future solarpunk home workspace: soft ambient lighting, a clean desk with minimal clutter, and a few plants and sustainable design touches blurred in the background. The 512×512 photorealistic composition focuses on the editor and email windows along with the sensor hardware, while peripherals and decor remain gently out of focus. No brand logos or legible words appear anywhere, and no faces are visible—only a hand near the trackpad—emphasizing that the script now sends an email when the sensor exceeds a configured temperature.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

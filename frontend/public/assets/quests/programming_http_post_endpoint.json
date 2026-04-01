@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_http_post_endpoint.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/http-post.json",
+    "item_name": "Accept POST Data",
+    "item_id": "programming/http-post",
+    "entity_type": "quest",
+    "prompt": "A laptop screen shows a stylized web server console and a simplified network diagram: an incoming arrow labeled with a generic “POST” icon points from a small device over to a server block, and a log panel below shows stacked JSON-shaped payload icons being captured, all without readable text. On the desk, a small IoT-style sensor node with LEDs and a thermistor is connected to the network via Ethernet or Wi-Fi, and a notepad sketch illustrates fields like temperature and time as abstract key–value bubbles.\n\nThe setting is a near-future solarpunk coding space: soft, cool lighting, clean surfaces, and a plant or two plus modest networking gear blurred in the background. The 512×512 photorealistic composition centers on the laptop display and nearby sensor device, with other tools and decor slightly out of focus. No brand logos or legible words appear anywhere, and no faces are visible—only hands near the keyboard—highlighting that the server has been updated to accept POST requests and log JSON payloads from sensors.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

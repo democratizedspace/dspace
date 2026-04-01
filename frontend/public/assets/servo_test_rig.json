@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/servo_test_rig.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "servo test rig",
+    "item_id": "b3857812-f50c-4880-810d-c929698599b3",
+    "entity_type": "item",
+    "prompt": "A simple servo test rig on a breadboard: a small microcontroller board, jumper wires with strain relief, and a hobby servo mounted so its horn can swing freely. A small clamp holds the assembly steady, and a multimeter probe rests nearby; no branding or readable labels.\n\nUltra-detailed, photorealistic 512×512 with a clean near-future electronics bench aesthetic: soft cinematic lighting, minimal clutter, no logos, no readable text, no overlays. Frame the breadboard, servo, and wiring clearly for easy icon recognition.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

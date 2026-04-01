@@ -1,0 +1,587 @@
+<script>
+    import { createEventDispatcher, onMount } from 'svelte';
+    import ItemPreview from './ItemPreview.svelte';
+    import items from '../../pages/inventory/json/items';
+    import { addItems } from '../../utils/gameState/inventory.js';
+    import { db } from '../../utils/customcontent.js';
+    import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+    import { getPriceStringComponents } from '../../utils.js';
+
+    export let name = '';
+    export let description = '';
+    export let image = null;
+    export let previewUrl = null;
+    let price = '';
+    export let unit = '';
+    export let type = '';
+    export let isEdit = false;
+    export let itemData = null;
+
+    const dispatch = createEventDispatcher();
+    let validationErrors = {};
+    let dependenciesInput = '';
+    let submitError = '';
+    let submitSuccess = '';
+    let savedItemId = null;
+    let isSubmitting = false;
+    let isProcessingImage = false;
+    let processedImageUrl = null;
+    let imageProcessingPromise = null;
+    let imageProcessingJobId = 0;
+    let isHydrated = false;
+    let priceAmount = '';
+    let priceCurrency = '';
+
+    const currencyAllowlist = new Set([
+        'dCarbon',
+        'dWatt',
+        'dUSD',
+        'dSolar',
+        'dWind',
+        'dLaunch',
+        'dOffset',
+        'dBI',
+        'dPrint',
+    ]);
+    const currencyDenylist = new Set(['Early Adopter Token', 'Newcomer Token']);
+    const currencyOptions = items
+        .filter(
+            (item) =>
+                item.category === 'Digital Currency & Tokens' &&
+                currencyAllowlist.has(item.name) &&
+                !currencyDenylist.has(item.name)
+        )
+        .map((item) => item.name);
+
+    $: normalizedPriceAmount =
+        priceAmount === null || priceAmount === undefined ? '' : String(priceAmount).trim();
+    $: normalizedPriceCurrency = priceCurrency ? priceCurrency.trim() : '';
+    $: price =
+        normalizedPriceAmount && normalizedPriceCurrency
+            ? `${normalizedPriceAmount} ${normalizedPriceCurrency}`
+            : '';
+
+    function parseDependencies(value) {
+        return value
+            .split(/[\n,]/)
+            .map((entry) => entry.trim())
+            .filter(Boolean);
+    }
+
+    async function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const jobId = (imageProcessingJobId += 1);
+            isProcessingImage = true;
+            imageProcessingPromise = (async () => {
+                try {
+                    const { dataUrl } = await downsampleAndCompressToJpeg(file);
+                    if (jobId !== imageProcessingJobId) {
+                        return;
+                    }
+                    previewUrl = dataUrl;
+                    processedImageUrl = dataUrl;
+                    image = null;
+                    const { image: _ignoredImageError, ...restErrors } = validationErrors;
+                    validationErrors = restErrors;
+                } catch (error) {
+                    console.error('Image downsample failed', error);
+                    if (jobId !== imageProcessingJobId) {
+                        return;
+                    }
+                    validationErrors = {
+                        ...validationErrors,
+                        image: 'Image processing failed. Please try a different file.',
+                    };
+                    previewUrl = null;
+                    processedImageUrl = null;
+                    image = null;
+                } finally {
+                    if (jobId === imageProcessingJobId) {
+                        isProcessingImage = false;
+                        imageProcessingPromise = null;
+                    }
+                }
+            })();
+        } else {
+            imageProcessingJobId += 1;
+            previewUrl = null;
+            image = null;
+            processedImageUrl = null;
+            imageProcessingPromise = null;
+            isProcessingImage = false;
+        }
+    }
+
+    function validateForm() {
+        const errors = {};
+        if (!name.trim()) {
+            errors.name = 'Name is required';
+        }
+        if (!description.trim()) {
+            errors.description = 'Description is required';
+        }
+        if (!image && !previewUrl) {
+            errors.image = 'Image is required';
+        }
+        const hasPriceAmount = normalizedPriceAmount.length > 0;
+        const hasPriceCurrency = normalizedPriceCurrency.length > 0;
+        if (hasPriceAmount || hasPriceCurrency) {
+            if (!hasPriceAmount) {
+                errors.priceAmount = 'Price amount is required';
+            } else {
+                const parsedPrice = Number(normalizedPriceAmount);
+                if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) {
+                    errors.priceAmount = 'Price must be a positive number';
+                }
+            }
+            if (!hasPriceCurrency) {
+                errors.priceCurrency = 'Select a currency';
+            }
+        }
+        validationErrors = errors;
+        return Object.keys(errors).length === 0;
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        if (isSubmitting) {
+            return;
+        }
+        submitError = '';
+        submitSuccess = '';
+        savedItemId = null;
+        while (imageProcessingPromise) {
+            await imageProcessingPromise;
+        }
+
+        if (!validateForm()) {
+            return;
+        }
+
+        let imageUrl = processedImageUrl || previewUrl;
+        if (!imageUrl && image instanceof File) {
+            try {
+                const { dataUrl } = await downsampleAndCompressToJpeg(image);
+                imageUrl = dataUrl;
+                previewUrl = dataUrl;
+                processedImageUrl = dataUrl;
+            } catch (error) {
+                validationErrors = {
+                    ...validationErrors,
+                    image: 'Image processing failed. Please try again.',
+                };
+                return;
+            }
+        }
+
+        const parsedDependencies = parseDependencies(dependenciesInput);
+        const hasDependenciesInput = dependenciesInput.trim().length > 0;
+        const hasPriceAmount = normalizedPriceAmount.length > 0;
+        const hasPriceCurrency = normalizedPriceCurrency.length > 0;
+        const parsedPrice = hasPriceAmount ? Number(normalizedPriceAmount) : null;
+        const computedPrice =
+            hasPriceAmount && hasPriceCurrency && Number.isFinite(parsedPrice) && parsedPrice > 0
+                ? `${parsedPrice} ${normalizedPriceCurrency}`
+                : '';
+        const payload = {
+            name,
+            description,
+            image: imageUrl,
+            ...(computedPrice && { price: computedPrice }),
+            ...(unit && { unit }),
+            ...(type && { type }),
+            ...((hasDependenciesInput || (isEdit && itemData?.dependencies?.length)) && {
+                dependencies: parsedDependencies,
+            }),
+        };
+
+        isSubmitting = true;
+        let storedId = itemData?.id ?? null;
+        try {
+            if (isEdit && itemData?.id) {
+                await db.items.update(itemData.id, payload);
+                storedId = itemData.id;
+                submitSuccess = 'Item updated successfully.';
+            } else {
+                storedId = await db.items.add(payload);
+                addItems([{ id: storedId, count: 0 }]);
+                submitSuccess = 'Item created successfully.';
+            }
+            savedItemId = storedId;
+        } catch (error) {
+            console.error('Failed to save item', error);
+            submitError =
+                error?.message ||
+                'Unable to save the item right now. Please try again or refresh the page.';
+            return;
+        } finally {
+            isSubmitting = false;
+        }
+
+        dispatch('submit', { ...payload, id: storedId });
+    }
+
+    onMount(() => {
+        isHydrated = true;
+        if (isEdit && itemData) {
+            name = itemData.name || '';
+            description = itemData.description || '';
+            const { price: parsedPrice, symbol } = getPriceStringComponents(itemData.price);
+            if (parsedPrice > 0 && symbol) {
+                priceAmount = String(parsedPrice);
+                priceCurrency = symbol;
+            } else {
+                priceAmount = '';
+                priceCurrency = '';
+            }
+            unit = itemData.unit || '';
+            type = itemData.type || '';
+            previewUrl = itemData.image || null;
+            processedImageUrl = itemData.image || null;
+            dependenciesInput = (itemData.dependencies || []).join('\n');
+        }
+    });
+</script>
+
+<form
+    on:submit={handleSubmit}
+    enctype="multipart/form-data"
+    class="item-form"
+    data-hydrated={isHydrated ? 'true' : 'false'}
+>
+    <div class="form-group">
+        <label for="name">Name*</label>
+        <input
+            type="text"
+            id="name"
+            bind:value={name}
+            placeholder="Item name"
+            class:error={validationErrors.name}
+        />
+        {#if validationErrors.name}
+            <span class="error-message">{validationErrors.name}</span>
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description*</label>
+        <textarea
+            id="description"
+            bind:value={description}
+            placeholder="Describe the item in detail"
+            class:error={validationErrors.description}
+        ></textarea>
+        {#if validationErrors.description}
+            <span class="error-message">{validationErrors.description}</span>
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <label for="image">Upload an Image*</label>
+        <input
+            type="file"
+            id="image"
+            data-testid="image-file-input"
+            data-processing={isProcessingImage ? 'true' : 'false'}
+            accept="image/*"
+            on:change={handleImageUpload}
+            class:error={validationErrors.image}
+        />
+        {#if validationErrors.image}
+            <span class="error-message">{validationErrors.image}</span>
+        {/if}
+        {#if previewUrl}
+            <div class="image-preview-container">
+                <img
+                    src={previewUrl}
+                    class="image-preview"
+                    alt="Preview"
+                    data-testid="image-preview"
+                />
+            </div>
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <label for="price-amount">Price (optional)</label>
+        <div class="price-inputs">
+            <div class="price-input">
+                <input
+                    type="number"
+                    id="price-amount"
+                    bind:value={priceAmount}
+                    min="0.01"
+                    step="any"
+                    inputmode="decimal"
+                    placeholder="e.g. 100"
+                    class:error={validationErrors.priceAmount}
+                />
+                {#if validationErrors.priceAmount}
+                    <span class="error-message">{validationErrors.priceAmount}</span>
+                {/if}
+            </div>
+            <div class="price-input">
+                <select
+                    id="price-currency"
+                    bind:value={priceCurrency}
+                    aria-label="Price currency"
+                    class:error={validationErrors.priceCurrency}
+                >
+                    <option value="">Select currency</option>
+                    {#each currencyOptions as currency}
+                        <option value={currency}>{currency}</option>
+                    {/each}
+                </select>
+                {#if validationErrors.priceCurrency}
+                    <span class="error-message">{validationErrors.priceCurrency}</span>
+                {/if}
+            </div>
+        </div>
+        <p class="helper-text">Enter a positive amount and choose a currency.</p>
+    </div>
+
+    <div class="form-group">
+        <label for="unit">Unit (optional)</label>
+        <input type="text" id="unit" bind:value={unit} placeholder="e.g. kg, m, L" />
+    </div>
+
+    <div class="form-group">
+        <label for="type">Type (optional)</label>
+        <input type="text" id="type" bind:value={type} placeholder="e.g. 3dprint" />
+    </div>
+
+    <div class="form-group">
+        <label for="dependencies">Dependencies (optional)</label>
+        <textarea
+            id="dependencies"
+            bind:value={dependenciesInput}
+            placeholder="Enter item IDs separated by commas or new lines"
+        ></textarea>
+        <p class="helper-text">Separate dependencies with commas or new lines.</p>
+    </div>
+
+    <div class="form-submit">
+        <button type="submit" class="submit-button" disabled={isSubmitting}>
+            {isSubmitting ? 'Saving…' : isEdit ? 'Update Item' : 'Create Item'}
+        </button>
+    </div>
+
+    {#if submitError}
+        <p class="submit-message error" role="alert">{submitError}</p>
+    {/if}
+    {#if submitSuccess}
+        <p class="submit-message success" role="status">
+            {submitSuccess}
+            {#if savedItemId}
+                <a href={`/inventory/item/${savedItemId}`}>View item</a>
+                <span class="separator">•</span>
+                <a href="/inventory/manage">Manage items</a>
+            {/if}
+        </p>
+    {/if}
+</form>
+
+{#if name || description || previewUrl}
+    <ItemPreview
+        {name}
+        {description}
+        imageUrl={previewUrl}
+        {price}
+        {unit}
+        {type}
+        dependencies={parseDependencies(dependenciesInput)}
+    />
+{/if}
+
+<style>
+    .item-form {
+        width: min(100%, 600px);
+        box-sizing: border-box;
+        margin: 0 auto;
+        padding: 20px;
+        background: #2c5837;
+        border-radius: 12px;
+        border: 2px solid #007006;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 6px;
+        color: white;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        border-radius: 8px;
+        background: #68d46d;
+        color: black;
+        font-size: 16px;
+        border: 2px solid #007006;
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #0f0;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+        outline: 3px solid #0f0;
+        outline-offset: 2px;
+    }
+
+    textarea {
+        height: 120px;
+        resize: vertical;
+    }
+
+    input[type='file'] {
+        width: 100%;
+        box-sizing: border-box;
+        background: #fff;
+        border: 2px solid #007006;
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    input.error,
+    textarea.error,
+    select.error,
+    input[type='file'].error {
+        border-color: #ff3e3e;
+    }
+
+    .error-message {
+        color: #ff3e3e;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .helper-text {
+        font-size: 14px;
+        color: #c4f5c6;
+        margin-top: 6px;
+    }
+
+    .price-inputs {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .price-input {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .image-preview-container {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .image-preview {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        border: 2px solid #007006;
+        box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.5);
+        margin-top: 10px;
+    }
+
+    .form-submit {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .submit-button {
+        font-size: 16px;
+        padding: 10px 20px;
+        background-color: #007006;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+    }
+
+    .submit-button:hover {
+        background-color: #005004;
+    }
+
+    .submit-button:disabled {
+        cursor: wait;
+        opacity: 0.7;
+    }
+
+    .submit-button:disabled:hover {
+        background-color: #007006;
+        cursor: wait;
+        opacity: 0.7;
+    }
+
+    .submit-message {
+        margin-top: 12px;
+        font-size: 15px;
+    }
+
+    .submit-message.success {
+        color: #baf9c0;
+    }
+
+    .submit-message.error {
+        color: #ff3e3e;
+    }
+
+    .submit-message a {
+        color: inherit;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    .separator {
+        margin: 0 6px;
+    }
+
+    @media (max-width: 480px) {
+        .item-form {
+            padding: 10px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .form-submit {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .submit-button {
+            width: 100%;
+        }
+    }
+</style>

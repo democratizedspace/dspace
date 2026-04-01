@@ -1,67 +1,153 @@
 ---
 import Page from '../../components/Page.astro';
+import DocsIndex from '../../components/svelte/DocsIndex.svelte';
+import sections from './json/sections.json';
+import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
+import { stripMarkdownToText } from '../../lib/docs/fullTextSearch';
+import { getQuestTreesFromModulePaths, mergeSkillLinks } from '../../utils/docsSkillsIndex.js';
 
-// TODO: create page dynamically with JSON
+const docModules = await Astro.glob('./md/**/*.md');
+
+const buildDocIndex = async () => {
+    const entries = await Promise.all(
+        docModules.map(async (doc) => {
+            const slug = String(doc?.frontmatter?.slug ?? '').toLowerCase();
+
+            if (!slug) {
+                return null;
+            }
+
+            try {
+                let content;
+
+                if (typeof doc.rawContent === 'function') {
+                    content = await doc.rawContent();
+                } else if (typeof doc.compiledContent === 'function') {
+                    content = await doc.compiledContent();
+                } else {
+                    throw new Error(`No content loader found for doc slug ${slug}`);
+                }
+
+                return [
+                    slug,
+                    {
+                        features: detectDocFeatures(content),
+                        bodyText: stripMarkdownToText(content),
+                    },
+                ];
+            } catch (error) {
+                console.error(`Failed to build doc search data for doc slug ${slug}`, error);
+
+                if (import.meta.env?.DEV) {
+                    throw error;
+                }
+
+                return [slug, { features: [], bodyText: '' }];
+            }
+        })
+    );
+
+    const filteredEntries = entries.filter((entry) => Array.isArray(entry));
+    return new Map(filteredEntries);
+};
+
+const docSearchIndex = await buildDocIndex();
+const questTreeModules = Object.keys(import.meta.glob('../quests/json/*/*.json'));
+
+const TITLE_OVERRIDES = {
+    '3dprinting': '3D Printing',
+    ubi: 'UBI',
+    devops: 'DevOps',
+    firstaid: 'First Aid',
+};
+
+const SKILL_SLUG_TREE_ALIASES = {
+    'chemistry-lab': 'chemistry',
+    'energy-systems': 'energy',
+    'first-aid': 'firstaid',
+    rockets: 'rocketry',
+    'sysadmin-devops': 'sysadmin',
+};
+
+const toTitleCase = (value = '') =>
+    value
+        .split(/[-_\s]+/)
+        .filter(Boolean)
+        .map((segment) => {
+            if (/^\d/.test(segment)) {
+                return segment.toUpperCase();
+            }
+
+            return segment.charAt(0).toUpperCase() + segment.slice(1);
+        })
+        .join(' ');
+
+const questSkillLinks = getQuestTreesFromModulePaths(questTreeModules).map((tree) => {
+        const href = `/docs/${tree}`;
+        const docData = docSearchIndex.get(tree) ?? null;
+        const missingDoc = !docData;
+        const features = docData?.features ?? [];
+        const bodyText = docData?.bodyText ?? '';
+
+        if (missingDoc) {
+            console.warn(`Quest tree '${tree}' is missing matching docs page at ${href}`);
+        }
+
+        return {
+            title: TITLE_OVERRIDES[tree] ?? toTitleCase(tree),
+            href,
+            keywords: missingDoc ? [tree, 'missing-doc'] : [tree],
+            features,
+            bodyText,
+        };
+    });
+
+const getSlugFromHref = (href = '') => {
+    const clean = href.split('#')[0].split('?')[0];
+
+    if (!clean.startsWith('/docs/')) {
+        return '';
+    }
+
+    const trimmed = clean.replace(/^\/docs\//, '').replace(/\/?$/, '');
+    return trimmed.toLowerCase();
+};
+
+const docsSections = sections.map((section) => ({
+    title: section.title,
+    links: section.links.map((link) => {
+        const slug = getSlugFromHref(link.href);
+        const docData = slug ? docSearchIndex.get(slug) ?? null : null;
+        const features = docData?.features ?? [];
+        const bodyText = docData?.bodyText ?? '';
+
+        return { ...link, features, bodyText };
+    }),
+}));
+
+const docsSectionsWithAllSkills = docsSections.map((section) => {
+    if (section.title !== 'Skills') {
+        return section;
+    }
+
+    return {
+        ...section,
+        links: mergeSkillLinks({
+            curatedLinks: section.links,
+            generatedLinks: questSkillLinks,
+            aliases: SKILL_SLUG_TREE_ALIASES,
+        }),
+    };
+});
 ---
 
 <Page title="Docs">
-    <span>
-        <h2>The basics</h2>
-        <nav>
-            <a href="/docs/about">About</a>
-            <a href="/docs/mission">Mission</a>
-            <a href="/docs/roadmap">Roadmap</a>
-            <a href="/docs/faq">FAQ</a>
-            <a href="/docs/glossary">Glossary</a>
-            <a href="/docs/contribute">Contribute</a>
-            <a href="/docs/team">Meet the team</a>
-        </nav>
-    </span>
-   
-    <span>
-        <h2>Skills</h2>
-        <nav>
-            <a href="/docs/3dprinting">3D printing</a>
-            <a href="/docs/solar">Solar power</a>
-            <a href="/docs/hydroponics">Hydroponics</a>
-            <a href="/docs/rockets">Rockets</a>
-        </nav>
-    </span>
-    <span>
-        <h2>Game systems</h2>
-        <nav>
-            <a href="/docs/npcs">NPCs</a>
-            <a href="/docs/realtime">Everything is real-time</a>
-            <a href="/docs/web3">Web3</a>
-            <a href="/docs/inventory">Inventory</a>
-            <a href="/docs/achievements">Achievements</a>
-            <a href="/docs/titles">Titles</a>
-            <a href="/docs/processes">Processes</a>
-            <a href="/docs/guilds">Guilds</a>
-            <a href="/docs/dWatt">dWatt</a>
-            <a href="/docs/dCarbon">dCarbon</a>
-        </nav>
-    </span>
-    <span>
-       <h2>Concepts</h2>
-       <nav>
-           <a href="/docs/hyperstructures">Hyperstructures</a>
-           <a href="/docs/credible_neutrality">Credible neutrality</a>
-       </nav>
-    </span>
-     <span>
-        <h2>Dev</h2>
-        <nav>
-            <a href="/docs/prs">Pull Requests</a>
-            <a href="/docs/bounties">Bounties</a>
-            <a href="/docs/prompts-quests">Quest prompts</a>
-        </nav>
-     </span>
+    <DocsIndex sections={docsSectionsWithAllSkills} client:load />
 </Page>
 
 <style>
     h2 {
-        color: white;
+        color: var(--color-heading);
     }
 
     a:hover {
@@ -69,8 +155,8 @@ import Page from '../../components/Page.astro';
     }
 
     span {
-        background-color: #2f5b2f;
-		border-radius: 2rem;
+        background-color: var(--color-surface);
+        border-radius: 2rem;
         text-align: justify;
         text-justify: inter-word;
         text-align: center;
@@ -78,36 +164,36 @@ import Page from '../../components/Page.astro';
     }
     /* Navbar */
 
-	nav {
-		text-align: center;
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
+    nav {
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         padding: 0px;
-	}
+    }
 
-	nav a {
+    nav a {
         opacity: 0.8;
-		background-color: #84d484;
-		border-radius: 100px;
-		color: black;
-		text-decoration: none;
-		flex-direction: row;
-		padding-left: 5px;
-		padding-right: 5px;
+        background-color: var(--color-pill-active);
+        border-radius: 100px;
+        color: var(--color-pill-active-text);
+        text-decoration: none;
+        flex-direction: row;
+        padding-left: 5px;
+        padding-right: 5px;
         text-align: center;
         white-space: nowrap;
         margin: 5px;
         padding: 10px;
     }
 
-	nav a:hover {
-		opacity: 1;
-	}
+    nav a:hover {
+        opacity: 1;
+    }
 
     p {
-        background-color: #2f5b2f;
+        background-color: var(--color-surface);
         padding: 15px;
-		border-radius: 2rem;
+        border-radius: 2rem;
     }
 </style>

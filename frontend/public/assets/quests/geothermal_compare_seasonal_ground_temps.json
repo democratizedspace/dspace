@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_compare_seasonal_ground_temps.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/compare-seasonal-ground-temps.json",
+    "item_name": "Compare Seasonal Ground Temps",
+    "item_id": "geothermal/compare-seasonal-ground-temps",
+    "entity_type": "quest",
+    "prompt": "A compact weather-protected enclosure houses an Arduino-based logger connected to a pair of thermistor probes: one cable leads to a buried ground sensor, and another to a removable probe that can be repositioned seasonally. A laminated but non-readable seasonal calendar chart is taped to the inside of the enclosure lid, and a tablet nearby displays a stylized multi-month temperature graph that shows repeating patterns. Fallen leaves, snow, or bright greenery at the edge of the frame hint at changing seasons, without dominating the scene.\n\nThe setting is a near-future solarpunk garden or test plot: soft ambient light, visible plants or ground cover in the blurred background, and perhaps a small solar panel powering the logger. The 512×512 photorealistic composition centers on the enclosure, probe cables, and subtle seasonal cues, with the rest of the environment gently out of focus. No logos or legible text appear anywhere, and no faces are visible—only hands adjusting the removable probe—highlighting long-term comparison of ground temperatures across seasons using a second thermistor.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

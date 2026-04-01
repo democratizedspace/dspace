@@ -1,0 +1,9 @@
+{
+    "filename": "/assets/temperature_tower_calibration.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "temperature tower sample",
+    "entity_type": "inventory",
+    "prompt": "A photorealistic PLA temperature calibration tower on a build plate, with banded sections labeled in 10°C steps from 240°C down to 180°C. Each band shows changing sheen, stringing, and bridging quality, with cooler sections appearing crisp and warmer sections slightly glossy. Soft studio lighting and a blurred open-frame 3D printer frame in the background.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

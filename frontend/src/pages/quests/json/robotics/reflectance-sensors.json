@@ -1,0 +1,157 @@
+{
+    "id": "robotics/reflectance-sensors",
+    "title": "Calibrate reflectance sensors",
+    "description": "Build a repeatable calibration workflow for floor-vs-line reflectance before closed-loop control.",
+    "image": "/assets/quests/robotics_reflectance_sensors.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Line followers need reliable sensor contrast. We'll mount, calibrate, then validate thresholds before you write steering logic.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "bench",
+                    "text": "Let's build the calibration bench."
+                }
+            ]
+        },
+        {
+            "id": "bench",
+            "text": "Bring your controller, sensor module, and a wheel encoder so you can track repeatable passes over the line.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Hardware bench is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "17edf3f2-8b4a-4c62-b3f5-c17236d53430",
+                            "count": 1
+                        },
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Stream raw readings while sweeping over dark tape and floor. Capture min/max windows and compute a threshold.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-reflectance-sensors",
+                    "text": "Capture and calibrate sensor ranges."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpretation",
+                    "text": "I logged the floor/line min-max values.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpretation",
+            "text": "Interpretation gate: mark your threshold as PASS only if line readings and floor readings keep a stable gap under repeated sweeps.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "validate",
+                    "text": "PASS: thresholds are stable enough for motion tests.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "FAIL: readings overlap or jitter too much."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Out-of-range recovery: clean lens surfaces, lower sensor height, and reduce ambient glare before collecting a fresh sample.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Corrective changes complete; re-run calibration."
+                }
+            ]
+        },
+        {
+            "id": "validate",
+            "text": "Now validate under motion so your threshold survives speed changes and lighting shifts.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "validate-line-thresholds",
+                    "text": "Run a moving validation pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Validation pass recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Final gate: confirm two consecutive passes stay within your threshold bounds before unlocking control quests.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Two consecutive passes succeeded; threshold is stable in motion.",
+                    "requiresItems": [
+                        {
+                            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Bounds failed; apply corrective branch and re-test."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/light-sensor", "programming/hello-sensor"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/washed_precipitate_cake_filtered.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "washed precipitate cake",
+    "item_id": "fecde9bf-4b1f-4c95-a809-c888e5c817fa",
+    "entity_type": "item",
+    "prompt": "A small filtered precipitate cake resting on filter paper in a glass funnel or shallow dish, shown as pale damp solids that have been rinsed and collected before final packaging. Nearby wash bottle, tweezers, and a sample vial suggest careful handling and lab cleanliness without turning the image into a cluttered chemistry scene.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future lab aesthetic: soft task lighting, realistic wet solid texture, clean glass and paper surfaces, no logos, no readable labels, and no identifiable faces. Keep the precipitate centered and visually obvious so it reads clearly as a DSPACE sample artifact.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

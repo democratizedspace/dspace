@@ -1,0 +1,155 @@
+{
+    "id": "3dprinting/filament-change",
+    "title": "Swap Filament",
+    "description": "Swap to green PLA on your entry-level FDM printer with goggles, wire cutters, and a 10 g purge.",
+    "image": "/assets/quests/filament_swap_green_pla.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to swap colors? We'll unload the old spool, purge green PLA, and verify first-layer adhesion before you commit to a long print. Keep goggles on and fingers clear of drive gears.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "heat",
+                    "text": "Leveled, unplugged accessories, and ready to heat.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "heat",
+            "text": "Preheat to 200 °C, move the hotend clear of clips, release the idler, and feed trimmed green PLA until it exits cleanly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "swap-green-pla-filament",
+                    "text": "Unload old filament and load green PLA."
+                },
+                {
+                    "type": "goto",
+                    "goto": "flow-check",
+                    "text": "Green filament is flowing without bubbles.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "flow-check",
+            "text": "Extrude a 20 mm purge line onto paper and inspect it: no popping, no black specks, and steady width. Record anything odd before continuing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Purge line is steady and first-layer strip looks clean.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I see bubbles, brittle feed, or inconsistent flow.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Troubleshoot before printing: clip the filament tip again, reduce feed speed, and verify the spool path is not snagged. If bubbling persists, run another swap/purge cycle.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "swap-green-pla-filament",
+                    "text": "Run a recovery swap and purge cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "flow-check",
+                    "text": "Recovery done, rechecking purge quality.",
+                    "requiresItems": [
+                        {
+                            "id": "97ec3b0b-1be0-4260-bbaf-62ccb935807e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your printer is purged, tensioned, and validated for a clean green first layer.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Time to print!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["3dprinting/calibration-cube"],
+    "hardening": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-17",
+                "date": "2025-08-17",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-clarity-2025-08-19",
+                "date": "2025-08-19",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-polish-2025-08-22",
+                "date": "2025-08-22",
+                "score": 95
+            }
+        ]
+    }
+}

@@ -1,0 +1,224 @@
+{
+    "id": "aquaria/water-testing",
+    "title": "Test water parameters",
+    "description": "Record a full liquid test panel, interpret threshold bounds, and run corrective action with a retest loop before stocking sensitive livestock.",
+    "image": "/assets/quests/water_testing.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before we add shrimp, we need proof that ammonia and nitrite are zero and nitrate stays under control. Stage PPE, the liquid kit, and your logbook so each reading is traceable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Bench is clear, PPE is on, and the kit is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Rinse each tube with tank water, fill to 5 mL, dose reagents exactly, then cap and invert. Keep reagents away from skin and food surfaces.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-liquid-parameters",
+                    "text": "Run the full liquid test panel.",
+                    "goto": "log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Panel run complete and readings are ready to log.",
+                    "requiresItems": [
+                        {
+                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Log ammonia, nitrite, nitrate, and pH with timestamp before deciding if the tank is in range.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-aquarium-test-results",
+                    "text": "Record the test panel in the logbook.",
+                    "goto": "interpret"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Readings are logged and ready for interpretation.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the log before stocking: ammonia = 0 ppm, nitrite = 0 ppm, nitrate < 40 ppm. If any value is out of range, branch to corrective work and retest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All values are in range; shrimp-safe window confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "At least one value is out of range; start corrective response.",
+                    "requiresItems": [
+                        {
+                            "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Pause stocking and run a controlled partial water change. Match replacement water temperature and dechlorination before restarting flow.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run corrective partial water change.",
+                    "goto": "retest"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Water change is complete and conditions are stable.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Run the liquid panel again and compare against your previous entry. Do not close this quest until a fresh in-range log exists.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Run the retest panel now.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Retest still out of range; run another corrective cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Retest passed and fresh readings confirm safe ranges.",
+                    "requiresItems": [
+                        {
+                            "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent discipline. You documented readings, handled risk safely, and proved recovery before moving livestock.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Water parameters verified."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["aquaria/thermometer"],
+    "hardening": {
+        "passes": 5,
+        "score": 100,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            },
+            {
+                "task": "codex-upgrade-2025-08-10",
+                "date": "2025-08-10",
+                "score": 94
+            },
+            {
+                "task": "codex-quest-refinement-2025-08-12",
+                "date": "2025-08-12",
+                "score": 95
+            }
+        ]
+    }
+}

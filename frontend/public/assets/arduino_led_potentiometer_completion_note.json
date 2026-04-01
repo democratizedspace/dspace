@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/arduino_led_potentiometer_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Dim an LED with a potentiometer on Arduino completion note",
+    "item_id": "0556d7cb-ba19-5cfb-8f20-fac2d29cd986",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting a successful Arduino experiment where a potentiometer dims a single LED. The image centers on a workbench note beside an Arduino-compatible board, a breadboard with a glowing 5 mm LED, a rotary potentiometer, jumper wires, and a simple test layout that clearly implies variable brightness control. The completion note includes plotted curves and small hand-drawn circuit symbols without readable text, making it unmistakably tied to electronics prototyping.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-lab aesthetic: soft bench lighting, realistic PCB, plastic knob, jumper wire, and paper textures, no logos, no readable labels, and no clear faces in frame. Keep the note and the dimmable LED setup centered and tidy so the artifact reads clearly at icon size.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

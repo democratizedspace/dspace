@@ -1,0 +1,11 @@
+{
+  "id": "avatar-grid-height",
+  "date": "2025-12-22",
+  "component": "frontend",
+  "rootCause": "A shared AvatarPicker button style forced every button to 100px tall, so larger avatar images were squished into the grid rows on /profile/avatar.",
+  "resolution": "Scoped the Select button styles and removed the fixed height so avatar tiles use their natural dimensions and maintain even spacing.",
+  "references": [
+    "frontend/src/components/svelte/AvatarPicker.svelte",
+    "https://staging.democratized.space/profile/avatar"
+  ]
+}

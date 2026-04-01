@@ -1,0 +1,13 @@
+{
+  "id": "2026-03-01-energy-power-inverter-invalid-item-gate",
+  "date": "2026-03-01",
+  "component": "quests-energy",
+  "longForm": "outages/2026-03-01-energy-power-inverter-invalid-item-gate.md",
+  "rootCause": "The energy/power-inverter start node gated progression behind an invalid safety-goggles UUID, so requirements rendered as Unknown item and blocked completion.",
+  "resolution": "Replaced the bad UUID with the canonical inventory item and added unknown-item validation coverage so quests/processes fail CI when referencing undefined IDs.",
+  "references": [
+    "frontend/src/pages/quests/json/energy/power-inverter.json",
+    "tests/questCompletableItems.test.ts",
+    "tests/questRewardsValidation.test.ts"
+  ]
+}

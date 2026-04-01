@@ -1,0 +1,176 @@
+{
+    "id": "robotics/gyro-balance",
+    "title": "Balance with a gyroscope",
+    "description": "Pair a gyro with tuned servo control so a two-wheeled platform can catch itself before tipping over.",
+    "image": "/assets/quests/robotics_gyro_balance_platform.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Two-wheel balance is all about fast corrections and safe test runs. Pick a tuning strategy before we spin the motors.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "parts",
+                    "text": "Use a conservative P-only baseline first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "parts",
+                    "text": "Start with full PID tuning and tighter control."
+                }
+            ]
+        },
+        {
+            "id": "parts",
+            "text": "Stage an Arduino Uno, two drive servos, and the MPU-6050. Keep wiring short and secure so vibration does not fake gyro drift.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Hardware is staged and strain-relieved.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "The gyro values jump around while stationary."
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Safety gate: test at low speed with a soft catch zone. Confirm emergency stop access before enabling continuous balancing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "operator-check",
+                    "text": "Safety setup complete; run operator recovery drills.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I need to secure the test zone first."
+                }
+            ]
+        },
+        {
+            "id": "operator-check",
+            "text": "Operational drill: rehearse emergency stop, spotter callouts, and battery disconnect steps before live balancing attempts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tune",
+                    "text": "Drill complete; start the five-run tuning block.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need to tighten stop procedure and spotter roles first."
+                }
+            ]
+        },
+        {
+            "id": "tune",
+            "text": "Run five 10-second balance attempts and log tip direction plus correction latency after each run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Tuning log is complete and stable.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "It still oscillates or drifts into a fall."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: re-level the frame, recalibrate gyro offset, then reduce D gain and retry a short run before raising speed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Fixes applied; repeat safety checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "operator-check",
+                    "text": "Retry with a fresh operator safety check."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: pass three consecutive 10-second holds with no uncontrolled tip-over and documented latency improvements.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Three clean balance holds recorded; gyro balance is validated.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "A hold failed; return to corrective tuning."
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["robotics/odometry-basics"],
+    "rewards": [
+        {
+            "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+            "count": 1
+        }
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

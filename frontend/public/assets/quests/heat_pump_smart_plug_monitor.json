@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/heat_pump_smart_plug_monitor.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/monitor-heat-pump-energy.json",
+    "item_name": "Monitor Heat Pump Energy Use",
+    "item_id": "geothermal/monitor-heat-pump-energy",
+    "entity_type": "quest",
+    "prompt": "A compact air-to-water or water-to-water heat pump unit in a tidy mechanical room or utility corner, with its power cord clearly routed through a smart plug adapter connected to a nearby outlet. A smartphone or tablet is shown in the foreground displaying a simple, text-free energy usage graph and power icon that obviously refers to the heat pump’s consumption. Nearby pipes and insulated lines hint at the ground loop connection without needing technical detail, making it clear that this is part of a geothermal system.\n\nNear-future solarpunk aesthetic with clean walls, organized piping, and soft neutral lighting. Photorealistic 512×512 rendering with no brand logos or readable text on the equipment or phone screen—only simple icons and graphs. No people are visible, keeping the focus on the heat pump, smart plug, and monitoring device as a complete “monitor energy use” setup.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/run_tests_terminal_dashboard.jpg",
+    "entity": "frontend/src/pages/quests/json/welcome/run-tests.json",
+    "item_name": "Run the Test Suite",
+    "item_id": "welcome/run-tests",
+    "entity_type": "quest",
+    "prompt": "A coding workstation with a laptop or ultrawide monitor showing a stylized test dashboard: rows of green checkmark icons and a few neutral or gray status icons, all represented as abstract bars and shapes with no readable text. A terminal window or side pane is visible using colored blocks and icons to suggest automated tests running and passing. On the desk lie a notebook with a few scribbled diagrams and a mug, reinforcing the feel of an active development environment.\n\nNear-future solarpunk workspace aesthetic with clean lines, warm lighting, and a small plant or two. Photorealistic 512×512 rendering, no brand logos or legible text in the UI. The composition should clearly convey the idea of running and monitoring an automated test suite to ensure changes are correct.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

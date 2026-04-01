@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stevia_crystals_jar.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia crystals",
+    "item_id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+    "entity_type": "item",
+    "prompt": "A small clear glass jar with a tight-fitting lid sits on a countertop, filled with fine, sparkling white crystals that resemble sugar but are labeled only with a simple stylized leaf icon, too small to read any words. Beside the jar, a measuring spoon holds a small mound of the crystals, and a couple of stevia leaves reinforce that this is a highly concentrated sweetener purified from stevia extract. The crystals catch the light in a way that emphasizes their refined, potent nature.\n\nThe scene is a near-future solarpunk kitchen or lab space with soft natural light, a potted herb plant, and minimal, clean surfaces in muted tones. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable text on the jar, and a composition that centers the open jar and spoonful of crystals while the background stays softly blurred to convey a precise, modern approach to natural sweeteners.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

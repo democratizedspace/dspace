@@ -1,0 +1,323 @@
+[
+    {
+        "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
+        "name": "Benchy Award",
+        "description": "Resin trophy of classic 3D Benchy boat for your first calibration print.",
+        "image": "/assets/benchy_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+        "name": "Motor Award",
+        "description": "12 cm tall brushed aluminum trophy shaped like an Edison Model M motor; awarded to early buyers.",
+        "image": "/assets/motor_award_trophy.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "946b07b7-2b2c-4507-a725-edb270d8e910",
+        "name": "Rocket Award",
+        "description": "15 cm tall brushed aluminum rocket trophy awarded for printing your first model rocket.",
+        "image": "/assets/rocket_award_trophy.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
+        "name": "Rocketeer Award",
+        "description": "12 cm aluminum rocket trophy for your first model rocket launch.",
+        "image": "/assets/rocketeer_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "1394c366-5078-49cf-b24e-c748e8428234",
+        "name": "Completionist Award",
+        "description": "15 cm aluminum trophy etched 'Completionist 2023'; reward for finishing every quest on 2023-01-01.",
+        "image": "/assets/completionist_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-16",
+                    "date": "2025-08-16",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "96e11500-a2ce-4531-a1b5-3a92c44fcb9d",
+        "name": "Tree Hugger Award",
+        "description": "12 cm bamboo trophy laser-engraved with a tree; awarded for converting dCarbon to dOffset.",
+        "image": "/assets/tree_hugger_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+        "name": "Completionist Award II core",
+        "description": "Freshly printed PLA core of the Completionist Award II, ready for sanding and a press-fit nameplate.",
+        "image": "/assets/completionist_award_ii_core_pla_print.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "a0fc23b6-3460-404f-bd16-dfb5700f7326",
+        "name": "Completionist Award II nameplate",
+        "description": "Engraved PLA plate with the award date and serial, sized to seat flush in the trophy core.",
+        "image": "/assets/completionist_award_ii_nameplate_engraved_insert.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+        "name": "Completionist Award II (polished)",
+        "description": "Award wiped clean of dust and fingerprints, ready for display photos.",
+        "image": "/assets/completionist_award_ii_polished_finish.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "a8120ce3-4a9d-4d49-b955-92bd9d7fbc07",
+        "name": "Completionist Award II (displayed)",
+        "description": "Award staged on a dusted shelf with backlighting logged for future inspections.",
+        "image": "/assets/completionist_award_ii_displayed_backlit_shelf.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+        "name": "Completionist Award II",
+        "description": "12 cm PLA trophy dated 2023-06-30; printed core and nameplate bonded for finishing and display.",
+        "image": "/assets/completionist_award_ii_finished_trophy.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "be9cb892-f4b2-45fd-ae2b-34d3190acb59",
+        "name": "Completionist Award III module kit",
+        "description": "A precision 3D printed module set for the Award III: crest shell, electronics tray, cable channels, planter ring, and engraved spine tabs ready for multi-material assembly.",
+        "image": "/assets/completionist_award_iii_module_kit.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "fd54da0d-cf87-4860-bf74-df3be8a95f90",
+        "name": "Completionist Award III wood pedestal",
+        "description": "A hand-cut pine pedestal with chamfered edges, sanded through fine grits and oil-finished to protect against moisture from the planter top.",
+        "image": "/assets/completionist_award_iii_wood_pedestal.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "37f159f8-e8a2-4721-9608-c4b25855092e",
+        "name": "Completionist Award III smart harness",
+        "description": "A soldered and heat-shrunk electronics harness with addressable LEDs, microcontroller leads, fused power input, and labeled signal lines for debugging-friendly service.",
+        "image": "/assets/completionist_award_iii_smart_harness.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "e6f5d8eb-1ce2-4a91-b9f4-3bbac465018b",
+        "name": "Completionist Award III motion core",
+        "description": "Integrated servo and mount stack tuned for smooth, low-noise crest rotation, with balanced linkage travel and strain-relieved wiring paths.",
+        "image": "/assets/completionist_award_iii_motion_core.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "ba8cc7ec-f6c9-429a-aa7d-4bf8f513f4c9",
+        "name": "Completionist Award III planter crown",
+        "description": "A compact hydroponic crown module with wick-fed reservoir cup, basil starter plug mount, and overflow-safe channel integrated into the trophy top geometry.",
+        "image": "/assets/completionist_award_iii_planter_crown.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "adf69f8d-4b30-4eec-b667-43ff5dfd9892",
+        "name": "Completionist Award III",
+        "description": "A museum-grade mixed-media trophy celebrating full v3 completion: a matte-white 3D printed geometric spine with inset brass fasteners rises from a hand-oiled pine pedestal; a translucent circular LED halo wraps the midsection and glows through engraved circuit motifs; a micro-servo rotates a brushed-metal crest featuring layered quest-tree glyphs; exposed sections show neatly loomed, heat-shrunk wiring and labeled debug test pads; the top hosts a living hydroponic basil planter with a black reservoir collar and fresh green leaves. Lighting should emphasize warm wood grain, cool electronic highlights, and the contrast between precision fabrication and organic growth.",
+        "image": "/assets/completionist_award_iii_mixed_media_trophy.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
+        "name": "Hydro Award",
+        "description": "10 cm aluminum droplet trophy engraved 'Hydration Hero'; reward for hauling ten buckets to dChat.",
+        "image": "/assets/hydro_award.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "\ud83c\udf00",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-15",
+                    "date": "2025-08-15",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "fd8bdb69-0f29-469c-9383-93f97b6ea015",
+        "name": "V2 Upgrade Trophy",
+        "description": "Awarded for migrating a v2 localStorage save to the v3 IndexedDB format.",
+        "image": "/assets/v2_upgrade_trophy_indexeddb_migration.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "d5d62069-c77d-44b1-8848-b355f8410f74",
+        "name": "GitHub Link-Up Trophy",
+        "description": "A celebratory Octocat badge awarded for securely connecting GitHub and enabling cloud sync.",
+        "image": "/assets/github_link_up_trophy.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    },
+    {
+        "id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
+        "name": "Test Suite Triumph Trophy",
+        "description": "Anodized aluminum trophy for a clean, tested-and-verified CI-parity run.",
+        "image": "/assets/test_suite_triumph_trophy.jpg",
+        "priceExemptionReason": "TROPHY",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "\ud83d\udee0\ufe0f",
+            "history": []
+        }
+    }
+]

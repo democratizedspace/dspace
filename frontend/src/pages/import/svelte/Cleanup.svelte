@@ -4,8 +4,8 @@
 
     addItems([
         {
-            "id": ""
-        }
+            id: '',
+        },
     ]);
 </script>
 

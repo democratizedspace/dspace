@@ -1,0 +1,157 @@
+{
+    "id": "devops/ssh-hardening",
+    "title": "Harden SSH Access",
+    "description": "Use key-based authentication and disable password logins.",
+    "hardening": {
+        "passes": 1,
+        "score": 90,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-18",
+                "date": "2025-08-18",
+                "score": 60
+            }
+        ]
+    },
+    "image": "/assets/quests/devops_ssh_hardening_keys.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's lock down SSH with a safety-first flow: stage keys, verify a second shell, then enforce hardening.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "keys",
+                    "text": "Ready with laptop and node.",
+                    "requiresItems": [
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "keys",
+            "text": "Run `ssh-keygen -t ed25519`, copy the public key with `ssh-copy-id`, and keep your existing session open as rollback insurance.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "generate-ssh-key",
+                    "text": "Generate and copy key."
+                },
+                {
+                    "type": "goto",
+                    "goto": "config",
+                    "text": "Key auth works in a second shell.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "config",
+            "text": "Back up `/etc/ssh/sshd_config`, set `PasswordAuthentication no` and `PermitRootLogin no`, then restart sshd while the backup session remains connected.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "harden-sshd-config",
+                    "text": "Apply hardened config."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Config applied; run verification."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Capture `sshd` journal evidence and confirm password login is blocked while key login stays healthy.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture sshd verification report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Key login failed or access is unstable.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Policy verified with evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: do not close the surviving session. Restore the backup config, fix key permissions, then retry verification before finalizing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Log the lockout incident and corrective steps."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery complete; re-run verification.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "SSH is hardened with verification evidence captured. Excellent ops hygiene.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Security first."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "aaef54ec-eed4-43d6-a4e4-e1b22fbb5a69",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["devops/firewall-rules"]
+}

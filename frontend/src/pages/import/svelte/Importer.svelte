@@ -10,11 +10,13 @@
     export let itemList = [];
 
     const newcomerToken = {
-        id: "86",
-        count: 1
+        id: '86',
+        count: 1,
     };
 
-    let mounted = false, imported = false, currentVersion;
+    let mounted = false,
+        imported = false,
+        currentVersion;
 
     let totalItemCount;
 
@@ -35,13 +37,14 @@
 
         currentVersion = getVersionNumber();
 
-        if (currentVersion === "2") {
+        if (currentVersion === '2') {
             imported = true;
         }
     });
 
     $: totalItemCount = itemList.length;
-    const newcomerTokenCount = derived(state, $state => getItemCount(newcomerToken.id));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const newcomerTokenCount = derived(state, (_state) => getItemCount(newcomerToken.id));
 </script>
 
 {#if mounted}
@@ -51,12 +54,17 @@
                 {#if imported}
                     <div class="item vertical">
                         <p>Done!</p>
-                        <p>You can click the button below to remove cookies used for DSPACE v1. Completing this step removes "Import from v1" menu item.</p>
+                        <p>
+                            You can click the button below to remove cookies used for DSPACE v1.
+                            Completing this step removes "Import from v1" menu item.
+                        </p>
                         <Chip text="Remove v1" href="/import/v2/v1/done" inverted={false} />
                     </div>
                 {:else}
                     <p align="center">
-                        {totalItemCount} {totalItemCount > 1 ? "different " : ""} {totalItemCount === 1 ? "item" : "items"} found
+                        {totalItemCount}
+                        {totalItemCount > 1 ? 'different ' : ''}
+                        {totalItemCount === 1 ? 'item' : 'items'} found
                     </p>
 
                     {#if totalItemCount > 0}
@@ -71,19 +79,28 @@
                             />
                         </div>
                     {:else}
-                        <p align="center">It looks like you didn't play v1 on this device, or your progress was wiped (by deleting cookies). In that case, take this token to hide this menu option!</p>
+                        <p align="center">
+                            It looks like you didn't play v1 on this device, or your progress was
+                            wiped (by deleting cookies). In that case, take this token to hide this
+                            menu option!
+                        </p>
                         <CompactItemList
                             itemList={[newcomerToken]}
                             noRed={true}
                             increase={true}
-                            inverted={true} />
-                            <Chip text="Accept" onClick={acceptNewcomerToken} inverted={false} disabled={$newcomerTokenCount > 0} />
+                            inverted={true}
+                        />
+                        <Chip
+                            text="Accept"
+                            onClick={acceptNewcomerToken}
+                            inverted={false}
+                            disabled={$newcomerTokenCount > 0}
+                        />
 
-                            {#if $newcomerTokenCount > 0}
-                                <Chip text="Go home" href="/" />
-                            {/if}
+                        {#if $newcomerTokenCount > 0}
+                            <Chip text="Go home" href="/" />
+                        {/if}
                     {/if}
-
                 {/if}
             </div>
         </div>
@@ -105,7 +122,7 @@
     }
 
     .inner {
-        background-color: #68D46D;
+        background-color: #68d46d;
         color: black;
         padding: 5px;
         margin: 20px;

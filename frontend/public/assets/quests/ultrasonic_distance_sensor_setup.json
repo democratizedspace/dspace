@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/ultrasonic_distance_sensor_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/ultrasonic-rangefinder.json",
+    "item_name": "Measure distance with an ultrasonic sensor",
+    "item_id": "robotics/ultrasonic-rangefinder",
+    "entity_type": "quest",
+    "prompt": "A small rectangular ultrasonic distance sensor module with two round transducers is mounted on a breadboard or a simple bracket at the front of a microcontroller-based project. Wires connect the sensor back to a microcontroller board, and the scene includes a few test objects at various distances in front of the sensor, such as small boxes or cylinders, to make it clear that distance measurements are being taken. The sensor is angled directly toward the objects, highlighting its role as an ultrasonic rangefinder.\n\nThe setup sits on a clean workbench in a near-future solarpunk lab, with bright but soft ambient lighting, tidy storage bins, and a couple of potted plants in the background. The 512×512 image is photorealistic with light stylization, no visible brand logos or readable text, and an uncluttered composition that keeps the ultrasonic sensor and its target objects as the main focal points while the rest of the workspace is gently blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

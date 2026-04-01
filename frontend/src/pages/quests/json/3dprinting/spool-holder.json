@@ -1,0 +1,191 @@
+{
+    "id": "3dprinting/spool-holder",
+    "title": "Print a Spool Holder",
+    "description": "Keep filament tidy by printing a simple spool holder.",
+    "image": "/assets/quests/spool_holder_print_setup.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Sydney here. Filament keeps wandering? We'll print a sturdy holder with a safe setup check, then prove feed stability before we call it done.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Guide me through prep."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Safety pass first: goggles on, sleeves clear, and route filament so nothing snags the hotend carriage. Then choose your prep strategy.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Run a full bed-level pass before printing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Bed is already leveled and verified.",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 2.0
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "strategy",
+            "text": "Main path: tension belts for dimensional stability. Alternate path: keep existing tension but print slower and monitor for wobble. Either way, load clean white PLA before the long print.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "tighten-x-belt",
+                    "text": "Main path: tune X-belt tension first."
+                },
+                {
+                    "type": "process",
+                    "process": "swap-white-pla-filament",
+                    "text": "Load white PLA and purge 10 grams before slicing."
+                },
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Prep complete; begin spool-holder print.",
+                    "requiresItems": [
+                        {
+                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Run a skirt, watch first-layer adhesion, then print the holder. Pause immediately if uprights lean or the base corner lifts.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-spool-holder",
+                    "text": "Print the spool holder."
+                },
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Holder cooled and ready for feed-path checks.",
+                    "requiresItems": [
+                        {
+                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Mount a spool and pull filament through three full carriage sweeps. Record whether drag stays smooth and whether the spool arm vibrates.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All three sweeps are smooth and no wobble appears.",
+                    "requiresItems": [
+                        {
+                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I hear dragging, feel binding, or see arm wobble.",
+                    "requiresItems": [
+                        {
+                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: verify holder sits flat, re-route filament to remove sharp bends, and reduce travel speed for a short re-test. Reprint if cracks or warping remain.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Part is warped or cracked; reprint with corrected settings.",
+                    "requiresItems": [
+                        {
+                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Feed path adjusted; rerun three-sweep verification.",
+                    "requiresItems": [
+                        {
+                            "id": "3721d5e0-a148-4f67-9150-55492873a576",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. You've proven the holder works under motion, not just on the bench.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Spool secured!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["3dprinting/phone-stand"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

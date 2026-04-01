@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_pi_temperature_data_logger.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/data-logger.json",
+    "item_name": "Log Temperature Data",
+    "item_id": "electronics/data-logger",
+    "entity_type": "quest",
+    "prompt": "A Raspberry Pi in a low-profile case sits on a desk connected via jumper wires to a small breadboard holding a thermistor and a few supporting components. A nearby monitor or laptop shows a stylized graph with a smoothly rising and falling temperature plot over time, the axes rendered without readable labels. A small sticky-note-sized card or notebook sketch shows a room outline with dots where sensors might be placed, hinting that ambient temperature is being recorded.\n\nThe environment is a near-future solarpunk home lab with soft lighting, pale surfaces, and a few plants or natural textures visible in the background. The 512×512 photorealistic composition keeps the Pi, sensor breadboard, and display graph as the focal trio, with background equipment and shelves softly blurred. No brand logos or legible text appear anywhere, and no faces are shown—just hands near the keyboard or Pi—emphasizing the quiet, continuous logging of temperature data using a small, efficient computer.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

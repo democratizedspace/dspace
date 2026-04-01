@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_gravel_vacuum_siphon.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "gravel vacuum",
+    "item_id": "97317bc3-507a-4e2c-912b-507d586cee87",
+    "entity_type": "item",
+    "prompt": "A gravel vacuum siphon is coiled neatly on a floor next to an aquarium, showing a clear 4 cm tube attached to a long, flexible 2 m hose. One end of the tube rests in a bucket partially filled with water and bits of debris, while the other end is positioned near the gravel in the aquarium, hinting that the siphon has just been used to clean the substrate. The self-priming bulb or simple hand-pump section is visible along the hose, making it clear that this tool is designed to start and maintain water flow without mouth-siphoning.\n\nThe setting is a near-future solarpunk living room or fish room with soft, indirect lighting, a lush planted tank in the background, and tidy storage of other aquarium tools on a nearby shelf. The 512×512 image is photorealistic with light stylization, no logos or text on the siphon, and a composition that emphasizes the gravel vacuum’s tube, hose, and bucket while the aquarium and room remain gently out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

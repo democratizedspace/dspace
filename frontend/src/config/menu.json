@@ -45,8 +45,20 @@
         "pinned": true
     },
     {
+        "name": "Processes",
+        "href": "/processes"
+    },
+    {
         "name": "Import/export gamesaves",
         "href": "/gamesaves"
+    },
+    {
+        "name": "Cloud Sync",
+        "href": "/cloudsync"
+    },
+    {
+        "name": "Custom Content Backup",
+        "href": "/contentbackup"
     },
     {
         "name": "Guilds",
@@ -55,18 +67,15 @@
     },
     {
         "name": "Stats",
-        "href": "/stats",
-        "comingSoon": true
+        "href": "/stats"
     },
     {
         "name": "Achievements",
-        "href": "/achievements",
-        "comingSoon": true
+        "href": "/achievements"
     },
     {
         "name": "Leaderboard",
-        "href": "/leaderboard",
-        "comingSoon": true
+        "href": "/leaderboard"
     },
     {
         "name": "Locations",
@@ -75,23 +84,15 @@
     },
     {
         "name": "Titles",
-        "href": "/titles",
-        "comingSoon": true
-    },
-    {
-        "name": "Flywheel",
-        "href": "/flywheel",
-        "comingSoon": true
+        "href": "/titles"
     },
     {
         "name": "Toolbox",
-        "href": "/toolbox",
-        "comingSoon": true
+        "href": "/toolbox"
     },
     {
         "name": "Settings",
-        "href": "/settings",
-        "comingSoon": true
+        "href": "/settings"
     },
     {
         "name": "Discord",
@@ -104,20 +105,5 @@
     {
         "name": "Github",
         "href": "https://github.com/democratizedspace/dspace"
-    },
-    {
-        "name": "Import from v1",
-        "href": "/import/v2/v1",
-        "pinned": true,
-        "hideIfOwned": [
-            {
-                "id": "85",
-                "count": 1
-            },
-            {
-                "id": "86",
-                "count": 1
-            }
-        ]
     }
 ]

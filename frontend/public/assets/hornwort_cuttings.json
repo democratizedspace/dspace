@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/hornwort_cuttings.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Hornwort cuttings",
+    "item_id": "a7ba3f18-510d-47cb-b73f-91b8e2a72e73",
+    "entity_type": "item",
+    "prompt": "Several fresh hornwort (Ceratophyllum demersum) cuttings arranged in a loose fan, each a thin flexible bright-green stem with no visible woody base, completely covered from base to tip in very fine soft needle-like leaves arranged in dense whorls all along the stem, so that almost no bare stem is visible. The cuttings look like natural broken segments taken from a larger floating hornwort plant, with slightly irregular snapped ends and some leaves splaying outward, resting on a wet dark slate tile with scattered water droplets, clearly showing the feathery, underwater-pine texture of the foliage.\n\nUltra-detailed, photorealistic 512×512 macro or product-style shot inside a 2040s Pacific floating-city habitat: sleek light-grey lab surface or prep table with faint cyan and magenta LED accents, curved wall panels and storage niches in the softly blurred background, a subtle holographic interface element or status icon hovering near the work area, environment tidy and high-tech, background slightly blurred, no hands, no people, no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

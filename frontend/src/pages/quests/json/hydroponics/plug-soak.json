@@ -1,0 +1,139 @@
+{
+    "id": "hydroponics/plug-soak",
+    "title": "Soak Starter Plugs",
+    "description": "Hydrate starter plugs, verify saturation, and recover safely when soak quality is off.",
+    "image": "/assets/quests/hydroponic_starter_plugs_soaking_tray.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Dry plugs are sneaky root-killers. We'll prep a clean soak, verify moisture, and rerun if the tray still has dry cores.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the plug hydration checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Safety first: use dechlorinated water with clean gloves and goggles so no contamination rides into your seed run.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "Bucket, gloves, and goggles are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "soak",
+            "text": "Submerge all plugs fully, then wait for uniform saturation before lifting them to drain.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rockwool-soak",
+                    "text": "Run the initial soak cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Soak completed; verify tray moisture.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 10
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Check random plugs for dry centers. Pass only if all sampled plugs are evenly damp and structurally intact.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All sampled plugs passed moisture and integrity checks.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 10
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Some plugs still have dry cores or crumbly edges."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: discard visibly damaged plugs, refresh water, and rerun soak. Do not seed until verification passes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rockwool-soak",
+                    "text": "Re-soak with fresh dechlorinated water."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery soak completed; re-check moisture.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 20
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work. Uniformly soaked plugs mean cleaner germination and fewer early losses.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Starter plugs are QA-cleared."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/top-off"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

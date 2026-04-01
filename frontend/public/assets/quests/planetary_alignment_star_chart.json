@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/planetary_alignment_star_chart.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/planetary-alignment.json",
+    "item_name": "Planetary Alignment",
+    "item_id": "astronomy/planetary-alignment",
+    "entity_type": "quest",
+    "prompt": "A small portable telescope set up on a balcony or backyard patio at night, with a star chart or planisphere spread out on a nearby table and a clear view of several bright planets lined up across the sky. The chart shows a simplified, text-free pattern of constellations and planetary markers, while the telescope is angled toward the alignment, with its tripod silhouetted against the stars. Subtle hints of a notebook, pen, or red-filtered flashlight on the table reinforce the idea of carefully tracking a rare planetary alignment.\n\nNear-future solarpunk night scene with gentle urban or suburban lighting in the distance, rooftop solar panels barely visible on neighboring buildings, and a sky that is dark enough to show stars but not unnaturally saturated. The image is photorealistic at 512×512, with soft cinematic lighting and no visible text or logos on the telescope or chart. The composition balances the foreground tools and the distant alignment, making it easy to read as an astronomy tracking quest icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

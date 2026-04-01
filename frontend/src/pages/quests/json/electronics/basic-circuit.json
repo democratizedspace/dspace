@@ -1,0 +1,200 @@
+{
+    "id": "electronics/basic-circuit",
+    "title": "Build a basic LED circuit",
+    "description": "Wire a 5 mm LED and 220 \u03a9 resistor on a breadboard to learn basic circuits.",
+    "image": "/assets/quests/electronics_basic_led_breadboard_circuit.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Orion here. We'll build a basic LED circuit safely and prove it works before we call it done.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "What do I need?"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "Lay out a solderless breadboard, jumper wires, LED, 220 ohm resistor, resistor color chart, 5 V power supply, and safety goggles. Keep power disconnected while wiring.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire-main",
+                    "text": "I have the parts and goggles.",
+                    "requiresItems": [
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 2
+                        },
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                            "count": 1
+                        },
+                        {
+                            "id": "828d6c3b-66a5-4064-b221-97630274502b",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "wire-main",
+            "text": "Main path: place the resistor in series with the LED, then wire to 5 V and GND. Double-check LED polarity before power-up.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-resistor-color-code",
+                    "text": "Confirm resistor value with the color chart."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Resistor check complete. Proceed to verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "alt-diagnose",
+                    "text": "I am unsure about LED polarity."
+                }
+            ]
+        },
+        {
+            "id": "alt-diagnose",
+            "text": "Alternative strategy: test LED polarity with the multimeter diode mode first, then reinsert it with the anode toward positive rail.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-led-polarity",
+                    "text": "Run polarity check."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Polarity confirmed. Re-test circuit at verification."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: power on and confirm the LED lights steadily for 10 seconds with no heat/smell from parts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "LED stays lit and stable."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "LED did not light or flickered."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Power off first. Re-seat wires, verify resistor is in series (not bypassed), and inspect for reversed LED legs. If anything smells hot, stop and let components cool.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire-main",
+                    "text": "I corrected wiring. Retry verification."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work. You built and verified a safe baseline circuit. Remove power before making changes.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["welcome/howtodoquests"],
+    "rewards": [
+        {
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+            "count": 1
+        }
+    ],
+    "hardening": {
+        "passes": 10,
+        "score": 100,
+        "emoji": "\ud83d\udcaf",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-03",
+                "date": "2025-08-03",
+                "score": 65
+            },
+            {
+                "task": "codex-upgrade-2025-08-03",
+                "date": "2025-08-03",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 92
+            },
+            {
+                "task": "codex-upgrade-2025-08-04b",
+                "date": "2025-08-04",
+                "score": 94
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            },
+            {
+                "task": "codex-upgrade-2025-08-12",
+                "date": "2025-08-12",
+                "score": 96
+            },
+            {
+                "task": "codex-upgrade-2025-08-14",
+                "date": "2025-08-14",
+                "score": 97
+            },
+            {
+                "task": "codex-upgrade-2025-08-16",
+                "date": "2025-08-16",
+                "score": 98
+            },
+            {
+                "task": "codex-upgrade-2025-08-18",
+                "date": "2025-08-18",
+                "score": 99
+            },
+            {
+                "task": "codex-upgrade-2025-09-27",
+                "date": "2025-09-27",
+                "score": 100
+            }
+        ]
+    }
+}

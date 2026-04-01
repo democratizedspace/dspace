@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/completionist_award_iii_motion_core.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Completionist Award III motion core",
+    "item_id": "e6f5d8eb-1ce2-4a91-b9f4-3bbac465018b",
+    "entity_type": "item",
+    "prompt": "A compact motion core assembly for a rotating trophy crest, shown as an integrated micro-servo, mount stack, linkage arm, and strain-relieved wire path mounted on a precise bracket system. The mechanical arrangement should suggest balanced travel, smooth low-noise rotation, and careful tuning for a display object rather than a toy or robot. Small fasteners, rubber dampers, and cable guides help communicate refinement and serviceability.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future mechatronics aesthetic: soft bench lighting, realistic metal, polymer, and wire textures, no logos, no readable markings, and no faces. The composition should be centered and tidy so the motion assembly reads clearly as a specialized internal subsystem for a premium DSPACE award.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

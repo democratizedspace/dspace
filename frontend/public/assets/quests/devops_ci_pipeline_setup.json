@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_ci_pipeline_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/ci-pipeline.json",
+    "item_name": "Set Up a CI Pipeline",
+    "item_id": "devops/ci-pipeline",
+    "entity_type": "quest",
+    "prompt": "A developer\u2019s workstation shows a laptop or monitor with a stylized continuous integration dashboard: a vertical list of recent commits or builds with green check marks and a few in-progress indicators, but all text rendered as abstract lines and blocks to avoid readability. On the desk below, a mechanical keyboard, mouse, and a small single-board computer or project device sit next to a notepad with simple pipeline doodles. The overall impression is of a freshly configured CI pipeline that automatically runs tests on each push.\n\nThe space has a near-future, solarpunk-leaning aesthetic: soft ambient light, a clean desk with subtle wood and metal textures, and perhaps a small potted plant or two near the monitor. The 512\u00d7512 photorealistic composition keeps the screen and its visual indicators as the focal point, with edges of the workspace gently blurred. No brand logos or legible text appear anywhere, and no human faces are shown\u2014only maybe a hand on the mouse\u2014keeping the emphasis on the automated GitHub Actions-style test pipeline.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

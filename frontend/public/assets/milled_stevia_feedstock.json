@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/milled_stevia_feedstock.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "milled stevia feedstock",
+    "item_id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
+    "entity_type": "item",
+    "prompt": "A shallow stainless tray containing low-moisture, uniformly milled stevia leaf feedstock, shown as a neat pile of fine green plant material prepared for solvent extraction. Nearby are a sieve, a small amber glass jar, and a clean lab scoop, making it clear this is processed botanical feedstock rather than fresh leaves. The texture should read as dry, consistent, and intentionally prepared for downstream chemistry work.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future biofabrication aesthetic: soft lab lighting, realistic fine-particle texture, clean work surfaces, no logos, no readable labels, and no faces. Keep the frame uncluttered and centered on the processed material so it works as a clear DSPACE extraction-supply inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

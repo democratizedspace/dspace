@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/helping_hands_soldering_tool.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "helping hands",
+    "item_id": "87f670ce-3630-42bb-84c0-9243cf630d05",
+    "entity_type": "item",
+    "prompt": "An adjustable third-hand tool with a heavy base stands on a workbench, its metal arms ending in small alligator clips that hold a tiny circuit board in mid-air. A circular magnifier lens is mounted above the board, angled so that someone working could easily see fine solder joints through it. A soldering iron and a small spool of solder rest nearby, making it clear that this tool is used to stabilize components during delicate soldering work.\n\nThe environment is a near-future solarpunk electronics workstation with soft, even lighting, tidy bins of components in the background, and perhaps a small plant adding a bit of green. The 512×512 image is photorealistic with gentle stylization, no logos or readable markings on the tool, and a composition that centers the helping hands, the clipped circuit board, and the magnifier while the surrounding bench and lab stay softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

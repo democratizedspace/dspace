@@ -1,0 +1,159 @@
+{
+    "id": "devops/private-registry",
+    "title": "Run a Private Docker Registry",
+    "description": "Host your own Docker images on the cluster.",
+    "image": "/assets/quests/devops_private_docker_registry.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A registry is only useful when pushes, pulls, and persistence all hold under stress. We'll build it with verification checkpoints.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Define storage and access policy.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Set storage path `/data/registry`, retention expectations, and auth strategy before deploy. Safety stop: do not expose registry writes to untrusted networks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Policy documented. Deploy registry stack.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Rework access policy before deployment."
+                }
+            ]
+        },
+        {
+            "id": "deploy",
+            "text": "Deploy the registry with docker compose and persistent volume mapping.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-docker-compose",
+                    "text": "Launch registry service."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Service running. Validate push/pull and persistence.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run a test image push and pull, then restart the service and confirm the tag still exists. Capture verification output for ops notes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture registry verification report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Push/pull failed or image disappeared after restart.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification passed with retained image state.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Troubleshoot auth, DNS, and storage mount order. If persistence is unstable, freeze image promotions until storage checks are green, then retry verification.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Document failure mode and mitigation."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Mitigation in place. Re-run push/pull validation.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Registry is production-safe: deployment proven, persistence verified, and recovery steps documented.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Publish the cluster image policy.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d2b39a23-cdfb-428d-a6ed-694ff0c0fc11",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["devops/docker-compose"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

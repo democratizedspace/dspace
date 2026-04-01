@@ -1,0 +1,136 @@
+{
+    "id": "ubi/reminder",
+    "title": "Set a UBI Reminder",
+    "description": "Set a recurring reminder on your phone so you never miss a daily dUSD claim.",
+    "image": "/assets/quests/ubi_daily_reminder.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want to avoid missing daily UBI claims? Let's set up a recurring reminder and validate that your reminder workflow actually runs.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Yes, walk me through it."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I already tried but the reminder keeps failing me."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "DSpace cannot create reminders for you. Open your phone's Clock or Reminders app, make it repeat daily, and label it clearly as 'Claim dUSD in DSpace'.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify-signal",
+                    "text": "Reminder created."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I cannot get daily repeat configured."
+                }
+            ]
+        },
+        {
+            "id": "verify-signal",
+            "text": "Evidence step: return to Wallet and confirm you still have at least 100 dBI from your earlier claim so this reminder is tied to an active UBI account.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "routine-choice",
+                    "text": "Verified dBI balance and reminder label.",
+                    "requiresItems": [
+                        {
+                            "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
+                            "count": 100
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "routine-choice",
+            "text": "Great. Do you want a strict routine or a lightweight fallback routine if notifications fail?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "strict-routine",
+                    "text": "Give me the strict routine."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fallback-routine",
+                    "text": "Give me the fallback routine."
+                }
+            ]
+        },
+        {
+            "id": "strict-routine",
+            "text": "Strict routine: when the reminder fires, open Wallet immediately, run one basic-income claim, then confirm both dUSD and dBI changed before closing the app.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I'll follow the strict routine."
+                }
+            ]
+        },
+        {
+            "id": "fallback-routine",
+            "text": "Fallback routine: if your phone notification is delayed, use a second daily check window (morning/evening) and manually verify Wallet once per window to avoid misses.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I'll use the fallback routine."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshooting path: if reminders fail, check notification permissions, battery optimization, and timezone settings. If those are locked down by your device, keep a manual calendar backup until reminders are stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Adjusted settings; retry reminder setup."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "I'll proceed with manual daily checks for now."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Perfect. Your reminder system now has both a primary and recovery path, which keeps your UBI streak resilient.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Got it. I'll keep the streak alive."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["ubi/first-payment"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

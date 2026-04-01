@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponic_basil_plant_harvested.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "harvested basil plant",
+    "item_id": "29190faf-8581-4769-b871-f0ee283840e1",
+    "entity_type": "item",
+    "prompt": "A basil plant in a small rockwool cube and net pot is shown after a recent harvest: most of the large leaves have been removed, leaving pruned stems with smaller leaves and nodes where new growth will emerge. A small pile of freshly cut basil leaves rests on a nearby dish or cutting board, clearly separated from the still-living plant. The rockwool cube at the base appears moist and healthy, emphasizing that the plant will regrow from what remains.\n\nThe scene is a near-future solarpunk kitchen-garden hybrid space, with soft overhead lighting, other herb plants nearby, and a clean countertop or hydroponic tray beneath. The 512×512 image is photorealistic with gentle stylization, no logos or text, and a composition that focuses on the pruned basil plant and the small pile of harvested leaves while the background garden and workspace stay softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

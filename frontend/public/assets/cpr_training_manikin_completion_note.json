@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/cpr_training_manikin_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Practice 30:2 CPR on a training manikin completion note",
+    "item_id": "b0bac679-10a2-59c6-ae97-468112b99913",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for practicing 30:2 CPR on a training manikin, shown as a skills check sheet beside a CPR torso manikin, disposable practice barrier, and a clean training mat. The note should indicate the drill was completed successfully, with simple rhythm markers and compression-breath cycle diagrams that make the subject unmistakably first-aid training, without any readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future health-training aesthetic: soft indoor lighting, realistic paper, vinyl, and plastic textures, no logos, no readable labels, and no identifiable faces. Keep the form centered and the equipment clearly visible but uncluttered for a strong DSPACE instructional artifact.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

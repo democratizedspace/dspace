@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/x_belt_tension_adjust.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/x-belt-tension.json",
+    "item_name": "Tighten the X-axis Belt",
+    "item_id": "3dprinting/x-belt-tension",
+    "entity_type": "quest",
+    "prompt": "A close-up of a 3D printer’s X-axis gantry and belt tensioner, with a gloved hand using a hex key or small wrench to adjust the belt tension. The toothed belt runs clearly across the scene, and a small icon-only gauge sticker or screen on the printer frame hints at proper tension without any readable text. In the blurred background, a few printed parts with slightly wavy edges sit on the workbench, suggesting why belt tension matters for sharp prints.\n\nNear-future solarpunk workshop aesthetic with warm lighting, wooden surfaces, and a plant or two in the background. Photorealistic 512×512 rendering, no brand logos or legible markings. The composition should make it obvious that the task is safely tightening a loose X-axis belt to keep prints crisp.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

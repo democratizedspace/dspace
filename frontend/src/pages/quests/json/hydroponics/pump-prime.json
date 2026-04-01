@@ -1,0 +1,186 @@
+{
+    "id": "hydroponics/pump-prime",
+    "title": "Prime Water Pump",
+    "description": "Prime and verify the pump loop so circulation starts without cavitation.",
+    "image": "/assets/quests/hydroponics_pump_prime.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Priming is a safety step, not a button mash. We confirm pre-checks, run a wet start, then verify stable flow before we close.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "precheck",
+                    "text": "Run priming checklist."
+                }
+            ]
+        },
+        {
+            "id": "precheck",
+            "text": "Before energizing, confirm the pump loop is installed or already verified, intake is submerged, and PPE is on around splashing electrical gear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prime",
+                    "text": "Installed loop, submerged intake, and PPE confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "prime",
+                    "text": "Verified loop, submerged intake, and PPE confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I see large air pockets or sections of the return line that are not fully flooded."
+                }
+            ]
+        },
+        {
+            "id": "prime",
+            "text": "Fill the housing, purge visible air, and run a short wet-start cycle. Stop immediately if the pump chatters dry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "install-submersible-pump",
+                    "text": "Run controlled prime cycle with wet intake."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Prime cycle done; verify circulation artifact.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Prime cycle done; use existing verification artifact.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: run flow verification and only close when we have a stable-loop proof artifact.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-hydroponic-flow",
+                    "text": "Capture post-prime flow verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Flow is stable after priming.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Flow still sputters or intake keeps pulling air."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: cut power, reseat tubing, top reservoir above intake, then wait one minute before retrying to avoid overheating.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "precheck",
+                    "text": "Corrective actions complete; re-run precheck."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Hardware is reseated; re-verify now.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Hardware is reseated; use verified loop to continue checks.",
+                    "requiresItems": [
+                        {
+                            "id": "bd215e1e-5477-4b2f-8420-0227180a3531",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Pump is primed and verified with a stable circulation artifact. Keep this checklist for every maintenance restart.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Prime + verification logged."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/pump-install"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

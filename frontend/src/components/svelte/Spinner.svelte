@@ -1,6 +1,6 @@
 <script>
     export let size = 30;
-    export let color = "#1f2937";
+    export let color = '#1f2937';
 </script>
 
 <div class="spinner" style="width: {size}px; height: {size}px;">

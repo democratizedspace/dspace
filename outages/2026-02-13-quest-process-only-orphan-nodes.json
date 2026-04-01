@@ -1,0 +1,16 @@
+{
+  "id": "OUT-2026-02-13-quest-process-only-orphan-nodes",
+  "date": "2026-02-13",
+  "component": "frontend/quests",
+  "rootCause": "Quest dialogue completable validation treated any option with a goto field as navigable, even when the option type was process. At runtime, only goto options advance dialogue state, so nodes with only process options became dead-ends and slipped through tests.",
+  "resolution": "Updated quest dialogue validation to only treat type=goto options as dialogue transitions, added a regression test for process-only nodes with goto metadata, and added explicit goto dialogue options to all affected quests so each non-terminal node has a valid navigation path.",
+  "references": [
+    "tests/questDialogueValidation.test.ts",
+    "frontend/src/pages/quests/json/composting/sift-compost.json",
+    "frontend/src/pages/quests/json/aquaria/guppy.json",
+    "frontend/src/pages/quests/json/firstaid/assemble-kit.json",
+    "frontend/src/pages/quests/json/firstaid/change-bandage.json",
+    "frontend/src/pages/quests/json/firstaid/dispose-expired.json",
+    "frontend/src/pages/quests/json/firstaid/remove-splinter.json"
+  ]
+}

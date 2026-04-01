@@ -1,0 +1,137 @@
+{
+    "id": "geothermal/calibrate-ground-sensor",
+    "title": "Calibrate Ground Sensor",
+    "description": "Use ice and boiling water checkpoints to calibrate your thermistor before burying it.",
+    "image": "/assets/quests/geothermal_calibrate_ground_thermistor_sensor.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Kill pump power, keep probe leads dry, and prep two cups: ice slurry near 0°C and boiling water near 100°C. Ready to baseline the thermistor?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Safety check done, start baseline",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Walk me through the calibration workflow"
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Run arduino-thermistor-read for your ice bath first, then boiling water. Save both readings before you interpret drift.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Run baseline capture"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Captured baseline pair",
+                    "requiresItems": [
+                        {
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Baseline pair already logged",
+                    "requiresItems": [
+                        {
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Pass target: ice reading 0±2°C and boiling reading 100±3°C (adjust for altitude). Are your readings inside tolerance?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Both readings are in tolerance",
+                    "requiresItems": [
+                        {
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recalibrate",
+                    "text": "No, one reading is out of range"
+                }
+            ]
+        },
+        {
+            "id": "recalibrate",
+            "text": "Troubleshoot before retry: reseat probe, dry connectors, confirm resistor value, then repeat both reference baths.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Run retest capture"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Restart from safety checklist"
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Rewired and ready to retest",
+                    "requiresItems": [
+                        {
+                            "id": "63738dd8-757a-49c5-b161-e124e3eac3be",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great calibration discipline. Store the offset notes with your logger so later drift checks have a trustworthy baseline.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sensor calibrated"
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "rewards": [
+        {
+            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+            "count": 1
+        }
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

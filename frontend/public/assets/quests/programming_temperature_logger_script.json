@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_temperature_logger_script.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/temp-logger.json",
+    "item_name": "Log Temperature Data",
+    "item_id": "programming/temp-logger",
+    "entity_type": "quest",
+    "prompt": "On a tidy desk, a laptop terminal shows a small Python script running in a loop, periodically printing abstract timestamps and temperature values and confirming that each reading is appended to a log file icon displayed in a file browser pane. Nearby, a compact single-board computer with a connected thermistor sensor and status LED sits on a non-conductive mat, clearly acting as the data source. A wall clock or small digital timer in the background suggests hourly intervals, reinforcing that readings are captured regularly over time.\n\nThe environment is a near-future solarpunk home lab: soft, even lighting, pale work surfaces, and a couple of plants or renewable-energy motifs blurred beyond the work area. The 512×512 photorealistic composition centers on the terminal, log file icon, and sensor hardware, with other items gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only a hand near the keyboard—emphasizing a simple script that records hourly temperature readings into a persistent log.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

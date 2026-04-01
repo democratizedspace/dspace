@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_tin_soldering_iron_tip.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/tin-soldering-iron.json",
+    "item_name": "Tin a Soldering Iron",
+    "item_id": "electronics/tin-soldering-iron",
+    "entity_type": "quest",
+    "prompt": "A soldering iron is held over a heat-resistant stand on a ventilated workbench, its metal tip freshly heated and being coated with a thin layer of solder. A small bead of shiny solder is melting and spreading evenly across the tip as solder is fed from a thin wire, while a brass or sponge tip cleaner and the iron’s base station sit nearby. The person is wearing clear safety goggles, and the tip is clearly bright, clean, and uniformly tinned rather than dark or oxidized.\n\nThe environment follows a near-future solarpunk lab aesthetic: soft bright lighting, tidy organization of tools and components, and a compact fume extractor or small fan positioned to draw smoke away, all slightly blurred in the background. The 512×512 photorealistic composition centers on the iron tip, solder, and cleaner, with the rest of the bench fading gently out of focus. No brand logos or readable text appear anywhere, and no faces are visible—only gloved or bare hands and forearms—highlighting the preparation step that ensures future solder joints will be clean and reliable.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

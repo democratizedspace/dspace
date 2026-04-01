@@ -1,0 +1,144 @@
+{
+    "id": "aquaria/aquarium-light",
+    "title": "Install an aquarium light",
+    "description": "Install LED lighting with a safe photoperiod, verify plant-response evidence, and recover from stress signs before normal operation.",
+    "image": "/assets/quests/aquarium_light.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your Walstad tank needs stable light, not random blasts. Confirm the fixture, timer, and splash-safe cable routing before we energize anything.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Bench is dry, timer is ready, and cable has a drip loop."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-recover",
+                    "text": "The cable path is still unsafe or wet."
+                }
+            ]
+        },
+        {
+            "id": "safety-recover",
+            "text": "Pause before power-on: dry the rim, move the cable below outlet height, and keep all plugs off the floor. Then restart installation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Safety path corrected; restart checks."
+                }
+            ]
+        },
+        {
+            "id": "mount",
+            "text": "Mount the LED fixture over open water, avoid hotspot glare, and set an 8-hour baseline photoperiod before fish lights-on.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "install-aquarium-led-photoperiod",
+                    "text": "Run the fixture install + first full timed photoperiod cycle (about 1 day).",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Fixture install cycle complete; continue to verification."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "After one cycle, verify plant and fish response. Proceed only if algae bloom and fish stress are absent.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Plants are upright, fish behavior is normal, and glare is controlled.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "tune-cycle",
+                    "text": "Algae or fish stress signs appeared during the first cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "manual-review",
+                    "text": "A second cycle still shows stress; pause automation and escalate to manual review."
+                }
+            ]
+        },
+        {
+            "id": "tune-cycle",
+            "text": "Recovery branch: reduce duration to 6 hours, raise fixture height one step, and run another observation cycle before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Adjusted photoperiod and fixture height; run verification again.",
+                    "requiresItems": [
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "manual-review",
+            "text": "Escalation path: hold the light at 6 hours, pause intensity increases, and run manual diagnostics (water quality, fixture spread, and livestock behavior) before returning to normal progression.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Manual review logged with a conservative lighting hold plan."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great control. Keep photoperiod logs consistent for a week and avoid sudden intensity jumps that destabilize the Walstad balance.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Lighting plan stabilized."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["aquaria/sponge-filter"],
+    "hardening": {
+        "passes": 1,
+        "score": 95,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-quest-hardening-95-2026-02-26",
+                "date": "2026-02-26",
+                "score": 95
+            }
+        ]
+    }
+}

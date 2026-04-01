@@ -1,0 +1,91 @@
+import { describe, it, expect } from 'vitest';
+import fs from 'fs';
+import path from 'path';
+import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+import update from '../scripts/update-new-quests.mjs';
+
+process.env.NEW_QUESTS_REF = process.env.NEW_QUESTS_REF || 'HEAD';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const repoRoot = path.resolve(__dirname, '..');
+
+type Group = { tree: string; quests: string[] };
+type Section = {
+  version: string;
+  prevCount: number;
+  currentCount: number;
+  groups: Group[];
+  newCount: number;
+};
+
+const { getReleaseSections, generateMarkdown, listQuestFiles } = update as {
+  getReleaseSections: () => Section[];
+  generateMarkdown: (sections: Section[]) => string;
+  listQuestFiles: (ref?: string) => string[];
+};
+
+const listPath = path.join(
+  repoRoot,
+  'frontend',
+  'src',
+  'pages',
+  'docs',
+  'md',
+  'new-quests.md'
+);
+
+describe('new quests list', () => {
+  it('matches generated markdown', () => {
+    const sections = getReleaseSections();
+    const expected = generateMarkdown(sections);
+    const actual = fs.readFileSync(listPath, 'utf8');
+    expect(actual).toBe(expected);
+  });
+
+  it(
+    'counts quests correctly for each release',
+    () => {
+      const sections = getReleaseSections();
+      sections.forEach((section) => {
+        const counted = section.groups.reduce(
+          (sum, g) => sum + g.quests.length,
+          0
+        );
+        expect(section.newCount).toBe(counted);
+        expect(section.currentCount).toBeGreaterThanOrEqual(section.prevCount);
+      });
+    },
+    10000
+  );
+
+  it('is up-to-date when regenerated', () => {
+    const before = fs.readFileSync(listPath, 'utf8');
+    execSync('node scripts/update-new-quests.mjs', { cwd: repoRoot });
+    const after = fs.readFileSync(listPath, 'utf8');
+    fs.writeFileSync(listPath, before);
+    expect(
+      after,
+      'Run `npm run new-quests:update` and commit the changes.'
+    ).toBe(before);
+  });
+
+  it('lists total quest count accurately', () => {
+    const quests = listQuestFiles(process.env.NEW_QUESTS_REF);
+    const doc = fs.readFileSync(listPath, 'utf8');
+    const match = doc.match(/Current quest count: (\d+)/);
+    expect(match).not.toBeNull();
+    const docCount = Number(match![1]);
+    expect(docCount).toBe(quests.length);
+  });
+
+  it('syncs root docs copy', () => {
+    const rootDoc = fs.readFileSync(
+      path.join(repoRoot, 'docs', 'new-quests.md'),
+      'utf8'
+    );
+    const frontendDoc = fs.readFileSync(listPath, 'utf8');
+    expect(rootDoc).toBe(frontendDoc);
+  });
+});

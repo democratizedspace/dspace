@@ -1,0 +1,104 @@
+{
+    "id": "hydroponics/ec-check",
+    "title": "Check Solution EC",
+    "description": "Measure nutrient strength with an EC meter.",
+    "image": "/assets/quests/hydroponic_ec_meter_check.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's verify EC with a defensible reading, not a guess. We log first, interpret second, then correct if needed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Ready to sample."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Rinse the probe, stir the reservoir, then capture a fresh EC reading. Target 1.2-1.8 mS/cm for leafy greens unless your crop sheet says otherwise.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ec-solution",
+                    "text": "Capture EC reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading logged; let's interpret it.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the log before closing: 1.2-1.8 mS/cm is in range, 1.0-1.2 or 1.8-2.0 is caution, and outside that range needs correction.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "In range (1.2-1.8). Close and record cadence.",
+                    "requiresItems": [
+                        {
+                            "id": "bc979305-53ef-4be8-9d21-c59e3bfa7f06",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Caution or out of range. Correct and re-test."
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Safety check: gloves and goggles on. Adjust concentration in small steps, circulate for 10 minutes, then measure again. No blind dosing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Apply correction and circulate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Correction done; re-test EC now."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great pass. You now have measurement evidence plus interpretation. Recheck on your weekly nutrient round or after any top-off >10%.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "EC check closed with evidence."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/ec-calibrate"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

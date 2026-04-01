@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_solution_ph_check.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/ph-check.json",
+    "item_name": "Check Solution pH",
+    "item_id": "hydroponics/ph-check",
+    "entity_type": "quest",
+    "prompt": "A shallow hydroponic reservoir tub is open, with a small sample of the nutrient solution drawn into a clear test vial resting on the edge of the tub. A digital pH probe or meter is dipped into the vial, and next to it lies a simplified color reference strip or card with abstract color blocks but no readable text. In the softly blurred background, net cups with leafy greens rise from the tub lid, their roots implied just below the nutrient surface.\n\nThe environment is a near-future solarpunk grow room with clean lines, soft white and green lighting, and tidy cable routing for pumps and aeration. The photorealistic 512×512 framing focuses on the vial, probe, and reservoir edge, with the plants and lab surroundings slightly out of focus. No brand logos or explicit words appear anywhere, and only gloved hands or forearms are visible to show safe, deliberate testing of the nutrient bath’s pH.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

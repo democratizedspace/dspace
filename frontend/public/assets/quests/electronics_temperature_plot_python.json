@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_temperature_plot_python.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/temperature-plot.json",
+    "item_name": "Plot Temperature Data",
+    "item_id": "electronics/temperature-plot",
+    "entity_type": "quest",
+    "prompt": "A laptop on a clean desk displays a Python plotting window with a smooth line chart representing temperature over time, derived from sensor data. The graph has a clearly visible curve with minor fluctuations, and unobtrusive axis ticks, but all text labels are rendered as abstract marks so no words or numbers are readable. Next to the laptop rests a small single-board computer or USB interface and a thermistor-equipped breadboard, implying that the data came from a real hardware logging setup.\n\nThe setting is a near-future solarpunk workspace: soft, warm lighting, pale surfaces, and subtle natural elements like a plant or wooden desk accents in the blurred background. The 512×512 photorealistic composition centers on the graph and the small hardware arrangement, with surrounding tools and notebooks gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only a hand resting on the keyboard or trackpad—highlighting the satisfaction of turning raw thermistor logs into a clean temperature chart using Python.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

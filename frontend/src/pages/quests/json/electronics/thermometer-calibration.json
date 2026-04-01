@@ -1,0 +1,105 @@
+{
+    "id": "electronics/thermometer-calibration",
+    "title": "Calibrate a Thermometer",
+    "description": "Use water baths to verify your thermometer's accuracy.",
+    "image": "/assets/quests/electronics_thermometer_calibration_water_baths.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your new thermometer might be a bit off. We'll calibrate it with ice and warm water baths and only pass when readings meet defined tolerance.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "define-thresholds",
+                    "text": "Thermometer ready",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "define-thresholds",
+            "text": "Calibration thresholds: ice bath target is 0 C ±1 C after stabilization; warm bath check target is 35-45 C with drift under 1 C over 2 minutes. If probe cracks, leaks, or condenses internally, stop and replace it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Thresholds documented."
+                }
+            ]
+        },
+        {
+            "id": "calibrate",
+            "text": "Immerse in stirred ice water first, then warm water. Record both stabilized readings and compare to thresholds before deciding pass/fail.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret-pass",
+                    "text": "Both checks are within tolerance."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective-loop",
+                    "text": "One or more checks are out of tolerance."
+                }
+            ]
+        },
+        {
+            "id": "corrective-loop",
+            "text": "Corrective branch: re-seat probe depth, remove trapped bubbles, re-mix baths, and apply/adjust software offset. Repeat both bath checks before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "calibrate",
+                    "text": "Adjustments complete; re-test both baths."
+                }
+            ]
+        },
+        {
+            "id": "interpret-pass",
+            "text": "Great discipline. You collected measurement evidence, interpreted tolerance, and confirmed stable readings.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Calibration evidence captured.",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Accurate readings make your automation and alerts trustworthy.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/thermistor-reading"],
+    "hardening": {
+        "passes": 0,
+        "score": 85,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

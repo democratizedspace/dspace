@@ -1,0 +1,230 @@
+{
+    "id": "aquaria/water-change",
+    "title": "Perform a partial water change",
+    "description": "Swap out a quarter of the tank water for conditioned tap water to keep fish healthy.",
+    "image": "/assets/quests/goldfish_partial_water_change.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before opening the tank: unplug heater and filter, put on goggles and nitrile gloves, and keep cords below outlet height for drip safety.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Safety checks complete and tools staged.",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "d7d7f91c-7c51-4fd0-bdd1-f8d25d4f03e0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Condition replacement water and match temperature within 2 \u00b0C before it enters the tank.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Condition replacement water.",
+                    "goto": "change"
+                },
+                {
+                    "type": "goto",
+                    "goto": "change",
+                    "text": "Replacement water is conditioned and temperature-matched.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "change",
+            "text": "Vacuum debris while removing ~25% of water, then refill gradually to avoid stressing fish or kicking substrate into the filter.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "partial-water-change",
+                    "text": "Run the partial water change.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Swap complete and systems restarted.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Log a post-change reading after the heater recovers. If fish gasp, clamp fins, or the temp drifts hard, branch to recovery.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-freshly-changed-walstad-temperature",
+                    "text": "Record the post-change temperature log.",
+                    "goto": "review"
+                },
+                {
+                    "type": "goto",
+                    "goto": "review",
+                    "text": "Temperature log already captured.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "review",
+            "text": "Review the log and fish behavior together: stable range means proceed; unstable range means pause feeding and troubleshoot before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log is stable and fish behavior is calm.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Temperature swing or stress signs detected; run recovery protocol.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: dim lights, confirm flow, and prep a fresh conditioned top-off before taking another log.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Prepare recovery top-off water.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery steps complete; re-log before finishing.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Fish behavior is improving; conclude with the current log and monitor again tomorrow.",
+                    "requiresItems": [
+                        {
+                            "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Water change complete with evidence logged. Rinse tools, restore normal lighting, and keep tomorrow's reading for trend checks.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Change verified and logged."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "a07b75e3-f828-4cb1-81d6-1ab0e9857a79",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["aquaria/guppy"],
+    "hardening": {
+        "passes": 4,
+        "score": 100,
+        "emoji": "\ud83d\udcaf",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-15",
+                "date": "2025-08-15",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-18",
+                "date": "2025-08-18",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-20",
+                "date": "2025-08-20",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-24",
+                "date": "2025-08-24",
+                "score": 92
+            }
+        ]
+    }
+}

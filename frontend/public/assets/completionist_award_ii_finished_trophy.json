@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/completionist_award_ii_finished_trophy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Completionist Award II",
+    "item_id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+    "entity_type": "item",
+    "prompt": "A compact 12 cm completion trophy with a bonded nameplate, shown as a finished display object on a clean shelf or bench. The trophy has a crisp geometric 3D printed body, a small integrated plaque area, and a carefully assembled appearance that suggests it was printed, bonded, and finished for presentation in 2023. The design should feel celebratory but modest compared with a more elaborate future award, making it clearly a prior-generation achievement piece.\n\nUltra-detailed, photorealistic 512×512 image with a near-future display-workshop aesthetic: soft warm lighting, realistic PLA and bonded-material textures, subtle shadows, no logos, no readable inscription text, and no faces. The composition should be centered and uncluttered so the object reads cleanly as a complete DSPACE award icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

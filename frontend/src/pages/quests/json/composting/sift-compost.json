@@ -1,0 +1,83 @@
+{
+    "id": "composting/sift-compost",
+    "title": "Sift Finished Compost",
+    "description": "Screen compost to remove large chunks for a fine finished mix.",
+    "image": "/assets/quests/compost_sift_finished_mix.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to use your compost? Let's sift the cured bucket into a fine mix.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "requiresItems": [
+                        {
+                            "id": "b281360b-2ecc-4fea-a248-36a61c5f7399",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Cured bucket and gloves ready."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Place the sifter over a tub, pour in small scoopfuls, and shake gently so fines fall through.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sift-compost",
+                    "goto": "finish",
+                    "text": "Sift the compost"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
+                            "count": 2.0
+                        }
+                    ],
+                    "text": "Screening complete."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! The screened blend is perfect for seedlings, top-dressing, or mixing into beds.",
+            "options": [
+                {
+                    "type": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Can't wait to use it!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5e165cbc-f4f2-4e9d-ac92-9588ff1ac9c1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["composting/check-temperature"],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

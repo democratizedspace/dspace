@@ -1,5 +1,7 @@
 ---
-import { SEO } from "astro-seo";
+import { SEO } from 'astro-seo';
+import { OFFLINE_TOAST_PUBLIC_PATH } from '../utils/offlineToastPath';
+import { getCheatsAvailabilityFlag } from '../utils/cheatsAvailability';
 
 export interface Props {
 	title: string;
@@ -8,61 +10,202 @@ export interface Props {
 const { title } = Astro.props as Props;
 
 const sitewideTitle = `DSPACE (democratized.space)`;
+const offlineWorkerRegistrationUrl = '/scripts/offlineWorkerRegistration.js';
+const cheatsAvailable = getCheatsAvailabilityFlag();
 ---
 
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<SEO
-			title={sitewideTitle}
-			description="A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
-			canonical="https://democratized.space"
-			openGraph={{
-			  basic: {
-				title: sitewideTitle,
-				type: "website",
-				image: "/assets/logo.png",
-			  }
-			}}
-			twitter={{
-			  creator: "@EspToTheFuture",
-			  title: sitewideTitle,
-			  image: "/assets/logo.png",
-			  description: "A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
-			}}
-			extend={{
-			  // extending the default link tags
-			  link: [{ rel: "icon", href: "/favicon.ico" }],
-			}}
-		  />
+<html
+        lang="en"
+        data-theme="dark"
+        data-cheats-available={cheatsAvailable ? 'true' : 'false'}
+>
+        <head>
+                <SEO
+                        title={sitewideTitle}
+                        description="A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system."
+                        canonical="https://democratized.space"
+                        openGraph={{
+                                basic: {
+                                        title: sitewideTitle,
+                                        type: 'website',
+                                        image: '/assets/logo.png',
+                                },
+                        }}
+                        twitter={{
+                                creator: '@EspToTheFuture',
+                                title: sitewideTitle,
+                                image: '/assets/logo.png',
+                                description:
+                                        'A space exploration idle game where you gradually build up your skillset and eventually proliferate throughout the solar system.',
+                        }}
+                        extend={{
+                                // extending the default link tags
+                                link: [{ rel: 'icon', href: '/favicon.ico' }],
+                        }}
+                />
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-	</head>
-	<body>
-		<div id="starry">
-			<slot />
-		</div>
-	</body>
+                <meta name="viewport" content="width=device-width" />
+                <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+                <meta name="generator" content={Astro.generator} />
+                <script is:inline>
+                        (function bootstrapTheme() {
+                                const STORAGE_KEY = 'dspace-theme';
+                                const DEFAULT_THEME = 'dark';
+
+                                const apply = (theme) => {
+                                        document.documentElement.dataset.theme = theme;
+
+                                        if (document.body) {
+                                                document.body.setAttribute('data-theme', theme);
+                                                return;
+                                        }
+
+                                        document.addEventListener(
+                                                'DOMContentLoaded',
+                                                () => document.body?.setAttribute('data-theme', theme),
+                                                { once: true }
+                                        );
+                                };
+
+                                try {
+                                        const stored = localStorage.getItem(STORAGE_KEY);
+                                        const theme =
+                                                stored === 'light' || stored === 'dark'
+                                                        ? stored
+                                                        : window.matchMedia?.('(prefers-color-scheme: light)')
+                                                                  .matches
+                                                          ? 'light'
+                                                          : DEFAULT_THEME;
+
+                                        apply(theme);
+                                        localStorage.setItem(STORAGE_KEY, theme);
+                                } catch (error) {
+                                        console.warn('Failed to read theme preference; falling back to dark.', error);
+                                        apply(DEFAULT_THEME);
+                                }
+                        })();
+                </script>
+        </head>
+        <body>
+                <div id="starry">
+                        <slot />
+                </div>
+                <script
+                        is:inline
+                        type="module"
+                        define:vars={{ offlineToastPath: OFFLINE_TOAST_PUBLIC_PATH }}
+                >
+                        import(offlineToastPath)
+                                .then(({ default: installOfflineToast }) => installOfflineToast())
+                                .catch((error) =>
+                                        console.warn(
+                                                'Failed to load offline toast script:',
+                                                error
+                                        )
+                                );
+                </script>
+
+                <script is:inline>
+                        (function syncCacheVersion() {
+                                const cacheVersionKey = 'dspace-cache-version';
+
+                                function persist(version) {
+                                        try {
+                                                const previous = localStorage.getItem(cacheVersionKey);
+                                                localStorage.setItem(cacheVersionKey, version);
+
+                                                if (previous && previous !== version) {
+                                                        window.dispatchEvent(
+                                                                new CustomEvent(
+                                                                        'dspace-cache-version-change',
+                                                                        {
+                                                                                detail: {
+                                                                                        previous,
+                                                                                        current: version,
+                                                                                },
+                                                                        }
+                                                                )
+                                                        );
+                                                }
+                                        } catch (error) {
+                                                console.warn(
+                                                        'Failed to persist cache version to localStorage:',
+                                                        error
+                                                );
+                                        }
+                                }
+
+                                function applyVersion() {
+                                        if (typeof self !== 'undefined' && self.CACHE_VERSION) {
+                                                persist(self.CACHE_VERSION);
+                                        }
+                                }
+
+                                try {
+                                        if (typeof self !== 'undefined' && self.CACHE_VERSION) {
+                                                applyVersion();
+                                                return;
+                                        }
+
+                                        const script = document.createElement('script');
+                                        script.src = '/cache-version.js';
+                                        script.addEventListener('load', applyVersion, { once: true });
+                                        script.addEventListener('error', (error) => {
+                                                console.warn(
+                                                        'Failed to load cache version script:',
+                                                        error
+                                                );
+                                        });
+                                        document.head.appendChild(script);
+                                } catch (error) {
+                                        console.warn('Failed to sync cache version to localStorage:', error);
+                                }
+                        })();
+                </script>
+
+                <script type="module" src={offlineWorkerRegistrationUrl}></script>
+        </body>
 </html>
 <style>
-	:root {
-		--font-size-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
-		--font-size-lg: clamp(1.2rem, 0.7vw + 1.2rem, 1.5rem);
-		--font-size-xl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
+        :root {
+                --font-size-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
+                --font-size-lg: clamp(1.2rem, 0.7vw + 1.2rem, 1.5rem);
+                --font-size-xl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
 
-		--color-text: #00ff22;
-		--color-bg: hsl(249, 9%, 15%);
-		--color-border: hsl(17, 24%, 90%);
-	}
+                --color-text: #00ff22;
+                --color-bg: hsl(249, 9%, 15%);
+                --color-border: hsl(17, 24%, 90%);
+                --color-heading: #ffffff;
+                --color-surface: #2f5b2f;
+                --color-pill: #007006;
+                --color-pill-active: #68d46d;
+                --color-pill-text: #ffffff;
+                --color-pill-active-text: #000000;
+                --page-section-bg: #ffffff;
+                --page-section-text: #111827;
+        }
 
-	html {
-		font-family: system-ui, sans-serif;
-		font-size: var(--font-size-base);
-		color: var(--color-text);
-		background-color: var(--color-bg);
-	}
+        html[data-theme='light'] {
+                --color-text: #063906;
+                --color-bg: #f4fff6;
+                --color-border: #2f5b2f;
+                --color-heading: #063906;
+                --color-surface: #e1f4e4;
+                --color-pill: #3aa650;
+                --color-pill-active: #9be29f;
+                --color-pill-text: #f5fff6;
+                --color-pill-active-text: #063906;
+                --page-section-bg: #ffffff;
+                --page-section-text: #111827;
+        }
+
+        html {
+                font-family: system-ui, sans-serif;
+                font-size: var(--font-size-base);
+                color: var(--color-text);
+                background-color: var(--color-bg);
+        }
 
 	body {
 		margin: 0;

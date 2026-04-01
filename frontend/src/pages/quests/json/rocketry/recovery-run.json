@@ -1,0 +1,161 @@
+{
+    "id": "rocketry/recovery-run",
+    "title": "Practice Rocket Recovery",
+    "description": "Run a full parachute flight recovery drill with evidence capture, anomaly handling, and go/no-go checks.",
+    "image": "/assets/quests/model_rocket_recovery_run_field.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Great flights are repeatable flights. We'll prep recovery gear, run launch-and-retrieve, and verify condition before declaring the rocket reusable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Ready to run the recovery drill."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Pack flame-resistant wadding, fold the chute, and verify shock cord routing with motor removed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range-check",
+                    "text": "Recovery stack prepped and motor is still out.",
+                    "requiresItems": [
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "9477a618-591b-45e0-9d81-18d60b848490",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Chute fold looked wrong or cord snagged."
+                }
+            ]
+        },
+        {
+            "id": "range-check",
+            "text": "Operational safety gate: clear a 5 m perimeter, verify launch rod tilt, and assign one person to call abort.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "text": "Pad is clear and abort caller is assigned."
+                },
+                {
+                    "type": "goto",
+                    "goto": "hold",
+                    "text": "Range setup is not safe yet. Hold."
+                }
+            ]
+        },
+        {
+            "id": "launch",
+            "text": "Run the parachute launch and watch for full canopy deployment and drift direction.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "launch-rocket-parachute",
+                    "text": "Launch and track descent."
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Rocket recovered. Begin post-flight inspection.",
+                    "requiresItems": [
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                            "count": 4.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Recovery looked unstable. Enter troubleshooting branch."
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "Evidence gate: inspect chute canopy, shock cord, and body tube. Only pass if no tears, burns, or loose knots are found.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Inspection passed. Rocket is reusable for next iteration.",
+                    "requiresItems": [
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Damage found. Fix and re-run recovery workflow."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Troubleshooting flow: repack chute with looser folds, re-seat knots, and replace scorched wadding before attempting another launch.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Fixes complete. Restart prep and verify again."
+                }
+            ]
+        },
+        {
+            "id": "hold",
+            "text": "Hold accepted. Keep igniter disconnected, clear non-essential crew, and resume only when the pad passes range safety checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range-check",
+                    "text": "Range corrected. Continue."
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Excellent recovery discipline. You validated reuse with launch evidence and a full troubleshooting loop.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Recovery run verified."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "c754c1e7-244c-41ec-96d4-ad468b6b3e52",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["rocketry/parachute"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

@@ -1,0 +1,195 @@
+{
+    "id": "astronomy/iss-photo",
+    "title": "Photograph the ISS",
+    "description": "Capture an ISS long-exposure streak, score shot quality against thresholds, and run deterministic corrective retests.",
+    "image": "/assets/quests/iss_long_exposure_phone_photo.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You spotted the ISS before. Ready for a measured long-exposure run with strict pass/fail thresholds?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Let's plan the shot."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Mount your digital camera on a tripod, confirm the next pass window, and stage a safe dark-path setup before capture.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "check-iss-pass",
+                    "text": "Pass time checked and logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Pass window confirmed, gear is staged.",
+                    "requiresItems": [
+                        {
+                            "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        },
+                        {
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Clouds or glare are building\u2014need a fallback."
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Start a 10-second exposure as the ISS rises. Immediately log timestamp, direction, and estimated trail length.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-iss-memento-photo",
+                    "text": "Long exposure captured with the mounted camera and archived."
+                },
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Shot metadata entered in mission log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Photo saved and metadata logged.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "16478015-5213-4b3f-960c-c0fdaaa91297",
+                            "count": 3.0
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Trail is smeared or frame missed the pass."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Quality gate: accept only if streak is continuous, timing error is under 15 seconds, and heading matches the pass window. Any miss triggers corrective retest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pass: streak continuous, timing <15s, heading matches plan.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        },
+                        {
+                            "id": "3d92d73f-271e-4f8c-a482-4fc51cc69abf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Fail: timing, heading, or framing out of range\u2014run corrective loop."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Corrective branch: stabilize tripod, lower vibration, verify heading in the app, and retry only if the walking path remains safe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Corrections applied; retaking the photo."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Conditions still unstable\u2014switch to recovery plan."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety stop: if clouds or footing risk rises, pause and schedule the next pass instead of forcing a shot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Conditions improved\u2014replan the session."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Session aborted safely; follow-up logged for next pass.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent capture. You now have a documented ISS photo memento with timing, heading, and exposure data preserved for posterity.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait for the next pass."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/iss-flyover"],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

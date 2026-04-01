@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponic_ph_log_entry_reservoir.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "hydroponic pH log",
+    "item_id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
+    "entity_type": "item",
+    "prompt": "A timestamped hydroponic pH log page on a work surface, with a highlighted final entry indicating a reservoir within the target range after adjustment and verification. A sample cup, pH tools, and reservoir hardware nearby make it clear this is a practical nutrient-management record rather than a generic notebook page.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future hydroponics-lab aesthetic: soft task lighting, realistic paper and plastic textures, no logos, no readable numbers or words, and no identifiable faces. Keep the page centered and tidy so it reads clearly as a DSPACE pH-tracking artifact.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

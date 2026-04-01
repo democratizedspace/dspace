@@ -1,0 +1,11 @@
+# Patterns to ignore when packaging
+.DS_Store
+.git/
+.gitignore
+.benchmarks/
+*.swp
+*.tmp
+*.orig
+*.bak
+node_modules/
+Chart.lock

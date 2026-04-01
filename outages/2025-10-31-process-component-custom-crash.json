@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2025-10-31-process-component-custom-crash",
+  "date": "2025-10-31",
+  "component": "frontend/processes",
+  "rootCause": "Process.svelte only resolved process metadata from built-in JSON and dereferenced undefined when ManageProcesses listed custom processes, crashing the Astro preview server and causing Playwright navigation to /processes to fail with net::ERR_CONNECTION_REFUSED.",
+  "resolution": "Pass full process data to Process.svelte, guard against missing metadata, treat custom processes as read-only, and add unit coverage so rendering custom entries no longer throws during E2E runs.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18642736123/job/53144470360",
+    "frontend/src/components/svelte/Process.svelte",
+    "frontend/__tests__/ProcessCustom.test.js"
+  ]
+}

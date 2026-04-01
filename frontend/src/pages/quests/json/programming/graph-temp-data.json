@@ -1,0 +1,140 @@
+{
+    "id": "programming/graph-temp-data",
+    "title": "Clean and graph your temperature logs",
+    "description": "Parse your log file, smooth noisy readings, and annotate the highs and lows so the chart tells a clearer story than raw numbers alone.",
+    "image": "/assets/quests/programming_graph_temperature_logs_script.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nice work gathering data. Before sharing this chart, we need a cleaned output and a clear pass band so anomalies are obvious.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "I'll stage the cleanup run.",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 3.0
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Set your acceptance band first: most readings should stay between 15C and 35C with no timestamp gaps longer than one sample interval.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Generate cleaned + annotated graph"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Annotated graph exported",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Review the chart against the pass band and cadence. If spikes exceed 35C, dips fall below 15C, or timestamps jump, treat it as out-of-range until corrected.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Graph is in-range and cadence is stable",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        },
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "I found out-of-range segments"
+                }
+            ]
+        },
+        {
+            "id": "triage",
+            "text": "Troubleshoot safely: reseat thermistor leads with power off, regenerate the chart, and confirm anomalies are resolved before sign-off.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Recreate baseline chart after wiring check"
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Wiring corrected; rerun annotated graph",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work. You produced evidence, interpreted bounds, and completed a corrective loop before finishing.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Chart QA complete."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["programming/graph-temp"],
+    "hardening": {
+        "passes": 3,
+        "score": 97,
+        "emoji": "\ud83d\udcaf",
+        "history": [
+            {
+                "task": "codex-hardening-2025-12-08",
+                "date": "2025-12-08",
+                "score": 95
+            },
+            {
+                "task": "codex-hardening-2025-12-18",
+                "date": "2025-12-18",
+                "score": 98
+            },
+            {
+                "task": "codex-hardening-2026-02-22",
+                "date": "2026-02-22",
+                "score": 97
+            }
+        ]
+    }
+}

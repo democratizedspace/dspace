@@ -1,0 +1,63 @@
+{
+    "generatedAt": "2026-03-15T06:58:42.968Z",
+    "envName": "test",
+    "sourceRef": null,
+    "generatedFrom": {
+        "routes": "docs/ROUTES.md",
+        "docs": "frontend/src/pages/docs/md",
+        "changelog": "frontend/src/pages/docs/md/changelog"
+    },
+    "sources": {
+        "changelog": [
+            "frontend/src/pages/docs/md/changelog.md",
+            "frontend/src/pages/docs/md/changelog/20221003.md",
+            "frontend/src/pages/docs/md/changelog/20221005.md",
+            "frontend/src/pages/docs/md/changelog/20221015.md",
+            "frontend/src/pages/docs/md/changelog/20221019.md",
+            "frontend/src/pages/docs/md/changelog/20221031.md",
+            "frontend/src/pages/docs/md/changelog/20221210.md",
+            "frontend/src/pages/docs/md/changelog/20230101.md",
+            "frontend/src/pages/docs/md/changelog/20230105.md",
+            "frontend/src/pages/docs/md/changelog/20230131.md",
+            "frontend/src/pages/docs/md/changelog/20230630.md",
+            "frontend/src/pages/docs/md/changelog/20230915.md",
+            "frontend/src/pages/docs/md/changelog/20260301.md",
+            "frontend/src/pages/docs/md/changelog/20260401.md"
+        ],
+        "v3Changelog": [
+            "frontend/src/pages/docs/md/changelog/20260301.md",
+            "frontend/src/pages/docs/md/changelog/20260401.md"
+        ]
+    },
+    "legacy": {
+        "changelogAnchors": [
+            "20221003",
+            "20221005",
+            "20221015",
+            "20221019",
+            "20221031",
+            "20221210",
+            "20230101",
+            "20230105",
+            "20230131",
+            "20230630",
+            "20230915"
+        ],
+        "changelogPaths": [
+            "frontend/src/pages/docs/md/changelog/20221003.md",
+            "frontend/src/pages/docs/md/changelog/20221005.md",
+            "frontend/src/pages/docs/md/changelog/20221015.md",
+            "frontend/src/pages/docs/md/changelog/20221019.md",
+            "frontend/src/pages/docs/md/changelog/20221031.md",
+            "frontend/src/pages/docs/md/changelog/20221210.md",
+            "frontend/src/pages/docs/md/changelog/20230101.md",
+            "frontend/src/pages/docs/md/changelog/20230105.md",
+            "frontend/src/pages/docs/md/changelog/20230131.md",
+            "frontend/src/pages/docs/md/changelog/20230630.md",
+            "frontend/src/pages/docs/md/changelog/20230915.md"
+        ]
+    },
+    "counts": { "totalChunks": 805, "docs": 748, "routes": 1, "changelog": 56 },
+    "gitSha": "8be79db0553744e35df5e4e7322c23b005fd3b4e",
+    "docsGitSha": "8be79db0553744e35df5e4e7322c23b005fd3b4e"
+}

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: http
+{{- $metricsPort := .Values.service.metricsPort }}
+{{- $metricsTargetPort := .Values.service.metricsTargetPort | default $metricsPort }}
+{{- if and .Values.metrics.enabled $metricsPort }}
+    - port: {{ $metricsPort }}
+      targetPort: {{ $metricsTargetPort }}
+      protocol: TCP
+      name: metrics
+{{- end }}
+  selector:
+    {{- include "dspace.selectorLabels" . | nindent 4 }}

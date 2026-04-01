@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_pi_ssd_boot.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/ssd-boot.json",
+    "item_name": "Boot from SSD",
+    "item_id": "devops/ssd-boot",
+    "entity_type": "quest",
+    "prompt": "A Raspberry Pi is mounted on a small stand with an M.2 or 2.5-inch SSD connected via a sleek adapter and short cable, both resting on a clean desk surface. A laptop screen nearby shows a stylized boot configuration tool or disk cloning interface, with two drive icons and a simple arrow indicating data being copied from a microSD card to the SSD, all without readable text. The microSD card itself lies next to the Pi, partly removed from its slot, suggesting the transition to SSD boot.\n\nThe environment is a near-future solarpunk home lab: soft, cool lighting, pale materials, and small plants and 3D-printed organizers in the background, giving the 512×512 image a calm, organized feel. The composition centers on the Pi and SSD connection, with the laptop and other objects slightly blurred but still recognizable. No brand logos or legible words appear anywhere, and no faces are visible—just hands positioning cables or hovering over the trackpad—emphasizing the upgrade from SD to SSD boot for faster, more reliable operation.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/dwatt_1e7_energy_vault.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/dWatt-1e7.json",
+    "item_name": "Amass an Unbelievable 10,000,000 dWatt",
+    "item_id": "energy/dWatt-1e7",
+    "entity_type": "quest",
+    "prompt": "A futuristic energy vault chamber with a massive transparent cylindrical reservoir in the center, glowing with a deep blue and teal light and marked by a prominent but text-free numeric display ring suggesting \"10,000,000\" units stored. Sleek conduits and cables feed into the reservoir from the floor and ceiling, and a small control console stands in the foreground with simple geometric indicators showing that the storage goal has been reached. The overall impression is of a monumental personal energy milestone being secured in a dedicated vault.\n\nNear-future solarpunk style with clean white and brushed metal surfaces, accent lighting, and subtle greenery visible through a distant window or skylight. Photorealistic 512×512 composition with soft cinematic lighting, no readable text or logos, and no visible faces—only gloved hands resting on the console at most. The image should feel grand and slightly awe-inspiring while remaining grounded and plausible.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

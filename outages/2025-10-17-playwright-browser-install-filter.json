@@ -1,0 +1,11 @@
+{
+  "id": "2025-10-17-playwright-browser-install-filter",
+  "date": "2025-10-17",
+  "component": "ci:e2e",
+  "rootCause": "CI invoked pnpm with the ./frontend filter for playwright install, which matches no workspace package, so browsers were never installed and every E2E launch failed",
+  "resolution": "Run pnpm commands from the frontend directory using --dir so Playwright browsers install before executing tests",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18586257662/job/52990714065",
+    "https://github.com/democratizedspace/dspace/actions/runs/18586257662/job/52990714057"
+  ]
+}

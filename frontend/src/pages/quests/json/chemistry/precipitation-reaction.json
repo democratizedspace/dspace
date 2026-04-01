@@ -1,0 +1,142 @@
+{
+    "id": "chemistry/precipitation-reaction",
+    "title": "Form a Precipitate",
+    "description": "Pre-stage reagent stoichiometry, run controlled precipitation, then wash/filter solids for clean analytical samples.",
+    "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Set out two labeled reagent cylinders, filtration funnel, filter paper, and wash bottle.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-prepare-precipitation-reagent-set",
+                    "text": "Prepare stoichiometric reagent set and sequence card."
+                },
+                {
+                    "type": "goto",
+                    "goto": "react",
+                    "text": "Reagent set prepared and labeled.",
+                    "requiresItems": [
+                        {
+                            "id": "1774fea1-a066-4617-b2e5-0692e63346d5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "react",
+            "text": "Add reagent B to A while stirring at constant speed; hold 5 minutes for full nucleation.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-form-precipitate",
+                    "text": "Generate precipitation slurry."
+                },
+                {
+                    "type": "goto",
+                    "goto": "wash",
+                    "text": "Slurry formed and ready for wash/filter stage.",
+                    "requiresItems": [
+                        {
+                            "id": "d36caabd-ddb7-4634-8d51-751957be80f4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "wash",
+            "text": "Filter slurry to collect solids, then rinse cake twice with cold DI water and log filtrate clarity.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-filter-precipitate",
+                    "text": "Filter slurry into precipitate sample."
+                },
+                {
+                    "type": "process",
+                    "process": "chemistry-age-and-wash-precipitate",
+                    "text": "Wash filtered precipitate cake and log cleanliness."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Filtered and washed solids captured.",
+                    "requiresItems": [
+                        {
+                            "id": "487c7586-a6f4-4fff-a210-979497f6380f",
+                            "count": 1
+                        },
+                        {
+                            "id": "fecde9bf-4b1f-4c95-a809-c888e5c817fa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Measure supernatant pH and document wash clarity.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-measure-ph",
+                    "text": "Capture pH verification card."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reagent set, washed cake, filtered sample, and pH card complete.",
+                    "requiresItems": [
+                        {
+                            "id": "1774fea1-a066-4617-b2e5-0692e63346d5",
+                            "count": 1
+                        },
+                        {
+                            "id": "fecde9bf-4b1f-4c95-a809-c888e5c817fa",
+                            "count": 1
+                        },
+                        {
+                            "id": "487c7586-a6f4-4fff-a210-979497f6380f",
+                            "count": 1
+                        },
+                        {
+                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Precipitation workflow complete with clean sample provenance.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Submit precipitate sample."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["chemistry/ph-adjustment"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "changelog-permalink-container",
+  "date": "2025-12-22",
+  "component": "frontend-changelog",
+  "rootCause": "Permalink support replaced the changelog body wrapper with an inline span, removing the themed container and leaving markdown text to render directly on the page background.",
+  "resolution": "Wrapped each changelog entry in a surfaced card with padded body content so markdown renders inside the same container styling used by other Astro pages.",
+  "references": [
+    "frontend/src/pages/changelog.astro"
+  ]
+}

@@ -1,0 +1,52 @@
+---
+import Page from '../../components/Page.astro';
+import Exporter from './svelte/Exporter.svelte';
+import Importer from './svelte/Importer.svelte';
+---
+
+<Page title="Custom Content Backup" columns="1">
+    <li class="page-section surface-plain">
+        <div class="vertical">
+            <div class="contentbackup-panel">
+                <Exporter client:idle />
+            </div>
+            <div class="contentbackup-panel">
+                <Importer client:idle />
+            </div>
+        </div>
+    </li>
+</Page>
+
+<style>
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+        width: min(960px, 100%);
+        margin: 0 auto;
+    }
+
+    .contentbackup-panel {
+        width: 100%;
+        max-width: 720px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .contentbackup-panel :global(nav) {
+        width: 100%;
+        max-width: 720px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .contentbackup-panel :global(nav button) {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+</style>

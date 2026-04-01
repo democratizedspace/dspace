@@ -1,0 +1,107 @@
+{
+    "id": "chemistry/acid-neutralization",
+    "title": "Neutralize an Acid Spill",
+    "description": "Contain an acid spill with a berm, neutralize in controlled passes, and seal residue with disposal metadata.",
+    "image": "/assets/quests/acid_spill_neutralization_setup.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Treat spill as live hazard. Set boundary cones, spill tray, and PPE, then isolate drains with absorbent socks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-deploy-spill-containment-berm",
+                    "text": "Deploy absorbent berm and mark hot zone perimeter."
+                },
+                {
+                    "type": "goto",
+                    "goto": "neutralize",
+                    "text": "Containment berm is in place.",
+                    "requiresItems": [
+                        {
+                            "id": "fea67487-4164-4ff7-969d-356127abbac9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "neutralize",
+            "text": "Dust sodium bicarbonate from outer edge inward. Wait for fizz to settle each pass; never kneel into the hazard zone.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-neutralize-acid-spill",
+                    "text": "Run neutralization and pH confirmation passes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "package",
+                    "text": "Neutralization complete with stable pH checks.",
+                    "requiresItems": [
+                        {
+                            "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "package",
+            "text": "Transfer residue to rigid drum, add absorbent liner, and tag with contents, date, and handler initials.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-package-neutralized-residue",
+                    "text": "Seal neutralized residue drum for disposal chain."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Containment + disposal artifacts complete.",
+                    "requiresItems": [
+                        {
+                            "id": "fea67487-4164-4ff7-969d-356127abbac9",
+                            "count": 1
+                        },
+                        {
+                            "id": "dedfa413-4cb8-4980-a310-820e958325cb",
+                            "count": 1
+                        },
+                        {
+                            "id": "d6238643-7e42-4b40-89c0-15f72f3d3dc3",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Spill response complete and traceable from containment to disposal.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Hazard closed."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["chemistry/ph-test"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

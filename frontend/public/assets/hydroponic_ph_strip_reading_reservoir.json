@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponic_ph_strip_reading_reservoir.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "hydroponic pH reading",
+    "item_id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+    "entity_type": "item",
+    "prompt": "A pH test strip held above a small nutrient-solution sample cup, with color pads visibly reacted and ready for comparison after a reservoir check. Hydroponic context comes from the reservoir lid, tubing, and net cup softly visible nearby, making it clear this is a nutrient-system reading rather than aquarium water testing.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future hydroponics-lab aesthetic: soft diffuse lighting, realistic paper, liquid, and plastic textures, no logos, no readable chart text, and only partial hands if needed. Keep the strip and sample centered so it reads clearly as a DSPACE hydroponic measurement icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

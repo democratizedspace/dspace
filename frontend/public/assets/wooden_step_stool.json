@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/wooden_step_stool.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Step stool",
+    "item_id": "0d4a7b77-f241-4c19-9365-c74647066802",
+    "entity_type": "item",
+    "prompt": "A compact wooden step stool with two steps stands on a smooth floor, its sturdy legs flared slightly outward for stability. The top step has a small handhold cut-out for easy carrying, and the edges are rounded so it looks safe and comfortable to stand on with bare feet. A set of high shelves or a tall cabinet looms softly in the background, with the stool positioned clearly as the tool that helps reach those higher spaces safely.\n\nThe environment is a bright near-future home or workshop with a solarpunk aesthetic: soft daylight, a potted plant nearby, and clean, minimal furnishings. The 512×512 image is photorealistic with light stylization, no logos or text on the stool, and a composition that centers the step stool itself while the tall shelves and surrounding room stay gently out of focus, emphasizing its role as a safe, compact helper.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

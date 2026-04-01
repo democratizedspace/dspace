@@ -1,0 +1,168 @@
+{
+    "id": "rocketry/night-launch",
+    "title": "Night Launch",
+    "description": "Take your rocket experience to the stars with a night launch. Gather your gear and light up the sky.",
+    "image": "/assets/quests/model_rocket_night_launch.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready for after-hours rocketry? At night we earn every launch with extra safety checks before the countdown.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "range-safety",
+                    "text": "Sounds awesome. Let's run the night safety gate first."
+                }
+            ]
+        },
+        {
+            "id": "range-safety",
+            "text": "Confirm range lighting, perimeter cones, and observer visibility. If anyone can't see the pad line, we hold launch.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Perimeter is lit and all observers confirmed visual contact."
+                },
+                {
+                    "type": "goto",
+                    "goto": "hold",
+                    "text": "Visibility is poor. Call a hold and re-stage the range."
+                }
+            ]
+        },
+        {
+            "id": "hold",
+            "text": "Good call. Reposition lighting, re-brief the team, and only resume once the pad and recovery corridor are clearly visible.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Hold cleared. Resume equipment staging."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "We'll need the launchpad, controller, igniter, and your rocket with a parachute. Confirm every item before arming.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "requiresItems": [
+                        {
+                            "id": "11d73d3c-aa22-450f-aef2-d6163e34e90d",
+                            "count": 1
+                        },
+                        {
+                            "id": "ae343640-c7c0-4f7e-907b-17bd87574d9b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d2f3e684-84e2-41f9-b39d-51ee224608ac",
+                            "count": 1
+                        },
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Gear's ready and double-checked for night ops."
+                }
+            ]
+        },
+        {
+            "id": "launch",
+            "text": "Set up the pad, verify downrange is clear, then commit to ignition.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "launch-rocket-parachute",
+                    "text": "Ignite into the night!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery-check",
+                    "requiresItems": [
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                            "count": 4.0
+                        }
+                    ],
+                    "text": "Flight complete. Move to post-flight recovery checks."
+                },
+                {
+                    "type": "goto",
+                    "goto": "misfire",
+                    "text": "Igniter failed or trajectory looked unsafe. Abort and troubleshoot."
+                }
+            ]
+        },
+        {
+            "id": "misfire",
+            "text": "Keep the pad cold for 60 seconds, disconnect the controller, and inspect igniter continuity before any retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Pad is safe again and hardware was re-verified. Re-stage for relaunch."
+                }
+            ]
+        },
+        {
+            "id": "recovery-check",
+            "text": "Confirm parachute condition and recovery corridor lighting before declaring success.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "e9123658-fb2b-4fb2-bfc4-9eaeebddf3ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "eb9c2a75-a87a-4171-8bc3-088e75936bcf",
+                            "count": 4.0
+                        }
+                    ],
+                    "text": "Rocket recovered with safe descent and clear visual tracking."
+                },
+                {
+                    "type": "goto",
+                    "goto": "hold",
+                    "text": "Recovery visibility was marginal. Re-light and verify before another attempt."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "What a sight. You ran a disciplined night operation and brought the rocket home safely.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Night launch complete with full safety checks."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d660dc50-7afb-4a2f-9508-a42490aae5e4",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["rocketry/recovery-run"],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/single_paper_towel_sheet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "paper towel",
+    "item_id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+    "entity_type": "item",
+    "prompt": "A single perforated sheet of paper towel is laid out flat on a countertop next to a small splash of water, with another folded sheet partially visible near the edge of the frame. The towel’s texture and light embossing are clearly visible, and one corner is slightly lifted as if it has just been picked up to dry hands or clean a spill. A roll of paper towels stands blurred in the background, reinforcing that this is a disposable, absorbent cleaning sheet.\n\nThe environment is a bright near-future kitchen or lab prep area with a solarpunk feel: clean surfaces, soft natural light, and a plant or two on a nearby shelf. The 512×512 image is photorealistic with gentle stylization, free of logos or text on any packaging, and composed so that the single sheet and its role in drying or wiping are immediately clear while the rest of the room stays softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

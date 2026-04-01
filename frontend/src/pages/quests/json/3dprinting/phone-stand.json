@@ -1,0 +1,167 @@
+{
+    "id": "3dprinting/phone-stand",
+    "title": "Print a Phone Stand",
+    "description": "Print and fit-check a phone stand with measured angle and clearance thresholds.",
+    "image": "/assets/quests/phone_stand_print.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Sydney here. We'll prep safely, print a stand, then prove it with measurements. Pass target is a 60–70° lean and charging-port clearance.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Let's prep first."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Ventilate, tie back hair, and keep sleeves clear. Level the bed, clean the plate with isopropyl, and purge to white PLA before slicing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Paper-level the bed."
+                },
+                {
+                    "type": "process",
+                    "process": "swap-white-pla-filament",
+                    "text": "Swap to white PLA and purge."
+                },
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "requiresItems": [
+                        {
+                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Ready to slice and print."
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Slice at 0.2 mm layers, 3 perimeters, and 15% gyroid infill. Use a 3–5 mm brim if adhesion looks weak. Watch first layer lines before leaving the machine.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-phone-stand",
+                    "text": "Print the phone stand."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ],
+                    "text": "The stand is finished and I have calipers ready."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Record two checks: lean angle between 60–70° and charging-port opening at least 12 mm. Write both values before deciding pass/fail.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Both measurements are in bounds and recorded."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Angle or clearance failed the threshold."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Out-of-range recovery: if angle is too steep, scale Y by +2%. If the port is blocked, widen slot geometry and smooth elephant-foot edges. Reprint, cool, and re-measure before closing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-phone-stand",
+                    "text": "Run a corrected reprint."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "requiresItems": [
+                        {
+                            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Corrective print cooled; retesting thresholds."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice. You verified both angle and clearance with measurements, not guesses. Log slicer settings so the next stand starts inside tolerance.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Sydney!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["3dprinting/filament-change"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

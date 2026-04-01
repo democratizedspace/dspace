@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/peroxide_rinse_bath_bucket.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "peroxide rinse bath",
+    "item_id": "68e50400-fa25-4459-9633-2304a67096c9",
+    "entity_type": "item",
+    "prompt": "A clean, translucent bucket filled with a diluted sanitizing solution, sitting on a hydroponics bench with a few submerged small parts like net pots and a short length of tubing. Tiny bubbles cling to the plastic surfaces, and a pair of nitrile-gloved hands is visible at the edge of frame placing equipment into the rinse bath, making it unmistakably a peroxide rinse step without showing any readable labels.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future hydroponics lab style: soft cinematic lighting, realistic liquid refraction, no logos, and no readable text. Keep the scene tidy, safe, and visually clear as a single-purpose sanitation setup.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

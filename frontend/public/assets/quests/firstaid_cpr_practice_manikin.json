@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/firstaid_cpr_practice_manikin.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/learn-cpr.json",
+    "item_name": "Practice Basic CPR",
+    "item_id": "firstaid/learn-cpr",
+    "entity_type": "quest",
+    "prompt": "A CPR training manikin lies on the floor of a well-lit room, and a person wearing nitrile gloves is positioned beside it with both hands interlocked over the center of the chest, arms straight to demonstrate proper compression posture. Nearby, a CPR pocket mask is placed over the manikin’s mouth and nose, and antiseptic wipes and a small first aid kit are laid out on a clean mat within reach. A phone sits off to the side on speaker mode, suggesting that emergency services have been contacted before starting practice.\n\nThe environment is a near-future training space or community room with soft, even lighting, clear floor space, and simple wall decor blurred in the background. The 512×512 photorealistic composition focuses on the manikin, the rescuer’s gloved hands, and the pocket mask, with other objects and surroundings slightly out of focus. No brand logos or legible text appear anywhere, and the trainee’s face is kept out of frame—only arms and torso are visible—emphasizing safe, mannequin-based CPR practice that complements, but does not replace, formal certification.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

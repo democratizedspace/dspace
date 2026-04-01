@@ -1,0 +1,12 @@
+{
+  "id": "docs-canvas-libexpat-missing",
+  "date": "2025-12-15",
+  "component": "docs",
+  "rootCause": "Production runtime image omitted libexpat and other canvas runtime libraries, causing jsdom's optional canvas dependency to crash SSR for /docs routes.",
+  "resolution": "Install the required canvas runtime libraries in the production image and add a container smoke test that requires canvas and verifies /docs/dCarbon renders successfully.",
+  "references": [
+    "Dockerfile",
+    ".github/workflows/ci-image.yml",
+    "frontend/src/pages/docs/[slug].astro"
+  ]
+}

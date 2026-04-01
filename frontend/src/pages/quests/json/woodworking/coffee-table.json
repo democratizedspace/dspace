@@ -1,0 +1,255 @@
+{
+    "id": "woodworking/coffee-table",
+    "title": "Build a coffee table",
+    "description": "Build a coffee table with alternate assembly plans, stability proof, and a corrective rework loop.",
+    "image": "/assets/quests/woodworking_coffee_table_build.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Good bookshelf work. For the coffee table, we verify load stability before we call it finished.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Let's build it to shop standard."
+                }
+            ]
+        },
+        {
+            "id": "gather",
+            "text": "Gather pine boards, glue, handsaw, tape measure, and safety goggles. We'll pick a frame strategy after prep.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 6
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Issue table materials and PPE."
+                },
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 6
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Materials staged and safety checks complete."
+                }
+            ]
+        },
+        {
+            "id": "strategy",
+            "text": "Choose a build strategy based on your stock: apron frame first, or top panel first.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "apron-frame",
+                    "text": "Main path: apron frame first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "top-panel",
+                    "text": "Alternate path: top panel first."
+                }
+            ]
+        },
+        {
+            "id": "apron-frame",
+            "text": "Cut legs and aprons, dry-clamp, then check for racking before attaching the top.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stability-check",
+                    "requiresItems": [
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Frame is clamped, square, and ready for top install."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rework",
+                    "text": "Frame racks when weight is applied."
+                }
+            ]
+        },
+        {
+            "id": "top-panel",
+            "text": "Glue the top panel first, then trim and attach legs after the top cures flat.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stability-check",
+                    "requiresItems": [
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Top cured flat and leg fit complete."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rework",
+                    "text": "Top cupped or leg fit drifted."
+                }
+            ]
+        },
+        {
+            "id": "stability-check",
+            "text": "Evidence gate: table must stand without wobble and survive a gentle push test before finish.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ],
+                    "text": "No wobble, no rack, and glue joints look sound."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rework",
+                    "text": "Wobble detected or joints creak under load."
+                }
+            ]
+        },
+        {
+            "id": "rework",
+            "text": "Recovery loop: back out the failed joint, re-square from one corner, and retest after reglue. Stop if footing or lighting is unsafe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Rework complete; retry with a strategy."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safe-pause",
+                    "text": "Paused safely for a better work session."
+                }
+            ]
+        },
+        {
+            "id": "safe-pause",
+            "text": "Good stop call. Power down, label your parts, and resume when footing and lighting are safe.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Pause and return later."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent work. You selected a path, proved stability, and handled faults with safe recovery.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "build-coffee-table",
+                    "text": "Assemble the table and verify it stays level under load."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the coffee table.",
+                    "requiresItems": [
+                        {
+                            "id": "7a8a7f56-e84f-45e0-b321-d9cff33d9ac5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "You've got your coffee table. Place it where it stays level and clear for daily use.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Enjoy the new table."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "ea830e47-5996-4886-b5ee-74bb2b932988",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["woodworking/bookshelf"],
+    "hardening": {
+        "passes": 1,
+        "score": 96,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-harden-coffee-table-2026-03-04",
+                "date": "2026-03-04",
+                "score": 96
+            }
+        ]
+    }
+}

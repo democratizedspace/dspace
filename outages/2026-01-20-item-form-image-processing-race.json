@@ -1,0 +1,10 @@
+{
+  "id": "2026-01-20-item-form-image-processing-race",
+  "date": "2026-01-20",
+  "component": "inventory item creation form",
+  "rootCause": "The item form validated before the async image downsample finished, so submitting immediately after selecting a file left the image field empty and suppressed the success status message.",
+  "resolution": "Track the image downsample promise and await it during submission before validating, ensuring the processed preview is ready before save.",
+  "references": [
+    "frontend/src/components/svelte/ItemForm.svelte"
+  ]
+}

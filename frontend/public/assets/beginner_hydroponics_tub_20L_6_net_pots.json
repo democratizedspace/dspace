@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/beginner_hydroponics_tub_20L_6_net_pots.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "Beginner hydroponics tub",
+    "item_id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+    "entity_type": "item",
+    "prompt": "A beginner hydroponics setup on a workbench: a sturdy 20 L plastic tub with a fitted lid, six round holes holding six 50 mm net pots, and a small airline grommet seated cleanly in the lid. The tub is empty or lightly filled to show the build clearly, with a short length of clear tubing and a small air stone placed beside it to communicate the aeration concept without clutter.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk maker-lab setting: soft cinematic lighting, clean plastics and edges, no logos, no readable text, and no identifiable faces. Composition is centered and simple so the tub-and-net-pot arrangement reads instantly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

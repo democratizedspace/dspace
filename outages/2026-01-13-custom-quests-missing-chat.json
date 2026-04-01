@@ -1,0 +1,15 @@
+{
+  "id": "2026-01-13-custom-quests-missing-chat",
+  "date": "2026-01-13",
+  "component": "frontend/quests",
+  "longForm": "outages/2026-01-13-custom-quests-missing-chat.md",
+  "rootCause": "The quest detail route used a custom-only details view and never normalized custom quest data into the canonical quest shape required by QuestChat, so the chat UI never rendered for quests created via /quests/create.",
+  "resolution": "Normalize custom quests into the same shape as built-ins and render QuestChat for any quest with dialogue on /quests/[id].",
+  "references": [
+    "frontend/src/pages/quests/[id].astro",
+    "frontend/src/pages/quests/svelte/QuestDetail.svelte",
+    "frontend/src/utils/questNormalization.js",
+    "frontend/tests/quest-detail-chat.test.ts",
+    "frontend/e2e/custom-quest-chat.spec.ts"
+  ]
+}

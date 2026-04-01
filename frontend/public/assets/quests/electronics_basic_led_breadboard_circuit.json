@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_basic_led_breadboard_circuit.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/basic-circuit.json",
+    "item_name": "Build a basic LED circuit",
+    "item_id": "electronics/basic-circuit",
+    "entity_type": "quest",
+    "prompt": "A close-up of a solderless breadboard shows a simple LED circuit: a bright 5 mm LED straddles the center gap, its longer lead connected through a 220 Ω resistor to a positive rail, with a jumper wire completing the path back to the negative rail. The color bands on the resistor are clear, and the jumper wires are neatly routed so the circuit is easy to trace visually. A small battery pack or low-voltage bench supply sits just off to the side, powering the breadboard.\n\nThe environment is a near-future solarpunk electronics workspace with soft white lighting, a clean tabletop, and a few neatly arranged components and tools blurred in the background. The 512×512 photorealistic composition centers the breadboard and LED, with the power source and surrounding objects only gently hinted at. No logos or readable text appear anywhere, and there are no faces—only perhaps a fingertip pointing to the resistor—highlighting the clarity of a basic LED-and-resistor circuit for beginners.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

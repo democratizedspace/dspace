@@ -1,0 +1,69 @@
+{
+    "id": "welcome/intro-inventory",
+    "title": "Check Your Inventory",
+    "description": "Learn how buying and selling works in /inventory.",
+    "image": "/assets/quests/intro_inventory_grid.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Next stop: /inventory. Buy 1 electrical tape with dUSD so you can practice the market flow.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "buy-sell",
+                    "text": "Open /inventory"
+                }
+            ]
+        },
+        {
+            "id": "buy-sell",
+            "text": "In /inventory, search for \"electrical tape\", open the item page, and press Buy. You can also press Sell on items you own to trade them back for dUSD. Watch the item count: quest checks only pass when your current count meets the requirement.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Bought electrical tape",
+                    "requiresItems": [
+                        {
+                            "id": "946bc4dd-32ee-434c-a8ed-d70cdce617f4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Perfect. You now know where to buy gear, how to sell extras, and how counts drive quest requirements.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Ready for the next lesson"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 120
+        },
+        {
+            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+            "count": 1
+        },
+        {
+            "id": "80d30825-a42b-4add-b715-322e1713952c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/howtodoquests"],
+    "hardening": {
+        "passes": 0,
+        "score": 80,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

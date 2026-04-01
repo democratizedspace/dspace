@@ -1,12 +1,32 @@
 ---
-title: "Electricity"
-slug: "electricity"
+title: 'Electricity'
+slug: 'electricity'
 ---
 
-## Non-renewable energy
+Electricity is the backbone of DSPACE's economy and automation loop. Using it efficiently keeps
+costs low, while generating it cleanly earns you dWatt without dCarbon penalties.
 
-If you plug a machine in the wall (on Earth, at least), chances are you're still using fossil fuels, either from coal or natural gas. In DSPACE, there is a built-in carbon tax that is applied to all electricity usage based on fossil fuels. For every 1000 [dCarbon](/docs/dCarbon) produced within the game, your sell prices in the shop will be reduced by 1%. This provides a monetary incentive to continue to adopt renewable energy production.
+## Non-renewable energy (dCarbon impact)
 
-## Renewable energy
+If you pull power from fossil-fuel sources, DSPACE applies a built-in carbon tax. Selling any priced
+item is taxed by `dCarbon / 1000` percent (continuous, capped at a 90% reduction), and dWatt itself
+is not sold. The goal is simple: reward renewable energy and make wasteful usage expensive.
 
-You can buy a solar panel or handheld wind turbine from [Amazing](/docs/amazing). These will generate electricity for you, and you can use them to power your machines. You can also sell the electricity you generate to other players.
+## Renewable energy and storage
+
+- Generate dWatt via solar panels and wind turbines, then store it in batteries for later use.
+- Use charge controllers, inverters, and smart plugs to monitor consumption and protect hardware.
+- Keep a GFCI tester on hand when working around mains power.
+
+## Quest trailheads
+
+- [Install a Power Inverter](/quests/energy/power-inverter)
+- [Maintain Your Battery Pack](/quests/energy/battery-maintenance)
+- [Check a battery pack's voltage](/quests/electronics/check-battery-voltage)
+- [Test a GFCI Outlet](/quests/electronics/test-gfci-outlet)
+- [Charge a Device Off-Grid](/quests/energy/offgrid-charger)
+
+## Safety reminders
+
+- Always fuse DC runs close to the battery and keep wire gauges appropriate for the load.
+- Verify polarity before powering up new circuits.

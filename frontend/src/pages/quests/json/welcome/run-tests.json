@@ -1,0 +1,216 @@
+{
+    "id": "welcome/run-tests",
+    "title": "Run the Test Suite",
+    "description": "Learn the real DSPACE test commands before opening a PR.",
+    "image": "/assets/quests/run_tests_terminal_dashboard.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before you ship code, run tests. We'll quiz your command ladder first, then walk the full local workflow end to end.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-1",
+                    "text": "Start the command quiz"
+                }
+            ]
+        },
+        {
+            "id": "quiz-1",
+            "text": "Which command is fastest to sanity-check your changes?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-2",
+                    "text": "npm run qa:smoke"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-smoke",
+                    "text": "npm run test:pr"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-smoke",
+                    "text": "npm run lint"
+                }
+            ]
+        },
+        {
+            "id": "retry-smoke",
+            "text": "Not quite. Start with `npm run qa:smoke` when you want the quickest sanity pass.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Retry from start"
+                }
+            ]
+        },
+        {
+            "id": "quiz-2",
+            "text": "Which command best matches CI parity?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "quiz-3",
+                    "text": "npm run test:ci"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-ci",
+                    "text": "npm run qa:smoke"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-ci",
+                    "text": "npm run lint"
+                }
+            ]
+        },
+        {
+            "id": "retry-ci",
+            "text": "Close. `npm run test:ci` is the CI-parity command from the repo scripts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Back to start"
+                }
+            ]
+        },
+        {
+            "id": "quiz-3",
+            "text": "What do you run before opening a PR?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-repo",
+                    "text": "npm run test:pr"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-pr",
+                    "text": "npm run qa:smoke only"
+                },
+                {
+                    "type": "goto",
+                    "goto": "retry-pr",
+                    "text": "Skip tests and rely on CI"
+                }
+            ]
+        },
+        {
+            "id": "retry-pr",
+            "text": "Before you open a PR, run `npm run test:pr` for the full local gate.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Retry from start"
+                }
+            ]
+        },
+        {
+            "id": "prep-repo",
+            "text": "Start by creating your DSPACE GitHub fork so your local run can mirror CI.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-github-repo",
+                    "text": "Create the GitHub fork"
+                },
+                {
+                    "type": "goto",
+                    "goto": "clone",
+                    "text": "Fork ready",
+                    "requiresItems": [
+                        {
+                            "id": "52593d07-908b-4109-92cf-826b2184ef6f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "clone",
+            "text": "Clone the repo and enter it (`git clone ...` then `cd dspace`) before installing deps.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "prepare-local-testbed",
+                    "text": "Clone repo and install dependencies"
+                },
+                {
+                    "type": "goto",
+                    "goto": "suite",
+                    "text": "Local checkout is ready",
+                    "requiresItems": [
+                        {
+                            "id": "c4807e67-4e40-452f-8cdc-e326f3e34444",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "suite",
+            "text": "Now run your local test suite and capture a report artifact before submission.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "execute-dspace-tests",
+                    "text": "Run tests and generate local report"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Report captured and green",
+                    "requiresItems": [
+                        {
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great run. You now know the test ladder and proved it with a local report artifact.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Claim testing trophy",
+                    "requiresItems": [
+                        {
+                            "id": "1486e0df-f01e-4c9e-bdd8-ef272df0b9ef",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "82b369fe-0ef4-4ca1-881c-14e5a7feeff5",
+            "count": 1
+        },
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 250
+        }
+    ],
+    "requiresQuests": ["welcome/connect-github"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

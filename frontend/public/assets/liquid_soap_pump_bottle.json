@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/liquid_soap_pump_bottle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "liquid soap",
+    "item_id": "55ace400-79ee-4b24-b7da-0b0435ab7d72",
+    "entity_type": "item",
+    "prompt": "A clear or frosted pump bottle of mild liquid hand soap sitting next to a sink, with a soft-colored soap visible inside and a single pump head on top. A clean hand towel and a running faucet or basin are partially visible in the background, suggesting that the soap is used for washing hands before treating a wound. The label on the bottle is abstract, showing only simple shapes and a droplet icon, with no readable text or branding.\n\nNear-future solarpunk bathroom or wash-station aesthetic with warm, soft lighting, a bit of greenery, and clean ceramic or metal fixtures. Photorealistic 512×512 rendering, no brand logos or legible writing on the bottle. The composition should clearly communicate that this is mild liquid soap for cleaning skin.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

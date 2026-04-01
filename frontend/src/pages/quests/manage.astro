@@ -1,0 +1,15 @@
+---
+import Page from '../../components/Page.astro';
+import ManageQuests from './svelte/ManageQuests.svelte';
+
+// Get all quests - similar to index.astro
+const questModules = import.meta.glob('./json/*/*.json', { eager: true });
+// Sort by file path for deterministic ordering across builds
+const quests = Object.entries(questModules)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, mod]) => mod);
+---
+
+<Page title="Manage Quests">
+    <ManageQuests client:load quests={quests} />
+</Page>

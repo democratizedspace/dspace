@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/smartphone_charge_from_200wh_pack_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Fully charge a smartphone from a 200 Wh battery pack using a USB cable completion note",
+    "item_id": "c1567e58-a130-58fc-af2c-89afe332cf2c",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for fully charging a smartphone from a 200 Wh battery pack using a USB cable, shown as a confirmation sheet beside a portable power pack, a smartphone connected by cable, and a calm tabletop charging setup. The note should convey that the charging cycle completed successfully, with a battery-flow sketch and full-charge indicator motif that clearly links it to portable energy storage use, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future off-grid tech aesthetic: soft indoor lighting, realistic paper, cable, anodized metal, and glass textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the charging scene uncluttered for a clean DSPACE icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

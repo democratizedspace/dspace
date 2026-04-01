@@ -1,0 +1,191 @@
+{
+    "id": "3dprinting/cable-clip",
+    "title": "Print a Cable Clip",
+    "description": "Reduce clutter by printing cable clips with setup evidence, fit checks, and a recovery loop.",
+    "image": "/assets/quests/cable_clip_print.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Sydney here. We'll print cable clips that actually snap without cracking. Goggles on, hotend clear, and no hands near moving axes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Walk me through setup and checks."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Prep path: level the bed, purge to white PLA, and confirm your first-layer test before committing material to the full batch.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Dial in the bed with a paper shim."
+                },
+                {
+                    "type": "process",
+                    "process": "swap-white-pla-filament",
+                    "text": "Purge to white PLA."
+                },
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "First-layer line is smooth and white PLA is flowing cleanly.",
+                    "requiresItems": [
+                        {
+                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Choose a print strategy: controlled perimeter-first settings, or faster draft settings with extra monitoring for stringing and brittle clips.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-cable-clips",
+                    "text": "Main path: controlled print settings for clean snap-fit clips."
+                },
+                {
+                    "type": "process",
+                    "process": "3dprint-cable-clips",
+                    "text": "Alternate path: faster draft settings with active monitoring at each cooldown."
+                },
+                {
+                    "type": "goto",
+                    "goto": "fit-test",
+                    "text": "Batch printed, cooled, and deburred.",
+                    "requiresItems": [
+                        {
+                            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Clips stringed, cracked, or failed to snap onto cable.",
+                    "requiresItems": [
+                        {
+                            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "fit-test",
+            "text": "Run a fit test on two cable diameters and inspect for stress whitening. Safety stop: pause immediately if clips crack sharply during snap-on.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Fit test passed and no brittle fractures appeared.",
+                    "requiresItems": [
+                        {
+                            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Fit test failed or clips fractured during installation.",
+                    "requiresItems": [
+                        {
+                            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery path: lower nozzle temp, slow outer walls, and trim sharp edges before running a verification print. If brittleness persists, dry filament before retrying and re-run fit checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fit-test",
+                    "text": "Adjustments made; verify with a fresh fit test before sign-off.",
+                    "requiresItems": [
+                        {
+                            "id": "06b405f2-1728-4428-bc1c-abcf7ef36bcf",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: confirm the clips pass a real cable fit test and record at least one note about tension, flex, or edge cleanup in your log.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Fit test passed and notes are logged.",
+                    "requiresItems": [
+                        {
+                            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Workspace tidy and repeatable. You now have a print profile plus a recovery playbook for future clips.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Cable chaos handled."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["3dprinting/filament-change"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

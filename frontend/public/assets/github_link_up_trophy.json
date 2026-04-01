@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/github_link_up_trophy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "GitHub Link-Up Trophy",
+    "item_id": "d5d62069-c77d-44b1-8848-b355f8410f74",
+    "entity_type": "item",
+    "prompt": "A compact celebratory connectivity trophy displayed on a presentation surface, featuring abstract linked-node and repository-inspired geometry instead of any copyrighted mascot or logo. The design should suggest secure syncing and successful integration between systems.\n\nPhotorealistic 512×512 image with soft cinematic lighting, realistic metal and enamel textures, no logos, no readable text, and no identifiable faces. Keep the trophy centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

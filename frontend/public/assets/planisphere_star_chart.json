@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/planisphere_star_chart.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "planisphere star chart",
+    "item_id": "98f6252e-95c2-468a-b110-69d47604df2c",
+    "entity_type": "item",
+    "prompt": "A rotating planisphere star chart held partially open, showing the circular sky window and date/time ring with clear shapes but no readable labels. A small compass and a folded cloth sit beside it, implying practical alignment in the field.\n\nUltra-detailed, photorealistic 512×512 with a near-future stargazing aesthetic: soft cinematic lighting, clean materials, no logos, no readable text, no overlays. Center the planisphere disk so the rotating-map concept is instantly recognizable at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,3 +1,8 @@
 [build]
     command = "npm run build"
     publish = "dist/"
+[context.nightly]
+    command = "npm run build:testnet"
+    publish = "frontend/dist"
+    [[context.nightly.environment]]
+        VITE_PERSISTENT_STATE = "true"

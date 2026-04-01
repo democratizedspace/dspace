@@ -1,0 +1,136 @@
+{
+    "id": "rocketry/static-test",
+    "title": "Perform a Static Engine Test",
+    "description": "Run a controlled static burn, record measurements, and only clear flight when thrust data passes bounds.",
+    "image": "/assets/quests/model_rocket_static_engine_test.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before launch day, let's run a static burn. We'll gather baseline data, apply pass/fail bounds, and only proceed if the curve is sane.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Let's secure the stand and instrumentation."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Clamp the rocket to a test stand, set a remote ignition line, and establish a 5-meter safety perimeter.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Stand is locked and perimeter is clear."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-hold",
+                    "text": "The setup feels sketchy. Hold the test."
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Record baseline: ambient wind, expected burn duration, and target peak thrust window before ignition.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "burn",
+                    "text": "Baseline values logged."
+                }
+            ]
+        },
+        {
+            "id": "burn",
+            "text": "Ignite remotely and capture the thrust curve. Keep observers behind cover until burnout and cooldown are complete.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-static-engine-test",
+                    "text": "Burn complete; thrust data captured."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-hold",
+                    "text": "Ignition behavior was unstable. Abort and investigate."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Use the captured thrust log to continue analysis.",
+                    "requiresItems": [
+                        {
+                            "id": "4d5d0f2e-77e7-44c2-a0d7-ef0f9f8a9b2d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: pass only when the curve is smooth, peak thrust sits in target bounds, and no pressure spike appears.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Data passes bounds and is safe for launch planning."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Data is out of range. We need a corrective loop."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective loop: inspect nozzle alignment, retighten mount hardware, and replace any suspect igniter leads before re-test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Corrections made. Re-log baseline and run another test."
+                }
+            ]
+        },
+        {
+            "id": "safety-hold",
+            "text": "Safety hold accepted. Keep the motor cold, clear the pad, and resume only after hazards are removed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Hazards cleared. Rebuild the test setup."
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Great work. You validated the motor with measurable evidence and a disciplined stop/retest path.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Static test verified."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "946b07b7-2b2c-4507-a725-edb270d8e910",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["rocketry/parachute"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

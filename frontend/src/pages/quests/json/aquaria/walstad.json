@@ -1,0 +1,186 @@
+{
+    "id": "aquaria/walstad",
+    "title": "Set up a Walstad tank",
+    "description": "Create a low-tech planted aquarium using the Walstad method.",
+    "image": "/assets/quests/walstad_setup.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Vega here. We'll build a Walstad system in stages: prep materials, build the substrate stack, then run a stability pause before livestock.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "I'm ready for the staged setup.",
+                    "requiresItems": [
+                        {
+                            "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+                            "count": 1
+                        },
+                        {
+                            "id": "98609b23-4811-4275-8d83-ad59a2797753",
+                            "count": 1
+                        },
+                        {
+                            "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+                            "count": 3
+                        },
+                        {
+                            "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+                            "count": 1
+                        },
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+                            "count": 1
+                        },
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "stage",
+            "text": "Level the stand, dry the floor, and set a drip loop on power cords before opening any water containers.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Prep dechlorinated fill water.",
+                    "goto": "build"
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Bucket is already dechlorinated and the station is dry.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Add soil, cap with rinsed gravel, plant guppy grass and duckweed, then fill gently to avoid a substrate storm.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-walstad-tank",
+                    "text": "Assemble and plant the Walstad tank.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Build complete; substrate cap stayed intact.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification checkpoint: water should be only lightly hazy and plants should remain rooted. If roots float up or water turns opaque, branch to recovery.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tank is stable enough to begin cycling with no livestock.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Cloudy surge or uprooted plants detected; run recovery staging.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Pause stocking, re-seat uprooted stems, and top off slowly with conditioned water only after sediment settles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "condition-bucket-water",
+                    "text": "Prepare a clean top-off bucket for recovery.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Recovery completed; return to stability verification.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cloudiness is improving; hold livestock and continue passive settling checks.",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Walstad base is stable. Keep lights moderate, test during the first week, and add fish only after ammonia and nitrite remain at zero.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll complete a no-fish cycle before stocking."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/howtodoquests"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stevia_tasting_solution_1pct.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia tasting solution",
+    "item_id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+    "entity_type": "item",
+    "prompt": "A small glass vial or beaker containing a clear liquid tasting solution, with a dropper pipette and a tiny weigh boat of crystalline sweetener nearby. The scene suggests careful sensory testing: clean glassware, a rinse beaker, and a stirring rod, with the solution presented as a precise 1% dilution without any readable labels.\n\nUltra-detailed, photorealistic 512×512 image in a clean near-future lab/kitchen-hacker aesthetic: soft cinematic lighting, realistic glass reflections, no brand logos, and no readable text. Keep the composition minimal and sterile, focused on the prepared tasting solution as the clear subject.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

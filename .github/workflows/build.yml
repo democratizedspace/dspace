@@ -1,0 +1,107 @@
+name: Build & Publish Container
+
+on:
+  push:
+    branches:
+      - main
+      - 'codex/**'
+    tags:
+      - 'v*'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  PUSH_IMAGE: ${{ github.event_name == 'push' && (github.ref_name == 'main' || startsWith(github.ref, 'refs/tags/v')) }}
+
+jobs:
+  build:
+    name: Build multi-arch image
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure build SHA is present
+        run: |
+          if [ -z "$GITHUB_SHA" ]; then
+            echo "GITHUB_SHA is empty; refusing to build." >&2
+            exit 1
+          fi
+
+      - name: Compute branch + SHA tag
+        id: vars
+        run: |
+          branch="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          branch="${branch//\//-}"
+          branch="$(echo "$branch" | tr '[:upper:]' '[:lower:]')"
+          branch="$(echo "$branch" | sed -E 's/[^a-z0-9._-]+/-/g')"
+          branch="$(echo "$branch" | sed -E 's/^[^a-z0-9_]+//')"
+          if [ -z "$branch" ]; then
+            branch="ref"
+          fi
+          short_sha="$(git rev-parse --short HEAD)"
+          max_branch_len=120
+          if [ "${#branch}" -gt "$max_branch_len" ]; then
+            branch="${branch:0:$max_branch_len}"
+          fi
+          echo "branch_sha=${branch}-${short_sha}" >> "$GITHUB_OUTPUT"
+
+      - name: Safety guard – fail if trying to push from non-trusted ref
+        if: ${{ env.PUSH_IMAGE == 'true' && !(github.ref_name == 'main' || startsWith(github.ref, 'refs/tags/v')) }}
+        run: |
+          echo "Ref $GITHUB_REF is not allowed to publish images" >&2
+          exit 1
+
+      - name: Set up QEMU
+        run: docker run --privileged --rm tonistiigi/binfmt --install arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        if: ${{ env.PUSH_IMAGE == 'true' }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,format=long,prefix=sha-
+            type=ref,event=branch
+            type=raw,value=${{ steps.vars.outputs.branch_sha }},enable=${{ steps.vars.outputs.branch_sha != '' }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created={{timestamp}}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: ${{ env.PUSH_IMAGE == 'true' }}
+          platforms: linux/amd64,linux/arm64
+          provenance: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            GIT_SHA=${{ github.sha }}
+            VITE_GIT_SHA=${{ github.sha }}
+            ENFORCE_VITE_GIT_SHA=1
+          cache-from: ${{ env.PUSH_IMAGE == 'true' && format('type=registry,ref={0}/{1}:buildcache', env.REGISTRY, env.IMAGE_NAME) || '' }}
+          cache-to: ${{ env.PUSH_IMAGE == 'true' && format('type=registry,ref={0}/{1}:buildcache,mode=max', env.REGISTRY, env.IMAGE_NAME) || '' }}

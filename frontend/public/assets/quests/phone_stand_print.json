@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/phone_stand_print.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/phone-stand.json",
+    "item_name": "Print a Phone Stand",
+    "item_id": "3dprinting/phone-stand",
+    "entity_type": "quest",
+    "prompt": "A 3D printer on a workbench finishing a simple, functional phone stand; the stand is clearly visible on the build plate with its angled back and base. Next to the printer on the table, a smartphone rests in a previously printed copy of the same stand, demonstrating how it’s used. A small spool of filament and a few tools sit nearby, keeping the scene tidy but active.\n\nNear-future solarpunk workspace aesthetic with warm light, clean wooden surfaces, and a plant or two in the background. Photorealistic 512×512 rendering with no brand logos or legible text on the printer or phone. The composition should immediately read as “3D printed phone stand that you can actually use on your desk.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

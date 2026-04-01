@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/model_rocket_preflight_checklist.jpg",
+    "entity": "frontend/src/pages/quests/json/rocketry/preflight-check.json",
+    "item_name": "Preflight Checklist",
+    "item_id": "rocketry/preflight-check",
+    "entity_type": "quest",
+    "prompt": "A top-down view of a neatly organized preflight setup on a clean work surface, featuring a compact 35 cm-tall model rocket with a glossy green PLA body and dark fins lying next to a printed checklist clipboard, a pen, a small toolkit, spare igniters, and fresh battery packs for the launch controller. The checklist should be clearly present as a sheet with checkboxes and lines but without any readable text, while the arrangement of gear makes it obvious that the user is confirming all components before heading to the launch pad. Subtle details like a labeled storage case, safety glasses, and a small digital timer help convey a methodical, safety-focused preflight routine.\n\nRender this as a near-future, solarpunk-inspired workspace with minimal clutter and modern materials like brushed metal, recycled composites, and soft-colored synthetic fabrics. Use soft, diffuse lighting that avoids harsh shadows, giving the photorealistic 512×512 image a calm, methodical mood, suitable for an in-game icon. Avoid visible brand logos or legible writing on the checklist or tools, and do not show full human figures—at most, a hint of a hand reaching for the pen or a wristwatch can suggest human presence without dominating the composition.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

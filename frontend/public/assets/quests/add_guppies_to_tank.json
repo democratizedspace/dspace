@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/add_guppies_to_tank.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/guppy.json",
+    "item_name": "Add guppies",
+    "item_id": "aquaria/guppy",
+    "entity_type": "quest",
+    "prompt": "A bag of acclimating guppies floats at the surface of a planted community aquarium, condensation droplets on the plastic catching the light. Inside the bag, colorful guppies swim calmly, while in the tank below, other peaceful fish and plants create a welcoming environment. A hand is gently tilting the bag to let a bit of tank water mix in, clearly showing the process of carefully introducing guppies to a community tank.\n\nThe environment is a near-future solarpunk living room with soft ambient lighting, additional plants near the aquarium, and simple furnishings in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the bag or equipment, and a composition that centers the bag, guppies, and tank waterline while the rest of the room remains softly out of focus, emphasizing a safe, deliberate introduction of new fish.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

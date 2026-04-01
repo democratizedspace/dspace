@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/guppy_grass_starter_floating_plant.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Guppy grass starter",
+    "item_id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+    "entity_type": "item",
+    "prompt": "A healthy starter portion of guppy grass floating in a small clear acclimation container, with bright green branching strands fanning out near the surface. A soft aeration bubble stream and a simple clip-on breeder ring (unbranded) appear nearby to hint at breeding-tank utility, without adding clutter or any readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future solarpunk aquarium aesthetic: soft cinematic lighting, clean water highlights, no logos, no readable labels, and no on-image text. Composition is simple and centered so the floating plant reads clearly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_ph_strip_reading.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Aquarium pH reading",
+    "item_id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+    "entity_type": "item",
+    "prompt": "A single aquarium pH test strip held with tweezers above a small sample cup of tank water, showing fresh color changes on the reagent pads. In the background, a simple color-reference chart is present but intentionally out of focus and unreadable; the strip is the focal point, implying the result was matched quickly within the dipping window.\n\nUltra-detailed, photorealistic 512×512 image in a clean near-future aquarium maintenance setting: soft cinematic lighting, realistic paper-fiber strip texture, no brand logos, and no readable text. If hands appear, show only gloved fingers or partial hands; keep the strip centered and unambiguous.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

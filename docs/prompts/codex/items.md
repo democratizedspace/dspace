@@ -1,0 +1,210 @@
+# Writing great item prompts for the DSPACE repository
+
+Codex is a sandboxed engineering agent that can open this repository, run its own
+tests, and send you a ready-made PR—but only if you give it a clear, file-scoped
+prompt. Use this guide alongside [Codex Prompts](baseline.md) when
+working on items. To keep the prompt docs evolving, see the
+[Codex meta prompt](meta.md). If these templates drift, refresh
+them with the [Codex Prompt Upgrader](upgrader.md). For failing
+GitHub Actions runs, use the [Codex CI-failure fix prompt](ci-fix.md).
+For general content rules see the [Item Development Guidelines](/docs/item-guidelines).
+
+> **TL;DR**
+>
+> 1. Scope changes to a single item entry.
+> 2. Say exactly what output you expect (tests, docs).
+> 3. Stop when the spec is complete. Codex treats all remaining text as
+>    mandatory instructions.
+> 4. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`,
+>    `npm run build`, `npm run itemValidation`, `npm run test:ci`, and
+>    `npm run test:ci -- itemQuality`.
+> 5. Scan staged changes with `git diff --cached | ./scripts/scan-secrets.py`;
+>    commit with an emoji prefix.
+
+---
+
+## 1. Quick start (Web vs CLI)
+
+- **Add or update an item**
+  - Web: use the "Code" button and attach the repo.
+  - CLI: `codex "add item solar-cell-junction-box"`
+- **Ask about item data**
+  - Web: use the "Code" button (the "Ask" button also works).
+  - CLI: `codex exec "explain frontend/src/pages/inventory/json/items/*.json"`
+- **Run item tests**
+  - Web: not supported yet.
+  - CLI:
+    ```bash
+    codex exec "\
+    npm run audit:ci && \
+    npm run lint && \
+    npm run type-check && \
+    npm run build && \
+    npm run itemValidation && \
+    npm run test:ci && \
+    npm run test:ci -- itemQuality && \
+    git diff --cached | ./scripts/scan-secrets.py"
+    ```
+
+See the [OpenAI CLI docs][openai-cli] for more flags.
+
+---
+
+## 2. Prompt ingredients
+
+- **Goal sentence**: Gives the agent a north star (“Add price to `white PLA filament`”).
+- **Files to touch**: Limits search space → faster & cheaper.
+- **Constraints**: Coding style, a11y, item schema rules.
+- **Acceptance check**:
+  - `npm run audit:ci`
+  - `npm run lint`
+  - `npm run type-check`
+  - `npm run build`
+  - `npm run test:ci`
+  - `npm run itemValidation`
+  - `npm run test:ci -- itemQuality` pass
+
+## 3. Reusable template
+
+```text
+You are working in democratizedspace/dspace.
+
+GOAL: <one sentence item addition or edit>.
+
+FILES OF INTEREST
+- frontend/src/pages/inventory/json/items/*.json   ← item registry
+- frontend/src/pages/inventory/jsonSchemas/item.json   ← schema
+
+REQUIREMENTS
+1. Follow the item schema.
+   - If an item is intentionally not sold in the shop, remove `price` **and** set `priceExemptionReason` to an allowed value.
+   - Never assume a missing `price` should become `0` for purchasing; process-only components must stay non-buyable.
+2. Reflect real-world materials or devices.
+3. Ensure the item is referenced by at least one quest or process; update those
+   files and create missing processes as needed.
+4. Use only existing image assets; do not add new image files because Codex cannot
+   create new binary image files (for example `.png`, `.jpg`, `.webp`). For new items,
+   reuse an existing image in the PR and note that a human should replace it later via
+   [https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
+5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
+   `npm run test:ci`.
+6. Run `npm run itemValidation` and `npm run test:ci -- itemQuality`, fixing any failures.
+7. Run `git diff --cached | ./scripts/scan-secrets.py` and ensure no secrets.
+8. Use an emoji-prefixed commit message like `📝 : – add price field`.
+9. Update docs or processes if needed.
+
+OUTPUT
+A pull request with the completed item and passing checks.
+```
+
+## Implementation Prompt
+
+Use this when you want Codex to automatically create or upgrade an item.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Edit or
+create items under `frontend/src/pages/inventory/json/items`, choosing the
+appropriate category file. Ensure realistic details, required fields, and
+passing checks (`npm run audit:ci`, `npm run lint`, `npm run type-check`,
+`npm run build`, `npm run test:ci`, `npm run itemValidation`, and
+`npm run test:ci -- itemQuality`). Verify the item appears in at least one quest or process,
+reuse existing image assets (Codex cannot create new binary image files), and
+scan for secrets with `git diff --cached | ./scripts/scan-secrets.py` before
+committing. In the PR summary, ask a human to replace reused placeholder imagery
+via [https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
+If a quest's text changes, run `npm run test:ci -- questQuality` and update
+the quest's
+`hardening` block with a fresh evaluation score.
+
+USER:
+1. Follow the steps above.
+2. Run the commands listed in the system prompt before committing, including quest quality
+   checks when quests are modified.
+3. Summarize the new or updated item in the PR description.
+4. Use an emoji-prefixed commit message like `📝 : – add price field`.
+
+OUTPUT:
+A pull request implementing the item with all tests green.
+```
+
+## Upgrade prompt for existing items
+
+Apply this prompt to refine items and track quality over time.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository.
+
+USER:
+1. Pick an item from `frontend/src/pages/inventory/json/items` that lacks a
+   `hardening` block or has a low score.
+2. Improve clarity, realism and units. Ensure prices and descriptions match
+   real-world expectations and that related processes reference the item
+   correctly. For non-priced items, ensure `priceExemptionReason` is present and
+   add/adjust a regression test if process flow could accidentally grant the item.
+3. When modifying the `image` field, reuse an existing image URL already in the
+   repository; do not add new or external images. For Codex-created PRs, reuse an
+   existing image and explicitly mark human follow-up via
+   [https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md#image-analysis-cli).
+4. Update or create the item's `hardening` block, incrementing `passes`,
+    refreshing the evaluator `score`, swapping the status `emoji` and appending a
+    history entry with the Codex task ID, date and score. Choose the emoji based
+   on:
+   - 0 passes → score 0 → 🛠️ Draft
+   - ≥1 pass & score ≥60 → 🌀 First polishing pass
+   - ≥2 passes & score ≥75 → ✅ Meets internal quality bar
+   - ≥3 passes & score ≥90 → 💯 Hardened – locked until spec change
+   Example:
+   "hardening": {
+     "passes": 1,
+     "score": 60,
+     "emoji": "🌀",
+     "history": [
+       { "task": "codex-upgrade-2025-09-01", "date": "2025-09-01", "score": 60 }
+     ]
+   }
+5. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`,
+   `npm run test:ci`, `npm run itemValidation`, and `npm run test:ci -- itemQuality`.
+   Update docs if needed.
+6. Run `git diff --cached | ./scripts/scan-secrets.py` before committing.
+7. Use an emoji-prefixed commit message like `📝 : – refine item details`.
+
+OUTPUT:
+A pull request with the refined item, updated hardening block and passing tests.
+```
+
+## Additional tips for AI assistance
+
+Modern assistants can be powerful collaborators. Keep in mind:
+
+- **Provide clear context** about DSPACE's educational mission and sustainability focus.
+- **Use system prompts** to guide tone and technical accuracy.
+- **Iterate on outputs** rather than expecting perfection on the first try.
+- **Fact-check technical information** since AI systems can generate plausible
+  but incorrect details.
+
+[openai-cli]: https://platform.openai.com/docs/guides/openai-cli/
+
+## Upgrader Prompt
+
+Type: evergreen
+
+Use this prompt to keep item-writing rules current.
+
+```text
+SYSTEM:
+You are an automated contributor for the DSPACE repository. Follow `AGENTS.md` and `README.md`.
+Ensure `npm run lint`, `npm run type-check`, `npm run build`,
+and `npm run test:ci` pass before committing.
+
+USER:
+1. Ensure item schema references and inventory paths are up to date.
+2. Fold in any new content guidelines from the item guide.
+3. Run the checks above.
+4. Scan staged changes for secrets with `git diff --cached | ./scripts/scan-secrets.py`.
+5. Commit with an emoji-prefixed message.
+
+OUTPUT:
+A pull request refining the item prompt doc with passing checks.
+```

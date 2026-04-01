@@ -1,0 +1,154 @@
+{
+    "id": "electronics/test-gfci-outlet",
+    "title": "Test a GFCI Outlet",
+    "description": "Run a GFCI test cycle with explicit pass bounds, anomaly classification, and mandatory safety re-test before closure.",
+    "image": "/assets/quests/test_gfci_outlet.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "GFCI outlets guard against shocks. Keep hands dry, wear shoes, verify wall plate integrity, and never remove outlet covers while energized.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-check",
+                    "text": "Tester ready and area inspected."
+                }
+            ]
+        },
+        {
+            "id": "prep-check",
+            "text": "Set acceptance bounds: PASS requires normal wiring pattern, TEST trip in ≤1 second, and stable RESET without flicker. Any burn smell, arcing sound, or reversed wiring is an immediate stop condition.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure-cycle",
+                    "text": "Bounds logged; begin cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure-cycle",
+            "text": "Insert tester fully, record baseline pattern, press TEST and time the trip, then press RESET and record restoration behavior.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "test-gfci-outlet",
+                    "text": "Run instrumented GFCI cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret-pass",
+                    "text": "Observed normal pattern + trip ≤1s + stable reset.",
+                    "requiresItems": [
+                        {
+                            "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "classify-fault",
+                    "text": "Observed bad pattern, delayed/no trip, or unstable reset."
+                }
+            ]
+        },
+        {
+            "id": "classify-fault",
+            "text": "Classify anomaly before touching wiring: (A) no trip, (B) wrong indicator pattern, (C) nuisance trip/reset instability. De-energize at breaker and tag outlet unsafe before correction.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "corrective-loop",
+                    "text": "Outlet tagged and breaker confirmed off."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-abort",
+                    "text": "Cannot de-energize safely right now."
+                }
+            ]
+        },
+        {
+            "id": "corrective-loop",
+            "text": "Corrective loop: tighten terminals as needed, verify load/line orientation, restore power, then repeat the full measurement cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure-cycle",
+                    "text": "Correction complete; rerun full cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-abort",
+                    "text": "Signs of heat damage or arcing persist."
+                }
+            ]
+        },
+        {
+            "id": "interpret-pass",
+            "text": "Pass interpretation: log measured trip timing and indicator pattern so the next monthly check can detect drift.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Results logged with tester evidence.",
+                    "requiresItems": [
+                        {
+                            "id": "5562d728-8e62-43b2-9b3d-77cebd2ab481",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-abort",
+            "text": "Safety abort: keep outlet de-energized, label it out of service, and escalate repair. Do not re-energize until a qualified fix is complete.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Abort logged and outlet left safe."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "You completed a deterministic GFCI QA cycle with explicit bounds and safe anomaly handling.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "GFCI QA complete."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/continuity-test"],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

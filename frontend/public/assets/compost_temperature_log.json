@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/compost_temperature_log.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "compost temperature log",
+    "item_id": "e034d081-a29e-4040-830f-a192304db50d",
+    "entity_type": "item",
+    "prompt": "A compost monitoring notebook page showing a simple hand-drawn temperature trend line and tick marks, with a long stainless probe thermometer lying across the bottom edge. A bucket compost lid and a small tray of dark compost are in soft focus; all handwritten notes are intentionally illegible.\n\nUltra-detailed, photorealistic 512×512 with a near-future sustainable DIY aesthetic: soft cinematic lighting, clean tools, no logos, no readable text, no overlays. Center the notebook and probe so the “temperature log” reads instantly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

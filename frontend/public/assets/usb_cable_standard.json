@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/usb_cable_standard.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "USB Cable",
+    "item_id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+    "entity_type": "item",
+    "prompt": "A standard USB cable is coiled neatly on a tabletop, with one end showing a recognizable rectangular USB-A plug and the other a smaller connector such as USB-C, both without logos or readable text. The plugs are molded with simple strain reliefs, and the cable jacket is smooth and flexible, making it clear that it can be used for both charging and data transfer between common devices. A phone and a laptop sit nearby, their ports oriented toward the cable to suggest typical use.\n\nThe scene is a near-future solarpunk home tech corner with soft, ambient light, a small plant beside the devices, and minimal clutter. The 512×512 image is photorealistic with gentle stylization, no brand markings or legible labels on the connectors, and a composition that centers the cable and its connectors while the phone, laptop, and room details remain softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,168 @@
+{
+    "id": "astronomy/venus-phases",
+    "title": "Observe Venus's Phases",
+    "description": "Use a planisphere and basic telescope to plan, view, and sketch Venus's shifting phase.",
+    "image": "/assets/quests/venus_phases_telescope_sequence.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here. Venus is bright tonight; let's watch its phase change.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Ready to aim.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Use the planisphere and an app to pick a time when Venus is high enough for a crisp view and your path is well lit.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plan-venus-window",
+                    "text": "Window chosen and written down."
+                },
+                {
+                    "type": "goto",
+                    "goto": "view",
+                    "text": "Timing locked—let's observe.",
+                    "requiresItems": [
+                        {
+                            "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "view",
+            "text": "Set up the telescope on stable ground, center Venus, and adjust focus until the phase edge is sharp.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sketch-venus-phase",
+                    "text": "Sketching the illuminated slice."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Phase recorded with date and time.",
+                    "requiresItems": [
+                        {
+                            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recheck",
+                    "text": "Seeing is unstable or the phase edge is smeared."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the sketch against tonight's expected crescent. Pass if your observed illuminated fraction is between 20% and 60%; otherwise treat it as out-of-range and recheck optics/time.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Measured fraction is within the 20%-60% target band.",
+                    "requiresItems": [
+                        {
+                            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recheck",
+                    "text": "Out-of-range result - run corrective checks and retest."
+                }
+            ]
+        },
+        {
+            "id": "recheck",
+            "text": "Pause and recover: confirm tripod level, refocus, and wait for steadier air. If glare persists near the horizon, delay to a safer, higher-altitude window before retrying. Reset the previous sketch so only corrected evidence is submitted.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "reset-venus-phase-sketch",
+                    "text": "Archive the failed sketch and clear for a fresh measurement."
+                },
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Sketch reset complete - shift to a better observation window.",
+                    "requiresItems": [
+                        {
+                            "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "view",
+                    "text": "Sketch reset complete - optics corrected, collect a new sketch.",
+                    "requiresItems": [
+                        {
+                            "id": "4b328572-69f2-4fa6-8005-dc64ac434cef",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great observation! Tracking phases helps practice precision focusing.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait for the next phase."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+            "count": 1
+        },
+        {
+            "id": "7e9cc033-a1bd-40fc-92b1-7d55b9dba295",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/saturn-rings"],
+    "hardening": {
+        "passes": 1,
+        "score": 100,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-02-18",
+                "date": "2025-02-18",
+                "score": 100
+            }
+        ]
+    }
+}

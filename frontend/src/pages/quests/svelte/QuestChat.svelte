@@ -1,10 +1,13 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import items from '../../inventory/json/items.json';
     import QuestChatOption from './QuestChatOption.svelte';
-    import { questFinished } from '../../../utils/gameState.js';
-    import { state } from '../../../utils/gameState/common.js';
+    import { getUnmetQuestRequirements, questFinished } from '../../../utils/gameState.js';
+    import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
+    import { isBrowser } from '../../../utils/ssr.js';
+    import { getItemMap } from '../../../utils/itemResolver.js';
+    import { formatDialogue } from '../../../utils/formatDialogue.ts';
+    import QuestLinkChips from '../../../components/svelte/QuestLinkChips.svelte';
 
     export let quest;
     export let pointer;
@@ -12,54 +15,109 @@
 
     const clientSideRendered = writable(false);
     const finished = writable(false);
+    const available = writable(null);
+
+    let unmetRequirements = [];
 
     // Move these declarations inside onMount to ensure quest is defined
     let npc;
     let rewardItems = [];
     let dialogueMap;
+    let rewardRequestId = 0;
+    let rewardItemsKey = '';
+    let isMounted = false;
+    let refreshIntervalId;
 
-    const avatar = localStorage.getItem('avatarUrl') || '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
+    const releaseRewardImages = (items) => {
+        items.forEach((item) => item?.releaseImage?.());
+    };
 
-    onMount(() => {
-        // Initialize quest-related data after component is mounted
-        if (quest) {
-            npc = quest.npc;
-            
-            // Create reward items map
-            rewardItems = quest.rewards.map(reward => {
-                let item = items.find(item => item.id === reward.id);
+    const loadRewardItems = async () => {
+        const rewards = quest?.rewards ?? [];
+        const ids = rewards.map((reward) => reward?.id);
+        const requestId = ++rewardRequestId;
+        const itemMap = await getItemMap(ids);
+
+        if (!isMounted || requestId !== rewardRequestId) {
+            releaseRewardImages(Array.from(itemMap.values()));
+            return;
+        }
+
+        releaseRewardImages(rewardItems);
+        rewardItems = rewards
+            .map((reward) => {
+                const rewardId =
+                    typeof reward?.id === 'string' || typeof reward?.id === 'number'
+                        ? String(reward.id)
+                        : null;
+                if (!rewardId) {
+                    return null;
+                }
+                const item = itemMap.get(rewardId);
                 return {
                     id: reward.id,
                     count: reward.count,
-                    image: item.image,
-                    name: item.name
-                }
-            });
+                    image: item?.image ?? '/favicon.ico',
+                    name: item?.name ?? 'Unknown item',
+                    releaseImage: item?.releaseImage ?? null,
+                };
+            })
+            .filter(Boolean);
+    };
+
+    // Only access localStorage in browser environment to avoid SSR errors
+    const avatar =
+        (isBrowser ? localStorage.getItem('avatarUrl') : null) ||
+        '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
+
+    onMount(() => {
+        refreshIntervalId = setInterval(() => {
+            syncGameStateFromLocalIfStale();
+        }, 3000);
+        rewardItemsKey = (quest?.rewards ?? []).map((reward) => reward?.id ?? '').join('|');
+        isMounted = true;
+        // Initialize quest-related data after component is mounted
+        if (quest) {
+            npc = quest.npc;
 
             // Initialize pointer if not set
             pointer = pointer || quest.start;
 
             // Create dialogue map
             dialogueMap = new Map();
-            quest.dialogue.forEach(d => {
+            quest.dialogue.forEach((d) => {
                 dialogueMap.set(d.id, d);
             });
 
             currentDialogue = dialogueMap.get(pointer);
         }
-        
+
         clientSideRendered.set(true);
+        void loadRewardItems();
+    });
+
+    onDestroy(() => {
+        clearInterval(refreshIntervalId);
+        releaseRewardImages(rewardItems);
     });
 
     $: {
         if ($state && quest) {
+            unmetRequirements = getUnmetQuestRequirements(quest);
+            available.set(!questFinished(quest.id) && unmetRequirements.length === 0);
             if ($state.quests[quest.id]) {
                 pointer = $state.quests[quest.id].stepId;
                 currentDialogue = dialogueMap?.get(pointer);
             }
-            if (questFinished(quest.id)) {
-                finished.set(true);
-            }
+            finished.set(questFinished(quest.id));
+        }
+    }
+
+    $: if (isMounted) {
+        const nextKey = (quest?.rewards ?? []).map((reward) => reward?.id ?? '').join('|');
+        if (nextKey !== rewardItemsKey) {
+            rewardItemsKey = nextKey;
+            void loadRewardItems();
         }
     }
 </script>
@@ -71,33 +129,50 @@
         </div>
     </div>
     {#if $finished}
-        <div class="chat">
+        <div class="chat" data-testid="chat-panel">
             <div class="vertical">
                 <h4>Quest Complete!</h4>
-                <p>You have completed this quest. You can now return to the Quests page to start another quest.</p>
+                <p>
+                    You have completed this quest. You can now return to the Quests page to start
+                    another quest.
+                </p>
+            </div>
+        </div>
+    {:else if $available === false}
+        <div class="chat" data-testid="chat-panel">
+            <div class="vertical unavailable-content" data-testid="quest-unavailable">
+                <h4>Quest not available yet</h4>
+                <p>Complete these quests first:</p>
+                <QuestLinkChips questIds={unmetRequirements} />
             </div>
         </div>
     {:else}
-        <div class="chat">
-            <div>
+        <div class="chat" data-testid="chat-panel">
+            <div class="chat-body">
                 {#if $clientSideRendered && quest && dialogueMap}
-                    <div>
+                    <div class="quest-banner">
                         <img class="banner" src={quest.image} alt={quest.title} />
                     </div>
                     <div class="left">
                         <img src={npc} alt="NPC" />
-                        <p class="npcDialogue left">
-                            {dialogueMap.get(pointer)?.text}
-                        </p>
+                        <div class="npcDialogue left">
+                            {@html formatDialogue(dialogueMap.get(pointer)?.text)}
+                        </div>
                     </div>
                     <div class="right options">
                         <img src={avatar} alt="Avatar" />
                         {#each dialogueMap.get(pointer)?.options || [] as option, index}
-                            <QuestChatOption {quest} {option} questId={quest.id} stepId={pointer} optionIndex={index} />
+                            <QuestChatOption
+                                {quest}
+                                {option}
+                                questId={quest.id}
+                                stepId={pointer}
+                                optionIndex={index}
+                            />
                         {/each}
                     </div>
                 {:else}
-                    <div class="temp-container" />
+                    <div class="temp-container"></div>
                 {/if}
             </div>
         </div>
@@ -106,13 +181,17 @@
         <h5>Status:</h5>
         {#if $finished}
             <p class="green">Complete</p>
+        {:else if $available === false}
+            <p class="red">Locked</p>
         {:else}
             <p class="orange">In Progress</p>
         {/if}
         <h5>Rewards:</h5>
         {#each rewardItems as item}
             <div class="horizontal">
-                <a href={`/inventory/item/${item.id}`}><img class="item" src={item.image} alt={item.name} /></a>
+                <a href={`/inventory/item/${item.id}`}
+                    ><img class="item" src={item.image} alt={item.name} /></a
+                >
                 <p>{item.count} x {item.name}</p>
             </div>
         {/each}
@@ -134,6 +213,10 @@
 
     .temp-container {
         height: 50vh;
+    }
+
+    .unavailable-content {
+        width: 100%;
     }
 
     img {
@@ -167,20 +250,40 @@
         opacity: 1;
     }
 
-    .banner {
-        width: 120%;
-        height: 300px;
-        object-fit: cover;
-        margin-left: -10%;
-        margin-top: -10%;
+    .npcDialogue :global(code) {
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        font-size: 0.95em;
+        background: rgba(36, 207, 47, 0.2);
+        padding: 2px 6px;
+        border-radius: 8px;
+        border: 1px solid rgba(36, 207, 47, 0.35);
     }
 
-    @media only screen and (max-width: 600px) {
-        .banner {
-            width: 120%;
-            margin: -10%;
-            margin-bottom: 0px;
-        }
+    .quest-banner {
+        width: min(512px, 100%);
+        aspect-ratio: 1 / 1;
+        margin: 0 auto 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .banner {
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        display: block;
+        margin: 0;
+        border-radius: 0;
+        border: none;
+    }
+
+    .chat-body {
+        width: 100%;
     }
 
     .left {

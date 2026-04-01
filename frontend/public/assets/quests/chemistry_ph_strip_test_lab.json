@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/ph-test.json",
+    "item_name": "Measure Solution pH",
+    "item_id": "chemistry/ph-test",
+    "entity_type": "quest",
+    "prompt": "A gloved hand holds a pH test strip that has just been dipped into a beaker of clear solution on a lab bench, the colored pads on the strip clearly visible. Next to the beaker is a simple color reference card with horizontal color bars but no readable text, and a second beaker plus a glass stirring rod suggest that more tests are underway. Safety goggles and a lab coat sleeve are partially visible, reinforcing that the measurement is being done carefully with proper protective gear.\n\nThe backdrop is a bright, near-future chemistry lab with a solarpunk vibe: smooth, uncluttered surfaces, soft white and pastel tones, and gentle, even lighting that makes the scene photorealistic at 512×512 resolution. The composition centers the strip, beaker, and card, with the rest of the lab slightly blurred. No logos or explicit labels appear, and there are no full faces—only hands and arms—so the focus stays firmly on the action of measuring solution pH safely.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

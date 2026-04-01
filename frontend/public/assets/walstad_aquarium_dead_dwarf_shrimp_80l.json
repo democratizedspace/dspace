@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/walstad_aquarium_dead_dwarf_shrimp_80l.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Walstad aquarium with dead dwarf shrimp (80 L)",
+    "item_id": "1b63146c-5cb3-4c75-bb31-ac4bb2e2bebe",
+    "entity_type": "item",
+    "prompt": "An 80 liter Walstad aquarium after a failed shrimp transfer, shown as a mature planted low-tech freshwater tank with rich substrate, dense aquatic plants, driftwood, and a subdued, somber atmosphere. A few tiny dwarf shrimp bodies should be subtly visible on the substrate or among leaves without gore, making the ecological setback clear while preserving dignity and realism.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future aquaria aesthetic: soft naturalistic lighting, realistic glass, water, plant, and substrate textures, no logos, no readable labels, and no identifiable faces. Keep the composition clear and centered on the tank interior so it reads well as a distinct DSPACE inventory image.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

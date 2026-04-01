@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/arduino_5v_multimeter_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Measure the 5 V pin on an Arduino Uno using a digital multimeter completion note",
+    "item_id": "071bb96b-7bd4-5ba1-9d67-89ffc3c3d430",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting a successful voltage measurement of the 5 V pin on an Arduino Uno using a digital multimeter. The image shows an Arduino-style board on a silicone electronics mat, multimeter probes touching the 5 V and ground pins, and a nearby completion sheet with voltage checkmarks, simple wiring doodles, and measurement blocks implied by shapes rather than readable text. The setup should clearly communicate safe, careful electronics verification.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-bench aesthetic: soft task lighting, realistic PCB, probe, and rubber mat textures, no logos, no readable labels, and no identifiable faces. Keep the measurement scene uncluttered and centered so the note and instrument relationship is easy to understand.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/seasonal_star_hop_plan.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "seasonal star hop plan",
+    "item_id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+    "entity_type": "item",
+    "prompt": "A notebook page with a simple star-hop plan: bright star dots connected by arrows leading toward faint constellation outlines, drawn next to a planisphere and a small red flashlight. The arrows and dots are visually clear, while any notes are intentionally illegible.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future astronomy kit aesthetic: soft low-light illumination, clean surfaces, no logos, no readable text, no overlays. Make the arrowed star-hop diagram bold and centered for icon readability.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

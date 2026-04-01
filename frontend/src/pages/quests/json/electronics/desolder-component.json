@@ -1,0 +1,136 @@
+{
+    "id": "electronics/desolder-component",
+    "title": "Desolder a component",
+    "description": "Remove a through-hole resistor from a scrap PCB using a desoldering pump, flux pen and solder wick. Work in a ventilated area and wear safety goggles.",
+    "image": "/assets/quests/electronics_desolder_through_hole_component.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A resistor is misplaced on a scrap PCB. Ventilate the area, put on safety goggles, and let the soldering iron warm in its stand before heating.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "What should I grab?"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Gather the soldering iron kit, desoldering pump, solder wick, flux pen and safety goggles. Keep the iron on its stand and cords clear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "desolder",
+                    "text": "Tools ready."
+                }
+            ]
+        },
+        {
+            "id": "desolder",
+            "text": "Apply a little flux, heat one lead, trigger the desoldering pump to pull molten solder, repeat on the other lead, then use solder wick to clear residue and gently wiggle the resistor free.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "desolder-through-hole",
+                    "text": "Run the desolder sequence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Pads look clear and the resistor lifted cleanly.",
+                    "requiresItems": [
+                        {
+                            "id": "4379a2f8-7cec-4bea-949b-ad50514d36ff",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "6f2bbb48-8620-4f22-b487-d1d7db34ab22",
+                            "count": 1
+                        },
+                        {
+                            "id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+                            "count": 1
+                        },
+                        {
+                            "id": "dad7f853-ccc9-40be-b226-89272708db84",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rework",
+                    "text": "Pad is still bridged or component won't release."
+                }
+            ]
+        },
+        {
+            "id": "rework",
+            "text": "Pause and recover safely: return the iron to its stand, add fresh flux, and wick only for 2-3 seconds per pass to avoid lifting pads. If a pad starts discoloring, stop heating and let the board cool for one minute before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "desolder",
+                    "text": "Board cooled; retry with shorter heat cycles."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: both pads must be open, no copper trace damage, and no loose solder balls. This before/after state proof is required before cleanup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification passed and station is powered down."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Clean the tip, unplug the iron, let it cool, and recycle the scrap PCB.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All cleaned up."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "f6bb2c1a-0001-46bd-998a-388a488b5b5c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/solder-wire"],
+    "hardening": {
+        "passes": 3,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-desolder-component-hardening-2025-08-13",
+                "date": "2025-08-13",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-15",
+                "date": "2025-08-15",
+                "score": 78
+            },
+            {
+                "task": "codex-quest-hardening-2025-10-23",
+                "date": "2025-10-23",
+                "score": 80
+            }
+        ]
+    }
+}

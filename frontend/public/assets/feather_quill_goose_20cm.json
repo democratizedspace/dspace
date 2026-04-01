@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/feather_quill_goose_20cm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "feather quill",
+    "item_id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+    "entity_type": "item",
+    "prompt": "A single 20 cm goose feather quill lies diagonally across a smooth writing desk, its natural white feather slightly curved and its stainless steel nib gleaming at the tip. The nib is finely pointed and clearly metal, with a small reservoir groove visible, and a faint trace of dried black ink can be seen near the end to show it has been used. In the background, slightly out of focus, sits a small glass bottle of black ink and a sheet of blank, high-quality paper, emphasizing that this is a traditional dip pen for calligraphy.\n\nThe environment is the same near-future solarpunk writing station, with a clean composite surface, soft neutral colors, and a gentle pool of cinematic light illuminating the feather’s texture and metallic sheen of the nib in a photorealistic 512×512 composition. A muted digital interface or smart notebook may be hinted at in the background, blending classic calligraphy tools with modern tech. There are no brand logos or readable text anywhere, and no human figures are visible; the focus remains entirely on the quill and its immediate surroundings.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

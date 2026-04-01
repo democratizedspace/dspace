@@ -1,0 +1,147 @@
+{
+    "id": "programming/temp-logger",
+    "title": "Log Temperature Data",
+    "description": "Write a simple script that records hourly temperature readings.",
+    "image": "/assets/quests/programming_temperature_logger_script.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've taken single readings. Now build a logger with evidence gates: collect a full run, interpret bounds, and recover if drift appears.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Start logger setup"
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Build the divider and flash the sketch. Safety check: secure power/USB strain relief before long logging windows to prevent corrupted samples.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-thermistor-logger",
+                    "text": "Wire the Uno and thermistor"
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "Rig is wired and sketch uploaded",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Run hourly capture for a full window and export CSV. Record min/max and note any gaps so interpretation is deterministic.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Collect and export the log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "CSV captured for review",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: acceptable indoor range is 15-30°C with no multi-hour gaps. If out-of-range spikes or gaps appear, classify as anomaly and correct before finish.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Detected spikes, dropouts, or long gaps"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Range and cadence pass review",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: check wiring and USB stability, then re-run capture for another window before closing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Re-capture after wiring corrections"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "New CSV ready for re-test",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Your logger now includes measurable pass criteria and an anomaly response loop.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Logger validated"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d2b39a23-cdfb-428d-a6ed-694ff0c0fc11",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/thermistor-reading"],
+    "hardening": {
+        "passes": 2,
+        "score": 95,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-hardening-2025-12-01",
+                "date": "2025-12-01",
+                "score": 92
+            },
+            {
+                "task": "codex-hardening-2025-12-15",
+                "date": "2025-12-15",
+                "score": 95
+            }
+        ]
+    }
+}

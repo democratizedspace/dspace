@@ -2,7 +2,7 @@
     "id": "ubi/basicincome",
     "title": "Earn basic income",
     "description": "Learn about the basic income system and how to earn dUSD.",
-    "image": "/assets/quests/basicincome.jpg",
+    "image": "/assets/quests/ubi_basic_income_overview.jpg",
     "npc": "/assets/npc/dChat.jpg",
     "start": "start",
     "dialogue": [
@@ -24,7 +24,7 @@
         },
         {
             "id": "earn",
-            "text": "Fantastic! Welcome to the wonderful world of UBI - Universal Basic Income! You can receive some dUSD daily, courtesy of the metaguild and its members.",
+            "text": "Fantastic! Welcome to the wonderful world of UBI - Universal Basic Income! You can receive some dUSD daily. When the Metaguild launches, its members will help fund the pool.",
             "options": [
                 {
                     "type": "goto",
@@ -40,7 +40,7 @@
         },
         {
             "id": "what",
-            "text": "That's right! Thanks to the metaguild and its generous members, we can provide you with a daily UBI in the form of dUSD. Isn't it great?",
+            "text": "That's right! The current system seeds the pool, and once the Metaguild launches, its members will help sustain daily UBI in the form of dUSD. Isn't it great?",
             "options": [
                 {
                     "type": "goto",
@@ -56,7 +56,7 @@
         },
         {
             "id": "metaguild",
-            "text": "The metaguild is a guild that all DSPACE players will eventually join later in their adventures. It's a guild that is building a global tech tree, from things like hydroponics and mycology all the way to rocketry and simulations.",
+            "text": "The Metaguild is a planned guild that players will eventually be able to join. It's envisioned as a shared tech tree, spanning everything from hydroponics and mycology all the way to rocketry and simulations.",
             "options": [
                 {
                     "type": "goto",
@@ -88,7 +88,7 @@
         },
         {
             "id": "source",
-            "text": "The money comes from donations made by generous members of the metaguild. There's a leaderboard that gamifies donations (although it's still not quite ready to show you yet). Additionally, any ecosystem tax (for example, having too much dCarbon, a token that accrues whenever you release carbon dioxide into the atmosphere) contributes to the UBI pool.",
+            "text": "Right now, the UBI pool is system-funded. Once guilds launch in a future release, donations from Metaguild members will feed the pool, and a leaderboard will highlight the biggest supporters. Additionally, any ecosystem tax (for example, having too much dCarbon, a token that accrues whenever you release carbon dioxide into the atmosphere) contributes to the UBI pool.",
             "options": [
                 {
                     "type": "goto",
@@ -123,6 +123,11 @@
                     "text": "This process right here?"
                 },
                 {
+                    "type": "goto",
+                    "goto": "earn",
+                    "text": "Can we quickly review how UBI funding works before I wrap up?"
+                },
+                {
                     "type": "finish",
                     "text": "Cool, I've got the gist! See you around, dChat!"
                 }
@@ -131,15 +136,19 @@
     ],
     "rewards": [
         {
-            "id": "24",
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
             "count": 100
         },
         {
-            "id": "72",
+            "id": "016d4758-d114-4e04-9e6a-853db93a2eee",
             "count": 100
         }
     ],
-    "requiresQuests": [
-        "3dprinter/start"
-    ]
+    "requiresQuests": ["3dprinting/start"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
 }

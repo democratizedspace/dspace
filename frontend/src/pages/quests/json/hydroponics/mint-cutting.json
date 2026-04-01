@@ -1,0 +1,155 @@
+{
+    "id": "hydroponics/mint-cutting",
+    "title": "Clone Mint Cutting",
+    "description": "Stage a mint clone from setup proof to rooted outcome, with recovery loops for wilt or rot.",
+    "image": "/assets/quests/hydroponics_mint_cutting_clone.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Mint cloning works when we prove setup quality first, then prove recovery and root success later.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage-setup",
+                    "text": "Show me the staged propagation flow."
+                }
+            ]
+        },
+        {
+            "id": "stage-setup",
+            "text": "Prepare a clean setup: hydrated plug, fresh water, and PPE so the stem isn't contaminated during the cut.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plant",
+                    "text": "Setup is ready for cutting.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plant",
+            "text": "Trim a healthy mint tip, place it in the soaked plug, and keep humidity steady while roots start.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "clone-mint-cutting",
+                    "text": "Run mint cutting setup process."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Cutting is set; move to root outcome checks.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Outcome gate: look for turgid leaves and early white roots. If the cutting wilts, recover before counting it as a success.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cutting is upright with visible root start.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 1
+                        },
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stress-check",
+                    "text": "Wilting, stem rot, or dry plug spotted."
+                }
+            ]
+        },
+        {
+            "id": "stress-check",
+            "text": "Stress contingency: if leaves collapse or rot odor appears, pause propagation for 12 hours, sanitize tools, and verify humidity before choosing recovery.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Pause complete; run a recovery recut and re-soak."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage-setup",
+                    "text": "Abort this clone attempt and restart with a fresh stem tomorrow."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: recut above damaged tissue, re-soak the plug, then re-stage the cutting. Abort if rot spreads after retry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "clone-mint-cutting",
+                    "text": "Run recovery cutting pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Recovery complete; re-check root and leaf condition.",
+                    "requiresItems": [
+                        {
+                            "id": "545aeb15-7e8b-489d-be4a-af2a59f447e1",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Beautiful propagation. You closed both setup and outcome gates, so this clone is ready for the next growth cycle.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Mint clone established."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/plug-soak"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

@@ -1,0 +1,306 @@
+{
+    "id": "woodworking/workbench",
+    "title": "Build a simple workbench",
+    "description": "Upgrade from a makeshift surface to a level, clamped-together workbench that can handle real projects.",
+    "image": "/assets/quests/woodworking_workbench_build.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Cedar here. A stable bench is your safety baseline for every future cut, so we'll build and verify it in stages.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "What do I need?"
+                },
+                {
+                    "type": "goto",
+                    "goto": "layout-plan",
+                    "text": "Show me the build sequence",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "We need pine boards, wood glue, a handsaw, and a tape measure. I can loan what you are missing.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Issue me the starter kit"
+                },
+                {
+                    "type": "goto",
+                    "goto": "layout-plan",
+                    "text": "I've got the tools and stock",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "layout-plan",
+            "text": "Dry-fit the top rectangle first, then legs, then lower stretchers. Measure both diagonals before glue-up.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build-top",
+                    "text": "Layout marked and measured",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "I still need gear"
+                }
+            ]
+        },
+        {
+            "id": "build-top",
+            "text": "Glue and clamp the top frame. Keep it square while curing so the legs seat cleanly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "leg-fit",
+                    "text": "Top frame cured and square",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "glue-recovery",
+                    "text": "Corners drifted out of square"
+                }
+            ]
+        },
+        {
+            "id": "glue-recovery",
+            "text": "Loosen clamps, re-square using diagonal checks, and reglue only after both diagonals match.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build-top",
+                    "text": "Retry clamping sequence"
+                },
+                {
+                    "type": "goto",
+                    "goto": "leg-fit",
+                    "text": "Square restored",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 4
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "leg-fit",
+            "text": "Attach legs and stretchers, then check for wobble by pressing each corner. Shim and re-clamp if needed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "level-check",
+                    "text": "Frame stands without wobble",
+                    "requiresItems": [
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "wobble-fix",
+                    "text": "Bench rocks on one corner"
+                }
+            ]
+        },
+        {
+            "id": "wobble-fix",
+            "text": "Mark the high corner, trim lightly, then retest on a flat floor. Do not force level with extra glue blobs.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "leg-fit",
+                    "text": "Trimmed and reassembled"
+                },
+                {
+                    "type": "goto",
+                    "goto": "level-check",
+                    "text": "Wobble resolved",
+                    "requiresItems": [
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "level-check",
+            "text": "Safety/ops gate: verify level front-to-back and side-to-side before loading tools on top.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "claim",
+                    "text": "Level checks passed and structure feels solid",
+                    "requiresItems": [
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "wobble-fix",
+                    "text": "Still not level, adjust again"
+                }
+            ]
+        },
+        {
+            "id": "claim",
+            "text": "Bench passes verification. Claim your workbench item so later quests can require it explicitly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "build-workbench",
+                    "text": "Assemble and level the workbench."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Workbench item added",
+                    "requiresItems": [
+                        {
+                            "id": "af77fbf2-30bc-499c-a95c-5daa47a47509",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work. You now have a square, level bench ready for repeatable builds.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Cedar!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "0d4a7b77-f241-4c19-9365-c74647066802",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["woodworking/step-stool"],
+    "hardening": {
+        "passes": 1,
+        "score": 96,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-harden-workbench-2026-03-04",
+                "date": "2026-03-04",
+                "score": 96
+            }
+        ]
+    }
+}

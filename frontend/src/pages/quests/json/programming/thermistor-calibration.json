@@ -1,0 +1,209 @@
+{
+    "id": "programming/thermistor-calibration",
+    "title": "Calibrate a Thermistor",
+    "description": "Use a 10k thermistor to measure temperature accurately with an Arduino script.",
+    "image": "/assets/quests/programming_thermistor_calibration_script.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Ready to get precise temperature readings? Let's calibrate a thermistor together!",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Sounds good"
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Wire the thermistor with a 10k resistor as a voltage divider so the microcontroller can read it. Power down before touching leads to avoid short spikes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Capture a baseline reading"
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Hardware ready",
+                    "requiresItems": [
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        },
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Baseline is unstable"
+                }
+            ]
+        },
+        {
+            "id": "rewire",
+            "text": "Troubleshoot first: confirm resistor value, inspect jumper seating, and keep thermistor leads insulated from metal surfaces before retrying baseline capture.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Re-run baseline capture"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Wiring corrected, retry calibration setup",
+                    "requiresItems": [
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Record baseline room temperature from your trusted reference before fitting coefficients. This anchor prevents calibrating to a bad assumption.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Baseline noted and reference stable",
+                    "requiresItems": [
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Upload a sketch that converts analog reading into Celsius using Steinhart-Hart coefficients, then adjust constants until error is within tolerance.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Run a post-adjust sample"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Adjusted values look consistent",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "drift",
+                    "text": "Readings still drift outside tolerance"
+                }
+            ]
+        },
+        {
+            "id": "drift",
+            "text": "If drift persists, roll back to last-known-good constants, cool the sensor to room equilibrium, and retest before trying new coefficients.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-thermistor-read",
+                    "text": "Retest after rollback"
+                },
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Retry coefficient adjustment",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final verification: repeat two readings five minutes apart. If both stay in tolerance, calibration is production-safe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Calibration passes repeated verification",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "5a6bb713-ed34-4463-94ee-cfe7b8faa45c",
+                            "count": 1
+                        },
+                        {
+                            "id": "ffe0b74a-f111-4d66-b4c3-d82965a976ac",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "drift",
+                    "text": "Verification failed, return to recovery path"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! Your calibrated thermistor will keep future projects in the comfort zone.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sweet"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["programming/hello-sensor"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

@@ -1,0 +1,164 @@
+{
+    "id": "completionist/catalog",
+    "title": "Catalog Your Trophy",
+    "description": "Log your Completionist Award II with a recorded serial, location, and audit-ready timestamp.",
+    "image": "/assets/quests/completionist_catalog_logbook.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want to log that shiny award in your inventory so future you can find it? We'll capture serial evidence and file a clean audit trail.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Yeah, let's catalog it",
+                    "requiresItems": [
+                        {
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Set the trophy on a clear surface and prep your logbook entry. Minimum fields: serial, display location, date, and capture method.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "record-completionist-award-entry",
+                    "text": "Capture the log entry with a quick photo"
+                },
+                {
+                    "type": "goto",
+                    "goto": "review",
+                    "text": "I have an entry ready for review",
+                    "requiresItems": [
+                        {
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                            "count": 1
+                        },
+                        {
+                            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "review",
+            "text": "Review before filing. A valid log must include serial, location, date, and at least one non-public note about condition and lighting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "audit-window",
+                    "text": "Entry includes all required fields",
+                    "requiresItems": [
+                        {
+                            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "fix-entry",
+                    "text": "Missing fields or blurry photo, I need to correct it"
+                }
+            ]
+        },
+        {
+            "id": "audit-window",
+            "text": "Now classify status: pass if fields are complete and readable. Flag anomaly if serial is partial, location ambiguous, or timestamp mismatched.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Audit pass: complete and readable record",
+                    "requiresItems": [
+                        {
+                            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "incident-response",
+                    "text": "Audit anomaly found, start corrective response"
+                }
+            ]
+        },
+        {
+            "id": "incident-response",
+            "text": "Good catch. Keep full serials private, patch missing metadata, and log what changed so the next weekly audit can verify correction.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "record-completionist-award-entry",
+                    "text": "Re-record and annotate corrected entry"
+                },
+                {
+                    "type": "goto",
+                    "goto": "review",
+                    "text": "Corrections done, rerun review",
+                    "requiresItems": [
+                        {
+                            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "fix-entry",
+            "text": "Re-shoot in steady light and keep detailed proof in your private logbook instead of public channels.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "record-completionist-award-entry",
+                    "text": "Re-record the entry with complete details"
+                },
+                {
+                    "type": "goto",
+                    "goto": "review",
+                    "text": "Retake complete, review again",
+                    "requiresItems": [
+                        {
+                            "id": "78896eea-e4a6-40d1-9b93-522482b71f4f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Future you will thank present you for maintaining an audit-ready trophy trail.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Log filed and searchable"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "1394c366-5078-49cf-b24e-c748e8428234",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["completionist/polish"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

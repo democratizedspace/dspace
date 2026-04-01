@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydroponics_tub_nutrient_deficient_plants.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "hydroponics tub (nutrient deficient)",
+    "item_id": "dc765172-c2e4-40dd-bb5a-a399bf6d6d77",
+    "entity_type": "item",
+    "prompt": "A lidded hydroponic tub with multiple net pots is shown from above, but the leafy plants in the pots are pale and slightly yellowed, with a few curling leaves that clearly suggest nutrient deficiency. The tub lid and layout match a typical beginner system, yet the solution visible through a small access opening looks slightly cloudy or under-mixed. Tubing and an air line are attached, but the overall impression is that the system is running with inadequate nutrients, making the plants look stressed rather than vibrant.\n\nThe scene takes place in a near-future solarpunk grow nook where other nearby plants look healthier in the blurred background, contrasting with the struggling tub in the foreground. Soft, diffused lighting gives the 512\u00d7512 image a photorealistic yet gently stylized feel, with no logos or readable text on the tub. The composition centers on the discolored foliage and the top of the tub, clearly signaling a nutrient-deficient hydroponic setup while the rest of the room remains out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

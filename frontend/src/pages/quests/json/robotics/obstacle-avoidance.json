@@ -1,0 +1,160 @@
+{
+    "id": "robotics/obstacle-avoidance",
+    "title": "Add Obstacle Avoidance",
+    "description": "Give your line follower the awareness to pause, scan, and steer around boxes without leaving the track.",
+    "image": "/assets/quests/robot_obstacle_avoidance.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your line follower works! Now we'll add obstacle handling that keeps people, pets, and hardware safe while staying on mission.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Prioritize safe slowdowns and clean bypasses."
+                },
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Prioritize faster reroutes with tighter control."
+                }
+            ]
+        },
+        {
+            "id": "strategy",
+            "text": "Pick your detection strategy. Conservative mode slows early for safer bypasses; agile mode reacts later but needs cleaner tuning.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Use conservative mode first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Use agile mode with tighter thresholds."
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Mount the ultrasonic sensor up front, route cables clear of wheels, and implement a stop-scan-turn routine.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "integrate-obstacle-avoidance-sensor",
+                    "text": "Install and calibrate ultrasonic stop-scan-turn behavior with guarded bench tests (about 2 hours)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "It false-triggers or clips obstacles."
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Safety gate: set a hard stop distance and verify behavior near table edges and tight corners before full-speed runs.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "ops-check",
+                    "text": "Safety checks pass; run operator lockout checks.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Need to retune stop distance first."
+                }
+            ]
+        },
+        {
+            "id": "ops-check",
+            "text": "Operational check: confirm remote kill switch response and no-go zones around bystanders before obstacle-course validation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Ops checks pass; run the obstacle course.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Kill switch drill failed; return to troubleshooting."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: check sensor angle, filter noisy pings, and lower turn speed. Re-run a short two-obstacle trial after each fix.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Switch strategy and retune."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Stability improved; rerun stop-distance safety checks."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: complete three clean obstacle-course runs without contact, logging stop distance and reroute reason each run.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Three clean runs logged; obstacle avoidance is field-ready.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Runs weren't clean; head back to troubleshooting and try again."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "9018feac-7213-4eef-9654-b06dbd9404ea",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["robotics/line-follower", "robotics/ultrasonic-rangefinder"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

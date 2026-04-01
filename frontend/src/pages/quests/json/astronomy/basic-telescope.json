@@ -1,0 +1,239 @@
+{
+    "id": "astronomy/basic-telescope",
+    "title": "Assemble a Simple Telescope",
+    "description": "Use 50 mm and 20 mm magnifying lenses, masking tape, a cardboard mailing tube and a camera tripod to build a simple refractor for viewing Jupiter's moons. Work in the shade and never aim at the Sun.",
+    "image": "/assets/quests/simple_cardboard_telescope_assembly.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here. Gather a 50 mm lens, 20 mm lens, mailing tube, masking tape, and a camera tripod. Inspect for chips, work in shade, wear eye protection, and keep the tube away from the Sun. Ready?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "I'm ready.",
+                    "requiresItems": [
+                        {
+                            "id": "0254a829-9002-4a75-8af2-03cd961601da",
+                            "count": 1
+                        },
+                        {
+                            "id": "7aafe032-86e2-449e-8e25-8148f8c58c17",
+                            "count": 1
+                        },
+                        {
+                            "id": "2794503d-fbe7-4031-a63e-deac531f9784",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        },
+                        {
+                            "id": "13aaff4f-e4ba-4e4a-b21b-5852b118a0ed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Choose your assembly path: direct tube build or pre-mount both lenses before seating the tube. Keep fingers clear of glass edges and keep the scope capped until night use.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-basic-telescope",
+                    "text": "Build the direct tube assembly."
+                },
+                {
+                    "type": "goto",
+                    "goto": "alternate-build",
+                    "text": "Use the staged pre-mount method first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Assembly complete; verify image quality.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "alternate-build",
+            "text": "Pre-seat each lens with light tape, then secure both ends after checking the optical axis. If wobble appears, return to direct build and retighten before field use.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-basic-telescope",
+                    "text": "Run staged pre-mount assembly now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Staged build done; start verification.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "The mount still shifts - back to direct build checks."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Point at Jupiter only after sunset. Confirm moons are distinct points, tripod stability holds for one full minute, and record the verification in your mission logbook.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Record the verification notes in the logbook."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-safety",
+                    "text": "Verified: stable tripod and clear moon points logged.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Image is blurry or the mount drifts."
+                }
+            ]
+        },
+        {
+            "id": "verify-safety",
+            "text": "Final safety gate: cap both optics, confirm no lens chips/loose tape, and ensure the tube is never aligned with dawn/sunrise while packed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Safety checklist complete; telescope is stored safely.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I found a safety fault; return to troubleshooting."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Pause observing. Re-cap the objective, retension tripod joints, and re-seat the eyepiece. If glass is chipped or loose, stop and rebuild before any further viewing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Rebuild safely from the assembly step."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Hardware corrected - re-run verification."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent craftsmanship. Regular stargazing sharpens navigation. Cap both lenses before storing and keep the telescope away from heat and direct sunlight.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Nova."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+            "count": 1
+        },
+        {
+            "id": "f293d45c-49bd-4c53-a73f-88233c5b6acc",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/observe-moon"],
+    "hardening": {
+        "passes": 5,
+        "score": 96,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-basic-telescope-2025-08-03",
+                "date": "2025-08-03",
+                "score": 60
+            },
+            {
+                "task": "codex-basic-telescope-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-basic-telescope-2025-08-05",
+                "date": "2025-08-05",
+                "score": 92
+            },
+            {
+                "task": "codex-quest-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 94
+            },
+            {
+                "task": "codex-basic-telescope-2025-08-14",
+                "date": "2025-08-14",
+                "score": 96
+            }
+        ]
+    }
+}

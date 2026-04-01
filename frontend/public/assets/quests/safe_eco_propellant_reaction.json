@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/safe_eco_propellant_reaction.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/safe-reaction.json",
+    "item_name": "Demonstrate a Safe Chemical Reaction",
+    "item_id": "chemistry/safe-reaction",
+    "entity_type": "quest",
+    "prompt": "A small, clearly benign chemistry setup sits on a sturdy lab table: a single glass beaker containing a softly bubbling, pale-colored solution is placed on a low-profile stir plate, with a magnetic stir bar barely visible inside. Colorful but non-threatening reagents in small bottles with plain, unreadable labels sit off to the side, and a nitrile-gloved hand is shown gently adjusting a knob or dropping in a final few drops from a plastic pipette. A simple reaction diagram sketched on a tablet or e-ink pad (no text, just arrows and icons) hints that this is a teaching demonstration related to eco-friendly propellant basics rather than anything dangerous or explosive.\n\nThe lab has a bright, near-future solarpunk aesthetic, with natural light from a window, soft indirect LED strips, and lots of clean white and soft green surfaces, rendered photorealistically in a 512×512 frame. The composition is calm and spacious, with no visible flames, no pressurized tanks, and no brand logos or readable text; all equipment looks modern but modest in scale. Only hands and arms are visible, emphasizing careful supervision and safety, and the overall mood is one of curiosity and gentle experimentation rather than risk.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

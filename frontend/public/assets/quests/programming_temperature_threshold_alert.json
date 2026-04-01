@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_temperature_threshold_alert.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/temp-alert.json",
+    "item_name": "Set Temperature Alert",
+    "item_id": "programming/temp-alert",
+    "entity_type": "quest",
+    "prompt": "On a clean desk, a laptop terminal displays a running Python script that periodically prints the latest temperature reading as abstract numbers and occasionally shows a bold warning line accompanied by a small alert icon, indicating that a threshold has been crossed. Next to the laptop is a small single-board computer connected to a thermistor sensor, with a status LED that lights up in sync with the alert condition. A notebook sketch shows a horizontal threshold line on a temperature graph with spikes poking above it, visually reinforcing the trigger behavior.\n\nThe scene follows a near-future solarpunk coding-lab aesthetic: soft, cool lighting, pale surfaces, and a couple of plants or solar-themed objects blurred in the background. The 512×512 photorealistic composition centers on the terminal output, the sensor hardware, and the threshold sketch, with everything else slightly out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only a hand near the keyboard—emphasizing that the script warns the user when the sensor crosses a defined temperature threshold.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

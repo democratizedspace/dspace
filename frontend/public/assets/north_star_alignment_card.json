@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/north_star_alignment_card.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "north-star alignment card",
+    "item_id": "8615b34c-f00e-4258-b94a-67bd58d11ece",
+    "entity_type": "item",
+    "prompt": "A durable field orientation card with a compact night-navigation layout, showing a Polaris lock procedure through arrows, sightline diagrams, bearing marks, and simple landmark sketches. The card sits on a rugged surface beside a small compass, improvised sight tube, and flashlight, making it clear this is a practical nighttime alignment aid used to establish reliable orientation in the field. The card should look weather-resistant and frequently handled.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future expedition aesthetic: cool evening light, realistic laminated card texture, subtle wear, no logos, no readable text, and no identifiable faces. Keep the composition crisp and uncluttered so the card reads as a specific navigation tool rather than generic astronomy paperwork.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

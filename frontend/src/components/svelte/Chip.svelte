@@ -1,85 +1,266 @@
 <script>
-    export let href, text, onClick, disabled = false, inverted = false, red = false;
+    import { createEventDispatcher } from 'svelte';
+
+    export let href,
+        text,
+        onClick = undefined,
+        disabled = false,
+        inverted = false,
+        red = false,
+        hazard = false,
+        cheat = false,
+        textBelowSlot = false,
+        pressed = undefined,
+        dataTestId = undefined;
+
+    const dispatch = createEventDispatcher();
+    const isStaticContainer = !href && typeof onClick !== 'function' && !text;
+
+    const handleClick = (event) => {
+        if (disabled === true) {
+            event.preventDefault();
+            return;
+        }
+
+        if (typeof onClick === 'function') {
+            onClick(event);
+        }
+        dispatch('click', event);
+    };
 </script>
 
 <nav>
-	{#if href}
-		<a href={href}>{text}</a>
-	{:else}
-		<button class:disabled={disabled === true} class:inverted={inverted === true} class:red={red === true} on:click={onClick}>
-			<div class="slot">
-				<slot></slot>
-			</div>
-			<p>{text}</p>
-		</button>
-	{/if}
+    {#if href}
+        <a
+            href={disabled === true ? undefined : href}
+            class:disabled={disabled === true}
+            class:inverted={inverted === true}
+            class:red={red === true}
+            class:hazard={hazard === true}
+            class:cheat={cheat === true}
+            class:text-below-slot={textBelowSlot === true}
+            aria-disabled={disabled === true}
+            tabindex={disabled === true ? -1 : undefined}
+            data-testid={dataTestId}
+            on:click={handleClick}
+        >
+            <div class="slot">
+                <slot />
+            </div>
+            <p class="chip-text">{text}</p>
+        </a>
+    {:else if isStaticContainer}
+        <div
+            class="chip-container static-container"
+            class:disabled={disabled === true}
+            class:inverted={inverted === true}
+            class:red={red === true}
+            class:hazard={hazard === true}
+            class:cheat={cheat === true}
+            data-testid={dataTestId}
+        >
+            <div class="slot">
+                <slot />
+            </div>
+        </div>
+    {:else}
+        <button
+            type="button"
+            class:disabled={disabled === true}
+            class:inverted={inverted === true}
+            class:red={red === true}
+            class:hazard={hazard === true}
+            class:cheat={cheat === true}
+            class:text-below-slot={textBelowSlot === true}
+            on:click={handleClick}
+            disabled={disabled === true}
+            aria-disabled={disabled === true}
+            aria-pressed={pressed}
+            data-testid={dataTestId}
+        >
+            <div class="slot">
+                <slot />
+            </div>
+            <p class="chip-text">{text}</p>
+        </button>
+    {/if}
 </nav>
 
 <style>
-	nav {
-		text-align: center;
-		display: inline-flex;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
+    nav {
+        text-align: center;
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 
-	nav a, nav button {
-		opacity: 0.8;
-		background-color: #007006;
-		border-radius: 0.4rem;
-		color: white;
-		text-decoration: none;
-		flex-direction: row;
-		margin: 1px;
-		padding: 5px;
-		text-align: center;
+    nav a,
+    nav button {
+        display: flex;
+        opacity: 0.8;
+        background-color: #007006;
+        border-radius: 0.4rem;
+        color: white;
+        text-decoration: none;
+        flex-direction: row;
+        margin: 1px;
+        padding: 5px;
+        text-align: center;
         -webkit-transition: 200ms linear;
         transition: 200ms linear;
-	}
+    }
 
-	nav button {
-		border: none;
-		padding: 6px 5px;
-		font-size: 1em;
-	}
+    nav .chip-container {
+        display: flex;
+        background-color: #007006;
+        border-radius: 0.4rem;
+        color: white;
+        text-decoration: none;
+        flex-direction: row;
+        margin: 1px;
+        padding: 5px;
+        text-align: center;
+        -webkit-transition: 200ms linear;
+        transition: 200ms linear;
+    }
 
-	nav a:hover, nav button:hover {
-		opacity: 1;
-	}
+    nav .chip-container {
+        -webkit-user-select: text;
+        user-select: text;
+    }
 
-	nav button:hover {
-		cursor: pointer;
-	}
+    nav .chip-container.static-container {
+        opacity: 1;
+    }
 
-	.red {
-		color: rgb(255, 94, 0);
-	}
+    nav .chip-container.static-container.inverted {
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    }
 
-	.inverted {
-		background-color: #68d46d;
-		color: black;
-	}
+    nav button {
+        border: none;
+        padding: 6px 5px;
+        font-size: 1em;
+    }
 
-	.disabled {
-		background-color: #575f57;
-		color: #8a8a8a;
-		opacity: 1;
-	}
+    nav a:hover,
+    nav button:hover {
+        opacity: 1;
+    }
 
-	.disabled:hover {
-		cursor: default;
-	}
+    nav a:focus-visible,
+    nav button:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
 
-	p {
-		margin: 0;
-	}
+    nav button:hover {
+        cursor: pointer;
+    }
 
-	.slot {
-		margin-right: 5px;
-		/* text align left */
-		display: flex;
-		/* bold */
-		font-weight: 1000;
-	}
+    nav a.red,
+    nav button.red,
+    nav .chip-container.red {
+        color: rgb(255, 94, 0);
+    }
 
+    nav a.hazard:not(.disabled),
+    nav button.hazard:not(.disabled),
+    nav .chip-container.hazard:not(.disabled) {
+        background-color: #9b1c31;
+        color: white;
+        opacity: 1;
+    }
+
+    nav a.hazard:not(.disabled):hover,
+    nav button.hazard:not(.disabled):hover,
+    nav .chip-container.hazard:not(.disabled):hover {
+        opacity: 0.9;
+    }
+
+    nav a.inverted,
+    nav button.inverted,
+    nav .chip-container.inverted {
+        background-color: #68d46d;
+        color: black;
+    }
+
+    nav a.inverted.red,
+    nav button.inverted.red,
+    nav .chip-container.inverted.red {
+        color: rgb(255, 94, 0);
+    }
+
+    nav a.cheat,
+    nav button.cheat,
+    nav .chip-container.cheat {
+        background-color: transparent;
+        border: 2px dashed #f97316;
+        color: #f97316;
+        box-shadow:
+            0 0 0 1px rgba(249, 115, 22, 0.35),
+            0 8px 16px rgba(0, 0, 0, 0.25);
+        opacity: 1;
+    }
+
+    nav a.cheat:not(.disabled):hover,
+    nav button.cheat:not(.disabled):hover,
+    nav .chip-container.cheat:not(.disabled):hover {
+        background-color: rgba(249, 115, 22, 0.12);
+        color: #fff7ed;
+        border-color: #fb923c;
+        box-shadow:
+            0 0 0 1px rgba(251, 146, 60, 0.55),
+            0 10px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    nav a.disabled,
+    nav button.disabled,
+    nav .chip-container.disabled {
+        background-color: #575f57;
+        color: #8a8a8a;
+        opacity: 1;
+    }
+
+    nav a.disabled:hover,
+    nav button.disabled:hover,
+    nav .chip-container.disabled:hover {
+        cursor: default;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    .chip-text {
+        line-height: 1.25;
+    }
+
+    nav :is(a, button).text-below-slot {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: left;
+        gap: 6px;
+    }
+
+    nav :is(a, button).text-below-slot .chip-text {
+        padding-top: 6px;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    nav :is(a, button).text-below-slot.disabled .chip-text {
+        border-top-color: rgba(255, 255, 255, 0.16);
+    }
+
+    nav :is(a, button).text-below-slot .slot {
+        margin-right: 0;
+    }
+
+    .slot {
+        margin-right: 5px;
+        /* text align left */
+        display: flex;
+        /* bold */
+        font-weight: 1000;
+    }
 </style>

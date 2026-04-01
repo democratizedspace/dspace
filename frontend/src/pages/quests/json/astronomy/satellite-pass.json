@@ -1,0 +1,273 @@
+{
+    "id": "astronomy/satellite-pass",
+    "title": "Track a Satellite Pass",
+    "description": "Plan and track a satellite pass with weather fallback, safety preflight, anomaly classification, and logged evidence.",
+    "image": "/assets/quests/satellite_pass_tracking_scope.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A bright satellite is passing tonight. We'll plan first, run a safety preflight, then track with fallback if visibility collapses.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Let's plan the pass."
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Use your chart and app to note expected path, altitude, and safe observation spot before setup.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "draft-seasonal-star-plan",
+                    "text": "Pass plan drafted in the logbook."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-preflight",
+                    "text": "Plan recorded and route is clear.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Cloud deck or glare may block this pass."
+                }
+            ]
+        },
+        {
+            "id": "weather-hold",
+            "text": "Fallback branch: hold position, keep lights low, and check the next visible pass window instead of forcing a bad session.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Recheck the next pass and update the plan."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-preflight",
+                    "text": "Sky cleared enough\u2014run preflight before setup.",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-preflight",
+            "text": "Safety preflight: confirm clear footing, dark-adapted lighting, and no overhead obstructions before moving to setup.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Preflight complete and hazard check passed.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Conditions still marginal\u2014hold for next window."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Level the tripod, verify clear footing, and start with low magnification to acquire the target smoothly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Reference stars confirmed for the tracking corridor."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe",
+                    "text": "Setup is stable and ready.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Tripod drift or alignment error detected."
+                },
+                {
+                    "type": "goto",
+                    "goto": "classify-anomaly",
+                    "text": "Vibration or glare hazard detected."
+                }
+            ]
+        },
+        {
+            "id": "observe",
+            "text": "Track across the sky and record entry azimuth, peak altitude estimate, and exit direction in your mission log.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Tracking notes recorded."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Pass observed with full notes.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 5.0
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "classify-anomaly",
+                    "text": "Lost the satellite mid-pass or data fields are inconsistent."
+                }
+            ]
+        },
+        {
+            "id": "classify-anomaly",
+            "text": "Classify the issue before retrying: tracking drift, cloud interruption, or safety hazard. Apply the matching corrective action and re-verify.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Tracking drift\u2014realign and retry."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Cloud interruption\u2014defer to the next pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Safety hazard persists\u2014abort run with a caution note."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: reset to low magnification, realign using reference stars, and retry only if paths are safe and unobstructed.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-preflight",
+                    "text": "Realigned\u2014run preflight and retry the pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-hold",
+                    "text": "Visibility degraded; defer to next pass window."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: complete only when all three fields (entry, peak, exit) are logged; otherwise run troubleshooting and retry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "All fields logged and coherent.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 5.0
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "classify-anomaly",
+                    "text": "One or more fields missing\u2014classify anomaly then retry."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great tracking run. You handled weather fallback, logged evidence, and used the recovery loop instead of guessing.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "That was fun!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+            "count": 1
+        },
+        {
+            "id": "f537cbd4-e5f0-4ef9-a776-b126894988cf",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/meteor-shower"],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+echo "Checking commit message format"
+# Check if we're on Windows and use PowerShell if available
+if command -v pwsh >/dev/null 2>&1; then
+  pwsh -NoProfile -ExecutionPolicy Bypass -File .husky/commit-msg.ps1 "$1"
+elif command -v powershell >/dev/null 2>&1; then
+  powershell -NoProfile -ExecutionPolicy Bypass -File .husky/commit-msg.ps1 "$1"
+else
+  echo "PowerShell not found, falling back to bash script"
+  # Get the commit message
+  MSG=$(cat "$1")
+
+  # Check if commit message starts with a type followed by a colon
+  # Types can be: feat, fix, docs, style, refactor, test, chore
+  if ! echo "$MSG" | grep -qE "^(feat|fix|docs|style|refactor|test|chore)(\([a-z]+\))?!?: .+"; then
+    echo "❌ Invalid commit message format."
+    echo "Commit message must start with a type (feat, fix, docs, style, refactor, test, chore) followed by a colon and a space."
+    echo "Example: feat: add new test runner"
+    exit 1
+  fi
+
+  # Check if commit message is at least 10 characters long
+  if [ ${#MSG} -lt 10 ]; then
+    echo "❌ Commit message is too short. Please provide a more descriptive message."
+    exit 1
+  fi
+
+  echo "✅ Commit message format is valid."
+fi 

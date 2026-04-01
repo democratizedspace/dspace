@@ -1,0 +1,132 @@
+{
+    "id": "electronics/measure-arduino-5v",
+    "title": "Measure Arduino 5 V output",
+    "description": "Verify the 5 V pin on an Arduino Uno with a multimeter.",
+    "image": "/assets/quests/electronics_measure_arduino_5v_output.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Orion here. We'll baseline your Arduino 5 V rail, interpret the reading, and handle out-of-range cases safely.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Let's set up."
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "Gather Arduino Uno, laptop, USB Type-B cable, digital multimeter, and safety goggles. Keep probes insulated and avoid shorting 5 V to GND.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Gear ready. Capture baseline.",
+                    "process": "measure-arduino-5v",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        },
+                        {
+                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Record the measured value in your lab notes. Acceptable window is 4.85 V to 5.15 V under USB power.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "in-range",
+                    "text": "Reading is within 4.85-5.15 V."
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Reading is outside 4.85-5.15 V."
+                }
+            ]
+        },
+        {
+            "id": "in-range",
+            "text": "Interpretation: regulator output is stable enough for low-voltage sensor work.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Log saved. Quest complete."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Safety check: disconnect USB before adjustments. Inspect for loose USB cable, wrong meter mode, or shorts on breadboard rails.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Apply corrective checks."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: re-seat cable, remove external loads, re-select DC volts, and remeasure. If voltage exceeds 5.3 V, stop using the board.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-arduino-5v",
+                    "text": "Run re-test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Re-evaluate the reading range."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice job. You captured evidence, interpreted it, and used a safe recovery loop.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/arduino-blink"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

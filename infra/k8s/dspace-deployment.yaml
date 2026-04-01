@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dspace-app
+  labels:
+    app: dspace-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dspace-app
+  template:
+    metadata:
+      labels:
+        app: dspace-app
+    spec:
+      containers:
+      - name: dspace
+        image: ghcr.io/democratizedspace/dspace:v3-latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "8080"
+        - name: HOST
+          value: "0.0.0.0"
+        - name: DSPACE_ENV
+          value: "production"
+        livenessProbe:
+          httpGet:
+            path: /livez
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 20
+          timeoutSeconds: 2
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 2
+          failureThreshold: 3

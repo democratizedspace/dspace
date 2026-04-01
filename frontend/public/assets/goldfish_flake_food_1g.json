@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/goldfish_flake_food_1g.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "goldfish food",
+    "item_id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+    "entity_type": "item",
+    "prompt": "A small pinch of goldfish flake food in a shallow dish, with thin, irregular flakes in warm golden-brown tones. A tiny measuring scoop and a clean fish-feeding container sit nearby to imply careful portioning, without showing any brand packaging or readable labels.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk home-aquarium workspace: soft cinematic lighting, clean surfaces, no logos, no readable text, and minimal clutter. Keep the flakes clearly visible and centered for icon clarity.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

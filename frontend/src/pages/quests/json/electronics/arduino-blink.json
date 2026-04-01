@@ -1,0 +1,234 @@
+{
+    "id": "electronics/arduino-blink",
+    "title": "Blink an LED with Arduino",
+    "description": "Learn to program a microcontroller by blinking an LED.",
+    "image": "/assets/quests/electronics_arduino_blink_led.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey, Orion here. We are going to run Blink like an operator: prep safely, upload, verify behavior, and recover if it fails.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Let's do it."
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "Gather an Arduino Uno, Breadboard, two Jumper Wires, a 220 \u03a9 Resistor, a 5 mm LED, Safety Goggles, a USB Type-A to Type-B cable, a Laptop Computer with the Arduino IDE, and a Resistor Color Chart. Confirm the resistor is red-red-brown, and keep USB unplugged while wiring.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-ide-install",
+                    "text": "Install or update the Arduino IDE"
+                },
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Parts are ready and the board is still unplugged.",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        },
+                        {
+                            "id": "d1105b87-8185-4a30-ba55-406384be169f",
+                            "count": 1
+                        },
+                        {
+                            "id": "3cd82744-d2aa-414e-9f03-80024b624066",
+                            "count": 2
+                        },
+                        {
+                            "id": "48cf736e-184c-4bd1-b9b0-15b7e9721646",
+                            "count": 1
+                        },
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "be3aaed8-13cc-4937-95d5-6e2c952c6612",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "preflight",
+            "text": "Preflight check: confirm LED polarity (long leg toward pin 13 path), no bare wires touching, and goggles on. If you smell heat or see smoke at any point, disconnect USB immediately and stop.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upload",
+                    "text": "Preflight complete. Upload Blink now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "I found a wiring concern. Re-check before powering."
+                }
+            ]
+        },
+        {
+            "id": "upload",
+            "text": "Connect USB, open File > Examples > 01.Basics > Blink, choose Board: Arduino Uno and the correct Port, then upload. Wait for 'Done uploading' and observe 10 seconds of blink behavior.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-led-blink",
+                    "text": "Run Blink upload + board check"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Upload finished. Time to verify behavior."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Evidence gate: your observation log must include blink cadence and any fault signs. Pass target: LED blinks near 1 second on / 1 second off and board stays cool.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Cadence is stable and no fault signs."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Blink is wrong, stuck, or inconsistent."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery branch: disconnect USB, check resistor/LED orientation, confirm the selected COM port, then re-upload. If the board gets hot, stop and replace suspect components before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "upload",
+                    "text": "I corrected the setup. Re-test upload."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Let's fully rewire before another power-on."
+                }
+            ]
+        },
+        {
+            "id": "rewire",
+            "text": "Safe re-entry checkpoint: keep USB unplugged, rebuild the LED path from scratch, and only return to upload when the wiring matches the diagram.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Rewire complete. Run preflight again."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work. You captured evidence, handled safety checks, and used a deterministic retry loop like a real technician.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "arduino-led-blink",
+                    "text": "Open the detailed blink process"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Let's review the blink evidence one more time before closing."
+                },
+                {
+                    "type": "finish",
+                    "text": "Quest complete."
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["electronics/basic-circuit"],
+    "rewards": [
+        {
+            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+            "count": 1
+        }
+    ],
+    "hardening": {
+        "passes": 10,
+        "score": 100,
+        "emoji": "\ud83d\udcaf",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 90
+            },
+            {
+                "task": "codex-improve-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            },
+            {
+                "task": "codex-refresh-2025-08-07",
+                "date": "2025-08-07",
+                "score": 98
+            },
+            {
+                "task": "codex-quest-update-2025-09-16",
+                "date": "2025-09-16",
+                "score": 99
+            },
+            {
+                "task": "codex-quest-refine-2025-09-17",
+                "date": "2025-09-17",
+                "score": 100
+            },
+            {
+                "task": "codex-quest-refresh-2025-09-18",
+                "date": "2025-09-18",
+                "score": 100
+            },
+            {
+                "task": "codex-quest-polish-2025-09-19",
+                "date": "2025-09-19",
+                "score": 100
+            },
+            {
+                "task": "codex-quest-update-2025-09-20",
+                "date": "2025-09-20",
+                "score": 100
+            }
+        ]
+    }
+}

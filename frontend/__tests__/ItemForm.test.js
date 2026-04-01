@@ -1,0 +1,555 @@
+/**
+ * @jest-environment jsdom
+ */
+import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
+import '@testing-library/jest-dom';
+import { render, act, fireEvent, waitFor } from '@testing-library/svelte';
+import ItemForm from '../src/components/svelte/ItemForm.svelte';
+
+const itemsAddMock = vi.fn().mockResolvedValue('mocked-item-id');
+const itemsUpdateMock = vi.fn().mockResolvedValue('mocked-item-id');
+
+vi.mock('../src/utils/customcontent.js', () => ({
+    db: {
+        items: {
+            add: itemsAddMock,
+            update: itemsUpdateMock,
+        },
+    },
+}));
+
+vi.mock('../src/utils/gameState/inventory.js', () => ({
+    addItems: vi.fn(),
+}));
+
+vi.mock('../src/utils/imageDownsample.js', () => ({
+    downsampleAndCompressToJpeg: vi.fn().mockResolvedValue({
+        dataUrl: 'data:image/jpeg;base64,COMPRESSED',
+        bytes: 12345,
+        width: 512,
+        height: 512,
+        qualityUsed: 0.8,
+    }),
+}));
+
+// Mock the browser's fetch API
+global.fetch = vi.fn(() =>
+    Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ url: 'mocked-image-url' }),
+    })
+);
+
+// Mock File for image uploads
+global.File = class File {
+    constructor(bits, name, options) {
+        this.name = name;
+        this.size = bits.length;
+        this.type = options?.type || '';
+    }
+};
+
+// Ensure __SSR__ is properly set for client-side hydration
+global.__SSR__ = false;
+global.__BROWSER__ = true;
+
+// Setup DOM environment mimicking Astro SSR output
+function setupDom() {
+    document.body.innerHTML = `
+    <div id="app">
+      <div id="item-form-container"></div>
+    </div>
+  `;
+    return document.getElementById('item-form-container');
+}
+
+describe('ItemForm Component', () => {
+    let container;
+
+    beforeEach(() => {
+        // Setup DOM
+        container = setupDom();
+
+        // Reset mocks
+        vi.clearAllMocks();
+        itemsAddMock.mockResolvedValue('mocked-item-id');
+        itemsUpdateMock.mockResolvedValue('mocked-item-id');
+    });
+
+    afterEach(() => {
+        // Cleanup
+        container.innerHTML = '';
+    });
+
+    it('renders form elements correctly', async () => {
+        const { getByLabelText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        // Verify form fields are present
+        await waitFor(() => {
+            expect(getByLabelText(/name/i)).toBeInTheDocument();
+            expect(getByLabelText(/description/i)).toBeInTheDocument();
+            expect(getByLabelText(/upload an image/i)).toBeInTheDocument();
+            expect(getByLabelText(/price \(optional\)/i)).toBeInTheDocument();
+            expect(getByLabelText(/price currency/i)).toBeInTheDocument();
+        });
+    });
+
+    it('submits form with all fields filled', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        // Fill form fields
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Test Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'This is a test item description' },
+            });
+
+            fireEvent.input(getByLabelText(/dependencies/i), {
+                target: { value: 'resource/filament, tool/nozzle' },
+            });
+
+            // Simulate image upload
+            const file = new File(['mock content'], 'test-image.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        // Submit the form
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        // Check if database add was called with correct data
+        await waitFor(() => {
+            expect(itemsAddMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    name: 'Test Item',
+                    description: 'This is a test item description',
+                    image: 'data:image/jpeg;base64,COMPRESSED',
+                    dependencies: ['resource/filament', 'tool/nozzle'],
+                })
+            );
+        });
+    });
+
+    it('shows success feedback with links after creating an item', async () => {
+        const { getByLabelText, findByRole, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Success Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Success description' },
+            });
+
+            const file = new File(['mock content'], 'success.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        const successMessage = await findByRole('status');
+        expect(successMessage).toHaveTextContent('Item created successfully.');
+        expect(successMessage).toHaveTextContent('View item');
+        expect(successMessage).toHaveTextContent('Manage items');
+        expect(
+            successMessage.querySelector('a[href="/inventory/item/mocked-item-id"]')
+        ).toBeInTheDocument();
+        expect(successMessage.querySelector('a[href="/inventory/manage"]')).toBeInTheDocument();
+    });
+
+    it('shows an error message when saving fails', async () => {
+        itemsAddMock.mockRejectedValueOnce(new Error('Database exploded'));
+
+        const { getByLabelText, getByText, findByRole } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Error Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Error description' },
+            });
+
+            const file = new File(['mock content'], 'error.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        const errorMessage = await findByRole('alert');
+        expect(errorMessage).toHaveTextContent('Database exploded');
+    });
+
+    it('trims dependency values and filters empty entries', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Dependency Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Has optional dependencies' },
+            });
+
+            fireEvent.input(getByLabelText(/dependencies/i), {
+                target: { value: '  item/one \n\n item/two  ,  ' },
+            });
+
+            const file = new File(['mock content'], 'dep-image.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(itemsAddMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    dependencies: ['item/one', 'item/two'],
+                })
+            );
+        });
+    });
+
+    it('validates required fields', async () => {
+        const { getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        // Submit form without filling any fields
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        // Check if validation messages appear
+        await waitFor(() => {
+            expect(getByText(/name is required/i)).toBeInTheDocument();
+            expect(getByText(/description is required/i)).toBeInTheDocument();
+            expect(getByText(/image is required/i)).toBeInTheDocument();
+        });
+
+        // Verify the database was not called
+        expect(itemsAddMock).not.toHaveBeenCalled();
+    });
+
+    it('combines price amount and currency for submission', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Priced Item' },
+            });
+
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Item with price' },
+            });
+
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: '12.5' },
+            });
+
+            fireEvent.change(getByLabelText(/price currency/i), {
+                target: { value: 'dUSD' },
+            });
+
+            const file = new File(['mock content'], 'price.jpg', { type: 'image/jpeg' });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(itemsAddMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    price: '12.5 dUSD',
+                })
+            );
+        });
+    });
+
+    it('handles edit mode correctly', async () => {
+        // Setup edit mode with existing item data
+        const existingItem = {
+            id: 'item-123',
+            name: 'Existing Item',
+            description: 'Existing item description',
+            price: '10 dUSD',
+            image: 'existing-image-url',
+            dependencies: ['resource/alloy'],
+        };
+
+        // No additional mocking needed - itemsUpdateMock is already mocked
+
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: true,
+                itemData: existingItem,
+            },
+        });
+
+        // Check if form is pre-filled with existing data
+        await waitFor(() => {
+            expect(getByLabelText(/name/i).value).toBe(existingItem.name);
+            expect(getByLabelText(/description/i).value).toBe(existingItem.description);
+            expect(getByLabelText(/dependencies/i).value).toBe('resource/alloy');
+            expect(getByLabelText(/price \(optional\)/i).value).toBe('10');
+            expect(getByLabelText(/price currency/i).value).toBe('dUSD');
+        });
+
+        // Submit form without changes
+        await act(async () => {
+            fireEvent.click(getByText(/update item/i));
+        });
+
+        // Verify update was called with correct data
+        await waitFor(() => {
+            expect(itemsUpdateMock).toHaveBeenCalledWith(
+                existingItem.id,
+                expect.objectContaining({
+                    name: existingItem.name,
+                    description: existingItem.description,
+                    image: existingItem.image,
+                    dependencies: existingItem.dependencies,
+                    price: existingItem.price,
+                })
+            );
+        });
+    });
+
+    it('requires a currency when a price amount is entered', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Currency Required Item' },
+            });
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Missing currency' },
+            });
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: '5' },
+            });
+            const file = new File(['mock content'], 'currency-required.jpg', {
+                type: 'image/jpeg',
+            });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/select a currency/i)).toBeInTheDocument();
+        });
+        expect(itemsAddMock).not.toHaveBeenCalled();
+    });
+
+    it('requires a price amount when only a currency is selected', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Amount Required Item' },
+            });
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Missing amount' },
+            });
+            fireEvent.change(getByLabelText(/price currency/i), {
+                target: { value: 'dUSD' },
+            });
+            const file = new File(['mock content'], 'amount-required.jpg', {
+                type: 'image/jpeg',
+            });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/price amount is required/i)).toBeInTheDocument();
+        });
+        expect(itemsAddMock).not.toHaveBeenCalled();
+    });
+
+    it('rejects zero or negative price amounts', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Invalid Price Item' },
+            });
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Invalid price values' },
+            });
+            fireEvent.change(getByLabelText(/price currency/i), {
+                target: { value: 'dUSD' },
+            });
+            const file = new File(['mock content'], 'invalid-price.jpg', {
+                type: 'image/jpeg',
+            });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: '0' },
+            });
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/price must be a positive number/i)).toBeInTheDocument();
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: '-3' },
+            });
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/price must be a positive number/i)).toBeInTheDocument();
+        });
+        expect(itemsAddMock).not.toHaveBeenCalled();
+    });
+
+    it('rejects non-numeric price amounts', async () => {
+        const { getByLabelText, getByText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        await act(async () => {
+            fireEvent.input(getByLabelText(/name/i), {
+                target: { value: 'Non Numeric Price Item' },
+            });
+            fireEvent.input(getByLabelText(/description/i), {
+                target: { value: 'Non numeric price' },
+            });
+            fireEvent.change(getByLabelText(/price currency/i), {
+                target: { value: 'dUSD' },
+            });
+            fireEvent.input(getByLabelText(/price \(optional\)/i), {
+                target: { value: 'abc' },
+            });
+            const file = new File(['mock content'], 'non-numeric.jpg', {
+                type: 'image/jpeg',
+            });
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        await act(async () => {
+            fireEvent.click(getByText(/create item/i));
+        });
+
+        await waitFor(() => {
+            expect(getByText(/price must be a positive number/i)).toBeInTheDocument();
+        });
+        expect(itemsAddMock).not.toHaveBeenCalled();
+    });
+
+    it('shows image preview after upload', async () => {
+        const { getByLabelText, findByAltText } = render(ItemForm, {
+            target: container,
+            props: {
+                isEdit: false,
+            },
+        });
+
+        const file = new File(['mock content'], 'test.jpg', { type: 'image/jpeg' });
+        await act(async () => {
+            fireEvent.change(getByLabelText(/upload an image/i), {
+                target: { files: [file] },
+            });
+        });
+
+        expect(await findByAltText('Preview')).toBeInTheDocument();
+    });
+});

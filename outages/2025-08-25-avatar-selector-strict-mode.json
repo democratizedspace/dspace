@@ -1,0 +1,10 @@
+{
+  "id": "avatar-selector-strict-mode",
+  "date": "2025-08-25",
+  "component": "e2e tests",
+  "rootCause": "profile-avatar-selection.spec.ts used a non-unique button selector matching multiple elements, causing Playwright strict mode violation",
+  "resolution": "use an exact `getByRole` match for the intended avatar button",
+  "references": [
+    "frontend/e2e/profile-avatar-selection.spec.ts"
+  ]
+}

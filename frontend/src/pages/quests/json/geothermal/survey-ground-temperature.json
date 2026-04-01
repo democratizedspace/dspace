@@ -1,0 +1,144 @@
+{
+    "id": "geothermal/survey-ground-temperature",
+    "title": "Survey for Geothermal Heat",
+    "description": "Measure baseline ground temperature and verify the site is stable enough for a loop design.",
+    "image": "/assets/quests/geothermal_ground_temperature_probe.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey explorer\u2014before we plan trenches, we need a clean baseline. We'll stage tools, log readings, and verify stability so we don't size the loop on bad data.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Run the safety brief first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "I already scoped the site, let's confirm safety gates."
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Keep power disconnected while wiring probes, wear gloves for digging, and avoid buried utility lines. We'll only log once the site check is complete.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Issue me the ground thermometer."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Safety check complete and thermometer staged.",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Take three readings around 1 m depth at least 2 m apart. Record each value and the timestamp so we can confirm the soil is stable, not just lucky.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture a timestamped baseline run"
+                },
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Seal the three-point baseline log.",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Readings recorded and stable near 10-14\u00b0C.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Readings drifted more than 2\u00b0C between spots."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Big swings usually mean poor probe contact or surface-biased depth. Re-pack the hole wall, lock out the circulator to avoid vibration noise, wait 5 minutes for thermal settling, then re-measure all three points.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Probe reseated, rerunning the survey."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Great. Stable readings in that band indicate usable geothermal potential for this training setup. Save the baseline and flag any >2\u00b0C variance for a same-day recheck before downstream loop sizing.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Baseline accepted and logged.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5bba251a-d223-4e22-aa30-b65238b17516",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["energy/solar"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

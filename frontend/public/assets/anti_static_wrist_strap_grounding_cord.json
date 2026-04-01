@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/anti_static_wrist_strap_grounding_cord.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "anti-static wrist strap",
+    "item_id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+    "entity_type": "item",
+    "prompt": "An anti-static wrist strap is shown coiled on an electronics workbench, its soft adjustable band opened to reveal a conductive inner lining and a small metal contact plate that would sit against the skin. A coiled grounding cord extends from the strap to a clip attached to a grounded metal point at the edge of the bench, clearly indicating how the strap dissipates static charges. Nearby, a delicate circuit board and a bag of chips emphasize that it’s meant for protecting sensitive components from electrostatic discharge.\n\nThe scene is a near-future solarpunk lab with soft, even lighting, an anti-static mat, and neatly labeled component drawers and tools in the blurred background. The 512×512 image is photorealistic with gentle stylization, no logos or readable text on the strap or bench, and a composition that centers the wrist strap and grounding cord while the rest of the workspace remains softly out of focus, conveying a careful, ESD-safe setup.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

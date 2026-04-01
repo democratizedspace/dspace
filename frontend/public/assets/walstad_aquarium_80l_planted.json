@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/walstad_aquarium_80l_planted.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Walstad aquarium (80 L)",
+    "item_id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+    "entity_type": "item",
+    "prompt": "A planted 80 liter aquarium using the low-tech Walstad method, shown as a balanced freshwater tank with rich natural substrate, heavy live planting, gentle biological complexity, and a calm self-sustaining feel. Include driftwood, rooted aquatic plants, and subtle natural algae or detritus that signal a mature ecosystem, while keeping the scene clearly healthy and intentional.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future aquaria aesthetic: soft naturalistic lighting, realistic glass, water, plant, and substrate textures, no logos, no readable labels, and no identifiable faces. Keep the full tank scene centered and uncluttered so it reads clearly as a distinct Walstad aquarium item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

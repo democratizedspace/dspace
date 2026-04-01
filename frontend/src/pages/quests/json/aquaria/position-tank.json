@@ -1,0 +1,178 @@
+{
+    "id": "aquaria/position-tank",
+    "title": "Move the Walstad tank",
+    "description": "Atlas helps you lift the empty 80 L Walstad aquarium onto a sturdy stand. Clear the path, lift with your legs and keep the glass supported.",
+    "image": "/assets/quests/position_tank.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Atlas here. Vega wants the empty 80 L tank on the stand. Before we lift, clear trip hazards, dry the floor, and decide if we can take the direct path or a staged rest route.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "lift",
+                    "text": "Direct path is clear; let's lift and place in one move.",
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        },
+                        {
+                            "id": "98609b23-4811-4275-8d83-ad59a2797753",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "staged-route",
+                    "text": "Let's use a staged route with a rest stop to protect the glass.",
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        },
+                        {
+                            "id": "98609b23-4811-4275-8d83-ad59a2797753",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "staged-route",
+            "text": "Good call. We'll pause once to reset grip and keep the rim supported. If either of us loses control, lower immediately and retry after clearing space.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "lift",
+                    "text": "Route is staged and grip points are confirmed."
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Stand area still feels unstable or crowded."
+                }
+            ]
+        },
+        {
+            "id": "lift",
+            "text": "I'll take most of the weight. On three\u2014one, two, three. Keep the tank level and your back straight.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "place",
+                    "text": "Heave-ho!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Abort: footing slipped or grip shifted\u2014set it down safely first."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Safety reset: lower the tank to a stable surface, dry the route, and re-center the stand. Do not continue while the path is wet or the stand rocks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "lift",
+                    "text": "Reset complete. Retry the lift with a level carry."
+                }
+            ]
+        },
+        {
+            "id": "place",
+            "text": "Set it down gently. Check the stand is level before letting go.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "heat",
+                    "text": "What's next?"
+                }
+            ]
+        },
+        {
+            "id": "heat",
+            "text": "Warm the tank with the heater before livestock. Make sure it's submerged before plugging into a GFCI outlet.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "heat-walstad",
+                    "text": "Install the heater and set it to 26\u00b0C"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Heater installed and indicator is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Stop: heater isn't fully submerged or the stand shifted."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Last check before closure: capture a temperature log after warmup and confirm no cable drips near the outlet.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-heated-walstad-temperature",
+                    "text": "Record warmup verification reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Warmup log captured. Re-check cables and review before closing.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "finish",
+                    "text": "Lift complete, heater verified, and safety checks passed.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "requiresQuests": ["aquaria/walstad", "aquaria/thermometer"],
+    "rewards": [
+        {
+            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+            "count": 1
+        }
+    ],
+    "hardening": {
+        "passes": 1,
+        "score": 100,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-07",
+                "date": "2025-08-07",
+                "score": 60
+            }
+        ]
+    }
+}

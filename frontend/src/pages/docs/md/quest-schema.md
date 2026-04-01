@@ -1,0 +1,64 @@
+---
+title: 'Quest Schema Requirements'
+slug: 'quest-schema'
+---
+
+# Quest Schema Requirements
+
+Every quest JSON file must conform to the [quest schema](https://github.com/democratizedspace/dspace/blob/v3/frontend/src/pages/quests/jsonSchemas/quest.json) to be
+loaded by DSPACE. Review the [Quest Development Guidelines](/docs/quest-guidelines) for design tips
+and the [Quest Submission Guide](/docs/quest-submission) when you're ready to publish. This page
+summarizes the required structure.
+
+## Top-level properties
+
+| Field            | Type   | Required | Description                                              |
+| ---------------- | ------ | -------- | -------------------------------------------------------- |
+| `id`             | string | ✔️       | Unique quest identifier, e.g. `astronomy/constellations` |
+| `title`          | string | ✔️       | Display name for the quest                               |
+| `description`    | string | ✔️       | Short summary shown before starting                      |
+| `image`          | string | ✔️       | Path to quest image asset                                |
+| `npc`            | string | ✔️       | NPC image or identifier shown in dialogue                |
+| `start`          | string | ✔️       | ID of the first dialogue node                            |
+| `dialogue`       | array  | ✔️       | Ordered list of dialogue nodes                           |
+| `hardening`      | object | ✔️       | Content rating and safety metadata for the quest         |
+| `rewards`        | array  | ❌       | Items granted on completion                              |
+| `requiresQuests` | array  | ❌       | Quest IDs that must be finished first                    |
+
+## Dialogue nodes
+
+Each entry in `dialogue` is an object with:
+
+| Field     | Type   | Required | Description                                |
+| --------- | ------ | -------- | ------------------------------------------ |
+| `id`      | string | ✔️       | Node identifier used by `start` and `goto` |
+| `text`    | string | ✔️       | Dialogue text displayed to the player      |
+| `options` | array  | ❌       | Player choices available at this node      |
+
+## Options
+
+Options control quest flow and may grant or require items.
+
+| Field            | Type    | Required | Description                                   |
+| ---------------- | ------- | -------- | --------------------------------------------- |
+| `type`           | string  | ✔️       | `goto`, `process`, or `finish`                |
+| `text`           | string  | ✔️       | Option label shown to the player              |
+| `goto`           | string  | depends  | Target node when `type` is `goto`             |
+| `process`        | string  | depends  | Process ID when `type` is `process`           |
+| `requiresItems`  | array   | ❌       | Items that must be owned to choose the option |
+| `grantsItems`    | array   | ❌       | Items granted when selected                   |
+| `requiresGitHub` | boolean | ❌       | Option requires GitHub authentication         |
+
+Item arrays consist of objects with `id` (string) and `count` (number). Built-in quest files
+should reference images under `/assets/quests/` to satisfy repository validation checks.
+
+For a full example, see the [Quest Template Example](/docs/quest-template). To validate a quest
+file locally, run:
+
+```bash
+node scripts/validate-quest.js path/to/quest.json
+```
+
+That script checks the JSON schema, the required `hardening` metadata, and references to quest and
+process IDs. Repository CI also validates built-in quest files with tests like
+`tests/builtinQuestSchema.test.ts` and `tests/questPrerequisites.test.ts`.

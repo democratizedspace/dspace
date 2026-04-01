@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/micro_servo_pair_with_horns.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "two-servo arm kit",
+    "item_id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
+    "entity_type": "item",
+    "prompt": "A small kit for a two-servo robotic arm is laid out: laser-cut arm links, a gripper plate, mounting screws, and two micro servo horns ready to attach. The pieces are organized on a mat with labels but no readable text, and a pair of hobby servos sit nearby waiting to be installed.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

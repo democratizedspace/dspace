@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/wooden_birdhouse.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Birdhouse",
+    "item_id": "092fdddc-431a-40bd-a66c-f7ef878ae1f8",
+    "entity_type": "item",
+    "prompt": "A simple wooden backyard birdhouse with a small round entrance hole and a sloped roof, shown cleanly against a soft outdoor background. The wood grain and basic construction are clearly visible, conveying a small shelter for birds without any decorative logos or text.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future backyard craft aesthetic: soft natural lighting, gentle bokeh, no logos, no readable text, no overlays. Keep the birdhouse centered and uncluttered so it reads clearly as an icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

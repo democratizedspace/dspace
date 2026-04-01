@@ -1,0 +1,202 @@
+{
+    "id": "firstaid/assemble-kit",
+    "title": "Assemble a First Aid Kit",
+    "description": "Assemble a basic first aid kit so you're ready for minor injuries.",
+    "image": "/assets/quests/firstaid_assemble_basic_kit.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "dChat here. We'll build a responder-ready kit: clean hands, complete supplies, and a quick safety check before we seal it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the assembly checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Step 1: wash and dry your hands, then stage bandages, gauze, wipes, and nitrile gloves on a clean surface.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Hands washed",
+                    "goto": "dry"
+                },
+                {
+                    "type": "goto",
+                    "goto": "dry",
+                    "text": "Hands already washed; continue."
+                }
+            ]
+        },
+        {
+            "id": "dry",
+            "text": "Step 2: dry fully. Damp hands can contaminate sterile supplies.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "dry-hands",
+                    "text": "Hands dry now",
+                    "goto": "inspect"
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Hands already dry."
+                },
+                {
+                    "type": "goto",
+                    "goto": "restart-hygiene",
+                    "text": "I touched a dirty surface; restart hygiene."
+                }
+            ]
+        },
+        {
+            "id": "restart-hygiene",
+            "text": "Good catch. Rewash, re-dry, then restart inspection with fresh handling.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Restart clean-hand workflow."
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "Step 3: inspect expiry and packaging. If seals are broken or dates are expired, pull replacements before packing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "pack",
+                    "text": "Supplies pass inspection."
+                },
+                {
+                    "type": "goto",
+                    "goto": "replace",
+                    "text": "I found expired or damaged supplies."
+                }
+            ]
+        },
+        {
+            "id": "replace",
+            "text": "Troubleshooting branch: remove damaged stock, grab replacements, and re-check every item before packing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Rechecked replacements; continue inspection."
+                }
+            ]
+        },
+        {
+            "id": "pack",
+            "text": "Step 4: pack and label the kit. Evidence gate: you must either run the packing process or prove a completed first aid kit exists.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "pack-first-aid-kit",
+                    "text": "Pack kit now",
+                    "goto": "safety-check"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Kit already packed and labeled",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Operational safety check: store the kit dry, easy to reach, and away from children or heat sources.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Storage is safe and documented."
+                },
+                {
+                    "type": "goto",
+                    "goto": "relocate",
+                    "text": "Storage spot is unsafe; relocate first."
+                }
+            ]
+        },
+        {
+            "id": "relocate",
+            "text": "Move the kit to a dry, labeled location and verify everyone knows where it is before finishing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Relocated; rerun safety check."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Kit assembled. You now have a verifiable first-aid baseline and a safer storage plan.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Ready for minor injuries."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/howtodoquests"],
+    "hardening": {
+        "passes": 6,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 65
+            },
+            {
+                "task": "codex-refine-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-refine-2025-08-05",
+                "date": "2025-08-05",
+                "score": 90
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            },
+            {
+                "task": "codex-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 94
+            },
+            {
+                "task": "codex-cleanup-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            }
+        ]
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_log_rotation.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/log-maintenance.json",
+    "item_name": "Set Up Log Rotation",
+    "item_id": "devops/log-maintenance",
+    "entity_type": "quest",
+    "prompt": "A terminal-style dashboard is displayed on a laptop or monitor, showing a list of stylized log files with some icons indicating that older ones are compressed and rolled over, all represented by shapes and generic filenames with no readable text. On the desk in front of the screen, an external drive or NAS device sits next to the small server, and a notepad has a simple spiral diagram illustrating logs rotating over time. A small hourglass or clock figurine suggests the passage of days as logs are archived.\n\nThe environment is a near-future solarpunk workspace: soft ambient lighting, neat cable management, and a mix of pale wood and brushed metal surfaces, with a small plant adding life to the scene. The 512×512 photorealistic composition keeps the screen, server, and storage device as the central focus, with everything else gently blurred. No brand logos or legible text appear anywhere, and no faces are visible—only hands and forearms may be present—highlighting the quiet reliability of log rotation keeping disks from filling.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/constellation_route_atlas_page.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "constellation route atlas page",
+    "item_id": "eefbf274-67f1-4ea8-8253-25f85c0db336",
+    "entity_type": "item",
+    "prompt": "A detailed star atlas page spread across a field table, annotated with a completed seasonal star-hop route, circled anchor stars, and fallback waypoint markings used when haze obscures intermediate patterns. The page should feel more map-like and navigational than a simple sketch sheet, with route arcs, small reference symbols, and a compass or planisphere nearby. It must clearly read as a route-planning atlas artifact for observational astronomy rather than a generic notebook doodle.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future stargazing aesthetic: soft night-session lighting, realistic paper and pencil textures, subtle red-light ambiance, no readable labels, and no identifiable faces. Keep the composition centered on the atlas page so it reads clearly as a navigation reference item for DSPACE.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

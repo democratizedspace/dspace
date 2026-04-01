@@ -1,0 +1,19 @@
+[
+  {
+    "id": "shared-tool",
+    "name": "Shared Tool",
+    "description": "Item fixture description for shared image.",
+    "image": "/assets/shared-path.jpg"
+  },
+  {
+    "id": "duplicate-kit",
+    "name": "Duplicate Kit",
+    "description": "Item fixture description for duplicate content.",
+    "image": "/assets/quests/duplicate-content.jpg"
+  },
+  {
+    "id": "conflict-kit",
+    "name": "Conflict Kit",
+    "image": "/assets/quests/conflict.jpg"
+  }
+]

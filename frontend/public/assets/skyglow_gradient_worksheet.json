@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/skyglow_gradient_worksheet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "skyglow gradient worksheet",
+    "item_id": "78bd4b60-a932-4d22-9b34-ecf9c3d46a75",
+    "entity_type": "item",
+    "prompt": "A site-evaluation worksheet showing horizon segments, brightness gradients, and a few glare-source arrows sketched across the page. A dim observing light, clipboard, and outdoor field gear nearby make it clearly a dark-sky assessment record.\n\nPhotorealistic 512×512 image with soft low light, realistic paper and pencil textures, no logos, no readable text, and no identifiable faces. Keep the page centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

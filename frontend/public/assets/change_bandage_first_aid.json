@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/change_bandage_first_aid.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/change-bandage.json",
+    "item_name": "Change a Bandage",
+    "item_id": "firstaid/change-bandage",
+    "entity_type": "quest",
+    "prompt": "A pair of gloved hands gently replaces an old bandage on a person’s forearm with a fresh adhesive pad, focusing tightly on the hands and the bandaged area to avoid showing the person’s face. The skin around the minor cut looks clean and only mildly reddened, with no graphic detail, and the new bandage is centered and smoothed down carefully. On the table beneath the arm, an opened packet of sterile gauze, antiseptic wipes, and a tube of antibiotic ointment are arranged neatly to suggest the full change-a-bandage workflow.\n\nThe environment is a calm, near-future home first-aid station or clinic room with a solarpunk aesthetic: soft neutral walls, a compact smart display in the blurred background, and organized storage bins for supplies. Lighting is soft and cinematic, illuminating the arm and supplies without harsh shadows in a photorealistic 512×512 format. No logos or readable text appear on any packaging, and the composition avoids any gore or distress, highlighting careful, safe wound care.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

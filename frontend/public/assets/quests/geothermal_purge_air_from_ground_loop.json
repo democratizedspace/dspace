@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/geothermal_purge_air_from_ground_loop.jpg",
+    "entity": "frontend/src/pages/quests/json/geothermal/purge-loop-air.json",
+    "item_name": "Purge Air from Ground Loop",
+    "item_id": "geothermal/purge-loop-air",
+    "entity_type": "quest",
+    "prompt": "A geothermal loop manifold is connected via flexible hoses to a sturdy flushing cart composed of a large bucket or reservoir and a compact submersible pump submerged inside. The pump’s outlet hose feeds into the loop inlet while the return hose from the loop splashes visibly aerated water back into the bucket, with small bubbles escaping as trapped air is purged from the piping. A gloved hand is adjusting a valve on the manifold, and the nearby heat pump is clearly offline while the flushing operation is underway.\n\nThe scene takes place in a near-future solarpunk mechanical room: soft practical lighting, clean floors, and neatly routed pipes and cables, with hints of other renewable systems blurred in the background. The 512×512 photorealistic composition centers on the bucket, pump, hoses, and manifold, capturing the motion of water and bubbles, while the rest of the room remains gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands and forearms—highlighting the safe use of a submersible pump to flush air from a geothermal ground loop.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

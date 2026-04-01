@@ -1,0 +1,10 @@
+{
+  "id": "2026-03-23-playwright-webserver-timeout-local",
+  "date": "2026-03-23",
+  "component": "frontend:playwright-config",
+  "rootCause": "Local Playwright runs used a 30 second webServer startup timeout while Astro preview startup regularly exceeded that threshold after a clean build, causing false-negative E2E failures before route assertions executed.",
+  "resolution": "Raised the local webServer timeout in playwright.config.ts to 180 seconds (matching CI) so E2E runs wait for Astro preview startup instead of failing early.",
+  "references": [
+    "frontend/playwright.config.ts"
+  ]
+}

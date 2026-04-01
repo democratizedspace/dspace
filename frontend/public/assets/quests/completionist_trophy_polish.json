@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/completionist_trophy_polish.jpg",
+    "entity": "frontend/src/pages/quests/json/completionist/polish.json",
+    "item_name": "Polish Your Trophy",
+    "item_id": "completionist/polish",
+    "entity_type": "quest",
+    "prompt": "A close-up of the Completionist Award II trophy on a desk or shelf being carefully polished: a soft microfiber cloth is wrapped around part of the crystalline surface, with just a partial hand visible holding the cloth to avoid showing a full face. A small bottle of gentle cleaning solution and a folded spare cloth sit nearby, and the trophy’s facets catch the light, showing a few faint smudges disappearing where it is being cleaned.\n\nNear-future solarpunk interior with warm, soft lighting and subtle background elements like plants or bookshelves. Photorealistic 512×512 rendering with no brand logos or readable text on the bottle; the focus is on the act of caring for the trophy and keeping it shiny. The composition should immediately signal “polishing your prized award.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

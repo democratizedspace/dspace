@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/simple_wooden_bookshelf.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Bookshelf",
+    "item_id": "619d485d-803f-4875-a048-157ce28d31c4",
+    "entity_type": "item",
+    "prompt": "A simple wooden bookshelf stands against a light-colored wall, with three or four sturdy shelves holding an assortment of books and a few small decor items. The design is clean and rectangular, with visible wood grain and neatly joined corners that suggest beginner-friendly carpentry. Some shelves are partially filled, hinting at room for a growing library without overcrowding the scene.\n\nThe environment is a near-future solarpunk living space with soft natural light, a plant on top of the bookshelf, and perhaps a glimpse of solar-inspired decor or minimalist furniture nearby. The 512×512 image is photorealistic with gentle stylization, no logos or text, and a composition that centers the bookshelf while the surrounding room remains softly blurred, emphasizing it as a freshly built, ready-to-use piece.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

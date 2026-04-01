@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/dwatt_1e8_energy_megagrid.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/dWatt-1e8.json",
+    "item_name": "Store a Colossal 100,000,000 dWatt",
+    "item_id": "energy/dWatt-1e8",
+    "entity_type": "quest",
+    "prompt": "A sprawling aerial view of a near-future energy megagrid: an array of sleek battery towers, solar fields, and compact wind turbines all feeding into a gigantic glowing central energy node. Lines of light connect the installations in a web, and a stylized circular gauge hovering above the node suggests a filled \"100,000,000\" capacity bar without any readable numbers. The scene conveys an almost unbelievable quantity of stored energy under precise control.\n\nSolapunk 2040s aesthetic with clean architecture, abundant greenery woven between infrastructure, and a twilight sky that makes the glowing energy paths stand out. The style is photorealistic with a slightly cinematic feel, no brand logos, no legible text, and no obvious people—just infrastructure and soft environmental details. The composition should clearly emphasize scale and the sense of a colossal energy achievement.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

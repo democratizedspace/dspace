@@ -1,0 +1,162 @@
+{
+    "id": "3dprinting/nozzle-cleaning",
+    "title": "Clear a Clogged Nozzle",
+    "description": "Heat and clean the nozzle to restore smooth extrusion.",
+    "image": "/assets/quests/nozzle_cleaning_tools.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Sydney here. Filament won't flow? We'll capture a before/after check so you can prove the clean worked instead of guessing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-nozzle-clog",
+                    "text": "Simulate the jam so I can practice cleanup."
+                },
+                {
+                    "type": "goto",
+                    "goto": "precheck",
+                    "text": "I already have a clogged hotend.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "precheck",
+            "text": "Safety first: power down, confirm heaters are off before touching metal, then do a short cold-pull check on paper to document baseline residue and flow.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Baseline residue check documented.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Filament snapped or residue spread to heater block."
+                }
+            ]
+        },
+        {
+            "id": "clean",
+            "text": "Preheat to 200 °C with goggles on, clear softened filament with pliers, and only swap the nozzle while hot enough for a proper seat.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "repair-clogged-nozzle",
+                    "text": "Disassemble, clear the bore, and reseat the nozzle."
+                },
+                {
+                    "type": "process",
+                    "process": "replace-brass-nozzle",
+                    "text": "Install a fresh 0.4 mm nozzle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "postcheck",
+                    "text": "Nozzle is rebuilt; run post-clean verification.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "postcheck",
+            "text": "Extrude 30 mm and compare against your baseline: smoother strand, less speckling, and no side ooze. Capture post-clean notes on a second sheet.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Before/after check passed and flow is stable.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Post-check still shows blobs or side leakage."
+                }
+            ]
+        },
+        {
+            "id": "contamination",
+            "text": "Pause and recover safely: cool the hotend, wipe residue from heater block/threads, and inspect PTFE path before the next attempt. Resume only when surfaces are clean.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Area cleaned; retrying the cleaning cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "postcheck",
+                    "text": "Residue cleared on a clean nozzle; rerun post-check.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Extrusion is smooth again, and you have paired baseline/post-clean evidence for future maintenance logs.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to printing."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "269d2cfb-25de-417b-8e29-64e80aff934c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["3dprinting/nozzle-clog"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

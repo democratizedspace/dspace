@@ -1,0 +1,62 @@
+---
+import Page from '../../../components/Page.astro';
+import QuestGraphVisualizer from '../../../components/quests/QuestGraphVisualizer.svelte';
+import { buildQuestGraph, type QuestData } from '../../../lib/quests/questGraph';
+
+const version =
+    process.env.DSPACE_VERSION ?? process.env.npm_package_version ?? 'unknown';
+const buildTimestamp = process.env.DSPACE_BUILD_TIMESTAMP ?? new Date().toISOString();
+
+const fixturesEnabled =
+    import.meta.env.DEV || import.meta.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true';
+
+const questData: QuestData[] = fixturesEnabled
+    ? [
+          {
+              path: './json/welcome/howtodoquests.json',
+              quest: { title: 'Fixture Root Quest' },
+          },
+          {
+              path: './json/fixtures/parent.json',
+              quest: {
+                  title: 'Fixture Parent Quest',
+                  requiresQuests: ['welcome/howtodoquests.json'],
+              },
+          },
+          {
+              path: './json/fixtures/child.json',
+              quest: { title: 'Fixture Child Quest', requiresQuests: ['fixtures/parent.json'] },
+          },
+          {
+              path: './json/fixtures/grandchild.json',
+              quest: {
+                  title: 'Fixture Grandchild Quest',
+                  requiresQuests: ['fixtures/child.json'],
+              },
+          },
+      ]
+    : [];
+
+const graph = fixturesEnabled ? buildQuestGraph({ quests: questData }) : null;
+---
+
+<Page title="Quest Graph Fixture: Ancestor Highlights">
+    <p>
+        This fixture renders a small quest graph for validating ancestor and descendant highlighting
+        behaviors.
+    </p>
+    {
+        fixturesEnabled ? (
+            <QuestGraphVisualizer
+                client:visible
+                graph={graph}
+                version={version}
+                buildTimestamp={buildTimestamp}
+            />
+        ) : (
+            <p class="subtle">
+                Fixtures are disabled. Enable PUBLIC_ENABLE_QUEST_GRAPH_DEBUG to view this page.
+            </p>
+        )
+    }
+</Page>

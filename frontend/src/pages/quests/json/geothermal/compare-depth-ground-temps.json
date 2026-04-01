@@ -1,0 +1,209 @@
+{
+    "id": "geothermal/compare-depth-ground-temps",
+    "title": "Compare Depth Ground Temps",
+    "description": "Capture shallow/deep temperature traces, compare spread, and re-test when variance looks suspicious.",
+    "image": "/assets/quests/geothermal_compare_depth_ground_temps.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Depth matters. We'll run paired probes, log both channels, and verify the deep sensor stays steadier than the shallow one before we call this dataset usable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Run setup checklist.",
+                    "requiresItems": [
+                        {
+                            "id": "e62dca47-fba6-4ad5-abd4-95dd41f5f4c2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "stage",
+            "text": "Stage shallow and deep probes, label cables, and keep trench edges stable. A swapped lead can fake a perfect result, so verify channel labels before logging.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture a paired depth log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "plot",
+                    "text": "Paired log exported",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plot",
+            "text": "Plot shallow vs deep traces and annotate depth + soil moisture notes. We need the chart to prove the interpretation isn't guesswork.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Plot the depth comparison"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Chart ready for interpretation",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 2.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Accept this run only if deep readings stay within \u00b11.5\u00b0C while shallow readings show the larger swing. If curves cross repeatedly, the probe depth or contact is wrong.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Annotate accepted spread and archive evidence"
+                },
+                {
+                    "type": "goto",
+                    "goto": "correct",
+                    "text": "Curves look wrong\u2014need corrective retest"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Spread confirmed and annotated",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 2.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "correct",
+            "text": "Troubleshoot: reseat the deep probe to full depth, re-pack soil to remove air gaps, and rerun a full logging cycle before interpreting again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage-retest",
+                    "text": "Corrections applied, rerun paired log."
+                }
+            ]
+        },
+        {
+            "id": "stage-retest",
+            "text": "Run a fresh paired-depth capture after corrective reseating so downstream interpretation uses post-fix evidence.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture corrective paired depth log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "plot-retest",
+                    "text": "Corrective paired log exported",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plot-retest",
+            "text": "Re-plot the corrected shallow/deep traces so the acceptance check is tied to the latest run.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Plot corrective depth comparison"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret-retest",
+                    "text": "Corrective chart ready for interpretation",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret-retest",
+            "text": "Confirm the corrected run: deep trace should hold within \u00b11.5\u00b0C while shallow still swings more. If the curves cross again, repeat corrective setup.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Annotate corrected spread and archive evidence"
+                },
+                {
+                    "type": "goto",
+                    "goto": "correct",
+                    "text": "Corrected run still fails, retest again"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Corrected spread confirmed and annotated",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. This depth comparison is now trustworthy enough to tune trench depth and seasonal expectations.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Depth survey validated",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 2.0
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["geothermal/log-ground-temperature"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

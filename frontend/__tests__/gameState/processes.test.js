@@ -1,4 +1,29 @@
-const {
+import { vi } from 'vitest';
+
+// Mock common.js imports
+vi.mock('../../src/utils/gameState/common.js', () => {
+    return {
+        loadGameState: vi.fn(),
+        saveGameState: vi.fn().mockResolvedValue(undefined),
+    };
+});
+
+// Mock processes import
+vi.mock('../../src/generated/processes.json', () => {
+    return {
+        default: [
+            {
+                id: 'foo',
+                requireItems: [{ id: 'item-1', count: 5 }],
+                consumeItems: [{ id: 'item-2', count: 3 }],
+                createItems: [{ id: 'item-3', count: 1 }],
+                duration: '10s',
+            },
+        ],
+    };
+});
+
+import {
     startProcess,
     hasRequiredAndConsumedItems,
     ProcessStates,
@@ -7,267 +32,411 @@ const {
     getProcessProgress,
     finishProcess,
     cancelProcess,
+    pauseProcess,
+    resumeProcess,
+    finishProcessNow,
     getProcessesForItem,
     skipProcess,
-  } = require("../../src/utils/gameState/processes.js");
-  
-  const {
-    loadGameState,
-    saveGameState,
-  } = require("../../src/utils/gameState/common.js");
-  
-  // Mock common.js imports
-  jest.mock("../../src/utils/gameState/common.js", () => {
-    return {
-      loadGameState: jest.fn(),
-      saveGameState: jest.fn(),
-    };
-  });
-  
-  // Mock processes import
-  jest.mock("../../src/pages/processes/processes.json", () => {
-    return [
-      {
-        id: "foo",
-        requireItems: [{id: "1", count: 5}],
-        consumeItems: [{id: "2", count: 3}],
-        createItems: [{id: "3", count: 1}],
-        duration: "10s", 
-      }
-    ];
-  });
-  
-  describe("gameState - processes", () => {
-  
+} from '../../src/utils/gameState/processes.js';
+
+import { loadGameState, saveGameState } from '../../src/utils/gameState/common.js';
+
+describe('gameState - processes', () => {
     let mockGameState;
-  
+
     beforeEach(() => {
-      mockGameState = {
-        inventory: {
-          "1": 10,
-          "2": 50
-        },
-        processes: {},
-      };
-  
-      loadGameState.mockImplementation(() => mockGameState);
-      
-      saveGameState.mockImplementation((newState) => {
-        mockGameState = newState;
-      });
-  
-      loadGameState.mockClear();
-      saveGameState.mockClear();
+        mockGameState = {
+            inventory: {
+                'item-1': 10,
+                'item-2': 50,
+            },
+            processes: {},
+        };
+
+        loadGameState.mockImplementation(() => mockGameState);
+
+        saveGameState.mockImplementation((newState) => {
+            mockGameState = newState;
+        });
+
+        loadGameState.mockClear();
+        saveGameState.mockClear();
     });
 
-    test("hasRequiredAndConsumedItems should return true if all items are available", () => {
-        expect(hasRequiredAndConsumedItems("foo")).toBe(true);
+    test('hasRequiredAndConsumedItems should return true if all items are available', () => {
+        expect(hasRequiredAndConsumedItems('foo')).toBe(true);
     });
 
-    test("hasRequiredAndConsumedItems should return false if any item is missing", () => {
-        mockGameState.inventory["1"] = 0;
-        expect(hasRequiredAndConsumedItems("foo")).toBe(false);
+    test('hasRequiredAndConsumedItems should return false if any item is missing', () => {
+        mockGameState.inventory['item-1'] = 0;
+        expect(hasRequiredAndConsumedItems('foo')).toBe(false);
     });
 
-    test("hasRequiredAndConsumedItems should return false if the process ID is invalid", () => {
-        expect(hasRequiredAndConsumedItems("bar")).toBe(false);
+    test('hasRequiredAndConsumedItems should return false if the process ID is invalid', () => {
+        expect(hasRequiredAndConsumedItems('bar')).toBe(false);
     });
 
-    test("startProcess should not start if any item is missing", () => {
-        mockGameState.inventory["1"] = 0;
-        startProcess("foo");
-        expect(mockGameState.processes["foo"]).toBeUndefined();
-    });
-  
-    test("startProcess should start correctly", () => {
-      startProcess("foo");
-  
-      expect(mockGameState.processes["foo"]).toEqual({
-        startedAt: expect.any(Number),
-        duration: expect.any(Number),
-      });
+    test('hasRequiredAndConsumedItems should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            requireItems: [],
+            consumeItems: [],
+        };
+        expect(hasRequiredAndConsumedItems('custom-1', definition)).toBe(true);
     });
 
-    test("startProcess should add the process to the game state", () => {
-      startProcess("foo");
-      expect(mockGameState.processes["foo"]).toEqual({
-        startedAt: expect.any(Number),
-        duration: expect.any(Number),
-      });
+    test('hasRequiredAndConsumedItems should handle undefined item arrays', () => {
+        const definition = {
+            id: 'custom-2',
+            createItems: [{ id: 'custom-item', count: 1 }],
+        };
+        expect(hasRequiredAndConsumedItems('custom-2', definition)).toBe(true);
     });
 
-    test("calling startProcess should burn the consume items", () => {
-      startProcess("foo");
-      expect(mockGameState.inventory["2"]).toBe(47);
+    test('startProcess should not start if any item is missing', () => {
+        mockGameState.inventory['item-1'] = 0;
+        startProcess('foo');
+        expect(mockGameState.processes['foo']).toBeUndefined();
     });
 
-    test("calling startProcess should not burn the require items", () => {
-      startProcess("foo");
-      expect(mockGameState.inventory["1"]).toBe(10);
+    test('startProcess should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [],
+            createItems: [],
+        };
+        startProcess('custom-1', definition);
+        expect(mockGameState.processes['custom-1']).toEqual({
+            startedAt: expect.any(Number),
+            duration: expect.any(Number),
+            pausedAt: null,
+            elapsedBeforePause: 0,
+        });
     });
 
-    test("getProcessState should return NOT_STARTED if the process has not started", () => {
-        const { state, progress } = getProcessState("foo");
+    test('startProcess should handle undefined consume items for custom processes', () => {
+        const definition = {
+            id: 'custom-2',
+            duration: '10s',
+            createItems: [{ id: 'custom-item', count: 1 }],
+        };
+        startProcess('custom-2', definition);
+        expect(mockGameState.processes['custom-2']).toEqual({
+            startedAt: expect.any(Number),
+            duration: expect.any(Number),
+            pausedAt: null,
+            elapsedBeforePause: 0,
+        });
+    });
+
+    test('startProcess should start correctly', () => {
+        startProcess('foo');
+
+        expect(mockGameState.processes['foo']).toEqual({
+            startedAt: expect.any(Number),
+            duration: expect.any(Number),
+            pausedAt: null,
+            elapsedBeforePause: 0,
+        });
+    });
+
+    test('startProcess should add the process to the game state', () => {
+        startProcess('foo');
+        expect(mockGameState.processes['foo']).toEqual({
+            startedAt: expect.any(Number),
+            duration: expect.any(Number),
+            pausedAt: null,
+            elapsedBeforePause: 0,
+        });
+    });
+
+    test('calling startProcess should burn the consume items', () => {
+        startProcess('foo');
+        expect(mockGameState.inventory['item-2']).toBe(47);
+    });
+
+    test('calling startProcess should not burn the require items', () => {
+        startProcess('foo');
+        expect(mockGameState.inventory['item-1']).toBe(10);
+    });
+
+    test('getProcessState should return NOT_STARTED if the process has not started', () => {
+        const { state, progress } = getProcessState('foo');
         expect(state).toBe(ProcessStates.NOT_STARTED);
         expect(progress).toBe(0);
     });
 
-    test("getProcessState should return IN_PROGRESS if the process is in progress", () => {
-        startProcess("foo");
+    test('getProcessState should return IN_PROGRESS if the process is in progress', () => {
+        startProcess('foo');
 
         // elapse 5 seconds
-        mockGameState.processes["foo"].startedAt = Date.now() - 5000;
-        
-        const { state, progress } = getProcessState("foo");
+        mockGameState.processes['foo'].startedAt = Date.now() - 5000;
+
+        const { state, progress } = getProcessState('foo');
         expect(state).toBe(ProcessStates.IN_PROGRESS);
         expect(progress).toBeGreaterThan(0);
     });
 
-    test("getProcessState should return FINISHED if the process is finished", () => {
-        startProcess("foo");
-        
+    test('getProcessState should return FINISHED if the process is finished', () => {
+        startProcess('foo');
+
         // elapse 20 seconds
-        mockGameState.processes["foo"].startedAt = Date.now() - 20000;
-        
-        const { state, progress } = getProcessState("foo");
+        mockGameState.processes['foo'].startedAt = Date.now() - 20000;
+
+        const { state, progress } = getProcessState('foo');
         expect(state).toBe(ProcessStates.FINISHED);
         expect(progress).toBe(100);
     });
 
-    test("getProcessStartedAt should return undefined if the process has not started", () => {
-        expect(getProcessStartedAt("foo")).toBeUndefined();
+    test('getProcessStartedAt should return undefined if the process has not started', () => {
+        expect(getProcessStartedAt('foo')).toBeUndefined();
     });
 
-    test("getProcessStartedAt should return the correct value if the process has started", () => {
-        startProcess("foo");
-        expect(getProcessStartedAt("foo")).toBe(mockGameState.processes["foo"].startedAt);
+    test('getProcessStartedAt should return the correct value if the process has started', () => {
+        startProcess('foo');
+        expect(getProcessStartedAt('foo')).toBe(mockGameState.processes['foo'].startedAt);
     });
 
-    test("getProcessProgress should return 0 if the process has not started", () => {
-        expect(getProcessProgress("foo")).toBe(0);
+    test('getProcessProgress should return 0 if the process has not started', () => {
+        expect(getProcessProgress('foo')).toBe(0);
     });
 
-    test("getProcessProgress should return the correct value if the process is in progress", () => {
-        startProcess("foo");
-        mockGameState.processes["foo"].startedAt = Date.now() - 5000;
-        expect(getProcessProgress("foo")).toBeGreaterThan(0);
+    test('getProcessProgress should return the correct value if the process is in progress', () => {
+        startProcess('foo');
+        mockGameState.processes['foo'].startedAt = Date.now() - 5000;
+        expect(getProcessProgress('foo')).toBeGreaterThan(0);
     });
 
-    test("getProcessProgress should return 100 if the process is finished", () => {
-        startProcess("foo");
-        mockGameState.processes["foo"].startedAt = Date.now() - 20000;
-        expect(getProcessProgress("foo")).toBe(100);
+    test('getProcessProgress should return 100 if the process is finished', () => {
+        startProcess('foo');
+        mockGameState.processes['foo'].startedAt = Date.now() - 20000;
+        expect(getProcessProgress('foo')).toBe(100);
     });
 
-    test("finishProcess should not do anything if the process is not finished", () => {
-        finishProcess("foo");
-        expect(mockGameState.processes["foo"]).toBeUndefined();
+    test('finishProcess should not do anything if the process is not finished', () => {
+        finishProcess('foo');
+        expect(mockGameState.processes['foo']).toBeUndefined();
     });
 
-    test("finishProcess should add the created items to the inventory", () => {
-        startProcess("foo");
-        mockGameState.processes["foo"].startedAt = Date.now() - 20000;
-        finishProcess("foo");
-        expect(mockGameState.inventory["3"]).toBe(1);
+    test('finishProcess should add the created items to the inventory', () => {
+        startProcess('foo');
+        mockGameState.processes['foo'].startedAt = Date.now() - 20000;
+        finishProcess('foo');
+        expect(mockGameState.inventory['3']).toBe(1);
     });
 
-    test("finishProcess should remove the process from the game state", () => {
-        startProcess("foo");
-        mockGameState.processes["foo"].startedAt = Date.now() - 20000;
-        finishProcess("foo");
-        expect(mockGameState.processes["foo"]).toBeUndefined();
+    test('finishProcess should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [],
+            createItems: [{ id: 'custom-item', count: 2 }],
+        };
+        mockGameState.inventory['custom-item'] = 0;
+        startProcess('custom-1', definition);
+        mockGameState.processes['custom-1'].startedAt = Date.now() - 20000;
+        finishProcess('custom-1', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(2);
     });
 
-    test("finishProcess should revert the process state to NOT_STARTED if the process is finished", () => {
-        startProcess("foo");
-        mockGameState.processes["foo"].startedAt = Date.now() - 20000;
-        finishProcess("foo");
-        expect(getProcessState("foo").state).toBe(ProcessStates.NOT_STARTED);
+    test('finishProcess should handle undefined create items for custom processes', () => {
+        const definition = {
+            id: 'custom-2',
+            duration: '10s',
+            consumeItems: [{ id: 'custom-item', count: 1 }],
+        };
+        mockGameState.inventory['custom-item'] = 3;
+        startProcess('custom-2', definition);
+        mockGameState.processes['custom-2'].startedAt = Date.now() - 20000;
+        finishProcess('custom-2', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(2);
     });
 
-    test("cancelProcess should not do anything if the process is not started", () => {
-        cancelProcess("foo");
-        expect(mockGameState.processes["foo"]).toBeUndefined();
+    test('finishProcess should remove the process from the game state', () => {
+        startProcess('foo');
+        mockGameState.processes['foo'].startedAt = Date.now() - 20000;
+        finishProcess('foo');
+        expect(mockGameState.processes['foo']).toBeUndefined();
+    });
+
+    test('finishProcess should revert the process state to NOT_STARTED if the process is finished', () => {
+        startProcess('foo');
+        mockGameState.processes['foo'].startedAt = Date.now() - 20000;
+        finishProcess('foo');
+        expect(getProcessState('foo').state).toBe(ProcessStates.NOT_STARTED);
+    });
+
+    test('cancelProcess should not do anything if the process is not started', () => {
+        cancelProcess('foo');
+        expect(mockGameState.processes['foo']).toBeUndefined();
 
         // inventory should not change
         expect(mockGameState.inventory).toEqual({
-            "1": 10,
-            "2": 50,
+            1: 10,
+            2: 50,
         });
     });
 
-    test("cancelProcess should not do anything if the process ID is invalid", () => {
-        cancelProcess("bar");
-        expect(mockGameState.processes["bar"]).toBeUndefined();
+    test('cancelProcess should not do anything if the process ID is invalid', () => {
+        cancelProcess('bar');
+        expect(mockGameState.processes['bar']).toBeUndefined();
     });
 
-    test("cancelProcess should cancel the process if it is in progress", () => {
-        startProcess("foo");
-        cancelProcess("foo");
-        expect(mockGameState.processes["foo"]).toBeUndefined();
+    test('cancelProcess should cancel the process if it is in progress', () => {
+        startProcess('foo');
+        cancelProcess('foo');
+        expect(mockGameState.processes['foo']).toBeUndefined();
     });
 
-    test("cancelProcess should return the consumed items to the inventory", () => {
-        startProcess("foo");
-        cancelProcess("foo");
-        expect(mockGameState.inventory["2"]).toBe(50);
+    test('cancelProcess should return the consumed items to the inventory', () => {
+        startProcess('foo');
+        cancelProcess('foo');
+        expect(mockGameState.inventory['item-2']).toBe(50);
     });
 
-    test("getProcessesForItem should return the correct processes", () => {
-        expect(getProcessesForItem("1")).toEqual({"requireItem": ["foo"]});
-        expect(getProcessesForItem("2")).toEqual({"consumeItem": ["foo"]});
-        expect(getProcessesForItem("3")).toEqual({"createItem": ["foo"]});
+    test('cancelProcess should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [{ id: 'custom-item', count: 3 }],
+            createItems: [],
+        };
+        mockGameState.inventory['custom-item'] = 5;
+        startProcess('custom-1', definition);
+        cancelProcess('custom-1', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(5);
     });
 
-    test("getProcessesForItem should return an empty array if no processes are found", () => {
+    test('cancelProcess should handle undefined consume items for custom processes', () => {
+        const definition = {
+            id: 'custom-2',
+            duration: '10s',
+            createItems: [{ id: 'custom-item', count: 1 }],
+        };
+        mockGameState.inventory['custom-item'] = 1;
+        startProcess('custom-2', definition);
+        cancelProcess('custom-2', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(1);
+    });
+
+    test('pauseProcess should move process to paused state', () => {
+        startProcess('foo');
+        pauseProcess('foo');
+        expect(mockGameState.processes['foo'].pausedAt).toEqual(expect.any(Number));
+        expect(getProcessState('foo').state).toBe(ProcessStates.PAUSED);
+    });
+
+    test('resumeProcess should resume a paused process', () => {
+        startProcess('foo');
+        pauseProcess('foo');
+        const pausedAt = mockGameState.processes['foo'].pausedAt;
+        resumeProcess('foo');
+        expect(mockGameState.processes['foo'].pausedAt).toBeNull();
+        expect(mockGameState.processes['foo'].startedAt).toBeGreaterThanOrEqual(pausedAt);
+        expect(getProcessState('foo').state).toBe(ProcessStates.IN_PROGRESS);
+    });
+
+    test('getProcessesForItem should return the correct processes', () => {
+        expect(getProcessesForItem('item-1')).toEqual({ requireItem: ['foo'] });
+        expect(getProcessesForItem('item-2')).toEqual({ consumeItem: ['foo'] });
+        expect(getProcessesForItem('item-3')).toEqual({ createItem: ['foo'] });
+    });
+
+    test('getProcessesForItem should return an empty array if no processes are found', () => {
         // hypothetical invalid item ID
-        expect(getProcessesForItem("999")).toEqual({});
+        expect(getProcessesForItem('nonexistent')).toEqual({});
     });
 
-    test("skipProcess should work even if the process is not started", () => {
-        skipProcess("foo");
-        expect(mockGameState.processes["foo"]).toBeUndefined();
+    test('skipProcess should work even if the process is not started', () => {
+        skipProcess('foo');
+        expect(mockGameState.processes['foo']).toBeUndefined();
     });
 
-    test("skipProcess should do nothing if the process ID is invalid", () => {
-        skipProcess("bar");
-        expect(mockGameState.processes["bar"]).toBeUndefined();
+    test('skipProcess should do nothing if the process ID is invalid', () => {
+        skipProcess('bar');
+        expect(mockGameState.processes['bar']).toBeUndefined();
     });
 
-    test("skipProcess should work even if the process is finished", () => {
-        startProcess("foo");
-        mockGameState.processes["foo"].startedAt = Date.now() - 20000;
-        skipProcess("foo");
-        expect(mockGameState.processes["foo"]).toBeUndefined();
+    test('skipProcess should work even if the process is finished', () => {
+        startProcess('foo');
+        mockGameState.processes['foo'].startedAt = Date.now() - 20000;
+        skipProcess('foo');
+        expect(mockGameState.processes['foo']).toBeUndefined();
     });
 
-    test("skipProcess should immediately finish the process", () => {
-        startProcess("foo");
-        skipProcess("foo");
-        expect(getProcessState("foo").state).toBe(ProcessStates.NOT_STARTED);
+    test('skipProcess should immediately finish the process', () => {
+        startProcess('foo');
+        skipProcess('foo');
+        expect(getProcessState('foo').state).toBe(ProcessStates.NOT_STARTED);
     });
 
-    test("skipProcess should add the created items to the inventory", () => {
-        startProcess("foo");
-        skipProcess("foo");
-        expect(mockGameState.inventory["3"]).toBe(1);
+    test('skipProcess should add the created items to the inventory', () => {
+        startProcess('foo');
+        skipProcess('foo');
+        expect(mockGameState.inventory['3']).toBe(1);
     });
 
-    test("skipProcess should remove the process from the game state", () => {
-        startProcess("foo");
-        skipProcess("foo");
-        expect(mockGameState.processes["foo"]).toBeUndefined();
+    test('skipProcess should remove the process from the game state', () => {
+        startProcess('foo');
+        skipProcess('foo');
+        expect(mockGameState.processes['foo']).toBeUndefined();
     });
 
-    test("skipProcess should revert the process state to NOT_STARTED if the process is finished", () => {
-        startProcess("foo");
-        skipProcess("foo");
-        expect(getProcessState("foo").state).toBe(ProcessStates.NOT_STARTED);
+    test('skipProcess should revert the process state to NOT_STARTED if the process is finished', () => {
+        startProcess('foo');
+        skipProcess('foo');
+        expect(getProcessState('foo').state).toBe(ProcessStates.NOT_STARTED);
     });
 
-    test("skipProcess should remove the consume items from the inventory", () => {
-        startProcess("foo");
-        skipProcess("foo");
-        expect(mockGameState.inventory["2"]).toBe(47);
+    test('skipProcess should remove the consume items from the inventory', () => {
+        startProcess('foo');
+        skipProcess('foo');
+        expect(mockGameState.inventory['item-2']).toBe(47);
     });
-  });
+
+    test('skipProcess should handle custom processes with undefined items', () => {
+        const definition = {
+            id: 'custom-3',
+            duration: '10s',
+            createItems: [{ id: 'custom-item', count: 2 }],
+        };
+        mockGameState.inventory['custom-item'] = 0;
+        startProcess('custom-3', definition);
+        skipProcess('custom-3', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(2);
+        expect(mockGameState.processes['custom-3']).toBeUndefined();
+    });
+
+    test('finishProcessNow should use provided process definition', () => {
+        const definition = {
+            id: 'custom-1',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [],
+            createItems: [{ id: 'custom-item', count: 1 }],
+        };
+        mockGameState.inventory['custom-item'] = 0;
+        startProcess('custom-1', definition);
+        finishProcessNow('custom-1', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(1);
+        expect(mockGameState.processes['custom-1']).toBeUndefined();
+    });
+
+    test('finishProcessNow should handle missing create items for custom processes', () => {
+        const definition = {
+            id: 'custom-2',
+            duration: '10s',
+            requireItems: [],
+            consumeItems: [{ id: 'custom-item', count: 2 }],
+        };
+        mockGameState.inventory['custom-item'] = 4;
+        startProcess('custom-2', definition);
+        finishProcessNow('custom-2', definition);
+        expect(mockGameState.inventory['custom-item']).toBe(2);
+        expect(mockGameState.processes['custom-2']).toBeUndefined();
+    });
+});

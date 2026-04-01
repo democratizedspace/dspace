@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Missing asset placeholder</title>
+  <desc id="desc">Neutral placeholder for missing inventory images.</desc>
+  <rect width="512" height="512" fill="#f2f4f7" />
+  <rect x="48" y="48" width="416" height="416" fill="#ffffff" stroke="#c7ced6" stroke-width="4" />
+  <path d="M128 320l80-96 64 72 56-64 96 112" fill="none" stroke="#c7ced6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="184" cy="184" r="28" fill="#c7ced6" />
+  <text x="256" y="412" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#9aa3ad">
+    Image unavailable
+  </text>
+</svg>

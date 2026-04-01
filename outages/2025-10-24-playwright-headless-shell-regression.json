@@ -1,0 +1,11 @@
+{
+  "id": "playwright-headless-shell-regression",
+  "date": "2025-10-24",
+  "component": "frontend-e2e",
+  "rootCause": "Playwright 1.54 skipped downloading chromium_headless_shell, so e2e shards crashed on launch.",
+  "resolution": "Call ensurePlaywrightBrowsers() in playwright.config.ts so each run installs Chromium shell. Add a regression test.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18611896671/job/53071209401",
+    "https://github.com/democratizedspace/dspace/actions/runs/18611896671/job/53071209417"
+  ]
+}

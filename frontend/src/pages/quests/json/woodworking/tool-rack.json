@@ -1,0 +1,303 @@
+{
+    "id": "woodworking/tool-rack",
+    "title": "Build a Tool Rack",
+    "description": "Organize your workspace with a simple rack for hand tools.",
+    "image": "/assets/quests/wooden_wall_tool_rack.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your bench is buried under loose tools. We'll build a rack with repeatable spacing so each tool returns to the same slot.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "design",
+                    "text": "Show me a layout"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Start with mounting safety"
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Before drilling, scan for wires or pipes and verify your wall can support the loaded rack. If uncertain, stop and re-check anchors.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "design",
+                    "text": "Wall safety checked"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "I need to inspect the wall first"
+                }
+            ]
+        },
+        {
+            "id": "design",
+            "text": "Measure wall space, mark studs 40 cm apart, and leave 2 cm between slots so chisels slide in without binding.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "gather",
+                    "text": "Got my measurements"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mounting-plan",
+                    "text": "How do I hang this on masonry?"
+                }
+            ]
+        },
+        {
+            "id": "gather",
+            "text": "Grab pine board, handsaw, glue, chisel, and sandpaper. Predrill for screws or anchors before hanging.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cut-strategy",
+                    "text": "Materials ready",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "mounting-plan",
+                    "text": "Walk me through anchor choices"
+                }
+            ]
+        },
+        {
+            "id": "cut-strategy",
+            "text": "Pick a cut strategy: slot-first for maximum capacity, or hook-first for mixed tool sizes. Both need spacing verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "slot-first",
+                    "text": "Cut slots first"
+                },
+                {
+                    "type": "goto",
+                    "goto": "hook-first",
+                    "text": "Cut hook blocks first"
+                }
+            ]
+        },
+        {
+            "id": "slot-first",
+            "text": "Cut to 60 cm, mark slot centers, and chisel shallow grooves. Dry-fit tools to confirm grip and clearance.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount-prep",
+                    "text": "Slots look good",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Slots are too tight or chipped"
+                }
+            ]
+        },
+        {
+            "id": "hook-first",
+            "text": "Cut small hook blocks, smooth edges, and glue-test their spacing before committing to wall holes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mount-prep",
+                    "text": "Hook spacing verified",
+                    "requiresItems": [
+                        {
+                            "id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+                            "count": 1
+                        },
+                        {
+                            "id": "ac6d5ef4-a7ec-4651-8f0c-db4c0ede865e",
+                            "count": 1
+                        },
+                        {
+                            "id": "7f78fea7-e017-411d-bb4b-82c8b0940d34",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Hook blocks shifted during dry-fit"
+                }
+            ]
+        },
+        {
+            "id": "mounting-plan",
+            "text": "Use 6 mm anchors in masonry or 70 mm screws into studs. Keep top and bottom fasteners on the same vertical line.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cut-strategy",
+                    "text": "Back to cutting"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mount-prep",
+                    "text": "Fastener plan confirmed"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: recut damaged slots, re-check spacing, and test one tool from each weight group before mounting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cut-strategy",
+                    "text": "Retry with corrected spacing"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Pause and re-check wall safety"
+                }
+            ]
+        },
+        {
+            "id": "mount-prep",
+            "text": "Clamp, mark holes, then predrill and fasten. Add a thin glue bead only after the first dry mount confirms level.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Rack is mounted and level",
+                    "requiresItems": [
+                        {
+                            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+                            "count": 1
+                        },
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Rack leans or flexes"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Load tools from lightest to heaviest and confirm no anchor creep. Final gate: all tools return to stable slots without rubbing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Load test passed"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "One anchor started to pull"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. Your tool wall now supports daily use and safer cleanup because every tool has a known home.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "build-tool-rack",
+                    "text": "Cut slots, mount anchors, and secure the rack."
+                },
+                {
+                    "type": "goto",
+                    "goto": "complete",
+                    "text": "Take the tool rack.",
+                    "requiresItems": [
+                        {
+                            "id": "fff4b263-806f-4aeb-a862-cbb0d50146e2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "complete",
+            "text": "Rack installed. Every tool now has a repeatable slot, and you've got fresh consumables for the next build.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Rack complete"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "30a7cd72-cf99-4ed7-9a4c-f30a68a4a399",
+            "count": 1
+        },
+        {
+            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["woodworking/workbench"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

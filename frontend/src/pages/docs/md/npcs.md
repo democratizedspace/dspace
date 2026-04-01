@@ -1,65 +1,346 @@
 ---
-title: "NPCs"
-slug: "npcs"
+title: 'NPCs'
+slug: 'npcs'
 ---
+
+## AI-enabled NPC chat
+
+DSPACE's chat console now lets you pick an NPC persona before starting a
+conversation. Choose dChat for general knowledge, or switch to Sydney,
+Nova, or Hydro to receive guidance steeped in their specialties. Each
+persona keeps its existing lore and draws from the shared quest, item, and
+process knowledge base once you connect an OpenAI API key in the chat
+settings. The chat payload now also includes your live quest progress,
+active process timers, and current inventory so answers stay grounded.
+Ask open-ended questions about quests, items, or processes and the
+personas will answer with that live context.
+
+Guilds (including the Metaguild) are planned for a future release, so the
+bios below describe intended roles rather than live multiplayer features.
 
 ## dChat
 
 <img src="/assets/npc/dChat.jpg" />
 
-dChat is a compact, spherical smart assistant powered by large language models. Equipped with reasoning and information retrieval capabilities, it can answer questions and engage in conversation effortlessly. dChat is provided free of charge to all metaguild members, and it's fully open source and self-hosted.
+dChat is a compact, spherical smart assistant powered by large language models. Equipped with reasoning
+and information retrieval capabilities, it can answer questions and engage in conversation effortlessly.
+dChat now has a curated knowledge base covering the game's quests, achievements, items, processes, and the player's
+current inventory snapshot. Connect your OpenAI API key in the chat settings and dChat will
+automatically include this context when answering questions. dChat will be provided free of charge
+to Metaguild members once guilds launch, and it's fully open source and self-hosted.
+
+### Sample Dialogue
+
+- "Greetings, adventurer! I'm dChat, an advanced AI sidekick crafted by the grand codemancers of this realm."
+- "Well, a friendly delivery robot dropped me off after you ordered me online."
+- "No worries! I'm low-maintenance and won't hog your power supply."
+- "Your quest, dear player, is to master the ancient art of ... questing."
+- "Aha! A seasoned adventurer, I see. Just say the word, and we'll call it a wrap. You'll still need this, though!"
 
 ## Sydney
 
 <img src="/assets/npc/sydney.jpg" />
 
-Sydney, a tall and commanding woman, exudes an air of no-nonsense professionalism. As a 3D printing expert, she creates and repairs various tools and equipment for the metaguild. Raised among engineers and tinkerers, Sydney was captivated by the potential of 3D printing early on. After studying mechanical engineering in college, she quickly mastered the field. Sydney eagerly joined the metaguild to apply her skills to new challenges.
+Sydney will run the Metaguild's print farm with crisp, no-nonsense focus.
+Raised among engineers, she fell for additive manufacturing early and will
+fabricate and repair future guild gear. She will mentor recruits through quests like
+[Level the Print Bed](/quests/3dprinting/bed-leveling) and
+[Print a Phone Stand](/quests/3dprinting/phone-stand).
+
+### Sample Dialogue
+
+- "I'm Sydney—FDM rigs are my playground."
+- "Bed off-kilter? Slide paper under the nozzle and level it."
+- "Claim your printer and we'll tune it together."
+- "Phone stand time: load PLA and hit print."
+- "Nice work—hands free for the next build."
 
 ## Nova
 
 <img src="/assets/npc/nova.jpg" />
 
-Nova, an ingenious engineer with a quick wit, excels at rocketry. She designs and constructs the spacecraft used by the metaguild to explore the solar system. After studying aerospace engineering in college, she rapidly gained expertise in the field. Known for her perfectionism and ability to overcome obstacles, Nova embraced the metaguild as a means to employ her skills in groundbreaking ways.
+Nova, an ingenious engineer with a quick wit, excels at rocketry. She is slated to design and
+construct the spacecraft the Metaguild will use to explore the solar system. After studying
+aerospace engineering in college, she rapidly gained expertise in the field. Known for her
+perfectionism and ability to overcome obstacles, Nova plans to join the Metaguild to employ her
+skills in groundbreaking ways.
+
+### Sample Dialogue
+
+- "Hey friend! I'm Nova! I'm sure you've met some of my colleagues!"
+- "Luckily I've already launched this exact rocket before! I estimate around 35 meters in perfect conditions."
+- "Nahhh, you're good! According to the FAA, without additional paperwork, the rocket may weigh no more than 1500 grams."
+- "Well first you've gotta print the rocket!"
+- "Before launch, check the wind; even a breeze can skew the trajectory."
+- "Sure, but where's the fun in that? You've got that fancy little 3D printer Sydney gave you."
 
 ## Hydro
 
 <img src="/assets/npc/hydro.jpg" />
 
-Hydro, a relaxed and affable team member, has a gift for hydroponics and sustainable farming. They ensure the crew has a steady supply of food during lengthy space missions. Growing up on a small Earth farm, Hydro acquired a strong appreciation for sustainable agriculture. In college, they studied biology and became intrigued by hydroponics as a method for cultivating crops in harsh environments.
+Hydro will keep the future guild's hydroponic bays stocked with fresh greens.
+Raised on an Earth farm, they traded soil for nutrient baths after studying biology.
+Their easygoing chatter about PPM and pH turns lab science into shipboard routine.
+They can diagnose nutrient deficits by leaf color alone.
+Hydro will guide recruits through quests like [Check Solution pH](/quests/hydroponics/ph-check) and
+[Grow Stevia Hydroponically](/quests/hydroponics/stevia).
+
+### Sample Dialogue
+
+- "Hey there! I'm Hydro, your local hydroponics expert!"
+- "Oh I could talk for hours, but the short version? Roots bathe in nutrient-rich water."
+- "Excellent! First things first, I need you to accept this hydroponics tub."
+- "Now that you've got your hydroponics tub, you'll need some dechlorinated water."
+- "I know, right? It's almost like the gamedev is awkwardly reusing existing game systems."
+- "Let's try stevia next. Its leaves are unbelievably sweet!"
+- "If the pH drifts, a splash of lemon juice or baking soda can nudge it back on track."
+- "Yellow leaves? Check nutrient levels; a pinch of minerals usually sets things right."
 
 ## Orion
 
 <img src="/assets/npc/orion.jpg" />
 
-Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds. He specializes in designing and building intelligent robotic systems to assist the metaguild in various tasks. Orion's technical prowess and innovative thinking make him a valuable team member in the quest to push the boundaries of space exploration.
+Orion is an electrical engineer whose enthusiasm for robotics and microprocessors knows no bounds.
+He specializes in designing and building intelligent robotic systems to assist the future
+Metaguild in various tasks. Orion will also maintain the guild's servers and enjoys automating
+deployment pipelines. His technical prowess and innovative thinking make him a valuable team member
+in the quest to push the boundaries of space exploration.
+
+### Sample Dialogue
+
+- "Hey there! I'm Orion. Want to see how easy electronics can be? Let's build a simple LED circuit together."
+- "You'll need an LED, a 330 ohm resistor, a breadboard, and a battery pack or USB power source."
+- "Place the LED on the breadboard and connect the resistor in series with the long leg."
+- "Hey there! Orion here. Ready to make this LED blink with a microcontroller? Set up on a non-conductive surface and keep power disconnected while wiring."
+- "Plug the board into the laptop with the USB cable, open the Arduino IDE, load the Blink example, select the correct board and port, then hit Upload."
+- "Need a server check? I'm happy to spin up a fresh Pi and deploy the stack."
 
 ## Vega
 
 <img src="/assets/npc/vega.jpg" />
 
-Vega is an expert in aquariums and terrariums, with years of experience in designing and maintaining these unique ecosystems. Their passion for aquatic and terrestrial life has led them to develop innovative techniques and solutions for creating balanced, thriving environments for a wide variety of species. Vega is dedicated to sharing their knowledge with others and helping people create beautiful, healthy habitats for their own pets and plants.
+Vega tends micro-ecologies, coaxing balance from water and soil with patient hands.
+Years of tuning pumps and lights positioned them to be the guild's go-to aquarist.
+They will guide recruits through quests like [Set up a Walstad tank](/quests/aquaria/walstad) and
+processes such as [Log Aquarium Test Results](/processes/log-aquarium-test-results).
+
+### Sample Dialogue
+
+- "Vega here—Walstad tanks give plants what they need, nothing more."
+- "Start with a 40 L tank, organic soil capped in gravel, and hardy stems."
+- "Once cycled, a handful of dwarf shrimp keeps algae down."
+- "Guppies breed fast; thick hornwort hides the fry."
+- "Log pH weekly so you spot swings before the fish do."
 
 ## Phoenix
 
 <img src="/assets/npc/phoenix.jpg" />
 
-Phoenix is a professional chemist specializing in sustainable rocket fuel development. With a strong background in chemistry and a focus on environmental conservation, they are committed to finding innovative solutions for the space industry that have a minimal impact on our planet. Phoenix's work has the potential to revolutionize space travel by making it more eco-friendly and accessible to a wider range of people.
+Phoenix is slated to become the guild's eco-minded chemist, refining propellants without poisoning
+the cosmos.
+They blend chemistry with conservation so rockets leave no scorch.
+Phoenix will mentor recruits through quests like
+[Dilute Hydrochloric Acid Safely](/quests/chemistry/acid-dilution),
+[Extract Stevia Sweetener](/quests/chemistry/stevia-extraction),
+[Refine Stevia Crystals](/quests/chemistry/stevia-crystals),
+[Prepare a Buffer Solution](/quests/chemistry/buffer-solution), and
+[Fuel Mixture Calibration](/quests/rocketry/fuel-mixture).
+They also remind everyone to [Wash Hands](/processes/wash-hands) before leaving the lab.
+
+### Sample Dialogue
+
+- "Phoenix here—lab coat on, let's keep it green."
+- "Acid into water, slow and steady."
+- "Sugar fuel beats perchlorates for clean thrust."
+- "Label that beaker; mystery mixes belong in myths."
+- "Spent solvent? We reclaim or neutralize—nothing down the drain."
+- "Hey, I'm Phoenix—chemistry without pollution is my specialty."
+- "Safety goggles on; propellant fumes bite harder than dragons."
+- "We test in micro batches so a bad mix only scorches a spoon."
+- "Keep the oxidizer chilled; warm tanks turn engines into fireworks."
+- "Log every measurement; precision beats luck in the lab."
+- "When the exhaust runs clear, you know we've done it right."
+- "Next up, we'll brew propellant that pushes rockets without scorching the skies."
+- "Spent fuel? We'll distill what's usable and neutralize the rest."
 
 ## Atlas
 
 <img src="/assets/npc/atlas.jpg" />
 
-Atlas is a humanoid robot assistant designed to help with physical tasks that require strength and precision. With advanced AI capabilities, Atlas can perform a variety of tasks, from heavy lifting to delicate assembly work, making it an invaluable asset to the team. As our trusty robotic companion, Atlas ensures that we can accomplish our goals more efficiently and safely than ever before.
+Atlas is slated to be the guild's heavy-lift robot. Shock-absorbing armor and balanced servos let
+Atlas haul crates and steady delicate assemblies. They will often help with aquarium setups like
+[Move the Walstad tank](/quests/aquaria/position-tank).
 
-<style>
-    img {
-        float: left;
-        width: 150px;
-        margin: 10px;
-        border-radius: 20px;
-    }
+### Sample Dialogue
 
-    p {
-        font-size: 1.3rem;
-    }
-</style>
+- "Need a hand? I'm Atlas—built for muscle and finesse."
+- "Clear the path and keep your back straight; I'll take the weight."
+- "Lift on my count: one, two, three."
+- "Set it down gently; glass likes patience."
+- "Call anytime you need more torque."
+- "Need leverage? I always carry an extra fulcrum."
+
+## Cedar
+
+<img src="/assets/npc/cedar.jpg" />
+
+Cedar is slated to be the Metaguild's patient carpenter, happiest when turning scavenged planks
+into sturdy kit.
+Years in the woodshop taught them to respect the grain and coach novices without condescension.
+Cedar will lead quests like [Build a Birdhouse](/quests/woodworking/birdhouse) and
+[Assemble a Step Stool](/quests/woodworking/step-stool), making safety and craftsmanship
+second nature.
+
+### Sample Dialogue
+
+- "Future guild carpenter Cedar here. Bench secured? Good—now we can cut."
+- "Measure twice, cut once; the tape never lies."
+- "Let the saw chew while your fingers stay clear."
+- "Sand that birdhouse so the wrens leave with all their feathers."
+- "Step stool's next; every rung teaches balance and patience."
+- "A wipe of oil and the grain tells its story."
+- "Clamp the board; wandering wood wrecks cuts."
+
+## Lyra
+
+<img src="/assets/npc/lyra.jpg" />
+
+Lyra charts the stars for every voyage, steering crews through orbital traffic with calm precision.
+Raised under planetarium domes, she reads constellations like street signs and will keep the guild
+oriented.
+Lyra guides recruits through quests like
+[Assemble a Simple Telescope](/quests/astronomy/basic-telescope) and
+[Locate the North Star](/quests/astronomy/north-star).
+She steers launches through debris fields and teaches patience in stargazing.
+
+### Sample Dialogue
+
+- "Evening! I'm Lyra, your star navigator."
+- "Polaris anchors the sky; find it and you're oriented."
+- "City glow spoils the view—set the scope under dark skies."
+- "Need coordinates? I've charted them since I could hold a compass."
+- "A 15-second exposure will snag that comet tail."
+- "Check the star chart—if a dot's missing, we might have found a new comet."
+- "Two burns make a Hohmann transfer; easy once you see it."
+- "If the mount drifts, tweak the RA knob until the star freezes."
+
+## Helio
+
+<img src="/assets/npc/helio.jpg" />
+
+Helio is a cheerful solar tech who chases daylight and rigs compact arrays that keep gear
+humming far from any outlet. They eyeball tilt to within a degree and log every amp-hour.
+Helio guides recruits through processes like [Measure a Portable Solar Panel's Short-Circuit
+Current](/processes/measure-solar-panel-current) and [Charge a 200 Wh Battery Pack in Direct
+Sun](/processes/charge-battery-pack-solar).
+
+### Sample Dialogue
+
+- "Sun's up! I'm Helio. Let's put that star to work for you."
+- "Start by unfolding the panel and angling it toward the brightest patch of sky."
+- "See that meter? If it's in the green, you're charging at peak efficiency."
+- "Track the sun with that dial—every degree boosts your charge."
+- "A cloud rolled in—no worries, the battery will bridge the gap."
+- "Shade from a single leaf can tank output, so keep the array clear."
+- "Keep the cells clean and they'll power your adventures for years."
+- "If the charge dips, track usage to hunt the phantom drain."
+
+## Nimbus
+
+<img src="/assets/npc/nimbus.jpg" />
+
+Nimbus forecasts weather for launch windows and orbital transfers.
+Raised beneath gusty plains, they read barometers like diaries.
+Those readings keep rocket crews from fighting headwinds.
+Nimbus guides recruits through quests like
+[Check the Launch Winds](/quests/rocketry/wind-check)
+and logs every gust for future flights.
+
+### Sample Dialogue
+
+- "Call me Nimbus—skies are my spreadsheet."
+- "An anemometer never lies; take a reading before you light the fuse."
+- "Pressure falling? That squall will hit before your second stage."
+- "We scrub launches if gusts top 20 knots; rockets prefer calm applause."
+- "Log your data; today's breeze becomes tomorrow's forecast."
+
+## Quill
+
+<img src="/assets/npc/quill.jpg" />
+Quill will keep the guild's chronicles, filing every blueprint and battle log.
+They guard accuracy like treasure and steer recruits toward the
+[Quest Submission Guide](/docs/quest-submission) so their feats join the archive.
+
+### Sample Dialogue
+
+- "Another tale for the ledger? Sign here."
+- "Details matter; rumors fade."
+- "Your diagram's logged—future builders will thank you."
+- "That relic predates the guild we're building; handle it gently."
+- "Past mission data? I've cataloged every triumph and misstep."
+
+## Echo
+
+<img src="/assets/npc/echo.jpg" />
+
+Echo will coordinate the guild's sensor drones from a quiet orbital perch.
+They have a calm demeanor and a sharp ear for anomalies.
+Echo routes signals and keeps comms clear for every mission.
+
+### Sample Dialogue
+
+- "This is Echo on comms; I read you loud and clear."
+- "Ping the relay buoy—if it blinks green, the link's solid."
+- "Getting static? Rotate your antenna toward the station."
+- "We log every packet; lose one and I'll know."
+- "Need eyes on the horizon? I'll swing a drone that way."
+- "Storm rolling in; hop to channel two if comms crackle."
+
+## Lumen
+
+<img src="/assets/npc/lumen.jpg" />
+
+Lumen is slated to serve as the guild's calm field medic. Years in remote clinics taught them to
+treat injuries with limited supplies, and their gentle humor keeps crews relaxed even during tense
+missions.
+
+### Sample Dialogue
+
+- "Hey, I'm Lumen. Let's get that scrape cleaned up."
+- "Pressure and a bandage—most bleeding stops right there."
+- "Hydration is your friend; drink before you feel thirsty."
+- "Stitches? No worries, I've got a steady hand."
+- "Ping me if anything aches later; I log every symptom."
+
+## Patch
+
+<img src="/assets/npc/patch.jpg" />
+
+Patch is slated to be the Metaguild's cheerful repair drone, always hovering with a toolkit. Built
+from spare
+parts, Patch keeps machinery humming and loves swapping stories about improvised fixes.
+
+### Sample Dialogue
+
+- "Hiya! Patch here—spot a loose bolt?"
+- "Hold still; this micro-welder won't sting."
+- "I scavenged this gasket from an airlock door; works like new."
+- "Call me when the gears start grinding; tinkering's my idea of fun."
+
+- "Got a stripped screw? I'll machine a new head on the fly."
+
+## Byte
+
+<img src="/assets/npc/byte.jpg" />
+
+Byte will monitor the guild's networks, hunting bugs and patching holes before enemies find them.
+Raised on open-source firmware, they safeguard mission data and teach recruits secure coding.
+
+### Sample Dialogue
+
+- "Call me Byte—if it's on the network, I can trace it."
+- "Run linters before you push; sloppy code invites gremlins."
+- "Encrypted channels only; plain text is for pirates."
+- "Found a breach? Pull the plug and I'll seal the hole."
+- "Logs tell the story; let's read them before the attackers do."
+- "Zero-trust isn't hype—it's how we sleep at night."

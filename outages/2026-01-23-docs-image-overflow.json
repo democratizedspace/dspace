@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-23-docs-image-overflow-mobile",
+  "date": "2026-01-23",
+  "component": "frontend-docs",
+  "rootCause": "Docs markdown images inherited no max-width constraints, so large screenshots could render at their intrinsic width and overflow narrow mobile viewports.",
+  "resolution": "Constrained docs and outage markdown images to 100% width with auto height so media scales down within the content container on small screens.",
+  "references": [
+    "frontend/src/pages/docs/[slug].astro",
+    "frontend/src/pages/docs/outages/[slug].astro"
+  ]
+}

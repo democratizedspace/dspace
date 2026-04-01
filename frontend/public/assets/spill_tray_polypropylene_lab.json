@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/spill_tray_polypropylene_lab.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "spill tray",
+    "item_id": "97b735d8-0d76-4fe5-908c-781178ff6308",
+    "entity_type": "item",
+    "prompt": "A polypropylene laboratory spill tray with a raised lip, empty and clean, sitting on a chemical-resistant bench in a compact wet-lab setup. The tray should read as practical secondary containment equipment used for acid handling, with realistic matte plastic texture and subtle bench reflections, but no readable labels or branding.\n\nUltra-detailed, photorealistic 512×512 image with neutral task lighting and a grounded near-future lab aesthetic. Keep the tray centered and uncluttered so it is instantly recognizable as a DSPACE inventory icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

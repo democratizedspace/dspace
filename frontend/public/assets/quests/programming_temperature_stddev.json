@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_temperature_stddev.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/stddev-temp.json",
+    "item_name": "Compute Temperature Standard Deviation",
+    "item_id": "programming/stddev-temp",
+    "entity_type": "quest",
+    "prompt": "A laptop screen shows a short analysis script in a code editor with a small section highlighted where a function computes the standard deviation of daily temperature readings from a log file. Below the editor, a console pane prints an abstract numeric result next to a small sigma symbol and thermometer icon instead of readable text, clearly indicating a spread or variability measure. On the desk nearby, a printed sheet of daily average temperatures with small dots scattered around a trend line is annotated by hand, reinforcing the idea of dispersion.\n\nThe environment is a near-future solarpunk study or lab corner: soft warm lighting, pale wood and metal surfaces, and a couple of plants or natural textures blurred in the background. The 512×512 photorealistic composition centers on the code, console output, and annotated averages, with other items gently out of focus. No brand logos or legible words appear anywhere, and no faces are visible—only a hand resting on the trackpad—emphasizing that the script has been extended to report the standard deviation of daily temperature readings.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

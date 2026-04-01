@@ -1,0 +1,28 @@
+{
+    "schemaVersion": 1,
+    "timestamp": "2026-01-21T00:04:11.000Z",
+    "counts": {
+        "items": 1,
+        "processes": 0,
+        "quests": 0,
+        "images": 1
+    },
+    "items": [
+        {
+            "id": "custom-item-only",
+            "name": "Custom item only",
+            "description": "Fixture item with image but no processes.",
+            "image": "data:image/jpeg;base64,TEST"
+        }
+    ],
+    "processes": [],
+    "quests": [],
+    "images": [
+        {
+            "id": "item:custom-item-only:image",
+            "entityType": "item",
+            "entityId": "custom-item-only",
+            "dataUrl": "data:image/jpeg;base64,TEST"
+        }
+    ]
+}

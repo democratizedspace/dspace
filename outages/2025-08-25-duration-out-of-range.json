@@ -1,0 +1,13 @@
+{
+  "id": "duration-out-of-range",
+  "date": "2025-08-25",
+  "component": "frontend",
+  "rootCause": "getDuration allowed negative or over-100 values, producing invalid percentages",
+  "resolution": "clamp duration values to the 0-100% range and add tests",
+  "references": [
+    "frontend/src/utils/strings.js",
+    "tests/strings.test.ts",
+    "frontend/__tests__/strings.test.js",
+    "frontend/README.md"
+  ]
+}

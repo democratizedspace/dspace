@@ -1,0 +1,184 @@
+{
+    "id": "aquaria/thermometer",
+    "title": "Attach Aquarium Thermometer",
+    "description": "Attach a stick-on strip thermometer outside the aquarium glass to monitor water temperature.",
+    "image": "/assets/quests/stick_on_aquarium_thermometer.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Wash and dry your hands. Unplug gear, wipe a 5 cm patch on the outside glass, and keep cords away from water while you work.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "attach",
+                    "text": "Glass is clean and dry",
+                    "requiresItems": [
+                        {
+                            "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+                            "count": 1
+                        },
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        },
+                        {
+                            "id": "b16cd6c7-dfeb-49bf-8758-0cb3563b0d50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "attach",
+            "text": "Peel the backing without touching adhesive. Align the strip at eye level below the waterline and press top to bottom for 30 seconds so bubbles don't form.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "attach-aquarium-thermometer",
+                    "text": "Attach the strip thermometer"
+                },
+                {
+                    "type": "goto",
+                    "goto": "stabilize",
+                    "text": "Strip attached but wrinkled or bubbled; smooth/reset placement before taking a reading.",
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "check",
+                    "text": "Strip is attached and seated",
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "check",
+            "text": "Wait a few minutes for the strip to stabilize. Read it straight on and log the temperature so you can catch swings while the tank cycles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Capture the first reading"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading recorded",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the reading before closure: aim for 24-28°C while cycling. If the strip reads outside range, hold stocking and run a corrective check loop.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is inside 24-28°C and logged.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "stabilize",
+                    "text": "Reading is out of range; pause and stabilize before rechecking.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "stabilize",
+            "text": "Troubleshoot safely: confirm no direct sun on the strip, keep heaters unplugged while hands are in the tank area, and wait 10 minutes before re-reading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Capture a fresh stabilization reading"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Fresh reading logged; re-evaluate range.",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Plug equipment back in with dry hands. Keep the strip away from direct sun and check it daily until the heater is installed.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Temperature logged"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "a07b75e3-f828-4cb1-81d6-1ab0e9857a79",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["aquaria/walstad"],
+    "hardening": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-13",
+                "date": "2025-08-13",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-14",
+                "date": "2025-08-14",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-16",
+                "date": "2025-08-16",
+                "score": 90
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-16-2",
+                "date": "2025-08-16",
+                "score": 95
+            }
+        ]
+    }
+}

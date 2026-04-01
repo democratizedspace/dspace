@@ -1,0 +1,72 @@
+---
+import Page from '../../../components/Page.astro';
+import Chip from '../../../components/Chip.astro';
+import { fixMarkdownText } from '../../../utils';
+import createDOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
+
+const { slug } = Astro.params;
+const outages = await Astro.glob('../md/outages/*.md');
+const outage = outages.find((doc) => doc.frontmatter.slug === slug);
+
+const title = outage?.frontmatter?.title ?? 'Outage not found';
+const DOMPurify = createDOMPurify((new JSDOM('')).window as unknown as Window);
+const html = outage ? DOMPurify.sanitize(fixMarkdownText(outage.compiledContent())) : '';
+---
+
+<Page title={title} columns="1">
+    <div class="breadcrumbs">
+        <Chip text="Docs" href="/docs" />
+        <span class="breadcrumb-separator" aria-hidden="true">→</span>
+        <Chip text="Outages" href="/docs/outages" />
+        {outage && <Chip text={title} href={`/docs/outages/${slug}`} />}
+    </div>
+
+    {outage ? (
+        <span class="content" set:html={html} />
+    ) : (
+        <p class="content">We couldn't find that outage entry.</p>
+    )}
+</Page>
+
+<style>
+    .breadcrumbs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .breadcrumb-separator {
+        background-color: white;
+        color: black;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+
+    .content {
+        background-color: white;
+        color: black;
+        padding: 10px;
+        border-radius: 20px;
+        overflow: auto;
+        display: block;
+    }
+
+    .content :global(img) {
+        max-width: 100%;
+        width: auto;
+        height: auto;
+        display: block;
+        margin: 0.75rem auto;
+    }
+
+    p.content {
+        margin: 0;
+    }
+</style>

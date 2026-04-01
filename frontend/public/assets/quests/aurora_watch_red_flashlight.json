@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/aurora_watch_red_flashlight.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/aurora-watch.json",
+    "item_name": "Watch the Aurora",
+    "item_id": "astronomy/aurora-watch",
+    "entity_type": "quest",
+    "prompt": "A silhouetted figure stands on a snowy or grassy ridge under a sky filled with soft green and purple aurora curtains, holding a small red-filtered flashlight pointed down at an open notebook. The notebook pages show simple lines and time marks (no readable text) where observations of the lights are being logged, and a nearby smartphone or compact device rests on a rock, suggesting that a forecast app was checked before heading outside. The person’s face is turned away or obscured, keeping them anonymous while focusing on the act of watching and recording the aurora.\n\nThe scene is rendered photorealistically at 512×512 in a near-future solarpunk style, with distant silhouettes of wind turbines or solar-powered cabins barely visible on the horizon. The aurora provides most of the ambient light, while the red flashlight casts a gentle pool of crimson on the notebook without overpowering the night adaptation mood. No brand logos or legible writing appear anywhere, and the overall composition feels calm and contemplative, emphasizing stepping outside with a red flashlight to log the lights.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

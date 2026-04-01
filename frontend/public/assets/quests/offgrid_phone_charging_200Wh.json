@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/offgrid_phone_charging_200Wh.jpg",
+    "entity": "frontend/src/pages/quests/json/energy/offgrid-charger.json",
+    "item_name": "Charge a Device Off-Grid",
+    "item_id": "energy/offgrid-charger",
+    "entity_type": "quest",
+    "prompt": "A small off-grid power setup is arranged on an outdoor table: a 200 W solar panel leans on a stand facing the sun, feeding a compact charge controller that sits next to a 200 Wh LiFePO4 battery pack. From the battery pack, a short USB cable runs to a smartphone lying flat on the table, its screen softly lit with a generic charging icon but no readable text. The charge controller and battery are connected with tidy DC cabling, and a simple sketch on a notepad shows icons for panel → controller → battery → phone, making the whole off-grid charging chain clear at a glance.\n\nThe scene is set on a balcony or rooftop with railings, potted plants, and a few larger rooftop solar panels visible in the distance, all rendered photorealistically in a 512×512 near-future solarpunk style. Natural, cinematic lighting highlights the reflective cells of the 200 W panel and the subtle indicators on the battery and phone, while the background remains softly out of focus. There are no brand logos or legible markings, and no full human figures—perhaps only a hand adjusting the phone cable—emphasizing the idea of charging a device entirely off-grid using a small solar kit.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

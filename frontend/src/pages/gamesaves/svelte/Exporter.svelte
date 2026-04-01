@@ -1,24 +1,73 @@
 <script>
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { exportGameStateString } from '../../../utils/gameState/common.js';
+    import { exportGameStateString, state, ready } from '../../../utils/gameState/common.js';
+    import { copyToClipboard } from '../../../utils/copyToClipboard.js';
+    import { onDestroy, onMount } from 'svelte';
 
-    const gameStateString = exportGameStateString();
+    let gameStateString = '';
+    let loaded = false;
+    let copyState = 'idle';
+    let copyFeedbackTimeoutId;
+
+    onMount(async () => {
+        await ready;
+        loaded = true;
+    });
+
+    onDestroy(() => {
+        if (copyFeedbackTimeoutId) {
+            clearTimeout(copyFeedbackTimeoutId);
+        }
+    });
+
+    const handleCopy = async () => {
+        try {
+            await copyToClipboard(gameStateString);
+            copyState = 'copied';
+        } catch (error) {
+            console.error('Failed to copy game state string', error);
+            copyState = 'error';
+        }
+
+        if (copyFeedbackTimeoutId) {
+            clearTimeout(copyFeedbackTimeoutId);
+        }
+
+        if (copyState !== 'idle') {
+            copyFeedbackTimeoutId = setTimeout(() => {
+                copyState = 'idle';
+            }, 2000);
+        }
+    };
+
+    $: if (loaded) {
+        const _gs = $state; // refresh when game state changes
+        gameStateString = exportGameStateString();
+    }
+
+    $: copyButtonText =
+        copyState === 'copied' ? 'Copied!' : copyState === 'error' ? 'Copy failed' : 'Copy';
 </script>
 
-<Chip text="">
-    <div class="vertical">
-        <p>Here is a string representation of your game state:</p>
+{#if loaded}
+    <Chip text="">
+        <div class="vertical">
+            <p>
+                Here is a portable backup envelope for your game state (with metadata). You can copy
+                and paste it to another device or keep it for safekeeping.
+            </p>
 
-        <!-- code block -->
-        <div class="code-block">
-            <code>
-                {gameStateString}
-            </code>
+            <!-- code block -->
+            <div class="code-block">
+                <code>
+                    {gameStateString}
+                </code>
+            </div>
+
+            <Chip text={copyButtonText} onClick={handleCopy} inverted={true} />
         </div>
-
-        <Chip text="Copy" onClick={() => navigator.clipboard.writeText(gameStateString)} inverted={true} />
-    </div>
-</Chip>
+    </Chip>
+{/if}
 
 <style>
     p {

@@ -1,0 +1,103 @@
+{
+    "id": "chemistry/stevia-extraction",
+    "title": "Extract Stevia Sweetener",
+    "description": "Dry and mill stevia biomass, run warm ethanol-water extraction, and clarify filtrate before collecting extract.",
+    "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Stage drying tray, grinder, 250 mL beaker, filter funnel, and 70% ethanol solvent bottle. Keep ignition sources off bench.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-prep-stevia-feedstock",
+                    "text": "Dry leaves to brittle state and mill to uniform feedstock."
+                },
+                {
+                    "type": "goto",
+                    "goto": "solvent",
+                    "text": "Milled feedstock is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "2e1dda41-1b4b-4d00-9d54-8669a49b3441",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "solvent",
+            "text": "Charge milled stevia into beaker, add 70% ethanol at 1:10 mass:volume, and hold at 55C with gentle stirring for 30 minutes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-run-stevia-solvent-wash",
+                    "text": "Run warm solvent wash and first-pass clarification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "concentrate",
+                    "text": "Clarified filtrate collected for concentration.",
+                    "requiresItems": [
+                        {
+                            "id": "35ec960e-3048-4429-ad6b-c6afb384d658",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "concentrate",
+            "text": "Evaporate solvent under low heat with airflow; do not exceed 65C to protect glycosides.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "extract-stevia",
+                    "text": "Concentrate clarified filtrate into stevia extract."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Filtrate and extract artifacts complete.",
+                    "requiresItems": [
+                        {
+                            "id": "35ec960e-3048-4429-ad6b-c6afb384d658",
+                            "count": 1
+                        },
+                        {
+                            "id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Extraction complete with documented solvent handling and thermal limits.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Stevia extract ready."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/stevia", "chemistry/safe-reaction"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

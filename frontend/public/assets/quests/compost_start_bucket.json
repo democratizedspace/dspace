@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/compost_start_bucket.jpg",
+    "entity": "frontend/src/pages/quests/json/composting/start.json",
+    "item_name": "Start a Compost Bucket",
+    "item_id": "composting/start",
+    "entity_type": "quest",
+    "prompt": "A lidded compost bucket or small bin sits on a patio or kitchen step, its lid open to reveal a fresh layer of kitchen scraps\u2014vegetable peels, coffee grounds, and bits of plant trimmings\u2014covered lightly with shredded paper or dry leaves. A small caddy or bowl of additional scraps waits nearby, and a trowel or scoop leans against the bucket, ready to add more brown material. In the background, a modest garden bed or a few planters hint at where the future compost will be used.\n\nThe scene embraces a near-future solarpunk home aesthetic: soft natural lighting, simple modern containers, and perhaps a subtle sensor or small solar-powered device attached to the bucket. The 512\u00d7512 photorealistic composition centers on the open bucket and its layered contents, with surrounding surfaces and plants in gentle blur. No brand logos or legible words appear anywhere, and no human faces are visible\u2014only hands or arms may be seen adding scraps\u2014underscoring the beginning of a small-scale kitchen-scrap-to-soil loop.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "process-form-missing-success-handler",
+  "date": "2025-10-17",
+  "component": "frontend ProcessForm",
+  "rootCause": "ProcessForm.svelte only dispatched a submit event and never persisted custom processes or surfaced a success indicator, leaving the Playwright suite unable to confirm creation and causing e2e shards to fail.",
+  "resolution": "Persist the process via the custom content database inside ProcessForm.svelte, render a success state for the UI, and cover the behaviour with tests.",
+  "references": [
+    "frontend/src/components/svelte/ProcessForm.svelte",
+    "frontend/__tests__/ProcessForm.test.js"
+  ]
+}

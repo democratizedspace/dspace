@@ -1,0 +1,116 @@
+{
+    "id": "completionist/polish",
+    "title": "Polish Your Trophy",
+    "description": "Keep your Completionist Award II shiny and ready for close-up photos.",
+    "image": "/assets/quests/completionist_trophy_polish.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "That award is looking a bit dusty. Want to give it a quick shine that also clears fingerprints?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Absolutely, let's polish it",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Grab a paper towel and a dab of soap to lift smudges without scratching the finish.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "polish-completionist-award",
+                    "text": "Wipe down the trophy and buff it dry"
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "First polish pass complete",
+                    "requiresItems": [
+                        {
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "Inspect under bright light. Finish only when no haze, streaks, or sticky residue remain on seams and lettering.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Surface is clear and dry, done",
+                    "requiresItems": [
+                        {
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Still streaky or tacky, I need a recovery pass"
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Safety first: stop if the cleaner smells harsh or the coating feels soft. Switch to diluted soap and a fresh towel, then polish again.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "touchup-polished-completionist-award",
+                    "text": "Run a gentler second polish pass"
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Second pass done, re-inspect",
+                    "requiresItems": [
+                        {
+                            "id": "1030a6c5-88b9-46e9-b38a-b20d8d326764",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Brilliant! A clean trophy reflects a dedicated adventurer.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, dChat!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "1394c366-5078-49cf-b24e-c748e8428234",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["completionist/v2"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

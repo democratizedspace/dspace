@@ -1,0 +1,83 @@
+[
+    {
+        "title": "The basics",
+        "links": [
+            { "label": "About", "href": "/docs/about" },
+            { "label": "Mission", "href": "/docs/mission" },
+            { "label": "Roadmap", "href": "/docs/roadmap" },
+            { "label": "Changelog", "href": "/docs/changelog" },
+            { "label": "FAQ", "href": "/docs/faq" },
+            { "label": "Glossary", "href": "/docs/glossary" },
+            { "label": "Contribute", "href": "/docs/contribute" },
+            { "label": "Meet the team", "href": "/docs/team" }
+        ]
+    },
+    {
+        "title": "Skills",
+        "links": [
+            { "label": "3D printing", "href": "/docs/3dprinting" },
+            { "label": "Aquaria", "href": "/docs/aquaria" },
+            { "label": "Astronomy & Observation", "href": "/docs/astronomy" },
+            { "label": "Chemistry Lab Basics", "href": "/docs/chemistry-lab" },
+            { "label": "Composting", "href": "/docs/composting" },
+            { "label": "Electronics", "href": "/docs/electronics" },
+            { "label": "Energy Systems", "href": "/docs/energy-systems" },
+            { "label": "Solar power", "href": "/docs/solar" },
+            { "label": "Electricity", "href": "/docs/electricity" },
+            { "label": "First Aid", "href": "/docs/first-aid" },
+            { "label": "Geothermal", "href": "/docs/geothermal" },
+            { "label": "Hydroponics", "href": "/docs/hydroponics" },
+            { "label": "Programming", "href": "/docs/programming" },
+            { "label": "Robotics", "href": "/docs/robotics" },
+            { "label": "Rocketry", "href": "/docs/rockets" },
+            { "label": "Sysadmin & DevOps", "href": "/docs/sysadmin-devops" },
+            { "label": "Woodworking", "href": "/docs/woodworking" }
+        ]
+    },
+    {
+        "title": "Game systems",
+        "links": [
+            { "label": "NPCs", "href": "/docs/npcs" },
+            { "label": "Everything is real-time", "href": "/docs/realtime" },
+            { "label": "Inventory", "href": "/docs/inventory" },
+            { "label": "Cloud Sync", "href": "/docs/cloud-sync" },
+            { "label": "Backups", "href": "/docs/backups" },
+            { "label": "Game state rollback", "href": "/docs/rollback" },
+            { "label": "Authentication", "href": "/docs/authentication" },
+            { "label": "Achievements", "href": "/docs/achievements" },
+            { "label": "Titles", "href": "/docs/titles" },
+            { "label": "Processes", "href": "/docs/processes" },
+            { "label": "Guilds", "href": "/docs/guilds" },
+            { "label": "Amazing", "href": "/docs/amazing" },
+            { "label": "dWatt", "href": "/docs/dwatt" },
+            { "label": "dCarbon", "href": "/docs/dCarbon" }
+        ]
+    },
+    {
+        "title": "Quests",
+        "links": [
+            { "label": "Quest Development Guidelines", "href": "/docs/quest-guidelines" },
+            { "label": "Quest Template Example", "href": "/docs/quest-template" },
+            { "label": "Quest Schema Requirements", "href": "/docs/quest-schema" },
+            { "label": "Quest Contribution Guidelines", "href": "/docs/quest-contribution" },
+            { "label": "Quest Submission Guide", "href": "/docs/quest-submission" },
+            { "label": "Custom Quest System", "href": "/docs/custom-quest-system" },
+            { "label": "Quest trees", "href": "/docs/quest-trees" },
+            { "label": "New quests list", "href": "/docs/new-quests" }
+        ]
+    },
+    {
+        "title": "Dev",
+        "links": [
+            { "label": "Pull Requests", "href": "/docs/prs" },
+            { "label": "Bounties", "href": "/docs/bounties" },
+            { "label": "User journeys", "href": "/docs/user-journeys" },
+            { "label": "Self-hosting", "href": "/docs/self-hosting" },
+            { "label": "Database benchmark", "href": "/docs/db-benchmark" },
+            { "label": "token.place API", "href": "/docs/token-place" },
+            { "label": "Schema versioning", "href": "/docs/schema-versioning" },
+            { "label": "UI lifecycle", "href": "/docs/ui-lifecycle" },
+            { "label": "Codex prompt library", "href": "/docs/prompts-codex" }
+        ]
+    }
+]

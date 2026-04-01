@@ -1,0 +1,108 @@
+{
+    "id": "geothermal/check-loop-pressure",
+    "title": "Check Loop Pressure",
+    "description": "Capture a pressure reading, validate it against operating bounds, and recover safely when the loop is out of range.",
+    "image": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before you touch the manifold: isolate mains power, crack the service valve slowly, and keep a towel under the purge point. Ready to baseline loop pressure?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Safety check complete, start baseline"
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Walk me through safe gauge setup"
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Capture one stabilized reading and note ambient conditions. Acceptable heating-mode window is 20–35 psi with less than 2 psi oscillation over 3 minutes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "text": "Capture manifold pressure",
+                    "goto": "interpret"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Pressure snapshot logged"
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the result: 20–35 psi with steady behavior passes. Below 20 psi suggests entrained air or leaks; above 35 psi points to overcharge or thermal expansion issues.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Reading is in range and stable"
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Reading is out of range or unstable"
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Recovery path: verify valve position, bleed trapped air, and inspect fittings for seepage. Re-run the gauge capture after each fix until pressure settles in bounds.",
+            "options": [
+                {
+                    "type": "goto",
+                    "text": "Re-test after corrective action",
+                    "goto": "measure"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Retest snapshot ready",
+                    "requiresItems": [
+                        {
+                            "id": "72b4448e-27d9-4746-bd3a-967ff13f501b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and redo lockout before another attempt"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work. Save the pressure value with timestamp and outdoor temp so future drift checks have a reliable baseline.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Loop pressure verified"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["geothermal/survey-ground-temperature"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

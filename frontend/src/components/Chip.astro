@@ -35,16 +35,36 @@ switch (size) {
 <span>
     { 
         variant === ChipVariants.SELECTED
-            ?
-        <a class={`selected ${classString}`} href={href}>{textString}</a>
-            :
-                (
-                    variant === ChipVariants.COMING_SOON
-                        ?
-                    <a class={`blue ${classString}`} href={href}>{textString}</a>
-                        :
-                    <a class={`${classString}`} href={href}>{textString}</a>
-                )
+            ? (
+                <a
+                    class={`selected ${classString}`}
+                    href={href}
+                    aria-label={textString}
+                >
+                    {textString}
+                </a>
+            )
+            : (
+                variant === ChipVariants.COMING_SOON
+                    ? (
+                        <a
+                            class={`blue ${classString}`}
+                            href={href}
+                            aria-label={textString}
+                        >
+                            {textString}
+                        </a>
+                    )
+                    : (
+                        <a
+                            class={`${classString}`}
+                            href={href}
+                            aria-label={textString}
+                        >
+                            {textString}
+                        </a>
+                    )
+            )
     }
 </span>
 
@@ -67,9 +87,14 @@ switch (size) {
         transition: 200ms linear;
 	}
 
-    a:hover {
-        opacity: 1;
-    }
+        a:hover {
+            opacity: 1;
+        }
+
+        a:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
     
 	@media only screen and (max-width: 768px) {
 		a {

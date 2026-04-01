@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/solder_wick_copper_braid_2mm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "solder wick",
+    "item_id": "526817d2-996a-4d80-b5fc-4a0a5eb9ca03",
+    "entity_type": "item",
+    "prompt": "A length of 2 mm copper solder wick is pulled out from a small, round spool resting on an electronics workbench, the flat braided pattern of the wick clearly visible where it lies across a PCB pad. The end of the braid is slightly darkened and spread out, showing it has just absorbed solder from a joint. The spool itself is plain with an icon-only label and no readable text, emphasizing that it is a no-clean desoldering braid.\n\nThe environment is a near-future solarpunk electronics station with soft, even lighting, a soldering iron stand and brass tip cleaner nearby, and organized component drawers fading into the background. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or legible writing on the spool or tools, and a composition that centers the braid, its used tip, and the PCB pads while the surrounding workspace remains softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

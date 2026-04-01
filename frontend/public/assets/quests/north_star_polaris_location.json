@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/north_star_polaris_location.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/north-star.json",
+    "item_name": "Locate the North Star",
+    "item_id": "astronomy/north-star",
+    "entity_type": "quest",
+    "prompt": "A silhouetted observer stands by a backyard fence, pointing a small red flashlight (turned off) along the line formed by the two “pointer” stars in the Big Dipper toward a bright star near the top of the frame, representing Polaris. In the foreground, a small table holds an open mission logbook with a simple sketch of the Big Dipper and a line extending to a marked star at the top of the circle (no readable text). The main constellation patterns are drawn in the sky with slightly brighter stars and faint connecting lines, clearly showing how the Big Dipper leads to the North Star.\n\nThe scene is a photorealistic 512×512 near-future solarpunk night, with a subtle glow from distant towns on the horizon and darkened houses with rooftop solar arrays behind the fence. Lighting is gentle, with starlight and a dim porch light providing just enough illumination to see the logbook and silhouette without spoiling the sky. No logos or legible labels appear, and the observer’s face remains unseen, emphasizing the navigational geometry between constellations rather than any individual person.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

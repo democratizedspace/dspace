@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/basil_seedling_genovese_rockwool_plug.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "basil seedling",
+    "item_id": "5712947f-716c-4f71-b28d-fcb811631080",
+    "entity_type": "item",
+    "prompt": "A two-week-old Genovese basil seedling emerging from a small rockwool plug, with several bright green leaves and a compact upright stem about five centimeters tall. The plug rests in a hydroponic propagation tray beside a net cup and a softly blurred nutrient reservoir lid, making it clearly part of a controlled indoor growing workflow. Fine leaf texture and the cube-shaped starter medium should be easy to distinguish at a glance.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future hydroponics aesthetic: soft diffuse greenhouse lighting, crisp plant detail, realistic moisture and fibrous plug texture, no logos, no text overlays, and no faces. The basil seedling should be centered and uncluttered so it reads cleanly as a distinct DSPACE inventory icon for an edible herb start.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

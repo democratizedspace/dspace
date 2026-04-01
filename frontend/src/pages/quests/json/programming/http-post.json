@@ -1,0 +1,130 @@
+{
+    "id": "programming/http-post",
+    "title": "Accept POST Data",
+    "description": "Update your server to handle POST requests and log JSON payloads.",
+    "image": "/assets/quests/programming_http_post_endpoint.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your API can serve data. Now let's safely ingest client data without opening the door to junk payloads.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "schema",
+                    "text": "I'm ready",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 2.0
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "schema",
+            "text": "Define the POST /submit schema first: timestamp, celsius, and sensor id. Reject unknown keys and oversized bodies.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "deploy-temperature-json-endpoint",
+                    "text": "Deploy the service with the new POST /submit route and schema validation"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Server returns 201 for valid payloads",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 2.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Validation failed or requests time out"
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Troubleshoot safely: add request-size limits, log rejected payload reasons, and keep secrets out of logs before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "schema",
+                    "text": "Hardening patch applied; retest",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run one valid and one invalid POST. Only close this quest when valid data persists and invalid data gets a clear 4xx response.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Both tests behave as expected",
+                    "requiresItems": [
+                        {
+                            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+                            "count": 2.0
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Invalid requests are still slipping through"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great! Your service now accepts structured POST data with explicit safety checks and recovery paths.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Nice!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["programming/json-api"],
+    "hardening": {
+        "passes": 1,
+        "score": 96,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-hardening-2026-02-21",
+                "date": "2026-02-21",
+                "score": 96
+            }
+        ]
+    }
+}

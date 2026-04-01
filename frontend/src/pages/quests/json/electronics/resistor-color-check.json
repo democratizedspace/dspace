@@ -1,0 +1,136 @@
+{
+    "id": "electronics/resistor-color-check",
+    "title": "Verify resistor color bands",
+    "description": "Confirm a resistor's value by decoding its color bands before installing it in a circuit.",
+    "image": "/assets/quests/electronics_resistor_color_band_check.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Need to confirm this resistor's value? Power down the circuit, set your multimeter to resistance mode, and hold off on soldering until we verify the stripes and a measured ohms reading.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prepare",
+                    "text": "Show me the checklist."
+                }
+            ]
+        },
+        {
+            "id": "prepare",
+            "text": "Gather the resistor color chart and multimeter. Isolate one leg of the resistor so parallel paths do not skew the reading, then orient the gold tolerance band to the right.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "decode",
+                    "text": "Tools ready and resistor isolated.",
+                    "requiresItems": [
+                        {
+                            "id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+                            "count": 1
+                        },
+                        {
+                            "id": "bf3d2784-d48d-4b12-b12a-75f563b5dc88",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "decode",
+            "text": "Decode the bands first: red-red-brown-gold should be 220 Ω ±5%. Record that expected range as 209 Ω to 231 Ω before you touch the probes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-resistor-color-code",
+                    "text": "Run the resistor color-code verifier"
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Expected range documented (209 Ω to 231 Ω)."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Measure resistance across the resistor leads and write down the observed value with units. If probes slip or your fingers bridge the leads, discard the reading and re-test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Measurement recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the recorded value against the expected window. Pass only if the reading is between 209 Ω and 231 Ω and stable across two checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Value is 209-231 Ω on two stable readings."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Value is outside tolerance or unstable."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Out-of-range branch: de-energize again, inspect for wrong color interpretation, oxidized leads, or meter range error. If the part still reads outside 209-231 Ω after cleanup, quarantine it and fetch a new 220 Ω resistor.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Corrective action applied; re-test safely."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great verification. You used both decoded bands and measured evidence, then closed only after the resistor passed tolerance.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/measure-led-current"],
+    "hardening": {
+        "passes": 2,
+        "score": 95,
+        "emoji": "✅",
+        "history": [
+            {
+                "task": "codex-refine-2025-08-07",
+                "date": "2025-08-07",
+                "score": 60
+            },
+            {
+                "task": "codex-refine-2025-08-11",
+                "date": "2025-08-11",
+                "score": 78
+            }
+        ]
+    }
+}

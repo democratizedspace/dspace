@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/woodworking_picture_frame_craft.jpg",
+    "entity": "frontend/src/pages/quests/json/woodworking/picture-frame.json",
+    "item_name": "Craft a Picture Frame",
+    "item_id": "woodworking/picture-frame",
+    "entity_type": "quest",
+    "prompt": "A simple rectangular picture frame is being assembled on a workbench, with four mitered strips of wood aligned in a square using a small corner clamp or band clamp. A printed photo lies just off to the side, ready to be placed in the frame once the glue dries, along with a thin backing board and clear glazing sheet. A small bottle of wood glue, a fine brush, and a miter saw or miter box in the background hint at the steps that led to these neat, crisp corners.\n\nThe environment is a cozy yet modern near-future workshop with a solarpunk sensibility: warm ambient lighting, pale wooden surfaces, and a few plants or natural textures subtly visible beyond the bench. The 512×512 photorealistic image centers on the frame corners and clamp, with the photo and tools slightly out of focus so there’s no readable text. Human presence is limited to hands adjusting the frame, with all faces out of frame and no brand logos visible, making the scene feel calm and precise.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

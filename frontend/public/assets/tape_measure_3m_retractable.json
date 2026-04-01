@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/tape_measure_3m_retractable.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "tape measure",
+    "item_id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+    "entity_type": "item",
+    "prompt": "A compact retractable tape measure rests on a workbench, its 3 m steel tape partially extended across the surface. The tape shows both metric and imperial markings, but the numbers and units are too small to read distinctly, clearly suggesting dual-scale measurements without focusing on exact values. The tape housing has a simple, rugged shape with a belt clip and no visible brand name or text.\n\nThe environment is a near-future solarpunk workshop with soft, natural-looking light, pieces of lumber and a small project in progress in the background, and a plant on a windowsill. The 512×512 image is photorealistic with gentle stylization, no logos or readable labels on the tape, and a composition that emphasizes the extended steel blade and the compact case while the rest of the workspace remains softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

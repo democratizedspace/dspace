@@ -1,0 +1,74 @@
+{
+    "description": "Legacy v2.1 saves are stored in localStorage['gameState'] as a JSON blob.",
+    "profiles": {
+        "minimal": {
+            "label": "Minimal v2.1 gameState",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "3": 120.5,
+                    "10": 2,
+                    "20": 7,
+                    "22": 18.25,
+                    "24": 250
+                },
+                "quests": {},
+                "processes": {}
+            }
+        },
+        "inProgress": {
+            "label": "In-progress process v2.1 gameState",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "3": 40,
+                    "11": 1,
+                    "24": 12.5,
+                    "25": 2
+                },
+                "quests": {
+                    "hydroponics/basil": {
+                        "stepId": "grown"
+                    }
+                },
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "duration": 3600000
+                    }
+                }
+            }
+        },
+        "messy": {
+            "label": "Messy v2.1 gameState (unknown keys)",
+            "gameState": {
+                "versionNumberString": "2.1",
+                "inventory": {
+                    "": 0,
+                    "0": 1,
+                    "24": 5,
+                    "85": 1
+                },
+                "quests": {
+                    "welcome/howtodoquests": {
+                        "finished": true,
+                        "itemsClaimed": ["welcome/howtodoquests-start-0"]
+                    }
+                },
+                "processes": {
+                    "processes/benchy": {
+                        "startedAt": 1672531200000,
+                        "finished": true,
+                        "result": "printed"
+                    }
+                },
+                "openAI": {
+                    "api\u004bey": "REDACTED"
+                },
+                "misc": {
+                    "flag": true
+                }
+            }
+        }
+    }
+}

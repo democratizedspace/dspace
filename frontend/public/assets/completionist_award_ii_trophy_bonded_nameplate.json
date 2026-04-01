@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/completionist_award_ii_trophy_bonded_nameplate.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "Completionist Award II",
+    "item_id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+    "entity_type": "item",
+    "prompt": "A 12 cm PLA trophy with its nameplate bonded into place, shown on a workbench mid-finishing: the seam line is subtly visible, and nearby are a small bottle of clear adhesive, sanding tools, and a soft cloth. The trophy’s form is complete and cohesive, clearly representing the assembled Completionist Award II ready for final finishing and display.\n\nUltra-detailed, photorealistic 512×512 image in a grounded near-future solarpunk maker workshop: soft cinematic lighting, clean bench organization, no logos, no readable text, and no identifiable faces. Compose the trophy prominently with minimal clutter so it reads clearly as an inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,55 +1,62 @@
 ---
-title: "Roadmap"
-slug: "roadmap"
+title: 'Roadmap'
+slug: 'roadmap'
 ---
 
-This is just a tentative roadmap showing what I'm hoping to work on next. Things are subject to change, timelines are subject to delays, and some things may be reprioritized.
+This roadmap keeps legacy v3 milestone checklist phrasing for historical continuity and also calls out
+current shipped status where relevant.
 
-## 2025
+## 2026
 
-- [ ] multiplayer
+- [ ] [custom quests](/docs/custom-quest-system) (historical milestone: shipped in April 2026)
+- [ ] 10x more quests (historical milestone: shipped in April 2026)
+- [ ] Top-down isometric base building prototype (late 2026 target, shifted beyond launch)
 
-## 2024
+## 2027 and beyond
 
-- [ ] guilds
-- [ ] top-down isometric base building
+- [ ] guilds (full membership mechanics beyond the current Metaguild framing)
+- [ ] locations gameplay systems
+- [ ] smarter dChat with deeper live game-context awareness
+- [ ] Multiplayer remains a long-term research area; updates will follow once prototypes reach
+      community testing
 
-## 2023
+## Shipped in v3 (April 2026)
 
-- [ ] in-game suborbital launch
-- [ ] AI-enabled NPCs
+- [x] DSPACE v3 released
+- [x] OpenAI-backed NPC chat personas shipped in `/chat`
+- [x] Utility destinations shipped in the More menu (`/stats`, `/leaderboard`, `/titles`,
+      `/toolbox`, `/settings`, `/gamesaves`, `/cloudsync`, `/contentbackup`)
 
-## September 2023
+See [v3 release state](/docs/v3-release-state) and the
+[April 2026 changelog](/changelog#20260401) for details.
 
-- [ ] smarter dChat (knowledge of the game, the items, your inventory, etc.)
+## Historical milestones
 
-## August 2023
+### 2025
 
-- [ ] custom quests
+The bulk of 2025 was spent developing and stabilizing DSPACE v3 for 2026 delivery.
 
-## July 2023
+### 2024
 
-- [ ] content update
+Maintenance and groundwork leading into v3.
 
-## June 2023
+### 2023
 
-- [x] [DSPACE v2]()
+- [x] in-game guided model rocket hop (servo + camera upgrade)
+- [x] AI-enabled NPCs (chat supports persona-powered conversations)
+- [x] content update (suborbital launch checklist for rockets)
+- [x] [DSPACE v2 release notes](/changelog#20230630)
 
-## January 2023
+### Early releases (2022-2023)
 
-- [x] golfish aquarium
+- [x] goldfish aquarium
 - [x] rocket with a parachute
 - [x] dSolar
 - [x] basic income
 - [x] EV charger
 - [x] carbon offsets
 - [x] 1kwh battery
-
-## October 2022
 - [x] Big [docs](/docs) update
 - [x] Make a test print
-
-## September 2022
-
-- [x] [Quest system](/docs/quests)
+- [x] [Quest system](/docs/quest-trees)
 - [x] [Docs page](/docs)

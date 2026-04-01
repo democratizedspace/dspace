@@ -1,0 +1,260 @@
+{
+    "id": "energy/wind-turbine",
+    "title": "Install a Wind Turbine",
+    "description": "Supplement your solar setup with power from the breeze.",
+    "image": "/assets/quests/small_wind_turbine_install.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your solar rig is humming. Let's capture wind energy too by mounting this 500 W turbine with a charge controller and fused leads. Tie back hair, keep hands off the rotor, and stage gear on dry ground.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Site is clear and gear is staged.",
+                    "requiresItems": [
+                        {
+                            "id": "743681a7-d2e7-465c-af07-43665079bf4d",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        },
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "6a3772b6-2550-434f-89f9-2eb53d5b139f",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce92a1a9-c817-40f0-92b1-24aff053903d",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Wind gusts are spiking. Hold position and run safety checks.",
+                    "requiresItems": [
+                        {
+                            "id": "743681a7-d2e7-465c-af07-43665079bf4d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good call. Engage the brake, secure the rotor, and verify mast plumb before climbing. Resume only when gust windows are stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Safety conditions restored; restart install flow.",
+                    "requiresItems": [
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Square the mast, torque the hardware, and route the DC leads down the tower. Wire the brake switch into the charge controller and confirm polarity with your meter before closing anything up.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "mount-wire-wind-turbine-500w",
+                    "text": "Mount, wire, and brake-test the turbine"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-brake",
+                    "text": "Tower is anchored and the brake test passed.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-brake",
+            "text": "Run one more brake/release cycle while watching cable tension. If the mast shifts or wiring chatters, descend and correct before harvesting.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Verification passed; proceed to harvesting.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Brake check failed; recover and re-mount.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Lock the brake, lower the nacelle angle, and re-torque all anchor bolts before repeating the mount verification.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Recovery complete; retry setup.",
+                    "requiresItems": [
+                        {
+                            "id": "2dfe683c-56f6-4026-b9e9-2d01a03b1878",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "harvest",
+            "text": "Face the nacelle into the breeze, ease off the brake, and watch voltage under light load before sending power into the 200 Wh pack. Stop if the tower flexes or the cables heat up.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "charge-battery-pack-wind",
+                    "text": "Harvest wind and top the pack"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-output",
+                    "text": "Logged 200 Wh and cables stayed cool.",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 1001.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-output",
+            "text": "Confirm production holds for another gust window and inspect guy lines for creep before sign-off.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verified: output stable and tower secure.",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 1001.0
+                        },
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "gust-recover",
+                    "text": "Output oscillated; run gust recovery and retest.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "gust-recover",
+            "text": "Feather the blades, re-check balance, and tighten guy lines. Re-enter harvesting only after a calm brake test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Recovery complete; retry wind harvest.",
+                    "requiresItems": [
+                        {
+                            "id": "34540aad-4c25-4268-a158-a291283bc7a0",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent! Lock the brake when you leave, coil slack, and check mast hardware after the first gusty night.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Can't wait for the next storm!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5bba251a-d223-4e22-aa30-b65238b17516",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["energy/solar-1kWh"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

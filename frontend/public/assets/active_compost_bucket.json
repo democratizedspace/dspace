@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/active_compost_bucket.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "active compost bucket",
+    "item_id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+    "entity_type": "item",
+    "prompt": "A gloved hand turns material inside a 5 gallon compost bucket, showing loosened, steaming scraps under a fresh brown layer. A thermometer and moisture meter rest nearby on a patio surface, hinting at monitoring.\n\nThe 512×512 photorealistic solarpunk setting keeps the bucket and stirred contents in focus with blurred planters behind it. There are no logos or readable text, and no faces are visible.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

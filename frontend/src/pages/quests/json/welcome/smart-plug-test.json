@@ -1,0 +1,91 @@
+{
+    "id": "welcome/smart-plug-test",
+    "title": "Smart Plug Test",
+    "description": "Use the smart plug to buy grid energy and learn the dWatt ↔ dCarbon tradeoff.",
+    "hardening": {
+        "passes": 1,
+        "score": 100,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-15",
+                "date": "2025-08-15",
+                "score": 60
+            }
+        ]
+    },
+    "image": "/assets/quests/smart_plug_test_dwatt_kwh.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Quick energy lesson: the smart plug lets you buy grid power any time. It is convenient, but it also creates dCarbon.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "what-it-means",
+                    "text": "Teach me the tradeoff"
+                }
+            ]
+        },
+        {
+            "id": "what-it-means",
+            "text": "dWatt is your spendable in-game energy for running machines. dCarbon tracks fossil-fuel impact from grid energy. Selling any priced item applies a dCarbon tax at 1% per 1000 dCarbon you carry (continuous, capped at 90%). You can pay down dCarbon with dUSD to mint dOffset, which funds renewables for other Metaguild members. Check the Sell button and tax note on an item detail page in /inventory to see your current rate.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "run",
+                    "text": "Got it—let's generate some dWatt"
+                }
+            ]
+        },
+        {
+            "id": "run",
+            "text": "Run outlet-dWatt-1e3 until your total dWatt reaches 10,000.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "outlet-dWatt-1e3",
+                    "text": "Start outlet-dWatt-1e3"
+                },
+                {
+                    "type": "goto",
+                    "goto": "wrapup",
+                    "requiresItems": [
+                        {
+                            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+                            "count": 10000
+                        }
+                    ],
+                    "text": "I reached 10,000 dWatt"
+                }
+            ]
+        },
+        {
+            "id": "wrapup",
+            "text": "Nice. Grid energy is the always-available option. As you progress, renewable generation and storage let you power up with less dCarbon cost.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Onward"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+            "count": 2500
+        },
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 150
+        },
+        {
+            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["welcome/howtodoquests"]
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/3d_printing_kit_entry_level_printer_and_pla.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "3D printing kit",
+    "item_id": "9605048d-ea62-4b70-9bbc-ea1ad4baaf3e",
+    "entity_type": "item",
+    "prompt": "An assembled entry-level FDM 3D printer with a 0.4 mm nozzle sits on a workbench, its 180\u00d7180\u00d7180 mm build volume clearly framed by the gantry and bed. On the side, a 500 g spool of PLA filament is mounted on a simple holder, with the filament routed through a guide toward the extruder. The print bed is empty and clean, and the control panel shows a neutral standby screen, emphasizing that this is a ready-to-use kit with printer and filament included.\n\nThe environment is a near-future solarpunk maker corner with soft, even lighting, neatly organized tools and filament spools on shelves, and a plant or two adding warmth. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable text on the printer, and a composition that centers the printer frame, bed, and PLA spool while the rest of the workspace remains softly blurred, highlighting a compact starter 3D printing setup.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/clean_soldering_iron_tip_brass_sponge_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Clean soldering iron tip using a brass wire sponge completion note",
+    "item_id": "f936cd30-c001-5b9a-980a-58aaead87f98",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for cleaning a soldering iron tip using a brass wire sponge, shown as a maintenance record card beside a soldering iron stand, a brass wire sponge cup, and a freshly cleaned tip. The note should clearly convey completed tip maintenance, with before-and-after tip sketches and a simple cleaning-action motif that make it visually specific to brass-sponge cleaning, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics bench aesthetic: soft warm task lighting, realistic paper, brass, steel, and ceramic textures, no logos, no readable labels, and no identifiable faces. Keep the note centered and the tool arrangement compact and uncluttered.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

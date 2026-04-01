@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/calibrate_multimeter_220_ohm_reference_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Calibrate a digital multimeter using a 220 Ω reference resistor completion note",
+    "item_id": "e8b3953c-943e-5a71-821a-a84f206c072a",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note for calibrating a digital multimeter using a 220 ohm reference resistor, shown as a compact electronics verification sheet beside a handheld multimeter, a precision resistor, and neatly placed probes on a workbench. The note should communicate successful calibration with a resistor symbol, reference comparison diagram, and calibration-complete indicator that make the subject unmistakably about instrument verification, without readable text.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics-lab aesthetic: soft task lighting, realistic paper, plastic, and metal textures, no logos, no readable labels, and no identifiable faces. Keep the note centered with the resistor and meter cleanly staged nearby.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

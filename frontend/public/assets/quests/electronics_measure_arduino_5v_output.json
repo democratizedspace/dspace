@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_measure_arduino_5v_output.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/measure-arduino-5v.json",
+    "item_name": "Measure Arduino 5 V output",
+    "item_id": "electronics/measure-arduino-5v",
+    "entity_type": "quest",
+    "prompt": "An Arduino Uno lies on a dry, non-conductive mat, powered via USB, with a digital multimeter set to DC voltage mode. The red probe is carefully touching the 5 V pin, while the black probe rests on a ground pin, both held steady by a hand wearing clear safety goggles just in frame. The meter’s display shows an abstract bar or segmented icon near the upper part of its scale instead of readable digits, suggesting a stable 5 V reading without revealing text.\n\nThe setting is a near-future solarpunk electronics bench: soft, even lighting, clean surfaces, and organized components and tools faintly visible in the background. The 512×512 photorealistic composition centers the Arduino board, probes, and meter, with the USB cable and nearby items quietly out of focus. No logos or legible text appear anywhere, and no faces are shown—only goggles, hands, and forearms—emphasizing safe and precise verification of the Arduino’s 5 V output.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

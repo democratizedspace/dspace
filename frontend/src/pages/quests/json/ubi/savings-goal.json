@@ -1,0 +1,191 @@
+{
+    "id": "ubi/savings-goal",
+    "title": "Start a Savings Jar",
+    "description": "Buy a savings jar, deposit 100 dUSD (10x deposit runs), and track your stored balance.",
+    "image": "/assets/quests/ubi_savings_jar.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You're collecting dUSD regularly. Let's build a durable savings routine with a jar, proof checks, and a fallback path.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "buy-jar",
+                    "text": "Sounds good."
+                },
+                {
+                    "type": "goto",
+                    "goto": "budget-recovery",
+                    "text": "I don't have enough dUSD yet."
+                }
+            ]
+        },
+        {
+            "id": "buy-jar",
+            "text": "First, buy a savings jar from inventory. It costs 2 dUSD and tracks what you store in it.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "deposit-choice",
+                    "text": "I bought the savings jar.",
+                    "requiresItems": [
+                        {
+                            "id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "budget-recovery",
+                    "text": "I still need more dUSD first."
+                }
+            ]
+        },
+        {
+            "id": "deposit-choice",
+            "text": "Now choose your deposit approach: run repeated deposits directly if you already have 100 dUSD, or top up first and then run deposits until the jar holds at least 100 dUSD.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "single-deposit",
+                    "text": "Direct deposit loop plan (I already have 100 dUSD).",
+                    "requiresItems": [
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 101.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "staged-deposit",
+                    "text": "Staged deposit plan (top up first)."
+                }
+            ]
+        },
+        {
+            "id": "single-deposit",
+            "text": "Run the `savings-jar-deposit` process repeatedly (10 dUSD each run) until the jar stores at least 100 dUSD total.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "savings-jar-deposit",
+                    "text": "Deposit 10 dUSD in one go."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-store",
+                    "text": "I completed enough deposit runs. Verify jar balance now.",
+                    "requiresItems": [
+                        {
+                            "id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 101.0,
+                            "containerItemId": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "staged-deposit",
+            "text": "Staged path: if your wallet is tight, claim basic income first, then run repeated savings deposits until the jar stores at least 100 dUSD.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "Top up with one basic-income cycle first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "single-deposit",
+                    "text": "Top-up done. Proceed with repeated jar deposits.",
+                    "requiresItems": [
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 101.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify-store",
+            "text": "Operational safety check: open the jar details and confirm it stores at least 100 dUSD before planning to break it. Never break the jar unless you intentionally want to cash out.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stored value confirmed and break-risk understood.",
+                    "requiresItems": [
+                        {
+                            "id": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec",
+                            "count": 1
+                        },
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 101.0,
+                            "containerItemId": "830d74da-9de5-44c7-8b9f-83a1ed3aa8ec"
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "budget-recovery",
+                    "text": "Stored value looks wrong or missing."
+                }
+            ]
+        },
+        {
+            "id": "budget-recovery",
+            "text": "Recovery branch: if funds are short or balances look wrong, run another basic-income claim, refresh inventory, then re-check jar ownership and wallet totals before retrying deposit.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "basic-income",
+                    "text": "Run recovery claim cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "buy-jar",
+                    "text": "Recovery complete. Retry jar setup and deposit loop.",
+                    "requiresItems": [
+                        {
+                            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+                            "count": 101.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. You now have a resilient savings loop: fund wallet, deposit intentionally, and confirm at least 100 dUSD is stored before any jar break action.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "All saved up for now."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5247a603-294a-4a34-a884-1ae20969b2a1",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["ubi/first-payment"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

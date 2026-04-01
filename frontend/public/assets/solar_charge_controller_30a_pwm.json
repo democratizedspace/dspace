@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/solar_charge_controller_30a_pwm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Solar charge controller",
+    "item_id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+    "entity_type": "item",
+    "prompt": "A compact 30 A PWM solar charge controller on a clean bench, with terminal blocks visible and neatly inserted wires for panel and battery connections. Small indicator LEDs glow softly, and a simple wiring diagram card sits nearby (unreadable), emphasizing safe charge regulation.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future renewable-energy aesthetic: soft cinematic lighting, tidy cabling, no logos, no readable text, no overlays. Center the controller so its terminals and compact form read clearly at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

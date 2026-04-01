@@ -1,0 +1,11 @@
+{
+  "id": "non-string-price-lookup",
+  "date": "2025-08-15",
+  "component": "backend",
+  "rootCause": "approximateIrlPrice threw when provided non-string input",
+  "resolution": "return null for null, undefined, or non-string inputs",
+  "references": [
+    "backend/approximateIrlPrice.ts",
+    "backend/approximateIrlPrice.test.ts"
+  ]
+}

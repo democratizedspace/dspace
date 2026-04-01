@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/planisphere_star_chart.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "planisphere star chart",
+    "item_id": "98f6252e-95c2-468a-b110-69d47604df2c",
+    "entity_type": "item",
+    "prompt": "A classic planisphere star chart lies flat on a wooden tabletop, showing a teardrop-shaped blue outer mask and a circular white inner disk printed with constellation lines and star dots. The inner disk rotates on a small brass-colored rivet at the center, and the outer mask has a large oval “window” cut-out that reveals part of the sky map beneath it. Around the edge of the white disk is a ring of small tick marks suggesting calendar dates and times, while the blue border hints at latitude and directional markings, all rendered as tiny, unreadable symbols so no specific text is legible. A small red-filtered astronomy flashlight and a notebook with simple constellation sketches (no readable writing) sit nearby, making it obvious this is a rotating sky map used to match constellations to the current date and time.\n\nThe setting is a cozy, near-future solarpunk astronomy corner with warm, soft lighting and a hint of modern tech in the blurred background, such as a compact smart display showing abstract starfield graphics. The 512×512 image should be photorealistic, with gentle reflections on the plastic surface of the planisphere and natural grain in the wooden table, keeping the composition clean and centered on the chart. No brand logos or readable labels appear anywhere, and no people are visible—only the planisphere and a few carefully chosen stargazing accessories that emphasize its role as a simple analog tool for exploring the night sky.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

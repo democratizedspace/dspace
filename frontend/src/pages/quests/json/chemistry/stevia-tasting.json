@@ -1,0 +1,112 @@
+{
+    "id": "chemistry/stevia-tasting",
+    "title": "Taste Test Stevia Crystals",
+    "description": "Calibrate sensory panel baselines, run blind stevia comparisons, and issue a structured panel scorecard.",
+    "image": "/assets/quests/stevia-tasting.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "No strong perfumes, coffee, or mint 30 minutes before tasting. Stage coded cups, RO water, and palate reset crackers.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-calibrate-stevia-tasting-panel",
+                    "text": "Prepare calibration cups and panel warm-up sequence."
+                },
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Calibration cups and panel readiness confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "23f49dfd-f7c6-421c-ac29-5b891d57bf97",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "mix",
+            "text": "Prepare blinded samples at 0.25%, 0.5%, and 1.0% in coded cups with randomized service order.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "mix-stevia-tasting-solution",
+                    "text": "Mix blinded stevia tasting solutions."
+                },
+                {
+                    "type": "goto",
+                    "goto": "panel",
+                    "text": "Solutions mixed and coded for panel run.",
+                    "requiresItems": [
+                        {
+                            "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "panel",
+            "text": "Run tasting in silence: sweetness onset (seconds), peak intensity (1-10), lingering bitterness (1-10).",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-run-stevia-sensory-panel",
+                    "text": "Capture structured panel scorecard."
+                },
+                {
+                    "type": "process",
+                    "process": "record-stevia-tasting-notes",
+                    "text": "Store narrative tasting notes."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Calibration, scorecard, and tasting notes complete.",
+                    "requiresItems": [
+                        {
+                            "id": "23f49dfd-f7c6-421c-ac29-5b891d57bf97",
+                            "count": 1
+                        },
+                        {
+                            "id": "de3dd21d-af02-4b38-82b7-b65c0f09a984",
+                            "count": 1
+                        },
+                        {
+                            "id": "fe146f9d-d912-4841-bf1f-1675c3aa93f3",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Sensory protocol complete with reproducible panel data.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Publish tasting results."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["chemistry/stevia-crystals"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

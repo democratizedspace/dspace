@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hypercar_20_percent_charge.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Hypercar (20% charge)",
+    "item_id": "5e283c0b-fd3c-4884-ae32-9a237f02a40e",
+    "entity_type": "item",
+    "prompt": "The same futuristic electric hypercar is shown again at a similar charging pedestal, but now the stylized battery icon visible through the window or on the dash shows only a single filled segment out of five, clearly suggesting around 20% charge without readable numbers or text. The cable is still connected, and a subtle warning-colored accent near the icon or on a small status light on the charger hints that the battery is low and actively charging up from a depleted state.\n\nThe environment remains a near-future solarpunk urban setting, but the lighting is slightly cooler and later in the day, with soft streetlights starting to glow and the city around the car in gentle evening tones. The 512\u00d7512 image is photorealistic with mild stylization, no logos or readable text, and a composition that mirrors the 80% version so the two images clearly depict the same hypercar at different charge levels while the background remains pleasantly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

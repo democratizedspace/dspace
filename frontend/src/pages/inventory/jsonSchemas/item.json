@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "image": { "type": "string" },
+        "price": { "type": "string" },
+        "unit": { "type": "string" },
+        "priceExemptionReason": { "type": "string" },
+        "type": { "type": "string" },
+        "category": {
+            "type": "string",
+            "enum": [
+                "3D Printing & Fabrication",
+                "Astronomy & Observation",
+                "Biology & Lab",
+                "Digital & Records",
+                "Digital Currency & Tokens",
+                "Electronics & Robotics",
+                "Energy & Power",
+                "Rocketry & Flight",
+                "Safety & Medical",
+                "Transportation",
+                "Workshop & Construction",
+                "Aquarium",
+                "Awards",
+                "Hydroponics",
+                "Tools",
+                "Uncategorized"
+            ]
+        },
+        "dependencies": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": []
+        },
+        "itemCounts": {
+            "type": "object",
+            "description": "Map of item ids this item can contain; values must default to 0 in catalog data",
+            "additionalProperties": { "type": "number", "minimum": 0 },
+            "default": {}
+        },
+        "hardening": { "$ref": "https://dspace.local/schemas/hardening.json" }
+    },
+    "required": ["id", "name", "description", "image"],
+    "additionalProperties": false
+}

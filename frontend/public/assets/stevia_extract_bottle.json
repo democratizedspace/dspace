@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stevia_extract_bottle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stevia extract",
+    "item_id": "a7cb182c-f491-4f49-8d36-964886d0d055",
+    "entity_type": "item",
+    "prompt": "A small amber glass dropper bottle labeled only with a simple green leaf icon stands on a clean countertop, next to a few fresh stevia leaves and a teaspoon showing a tiny pool of clear, slightly viscous liquid. The bottle\u2019s dropper cap is closed, and the scene emphasizes that the liquid inside is a concentrated sweetener derived from stevia leaves rather than a generic flavoring or medicine. A faint reflection on the surface and the deep amber glass make it clear that the contents are light-sensitive and potent.\n\nThe setting is a bright near-future solarpunk kitchen or small lab, with soft natural light, a potted herb plant in the background, and minimalist utensils neatly arranged. The 512\u00d7512 image is photorealistic with subtle stylization, no logos or readable text on the bottle, and a composition that centers the stevia extract bottle, fresh leaves, and teaspoon while the rest of the environment remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

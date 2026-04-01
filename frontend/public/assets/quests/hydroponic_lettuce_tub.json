@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponic_lettuce_tub.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/lettuce.json",
+    "item_name": "Grow Lettuce Hydroponically",
+    "item_id": "hydroponics/lettuce",
+    "entity_type": "quest",
+    "prompt": "A compact indoor hydroponic tub is filled with lush, bright-green heads of lettuce, each growing from a net pot set into the lid. The roots hang into an aerated nutrient solution below, with airline tubing and a small pump neatly routed along the side. A hand reaches in with scissors to harvest outer leaves from one of the plants, while other heads remain intact, clearly showing the process of planting lettuce seeds and harvesting fresh leaves from a home hydroponic setup.\n\nThe environment is a near-future solarpunk grow room with soft, even lighting from overhead LED panels, clean white walls, and additional tubs and vertical planters visible in gentle soft focus. The 512×512 image is photorealistic with light stylization, no logos or readable text on any equipment, and a composition that centers the lettuce tub, harvesting action, and visible root systems while the rest of the room remains softly blurred, emphasizing sustainable indoor food production.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

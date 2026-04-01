@@ -1,0 +1,2003 @@
+<script>
+    import { createEventDispatcher, onMount } from 'svelte';
+    import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
+    import QuestPreview from './QuestPreview.svelte';
+    import ItemSelector from './ItemSelector.svelte';
+    import ProcessSelector from './ProcessSelector.svelte';
+    import builtInItems from '../../pages/inventory/json/items';
+    import builtInProcesses from '../../generated/processes.json';
+    import {
+        validateQuestData,
+        validateQuestDependencies,
+    } from '../../utils/customQuestValidation.js';
+    import { isQuestTitleUnique } from '../../utils/questHelpers.js';
+    import {
+        applyQuestDefaults,
+        DEFAULT_DIALOGUE_NODE_ID,
+        DEFAULT_DIALOGUE_TEXT,
+        DEFAULT_NPC_NAME,
+        DEFAULT_QUEST_IMAGE,
+        DEFAULT_DIALOGUE_OPTION,
+        createDefaultDialogueNode,
+    } from '../../utils/questDefaults.js';
+    import { npcCatalog } from '../../data/npcs.js';
+    import { syncExistingQuestsToIndexedDB } from '../../utils/questPersistence.js';
+    import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+    import { getQuestSimulationSummary } from '../../utils/simulateQuest.js';
+    import { getMergedItemCatalog } from '../../utils/itemCatalog.js';
+
+    export let isEdit = false;
+    export let questId = null;
+    export let existingQuests = [];
+
+    let title = '';
+    let description = '';
+    let image = null;
+    let previewUrl = null;
+    let processedImageUrl = null;
+    let isProcessingImage = false;
+    let showPreview = false;
+    let isHydrated = false;
+    let requiresQuests = [];
+    let rewards = [];
+    let allQuests = [];
+    let allItems = [];
+    let allProcesses = [];
+    let validationErrors = {};
+    let isSubmitting = false;
+    let simulationSummary = {
+        hasFinishPath: true,
+        missingStart: false,
+        unreachableNodes: [],
+    };
+    const npcOptions = npcCatalog.map((entry) => ({
+        value: entry.avatar,
+        label: entry.name,
+    }));
+    const npcById = new Map(npcCatalog.map((entry) => [entry.id, entry]));
+    const npcByAvatar = new Map(npcCatalog.map((entry) => [entry.avatar, entry]));
+    const npcByName = new Map(npcCatalog.map((entry) => [entry.name.toLowerCase(), entry]));
+    let npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
+    let npcSelectOptions = npcOptions;
+    let startNodeId = DEFAULT_DIALOGUE_NODE_ID;
+    let dialogueNodes = [];
+    let newNodeId = '';
+    let newNodeText = '';
+    let nodeDraftError = '';
+    const MIN_TITLE_LENGTH = 3;
+    const MIN_DESC_LENGTH = 10;
+
+    let touched = { title: false, description: false };
+    let availableQuests = [];
+    let selectableQuests = [];
+
+    const dispatch = createEventDispatcher();
+
+    const OPTION_TYPES = [
+        { value: 'goto', label: 'Go to node' },
+        { value: 'finish', label: 'Finish quest' },
+        { value: 'process', label: 'Run process' },
+        { value: 'grantsItems', label: 'Grant items' },
+    ];
+
+    const normalizeProcessId = (id) => String(id ?? '').trim();
+
+    const normalizeProcessCatalog = (processList) =>
+        (Array.isArray(processList) ? processList : []).filter(Boolean).map((process) => ({
+            ...process,
+            id: normalizeProcessId(process?.id),
+        }));
+
+    const baseProcessCatalog = normalizeProcessCatalog(builtInProcesses).map((process) => ({
+        ...process,
+        custom: false,
+    }));
+
+    function questIdToString(id) {
+        return id == null ? '' : String(id);
+    }
+
+    function filterCurrentQuestDependencies(ids = []) {
+        const normalized = ids.map((id) => questIdToString(id)).filter(Boolean);
+        if (!isEdit || questId == null) {
+            return normalized;
+        }
+
+        const currentId = questIdToString(questId);
+        return normalized.filter((id) => id !== currentId);
+    }
+
+    async function loadQuestOptions() {
+        if (existingQuests.length === 0) {
+            try {
+                allQuests = await db.list(ENTITY_TYPES.QUEST);
+            } catch (error) {
+                console.error('Error loading quests:', error);
+                allQuests = [];
+            }
+            return;
+        }
+
+        try {
+            allQuests = await syncExistingQuestsToIndexedDB(existingQuests);
+        } catch (error) {
+            console.error('Error synchronizing existing quests:', error);
+            allQuests = existingQuests;
+        }
+    }
+
+    function normalizeOption(option) {
+        const normalized = {
+            ...option,
+            requiresItems: Array.isArray(option.requiresItems)
+                ? option.requiresItems.map((entry) => ({
+                      id: entry?.id ?? '',
+                      count: entry?.count ?? 1,
+                  }))
+                : [],
+            grantsItems: Array.isArray(option.grantsItems)
+                ? option.grantsItems.map((entry) => ({
+                      id: entry?.id ?? '',
+                      count: entry?.count ?? 1,
+                  }))
+                : [],
+        };
+
+        if (normalized.type === 'goto') {
+            normalized.goto = normalized.goto ?? '';
+        } else {
+            delete normalized.goto;
+        }
+
+        if (normalized.type === 'process') {
+            normalized.process = normalized.process ?? '';
+        } else {
+            delete normalized.process;
+        }
+
+        if (normalized.type !== 'grantsItems') {
+            normalized.grantsItems = [];
+        }
+
+        return normalized;
+    }
+
+    function createOptionDraft() {
+        return normalizeOption({
+            type: 'goto',
+            text: '',
+            goto: '',
+            process: '',
+            requiresItems: [],
+            grantsItems: [],
+        });
+    }
+
+    function createOptionState(option = createOptionDraft()) {
+        const normalized = normalizeOption(option);
+        const requiresItems = Array.isArray(normalized.requiresItems)
+            ? normalized.requiresItems
+            : [];
+        const grantsItems =
+            normalized.type === 'grantsItems'
+                ? Array.isArray(normalized.grantsItems)
+                    ? normalized.grantsItems
+                    : []
+                : [];
+
+        return {
+            ...normalized,
+            requiresItems,
+            grantsItems,
+        };
+    }
+
+    function isDefaultFinishOption(option) {
+        if (!option || option.type !== DEFAULT_DIALOGUE_OPTION.type) {
+            return false;
+        }
+
+        const optionText = (option.text || '').trim();
+        const defaultText = (DEFAULT_DIALOGUE_OPTION.text || '').trim();
+        const requiresItems = Array.isArray(option.requiresItems) ? option.requiresItems.length : 0;
+        const grantsItems = Array.isArray(option.grantsItems) ? option.grantsItems.length : 0;
+
+        return (
+            optionText === defaultText &&
+            requiresItems === 0 &&
+            grantsItems === 0 &&
+            !('goto' in option) &&
+            !('process' in option)
+        );
+    }
+
+    function createDialogueNodeState(node = createDefaultDialogueNode()) {
+        return {
+            id: node.id,
+            text: node.text,
+            options: (node.options || []).map((option) => createOptionState(option)),
+            newOption: createOptionState(),
+            optionError: '',
+        };
+    }
+
+    function resolveNpcSelection(value) {
+        const trimmed = typeof value === 'string' ? value.trim() : '';
+        if (!trimmed) {
+            return npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
+        }
+
+        const matched = npcByAvatar.get(trimmed);
+        if (matched) {
+            return matched.avatar;
+        }
+
+        const matchedById = npcById.get(trimmed);
+        if (matchedById) {
+            return matchedById.avatar;
+        }
+
+        const matchedByName = npcByName.get(trimmed.toLowerCase());
+        if (matchedByName) {
+            return matchedByName.avatar;
+        }
+
+        return trimmed;
+    }
+
+    function getNpcPayloadValue(value) {
+        const trimmed = typeof value === 'string' ? value.trim() : '';
+        if (!trimmed) {
+            return '';
+        }
+
+        const matched = npcByAvatar.get(trimmed);
+        if (matched) {
+            return matched.avatar;
+        }
+
+        const matchedById = npcById.get(trimmed);
+        if (matchedById) {
+            return matchedById.avatar;
+        }
+
+        const matchedByName = npcByName.get(trimmed.toLowerCase());
+        if (matchedByName) {
+            return matchedByName.avatar;
+        }
+
+        return trimmed;
+    }
+
+    if (dialogueNodes.length === 0) {
+        dialogueNodes = [createDialogueNodeState()];
+    }
+
+    // If in edit mode, load the quest data
+    onMount(async () => {
+        isHydrated = true;
+        if (isEdit && questId) {
+            try {
+                const questData = await db.quests.get(questId);
+                title = questData.title;
+                description = questData.description;
+                requiresQuests = filterCurrentQuestDependencies(questData.requiresQuests || []);
+                rewards = Array.isArray(questData.rewards)
+                    ? questData.rewards.map((entry) => ({
+                          id: entry?.id ?? '',
+                          count: entry?.count ?? 1,
+                      }))
+                    : [];
+                npc = resolveNpcSelection(questData.npc);
+                startNodeId = questData.start || DEFAULT_DIALOGUE_NODE_ID;
+                const mappedNodes = (questData.dialogue || []).map((node) =>
+                    createDialogueNodeState({
+                        id: node.id,
+                        text: node.text,
+                        options: node.options,
+                    })
+                );
+                dialogueNodes = mappedNodes.length > 0 ? mappedNodes : [createDialogueNodeState()];
+                if (questData.image) {
+                    previewUrl = questData.image;
+                    processedImageUrl = questData.image;
+                }
+            } catch (error) {
+                console.error('Error loading quest:', error);
+            }
+        }
+
+        if (dialogueNodes.length === 0) {
+            dialogueNodes = [createDialogueNodeState()];
+        }
+
+        if (!startNodeId) {
+            startNodeId = dialogueNodes[0]?.id ?? DEFAULT_DIALOGUE_NODE_ID;
+        }
+
+        await loadQuestOptions();
+        await validateForm();
+
+        allItems = await getMergedItemCatalog({
+            builtInItems,
+            onError: (error) => {
+                console.error('Error loading items:', error);
+            },
+        });
+
+        try {
+            const customProcesses = await db.list(ENTITY_TYPES.PROCESS);
+            allProcesses = [...baseProcessCatalog, ...normalizeProcessCatalog(customProcesses)];
+        } catch (error) {
+            console.error('Error loading processes:', error);
+            allProcesses = [...baseProcessCatalog];
+        }
+    });
+
+    $: availableQuests = allQuests.length > 0 ? allQuests : existingQuests;
+    $: selectableQuests = availableQuests.filter(
+        (quest) => questIdToString(quest.id) !== questIdToString(questId)
+    );
+    $: npcSelectOptions =
+        npcOptions.some((option) => option.value === npc) || !npc
+            ? npcOptions
+            : [...npcOptions, { value: npc, label: `Custom (${npc})` }];
+
+    function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (typeof reader.result === 'string') {
+                    resolve(reader.result);
+                } else {
+                    reject(new Error('Unable to read file as data URL.'));
+                }
+            };
+            reader.onerror = () => reject(new Error('Unable to read file as data URL.'));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function handleImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            isProcessingImage = true;
+            try {
+                const { dataUrl } = await downsampleAndCompressToJpeg(file);
+                previewUrl = dataUrl;
+                processedImageUrl = dataUrl;
+                image = file;
+                await validateForm();
+            } catch (error) {
+                console.error('Error preparing quest image:', error);
+                try {
+                    const fallbackDataUrl = await readFileAsDataUrl(file);
+                    previewUrl = fallbackDataUrl;
+                    processedImageUrl = fallbackDataUrl;
+                    image = file;
+                    await validateForm();
+                    return;
+                } catch (fallbackError) {
+                    console.error('Error creating quest image preview:', fallbackError);
+                }
+                previewUrl = null;
+                processedImageUrl = null;
+                image = null;
+                await validateForm();
+                validationErrors = {
+                    ...validationErrors,
+                    image: 'Image processing failed. Please try a different file.',
+                };
+            } finally {
+                isProcessingImage = false;
+            }
+        } else {
+            previewUrl = null;
+            image = null;
+            processedImageUrl = null;
+            await validateForm();
+        }
+    }
+
+    function handleRequirementsChange(event) {
+        const selected = Array.from(event.target.selectedOptions).map((opt) => opt.value);
+        requiresQuests = filterCurrentQuestDependencies(selected);
+    }
+
+    function handleTitleInput(event) {
+        title = event.target.value;
+        touched.title = true;
+        validateForm();
+    }
+
+    function handleDescriptionInput(event) {
+        description = event.target.value;
+        touched.description = true;
+        validateForm();
+    }
+
+    function handleNpcInput(event) {
+        npc = event.target.value;
+        validateForm();
+    }
+
+    function handleStartNodeChange(event) {
+        startNodeId = event.target.value;
+        validateForm();
+    }
+
+    function updateNodeText(index, value) {
+        dialogueNodes = dialogueNodes.map((node, idx) =>
+            idx === index ? { ...node, text: value } : node
+        );
+        validateForm();
+    }
+
+    function updateOptionField(nodeIndex, optionIndex, field, value) {
+        dialogueNodes = dialogueNodes.map((node, idx) => {
+            if (idx !== nodeIndex) {
+                return node;
+            }
+
+            const updatedOptions = node.options.map((option, optIdx) => {
+                if (optIdx !== optionIndex) {
+                    return option;
+                }
+
+                return normalizeOption({ ...option, [field]: value });
+            });
+
+            return { ...node, options: updatedOptions };
+        });
+        validateForm();
+    }
+
+    function updateOptionDraft(nodeIndex, field, value) {
+        dialogueNodes = dialogueNodes.map((node, idx) => {
+            if (idx !== nodeIndex) {
+                return node;
+            }
+
+            const draft = normalizeOption({
+                ...node.newOption,
+                [field]: value,
+            });
+
+            return { ...node, newOption: draft };
+        });
+    }
+
+    function updateOptionWithItems(nodeIndex, optionIndex, updater) {
+        dialogueNodes = dialogueNodes.map((node, idx) => {
+            if (idx !== nodeIndex) {
+                return node;
+            }
+
+            const updatedOptions = node.options.map((option, optIdx) => {
+                if (optIdx !== optionIndex) {
+                    return option;
+                }
+
+                return normalizeOption(updater(option));
+            });
+
+            return { ...node, options: updatedOptions };
+        });
+    }
+
+    function addOptionItem(nodeIndex, optionIndex, key) {
+        updateOptionWithItems(nodeIndex, optionIndex, (option) => {
+            const items = Array.isArray(option[key]) ? option[key] : [];
+            return {
+                ...option,
+                [key]: [...items, { id: '', count: 1 }],
+            };
+        });
+        validateForm();
+    }
+
+    function updateOptionItemField(nodeIndex, optionIndex, key, itemIndex, field, value) {
+        updateOptionWithItems(nodeIndex, optionIndex, (option) => {
+            const items = Array.isArray(option[key]) ? option[key] : [];
+            const updatedItems = items.map((item, idx) => {
+                if (idx !== itemIndex) {
+                    return item;
+                }
+
+                if (field === 'count') {
+                    const parsed = value === '' ? '' : Number(value);
+                    return { ...item, count: parsed };
+                }
+
+                return { ...item, [field]: value };
+            });
+
+            return {
+                ...option,
+                [key]: updatedItems,
+            };
+        });
+        validateForm();
+    }
+
+    function removeOptionItem(nodeIndex, optionIndex, key, itemIndex) {
+        updateOptionWithItems(nodeIndex, optionIndex, (option) => {
+            const items = Array.isArray(option[key]) ? option[key] : [];
+            const updatedItems = items.filter((_, idx) => idx !== itemIndex);
+            return {
+                ...option,
+                [key]: updatedItems,
+            };
+        });
+        validateForm();
+    }
+
+    function addRewardItem() {
+        rewards = [...rewards, { id: '', count: 1 }];
+        validateForm();
+    }
+
+    function updateRewardItemField(itemIndex, field, value) {
+        rewards = rewards.map((item, idx) => {
+            if (idx !== itemIndex) {
+                return item;
+            }
+
+            if (field === 'count') {
+                const parsed = value === '' ? '' : Number(value);
+                return { ...item, count: parsed };
+            }
+
+            return { ...item, [field]: value };
+        });
+        validateForm();
+    }
+
+    function removeRewardItem(itemIndex) {
+        rewards = rewards.filter((_, idx) => idx !== itemIndex);
+        validateForm();
+    }
+
+    function addOption(nodeIndex) {
+        const node = dialogueNodes[nodeIndex];
+        const draft = node.newOption;
+        const optionText = (draft.text || '').trim();
+        const optionType = draft.type || 'goto';
+
+        if (!optionText) {
+            dialogueNodes = dialogueNodes.map((n, idx) =>
+                idx === nodeIndex ? { ...n, optionError: 'Option text is required' } : n
+            );
+            return;
+        }
+
+        if (optionType === 'goto') {
+            const target = (draft.goto || '').trim();
+            if (!target) {
+                dialogueNodes = dialogueNodes.map((n, idx) =>
+                    idx === nodeIndex
+                        ? { ...n, optionError: 'Target node is required for goto options' }
+                        : n
+                );
+                return;
+            }
+        }
+
+        if (optionType === 'process') {
+            const processId = (draft.process || '').trim();
+            if (!processId) {
+                dialogueNodes = dialogueNodes.map((n, idx) =>
+                    idx === nodeIndex
+                        ? { ...n, optionError: 'Process options require a process ID' }
+                        : n
+                );
+                return;
+            }
+        }
+
+        const newOption = normalizeOption({
+            type: optionType,
+            text: optionText,
+            goto: optionType === 'goto' ? (draft.goto || '').trim() : undefined,
+            process: optionType === 'process' ? (draft.process || '').trim() : undefined,
+            grantsItems: optionType === 'grantsItems' ? draft.grantsItems : undefined,
+        });
+
+        dialogueNodes = dialogueNodes.map((n, idx) => {
+            if (idx !== nodeIndex) {
+                return n;
+            }
+
+            const existingOptions = n.options || [];
+            let updatedOptions = existingOptions;
+
+            if (optionType === 'finish') {
+                const placeholderIndex = existingOptions.findIndex((option) =>
+                    isDefaultFinishOption(option)
+                );
+
+                if (placeholderIndex !== -1) {
+                    updatedOptions = existingOptions.map((option, optIdx) =>
+                        optIdx === placeholderIndex ? newOption : option
+                    );
+                } else {
+                    updatedOptions = [...existingOptions, newOption];
+                }
+            } else {
+                updatedOptions = [...existingOptions, newOption];
+            }
+
+            return {
+                ...n,
+                options: updatedOptions,
+                newOption: createOptionDraft(),
+                optionError: '',
+            };
+        });
+        validateForm();
+    }
+
+    function removeOption(nodeIndex, optionIndex) {
+        dialogueNodes = dialogueNodes.map((node, idx) =>
+            idx === nodeIndex
+                ? {
+                      ...node,
+                      options: node.options.filter((_, optIdx) => optIdx !== optionIndex),
+                  }
+                : node
+        );
+        validateForm();
+    }
+
+    function addDialogueNode() {
+        const id = newNodeId.trim();
+        const text = newNodeText.trim();
+
+        if (!id || !text) {
+            nodeDraftError = 'Node ID and text are required';
+            return;
+        }
+
+        if (dialogueNodes.some((node) => node.id === id)) {
+            nodeDraftError = 'Node ID must be unique';
+            return;
+        }
+
+        const newNode = {
+            id,
+            text,
+            options: [],
+            newOption: createOptionState(),
+            optionError: '',
+        };
+
+        dialogueNodes = [...dialogueNodes, newNode];
+        newNodeId = '';
+        newNodeText = '';
+        nodeDraftError = '';
+
+        if (!startNodeId) {
+            startNodeId = id;
+        }
+
+        validateForm();
+    }
+
+    function removeDialogueNode(index) {
+        const removedNode = dialogueNodes[index];
+        dialogueNodes = dialogueNodes.filter((_, idx) => idx !== index);
+
+        if (startNodeId === removedNode?.id) {
+            startNodeId = dialogueNodes[0]?.id ?? '';
+        }
+
+        validateForm();
+    }
+
+    function isPositiveNumber(value) {
+        const number = Number(value);
+        return Number.isFinite(number) && number > 0;
+    }
+
+    function sanitizeItems(items = []) {
+        return items
+            .map((item) => ({
+                id: (item?.id ?? '').trim(),
+                count: Number(item?.count ?? 0),
+            }))
+            .filter((item) => item.id && isPositiveNumber(item.count))
+            .map((item) => ({ id: item.id, count: Math.max(1, Math.round(item.count)) }));
+    }
+
+    function serializeOption(option) {
+        const normalized = normalizeOption(option);
+        const requiresItems = sanitizeItems(normalized.requiresItems);
+        if (requiresItems.length > 0) {
+            normalized.requiresItems = requiresItems;
+        } else {
+            delete normalized.requiresItems;
+        }
+
+        if (normalized.type === 'grantsItems') {
+            const grantsItems = sanitizeItems(normalized.grantsItems);
+            if (grantsItems.length > 0) {
+                normalized.grantsItems = grantsItems;
+            } else {
+                delete normalized.grantsItems;
+            }
+        } else {
+            delete normalized.grantsItems;
+        }
+
+        return normalized;
+    }
+
+    function getSerializedDialogueNodes() {
+        return dialogueNodes.map((node) => ({
+            id: (node.id || '').trim(),
+            text: (node.text || '').trim(),
+            options: node.options.map((option) => serializeOption(option)),
+        }));
+    }
+
+    function getQuestPayload() {
+        const serializedNodes = getSerializedDialogueNodes();
+        const sanitizedRewards = sanitizeItems(rewards);
+        const payload = applyQuestDefaults({
+            title: title.trim(),
+            description: description.trim(),
+            image: previewUrl || '',
+            requiresQuests,
+            rewards: sanitizedRewards,
+            npc: getNpcPayloadValue(npc),
+            start: startNodeId.trim(),
+            dialogue: serializedNodes.filter((node) => node.id),
+        });
+
+        if (payload.dialogue.length === 0) {
+            payload.dialogue = [createDefaultDialogueNode()];
+        }
+
+        if (!payload.start || !payload.dialogue.some((node) => node.id === payload.start)) {
+            payload.start = payload.dialogue[0]?.id ?? createDefaultDialogueNode().id;
+        }
+
+        return { payload, serializedNodes };
+    }
+
+    $: if (isHydrated) {
+        simulationSummary = getQuestSimulationSummary({
+            start: startNodeId.trim(),
+            dialogue: getSerializedDialogueNodes().filter((node) => node.id),
+        });
+    }
+
+    async function validateForm() {
+        const errors = {};
+        const { payload, serializedNodes } = getQuestPayload();
+        const questsForValidation = allQuests.length > 0 ? allQuests : existingQuests;
+        const usingAutogeneratedImage =
+            !isEdit && !image && !previewUrl && payload.image === DEFAULT_QUEST_IMAGE;
+
+        const trimmedTitle = payload.title;
+        if (!trimmedTitle) {
+            errors.title = 'Title is required';
+        } else if (trimmedTitle.length < MIN_TITLE_LENGTH) {
+            errors.title = `Title must be at least ${MIN_TITLE_LENGTH} characters`;
+        } else if (
+            !isQuestTitleUnique(trimmedTitle, questsForValidation, isEdit ? questId : null)
+        ) {
+            errors.title = 'Title must be unique';
+        }
+
+        const trimmedDesc = payload.description;
+        if (!trimmedDesc) {
+            errors.description = 'Description is required';
+        } else if (trimmedDesc.length < MIN_DESC_LENGTH) {
+            errors.description = `Description must be at least ${MIN_DESC_LENGTH} characters`;
+        }
+
+        const { valid, errors: schemaErrors } = validateQuestData(payload);
+        const usingDefaultDialogue =
+            dialogueNodes.length === 1 &&
+            dialogueNodes[0]?.id === DEFAULT_DIALOGUE_NODE_ID &&
+            dialogueNodes[0]?.text === DEFAULT_DIALOGUE_TEXT &&
+            (dialogueNodes[0]?.options || []).length === 1 &&
+            dialogueNodes[0]?.options[0]?.type === 'finish';
+
+        if (!valid && schemaErrors) {
+            schemaErrors.forEach((err) => {
+                const field = err.instancePath.replace('/', '');
+                if (!field) return;
+
+                if (
+                    usingDefaultDialogue &&
+                    ['image', 'npc', 'dialogue', 'start', 'requiresQuests'].some((prefix) =>
+                        field.startsWith(prefix)
+                    )
+                ) {
+                    return;
+                }
+                if (field === 'image' && !errors.image) {
+                    errors.image = 'Invalid image format';
+                } else if (field === 'requiresQuests' && !errors.requiresQuests) {
+                    errors.requiresQuests = 'Invalid quest dependency';
+                } else if (field === 'npc' && !errors.npc) {
+                    errors.npc = 'NPC is required';
+                } else if (field.startsWith('dialogue') && !errors.dialogue) {
+                    errors.dialogue = 'Dialogue nodes are invalid';
+                } else if (field === 'start' && !errors.startNode) {
+                    errors.startNode = 'Start node is required';
+                } else if (!errors[field]) {
+                    errors[field] = 'Invalid characters';
+                }
+            });
+        }
+
+        if (usingAutogeneratedImage) {
+            delete errors.image;
+        }
+
+        if (dialogueNodes.length > 0) {
+            const nodeIds = new Set();
+
+            for (const node of serializedNodes) {
+                if (!node.id) {
+                    errors.dialogue = 'Dialogue nodes require an ID';
+                    break;
+                }
+
+                if (nodeIds.has(node.id)) {
+                    errors.dialogue = 'Dialogue node IDs must be unique';
+                    break;
+                }
+
+                nodeIds.add(node.id);
+
+                if (!node.text) {
+                    errors.dialogue = 'Dialogue nodes require text';
+                    break;
+                }
+
+                if (!node.options || node.options.length === 0) {
+                    errors.dialogue = 'Each dialogue node needs at least one option';
+                    break;
+                }
+
+                const missingOptionText = node.options.find(
+                    (option) => !(option.text || '').trim()
+                );
+                if (missingOptionText) {
+                    errors.dialogue = 'Dialogue options require text';
+                    break;
+                }
+
+                const missingGotoTarget = node.options.find(
+                    (option) => option.type === 'goto' && !(option.goto || '').trim()
+                );
+                if (missingGotoTarget) {
+                    errors.dialogue = 'Goto options require a target node';
+                    break;
+                }
+            }
+
+            if (!errors.dialogue) {
+                const invalidTarget = serializedNodes
+                    .flatMap((node) =>
+                        node.options
+                            .filter((option) => option.type === 'goto')
+                            .map((option) => ({ from: node.id, target: option.goto }))
+                    )
+                    .find(({ target }) => target && !serializedNodes.some((n) => n.id === target));
+
+                if (invalidTarget) {
+                    errors.dialogue = `Option target not found: ${invalidTarget.target}`;
+                }
+            }
+
+            if (!errors.dialogue) {
+                const missingProcess = serializedNodes
+                    .flatMap((node) =>
+                        node.options
+                            .filter((option) => option.type === 'process')
+                            .map((option) => option.process)
+                    )
+                    .find((processId) => processId != null && !(processId || '').trim());
+
+                if (missingProcess !== undefined) {
+                    errors.dialogue = 'Process options require a process ID';
+                }
+            }
+
+            if (!errors.dialogue) {
+                const invalidRequirement = serializedNodes.some((node) =>
+                    node.options.some((option) =>
+                        (option.requiresItems || []).some(
+                            (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
+                        )
+                    )
+                );
+
+                if (invalidRequirement) {
+                    errors.dialogue = 'Required items must include an item and positive count';
+                }
+            }
+
+            if (!errors.dialogue) {
+                const invalidGrant = serializedNodes.some((node) =>
+                    node.options.some(
+                        (option) =>
+                            option.type === 'grantsItems' &&
+                            (option.grantsItems || []).some(
+                                (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
+                            )
+                    )
+                );
+
+                if (invalidGrant) {
+                    errors.dialogue = 'Granted items require an item and positive count';
+                }
+            }
+        }
+
+        if (!errors.rewards && rewards.length > 0) {
+            const invalidReward = rewards.some(
+                (item) => !(item?.id || '').trim() || !isPositiveNumber(item?.count)
+            );
+            if (invalidReward) {
+                errors.rewards = 'Rewards require an item and positive count';
+            }
+        }
+
+        const selectableQuestIds = availableQuests
+            .filter((quest) => questIdToString(quest.id) !== questIdToString(questId))
+            .map((quest) => questIdToString(quest.id));
+
+        if (
+            payload.requiresQuests.length > 0 &&
+            !validateQuestDependencies(
+                payload.requiresQuests.map((id) => questIdToString(id)),
+                selectableQuestIds
+            )
+        ) {
+            errors.requiresQuests = 'Unknown quest dependency';
+        }
+
+        const summary = getQuestSimulationSummary(payload);
+        simulationSummary = summary;
+
+        validationErrors = errors;
+        return Object.keys(errors).length === 0;
+    }
+
+    async function uploadImage(file) {
+        if (!file) {
+            return previewUrl; // Return existing image URL if no new file
+        }
+
+        if (processedImageUrl && processedImageUrl.startsWith('data:image')) {
+            return processedImageUrl;
+        }
+
+        if (previewUrl && previewUrl.startsWith('data:image')) {
+            return previewUrl;
+        }
+
+        try {
+            const { dataUrl } = await downsampleAndCompressToJpeg(file);
+            previewUrl = dataUrl;
+            processedImageUrl = dataUrl;
+            return dataUrl;
+        } catch (error) {
+            console.error('Error preparing quest image:', error);
+            return previewUrl;
+        }
+    }
+
+    async function handlePreview() {
+        const isValid = await validateForm();
+        if (isValid) {
+            showPreview = true;
+        }
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+
+        // Validate form
+        const isValid = await validateForm();
+        if (!isValid) return;
+
+        if (isProcessingImage) {
+            dispatch('error', { message: 'Image is still processing. Please wait.' });
+            return;
+        }
+
+        isSubmitting = true;
+
+        try {
+            // Upload image if there's a new one
+            const { payload } = getQuestPayload();
+            const imageUrl = await uploadImage(image);
+            const questData = {
+                ...payload,
+                image: imageUrl || payload.image || DEFAULT_QUEST_IMAGE,
+            };
+
+            if (isEdit) {
+                await db.quests.update(questId, {
+                    ...questData,
+                    updatedAt: new Date().toISOString(),
+                });
+
+                dispatch('success', { message: 'Quest updated successfully', id: questId });
+            } else {
+                const newQuestId = await db.quests.add(questData);
+
+                dispatch('success', { message: 'Quest created successfully', id: newQuestId });
+
+                // Reset form after successful submission
+                title = '';
+                description = '';
+                image = null;
+                previewUrl = null;
+                processedImageUrl = null;
+                requiresQuests = [];
+                rewards = [];
+                npc = npcOptions[0]?.value ?? DEFAULT_NPC_NAME;
+                startNodeId = DEFAULT_DIALOGUE_NODE_ID;
+                dialogueNodes = [createDialogueNodeState()];
+                nodeDraftError = '';
+            }
+        } catch (error) {
+            console.error('Error saving quest:', error);
+            dispatch('error', { message: 'Failed to save quest' });
+        } finally {
+            isSubmitting = false;
+        }
+    }
+</script>
+
+<form on:submit={handleSubmit} class="quest-form" data-hydrated={isHydrated ? 'true' : 'false'}>
+    <div class="form-group">
+        <label for="title">Title*</label>
+        <input
+            type="text"
+            id="title"
+            bind:value={title}
+            placeholder="Gather resources"
+            class:error={validationErrors.title}
+            on:input={handleTitleInput}
+        />
+        {#if validationErrors.title}
+            <span class="error-message" data-testid="quest-title-error"
+                >{validationErrors.title}</span
+            >
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description*</label>
+        <textarea
+            id="description"
+            bind:value={description}
+            placeholder="Describe the quest in detail. What needs to be done?"
+            class:error={validationErrors.description}
+            on:input={handleDescriptionInput}
+        ></textarea>
+        {#if validationErrors.description}
+            <span class="error-message" data-testid="quest-description-error"
+                >{validationErrors.description}</span
+            >
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <label for="image">Upload an Image*</label>
+        <input
+            type="file"
+            id="image"
+            data-testid="image-file-input"
+            data-processing={isProcessingImage ? 'true' : 'false'}
+            accept="image/*"
+            on:change={handleImageUpload}
+            class:error={validationErrors.image}
+        />
+        {#if validationErrors.image}
+            <span class="error-message">{validationErrors.image}</span>
+        {/if}
+        {#if previewUrl}
+            <div class="image-preview-container">
+                <img
+                    src={previewUrl}
+                    class="image-preview"
+                    alt="Quest preview"
+                    data-testid="image-preview"
+                />
+            </div>
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <label for="requires">Quest Requirements</label>
+        <select id="requires" multiple on:change={handleRequirementsChange}>
+            {#each selectableQuests as q}
+                <option
+                    value={questIdToString(q.id)}
+                    selected={requiresQuests.includes(questIdToString(q.id))}
+                >
+                    {q.title}
+                </option>
+            {/each}
+        </select>
+        {#if validationErrors.requiresQuests}
+            <span class="error-message">{validationErrors.requiresQuests}</span>
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <h3 class="section-title">Quest Rewards</h3>
+        <p class="item-hint">
+            Select items and quantities granted when the quest is completed. Custom items are
+            supported.
+        </p>
+        {#if rewards.length === 0}
+            <p class="item-hint">No rewards configured</p>
+        {/if}
+        {#each rewards as rewardEntry, rewardIndex (rewardIndex)}
+            <div class="item-row">
+                <ItemSelector
+                    items={allItems}
+                    selectedItemId={rewardEntry.id}
+                    label="Select reward item"
+                    allowCustomId
+                    testId={`reward-item-selector-${rewardIndex}`}
+                    on:select={(event) =>
+                        updateRewardItemField(rewardIndex, 'id', event.detail.itemId)}
+                />
+                <label class="sr-only" for={`quest-reward-${rewardIndex}-count`}
+                    >Reward item count</label
+                >
+                <input
+                    id={`quest-reward-${rewardIndex}-count`}
+                    type="number"
+                    min="1"
+                    value={rewardEntry.count ?? 1}
+                    on:input={(event) =>
+                        updateRewardItemField(rewardIndex, 'count', event.target.value)}
+                    data-testid={`reward-item-count-${rewardIndex}`}
+                />
+                <button
+                    type="button"
+                    class="remove-button"
+                    on:click={() => removeRewardItem(rewardIndex)}
+                    data-testid={`remove-reward-item-${rewardIndex}`}
+                >
+                    Remove
+                </button>
+            </div>
+        {/each}
+        <button type="button" class="add-item-button" on:click={addRewardItem}>
+            Add reward item
+        </button>
+        {#if validationErrors.rewards}
+            <span class="error-message">{validationErrors.rewards}</span>
+        {/if}
+    </div>
+
+    <div class="form-group">
+        <label for="npc">NPC Identifier*</label>
+        <select
+            id="npc"
+            bind:value={npc}
+            class:error={validationErrors.npc}
+            on:change={handleNpcInput}
+        >
+            {#each npcSelectOptions as option}
+                <option value={option.value}>{option.label}</option>
+            {/each}
+        </select>
+        {#if validationErrors.npc}
+            <span class="error-message">{validationErrors.npc}</span>
+        {/if}
+    </div>
+
+    <section class="dialogue-builder">
+        <h2>Dialogue</h2>
+        <div class="new-node">
+            <div class="form-group">
+                <label for="new-node-id">New node ID</label>
+                <input id="new-node-id" type="text" bind:value={newNodeId} placeholder="start" />
+            </div>
+            <div class="form-group">
+                <label for="new-node-text">Node text</label>
+                <textarea id="new-node-text" bind:value={newNodeText} placeholder="NPC dialogue"
+                ></textarea>
+            </div>
+            <button type="button" class="add-button" on:click={addDialogueNode}>
+                Add Dialogue Node
+            </button>
+            {#if nodeDraftError}
+                <span class="error-message">{nodeDraftError}</span>
+            {/if}
+        </div>
+
+        {#if dialogueNodes.length > 0}
+            <div class="form-group">
+                <label for="start-node">Start node*</label>
+                <select id="start-node" bind:value={startNodeId} on:change={handleStartNodeChange}>
+                    <option value="" disabled>Select start node</option>
+                    {#each dialogueNodes as node}
+                        <option value={node.id}>{node.id}</option>
+                    {/each}
+                </select>
+                {#if validationErrors.startNode}
+                    <span class="error-message">{validationErrors.startNode}</span>
+                {/if}
+            </div>
+
+            {#each dialogueNodes as node, index (node.id)}
+                <section class="dialogue-node">
+                    <header class="dialogue-header">
+                        <h3>{node.id}</h3>
+                        <button
+                            type="button"
+                            class="delete-button"
+                            on:click={() => removeDialogueNode(index)}
+                        >
+                            Remove node
+                        </button>
+                    </header>
+                    <div class="form-group">
+                        <label for={`node-text-${node.id}`}>Dialogue text</label>
+                        <textarea
+                            id={`node-text-${node.id}`}
+                            value={node.text}
+                            on:input={(event) => updateNodeText(index, event.target.value)}
+                        ></textarea>
+                    </div>
+
+                    <div class="options-list">
+                        <h4>Options</h4>
+                        {#each node.options as option, optionIndex (optionIndex)}
+                            <div class="option-row">
+                                <label for={`option-${node.id}-${optionIndex}-text`}>Text</label>
+                                <input
+                                    id={`option-${node.id}-${optionIndex}-text`}
+                                    type="text"
+                                    value={option.text}
+                                    on:input={(event) =>
+                                        updateOptionField(
+                                            index,
+                                            optionIndex,
+                                            'text',
+                                            event.target.value
+                                        )}
+                                />
+                                <label for={`option-${node.id}-${optionIndex}-type`}>Type</label>
+                                <select
+                                    id={`option-${node.id}-${optionIndex}-type`}
+                                    value={option.type}
+                                    on:change={(event) =>
+                                        updateOptionField(
+                                            index,
+                                            optionIndex,
+                                            'type',
+                                            event.target.value
+                                        )}
+                                >
+                                    {#each OPTION_TYPES as typeOption}
+                                        <option value={typeOption.value}>{typeOption.label}</option>
+                                    {/each}
+                                </select>
+                                {#if option.type === 'goto'}
+                                    <label for={`option-${node.id}-${optionIndex}-goto`}
+                                        >Target node</label
+                                    >
+                                    <input
+                                        id={`option-${node.id}-${optionIndex}-goto`}
+                                        type="text"
+                                        value={option.goto}
+                                        on:input={(event) =>
+                                            updateOptionField(
+                                                index,
+                                                optionIndex,
+                                                'goto',
+                                                event.target.value
+                                            )}
+                                    />
+                                {:else if option.type === 'process'}
+                                    <ProcessSelector
+                                        processes={allProcesses}
+                                        selectedProcessId={option.process}
+                                        label="Select process"
+                                        allowCustomId
+                                        testId={`option-process-selector-${index}-${optionIndex}`}
+                                        on:select={(event) =>
+                                            updateOptionField(
+                                                index,
+                                                optionIndex,
+                                                'process',
+                                                event.detail.processId
+                                            )}
+                                    />
+                                {/if}
+                                <button
+                                    type="button"
+                                    class="delete-button"
+                                    on:click={() => removeOption(index, optionIndex)}
+                                >
+                                    Remove option
+                                </button>
+                            </div>
+                            <div class="option-items">
+                                <div class="item-group">
+                                    <h5>Required items</h5>
+                                    {#if option.requiresItems.length === 0}
+                                        <p class="item-hint">No item gate configured</p>
+                                    {/if}
+                                    {#each option.requiresItems as itemEntry, reqIndex (reqIndex)}
+                                        <div class="item-row">
+                                            <ItemSelector
+                                                items={allItems}
+                                                selectedItemId={itemEntry.id}
+                                                label="Select required item"
+                                                allowCustomId
+                                                testId={`requires-item-selector-${index}-${optionIndex}-${reqIndex}`}
+                                                on:select={(event) =>
+                                                    updateOptionItemField(
+                                                        index,
+                                                        optionIndex,
+                                                        'requiresItems',
+                                                        reqIndex,
+                                                        'id',
+                                                        event.detail.itemId
+                                                    )}
+                                            />
+                                            <label
+                                                class="sr-only"
+                                                for={`option-${node.id}-${optionIndex}-requires-${reqIndex}-count`}
+                                                >Required item count</label
+                                            >
+                                            <input
+                                                id={`option-${node.id}-${optionIndex}-requires-${reqIndex}-count`}
+                                                type="number"
+                                                min="1"
+                                                value={itemEntry.count ?? 1}
+                                                on:input={(event) =>
+                                                    updateOptionItemField(
+                                                        index,
+                                                        optionIndex,
+                                                        'requiresItems',
+                                                        reqIndex,
+                                                        'count',
+                                                        event.target.value
+                                                    )}
+                                                data-testid={`requires-item-count-${index}-${optionIndex}-${reqIndex}`}
+                                            />
+
+                                            <button
+                                                type="button"
+                                                class="remove-button"
+                                                on:click={() =>
+                                                    removeOptionItem(
+                                                        index,
+                                                        optionIndex,
+                                                        'requiresItems',
+                                                        reqIndex
+                                                    )}
+                                                data-testid={`remove-required-item-${index}-${optionIndex}-${reqIndex}`}
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                    {/each}
+                                    <button
+                                        type="button"
+                                        class="add-item-button"
+                                        on:click={() =>
+                                            addOptionItem(index, optionIndex, 'requiresItems')}
+                                        data-testid={`add-required-item-${index}-${optionIndex}`}
+                                    >
+                                        Add required item
+                                    </button>
+                                </div>
+
+                                {#if option.type === 'grantsItems'}
+                                    <div class="item-group">
+                                        <h5>Grant items</h5>
+                                        {#if option.grantsItems.length === 0}
+                                            <p class="item-hint">No items granted yet</p>
+                                        {/if}
+                                        {#each option.grantsItems as grantEntry, grantIndex (grantIndex)}
+                                            <div class="item-row">
+                                                <ItemSelector
+                                                    items={allItems}
+                                                    selectedItemId={grantEntry.id}
+                                                    label="Select grant item"
+                                                    allowCustomId
+                                                    testId={`grants-item-selector-${index}-${optionIndex}-${grantIndex}`}
+                                                    on:select={(event) =>
+                                                        updateOptionItemField(
+                                                            index,
+                                                            optionIndex,
+                                                            'grantsItems',
+                                                            grantIndex,
+                                                            'id',
+                                                            event.detail.itemId
+                                                        )}
+                                                />
+                                                <label
+                                                    class="sr-only"
+                                                    for={`option-${node.id}-${optionIndex}-grants-${grantIndex}-count`}
+                                                    >Granted item count</label
+                                                >
+                                                <input
+                                                    id={`option-${node.id}-${optionIndex}-grants-${grantIndex}-count`}
+                                                    type="number"
+                                                    min="1"
+                                                    value={grantEntry.count ?? 1}
+                                                    on:input={(event) =>
+                                                        updateOptionItemField(
+                                                            index,
+                                                            optionIndex,
+                                                            'grantsItems',
+                                                            grantIndex,
+                                                            'count',
+                                                            event.target.value
+                                                        )}
+                                                    data-testid={`grants-item-count-${index}-${optionIndex}-${grantIndex}`}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    class="remove-button"
+                                                    on:click={() =>
+                                                        removeOptionItem(
+                                                            index,
+                                                            optionIndex,
+                                                            'grantsItems',
+                                                            grantIndex
+                                                        )}
+                                                    data-testid={`remove-grant-item-${index}-${optionIndex}-${grantIndex}`}
+                                                >
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        {/each}
+                                        <button
+                                            type="button"
+                                            class="add-item-button"
+                                            on:click={() =>
+                                                addOptionItem(index, optionIndex, 'grantsItems')}
+                                            data-testid={`add-grant-item-${index}-${optionIndex}`}
+                                        >
+                                            Add grant item
+                                        </button>
+                                    </div>
+                                {/if}
+                            </div>
+                        {/each}
+
+                        <div class="option-draft">
+                            <label for={`option-text-${node.id}`}>New option text</label>
+                            <input
+                                id={`option-text-${node.id}`}
+                                type="text"
+                                value={node.newOption.text || ''}
+                                on:input={(event) =>
+                                    updateOptionDraft(index, 'text', event.target.value)}
+                            />
+                            <label for={`option-type-${node.id}`}>Type</label>
+                            <select
+                                id={`option-type-${node.id}`}
+                                value={node.newOption.type || 'goto'}
+                                on:change={(event) =>
+                                    updateOptionDraft(index, 'type', event.target.value)}
+                            >
+                                {#each OPTION_TYPES as typeOption}
+                                    <option value={typeOption.value}>{typeOption.label}</option>
+                                {/each}
+                            </select>
+                            {#if (node.newOption.type || 'goto') === 'goto'}
+                                <label for={`option-target-${node.id}`}>Target node</label>
+                                <input
+                                    id={`option-target-${node.id}`}
+                                    type="text"
+                                    value={node.newOption.goto || ''}
+                                    on:input={(event) =>
+                                        updateOptionDraft(index, 'goto', event.target.value)}
+                                />
+                            {:else if (node.newOption.type || 'goto') === 'process'}
+                                <ProcessSelector
+                                    processes={allProcesses}
+                                    selectedProcessId={node.newOption.process || ''}
+                                    label="Select process"
+                                    allowCustomId
+                                    testId={`option-process-selector-${index}-draft`}
+                                    on:select={(event) =>
+                                        updateOptionDraft(index, 'process', event.detail.processId)}
+                                />
+                            {/if}
+                            <button
+                                type="button"
+                                class="add-button"
+                                on:click={() => addOption(index)}
+                            >
+                                Add Option
+                            </button>
+                        </div>
+                        {#if node.optionError}
+                            <span class="error-message">{node.optionError}</span>
+                        {/if}
+                    </div>
+                </section>
+            {/each}
+        {/if}
+
+        {#if validationErrors.dialogue}
+            <span class="error-message">{validationErrors.dialogue}</span>
+        {/if}
+    </section>
+
+    <section class="simulation-panel" aria-live="polite">
+        <h2>Simulation tests</h2>
+        <p class="simulation-subtitle">
+            Runs automatically to catch obvious logic errors before saving.
+        </p>
+        <ul class="simulation-list">
+            <li
+                class:pass={!simulationSummary.missingStart}
+                class:fail={simulationSummary.missingStart}
+            >
+                Start node exists
+            </li>
+            <li
+                class:pass={simulationSummary.hasFinishPath}
+                class:fail={!simulationSummary.hasFinishPath}
+            >
+                Finish path reachable
+            </li>
+            <li
+                class:pass={simulationSummary.unreachableNodes.length === 0}
+                class:fail={simulationSummary.unreachableNodes.length > 0}
+            >
+                All nodes reachable from start
+            </li>
+        </ul>
+        {#if simulationSummary.unreachableNodes.length > 0}
+            <p class="simulation-detail">
+                Unreachable nodes: {simulationSummary.unreachableNodes.join(', ')}
+            </p>
+        {/if}
+    </section>
+
+    <div class="form-submit">
+        <button type="submit" class="submit-button" disabled={isSubmitting}>
+            {#if isSubmitting}
+                Saving...
+            {:else if isEdit}
+                Update Quest
+            {:else}
+                Create Quest
+            {/if}
+        </button>
+        <button type="button" class="preview-button" on:click={handlePreview}> Preview </button>
+    </div>
+</form>
+
+{#if showPreview}
+    <QuestPreview {title} {description} imageUrl={previewUrl} />
+{/if}
+
+<style>
+    .quest-form,
+    .quest-form * {
+        box-sizing: border-box;
+    }
+
+    .quest-form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #2c5837;
+        border-radius: 12px;
+        border: 2px solid #007006;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 6px;
+        color: white;
+    }
+
+    .section-title {
+        margin: 0 0 6px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+    }
+
+    input,
+    textarea {
+        width: 95%;
+        padding: 10px;
+        border-radius: 8px;
+        background: #68d46d;
+        color: black;
+        font-size: 16px;
+        border: 2px solid #007006;
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s;
+    }
+
+    select {
+        width: 95%;
+        padding: 10px;
+        border-radius: 8px;
+        background: #68d46d;
+        color: black;
+        font-size: 16px;
+        border: 2px solid #007006;
+    }
+
+    input.error,
+    textarea.error {
+        border-color: #ff3e3e;
+        background-color: #ffecec;
+    }
+
+    .error-message {
+        color: #ff3e3e;
+        font-size: 14px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    input:focus,
+    textarea:focus {
+        border-color: #0f0;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+        outline: 3px solid #0f0;
+        outline-offset: 2px;
+    }
+
+    select:focus {
+        border-color: #0f0;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+        outline: 3px solid #0f0;
+        outline-offset: 2px;
+    }
+
+    textarea {
+        height: 120px;
+        resize: vertical;
+    }
+
+    input[type='file'] {
+        width: 100%;
+        background: #fff;
+        border: 2px solid #007006;
+        padding: 8px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .image-preview-container {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .image-preview {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        border: 2px solid #007006;
+        box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.5);
+        margin-top: 10px;
+    }
+
+    .form-submit {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .submit-button {
+        font-size: 16px;
+        padding: 10px 20px;
+        background-color: #007006;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+        margin-top: 10px;
+    }
+
+    .submit-button:hover:not(:disabled) {
+        background-color: #005004;
+    }
+
+    .submit-button:disabled {
+        background-color: #88a889;
+        cursor: not-allowed;
+    }
+
+    .dialogue-builder {
+        margin-top: 20px;
+        padding: 15px;
+        border: 2px dashed #00b33c;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.15);
+    }
+
+    .dialogue-builder h2 {
+        margin-top: 0;
+        color: #00ff88;
+    }
+
+    .simulation-panel {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid #00b33c;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .simulation-panel h2 {
+        margin: 0 0 6px;
+        color: #00ff88;
+    }
+
+    .simulation-subtitle {
+        margin: 0 0 10px;
+        color: #c8e6c9;
+        font-size: 14px;
+    }
+
+    .simulation-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 8px;
+    }
+
+    .simulation-list li {
+        padding: 8px 10px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid transparent;
+        font-size: 14px;
+    }
+
+    .simulation-list li.pass {
+        border-color: #00b33c;
+        color: #c8ffd9;
+    }
+
+    .simulation-list li.fail {
+        border-color: #ff3e3e;
+        color: #ffd6d6;
+    }
+
+    .simulation-detail {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: #ffe8a3;
+    }
+
+    .new-node {
+        border: 2px solid #007006;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    .dialogue-node {
+        margin-top: 20px;
+        padding: 15px;
+        border: 2px solid #007006;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.08);
+    }
+
+    .dialogue-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .dialogue-header h3 {
+        margin: 0;
+        color: #00ff88;
+    }
+
+    .options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .option-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+        align-items: end;
+        background: rgba(0, 0, 0, 0.06);
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .option-row input,
+    .option-row select {
+        width: 100%;
+    }
+
+    .option-items {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 8px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+    }
+
+    .option-items .item-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .option-items h5 {
+        margin: 0;
+        font-size: 16px;
+        color: #b8ffd2;
+    }
+
+    .item-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 8px;
+        align-items: center;
+    }
+
+    .item-hint {
+        font-size: 14px;
+        color: #c8e6c9;
+        margin: 0;
+    }
+
+    .add-item-button {
+        align-self: flex-start;
+        background-color: #004d99;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 14px;
+        cursor: pointer;
+    }
+
+    .add-item-button:hover {
+        background-color: #003366;
+    }
+
+    .remove-button {
+        background-color: #aa1b1b;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+
+    .remove-button:hover {
+        background-color: #800f0f;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .option-draft {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 10px;
+        align-items: end;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 12px;
+    }
+
+    .add-button {
+        margin-top: 10px;
+        background-color: #0055cc;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        cursor: pointer;
+        align-self: start;
+    }
+
+    .add-button:hover {
+        background-color: #003d99;
+    }
+
+    .delete-button {
+        background-color: #aa1b1b;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+    .delete-button:hover {
+        background-color: #800f0f;
+    }
+
+    .preview-button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        background-color: #0055cc;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+    .preview-button:hover {
+        background-color: #003d99;
+    }
+
+    @media (max-width: 480px) {
+        .quest-form {
+            padding: 10px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .form-submit {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .preview-button {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .submit-button {
+            width: 100%;
+        }
+    }
+</style>

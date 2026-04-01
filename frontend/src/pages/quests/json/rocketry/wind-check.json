@@ -1,0 +1,170 @@
+{
+    "id": "rocketry/wind-check",
+    "title": "Check the Launch Winds",
+    "description": "Measure wind speed, classify risk, and clear launch only after a verified retest window.",
+    "image": "/assets/quests/model_rocket_wind_check.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nimbus here. Wind is data, not vibes. We'll log two readings, classify the trend, and only launch when the retest confirms control.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Copy that. Let's set up for a clean measurement run."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Hold the anemometer at launch-rod height, keep observers 5 m clear, and point the rod away from people before recording anything.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "reading-one",
+                    "text": "Perimeter is clear and rod orientation is safe."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-hold",
+                    "text": "Pad spacing is unsafe. Hold and reset before testing."
+                }
+            ]
+        },
+        {
+            "id": "reading-one",
+            "text": "Record reading #1 and note gust direction relative to the flight corridor.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "reading-two",
+                    "text": "Reading #1 logged. Capture the second sample now.",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "reading-two",
+            "text": "Take reading #2 from the same height after a short pause so we can compare consistency.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading #2 logged and trend noted.",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: green only if sustained wind is within your club limit and gust spread remains stable. If not, classify and correct before any countdown.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest-window",
+                    "text": "Within bounds. Run a short confirmation retest window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Out of bounds or gusting. Enter corrective branch."
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Corrective branch: lower launch rail angle, wait for gust lull, and re-brief the crew on abort calls. If conditions keep worsening, scrub the launch.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "reading-one",
+                    "text": "Conditions improved. Restart the two-reading protocol."
+                },
+                {
+                    "type": "goto",
+                    "goto": "scrub",
+                    "text": "Still unsafe. Scrub this window and stand down."
+                }
+            ]
+        },
+        {
+            "id": "retest-window",
+            "text": "Hold a short retest window before countdown. Launch is cleared only if no new gust spikes appear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "done",
+                    "text": "Retest stayed stable. Launch conditions verified.",
+                    "requiresItems": [
+                        {
+                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Retest drifted out of limits. Re-enter corrective flow."
+                }
+            ]
+        },
+        {
+            "id": "safety-hold",
+            "text": "Good hold call. Keep igniters disconnected, clear the pad, and resume only after spacing and orientation are corrected.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Safety issues resolved. Return to setup."
+                }
+            ]
+        },
+        {
+            "id": "scrub",
+            "text": "Scrub accepted. A no-launch decision under bad winds is a successful safety outcome.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Try again in a safer weather window."
+                }
+            ]
+        },
+        {
+            "id": "done",
+            "text": "Great discipline. You cleared the window with logged evidence, a retest gate, and explicit abort criteria.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Wind check verified."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["rocketry/preflight-check"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

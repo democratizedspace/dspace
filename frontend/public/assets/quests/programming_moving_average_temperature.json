@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/programming_moving_average_temperature.jpg",
+    "entity": "frontend/src/pages/quests/json/programming/moving-avg-temp.json",
+    "item_name": "Compute Moving Average Temperature",
+    "item_id": "programming/moving-avg-temp",
+    "entity_type": "quest",
+    "prompt": "A plotting window on a laptop shows two overlaid time-series lines: a jagged line representing raw temperature readings and a smoother line representing a moving average, both rendered without readable legends but clearly differentiated by color and thickness. In a code editor pane beside the graph, a short section of script is highlighted, visually indicating a loop or sliding-window function that computes the moving average. On the desk, a notepad sketch illustrates a few bars being averaged into a single smoother point, reinforcing the concept.\n\nThe scene is a near-future solarpunk developer workspace: soft indirect lighting, clean surfaces, and a few plants and minimalist devices blurred in the background. The 512×512 photorealistic composition centers on the dual-line graph and the highlighted code, with other objects gently out of focus. No brand logos or legible text appear anywhere, and no faces are visible—only hands near the keyboard—emphasizing that a moving average has been added to the temperature analysis script to reveal trends more clearly over time.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

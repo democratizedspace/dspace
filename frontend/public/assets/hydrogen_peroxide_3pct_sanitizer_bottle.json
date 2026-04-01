@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/hydrogen_peroxide_3pct_sanitizer_bottle.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "hydrogen peroxide (3%)",
+    "item_id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
+    "entity_type": "item",
+    "prompt": "A 250 mL amber glass bottle of 3% hydrogen peroxide on a clean hydroponics workstation, with a child-resistant cap and a small measuring cup beside it. In the background are rinsed tubing segments and a compact sprayer, suggesting sanitation of hydro gear; the bottle label is generic and non-readable, relying on the distinctive amber bottle and safety cap to convey the item.\n\nUltra-detailed, photorealistic 512×512 image with a near-future clean-lab hydroponics aesthetic: soft cinematic lighting, realistic glass reflections, no brand marks, and no readable text. Keep the bottle centered and isolated enough to work as a clear inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

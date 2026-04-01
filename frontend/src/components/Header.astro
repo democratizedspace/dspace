@@ -1,91 +1,279 @@
 ---
 import Logo from '../components/Logo.astro';
-import Chip from '../components/Chip.astro';
-import { ChipVariants, ChipSize } from '../components/Chip.astro';
+import ThemeToggle from './svelte/ThemeToggle.svelte';
+import HeaderAvatar from './svelte/HeaderAvatar.svelte';
 
 export interface Props {
-	title: string;
-	body: string;
-	href: string;
+    title: string;
+    body: string;
+    href: string;
 }
 ---
 
-<a href="/">
+<a href="#main" class="skip-link">Skip to main content</a>
 
-	<div class="vertical">
-		<Logo />
-		<span class="text-gradient title">DSPACE</span>
-		<p class="domain">democratized.space</p>
-	</div>
-	
-</a>
+<header class="header">
+    <div class="header-inner">
+        <a href="/" aria-label="Go to homepage" class="brand" data-testid="brand">
+            <div class="vertical">
+                <Logo />
+                <span class="text-gradient title">DSPACE</span>
+                <p class="domain">democratized.space</p>
+            </div>
+        </a>
+    </div>
+    <div class="header-actions" data-testid="header-actions">
+        <div class="header-actions__stack" data-testid="header-actions-stack">
+            <ThemeToggle client:load />
+            <HeaderAvatar client:load />
+        </div>
+    </div>
+</header>
 
 <style>
-	:root {
-		--astro-gradient: linear-gradient(0deg, #80df98, #00ff22);
-	}
+    :global(:root) {
+        --astro-gradient: linear-gradient(0deg, #80df98, #00ff22);
+        --page-inline-padding: 1rem;
+        --header-inline-inset-base: 0.55rem;
+        --header-top-inset: calc(0.5rem + env(safe-area-inset-top, 0px));
+        --header-inline-inset-left: calc(
+            var(--header-inline-inset-base) + env(safe-area-inset-left, 0px)
+        );
+        --header-inline-inset-right: calc(
+            var(--header-inline-inset-base) + env(safe-area-inset-right, 0px)
+        );
+        --header-actions-reserved-inline: 8rem;
+        --header-inline-total: calc(
+            (var(--page-inline-padding, 0px) * 2) +
+                var(--header-inline-inset-left) +
+                var(--header-inline-inset-right)
+        );
+        --header-content-width: max(
+            12rem,
+            calc(100% - var(--header-inline-total) - var(--header-actions-reserved-inline, 7rem))
+        );
+    }
 
-	a {
-		text-decoration: none;
-	}
+    a {
+        text-decoration: none;
+    }
 
-	.text-gradient {
-		font-weight: 900;
-		background: var(--astro-gradient);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-size: 100% 200%;
-		background-position-y: 100%;
-		border-radius: 0.4rem;
-		animation: pulse 2s ease-in-out infinite;
-		display: table;
-		margin: 0 auto;
-		font-size: 2em;
-	}
+    a:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
 
-	.default-size {
-		font-size: 1em;
-	}
+    .header {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        margin-inline: auto;
+        overflow-x: clip;
+        box-sizing: border-box;
+        --header-actions-top: var(--header-top-inset);
+        --header-actions-right: max(0rem, calc(var(--header-inline-inset-right) - 0.15rem));
+        --header-actions-height: 4.75rem;
+        padding-top: var(--header-top-inset);
+        padding-bottom: 0.75rem;
+        padding-left: calc(var(--page-inline-padding, 0px) + var(--header-inline-inset-left));
+        padding-right: calc(var(--page-inline-padding, 0px) + var(--header-inline-inset-right));
+        min-height: calc(var(--header-actions-top) + var(--header-actions-height));
+        display: flex;
+        justify-content: center;
+    }
 
-	@keyframes pulse {
-		0% {
-			background-position-y: 0%;
-		}
-		100% {
-			background-position-y: 200%;
-		}
-	}
+    .header-inner {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: flex-start;
+        justify-items: center;
+        gap: 1rem;
+        width: min(70rem, var(--header-content-width));
+        max-width: min(70rem, var(--header-content-width));
+        margin: 0 auto;
+        justify-self: center;
+    }
 
-	.horizontal {
-		display: flex;
-		flex-direction: row;
-	}
+    .brand {
+        grid-column: 2;
+        min-width: 0;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-self: center;
+        text-align: center;
+        max-width: clamp(8.75rem, 42vw, 13.5rem);
+    }
 
-	.vertical {
-		display: flex;
-		flex-direction: column;
-		/* center */
-		align-items: center;
-	}
+    .header-actions {
+        position: absolute;
+        top: var(--header-actions-top);
+        right: var(--header-actions-right);
+        z-index: 5;
+    }
 
-	.item {
-		gap: 2px;
-	}
+    .header-actions__stack {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.2rem;
+        min-width: fit-content;
+    }
 
-	.right {
-		align-items: flex-end;
-	}
+    .text-gradient {
+        font-weight: 900;
+        background: var(--astro-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-size: 100% 200%;
+        background-position-y: 100%;
+        border-radius: 0.4rem;
+        animation: pulse 2s ease-in-out infinite;
+        display: table;
+        margin: 0 auto;
+        font-size: 2em;
+        max-width: 100%;
+    }
 
-	.container {
-		background: rgb(20, 20, 20);
-		padding: 10px;
-		border-radius: 10px;
-		margin-top: 20px;
-	}
+    @media (prefers-reduced-motion: reduce) {
+        .text-gradient {
+            animation: none;
+        }
+    }
 
-	.domain {
-		font-size: 0.8em;
-		color: #00ff22;
-		margin-top: 0px;
-	}
+    .default-size {
+        font-size: 1em;
+    }
+
+    @keyframes pulse {
+        0% {
+            background-position-y: 0%;
+        }
+        100% {
+            background-position-y: 200%;
+        }
+    }
+
+    .horizontal {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        /* center */
+        align-items: center;
+    }
+
+    .item {
+        gap: 2px;
+    }
+
+    .right {
+        align-items: flex-end;
+    }
+
+    .container {
+        background: rgb(20, 20, 20);
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .domain {
+        font-size: 0.8em;
+        color: #00ff22;
+        margin-top: 0px;
+    }
+
+    @media (max-width: 720px) {
+        .header-inner {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        .brand {
+            grid-column: auto;
+        }
+    }
+
+    .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #000;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        z-index: 1000;
+    }
+
+    .skip-link:focus {
+        top: 0;
+    }
+
+    @media (max-width: 480px) {
+        :global(:root) {
+            --header-actions-reserved-inline: 8.5rem;
+            --header-content-width: max(
+                10rem,
+                calc(
+                    100% - var(--header-inline-total) -
+                        var(--header-actions-reserved-inline, 8.5rem)
+                )
+            );
+        }
+
+        .header {
+            padding-right: calc(var(--header-inline-inset-right) + 0.25rem);
+            --header-actions-height: 4.2rem;
+            min-height: calc(var(--header-actions-top) + var(--header-actions-height) + 0.5rem);
+        }
+
+        .header-inner {
+            padding-top: 0.25rem;
+            align-items: center;
+        }
+
+        .header-actions__stack {
+            gap: 0.18rem;
+            transform: scale(0.58);
+            transform-origin: top right;
+        }
+
+        .brand {
+            max-width: clamp(6.75rem, 50vw, 7.75rem);
+            margin-top: 0.35rem;
+        }
+
+        .text-gradient {
+            font-size: 1.5em;
+        }
+
+        .domain {
+            font-size: 0.68em;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .header {
+            --header-actions-height: 3.9rem;
+        }
+
+        .header-actions__stack {
+            transform: scale(0.56);
+        }
+
+        .text-gradient {
+            font-size: 1.4em;
+        }
+
+        .domain {
+            font-size: 0.64em;
+        }
+
+        .brand {
+            max-width: clamp(6.9rem, 60vw, 7.6rem);
+        }
+    }
 </style>

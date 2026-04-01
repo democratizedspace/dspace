@@ -1,0 +1,205 @@
+{
+    "id": "woodworking/finish-sanding",
+    "title": "Finish Sand Your Project",
+    "description": "Smooth the surface of your latest build with fine-grit paper before applying finish.",
+    "image": "/assets/quests/woodworking_finish_sanding.jpg",
+    "npc": "/assets/npc/atlas.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Sanding is where patient builders separate clean joinery from patch jobs. Mask up, clear your bench, and keep a bright light on the grain.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Give me the sanding sequence"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "What are the safety checks first?"
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "If dust control is weak, pause. Open airflow, move ignition sources away from dusty rags, and only resume when visibility is clear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Bench is safe and clear"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "I need to reset the area"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Circle glue squeeze-out and torn fibers in pencil. Start 120 grit only where defects exist, then blend with long strokes along the grain.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Defects marked and sequence planned"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I already see tear-out risks"
+                }
+            ]
+        },
+        {
+            "id": "strategy",
+            "text": "Pick your approach: hand-block control for edges, or broad-pass smoothing for panels. Both require a scratch check before moving on.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "hand-block",
+                    "text": "Hand-block edges first",
+                    "requiresItems": [
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "panel-pass",
+                    "text": "Panel passes first",
+                    "requiresItems": [
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "hand-block",
+            "text": "Use short edge strokes with 120 then 180, keeping pressure light at corners to avoid rounding profiles.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scratch-check",
+                    "text": "Edge passes complete"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Corners are rounding too fast"
+                }
+            ]
+        },
+        {
+            "id": "panel-pass",
+            "text": "Run full-length passes with 120 then 180. Vacuum between grits so loose particles do not carve swirl marks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scratch-check",
+                    "text": "Panel passes complete"
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I see swirls across the panel"
+                }
+            ]
+        },
+        {
+            "id": "scratch-check",
+            "text": "Rake a light across the surface. If scratches still cross the grain, drop back one grit and re-level before finishing with 220.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "dust",
+                    "text": "Grain-aligned scratch pattern confirmed",
+                    "requiresItems": [
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Scratches are still visible"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery loop: refresh paper, reduce pressure, and work one grit coarser for two passes before retrying inspection. Stop if dust control degrades.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Retry with corrected technique"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Pause for a safety reset"
+                }
+            ]
+        },
+        {
+            "id": "dust",
+            "text": "Final evidence gate: vacuum seams, wipe with a tack cloth, and confirm no powder remains in pores before opening finish cans.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Surface is dust-free and ready",
+                    "requiresItems": [
+                        {
+                            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "One more sanding pass"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Clean prep complete. Your finish coat will bond evenly and highlight the grain without cloudy dust streaks.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Surface approved"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "05dd84f7-b9bc-4eac-93c5-5838cab84b32",
+            "count": 1
+        },
+        {
+            "id": "2770ee5d-f9a0-4dc8-9c79-4f031fefd093",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["woodworking/step-stool"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

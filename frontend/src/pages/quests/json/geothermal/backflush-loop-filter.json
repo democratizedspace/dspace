@@ -1,0 +1,172 @@
+{
+    "id": "geothermal/backflush-loop-filter",
+    "title": "Backflush Loop Filter",
+    "description": "Run a safe backflush with pre/post evidence and a re-entry loop when debris persists.",
+    "image": "/assets/quests/geothermal_backflush_loop_filter.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before touching the loop, kill pump power, close isolation valves, and keep a catch bucket under the housing. Ready to run a controlled backflush?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Safety prep complete"
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Walk me through safe setup"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "Stage the submersible pump and route return water so it never sprays connectors or the control board.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Issue backflush pump"
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Pump and hose routing staged",
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Capture a baseline trace before flushing so you can prove flow recovered after the cleanup.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture pre-backflush trace"
+                },
+                {
+                    "type": "goto",
+                    "goto": "flush",
+                    "text": "Baseline trace saved",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        },
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "flush",
+            "text": "Backflush until discharge runs clear, then reseat seals and capture a post-flush trace before restarting normal flow.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture post-backflush trace"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Post-backflush trace saved",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        },
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Compare pre/post traces: is flow stable with no new cavitation spikes after the flush?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes, flow is stable now",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "No, turbulence or clog signs remain"
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery branch: stop flow, inspect filter mesh for trapped fines, reseat O-rings, and only then rerun the backflush cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "flush",
+                    "text": "Issue corrected, rerun backflush"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Reset and re-run safety prep"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Filter recovery confirmed. Archive both traces with a note on debris source so the next maintenance window starts faster.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Backflush benchmark logged",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "061fd221-404a-4bd1-9432-3e25b0f17a2c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["geothermal/purge-loop-air"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

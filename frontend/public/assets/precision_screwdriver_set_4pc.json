@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/precision_screwdriver_set_4pc.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "precision screwdriver set",
+    "item_id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+    "entity_type": "item",
+    "prompt": "A four-piece precision screwdriver set lies neatly arranged on a silicone mat, showing two slender Phillips drivers (#00 and #0) and two flathead drivers (1.5 mm and 2.5 mm). Each driver has a slim shaft, a rotating cap at the top for fingertip control, and a simple, unbranded handle with light texturing for grip. A small robot chassis and an open electronics enclosure in the background make it clear that these are meant for electronics and robotics work.\n\nThe scene is a near-future solarpunk workbench with soft, diffused lighting, organized trays of screws and parts, and a plant or two in the blurred distance. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or readable markings on the drivers, and a composition that keeps the four screwdrivers and a few tiny screws in crisp focus while the rest of the workspace remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,126 @@
+{
+    "id": "hydroponics/temp-check",
+    "title": "Check Water Temperature",
+    "description": "Measure, log, and interpret reservoir temperature with corrective retest loops.",
+    "image": "/assets/quests/hydroponic_reservoir_temp_check.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Temperature checks need evidence and action thresholds. We will attach, log, interpret, then correct/retest if out of range.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "attach",
+                    "text": "Run temperature QA sequence."
+                }
+            ]
+        },
+        {
+            "id": "attach",
+            "text": "Mount the strip thermometer where flow is representative, not near a pump hotspot.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "attach-hydroponic-reservoir-thermometer",
+                    "text": "Attach thermometer for a stable reading."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Thermometer mounted; capture temperature log.",
+                    "requiresItems": [
+                        {
+                            "id": "b81e67a1-28b0-4cd8-b202-778f66a95a7b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Log the observed water temperature and classify it: 65-75\u00b0F pass, 60-64\u00b0F or 76-79\u00b0F caution, outside that is fail.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-hydroponic-reservoir-temperature",
+                    "text": "Record temperature log artifact."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Temperature log captured.",
+                    "requiresItems": [
+                        {
+                            "id": "6305ae99-c0b2-49f8-8d58-a1d81b765342",
+                            "count": 1.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret before finishing. Only close when logs show stable pass range across checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "In range and stable; close this check.",
+                    "requiresItems": [
+                        {
+                            "id": "6305ae99-c0b2-49f8-8d58-a1d81b765342",
+                            "count": 1.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "correct",
+                    "text": "Caution/fail band detected; apply correction and retest."
+                }
+            ]
+        },
+        {
+            "id": "correct",
+            "text": "Safety gate: avoid thermal shock. Adjust gradually, wait 15 minutes for mixing, then re-log before declaring recovery.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refresh-hydroponic-tub",
+                    "text": "Stabilize reservoir before retest."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Correction complete; capture a new temperature log."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Temperature check closed with a recorded log and interpretation. Repeat after major top-off or pump maintenance.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Reservoir temperature QA complete."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/nutrient-check"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

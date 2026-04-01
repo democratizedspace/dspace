@@ -1,0 +1,189 @@
+{
+    "id": "3dprinting/nozzle-clog",
+    "title": "Fix a Clogged Nozzle",
+    "description": "Disassemble your printer after a blob of death from skipping the first layer to unclog or replace the nozzle.",
+    "image": "/assets/quests/nozzle_clog_disassembly.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Skipping first-layer checks can snowball into a blob of death. We'll recreate the failure, recover safely, then verify with timestamped purge snapshots.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "3dprint-nozzle-clog",
+                    "text": "Document the failure and trigger a clog state."
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Printer is powered down, ventilated, and cool.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "cooldown",
+            "text": "Confirm heaters are off, peel away loose plastic, and keep tools clear of thermistor wires before service.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "repair-clogged-nozzle",
+                    "text": "Clear the nozzle and reseat it."
+                },
+                {
+                    "type": "process",
+                    "process": "replace-brass-nozzle",
+                    "text": "Swap in a new nozzle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Hotend is rebuilt and ready for monitored purge.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "monitor",
+            "text": "Run three purge snapshots (10 mm each, ~5 minutes apart). Log timestamp, strand width estimate, skipped steps, and odor/smoke status for every pass.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Logs show all three snapshots are stable and within limits.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 3
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "At least one snapshot failed (skip, smoke, or uneven strand).",
+                    "requiresItems": [
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Persistent smoke or burnt odor appeared; stop and cool down now."
+                }
+            ]
+        },
+        {
+            "id": "anomaly",
+            "text": "Classify the issue before retry: partial obstruction (repeat cleaning), thermal creep (cooldown + slower feed), or nozzle damage (replace). Re-run the same three-snapshot cadence after correction.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "monitor",
+                    "text": "Adjusted cooling/feed settings and logged corrective notes.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 3
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Symptoms look like a hard clog; return to teardown and service.",
+                    "requiresItems": [
+                        {
+                            "id": "564a76de-925b-4457-a548-d015168abe0c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Good call. Cut heater power, ventilate, and wait for a full cool-down before touching the hotend. Safety overrides uptime.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "cooldown",
+                    "text": "Printer is cool and workspace is safe again.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Finish with a center-paper check and first-layer watch so the recovery is safe under print load, not just during purges.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "First layer holds and the three-entry monitoring log is complete.",
+                    "requiresItems": [
+                        {
+                            "id": "45f6f1ce-18e4-481d-8635-23ea51e0c2fd",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 3
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "The printer is recovered with a repeatable monitoring record you can reuse the next time flow drifts.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to printing."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["3dprinting/filament-change"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

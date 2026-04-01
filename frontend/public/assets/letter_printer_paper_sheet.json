@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/letter_printer_paper_sheet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "sheet of printer paper",
+    "item_id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+    "entity_type": "item",
+    "prompt": "A single pristine sheet of letter-size printer paper lies flat on a clean desk surface, its crisp rectangular shape and slightly rounded corners clearly visible. A stack of additional sheets sits just out of focus behind it, and a nearby compact printer and pen subtly reinforce the idea of standard office paper. The sheet itself is blank and smooth, with no markings or folds, emphasizing its role as a generic, versatile supply.\n\nThe environment is a bright near-future office or home workspace with a solarpunk feel: soft daylight, a small plant on the desk, and minimalistic accessories in muted tones. The 512×512 image is photorealistic with gentle stylization, no logos or text anywhere in the frame, and a simple composition that keeps the single sheet of paper as the clear focal point while the background elements remain softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

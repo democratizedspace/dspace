@@ -1,0 +1,33 @@
+replicaCount: 1
+env: dev
+environment: dev
+image:
+  # Dev can follow a mutable tag for rapid iteration; pin a digest locally when needed.
+  tag: main
+  digest: ""
+ingress:
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-dns01
+  hosts:
+    - host: dev.dspace.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: dspace-dev-tls
+      hosts:
+        - dev.dspace.example.com
+metrics:
+  enabled: false
+
+runtimeEnv:
+  standard:
+    DSPACE_ENV: dev
+  extra:
+    - name: DSPACE_ENABLE_METRICS
+      value: "0"
+    - name: DSPACE_FEATURE_FLAGS
+      value: beta-chat
+serviceMonitor:
+  enabled: false

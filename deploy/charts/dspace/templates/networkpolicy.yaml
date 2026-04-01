@@ -1,0 +1,67 @@
+{{- if .Values.networkPolicy.enabled }}
+{{- $metricsPort := .Values.service.metricsPort }}
+{{- $metricsScraper := .Values.networkPolicy.metricsScraper }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "dspace.fullname" . }}
+  labels:
+    {{- include "dspace.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "dspace.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Values.networkPolicy.traefikNamespace }}
+          {{- with .Values.networkPolicy.traefikSelector }}
+          podSelector:
+            matchLabels:
+              {{- toYaml . | nindent 14 }}
+          {{- end }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.service.port }}
+{{- if and .Values.metrics.enabled $metricsPort }}
+        - protocol: TCP
+          port: {{ $metricsPort }}
+{{- end }}
+{{- if and .Values.metrics.enabled $metricsPort $metricsScraper $metricsScraper.enabled }}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $metricsScraper.namespace | default "monitoring" }}
+          {{- with $metricsScraper.podSelector }}
+          podSelector:
+            matchLabels:
+              {{- toYaml . | nindent 14 }}
+          {{- end }}
+      ports:
+        - protocol: TCP
+          port: {{ $metricsPort }}
+{{- end }}
+  {{- with .Values.networkPolicy.extraIngress }}
+  {{ toYaml . | indent 4 }}
+  {{- end }}
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+  {{- with .Values.networkPolicy.extraEgress }}
+  {{ toYaml . | indent 4 }}
+  {{- end }}
+{{- end }}

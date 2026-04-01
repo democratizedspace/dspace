@@ -1,0 +1,182 @@
+{
+    "id": "robotics/servo-arm",
+    "title": "Assemble a Servo Arm",
+    "description": "Assemble a two-joint servo arm with a gripper so you can practice smooth pick-and-place moves.",
+    "image": "/assets/quests/simple_servo_robot_arm.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You're getting comfortable with servos. Let's build a small robotic arm with a gripper. Clear a stable bench, strap in for ESD, and keep cables away from moving joints.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "Kit and tools are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "f69a6eb1-3ef5-4f3e-97e8-5e5f395c2363",
+                            "count": 1
+                        },
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 2
+                        },
+                        {
+                            "id": "8299ac3f-c232-46d4-a007-2ad86ec70361",
+                            "count": 1
+                        },
+                        {
+                            "id": "d30d7a65-bd11-42a2-89c1-2828e990a3b2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "strategy",
+            "text": "Choose your build order: base-first for easier cable routing or elbow-first for quicker alignment checks. Both paths must converge on a snag-free sweep.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Base-first assembly path"
+                },
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Elbow-first assembly path"
+                }
+            ]
+        },
+        {
+            "id": "build",
+            "text": "Bolt the base servo, stack the second servo for the elbow, and fasten the gripper plate. Route wires so they won't snag when the arm sweeps.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-servo-arm-kit",
+                    "text": "Assemble the two-servo arm"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Arm swings freely and the gripper opens.",
+                    "requiresItems": [
+                        {
+                            "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-check",
+            "text": "Run a dry-motion safety pass: confirm cable slack at full extension, set soft limits to avoid hard stops, and keep payload under training weight.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "tune",
+                    "text": "Safety checks pass; start calibration.",
+                    "requiresItems": [
+                        {
+                            "id": "8efbfdc9-3725-46b4-baaf-9b070ca99a5d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Cable snag or hard-stop risk found—fix before calibration."
+                }
+            ]
+        },
+        {
+            "id": "tune",
+            "text": "Upload a smooth motion sketch, set soft limits so nothing binds, and test with a light payload before closing the loop.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "calibrate-servo-arm",
+                    "text": "Tune limits and gripper timing"
+                },
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Calibration saved and joints stay cool.",
+                    "requiresItems": [
+                        {
+                            "id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery drill: re-route harness slack, tighten bracket screws, and reduce endpoint angles until motion is silent. Re-run safety checks before calibrating again.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "build",
+                    "text": "Mechanical fixes complete; rebuild verification path."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-check",
+                    "text": "Ready to repeat safety checks."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Evidence gate: complete two pick-and-place cycles with stable center return and no overheating.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Two stable cycles logged.",
+                    "requiresItems": [
+                        {
+                            "id": "b73ddc8a-b0cf-43ee-8d1e-189e50ac3d96",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Cycle quality failed—return to recovery and re-verify."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job! Label the axes, park the arm at center, and coil the USB cable so you're ready for the next pick-and-place drill.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Onward!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "2ea30b6c-bdf4-4aef-b6ce-6ce6d903d274",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["robotics/servo-gripper"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

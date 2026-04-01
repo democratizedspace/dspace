@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_temperature_strip_reading.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Aquarium temperature reading",
+    "item_id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+    "entity_type": "item",
+    "prompt": "A close-up of an aquarium glass pane with a stick-on strip thermometer after the surface has dried, showing a stable temperature indication via a highlighted color segment (no readable numerals). The shot includes a hint of the waterline and blurred plants behind the glass to anchor it as an aquarium context, plus a soft microfiber cloth or paper towel nearby to suggest the “dry and stabilized” step.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future solarpunk maintenance aesthetic: soft, diffused lighting, realistic glass reflections, no logos, no readable markings, and no on-image text. Keep the thermometer strip as the clear focal point, framed simply for icon clarity.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

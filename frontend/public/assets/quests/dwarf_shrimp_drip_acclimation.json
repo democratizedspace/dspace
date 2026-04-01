@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/quests/dwarf_shrimp_drip_acclimation.jpg",
+    "entity": "frontend/src/pages/quests/json/aquaria/shrimp.json",
+    "item_name": "Add dwarf shrimp",
+    "item_id": "aquaria/shrimp",
+    "entity_type": "quest",
+    "prompt": "A tabletop scene showing a clear plastic bucket or tub beside a planted aquarium, with a few small dwarf shrimp visible in the bucket and a thin airline tube siphoning water gently from the tank into the container. The shrimp are tiny and translucent with reddish accents, hovering or resting on the bottom while the slow drip from the tube creates small ripples, illustrating a careful acclimation process. In the background, the main aquarium is densely planted with green stems and mosses, conveying a stable, mature tank waiting for new inhabitants.\n\nNear-future solarpunk indoor setting with soft, calm lighting from an overhead LED strip and a slightly high-tech feel, such as subtle cable organization and a clean, minimalist stand. The style is photorealistic, 512×512, with natural colors and no on-screen text or branding. The composition clearly shows the relationship between the tank, the drip line, and the bucket, emphasizing safe, responsible livestock introduction while keeping any human presence to partial hands or arms at most.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

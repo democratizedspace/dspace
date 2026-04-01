@@ -1,0 +1,116 @@
+{
+    "id": "programming/temp-email",
+    "title": "Email Temperature Alert",
+    "description": "Trigger an email when the sensor exceeds a set temperature.",
+    "image": "/assets/quests/programming_temperature_email_alert.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've built local alerts. Now wire up email so anomalies reach you off-device.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Configure alert thresholds",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 9
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Send a controlled test alert and record both trigger temperature and delivery timestamp so you can verify SLA expectations.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture an alert test log window"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Email alert arrived with timestamp",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 9
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret reliability before closing: alerts should trigger only when thresholds are exceeded and should arrive within your response window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Alert timing and threshold behavior are correct",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 9
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Late email, duplicate sends, or false positives detected"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Recovery path: pause noisy notifications, tune threshold + debounce settings, and re-run a controlled alert test before re-enabling normal routing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture a fresh validation log"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Re-validate email behavior",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 9
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Remote notifications keep you informed and reduce surprise equipment failures.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Stay updated."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d2b39a23-cdfb-428d-a6ed-694ff0c0fc11",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["programming/temp-alert"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

@@ -1,0 +1,193 @@
+{
+    "id": "geothermal/compare-seasonal-ground-temps",
+    "title": "Compare Seasonal Ground Temps",
+    "description": "Measure seasonal shifts at fixed depth, classify risk bands, and retest when drift exceeds limits.",
+    "image": "/assets/quests/geothermal_compare_seasonal_ground_temps.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Welcome back, explorer. We need a same-depth seasonal comparison, not random snapshots. We'll lock the probe depth, capture evidence, then classify drift before we call this stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Run the safety and depth-control brief"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Skip recap, enforce the same safety gates"
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Safety gate: verify utility-clear zone, isolate nearby electrical tools, and use insulated gloves if soil is wet. Seasonal comparisons are invalid if depth marker or probe contact drifts.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Safety checks complete and depth marker fixed",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Capture the baseline trace at 1m depth using the same probe position you used in the prior quest. Record timestamp and weather context so drift interpretation is meaningful.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture seasonal baseline trace"
+                },
+                {
+                    "type": "goto",
+                    "goto": "compare",
+                    "text": "Baseline trace logged",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "compare",
+            "text": "Run a second capture for the current season at the same depth marker. Then compare against baseline and classify drift bands before planning loop sizing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture current-season trace"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Seasonal comparison dataset ready",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: pass if seasonal delta stays within ±4°C and short-term variance remains under ±1.5°C. Beyond those bounds, treat the site as unstable until corrected and re-measured.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Seasonal drift is within bounds",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Drift exceeded limits, run recovery plan"
+                }
+            ]
+        },
+        {
+            "id": "corrective",
+            "text": "Recovery branch: re-seat the probe to the marked depth, compact disturbed soil, and re-check after thermal settling. This prevents surface bias from masquerading as seasonal change.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Probe reset complete, retest seasonal readings"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Take a corrected seasonal capture and compare it against baseline again. Only corrected evidence can unlock completion.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture corrected seasonal trace"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret-retest",
+                    "text": "Corrected seasonal trace logged",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret-retest",
+            "text": "Re-check using corrected data. Pass only if seasonal delta is now within ±4°C and short-term variance remains under ±1.5°C.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Corrected dataset passed",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 4
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "corrective",
+                    "text": "Still unstable, repeat recovery loop"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. You now have seasonal evidence with bounded drift, so loop design assumptions can be defended instead of guessed.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Seasonal comparison validated",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["geothermal/log-ground-temperature"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

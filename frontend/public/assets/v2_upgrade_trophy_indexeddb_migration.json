@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/v2_upgrade_trophy_indexeddb_migration.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/awards.json",
+    "item_name": "V2 Upgrade Trophy",
+    "item_id": "fd8bdb69-0f29-469c-9383-93f97b6ea015",
+    "entity_type": "item",
+    "prompt": "A sleek, futuristic trophy on a desk: a small translucent pedestal supporting a stylized “data migration” sculpture—two stacked geometric blocks connected by an arcing ribbon of light-like filaments, suggesting a successful upgrade from an old storage layer to a newer database layer. The trophy sits beside a laptop and a small circuit-like desk ornament, implying a software achievement without any readable words.\n\nUltra-detailed, photorealistic 512×512 image in a clean near-future solarpunk tech workspace: soft cinematic lighting, glassy and brushed-metal materials, no brand logos, and no readable text. Keep the trophy centered and visually iconic, clearly reading as an “upgrade achievement” award.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

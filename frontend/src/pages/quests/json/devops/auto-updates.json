@@ -1,0 +1,167 @@
+{
+    "id": "devops/auto-updates",
+    "title": "Enable Automatic Updates",
+    "description": "Keep your Pi cluster secure with unattended upgrades.",
+    "image": "/assets/quests/devops_enable_auto_updates.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Software rots fast. We'll use a safe rollout: define a patch window, stage unattended-upgrades, and verify before trusting automation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "window",
+                    "text": "Define maintenance constraints.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "window",
+            "text": "Pick a reboot-safe window and confirm someone can reach console if SSH drops. Safety stop: never schedule blind reboot windows during active workloads.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Window documented; stage config.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and coordinate a safer window first."
+                }
+            ]
+        },
+        {
+            "id": "stage",
+            "text": "Enable unattended-upgrades, pin the security origin, and set reboot policy to your maintenance window.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "configure-unattended-upgrades",
+                    "text": "Apply unattended-upgrades policy."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Config staged; run verification dry run.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "d8346735-7f1c-4309-a400-6cf6801534f7",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Run a simulated upgrade and capture logs. Pass when held packages are resolved and reboot flags only appear after patch success.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "verify-unattended-upgrades",
+                    "text": "Run unattended-upgrades verification."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Dry run reports held packages or unsafe reboot timing.",
+                    "requiresItems": [
+                        {
+                            "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Verification evidence is clean.",
+                    "requiresItems": [
+                        {
+                            "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Classify the issue (held package, reboot collision, mirror timeout). Roll back risky auto-reboot settings, fix root cause, then re-run verification before closure.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "configure-unattended-upgrades",
+                    "text": "Re-apply corrected unattended-upgrades policy."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Mitigation applied; re-run verification window.",
+                    "requiresItems": [
+                        {
+                            "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great. Auto-updates now run with evidence-backed checks and a rollback playbook when patch cadence drifts.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Queue the next maintenance window.",
+                    "requiresItems": [
+                        {
+                            "id": "afd6a926-bd21-4242-ba79-d25fc152de03",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d2b39a23-cdfb-428d-a6ed-694ff0c0fc11",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["devops/monitoring"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

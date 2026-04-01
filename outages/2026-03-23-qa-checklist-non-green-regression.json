@@ -1,0 +1,17 @@
+{
+  "id": "2026-03-23-qa-checklist-non-green-regression",
+  "date": "2026-03-23",
+  "component": "frontend/tests-and-qa-docs",
+  "longForm": "outages/2026-03-23-qa-checklist-non-green-regression.md",
+  "rootCause": "Legacy quest QA suites mixed hard failures with heuristic advisories, and canonical checks assumed finish options only appeared in the final dialogue node. Combined with inconsistent glob module export handling, this left the QA matrix with non-green boxes despite functional test execution.",
+  "resolution": "Centralized glob compatibility resolution with callable-export support + explicit invariant errors, corrected canonical finish validation to accept valid finish paths across dialogue graphs, and separated hard-gating assertions from advisory heuristic logging in quest quality checks. Added regression tests for the shared glob resolver and re-ran targeted QA commands before re-checking boxes.",
+  "references": [
+    "frontend/__tests__/helpers/resolveGlobSync.js",
+    "frontend/__tests__/helpers/resolveGlobSync.test.js",
+    "frontend/__tests__/questCanonical.test.js",
+    "frontend/__tests__/questDependencies.test.js",
+    "frontend/__tests__/questSimulation.test.js",
+    "frontend/__tests__/questQuality.test.js",
+    "docs/qa/v3.md"
+  ]
+}

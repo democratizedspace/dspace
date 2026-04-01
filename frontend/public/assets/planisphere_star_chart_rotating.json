@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/planisphere_star_chart_rotating.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "planisphere star chart",
+    "item_id": "98f6252e-95c2-468a-b110-69d47604df2c",
+    "entity_type": "item",
+    "prompt": "A rotating planisphere star chart viewed from above, with an outer date ring and inner sky window showing constellations and horizon guides through symbolic marks rather than readable labels. The device is slightly open as if being adjusted to the current date and time, with a pencil and small red observation light nearby. Its design should clearly communicate a practical analog sky map used for matching the night sky, not a fantasy chart.\n\nUltra-detailed, photorealistic 512×512 image with a clean near-future astronomy aesthetic: soft low-light illumination, realistic cardstock and matte print textures, no logos, no readable text, and no identifiable faces. Keep the planisphere centered and uncluttered so it works well as a small inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

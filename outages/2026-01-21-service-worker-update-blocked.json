@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-21-service-worker-update-blocked",
+  "date": "2026-01-21",
+  "component": "frontend/e2e/service-worker-update",
+  "rootCause": "Playwright was configured to block service workers for all tests, so the service worker update suite could not register a worker and consistently failed its registration assertions.",
+  "resolution": "Allow service workers in the service-worker-update test suite so registration and cache validation can execute under Playwright.",
+  "references": [
+    "frontend/e2e/service-worker-update.spec.ts",
+    "frontend/playwright.config.ts"
+  ]
+}

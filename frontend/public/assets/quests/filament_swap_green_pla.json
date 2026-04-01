@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/filament_swap_green_pla.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/filament-change.json",
+    "item_name": "Swap Filament",
+    "item_id": "3dprinting/filament-change",
+    "entity_type": "quest",
+    "prompt": "A home 3D printer on a workbench at the end of a safe filament swap, now loaded with a spool of bright green PLA on the spool holder. The previous filament spool in a different color sits off to the side, clearly removed. On the bench are safety goggles, a pair of wire cutters, and a small tray or sheet of paper holding a loose coil of purged green filament that looks like about 10 g of plastic, showing that the old color has been fully flushed through. The hotend is warm but idle, with a short strand of green PLA just extruded into the purge pile, and the user’s hands are out of the danger zone so no one is touching the hot nozzle or gears.\n\nNear-future solarpunk workshop aesthetic with warm lighting, clean wooden surfaces, and a plant or two on a shelf. The printer looks like an entry-level FDM machine with straightforward controls. Photorealistic 512×512 rendering, no brand logos or legible text on the printer or tools. The composition should clearly communicate that the old filament was safely unloaded, green PLA is now installed, goggles and wire cutters were used, and a proper 10 g purge was completed.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

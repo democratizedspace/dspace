@@ -1,0 +1,142 @@
+{
+    "id": "programming/median-temp",
+    "title": "Compute Median Temperature",
+    "description": "Extend your script to report the median temperature from your log.",
+    "image": "/assets/quests/programming_compute_median_temperature.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your average script works, but median catches outliers. Let's verify your dataset is clean before trusting that number.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "collect",
+                    "text": "Use my latest logger export",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "collect",
+            "text": "Check for missing timestamps, duplicated rows, and impossible values (< -20C or > 80C for this setup).",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "compute",
+                    "text": "Dataset passes sanity checks",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "repair",
+                    "text": "I found corrupted or out-of-range rows"
+                }
+            ]
+        },
+        {
+            "id": "repair",
+            "text": "Good catch. Filter invalid rows, re-export the cleaned CSV, and verify you still have an odd sample count before recomputing median.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "collect",
+                    "text": "Cleaned file is ready for re-check",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "compute",
+            "text": "Run your median function and log both value + sample count so others can audit the result.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Median report generated",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Interpret the output: if median drifts more than 4C from today's baseline, investigate sensor placement and rerun before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Median is within expected range",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "repair",
+                    "text": "Median is suspicious; clean and retest"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. You now have a reproducible median workflow with sanity checks and a recovery loop.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Median verified"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["programming/avg-temp"],
+    "hardening": {
+        "passes": 1,
+        "score": 96,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2026-02-21",
+                "date": "2026-02-21",
+                "score": 96
+            }
+        ]
+    }
+}

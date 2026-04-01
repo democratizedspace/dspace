@@ -1,0 +1,19 @@
+import { describe, it, expect } from 'vitest';
+import processes from '../frontend/src/generated/processes.json' assert { type: 'json' };
+import fs from 'fs';
+import path from 'path';
+
+describe('process hardening metadata', () => {
+  it('reinjects all hardening files', () => {
+    const hardeningDir = path.join(__dirname, '../frontend/src/pages/processes/hardening');
+    const hardeningFiles = fs.readdirSync(hardeningDir).map(file => path.parse(file).name);
+    const processesById = new Map((processes as Array<any>).map(process => [process.id, process]));
+
+    const reinjectedHardening = hardeningFiles.filter(processId => {
+      const process = processesById.get(processId);
+      return process?.hardening;
+    });
+
+    expect(reinjectedHardening).toHaveLength(hardeningFiles.length);
+  });
+});

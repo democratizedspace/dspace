@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+set -e
+
+echo "Running pre-push checks..."
+
+npm run check
+npm run test:root
+
+echo "✅ All pre-push checks passed!"

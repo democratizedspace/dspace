@@ -1,0 +1,187 @@
+{
+    "id": "devops/docker-compose",
+    "title": "Launch DSPACE in Docker",
+    "description": "Start DSPACE with Docker Compose and expose it securely through a Cloudflare Tunnel.",
+    "hardening": {
+        "passes": 3,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-16",
+                "date": "2025-08-16",
+                "score": 80
+            },
+            {
+                "task": "codex-hardening-2025-08-19",
+                "date": "2025-08-19",
+                "score": 90
+            }
+        ]
+    },
+    "image": "/assets/quests/devops_dspace_docker_compose.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "We'll deploy DSPACE with an operator-safe sequence: preflight checks, compose launch, tunnel validation, then rollback rehearsal.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "preflight",
+                    "text": "Run preflight before launching.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "preflight",
+            "text": "Confirm compose files are versioned, host time is synced, and you have local console access. Safety stop: if secrets are only in `.env` backups, rotate them before deployment.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "launch",
+                    "text": "Preflight complete; launch containers.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause and remediate preflight risk."
+                }
+            ]
+        },
+        {
+            "id": "launch",
+            "text": "Run `docker compose up -d --build` and verify the app container reaches healthy status before exposing traffic.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-docker-compose",
+                    "text": "Build and run containers."
+                },
+                {
+                    "type": "goto",
+                    "goto": "tunnel",
+                    "text": "Services are healthy locally; configure tunnel.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "tunnel",
+            "text": "Create a Cloudflare Tunnel and test the public route. Accept only if HTTPS endpoint returns expected content and origin remains private.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "create-cloudflare-tunnel",
+                    "text": "Provision tunnel and route."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Tunnel fails health check or leaks origin.",
+                    "requiresItems": [
+                        {
+                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                            "count": 1
+                        },
+                        {
+                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Tunnel is healthy and origin access is restricted.",
+                    "requiresItems": [
+                        {
+                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                            "count": 1
+                        },
+                        {
+                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Rollback to `docker compose down`, inspect proxy DNS and token scope, then redeploy and re-validate before reopening traffic.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "run-docker-compose",
+                    "text": "Perform controlled rollback/redeploy."
+                },
+                {
+                    "type": "goto",
+                    "goto": "tunnel",
+                    "text": "Remediation complete; rerun tunnel validation.",
+                    "requiresItems": [
+                        {
+                            "id": "df7e94e2-76b9-4865-b843-2ec21feb258e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "DSPACE is live through a verified tunnel with rollback discipline and explicit safety stops for secret or exposure risks.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Document this deployment runbook.",
+                    "requiresItems": [
+                        {
+                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                            "count": 1
+                        },
+                        {
+                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d2b39a23-cdfb-428d-a6ed-694ff0c0fc11",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["devops/prepare-first-node"]
+}

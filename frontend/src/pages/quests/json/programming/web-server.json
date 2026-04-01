@@ -1,0 +1,130 @@
+{
+    "id": "programming/web-server",
+    "title": "Serve a Web Page",
+    "description": "Write a tiny HTTP server that responds with 'Hello, world'.",
+    "image": "/assets/quests/programming_minimal_web_server.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's publish your temperature dashboard with an operational checklist instead of a one-shot demo.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "I'll prep static assets and dependencies.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Build index.html plus a health endpoint and capture a chart artifact so operators can verify fresh data at a glance.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Render dashboard chart"
+                },
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Assets ready for server launch",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "deploy",
+            "text": "Start the web server and verify from a second device: home page loads, health path returns 200, and log refresh updates within one cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Service passes remote checks",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        },
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Remote check failed"
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: if port conflicts or stale caches appear, stop the server, clear cache headers, bind to a safe port, and retry verification.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Regenerate dashboard bundle after fixes"
+                },
+                {
+                    "type": "goto",
+                    "goto": "deploy",
+                    "text": "Patched config; re-run remote checks",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent. You now have deploy, verification, and rollback-style recovery documented in quest flow.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Web service validated."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["programming/hello-sensor"],
+    "hardening": {
+        "passes": 1,
+        "score": 96,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-hardening-2026-02-22",
+                "date": "2026-02-22",
+                "score": 96
+            }
+        ]
+    }
+}

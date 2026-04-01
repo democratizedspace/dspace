@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_usb_cable_continuity_test.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/continuity-test.json",
+    "item_name": "Check USB cable continuity",
+    "item_id": "electronics/continuity-test",
+    "entity_type": "quest",
+    "prompt": "On a dry, light-colored non-conductive mat, an unplugged USB cable is laid out with both ends visible, and a digital multimeter is set to continuity mode with its probes touching matching pins on each connector. The meter rests securely on the surface, its display showing a simple speaker or sound-wave icon instead of readable numbers, implying the continuity beep. The person performing the test is wearing clear safety goggles, with their gloved hands holding the probes steadily on the cable contacts.\n\nThe scene is a near-future solarpunk electronics bench: soft, even lighting, clean surfaces, and organized tools in the blurred background, including a small parts bin and a few coiled cables. The 512×512 photorealistic composition focuses on the USB cable, multimeter, and probe positions, with the rest of the workspace gently out of focus. No brand logos or legible text appear anywhere, and no full faces are shown—only goggles, hands, and forearms—emphasizing careful, safe continuity testing of the cable.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

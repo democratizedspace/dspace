@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/entry_level_fdm_printer_blob_of_death.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "entry-level FDM 3D printer (blob of death)",
+    "item_id": "8896a0ef-edd8-4d19-ac14-19ee66470e54",
+    "entity_type": "item",
+    "prompt": "An entry-level FDM 3D printer is shown mid-failure, its hotend assembly engulfed in a chaotic blob of solidified plastic where filament has wrapped around the heater block and nozzle. Stray strands of filament stretch between the hotend and the half-printed object on the bed, clearly indicating a mid-air extrusion that went wrong. The rest of the printer frame and bed are intact, but the hotend is visibly buried and will need careful disassembly and cleaning.\n\nThe scene is a near-future solarpunk maker lab with soft, even lighting, a few tools like hex keys and pliers laid out nearby, and spare hotend parts or nozzles in the blurred background. The 512\u00d7512 image is photorealistic with gentle stylization, no logos or text on the printer, and a composition that centers the tangled blob around the hotend and the failed print below while the rest of the workspace remains softly out of focus, capturing the classic 3D printing \u201cblob of death\u201d scenario.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

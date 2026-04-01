@@ -1,0 +1,169 @@
+{
+    "id": "electronics/check-battery-voltage",
+    "title": "Check a battery pack's voltage",
+    "description": "Use a digital multimeter to check a 12 V LiFePO4 battery pack after disconnecting it and placing it on a dry, non-conductive surface. Wear safety goggles throughout.",
+    "image": "/assets/quests/electronics_check_battery_pack_voltage.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Before measuring, isolate the LiFePO4 pack from loads, inspect for swelling or damage, and put on safety goggles. We'll record a reading, interpret it, and recover safely if it is out of range.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Ready for setup."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Set the multimeter to DC volts (20 V range), verify probes are in COM and V\u03a9, and keep fingers behind probe guards. Stop immediately if you see sparks, smell heat, or damaged insulation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Meter setup is confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "5127e156-3009-4db4-85ac-e3ea070b68f2",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Measure the disconnected pack: red probe to + terminal, black to -. Evidence artifact: record the exact voltage in your notes. Pass window for this quest is 12.4-13.6 V.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-battery-voltage",
+                    "text": "Run measurement procedure"
+                },
+                {
+                    "type": "goto",
+                    "goto": "in-range",
+                    "text": "Logged value is within 12.4-13.6 V."
+                },
+                {
+                    "type": "goto",
+                    "goto": "out-of-range",
+                    "text": "Logged value is outside 12.4-13.6 V."
+                }
+            ]
+        },
+        {
+            "id": "in-range",
+            "text": "Interpretation: this voltage is consistent with a healthy resting LiFePO4 pack. Re-cap terminals safely and store on a dry, fire-safe surface.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Interpretation complete."
+                }
+            ]
+        },
+        {
+            "id": "out-of-range",
+            "text": "Out-of-range recovery: quarantine the pack from chargers/loads, re-check probe polarity, and wait 10 minutes before a second reading. Do not charge or discharge an overheating pack.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Proceed with controlled re-test."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish-safe-stop",
+                    "text": "Pack shows heat/swelling. End with safety stop."
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Re-test gate: repeat the measurement process and compare with your first value. If readings remain out of range, escalate to battery maintenance diagnostics.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-battery-voltage",
+                    "text": "Run second measurement"
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Return to pass/fail interpretation with new reading."
+                }
+            ]
+        },
+        {
+            "id": "finish-safe-stop",
+            "text": "Good call stopping early. Safety-first operations are valid outcomes when battery risk signals appear.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Logged and escalated safely."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. You produced a measurement artifact, interpreted thresholds, and followed the corrective branch safely.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks, Orion!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "fb60696a-6c94-4e5e-9277-b62377ee6d73",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["electronics/basic-circuit"],
+    "hardening": {
+        "passes": 5,
+        "score": 95,
+        "emoji": "\ud83d\udcaf",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-polish-2025-08-05",
+                "date": "2025-08-05",
+                "score": 92
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 94
+            },
+            {
+                "task": "codex-refine-2025-08-06",
+                "date": "2025-08-06",
+                "score": 95
+            }
+        ]
+    }
+}

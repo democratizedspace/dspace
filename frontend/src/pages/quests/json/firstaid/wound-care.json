@@ -1,0 +1,157 @@
+{
+    "id": "firstaid/wound-care",
+    "title": "Practice Basic Wound Care",
+    "description": "Practice cleaning a minor cut with soap, gloves, antiseptic wipe, ointment, and a bandage while using explicit escalation and re-clean loops.",
+    "image": "/assets/quests/basic_wound_care_practice.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Minor scrapes happen. We'll clean and dress a small cut with supplies from a first aid kit.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "Start wound-care triage"
+                }
+            ]
+        },
+        {
+            "id": "triage",
+            "text": "Safety gate: only continue for shallow, controlled bleeding. Stop and seek medical care for deep punctures, gaping edges, embedded debris, animal bites, or heavy bleeding.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Minor wound is appropriate for home care"
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "This wound needs professional care"
+                }
+            ]
+        },
+        {
+            "id": "clean",
+            "text": "Wash hands for 20 seconds with liquid soap, put on nitrile gloves, rinse the cut with clean water, then wipe around (not into) the wound with a fresh antiseptic wipe.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "clean-minor-cut",
+                    "text": "Complete cleaning protocol"
+                },
+                {
+                    "type": "goto",
+                    "goto": "dress",
+                    "text": "Cleaning complete"
+                }
+            ]
+        },
+        {
+            "id": "dress",
+            "text": "Apply a thin layer of antibiotic ointment and cover with an adhesive bandage. Confirm bleeding is controlled and the bandage stays dry and secure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Bandage applied and bleeding controlled",
+                    "requiresItems": [
+                        {
+                            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "reclean",
+                    "text": "Bandage soaked through or area got contaminated"
+                }
+            ]
+        },
+        {
+            "id": "reclean",
+            "text": "Troubleshooting loop: remove contaminated dressing, re-rinse with clean water, replace with fresh antiseptic wipe and new bandage, then re-check bleeding control.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "clean",
+                    "text": "Restart cleaning and dressing sequence"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: no persistent bleeding, no severe pain, and no numbness. Plan daily bandage changes and infection checks (redness, swelling, pus, fever).",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Home-care checks passed"
+                },
+                {
+                    "type": "goto",
+                    "goto": "escalate",
+                    "text": "Warning signs detected"
+                }
+            ]
+        },
+        {
+            "id": "escalate",
+            "text": "Safety stop: seek medical care now and avoid closing or probing the wound yourself.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Escalation plan complete"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job. You followed triage, treatment, and verification gates instead of a one-step bandage flow.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Will do."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "09af703f-7054-4b33-a67d-4035d58bdfb7",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["firstaid/learn-cpr"],
+    "hardening": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-upgrade-2025-08-02",
+                "date": "2025-08-02",
+                "score": 60
+            },
+            {
+                "task": "codex-upgrade-2025-08-04",
+                "date": "2025-08-04",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 90
+            },
+            {
+                "task": "codex-upgrade-2025-09-07",
+                "date": "2025-09-07",
+                "score": 92
+            }
+        ]
+    }
+}

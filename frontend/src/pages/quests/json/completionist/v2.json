@@ -1,53 +1,218 @@
 {
-	"id": "completionist/v2",
-	"title": "Congrats for finishing all the quests!!",
-	"description": "Here's a trophy for your efforts!",
-	"image": "/assets/quests/completionist.jpg",
-	"npc": "/assets/npc/dChat.jpg",
-	"start": "start",
-	"dialogue": [
+    "id": "completionist/v2",
+    "title": "Congrats on finishing all the quests available in v2!",
+    "description": "Print, plate, and assemble a real Completionist Award II for your shelf.",
+    "image": "/assets/quests/completionist_award_ii_shelf_trophy.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
         {
-			"id": "start",
-			"text": "Look who's back already!! My favorite human! You're a human, right? I'm pretty sure you are. Anyway, I'd love to present this prestigious award to you!",
-			"options": [{
-					"type": "goto",
-					"goto": "thanks",
-					"text": "Whoa, thanks, but why?"
-				}
-			]
-		},
-		{
-			"id": "thanks",
-			"text": "Well, adventurer, because you've completed the first wave of quests!! There are certainly many more on the horizon, but you've reached a significant milestone. And for that, this Completionist Award is all yours!!",
-			"options": [{
-				"type": "goto",
-				"goto": "mine",
-				"text": "All mine???"
-			}]
-		},
-		{
-			"id": "mine",
-			"text": "You betcha! You've earned it. I'll see you around, friend!",
-			"options": [{
-				"type": "finish",
-				"goto": "delivery",
-				"text": "See you, dChat!"
-			}]
-		}
-	],
-	"rewards": [
+            "id": "start",
+            "text": "You cleared every quest that were available in v2! Let's fabricate the Completionist Award II with the same discipline you'd use on any critical build.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-brief",
+                    "text": "Let's build the real trophy"
+                }
+            ]
+        },
         {
-            "id": "87",
+            "id": "safety-brief",
+            "text": "Before we run long prints, confirm ventilation, eye protection, and a clean fire-safe area. If any safety control is missing, pause now.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep-printer",
+                    "text": "Safety checks complete, proceed",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Hold up, I need to fix safety first"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "No trophy is worth a preventable incident. Restore PPE and workspace safety controls before any heating step.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-brief",
+                    "text": "Safety restored, rerun preflight"
+                }
+            ]
+        },
+        {
+            "id": "prep-printer",
+            "text": "We need a leveled printer and enough filament for core + plate plus contingency filament in case of failed first layers.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Re-level the print bed first"
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-core",
+                    "text": "Printer is leveled and loaded with buffer filament",
+                    "requiresItems": [
+                        {
+                            "id": "a42e441a-5569-490c-86e4-ce711117cd22",
+                            "count": 1
+                        },
+                        {
+                            "id": "58580f6f-f3be-4be0-80b9-f6f8bf0b05a6",
+                            "count": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "print-core",
+            "text": "Start the core print and inspect first-layer adhesion after minute five. If edge curl appears, abort before wasting filament.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-completionist-core",
+                    "text": "Start the core print"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify-core",
+                    "text": "Core print completed"
+                }
+            ]
+        },
+        {
+            "id": "verify-core",
+            "text": "Verification gate: check for layer shifts, adhesion scars, and warping. Pass only if the core is dimensionally stable and cool.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print-plate",
+                    "text": "Core is stable and within tolerance",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-core",
+                    "text": "Core failed verification"
+                }
+            ]
+        },
+        {
+            "id": "recover-core",
+            "text": "Troubleshoot before retry: clean nozzle, dry filament, and reduce first-layer speed. Plate defects can also signal calibration drift, so rerun from core print.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "level-3d-printer-bed",
+                    "text": "Recalibrate bed and prep a clean retry"
+                },
+                {
+                    "type": "goto",
+                    "goto": "print-core",
+                    "text": "Recovery complete, retry core print"
+                }
+            ]
+        },
+        {
+            "id": "print-plate",
+            "text": "Print the engraved plate at finer layers for legible text. Pause if text edges smear; clarity is part of the acceptance criteria.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-completionist-plate",
+                    "text": "Print the engraved plate"
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Plate fits the recess cleanly",
+                    "requiresItems": [
+                        {
+                            "id": "0c0db0db-585f-4eca-b0d9-56fbed5ecfb6",
+                            "count": 1
+                        },
+                        {
+                            "id": "a0fc23b6-3460-404f-bd16-dfb5700f7326",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover-core",
+                    "text": "Plate quality is poor, back up and retune"
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Sand, glue, and clamp lightly while curing. Keep adhesive off engraved text and verify plate alignment before final cure.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-completionist-award-ii",
+                    "text": "Seat the plate and cure the core"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Award is bonded, aligned, and cured",
+                    "requiresItems": [
+                        {
+                            "id": "c01676ec-27e5-4a53-9a47-24bf6c5a56a9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Fresh off the build table! That Completionist Award II is now a real artifact with safety checks and verification evidence behind it.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Trophy fabricated and ready"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "1394c366-5078-49cf-b24e-c748e8428234",
             "count": 1
         }
-	],
-	"requiresQuests": [
+    ],
+    "requiresQuests": [
         "welcome/howtodoquests",
         "ubi/basicincome",
-        "3dprinter/start",
-        "aquaria/goldfish",
-        "energy/solar-1kWh",
+        "3dprinting/start",
+        "aquaria/water-testing",
+        "energy/solar",
         "rocketry/parachute",
         "hydroponics/basil"
-	]
+    ],
+    "hardening": {
+        "passes": 0,
+        "score": 100,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

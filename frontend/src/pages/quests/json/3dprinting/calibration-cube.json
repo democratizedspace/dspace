@@ -1,0 +1,238 @@
+{
+    "id": "3dprinting/calibration-cube",
+    "title": "Print a Calibration Cube",
+    "description": "Print a 20 mm calibration cube with baseline measurements, tuning adjustments, and retest evidence.",
+    "image": "/assets/quests/calibration_cube_measure.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Let's harden your printer accuracy. We'll capture baseline measurements, choose a tuning strategy, and prove the retest lands within tolerance before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Main path: run baseline print first."
+                },
+                {
+                    "type": "goto",
+                    "goto": "firmware-check",
+                    "text": "Alternate path: validate firmware and filament before printing."
+                }
+            ]
+        },
+        {
+            "id": "firmware-check",
+            "text": "Alternate setup path: verify nozzle profile, measure filament diameter, and record planned adjustment limits before baseline printing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-filament-diameter",
+                    "text": "Measure filament and log target profile."
+                },
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Setup evidence captured; proceed to baseline print.",
+                    "requiresItems": [
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "print",
+            "text": "Safety pass first: goggles on, ventilation running, and hands clear of moving rails. Print a baseline cube, let it cool fully, then remove it with a scraper.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-calibration-cube",
+                    "text": "Run the baseline cube print."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Baseline cube is cooled and ready to measure.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+                            "count": 15
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Measure X/Y/Z and log values. Pass target is 20.00 mm ±0.10 mm. If any axis drifts beyond tolerance, tune steps or flow before retesting.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-calibration-cube",
+                    "text": "Record baseline measurements."
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Baseline logged and tuning adjustments applied.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "One axis is still out of tolerance after adjustments.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Measurements are unstable or drift worsened after tuning.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Safety stop: pause motion, let the hotend cool, and inspect belt and coupler security before retrying to avoid compounding mechanical drift.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Safety checks complete; resume structured recovery.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery loop: re-check belt tension, confirm extrusion multiplier, and rerun a single-axis test print. If drift persists, roll back to last-known-good profile, cool the hotend, and repeat baseline.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "print",
+                    "text": "Rollback complete. Run a fresh baseline cube.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "9b985439-3c19-4fa7-b864-34a3c5c33ac4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Print and measure the post-adjust cube. Completion requires a retest log that shows all axes in tolerance and notes what changed.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-calibration-cube",
+                    "text": "Run post-adjust retest print."
+                },
+                {
+                    "type": "process",
+                    "process": "measure-calibration-cube",
+                    "text": "Log post-adjust retest measurements."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Retest passed and measurements are documented.",
+                    "requiresItems": [
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Accuracy locked. You now have baseline + retest evidence and a rollback path for future drift.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Calibration protocol complete."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d3590107-25ff-4de5-af3a-46e2497bfc52",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["3dprinting/bed-leveling"],
+    "hardening": {
+        "passes": 3,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-07",
+                "date": "2025-08-07",
+                "score": 65
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-13",
+                "date": "2025-08-13",
+                "score": 82
+            }
+        ]
+    }
+}

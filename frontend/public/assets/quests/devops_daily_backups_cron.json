@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_daily_backups_cron.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/daily-backups.json",
+    "item_name": "Configure Daily Backups",
+    "item_id": "devops/daily-backups",
+    "entity_type": "quest",
+    "prompt": "A compact home server or small form factor PC sits on a shelf beside an external hard drive or NAS unit, with a network cable and power cables neatly routed. In front of it, a laptop screen displays a stylized terminal window with a daily backup schedule: a calendar-like grid and a cron-style timing diagram are suggested with icons and lines instead of readable text. A game controller and a small stack of game cases or cartridges rest nearby, implying that important game data is being protected.\n\nThe scene fits a cozy near-future solarpunk gaming corner: warm, indirect lighting, small plants on the shelf, and a clean mix of wood and matte plastic surfaces. The 512\u00d7512 photorealistic composition focuses on the server, backup drive, and laptop, while the rest of the room fades into soft blur. No legible words or brand logos appear anywhere, and there are no visible faces\u2014only possibly a hand reaching toward the keyboard\u2014emphasizing automated nightly backups and safe data stewardship.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

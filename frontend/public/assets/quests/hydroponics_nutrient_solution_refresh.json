@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_nutrient_solution_refresh.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/nutrient-check.json",
+    "item_name": "Refresh Nutrient Solution",
+    "item_id": "hydroponics/nutrient-check",
+    "entity_type": "quest",
+    "prompt": "A rectangular hydroponic reservoir tub is partially opened, showing a softly tinted nutrient solution inside with a faint meniscus line where the old level used to be. A measuring pitcher filled with fresh nutrient solution is being poured gently into the tub, with the stream of liquid clearly visible and rising the level toward a marked fill line on the inner wall. Around the tub are a few thriving leafy plants in net cups, and a laminated safety mat or tray beneath the setup helps catch any small spills.\n\nThe scene is set in a clean near-future solarpunk grow lab, with soft white LED lighting and subtle green reflections from nearby plants. The 512×512 composition is photorealistic, keeping the tub and pouring pitcher as the focal point while background details like shelving and tubing remain slightly blurred. No brand logos or readable text appear anywhere, and if a person is visible, only their gloved hands and forearms are shown to emphasize safe, careful nutrient handling.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

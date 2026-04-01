@@ -1,0 +1,230 @@
+{
+    "id": "astronomy/star-trails",
+    "title": "Capture Star Trails",
+    "description": "Use long-exposure photography to capture star trails with logged pass criteria and recovery loops.",
+    "image": "/assets/quests/star_trails_long_exposure_tripod.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've mapped constellations; now let's capture their motion. We need a plan before we open the shutter.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "draft-seasonal-star-plan",
+                    "text": "Plot the hop and gear."
+                },
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Seasonal plan drafted and gear list confirmed.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Mark Polaris on your chart and note your exposure window so you avoid passing planes and neighbor lights.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "align-star-trail-rig",
+                    "text": "Tripod leveled and azimuth marked."
+                },
+                {
+                    "type": "goto",
+                    "goto": "setup",
+                    "text": "Polar alignment confirmed and rig locked.",
+                    "requiresItems": [
+                        {
+                            "id": "60da6648-c22e-466e-9789-9e1d4635fd46",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+                            "count": 1
+                        },
+                        {
+                            "id": "49fb255e-a4c3-48e4-bca7-4c3781fdb98b",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Recheck my sky window."
+                }
+            ]
+        },
+        {
+            "id": "setup",
+            "text": "Dial in a 20–30 second base exposure, use your red light to frame foreground, and lock focus on a bright star.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-star-trail-stack",
+                    "text": "Stack captured and color-balanced."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Stack ready for interpretation review.",
+                    "requiresItems": [
+                        {
+                            "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "I bumped the tripod—realign."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Condensation, battery drain, or clouds interrupted capture."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interval-plan",
+                    "text": "Seeing is unstable; switch to shorter interval bursts."
+                }
+            ]
+        },
+        {
+            "id": "interval-plan",
+            "text": "Alternate strategy: run 10-15 second interval bursts with a two-second gap, then stack only the cleanest sequence to reduce cloud and vibration streaks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-star-trail-stack",
+                    "text": "Burst set captured and stacked for review."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Burst stack prepared for interpretation.",
+                    "requiresItems": [
+                        {
+                            "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Cloud breaks or battery sag still ruined the burst set."
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation check: confirm trails are continuous, noise is acceptable, and frame drift stayed below your tolerance.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pass: trails are continuous and drift stayed in bounds.",
+                    "requiresItems": [
+                        {
+                            "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                            "count": 1
+                        },
+                        {
+                            "id": "2ab80a53-6a2a-4e51-b1f7-fa78620a0132",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recovery",
+                    "text": "Fail: drift/noise exceeded bounds, rerun required."
+                }
+            ]
+        },
+        {
+            "id": "recovery",
+            "text": "Recovery: secure tripod, wipe lens dew, and verify you still have a safe setup path before retrying.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Recovery checks complete—replan and retry."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Unsafe window tonight; log the partial and stand down.",
+                    "requiresItems": [
+                        {
+                            "id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Beautiful work. You captured, interpreted, and recovered safely when conditions shifted.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Save to the observing log."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "067aa8eb-b5a4-4bef-a307-7dde10e981f5",
+            "count": 1
+        },
+        {
+            "id": "684ec366-e0b1-4425-94fd-7dd9775dac08",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/planetary-alignment"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

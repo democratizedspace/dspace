@@ -1,192 +1,230 @@
 <script>
     import menu from '../../config/menu.json';
-	import { getItemCount } from '../../utils/gameState/inventory.js';
-	import { onMount } from 'svelte';
+    import { getItemCount } from '../../utils/gameState/inventory.js';
+    import { onMount } from 'svelte';
+    import { isMenuItemActive } from './menuActive.js';
 
-	export let pathname;
+    export let pathname;
 
-	// get avatarUrl from localStorage key of same name
-	let avatarUrl = localStorage.getItem('avatarUrl');
-	let mounted = false;
+    let mounted = false;
 
-	const toggleShowUnpinned = () => {
-		showUnpinned = !showUnpinned;
+    const toggleShowUnpinned = () => {
+        showUnpinned = !showUnpinned;
+    };
 
-		// edit unpinned-toggle button text
-		const button = document.getElementById('unpinned-toggle');
-		button.innerText = showUnpinned ? LABEL_FEWER : LABEL_MORE;
-	}
+    const isActive = (item) => isMenuItemActive(pathname, item);
 
-	const isActive = (item) => {
-		if (item.href === '/') {
-			return pathname === '/';
-		}
+    const showMenuItem = (currentItem) => {
+        if (currentItem && currentItem.hideIfOwned) {
+            // for each item in hideIfOwned, check if the player has it
+            for (const i of currentItem.hideIfOwned) {
+                if (getItemCount(i.id) > 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
 
-		// TODO: support unpinned menu items
-		return pathname.startsWith(item.href);
-	}
+    const LABEL_MORE = 'More';
+    const LABEL_FEWER = 'Less';
 
-	const showMenuItem = (currentItem) => {
-		if (currentItem && currentItem.hideIfOwned) {
-			// for each item in hideIfOwned, check if the player has it
-			for (const i of currentItem.hideIfOwned) {
-				if (getItemCount(i.id) > 0) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+    let showUnpinned = false;
+    let toggleLabel = LABEL_MORE;
 
-	const LABEL_MORE = 'More';
-	const LABEL_FEWER = 'Less';
+    $: toggleLabel = showUnpinned ? LABEL_FEWER : LABEL_MORE;
 
-	let showUnpinned = false;
-    
-	// filter menu to only pinned == true
-	const {pinned, unpinned } = menu.reduce((acc, item) => {
-		if (item.pinned) {
-			acc.pinned.push(item);
-		} else {
-			acc.unpinned.push(item);
-		}
-		return acc;
-	}, { pinned: [], unpinned: [] });
+    // filter menu to only pinned == true
+    const { pinned, unpinned } = menu.reduce(
+        (acc, item) => {
+            if (item.pinned) {
+                acc.pinned.push(item);
+            } else {
+                acc.unpinned.push(item);
+            }
+            return acc;
+        },
+        { pinned: [], unpinned: [] }
+    );
 
-	const activeUnpinned = unpinned.filter(item => isActive(item));
-	if (activeUnpinned.length > 0) {
-		const activeItem = activeUnpinned[0];
-		unpinned.splice(unpinned.indexOf(activeItem), 1);
-		pinned.push(activeItem);
-	}
+    const activeUnpinned = unpinned.filter((item) => isActive(item));
+    if (activeUnpinned.length > 0) {
+        const activeItem = activeUnpinned[0];
+        unpinned.splice(unpinned.indexOf(activeItem), 1);
+        pinned.push(activeItem);
+    }
 
-	onMount(() => {
-		mounted = true;
-	});
+    onMount(() => {
+        mounted = true;
+    });
 </script>
 
-<div>
-	{#if avatarUrl}
-		<a href="/profile"><img class="pfp" src={avatarUrl} alt="logo" /></a>
-	{/if}
-	<nav>
-		{#each pinned as item}
-				{#if isActive(item)}
-					<a class="active" href={item.href}>{item.name}</a>
-				{:else}
-					{#if item.hideIfOwned}
-						{#if showMenuItem(item) && mounted}
-							<a href={item.href}>{item.name}</a>
-						{/if}
-					{:else if item.comingSoon === true}
-						<a class="disabled" href={item.href}>{item.name}</a>
-					{:else}
-						<a href={item.href}>{item.name}</a>
-					{/if}
-				{/if}
-		{/each}
+<nav data-testid="header-nav">
+    {#each pinned as item}
+        {#if isActive(item)}
+            <a class="active" href={item.href} aria-current="page">{item.name}</a>
+        {:else if item.hideIfOwned}
+            {#if showMenuItem(item) && mounted}
+                <a href={item.href}>{item.name}</a>
+            {/if}
+        {:else if item.comingSoon === true}
+            <a class="disabled" href={item.href}>{item.name}</a>
+        {:else}
+            <a href={item.href}>{item.name}</a>
+        {/if}
+    {/each}
 
-		{#if showUnpinned}
-			{#each unpinned as item}
-				{#if item.hideIfOwned}
-					{#if mounted}
-						<button class="active" href={""}>{item.name}f</button>
-					{/if}
-				{:else if item.comingSoon === true}
-					<button class="disabled" href={""}>{item.name}</button>
-				{:else}
-					<a href={item.href}>{item.name}</a>
-				{/if}
-			{/each}
-		{/if}
-		
-		<button id="unpinned-toggle" on:click={toggleShowUnpinned}>{LABEL_MORE}</button>
-	</nav>
-</div>
+    <div
+        id="unpinned-menu"
+        hidden={!showUnpinned}
+        style={`display: ${showUnpinned ? 'contents' : 'none'}`}
+        aria-hidden={!showUnpinned}
+        role="region"
+        aria-label="Additional menu items"
+    >
+        {#each unpinned as item}
+            {#if item.hideIfOwned}
+                {#if mounted}
+                    <button class="active" type="button">{item.name}</button>
+                {/if}
+            {:else if item.comingSoon === true}
+                <button class="disabled" type="button">{item.name}</button>
+            {:else}
+                <a href={item.href}>{item.name}</a>
+            {/if}
+        {/each}
+    </div>
+
+    <button
+        id="unpinned-toggle"
+        on:click={toggleShowUnpinned}
+        aria-expanded={showUnpinned}
+        aria-controls="unpinned-menu"
+        aria-label="Toggle additional menu items"
+        type="button"
+        data-hydrated={mounted ? 'true' : 'false'}
+    >
+        {toggleLabel}
+    </button>
+</nav>
 
 <style>
-	nav {
-		text-align: center;
-		display: inline-flex;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: min(
+            70rem,
+            var(
+                --header-content-width,
+                max(
+                    12rem,
+                    calc(
+                        100% - var(--header-inline-total, 2rem) -
+                            var(--header-actions-reserved-inline, 8rem)
+                    )
+                )
+            )
+        );
+        max-width: min(
+            70rem,
+            var(
+                --header-content-width,
+                max(
+                    12rem,
+                    calc(
+                        100% - var(--header-inline-total, 2rem) -
+                            var(--header-actions-reserved-inline, 8rem)
+                    )
+                )
+            )
+        );
+        margin-inline: auto;
+        box-sizing: border-box;
+        padding-inline: max(
+            0.25rem,
+            calc((var(--page-inline-padding, 0px) + var(--header-inline-inset-left, 1rem)) / 3)
+        );
+    }
 
-	nav a {
-		opacity: 0.8;
-		background-color: #007006;
-		border-radius: 0.4rem;
-		color: white;
-		text-decoration: none;
-		flex-direction: row;
-		margin: 1px;
-		padding: 5px;
-		text-align: center;
-	}
+    nav a {
+        opacity: 0.8;
+        background-color: var(--color-pill);
+        border-radius: 0.4rem;
+        color: var(--color-pill-text);
+        text-decoration: none;
+        flex-direction: row;
+        flex: 0 0 auto;
+        margin: 1px;
+        padding: 5px;
+        text-align: center;
+    }
 
-	nav a:hover {
-		opacity: 1;
-	}
+    nav a:hover {
+        opacity: 1;
+    }
 
-	nav button {
-		background-color: #007006;
-		border-radius: 0.4rem;
-		color: white;
-		text-decoration: none;
-		flex-direction: row;
-		margin: 1px;
-		padding: 5px;
-		text-align: center;
-		font-size: 0.7rem;
-		border: none;
-		opacity: 0.8;
-		font-family: system-ui,sans-serif;
-		/* make the height less */
-		height: 1.5rem;
-		/* center in nav */
-		align-self: center;
-	}
+    nav a:focus-visible,
+    nav button:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
 
-	nav button:hover {
-		opacity: 1;
-		/* change cursor to pointer */
-		cursor: pointer;
-	}
+    nav button {
+        background-color: var(--color-pill);
+        border-radius: 0.4rem;
+        color: var(--color-pill-text);
+        text-decoration: none;
+        flex-direction: row;
+        flex: 0 0 auto;
+        margin: 1px;
+        padding: 5px;
+        text-align: center;
+        font-size: 0.7rem;
+        border: none;
+        opacity: 0.8;
+        font-family: system-ui, sans-serif;
+        /* make the height less */
+        height: 1.5rem;
+        /* center in nav */
+        align-self: center;
+    }
 
-	.active {
-		/* background color slightly lighter than #007006 */
-		background-color: #68d46d;
-		color: black;
-	}
+    nav button:hover {
+        opacity: 1;
+        /* change cursor to pointer */
+        cursor: pointer;
+    }
 
-	.disabled {
+    .active {
+        background-color: var(--color-pill-active);
+        color: var(--color-pill-active-text);
+    }
+
+    .disabled {
         background-color: #004603;
         color: rgb(138, 138, 138);
-		font-size: 1rem;
-		padding-left: 5px;
-		padding-right: 5px;
-		padding-top: 2px;
-		padding-bottom: 10px;
-	}
+        font-size: 1rem;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 2px;
+        padding-bottom: 10px;
+    }
 
-	.disabled:hover {
-		/* make the cursor normal */
-		cursor: default;
-	}
+    .disabled:hover {
+        /* make the cursor normal */
+        cursor: default;
+    }
 
-	.pfp {
-		width: 50px;
-		height: 50px;
-		border-radius: 50%;
-		position: absolute;
-		top: 20px;
-		right: 20px;
-		opacity: 0.8;
-		transition: 1s;
-		border: 2px solid rgb(67, 255, 76);
-	}
-
-	.pfp:hover {
-		opacity: 1;
-	}
+    @media (max-width: 768px) {
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: none;
+            box-sizing: border-box;
+            padding-inline: clamp(0.75rem, 4vw, 1.25rem);
+        }
+    }
 </style>

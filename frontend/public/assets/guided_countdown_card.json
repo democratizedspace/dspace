@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/guided_countdown_card.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "guided countdown card",
+    "item_id": "b9df8f38-83ed-4b0f-80be-3bfaf7228dbe",
+    "entity_type": "item",
+    "prompt": "A laminated countdown cue card clipped to a compact launch controller, showing a series of simple icon-like symbols arranged vertically to represent T-30 to liftoff steps: a clock icon, a servo arm symbol, a pad clearance silhouette, and a small rocket taking off. The symbols are purely graphical with no text, and the card has checkboxes that appear blank but clearly imply a step-by-step script. Nearby on the table are a coiled launch cable, a safety key, and a small guided model rocket standing on a sturdy pad in the background, with its 3D-printed green PLA fins and nosecone clearly visible.\n\nThe scene is a near-future, solarpunk launch pad setup with a clean, organized field station under soft daylight or golden-hour lighting. The style is lightly stylized but mostly photorealistic, with gentle depth of field to keep the countdown card and controller readable at small size while the green PLA rocket, pad, and surrounding terrain blur pleasantly. No brands or text are visible, and no faces are shown—at most, a gloved thumb holds the card in place—maintaining a calm, professional 2040s aerospace test-range atmosphere.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

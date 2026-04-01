@@ -1,0 +1,163 @@
+{
+    "id": "3dprinting/temperature-tower",
+    "title": "Print a Temperature Tower",
+    "description": "Find the ideal nozzle temperature by printing a simple calibration tower.",
+    "image": "/assets/quests/temperature_tower_calibration.jpg",
+    "npc": "/assets/npc/sydney.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "With retraction dialed, let's lock in nozzle temperatures using a labeled white PLA tower and evidence notes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "slice",
+                    "text": "Benchy notes are ready; let's slice it.",
+                    "requiresItems": [
+                        {
+                            "id": "8aa6dc27-dc42-4622-ac88-cbd57f48625f",
+                            "count": 1
+                        },
+                        {
+                            "id": "141581bf-be69-4522-973b-3d22292a85fa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "slice",
+            "text": "Slice the tower with 5 °C steps, emboss temperature labels on each band, and keep cooling + retraction fixed to isolate nozzle temp effects.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-temperature-tower",
+                    "text": "Print the temperature tower."
+                },
+                {
+                    "type": "goto",
+                    "goto": "review",
+                    "text": "Tower cooled and labeled.",
+                    "requiresItems": [
+                        {
+                            "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "review",
+            "text": "Inspect three candidate bands and log stringing, corner sag, and bridge clarity. Keep calipers and paper notes ready for threshold checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evaluate",
+                    "text": "Measurements logged for at least three temperature bands.",
+                    "requiresItems": [
+                        {
+                            "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "evaluate",
+            "text": "Pass criteria: selected band has minimal stringing, bridge droop under 0.5 mm, and consistent wall finish. If not, adjust nozzle temp range and rerun the tower.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "One band meets all thresholds; temp profile is ready.",
+                    "requiresItems": [
+                        {
+                            "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
+                            "count": 1
+                        },
+                        {
+                            "id": "e37c86b0-caaf-485d-b5c1-c15f7029973c",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "correct",
+                    "text": "Bands are inconsistent or all fail thresholds.",
+                    "requiresItems": [
+                        {
+                            "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
+                            "count": 1
+                        },
+                        {
+                            "id": "60409c3f-56cf-4b9e-9e60-ca480d4896d0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "correct",
+            "text": "Recovery path: narrow the temperature range, reduce fan swings, and rerun the print. Abort if you smell burning PLA or see persistent smoke; cool down before retrying.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "print-temperature-tower",
+                    "text": "Reprint with corrected temperature range."
+                },
+                {
+                    "type": "goto",
+                    "goto": "review",
+                    "text": "Corrective run complete; re-evaluate all bands.",
+                    "requiresItems": [
+                        {
+                            "id": "efcf79a5-1616-490e-add7-40f7fdb628b4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great. You now have a measured temperature profile you can carry into future print jobs.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Got it, thanks!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "fe46e236-5d03-4c95-9b38-68b045a0df03",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["3dprinting/retraction-test"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

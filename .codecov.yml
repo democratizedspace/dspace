@@ -1,0 +1,15 @@
+codecov:
+  require_ci_to_pass: yes
+
+flags:
+  backend:
+    paths: backend/
+    carryforward: true
+  frontend:
+    paths: frontend/
+    carryforward: true
+
+ignore:
+  - "frontend/src/components/generated/**"
+  - "**/*.d.ts"
+  - "**/node_modules/**"

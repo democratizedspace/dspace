@@ -1,0 +1,212 @@
+{
+    "id": "aquaria/floating-plants",
+    "title": "Add Floating Plants",
+    "description": "Rinse guppy grass in dechlorinated water, then float it so it soaks up excess nutrients and shelters fry.",
+    "image": "/assets/quests/floating_plants.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your shrimp are thriving, but nutrient levels creep up fast. We'll run a clean install path and a slower quarantine path so pests never hitchhike into the tank.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prep fresh dechlorinated rinse water.",
+                    "goto": "strategy"
+                },
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "I'll use the bucket that's already dechlorinated.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "strategy",
+            "text": "Choose your path: quick rinse for healthy clippings, or quarantine rinse when you suspect snail eggs or damaged stems.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Use the standard rinse path.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "I found hitchhikers or mushy stems; do a recovery rinse.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Swirl guppy grass in dechlorinated water, strip brown stems, and keep only bright green growth for surface cover.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-floating-plants",
+                    "text": "Rinse and inspect the plants.",
+                    "goto": "place"
+                },
+                {
+                    "type": "goto",
+                    "goto": "place",
+                    "text": "Rinsed bundle is clean and ready for placement.",
+                    "requiresItems": [
+                        {
+                            "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Good catch. Remove suspect stems, refresh the rinse water, and repeat until no pests or decaying leaves remain.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-floating-plants",
+                    "text": "Run a second rinse after trimming contaminated stems.",
+                    "goto": "place"
+                },
+                {
+                    "type": "goto",
+                    "goto": "place",
+                    "text": "I trimmed and redistributed the existing mat; re-check placement before verifying.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "I replaced the water and tools; return to standard rinse checks.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "0704e829-ce72-4c7d-91b0-8a774b11575d",
+                            "count": 1
+                        },
+                        {
+                            "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "place",
+            "text": "Float the rinsed stems under the light, keep them clear of the intake, and leave a breathing lane so shrimp can reach the surface.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "place-floating-plants",
+                    "text": "Float and spread the guppy grass mat.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Mat is floating and the intake lane stays open.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Now verify operations: if the mat covers more than half the surface or blocks flow, thin it before calling this stable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Coverage and flow are balanced; fry still have open surface access.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Flow is blocked or plants are melting; troubleshoot and re-rinse before retrying.",
+                    "requiresItems": [
+                        {
+                            "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Perfect. The floating mat now acts as a nutrient sponge and nursery cover without choking gas exchange.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll keep the mat trimmed and the surface lane clear."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "a07b75e3-f828-4cb1-81d6-1ab0e9857a79",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["aquaria/shrimp"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

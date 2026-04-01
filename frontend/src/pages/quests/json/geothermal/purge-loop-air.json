@@ -1,0 +1,172 @@
+{
+    "id": "geothermal/purge-loop-air",
+    "title": "Purge Air from Ground Loop",
+    "description": "Run a controlled purge with pre/post evidence and a repeat-until-clear recovery loop.",
+    "image": "/assets/quests/geothermal_purge_air_from_ground_loop.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Power down the pump, crack vent points slowly, and keep a catch bucket ready before opening the loop. Ready to run a safe purge cycle?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Safety prep done"
+                },
+                {
+                    "type": "goto",
+                    "goto": "materials",
+                    "text": "Walk me through the purge setup"
+                }
+            ]
+        },
+        {
+            "id": "materials",
+            "text": "Stage the submersible pump and confirm hose routing so discharge returns to the reservoir without spraying connectors.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Issue purge pump"
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Pump and hoses staged",
+                    "requiresItems": [
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Capture a baseline loop trace before purging so you can prove flow quality improved after the cycle.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture pre-purge baseline"
+                },
+                {
+                    "type": "goto",
+                    "goto": "purge",
+                    "text": "Baseline trace saved",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        },
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "purge",
+            "text": "Run purge flow until bubble noise drops and return stream clears, then capture a post-purge trace.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture post-purge trace"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Post-purge trace saved",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        },
+                        {
+                            "id": "584ca717-4ce1-4ca1-bcd3-38272a52768a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Did pre/post traces show steadier temperatures and fewer cavitation spikes?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes, purge pass confirmed",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "reentry",
+                    "text": "No, bubbles or spikes remain"
+                }
+            ]
+        },
+        {
+            "id": "reentry",
+            "text": "Re-entry branch: stop flow, bleed high points again, inspect for suction leaks, then run another purge cycle.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "purge",
+                    "text": "Issue corrected, rerun purge"
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Reset to safety prep"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Loop flow looks healthy again. Keep the before/after traces with maintenance notes for future diagnostics.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Loop purge benchmarked",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5bba251a-d223-4e22-aa30-b65238b17516",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["geothermal/monitor-heat-pump-energy"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

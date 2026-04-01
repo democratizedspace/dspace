@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponic_ec_meter_check.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/ec-check.json",
+    "item_name": "Check Solution EC",
+    "item_id": "hydroponics/ec-check",
+    "entity_type": "quest",
+    "prompt": "A close-up view shows a person’s hand holding an EC meter probe over a small hydroponic reservoir, gently lowering the tip into the nutrient solution. The reservoir is a shallow tub with bubbling air stones and floating roots from healthy green plants above, supported by net pots in a lid. The EC meter body and cable are clearly visible, with the display angled slightly toward the viewer but the numbers too small to read, emphasizing that a measurement of nutrient strength is being taken.\n\nThe environment is a bright, futuristic indoor grow lab with a calm solarpunk mood: trellised plants, soft white and warm accent lighting, and clean white or light wood surfaces. The 512×512 image is photorealistic with mild stylization, no logos or readable text, and a composition that highlights the interaction between the EC probe and the reservoir, while the surrounding plants and equipment quietly frame the scene.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

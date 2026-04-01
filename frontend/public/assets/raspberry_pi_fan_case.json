@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/raspberry_pi_fan_case.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "fan case",
+    "item_id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
+    "entity_type": "item",
+    "prompt": "A standard Raspberry Pi–style single-board computer in a slim silver aluminum case sits on a wooden desk. The board has the familiar rectangular footprint (longer than it is deep). On one long edge of the case, facing the viewer, are four stacked USB ports and one RJ-45 Ethernet jack: two USB 3.0 ports and two USB 2.0 ports in a vertical stack, with the Ethernet jack immediately beside them on the right. On the adjacent short edge to the **left** of this USB/Ethernet face, the case exposes the video and power ports: starting at the front-left corner is a single USB-C power input, and immediately to its right are two micro-HDMI ports side by side. No USB-C or HDMI ports appear on the other faces of the case. A USB-C cable is plugged into the USB-C power port on that left short edge and runs out of frame toward a wall adapter.\n\nOn top of the case, centered above the CPU area, is a small square cooling fan. Two thin wires from the fan, one red and one black, run neatly to the 40-pin GPIO header, plugging into the 5V and GND pins near the corner closest to the USB/Ethernet ports. No other wires touch the GPIO header. The scene has a near-future solarpunk desktop aesthetic with warm lamplight, a couple of small succulents in white pots, and a tiny solar panel gadget nearby. The Pi’s USB, Ethernet, USB-C, and micro-HDMI ports are clearly visible but carry no brand logos or readable text. The image is photorealistic at 512×512 resolution, focusing on the correctly proportioned rectangular Pi case, the accurate port layout, and the fan case wired properly to 5V and GND.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

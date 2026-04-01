@@ -1,0 +1,642 @@
+[
+    {
+        "id": "83fe7eee-135e-4885-9ce0-9042b9fb860a",
+        "name": "aquarium (150 L)",
+        "description": "90×45×45 cm (150 L/40 gal) glass aquarium with 6 mm tempered panels; shipped empty without lid.",
+        "image": "/assets/aquarium_empty.jpg",
+        "price": "120 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "76307a8e-4e0e-4dfa-abc2-7917d384d82c",
+        "name": "aquarium (goldfish) (150 L)",
+        "description": "90×45×45 cm (150 L) freshwater tank with 5 cm goldfish; includes water and sponge filter; no lid.",
+        "image": "/assets/aquarium_goldfish.jpg",
+        "price": "125 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "40920981-bf9f-4b89-b887-bebe7006f7dc",
+        "name": "goldfish",
+        "description": "Juvenile common goldfish (Carassius auratus) about 5 cm long; requires a dechlorinated 150 L+ aquarium kept at 18–22°C.",
+        "image": "/assets/goldfish.jpg",
+        "price": "5 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-10",
+                    "date": "2025-08-10",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "8807f2f1-3ca2-48da-9b2b-1915604a63e2",
+        "name": "goldfish food",
+        "description": "1 g of balanced goldfish flakes; feed about 0.1 g per fish daily.",
+        "image": "/assets/goldfish_flake_food_1g.jpg",
+        "price": "0.07 dUSD",
+        "unit": "g",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "6fe61da2-6aa3-447e-aad5-c65b1b8da1f1",
+        "name": "aquarium filter",
+        "description": "Hang-on-back filter with 10 W pump moving 200 L/h for 150 L tanks; includes sponge and carbon.",
+        "image": "/assets/aquarium_filter.jpg",
+        "price": "30 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-update-2025-08-11",
+                    "date": "2025-08-11",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+        "name": "aquarium heater (150 W)",
+        "description": "Submersible 150 W heater with 20–30°C thermostat, auto shutoff and 1.5 m 120 V cord; warms 150 L.",
+        "image": "/assets/aquarium_heater_150w.jpg",
+        "price": "22 dUSD",
+        "hardening": {
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-18",
+                    "date": "2025-08-18",
+                    "score": 80
+                }
+            ]
+        }
+    },
+    {
+        "id": "62757412-be94-48c0-a1c0-8fad9bdb8c4a",
+        "name": "aquarium LED light (20 W)",
+        "description": "Clip-on 20 W LED light (6500 K) for 60–80 L freshwater tanks; 1.5 m cord with switch.",
+        "image": "/assets/aquarium_led_light_20w_clip_on.jpg",
+        "price": "20 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+        "name": "aquarium thermometer (0–50°C)",
+        "description": "Stick-on strip thermometer for aquariums; 0–50°C range with ±1°C accuracy.",
+        "image": "/assets/aquarium_thermometer_strip_0_50c.jpg",
+        "price": "7 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "ca7c1069-4ba3-4339-9a10-0b690a690e60",
+        "name": "7 pH freshwater aquarium (150 L)",
+        "description": "An freshwater aquarium with a pH of 7.",
+        "image": "/assets/freshwater_aquarium_150l_ph7.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "75cec98f-fcf0-4d73-8d31-5a53571317b2",
+        "name": "aquarium gravel (1 kg)",
+        "description": "1 kg bag of washed 5–10 mm river gravel for aquarium substrate; rinse before use.",
+        "image": "/assets/aquarium_gravel_bag_1kg.jpg",
+        "price": "1 dUSD",
+        "unit": "kg",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-24",
+                    "date": "2025-08-24",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "ee7d437d-7426-47cd-b691-386dd20f4e47",
+        "name": "aquarium net",
+        "description": "10 cm nylon mesh net with 30 cm handle for moving fish during tank maintenance.",
+        "image": "/assets/aquarium_net_10cm.jpg",
+        "price": "5 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "36a1168f-0109-4a8c-b70b-45f8ca582297",
+        "name": "dGoldfish",
+        "description": "A token granted for feeding a goldfish",
+        "image": "/assets/dGoldfish.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "a07b75e3-f828-4cb1-81d6-1ab0e9857a79",
+        "name": "Fish Friend Award",
+        "description": "An award given for setting up your first goldfish aquarium.",
+        "image": "/assets/fish_friend_award.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+        "name": "Walstad aquarium (80 L)",
+        "description": "A planted tank using the low-tech Walstad method.",
+        "image": "/assets/walstad_aquarium_80l_planted.jpg",
+        "price": "80 dUSD"
+    },
+    {
+        "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+        "name": "Walstad aquarium with thermometer (80 L)",
+        "description": "An 80 L Walstad tank with a strip thermometer attached on the outside glass for quick checks.",
+        "image": "/assets/walstad_aquarium_with_strip_thermometer_80l.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "98609b23-4811-4275-8d83-ad59a2797753",
+        "name": "aquarium stand (80 L)",
+        "description": "Sturdy wooden stand rated to hold a filled 80 L aquarium.",
+        "image": "/assets/aquarium_stand_80L.jpg",
+        "price": "40 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-07",
+                    "date": "2025-08-07",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "b494f643-a77a-4edf-be7e-5f7ff2dfba6a",
+        "name": "Dwarf shrimp",
+        "description": "Neocaridina davidi (~1.5 cm) algae grazer for 20-26°C planted tanks.",
+        "image": "/assets/dwarf_shrimp_neocaridina_closeup.jpg",
+        "price": "3 dUSD",
+        "unit": "each",
+        "hardening": {
+            "passes": 1,
+            "score": 70,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-refine-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 70
+                }
+            ]
+        }
+    },
+    {
+        "id": "011129b7-2190-47dd-b541-8123a2e8a9a3",
+        "name": "Drip-acclimated dwarf shrimp",
+        "description": "Dwarf shrimp adjusted slowly to tank parameters and ready for net transfer.",
+        "image": "/assets/drip_acclimated_dwarf_shrimp.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "35aeac1d-e26e-475b-8b05-b74562e90173",
+        "name": "Walstad aquarium with dwarf shrimp (80 L)",
+        "description": "An 80 L Walstad aquarium stocked with drip-acclimated dwarf shrimp.",
+        "image": "/assets/walstad_aquarium_dwarf_shrimp_80l.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "1b63146c-5cb3-4c75-bb31-ac4bb2e2bebe",
+        "name": "Walstad aquarium with dead dwarf shrimp (80 L)",
+        "description": "An 80 L Walstad aquarium after a failed shrimp transfer that caused a total die-off.",
+        "image": "/assets/walstad_aquarium_dead_dwarf_shrimp_80l.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER"
+    },
+    {
+        "id": "60e517b4-5807-4983-afb8-e2aad1566587",
+        "name": "Airline tubing",
+        "description": "2 m of 4 mm inner diameter clear PVC tubing for aquarium air pumps or drip acclimation.",
+        "image": "/assets/aquarium_airline_tubing_2m.jpg",
+        "price": "2 dUSD",
+        "unit": "2 m coil",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+        "name": "Heated Walstad aquarium (80 L, 26°C)",
+        "description": "80 L (21 gal) Walstad tank with a 150 W heater preset to 26°C; includes soil and sand cap.",
+        "image": "/assets/walstad_heated_80L.jpg",
+        "price": "120 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "21247ab3-427f-4448-8b68-4d8ad742cb7a",
+        "name": "Heated Walstad aquarium with guppies (80 L, 26°C)",
+        "description": "80 L (21 gal) Walstad tank with soil and 150 W heater at 26°C; stocked with four guppies (1♂, 3♀).",
+        "image": "/assets/walstad.jpg",
+        "price": "126 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-13",
+                    "date": "2025-08-13",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
+        "name": "aquarium air pump",
+        "description": "5 W diaphragm air pump supplies ~3 L/min at 12 kPa for tanks ≤40 L; 1 m 120 V cord; <40 dB noise.",
+        "image": "/assets/aquarium_air_pump_5w.jpg",
+        "price": "15 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-23",
+                    "date": "2025-08-23",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+        "name": "Sponge filter",
+        "description": "Air-driven sponge filter for ≤40 L (10 gal) tanks; 5 cm foam; needs 4 mm airline and air pump.",
+        "image": "/assets/sponge_filter_small_aquarium.jpg",
+        "price": "6 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-14",
+                    "date": "2025-08-14",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+        "name": "Rinsed sponge filter core",
+        "description": "Sponge filter media squeezed clean in dechlorinated tank water and kept wet to preserve bacteria.",
+        "image": "/assets/rinsed_sponge_filter_core.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+        "name": "Restored sponge filter flow",
+        "description": "Sponge filter reassembled, primed, and bubbling evenly after a rinse.",
+        "image": "/assets/restored_sponge_filter_flow_bubbling.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "8d30133e-0fbb-4e0f-845b-44d721a1f6b2",
+        "name": "Aquarium liquid test kit",
+        "description": "Liquid reagent kit for aquariums. Four 15 mL bottles and test tubes provide ~130 tests for ammonia, nitrite and nitrate.",
+        "image": "/assets/aquarium_liquid_reagent_test_kit_multi_parameter.jpg",
+        "price": "25 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "16eb261b-9d93-4aff-ab31-40f6a78d04f1",
+        "name": "Water conditioner",
+        "description": "50 mL bottle of sodium thiosulfate solution that neutralizes chlorine and chloramine in tap water before aquarium use.",
+        "image": "/assets/water_conditioner_bottle_50ml.jpg",
+        "price": "6 dUSD",
+        "hardening": {
+            "passes": 1,
+            "score": 65,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-hardening-2025-08-04",
+                    "date": "2025-08-04",
+                    "score": 65
+                }
+            ]
+        }
+    },
+    {
+        "id": "97317bc3-507a-4e2c-912b-507d586cee87",
+        "name": "gravel vacuum",
+        "description": "Self-priming siphon with 2 m (6.5 ft) hose and 4 cm (1.6 in) tube; moves ~3 L/min to clear debris.",
+        "image": "/assets/aquarium_gravel_vacuum_siphon.jpg",
+        "price": "10 dUSD",
+        "hardening": {
+            "passes": 2,
+            "score": 80,
+            "emoji": "✅",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-05",
+                    "date": "2025-08-05",
+                    "score": 60
+                },
+                {
+                    "task": "codex-item-hardening-2025-08-06",
+                    "date": "2025-08-06",
+                    "score": 80
+                }
+            ]
+        }
+    },
+    {
+        "id": "b8602362-2035-4f00-9376-f48d8668cf38",
+        "name": "water test logbook",
+        "description": "Waterproof A5 notebook with 100 pre-numbered pages for recording aquarium parameters.",
+        "image": "/assets/aquarium_water_test_logbook.jpg",
+        "price": "4 dUSD",
+        "type": "tool",
+        "hardening": {
+            "passes": 1,
+            "score": 60,
+            "emoji": "🌀",
+            "history": [
+                {
+                    "task": "codex-item-hardening-2025-08-12",
+                    "date": "2025-08-12",
+                    "score": 60
+                }
+            ]
+        }
+    },
+    {
+        "id": "c1f5f126-ad6b-4ba8-86ad-5598fb5038e9",
+        "name": "Rinsed guppy grass",
+        "description": "Guppy grass swished in dechlorinated water to shake off algae, snails, and eggs before placing.",
+        "image": "/assets/rinsed_guppy_grass_dechlorinated_water.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "1bdcb22a-17e2-42f8-b990-b842f9684169",
+        "name": "Floating plant mat",
+        "description": "Cluster of rinsed guppy grass spread across the water surface to soak up nutrients and shade fry.",
+        "image": "/assets/floating_plant_mat_guppy_grass.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "2d1b7889-b28c-4970-8be9-5de092cfd4d9",
+        "name": "Aquarium pH reading",
+        "description": "Single pH strip result matched to the chart within 30 seconds of dipping.",
+        "image": "/assets/aquarium_ph_strip_result.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "9c392043-4067-4f49-8038-38eef00e0b24",
+        "name": "Logged pH entry",
+        "description": "Dated logbook entry capturing the most recent aquarium pH strip result.",
+        "image": "/assets/aquarium_ph_log_entry.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "9748fccc-ec16-4664-982e-c79b1c082e5e",
+        "name": "Liquid test readings",
+        "description": "Fresh ammonia, nitrite, nitrate, and pH values gathered with a liquid kit and clean vials.",
+        "image": "/assets/aquarium_liquid_test_readings_vials.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "9c60b34c-f0f0-4ed4-b490-e1d781ecb83c",
+        "name": "Logged water parameters",
+        "description": "Notebook entry with ammonia, nitrite, nitrate, and pH values plus date and time.",
+        "image": "/assets/aquarium_water_parameters_log.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+        "name": "Aquarium temperature reading",
+        "description": "Most recent strip thermometer reading recorded after the glass dried and stabilized.",
+        "image": "/assets/aquarium_temperature_strip_reading_log.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "bc8ff31b-7c20-4c05-9af0-e3530d90fe3f",
+        "name": "Freshly changed aquarium (80 L)",
+        "description": "Walstad tank refilled with temperature-matched dechlorinated water after a gravel-vac water change.",
+        "image": "/assets/freshly_changed_walstad_80l.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "bda9e450-499d-41d6-ab32-df73528dc68f",
+        "name": "Dense fry cover",
+        "description": "Floating tangle of hornwort and guppy grass packed at the surface to shelter newborn guppy fry.",
+        "image": "/assets/dense_fry_cover_hornwort_guppy_grass.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "eb0f7f00-98dc-44b0-bf7c-9c8d998cbbcb",
+        "name": "Fry food pinch",
+        "description": "Crushed flake powder sized for guppy fry; enough for a week of tiny feedings.",
+        "image": "/assets/fry_food_crushed_flake_pinch.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    },
+    {
+        "id": "18a20f4e-a351-448e-837b-3caca90f71f4",
+        "name": "Juvenile guppy brood",
+        "description": "Home-bred guppy juveniles past the fry stage and ready to rehome or trade.",
+        "image": "/assets/juvenile_guppy_brood_ready_to_rehome.jpg",
+        "priceExemptionReason": "BETA_PLACEHOLDER",
+        "hardening": {
+            "passes": 0,
+            "score": 0,
+            "emoji": "🛠️",
+            "history": []
+        }
+    }
+]

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/telescope_build_alignment_card.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "telescope build alignment card",
+    "item_id": "f293d45c-49bd-4c53-a73f-88233c5b6acc",
+    "entity_type": "item",
+    "prompt": "A stiff cardstock telescope alignment card laid on a maker bench beside a cardboard telescope tube, featuring carefully drawn focal spacing marks, centering circles, and balance-reference lines used during manual optical alignment. The card should look worn but precise, with pencil marks, a clipped corner, and a few setup tools nearby such as a ruler, small flashlight, and tripod head. It must clearly read as a calibration aid for a hand-built telescope rather than ordinary office stationery.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-optics aesthetic: soft workshop lighting, realistic paper fibers and graphite marks, no logos, no readable writing, and no identifiable faces. Keep the composition tidy and centered on the alignment card so it reads well as a specialized telescope-build artifact in DSPACE.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

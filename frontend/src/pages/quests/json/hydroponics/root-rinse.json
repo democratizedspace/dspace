@@ -1,0 +1,163 @@
+{
+    "id": "hydroponics/root-rinse",
+    "title": "Rinse the Roots",
+    "description": "Flush salts from the root zone with clean water.",
+    "image": "/assets/quests/hydroponics_root_rinse.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Salt buildup stresses roots. We will capture pre-rinse evidence, flush safely, and confirm post-rinse recovery.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "water",
+                    "text": "Begin rinse protocol."
+                }
+            ]
+        },
+        {
+            "id": "water",
+            "text": "Prepare dechlorinated rinse water and check pump isolation so you do not flood the tray during flush.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prepare rinse water."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Water ready and tray is isolated.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 2.0
+                        },
+                        {
+                            "id": "11aa585c-fdeb-41ba-9191-be4bcdaa23c4",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Capture baseline runoff before flushing so you can prove the rinse changed root-zone conditions.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "flush-root-zone",
+                    "text": "Take initial runoff sample."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Baseline captured; proceed to full rinse.",
+                    "requiresItems": [
+                        {
+                            "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "rinse",
+            "text": "Run a full gentle flush until runoff clarity improves. If runoff stays cloudy, branch to contamination response.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "flush-root-zone",
+                    "text": "Perform full root-zone flush."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Runoff visibly improved after rinse.",
+                    "requiresItems": [
+                        {
+                            "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
+                            "count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "contam",
+                    "text": "Runoff still cloudy or odor persists."
+                }
+            ]
+        },
+        {
+            "id": "contam",
+            "text": "Contamination branch: pause nutrient dosing, inspect for biofilm/slime, clean lines, then re-enter flush only when system is safe.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "water",
+                    "text": "System cleaned; prepare fresh rinse water again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Immediate repeat flush with corrected setup.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 2.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Verification gate: confirm post-rinse root zone is clear and plants are not wilting before closure.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rinse",
+                    "text": "Not clear enough yet; run another flush cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Runoff clear and roots look relieved.",
+                    "requiresItems": [
+                        {
+                            "id": "15ff1896-7a19-4060-bfb3-77b62ec4fd5a",
+                            "count": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice recovery. Baseline-plus-post evidence confirms the root rinse actually reduced stress conditions.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Root rinse complete with contamination safeguards."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/filter-clean"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

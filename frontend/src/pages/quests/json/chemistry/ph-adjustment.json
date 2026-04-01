@@ -1,0 +1,116 @@
+{
+    "id": "chemistry/ph-adjustment",
+    "title": "Adjust Solution pH",
+    "description": "Plan titration corrections, execute micro-adjustments, and log every correction cycle until the buffer is in spec.",
+    "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Review previous buffer lot and target pH window. Stage pipette, stir rod, and correction reagents in separate dropper bottles.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-plan-ph-adjustment",
+                    "text": "Create titration adjustment plan with expected drops per cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "titrate",
+                    "text": "Adjustment plan is documented.",
+                    "requiresItems": [
+                        {
+                            "id": "3843a2ef-f029-4bd5-b450-828a82d62c8b",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "titrate",
+            "text": "Apply 1-2 drop corrections, stir 30 seconds, then re-sample. Repeat only if trend stays monotonic toward target.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-execute-ph-adjustment-cycle",
+                    "text": "Run controlled adjustment cycles and capture cycle log."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Adjustment cycle log ready for final readback.",
+                    "requiresItems": [
+                        {
+                            "id": "f7a90006-26fa-4ef0-b587-93edd963bb84",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Take final pH reading and confirm adjusted buffer is labeled with correction history.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-measure-ph",
+                    "text": "Capture final pH reading card."
+                },
+                {
+                    "type": "process",
+                    "process": "chemistry-adjust-buffer-ph",
+                    "text": "Commit corrected buffer as finished adjusted lot."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Plan, cycle log, adjusted buffer, and pH evidence complete.",
+                    "requiresItems": [
+                        {
+                            "id": "3843a2ef-f029-4bd5-b450-828a82d62c8b",
+                            "count": 1
+                        },
+                        {
+                            "id": "f7a90006-26fa-4ef0-b587-93edd963bb84",
+                            "count": 1
+                        },
+                        {
+                            "id": "8f50d94c-cd39-48bb-8f0c-abb24c51ffff",
+                            "count": 1
+                        },
+                        {
+                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Adjustment complete with full titration traceability.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Buffer pH tuned."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "e1714868-aa17-4f04-ac09-13ac4d7ecea0",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["chemistry/buffer-solution"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

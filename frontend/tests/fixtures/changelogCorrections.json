@@ -1,0 +1,79 @@
+{
+    "20221005": [
+        {
+            "type": "link",
+            "description": "Updated items.json link from old location (frontend/src/config/items.json) to new location (frontend/src/pages/inventory/json/items/) as items are now categorized in subdirectories",
+            "date": "2025-11-06"
+        },
+        {
+            "type": "link",
+            "description": "Corrected Docs link to point at the /docs route after the static page moved",
+            "date": "2025-11-06"
+        }
+    ],
+    "20221019": [
+        {
+            "type": "link",
+            "description": "Updated items.json link from old location to new location (frontend/src/pages/inventory/json/items/) as items are now categorized in subdirectories",
+            "date": "2025-11-06"
+        }
+    ],
+    "20230105": [
+        {
+            "type": "whitespace",
+            "description": "Removed trailing whitespace after 'but there's now a solution:'",
+            "date": "2025-11-06"
+        }
+    ],
+    "20230131": [
+        {
+            "type": "whitespace",
+            "description": "Removed trailing whitespace after 'Electric vehicle charger' heading",
+            "date": "2025-11-06"
+        },
+        {
+            "type": "link",
+            "description": "Removed dead internal Wallet link because the route no longer exists",
+            "date": "2025-11-06"
+        },
+        {
+            "type": "formatting",
+            "description": "Aligned the changelog slug with the January 31 filename to keep anchors consistent",
+            "date": "2026-02-02"
+        }
+    ],
+    "20230630": [
+        {
+            "type": "spelling",
+            "description": "Corrected 'sillhouette' to 'silhouette' in alt text",
+            "date": "2025-11-06"
+        },
+        {
+            "type": "link",
+            "description": "Removed dead internal Wallet link because the route no longer exists",
+            "date": "2025-11-06"
+        },
+        {
+            "type": "formatting",
+            "description": "Updated GPT-3.5 model reference to GPT-5 for current naming",
+            "date": "2026-01-07"
+        }
+    ],
+    "20260401": [
+        {
+            "type": "formatting",
+            "description": "Shifted the v3 release date from February 1 to March 1 per QA schedule.",
+            "date": "2026-01-27"
+        },
+        {
+            "type": "formatting",
+            "description": "Shifted the v3 release date from March 1 to April 1 per QA schedule update.",
+            "date": "2026-03-02"
+        },
+        {
+            "type": "formatting",
+            "description": "Moved ship-ready v3 release summary content into changelog notes to preserve historical markdown.",
+            "date": "2026-03-01"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/compost_check_temperature.jpg",
+    "entity": "frontend/src/pages/quests/json/composting/check-temperature.json",
+    "item_name": "Check Compost Temperature",
+    "item_id": "composting/check-temperature",
+    "entity_type": "quest",
+    "prompt": "An outdoor compost bin or lidded bucket is opened to reveal a rich, dark composting mix, and a long-stemmed compost thermometer is inserted into the center of the pile. The dial of the thermometer is large and easy to see, with colored zones indicating ranges but no readable numbers or text. The surrounding area shows a small garden bed or a few potted plants nearby, hinting that this compost will eventually feed living soil.\n\nThe environment has a warm, near-future solarpunk garden feel: soft natural daylight, a mix of wood and metal on the bin, and subtle high-tech touches like a tiny solar panel or sensor on the bin\u2019s side. The 512\u00d7512 photorealistic composition centers on the thermometer and the steaming or slightly moist compost surface, while background plants and fences are softly blurred. No logos or legible words appear, and no faces are visible\u2014perhaps just a hand on the thermometer\u2014highlighting the simple act of checking compost temperature for active decomposition.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

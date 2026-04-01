@@ -1,0 +1,126 @@
+{
+    "id": "programming/temp-alert",
+    "title": "Set Temperature Alert",
+    "description": "Write a script that warns you when the sensor crosses a threshold.",
+    "image": "/assets/quests/programming_temperature_threshold_alert.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "You've graphed your data; now enforce an alert policy that is precise enough to trust during real heat events.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "I'll define the alert thresholds.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 7
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Set warning and critical levels (for example warning at 30C, critical at 35C) and require at least two consecutive high readings before firing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "capture-hourly-temperature-log",
+                    "text": "Capture validation log for threshold test"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Validation log captured",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 7
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Classify results: pass only if alerts fire at/above configured thresholds and remain quiet in normal range. Any false alarm or missed trigger is a fail.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Alert behavior matches policy",
+                    "requiresItems": [
+                        {
+                            "id": "8e81b5e5-4aee-402c-bd04-fed9188f8c07",
+                            "count": 1
+                        },
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 7
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "tune",
+                    "text": "False alarm or missed trigger detected"
+                }
+            ]
+        },
+        {
+            "id": "tune",
+            "text": "Troubleshoot safely before redeploying: review debounce logic, verify sensor units, and rerun the same threshold test window.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Inspect event timeline around failed alerts"
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Policy tuned; rerun alert validation",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 4.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great job. You delivered a measurable alert policy with anomaly handling before closeout.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Alerts are trustworthy now."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["programming/temp-graph"],
+    "hardening": {
+        "passes": 1,
+        "score": 96,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-hardening-2026-02-22",
+                "date": "2026-02-22",
+                "score": 96
+            }
+        ]
+    }
+}

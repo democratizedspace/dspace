@@ -1,0 +1,191 @@
+{
+    "id": "composting/turn-pile",
+    "title": "Turn Your Compost Bucket",
+    "description": "Aerate the compost by stirring the mix so microbes stay active.",
+    "hardening": {
+        "passes": 3,
+        "score": 95,
+        "emoji": "\ud83d\udcaf",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-12",
+                "date": "2025-08-12",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-update-2025-08-16",
+                "date": "2025-08-16",
+                "score": 65
+            },
+            {
+                "task": "codex-quest-update-2025-08-18",
+                "date": "2025-08-18",
+                "score": 90
+            }
+        ]
+    },
+    "image": "/assets/quests/compost_turn_bucket.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A stagnant bucket can smell. Suit up with gloves so we can fluff and vent it safely.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "requiresItems": [
+                        {
+                            "id": "0564d441-7367-412e-b709-dad770814a39",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "025862b3-8377-4396-ab32-aa572bdc3260",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Gloves on; bucket needs air."
+                }
+            ]
+        },
+        {
+            "id": "mix",
+            "text": "Stir greens and browns with gloved hands until loose and damp, then cap with a brown layer. Watch for steam and move slowly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "turn-compost-bucket",
+                    "goto": "mix",
+                    "text": "Turn and fluff the mix"
+                },
+                {
+                    "type": "goto",
+                    "goto": "temp",
+                    "requiresItems": [
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        },
+                        {
+                            "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Check core temperature"
+                },
+                {
+                    "type": "goto",
+                    "goto": "moisture",
+                    "requiresItems": [
+                        {
+                            "id": "e034d081-a29e-4040-830f-a192304db50d",
+                            "count": 1
+                        },
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        },
+                        {
+                            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Measure moisture level"
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        },
+                        {
+                            "id": "e034d081-a29e-4040-830f-a192304db50d",
+                            "count": 1
+                        },
+                        {
+                            "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Mix is fluffy and capped"
+                }
+            ]
+        },
+        {
+            "id": "temp",
+            "text": "Thermometer reads 55 \u00b0C\u2014ideal. Remove the probe carefully; it may be hot.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-compost-temperature",
+                    "goto": "moisture",
+                    "text": "Log the temperature"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Return to turning the pile"
+                }
+            ]
+        },
+        {
+            "id": "moisture",
+            "text": "Meter shows 55% moisture\u2014ideal for microbes. Rinse the probe after use.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-compost-moisture",
+                    "goto": "finish",
+                    "text": "Record the moisture"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Return to turning the pile"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! With fresh air, capped browns, and logged readings, the bucket will heat evenly. Wash up and keep it covered.",
+            "options": [
+                {
+                    "type": "finish",
+                    "requiresItems": [
+                        {
+                            "id": "ff89afa1-2f88-44f2-a414-7fb1eda08735",
+                            "count": 1
+                        },
+                        {
+                            "id": "e034d081-a29e-4040-830f-a192304db50d",
+                            "count": 1
+                        },
+                        {
+                            "id": "723f5795-735c-46ee-8a33-30a3a403cdfd",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Aerated and logged"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "4d21c498-9225-4d0b-9a1a-ed65e349f0a8",
+            "count": 1
+        },
+        {
+            "id": "2b57a38d-0486-40e8-a50d-d893541b50e9",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["composting/start"]
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/jupiter_moons_orbital_tracking.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/jupiter-moons.json",
+    "item_name": "Track Jupiter's Moons",
+    "item_id": "astronomy/jupiter-moons",
+    "entity_type": "quest",
+    "prompt": "A basic telescope is set up in a backyard at night, pointed toward a bright object near the horizon representing Jupiter. On a small table beside the scope, an open mission logbook shows several circular eyepiece diagrams with four tiny dots changing positions from page to page, illustrating the shifting layout of Jupiter’s Galilean moons over multiple nights (no readable text). A red flashlight rests nearby, illuminating the current page while the telescope’s eyepiece gleams softly, inviting the next observation.\n\nThe scene is photorealistic 512×512 near-future solarpunk: neighboring houses with rooftop solar panels form a low horizon, and a rich star field fills the sky above. Lighting balances warm glows from distant windows with the cool darkness of the yard, and the red flashlight provides a focused highlight on the logbook. No brand logos or legible labels appear, and no full human figures are present—only the telescope and logbook—emphasizing the patient nightly tracking of Jupiter’s moons to understand orbital motion.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

@@ -1,0 +1,148 @@
+{
+    "id": "hydroponics/tub-scrub",
+    "title": "Scrub the Grow Tub",
+    "description": "Remove biofilm from the reservoir walls.",
+    "image": "/assets/quests/hydroponics_tub_scrub.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Slimy walls choke flow and invite contamination. We'll capture pre-clean evidence, scrub, then verify with a post-clean artifact.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Start cleaning protocol."
+                }
+            ]
+        },
+        {
+            "id": "mix",
+            "text": "Mix fresh peroxide rinse with PPE on. If your previous bath looks cloudy, discard it and remix before touching the tub.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prepare fresh rinse water."
+                },
+                {
+                    "type": "process",
+                    "process": "mix-peroxide-bath",
+                    "text": "Mix peroxide bath for scrub cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Bath mixed; capture baseline residue state.",
+                    "requiresItems": [
+                        {
+                            "id": "68e50400-fa25-4459-9633-2304a67096c9",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Baseline artifact gate: record pre-scrub residue before cleaning so we can prove improvement.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "scrub",
+                    "text": "Baseline recorded; begin scrub pass.",
+                    "requiresItems": [
+                        {
+                            "id": "68e50400-fa25-4459-9633-2304a67096c9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I found contamination or stale solution before scrubbing."
+                }
+            ]
+        },
+        {
+            "id": "scrub",
+            "text": "Scrub all interior walls and intake areas with the prepared bath. Keep cords unplugged and never spray directly onto electrical connectors.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sanitize-net-cups",
+                    "text": "Run the scrub/sanitize pass."
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Scrub pass complete; verify post-clean state.",
+                    "requiresItems": [
+                        {
+                            "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Post-clean verification: if sanitized-cup/tub artifact is present and residue is gone, close out. If not, branch to recovery and repeat.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Post-clean artifact confirms a clear tub.",
+                    "requiresItems": [
+                        {
+                            "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Residue remains or contamination returned."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: discard contaminated bath, remix fresh solution, and rerun baseline + scrub cycle before attempting completion.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Recovery steps done; restart the clean cycle."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great cleaning run. You closed with before/after evidence and a repeat-until-pass contamination workflow.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Back to growing."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/reservoir-refresh"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

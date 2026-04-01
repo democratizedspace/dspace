@@ -1,0 +1,123 @@
+{
+    "id": "astronomy/andromeda",
+    "title": "Locate the Andromeda Galaxy",
+    "description": "Use a planisphere star chart, a red flashlight and a basic telescope to locate our neighboring galaxy while preserving night vision.",
+    "image": "/assets/quests/andromeda_galaxy_backyard_hunt.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Nova here. Choose a dark, open spot away from traffic, check the forecast and let your eyes adjust for 15 minutes. Keep screens dim, secure your basic telescope and use a planisphere star chart with a red flashlight to preserve night vision. Ready?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "align",
+                    "text": "Gear ready.",
+                    "requiresItems": [
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "align",
+            "text": "First, orient using Cassiopeia's W and your chart. Keep one eye on hazards: no rooftops, no roads, and never sweep near aircraft paths.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "identify-constellations",
+                    "text": "Run a constellation alignment sweep."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Alignment notes are in my log.",
+                    "requiresItems": [
+                        {
+                            "id": "b73f795b-7abb-4a0c-950b-7f8ad82012b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Good. Is the core haze stable in averted vision for at least three slow sweeps?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Yes—the smudge holds across repeated sweeps."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "No, it fades or blurs when I re-check."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Troubleshoot before forcing it: reduce magnification, shield stray lights, and reset to the Cassiopeia anchor. If clouds thicken or footing feels unsafe, pause and retry another night.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "align",
+                    "text": "Retry with lower magnification and better light discipline."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work! Log the position for next time, cap the telescope, switch off the flashlight and pack your gear before leaving the site.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Logging observations."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "85d4fb76-9591-4b70-b88d-e74ff133215d",
+            "count": 1
+        },
+        {
+            "id": "82edf24f-3a5b-442d-8214-191454a6bc52",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/basic-telescope"],
+    "hardening": {
+        "passes": 3,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-refinement-2025-08-06",
+                "date": "2025-08-06",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-polish-2025-08-06",
+                "date": "2025-08-06",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-refine-2025-08-07",
+                "date": "2025-08-07",
+                "score": 90
+            }
+        ]
+    }
+}

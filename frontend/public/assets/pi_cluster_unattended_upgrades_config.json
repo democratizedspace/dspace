@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/pi_cluster_unattended_upgrades_config.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "unattended-upgrades config",
+    "item_id": "d8346735-7f1c-4309-a400-6cf6801534f7",
+    "entity_type": "item",
+    "prompt": "A clean configuration binder page clipped to a board beside a small cluster of single-board computers in soft focus, showing a schematic-style layout for pinned package lists, reboot window, and log rotation. The page contains structured blocks and toggles but all text is intentionally illegible and generic.\n\nUltra-detailed, photorealistic 512×512 with a near-future homelab aesthetic: soft cinematic lighting, tidy cabling, no logos, no readable text, no overlays. Center the config page so it reads clearly as “cluster config documentation.”",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

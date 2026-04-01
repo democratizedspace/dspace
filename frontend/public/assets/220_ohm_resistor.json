@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/220_ohm_resistor.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "220 Ohm Resistor",
+    "item_id": "037e6065-68a7-4ad1-9b0b-7778ecfe0662",
+    "entity_type": "item",
+    "prompt": "A close-up view of a small 220 ohm through-hole resistor with colored bands, resting on a light wooden desk next to a breadboard. The resistor’s leads are slightly bent as if ready to be inserted, and in the background a simple LED and a few jumper wires are visible, suggesting that this part is commonly used to limit current to that LED in a basic circuit. The focus is on the resistor body and its color bands so it’s clearly identifiable as a specific component.\n\nNear-future solarpunk electronics workbench aesthetic with soft, even lighting and a clean, organized feel. Photorealistic 512×512 rendering, no brand logos or legible text anywhere on components. The composition should make it obvious that this is a small, single resistor item in the inventory rather than a full circuit.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

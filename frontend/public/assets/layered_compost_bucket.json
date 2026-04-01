@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/layered_compost_bucket.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "layered compost bucket",
+    "item_id": "025862b3-8377-4396-ab32-aa572bdc3260",
+    "entity_type": "item",
+    "prompt": "An open 5 gallon bucket with small ventilation holes near the rim shows alternating layers of kitchen scraps and shredded paper. A thin brown cap sits on top, with a gloved hand holding a scoop ready to add more browns. Nearby are a small bowl of vegetable peels and a stack of dry leaves, all on a tidy patio.\n\nThe solarpunk scene is softly lit, with planters and a compact sensor or solar tag in the background. The 512×512 photorealistic image centers the layered compost in the bucket; no brand logos or readable text are visible, and no faces appear.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

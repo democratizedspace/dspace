@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const Ajv = require('ajv');
+const schema = require('../frontend/src/pages/inventory/jsonSchemas/item.json');
+const hardeningSchema = require('../frontend/src/pages/sharedSchemas/hardening.json');
+
+const ajv = new Ajv({ allErrors: true, strict: false });
+ajv.addSchema(hardeningSchema, hardeningSchema.$id);
+const validate = ajv.compile(schema);
+
+function validateItem(filePath) {
+  const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  const items = Array.isArray(data) ? data : [data];
+  return items.every((item) => {
+    const ok = validate(item);
+    if (!ok) {
+      console.error(`Validation failed for ${filePath}`);
+      console.error(validate.errors);
+    }
+    return ok;
+  });
+}
+
+if (require.main === module) {
+  const file = process.argv[2];
+  if (!file) {
+    console.error('Usage: node scripts/validate-item.js <item.json>');
+    process.exit(1);
+  }
+  const isValid = validateItem(path.resolve(file));
+  process.exit(isValid ? 0 : 1);
+}
+
+module.exports = validateItem;

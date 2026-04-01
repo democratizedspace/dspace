@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/beaker_250ml_glass.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "250 mL glass beaker",
+    "item_id": "10fab5e7-036b-4f8f-9f35-84117bc8ef09",
+    "entity_type": "item",
+    "prompt": "A clear 250 mL borosilicate glass beaker sitting on a lab bench, partially filled with a transparent liquid. The beaker features molded 50 mL graduation marks and a small spout on the rim for pouring, all rendered without legible numbers. A stirring rod rests alongside it and a hot plate or small burner is visible in soft focus behind, hinting at its ability to handle hot liquids without shattering.\n\nNear-future solarpunk lab aesthetic with clean countertops, soft neutral lighting, and a subtle bit of greenery or sustainable tech in the background. Photorealistic 512×512 rendering with no brand logos or readable labels. The composition should make the beaker itself the star of the image as a reusable labware item.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

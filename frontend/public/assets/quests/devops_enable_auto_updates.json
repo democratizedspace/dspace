@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_enable_auto_updates.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/auto-updates.json",
+    "item_name": "Enable Automatic Updates",
+    "item_id": "devops/auto-updates",
+    "entity_type": "quest",
+    "prompt": "A compact Raspberry Pi cluster of three to four boards is mounted neatly on a small rack or stand, each board connected with short Ethernet cables and sharing a single power bar. On a nearby desk, a slim laptop screen shows a terminal window with a system update process in progress\u2014abstract progress bars and status lines are visible but with no readable text. The focus is on the tidy hardware setup and the idea that the devices are being kept up to date automatically, rather than on any specific software UI.\n\nThe environment follows a clean near-future solarpunk aesthetic: soft, cool lighting, pale desk surfaces, and a few green plants in the background, with a window hinting at daylight. The 512\u00d7512 photorealistic image centers the Pi stack and the laptop off to one side, with cabling kept orderly and background details slightly blurred. No brand logos or legible words appear anywhere, and no full faces are visible\u2014only perhaps a hand resting near the keyboard\u2014keeping the focus on secure unattended upgrades for a small home lab.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

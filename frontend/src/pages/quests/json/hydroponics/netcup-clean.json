@@ -1,0 +1,186 @@
+{
+    "id": "hydroponics/netcup-clean",
+    "title": "Clean Net Cups",
+    "description": "Sanitize net cups with contamination fallback and verified dry-ready evidence.",
+    "image": "/assets/quests/hydroponics_netcup_cleaning.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Grimy cups spread pathogens. We will run a clean cycle with contamination fallback and only close on dry-ready evidence.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Start sanitation workflow."
+                }
+            ]
+        },
+        {
+            "id": "mix",
+            "text": "Mix dechlorinated water and peroxide with PPE on. This bath is your pre-clean artifact gate.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prepare dechlorinated water."
+                },
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "Water and peroxide are staged for bath mixing.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 2.0
+                        },
+                        {
+                            "id": "50f2080e-7dd5-4c8d-a764-dfaa02ca59c3",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Water prep failed or PPE is missing."
+                }
+            ]
+        },
+        {
+            "id": "soak",
+            "text": "Create the peroxide bath and confirm the bath artifact before scrubbing starts.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "mix-peroxide-bath",
+                    "text": "Mix peroxide rinse bath."
+                },
+                {
+                    "type": "goto",
+                    "goto": "scrub",
+                    "text": "Bath artifact confirmed; begin scrub cycle.",
+                    "requiresItems": [
+                        {
+                            "id": "68e50400-fa25-4459-9633-2304a67096c9",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Bath looks contaminated or concentration is uncertain."
+                }
+            ]
+        },
+        {
+            "id": "scrub",
+            "text": "Scrub each cup, rinse through the bath, and inspect for residue. If residue remains, branch to recovery before retry.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sanitize-net-cups",
+                    "text": "Run sanitize + rinse cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "dry",
+                    "text": "Sanitized-cup artifact captured.",
+                    "requiresItems": [
+                        {
+                            "id": "6498967e-284e-46ff-bee7-10e3907f60fd",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Biofilm remains or peroxide bath turned cloudy."
+                }
+            ]
+        },
+        {
+            "id": "dry",
+            "text": "Air-dry sanitized cups. Finish unlocks only after dry-ready proof confirms no pooled moisture remains.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "dry-net-cups",
+                    "text": "Run controlled air-dry step."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Dry-ready artifact verified; cups safe for next planting.",
+                    "requiresItems": [
+                        {
+                            "id": "d4a73557-e5a8-458a-80d9-6c1b46667428",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Moisture or odor remains; rerun sanitation path."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery path: discard contaminated bath, remix fresh solution, and restart at soak. Do not skip PPE between retries.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "mix",
+                    "text": "Need fresh water and peroxide staging again."
+                },
+                {
+                    "type": "goto",
+                    "goto": "soak",
+                    "text": "Fresh materials ready; re-enter at bath verification."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great sanitation run: pre-bath proof, sanitized-cup proof, and dry-ready proof all passed with contamination fallback.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Net cups cleaned and verified."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5599c466-91e9-46fb-8d8b-11388e4f8f9c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/tub-scrub"],
+    "hardening": {
+        "passes": 1,
+        "score": 90,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-15",
+                "date": "2025-08-15",
+                "score": 60
+            }
+        ]
+    }
+}

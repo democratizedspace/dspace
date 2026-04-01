@@ -1,0 +1,125 @@
+{
+    "id": "devops/log-maintenance",
+    "title": "Set Up Log Rotation",
+    "description": "Prevent logs from filling your server by compressing old files.",
+    "image": "/assets/quests/devops_log_rotation.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "As services run, logs can quietly consume the node. We'll define cadence, required fields, and anomaly thresholds before enabling rotation.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "configure",
+                    "text": "Set the logging policy.",
+                    "requiresItems": [
+                        {
+                            "id": "849eb5e1-9f63-488b-80d3-913492049090",
+                            "count": 1
+                        },
+                        {
+                            "id": "b6fc1ed6-f399-4fdb-9f9d-3913f893f43d",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "configure",
+            "text": "Set `logrotate` to run daily, keep 14 compressed archives, and record these fields in your ops notes: timestamp, service, file size, error count, and disk-used%.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "configure-daily-backups",
+                    "text": "Apply rotation and schedule."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Policy applied; capture verification evidence."
+                }
+            ]
+        },
+        {
+            "id": "capture",
+            "text": "Export a journal snapshot after rotation. Pass criteria: report includes timestamp/service/error count fields and no recurring rotation errors in the sampled window.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture rotation snapshot report."
+                },
+                {
+                    "type": "goto",
+                    "goto": "anomaly",
+                    "text": "Threshold exceeded or report missing fields.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Snapshot passes thresholds.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "anomaly",
+            "text": "Classify the anomaly (runaway service logs, stalled compression, or disk pressure). Safety stop: if disk use is above 90%, clear emergency space before continuing.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Create incident extract with corrective action."
+                },
+                {
+                    "type": "goto",
+                    "goto": "capture",
+                    "text": "Corrective action applied; run follow-up verification window.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. You now have repeatable log evidence and a recovery playbook when thresholds drift.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Logs under control."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "aaef54ec-eed4-43d6-a4e4-e1b22fbb5a69",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["devops/daily-backups"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

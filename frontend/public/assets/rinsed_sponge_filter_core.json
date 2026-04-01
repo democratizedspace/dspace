@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/rinsed_sponge_filter_core.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Rinsed sponge filter core",
+    "item_id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+    "entity_type": "item",
+    "prompt": "A sponge filter core being maintained: the foam sponge sits in a shallow bowl of dechlorinated aquarium water, visibly wet and freshly squeezed clean. A small bucket and a pair of nitrile gloves are nearby, indicating careful handling to preserve beneficial bacteria.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future aquaria maintenance aesthetic: soft cinematic lighting, clean surfaces, no logos, no readable text, no overlays. Keep the wet foam texture and “rinsed in tank water” context obvious at icon scale.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

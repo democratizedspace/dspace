@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/venus_phases_telescope_sequence.jpg",
+    "entity": "frontend/src/pages/quests/json/astronomy/venus-phases.json",
+    "item_name": "Observe Venus's Phases",
+    "item_id": "astronomy/venus-phases",
+    "entity_type": "quest",
+    "prompt": "A compact telescope with a diagonal and eyepiece set up on a balcony or small patio at dusk, with a bright point of light low in the sky representing Venus. Beside the telescope on a small table, a sketchbook or tablet shows a simple sequence of crescent-to-gibbous disk shapes, arranged in a row with no text, suggesting repeated observations of Venus’s changing phases. A red-filtered flashlight and a simple planisphere are nearby, reinforcing the idea of organized planetary tracking.\n\nNear-future solarpunk urban edge setting with warm, soft lighting from the fading sunset and early city lights, plus subtle indications of sustainable tech like balcony planters and rooftop solar panels. The 512×512 image is photorealistic with a slightly cinematic feel, no visible logos or readable text on equipment, and a clear composition that links the telescope, the phase sketches, and the bright “star” of Venus in the sky as a cohesive story about patient, repeated observation.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

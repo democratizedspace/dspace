@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/portable_solar_kit_wired_200wh.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "portable solar kit (wired)",
+    "item_id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+    "entity_type": "item",
+    "prompt": "A portable solar kit laid out on the ground: a folding solar panel connected via MC4 leads to a compact charge controller and a small LiFePO4 battery pack in a weather-resistant case. Ring terminals, strain relief, and neatly routed cables are clearly visible, showing a ready-to-deploy off-grid wiring setup.\n\nUltra-detailed, photorealistic 512×512 with a grounded near-future renewable-energy aesthetic: soft natural lighting, realistic materials, no logos, no readable text, no overlays. Compose so the panel, controller, and battery pack form a clear, uncluttered icon-like arrangement.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

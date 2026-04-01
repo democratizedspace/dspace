@@ -1,0 +1,274 @@
+{
+    "id": "energy/portable-solar-panel",
+    "title": "Test a Portable Solar Panel",
+    "description": "Harvest sunshine anywhere with a foldable panel.",
+    "image": "/assets/quests/portable_foldable_solar_panel_test.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Want off-grid power on the go? I have a 200 W portable panel, charge controller, and 200 Wh pack—if you wire them right.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "I'd love to test it!"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-pause",
+                    "text": "Let's stage a weather-safe workspace first."
+                }
+            ]
+        },
+        {
+            "id": "safety-pause",
+            "text": "Smart move. Wait for dry footing, keep terminals covered, and route cables so nobody trips over the panel lead.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "kit",
+                    "text": "Conditions look safe now; continue setup."
+                }
+            ]
+        },
+        {
+            "id": "kit",
+            "text": "I'll loan you the panel, controller, pack, and a fused lead kit. Lay them out on a dry surface, keep ring terminals off the ground, and disconnect if anything gets hot.",
+            "options": [
+                {
+                    "type": "grantsItems",
+                    "grantsItems": [
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ],
+                    "text": "Take the loaner kit"
+                },
+                {
+                    "type": "goto",
+                    "goto": "site-check",
+                    "text": "Parts staged and safe.",
+                    "requiresItems": [
+                        {
+                            "id": "02b32152-a7b2-458e-9643-7b754c722165",
+                            "count": 1
+                        },
+                        {
+                            "id": "67a682f8-a8a4-4a14-8806-5ccd3620fd3b",
+                            "count": 1
+                        },
+                        {
+                            "id": "cfe87611-623a-45b0-9243-422cd8a73a16",
+                            "count": 1
+                        },
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "site-check",
+            "text": "Pick your deployment plan: max-output angle tracking or conservative thermal-first placement. Either route needs a fuse-forward path and periodic connector touch checks.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Track the sun for higher output and run frequent thermal checks.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Use a conservative angle to prioritize cable cooling and stable voltage.",
+                    "requiresItems": [
+                        {
+                            "id": "0ccc4a37-b719-4f7c-ba73-9e4becdcd778",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-pause",
+                    "text": "Wind picked up—pause and reset the site."
+                }
+            ]
+        },
+        {
+            "id": "wire",
+            "text": "Crimped lugs go battery-side, MC4s point to the panel. Fuse on the positive lead—red to positive, black to negative—torque to spec, and zip-tie strain relief so nothing yanks free.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wire-portable-solar-kit",
+                    "text": "Wire it carefully"
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect-terminals",
+                    "text": "Cable ends are tight and fused.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Connector looked loose or polarity labels disagreed."
+                }
+            ]
+        },
+        {
+            "id": "rewire",
+            "text": "Recovery path: isolate the battery, reseat lugs, confirm polarity labels, and only restore the fuse after the connector area is cool and dry.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "wire",
+                    "text": "Rewire complete. Retry controlled startup."
+                }
+            ]
+        },
+        {
+            "id": "inspect-terminals",
+            "text": "Evidence gate: do a 5-minute idle check with the panel connected and confirm no connector heating, no arc marks, and steady controller status.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Inspection passed. Begin harvest.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Inspection failed. Return to troubleshooting."
+                }
+            ]
+        },
+        {
+            "id": "harvest",
+            "text": "Face the panel toward the sun, shade the battery, and start charging. Stop if connectors warm up or voltage dips below the controller’s low-cutoff.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "harvest-200Wh-portable",
+                    "text": "Let the photons flow"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Harvested 200 Wh without any hot cables.",
+                    "requiresItems": [
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "cloud-recovery",
+                    "text": "Clouds rolled in or cable temps rose—stabilize before retry."
+                }
+            ]
+        },
+        {
+            "id": "cloud-recovery",
+            "text": "Pause and recovery: re-angle the panel for stable current, move the pack into shade, and wait for cable temps to normalize before resuming.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "harvest",
+                    "text": "Recovery complete. Retry harvest."
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final verification: confirm the run produced 200 dSolar without alarms and that strain relief stayed intact for the full charge window.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "fin",
+                    "text": "Verification complete. Pack down safely.",
+                    "requiresItems": [
+                        {
+                            "id": "8e540f94-91e0-47a1-b6ca-78e8b48aefac",
+                            "count": 1
+                        },
+                        {
+                            "id": "b02ecff5-1f7d-4247-a09d-7d6cd6bb218a",
+                            "count": 200
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rewire",
+                    "text": "Verification failed. Rework wiring and rerun."
+                }
+            ]
+        },
+        {
+            "id": "fin",
+            "text": "Nice work! Coil the MC4 leads, keep the fuse installed, and stash the kit dry for your next off-grid errand.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Sun power for the win!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "5bba251a-d223-4e22-aa30-b65238b17516",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["energy/offgrid-charger"],
+    "hardening": {
+        "passes": 1,
+        "score": 96,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-energy-parity-2026-02-27",
+                "date": "2026-02-27",
+                "score": 96
+            }
+        ]
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/shell_transcript_terminal_capture.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "shell transcript",
+    "item_id": "91923542-45d5-46f5-82eb-6367b26ef8cc",
+    "entity_type": "item",
+    "prompt": "A printed shell transcript page resting beside a keyboard and terminal-lit workstation, showing the visual structure of a command session with short lines, prompts, and outputs in sequence. It should feel technical and reproducible, with no readable words.\n\nPhotorealistic 512×512 image with soft desk lighting, realistic paper and keyboard textures, no logos, no readable text, and no identifiable faces. Keep the page centered and uncluttered.",
+    "image_model": "MAI-Image-1",
+    "resolution": "512x512"
+}

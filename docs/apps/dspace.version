@@ -1,0 +1,3 @@
+# Helm chart version consumed by sugarkube helpers (helm-oci-install/upgrade).
+# Keep this in sync with charts/dspace/Chart.yaml:version.
+3.0.0

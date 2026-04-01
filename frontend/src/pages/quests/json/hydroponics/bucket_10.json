@@ -8,24 +8,138 @@
     "dialogue": [
         {
             "id": "start",
-            "text": "Hellooooo adventurer! You know what I find truly fascinating? Water! There's so much of it! I want all of it! Get me water! Lots of water!",
+            "text": "Hellooooo adventurer! I need a ten-bucket water reserve, but we do it safely and with proof. Pick your hauling plan, then verify the stack before I hand over the award.",
             "options": [
                 {
                     "type": "goto",
+                    "goto": "plan",
+                    "text": "How are we staging this?"
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Two strategies: one marathon haul or two staggered trips. Keep your path dry and lift with your legs so we do not turn this into a slip-and-strain side quest.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "haul",
+                    "text": "One marathon haul."
+                },
+                {
+                    "type": "goto",
+                    "goto": "stage",
+                    "text": "Two staggered trips with a stability check."
+                }
+            ]
+        },
+        {
+            "id": "stage",
+            "text": "Stage the first batch and clear an aisle before finishing the second run. This branch trades speed for fewer spill risks.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stage-ten-buckets",
+                    "text": "Complete the staged two-trip haul."
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Both trips complete; inspect the stack.",
                     "requiresItems": [
                         {
-                            "id": "25",
-                            "count": 10
+                            "id": "86b5d874-a04e-426f-be77-0f7047789faf",
+                            "count": 1
                         }
-                    ],
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "haul",
+            "text": "Hauling water isn't glamorous, but it builds good habits for future hydro runs. Keep buckets capped and avoid overreaching while stacking.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stage-ten-buckets",
+                    "text": "Run the full ten-bucket haul."
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Ten buckets staged; ready for inspection.",
+                    "requiresItems": [
+                        {
+                            "id": "86b5d874-a04e-426f-be77-0f7047789faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "inspect",
+            "text": "Verification gate: confirm the stack is stable and spill-free before claiming the award token.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "check",
+                    "text": "Stack is stable and aisle is clear."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "A bucket tipped or the stack feels unstable."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery branch: re-stage the spill zone, wipe standing water, and rebuild the stack from the base up before re-checking.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "stage-ten-buckets",
+                    "text": "Re-stage and re-stack the ten-bucket haul."
+                },
+                {
+                    "type": "goto",
+                    "goto": "inspect",
+                    "text": "Recovery complete; verify again.",
+                    "requiresItems": [
+                        {
+                            "id": "86b5d874-a04e-426f-be77-0f7047789faf",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "check",
+            "text": "Nice form. Now exchange the verified haul for the Hydro Award so the completion step is backed by mechanics, not vibes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "award-hydro-haul",
+                    "text": "Claim the Hydro Award."
+                },
+                {
+                    "type": "goto",
                     "goto": "finish",
-                    "text": "I have the 10 buckets ... that took awhile!"
+                    "text": "Award in hand.",
+                    "requiresItems": [
+                        {
+                            "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
+                            "count": 1
+                        }
+                    ]
                 }
             ]
         },
         {
             "id": "finish",
-            "text": "Ahhh, you're the best, adventurer! Have I ever told you that? You're the best! I give you this shiny liquid award!",
+            "text": "You wrangled all ten buckets with a verified safe stack and a recovery-ready workflow. Hydro logistics unlocked!",
             "options": [
                 {
                     "type": "finish",
@@ -36,16 +150,15 @@
     ],
     "rewards": [
         {
-            "id": "89",
+            "id": "978ce094-f4fa-4b55-9e1a-2ea76531989d",
             "count": 1
-        },
-        {
-            "id": "16",
-            "count": 10
         }
     ],
-    "requiresQuests": [
-        "hydroponics/basil",
-        "3dprinter/start"
-    ]
+    "requiresQuests": ["hydroponics/basil", "3dprinting/start"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
 }

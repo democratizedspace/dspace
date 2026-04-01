@@ -1,0 +1,194 @@
+{
+    "id": "astronomy/meteor-shower",
+    "title": "Document a Meteor Shower",
+    "description": "Plan for shower conditions, log meteor observations with interpretation, and rerun safely when visibility fails.",
+    "hardening": {
+        "passes": 2,
+        "score": 97,
+        "emoji": "\u2705",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-17",
+                "date": "2025-08-17",
+                "score": 60
+            },
+            {
+                "task": "codex-quest-quality-parity-2026-02-24",
+                "date": "2026-02-24",
+                "score": 97
+            }
+        ]
+    },
+    "image": "/assets/quests/meteor_shower_observation_log.jpg",
+    "npc": "/assets/npc/nova.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "The Perseids peak tonight. Do you want to run from your current site or start with a weather fallback plan?",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "session-plan",
+                    "text": "Let's prepare both paths."
+                }
+            ]
+        },
+        {
+            "id": "session-plan",
+            "text": "First log the radiant direction and safe path to your observing spot, then choose the live session route.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Radiant direction and route logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "observe-live",
+                    "text": "Sky is clear enough for live observing.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 2.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-fallback",
+                    "text": "Clouds and haze require fallback timing."
+                }
+            ]
+        },
+        {
+            "id": "observe-live",
+            "text": "Use planisphere orientation, keep white lights off, and log meteor count plus brightness classes for 20 minutes.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "observe-meteor-shower",
+                    "text": "Meteor session logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Observation run complete.",
+                    "requiresItems": [
+                        {
+                            "id": "f439b57a-9df3-4bd9-9b6e-042476ceecf5",
+                            "count": 1
+                        },
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "9a72fb16-fc69-45c5-beca-f25c27028977",
+                            "count": 1
+                        },
+                        {
+                            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "weather-fallback",
+                    "text": "Cloud deck rolled in during observation."
+                }
+            ]
+        },
+        {
+            "id": "weather-fallback",
+            "text": "Fallback branch: delay to next forecast window, verify safe footing, and avoid roadside observing. Resume only when visibility and safety both recover.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Follow-up note recorded with postponement reason and next window."
+                },
+                {
+                    "type": "goto",
+                    "goto": "session-plan",
+                    "text": "Forecast improved; restart planning cycle."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Session postponed safely with a follow-up note.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 2.0
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpretation gate: classify peak activity (high/moderate/low) and note limiting factors like moonlight or haze before completion.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "write-mission-log-entry",
+                    "text": "Peak class and limiting factors logged."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Observation artifact and interpretation complete.",
+                    "requiresItems": [
+                        {
+                            "id": "70bb8d86-2c4e-4330-9705-371891934686",
+                            "count": 1
+                        },
+                        {
+                            "id": "280ed361-ac70-4ab9-bcd9-aee481790faf",
+                            "count": 2.0
+                        },
+                        {
+                            "id": "aa82b02f-2617-4474-a91b-29647e4a9780",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work! You produced a usable observation record with interpretation, fallback handling, and clear night-safety checks.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "I'll compare the next peak night."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "98f6252e-95c2-468a-b110-69d47604df2c",
+            "count": 1
+        },
+        {
+            "id": "6aa2c7a1-f604-4bf6-93f8-5a37d017301f",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["astronomy/jupiter-moons"]
+}

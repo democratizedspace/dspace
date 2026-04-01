@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/fresh_bundle_of_stevia_leaves.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "bundle of stevia leaves",
+    "item_id": "c5d9469f-9e86-40c7-8b98-14b8b4ae91ae",
+    "entity_type": "item",
+    "prompt": "A fresh hand-tied bundle of stevia stems with abundant bright green leaves, laid on a clean harvest table with a few loose leaves scattered nearby. The leaves should look soft, natural, and recently cut, with visible serrated edges and a lively just-harvested texture. A blurred greenhouse or garden background can hint at cultivation without overpowering the bundle itself.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future agricultural aesthetic: soft natural lighting, realistic leaf texture, muted earth tones and greens, no logos, no text, and no identifiable faces. The composition should remain simple and centered so the bundle reads immediately as a distinct botanical inventory icon.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

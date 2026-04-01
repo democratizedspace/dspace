@@ -1,0 +1,153 @@
+{
+    "id": "firstaid/dispose-bandages",
+    "title": "Bag Used Bandages",
+    "description": "Use a biohazard bag to discard used bandages and wash up.",
+    "image": "/assets/quests/bag_used_bandages_biohazard.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Used bandages can spread germs. We are doing this in a containment-first order.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Start disposal workflow"
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Put on gloves and stage a fresh biohazard bag before touching contaminated waste.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Wash, glove, and stage disposal bag",
+                    "goto": "bag"
+                },
+                {
+                    "type": "goto",
+                    "goto": "bag",
+                    "text": "Supplies staged",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "I touched waste before staging"
+                }
+            ]
+        },
+        {
+            "id": "bag",
+            "text": "Place used bandages and wipes in the bag, expel excess air, then seal the bag before transport.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Bag sealed and leak-free",
+                    "requiresItems": [
+                        {
+                            "id": "7a4b8892-365f-4a56-93ce-127aa989f50d",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Bagging sequence completed under supervision"
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Bag tore or leaked"
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Pause disposal, isolate the spill, re-bag with fresh PPE, and sanitize hands before restarting.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Sanitize and restart",
+                    "goto": "prep"
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-stop",
+                    "text": "Exposure incident needs supervisor help"
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Now verify final controls: sealed waste, clean hands, and disposal path that avoids food-prep areas.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Final controls verified"
+                },
+                {
+                    "type": "process",
+                    "process": "wash-hands",
+                    "text": "Final hand wash",
+                    "goto": "finish"
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Need to re-bag before final wash"
+                }
+            ]
+        },
+        {
+            "id": "safety-stop",
+            "text": "Correct move. Escalate exposure incidents and resume only after safety guidance is clear.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Return after incident response"
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice work. The waste stream is controlled and your station is clean.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Disposal complete"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "b0f10930-53aa-4d45-8bb7-9c7b17f14a5a",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["firstaid/change-bandage"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

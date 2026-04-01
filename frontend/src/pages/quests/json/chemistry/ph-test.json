@@ -1,0 +1,123 @@
+{
+    "id": "chemistry/ph-test",
+    "title": "Measure Solution pH",
+    "description": "Calibrate pH tools, condition a sample aliquot, and produce a traceable pH reading card with method notes.",
+    "hardening": {
+        "passes": 3,
+        "score": 95,
+        "emoji": "\ud83d\udcaf",
+        "history": [
+            {
+                "task": "codex-hardening-2025-08-04",
+                "date": "2025-08-04",
+                "score": 60
+            },
+            {
+                "task": "codex-hardening-2025-08-05",
+                "date": "2025-08-05",
+                "score": 80
+            },
+            {
+                "task": "codex-upgrade-2025-08-06",
+                "date": "2025-08-06",
+                "score": 92
+            }
+        ]
+    },
+    "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
+    "npc": "/assets/npc/phoenix.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Put on coat, gloves, and goggles. Prepare pH strips, distilled rinse water, and a clean vial rack before touching samples.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-calibrate-ph-kit",
+                    "text": "Calibrate pH kit against reference strip colors and log baseline."
+                },
+                {
+                    "type": "goto",
+                    "goto": "condition",
+                    "text": "Calibration log recorded.",
+                    "requiresItems": [
+                        {
+                            "id": "a0ab6b27-ed3e-4d7d-8d21-3296e9031772",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "condition",
+            "text": "Collect a 20 mL aliquot and condition it: swirl, degas 60 seconds, then cool to room temperature to avoid false readings.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-condition-ph-sample",
+                    "text": "Prepare conditioned aliquot vial for measurement."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Conditioned aliquot is ready for pH strip test.",
+                    "requiresItems": [
+                        {
+                            "id": "44b6c979-b1e2-493e-bb00-4df7e47a66a2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Dip strip for 2 seconds, wick edge on clean tissue, then compare at 15 seconds under neutral light.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "chemistry-measure-ph",
+                    "text": "Record pH value and uncertainty band."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Measurement card and prep records complete.",
+                    "requiresItems": [
+                        {
+                            "id": "27f43446-04e7-46e8-a11c-4f57c449118a",
+                            "count": 1
+                        },
+                        {
+                            "id": "a0ab6b27-ed3e-4d7d-8d21-3296e9031772",
+                            "count": 1
+                        },
+                        {
+                            "id": "44b6c979-b1e2-493e-bb00-4df7e47a66a2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great work. You captured calibration, sample handling, and final reading evidence.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "pH test complete."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "d8e22b52-4807-4f8d-b901-5aee64a5770c",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["chemistry/safe-reaction"]
+}

@@ -1,0 +1,143 @@
+import { test, expect } from '@playwright/test';
+import {
+    clearUserData,
+    createTestItems,
+    fillProcessForm,
+    ItemSelectorHelper,
+    findAndClickButton,
+    waitForHydration,
+} from './test-helpers';
+
+/**
+ * This test file is dedicated to testing process creation in a more reliable way.
+ * It includes extra debugging information and multiple selector strategies to
+ * help diagnose issues with the process form interaction.
+ */
+test.describe('Process Creation', () => {
+    test.setTimeout(60000); // 1 minute timeout for these complex tests
+
+    test.beforeEach(async ({ page }) => {
+        // Clear user data before each test
+        await clearUserData(page);
+    });
+
+    test('should create process end-to-end in CI', async ({ page }) => {
+        const itemIds = await createTestItems(page, 2);
+        expect(itemIds.length).toBeGreaterThanOrEqual(2);
+
+        await page.goto('/processes/create');
+        await waitForHydration(page, '.process-form');
+
+        const processTitle = `Debug Process ${Date.now()}`;
+        const success = await fillProcessForm(page, processTitle, '1h 30m', 1, 1, 1);
+        expect(success).toBe(true);
+
+        const submitButton = page.getByRole('button', { name: /create process/i });
+        await submitButton.click();
+        await page.waitForLoadState('networkidle');
+
+        const successMessage = page.locator('.success-message');
+        await expect(successMessage).toBeVisible();
+        await expect(successMessage).toContainText('Process created successfully');
+
+        const successLink = page.locator('.success-link');
+        await expect(successLink).toBeVisible();
+        await expect(successLink).toHaveAttribute('href', /\/processes\//);
+    });
+
+    test('should create process with seconds duration', async ({ page }) => {
+        await createTestItems(page, 1);
+        await page.goto('/processes/create');
+        await page.waitForLoadState('networkidle');
+
+        const processTitle = `Seconds Duration ${Date.now()}`;
+        const success = await fillProcessForm(page, processTitle, '2m 30s', 1, 0, 0);
+        expect(success).toBe(true);
+
+        const submitButton = page.locator('button.submit-button');
+        await submitButton.click();
+        await page.waitForTimeout(3000);
+
+        const errorMessages = page.locator('.error-message');
+        expect(await errorMessages.count()).toBe(0);
+    });
+
+    test('should test item selector in isolation', async ({ page }) => {
+        // Create test items first
+        await createTestItems(page, 2);
+
+        // Navigate to the process creation page
+        await page.goto('/processes/create');
+        await page.waitForLoadState('networkidle');
+
+        // Fill in the basic process details
+        await page.fill('#title', `Item Selector Test ${Date.now()}`);
+        await page.fill('#duration', '1h');
+
+        // Add a single item to test the selector
+        if (await findAndClickButton(page, 'Add Created Item')) {
+            console.log('Added a created item row');
+
+            // Take a screenshot
+            await page.screenshot({
+                path: './test-artifacts/screenshots/item-selector-initial.png',
+            });
+
+            // Get the item row
+            const itemRow = page.locator('.form-group:has-text("Created Items") .item-row').first();
+            if ((await itemRow.count()) > 0) {
+                console.log('Found the item row');
+
+                // Create a helper for this selector
+                const helper = new ItemSelectorHelper(page, itemRow);
+
+                // Try to open the selector
+                const opened = await helper.open();
+                console.log('Opened selector:', opened);
+
+                if (opened) {
+                    // Take a screenshot
+                    await page.screenshot({
+                        path: './test-artifacts/screenshots/item-selector-opened.png',
+                    });
+
+                    // Look for the selector-expanded element and log its HTML
+                    const expandedSelector = itemRow.locator('.selector-expanded');
+                    if ((await expandedSelector.count()) > 0) {
+                        console.log('Expanded selector HTML:', await expandedSelector.innerHTML());
+
+                        // Check for item rows
+                        const itemRows = expandedSelector.locator('.item-option');
+                        console.log(
+                            `Found ${await itemRows.count()} item rows in the expanded selector`
+                        );
+
+                        if ((await itemRows.count()) > 0) {
+                            // Try to select the first item
+                            const selected = await helper.selectItem(0);
+                            console.log('Selected item:', selected);
+
+                            if (selected) {
+                                // Take a screenshot
+                                await page.screenshot({
+                                    path: './test-artifacts/screenshots/item-selector-item-selected.png',
+                                });
+
+                                // Try to set the quantity
+                                const quantitySet = await helper.setQuantity(3);
+                                console.log('Set quantity:', quantitySet);
+
+                                if (quantitySet) {
+                                    // Take a screenshot
+                                    await page.screenshot({
+                                        path: './test-artifacts/screenshots/item-selector-quantity-set.png',
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+});

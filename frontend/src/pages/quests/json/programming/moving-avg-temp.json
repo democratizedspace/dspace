@@ -1,0 +1,126 @@
+{
+    "id": "programming/moving-avg-temp",
+    "title": "Compute Moving Average Temperature",
+    "description": "Add a moving average to your temperature analysis script.",
+    "image": "/assets/quests/programming_moving_average_temperature.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Your average gives the big picture; now prove your moving average is stable enough for alerting decisions.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Use the latest logger export.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Choose a window and define thresholds: smoothed trend should stay within 15C-35C and avoid abrupt frame-to-frame jumps over 5C.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Generate baseline moving-average plot"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Baseline plot ready",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the smoothed series. If the curve exits bounds or still jitters wildly, classify it as failed and enter correction mode.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Trend is smooth and in-bounds",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 3.0
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "retest",
+                    "text": "Trend still unstable"
+                }
+            ]
+        },
+        {
+            "id": "retest",
+            "text": "Recovery path: adjust window size, remove obvious sensor glitches, then rerun and compare against the same thresholds.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Recompute moving average with corrected inputs"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Re-test corrected output",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 3.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice. Your moving average now has explicit acceptance criteria and a verified correction loop.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Smoothing validated."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["programming/avg-temp"],
+    "hardening": {
+        "passes": 1,
+        "score": 97,
+        "emoji": "\ud83c\udf00",
+        "history": [
+            {
+                "task": "codex-hardening-2026-02-22",
+                "date": "2026-02-22",
+                "score": 97
+            }
+        ]
+    }
+}

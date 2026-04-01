@@ -1,0 +1,20 @@
+{
+    "id": "test/github-finish",
+    "title": "GitHub Finish",
+    "description": "Quest requiring GitHub token",
+    "image": "/assets/test.png",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "start",
+            "options": [{ "type": "goto", "goto": "end", "text": "next" }]
+        },
+        {
+            "id": "end",
+            "text": "end",
+            "options": [{ "type": "finish", "text": "finish", "requiresGitHub": true }]
+        }
+    ]
+}

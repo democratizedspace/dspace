@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/hydroponics_reservoir_ph_test.jpg",
+    "entity": "frontend/src/pages/quests/json/hydroponics/ph-test.json",
+    "item_name": "Test Hydroponic pH",
+    "item_id": "hydroponics/ph-test",
+    "entity_type": "quest",
+    "prompt": "A pH test strip freshly dipped in hydroponic nutrient solution is held above an open reservoir tub, with a few drops of liquid still clinging to its edge. The colored pads on the strip show several distinct hues, and on the tub lid nearby lies a minimal color comparison card with soft vertical color bands but no readable markings. The reservoir is surrounded by net pots holding leafy plants, with their stems and leaves clearly visible while the roots remain hidden below the lid.\n\nThe scene uses a bright near-future solarpunk hydroponics aesthetic: soft overhead LED grow lights cast a gentle glow on the plants, while the lab surfaces are smooth and uncluttered. The 512×512 composition is photorealistic, centering the test strip and reservoir opening, with background elements like tubing and support structures in soft focus. No logos or text are shown, and human presence is limited to a partially visible gloved hand holding the strip, emphasizing safe and routine pH testing.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

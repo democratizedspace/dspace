@@ -1,0 +1,11 @@
+{
+  "id": "2026-03-25-quest-graph-map-viewport-conditional-skip",
+  "date": "2026-03-25",
+  "component": "frontend:e2e-quest-graph",
+  "rootCause": "quest-graph-map-viewport.spec.ts used test.skip() when the 'Show unreachable' control was disabled, producing a skipped result in environments where no unreachable nodes are present.",
+  "resolution": "Reworked the viewport test to assert the disabled-control branch without skipping, while preserving the toggle-and-viewport assertions when the checkbox is enabled.",
+  "references": [
+    "frontend/e2e/quest-graph-map-viewport.spec.ts",
+    "docs/qa/v3.md"
+  ]
+}

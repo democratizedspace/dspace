@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/temperature_log_csv_export_unique.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "temperature log CSV",
+    "item_id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+    "entity_type": "item",
+    "prompt": "A clean CSV-style temperature log export shown as a printed sheet with hourly timestamp blocks, compact table columns, and a small plotted temperature trend line, resting beside a simple thermistor logging rig and a laptop. The page should clearly represent a tangible export artifact from a sensor-logging system, emphasizing timestamps and repeated temperature samples without making any characters legible.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future instrumentation aesthetic: soft desk lighting, realistic paper, wire, and electronics textures, no logos, no readable labels, and no identifiable faces. Keep the exported sheet centered and uncluttered so it reads clearly as a DSPACE data artifact.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

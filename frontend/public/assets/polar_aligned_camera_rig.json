@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/camera_tripod_astronomy.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "polar-aligned camera rig",
+    "item_id": "dfbd9155-1c06-4951-9a32-4520107a88fb",
+    "entity_type": "item",
+    "prompt": "A sturdy camera sits on a leveled tripod in a backyard at dusk, aligned toward Polaris with a red flashlight resting at the tripod base. Bubble levels and azimuth markings are visible but blurred, showing the rig is locked in for star trails. The scene is a calm, 512×512 photorealistic solarpunk evening with no logos or readable text.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

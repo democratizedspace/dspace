@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/robot_maze_navigation.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/maze-navigation.json",
+    "item_name": "Navigate a Simple Maze",
+    "item_id": "robotics/maze-navigation",
+    "entity_type": "quest",
+    "prompt": "A small autonomous robot with two main drive wheels and a sensor array at the front is paused inside a simple tabletop maze made from low white walls arranged in a few right-angle turns. The camera looks slightly down on the scene, showing the maze layout from above while keeping the robot prominent in the frame. On top of the robot, a microcontroller board and neatly bundled wires connect to forward-facing distance sensors, making it clear that the robot is using them to navigate the maze rather than following a line.\n\nThe environment is a bright 2040s makerspace with clean wooden or white work surfaces, potted plants, and modular shelving holding labeled containers and 3D-printed parts. Soft, cinematic lighting and a gently stylized photorealistic look fit a solarpunk aesthetic, with no visible logos or text. The composition keeps the maze and robot as the main focus, while the background workshop context fades into a pleasant blur.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

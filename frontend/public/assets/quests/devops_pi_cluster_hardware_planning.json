@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/devops_pi_cluster_hardware_planning.jpg",
+    "entity": "frontend/src/pages/quests/json/devops/pi-cluster-hardware.json",
+    "item_name": "Plan Your Pi Cluster",
+    "item_id": "devops/pi-cluster-hardware",
+    "entity_type": "quest",
+    "prompt": "A tabletop is laid out with the core components of a Raspberry Pi cluster: several Pi boards, PoE or power hats, a compact Ethernet switch, short Ethernet cables, a stack of microSD cards or SSDs, and a small power supply. Beside the hardware, a notebook or tablet displays a simple parts checklist and a block diagram of how the pieces will connect, all represented with icons and lines rather than readable text. A ruler or caliper sits nearby, hinting at careful physical planning for mounting and airflow.\n\nThe scene takes place in a bright near-future solarpunk maker space: soft natural and LED lighting, pale wood and metal surfaces, and a few plants or 3D-printed organizers in the background. The 512×512 photorealistic composition centers on the hardware spread and the planning sketch, with shelves and tools behind them softly blurred. No brand logos or legible words appear anywhere, and no faces are visible—only hands hovering over the layout—capturing the excitement of planning a Pi cluster’s bill of materials before assembly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

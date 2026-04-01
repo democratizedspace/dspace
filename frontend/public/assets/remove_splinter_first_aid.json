@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/remove_splinter_first_aid.jpg",
+    "entity": "frontend/src/pages/quests/json/firstaid/remove-splinter.json",
+    "item_name": "Remove a Splinter",
+    "item_id": "firstaid/remove-splinter",
+    "entity_type": "quest",
+    "prompt": "A close-up of gloved hands using a pair of fine-point tweezers to gently remove a tiny splinter from the pad of a fingertip, with the focus on the tools and finger and no visible face. The skin is only slightly reddened around the splinter, with no blood or graphic detail, and a folded sterile gauze pad rests just beneath the hand as a clean working surface. Nearby on the table, an antiseptic wipe packet and a small bandage strip are laid out, clearly indicating the before-and-after steps of splinter removal.\n\nThe environment is a bright, near-future home or clinic first-aid station rendered in a photorealistic 512×512 style, with a smooth composite tabletop, soft diffused lighting, and hints of organized storage containers in the blurred background. The color palette is calm and reassuring, with no brand logos or readable text on any packaging. The composition avoids any dramatic angles, presenting the procedure as safe, careful, and routine, with only hands and the finger in view.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/electronics_light_sensor_arduino_photoresistor.jpg",
+    "entity": "frontend/src/pages/quests/json/electronics/light-sensor.json",
+    "item_name": "Build a Light Sensor",
+    "item_id": "electronics/light-sensor",
+    "entity_type": "quest",
+    "prompt": "An Arduino is wired on a breadboard to a small photoresistor and a fixed resistor forming a voltage divider, with the sensing pair placed near the edge of the board for clear visibility. A desk lamp or adjustable LED light source is angled toward the sensor, and a laptop screen nearby shows a stylized bar graph that rises and falls as the light intensity changes, with no readable text on the axes. A small note card with a hand-drawn circuit diagram of the voltage divider rests beside the setup.\n\nThe scene takes place in a near-future solarpunk electronics lab: soft, directional lighting, pale surfaces, and organized tool storage in the blurred background. The 512×512 photorealistic composition centers the Arduino, breadboard, and photoresistor area, with the lamp and display adding context while remaining slightly out of focus. No logos or legible text appear anywhere, and no faces are visible—only hands near the keyboard or knob of the lamp—capturing the feel of measuring ambient brightness with a simple light sensor circuit.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

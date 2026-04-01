@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/stability_firmware_code_interface.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "stability firmware",
+    "item_id": "e37831d8-76d4-4ffc-9e75-7d5bc601cf64",
+    "entity_type": "item",
+    "prompt": "A laptop screen fills most of the frame, displaying a code editor and a compact, abstract visualization panel that suggests fin positions and tilt limits for a small guided rocket, without any readable text. The code window shows neatly indented lines and colored syntax, while to one side simple bar or dial graphics indicate stability parameters and arm/disarm status. In front of the laptop, a small microcontroller board with a connected IMU sensor and thin wiring rests on the desk, hinting that the firmware is being uploaded and tested.\n\nThe environment is a near-future solarpunk lab focused on rocketry and control systems, with warm, cinematic lighting and a small test article or rocket model blurred in the background. The image is photorealistic at 512×512 resolution, with no visible logos or explicit text, just clean UI shapes and code blocks. The composition balances the laptop display and hardware on the desk, clearly communicating that this is specialized, safety-conscious stability firmware for controlled hop tests.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

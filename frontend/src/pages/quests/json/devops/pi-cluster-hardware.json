@@ -1,0 +1,177 @@
+{
+    "id": "devops/pi-cluster-hardware",
+    "title": "Plan Your Pi Cluster",
+    "description": "Orion walks through hardware planning with evidence checkpoints before node bring-up.",
+    "image": "/assets/quests/devops_pi_cluster_hardware_planning.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hey there! Orion here. Before buying anything, let's lock a bill of materials and a power/cooling plan so the cluster doesn't brown out on day one.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "bom",
+                    "text": "Start the parts and risk review."
+                }
+            ]
+        },
+        {
+            "id": "bom",
+            "text": "Checklist time: Pi board, PoE+ HAT, SSD, microSD, PoE+ switch, cable, and cooling. Safety stop: if your switch is not PoE+, don't power this stack yet.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-export-journalctl-report",
+                    "text": "Capture a hardware readiness worksheet."
+                },
+                {
+                    "type": "goto",
+                    "goto": "strategy",
+                    "text": "All required parts are staged.",
+                    "requiresItems": [
+                        {
+                            "id": "ce140453-c7ef-42c9-b9f9-38acfb4219cf",
+                            "count": 1
+                        },
+                        {
+                            "id": "926cd4e3-3704-423b-96d9-d3da0421b67a",
+                            "count": 1
+                        },
+                        {
+                            "id": "b93065cb-d91e-4712-8edd-a6cfce5fee45",
+                            "count": 1
+                        },
+                        {
+                            "id": "36042a2b-861a-4192-a991-98778898963a",
+                            "count": 1
+                        },
+                        {
+                            "id": "a2f40d22-171e-4f87-b5d4-3a44aee7ad2e",
+                            "count": 1
+                        },
+                        {
+                            "id": "e709a9fc-dd12-4507-af48-5f83b386b835",
+                            "count": 1
+                        },
+                        {
+                            "id": "231ad01a-fa78-46a7-a590-827bd0c84dec",
+                            "count": 1
+                        },
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "strategy",
+            "text": "Choose your assembly strategy: parallel prep for speed, or one-node bring-up for lower risk. Both require documented compatibility evidence.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Parallel prep: pre-stage all node kits and labels.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Conservative path: validate one golden node kit first.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "A part is incompatible or missing; hold procurement."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Good catch. Record the mismatch (power budget, thermals, or connector fit), swap to known-good parts, then re-run the worksheet before spending more.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "sysadmin-logs-tail-incident-extract",
+                    "text": "Log the mismatch and mitigation plan."
+                },
+                {
+                    "type": "goto",
+                    "goto": "bom",
+                    "text": "Updated BOM ready. Re-check hardware readiness.",
+                    "requiresItems": [
+                        {
+                            "id": "d00078e7-1098-4f78-9a96-9fa1f6ef615c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final gate: confirm PoE budget headroom, cooling plan, and spare cable strategy are documented with your worksheet artifact.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Readiness evidence captured and risks accepted.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Risk review failed; revise parts list before proceeding."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent. You've got a validated hardware plan with recovery notes, so preparing the first node will be deterministic.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Move to first-node prep.",
+                    "requiresItems": [
+                        {
+                            "id": "13061ba3-25af-4548-aab5-eee8bffad8fe",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "74a0707b-7292-4ac8-95f2-2b258210064f",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["sysadmin/basic-commands"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

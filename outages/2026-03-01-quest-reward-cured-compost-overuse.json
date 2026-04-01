@@ -1,0 +1,37 @@
+{
+  "id": "quest-reward-cured-compost-overuse",
+  "date": "2026-03-01",
+  "component": "frontend/quests/rewards",
+  "longForm": "outages/2026-03-01-quest-reward-cured-compost-overuse.md",
+  "rootCause": "A placeholder reward (1 x cured compost bucket) was copied broadly across quest trees, resulting in thematically mismatched completion rewards and low reward variety.",
+  "resolution": "Audited all quest completion rewards and replaced cured compost bucket completion rewards with tree-appropriate reward pools (cycled per tree for variety).",
+  "impact": {
+    "beforeCuredCompostCompletionRewards": 177,
+    "afterCuredCompostCompletionRewards": 0,
+    "totalQuestsChanged": 177,
+    "questTreesChanged": 17,
+    "perTreeQuestsChanged": {
+      "3dprinting": 12,
+      "aquaria": 13,
+      "astronomy": 15,
+      "chemistry": 10,
+      "completionist": 5,
+      "composting": 2,
+      "devops": 15,
+      "electronics": 12,
+      "energy": 10,
+      "firstaid": 13,
+      "geothermal": 13,
+      "hydroponics": 20,
+      "programming": 18,
+      "robotics": 10,
+      "rocketry": 2,
+      "ubi": 2,
+      "woodworking": 5
+    }
+  },
+  "references": [
+    "frontend/src/pages/quests/json",
+    "outages/2026-03-01-quest-reward-cured-compost-overuse.md"
+  ]
+}

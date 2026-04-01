@@ -1,0 +1,10 @@
+{
+  "id": "OUT-2025-10-18-astro-build-client-assets-missing",
+  "date": "2025-10-18",
+  "component": "frontend-e2e",
+  "rootCause": "Playwright preview reused a stale Astro build because ensure-astro-build.mjs only checked for the server entrypoint and skipped rebuilding when the dist/client/_astro directory was missing, so the preview server returned 404s for client bundles.",
+  "resolution": "Updated ensure-astro-build.mjs to verify both server and client assets exist before skipping a rebuild and added tests that fail when client bundles are absent.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/actions/runs/18605256329"
+  ]
+}

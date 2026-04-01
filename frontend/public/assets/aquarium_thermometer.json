@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/aquarium_thermometer.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Walstad aquarium with thermometer (80 L)",
+    "item_id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+    "entity_type": "item",
+    "prompt": "An 80-liter planted Walstad aquarium on a stand, viewed straight on with a slim strip thermometer attached to the outside glass near eye level. The water is clear, plants are lush, and no heater is visible yet—just the strip and gentle surface ripples from a sponge filter. A dechlorinated bucket and light stand are blurred in the background to hint at recent setup.\n\nPhotorealistic 512x512 image in a clean, near-future solarpunk room with soft indirect light, no people, no logos, and no readable text. The focus stays on the strip thermometer and the planted tank while the background remains softly out of focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

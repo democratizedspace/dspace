@@ -1,0 +1,13 @@
+{
+  "id": "windows-powershell-frontend-install-dev",
+  "date": "2026-03-01",
+  "component": "frontend-tooling",
+  "longForm": "outages/2026-03-01-windows-powershell-frontend-install-dev.md",
+  "rootCause": "Running npm from frontend on Windows PowerShell did not inherit the root peer-resolution guard, so stale local node_modules state triggered ERESOLVE and prevented prism-svelte from being installed, which then broke astro.config.mjs import during npm run dev.",
+  "resolution": "Added frontend/.npmrc with legacy-peer-deps=true so frontend-scoped npm installs resolve peers consistently on local Windows shells, then added a regression test that enforces the setting remains present.",
+  "references": [
+    "frontend/.npmrc",
+    "tests/packageManager.test.ts",
+    "frontend/astro.config.mjs"
+  ]
+}

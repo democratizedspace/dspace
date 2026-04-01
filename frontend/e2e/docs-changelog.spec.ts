@@ -1,0 +1,236 @@
+import { expect, test, type Locator } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const changelogDir = path.resolve(__dirname, '../src/pages/docs/md/changelog');
+
+const parseFrontmatter = (frontmatter) => {
+    const result = {};
+    const lines = frontmatter.split('\n');
+    let currentKey = null;
+    let blockLines = [];
+
+    const commitBlock = () => {
+        if (currentKey) {
+            result[currentKey] = blockLines.join('\n').trim();
+        }
+        currentKey = null;
+        blockLines = [];
+    };
+
+    for (const line of lines) {
+        if (currentKey) {
+            if (/^\s/.test(line)) {
+                blockLines.push(line.trim());
+                continue;
+            }
+
+            if (!line.trim()) {
+                blockLines.push('');
+                continue;
+            }
+
+            commitBlock();
+        }
+
+        if (!line.trim()) {
+            continue;
+        }
+
+        const separatorIndex = line.indexOf(':');
+        if (separatorIndex === -1) {
+            continue;
+        }
+
+        const key = line.slice(0, separatorIndex).trim();
+        let value = line.slice(separatorIndex + 1).trim();
+
+        if (value === '>-') {
+            currentKey = key;
+            blockLines = [];
+            continue;
+        }
+
+        if (
+            (value.startsWith('"') && value.endsWith('"')) ||
+            (value.startsWith("'") && value.endsWith("'"))
+        ) {
+            value = value.slice(1, -1);
+        }
+
+        result[key] = value;
+    }
+
+    if (currentKey) {
+        commitBlock();
+    }
+
+    return result;
+};
+
+const getLatestChangelogMeta = () => {
+    const files = fs.readdirSync(changelogDir).filter((file) => file.endsWith('.md'));
+
+    const entries = files
+        .map((file) => {
+            const raw = fs.readFileSync(path.join(changelogDir, file), 'utf8');
+            const match = raw.match(/^---\n([\s\S]+?)\n---/);
+            if (!match) {
+                return null;
+            }
+            const frontmatter = parseFrontmatter(match[1]);
+            if (!frontmatter.slug) {
+                return null;
+            }
+            return frontmatter;
+        })
+        .filter(Boolean)
+        .sort((a, b) => String(b.slug).localeCompare(String(a.slug)));
+
+    return entries[0] ?? null;
+};
+
+const latestChangelog = getLatestChangelogMeta();
+const CHANGELOG_HERO_IMAGE_CLASS = 'changelog-hero-image--20260401';
+
+const waitForImageReady = async (locator: Locator) => {
+    await locator.evaluate(async (node) => {
+        const image = node;
+        if (image.complete && image.naturalWidth > 0) {
+            return;
+        }
+
+        if (typeof image.decode === 'function') {
+            await image.decode().catch(() => undefined);
+            if (image.complete && image.naturalWidth > 0) {
+                return;
+            }
+        }
+
+        await new Promise((resolve, reject) => {
+            const onLoad = () => {
+                cleanup();
+                resolve(undefined);
+            };
+            const onError = () => {
+                cleanup();
+                reject(new Error('Failed to load image before measurement.'));
+            };
+            const cleanup = () => {
+                image.removeEventListener('load', onLoad);
+                image.removeEventListener('error', onError);
+            };
+
+            image.addEventListener('load', onLoad, { once: true });
+            image.addEventListener('error', onError, { once: true });
+        });
+    });
+};
+
+// The changelog doc should render real release notes instead of the placeholder CTA.
+test.describe('docs changelog page', () => {
+    test('lists recent release entries', async ({ page }) => {
+        await page.goto('/docs/changelog');
+        await page.waitForLoadState('domcontentloaded');
+
+        await expect(page.getByRole('heading', { name: 'Changelog' })).toBeVisible();
+
+        const releasesList = page.getByRole('list', { name: 'Latest releases' });
+        await expect(releasesList).toBeVisible();
+
+        if (latestChangelog) {
+            const nbsp = '\u00a0';
+            const expectedLinkText = latestChangelog.tagline
+                ? `${latestChangelog.title}${nbsp}—${nbsp}${latestChangelog.tagline}`
+                : latestChangelog.title;
+
+            const latestLink = releasesList.getByRole('link', {
+                name: expectedLinkText,
+            });
+
+            await expect(latestLink).toBeVisible();
+            await expect(latestLink).toHaveAttribute(
+                'href',
+                `/changelog#${String(latestChangelog.slug).toLowerCase()}`
+            );
+
+            const summaryText = latestChangelog.summary
+                ? latestChangelog.summary.replace(/\s+/g, ' ').trim()
+                : '';
+
+            if (summaryText) {
+                await expect(
+                    releasesList.getByText(summaryText, {
+                        exact: true,
+                    })
+                ).toBeVisible();
+            }
+        }
+
+        await expect(
+            page.getByRole('link', { name: 'complete changelog archive' })
+        ).toHaveAttribute('href', '/changelog');
+    });
+
+    test('does not show the placeholder contribution CTA', async ({ page }) => {
+        await page.goto('/docs/changelog');
+        await page.waitForLoadState('domcontentloaded');
+
+        await expect(page.getByRole('heading', { name: 'Doc not found', exact: true })).toHaveCount(
+            0
+        );
+
+        await expect(
+            page.getByText(
+                'Should something exist here? Add a file on Github and submit a pull request.',
+                { exact: true }
+            )
+        ).toHaveCount(0);
+
+        await expect(
+            page.getByRole('link', { name: 'Write the Changelog doc', exact: true })
+        ).toHaveCount(0);
+    });
+
+    test('keeps changelog hero image readable without shrinking docs images', async ({ page }) => {
+        await page.setViewportSize({ width: 1400, height: 1000 });
+        await page.goto('/');
+        await page.waitForLoadState('domcontentloaded');
+
+        const homeImage = page.locator(`.latest-update-html img.${CHANGELOG_HERO_IMAGE_CLASS}`);
+        await expect(homeImage).toBeVisible();
+        await waitForImageReady(homeImage);
+        const homeWidth = await homeImage.evaluate((node) =>
+            Math.ceil(node.getBoundingClientRect().width)
+        );
+        expect(homeWidth).toBeLessThanOrEqual(512);
+
+        await page.goto('/changelog');
+        await page.waitForLoadState('domcontentloaded');
+
+        const changelogImage = page.locator(`.entry-body img.${CHANGELOG_HERO_IMAGE_CLASS}`);
+        await expect(changelogImage).toBeVisible();
+        await waitForImageReady(changelogImage);
+        const changelogWidth = await changelogImage.evaluate((node) =>
+            Math.ceil(node.getBoundingClientRect().width)
+        );
+        expect(changelogWidth).toBeLessThanOrEqual(512);
+
+        await page.goto('/docs/custom-content');
+        await page.waitForLoadState('domcontentloaded');
+
+        const docImage = page.locator('.doc-content img').first();
+        await expect(docImage).toBeVisible();
+        await waitForImageReady(docImage);
+        const docMetrics = await docImage.evaluate((node) => ({
+            width: Math.ceil(node.getBoundingClientRect().width),
+            naturalWidth: node.naturalWidth,
+        }));
+        expect(docMetrics.naturalWidth).toBeGreaterThan(512);
+        expect(docMetrics.width).toBeGreaterThan(512);
+    });
+});

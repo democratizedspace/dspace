@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/basil_seeds_packet.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/hydroponics.json",
+    "item_name": "basil seeds",
+    "item_id": "affa2f80-28f1-422e-a0c8-49e51ce65a1e",
+    "entity_type": "item",
+    "prompt": "A small paper seed packet labeled only with a stylized basil leaf icon and no readable text lies on a table, with a handful of tiny dark basil seeds spilled out onto the surface. Beside the packet, a rockwool cube tray or small seedling dome hints at hydroponic germination, and a fingertip or small scoop is visible near the seeds to suggest careful sowing. The overall look makes it clear that this packet holds Genovese basil seeds destined for a hydroponic system.\n\nThe environment is a near-future solarpunk grow prep area with soft, natural-looking light, other herb packets and tools arranged neatly in the background, and a plant or two already thriving under LED lights. The 512×512 image is photorealistic with gentle stylization, no logos or legible text on the packet, and a composition that centers the spilled seeds, packet, and nearby tray while the rest of the scene remains softly out of focus, emphasizing the start of the basil growth cycle.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

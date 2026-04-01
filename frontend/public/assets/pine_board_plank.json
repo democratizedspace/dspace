@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/pine_board_plank.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Pine board",
+    "item_id": "6c075116-ebd1-4147-8666-ec6338ca251e",
+    "entity_type": "item",
+    "prompt": "A single pine board rests on a workbench, its light-colored grain, knots, and smooth planed surface clearly visible along the full length of the plank. One end is slightly cut off in the frame, and a measuring tape, pencil, and square lie nearby, ready to mark it for a beginner woodworking project. The board looks lightweight and easy to handle, emphasizing its suitability for simple, entry-level builds.\n\nThe scene is a near-future solarpunk workshop with soft, warm lighting, a few other boards stacked neatly in the background, and organized tools on a pegboard. The 512×512 image is photorealistic with gentle stylization, no logos or text on any tools, and a composition that keeps the pine board as the main focus while the rest of the shop environment stays softly blurred.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

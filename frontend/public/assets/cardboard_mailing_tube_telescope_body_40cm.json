@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/cardboard_mailing_tube_telescope_body_40cm.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "cardboard mailing tube",
+    "item_id": "2794503d-fbe7-4031-a63e-deac531f9784",
+    "entity_type": "item",
+    "prompt": "A sturdy cardboard mailing tube repurposed as a telescope body, shown horizontally on a workbench with its circular opening, thick paper walls, and simple matte surface clearly visible. Nearby are a loose lens cell, a ruler, and a few hand tools, hinting at DIY telescope construction without turning the scene into a finished instrument. The tube should read as a practical structural component meant to hold optics and maintain alignment.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future maker-workshop aesthetic: soft task lighting, realistic cardboard texture, subtle shadows, no logos, no readable measurements, and no faces. The composition should be clean and centered on the tube so it works clearly as a telescope-building inventory icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

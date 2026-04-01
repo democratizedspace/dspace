@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/external_backup_ssd.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "external backup SSD",
+    "item_id": "849eb5e1-9f63-488b-80d3-913492049090",
+    "entity_type": "item",
+    "prompt": "An external backup SSD enclosure sits on a wooden desk, connected to a laptop via a short USB-C cable. A small status LED on the enclosure glows softly, and on the laptop screen a stylized backup dashboard shows a database icon and a progress bar, indicating nightly dumps being stored on the drive. The SSD enclosure is sleek and minimalist, with no readable branding, and a “cluster” of small server or container icons is subtly visible in the UI to hint at its role in backing up a cluster.\n\nNear-future solarpunk workspace aesthetic with warm lighting, a plant or two, and perhaps a tiny solar panel near the window. Photorealistic 512×512 rendering, no brand logos or legible text on the SSD or UI. The composition should clearly convey the idea of an external SSD used for nightly database backups.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

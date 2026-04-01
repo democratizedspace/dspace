@@ -1,0 +1,12 @@
+{
+  "id": "OUT-2026-01-13-custom-item-edit-404",
+  "date": "2026-01-13",
+  "component": "frontend/inventory",
+  "rootCause": "The edit route for /inventory/item/{id}/edit was missing, so custom item edit links resolved to a 404.",
+  "resolution": "Added the missing edit route so /inventory/item/{id}/edit resolves correctly.",
+  "references": [
+    "frontend/src/pages/inventory/item/[itemId]/edit.astro",
+    "frontend/src/pages/inventory/svelte/EditItem.svelte",
+    "https://staging.democratized.space/inventory/item/5326766c-93ae-47e7-be08-15247c75a234/edit"
+  ]
+}

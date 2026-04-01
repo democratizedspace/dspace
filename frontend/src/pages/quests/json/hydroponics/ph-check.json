@@ -1,0 +1,195 @@
+{
+    "id": "hydroponics/ph-check",
+    "title": "Check Solution pH",
+    "description": "Measure the nutrient bath's pH and correct it to keep plants happy.",
+    "image": "/assets/quests/hydroponics_solution_ph_check.jpg",
+    "npc": "/assets/npc/hydro.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Hydro here. Happy roots love steady pH, so we will measure, interpret, and only close when the log proves we're in range.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Run the pH checklist."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Stage PPE and sampling gear before touching pH chemicals. If strips are expired or unreadable, branch to troubleshooting first.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Gloves, goggles, and clean sample cylinder are ready.",
+                    "requiresItems": [
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        },
+                        {
+                            "id": "c9b51052-4594-42d7-a723-82b815ab8cc2",
+                            "count": 1
+                        },
+                        {
+                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Strip quality is questionable or color chart is hard to read."
+                }
+            ]
+        },
+        {
+            "id": "measure",
+            "text": "Pull a sample and run a pH test. Target 5.5-6.5 for leafy crops.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "measure-ph",
+                    "text": "Measure pH now."
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading captured.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the reading. If pH is outside 5.5-6.5, correct in small steps and re-test before logging.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "adjust",
+                    "text": "Out of range; apply correction and retest.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "log",
+                    "text": "In range at 5.5-6.5; log stable reading.",
+                    "requiresItems": [
+                        {
+                            "id": "5456a6a5-5da9-46a0-aa4e-a74b6814404a",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "adjust",
+            "text": "Keep PPE on. Dose pH up/down in small increments, stir thoroughly, then route back to measurement for a fresh reading.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "adjust-ph",
+                    "text": "Dose and stir."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Re-test after mixing.",
+                    "requiresItems": [
+                        {
+                            "id": "4d1a3894-e471-4483-8ae6-c6e12db1afae",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "troubleshoot",
+                    "text": "Reading still unstable after two adjustments."
+                }
+            ]
+        },
+        {
+            "id": "troubleshoot",
+            "text": "Recovery path: replace strips, verify reagent bottles, and inspect pump circulation for dead zones before retrying the test.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Troubleshooting complete; restart with fresh sample gear."
+                },
+                {
+                    "type": "goto",
+                    "goto": "measure",
+                    "text": "Circulation and reagents verified; take a new measurement.",
+                    "requiresItems": [
+                        {
+                            "id": "4b09d8a3-5dd3-44b8-9fd7-89cc34a34076",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "text": "Record the stable reading with timestamp so drift trends are visible at next check.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-stable-ph",
+                    "text": "Log pH and timestamp."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Stable reading logged and reviewed.",
+                    "requiresItems": [
+                        {
+                            "id": "cad7d051-e3fb-4f1c-9d72-358076ee732e",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Great control loop. You measured, interpreted, corrected if needed, and logged evidence before closing.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "pH check complete with verification log."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "cfaa44c1-86b4-43ae-b15e-11e3ad75ba57",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["hydroponics/nutrient-check"],
+    "hardening": {
+        "passes": 0,
+        "score": 90,
+        "emoji": "🛠️",
+        "history": []
+    }
+}

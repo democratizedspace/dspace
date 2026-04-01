@@ -1,0 +1,154 @@
+{
+    "id": "robotics/servo-gripper",
+    "title": "Build a Servo Gripper",
+    "description": "Cut and hinge two jaws onto a micro servo so your robot can pinch and release small objects safely.",
+    "image": "/assets/quests/servo_gripper_claw.jpg",
+    "npc": "/assets/npc/orion.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "A gripper is how your robot starts handling real objects. We'll build for control first, then verify safe gripping before you trust it near wiring.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "plan",
+                    "text": "Bench is clear and parts are staged.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "plan",
+            "text": "Pick your linkage strategy: direct horn mount for speed or offset linkage for smoother force. Either way, keep jaw travel away from hard-stop stall zones.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Use direct horn mount for a compact build.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Use offset linkage for gentler grip.",
+                    "requiresItems": [
+                        {
+                            "id": "e976bae6-e33c-428a-a20d-0aa8fde13c6c",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "assemble",
+            "text": "Mount the servo vertically, align both jaws, and verify full open/close travel by hand before power-on.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "assemble-servo-gripper",
+                    "text": "Assemble jaws, center the horn, and run non-stall travel calibration (about 2 hours)."
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Linkage rubs or stalls before full travel."
+                }
+            ]
+        },
+        {
+            "id": "safety",
+            "text": "Safety gate: cap grip force with software limits and test with a soft object first so you don't crush parts or strip gears.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "evidence",
+                    "text": "Soft-object test passes with smooth release.",
+                    "requiresItems": [
+                        {
+                            "id": "b3857812-f50c-4880-810d-c929698599b3",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Grip slipped, crushed, or chattered\u2014need retune."
+                }
+            ]
+        },
+        {
+            "id": "recover",
+            "text": "Recovery loop: shorten jaw throw, re-center horn at neutral, and add padding to contact surfaces. Re-test only after manual free-motion check.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "assemble",
+                    "text": "Mechanical fixes complete; re-check travel."
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety",
+                    "text": "Travel is free now; retry safety test."
+                }
+            ]
+        },
+        {
+            "id": "evidence",
+            "text": "Final evidence: complete three pinch-and-release cycles with the same target and no jaw drift.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Three controlled cycles complete.",
+                    "requiresItems": [
+                        {
+                            "id": "b3857812-f50c-4880-810d-c929698599b3",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "recover",
+                    "text": "Cycle consistency failed\u2014return to recovery."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice! Your gripper now opens and closes safely enough for repeat pickup drills.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Gripper online"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "71fafa9a-3998-4763-a63a-279acc4ca603",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["robotics/servo-control"],
+    "hardening": {
+        "passes": 0,
+        "score": 95,
+        "emoji": "\ud83d\udee0\ufe0f",
+        "history": []
+    }
+}

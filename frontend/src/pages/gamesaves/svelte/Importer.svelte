@@ -4,18 +4,22 @@
 
     let importString = '';
 
-    const handleImport = () => {
+    let errorMessage = '';
+
+    const handleImport = async () => {
+        errorMessage = '';
         try {
-            importGameStateString(importString);
+            await importGameStateString(importString);
         } catch (err) {
             console.error('Failed to import game state:', err);
+            errorMessage = 'Import failed. Please double-check the backup string and try again.';
         }
     };
 </script>
 
 <Chip text="">
     <div class="vertical">
-        <p>Paste the string representation of your game state here:</p>
+        <p>Paste a game state backup string (envelope or raw state) here:</p>
 
         <!-- input block -->
         <div class="input-block">
@@ -23,6 +27,9 @@
         </div>
 
         <Chip text="Import" onClick={handleImport} inverted={true} />
+        {#if errorMessage}
+            <p class="error">{errorMessage}</p>
+        {/if}
     </div>
 </Chip>
 
@@ -47,5 +54,10 @@
     .vertical {
         display: flex;
         flex-direction: column;
+    }
+
+    .error {
+        color: #b00020;
+        margin: 0 10px 10px;
     }
 </style>

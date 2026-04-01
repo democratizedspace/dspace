@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/jupiter_galilean_moons_completion_note.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "Observe Jupiter's four Galilean moons through a basic telescope completion note",
+    "item_id": "5a68e242-1f01-5040-b12b-0cd8e3a44ae2",
+    "entity_type": "item",
+    "prompt": "A process-specific completion note documenting observation of Jupiter's four Galilean moons through a basic telescope. The scene shows a modest amateur telescope on a tripod under a dark sky, with a nearby observation notebook or completion card featuring a simple eyepiece sketch of Jupiter and four small points of light laid out without readable text. The setting should feel like a real backyard astronomy session, calm and rewarding, with the observation note as proof of success.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future backyard-observatory aesthetic: soft moonlight and warm spill light from a nearby porch or red lamp, realistic metal tripod and paper textures, no logos, no readable labels, and no identifiable faces. Keep the telescope and note central, with the planetary observation implied cleanly and uncluttered.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

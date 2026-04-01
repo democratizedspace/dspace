@@ -1,0 +1,12 @@
+{
+    "filename": "/assets/walstad_80L.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/aquarium.json",
+    "item_name": "Walstad aquarium (80 L)",
+    "item_id": "785fa6f3-bb66-4197-a43f-52fea9cebd48",
+    "entity_type": "item",
+    "prompt": "An 80-liter Walstad aquarium without visible equipment, densely planted with varied greens and mosses, rich soil and sand substrate, only tiny snails or shrimp visible, conveying a low-tech, fully natural ecosystem that hasn’t been stocked with fish yet.\n\nUltra-detailed, photorealistic 512×512 image inside a 2040s Pacific floating-city habitat: curved white composite walls, integrated LED light strips in cyan and magenta, smart glass window panels with soft abstract reflections, sleek modular furniture with rounded corners, floating or recessed shelves with small plants and gadgets, subtle holographic UI glows and status icons on nearby surfaces, everything clean and clutter-free, background slightly blurred, no people, no text, no logos or watermarks.",
+    "image_model": "Z-Image Turbo",
+    "resolution": "512x512",
+    "steps": 4,
+    "cfg": 1.0
+}

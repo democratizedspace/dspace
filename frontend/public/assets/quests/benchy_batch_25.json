@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/benchy_batch_25.jpg",
+    "entity": "frontend/src/pages/quests/json/3dprinting/benchy_25.json",
+    "item_name": "3D Print 25 Benchies",
+    "item_id": "3dprinting/benchy_25",
+    "entity_type": "quest",
+    "prompt": "A 3D printer workbench with a sturdy FDM printer on one side and a neat array of at least 25 finished Benchy boat models lined up on shelves and the tabletop. The Benchies are in a variety of bright filament colors and are grouped in small clusters, clearly showing that many copies have been produced. The printer’s build plate is visible with one more Benchy either just finishing or recently completed, reinforcing the sense of high-volume printing output in a tidy maker space.\n\nNear-future solarpunk workshop aesthetic with warm ambient lighting, clean cable management, and a few plants or small renewable-energy gadgets in the background. Photorealistic 512×512 rendering with no brand logos or legible text on the printer. The composition should make the grid of colorful Benchies instantly readable as a collection earned through repeated prints rather than a single test print.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

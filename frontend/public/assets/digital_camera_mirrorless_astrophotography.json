@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/digital_camera_mirrorless_astrophotography.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "digital camera",
+    "item_id": "a96ce9ed-b9e0-44e5-bd9f-c068643e6749",
+    "entity_type": "item",
+    "prompt": "A mirrorless digital camera mounted on a compact tripod under a night sky setup, with a wide lens, manual controls, and a small interval trigger cable attached. The framing should make it clear this is a camera intended for long-exposure astrophotography, with a faint star field overhead and a stable field-work vibe rather than a casual consumer snapshot scene.\n\nUltra-detailed, photorealistic 512×512 image with a calm near-future astronomy aesthetic: soft nighttime lighting, realistic metal, glass, and polymer textures, no logos, no readable markings, and no identifiable faces. Keep the camera centered and uncluttered so it reads immediately as a DSPACE astrophotography equipment icon.",
+    "image_model": "ChatGPT Create Image",
+    "resolution": "512x512"
+}

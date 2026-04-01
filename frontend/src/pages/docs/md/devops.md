@@ -1,0 +1,468 @@
+---
+title: 'Devops'
+slug: 'devops'
+---
+
+Devops quests build practical progression through the devops skill tree. This page is a QA-oriented map of quest dependencies, process IO, and inventory gates.
+
+## Quest tree
+
+1. [Plan Your Pi Cluster](/quests/devops/pi-cluster-hardware)
+2. [Prepare the First Node](/quests/devops/prepare-first-node)
+3. [Launch DSPACE in Docker](/quests/devops/docker-compose)
+4. [Set Up a CI Pipeline](/quests/devops/ci-pipeline)
+5. [Deploy with k3s](/quests/devops/k3s-deploy)
+6. [Set Up Monitoring](/quests/devops/monitoring)
+7. [Enable Automatic Updates](/quests/devops/auto-updates)
+8. [Configure Daily Backups](/quests/devops/daily-backups)
+9. [Secure the Cluster with HTTPS](/quests/devops/enable-https)
+10. [Configure Firewall Rules](/quests/devops/firewall-rules)
+11. [Set Up Log Rotation](/quests/devops/log-maintenance)
+12. [Run a Private Docker Registry](/quests/devops/private-registry)
+13. [Boot from SSD](/quests/devops/ssd-boot)
+14. [Harden SSH Access](/quests/devops/ssh-hardening)
+15. [Block SSH Brute Force](/quests/devops/fail2ban)
+
+## 1) Plan Your Pi Cluster (`devops/pi-cluster-hardware`)
+
+- Quest link: [/quests/devops/pi-cluster-hardware](/quests/devops/pi-cluster-hardware)
+- Unlock prerequisite:
+    - `requiresQuests`: `sysadmin/basic-commands`
+- Dialogue `requiresItems` gates:
+    - `start` → "Start the parts and risk review." — no item gate (planning/procurement step)
+    - `bom` → "All required parts are staged." — Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, 1TB 2230 M.2 SSD ×1, 64GB microSD card ×1, PoE+ switch ×1, Ethernet cable ×1, fan case ×1, hardware worksheet artifact (`journalctl report` ×1)
+    - `strategy` → both strategy options require a hardware worksheet artifact (`journalctl report` ×1)
+    - `troubleshoot` → "Updated BOM ready. Re-check hardware readiness." — incident log extract ×1
+    - `verify`/`finish` → worksheet artifact (`journalctl report` ×1)
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - basic shell operator badge ×1
+- Processes used:
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+
+## 2) Prepare the First Node (`devops/prepare-first-node`)
+
+- Quest link: [/quests/devops/prepare-first-node](/quests/devops/prepare-first-node)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/pi-cluster-hardware`
+- Dialogue `requiresItems` gates:
+    - `start` → "Begin preflight and flash workflow." — 64GB microSD card ×1, Raspberry Pi 5 board ×1
+    - `preflight` → "Card flashed and first boot complete." — flashed microSD card ×1
+    - `update` → both update paths require Raspberry Pi 5 board ×1
+    - `docker` → Docker verification artifact (`journalctl report` ×1)
+    - `verify`/`finish` → Docker verification artifact (`journalctl report` ×1), flashed microSD card ×1
+    - `recover` → "System stabilized; re-run update and install path." — incident log extract ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - observability checkpoint badge ×1
+- Processes used:
+    - [flash-sd-card](/processes/flash-sd-card)
+        - Requires: Laptop Computer ×1
+        - Consumes: 64GB microSD card ×1
+        - Creates: flashed microSD card ×1
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+
+## 3) Launch DSPACE in Docker (`devops/docker-compose`)
+
+- Quest link: [/quests/devops/docker-compose](/quests/devops/docker-compose)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/prepare-first-node`
+- Dialogue `requiresItems` gates:
+    - `start` → "Run preflight before launching." — Pi cluster node ×1, Laptop Computer ×1
+    - `preflight` → "Preflight complete; launch containers." — Pi cluster node ×1
+    - `launch` → "Services are healthy locally; configure tunnel." — Pi cluster node ×1
+    - `tunnel` → "Tunnel fails health check or leaks origin." — PoE+ switch ×1, Ethernet cable ×1
+    - `tunnel` → "Tunnel is healthy and origin access is restricted." — PoE+ switch ×1,
+      Ethernet cable ×1
+    - `recover` → "Remediation complete; rerun tunnel validation." — Pi cluster node ×1
+    - `finish` → "Document this deployment runbook." — PoE+ switch ×1, Ethernet cable ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - incident response analyst badge ×1
+- Processes used:
+    - [run-docker-compose](/processes/run-docker-compose)
+        - Requires: Pi cluster node ×1
+        - Consumes: none
+        - Creates: none
+    - [create-cloudflare-tunnel](/processes/create-cloudflare-tunnel)
+        - Requires: PoE+ switch ×1, Ethernet cable ×1
+        - Consumes: none
+        - Creates: none
+
+## 4) Set Up a CI Pipeline (`devops/ci-pipeline`)
+
+- Quest link: [/quests/devops/ci-pipeline](/quests/devops/ci-pipeline)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/docker-compose`
+- Dialogue `requiresItems` gates:
+    - `start` → "Define CI safety policy first." — Laptop Computer ×1
+    - `policy` → "Policy documented; author the workflow." — Laptop Computer ×1
+    - `author` → "Workflow added; collect first run evidence." — CI workflow file ×1
+    - `verify` → "Run failed or branch protections are missing." — CI workflow file ×1
+    - `verify` → "Checks are enforced and green." — CI workflow file ×1
+    - `recover` → "Fix applied; verify the rerun evidence." — CI workflow file ×1
+    - `finish` → "Ship with confidence." — CI workflow file ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - basic shell operator badge ×1
+- Processes used:
+    - [create-ci-workflow](/processes/create-ci-workflow)
+        - Requires: GitHub repository ×1
+        - Consumes: none
+        - Creates: CI workflow file ×1
+
+## 5) Deploy with k3s (`devops/k3s-deploy`)
+
+- Quest link: [/quests/devops/k3s-deploy](/quests/devops/k3s-deploy)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/docker-compose`
+- Dialogue `requiresItems` gates:
+    - `start` → "Let's stage it safely." — Pi cluster node ×1, Laptop Computer ×1
+    - `install` → "Cluster install complete." — Pi cluster node ×1
+    - `verify` → "Nodes healthy and report captured." — journalctl report ×1
+    - `rollback` → "Rollback complete; retry install with corrected settings." — Pi cluster node ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - basic shell operator badge ×1
+- Processes used:
+    - [join-k3s-cluster](/processes/join-k3s-cluster)
+        - Requires: Pi cluster node ×1
+        - Consumes: none
+        - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+
+## 6) Set Up Monitoring (`devops/monitoring`)
+
+- Quest link: [/quests/devops/monitoring](/quests/devops/monitoring)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/k3s-deploy`
+- Dialogue `requiresItems` gates:
+    - `install` → "Dashboards are loading and metrics are scraping." — external backup SSD ×1
+    - `verify` → "Snapshot meets thresholds. Compile the monitoring logbook artifact." — external backup SSD ×1, Pi cluster node ×1, Laptop Computer ×1
+    - `verify` → "Anomaly detected (alerts firing or scrape gaps). Enter incident triage with log export access." — Laptop Computer ×1
+    - `incident` → "Incident report and extract captured. Choose the remediation path." — journalctl report ×1, incident log extract ×1
+    - `classify` → all remediation exits require incident log extract ×1
+    - `logbook` → "Logbook complete with thresholds, cadence, and evidence archive." — journalctl report ×1, external backup SSD ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - observability checkpoint badge ×1
+- Processes used:
+    - [install-monitoring-stack](/processes/install-monitoring-stack)
+        - Requires: Pi cluster node ×1
+        - Consumes: none
+        - Creates: external backup SSD ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+
+## 7) Enable Automatic Updates (`devops/auto-updates`)
+
+- Quest link: [/quests/devops/auto-updates](/quests/devops/auto-updates)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/monitoring`
+- Dialogue `requiresItems` gates:
+    - `start` → "Define maintenance constraints." — Pi cluster node ×1, Laptop Computer ×1
+    - `window` → "Window documented; stage config." — Pi cluster node ×1, Laptop Computer ×1
+    - `stage` → "Config staged; run verification dry run." — Pi cluster node ×1, unattended-upgrades config ×1
+    - `verify` → "Dry run reports held packages or unsafe reboot timing." — auto-update health report ×1
+    - `verify` → "Verification evidence is clean." — auto-update health report ×1
+    - `recovery` → "Mitigation applied; re-run verification window." — auto-update health report ×1
+    - `finish` → "Queue the next maintenance window." — auto-update health report ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - basic shell operator badge ×1
+- Processes used:
+    - [configure-unattended-upgrades](/processes/configure-unattended-upgrades)
+        - Requires: Pi cluster node ×1, Laptop Computer ×1
+        - Consumes: none
+        - Creates: unattended-upgrades config ×1
+    - [verify-unattended-upgrades](/processes/verify-unattended-upgrades)
+        - Requires: unattended-upgrades config ×1, Pi cluster node ×1
+        - Consumes: none
+        - Creates: auto-update health report ×1
+
+## 8) Configure Daily Backups (`devops/daily-backups`)
+
+- Quest link: [/quests/devops/daily-backups](/quests/devops/daily-backups)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/monitoring`
+- Dialogue `requiresItems` gates:
+    - `start` → "Plan backup cadence and retention." — external backup SSD ×1, Pi cluster node ×1
+    - `stage` → "Backup job staged; run verification." — external backup SSD ×1
+    - `verify` → "Restore test failed or logs show checksum mismatch." — journalctl report ×1
+    - `verify` → "Restore drill passed with complete evidence." — journalctl report ×1
+    - `recover` → "Corrected. Re-run backup + restore verification." — incident log extract ×1
+    - `finish` → "Lock in the backup SOP." — journalctl report ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - basic shell operator badge ×1
+- Processes used:
+    - [configure-daily-backups](/processes/configure-daily-backups)
+        - Requires: Pi cluster node ×1, external backup SSD ×1
+        - Consumes: none
+        - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+
+## 9) Secure the Cluster with HTTPS (`devops/enable-https`)
+
+- Quest link: [/quests/devops/enable-https](/quests/devops/enable-https)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/daily-backups`
+- Dialogue `requiresItems` gates:
+    - `start` → "Console access confirmed. Stage certbot." — Pi cluster node ×1, auto-update health report ×1
+    - `provision` → "Certificates minted." — Pi cluster node ×1, auto-update health report ×1
+    - `verify` → "TLS health verified with clean chain and renewal output." — TLS certificate bundle ×1, Pi cluster node ×1
+    - `rollback` → "Rollback checks captured. Decide whether to retry issuance or pause." — Pi cluster node ×1 (rollback evidence captured via HTTPS health check output)
+    - `rollback-verify` → "Rollback is stable. Retry certificate provisioning." — HTTPS service check ×1, Pi cluster node ×1
+    - `finish` → "Document the renewal schedule." — HTTPS service check ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - incident response analyst badge ×1
+- Processes used:
+    - [request-letsencrypt-cert](/processes/request-letsencrypt-cert)
+        - Requires: auto-update health report ×1, Pi cluster node ×1
+        - Consumes: none
+        - Creates: TLS certificate bundle ×1
+    - [verify-https-service](/processes/verify-https-service)
+        - Requires: TLS certificate bundle ×1, Pi cluster node ×1
+        - Consumes: none
+        - Creates: HTTPS service check ×1
+
+## 10) Configure Firewall Rules (`devops/firewall-rules`)
+
+- Quest link: [/quests/devops/firewall-rules](/quests/devops/firewall-rules)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/auto-updates`
+- Dialogue `requiresItems` gates:
+    - `start` → "Access map documented. Apply baseline rules." — Pi cluster node ×1, Laptop Computer ×1
+    - `setup` → "Rules applied and node still reachable." — Pi cluster node ×1, Laptop Computer ×1
+    - `verify` → "Only expected ports respond and SSH remains healthy." — Pi cluster node ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - basic shell operator badge ×1
+- Processes used:
+    - [configure-ufw-firewall](/processes/configure-ufw-firewall)
+        - Requires: Laptop Computer ×1, Pi cluster node ×1
+        - Consumes: none
+        - Creates: none
+
+## 11) Set Up Log Rotation (`devops/log-maintenance`)
+
+- Quest link: [/quests/devops/log-maintenance](/quests/devops/log-maintenance)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/daily-backups`
+- Dialogue `requiresItems` gates:
+    - `start` → "Set the logging policy." — external backup SSD ×1, Laptop Computer ×1
+    - `capture` → "Threshold exceeded or report missing fields." — journalctl report ×1
+    - `capture` → "Snapshot passes thresholds." — journalctl report ×1
+    - `anomaly` → "Corrective action applied; run follow-up verification window." — incident log extract ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - incident response analyst badge ×1
+- Processes used:
+    - [configure-daily-backups](/processes/configure-daily-backups)
+        - Requires: Pi cluster node ×1, external backup SSD ×1
+        - Consumes: none
+        - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+
+## 12) Run a Private Docker Registry (`devops/private-registry`)
+
+- Quest link: [/quests/devops/private-registry](/quests/devops/private-registry)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/docker-compose`
+- Dialogue `requiresItems` gates:
+    - `start` → "Define storage and access policy." — Pi cluster node ×1, Laptop Computer ×1
+    - `plan` → "Policy documented. Deploy registry stack." — Pi cluster node ×1
+    - `deploy` → "Service running. Validate push/pull and persistence." — Pi cluster node ×1
+    - `verify` → "Push/pull failed or image disappeared after restart." — journalctl report ×1
+    - `verify` → "Verification passed with retained image state." — journalctl report ×1
+    - `recovery` → "Mitigation in place. Re-run push/pull validation." — incident log extract ×1
+    - `finish` → "Publish the cluster image policy." — journalctl report ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - basic shell operator badge ×1
+- Processes used:
+    - [run-docker-compose](/processes/run-docker-compose)
+        - Requires: Pi cluster node ×1
+        - Consumes: none
+        - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+
+## 13) Boot from SSD (`devops/ssd-boot`)
+
+- Quest link: [/quests/devops/ssd-boot](/quests/devops/ssd-boot)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/prepare-first-node`
+- Dialogue `requiresItems` gates:
+    - `start` → "Begin SSD migration plan." — flashed microSD card ×1, 1TB 2230 M.2 SSD ×1
+    - `baseline` → "Baseline captured; start clone." — journalctl report ×1
+    - `clone` → "Clone complete; prep hardware cutover." — bootable 1TB SSD ×1
+    - `mount` → "Node is online; verify root device and performance." — Pi cluster node ×1
+    - `verify`/`finish` → Pi cluster node ×1 + journalctl report ×1
+    - `recover` retry paths require incident log extract ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - incident response analyst badge ×1
+- Processes used:
+    - [clone-os-to-ssd](/processes/clone-os-to-ssd)
+        - Requires: none
+        - Consumes: flashed microSD card ×1, 1TB 2230 M.2 SSD ×1
+        - Creates: bootable 1TB SSD ×1
+    - [assemble-pi-node](/processes/assemble-pi-node)
+        - Requires: none
+        - Consumes: Raspberry Pi 5 board ×1, M.2 PoE+ HAT ×1, bootable 1TB SSD ×1, fan case ×1
+        - Creates: Pi cluster node ×1
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+
+## 14) Harden SSH Access (`devops/ssh-hardening`)
+
+- Quest link: [/quests/devops/ssh-hardening](/quests/devops/ssh-hardening)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/firewall-rules`
+- Dialogue `requiresItems` gates:
+    - `start` → "Ready with laptop and node." — Laptop Computer ×1, Pi cluster node ×1
+    - `keys` → "Key auth works in a second shell." — Pi cluster node ×1, Laptop Computer ×1
+    - `verify` → "Key login failed or access is unstable." — journalctl report ×1
+    - `verify` → "Policy verified with evidence." — journalctl report ×1
+    - `recovery` → "Recovery complete; re-run verification." — incident log extract ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - basic shell operator badge ×1
+- Processes used:
+    - [generate-ssh-key](/processes/generate-ssh-key)
+        - Requires: Laptop Computer ×1, Pi cluster node ×1
+        - Consumes: none
+        - Creates: none
+    - [harden-sshd-config](/processes/harden-sshd-config)
+        - Requires: Pi cluster node ×1
+        - Consumes: none
+        - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+
+## 15) Block SSH Brute Force (`devops/fail2ban`)
+
+- Quest link: [/quests/devops/fail2ban](/quests/devops/fail2ban)
+- Unlock prerequisite:
+    - `requiresQuests`: `devops/ssh-hardening`
+- Dialogue `requiresItems` gates:
+    - `start` → "Stage a fail2ban policy." — Pi cluster node ×1, Laptop Computer ×1
+    - `start` → "Run a canary dry-run before cluster-wide rollout." — Pi cluster node ×1, Laptop Computer ×1
+    - `canary` → "Canary evidence looks safe. Promote policy cluster-wide." — journalctl report ×1
+    - `canary` → "Canary shows lockout risk with evidence captured. Enter recovery before rollout." — journalctl report ×1
+    - `verify` → "Ban evidence exists, but false positives hit trusted admin sources." — journalctl report ×1
+    - `stage` → "Policy staged; capture ban evidence." — Pi cluster node ×1
+    - `verify` → "Ban evidence missing or admin access degraded." — journalctl report ×1
+    - `verify` → "Ban telemetry and admin access both pass." — journalctl report ×1
+    - `policy-tune` → "Tuning captured. Re-run controlled login failure tests." — incident log extract ×1
+    - `recover` → "Mitigation applied; verify again." — incident log extract ×1
+    - `finish` → "Keep fail2ban metrics in weekly ops review." — journalctl report ×1
+- Grants:
+    - Dialogue options/steps grantsItems: None
+    - Quest-level `grantsItems`: None
+- Rewards:
+    - incident response analyst badge ×1
+- Processes used:
+    - [configure-ufw-firewall](/processes/configure-ufw-firewall)
+        - Requires: Laptop Computer ×1, Pi cluster node ×1
+        - Consumes: none
+        - Creates: none
+    - [sysadmin-logs-export-journalctl-report](/processes/sysadmin-logs-export-journalctl-report)
+        - Requires: Laptop Computer ×1
+        - Consumes: none
+        - Creates: journalctl report ×1
+    - [sysadmin-logs-tail-incident-extract](/processes/sysadmin-logs-tail-incident-extract)
+        - Requires: journalctl report ×1
+        - Consumes: none
+        - Creates: incident log extract ×1
+
+## QA flow notes
+
+- Cross-quest dependencies: follow quest unlocks in order; each quest above lists exact `requiresQuests` and inventory gates that must be present before completion paths appear.
+- Progression integrity checks: verify each process-backed step can be completed either by running the process or by satisfying the documented continuation gate items.
+- Known pitfalls: repeated processes may generate stackable logs or outputs; validate minimum item counts on continuation options before skipping process steps.

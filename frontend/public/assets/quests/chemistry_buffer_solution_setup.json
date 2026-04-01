@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/chemistry_buffer_solution_setup.jpg",
+    "entity": "frontend/src/pages/quests/json/chemistry/buffer-solution.json",
+    "item_name": "Prepare a Buffer Solution",
+    "item_id": "chemistry/buffer-solution",
+    "entity_type": "quest",
+    "prompt": "On a laboratory bench, two clear glass beakers sit side by side: one containing a clear acidic solution and the other with a mild basic solution, with a third beaker in front where the two have been combined into a gently fizzing buffer mixture. A small scoop of white powder rests on a spatula beside an open container, and a magnetic stir bar is visible at the bottom of the central beaker, suggesting steady mixing. A simple pH meter probe or pH strip lies nearby, indicating that the mixture’s resistance to pH change is being checked.\n\nThe scene takes place in a sleek near-future chemistry lab with a solarpunk aesthetic: smooth white and pale wood surfaces, soft diffuse lighting, and a window or panel hinting at greenery or daylight outside. The photorealistic 512×512 composition focuses on the trio of beakers and their contents, with the background gently blurred. There are no logos or readable labels, and no full faces—only maybe a gloved hand at the edge of the frame adjusting the probe, keeping attention on the buffer solution setup itself.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

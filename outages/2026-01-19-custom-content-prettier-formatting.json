@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-19-custom-content-prettier-formatting",
+  "date": "2026-01-19",
+  "component": "frontend/e2e",
+  "rootCause": "An unwrapped locator string in the custom content Playwright spec drifted from the frontend Prettier rules, causing format checks in CI to fail.",
+  "resolution": "Reformatted the custom content e2e spec to match the frontend Prettier configuration so the format gate passes.",
+  "references": [
+    "frontend/e2e/custom-content.spec.ts",
+    "scripts/tests/prettierFormatting.test.ts"
+  ]
+}

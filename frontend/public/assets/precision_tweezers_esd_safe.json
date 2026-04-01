@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/precision_tweezers_esd_safe.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/tools.json",
+    "item_name": "precision tweezers",
+    "item_id": "fc9301ec-674f-4b0d-b85e-c47140d5ae00",
+    "entity_type": "item",
+    "prompt": "A pair of slim ESD-safe precision tweezers lies on an anti-static silicone mat, their long stainless steel body tapering to extremely fine 0.1 mm tips. The tips are aligned and slightly closed, gripping a tiny SMD resistor or capacitor, making it obvious that they are intended for placing very small electronic parts. The tweezers’ finish is matte and dark, with a subtle ESD-safe marking implied but not readable, and their overall length of about 120 mm is visually apparent.\n\nThe scene is a near-future solarpunk electronics bench with soft, even lighting, a magnifier lamp and fine-pitch circuit board in the blurred background, and a small plant off to the side adding warmth. The 512×512 image is photorealistic with gentle stylization, no logos or legible text on the tweezers, and a composition that focuses on the delicate tips and the tiny part they hold while the rest of the workspace remains softly out of focus, emphasizing careful SMD assembly.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

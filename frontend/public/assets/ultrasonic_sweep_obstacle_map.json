@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/ultrasonic_sweep_obstacle_map.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "ultrasonic sweep map",
+    "item_id": "9f2109f5-59c8-4309-8a6c-3c60be744985",
+    "entity_type": "item",
+    "prompt": "A visual “sweep map” artifact displayed as a clean, textless point-cloud-style scatter plot on a small tablet-like slate lying on a workbench, showing arcs of detected obstacles and clear open sectors from a 180° ultrasonic sweep. Beside the display are the pan-tilt rig and a few measurement props (a small box and a chair leg) that match the implied obstacles, making the map clearly tied to real-world scanning.\n\nUltra-detailed, photorealistic 512×512 image with a grounded near-future electronics lab aesthetic: soft cinematic lighting, no brand marks, and no readable UI labels or text. The plot should use dots, lines, and shaded wedges only—purely visual—so it reads as an obstacle point cloud without words.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

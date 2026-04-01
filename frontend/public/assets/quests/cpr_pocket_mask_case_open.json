@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/cpr_pocket_mask_case_open.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "CPR pocket mask",
+    "item_id": "a1c7f153-5b2e-443d-936a-47f396a7d191",
+    "entity_type": "item",
+    "prompt": "A compact CPR pocket mask is displayed opened next to its small hard case on a clean tabletop, showing the transparent mask body with a soft silicone cushion and a one-way valve assembly at the center. The valve is clearly visible as a small cylindrical component that allows air to flow in one direction, and the mask is sized appropriately for use on an adult’s face. The case sits nearby, hinged open to reveal a molded interior that securely holds the mask, emphasizing that this is a reusable emergency tool.\n\nThe setting is a bright, near-future community first-aid station or training space with a solarpunk aesthetic: soft daylight coming through a window, a hint of green plants, and neatly arranged medical supplies blurred in the background. The image is photorealistic at 512×512 resolution with clean composition, subtle reflections, and no readable text or logos. The focus stays on the pocket mask and case, highlighting safe, prepared rescue breathing equipment without showing any full faces or distressing scenes.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

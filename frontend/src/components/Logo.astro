@@ -1,14 +1,18 @@
 ---
-const { href, title, body } = Astro.props as Props;
 ---
 
-<div></div><img src="/assets/logo.png" alt="A logo of a rocket lifting off from Mars, minimalistic. Made with DALL-E 2." class="logo" />
+<img
+    src="/assets/logo.png"
+    alt="Minimal rocket launching from Mars"
+    class="logo"
+    loading="lazy"
+/> 
 
 <style>
-	.logo {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 20%;
-	}
+    .logo {
+        display: block;
+        margin-inline: auto;
+        width: clamp(4rem, 20vw, 8rem);
+        height: auto;
+    }
 </style>

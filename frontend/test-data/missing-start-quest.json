@@ -1,0 +1,14 @@
+{
+    "id": "test/missing-start",
+    "title": "Missing Start",
+    "description": "Quest with start id that does not exist",
+    "image": "/assets/test.png",
+    "start": "does-not-exist",
+    "dialogue": [
+        {
+            "id": "only",
+            "text": "Lonely node",
+            "options": [{ "type": "finish", "text": "Finish" }]
+        }
+    ]
+}

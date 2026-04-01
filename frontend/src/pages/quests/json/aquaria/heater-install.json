@@ -1,0 +1,224 @@
+{
+    "id": "aquaria/heater-install",
+    "title": "Install an aquarium heater",
+    "description": "Install a 150 W heater in a Walstad tank, verify safe stability, and use rollback or lockout recovery when readings drift or hardware risk appears.",
+    "image": "/assets/quests/install_aquarium_heater.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Tropical fish need steady heat, not spikes. Confirm the Walstad tank has flow, thermometer strip, and a drip loop ready before we mount the heater.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "safety-lockout",
+                    "text": "Outlet area is wet, cracked, or missing a drip loop"
+                },
+                {
+                    "type": "goto",
+                    "goto": "mount",
+                    "text": "Tank is ready for heat",
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        },
+                        {
+                            "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                            "count": 1
+                        },
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "mount",
+            "text": "Unplug other gear, submerge the heater near flow, set 26°C, and wait 20 minutes before powering so the glass equalizes to water temp.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "heat-walstad",
+                    "text": "Install and set the heater"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Heater installed and powered on",
+                    "requiresItems": [
+                        {
+                            "id": "8c0f72a2-db79-4238-b80f-97721def169f",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Log the stabilized temperature before adding fish. Acceptable range is 25–27°C after a full warm-up window.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "text": "Log stabilized temperature"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Reading recorded",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "If readings are still drifting, do not stock livestock yet. Classify the issue first so we can recover cleanly.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Range held at 25–27°C for two checks",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Temperature overshot or dropped outside safe range",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-lockout",
+                    "text": "Heater glass looks cracked, exposed, or intermittently powered"
+                }
+            ]
+        },
+        {
+            "id": "rollback",
+            "text": "Recovery protocol: unplug heater, confirm full submersion depth, reset the dial one notch toward target, then take a fresh stabilized reading before deciding next action. If drift persists or hardware confidence drops, transition to lockout before any further heating.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "log-walstad-temperature",
+                    "goto": "interpret",
+                    "text": "Apply rollback and capture a fresh verification reading"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Fresh post-rollback reading is logged",
+                    "requiresItems": [
+                        {
+                            "id": "7f9d9d21-a4f2-4c48-b0e5-9a7483ab05d2",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "safety-lockout",
+                    "text": "Drift or instability continues after rollback; lock out and replace hardware."
+                }
+            ]
+        },
+        {
+            "id": "safety-lockout",
+            "text": "Safety lockout: keep the heater unplugged, isolate livestock heat risk, and do not resume automatic heating until damaged hardware is replaced.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "rollback",
+                    "text": "Replacement heater is staged; rerun rollback verification.",
+                    "requiresItems": [
+                        {
+                            "id": "4e8db808-927f-4ac7-9d1f-1c8400c7f5d7",
+                            "count": 1
+                        },
+                        {
+                            "id": "0b85f058-38f2-4e9a-93e9-d47441608619",
+                            "count": 1
+                        },
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "start",
+                    "text": "Pause install and return to prep after fixing outlet safety."
+                },
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Lockout documented and manual monitoring plan is active."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Nice control. Keep the heater cord below outlet height and recheck daily for a week to catch thermostat drift early.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Temperature locked in"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "c5a7574e-515f-4e9a-83fc-350703131f25",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["aquaria/sponge-filter", "aquaria/thermometer", "aquaria/walstad"],
+    "hardening": {
+        "passes": 4,
+        "score": 95,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-16",
+                "date": "2025-08-16",
+                "score": 65
+            },
+            {
+                "task": "codex-quest-hardening-2025-08-18",
+                "date": "2025-08-18",
+                "score": 80
+            },
+            {
+                "task": "codex-quest-update-2025-05-24",
+                "date": "2025-05-24",
+                "score": 92
+            },
+            {
+                "task": "codex-quest-hardening-2026-02-26",
+                "date": "2026-02-26",
+                "score": 96
+            }
+        ]
+    }
+}

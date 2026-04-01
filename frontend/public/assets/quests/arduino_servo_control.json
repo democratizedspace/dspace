@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/arduino_servo_control.jpg",
+    "entity": "frontend/src/pages/quests/json/robotics/servo-control.json",
+    "item_name": "Control a Servo Motor",
+    "item_id": "robotics/servo-control",
+    "entity_type": "quest",
+    "prompt": "A close-up of a small breadboard and microcontroller board on a work table, wired to a single hobby servo motor lying next to them. Signal, power, and ground wires from the servo are clearly connected to the microcontroller, and the servo horn is visible, angled to show that it can rotate. A USB cable runs from the microcontroller toward the edge of the frame, hinting that code is being uploaded to control the servo\u2019s position.\n\nThe scene is a bright, tidy solarpunk electronics corner with soft ambient light, a couple of plants, and neatly arranged components in the background. The 512\u00d7512 image is photorealistic with gentle stylization, no visible text or logos on boards, and a clean composition that highlights the relationship between the microcontroller, breadboard wiring, and the single servo motor as the central focus.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

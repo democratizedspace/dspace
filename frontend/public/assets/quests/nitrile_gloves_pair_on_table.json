@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/nitrile_gloves_pair_on_table.jpg",
+    "entity": "frontend/src/pages/inventory/json/items/misc.json",
+    "item_name": "nitrile gloves (pair)",
+    "item_id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+    "entity_type": "item",
+    "prompt": "A pair of disposable nitrile gloves lies neatly on a smooth work surface, palms facing up and fingers slightly curved as if just removed from someone’s hands. The gloves have a soft matte texture with subtle creases at the knuckles and cuffs, and their color clearly distinguishes them as nitrile rather than latex. Nearby, the edge of a lab tray and a few small instruments are partially visible, implying that the gloves are used for handling chemicals or delicate equipment without showing any brands or packaging.\n\nThe environment is a bright, near-future solarpunk lab or workshop with clean, minimalist design and soft cinematic lighting casting gentle shadows from the gloves. The background is slightly out of focus, with hints of glassware, sensors, and maybe a leafy plant in the periphery, emphasizing a careful, safety-conscious workspace. The image is photorealistic, 512×512, with no visible logos or text, and composed so the gloves are the clear focal point symbolizing safe handling of chemicals and materials.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}

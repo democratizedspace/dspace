@@ -1,0 +1,175 @@
+{
+    "id": "aquaria/filter-rinse",
+    "title": "Rinse Sponge Filter",
+    "description": "Capture pre-rinse flow evidence, rinse in dechlorinated water, and verify restored gentle flow before closing maintenance.",
+    "image": "/assets/quests/rinse_sponge_filter_bucket.jpg",
+    "npc": "/assets/npc/vega.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Flow is slowing and the shrimp look annoyed. Record the pre-rinse state, unplug the pump, and keep the sponge submerged so your bacteria colony survives.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Stage dechlorinated bucket water first.",
+                    "goto": "baseline"
+                },
+                {
+                    "type": "goto",
+                    "goto": "baseline",
+                    "text": "Bucket staged, pump unplugged, and PPE on.",
+                    "requiresItems": [
+                        {
+                            "id": "71efa72a-8c87-4dc2-8e2c-9119bb28fe50",
+                            "count": 1
+                        },
+                        {
+                            "id": "496b4ebb-43c8-42d7-a921-fc6ee9d6ae56",
+                            "count": 1
+                        },
+                        {
+                            "id": "5d5e4e29-94b7-4a03-b73d-7420841ae686",
+                            "count": 1
+                        },
+                        {
+                            "id": "997eaba9-25ee-43d5-bbdc-5d6adf03adfa",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "baseline",
+            "text": "Confirm this is a real maintenance event: note the weak bubble pattern before cleaning so we can compare after restart.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Pre-rinse flow is visibly weak and recorded."
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Lift the sponge out with the airline attached and squeeze only in the dechlorinated bucket. If sludge clouds keep returning, branch to a contamination rinse.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "rinse-aquarium-filter",
+                    "text": "Run normal rinse cycle.",
+                    "goto": "restart"
+                },
+                {
+                    "type": "goto",
+                    "goto": "contamination",
+                    "text": "Water still runs dark or smells off."
+                },
+                {
+                    "type": "goto",
+                    "goto": "restart",
+                    "text": "Core is rinsed and still wet.",
+                    "requiresItems": [
+                        {
+                            "id": "606c4f47-ca8f-4458-bc7f-0ab2957ef641",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "contamination",
+            "text": "Good catch. Discard the dirty bucket, stage fresh dechlorinated water, and repeat a gentle squeeze until the rinse is clear. Never use chlorinated tap water directly.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "bucket-water-dechlorinated",
+                    "text": "Prepare fresh dechlorinated rinse water.",
+                    "goto": "prep"
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Fresh bucket is staged; continue the rinse loop."
+                }
+            ]
+        },
+        {
+            "id": "restart",
+            "text": "Reconnect the airline, start the pump gradually, and verify bubbles are steady but not blasting livestock around the tank.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "restart-sponge-filter",
+                    "text": "Restart and tune airflow.",
+                    "goto": "verify"
+                },
+                {
+                    "type": "goto",
+                    "goto": "verify",
+                    "text": "Flow is restored and livestock behavior looks normal.",
+                    "requiresItems": [
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "verify",
+            "text": "Final check: compare post-rinse flow to the weak baseline. If flow is still weak, run one more rinse loop before closing.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Pre/post evidence confirms flow recovery.",
+                    "requiresItems": [
+                        {
+                            "id": "6f08e704-1086-4fef-ad0a-f48922a5cfd0",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Still weak; repeat rinse loop before closing and return with restored-flow proof."
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Clean sponge, stable bubbles, and no chlorine shock. Nice maintenance discipline.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Set the next rinse checkpoint."
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "13167d6a-5617-4931-8a6e-6f463c6b8835",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["aquaria/sponge-filter"],
+    "hardening": {
+        "passes": 1,
+        "score": 95,
+        "emoji": "🌀",
+        "history": [
+            {
+                "task": "codex-quest-hardening-2025-08-19",
+                "date": "2025-08-19",
+                "score": 65
+            }
+        ]
+    }
+}

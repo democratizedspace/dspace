@@ -1,0 +1,11 @@
+{
+  "id": "2026-01-20-process-create-id-generation",
+  "date": "2026-01-20",
+  "component": "frontend/processes/create",
+  "rootCause": "Process creation depended on crypto.randomUUID without a fallback and process records did not guarantee an id when added via the db.processes helper, so environments without crypto.randomUUID (or call sites that omitted ids) failed to persist custom processes to IndexedDB.",
+  "resolution": "Added a shared process ID fallback generator and ensured process records always receive an id before being saved, so custom processes persist reliably.",
+  "references": [
+    "frontend/src/utils/customcontent.js",
+    "frontend/e2e/custom-content.spec.ts"
+  ]
+}

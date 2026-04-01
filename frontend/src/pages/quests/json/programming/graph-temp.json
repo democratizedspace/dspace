@@ -1,0 +1,132 @@
+{
+    "id": "programming/graph-temp",
+    "title": "Graph Temperature Logs",
+    "description": "Plot the raw log from temp-logger to get a quick visual check that your sensor data looks reasonable.",
+    "image": "/assets/quests/programming_graph_temperature_data.jpg",
+    "npc": "/assets/npc/dChat.jpg",
+    "start": "start",
+    "dialogue": [
+        {
+            "id": "start",
+            "text": "Now that you've been collecting temperature readings, let's turn that list of numbers into a chart and verify the signal is believable.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "prep",
+                    "text": "Let's create a graph.",
+                    "requiresItems": [
+                        {
+                            "id": "d06c9f8d-6553-4f3c-9e10-05e1cf33a6b8",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "prep",
+            "text": "Point your plotting script at the CSV from your logger and note the expected room temperature band before you render.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "plot-temperature-data",
+                    "text": "Run the plotting script"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "Chart exported for review",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "interpret",
+            "text": "Interpret the graph. Healthy runs stay mostly between 15C and 35C with smooth transitions. Flag sudden cliffs or impossible spikes.",
+            "options": [
+                {
+                    "type": "goto",
+                    "goto": "finish",
+                    "text": "Trend and bounds look healthy",
+                    "requiresItems": [
+                        {
+                            "id": "e7d1cd7d-e014-43a1-b1c8-9b7fb39deeed",
+                            "count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "goto",
+                    "goto": "triage",
+                    "text": "Graph shows spikes or dropouts"
+                }
+            ]
+        },
+        {
+            "id": "triage",
+            "text": "Troubleshoot before publishing: reseat sensor wiring, regenerate an annotated graph that calls out anomalies, then re-check the pass band.",
+            "options": [
+                {
+                    "type": "process",
+                    "process": "refine-temperature-graph",
+                    "text": "Create an annotated troubleshooting graph"
+                },
+                {
+                    "type": "goto",
+                    "goto": "interpret",
+                    "text": "I corrected wiring and re-ran the graph",
+                    "requiresItems": [
+                        {
+                            "id": "50360fd0-e296-4ef8-a3a9-00e049318166",
+                            "count": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "finish",
+            "text": "Excellent work! You produced evidence, interpreted bounds, and handled out-of-range behavior before sign-off.",
+            "options": [
+                {
+                    "type": "finish",
+                    "text": "Thanks dChat!"
+                }
+            ]
+        }
+    ],
+    "rewards": [
+        {
+            "id": "f763cb7d-4e1a-4146-b304-4d8bfde4df86",
+            "count": 1
+        }
+    ],
+    "requiresQuests": ["programming/temp-logger"],
+    "hardening": {
+        "passes": 3,
+        "score": 97,
+        "emoji": "💯",
+        "history": [
+            {
+                "task": "codex-hardening-2025-12-08",
+                "date": "2025-12-08",
+                "score": 95
+            },
+            {
+                "task": "codex-hardening-2025-12-18",
+                "date": "2025-12-18",
+                "score": 98
+            },
+            {
+                "task": "codex-hardening-2026-02-21",
+                "date": "2026-02-21",
+                "score": 97
+            }
+        ]
+    }
+}

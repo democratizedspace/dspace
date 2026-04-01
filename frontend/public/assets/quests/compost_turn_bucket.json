@@ -1,0 +1,10 @@
+{
+    "filename": "/assets/quests/compost_turn_bucket.jpg",
+    "entity": "frontend/src/pages/quests/json/composting/turn-pile.json",
+    "item_name": "Turn Your Compost Bucket",
+    "item_id": "composting/turn-pile",
+    "entity_type": "quest",
+    "prompt": "A compost bucket or small bin is being stirred with a sturdy hand tool such as a compost aerator or long-handled trowel, mixing together layers of kitchen scraps and brown material. The contents show a blend of partially broken-down vegetable pieces, coffee grounds, and shredded paper or dry leaves, with hints of steam or moisture indicating active decomposition. The lid of the bucket rests nearby, and a pair of gardening gloves sits on the ground next to it.\n\nThe environment reflects a near-future solarpunk yard or balcony: soft daylight, simple modern containers, and perhaps a small vertical garden or planter stack in the blurred background. The 512\u00d7512 photorealistic composition keeps the bucket opening and stirring tool as the focal point, with surrounding surfaces and plants gently out of focus. No brand logos or legible text appear anywhere, and only arms and hands are shown, highlighting the periodic turning that keeps compost aerated and microbes thriving.",
+    "image_model": "Nano Banana Pro",
+    "resolution": "512x512"
+}
