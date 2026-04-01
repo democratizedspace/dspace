@@ -234,6 +234,7 @@ async function verifyChat(page: Page): Promise<void> {
 
     const panel = page.locator('[data-testid="chat-panel"]').first();
     await expect(panel).toBeVisible();
+    await expect(panel).toHaveAttribute('data-hydrated', 'true');
 
     const textbox = panel.getByRole('textbox');
     await expect(textbox).toBeEnabled();
@@ -248,6 +249,12 @@ async function verifyChat(page: Page): Promise<void> {
     const userMessages = panel.locator('.message-bubble.user');
     const assistantReplies = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
     const errorBanner = panel.locator('.chat-error, [data-error-type]');
+    const chatSpinner = panel.locator('.spinner-container');
+
+    await expect(chatSpinner, 'Expected chat panel to finish loading before sending').not.toBeVisible({
+        timeout: 15_000,
+    });
+
     const startingUserMessageCount = await userMessages.count();
     const startingAssistantReplyCount = await assistantReplies.count();
 
@@ -261,11 +268,17 @@ async function verifyChat(page: Page): Promise<void> {
     await expect(textbox, 'Expected textbox to clear after send').toHaveValue('');
 
     const winner = await Promise.race([
-        panel
-            .locator('.message-bubble.assistant, [data-role="assistant"]')
-            .nth(startingAssistantReplyCount)
-            .waitFor({ state: 'visible', timeout: 30_000 })
-            .then(() => 'assistant' as const),
+        (async () => {
+            await expect(
+                assistantReplies,
+                'Expected a new assistant reply after sending'
+            ).toHaveCount(startingAssistantReplyCount + 1, { timeout: 30_000 });
+            await expect(
+                assistantReplies.first(),
+                'Expected the newest assistant reply to be visible'
+            ).toBeVisible();
+            return 'assistant' as const;
+        })(),
         errorBanner
             .first()
             .waitFor({ state: 'visible', timeout: 30_000 })
@@ -275,11 +288,7 @@ async function verifyChat(page: Page): Promise<void> {
     expect(winner, 'Chat returned an error instead of an assistant reply').toBe('assistant');
     await expect(errorBanner.first(), 'Expected no chat error banner').not.toBeVisible();
     await expect(
-        assistantReplies,
-        'Expected a new assistant reply after sending'
-    ).toHaveCount(startingAssistantReplyCount + 1);
-    await expect(
-        assistantReplies.nth(startingAssistantReplyCount),
+        assistantReplies.first(),
         'Expected the new assistant reply to be visible'
     ).toBeVisible();
 }
