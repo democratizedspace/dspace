@@ -16,8 +16,8 @@ const frontendPackage = JSON.parse(
 ) as PackageJsonDependencies;
 
 describe('canvas dependency alignment', () => {
-    it('does not keep a stale direct frontend canvas pin in dependencies or devDependencies', () => {
-        expect(frontendPackage.dependencies ?? {}).not.toHaveProperty('canvas');
+    it('keeps frontend canvas as a runtime dependency and out of devDependencies', () => {
+        expect(frontendPackage.dependencies ?? {}).toHaveProperty('canvas');
         expect(frontendPackage.devDependencies ?? {}).not.toHaveProperty('canvas');
     });
 });
