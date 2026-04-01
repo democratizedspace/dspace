@@ -245,18 +245,29 @@ async function verifyChat(page: Page): Promise<void> {
         return;
     }
 
+    const userMessages = panel.locator('.message-bubble.user, [data-role="user"]');
+    const assistantReply = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
+    const errorBanner = panel.locator('.chat-error, [data-error-type]');
+    const userCountBefore = await userMessages.count();
+    const assistantCountBefore = await assistantReply.count();
+
     await textbox.fill(CHAT_PROMPT);
     await sendButton.click();
 
-    await expect(panel.getByText(CHAT_PROMPT)).toBeVisible();
-
-    const assistantReply = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
-    const errorBanner = panel.locator('.chat-error, [data-error-type]');
+    await expect
+        .poll(async () => userMessages.count(), {
+            message: 'Expected one new user message to appear after clicking Send',
+            timeout: 15_000,
+        })
+        .toBeGreaterThan(userCountBefore);
 
     const winner = await Promise.race([
-        assistantReply
-            .first()
-            .waitFor({ state: 'visible', timeout: 30_000 })
+        expect
+            .poll(async () => assistantReply.count(), {
+                message: 'Expected one new assistant reply after sending a live chat prompt',
+                timeout: 30_000,
+            })
+            .toBeGreaterThan(assistantCountBefore)
             .then(() => 'assistant' as const),
         errorBanner
             .first()

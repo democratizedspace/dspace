@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-01-remote-smoke-live-chat-assertion-drift",
+  "date": "2026-04-01",
+  "component": "frontend:e2e-remote-smoke-chat",
+  "rootCause": "The live chat smoke check asserted exact prompt text visibility after Send, which is brittle in production rendering and produced a false-negative despite successful send/receive behavior.",
+  "resolution": "Updated remote-release-smoke verifyChat() to assert durable send/receive contract signals: user message count increments after Send, assistant message count increments for the same interaction, and no chat error banner appears.",
+  "references": [
+    "frontend/e2e/remote-release-smoke.spec.ts",
+    "outages/2026-04-01-remote-smoke-live-chat-assertion-drift.json"
+  ]
+}
