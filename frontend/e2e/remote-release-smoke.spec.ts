@@ -64,7 +64,7 @@ async function configureLiveChatTransport(page: Page): Promise<void> {
         );
     }
 
-    await page.route('https://api.openai.com/v1/responses', async (route, request) => {
+    await page.route('https://api.openai.com/v1/responses*', async (route, request) => {
         const headers = {
             ...request.headers(),
             authorization: `Bearer ${CHAT_API_KEY}`,

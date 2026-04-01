@@ -15,7 +15,7 @@ function parseArgs(argv) {
   const parsed = {
     baseURL: DEFAULT_BASE_URL,
     chatMode: 'ui',
-    chatLiveBackend: 'mock',
+    chatLiveBackend: process.env.REMOTE_SMOKE_CHAT_LIVE_BACKEND || 'mock',
     mutate: false,
     project: 'chromium',
     passthrough: [],
@@ -107,6 +107,12 @@ if (!['mock', 'real'].includes(options.chatLiveBackend)) {
   process.exit(1);
 }
 
+if (options.chatLiveBackend !== 'mock' && options.chatMode !== 'live') {
+  console.warn(
+    `[qa:remote-smoke] Warning: --chat-live-backend=${options.chatLiveBackend} has no effect unless --chat-mode=live is also set.`
+  );
+}
+
 const url = new URL(options.baseURL);
 const isLocalHost =
   url.hostname === '127.0.0.1' ||
@@ -139,10 +145,17 @@ console.log(`[qa:remote-smoke] chatMode=${options.chatMode}`);
 if (options.chatMode === 'live') {
   console.log(`[qa:remote-smoke] chatLiveBackend=${options.chatLiveBackend}`);
   if (options.chatLiveBackend === 'real') {
+    const hasLiveKey = Boolean(process.env.REMOTE_SMOKE_CHAT_API_KEY);
     console.log(
       '[qa:remote-smoke] chatLiveRealKey=' +
-        `${process.env.REMOTE_SMOKE_CHAT_API_KEY ? 'provided via env' : 'missing'}`
+        `${hasLiveKey ? 'provided via env' : 'missing'}`
     );
+    if (!hasLiveKey) {
+      console.error(
+        '[qa:remote-smoke] REMOTE_SMOKE_CHAT_API_KEY is required when --chat-live-backend=real and --chat-mode=live.'
+      );
+      process.exit(1);
+    }
   }
 }
 console.log(
