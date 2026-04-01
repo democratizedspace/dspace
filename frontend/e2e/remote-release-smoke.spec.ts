@@ -384,10 +384,10 @@ test.describe('Remote release smoke', () => {
         await runProcessLifecycle(page);
     });
 
-    test('creates and deletes one custom item (opt-in)', async ({ page }) => {
+    test('creates and deletes one custom item (default, opt-out available)', async ({ page }) => {
         test.skip(
             !SHOULD_MUTATE,
-            'Set REMOTE_SMOKE_MUTATION=1 to run custom-item create/delete checks.'
+            'Set REMOTE_SMOKE_MUTATION=1 (or omit --no-mutate) to run custom-item create/delete checks.'
         );
         await createAndDeleteCustomItem(page);
     });
