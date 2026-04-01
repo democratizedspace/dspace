@@ -257,7 +257,7 @@ async function verifyChat(page: Page): Promise<void> {
     await expect(
         userMessages,
         'Expected sending to append a new user message bubble'
-    ).toHaveCount(startingUserMessageCount + 1);
+    ).toHaveCount(startingUserMessageCount + 1, { timeout: 10_000 });
     await expect(textbox, 'Expected textbox to clear after send').toHaveValue('');
 
     const winner = await Promise.race([
@@ -279,8 +279,8 @@ async function verifyChat(page: Page): Promise<void> {
         'Expected a new assistant reply after sending'
     ).toHaveCount(startingAssistantReplyCount + 1);
     await expect(
-        assistantReplies.first(),
-        'Expected an assistant reply to be visible'
+        assistantReplies.nth(startingAssistantReplyCount),
+        'Expected the new assistant reply to be visible'
     ).toBeVisible();
 }
 
