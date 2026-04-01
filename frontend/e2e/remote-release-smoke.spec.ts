@@ -246,7 +246,7 @@ async function verifyChat(page: Page): Promise<void> {
         return;
     }
 
-    const userMessages = panel.locator('.message-bubble.user');
+    const userMessages = panel.locator('.message-bubble.user, [data-role="user"]');
     const assistantReplies = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
     const errorBanner = panel.locator('.chat-error, [data-error-type]');
     const chatSpinner = panel.locator('.spinner-container');
