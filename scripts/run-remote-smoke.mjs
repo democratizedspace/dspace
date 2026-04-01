@@ -15,6 +15,8 @@ function parseArgs(argv) {
   const parsed = {
     baseURL: DEFAULT_BASE_URL,
     chatMode: 'ui',
+    chatLiveTransport: 'mock',
+    chatAuth: process.env.REMOTE_SMOKE_CHAT_AUTH || '',
     mutate: false,
     project: 'chromium',
     passthrough: [],
@@ -55,6 +57,28 @@ function parseArgs(argv) {
       continue;
     }
 
+    if (arg === '--chat-live-transport') {
+      parsed.chatLiveTransport = argv[index + 1] || parsed.chatLiveTransport;
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith('--chat-live-transport=')) {
+      parsed.chatLiveTransport = arg.slice(arg.indexOf('=') + 1) || parsed.chatLiveTransport;
+      continue;
+    }
+
+    if (arg === '--chat-auth') {
+      parsed.chatAuth = argv[index + 1] || parsed.chatAuth;
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith('--chat-auth=')) {
+      parsed.chatAuth = arg.slice(arg.indexOf('=') + 1) || parsed.chatAuth;
+      continue;
+    }
+
     if (arg === '--project') {
       parsed.project = argv[index + 1] || parsed.project;
       index += 1;
@@ -88,6 +112,13 @@ if (!['ui', 'live'].includes(options.chatMode)) {
   process.exit(1);
 }
 
+if (!['mock', 'real'].includes(options.chatLiveTransport)) {
+  console.error(
+    `Invalid --chat-live-transport value: "${options.chatLiveTransport}". Use "mock" or "real".`
+  );
+  process.exit(1);
+}
+
 const url = new URL(options.baseURL);
 const isLocalHost =
   url.hostname === '127.0.0.1' ||
@@ -102,6 +133,8 @@ const env = {
   PLAYWRIGHT_SKIP_INSTALL_DEPS: '1',
   REMOTE_SMOKE: '1',
   REMOTE_SMOKE_CHAT_MODE: options.chatMode,
+  REMOTE_SMOKE_CHAT_LIVE_TRANSPORT: options.chatLiveTransport,
+  REMOTE_SMOKE_CHAT_AUTH: options.chatAuth,
   REMOTE_SMOKE_MUTATION: options.mutate ? '1' : '0',
   REMOTE_SMOKE_USE_WEBSERVER: isLocalHost ? '1' : '0',
 };
@@ -116,6 +149,14 @@ const playwrightArgs = [
 
 console.log(`[qa:remote-smoke] baseURL=${options.baseURL}`);
 console.log(`[qa:remote-smoke] chatMode=${options.chatMode}`);
+if (options.chatMode === 'live') {
+  console.log(`[qa:remote-smoke] chatLiveTransport=${options.chatLiveTransport}`);
+  if (options.chatLiveTransport === 'real') {
+    console.log(
+      `[qa:remote-smoke] chatAuth=${options.chatAuth ? 'provided via env/CLI' : 'not provided (request may fail)'}`
+    );
+  }
+}
 console.log(
   `[qa:remote-smoke] mutation=${options.mutate ? 'enabled' : 'disabled'}`
 );

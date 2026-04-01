@@ -37,8 +37,54 @@ const TOOLBOX_AND_EDITORS = [
 
 const SHOULD_MUTATE = process.env.REMOTE_SMOKE_MUTATION === '1';
 const CHAT_MODE = process.env.REMOTE_SMOKE_CHAT_MODE === 'live' ? 'live' : 'ui';
+const CHAT_LIVE_TRANSPORT =
+    process.env.REMOTE_SMOKE_CHAT_LIVE_TRANSPORT === 'real' ? 'real' : 'mock';
+const CHAT_AUTH = process.env.REMOTE_SMOKE_CHAT_AUTH || '';
 const CHAT_PROMPT =
     process.env.REMOTE_SMOKE_CHAT_PROMPT || 'Remote smoke check: respond with one short sentence.';
+const MOCK_CHAT_REPLY = 'Remote smoke mock assistant reply.';
+
+async function configureLiveChatTransport(page: Page): Promise<void> {
+    if (CHAT_MODE !== 'live') {
+        return;
+    }
+
+    if (CHAT_LIVE_TRANSPORT !== 'real') {
+        await page.route('https://api.openai.com/v1/responses', async (route) => {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    id: 'resp_remote_smoke_mock',
+                    object: 'response',
+                    output_text: MOCK_CHAT_REPLY,
+                    output: [
+                        {
+                            type: 'message',
+                            role: 'assistant',
+                            content: [{ type: 'output_text', text: MOCK_CHAT_REPLY }],
+                        },
+                    ],
+                }),
+            });
+        });
+        return;
+    }
+
+    if (!CHAT_AUTH) {
+        return;
+    }
+
+    await page.route('https://api.openai.com/v1/responses', async (route) => {
+        const request = route.request();
+        await route.continue({
+            headers: {
+                ...request.headers(),
+                authorization: `Bearer ${CHAT_AUTH}`,
+            },
+        });
+    });
+}
 
 async function visitRouteAndAssert(page: Page, route: string): Promise<void> {
     const response = await page.goto(route);
@@ -229,6 +275,7 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
 }
 
 async function verifyChat(page: Page): Promise<void> {
+    await configureLiveChatTransport(page);
     await page.goto('/chat');
     await waitForHydration(page);
 

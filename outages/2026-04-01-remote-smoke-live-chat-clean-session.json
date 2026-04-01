@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-01-remote-smoke-live-chat-clean-session",
+  "date": "2026-04-01",
+  "component": "frontend:e2e-remote-release-smoke",
+  "rootCause": "The remote smoke live-chat assertion ran in a clean Playwright browser context that had no stored OpenAI credential, so /chat send/receive flowed into the error banner path even though manual production sessions with configured credentials worked.",
+  "resolution": "Added a smoke-harness live-chat transport switch. Default live mode now stubs OpenAI /v1/responses in Playwright to validate chat UI send/receive without secrets; an explicit opt-in real mode can forward requests and inject auth via REMOTE_SMOKE_CHAT_AUTH/--chat-auth.",
+  "references": [
+    "scripts/run-remote-smoke.mjs",
+    "frontend/e2e/remote-release-smoke.spec.ts"
+  ]
+}
