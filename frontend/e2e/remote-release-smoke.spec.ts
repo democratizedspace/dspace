@@ -245,17 +245,25 @@ async function verifyChat(page: Page): Promise<void> {
         return;
     }
 
+    const userMessages = panel.locator('.message-bubble.user');
+    const assistantReplies = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
+    const errorBanner = panel.locator('.chat-error, [data-error-type]');
+    const startingUserMessageCount = await userMessages.count();
+    const startingAssistantReplyCount = await assistantReplies.count();
+
     await textbox.fill(CHAT_PROMPT);
     await sendButton.click();
 
-    await expect(panel.getByText(CHAT_PROMPT)).toBeVisible();
-
-    const assistantReply = panel.locator('.message-bubble.assistant, [data-role="assistant"]');
-    const errorBanner = panel.locator('.chat-error, [data-error-type]');
+    await expect(
+        userMessages,
+        'Expected sending to append a new user message bubble'
+    ).toHaveCount(startingUserMessageCount + 1);
+    await expect(textbox, 'Expected textbox to clear after send').toHaveValue('');
 
     const winner = await Promise.race([
-        assistantReply
-            .first()
+        panel
+            .locator('.message-bubble.assistant, [data-role="assistant"]')
+            .nth(startingAssistantReplyCount)
             .waitFor({ state: 'visible', timeout: 30_000 })
             .then(() => 'assistant' as const),
         errorBanner
@@ -266,7 +274,14 @@ async function verifyChat(page: Page): Promise<void> {
 
     expect(winner, 'Chat returned an error instead of an assistant reply').toBe('assistant');
     await expect(errorBanner.first(), 'Expected no chat error banner').not.toBeVisible();
-    await expect(assistantReply.first(), 'Expected an assistant reply to be visible').toBeVisible();
+    await expect(
+        assistantReplies,
+        'Expected a new assistant reply after sending'
+    ).toHaveCount(startingAssistantReplyCount + 1);
+    await expect(
+        assistantReplies.first(),
+        'Expected an assistant reply to be visible'
+    ).toBeVisible();
 }
 
 test.describe('Remote release smoke', () => {
