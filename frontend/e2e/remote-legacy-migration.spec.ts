@@ -363,6 +363,11 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
                     });
                     await goToSettings(page);
                     await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
+                    const storage = await readStorageSnapshot(page);
+                    expect(storage.gameState).not.toBeNull();
+                    const migrated = JSON.parse(storage.gameState || '{}') as Record<string, unknown>;
+                    expect(String(migrated.versionNumberString || migrated.version || '')).toMatch(/^3/);
+                    expect(migrated.openAI).toBeUndefined();
                 }
             );
         }
