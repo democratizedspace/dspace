@@ -251,7 +251,10 @@ async function verifyChat(page: Page): Promise<void> {
     const errorBanner = panel.locator('.chat-error, [data-error-type]');
     const chatSpinner = panel.locator('.spinner-container');
 
-    await expect(chatSpinner, 'Expected chat panel to finish loading before sending').not.toBeVisible({
+    await expect(
+        chatSpinner,
+        'Expected chat panel to finish loading before sending'
+    ).not.toBeVisible({
         timeout: 15_000,
     });
 
@@ -261,10 +264,10 @@ async function verifyChat(page: Page): Promise<void> {
     await textbox.fill(CHAT_PROMPT);
     await sendButton.click();
 
-    await expect(
-        userMessages,
-        'Expected sending to append a new user message bubble'
-    ).toHaveCount(startingUserMessageCount + 1, { timeout: 10_000 });
+    await expect(userMessages, 'Expected sending to append a new user message bubble').toHaveCount(
+        startingUserMessageCount + 1,
+        { timeout: 10_000 }
+    );
     await expect(textbox, 'Expected textbox to clear after send').toHaveValue('');
 
     const winner = await Promise.race([
