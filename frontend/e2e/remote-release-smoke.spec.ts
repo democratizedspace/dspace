@@ -331,6 +331,12 @@ async function verifyChat(page: Page): Promise<void> {
         assistantReplies.first(),
         'Expected the new assistant reply to be visible'
     ).toBeVisible();
+    if (CHAT_LIVE_BACKEND === 'mock') {
+        await expect(
+            assistantReplies.first(),
+            'Expected mock live-chat path to return the known smoke reply'
+        ).toContainText(MOCK_LIVE_CHAT_REPLY);
+    }
 }
 
 test.describe('Remote release smoke', () => {
