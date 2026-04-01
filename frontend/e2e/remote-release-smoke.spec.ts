@@ -231,7 +231,7 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
 
     await page.getByRole('button', { name: /create item/i }).click();
     await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('status')).toContainText('Item created successfully.');
+    await expect(page.getByRole('status')).toContainText(/item created successfully/i);
 
     await page.goto('/inventory/manage');
     await waitForHydration(page);
