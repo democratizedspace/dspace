@@ -37,8 +37,44 @@ const TOOLBOX_AND_EDITORS = [
 
 const SHOULD_MUTATE = process.env.REMOTE_SMOKE_MUTATION === '1';
 const CHAT_MODE = process.env.REMOTE_SMOKE_CHAT_MODE === 'live' ? 'live' : 'ui';
+const CHAT_LIVE_BACKEND = process.env.REMOTE_SMOKE_CHAT_LIVE_BACKEND === 'real' ? 'real' : 'mock';
+const CHAT_API_KEY = process.env.REMOTE_SMOKE_CHAT_API_KEY || ''; // scan-secrets: ignore
 const CHAT_PROMPT =
     process.env.REMOTE_SMOKE_CHAT_PROMPT || 'Remote smoke check: respond with one short sentence.';
+const MOCK_LIVE_CHAT_REPLY = 'Remote smoke mock assistant reply.';
+
+async function configureLiveChatTransport(page: Page): Promise<void> {
+    if (CHAT_LIVE_BACKEND !== 'real') {
+        await page.addInitScript(
+            ({ reply }) => {
+                // @ts-expect-error test hook for OpenAI client
+                window.__DSpaceOpenAIClient = function () {
+                    return {
+                        responses: {
+                            create: async () => ({ output_text: reply }),
+                        },
+                    };
+                };
+            },
+            { reply: MOCK_LIVE_CHAT_REPLY }
+        );
+        return;
+    }
+
+    if (!CHAT_API_KEY) {
+        throw new Error(
+            'REMOTE_SMOKE_CHAT_LIVE_BACKEND=real requires REMOTE_SMOKE_CHAT_API_KEY to be set.'
+        );
+    }
+
+    await page.route('https://api.openai.com/v1/responses*', async (route, request) => {
+        const headers = {
+            ...request.headers(),
+            authorization: `Bearer ${CHAT_API_KEY}`,
+        };
+        await route.continue({ headers });
+    });
+}
 
 async function visitRouteAndAssert(page: Page, route: string): Promise<void> {
     const response = await page.goto(route);
@@ -229,6 +265,10 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
 }
 
 async function verifyChat(page: Page): Promise<void> {
+    if (CHAT_MODE === 'live') {
+        await configureLiveChatTransport(page);
+    }
+
     await page.goto('/chat');
     await waitForHydration(page);
 
@@ -294,6 +334,12 @@ async function verifyChat(page: Page): Promise<void> {
         assistantReplies.first(),
         'Expected the new assistant reply to be visible'
     ).toBeVisible();
+    if (CHAT_LIVE_BACKEND === 'mock') {
+        await expect(
+            assistantReplies.first(),
+            'Expected mock live-chat path to return the known smoke reply'
+        ).toContainText(MOCK_LIVE_CHAT_REPLY);
+    }
 }
 
 test.describe('Remote release smoke', () => {
