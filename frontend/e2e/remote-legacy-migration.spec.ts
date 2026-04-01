@@ -66,7 +66,9 @@ const REAL_V2_JSON_PATH = process.env.REMOTE_MIGRATION_REAL_V2_JSON_PATH?.trim()
 
 function readRealV2Payload(): string {
     if (!REAL_V2_JSON_PATH) {
-        return '';
+        throw new Error(
+            'REMOTE_MIGRATION_REAL_V2_JSON_PATH is not set. Run via "npm run qa:remote-migration" so the fixture path is provided automatically.'
+        );
     }
 
     if (!existsSync(REAL_V2_JSON_PATH)) {
@@ -335,37 +337,33 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
 
         const realV2JsonRaw = readRealV2Payload();
 
-        if (!realV2JsonRaw) {
-            addResult(
-                'C.v2-real-save',
-                'Real v2 payload path/env input is wired',
-                'skip',
-                'No REMOTE_MIGRATION_REAL_V2_JSON_PATH payload provided for this run.'
-            );
-        } else {
-            await runStep(
-                'C.v2-real-save',
-                'Real v2 payload detection + replace path',
-                async () => {
-                    const parsed = JSON.parse(realV2JsonRaw) as Record<string, unknown>;
-                    await purgeClientState(page);
-                    await page.goto('/');
-                    await seedV2State(page, parsed);
-                    await goToSettings(page);
-                    await expect(
-                        page.getByText('Legacy v2 localStorage data detected')
-                    ).toBeVisible();
-                    await page
-                        .getByRole('button', { name: 'Replace current save with v2' })
-                        .click();
-                    await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
-                        timeout: 10_000,
-                    });
-                    await goToSettings(page);
-                    await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
-                }
-            );
-        }
+        await runStep('C.v2-real-save', 'Real v2 payload detection + replace path', async () => {
+            const realV2State = JSON.parse(realV2JsonRaw) as Record<string, unknown>;
+            await purgeClientState(page);
+            await page.goto('/');
+            await seedV2State(page, realV2State);
+            await goToSettings(page);
+            await expect(page.getByText('Legacy v2 localStorage data detected')).toBeVisible();
+            await page.getByRole('button', { name: 'Replace current save with v2' }).click();
+            await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
+                timeout: 10_000,
+            });
+            await goToSettings(page);
+            await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
+            const storage = await readStorageSnapshot(page);
+            if (storage.gameState !== null) {
+                const migratedState = JSON.parse(storage.gameState) as Record<string, unknown>;
+                expect(
+                    String(migratedState.versionNumberString || migratedState.version || '')
+                ).toMatch(/^3/);
+                expect(storage.gameState).not.toContain('REDACTED_V2_TEST_KEY');
+                expect(storage.gameState).not.toContain('"apiKey"');
+            }
+            if (storage.gameStateBackup !== null) {
+                expect(storage.gameStateBackup).not.toContain('REDACTED_V2_TEST_KEY');
+                expect(storage.gameStateBackup).not.toContain('"apiKey"');
+            }
+        });
 
         expect(
             failedSteps,
