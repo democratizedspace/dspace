@@ -1,0 +1,114 @@
+{
+  "quests": {
+    "welcome/howtodoquests": { "finished": true },
+    "3dprinter/start": { "finished": true },
+    "hydroponics/basil": {
+      "stepId": "lighting",
+      "itemsClaimed": ["hydroponics/basil-lighting-0"]
+    },
+    "aquaria/goldfish": { "finished": true },
+    "energy/solar": { "finished": true },
+    "rocketry/firstlaunch": { "stepId": "assemble" },
+    "ubi/basicincome": { "finished": true },
+    "energy/solar-1kWh": { "stepId": "upgrades" },
+    "energy/dWatt-1e3": { "finished": true },
+    "energy/dWatt-1e4": { "finished": true },
+    "energy/dWatt-1e5": { "finished": true },
+    "energy/dWatt-1e6": { "finished": true }
+  },
+  "inventory": {
+    "0": 1,
+    "1": 1,
+    "5": 20,
+    "6": 0,
+    "8": 1,
+    "9": 0,
+    "10": 1,
+    "12": 785,
+    "13": 0,
+    "14": 0,
+    "16": 0,
+    "17": 0,
+    "20": 1185.3597986939917,
+    "22": 1183621.2922200002,
+    "24": 46.42999999999998,
+    "25": 0,
+    "26": 0,
+    "27": 0,
+    "28": 1,
+    "29": 1,
+    "30": 0,
+    "31": 0,
+    "32": 0,
+    "33": 0,
+    "34": 2,
+    "35": 0.9,
+    "43": 1,
+    "44": 0,
+    "49": 1,
+    "51": 0,
+    "52": 1,
+    "53": 0,
+    "55": 0,
+    "56": 0,
+    "57": 0,
+    "58": 0,
+    "60": 0,
+    "61": 200,
+    "62": 0,
+    "63": 1,
+    "65": 1,
+    "72": 100,
+    "78": 1,
+    "79": 0,
+    "80": 0,
+    "81": 0,
+    "86": 1,
+    "88": 123.99999999999999
+  },
+  "processes": {
+    "outlet-dWatt-1e3": {
+      "startedAt": 1692681752010,
+      "duration": 2000
+    },
+    "basic-income": {
+      "startedAt": 1695150482511,
+      "duration": 86400000
+    },
+    "grow-basil": {
+      "startedAt": 1718258042548,
+      "duration": 2419200000
+    },
+    "bucket-water-chlorinated": {
+      "startedAt": 1718258049924,
+      "duation": 30000
+    },
+    "3dprint-rocket-nosecone": {
+      "startedAt": 1727932072495,
+      "duration": 6435000
+    },
+    "3dprint-rocket-body-tube": {
+      "startedAt": 1727932083257,
+      "duration": 7691000
+    },
+    "3dprint-rocket-fincan": {
+      "startedAt": 1727932149359,
+      "duration": 28993000
+    },
+    "3dprint-rocket-nosecone-coupler": {
+      "startedAt": 1727932150719,
+      "duration": 3252000
+    },
+    "assemble-rocket": {
+      "startedAt": 1727932184631,
+      "duration": 300000
+    },
+    "setup-solar-enclosure-200Wh": {
+      "startedAt": 1749540315845,
+      "duation": 300000
+    }
+  },
+  "openAI": {
+    "apiKey": "REDACTED_V2_TEST_KEY"
+  }
+}

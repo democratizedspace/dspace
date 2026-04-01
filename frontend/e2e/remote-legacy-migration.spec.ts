@@ -333,39 +333,38 @@ test.describe('Remote legacy migration harness (3.2.2 coverage)', () => {
             await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
         });
 
-        const realV2JsonRaw = readRealV2Payload();
+        await runStep('C.v2-real-save', 'Real v2 payload detection + replace path', async () => {
+            const realV2JsonRaw = readRealV2Payload();
+            if (!realV2JsonRaw) {
+                throw new Error('REMOTE_MIGRATION_REAL_V2_JSON_PATH payload is required.');
+            }
 
-        if (!realV2JsonRaw) {
-            addResult(
-                'C.v2-real-save',
-                'Real v2 payload path/env input is wired',
-                'skip',
-                'No REMOTE_MIGRATION_REAL_V2_JSON_PATH payload provided for this run.'
-            );
-        } else {
-            await runStep(
-                'C.v2-real-save',
-                'Real v2 payload detection + replace path',
-                async () => {
-                    const parsed = JSON.parse(realV2JsonRaw) as Record<string, unknown>;
-                    await purgeClientState(page);
-                    await page.goto('/');
-                    await seedV2State(page, parsed);
-                    await goToSettings(page);
-                    await expect(
-                        page.getByText('Legacy v2 localStorage data detected')
-                    ).toBeVisible();
-                    await page
-                        .getByRole('button', { name: 'Replace current save with v2' })
-                        .click();
-                    await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
-                        timeout: 10_000,
-                    });
-                    await goToSettings(page);
-                    await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
+            const parsed = JSON.parse(realV2JsonRaw) as Record<string, unknown>;
+            await purgeClientState(page);
+            await page.goto('/');
+            await seedV2State(page, parsed);
+            await goToSettings(page);
+            await expect(page.getByText('Legacy v2 localStorage data detected')).toBeVisible();
+            await page.getByRole('button', { name: 'Replace current save with v2' }).click();
+            await expect(page.getByText('No v2 localStorage data detected')).toBeVisible({
+                timeout: 10_000,
+            });
+            await goToSettings(page);
+            await expect(page.getByText('No v2 localStorage data detected')).toBeVisible();
+            const storage = await readStorageSnapshot(page);
+            for (const raw of [storage.gameState, storage.gameStateBackup]) {
+                if (!raw) {
+                    continue;
                 }
-            );
-        }
+                const migrated = JSON.parse(raw) as Record<string, unknown>;
+                const version = String(
+                    (migrated.versionNumberString as string) ?? (migrated.version as string) ?? ''
+                );
+                expect(version).toMatch(/^3/);
+                const migratedOpenAI = migrated.openAI as { apiKey?: unknown } | undefined;
+                expect(migratedOpenAI?.apiKey).toBeUndefined();
+            }
+        });
 
         expect(
             failedSteps,
