@@ -1,0 +1,10 @@
+{
+  "id": "2026-04-01-remote-smoke-live-chat-prompt-echo",
+  "date": "2026-04-01",
+  "component": "frontend:e2e-remote-smoke",
+  "rootCause": "The live-chat branch in remote-release-smoke.spec.ts required an exact text match for the raw prompt echo after clicking Send. In production, message rendering can normalize markdown/text nodes, so the exact prompt node was not always discoverable even when send/receive worked.",
+  "resolution": "Replaced the brittle exact-text assertion with durable chat contract checks: verify a new user message bubble is appended, textarea clears on send, then wait for either a new assistant bubble or an error banner and require the assistant path with no error banner.",
+  "references": [
+    "frontend/e2e/remote-release-smoke.spec.ts"
+  ]
+}
