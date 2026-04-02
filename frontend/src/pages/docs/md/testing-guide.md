@@ -27,7 +27,7 @@ Docs are validated by `scripts/link-check.mjs`. It verifies:
 
 - Internal routes starting with `/` resolve to an Astro route.
 - `/docs/<slug>` pages refer to an existing docs markdown entry.
-- GitHub links that point to `democratizedspace/dspace` on the `v3` branch refer to a file
+- GitHub links that point to `democratizedspace/dspace` on the `main` branch refer to a file
   that exists in the repo.
 
 Run it manually with:
@@ -45,4 +45,4 @@ npm run link-check
 ## Related docs
 
 - [UI Lifecycle Overview](/docs/ui-lifecycle)
-- [Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md)
+- [Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md)

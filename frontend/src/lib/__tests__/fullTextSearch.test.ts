@@ -103,7 +103,7 @@ describe('findDocSnippet', () => {
 
     it('returns plain text snippets for punctuation-heavy matches', () => {
         const longUrl =
-            'https://github.com/democratizedspace/dspace/blob/v3/frontend/src/components/svelte/' +
+            'https://github.com/democratizedspace/dspace/blob/main/frontend/src/components/svelte/' +
             'DocsIndex.svelte';
         const doc = {
             title: 'Docs search',
