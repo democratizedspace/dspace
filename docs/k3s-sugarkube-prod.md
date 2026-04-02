@@ -13,9 +13,9 @@ rollbacks using immutable tags.
 
 ## `prod.democratized.space` guidance
 
-`prod.democratized.space` is optional alias/reference infrastructure. It is **not** a mandatory
-permanent preview phase. Use it only when you explicitly want a rollout rehearsal or temporary
-validation lane.
+`prod.democratized.space` is an optional alias/rehearsal endpoint. It is **not** the default
+production path and is never required for standard prod deploys. Use it only when you explicitly
+want temporary rehearsal or alias validation.
 
 ## Release model for prod
 

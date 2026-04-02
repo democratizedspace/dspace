@@ -90,6 +90,7 @@ git push origin vX.Y.Z
 - Deploy immutable approved tags only.
 - Keep a previous known-good immutable tag ready for rollback.
 - Keep QA Cheats off (`DSPACE_ENV=prod`).
+- Treat `prod.democratized.space` as optional rehearsal/alias guidance only; default prod traffic stays on `democratized.space`.
 
 ## Patch vs feature releases
 
