@@ -48,7 +48,6 @@ jobs:
           version: '0.14.0'
           args: >-
             --accept 200,403,429,503
-            --base https://democratized.space
             --exclude "http://localhost"
             --no-progress --verbose
             "docs/**/*.md" "frontend/src/pages/docs/**/*.md"
