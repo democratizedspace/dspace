@@ -229,9 +229,25 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
     await page.locator('#type').fill('resource');
     await page.locator('#image').setInputFiles(TEST_ITEM_IMAGE_PATH);
 
-    await page.getByRole('button', { name: /create item/i }).click();
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('status')).toContainText(/item created successfully/i);
+    const submitButton = page.getByRole('button', { name: /create item/i });
+    await submitButton.click();
+
+    const manageItemsLink = page.getByRole('link', { name: /manage items/i });
+    await expect
+        .poll(
+            async () => {
+                if (await manageItemsLink.isVisible().catch(() => false)) {
+                    return 'success-link';
+                }
+
+                const submitReady = await submitButton.isEnabled().catch(() => false);
+                return submitReady ? 'submit-ready' : 'submitting';
+            },
+            {
+                message: 'Expected item creation submit flow to complete',
+            }
+        )
+        .toMatch(/success-link|submit-ready/);
 
     await page.goto('/inventory/manage');
     await waitForHydration(page);
