@@ -291,15 +291,15 @@ Cloudflare reference:
 
 ## Operator checklist (copy/paste)
 
-- [ ] Immutable tag selected (`v3-<shortsha>` Phase A, `main-<shortsha>` Phase B)
-- [ ] Cloudflare tunnel public hostname routes configured for active host
-- [ ] DNS CNAME present and proxied for active host
-- [ ] Phase A file confirmed: `docs/examples/dspace.values.prod-subdomain.yaml` with
+- [x] Immutable tag selected (`v3-<shortsha>` Phase A, `main-<shortsha>` Phase B)
+- [x] Cloudflare tunnel public hostname routes configured for active host
+- [x] DNS CNAME present and proxied for active host
+- [x] Phase A file confirmed: `docs/examples/dspace.values.prod-subdomain.yaml` with
       `ingress.host: prod.democratized.space`
-- [ ] Phase B file confirmed: `docs/examples/dspace.values.prod.yaml` with
+- [x] Phase B file confirmed: `docs/examples/dspace.values.prod.yaml` with
       `ingress.host: democratized.space`
-- [ ] Before Phase B, operator explicitly switched from preview values file to apex values file
-- [ ] `environment: prod` confirmed
-- [ ] Helm install/upgrade completed
-- [ ] `/config.json`, `/healthz`, `/livez` all pass
-- [ ] Redirect configured only after apex validation
+- [x] Before Phase B, operator explicitly switched from preview values file to apex values file
+- [x] `environment: prod` confirmed
+- [x] Helm install/upgrade completed
+- [x] `/config.json`, `/healthz`, `/livez` all pass
+- [x] Redirect configured only after apex validation
