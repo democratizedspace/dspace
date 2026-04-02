@@ -1,0 +1,43 @@
+name: workflow-integrity
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - v3
+
+jobs:
+  guard:
+    name: Validate workflow definitions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@9 --activate
+
+      - name: Determine pnpm store path
+        id: pnpm-store
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --reporter=append-only
+
+      - name: Run workflow integrity tests
+        run: npm run test:root -- tests/workflowIntegrity.test.ts
