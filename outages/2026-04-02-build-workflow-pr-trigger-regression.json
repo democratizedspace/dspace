@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-02-build-workflow-pr-trigger-regression",
+  "date": "2026-04-02",
+  "component": "github actions workflow triggering",
+  "rootCause": "The build workflow lacked an explicit pull_request branch allowlist for the two long-lived base branches, and there was no aggregate guardrail validating workflow trigger coverage. This let regressions silently remove expected PR checks.",
+  "resolution": "Pinned build.yml pull_request branches to main and v3, added a workflow integrity test suite that parses every workflow and enforces required trigger coverage, and introduced a new workflow-integrity aggregate workflow to fail fast whenever workflow definitions drift.",
+  "references": [
+    ".github/workflows/build.yml",
+    ".github/workflows/workflow-integrity.yml",
+    "tests/workflowIntegrity.test.ts"
+  ]
+}
