@@ -12,7 +12,7 @@ A free and open-source web-based space exploration idle game combining resource 
 
 ## Quick Start
 
-- **Play the Game**: [democratized.space/play](https://democratized.space/play)
+- **Play the Game**: [democratized.space](https://democratized.space/)
 - **Documentation**: [democratized.space/docs](https://democratized.space/docs)
 - **Join Community**: [Discord](https://discord.gg/A3UAfYvnxM)
 

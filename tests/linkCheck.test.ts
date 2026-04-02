@@ -9,19 +9,21 @@ const runLinkCheck = () =>
     stdio: 'pipe',
   });
 
-const staleBranchPatterns = [
-  'https://github.com/democratizedspace/dspace/blob/v3/',
-  'http://github.com/democratizedspace/dspace/blob/v3/',
-];
+const staleBranchLinkPattern =
+  /https?:\/\/(?:github\.com\/democratizedspace\/dspace\/blob\/v3(?:\/|$)|github\.com\/democratizedspace\/dspace\/tree\/v3(?:\/|$)|raw\.githubusercontent\.com\/democratizedspace\/dspace\/v3\/)/;
 
-const scopedDirs = ['frontend/tests', 'tests', 'scripts/tests'];
+const scopedDirs = ['AGENTS.md', 'docs', 'frontend', '.github'];
 const excludedFiles = new Set(['tests/linkCheck.test.ts']);
 
 function findStaleBranchUrlsWithFallback() {
-  const rgPatterns = staleBranchPatterns.flatMap((pattern) => ['-e', pattern]);
   const rgResult = spawnSync(
     'rg',
-    ['-n', ...rgPatterns, ...scopedDirs, '-g', '!tests/linkCheck.test.ts'],
+    [
+      '--hidden',
+      '-n',
+      'https?://github\\.com/democratizedspace/dspace/(blob|tree)/v3(?:/|$)|https?://raw\\.githubusercontent\\.com/democratizedspace/dspace/v3/',
+      ...scopedDirs,
+    ],
     {
       encoding: 'utf8',
     }
@@ -42,7 +44,10 @@ function findStaleBranchUrlsWithFallback() {
       .split('\n')
       .map((line) => line.trim())
       .filter(Boolean)
-      .filter((file) => !excludedFiles.has(file));
+      .filter((line) => {
+        const file = line.split(':', 1)[0];
+        return !excludedFiles.has(file);
+      });
   }
 
   const files = execFileSync('git', ['ls-files', ...scopedDirs], {
@@ -50,7 +55,8 @@ function findStaleBranchUrlsWithFallback() {
   })
     .split('\n')
     .map((file) => file.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .filter((file) => !excludedFiles.has(file));
 
   const offenders = [];
   for (const file of files) {
@@ -62,7 +68,7 @@ function findStaleBranchUrlsWithFallback() {
       continue;
     }
 
-    if (staleBranchPatterns.some((pattern) => contents.includes(pattern))) {
+    if (staleBranchLinkPattern.test(contents)) {
       offenders.push(file);
     }
   }
@@ -73,6 +79,32 @@ function findStaleBranchUrlsWithFallback() {
 describe('markdown link validation', () => {
   it('resolves internal and GitHub links without 404s', () => {
     expect(() => runLinkCheck()).not.toThrow();
+  });
+
+  it('rejects stale v3 branch URLs and allows main branch plus named v3 references', () => {
+    expect(
+      staleBranchLinkPattern.test(
+        'https://github.com/democratizedspace/dspace/blob/v3/docs/prompts/codex/quests.md'
+      )
+    ).toBe(true);
+    expect(
+      staleBranchLinkPattern.test(
+        'https://github.com/democratizedspace/dspace/tree/v3/frontend/src/pages'
+      )
+    ).toBe(true);
+    expect(
+      staleBranchLinkPattern.test(
+        'https://raw.githubusercontent.com/democratizedspace/dspace/v3/frontend/.vscode/extensions.json'
+      )
+    ).toBe(true);
+
+    expect(
+      staleBranchLinkPattern.test(
+        'https://github.com/democratizedspace/dspace/blob/main/docs/prompts/codex/quests.md'
+      )
+    ).toBe(false);
+    expect(staleBranchLinkPattern.test('docs/qa/v3.md')).toBe(false);
+    expect(staleBranchLinkPattern.test('v3.0.0-rc.4')).toBe(false);
   });
 
   it('has no stale v3 branch URLs to democratizedspace/dspace in tracked files', () => {

@@ -19,8 +19,24 @@ const markdownFiles = await glob('**/*.md', {
 const linkPattern = /\[[^\]]+\]\(([^)]+)\)/g;
 const broken = [];
 const githubPrefixes = [
+  'https://github.com/democratizedspace/dspace/blob/main/',
+  'http://github.com/democratizedspace/dspace/blob/main/',
+  'https://github.com/democratizedspace/dspace/tree/main/',
+  'http://github.com/democratizedspace/dspace/tree/main/',
+  'https://github.com/democratizedspace/dspace/tree/main',
+  'http://github.com/democratizedspace/dspace/tree/main',
+  'https://raw.githubusercontent.com/democratizedspace/dspace/main/',
+  'http://raw.githubusercontent.com/democratizedspace/dspace/main/',
+];
+const staleBranchPrefixes = [
   'https://github.com/democratizedspace/dspace/blob/v3/',
   'http://github.com/democratizedspace/dspace/blob/v3/',
+  'https://github.com/democratizedspace/dspace/tree/v3/',
+  'http://github.com/democratizedspace/dspace/tree/v3/',
+  'https://github.com/democratizedspace/dspace/tree/v3',
+  'http://github.com/democratizedspace/dspace/tree/v3',
+  'https://raw.githubusercontent.com/democratizedspace/dspace/v3/',
+  'http://raw.githubusercontent.com/democratizedspace/dspace/v3/',
 ];
 const docsSlugSet = new Set();
 const repoRoot = process.cwd();
@@ -123,6 +139,11 @@ for (const file of markdownFiles) {
     if (!rawLink) continue;
     if (rawLink.startsWith('#')) continue;
     if (rawLink.includes('://')) {
+      const staleBranchPrefix = staleBranchPrefixes.find((prefix) => rawLink.startsWith(prefix));
+      if (staleBranchPrefix) {
+        broken.push({ file, link: rawLink });
+        continue;
+      }
       const githubPrefix = githubPrefixes.find((prefix) => rawLink.startsWith(prefix));
       if (githubPrefix) {
         const githubTarget = stripHashAndQuery(rawLink);
