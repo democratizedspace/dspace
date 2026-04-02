@@ -8,7 +8,7 @@ slug: 'v3-release-state'
 This page is the source-of-truth snapshot for v3 release scope and current release-state limits.
 Use it alongside the v3 release notes at [/docs/changelog/20260401](/docs/changelog/20260401) and
 the full release QA checklist in
-[docs/qa/v3.md](https://github.com/democratizedspace/dspace/blob/v3/docs/qa/v3.md).
+[docs/qa/v3.md](https://github.com/democratizedspace/dspace/blob/main/docs/qa/v3.md).
 
 ## v3 in-scope systems
 

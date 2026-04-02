@@ -1,10 +1,10 @@
 # Deploying dspace v3 to k3s with sugarkube
 
-> **Scope:** This runbook covers **staging** (`staging.democratized.space`) using the `v3` branch.
+> **Scope:** This runbook covers **staging** (`staging.democratized.space`) using the `main` branch.
 > The production site (`democratized.space`) currently runs v2.x from the `main` branch and is
 > managed separately.
 
-Use this runbook to take [`dspace@v3`](https://github.com/democratizedspace/dspace/tree/v3) from source to a running web server on the sugarkube
+Use this runbook to take [`dspace@main`](https://github.com/democratizedspace/dspace/tree/main) from source to a running web server on the sugarkube
 three-server HA k3s cluster. It links directly to the sugarkube recipes, GHCR build workflows,
 and Cloudflare Tunnel notes so you can move from zero to serving traffic without hunting for
 prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugarkube, see
@@ -13,7 +13,7 @@ prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugark
 ## Source of truth and upstream references
 
 - dspace Helm chart: [`charts/dspace`](../charts/dspace)
-- CI workflows that publish GHCR artifacts (both add a branch selector for `v3` or `main`):
+- CI workflows that publish GHCR artifacts (branch selector defaults to `main`):
   - Container image: [ci-image.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
   - Helm chart: [ci-helm.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
 - sugarkube deployment guide for this app: [docs/apps/dspace.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md)
@@ -25,15 +25,15 @@ prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugark
   - [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
 - Cloudflare Tunnel installation (used to reach Traefik from the internet):
   [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md)
-- Promotion guidance for landing v3 changes on `main`: [merge-plan.md](./merge-plan.md)
+- Promotion guidance for release management on `main`: [merge-plan.md](./merge-plan.md)
 
 ## Published artifacts
 
 - dspace multi-arch container images are published to GHCR at
   `ghcr.io/democratizedspace/dspace`.
-  - Tags include immutable branch SHA tags (`v3-<shortsha>`, `main-<shortsha>`), mutable convenience tags
-    (`v3-latest`, `main-latest`), and semantic versions such as `v3.0.0`.
-  - For release-candidate validation in staging, use immutable `v3-<shortsha>` tags (treat
+  - Tags include immutable branch SHA tags (`main-<shortsha>`), mutable convenience tags
+    (`main-latest`), and semantic versions such as `v3.0.0`.
+  - For release-candidate validation in staging, use immutable `main-<shortsha>` tags (treat
     `*-latest` as non-sign-off convenience only).
 - The Helm chart is published as an OCI artifact to
   `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
@@ -95,9 +95,9 @@ toggle. Leave this value as-is; only production should disable QA Cheats.
 ## Quick start: happy path for Raspberry Pi HA cluster
 
 Once you have completed the [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
-and configured your Cloudflare Tunnel, deploying dspace from the `v3` branch requires:
+and configured your Cloudflare Tunnel, deploying dspace from the `main` branch requires:
 
-1. **Build artifacts**: Manually trigger both GHCR workflows from the Actions tab, selecting `v3`:
+1. **Build artifacts**: Manually trigger both GHCR workflows from the Actions tab, selecting `main`:
    - [Build and publish GHCR image](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
    - [Publish Helm chart](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
 
@@ -112,10 +112,10 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-REPLACE_SHORTSHA
+  default_tag=main-REPLACE_SHORTSHA
 ```
 
-Replace `REPLACE_SHORTSHA` with the exact immutable suffix from the `v3-<shortsha>` image tag
+Replace `REPLACE_SHORTSHA` with the exact immutable suffix from the `main-<shortsha>` image tag
 published by CI.
 
 3. **Verify**:
@@ -131,18 +131,17 @@ hostnames for staging.
 
 ## Step 1: Build and publish GHCR artifacts from the right branch
 
-Both workflows accept a branch selector (`v3` or `main`) and produce branch-specific tags:
+Both workflows use the `main` branch and produce main-branch tags:
 
-- **For `v3` builds**: tags are `v3-<shortsha>` (immutable RC tag) and `v3-latest` (mutable convenience tag)
-- **For `main` builds**: tags are `main-<shortsha>` (immutable promotion tag) and `main-latest` (mutable convenience tag)
+- Tags are `main-<shortsha>` (immutable tag) and `main-latest` (mutable convenience tag).
 
-For staging RC verification, deploy `v3-<shortsha>` so QA runs are reproducible and rollback is explicit.
+For staging verification, deploy `main-<shortsha>` so QA runs are reproducible and rollback is explicit.
 
 ### Running the workflows
 
 1. Container image: trigger the
    [Build and publish GHCR image workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
-   and choose the branch (`v3` for ongoing work, `main` after following [merge-plan.md](./merge-plan.md)).
+   and choose the `main` branch.
    - The workflow generates `<branch>-<shortsha>`, `<branch>-latest`, and `v{version}` tags for multi-arch images.
    - Images include both `linux/amd64` and `linux/arm64` platforms for Raspberry Pi compatibility.
 2. Helm chart: trigger the
@@ -190,7 +189,7 @@ the Cloudflare dashboard **before** running the Helm install.
 1. **Add a published application route:**
    - In the Cloudflare dashboard, open the `democratized.space` zone.
    - Navigate to **Zero Trust → Networks → Tunnels** and select the existing tunnel for your
-     cluster (e.g., `dspace-staging-v3`).
+     cluster (e.g., `dspace-staging-main`).
    - Open the **Published application routes** tab and click **Add a published application route**.
    - Fill in the **Hostname** section:
      - **Subdomain**: `staging`
@@ -215,7 +214,7 @@ the Cloudflare dashboard **before** running the Helm install.
    - Cloudflare typically creates this automatically when you add the published application route,
      but verify it exists.
 
-Once those are in place, the remainder of this document focuses on deploying dspace v3 itself.
+Once those are in place, the remainder of this document focuses on deploying dspace from `main`.
 
 The steps below pick up after the tunnel and Traefik are live and verified. Replace example secret
 values with real credentials and adjust the namespace or host only if your environment differs from
@@ -280,7 +279,7 @@ just helm-oci-install \
   chart=oci://ghcr.io/democratizedspace/charts/dspace \
   values=docs/examples/dspace.values.staging.yaml \
   version_file=docs/apps/dspace.version \
-  default_tag=v3-REPLACE_SHORTSHA
+  default_tag=main-REPLACE_SHORTSHA
 ```
 
 To target a specific image build, add `tag=<branch>-<shortsha>` or use `just helm-oci-upgrade` with
@@ -298,9 +297,9 @@ helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
 > `dspace.values.staging.yaml` overrides it to `staging` so QA Cheats stay enabled here. Production
 > should keep `DSPACE_ENV=prod` so cheats remain disabled.
 
-### Force a rollout restart when using mutable tags (e.g., `v3-latest`)
+### Force a rollout restart when using mutable tags (e.g., `main-latest`)
 
-When redeploying with a mutable tag such as `v3-latest`, Helm may report an upgrade without
+When redeploying with a mutable tag such as `main-latest`, Helm may report an upgrade without
 changing the Deployment template because the chart version and image tag stay the same. In that
 case Kubernetes will not create a new ReplicaSet, and pods keep running the previous image digest.
 
@@ -323,7 +322,7 @@ sudo kubectl -n dspace port-forward svc/dspace 8080:8080
 curl -s http://localhost:8080/healthz | jq
 ```
 
-For staging release-candidate validation, prefer immutable `v3-<shortsha>` tags so repeated QA
+For staging release-candidate validation, prefer immutable `main-<shortsha>` tags so repeated QA
 cycles are reproducible and easily comparable over time.
 
 ### Verification
@@ -341,29 +340,29 @@ through the Cloudflare Tunnel and Traefik.
 
 Use this flow for every candidate build you want QA to validate in staging:
 
-1. Trigger `ci-image.yml` from branch `v3` and record the generated immutable tag
-   (`v3-<shortsha>`).
-2. Deploy that exact tag with `just helm-oci-install ... default_tag=v3-REPLACE_SHORTSHA`.
+1. Trigger `ci-image.yml` from branch `main` and record the generated immutable tag
+   (`main-<shortsha>`).
+2. Deploy that exact tag with `just helm-oci-install ... default_tag=main-REPLACE_SHORTSHA`.
 3. Validate staging behavior and record pass/fail against the tag.
    - `curl -fsS https://staging.democratized.space/config.json`
    - `curl -fsS https://staging.democratized.space/healthz`
    - `curl -fsS https://staging.democratized.space/livez`
-4. If a fix is needed, produce a new `v3-<shortsha>` and repeat.
+4. If a fix is needed, produce a new `main-<shortsha>` and repeat.
 5. If the candidate fails, roll back immediately by redeploying the prior known-good
-   `v3-<shortsha>` tag and re-running the three endpoint checks above.
+   `main-<shortsha>` tag and re-running the three endpoint checks above.
 
-Only use `v3-latest` for convenience checks where reproducibility is not required.
+Only use `main-latest` for convenience checks where reproducibility is not required.
 
 ### Fast manual redeploy (emergency push only; not for RC sign-off)
 
 Use this only when you already have dspace running on sugarkube and explicitly accept
-non-reproducible validation with `v3-latest`. For RC sign-off, use the repeated immutable-tag loop
+non-reproducible validation with `main-latest`. For RC sign-off, use the repeated immutable-tag loop
 above. This reuses the existing chart version and values; it simply forces Helm to pull the
 refreshed mutable tag.
 
 1. **Build and publish a new image:** Follow [Step 1](#step-1-build-and-publish-ghcr-artifacts-from-the-right-branch)
-   to trigger the GHCR image workflow for `v3`. Ensure the run publishes both `v3-<shortsha>` and
-   moves `v3-latest` to that build.
+   to trigger the GHCR image workflow for `main`. Ensure the run publishes both `main-<shortsha>` and
+   moves `main-latest` to that build.
 2. **Redeploy the Helm release:** From `~/sugarkube` on a control node, rerun the same install
    command used above (chart version stays `3.0.0`; the image comes from `v3-latest`):
 
@@ -374,7 +373,7 @@ refreshed mutable tag.
      chart=oci://ghcr.io/democratizedspace/charts/dspace \
      values=docs/examples/dspace.values.staging.yaml \
      version_file=docs/apps/dspace.version \
-     default_tag=v3-latest
+     default_tag=main-latest
    ```
 
 3. **Verify the new image is live:**
@@ -387,8 +386,8 @@ refreshed mutable tag.
    curl -fsS https://staging.democratized.space/livez
    ```
 
-   You should see the Deployment and pods referencing `ghcr.io/democratizedspace/dspace:v3-latest`
-   (which should point at your newest `v3-<shortsha>` build). Load the site to confirm the expected
+   You should see the Deployment and pods referencing `ghcr.io/democratizedspace/dspace:main-latest`
+   (which should point at your newest `main-<shortsha>` build). Load the site to confirm the expected
    version or build SHA if your UI exposes it, and use `/settings` → chat debug to view the prompt
    version, app build SHA, and Docs RAG sync status in `/chat`.
 

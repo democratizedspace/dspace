@@ -1,9 +1,9 @@
 # Deploying dspace v3 to a dev k3s cluster with sugarkube
 
-> **Scope:** Development (`env=dev`) using the `v3` branch. This guide assumes a lab or workstation
+> **Scope:** Development (`env=dev`) using the `main` branch. This guide assumes a lab or workstation
 > cluster without a public hostname or Cloudflare tunnel.
 
-This runbook takes [`dspace@v3`](https://github.com/democratizedspace/dspace/tree/v3) from source to
+This runbook takes [`dspace@main`](https://github.com/democratizedspace/dspace/tree/main) from source to
 an accessible dev deployment. It keeps QA Cheats **enabled** (via `DSPACE_ENV=dev`) and uses
 port-forward checks instead of an external tunnel.
 
@@ -22,7 +22,7 @@ to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not overrid
 
 ## Quick start
 
-1. **Build artifacts (optional if already published):** Trigger the GHCR workflows on branch `v3`:
+1. **Build artifacts (optional if already published):** Trigger the GHCR workflows on branch `main`:
    - [Build and publish GHCR image](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
    - [Publish Helm chart](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
 
@@ -35,7 +35,7 @@ to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not overrid
      chart=oci://ghcr.io/democratizedspace/charts/dspace \
      values=docs/examples/dspace.values.dev.yaml \
      version_file=docs/apps/dspace.version \
-     default_tag=v3-latest
+     default_tag=main-latest
    ```
 
    This uses `environment: dev` from the values file, which keeps QA Cheats available.
@@ -55,6 +55,6 @@ to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not overrid
 - Keep tokens scoped: use `SUGARKUBE_TOKEN_DEV` for dev clusters; do not reuse staging/prod tokens.
 - Cloudflare tunnels are optional in dev. If you add one, align it with `env=dev` and a non-public
   hostname.
-- `v3-latest` is fine for day-to-day dev iteration and convenience redeploys.
-- Prefer immutable `v3-<shortsha>` tags for reproducible debugging, pair-testing, and rollback
+- `main-latest` is fine for day-to-day dev iteration and convenience redeploys.
+- Prefer immutable `main-<shortsha>` tags for reproducible debugging, pair-testing, and rollback
   drills.
