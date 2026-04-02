@@ -1,0 +1,15 @@
+{
+  "id": "2026-04-02-build-workflow-visibility-regression",
+  "date": "2026-04-02",
+  "component": "github-actions/workflows",
+  "rootCause": "Workflow guardrails only checked tests.yml and ci.yml content, so regressions that removed or invalidated build.yml pull_request registration were not caught by an aggregate PR gate.",
+  "resolution": "Expanded ci-sentinel into a workflow-health aggregate gate that parses every workflow YAML file and verifies build/tests/link-check PR triggers, then added regression tests to lock the guardrail behavior in place.",
+  "references": [
+    "https://github.com/democratizedspace/dspace/pull/4234",
+    ".github/workflows/ci-sentinel.yml",
+    "tests/workflowRegressionGuards.test.ts",
+    ".github/workflows/build.yml",
+    ".github/workflows/tests.yml",
+    ".github/workflows/link-check.yml"
+  ]
+}

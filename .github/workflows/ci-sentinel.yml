@@ -4,14 +4,25 @@ on:
   push:
     branches: [main]
 jobs:
-  ensure-tests-exist:
+  ensure-workflow-health:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - run: |
+          set -euo pipefail
+
+          for workflow in .github/workflows/*.yml; do
+            ruby -e "require 'yaml'; YAML.safe_load(File.read(ARGV[0]), aliases: true)" "$workflow" > /dev/null
+          done
+
           test -f .github/workflows/tests.yml
           test -f .github/workflows/ci.yml
+          test -f .github/workflows/build.yml
+          test -f .github/workflows/link-check.yml
           grep -q 'npm run coverage' .github/workflows/tests.yml
           grep -q 'codecov/codecov-action@' .github/workflows/tests.yml
           grep -q 'fetch-depth: 0' .github/workflows/tests.yml
           grep -q 'CODECOV_TOKEN' .github/workflows/tests.yml
+          grep -q '^  pull_request:' .github/workflows/build.yml
+          grep -q '^  pull_request:' .github/workflows/tests.yml
+          grep -q '^  pull_request:' .github/workflows/link-check.yml
