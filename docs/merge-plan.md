@@ -98,7 +98,7 @@ git push origin vX.Y.Z
 - Scope is bugfixes and small improvements only.
 - Prefer direct work on `main` unless stabilization isolation is needed.
 - If risk is elevated, use short-lived `release/v3.0.1` plus RC tags.
-- Validate with patch-focused checklist: [docs/qa/v3.0.1.md](./qa/v3.0.1.md).
+- Validate with patch-focused checklist: [docs/qa/v3.0.0.1.md](./qa/v3.0.0.1.md).
 
 ### Feature release (example: `v3.1.x`)
 
@@ -115,7 +115,7 @@ cd ~/sugarkube
 ```
 
 ```bash
-just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=<env-values-file> version_file=docs/apps/dspace.version default_tag=<previous-immutable-tag>
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=<env-values-file> version_file=docs/apps/dspace.version tag=<previous-immutable-tag>
 ```
 
 Then verify runtime health endpoints.

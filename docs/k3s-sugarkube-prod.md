@@ -26,6 +26,12 @@ validation lane.
 
 See release workflow and branch/tag policy: [docs/merge-plan.md](./merge-plan.md).
 
+Related docs:
+
+- [Release procedure](./merge-plan.md)
+- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
+- [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
+
 ## Prerequisites
 
 - Access to prod cluster context (`env=prod`)
@@ -99,7 +105,7 @@ curl -fsS https://democratized.space/healthz
 
 ## Optional rehearsal on `prod.democratized.space`
 
-Only use this when explicitly needed for a rehearsal. It is not the default prod path.
+Only use this when explicitly needed for a rehearsal or temporary alias validation. It is not part of the default prod flow.
 
 ```bash
 cd ~/sugarkube

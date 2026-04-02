@@ -21,6 +21,12 @@ are acceptable in this environment.
 
 See the release workflow: [docs/merge-plan.md](./merge-plan.md).
 
+Related docs:
+
+- [Release procedure](./merge-plan.md)
+- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
+- [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
+
 ## Prerequisites (when dev is provisioned)
 
 - sugarkube cluster access for `env=dev` targeting sugarkube6

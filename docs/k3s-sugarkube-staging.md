@@ -20,6 +20,12 @@ validated before production promotion.
 
 See the cross-environment release procedure: [docs/merge-plan.md](./merge-plan.md).
 
+Related docs:
+
+- [Release procedure](./merge-plan.md)
+- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
+- [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
+
 ## Prerequisites
 
 - Access to staging cluster context (`env=staging`)

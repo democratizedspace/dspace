@@ -10,6 +10,9 @@ incidents, or performing maintenance.
 - [Cloudflare load balancing](./cloudflare_load_balancing.md)
 - [Deployments](./deploy/)
 - [Release procedure](../merge-plan.md)
+- Release-management QA quick links:
+  - [Patch checklist (`v3.0.0.1`)](../qa/v3.0.0.1.md)
+  - [Feature checklist (`v3.1`)](../qa/v3.1.md)
 - [Failover procedures](./failover_procedures.md)
 - [Monitoring setup](./monitoring_setup.md)
 - [Netlify migration history](./netlify-migration.md)
