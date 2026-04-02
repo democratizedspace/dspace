@@ -19,8 +19,8 @@ const markdownFiles = await glob('**/*.md', {
 const linkPattern = /\[[^\]]+\]\(([^)]+)\)/g;
 const broken = [];
 const githubPrefixes = [
-  'https://github.com/democratizedspace/dspace/blob/v3/',
-  'http://github.com/democratizedspace/dspace/blob/v3/',
+  'https://github.com/democratizedspace/dspace/blob/main/',
+  'http://github.com/democratizedspace/dspace/blob/main/',
 ];
 const docsSlugSet = new Set();
 const repoRoot = process.cwd();
