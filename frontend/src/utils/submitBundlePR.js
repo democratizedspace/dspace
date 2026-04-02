@@ -5,9 +5,9 @@ export async function submitBundlePR(token, branch, bundleJson) {
         'Content-Type': 'application/json',
     };
 
-    // Get the SHA of the base branch (v3)
+    // Get the SHA of the base branch (main)
     const baseRefRes = await fetch(
-        'https://api.github.com/repos/democratizedspace/dspace/git/refs/heads/v3',
+        'https://api.github.com/repos/democratizedspace/dspace/git/refs/heads/main',
         { headers }
     );
     if (!baseRefRes.ok) throw new Error(await baseRefRes.text());
@@ -52,7 +52,7 @@ export async function submitBundlePR(token, branch, bundleJson) {
         body: JSON.stringify({
             title: `Custom content bundle: ${branchName}`,
             head: branchName,
-            base: 'v3',
+            base: 'main',
             body: 'Automated custom content bundle submission containing quests, items, and/or processes.',
         }),
     });
