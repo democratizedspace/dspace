@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 
 const staleBranchLinkPattern =
-    /https?:\/\/(?:github\.com\/democratizedspace\/dspace\/(?:blob|tree)\/v3\/|raw\.githubusercontent\.com\/democratizedspace\/dspace\/v3\/)/;
+    /https?:\/\/(?:github\.com\/democratizedspace\/dspace\/blob\/v3(?:\/|$)|github\.com\/democratizedspace\/dspace\/tree\/v3(?:\/|$)|raw\.githubusercontent\.com\/democratizedspace\/dspace\/v3\/)/;
 
 describe('dspace self-link branch references', () => {
     it('rejects stale v3 branch URLs and allows valid non-branch v3 references', () => {
@@ -35,6 +35,7 @@ describe('dspace self-link branch references', () => {
         const result = spawnSync(
             'rg',
             [
+                '--hidden',
                 '-n',
                 'https?://github\\.com/democratizedspace/dspace/(blob|tree)/v3/|https?://raw\\.githubusercontent\\.com/democratizedspace/dspace/v3/',
                 'AGENTS.md',
@@ -44,6 +45,10 @@ describe('dspace self-link branch references', () => {
             ],
             { encoding: 'utf8' }
         );
+
+        if (result.error) {
+            throw new Error(`rg not available: ${result.error.message}`);
+        }
 
         expect(result.status).toBe(1);
         expect(result.stdout).toBe('');

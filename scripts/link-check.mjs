@@ -23,6 +23,8 @@ const githubPrefixes = [
   'http://github.com/democratizedspace/dspace/blob/main/',
   'https://github.com/democratizedspace/dspace/tree/main/',
   'http://github.com/democratizedspace/dspace/tree/main/',
+  'https://github.com/democratizedspace/dspace/tree/main',
+  'http://github.com/democratizedspace/dspace/tree/main',
   'https://raw.githubusercontent.com/democratizedspace/dspace/main/',
   'http://raw.githubusercontent.com/democratizedspace/dspace/main/',
 ];
@@ -31,6 +33,8 @@ const staleBranchPrefixes = [
   'http://github.com/democratizedspace/dspace/blob/v3/',
   'https://github.com/democratizedspace/dspace/tree/v3/',
   'http://github.com/democratizedspace/dspace/tree/v3/',
+  'https://github.com/democratizedspace/dspace/tree/v3',
+  'http://github.com/democratizedspace/dspace/tree/v3',
   'https://raw.githubusercontent.com/democratizedspace/dspace/v3/',
   'http://raw.githubusercontent.com/democratizedspace/dspace/v3/',
 ];
