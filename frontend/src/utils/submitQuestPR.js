@@ -21,7 +21,7 @@ export async function submitQuestPR(token, branch, questJson) {
         body: JSON.stringify({
             title: `Quest submission: ${branchName}`,
             head: branchName,
-            base: 'v3',
+            base: 'main',
             body: 'Automated quest submission.',
         }),
     });

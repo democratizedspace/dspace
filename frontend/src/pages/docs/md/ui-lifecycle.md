@@ -63,4 +63,4 @@ sets `window.dspaceStart = performance.now()` via an inline script in
   wrapped in `onMount`.
 
 For additional details on testing strategies, see the [Testing Guide](/docs/testing-guide) and the
-broader [Developer Guide](https://github.com/democratizedspace/dspace/blob/v3/DEVELOPER_GUIDE.md).
+broader [Developer Guide](https://github.com/democratizedspace/dspace/blob/main/DEVELOPER_GUIDE.md).

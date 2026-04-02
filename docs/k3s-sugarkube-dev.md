@@ -3,7 +3,7 @@
 > **Scope:** Development (`env=dev`) using the `v3` branch. This guide assumes a lab or workstation
 > cluster without a public hostname or Cloudflare tunnel.
 
-This runbook takes [`dspace@v3`](https://github.com/democratizedspace/dspace/tree/v3) from source to
+This runbook takes [`dspace@main`](https://github.com/democratizedspace/dspace/tree/main) from source to
 an accessible dev deployment. It keeps QA Cheats **enabled** (via `DSPACE_ENV=dev`) and uses
 port-forward checks instead of an external tunnel.
 
