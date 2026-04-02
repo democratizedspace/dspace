@@ -8,12 +8,13 @@ on:
   pull_request:
     branches:
       - v3
+      - main
   workflow_dispatch:
     inputs:
       branch:
         description: Branch to build and publish the image from
         required: false
-        default: v3
+        default: main
         type: choice
         options:
           - v3

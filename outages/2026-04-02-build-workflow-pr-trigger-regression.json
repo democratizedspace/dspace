@@ -1,0 +1,18 @@
+{
+  "id": "2026-04-02-build-workflow-pr-trigger-regression",
+  "date": "2026-04-02",
+  "component": "GitHub Actions workflow trigger configuration",
+  "longForm": "outages/2026-04-02-build-workflow-pr-trigger-regression.md",
+  "rootCause": "Workflow trigger branch filters drifted (notably ci-image.yml and ci.yml), so build-related workflows no longer ran for some pull requests to main, and ci-sentinel lacked a contract-level integrity check.",
+  "resolution": "Restored build workflow visibility naming, expanded PR/main trigger coverage in affected workflows, and added scripts/check-workflows.mjs with ci-sentinel enforcement plus regression test coverage.",
+  "references": [
+    ".github/workflows/build.yml",
+    ".github/workflows/ci.yml",
+    ".github/workflows/ci-image.yml",
+    ".github/workflows/tests.yml",
+    ".github/workflows/ci-sentinel.yml",
+    "scripts/check-workflows.mjs",
+    "tests/workflowIntegrityScript.test.ts",
+    "outages/2026-04-02-build-workflow-pr-trigger-regression.md"
+  ]
+}
