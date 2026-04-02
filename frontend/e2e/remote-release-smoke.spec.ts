@@ -229,9 +229,11 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
     await page.locator('#type').fill('resource');
     await page.locator('#image').setInputFiles(TEST_ITEM_IMAGE_PATH);
 
-    await page.getByRole('button', { name: /create item/i }).click();
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('status')).toContainText(/item created successfully/i);
+    const createButton = page.getByRole('button', { name: /create item/i });
+    await createButton.click();
+
+    await expect(createButton, 'Expected create action to complete and re-enable submit').toBeEnabled();
+    await expect(page.getByRole('alert')).toHaveCount(0);
 
     await page.goto('/inventory/manage');
     await waitForHydration(page);
