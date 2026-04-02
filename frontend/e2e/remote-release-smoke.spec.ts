@@ -231,9 +231,7 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
 
     const createButton = page.getByRole('button', { name: /create item/i });
     const manageItemsLink = page.getByRole('link', { name: /manage items/i }).first();
-    const manageItemsVisibleBeforeSubmit = await manageItemsLink
-        .isVisible()
-        .catch(() => false);
+    const manageItemsVisibleBeforeSubmit = await manageItemsLink.isVisible().catch(() => false);
     await createButton.click();
 
     try {
