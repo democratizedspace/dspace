@@ -1,5 +1,11 @@
 # DSPACE production runbook: k3s + sugarkube
 
+Related release docs:
+
+- [Release procedure](./merge-plan.md)
+- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
+- [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
+
 ## Topology and role (current live state)
 
 - Environment: `env=prod`
@@ -13,9 +19,9 @@ rollbacks using immutable tags.
 
 ## `prod.democratized.space` guidance
 
-`prod.democratized.space` is optional alias/reference infrastructure. It is **not** a mandatory
-permanent preview phase. Use it only when you explicitly want a rollout rehearsal or temporary
-validation lane.
+`prod.democratized.space` is an optional alias/rehearsal host. It is **not** part of the default
+production path to `democratized.space`, and it is never required for a normal production deploy.
+Use it only when you explicitly want temporary rehearsal/preview validation.
 
 ## Release model for prod
 
@@ -25,12 +31,6 @@ validation lane.
 - Keep the previous known-good immutable tag available for explicit rollback.
 
 See release workflow and branch/tag policy: [docs/merge-plan.md](./merge-plan.md).
-
-Related docs:
-
-- [Release procedure](./merge-plan.md)
-- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
-- [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
 
 ## Prerequisites
 
@@ -105,7 +105,7 @@ curl -fsS https://democratized.space/healthz
 
 ## Optional rehearsal on `prod.democratized.space`
 
-Only use this when explicitly needed for a rehearsal or temporary alias validation. It is not part of the default prod flow.
+Only use this when explicitly needed for rehearsal or temporary alias validation. It is not part of the default production flow.
 
 ```bash
 cd ~/sugarkube

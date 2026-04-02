@@ -1,5 +1,11 @@
 # DSPACE staging runbook: k3s + sugarkube
 
+Related release docs:
+
+- [Release procedure](./merge-plan.md)
+- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
+- [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
+
 ## Topology and role (current live state)
 
 - Environment: `env=staging`
@@ -19,12 +25,6 @@ validated before production promotion.
 - Avoid mutable tags (`main-latest`, `v<package-version>`) for release sign-off.
 
 See the cross-environment release procedure: [docs/merge-plan.md](./merge-plan.md).
-
-Related docs:
-
-- [Release procedure](./merge-plan.md)
-- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
-- [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
 
 ## Prerequisites
 
