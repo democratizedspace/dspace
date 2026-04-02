@@ -22,12 +22,13 @@ Cross-reference runbooks:
 ### 1) Day-to-day integration
 
 - Merge normal feature/fix PRs into `main`.
-- CI publishes image tags like `main-<shortsha>` and convenience tag `main-latest`.
+- `ci-image.yml` publishes immutable branch+SHA tags like `main-<shortsha>` and convenience tags
+  like `main-latest`.
 - Use immutable tags (`main-<shortsha>`) for sign-off, promotion, and rollback.
 
 ### 2) Optional stabilization branch (only when needed)
 
-Use a short-lived release branch when a release needs focused stabilization (for example `release/v3.0.0.1`).
+Use a short-lived release branch when a release needs focused stabilization (for example `release/v3.0.1`).
 
 ```bash
 git checkout -b release/vX.Y.Z
@@ -38,7 +39,7 @@ git checkout -b release/vX.Y.Z
 
 ### 3) RC tags for candidate validation
 
-Mark candidate commits with release-candidate tags before final release sign-off.
+Mark candidate commits with release-candidate git tags before final release sign-off.
 
 ```bash
 git tag vX.Y.Z-rc.1
@@ -48,12 +49,14 @@ git tag vX.Y.Z-rc.1
 git push origin vX.Y.Z-rc.1
 ```
 
-- Deploy RC-related immutable image tags to staging.
+- Tag pushes trigger `build.yml`, which publishes immutable image tags derived from the git tag
+  (for example `3.1.0-rc.1`, no leading `v`) and `sha-<longsha>`.
+- Deploy those immutable artifacts to staging for sign-off.
 - Iterate (`rc.2`, `rc.3`, ...) until staging gates pass.
 
-### 4) Final semver tag for production release
+### 4) Final SemVer git tag for production release
 
-After staging approval, create the final semver tag from the approved commit.
+After staging approval, create the final SemVer git tag from the approved commit.
 
 ```bash
 git tag vX.Y.Z
@@ -63,8 +66,10 @@ git tag vX.Y.Z
 git push origin vX.Y.Z
 ```
 
-- Deploy the corresponding immutable image tag to prod.
-- Record the exact deployed tag and commit SHA in release notes and QA checklist.
+- The tag push triggers `build.yml`, which publishes immutable release-tag artifacts (for example
+  `3.0.1`) and `sha-<longsha>`.
+- Deploy one of those immutable artifacts to prod.
+- Record the exact deployed artifact tag and commit SHA in release notes and QA checklist.
 
 ## Environment promotion rules
 
@@ -88,12 +93,12 @@ git push origin vX.Y.Z
 
 ## Patch vs feature releases
 
-### Urgent patch release (example: `v3.0.0.1`)
+### Urgent patch release (example: `v3.0.1`)
 
 - Scope is bugfixes and small improvements only.
 - Prefer direct work on `main` unless stabilization isolation is needed.
-- If risk is elevated, use short-lived `release/v3.0.0.1` plus RC tags.
-- Validate with patch-focused checklist: [docs/qa/v3.0.0.1.md](./qa/v3.0.0.1.md).
+- If risk is elevated, use short-lived `release/v3.0.1` plus RC tags.
+- Validate with patch-focused checklist: [docs/qa/v3.0.1.md](./qa/v3.0.1.md).
 
 ### Feature release (example: `v3.1.x`)
 
@@ -131,8 +136,8 @@ curl -fsS https://<environment-hostname>/livez
 
 For each production release, record:
 
-- release version (`vX.Y.Z`)
-- deployed immutable image tag
+- release git tag (`vX.Y.Z`)
+- deployed immutable image artifact tag (for example `main-<shortsha>`, `3.0.1`, or `sha-<longsha>`)
 - commit SHA
 - staging validation timestamp + approver
 - production deploy timestamp + operator

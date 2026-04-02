@@ -42,6 +42,9 @@ just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democr
 
 ## Deploy with immutable tag (`main-<shortsha>`)
 
+If this is the first deployment in the namespace, run `helm-oci-install` first. `helm-oci-upgrade`
+assumes an existing release.
+
 ```bash
 cd ~/sugarkube
 ```

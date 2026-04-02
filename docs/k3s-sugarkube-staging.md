@@ -13,9 +13,10 @@ validated before production promotion.
 
 ## Release model for staging
 
-- Deploy immutable candidate tags (`main-<shortsha>`, `vX.Y.Z-rc.N`, or approved semver tags).
-- Avoid signing off releases from mutable tags.
-- Iterate quickly by redeploying the next immutable candidate.
+- Prefer immutable branch build tags from CI: `main-<shortsha>`.
+- For tag-driven release candidates, use artifact tags published by `build.yml` from git tags
+  (for example `3.1.0-rc.2` from git tag `v3.1.0-rc.2`).
+- Avoid mutable tags (`main-latest`, `v<package-version>`) for release sign-off.
 
 See the cross-environment release procedure: [docs/merge-plan.md](./merge-plan.md).
 
@@ -59,10 +60,9 @@ curl -fsS https://staging.democratized.space/healthz
 curl -fsS https://staging.democratized.space/livez
 ```
 
-Run release QA checklist as appropriate:
+Run the release checklist from the QA index:
 
-- Patch line: [docs/qa/v3.0.0.1.md](./qa/v3.0.0.1.md)
-- Feature line: [docs/qa/v3.1.md](./qa/v3.1.md)
+- [QA checklists index](./qa/README.md)
 
 ## Iterate with a newer candidate
 
