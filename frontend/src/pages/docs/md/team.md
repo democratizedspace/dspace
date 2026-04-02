@@ -29,7 +29,7 @@ handy companion for prototyping gameplay systems and content tooling.
 GitHub Copilot Agent assists with multi-step coding workflows, codebase navigation, and cleanup,
 which keeps the team focused on higher-level design and iteration.
 
-### [Nano Banana Pro](https://blog.google/innovation-and-ai/products/nano-banana-pro/)
+### [Nano Banana Pro](https://blog.google/innovation-and-ai/)
 
 ![Placeholder image for Nano Banana Pro](/assets/team_nanobananapro.jpg)
 
