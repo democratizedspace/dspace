@@ -246,6 +246,11 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
         page.waitForURL((url) => !url.pathname.endsWith('/inventory/create'), {
             timeout: 15_000,
         }),
+        page
+            .getByRole('status')
+            .filter({ hasText: /item created successfully/i })
+            .first()
+            .waitFor({ state: 'visible', timeout: 15_000 }),
         (async () => {
             if (manageItemsVisibleBeforeSubmit) {
                 throw new Error(
