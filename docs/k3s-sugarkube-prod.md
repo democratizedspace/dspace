@@ -1,305 +1,112 @@
-# Deploying dspace v3 to k3s with sugarkube (production)
+# DSPACE production runbook: k3s + sugarkube
 
-> **Scope:** Production (`env=prod`) for `https://democratized.space` with a subdomain-first
-> rollout at `https://prod.democratized.space`. QA Cheats must remain **disabled**.
+## Topology and role (current live state)
 
-This is an operator runbook for deploying dspace to production with a safe two-phase rollout:
+- Environment: `env=prod`
+- Public host: `https://democratized.space`
+- Live cluster nodes: `sugarkube0`, `sugarkube1`, `sugarkube2`
+- Availability model: 3-node HA
+- QA Cheats: **OFF** (`DSPACE_ENV=prod`)
 
-1. Validate on `prod.democratized.space` (still `env=prod`), then
-2. Promote to apex `democratized.space`, and
-3. Convert `prod` to a redirect only after apex is healthy.
+Production is the steady-state public environment. This runbook is for repeated releases and
+rollbacks using immutable tags.
 
-## Source of truth and references
+## `prod.democratized.space` guidance
 
-- dspace chart in this repo: [`charts/dspace`](../charts/dspace)
-- CI workflows that publish immutable deploy artifacts:
-  - Image: [ci-image.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
-  - Chart: [ci-helm.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
-- sugarkube dspace app docs:
-  [docs/apps/dspace.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md)
-- sugarkube Traefik operations:
-  [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
-- sugarkube Cloudflare tunnel setup:
-  [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md)
-- Cloudflare official docs used in this runbook:
-  - Tunnel hostname + DNS routing:
-    [Route traffic to a Tunnel with DNS](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/dns/)
-  - Tunnel DNS routing:
-    [Route traffic to a Tunnel with DNS](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/routing-to-tunnel/dns/)
-  - DNS records UI reference:
-    [Create DNS records](https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/)
-  - Redirect rules (for final prod→apex redirect):
-    [Single Redirects](https://developers.cloudflare.com/rules/url-forwarding/single-redirects/)
+`prod.democratized.space` is optional alias/reference infrastructure. It is **not** a mandatory
+permanent preview phase. Use it only when you explicitly want a rollout rehearsal or temporary
+validation lane.
 
-## Preconditions (must be true before Step 1)
+## Release model for prod
 
-- Sugarkube cluster is running with `env=prod`.
-- Traefik is installed and healthy (`just traefik-install`, `just traefik-status`).
-- Cloudflare tunnel is installed for prod (`just cf-tunnel-install env=prod ...`) and connected.
-- You have GHCR pull access for:
-  - `ghcr.io/democratizedspace/dspace`
-  - `oci://ghcr.io/democratizedspace/charts/dspace`
-- You have `kubectl` and `just` on the control host where `~/sugarkube` is checked out.
-- The sugarkube production values files exist and are current in your `sugarkube` checkout:
-  - `~/sugarkube/docs/examples/dspace.values.prod-subdomain.yaml` for Phase A preview host
-    `prod.democratized.space` (see
-    [`docs/examples/dspace.values.prod-subdomain.yaml` in the sugarkube repo](https://github.com/futuroptimist/sugarkube/blob/main/docs/examples/dspace.values.prod-subdomain.yaml)).
-  - `~/sugarkube/docs/examples/dspace.values.prod.yaml` for Phase B apex host
-    `democratized.space` (see
-    [`docs/examples/dspace.values.prod.yaml` in the sugarkube repo](https://github.com/futuroptimist/sugarkube/blob/main/docs/examples/dspace.values.prod.yaml)).
+- Deploy from approved immutable tags only (`main-<shortsha>` or final semver tags like `v3.0.1`).
+- Do not deploy mutable tags (`main-latest`) to prod.
+- Keep the previous known-good immutable tag available for explicit rollback.
 
-## QA Cheats policy (prod)
+See release workflow and branch/tag policy: [docs/merge-plan.md](./merge-plan.md).
 
-Production must run with QA Cheats **OFF**. Keep `environment: prod` in the production values,
-which maps to `DSPACE_ENV=prod`.
+## Prerequisites
 
-## Immutable tags only
+- Access to prod cluster context (`env=prod`)
+- sugarkube checkout at `~/sugarkube`
+- GHCR pull access for image and chart artifacts
+- Traefik and Cloudflare tunnel already configured for `democratized.space`
+- tools: `just`, `kubectl`, `curl`
 
-Use immutable tags for reproducible rollouts and explicit rollback:
-
-- Validation phase: `v3-<shortsha>`
-- Post-merge apex phase: `main-<shortsha>`
-
-Do **not** deploy mutable tags like `v3-latest` or `main-latest` in production.
-
-## Production cutover sequence
-
-1. **Phase A:** deploy `v3-<shortsha>` to `prod.democratized.space` (env still `prod`).
-2. Validate all checks on `prod.democratized.space`.
-3. Merge `v3` into `main` after sign-off.
-4. **Phase B:** deploy `main-<shortsha>` to apex `democratized.space`.
-5. After apex is healthy, convert `prod.democratized.space` to a redirect to apex.
-
----
-
-## Step 1: Pick a release tag and verify artifacts exist
-
-1. Trigger/confirm workflows for the target branch:
-   - [ci-image.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
-   - [ci-helm.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
-2. Select immutable image tag:
-   - Phase A: `v3-<shortsha>`
-   - Phase B: `main-<shortsha>`
-3. Confirm chart version in sugarkube:
+## Deploy approved immutable tag to prod
 
 ```bash
 cd ~/sugarkube
-cat docs/apps/dspace.version
 ```
 
----
-
-## Step 2: Configure Cloudflare for Phase A (`prod.democratized.space`)
-
-> Helm deploys Kubernetes objects only. It does **not** create Cloudflare routes or DNS records.
-> Configure Cloudflare first so external traffic can reach Traefik.
-
-### 2A) Create/verify Tunnel public hostname route
-
-In Cloudflare dashboard:
-
-1. Open the `democratized.space` zone.
-2. Go to **Zero Trust** → **Networks** → **Tunnels**.
-3. Open the production tunnel used by sugarkube.
-4. In **Public Hostname** (or **Published application routes**, depending on UI), add:
-   - **Subdomain:** `prod`
-   - **Domain:** `democratized.space`
-   - **Path:** *(blank)*
-   - **Service Type:** `HTTP`
-   - **URL:** `traefik.kube-system.svc.cluster.local`
-5. Save.
-
-Cloudflare reference:
-[Route traffic to a Tunnel with DNS](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/dns/).
-
-### 2B) Verify DNS record was created (or create it manually)
-
-In Cloudflare dashboard → **DNS** → **Records**, confirm:
-
-- **Type:** `CNAME`
-- **Name:** `prod`
-- **Target:** `<tunnel-UUID>.cfargotunnel.com`
-- **Proxy status:** **Proxied** (orange cloud)
-
-Cloudflare references:
-[Route traffic to a Tunnel with DNS](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/routing-to-tunnel/dns/),
-[Create DNS records](https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/).
-
-### 2C) Optional CLI verification from your operator machine
-
 ```bash
-# NOTE: Because this record is Proxied (orange cloud), nslookup should resolve
-# to Cloudflare anycast IPs, not the underlying cfargotunnel.com CNAME target.
-# Verify the CNAME target in Cloudflare DNS UI (Step 2B above).
-nslookup prod.democratized.space
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.prod.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_APPROVED_SHORTSHA
 ```
 
----
-
-## Step 3: Ensure sugarkube production values are correct for Phase A
-
-On the sugarkube control host:
+## Validate production health
 
 ```bash
-cd ~/sugarkube
-cat docs/examples/dspace.values.prod-subdomain.yaml
+kubectl -n dspace get deploy,po,svc,ingress
 ```
 
-Pre-flight grep (run before Phase A deploy):
-
 ```bash
-cd ~/sugarkube
-rg -n 'ingress\.host:\s*prod\.democratized\.space|ingress\.className:\s*traefik|environment:\s*prod|ingress\.enabled:\s*true' docs/examples/dspace.values.prod-subdomain.yaml docs/apps/dspace.version
+kubectl -n dspace rollout status deploy/dspace --timeout=180s
 ```
 
-Verify all of the following before install:
-
-- `environment: prod`
-- `ingress.enabled: true`
-- `ingress.className: traefik`
-- `ingress.host: prod.democratized.space` (**required for Phase A**)
-- Phase A values file is `docs/examples/dspace.values.prod-subdomain.yaml` (do not use apex file here)
-
----
-
-## Step 4: Deploy Phase A to `prod.democratized.space`
-
 ```bash
-cd ~/sugarkube
-just helm-oci-install \
-  release=dspace namespace=dspace \
-  chart=oci://ghcr.io/democratizedspace/charts/dspace \
-  values=docs/examples/dspace.values.prod-subdomain.yaml \
-  version_file=docs/apps/dspace.version \
-  default_tag=v3-REPLACE_SHORTSHA
-```
-
-Then verify rollout:
-
-```bash
-kubectl -n dspace get deploy,po,ingress
-kubectl -n dspace rollout status deploy/dspace
-curl -fsS https://prod.democratized.space/config.json
-curl -fsS https://prod.democratized.space/healthz
-curl -fsS https://prod.democratized.space/livez
-```
-
-Proceed only if all checks pass.
-
----
-
-## Step 5: Promote to apex (`democratized.space`) for Phase B
-
-1. Merge `v3` to `main` after Phase A sign-off.
-2. **Explicit Phase B file switch check (required):**
-   - Use `docs/examples/dspace.values.prod.yaml` for apex promotion.
-   - Do **not** reuse `docs/examples/dspace.values.prod-subdomain.yaml` for Phase B.
-   - Reusing the preview values file during apex promotion is incorrect and will route
-     production traffic with the wrong ingress host (`prod.democratized.space`).
-3. Verify Phase B values before any Cloudflare or Helm action:
-
-   ```bash
-   cd ~/sugarkube
-   cat docs/examples/dspace.values.prod.yaml
-   ```
-
-4. Pre-flight grep (run before Phase B Helm upgrade):
-
-   ```bash
-   cd ~/sugarkube
-   rg -n 'ingress\.host:\s*democratized\.space|ingress\.className:\s*traefik|environment:\s*prod|ingress\.enabled:\s*true|prod\.democratized\.space' docs/examples/dspace.values.prod.yaml docs/apps/dspace.version
-   ```
-
-   Confirm at minimum:
-   - `environment: prod`
-   - `ingress.enabled: true`
-   - `ingress.className: traefik`
-   - `ingress.host: democratized.space` (must be exact — `prod.democratized.space` must **not** appear as `ingress.host`)
-
-5. Configure/verify Cloudflare for apex `democratized.space` (must be complete before Helm upgrade):
-   1. In Cloudflare dashboard → **Zero Trust** → **Networks** → **Tunnels** → your production
-      tunnel, confirm or add a public hostname route for apex:
-      - **Subdomain:** *(blank for apex)*
-      - **Domain:** `democratized.space`
-      - **Path:** *(blank)*
-      - **Service Type:** `HTTP`
-      - **URL:** `traefik.kube-system.svc.cluster.local`
-   2. In Cloudflare dashboard → **DNS** → **Records**, confirm or add the apex tunnel DNS record:
-      - **Type:** `CNAME`
-      - **Name:** `@` (Cloudflare UI may also render this as `democratized.space`)
-      - **Target:** `<tunnel-UUID>.cfargotunnel.com`
-      - **Proxy status:** **Proxied** (orange cloud)
-   3. Optional CLI spot-check:
-
-      ```bash
-      # Should resolve successfully (typically returning Cloudflare proxy IPs)
-      nslookup democratized.space
-      ```
-6. Deploy immutable `main-<shortsha>` only after apex route + DNS are ready:
-
-```bash
-cd ~/sugarkube
-just helm-oci-upgrade \
-  release=dspace namespace=dspace \
-  chart=oci://ghcr.io/democratizedspace/charts/dspace \
-  values=docs/examples/dspace.values.prod.yaml \
-  version_file=docs/apps/dspace.version \
-  default_tag=main-REPLACE_SHORTSHA
-```
-
-7. Validate apex before converting `prod.democratized.space` into a redirect:
-
-```bash
-kubectl -n dspace rollout status deploy/dspace
 curl -fsS https://democratized.space/config.json
+```
+
+```bash
 curl -fsS https://democratized.space/healthz
+```
+
+```bash
 curl -fsS https://democratized.space/livez
 ```
 
----
+## Optional: deploy semver tag directly
 
-## Step 6: Convert `prod.democratized.space` to redirect (only after apex is healthy)
+```bash
+cd ~/sugarkube
+```
 
-After Phase B passes:
+```bash
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.prod.yaml version_file=docs/apps/dspace.version default_tag=vX.Y.Z
+```
 
-1. In Cloudflare, create a **Single Redirect** rule:
-   - **If incoming URL:** `https://prod.democratized.space/*`
-   - **Then forward to:** `https://democratized.space/${1}`
-   - **Status code:** `301` (or `302` if you need temporary)
-2. Keep tunnel and DNS in place until redirect behavior is verified.
+## Roll back production
 
-Cloudflare reference:
-[Single Redirects](https://developers.cloudflare.com/rules/url-forwarding/single-redirects/).
+```bash
+cd ~/sugarkube
+```
 
----
+```bash
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.prod.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_PREVIOUS_SHORTSHA
+```
 
-## Rollback runbook
+```bash
+kubectl -n dspace rollout status deploy/dspace --timeout=180s
+```
 
-### Phase A rollback (`prod.democratized.space` validation failed)
+```bash
+curl -fsS https://democratized.space/healthz
+```
 
-- Keep apex `democratized.space` untouched.
-- Redeploy previous known-good `v3-<shortsha>` to prod subdomain using
-  `values=docs/examples/dspace.values.prod-subdomain.yaml`.
-- Re-run `/config.json`, `/healthz`, `/livez` checks on `prod.democratized.space`.
+## Optional rehearsal on `prod.democratized.space`
 
-### Phase B rollback (apex failed after promotion)
+Only use this when explicitly needed for a rehearsal. It is not the default prod path.
 
-- Redeploy previous known-good `main-<shortsha>` to apex using
-  `values=docs/examples/dspace.values.prod.yaml`.
-- Keep `prod.democratized.space` as live validation host until apex is stable.
-- Only enable/retain redirect once apex is healthy.
+```bash
+cd ~/sugarkube
+```
 
-## Operator checklist (copy/paste)
+```bash
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.prod-subdomain.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_SHORTSHA
+```
 
-- [x] Immutable tag selected (`v3-<shortsha>` Phase A, `main-<shortsha>` Phase B)
-- [x] Cloudflare tunnel public hostname routes configured for active host
-- [x] DNS CNAME present and proxied for active host
-- [x] Phase A file confirmed: `docs/examples/dspace.values.prod-subdomain.yaml` with
-      `ingress.host: prod.democratized.space`
-- [x] Phase B file confirmed: `docs/examples/dspace.values.prod.yaml` with
-      `ingress.host: democratized.space`
-- [x] Before Phase B, operator explicitly switched from preview values file to apex values file
-- [x] `environment: prod` confirmed
-- [x] Helm install/upgrade completed
-- [x] `/config.json`, `/healthz`, `/livez` all pass
-- [x] Redirect configured only after apex validation
+```bash
+curl -fsS https://prod.democratized.space/healthz
+```
+
+If rehearsal succeeds and you proceed to production, switch back to `docs/examples/dspace.values.prod.yaml` for the real prod deployment.

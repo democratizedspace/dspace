@@ -1,435 +1,96 @@
-# Deploying dspace v3 to k3s with sugarkube
+# DSPACE staging runbook: k3s + sugarkube
 
-> **Scope:** This runbook covers **staging** (`staging.democratized.space`) using the `main` branch.
-> The production site (`democratized.space`) currently runs v2.x from the `main` branch and is
-> managed separately.
+## Topology and role (current live state)
 
-Use this runbook to take [`dspace@main`](https://github.com/democratizedspace/dspace/tree/main) from source to a running web server on the sugarkube
-three-server HA k3s cluster. It links directly to the sugarkube recipes, GHCR build workflows,
-and Cloudflare Tunnel notes so you can move from zero to serving traffic without hunting for
-prerequisites. If you need a raw `kubectl` / `kustomize` fallback outside sugarkube, see
-[docs/ops/deploy/k8s-environments.md](./ops/deploy/k8s-environments.md).
+- Environment: `env=staging`
+- Public host: `https://staging.democratized.space`
+- Live cluster nodes: `sugarkube3`, `sugarkube4`, `sugarkube5`
+- Availability model: 3-node HA
+- QA Cheats: **ON** (`DSPACE_ENV=staging`)
 
-## Source of truth and upstream references
+Staging is the canonical pre-production validation environment. It is where candidate tags are
+validated before production promotion.
 
-- dspace Helm chart: [`charts/dspace`](../charts/dspace)
-- CI workflows that publish GHCR artifacts (branch selector defaults to `main`):
-  - Container image: [ci-image.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
-  - Helm chart: [ci-helm.yml](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
-- sugarkube deployment guide for this app: [docs/apps/dspace.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md)
-- OCI Helm helpers in the sugarkube justfile:
-  - [helm-oci-install](https://github.com/futuroptimist/sugarkube/blob/main/justfile#L345-L346)
-  - [helm-oci-upgrade](https://github.com/futuroptimist/sugarkube/blob/main/justfile#L348-L349)
-- sugarkube platform bring-up for the Raspberry Pi HA cluster:
-  - [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
-  - [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
-- Cloudflare Tunnel installation (used to reach Traefik from the internet):
-  [cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md)
-- Promotion guidance for release management on `main`: [merge-plan.md](./merge-plan.md)
+## Release model for staging
 
-## Published artifacts
+- Deploy immutable candidate tags (`main-<shortsha>`, `vX.Y.Z-rc.N`, or approved semver tags).
+- Avoid signing off releases from mutable tags.
+- Iterate quickly by redeploying the next immutable candidate.
 
-- dspace multi-arch container images are published to GHCR at
-  `ghcr.io/democratizedspace/dspace`.
-  - Tags include immutable branch SHA tags (`main-<shortsha>`), mutable convenience tags
-    (`main-latest`), and semantic versions such as `v3.0.0`.
-  - For release-candidate validation in staging, use immutable `main-<shortsha>` tags (treat
-    `*-latest` as non-sign-off convenience only).
-- The Helm chart is published as an OCI artifact to
-  `oci://ghcr.io/democratizedspace/charts/dspace:<chartVersion>`, where `<chartVersion>` comes
-  from `charts/dspace/Chart.yaml`. The chart version is mirrored in
-  [`docs/apps/dspace.version`](./apps/dspace.version) for sugarkube automation and is currently
-  `3.0.0`.
+See the cross-environment release procedure: [docs/merge-plan.md](./merge-plan.md).
 
-## Assumptions and prerequisites
+## Prerequisites
 
-Prerequisites:
+- Access to staging cluster context (`env=staging`)
+- sugarkube checkout at `~/sugarkube`
+- GHCR pull access for image and Helm chart artifacts
+- Traefik and Cloudflare tunnel already configured for `staging.democratized.space`
+- tools: `just`, `kubectl`, `curl`
 
-- Sugarkube ha3 cluster is running _and_ you have completed the Traefik installation in the
-  sugarkube operations guide:
-  [Install and verify Traefik ingress](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md#install-and-verify-traefik-ingress).
-- Cluster joins use `SUGARKUBE_TOKEN_STAGING`; avoid reusing dev
-  tokens for staging.
-
-### Hardware and cluster configuration
-
-This guide assumes you are deploying to sugarkube's **Raspberry Pi 5 three-server HA cluster**:
-
-- 3× Raspberry Pi 5 (or similar 64-bit ARM) nodes running the sugarkube image
-- k3s installed on the cluster
-- `env=staging` as the target environment for sugarkube commands
-- Cluster brought up following [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
-
-The Raspberry Pi base cluster setup does **not** install an ingress controller automatically.
-dspace v3's k3s deployment assumes Traefik is installed as the cluster ingress. Before continuing,
-follow the sugarkube instructions to install and confirm Traefik is running in `kube-system`:
-[Install and verify Traefik ingress](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md#install-and-verify-traefik-ingress).
-Once `kubectl -n kube-system get svc -l app.kubernetes.io/name=traefik` shows a `traefik` service,
-return here and continue with the dspace deployment steps.
-
-The GHCR workflows build **multi-arch container images** including `linux/arm64`, so the images are
-ready to run on the Raspberry Pi cluster without modification.
-
-### Staging domain
-
-- Default public URL for the v3 sugarkube + k3s environment: `staging.democratized.space`
-- You can substitute a different domain or subdomain, but examples below assume
-  `staging.democratized.space`.
-
-### Required access and tooling
-
-- You have sugarkube's three-server HA cluster online following the Raspberry Pi setup guide
-  (`just ha3 env=staging`) and have installed Traefik using the sugarkube operations guide.
-- You can log in to GHCR with a token that can pull `ghcr.io/democratizedspace` images and charts.
-- Cloudflare manages the DNS zone for the hostname that will front dspace, and you can create a
-  published application route that targets `traefik.kube-system.svc.cluster.local` inside the cluster.
-- `kubectl` is pointed at the cluster and `just` is installed where you will run the sugarkube
-  commands.
-
-### QA Cheats in staging
-
-Staging keeps QA Cheats **enabled** so test users can exercise shortcuts. The Helm values set
-`environment: staging`, which maps to `DSPACE_ENV=staging` inside the pod and enables the cheats
-toggle. Leave this value as-is; only production should disable QA Cheats.
-
-## Quick start: happy path for Raspberry Pi HA cluster
-
-Once you have completed the [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
-and configured your Cloudflare Tunnel, deploying dspace from the `main` branch requires:
-
-1. **Build artifacts**: Manually trigger both GHCR workflows from the Actions tab, selecting `main`:
-   - [Build and publish GHCR image](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
-   - [Publish Helm chart](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
-
-2. **Deploy to cluster**: On a sugarkube control node (e.g., `sugarkube0`), run the following from
-   `~/sugarkube`. The staging host (`staging.democratized.space`) is defined in
-   `docs/examples/dspace.values.staging.yaml`:
+## Deploy a candidate tag
 
 ```bash
 cd ~/sugarkube
-just helm-oci-install \
-  release=dspace namespace=dspace \
-  chart=oci://ghcr.io/democratizedspace/charts/dspace \
-  values=docs/examples/dspace.values.staging.yaml \
-  version_file=docs/apps/dspace.version \
-  default_tag=main-REPLACE_SHORTSHA
 ```
-
-Replace `REPLACE_SHORTSHA` with the exact immutable suffix from the `main-<shortsha>` image tag
-published by CI.
-
-3. **Verify**:
-   - `curl -fsS https://staging.democratized.space/config.json`
-   - `curl -fsS https://staging.democratized.space/healthz`
-   - `curl -fsS https://staging.democratized.space/livez`
-   - Open `https://staging.democratized.space` in a browser.
-
-The sections below provide full context for each step, branch-specific tag conventions, and
-troubleshooting guidance. Keep the values list scoped to `dspace.values.staging.yaml`; mixing in the
-dev values file (`dspace.values.dev.yaml`) will flip the environment to `dev` and misconfigure the
-hostnames for staging.
-
-## Step 1: Build and publish GHCR artifacts from the right branch
-
-Both workflows use the `main` branch and produce main-branch tags:
-
-- Tags are `main-<shortsha>` (immutable tag) and `main-latest` (mutable convenience tag).
-
-For staging verification, deploy `main-<shortsha>` so QA runs are reproducible and rollback is explicit.
-
-### Running the workflows
-
-1. Container image: trigger the
-   [Build and publish GHCR image workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
-   and choose the `main` branch.
-   - The workflow generates `<branch>-<shortsha>`, `<branch>-latest`, and `v{version}` tags for multi-arch images.
-   - Images include both `linux/amd64` and `linux/arm64` platforms for Raspberry Pi compatibility.
-2. Helm chart: trigger the
-   [Publish Helm chart workflow](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
-   with the same branch selection. It packages `charts/dspace` and pushes to
-   `oci://ghcr.io/democratizedspace/charts`.
-3. Confirm the outputs match the tags you plan to deploy:
 
 ```bash
-# List pushed images (requires GHCR login)
-crane ls ghcr.io/democratizedspace/dspace | grep "^<branch>-"
-
-# Check available chart versions
-helm pull oci://ghcr.io/democratizedspace/charts/dspace \
-  --version "$(cat docs/apps/dspace.version)" --untar
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_SHORTSHA
 ```
 
-## Step 2: Confirm the sugarkube + Cloudflare Tunnel prerequisites
-
-This runbook assumes you already finished the ingress and tunnel setup documented in the sugarkube
-repo. Use the sugarkube guides to reach the following starting point before touching the dspace
-Helm release:
-
-- 3-node HA k3s cluster is online via sugarkube (`just ha3 env=staging`). See
-  [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
-  and [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md).
-- Traefik is installed and healthy (`just traefik-install` and `just traefik-status`).
-- Cloudflare Tunnel connector is running in the cluster via
-  `just cf-tunnel-install env=staging token="$CF_TUNNEL_TOKEN"`.
-- Published application route sends `staging.democratized.space` to
-  `traefik.kube-system.svc.cluster.local` (Type: HTTP).
-- DNS CNAME points `staging.democratized.space` to the tunnel endpoint (`<UUID>.cfargotunnel.com`).
-
-For the full tunnel and Traefik steps, follow sugarkube's
-[cloudflare_tunnel.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/cloudflare_tunnel.md)
-and
-[raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md).
-
-### Configure Cloudflare Tunnel hostname and DNS
-
-Helm and `just helm-oci-install` only create Kubernetes resources (Deployment, Service, Ingress);
-they do **not** configure Cloudflare routes or DNS records. You must configure those separately in
-the Cloudflare dashboard **before** running the Helm install.
-
-1. **Add a published application route:**
-   - In the Cloudflare dashboard, open the `democratized.space` zone.
-   - Navigate to **Zero Trust → Networks → Tunnels** and select the existing tunnel for your
-     cluster (e.g., `dspace-staging-main`).
-   - Open the **Published application routes** tab and click **Add a published application route**.
-   - Fill in the **Hostname** section:
-     - **Subdomain**: `staging`
-     - **Domain**: `democratized.space`
-     - **Path**: leave blank
-   - A banner will confirm that a DNS record for `staging.democratized.space` will be created.
-   - Fill in the **Service** section:
-     - **Type**: `HTTP`
-     - **URL**: `traefik.kube-system.svc.cluster.local`
-   - Leave all advanced settings (HTTP Host Header, Disable Chunked Encoding, Access JWT, etc.) at
-     their defaults. This is fine for staging and causes Cloudflare to send
-     `Host: staging.democratized.space` to Traefik.
-   - Save the route.
-
-2. **Verify DNS record:**
-   - In the Cloudflare dashboard, go to **DNS → Records** for the `democratized.space` zone.
-   - Confirm there is a proxied CNAME record:
-     - **Type**: `CNAME`
-     - **Name**: `staging`
-     - **Target**: `<tunnel-UUID>.cfargotunnel.com`
-     - **Proxy status**: Proxied (orange cloud)
-   - Cloudflare typically creates this automatically when you add the published application route,
-     but verify it exists.
-
-Once those are in place, the remainder of this document focuses on deploying dspace from `main`.
-
-The steps below pick up after the tunnel and Traefik are live and verified. Replace example secret
-values with real credentials and adjust the namespace or host only if your environment differs from
-`staging.democratized.space`.
-
-## Step 3: Prepare the namespace
-
-> **Where to run:** Commands in Steps 3–5 (`kubectl`, `just helm-oci-install`) are executed on a
-> sugarkube control node (e.g., `sugarkube0`) with the sugarkube repo checked out at `~/sugarkube`.
-
-Create or reuse the dspace namespace:
+## Validate candidate in staging
 
 ```bash
-kubectl create namespace dspace
-# If it already exists, rerun with --dry-run=client -o yaml | kubectl apply -f -
+kubectl -n dspace get deploy,po,svc,ingress
 ```
 
-Alternatively, Helm can create the namespace automatically when you include `--create-namespace` in
-the install command.
-
-**Note:** dspace v3 is a frontend-only deployment with no backend services. All game state is stored
-client-side (localStorage and IndexedDB), so there are no secrets required by default:
-
-- No Postgres database connection
-- No JWT-based authentication
-- No metrics token (metrics are served unauthenticated unless you enable `METRICS_TOKEN`)
-
-If you later add optional features (e.g., protected metrics scraping), you can create secrets and
-reference them via the chart's `secret` or `env` values. For the default v3 deployment, skip secret
-creation entirely.
-
-## Step 4: Staging ingress values
-
-The staging ingress values for dspace are version-controlled in the sugarkube repo at
-[`docs/examples/dspace.values.staging.yaml`](https://github.com/futuroptimist/sugarkube/blob/main/docs/examples/dspace.values.staging.yaml).
-This file contains the staging-specific overrides:
-
-```yaml
-ingress:
-  enabled: true
-  className: traefik
-  host: staging.democratized.space
+```bash
+kubectl -n dspace rollout status deploy/dspace --timeout=180s
 ```
 
-The chart uses a single `host` string (not a list) and creates one Ingress rule for that hostname
-with a catch-all path (`/`). TLS is disabled by default because Cloudflare terminates TLS at the
-tunnel edge before forwarding to Traefik inside the cluster.
+```bash
+curl -fsS https://staging.democratized.space/config.json
+```
 
-Deploys from the Pis are run from `~/sugarkube` using `just helm-oci-install` with only the staging
-values file (`dspace.values.staging.yaml`) passed via the `values=` parameter. No
-manual creation of a values file is required.
+```bash
+curl -fsS https://staging.democratized.space/healthz
+```
 
-## Step 5: Install or upgrade the Helm release
+```bash
+curl -fsS https://staging.democratized.space/livez
+```
 
-Deploy via the sugarkube justfile wrapper (recommended so chart versions stay aligned with the
-sugarkube app guide). From `~/sugarkube` on a sugarkube control node:
+Run release QA checklist as appropriate:
+
+- Patch line: [docs/qa/v3.0.0.1.md](./qa/v3.0.0.1.md)
+- Feature line: [docs/qa/v3.1.md](./qa/v3.1.md)
+
+## Iterate with a newer candidate
 
 ```bash
 cd ~/sugarkube
-just helm-oci-install \
-  release=dspace namespace=dspace \
-  chart=oci://ghcr.io/democratizedspace/charts/dspace \
-  values=docs/examples/dspace.values.staging.yaml \
-  version_file=docs/apps/dspace.version \
-  default_tag=main-REPLACE_SHORTSHA
 ```
-
-To target a specific image build, add `tag=<branch>-<shortsha>` or use `just helm-oci-upgrade` with
-the same arguments. If you are running Helm directly, mirror the same values files:
 
 ```bash
-helm upgrade --install dspace oci://ghcr.io/democratizedspace/charts/dspace \
-  --namespace dspace --create-namespace \
-  --version "$(cat docs/apps/dspace.version)" \
-  --values docs/examples/dspace.values.staging.yaml
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_NEW_SHORTSHA
 ```
 
-> **Runtime environment flag:** The Astro server reads `DSPACE_ENV` to decide whether QA-only UI
-> (such as cheat toggles) should render. The Helm chart defaults this flag to `production`;
-> `dspace.values.staging.yaml` overrides it to `staging` so QA Cheats stay enabled here. Production
-> should keep `DSPACE_ENV=prod` so cheats remain disabled.
-
-### Force a rollout restart when using mutable tags (e.g., `main-latest`)
-
-When redeploying with a mutable tag such as `main-latest`, Helm may report an upgrade without
-changing the Deployment template because the chart version and image tag stay the same. In that
-case Kubernetes will not create a new ReplicaSet, and pods keep running the previous image digest.
-
-After triggering the Sugarkube helper, explicitly roll the Deployment to ensure pods pull the
-latest digest:
+## Roll back staging
 
 ```bash
 cd ~/sugarkube
-just dspace-oci-redeploy
-
-sudo kubectl rollout restart deploy dspace -n dspace
-sudo kubectl rollout status deploy dspace -n dspace --timeout=120s
 ```
-
-Watch pods replace and confirm the new build:
 
 ```bash
-sudo kubectl get pods -n dspace -w
-sudo kubectl -n dspace port-forward svc/dspace 8080:8080
-curl -s http://localhost:8080/healthz | jq
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_PREVIOUS_SHORTSHA
 ```
 
-For staging release-candidate validation, prefer immutable `main-<shortsha>` tags so repeated QA
-cycles are reproducible and easily comparable over time.
+## Promotion handoff to prod
 
-### Verification
+Promote only after staging sign-off. Hand off:
 
-```bash
-kubectl -n dspace get pods
-kubectl -n dspace get svc,ingress
-```
+- immutable tag approved in staging
+- commit SHA
+- checklist link + sign-off timestamp
+- rollback tag confirmed
 
-Confirm the ingress shows `staging.democratized.space` as the host and the `traefik` ingress class,
-then open `https://staging.democratized.space` in a browser. You should see the dspace v3 UI served
-through the Cloudflare Tunnel and Traefik.
-
-### Repeated RC validation loop (recommended for staging)
-
-Use this flow for every candidate build you want QA to validate in staging:
-
-1. Trigger `ci-image.yml` from branch `main` and record the generated immutable tag
-   (`main-<shortsha>`).
-2. Deploy that exact tag with `just helm-oci-install ... default_tag=main-REPLACE_SHORTSHA`.
-3. Validate staging behavior and record pass/fail against the tag.
-   - `curl -fsS https://staging.democratized.space/config.json`
-   - `curl -fsS https://staging.democratized.space/healthz`
-   - `curl -fsS https://staging.democratized.space/livez`
-4. If a fix is needed, produce a new `main-<shortsha>` and repeat.
-5. If the candidate fails, roll back immediately by redeploying the prior known-good
-   `main-<shortsha>` tag and re-running the three endpoint checks above.
-
-Only use `main-latest` for convenience checks where reproducibility is not required.
-
-### Fast manual redeploy (emergency push only; not for RC sign-off)
-
-Use this only when you already have dspace running on sugarkube and explicitly accept
-non-reproducible validation with `main-latest`. For RC sign-off, use the repeated immutable-tag loop
-above. This reuses the existing chart version and values; it simply forces Helm to pull the
-refreshed mutable tag.
-
-1. **Build and publish a new image:** Follow [Step 1](#step-1-build-and-publish-ghcr-artifacts-from-the-right-branch)
-   to trigger the GHCR image workflow for `main`. Ensure the run publishes both `main-<shortsha>` and
-   moves `main-latest` to that build.
-2. **Redeploy the Helm release:** From `~/sugarkube` on a control node, rerun the same install
-   command used above (chart version stays `3.0.0`; the image comes from `v3-latest`):
-
-   ```bash
-   cd ~/sugarkube
-   just helm-oci-install \
-     release=dspace namespace=dspace \
-     chart=oci://ghcr.io/democratizedspace/charts/dspace \
-     values=docs/examples/dspace.values.staging.yaml \
-     version_file=docs/apps/dspace.version \
-     default_tag=main-latest
-   ```
-
-3. **Verify the new image is live:**
-
-   ```bash
-   kubectl get pods -n dspace -o wide
-   kubectl get deploy -n dspace dspace -o yaml | grep "image:"
-   curl -fsS https://staging.democratized.space/config.json
-   curl -fsS https://staging.democratized.space/healthz
-   curl -fsS https://staging.democratized.space/livez
-   ```
-
-   You should see the Deployment and pods referencing `ghcr.io/democratizedspace/dspace:main-latest`
-   (which should point at your newest `main-<shortsha>` build). Load the site to confirm the expected
-   version or build SHA if your UI exposes it, and use `/settings` → chat debug to view the prompt
-   version, app build SHA, and Docs RAG sync status in `/chat`.
-
-> This is the fast path and may cause brief downtime while the Deployment rolls pods. More gradual
-> rollouts (canary/blue-green) can be layered on later using native Kubernetes strategies or
-> additional sugarkube automation.
-
-## End-to-end verification for dspace staging
-
-Use this quick runbook to confirm staging is healthy after a deploy:
-
-- Sugarkube cluster: `just cluster-status` is healthy.
-- Traefik: `just traefik-status` is healthy.
-- Cloudflare Tunnel: connector running (`kubectl -n cloudflare get deploy,po`) and its own admin
-  endpoint `/ready` returns 200 (this checks the tunnel process, not dspace). Verify with a
-  two-shell port-forward:
-  - Shell 1: `kubectl -n cloudflare port-forward deploy/cloudflare-tunnel 2000:2000`
-  - Shell 2: `curl -fsS http://localhost:2000/ready`
-  - A JSON response containing `"status":200` confirms the tunnel is healthy.
-- Published application route: `staging.democratized.space` →
-  `traefik.kube-system.svc.cluster.local` (Type: HTTP).
-- DNS: `staging.democratized.space` CNAME → `<UUID>.cfargotunnel.com` (proxied).
-- dspace Helm release deployed in `dspace` (or your chosen) namespace.
-- `kubectl -n dspace get ingress` shows host `staging.democratized.space`.
-- dspace endpoints return success (check in this order):
-  - `https://staging.democratized.space/config.json` (primary runtime smoke endpoint)
-  - `https://staging.democratized.space/healthz` (readiness)
-  - `https://staging.democratized.space/livez` (liveness)
-- Browsing `https://staging.democratized.space` shows the dspace v3 UI.
-
-## Troubleshooting
-
-- Pull or Helm auth failures: log in to GHCR (`helm registry login ghcr.io -u <user> -p <token>`) and
-  confirm the branch you built matches the tag you are deploying.
-- Ingress not reachable:
-  - Validate Cloudflare Tunnel status and the route target (`traefik.kube-system.svc.cluster.local`).
-  - Confirm the ingress uses the `traefik` class and that Traefik reports healthy in
-    `kubectl -n kube-system get deploy,svc | grep traefik`.
-- Release drift: inspect rendered values and history with `helm -n dspace status dspace` and
-  `helm -n dspace get values dspace`.
-- Pods failing readiness:
-  - Check pod logs (`kubectl -n dspace logs deploy/dspace`) and describe events to see if
-    the image tag or chart version mismatches the published artifacts.
-- Cluster-level issues: use sugarkube's HA diagnostics and log capture from the Raspberry Pi runbooks
-  if mDNS discovery, etcd health, or networking regress after upgrades.
+Prod should deploy the same approved immutable artifact (not `main-latest`).

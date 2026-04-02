@@ -1,60 +1,95 @@
-# Deploying dspace v3 to a dev k3s cluster with sugarkube
+# DSPACE dev runbook (planned): k3s + sugarkube
 
-> **Scope:** Development (`env=dev`) using the `main` branch. This guide assumes a lab or workstation
-> cluster without a public hostname or Cloudflare tunnel.
+> **Status:** Dev is **not live yet**. This is the intended runbook for when dev is stood up.
 
-This runbook takes [`dspace@main`](https://github.com/democratizedspace/dspace/tree/main) from source to
-an accessible dev deployment. It keeps QA Cheats **enabled** (via `DSPACE_ENV=dev`) and uses
-port-forward checks instead of an external tunnel.
+## Intended topology and purpose
 
-## Prerequisites
+- Environment: `env=dev`
+- Planned node: `sugarkube6` only
+- Availability model: single-node, non-HA by design
+- Exposure model: non-user-facing / low-stakes environment
+- QA Cheats: **ON** (`DSPACE_ENV=dev`)
 
-- A single-node or small k3s cluster brought up with sugarkube (`just up dev` or `just ha3 env=dev`)
-- Traefik installed from the sugarkube operations guide (for ingress), or be ready to
-  `kubectl port-forward` the `dspace` Service locally
-- GHCR credentials to pull `ghcr.io/democratizedspace/dspace` images and charts
-- `just` and `kubectl` installed on the host running the commands
+Dev intentionally favors speed and convenience over durability. Outages, node loss, and local resets
+are acceptable in this environment.
 
-## QA Cheats policy (dev)
+## Release model for dev
 
-Dev intentionally keeps QA Cheats **ON**. The sample values file sets `environment: dev`, which maps
-to `DSPACE_ENV=dev` inside the pod and enables the cheats toggle. Do not override this value in dev.
+- Use `main-latest` for rapid iteration and convenience redeploys.
+- Use immutable `main-<shortsha>` tags for reproducible debugging and handoff.
+- Do not treat dev sign-off as a substitute for staging validation.
 
-## Quick start
+See the release workflow: [docs/merge-plan.md](./merge-plan.md).
 
-1. **Build artifacts (optional if already published):** Trigger the GHCR workflows on branch `main`:
-   - [Build and publish GHCR image](https://github.com/democratizedspace/dspace/actions/workflows/ci-image.yml)
-   - [Publish Helm chart](https://github.com/democratizedspace/dspace/actions/workflows/ci-helm.yml)
+## Prerequisites (when dev is provisioned)
 
-2. **Install via Helm + sugarkube** on your control node (for example `sugarkube0`):
+- sugarkube cluster access for `env=dev` targeting sugarkube6
+- GHCR pull access for:
+  - `ghcr.io/democratizedspace/dspace`
+  - `oci://ghcr.io/democratizedspace/charts/dspace`
+- local tools: `just`, `kubectl`, `curl`
+- sugarkube checkout at `~/sugarkube`
 
-   ```bash
-   cd ~/sugarkube
-   just helm-oci-install \
-     release=dspace namespace=dspace \
-     chart=oci://ghcr.io/democratizedspace/charts/dspace \
-     values=docs/examples/dspace.values.dev.yaml \
-     version_file=docs/apps/dspace.version \
-     default_tag=main-latest
-   ```
+## Deploy with convenience tag (`main-latest`)
 
-   This uses `environment: dev` from the values file, which keeps QA Cheats available.
+```bash
+cd ~/sugarkube
+```
 
-3. **Verify locally (no tunnel by default):**
-   - Port-forward the Service: `kubectl -n dspace port-forward svc/dspace 3000:8080`
-   - In another shell, run `curl -fsS http://localhost:3000/config.json` first, then
-     `curl -fsS http://localhost:3000/healthz`, and
-     `curl -fsS http://localhost:3000/livez` (or open
-     http://localhost:3000/ in a browser)
+```bash
+just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.dev.yaml version_file=docs/apps/dspace.version default_tag=main-latest
+```
 
-   If you prefer ingress, set a local hostname in the dev values file and route it through Traefik,
-   but keep it non-public.
+## Deploy with immutable tag (`main-<shortsha>`)
 
-## Notes for dev environments
+```bash
+cd ~/sugarkube
+```
 
-- Keep tokens scoped: use `SUGARKUBE_TOKEN_DEV` for dev clusters; do not reuse staging/prod tokens.
-- Cloudflare tunnels are optional in dev. If you add one, align it with `env=dev` and a non-public
-  hostname.
-- `main-latest` is fine for day-to-day dev iteration and convenience redeploys.
-- Prefer immutable `main-<shortsha>` tags for reproducible debugging, pair-testing, and rollback
-  drills.
+```bash
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.dev.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_SHORTSHA
+```
+
+## Verify deployment (local-first)
+
+```bash
+kubectl -n dspace get deploy,po,svc,ingress
+```
+
+```bash
+kubectl -n dspace rollout status deploy/dspace --timeout=120s
+```
+
+```bash
+kubectl -n dspace port-forward svc/dspace 3000:8080
+```
+
+```bash
+curl -fsS http://localhost:3000/config.json
+```
+
+```bash
+curl -fsS http://localhost:3000/healthz
+```
+
+```bash
+curl -fsS http://localhost:3000/livez
+```
+
+## Rollback
+
+Use the previous known-good immutable tag.
+
+```bash
+cd ~/sugarkube
+```
+
+```bash
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.dev.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_PREVIOUS_SHORTSHA
+```
+
+## Operator notes
+
+- Keep `environment: dev` in the dev values file so QA Cheats remain enabled.
+- Because dev is single-node and non-HA, expect lower resilience than staging/prod.
+- If public ingress is ever enabled for dev, keep it explicitly non-production and low-trust.

@@ -1,30 +1,139 @@
-# Release merge plan
+# DSPACE release and promotion procedure
 
-Use this list to confirm everything is ready before merging v3 into main.
+This document defines the steady-state release flow for DSPACE after `v3.0.0`.
 
-- Keep CI green for the release pipeline (image build and Helm chart publish jobs should succeed).
-- Record the install command used for the release and capture the final Cloudflare URL.
-- Document the Helm values diff between dev and main namespaces:
-  - Export both value sets and compare.
-  - Note any deviations that will ship to main.
-  - Suggested snippet:
-    ```bash
-    helm get values dspace -n <MAIN_NAMESPACE> --all > /tmp/values-main.yaml
-    helm get values dspace -n <DEV_NAMESPACE> --all > /tmp/values-dev.yaml
-    diff -u /tmp/values-dev.yaml /tmp/values-main.yaml
-    ```
-- Verify the rollback plan:
-  - Confirm `helm rollback dspace <REV>` works for the release namespace.
-  - Document how to switch images if needed (e.g., pinning a different tag or overriding the image repository):
-    ```bash
-    helm upgrade dspace charts/dspace \
-      -n <NAMESPACE> \
-      --reuse-values \
-      --set image.tag=<PREVIOUS_TAG>
-    ```
-- Chart appVersion and the default image tag are pinned to the current release (v3.0.0) and enforced by automated tests. To
-  verify any overridden deployment values, run:
-  ```bash
-  yq '.appVersion' charts/dspace/Chart.yaml
-  yq '.image.tag' charts/dspace/values.yaml
-  ```
+## Why this exists
+
+- `main` is the default integration branch.
+- The old `v3` branch cutover flow is retired.
+- Releases now follow repeatable promotion across environments:
+  - planned `dev` (`env=dev`, sugarkube6)
+  - live `staging` (`env=staging`, sugarkube3–5)
+  - live `prod` (`env=prod`, sugarkube0–2)
+
+Cross-reference runbooks:
+
+- [k3s + sugarkube dev runbook](./k3s-sugarkube-dev.md)
+- [k3s + sugarkube staging runbook](./k3s-sugarkube-staging.md)
+- [k3s + sugarkube prod runbook](./k3s-sugarkube-prod.md)
+
+## Branching and tagging model
+
+### 1) Day-to-day integration
+
+- Merge normal feature/fix PRs into `main`.
+- CI publishes image tags like `main-<shortsha>` and convenience tag `main-latest`.
+- Use immutable tags (`main-<shortsha>`) for sign-off, promotion, and rollback.
+
+### 2) Optional stabilization branch (only when needed)
+
+Use a short-lived release branch when a release needs focused stabilization (for example `release/v3.0.0.1`).
+
+```bash
+git checkout -b release/vX.Y.Z
+```
+
+- Only cherry-pick or merge scoped fixes for that release line.
+- Keep branch lifetime short; delete it after release is finalized.
+
+### 3) RC tags for candidate validation
+
+Mark candidate commits with release-candidate tags before final release sign-off.
+
+```bash
+git tag vX.Y.Z-rc.1
+```
+
+```bash
+git push origin vX.Y.Z-rc.1
+```
+
+- Deploy RC-related immutable image tags to staging.
+- Iterate (`rc.2`, `rc.3`, ...) until staging gates pass.
+
+### 4) Final semver tag for production release
+
+After staging approval, create the final semver tag from the approved commit.
+
+```bash
+git tag vX.Y.Z
+```
+
+```bash
+git push origin vX.Y.Z
+```
+
+- Deploy the corresponding immutable image tag to prod.
+- Record the exact deployed tag and commit SHA in release notes and QA checklist.
+
+## Environment promotion rules
+
+### Dev (planned, non-HA)
+
+- Intended for rapid validation once stood up on sugarkube6.
+- `main-latest` is acceptable for convenience iteration.
+- `main-<shortsha>` is preferred when you need reproducibility.
+
+### Staging (canonical pre-prod)
+
+- Always deploy immutable candidate tags for release sign-off.
+- Validate functional, smoke, and release-specific QA gates.
+- Promote only the exact approved immutable tag to prod.
+
+### Prod (public, stable)
+
+- Deploy immutable approved tags only.
+- Keep a previous known-good immutable tag ready for rollback.
+- Keep QA Cheats off (`DSPACE_ENV=prod`).
+
+## Patch vs feature releases
+
+### Urgent patch release (example: `v3.0.0.1`)
+
+- Scope is bugfixes and small improvements only.
+- Prefer direct work on `main` unless stabilization isolation is needed.
+- If risk is elevated, use short-lived `release/v3.0.0.1` plus RC tags.
+- Validate with patch-focused checklist: [docs/qa/v3.0.0.1.md](./qa/v3.0.0.1.md).
+
+### Feature release (example: `v3.1.x`)
+
+- Use normal `main` integration with broader QA scope.
+- Optionally cut a short-lived release branch near code freeze for hardening.
+- Validate with feature-track checklist: [docs/qa/v3.1.md](./qa/v3.1.md).
+
+## Rollback standard
+
+If a release fails after deploy, roll back to the previous known-good immutable tag.
+
+```bash
+cd ~/sugarkube
+```
+
+```bash
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=<env-values-file> version_file=docs/apps/dspace.version default_tag=<previous-immutable-tag>
+```
+
+Then verify runtime health endpoints.
+
+```bash
+curl -fsS https://<environment-hostname>/config.json
+```
+
+```bash
+curl -fsS https://<environment-hostname>/healthz
+```
+
+```bash
+curl -fsS https://<environment-hostname>/livez
+```
+
+## Release record minimums
+
+For each production release, record:
+
+- release version (`vX.Y.Z`)
+- deployed immutable image tag
+- commit SHA
+- staging validation timestamp + approver
+- production deploy timestamp + operator
+- rollback tag validated and ready
