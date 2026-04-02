@@ -229,9 +229,35 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
     await page.locator('#type').fill('resource');
     await page.locator('#image').setInputFiles(TEST_ITEM_IMAGE_PATH);
 
-    await page.getByRole('button', { name: /create item/i }).click();
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('status')).toContainText(/item created successfully/i);
+    const createButton = page.getByRole('button', { name: /create item/i });
+    const manageItemsLink = page.getByRole('link', { name: /manage items/i }).first();
+    const manageItemsVisibleBeforeSubmit = await manageItemsLink.isVisible().catch(() => false);
+    await createButton.click();
+
+    try {
+        await page.waitForLoadState('networkidle', { timeout: 10_000 });
+    } catch {
+        await page.waitForLoadState('load');
+    }
+
+    await Promise.any([
+        page.waitForURL((url) => !url.pathname.endsWith('/inventory/create'), {
+            timeout: 15_000,
+        }),
+        page
+            .getByRole('status')
+            .filter({ hasText: /item created successfully/i })
+            .first()
+            .waitFor({ state: 'visible', timeout: 15_000 }),
+        (async () => {
+            if (manageItemsVisibleBeforeSubmit) {
+                throw new Error(
+                    'Manage items link was already visible before submit; cannot use as post-submit signal.'
+                );
+            }
+            await manageItemsLink.waitFor({ state: 'visible', timeout: 15_000 });
+        })(),
+    ]);
 
     await page.goto('/inventory/manage');
     await waitForHydration(page);
