@@ -4,13 +4,24 @@ on:
   push:
     branches: [main]
 jobs:
-  ensure-tests-exist:
+  workflow-integrity:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          test -f .github/workflows/tests.yml
-          test -f .github/workflows/ci.yml
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+      - name: Enable pnpm via Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@9 --activate
+      - name: Install dependencies
+        run: npm run ci:install
+      - name: Validate workflow contracts
+        run: node scripts/check-workflows.mjs
+      - name: Guard legacy coverage requirements
+        run: |
           grep -q 'npm run coverage' .github/workflows/tests.yml
           grep -q 'codecov/codecov-action@' .github/workflows/tests.yml
           grep -q 'fetch-depth: 0' .github/workflows/tests.yml

@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-02-build-workflow-pr-trigger-regression",
+  "date": "2026-04-02",
+  "component": "GitHub Actions workflow trigger configuration",
+  "rootCause": "Workflow trigger branch filters drifted so PRs targeting main no longer received full expected checks: ci.yml and ci-image.yml had main coverage constrained to v3-only filters, and tests.yml push coverage had drifted from main. PR #4234 therefore did not show the expected check set even though build.yml already had pull_request enabled.",
+  "resolution": "Restored main coverage in ci.yml, tests.yml, and ci-image.yml; kept build.yml trigger behavior and reverted workflow display-name churn; wired scripts/check-workflows.mjs into ci-sentinel.yml as the single aggregate failure surface; expanded tests/workflowIntegrityScript.test.ts with direct assertions for main pull_request coverage on the incident workflows plus failure-path guard tests. Regression search results before finalization: branch-filter scan confirmed v3-only drift patterns were removed from incident workflows, workflow-name scan showed build workflow naming now matches historical Build & Publish Container naming, and git diff --stat stayed within the scoped workflow/script/test/outage changes. No additional broken tests inside affected GitHub Actions checks were identified.",
+  "references": [
+    ".github/workflows/build.yml",
+    ".github/workflows/ci.yml",
+    ".github/workflows/tests.yml",
+    ".github/workflows/ci-image.yml",
+    ".github/workflows/ci-sentinel.yml",
+    "scripts/check-workflows.mjs",
+    "tests/workflowIntegrityScript.test.ts"
+  ]
+}
