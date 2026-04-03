@@ -2,6 +2,7 @@
 
 ## Release metadata
 
+- [ ] Canonical release history reviewed: [docs/releases.md](../releases.md)
 - [ ] Release name: `vX.Y[.Z]`
 - [ ] Tag/commit:
 - [ ] Staging URL:
