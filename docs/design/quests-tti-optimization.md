@@ -68,7 +68,9 @@ checks), multiplying cost with quest count.
 
 `safeCanStartQuest()` in `Quests.svelte` returns `true` on error, which is optimistic and can
 transiently show quests as available when authoritative state evaluation failed. That violates the
-v3.0.1 correctness constraint.
+v3.0.1 correctness constraint. The fast path therefore must remain neutral on uncertainty: if
+availability evaluation fails (or authoritative prerequisites are not loaded yet), show non-actionable
+`Locked`/withheld status rather than `Start`/`Continue`.
 
 ### 4.5 Custom quests and graph concerns are mixed into the same mount path
 
@@ -91,16 +93,16 @@ is unnecessary for first-interactive list rendering.
 
 ## 5) Option set
 
-| Option | Expected TTI / perceived impact | Complexity | Correctness risk | Offline-first fit | Scale behavior |
-|---|---|---:|---:|---:|---:|
-| A. Build-time quest list manifest (built-ins) | High | Medium | Low | Strong | Strong |
-| B. Lightweight authoritative progress snapshot for list classification | High | Medium | Low-Medium (if snapshot schema wrong) | Strong | Strong |
-| C. One-pass classifier over in-memory snapshot + quest summaries | High | Medium | Low | Strong | Strong |
-| D. Defer custom quest loading off critical path | Medium-High | Low-Medium | Low | Strong | Strong |
-| E. Defer/non-block graph-related work from list path | Medium | Low | Low | Strong | Medium |
-| F. List virtualization | Medium at high counts | Medium-High | Medium | Strong | Strong |
-| G. Pragmatic image derivative + reserved layout + fade-in | Medium perceived | Medium | Low | Strong | Strong |
-| H. Attribute-only image tuning (`loading`, `decoding`, fetch priority) | Low-Medium | Low | Low | Strong | Medium |
+| Option                                                                 | Expected TTI / perceived impact |  Complexity |                      Correctness risk | Offline-first fit | Scale behavior |
+| ---------------------------------------------------------------------- | ------------------------------- | ----------: | ------------------------------------: | ----------------: | -------------: |
+| A. Build-time quest list manifest (built-ins)                          | High                            |      Medium |                                   Low |            Strong |         Strong |
+| B. Lightweight authoritative progress snapshot for list classification | High                            |      Medium | Low-Medium (if snapshot schema wrong) |            Strong |         Strong |
+| C. One-pass classifier over in-memory snapshot + quest summaries       | High                            |      Medium |                                   Low |            Strong |         Strong |
+| D. Defer custom quest loading off critical path                        | Medium-High                     |  Low-Medium |                                   Low |            Strong |         Strong |
+| E. Defer/non-block graph-related work from list path                   | Medium                          |         Low |                                   Low |            Strong |         Medium |
+| F. List virtualization                                                 | Medium at high counts           | Medium-High |                                Medium |            Strong |         Strong |
+| G. Pragmatic image derivative + reserved layout + fade-in              | Medium perceived                |      Medium |                                   Low |            Strong |         Strong |
+| H. Attribute-only image tuning (`loading`, `decoding`, fetch priority) | Low-Medium                      |         Low |                                   Low |            Strong |         Medium |
 
 ### Option details
 
@@ -169,12 +171,13 @@ resolved. We do not hide locked built-ins in the v3.0.1 fast path.
 ### 6.3 Snapshot-first authoritative classification
 
 Extend lightweight persisted snapshot in `gameState/common.js` to include minimal authoritative
-quest progress fields for list-safe classification (e.g., completed quest IDs and in-progress quest
-step IDs/checksum-bound marker).
+quest progress fields for list-safe classification (proposed shape: at minimum completed quest IDs,
+plus any additional field needed to avoid optimistic availability claims).
 
 Rules:
 
-- If snapshot is present and validated against checksum semantics, `completed` can be shown.
+- If snapshot is present and validated against existing checksum marker semantics in
+  `gameState/common.js`, `completed` can be shown.
 - `startable/continue` is shown only when requirements can be evaluated authoritatively.
 - If uncertain (snapshot missing/stale/partial), render neutral state (`status withheld`) instead
   of optimistic availability.
@@ -199,6 +202,10 @@ state for those entries is available.
 
 Retain lazy graph visualizer behavior and ensure graph data computation/serialization is excluded
 from initial quest-list interactivity path where possible.
+
+Because `index.astro` currently constructs `graph = buildQuestGraph({ quests: questData })`
+unconditionally, v3.0.1 should ensure initial built-in list rendering does not depend on route-time
+graph construction.
 
 ### 6.7 Secondary image optimization
 
@@ -233,7 +240,7 @@ pop-in on slower devices.
 
 ### Build artifact
 
-- New generated quest-list manifest under `frontend/src/generated/quests/`.
+- Proposed generated quest-list manifest location: `frontend/src/generated/quests/`.
 - Build script should validate deterministic sort and normalized requiresQuests.
 
 ### Game-state lightweight snapshot
@@ -241,6 +248,8 @@ pop-in on slower devices.
 - Extend lightweight snapshot currently written in `gameState/common.js` meta store.
 - Snapshot must remain compact and cheap to read.
 - Include versioning to allow forward-compatible migration/fallback.
+- Exact field names are proposed in this doc and should be finalized in implementation once schema
+  conventions are confirmed.
 
 ### Classifier inputs
 
@@ -250,11 +259,12 @@ pop-in on slower devices.
 
 ## 9) Asset / image pipeline implications
 
-- Add a build-time step to generate one quest-list image derivative per canonical quest image.
+- Add a build-time step to generate one quest-list image derivative per canonical quest image
+  (proposed for implementation phase).
 - Keep canonical source assets unchanged; derivatives are generated artifacts.
 - Quest list cards use derivative path by default; fallback to canonical image on missing derivative.
-- Keep existing offline-first service-worker behavior by ensuring generated assets are in static
-  build output and included in cache strategy.
+- Service-worker/cache handling is proposed: ensure generated assets are in static build output and
+  covered by the repository's existing offline caching conventions during implementation.
 - Add explicit image box reservation and fade-in behavior to eliminate layout shift.
 
 ## 10) Migration / rollout plan
@@ -338,16 +348,17 @@ If image derivative strategy is implemented:
 
 1. `/quests` shows meaningful quest-list content before full persisted-state readiness.
 2. Initial built-in list render does not depend on eager full quest payload loading.
-3. Initial render does not block on full custom quest enumeration.
-4. No transient incorrect quest availability/action affordances are shown.
-5. If state is uncertain, UI shows neutral/withheld status rather than optimistic status.
-6. Post-initial UI enhancements reconcile via non-layout-shifting transitions (no pushdowns).
-7. Full-state reconciliation path does strictly less critical-path work than current implementation
+3. Initial built-in list render does not depend on route-time `buildQuestGraph(...)` work.
+4. Initial render does not block on full custom quest enumeration.
+5. No transient incorrect quest availability/action affordances are shown.
+6. If state is uncertain, UI shows neutral/withheld status rather than optimistic status.
+7. Post-initial UI enhancements reconcile via non-layout-shifting transitions (no pushdowns).
+8. Full-state reconciliation path does strictly less critical-path work than current implementation
    (including removal of repeated clone-heavy per-quest checks).
-8. Offline-first behavior remains intact for built-in list data and progress classification.
-9. If image optimization is included, list-card images use generated derivative(s) that improve
-   perceived performance without manually duplicating many source asset sizes in-repo.
-10. Implementation includes robust unit + component + Playwright coverage for correctness,
+9. Offline-first behavior remains intact for built-in list data and progress classification.
+10. If image optimization is included, list-card images use generated derivative(s) that improve
+    perceived performance without manually duplicating many source asset sizes in-repo.
+11. Implementation includes robust unit + component + Playwright coverage for correctness,
     reconciliation behavior, and regressions.
 
 ## 14) Deferred ideas / non-primary recommendations
@@ -383,11 +394,3 @@ If image derivative strategy is implemented:
 - `frontend/src/utils/gameState/common.js`
 - `frontend/src/utils/gameState.js`
 - `frontend/src/utils/customcontent.js`
-- `frontend/src/utils/indexeddb.js`
-- `frontend/__tests__/Quests.test.js`
-- `tests/customQuestLoader.test.ts`
-- `tests/offlineQuestCache.test.ts`
-- `frontend/e2e/quests.spec.ts`
-- `frontend/e2e/page-structure.spec.ts`
-- `frontend/e2e/quest-graph-visibility-toggle.spec.ts`
-- `frontend/e2e/svelte-component-hydration.spec.ts`
