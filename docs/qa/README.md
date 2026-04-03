@@ -11,6 +11,11 @@ releases easy to stage.
 - [v3.1 release QA](./v3.1.md) - feature-track checklist (token.place integration + broader rerun)
 - [Template](./template.md) - copy for new releases
 
+## Canonical release history
+
+- [Historical release tag index](../releases.md) - canonical list of all shipped/RC tags and
+  GitHub tag build links
+
 ## How to use this folder
 
 - Copy the latest checklist for each release (`v3.0.0.1`, `v3.1`, etc.) and tailor the notes for the
