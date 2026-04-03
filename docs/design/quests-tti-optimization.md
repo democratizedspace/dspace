@@ -14,7 +14,9 @@ Current implementation hotspots are concentrated in:
   reads and validation in `gameState/common.js`.
 - Per-quest availability checks that repeatedly call `loadGameState()` (which `structuredClone`s
   the full state each time), through `questFinished()`/`canStartQuest()` in `gameState.js`.
-- Eager custom quest enumeration (`listCustomQuests()`) before list rendering in `Quests.svelte`.
+- Custom quest enumeration (`listCustomQuests()`) as follow-up asynchronous work in
+  `Quests.svelte` that still adds mount-path overhead, but typically merges after built-ins can
+  render.
 
 Together, these form an avoidable critical path and increase both CPU and memory pressure on older
 hardware.
@@ -47,13 +49,11 @@ metadata that are not required for first list paint (title/description/image/id/
 ### 4.2 Initial list visibility is blocked on persistence readiness
 
 In `Quests.svelte`, all actionable/visible content is inside `{#if mounted}` and `mounted` is set
-only after `await ready` from `gameState/common.js`, then custom quests are loaded.
+only after `await ready` from `gameState/common.js`. That `ready` path is the primary blocker for
+first list paint.
 
-This defers first meaningful content to:
-
-1. IndexedDB/localStorage reads + migration/validation-ready path (`ready`), then
-2. custom quest enumeration (`listCustomQuests()`), then
-3. classification loop.
+After `mounted` flips true, built-in classification/render can proceed while custom quest
+enumeration (`listCustomQuests()`) continues asynchronously and merges later.
 
 ### 4.3 Classification does repeated full-state cloning
 
@@ -162,6 +162,10 @@ payloads.
 `Quests.svelte` should render initial cards immediately from manifest-provided built-in summaries,
 without waiting for `ready`.
 
+**Locked-quest visibility decision (explicit):** built-in quests should be shown in the fast path
+with a neutral `Locked` (non-actionable) status when prerequisites cannot yet be authoritatively
+resolved. We do not hide locked built-ins in the v3.0.1 fast path.
+
 ### 6.3 Snapshot-first authoritative classification
 
 Extend lightweight persisted snapshot in `gameState/common.js` to include minimal authoritative
@@ -208,11 +212,13 @@ pop-in on slower devices.
 
 - Quest title, description, image, id/path/tree from build-time manifest.
 - Static card shells and navigation links to quest detail routes.
+- Neutral `Locked` badge for entries that are not yet known to be `available` or `completed`.
 - `completed` badge only if snapshot is authoritative for that claim.
 
 ### Must be withheld until authoritative
 
 - `Start` / `Continue` affordances when requirement satisfaction is uncertain.
+- Marking a locked quest as hidden solely because authoritative prerequisites are not loaded yet.
 - Any status derived from missing/possibly stale prerequisites.
 
 ### Reconciliation behavior
@@ -355,8 +361,9 @@ If image derivative strategy is implemented:
 
 1. Should lightweight snapshot store only completion + current step, or include additional minimal
    fields for nuanced status chips?
-2. What is the exact trust policy between snapshot checksum and current in-memory state checksum on
-   first mount?
+2. **Resolved default policy:** on first mount checksum mismatch (or missing checksum) means
+   `snapshot treated as stale` → UI remains in neutral/locked-withheld state for non-completed
+   claims until full authoritative reconciliation finishes.
 3. Should custom quests always be sectioned separately (e.g., “Custom quests”) to further isolate
    late-arrival merge behavior?
 4. Can graph payload serialization be removed from `/quests` initial HTML when graph toggle is off,
