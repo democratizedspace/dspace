@@ -2,6 +2,12 @@
 
 > **Status:** Dev is **not live yet**. This is the intended runbook for when dev is stood up.
 
+Related release docs:
+
+- [Release procedure](./merge-plan.md)
+- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
+- [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
+
 ## Intended topology and purpose
 
 - Environment: `env=dev`
@@ -20,12 +26,6 @@ are acceptable in this environment.
 - Do not treat dev sign-off as a substitute for staging validation.
 
 See the release workflow: [docs/merge-plan.md](./merge-plan.md).
-
-Related docs:
-
-- [Release procedure](./merge-plan.md)
-- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
-- [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
 
 ## Prerequisites (when dev is provisioned)
 
@@ -94,7 +94,7 @@ cd ~/sugarkube
 ```
 
 ```bash
-just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.dev.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_PREVIOUS_SHORTSHA
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.dev.yaml version_file=docs/apps/dspace.version tag=<previous-immutable-tag>
 ```
 
 ## Operator notes
