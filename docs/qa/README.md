@@ -5,6 +5,7 @@ releases easy to stage.
 
 ## Checklists
 
+- [Release history (canonical)](../releases.md) - full list of historical release tags
 - [v3 release QA](./v3) - primary checklist for the v3 launch
 - [v3 quest speedrun artifact (cheat-enabled, 2026-03-13)](./speedrun_qa-cheats_20260313.csv) - full end-to-end quest QA record
 - [v3.0.0.1 patch release QA](./v3.0.0.1.md) - urgent bugfix/small-improvement release checklist
