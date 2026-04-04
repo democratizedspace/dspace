@@ -9,6 +9,8 @@ const {
     validateGameState,
     getGameStateChecksum,
     getPersistedGameStateChecksum,
+    getPersistedGameStateLightweight,
+    isAuthoritativeQuestSnapshot,
     syncGameStateFromLocalIfStale,
 } = require('../../src/utils/gameState/common.js');
 const { listBuiltInQuestIds } = require('../../src/utils/builtInQuests.js');
@@ -195,6 +197,27 @@ describe('gameState - common utilities', () => {
         expect(typeof checksum).toBe('string');
         expect(checksum.length).toBeGreaterThan(0);
         expect(getPersistedGameStateChecksum()).toBe(checksum);
+    });
+
+    test('lightweight snapshot carries authoritative quest completion metadata', async () => {
+        const state = loadGameState();
+        state.quests['welcome/howtodoquests'] = { finished: true };
+        await saveGameState(state);
+
+        const snapshot = await getPersistedGameStateLightweight();
+        expect(snapshot.version).toBe(2);
+        expect(snapshot.completedQuestIds).toContain('welcome/howtodoquests');
+        expect(isAuthoritativeQuestSnapshot(snapshot)).toBe(true);
+    });
+
+    test('stale lightweight snapshot falls back to non-authoritative state', () => {
+        expect(
+            isAuthoritativeQuestSnapshot({
+                version: 1,
+                checksum: 'abc123',
+                completedQuestIds: ['welcome/howtodoquests'],
+            })
+        ).toBe(false);
     });
 
     test('syncGameStateFromLocalIfStale hydrates newer localStorage state', async () => {

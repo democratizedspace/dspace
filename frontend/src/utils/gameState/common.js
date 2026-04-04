@@ -17,6 +17,7 @@ const LS_BACKUP_KEY = 'gameStateBackup';
 const LS_CHECKSUM_KEY = 'gameStateChecksum';
 const LS_LIGHTWEIGHT_KEY = 'gameStateLite';
 const META_KEY = '_meta';
+const LIGHTWEIGHT_SNAPSHOT_VERSION = 2;
 const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
@@ -228,20 +229,37 @@ const getPersistedDusd = (state) => {
 };
 
 const buildLightweightSnapshot = (state) => ({
+    version: LIGHTWEIGHT_SNAPSHOT_VERSION,
     checksum: state?.[META_KEY]?.checksum ?? '',
     dUSD: getPersistedDusd(state),
     lastUpdated: state?.[META_KEY]?.lastUpdated ?? Date.now(),
+    completedQuestIds: Object.entries(state?.quests ?? {})
+        .filter(([, progress]) => progress?.finished === true)
+        .map(([questId]) => questId)
+        .sort((a, b) => a.localeCompare(b)),
 });
 
 const normalizeLightweightSnapshot = (value) => {
     if (!value || typeof value !== 'object') {
-        return { checksum: '', dUSD: 0, lastUpdated: 0 };
+        return {
+            version: 0,
+            checksum: '',
+            dUSD: 0,
+            lastUpdated: 0,
+            completedQuestIds: [],
+        };
     }
 
     return {
+        version: Number.isFinite(value.version) ? Number(value.version) : 0,
         checksum: typeof value.checksum === 'string' ? value.checksum : '',
         dUSD: Number.isFinite(value.dUSD) ? Number(value.dUSD) : 0,
         lastUpdated: Number.isFinite(value.lastUpdated) ? Number(value.lastUpdated) : 0,
+        completedQuestIds: Array.isArray(value.completedQuestIds)
+            ? value.completedQuestIds.filter(
+                  (questId) => typeof questId === 'string' && questId.trim() !== ''
+              )
+            : [],
     };
 };
 
@@ -516,6 +534,19 @@ export const getPersistedGameStateLightweight = async () => {
     }
 
     return readLightweightSnapshotFromLocalStorage();
+};
+
+export const isAuthoritativeQuestSnapshot = (snapshot) => {
+    if (!snapshot || typeof snapshot !== 'object') {
+        return false;
+    }
+
+    return (
+        snapshot.version === LIGHTWEIGHT_SNAPSHOT_VERSION &&
+        typeof snapshot.checksum === 'string' &&
+        snapshot.checksum.length > 0 &&
+        Array.isArray(snapshot.completedQuestIds)
+    );
 };
 
 export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {
