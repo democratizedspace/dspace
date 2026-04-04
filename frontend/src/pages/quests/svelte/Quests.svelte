@@ -103,6 +103,7 @@
 
         const lightweightSnapshot = getPersistedGameStateLightweightSync();
         const trustedSnapshot = getAuthoritativeQuestProgressSnapshot(lightweightSnapshot);
+        let latestClassificationSnapshot = trustedSnapshot;
 
         applyBuiltInClassification(trustedSnapshot);
 
@@ -127,13 +128,16 @@
                 showQuestGraphVisualizer = Boolean(currentState.settings?.showQuestGraphVisualizer);
 
                 const fullStateSnapshot = { state: currentState };
+                latestClassificationSnapshot = fullStateSnapshot;
                 applyBuiltInClassification(fullStateSnapshot);
                 classifyCustomQuests(fullStateSnapshot);
 
                 unsubscribeState = state.subscribe((value) => {
+                    const stateSnapshot = { state: value };
+                    latestClassificationSnapshot = stateSnapshot;
                     showQuestGraphVisualizer = Boolean(value?.settings?.showQuestGraphVisualizer);
-                    applyBuiltInClassification({ state: value });
-                    classifyCustomQuests({ state: value });
+                    applyBuiltInClassification(stateSnapshot);
+                    classifyCustomQuests(stateSnapshot);
                 });
             } catch (error) {
                 console.error('Unable to reconcile quests with full game state:', error);
@@ -149,21 +153,26 @@
         reconcileFullState();
 
         try {
-            const questsFromStorage = await listCustomQuests();
+            const customQuestsPromise = listCustomQuests();
+            const timedCustomQuestLoad = Promise.race([
+                customQuestsPromise,
+                new Promise((resolve) => setTimeout(() => resolve([]), 5000)),
+            ]);
+            const questsFromStorage = await timedCustomQuestLoad;
             customQuestRecords = Array.isArray(questsFromStorage) ? questsFromStorage : [];
         } catch (error) {
             console.error('Unable to load custom quests for listing:', error);
             customQuestRecords = [];
+        } finally {
+            classifyCustomQuests(latestClassificationSnapshot);
+            customMergeComplete = true;
+            markPerf('quests:custom-quests-merge-complete');
+            measurePerf(
+                'quests:time-to-custom-merge',
+                'quests:list-hydration-start',
+                'quests:custom-quests-merge-complete'
+            );
         }
-
-        classifyCustomQuests(trustedSnapshot);
-        customMergeComplete = true;
-        markPerf('quests:custom-quests-merge-complete');
-        measurePerf(
-            'quests:time-to-custom-merge',
-            'quests:list-hydration-start',
-            'quests:custom-quests-merge-complete'
-        );
     });
 
     onDestroy(() => {
