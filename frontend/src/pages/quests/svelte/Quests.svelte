@@ -40,6 +40,7 @@
     let activeBuiltInQuests = [];
     let customQuestRecords = [];
     let customClassified = [];
+    let customMergeComplete = false;
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
 
@@ -145,6 +146,8 @@
         } catch (error) {
             console.error('Unable to load custom quests for listing:', error);
             customQuestRecords = [];
+        } finally {
+            customMergeComplete = true;
         }
 
         classifyCustomQuests({ state: loadGameState() });
@@ -183,14 +186,22 @@
     {/if}
 
     <section class="custom-section" data-testid="custom-quests-section">
-        {#if customClassified.length > 0}
+        {#if !customMergeComplete || customClassified.length > 0}
             <h2>Custom Quests</h2>
-            <div class="quests-grid">
-                {#each customClassified as quest}
-                    <a href={quest.route} aria-label={quest.title}>
-                        <Quest {quest} status={quest.status} />
-                    </a>
-                {/each}
+            <div class="custom-grid-shell" data-testid="custom-quests-shell">
+                {#if customClassified.length > 0}
+                    <div class="quests-grid">
+                        {#each customClassified as quest}
+                            <a href={quest.route} aria-label={quest.title}>
+                                <Quest {quest} status={quest.status} />
+                            </a>
+                        {/each}
+                    </div>
+                {:else}
+                    <div class="custom-placeholder-grid" aria-hidden="true">
+                        <div class="custom-placeholder-card" />
+                    </div>
+                {/if}
             </div>
         {/if}
     </section>
@@ -248,6 +259,22 @@
         height: auto;
     }
 
+    .custom-grid-shell {
+        min-height: 246px;
+    }
+
+    .custom-placeholder-grid {
+        display: flex;
+        justify-content: center;
+    }
+
+    .custom-placeholder-card {
+        width: min(400px, 100%);
+        height: 220px;
+        border-radius: 20px;
+        background: transparent;
+    }
+
     @media only screen and (max-width: 640px) {
         .container {
             padding-inline: 1rem;
@@ -265,7 +292,4 @@
         min-width: 0;
     }
 
-    .custom-section {
-        min-height: 12px;
-    }
 </style>
