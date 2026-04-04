@@ -97,27 +97,41 @@ export const finishQuest = (questId, rewardItems) => {
 
 export const questFinished = (questId) => {
     const gameState = loadGameState();
+    return questFinishedInState(questId, gameState);
+};
 
-    const finished = gameState.quests[questId] ? gameState.quests[questId].finished : false;
-    return finished;
+export const questFinishedInState = (questId, gameState) => {
+    return Boolean(gameState?.quests?.[questId]?.finished);
 };
 
 export const getUnmetQuestRequirements = (quest) => {
+    const gameState = loadGameState();
+    return getUnmetQuestRequirementsInState(quest, gameState);
+};
+
+export const getUnmetQuestRequirementsInState = (quest, gameState) => {
     const requiresQuests = Array.isArray(quest?.default?.requiresQuests)
         ? quest.default.requiresQuests
         : Array.isArray(quest?.requiresQuests)
           ? quest.requiresQuests
           : [];
 
-    return requiresQuests.filter((requiredQuestId) => !questFinished(requiredQuestId));
+    return requiresQuests.filter(
+        (requiredQuestId) => !questFinishedInState(requiredQuestId, gameState)
+    );
 };
 
 export const canStartQuest = (quest) => {
-    if (questFinished(quest.id)) {
+    const gameState = loadGameState();
+    return canStartQuestInState(quest, gameState);
+};
+
+export const canStartQuestInState = (quest, gameState) => {
+    if (questFinishedInState(quest.id, gameState)) {
         return false;
     }
 
-    return getUnmetQuestRequirements(quest).length === 0;
+    return getUnmetQuestRequirementsInState(quest, gameState).length === 0;
 };
 
 export const setCurrentDialogueStep = (questId, stepId) => {

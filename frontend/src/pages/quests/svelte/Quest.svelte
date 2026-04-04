@@ -1,6 +1,18 @@
 <script>
+    import { QUEST_LIST_STATUS } from '../../../utils/quests/listClassifier.js';
+
     export let quest,
-        compact = false;
+        compact = false,
+        status = QUEST_LIST_STATUS.UNKNOWN;
+
+    let imageLoaded = false;
+
+    const statusLabelByType = {
+        [QUEST_LIST_STATUS.UNKNOWN]: 'Status unavailable',
+        [QUEST_LIST_STATUS.LOCKED]: 'Locked',
+        [QUEST_LIST_STATUS.AVAILABLE]: 'Ready to start',
+        [QUEST_LIST_STATUS.COMPLETED]: 'Completed',
+    };
 </script>
 
 <div class="container" class:quest data-testid="quest-tile">
@@ -9,8 +21,14 @@
             <div class="content">
                 <img
                     class="quest-img quest-img-compact"
+                    class:loaded={imageLoaded}
                     src={quest.image}
                     alt={`Quest artwork for ${quest.title}`}
+                    loading="lazy"
+                    decoding="async"
+                    on:load={() => {
+                        imageLoaded = true;
+                    }}
                 />
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
@@ -18,10 +36,23 @@
             </div>
         {:else}
             <div class="content">
-                <img class="quest-img" src={quest.image} alt={`Quest artwork for ${quest.title}`} />
+                <img
+                    class="quest-img"
+                    class:loaded={imageLoaded}
+                    src={quest.image}
+                    alt={`Quest artwork for ${quest.title}`}
+                    loading="lazy"
+                    decoding="async"
+                    width="200"
+                    height="200"
+                    on:load={() => {
+                        imageLoaded = true;
+                    }}
+                />
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
                     <p>{quest.description}</p>
+                    <p class="quest-status" data-testid="quest-status">{statusLabelByType[status]}</p>
                 </div>
             </div>
         {/if}
@@ -63,6 +94,12 @@
         background: #1d1d2e;
         border: 5px solid #68d46d;
         box-sizing: border-box;
+        opacity: 0;
+        transition: opacity 0.18s ease-in;
+    }
+
+    .quest-img.loaded {
+        opacity: 1;
     }
 
     .quest-img-compact {
@@ -100,6 +137,13 @@
         align-items: flex-start;
         justify-content: center;
         padding: 16px 24px;
+    }
+
+    .quest-status {
+        min-height: 1.5rem;
+        font-weight: 600;
+        opacity: 0.9;
+        transition: opacity 0.18s ease-in;
     }
 
     @media only screen and (max-width: 640px) {
