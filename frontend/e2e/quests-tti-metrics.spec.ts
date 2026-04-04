@@ -14,7 +14,7 @@ test.describe('quests performance marks', () => {
         await clearUserData(page);
     });
 
-    test('collects /quests user timing milestones', async ({ page, browserName }) => {
+    test('collects /quests user timing milestones', async ({ page, browserName, baseURL }) => {
         test.skip(browserName !== 'chromium', 'Measurement harness is Chromium-focused');
 
         const cpuSlowdown = Number(process.env.QUESTS_TTI_CPU_SLOWDOWN ?? '1');
@@ -26,6 +26,14 @@ test.describe('quests performance marks', () => {
         await page.goto('/quests');
         await page.waitForLoadState('networkidle');
 
+        const configuredBaseUrl =
+            process.env.QUESTS_PERF_BASE_URL || process.env.BASE_URL || baseURL || page.url();
+        const configuredOrigin = new URL(configuredBaseUrl).origin;
+        const loadedUrl = new URL(page.url());
+
+        expect(loadedUrl.origin).toBe(configuredOrigin);
+        expect(loadedUrl.pathname).toBe('/quests');
+        await expect(page.getByRole('heading', { name: 'Quests' })).toBeVisible();
         await expect(page.getByTestId('quests-grid')).toBeVisible();
 
         const metrics = await page.evaluate((marks) => {
