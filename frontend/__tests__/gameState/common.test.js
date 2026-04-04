@@ -10,6 +10,8 @@ const {
     getGameStateChecksum,
     getPersistedGameStateChecksum,
     syncGameStateFromLocalIfStale,
+    getPersistedGameStateLightweightSync,
+    getAuthoritativeQuestProgressSnapshot,
 } = require('../../src/utils/gameState/common.js');
 const { listBuiltInQuestIds } = require('../../src/utils/builtInQuests.js');
 const { getOfficialQuestStats } = require('../../src/utils/gameState/questStats.js');
@@ -197,6 +199,27 @@ describe('gameState - common utilities', () => {
         expect(getPersistedGameStateChecksum()).toBe(checksum);
     });
 
+    test('lightweight snapshot includes trusted quest progress metadata', async () => {
+        const next = loadGameState();
+        next.quests['welcome/howtodoquests'] = { finished: true };
+        await saveGameState(next);
+
+        const lightweight = getPersistedGameStateLightweightSync();
+        const trusted = getAuthoritativeQuestProgressSnapshot(lightweight);
+
+        expect(trusted.authoritative).toBe(true);
+        expect(trusted.completedQuestIds).toContain('welcome/howtodoquests');
+    });
+
+    test('snapshot trust falls back to neutral on version mismatch', () => {
+        const trusted = getAuthoritativeQuestProgressSnapshot({
+            checksum: 'abc123',
+            questProgress: { version: 999, completedQuestIds: ['welcome/howtodoquests'] },
+        });
+
+        expect(trusted.authoritative).toBe(false);
+        expect(trusted.completedQuestIds).toEqual([]);
+    });
     test('syncGameStateFromLocalIfStale hydrates newer localStorage state', async () => {
         const initial = loadGameState();
         initial.inventory['multi-tab-item'] = 1;

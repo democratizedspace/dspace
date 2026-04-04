@@ -1,0 +1,3349 @@
+[
+    {
+        "id": "3dprinting/bed-leveling",
+        "title": "Level the Print Bed",
+        "description": "After power-off and cooling, level the FDM bed with a paper-drag baseline, adjustment pass, and re-test.",
+        "image": "/assets/quests/bed_leveling_printer_paper_test.jpg",
+        "requiresQuests": [
+            "3dprinting/start"
+        ],
+        "tree": "3dprinting",
+        "slug": "bed-leveling",
+        "route": "/quests/3dprinting/bed-leveling",
+        "sourcePath": "./json/3dprinting/bed-leveling.json"
+    },
+    {
+        "id": "3dprinting/benchy_10",
+        "title": "3D Print 10 Benchies",
+        "description": "Build a reliable first production batch of 10 Benchies with checkpoint notes and recovery steps.",
+        "image": "/assets/quests/benchy_10_lineup.jpg",
+        "requiresQuests": [
+            "3dprinting/filament-change"
+        ],
+        "tree": "3dprinting",
+        "slug": "benchy_10",
+        "route": "/quests/3dprinting/benchy_10",
+        "sourcePath": "./json/3dprinting/benchy_10.json"
+    },
+    {
+        "id": "3dprinting/benchy_100",
+        "title": "3D Print 100 Benchies",
+        "description": "Scale to a 100-Benchy fleet with production evidence, quality checkpoints, and recovery loops.",
+        "image": "/assets/quests/benchy_100.jpg",
+        "requiresQuests": [
+            "3dprinting/benchy_25"
+        ],
+        "tree": "3dprinting",
+        "slug": "benchy_100",
+        "route": "/quests/3dprinting/benchy_100",
+        "sourcePath": "./json/3dprinting/benchy_100.json"
+    },
+    {
+        "id": "3dprinting/benchy_25",
+        "title": "3D Print 25 Benchies",
+        "description": "Build a fleet of 25 Benchies with a stable production plan, quality checks, and recovery loops.",
+        "image": "/assets/quests/benchy_batch_25.jpg",
+        "requiresQuests": [
+            "3dprinting/benchy_10"
+        ],
+        "tree": "3dprinting",
+        "slug": "benchy_25",
+        "route": "/quests/3dprinting/benchy_25",
+        "sourcePath": "./json/3dprinting/benchy_25.json"
+    },
+    {
+        "id": "3dprinting/blob-of-death",
+        "title": "Witness a Blob of Death",
+        "description": "Skipping a first-layer check lets a failed Z homing extrude in mid-air, engulfing the nozzle in molten plastic.",
+        "image": "/assets/quests/blob_of_death_nozzle_fail.jpg",
+        "requiresQuests": [
+            "3dprinting/nozzle-cleaning"
+        ],
+        "tree": "3dprinting",
+        "slug": "blob-of-death",
+        "route": "/quests/3dprinting/blob-of-death",
+        "sourcePath": "./json/3dprinting/blob-of-death.json"
+    },
+    {
+        "id": "3dprinting/cable-clip",
+        "title": "Print a Cable Clip",
+        "description": "Reduce clutter by printing cable clips with setup evidence, fit checks, and a recovery loop.",
+        "image": "/assets/quests/cable_clip_print.jpg",
+        "requiresQuests": [
+            "3dprinting/filament-change"
+        ],
+        "tree": "3dprinting",
+        "slug": "cable-clip",
+        "route": "/quests/3dprinting/cable-clip",
+        "sourcePath": "./json/3dprinting/cable-clip.json"
+    },
+    {
+        "id": "3dprinting/calibration-cube",
+        "title": "Print a Calibration Cube",
+        "description": "Print a 20 mm calibration cube with baseline measurements, tuning adjustments, and retest evidence.",
+        "image": "/assets/quests/calibration_cube_measure.jpg",
+        "requiresQuests": [
+            "3dprinting/bed-leveling"
+        ],
+        "tree": "3dprinting",
+        "slug": "calibration-cube",
+        "route": "/quests/3dprinting/calibration-cube",
+        "sourcePath": "./json/3dprinting/calibration-cube.json"
+    },
+    {
+        "id": "3dprinting/filament-change",
+        "title": "Swap Filament",
+        "description": "Swap to green PLA on your entry-level FDM printer with goggles, wire cutters, and a 10 g purge.",
+        "image": "/assets/quests/filament_swap_green_pla.jpg",
+        "requiresQuests": [
+            "3dprinting/calibration-cube"
+        ],
+        "tree": "3dprinting",
+        "slug": "filament-change",
+        "route": "/quests/3dprinting/filament-change",
+        "sourcePath": "./json/3dprinting/filament-change.json"
+    },
+    {
+        "id": "3dprinting/nozzle-cleaning",
+        "title": "Clear a Clogged Nozzle",
+        "description": "Heat and clean the nozzle to restore smooth extrusion.",
+        "image": "/assets/quests/nozzle_cleaning_tools.jpg",
+        "requiresQuests": [
+            "3dprinting/nozzle-clog"
+        ],
+        "tree": "3dprinting",
+        "slug": "nozzle-cleaning",
+        "route": "/quests/3dprinting/nozzle-cleaning",
+        "sourcePath": "./json/3dprinting/nozzle-cleaning.json"
+    },
+    {
+        "id": "3dprinting/nozzle-clog",
+        "title": "Fix a Clogged Nozzle",
+        "description": "Disassemble your printer after a blob of death from skipping the first layer to unclog or replace the nozzle.",
+        "image": "/assets/quests/nozzle_clog_disassembly.jpg",
+        "requiresQuests": [
+            "3dprinting/filament-change"
+        ],
+        "tree": "3dprinting",
+        "slug": "nozzle-clog",
+        "route": "/quests/3dprinting/nozzle-clog",
+        "sourcePath": "./json/3dprinting/nozzle-clog.json"
+    },
+    {
+        "id": "3dprinting/phone-stand",
+        "title": "Print a Phone Stand",
+        "description": "Print and fit-check a phone stand with measured angle and clearance thresholds.",
+        "image": "/assets/quests/phone_stand_print.jpg",
+        "requiresQuests": [
+            "3dprinting/filament-change"
+        ],
+        "tree": "3dprinting",
+        "slug": "phone-stand",
+        "route": "/quests/3dprinting/phone-stand",
+        "sourcePath": "./json/3dprinting/phone-stand.json"
+    },
+    {
+        "id": "3dprinting/retraction-test",
+        "title": "Tune Retraction Settings",
+        "description": "Print a single Benchy while adjusting retraction to reduce stringing.",
+        "image": "/assets/quests/retraction_test_benchy.jpg",
+        "requiresQuests": [
+            "3dprinting/spool-holder"
+        ],
+        "tree": "3dprinting",
+        "slug": "retraction-test",
+        "route": "/quests/3dprinting/retraction-test",
+        "sourcePath": "./json/3dprinting/retraction-test.json"
+    },
+    {
+        "id": "3dprinting/spool-holder",
+        "title": "Print a Spool Holder",
+        "description": "Keep filament tidy by printing a simple spool holder.",
+        "image": "/assets/quests/spool_holder_print_setup.jpg",
+        "requiresQuests": [
+            "3dprinting/phone-stand"
+        ],
+        "tree": "3dprinting",
+        "slug": "spool-holder",
+        "route": "/quests/3dprinting/spool-holder",
+        "sourcePath": "./json/3dprinting/spool-holder.json"
+    },
+    {
+        "id": "3dprinting/start",
+        "title": "Set up your first 3D printer",
+        "description": "Accept Sydney's offer of a 3D printer, and learn how to set it up for use in your space exploration adventure.",
+        "image": "/assets/quests/first_3d_printer_setup.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "3dprinting",
+        "slug": "start",
+        "route": "/quests/3dprinting/start",
+        "sourcePath": "./json/3dprinting/start.json"
+    },
+    {
+        "id": "3dprinting/temperature-tower",
+        "title": "Print a Temperature Tower",
+        "description": "Find the ideal nozzle temperature by printing a simple calibration tower.",
+        "image": "/assets/quests/temperature_tower_calibration.jpg",
+        "requiresQuests": [
+            "3dprinting/retraction-test"
+        ],
+        "tree": "3dprinting",
+        "slug": "temperature-tower",
+        "route": "/quests/3dprinting/temperature-tower",
+        "sourcePath": "./json/3dprinting/temperature-tower.json"
+    },
+    {
+        "id": "3dprinting/x-belt-tension",
+        "title": "Tighten the X-axis Belt",
+        "description": "Keep your prints sharp by safely tightening a loose X-axis belt.",
+        "image": "/assets/quests/x_belt_tension_adjust.jpg",
+        "requiresQuests": [
+            "3dprinting/cable-clip"
+        ],
+        "tree": "3dprinting",
+        "slug": "x-belt-tension",
+        "route": "/quests/3dprinting/x-belt-tension",
+        "sourcePath": "./json/3dprinting/x-belt-tension.json"
+    },
+    {
+        "id": "aquaria/aquarium-light",
+        "title": "Install an aquarium light",
+        "description": "Install LED lighting with a safe photoperiod, verify plant-response evidence, and recover from stress signs before normal operation.",
+        "image": "/assets/quests/aquarium_light.jpg",
+        "requiresQuests": [
+            "aquaria/sponge-filter"
+        ],
+        "tree": "aquaria",
+        "slug": "aquarium-light",
+        "route": "/quests/aquaria/aquarium-light",
+        "sourcePath": "./json/aquaria/aquarium-light.json"
+    },
+    {
+        "id": "aquaria/balance-ph",
+        "title": "Balance aquarium pH",
+        "description": "Capture a baseline pH reading, dose buffer safely, then re-test and log a stable window before declaring the tank recovered.",
+        "image": "/assets/quests/aquarium_ph_balance.jpg",
+        "requiresQuests": [
+            "aquaria/ph-strip-test"
+        ],
+        "tree": "aquaria",
+        "slug": "balance-ph",
+        "route": "/quests/aquaria/balance-ph",
+        "sourcePath": "./json/aquaria/balance-ph.json"
+    },
+    {
+        "id": "aquaria/breeding",
+        "title": "Breed your guppies",
+        "description": "Stage fry cover and feeding, then prove brood health with water-parameter checks before graduating juveniles.",
+        "image": "/assets/quests/aquaria_guppy_breeding_plants.jpg",
+        "requiresQuests": [
+            "aquaria/floating-plants",
+            "aquaria/guppy"
+        ],
+        "tree": "aquaria",
+        "slug": "breeding",
+        "route": "/quests/aquaria/breeding",
+        "sourcePath": "./json/aquaria/breeding.json"
+    },
+    {
+        "id": "aquaria/filter-rinse",
+        "title": "Rinse Sponge Filter",
+        "description": "Capture pre-rinse flow evidence, rinse in dechlorinated water, and verify restored gentle flow before closing maintenance.",
+        "image": "/assets/quests/rinse_sponge_filter_bucket.jpg",
+        "requiresQuests": [
+            "aquaria/sponge-filter"
+        ],
+        "tree": "aquaria",
+        "slug": "filter-rinse",
+        "route": "/quests/aquaria/filter-rinse",
+        "sourcePath": "./json/aquaria/filter-rinse.json"
+    },
+    {
+        "id": "aquaria/floating-plants",
+        "title": "Add Floating Plants",
+        "description": "Rinse guppy grass in dechlorinated water, then float it so it soaks up excess nutrients and shelters fry.",
+        "image": "/assets/quests/floating_plants.jpg",
+        "requiresQuests": [
+            "aquaria/shrimp"
+        ],
+        "tree": "aquaria",
+        "slug": "floating-plants",
+        "route": "/quests/aquaria/floating-plants",
+        "sourcePath": "./json/aquaria/floating-plants.json"
+    },
+    {
+        "id": "aquaria/goldfish",
+        "title": "Set up an aquarium for a goldfish",
+        "description": "Stage a goldfish habitat, verify safety checks, and resolve early stress signals before declaring the setup stable.",
+        "image": "/assets/quests/goldfish_aquarium_setup.jpg",
+        "requiresQuests": [
+            "aquaria/breeding",
+            "welcome/howtodoquests"
+        ],
+        "tree": "aquaria",
+        "slug": "goldfish",
+        "route": "/quests/aquaria/goldfish",
+        "sourcePath": "./json/aquaria/goldfish.json"
+    },
+    {
+        "id": "aquaria/guppy",
+        "title": "Add guppies",
+        "description": "Introduce colorful guppies with staged acclimation, stress handling, and post-release verification.",
+        "image": "/assets/quests/add_guppies_to_tank.jpg",
+        "requiresQuests": [
+            "aquaria/heater-install",
+            "aquaria/water-testing"
+        ],
+        "tree": "aquaria",
+        "slug": "guppy",
+        "route": "/quests/aquaria/guppy",
+        "sourcePath": "./json/aquaria/guppy.json"
+    },
+    {
+        "id": "aquaria/heater-install",
+        "title": "Install an aquarium heater",
+        "description": "Install a 150 W heater in a Walstad tank, verify safe stability, and use rollback or lockout recovery when readings drift or hardware risk appears.",
+        "image": "/assets/quests/install_aquarium_heater.jpg",
+        "requiresQuests": [
+            "aquaria/sponge-filter",
+            "aquaria/thermometer",
+            "aquaria/walstad"
+        ],
+        "tree": "aquaria",
+        "slug": "heater-install",
+        "route": "/quests/aquaria/heater-install",
+        "sourcePath": "./json/aquaria/heater-install.json"
+    },
+    {
+        "id": "aquaria/log-water-parameters",
+        "title": "Log Water Parameters",
+        "description": "Run a full liquid test panel, classify anomalies by severity, and log complete records with a deterministic corrective/retest loop.",
+        "image": "/assets/quests/paperwork.jpg",
+        "requiresQuests": [
+            "aquaria/water-testing"
+        ],
+        "tree": "aquaria",
+        "slug": "log-water-parameters",
+        "route": "/quests/aquaria/log-water-parameters",
+        "sourcePath": "./json/aquaria/log-water-parameters.json"
+    },
+    {
+        "id": "aquaria/net-fish",
+        "title": "Catch a fish with a net",
+        "description": "Use an aquarium net to move a fish safely during cleaning.",
+        "image": "/assets/quests/catch_fish_with_a_net.jpg",
+        "requiresQuests": [
+            "aquaria/water-change"
+        ],
+        "tree": "aquaria",
+        "slug": "net-fish",
+        "route": "/quests/aquaria/net-fish",
+        "sourcePath": "./json/aquaria/net-fish.json"
+    },
+    {
+        "id": "aquaria/ph-strip-test",
+        "title": "Check aquarium pH",
+        "description": "Capture a pH strip reading, interpret against safe bounds, and re-test if the tank is out of range.",
+        "image": "/assets/quests/aquarium_ph_strip_test.jpg",
+        "requiresQuests": [
+            "aquaria/water-testing"
+        ],
+        "tree": "aquaria",
+        "slug": "ph-strip-test",
+        "route": "/quests/aquaria/ph-strip-test",
+        "sourcePath": "./json/aquaria/ph-strip-test.json"
+    },
+    {
+        "id": "aquaria/position-tank",
+        "title": "Move the Walstad tank",
+        "description": "Atlas helps you lift the empty 80 L Walstad aquarium onto a sturdy stand. Clear the path, lift with your legs and keep the glass supported.",
+        "image": "/assets/quests/position_tank.jpg",
+        "requiresQuests": [
+            "aquaria/thermometer",
+            "aquaria/walstad"
+        ],
+        "tree": "aquaria",
+        "slug": "position-tank",
+        "route": "/quests/aquaria/position-tank",
+        "sourcePath": "./json/aquaria/position-tank.json"
+    },
+    {
+        "id": "aquaria/shrimp",
+        "title": "Add dwarf shrimp",
+        "description": "Introduce hardy shrimp with drip acclimation to keep the tank clean and water stable.",
+        "image": "/assets/quests/dwarf_shrimp_drip_acclimation.jpg",
+        "requiresQuests": [
+            "aquaria/heater-install",
+            "aquaria/log-water-parameters",
+            "aquaria/ph-strip-test"
+        ],
+        "tree": "aquaria",
+        "slug": "shrimp",
+        "route": "/quests/aquaria/shrimp",
+        "sourcePath": "./json/aquaria/shrimp.json"
+    },
+    {
+        "id": "aquaria/sponge-filter",
+        "title": "Install a sponge filter",
+        "description": "Install and verify gentle biological filtration with evidence gates and a contamination recovery loop.",
+        "image": "/assets/quests/install_sponge_filter_aquarium.jpg",
+        "requiresQuests": [
+            "aquaria/position-tank"
+        ],
+        "tree": "aquaria",
+        "slug": "sponge-filter",
+        "route": "/quests/aquaria/sponge-filter",
+        "sourcePath": "./json/aquaria/sponge-filter.json"
+    },
+    {
+        "id": "aquaria/thermometer",
+        "title": "Attach Aquarium Thermometer",
+        "description": "Attach a stick-on strip thermometer outside the aquarium glass to monitor water temperature.",
+        "image": "/assets/quests/stick_on_aquarium_thermometer.jpg",
+        "requiresQuests": [
+            "aquaria/walstad"
+        ],
+        "tree": "aquaria",
+        "slug": "thermometer",
+        "route": "/quests/aquaria/thermometer",
+        "sourcePath": "./json/aquaria/thermometer.json"
+    },
+    {
+        "id": "aquaria/top-off",
+        "title": "Top Off Evaporated Water",
+        "description": "Use a siphon and dechlorinated water to restore level safely, then verify stable conditions.",
+        "image": "/assets/quests/aquarium_top_off.jpg",
+        "requiresQuests": [
+            "aquaria/water-change"
+        ],
+        "tree": "aquaria",
+        "slug": "top-off",
+        "route": "/quests/aquaria/top-off",
+        "sourcePath": "./json/aquaria/top-off.json"
+    },
+    {
+        "id": "aquaria/walstad",
+        "title": "Set up a Walstad tank",
+        "description": "Create a low-tech planted aquarium using the Walstad method.",
+        "image": "/assets/quests/walstad_setup.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "aquaria",
+        "slug": "walstad",
+        "route": "/quests/aquaria/walstad",
+        "sourcePath": "./json/aquaria/walstad.json"
+    },
+    {
+        "id": "aquaria/water-change",
+        "title": "Perform a partial water change",
+        "description": "Swap out a quarter of the tank water for conditioned tap water to keep fish healthy.",
+        "image": "/assets/quests/goldfish_partial_water_change.jpg",
+        "requiresQuests": [
+            "aquaria/guppy"
+        ],
+        "tree": "aquaria",
+        "slug": "water-change",
+        "route": "/quests/aquaria/water-change",
+        "sourcePath": "./json/aquaria/water-change.json"
+    },
+    {
+        "id": "aquaria/water-testing",
+        "title": "Test water parameters",
+        "description": "Record a full liquid test panel, interpret threshold bounds, and run corrective action with a retest loop before stocking sensitive livestock.",
+        "image": "/assets/quests/water_testing.jpg",
+        "requiresQuests": [
+            "aquaria/thermometer"
+        ],
+        "tree": "aquaria",
+        "slug": "water-testing",
+        "route": "/quests/aquaria/water-testing",
+        "sourcePath": "./json/aquaria/water-testing.json"
+    },
+    {
+        "id": "astronomy/andromeda",
+        "title": "Locate the Andromeda Galaxy",
+        "description": "Use a planisphere star chart, a red flashlight and a basic telescope to locate our neighboring galaxy while preserving night vision.",
+        "image": "/assets/quests/andromeda_galaxy_backyard_hunt.jpg",
+        "requiresQuests": [
+            "astronomy/basic-telescope"
+        ],
+        "tree": "astronomy",
+        "slug": "andromeda",
+        "route": "/quests/astronomy/andromeda",
+        "sourcePath": "./json/astronomy/andromeda.json"
+    },
+    {
+        "id": "astronomy/aurora-watch",
+        "title": "Watch the Aurora",
+        "description": "Pick a safe aurora window, pack red light and layers, and log what you spot.",
+        "image": "/assets/quests/aurora_watch_red_flashlight.jpg",
+        "requiresQuests": [
+            "astronomy/light-pollution"
+        ],
+        "tree": "astronomy",
+        "slug": "aurora-watch",
+        "route": "/quests/astronomy/aurora-watch",
+        "sourcePath": "./json/astronomy/aurora-watch.json"
+    },
+    {
+        "id": "astronomy/basic-telescope",
+        "title": "Assemble a Simple Telescope",
+        "description": "Use 50 mm and 20 mm magnifying lenses, masking tape, a cardboard mailing tube and a camera tripod to build a simple refractor for viewing Jupiter's moons. Work in the shade and never aim at the Sun.",
+        "image": "/assets/quests/simple_cardboard_telescope_assembly.jpg",
+        "requiresQuests": [
+            "astronomy/observe-moon"
+        ],
+        "tree": "astronomy",
+        "slug": "basic-telescope",
+        "route": "/quests/astronomy/basic-telescope",
+        "sourcePath": "./json/astronomy/basic-telescope.json"
+    },
+    {
+        "id": "astronomy/binary-star",
+        "title": "Split a Binary Star",
+        "description": "Use charting and focus checks to split Albireo, verify interpretation, and recover safely when seeing is poor.",
+        "image": "/assets/quests/binary_star_albireo_observation.jpg",
+        "requiresQuests": [
+            "astronomy/constellations"
+        ],
+        "tree": "astronomy",
+        "slug": "binary-star",
+        "route": "/quests/astronomy/binary-star",
+        "sourcePath": "./json/astronomy/binary-star.json"
+    },
+    {
+        "id": "astronomy/comet-tracking",
+        "title": "Track a Visiting Comet",
+        "description": "Build a repeatable observing plan, log comet position across nights, and recover safely when visibility drops.",
+        "image": "/assets/quests/comet_tracking_observation_log.jpg",
+        "requiresQuests": [
+            "astronomy/meteor-shower"
+        ],
+        "tree": "astronomy",
+        "slug": "comet-tracking",
+        "route": "/quests/astronomy/comet-tracking",
+        "sourcePath": "./json/astronomy/comet-tracking.json"
+    },
+    {
+        "id": "astronomy/constellations",
+        "title": "Map the Constellations",
+        "description": "Build a seasonal star-hop map, verify pattern recognition with evidence, and recover safely when visibility drops.",
+        "image": "/assets/quests/constellation_mapping_logbook.jpg",
+        "requiresQuests": [
+            "astronomy/jupiter-moons"
+        ],
+        "tree": "astronomy",
+        "slug": "constellations",
+        "route": "/quests/astronomy/constellations",
+        "sourcePath": "./json/astronomy/constellations.json"
+    },
+    {
+        "id": "astronomy/iss-flyover",
+        "title": "Spot the ISS",
+        "description": "Plan an ISS pass, capture an observation artifact, and use weather/glare recovery with a scheduled follow-up when needed.",
+        "image": "/assets/quests/iss_flyover_backyard_observation.jpg",
+        "requiresQuests": [
+            "astronomy/observe-moon"
+        ],
+        "tree": "astronomy",
+        "slug": "iss-flyover",
+        "route": "/quests/astronomy/iss-flyover",
+        "sourcePath": "./json/astronomy/iss-flyover.json"
+    },
+    {
+        "id": "astronomy/iss-photo",
+        "title": "Photograph the ISS",
+        "description": "Capture an ISS long-exposure streak, score shot quality against thresholds, and run deterministic corrective retests.",
+        "image": "/assets/quests/iss_long_exposure_phone_photo.jpg",
+        "requiresQuests": [
+            "astronomy/iss-flyover"
+        ],
+        "tree": "astronomy",
+        "slug": "iss-photo",
+        "route": "/quests/astronomy/iss-photo",
+        "sourcePath": "./json/astronomy/iss-photo.json"
+    },
+    {
+        "id": "astronomy/jupiter-moons",
+        "title": "Track Jupiter's Moons",
+        "description": "Track Jupiter's four Galilean moons across multiple sessions with logged evidence, safety checks, and a recovery loop for poor seeing.",
+        "image": "/assets/quests/jupiter_moons_orbital_tracking.jpg",
+        "requiresQuests": [
+            "astronomy/basic-telescope"
+        ],
+        "tree": "astronomy",
+        "slug": "jupiter-moons",
+        "route": "/quests/astronomy/jupiter-moons",
+        "sourcePath": "./json/astronomy/jupiter-moons.json"
+    },
+    {
+        "id": "astronomy/light-pollution",
+        "title": "Measure Light Pollution",
+        "description": "Run an Orion star-count baseline, interpret visibility bands, and recover with safer fallback locations.",
+        "image": "/assets/quests/orion_light_pollution_count.jpg",
+        "requiresQuests": [
+            "astronomy/constellations"
+        ],
+        "tree": "astronomy",
+        "slug": "light-pollution",
+        "route": "/quests/astronomy/light-pollution",
+        "sourcePath": "./json/astronomy/light-pollution.json"
+    },
+    {
+        "id": "astronomy/lunar-eclipse",
+        "title": "Photograph a Lunar Eclipse",
+        "description": "Capture images of the Moon as it moves through Earth's shadow.",
+        "image": "/assets/quests/lunar_eclipse_astrophotography.jpg",
+        "requiresQuests": [
+            "astronomy/observe-moon"
+        ],
+        "tree": "astronomy",
+        "slug": "lunar-eclipse",
+        "route": "/quests/astronomy/lunar-eclipse",
+        "sourcePath": "./json/astronomy/lunar-eclipse.json"
+    },
+    {
+        "id": "astronomy/meteor-shower",
+        "title": "Document a Meteor Shower",
+        "description": "Plan for shower conditions, log meteor observations with interpretation, and rerun safely when visibility fails.",
+        "image": "/assets/quests/meteor_shower_observation_log.jpg",
+        "requiresQuests": [
+            "astronomy/jupiter-moons"
+        ],
+        "tree": "astronomy",
+        "slug": "meteor-shower",
+        "route": "/quests/astronomy/meteor-shower",
+        "sourcePath": "./json/astronomy/meteor-shower.json"
+    },
+    {
+        "id": "astronomy/north-star",
+        "title": "Locate the North Star",
+        "description": "Find Polaris via two route options, record a navigation artifact, and recover safely when conditions drift.",
+        "image": "/assets/quests/north_star_polaris_location.jpg",
+        "requiresQuests": [
+            "astronomy/constellations"
+        ],
+        "tree": "astronomy",
+        "slug": "north-star",
+        "route": "/quests/astronomy/north-star",
+        "sourcePath": "./json/astronomy/north-star.json"
+    },
+    {
+        "id": "astronomy/observe-moon",
+        "title": "Observe the Moon",
+        "description": "Use a basic telescope, mission logbook, quill, ink and red flashlight to sketch lunar craters safely.",
+        "image": "/assets/quests/lunar_crater_sketching_session.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "astronomy",
+        "slug": "observe-moon",
+        "route": "/quests/astronomy/observe-moon",
+        "sourcePath": "./json/astronomy/observe-moon.json"
+    },
+    {
+        "id": "astronomy/orion-nebula",
+        "title": "Observe the Orion Nebula",
+        "description": "Run a structured Orion session with fallback paths, logged evidence, and weather-safe recovery loops.",
+        "image": "/assets/quests/orion_nebula_backyard_observation.jpg",
+        "requiresQuests": [
+            "astronomy/andromeda"
+        ],
+        "tree": "astronomy",
+        "slug": "orion-nebula",
+        "route": "/quests/astronomy/orion-nebula",
+        "sourcePath": "./json/astronomy/orion-nebula.json"
+    },
+    {
+        "id": "astronomy/planetary-alignment",
+        "title": "Planetary Alignment",
+        "description": "Document a planetary lineup with a route plan, logged evidence, and safety-first recovery loops.",
+        "image": "/assets/quests/planetary_alignment_star_chart.jpg",
+        "requiresQuests": [
+            "astronomy/north-star"
+        ],
+        "tree": "astronomy",
+        "slug": "planetary-alignment",
+        "route": "/quests/astronomy/planetary-alignment",
+        "sourcePath": "./json/astronomy/planetary-alignment.json"
+    },
+    {
+        "id": "astronomy/satellite-pass",
+        "title": "Track a Satellite Pass",
+        "description": "Plan and track a satellite pass with weather fallback, safety preflight, anomaly classification, and logged evidence.",
+        "image": "/assets/quests/satellite_pass_tracking_scope.jpg",
+        "requiresQuests": [
+            "astronomy/meteor-shower"
+        ],
+        "tree": "astronomy",
+        "slug": "satellite-pass",
+        "route": "/quests/astronomy/satellite-pass",
+        "sourcePath": "./json/astronomy/satellite-pass.json"
+    },
+    {
+        "id": "astronomy/saturn-rings",
+        "title": "Spot Saturn's Rings",
+        "description": "Plan and execute a Saturn observing session with evidence logging, fallback routing, and safe retry handling.",
+        "image": "/assets/quests/saturn_rings_planisphere_setup.jpg",
+        "requiresQuests": [
+            "astronomy/basic-telescope"
+        ],
+        "tree": "astronomy",
+        "slug": "saturn-rings",
+        "route": "/quests/astronomy/saturn-rings",
+        "sourcePath": "./json/astronomy/saturn-rings.json"
+    },
+    {
+        "id": "astronomy/star-trails",
+        "title": "Capture Star Trails",
+        "description": "Use long-exposure photography to capture star trails with logged pass criteria and recovery loops.",
+        "image": "/assets/quests/star_trails_long_exposure_tripod.jpg",
+        "requiresQuests": [
+            "astronomy/planetary-alignment"
+        ],
+        "tree": "astronomy",
+        "slug": "star-trails",
+        "route": "/quests/astronomy/star-trails",
+        "sourcePath": "./json/astronomy/star-trails.json"
+    },
+    {
+        "id": "astronomy/sunspot-sketch",
+        "title": "Sketch Sunspots",
+        "description": "Use safe solar projection to capture a sunspot sketch, log interpretation notes, and recover cleanly when projection quality is poor.",
+        "image": "/assets/quests/solar.jpg",
+        "requiresQuests": [
+            "astronomy/saturn-rings"
+        ],
+        "tree": "astronomy",
+        "slug": "sunspot-sketch",
+        "route": "/quests/astronomy/sunspot-sketch",
+        "sourcePath": "./json/astronomy/sunspot-sketch.json"
+    },
+    {
+        "id": "astronomy/venus-phases",
+        "title": "Observe Venus's Phases",
+        "description": "Use a planisphere and basic telescope to plan, view, and sketch Venus's shifting phase.",
+        "image": "/assets/quests/venus_phases_telescope_sequence.jpg",
+        "requiresQuests": [
+            "astronomy/saturn-rings"
+        ],
+        "tree": "astronomy",
+        "slug": "venus-phases",
+        "route": "/quests/astronomy/venus-phases",
+        "sourcePath": "./json/astronomy/venus-phases.json"
+    },
+    {
+        "id": "chemistry/acid-dilution",
+        "title": "Dilute Hydrochloric Acid Safely",
+        "description": "Compute target molarity, pre-chill dilution glassware, then dilute HCl in an ice bath with staged additions and verification.",
+        "image": "/assets/quests/chemistry_hcl_acid_dilution.jpg",
+        "requiresQuests": [
+            "chemistry/ph-test"
+        ],
+        "tree": "chemistry",
+        "slug": "acid-dilution",
+        "route": "/quests/chemistry/acid-dilution",
+        "sourcePath": "./json/chemistry/acid-dilution.json"
+    },
+    {
+        "id": "chemistry/acid-neutralization",
+        "title": "Neutralize an Acid Spill",
+        "description": "Contain an acid spill with a berm, neutralize in controlled passes, and seal residue with disposal metadata.",
+        "image": "/assets/quests/acid_spill_neutralization_setup.jpg",
+        "requiresQuests": [
+            "chemistry/ph-test"
+        ],
+        "tree": "chemistry",
+        "slug": "acid-neutralization",
+        "route": "/quests/chemistry/acid-neutralization",
+        "sourcePath": "./json/chemistry/acid-neutralization.json"
+    },
+    {
+        "id": "chemistry/buffer-solution",
+        "title": "Prepare a Buffer Solution",
+        "description": "Design a Henderson–Hasselbalch recipe, compound the buffer with calibrated volumetrics, then verify pH and labeling.",
+        "image": "/assets/quests/chemistry_buffer_solution_setup.jpg",
+        "requiresQuests": [
+            "chemistry/acid-dilution",
+            "chemistry/ph-test"
+        ],
+        "tree": "chemistry",
+        "slug": "buffer-solution",
+        "route": "/quests/chemistry/buffer-solution",
+        "sourcePath": "./json/chemistry/buffer-solution.json"
+    },
+    {
+        "id": "chemistry/ph-adjustment",
+        "title": "Adjust Solution pH",
+        "description": "Plan titration corrections, execute micro-adjustments, and log every correction cycle until the buffer is in spec.",
+        "image": "/assets/quests/chemistry_ph_adjustment_nutrient_solution.jpg",
+        "requiresQuests": [
+            "chemistry/buffer-solution"
+        ],
+        "tree": "chemistry",
+        "slug": "ph-adjustment",
+        "route": "/quests/chemistry/ph-adjustment",
+        "sourcePath": "./json/chemistry/ph-adjustment.json"
+    },
+    {
+        "id": "chemistry/ph-test",
+        "title": "Measure Solution pH",
+        "description": "Calibrate pH tools, condition a sample aliquot, and produce a traceable pH reading card with method notes.",
+        "image": "/assets/quests/chemistry_ph_strip_test_lab.jpg",
+        "requiresQuests": [
+            "chemistry/safe-reaction"
+        ],
+        "tree": "chemistry",
+        "slug": "ph-test",
+        "route": "/quests/chemistry/ph-test",
+        "sourcePath": "./json/chemistry/ph-test.json"
+    },
+    {
+        "id": "chemistry/precipitation-reaction",
+        "title": "Form a Precipitate",
+        "description": "Pre-stage reagent stoichiometry, run controlled precipitation, then wash/filter solids for clean analytical samples.",
+        "image": "/assets/quests/chemistry_precipitation_reaction.jpg",
+        "requiresQuests": [
+            "chemistry/ph-adjustment"
+        ],
+        "tree": "chemistry",
+        "slug": "precipitation-reaction",
+        "route": "/quests/chemistry/precipitation-reaction",
+        "sourcePath": "./json/chemistry/precipitation-reaction.json"
+    },
+    {
+        "id": "chemistry/safe-reaction",
+        "title": "Demonstrate a Safe Chemical Reaction",
+        "description": "Run a documented baking-soda and vinegar reaction with explicit equipment checks, measured additions, and logged containment outcomes.",
+        "image": "/assets/quests/safe_eco_propellant_reaction.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "chemistry",
+        "slug": "safe-reaction",
+        "route": "/quests/chemistry/safe-reaction",
+        "sourcePath": "./json/chemistry/safe-reaction.json"
+    },
+    {
+        "id": "chemistry/stevia-crystals",
+        "title": "Refine Stevia Crystals",
+        "description": "Seed stevia concentrate for crystallization, then dry crystals under airflow/vacuum to a stable moisture target.",
+        "image": "/assets/quests/stevia_crystal_refinement.jpg",
+        "requiresQuests": [
+            "chemistry/stevia-extraction"
+        ],
+        "tree": "chemistry",
+        "slug": "stevia-crystals",
+        "route": "/quests/chemistry/stevia-crystals",
+        "sourcePath": "./json/chemistry/stevia-crystals.json"
+    },
+    {
+        "id": "chemistry/stevia-extraction",
+        "title": "Extract Stevia Sweetener",
+        "description": "Dry and mill stevia biomass, run warm ethanol-water extraction, and clarify filtrate before collecting extract.",
+        "image": "/assets/quests/stevia_leaf_extraction_setup.jpg",
+        "requiresQuests": [
+            "chemistry/safe-reaction",
+            "hydroponics/stevia"
+        ],
+        "tree": "chemistry",
+        "slug": "stevia-extraction",
+        "route": "/quests/chemistry/stevia-extraction",
+        "sourcePath": "./json/chemistry/stevia-extraction.json"
+    },
+    {
+        "id": "chemistry/stevia-tasting",
+        "title": "Taste Test Stevia Crystals",
+        "description": "Calibrate sensory panel baselines, run blind stevia comparisons, and issue a structured panel scorecard.",
+        "image": "/assets/quests/stevia-tasting.jpg",
+        "requiresQuests": [
+            "chemistry/stevia-crystals"
+        ],
+        "tree": "chemistry",
+        "slug": "stevia-tasting",
+        "route": "/quests/chemistry/stevia-tasting",
+        "sourcePath": "./json/chemistry/stevia-tasting.json"
+    },
+    {
+        "id": "completionist/award-iii",
+        "title": "Forge the Completionist Award III",
+        "description": "Build a grand mixed-discipline trophy that celebrates your full v3 journey: printed structure, fine woodworking base, soldered electronics, robotics motion, and a living planter crown.",
+        "image": "/assets/quests/completionist_award_iii_forge.jpg",
+        "requiresQuests": [
+            "3dprinting/benchy_100",
+            "3dprinting/blob-of-death",
+            "3dprinting/temperature-tower",
+            "3dprinting/x-belt-tension",
+            "aquaria/aquarium-light",
+            "aquaria/balance-ph",
+            "aquaria/filter-rinse",
+            "aquaria/goldfish",
+            "aquaria/net-fish",
+            "aquaria/top-off",
+            "astronomy/aurora-watch",
+            "astronomy/binary-star",
+            "astronomy/comet-tracking",
+            "astronomy/iss-photo",
+            "astronomy/lunar-eclipse",
+            "astronomy/orion-nebula",
+            "astronomy/satellite-pass",
+            "astronomy/star-trails",
+            "astronomy/sunspot-sketch",
+            "astronomy/venus-phases",
+            "chemistry/acid-neutralization",
+            "chemistry/precipitation-reaction",
+            "chemistry/stevia-tasting",
+            "completionist/catalog",
+            "completionist/reminder",
+            "composting/sift-compost",
+            "devops/ci-pipeline",
+            "devops/enable-https",
+            "devops/fail2ban",
+            "devops/log-maintenance",
+            "devops/private-registry",
+            "devops/ssd-boot",
+            "electronics/desolder-component",
+            "electronics/led-polarity",
+            "electronics/measure-arduino-5v",
+            "electronics/measure-resistance",
+            "electronics/servo-sweep",
+            "electronics/solder-led-harness",
+            "electronics/temperature-plot",
+            "electronics/test-gfci-outlet",
+            "electronics/thermometer-calibration",
+            "electronics/voltage-divider",
+            "energy/battery-maintenance",
+            "energy/biogas-digester",
+            "energy/dSolar-100kW",
+            "energy/dWatt-1e8",
+            "energy/power-inverter",
+            "energy/solar-tracker",
+            "energy/wind-turbine",
+            "firstaid/dispose-bandages",
+            "firstaid/dispose-expired",
+            "firstaid/flashlight-battery",
+            "firstaid/remove-splinter",
+            "firstaid/sanitize-pocket-mask",
+            "firstaid/splint-limb",
+            "firstaid/treat-burn",
+            "geothermal/backflush-loop-filter",
+            "geothermal/check-loop-temp-delta",
+            "geothermal/compare-depth-ground-temps",
+            "geothermal/compare-seasonal-ground-temps",
+            "geothermal/log-heat-pump-warmup",
+            "geothermal/replace-faulty-thermistor",
+            "hydroponics/air-stone-soak",
+            "hydroponics/ec-check",
+            "hydroponics/grow-light",
+            "hydroponics/mint-cutting",
+            "hydroponics/netcup-clean",
+            "hydroponics/ph-test",
+            "hydroponics/pump-prime",
+            "hydroponics/regrow-stevia",
+            "hydroponics/root-rinse",
+            "hydroponics/temp-check",
+            "programming/http-post",
+            "programming/moving-avg-temp",
+            "programming/plot-temp-cli",
+            "programming/stddev-temp",
+            "programming/temp-email",
+            "programming/thermistor-calibration",
+            "robotics/gyro-balance",
+            "robotics/maze-navigation",
+            "robotics/servo-arm",
+            "robotics/servo-radar",
+            "rocketry/fuel-mixture",
+            "rocketry/night-launch",
+            "rocketry/static-test",
+            "rocketry/suborbital-hop",
+            "rocketry/wind-check",
+            "sysadmin/log-analysis",
+            "ubi/reminder",
+            "ubi/savings-goal",
+            "welcome/run-tests",
+            "welcome/smart-plug-test",
+            "woodworking/apply-finish",
+            "woodworking/coffee-table",
+            "woodworking/picture-frame"
+        ],
+        "tree": "completionist",
+        "slug": "award-iii",
+        "route": "/quests/completionist/award-iii",
+        "sourcePath": "./json/completionist/award-iii.json"
+    },
+    {
+        "id": "completionist/catalog",
+        "title": "Catalog Your Trophy",
+        "description": "Log your Completionist Award II with a recorded serial, location, and audit-ready timestamp.",
+        "image": "/assets/quests/completionist_catalog_logbook.jpg",
+        "requiresQuests": [
+            "completionist/polish"
+        ],
+        "tree": "completionist",
+        "slug": "catalog",
+        "route": "/quests/completionist/catalog",
+        "sourcePath": "./json/completionist/catalog.json"
+    },
+    {
+        "id": "completionist/display",
+        "title": "Show Off Your Trophy",
+        "description": "Dust the shelf, polish the award, and mount it where everyone can see.",
+        "image": "/assets/quests/completionist_trophy_display_shelf.jpg",
+        "requiresQuests": [
+            "completionist/polish"
+        ],
+        "tree": "completionist",
+        "slug": "display",
+        "route": "/quests/completionist/display",
+        "sourcePath": "./json/completionist/display.json"
+    },
+    {
+        "id": "completionist/polish",
+        "title": "Polish Your Trophy",
+        "description": "Keep your Completionist Award II shiny and ready for close-up photos.",
+        "image": "/assets/quests/completionist_trophy_polish.jpg",
+        "requiresQuests": [
+            "completionist/v2"
+        ],
+        "tree": "completionist",
+        "slug": "polish",
+        "route": "/quests/completionist/polish",
+        "sourcePath": "./json/completionist/polish.json"
+    },
+    {
+        "id": "completionist/reminder",
+        "title": "Check for New Quests",
+        "description": "Set and verify a weekly reminder so new quests never sneak past your displayed award run.",
+        "image": "/assets/quests/completionist_new_quests_reminder.jpg",
+        "requiresQuests": [
+            "completionist/display"
+        ],
+        "tree": "completionist",
+        "slug": "reminder",
+        "route": "/quests/completionist/reminder",
+        "sourcePath": "./json/completionist/reminder.json"
+    },
+    {
+        "id": "completionist/v2",
+        "title": "Congrats on finishing all the quests available in v2!",
+        "description": "Print, plate, and assemble a real Completionist Award II for your shelf.",
+        "image": "/assets/quests/completionist_award_ii_shelf_trophy.jpg",
+        "requiresQuests": [
+            "3dprinting/start",
+            "aquaria/water-testing",
+            "energy/solar",
+            "hydroponics/basil",
+            "rocketry/parachute",
+            "ubi/basicincome",
+            "welcome/howtodoquests"
+        ],
+        "tree": "completionist",
+        "slug": "v2",
+        "route": "/quests/completionist/v2",
+        "sourcePath": "./json/completionist/v2.json"
+    },
+    {
+        "id": "composting/check-temperature",
+        "title": "Check Compost Temperature",
+        "description": "Measure the heat of your compost to ensure active decomposition.",
+        "image": "/assets/quests/compost_check_temperature.jpg",
+        "requiresQuests": [
+            "composting/turn-pile"
+        ],
+        "tree": "composting",
+        "slug": "check-temperature",
+        "route": "/quests/composting/check-temperature",
+        "sourcePath": "./json/composting/check-temperature.json"
+    },
+    {
+        "id": "composting/sift-compost",
+        "title": "Sift Finished Compost",
+        "description": "Screen compost to remove large chunks for a fine finished mix.",
+        "image": "/assets/quests/compost_sift_finished_mix.jpg",
+        "requiresQuests": [
+            "composting/check-temperature"
+        ],
+        "tree": "composting",
+        "slug": "sift-compost",
+        "route": "/quests/composting/sift-compost",
+        "sourcePath": "./json/composting/sift-compost.json"
+    },
+    {
+        "id": "composting/start",
+        "title": "Start a Compost Bucket",
+        "description": "Build a compost bucket, learn the science, and run the setup process from item pages.",
+        "image": "/assets/quests/compost_start_bucket.jpg",
+        "requiresQuests": [
+            "hydroponics/basil"
+        ],
+        "tree": "composting",
+        "slug": "start",
+        "route": "/quests/composting/start",
+        "sourcePath": "./json/composting/start.json"
+    },
+    {
+        "id": "composting/turn-pile",
+        "title": "Turn Your Compost Bucket",
+        "description": "Aerate the compost by stirring the mix so microbes stay active.",
+        "image": "/assets/quests/compost_turn_bucket.jpg",
+        "requiresQuests": [
+            "composting/start"
+        ],
+        "tree": "composting",
+        "slug": "turn-pile",
+        "route": "/quests/composting/turn-pile",
+        "sourcePath": "./json/composting/turn-pile.json"
+    },
+    {
+        "id": "devops/auto-updates",
+        "title": "Enable Automatic Updates",
+        "description": "Keep your Pi cluster secure with unattended upgrades.",
+        "image": "/assets/quests/devops_enable_auto_updates.jpg",
+        "requiresQuests": [
+            "devops/monitoring"
+        ],
+        "tree": "devops",
+        "slug": "auto-updates",
+        "route": "/quests/devops/auto-updates",
+        "sourcePath": "./json/devops/auto-updates.json"
+    },
+    {
+        "id": "devops/ci-pipeline",
+        "title": "Set Up a CI Pipeline",
+        "description": "Configure GitHub Actions to run tests whenever you push.",
+        "image": "/assets/quests/devops_ci_pipeline_setup.jpg",
+        "requiresQuests": [
+            "devops/docker-compose"
+        ],
+        "tree": "devops",
+        "slug": "ci-pipeline",
+        "route": "/quests/devops/ci-pipeline",
+        "sourcePath": "./json/devops/ci-pipeline.json"
+    },
+    {
+        "id": "devops/daily-backups",
+        "title": "Configure Daily Backups",
+        "description": "Use a cron job to archive your game data each night.",
+        "image": "/assets/quests/devops_daily_backups_cron.jpg",
+        "requiresQuests": [
+            "devops/monitoring"
+        ],
+        "tree": "devops",
+        "slug": "daily-backups",
+        "route": "/quests/devops/daily-backups",
+        "sourcePath": "./json/devops/daily-backups.json"
+    },
+    {
+        "id": "devops/docker-compose",
+        "title": "Launch DSPACE in Docker",
+        "description": "Start DSPACE with Docker Compose and expose it securely through a Cloudflare Tunnel.",
+        "image": "/assets/quests/devops_dspace_docker_compose.jpg",
+        "requiresQuests": [
+            "devops/prepare-first-node"
+        ],
+        "tree": "devops",
+        "slug": "docker-compose",
+        "route": "/quests/devops/docker-compose",
+        "sourcePath": "./json/devops/docker-compose.json"
+    },
+    {
+        "id": "devops/enable-https",
+        "title": "Secure the Cluster with HTTPS",
+        "description": "Use Let's Encrypt to add TLS encryption to your services.",
+        "image": "/assets/quests/devops_enable_https.jpg",
+        "requiresQuests": [
+            "devops/daily-backups"
+        ],
+        "tree": "devops",
+        "slug": "enable-https",
+        "route": "/quests/devops/enable-https",
+        "sourcePath": "./json/devops/enable-https.json"
+    },
+    {
+        "id": "devops/fail2ban",
+        "title": "Block SSH Brute Force",
+        "description": "Install Fail2ban to ban repeated failed logins.",
+        "image": "/assets/quests/devops_fail2ban_ssh_protection.jpg",
+        "requiresQuests": [
+            "devops/ssh-hardening"
+        ],
+        "tree": "devops",
+        "slug": "fail2ban",
+        "route": "/quests/devops/fail2ban",
+        "sourcePath": "./json/devops/fail2ban.json"
+    },
+    {
+        "id": "devops/firewall-rules",
+        "title": "Configure Firewall Rules",
+        "description": "Lock down network ports to only what you need.",
+        "image": "/assets/quests/devops_firewall_rules_config.jpg",
+        "requiresQuests": [
+            "devops/auto-updates"
+        ],
+        "tree": "devops",
+        "slug": "firewall-rules",
+        "route": "/quests/devops/firewall-rules",
+        "sourcePath": "./json/devops/firewall-rules.json"
+    },
+    {
+        "id": "devops/k3s-deploy",
+        "title": "Deploy with k3s",
+        "description": "Orion teaches you how to run DSPACE across multiple Pis with k3s.",
+        "image": "/assets/quests/devops_k3s_cluster_deploy.jpg",
+        "requiresQuests": [
+            "devops/docker-compose"
+        ],
+        "tree": "devops",
+        "slug": "k3s-deploy",
+        "route": "/quests/devops/k3s-deploy",
+        "sourcePath": "./json/devops/k3s-deploy.json"
+    },
+    {
+        "id": "devops/log-maintenance",
+        "title": "Set Up Log Rotation",
+        "description": "Prevent logs from filling your server by compressing old files.",
+        "image": "/assets/quests/devops_log_rotation.jpg",
+        "requiresQuests": [
+            "devops/daily-backups"
+        ],
+        "tree": "devops",
+        "slug": "log-maintenance",
+        "route": "/quests/devops/log-maintenance",
+        "sourcePath": "./json/devops/log-maintenance.json"
+    },
+    {
+        "id": "devops/monitoring",
+        "title": "Set Up Monitoring",
+        "description": "Install Prometheus and Grafana to monitor your Pi cluster.",
+        "image": "/assets/quests/devops_monitoring_dashboard.jpg",
+        "requiresQuests": [
+            "devops/k3s-deploy"
+        ],
+        "tree": "devops",
+        "slug": "monitoring",
+        "route": "/quests/devops/monitoring",
+        "sourcePath": "./json/devops/monitoring.json"
+    },
+    {
+        "id": "devops/pi-cluster-hardware",
+        "title": "Plan Your Pi Cluster",
+        "description": "Orion walks through hardware planning with evidence checkpoints before node bring-up.",
+        "image": "/assets/quests/devops_pi_cluster_hardware_planning.jpg",
+        "requiresQuests": [
+            "sysadmin/basic-commands"
+        ],
+        "tree": "devops",
+        "slug": "pi-cluster-hardware",
+        "route": "/quests/devops/pi-cluster-hardware",
+        "sourcePath": "./json/devops/pi-cluster-hardware.json"
+    },
+    {
+        "id": "devops/prepare-first-node",
+        "title": "Prepare the First Node",
+        "description": "Flash, harden, and verify the first Pi node with rollback-aware checkpoints.",
+        "image": "/assets/quests/devops_prepare_first_node_flash_docker.jpg",
+        "requiresQuests": [
+            "devops/pi-cluster-hardware"
+        ],
+        "tree": "devops",
+        "slug": "prepare-first-node",
+        "route": "/quests/devops/prepare-first-node",
+        "sourcePath": "./json/devops/prepare-first-node.json"
+    },
+    {
+        "id": "devops/private-registry",
+        "title": "Run a Private Docker Registry",
+        "description": "Host your own Docker images on the cluster.",
+        "image": "/assets/quests/devops_private_docker_registry.jpg",
+        "requiresQuests": [
+            "devops/docker-compose"
+        ],
+        "tree": "devops",
+        "slug": "private-registry",
+        "route": "/quests/devops/private-registry",
+        "sourcePath": "./json/devops/private-registry.json"
+    },
+    {
+        "id": "devops/ssd-boot",
+        "title": "Boot from SSD",
+        "description": "Clone to NVMe, verify SSD boot, and recover safely if boot order fails.",
+        "image": "/assets/quests/devops_pi_ssd_boot.jpg",
+        "requiresQuests": [
+            "devops/prepare-first-node"
+        ],
+        "tree": "devops",
+        "slug": "ssd-boot",
+        "route": "/quests/devops/ssd-boot",
+        "sourcePath": "./json/devops/ssd-boot.json"
+    },
+    {
+        "id": "devops/ssh-hardening",
+        "title": "Harden SSH Access",
+        "description": "Use key-based authentication and disable password logins.",
+        "image": "/assets/quests/devops_ssh_hardening_keys.jpg",
+        "requiresQuests": [
+            "devops/firewall-rules"
+        ],
+        "tree": "devops",
+        "slug": "ssh-hardening",
+        "route": "/quests/devops/ssh-hardening",
+        "sourcePath": "./json/devops/ssh-hardening.json"
+    },
+    {
+        "id": "electronics/arduino-blink",
+        "title": "Blink an LED with Arduino",
+        "description": "Learn to program a microcontroller by blinking an LED.",
+        "image": "/assets/quests/electronics_arduino_blink_led.jpg",
+        "requiresQuests": [
+            "electronics/basic-circuit"
+        ],
+        "tree": "electronics",
+        "slug": "arduino-blink",
+        "route": "/quests/electronics/arduino-blink",
+        "sourcePath": "./json/electronics/arduino-blink.json"
+    },
+    {
+        "id": "electronics/basic-circuit",
+        "title": "Build a basic LED circuit",
+        "description": "Wire a 5 mm LED and 220 Ω resistor on a breadboard to learn basic circuits.",
+        "image": "/assets/quests/electronics_basic_led_breadboard_circuit.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "electronics",
+        "slug": "basic-circuit",
+        "route": "/quests/electronics/basic-circuit",
+        "sourcePath": "./json/electronics/basic-circuit.json"
+    },
+    {
+        "id": "electronics/check-battery-voltage",
+        "title": "Check a battery pack's voltage",
+        "description": "Use a digital multimeter to check a 12 V LiFePO4 battery pack after disconnecting it and placing it on a dry, non-conductive surface. Wear safety goggles throughout.",
+        "image": "/assets/quests/electronics_check_battery_pack_voltage.jpg",
+        "requiresQuests": [
+            "electronics/basic-circuit"
+        ],
+        "tree": "electronics",
+        "slug": "check-battery-voltage",
+        "route": "/quests/electronics/check-battery-voltage",
+        "sourcePath": "./json/electronics/check-battery-voltage.json"
+    },
+    {
+        "id": "electronics/continuity-test",
+        "title": "Check USB cable continuity",
+        "description": "Use a digital multimeter in continuity mode to check an unplugged USB cable while wearing safety goggles.",
+        "image": "/assets/quests/electronics_usb_cable_continuity_test.jpg",
+        "requiresQuests": [
+            "electronics/solder-wire"
+        ],
+        "tree": "electronics",
+        "slug": "continuity-test",
+        "route": "/quests/electronics/continuity-test",
+        "sourcePath": "./json/electronics/continuity-test.json"
+    },
+    {
+        "id": "electronics/data-logger",
+        "title": "Log Temperature Data",
+        "description": "Use a Raspberry Pi to record readings from your thermistor.",
+        "image": "/assets/quests/electronics_pi_temperature_data_logger.jpg",
+        "requiresQuests": [
+            "electronics/thermistor-reading"
+        ],
+        "tree": "electronics",
+        "slug": "data-logger",
+        "route": "/quests/electronics/data-logger",
+        "sourcePath": "./json/electronics/data-logger.json"
+    },
+    {
+        "id": "electronics/desolder-component",
+        "title": "Desolder a component",
+        "description": "Remove a through-hole resistor from a scrap PCB using a desoldering pump, flux pen and solder wick. Work in a ventilated area and wear safety goggles.",
+        "image": "/assets/quests/electronics_desolder_through_hole_component.jpg",
+        "requiresQuests": [
+            "electronics/solder-wire"
+        ],
+        "tree": "electronics",
+        "slug": "desolder-component",
+        "route": "/quests/electronics/desolder-component",
+        "sourcePath": "./json/electronics/desolder-component.json"
+    },
+    {
+        "id": "electronics/led-polarity",
+        "title": "Check LED polarity with a multimeter",
+        "description": "Use a digital multimeter's diode mode to find which lead of a loose 5 mm LED is positive. Disconnect power, work on a dry non-conductive surface, wear safety goggles, and only use the meter's built-in diode test.",
+        "image": "/assets/quests/electronics_led_polarity_multimeter_diode_test.jpg",
+        "requiresQuests": [
+            "electronics/check-battery-voltage"
+        ],
+        "tree": "electronics",
+        "slug": "led-polarity",
+        "route": "/quests/electronics/led-polarity",
+        "sourcePath": "./json/electronics/led-polarity.json"
+    },
+    {
+        "id": "electronics/light-sensor",
+        "title": "Build a Light Sensor",
+        "description": "Use a photoresistor and Arduino to measure ambient brightness.",
+        "image": "/assets/quests/electronics_light_sensor_arduino_photoresistor.jpg",
+        "requiresQuests": [
+            "electronics/basic-circuit"
+        ],
+        "tree": "electronics",
+        "slug": "light-sensor",
+        "route": "/quests/electronics/light-sensor",
+        "sourcePath": "./json/electronics/light-sensor.json"
+    },
+    {
+        "id": "electronics/measure-arduino-5v",
+        "title": "Measure Arduino 5 V output",
+        "description": "Verify the 5 V pin on an Arduino Uno with a multimeter.",
+        "image": "/assets/quests/electronics_measure_arduino_5v_output.jpg",
+        "requiresQuests": [
+            "electronics/arduino-blink"
+        ],
+        "tree": "electronics",
+        "slug": "measure-arduino-5v",
+        "route": "/quests/electronics/measure-arduino-5v",
+        "sourcePath": "./json/electronics/measure-arduino-5v.json"
+    },
+    {
+        "id": "electronics/measure-led-current",
+        "title": "Measure LED Current",
+        "description": "Use a digital multimeter to measure the current through a basic LED circuit.",
+        "image": "/assets/quests/electronics_measure_led_current_multimeter_series.jpg",
+        "requiresQuests": [
+            "electronics/light-sensor"
+        ],
+        "tree": "electronics",
+        "slug": "measure-led-current",
+        "route": "/quests/electronics/measure-led-current",
+        "sourcePath": "./json/electronics/measure-led-current.json"
+    },
+    {
+        "id": "electronics/measure-resistance",
+        "title": "Measure a Resistor",
+        "description": "Use a digital multimeter to confirm a loose resistor's value. Disconnect all power, keep metal jewelry off, set components on a dry non-conductive surface, and wear safety goggles.",
+        "image": "/assets/quests/electronics_measure_resistor_multimeter.jpg",
+        "requiresQuests": [
+            "electronics/resistor-color-check"
+        ],
+        "tree": "electronics",
+        "slug": "measure-resistance",
+        "route": "/quests/electronics/measure-resistance",
+        "sourcePath": "./json/electronics/measure-resistance.json"
+    },
+    {
+        "id": "electronics/potentiometer-dimmer",
+        "title": "Dim an LED with a Potentiometer",
+        "description": "Adjust LED brightness using a potentiometer and an Arduino.",
+        "image": "/assets/quests/electronics_potentiometer_led_dimmer.jpg",
+        "requiresQuests": [
+            "electronics/arduino-blink"
+        ],
+        "tree": "electronics",
+        "slug": "potentiometer-dimmer",
+        "route": "/quests/electronics/potentiometer-dimmer",
+        "sourcePath": "./json/electronics/potentiometer-dimmer.json"
+    },
+    {
+        "id": "electronics/resistor-color-check",
+        "title": "Verify resistor color bands",
+        "description": "Confirm a resistor's value by decoding its color bands before installing it in a circuit.",
+        "image": "/assets/quests/electronics_resistor_color_band_check.jpg",
+        "requiresQuests": [
+            "electronics/measure-led-current"
+        ],
+        "tree": "electronics",
+        "slug": "resistor-color-check",
+        "route": "/quests/electronics/resistor-color-check",
+        "sourcePath": "./json/electronics/resistor-color-check.json"
+    },
+    {
+        "id": "electronics/servo-sweep",
+        "title": "Sweep a Servo",
+        "description": "Use the Arduino IDE's Servo library 'Sweep' example to rotate a hobby servo from 0° to 180°.",
+        "image": "/assets/quests/electronics_servo_sweep_arduino.jpg",
+        "requiresQuests": [
+            "electronics/arduino-blink"
+        ],
+        "tree": "electronics",
+        "slug": "servo-sweep",
+        "route": "/quests/electronics/servo-sweep",
+        "sourcePath": "./json/electronics/servo-sweep.json"
+    },
+    {
+        "id": "electronics/solder-led-harness",
+        "title": "Solder an LED Harness",
+        "description": "Build and verify an LED harness with staged solder checks, safety pauses, and rework loops before sign-off.",
+        "image": "/assets/quests/electronics_solder_led_harness.jpg",
+        "requiresQuests": [
+            "electronics/tin-soldering-iron"
+        ],
+        "tree": "electronics",
+        "slug": "solder-led-harness",
+        "route": "/quests/electronics/solder-led-harness",
+        "sourcePath": "./json/electronics/solder-led-harness.json"
+    },
+    {
+        "id": "electronics/solder-wire",
+        "title": "Solder a Wire Connection",
+        "description": "Repair a snapped jumper lead with staged prep, splice verification, and fault-recovery loops under solder safety controls.",
+        "image": "/assets/quests/electronics_solder_wire_connection.jpg",
+        "requiresQuests": [
+            "electronics/tin-soldering-iron"
+        ],
+        "tree": "electronics",
+        "slug": "solder-wire",
+        "route": "/quests/electronics/solder-wire",
+        "sourcePath": "./json/electronics/solder-wire.json"
+    },
+    {
+        "id": "electronics/temperature-plot",
+        "title": "Plot Temperature Data",
+        "description": "Generate a chart from your thermistor log using Python.",
+        "image": "/assets/quests/electronics_temperature_plot_python.jpg",
+        "requiresQuests": [
+            "electronics/data-logger"
+        ],
+        "tree": "electronics",
+        "slug": "temperature-plot",
+        "route": "/quests/electronics/temperature-plot",
+        "sourcePath": "./json/electronics/temperature-plot.json"
+    },
+    {
+        "id": "electronics/test-gfci-outlet",
+        "title": "Test a GFCI Outlet",
+        "description": "Run a GFCI test cycle with explicit pass bounds, anomaly classification, and mandatory safety re-test before closure.",
+        "image": "/assets/quests/test_gfci_outlet.jpg",
+        "requiresQuests": [
+            "electronics/continuity-test"
+        ],
+        "tree": "electronics",
+        "slug": "test-gfci-outlet",
+        "route": "/quests/electronics/test-gfci-outlet",
+        "sourcePath": "./json/electronics/test-gfci-outlet.json"
+    },
+    {
+        "id": "electronics/thermistor-reading",
+        "title": "Read a Thermistor",
+        "description": "Wire a thermistor to your Arduino and log temperature values.",
+        "image": "/assets/quests/electronics_thermistor_reading_arduino.jpg",
+        "requiresQuests": [
+            "electronics/potentiometer-dimmer"
+        ],
+        "tree": "electronics",
+        "slug": "thermistor-reading",
+        "route": "/quests/electronics/thermistor-reading",
+        "sourcePath": "./json/electronics/thermistor-reading.json"
+    },
+    {
+        "id": "electronics/thermometer-calibration",
+        "title": "Calibrate a Thermometer",
+        "description": "Use water baths to verify your thermometer's accuracy.",
+        "image": "/assets/quests/electronics_thermometer_calibration_water_baths.jpg",
+        "requiresQuests": [
+            "electronics/thermistor-reading"
+        ],
+        "tree": "electronics",
+        "slug": "thermometer-calibration",
+        "route": "/quests/electronics/thermometer-calibration",
+        "sourcePath": "./json/electronics/thermometer-calibration.json"
+    },
+    {
+        "id": "electronics/tin-soldering-iron",
+        "title": "Tin a Soldering Iron",
+        "description": "Prepare your soldering iron for clean joints by tinning the tip.",
+        "image": "/assets/quests/electronics_tin_soldering_iron_tip.jpg",
+        "requiresQuests": [
+            "electronics/resistor-color-check"
+        ],
+        "tree": "electronics",
+        "slug": "tin-soldering-iron",
+        "route": "/quests/electronics/tin-soldering-iron",
+        "sourcePath": "./json/electronics/tin-soldering-iron.json"
+    },
+    {
+        "id": "electronics/voltage-divider",
+        "title": "Build a Voltage Divider",
+        "description": "Split 5 V to about 2.5 V using 220 Ω and 10 kΩ resistors on a Breadboard.",
+        "image": "/assets/quests/electronics_voltage_divider_breadboard.jpg",
+        "requiresQuests": [
+            "electronics/tin-soldering-iron"
+        ],
+        "tree": "electronics",
+        "slug": "voltage-divider",
+        "route": "/quests/electronics/voltage-divider",
+        "sourcePath": "./json/electronics/voltage-divider.json"
+    },
+    {
+        "id": "energy/battery-maintenance",
+        "title": "Maintain Your Battery Pack",
+        "description": "Cycle your 200 Wh battery pack with solar to keep it healthy.",
+        "image": "/assets/quests/solar_battery_pack_200Wh_maintenance.jpg",
+        "requiresQuests": [
+            "energy/solar"
+        ],
+        "tree": "energy",
+        "slug": "battery-maintenance",
+        "route": "/quests/energy/battery-maintenance",
+        "sourcePath": "./json/energy/battery-maintenance.json"
+    },
+    {
+        "id": "energy/battery-upgrade",
+        "title": "Install a Larger Battery",
+        "description": "Expand your solar setup with a 1 kWh storage pack and enclosure.",
+        "image": "/assets/quests/solar_battery_pack_1kWh_upgrade.jpg",
+        "requiresQuests": [
+            "energy/solar"
+        ],
+        "tree": "energy",
+        "slug": "battery-upgrade",
+        "route": "/quests/energy/battery-upgrade",
+        "sourcePath": "./json/energy/battery-upgrade.json"
+    },
+    {
+        "id": "energy/biogas-digester",
+        "title": "Build a Biogas Digester",
+        "description": "Ferment kitchen scraps into methane for cooking.",
+        "image": "/assets/quests/biogas_digester_small_scale.jpg",
+        "requiresQuests": [
+            "energy/solar-1kWh"
+        ],
+        "tree": "energy",
+        "slug": "biogas-digester",
+        "route": "/quests/energy/biogas-digester",
+        "sourcePath": "./json/energy/biogas-digester.json"
+    },
+    {
+        "id": "energy/charge-controller-setup",
+        "title": "Configure a Solar Charge Controller",
+        "description": "Wire and configure a charge controller to safely charge your 200 Wh battery.",
+        "image": "/assets/quests/solar_charge_controller_setup.jpg",
+        "requiresQuests": [
+            "energy/solar"
+        ],
+        "tree": "energy",
+        "slug": "charge-controller-setup",
+        "route": "/quests/energy/charge-controller-setup",
+        "sourcePath": "./json/energy/charge-controller-setup.json"
+    },
+    {
+        "id": "energy/dSolar-100kW",
+        "title": "Accrue 100,000 dSolar",
+        "description": "Set new standards in solar energy production! To complete this quest, have at least 100,000 dSolar in your inventory.",
+        "image": "/assets/quests/dSolar_100kW.jpg",
+        "requiresQuests": [
+            "energy/dSolar-10kW"
+        ],
+        "tree": "energy",
+        "slug": "dSolar-100kW",
+        "route": "/quests/energy/dSolar-100kW",
+        "sourcePath": "./json/energy/dSolar-100kW.json"
+    },
+    {
+        "id": "energy/dSolar-10kW",
+        "title": "Accrue 10,000 dSolar",
+        "description": "Push the boundaries of energy production! To complete this quest, have at least 10,000 dSolar in your inventory.",
+        "image": "/assets/quests/dSolar_10kW.jpg",
+        "requiresQuests": [
+            "energy/dSolar-1kW"
+        ],
+        "tree": "energy",
+        "slug": "dSolar-10kW",
+        "route": "/quests/energy/dSolar-10kW",
+        "sourcePath": "./json/energy/dSolar-10kW.json"
+    },
+    {
+        "id": "energy/dSolar-1kW",
+        "title": "Accrue 1,000 dSolar",
+        "description": "Reach increasingly higher levels of energy production! To complete this quest, have at least 1,000 dSolar in your inventory.",
+        "image": "/assets/quests/dSolar_1kW.jpg",
+        "requiresQuests": [
+            "energy/solar-1kWh"
+        ],
+        "tree": "energy",
+        "slug": "dSolar-1kW",
+        "route": "/quests/energy/dSolar-1kW",
+        "sourcePath": "./json/energy/dSolar-1kW.json"
+    },
+    {
+        "id": "energy/dWatt-1e3",
+        "title": "Accumulate 1,000 dWatt",
+        "description": "Boost your energy potential! To unlock this quest's reward, accumulate at least 1,000 dWatt in your inventory.",
+        "image": "/assets/quests/dWatt_1e3.jpg",
+        "requiresQuests": [
+            "energy/charge-controller-setup"
+        ],
+        "tree": "energy",
+        "slug": "dWatt-1e3",
+        "route": "/quests/energy/dWatt-1e3",
+        "sourcePath": "./json/energy/dWatt-1e3.json"
+    },
+    {
+        "id": "energy/dWatt-1e4",
+        "title": "Accumulate 10,000 dWatt",
+        "description": "Supercharge your energy reserves! To claim your prize, gather at least 10,000 dWatt in your inventory.",
+        "image": "/assets/quests/dWatt_1e4.jpg",
+        "requiresQuests": [
+            "energy/dWatt-1e3"
+        ],
+        "tree": "energy",
+        "slug": "dWatt-1e4",
+        "route": "/quests/energy/dWatt-1e4",
+        "sourcePath": "./json/energy/dWatt-1e4.json"
+    },
+    {
+        "id": "energy/dWatt-1e5",
+        "title": "Collect a Stunning 100,000 dWatt",
+        "description": "Ascent to greater heights in energy collection! To be rewarded, amass a significant 100,000 dWatt.",
+        "image": "/assets/quests/dWatt_1e5.jpg",
+        "requiresQuests": [
+            "energy/dWatt-1e4"
+        ],
+        "tree": "energy",
+        "slug": "dWatt-1e5",
+        "route": "/quests/energy/dWatt-1e5",
+        "sourcePath": "./json/energy/dWatt-1e5.json"
+    },
+    {
+        "id": "energy/dWatt-1e6",
+        "title": "Achieve an Astounding 1,000,000 dWatt",
+        "description": "Reach the pinnacle of energy gathering! Secure your legacy by accumulating 1,000,000 dWatt.",
+        "image": "/assets/quests/dWatt_1e6.jpg",
+        "requiresQuests": [
+            "energy/dWatt-1e5"
+        ],
+        "tree": "energy",
+        "slug": "dWatt-1e6",
+        "route": "/quests/energy/dWatt-1e6",
+        "sourcePath": "./json/energy/dWatt-1e6.json"
+    },
+    {
+        "id": "energy/dWatt-1e7",
+        "title": "Amass an Unbelievable 10,000,000 dWatt",
+        "description": "Challenge the very fabric of what's considered possible! Conquer this monumental task by stockpiling 10,000,000 dWatt.",
+        "image": "/assets/quests/dwatt_1e7_energy_vault.jpg",
+        "requiresQuests": [
+            "energy/dWatt-1e6"
+        ],
+        "tree": "energy",
+        "slug": "dWatt-1e7",
+        "route": "/quests/energy/dWatt-1e7",
+        "sourcePath": "./json/energy/dWatt-1e7.json"
+    },
+    {
+        "id": "energy/dWatt-1e8",
+        "title": "Store a Colossal 100,000,000 dWatt",
+        "description": "Prove your dedication by collecting a staggering 100,000,000 dWatt.",
+        "image": "/assets/quests/dwatt_1e8_energy_megagrid.jpg",
+        "requiresQuests": [
+            "energy/dWatt-1e7"
+        ],
+        "tree": "energy",
+        "slug": "dWatt-1e8",
+        "route": "/quests/energy/dWatt-1e8",
+        "sourcePath": "./json/energy/dWatt-1e8.json"
+    },
+    {
+        "id": "energy/hand-crank-generator",
+        "title": "Build a Hand Crank Generator",
+        "description": "Print parts and assemble a hand crank generator to charge a 200 Wh battery pack.",
+        "image": "/assets/quests/hand_crank_generator_200Wh.jpg",
+        "requiresQuests": [
+            "energy/dWatt-1e3"
+        ],
+        "tree": "energy",
+        "slug": "hand-crank-generator",
+        "route": "/quests/energy/hand-crank-generator",
+        "sourcePath": "./json/energy/hand-crank-generator.json"
+    },
+    {
+        "id": "energy/offgrid-charger",
+        "title": "Charge a Device Off-Grid",
+        "description": "Charge a phone off-grid with a 200 W panel, charge controller, 200 Wh LiFePO4 battery and USB cable.",
+        "image": "/assets/quests/offgrid_phone_charging_200Wh.jpg",
+        "requiresQuests": [
+            "energy/hand-crank-generator"
+        ],
+        "tree": "energy",
+        "slug": "offgrid-charger",
+        "route": "/quests/energy/offgrid-charger",
+        "sourcePath": "./json/energy/offgrid-charger.json"
+    },
+    {
+        "id": "energy/portable-solar-panel",
+        "title": "Test a Portable Solar Panel",
+        "description": "Harvest sunshine anywhere with a foldable panel.",
+        "image": "/assets/quests/portable_foldable_solar_panel_test.jpg",
+        "requiresQuests": [
+            "energy/offgrid-charger"
+        ],
+        "tree": "energy",
+        "slug": "portable-solar-panel",
+        "route": "/quests/energy/portable-solar-panel",
+        "sourcePath": "./json/energy/portable-solar-panel.json"
+    },
+    {
+        "id": "energy/power-inverter",
+        "title": "Install a Power Inverter",
+        "description": "Convert your battery's DC output into AC for household gear.",
+        "image": "/assets/quests/power_inverter_installation.jpg",
+        "requiresQuests": [
+            "energy/battery-upgrade"
+        ],
+        "tree": "energy",
+        "slug": "power-inverter",
+        "route": "/quests/energy/power-inverter",
+        "sourcePath": "./json/energy/power-inverter.json"
+    },
+    {
+        "id": "energy/solar",
+        "title": "Set up a solar panel",
+        "description": "The wall outlet is convenient, but your utility uses fossil fuels for electricity generation! Let's take things in our own hands and start going off the grid.",
+        "image": "/assets/quests/solar_panel_rooftop_setup.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "energy",
+        "slug": "solar",
+        "route": "/quests/energy/solar",
+        "sourcePath": "./json/energy/solar.json"
+    },
+    {
+        "id": "energy/solar-1kWh",
+        "title": "Upgrade your solar enclosure with more capacity",
+        "description": "Swap out that tiny 200 Wh battery pack for a new 1 kWh one! No upgrade in charge speed just yet, just more capacity!",
+        "image": "/assets/quests/solar_1kWh.jpg",
+        "requiresQuests": [
+            "energy/portable-solar-panel"
+        ],
+        "tree": "energy",
+        "slug": "solar-1kWh",
+        "route": "/quests/energy/solar-1kWh",
+        "sourcePath": "./json/energy/solar-1kWh.json"
+    },
+    {
+        "id": "energy/solar-tracker",
+        "title": "Build a Solar Tracker",
+        "description": "Rotate your 200 Wh kit to follow the sun.",
+        "image": "/assets/quests/solar_tracker_200Wh_kit.jpg",
+        "requiresQuests": [
+            "energy/solar-1kWh"
+        ],
+        "tree": "energy",
+        "slug": "solar-tracker",
+        "route": "/quests/energy/solar-tracker",
+        "sourcePath": "./json/energy/solar-tracker.json"
+    },
+    {
+        "id": "energy/wind-turbine",
+        "title": "Install a Wind Turbine",
+        "description": "Supplement your solar setup with power from the breeze.",
+        "image": "/assets/quests/small_wind_turbine_install.jpg",
+        "requiresQuests": [
+            "energy/solar-1kWh"
+        ],
+        "tree": "energy",
+        "slug": "wind-turbine",
+        "route": "/quests/energy/wind-turbine",
+        "sourcePath": "./json/energy/wind-turbine.json"
+    },
+    {
+        "id": "firstaid/assemble-kit",
+        "title": "Assemble a First Aid Kit",
+        "description": "Assemble a basic first aid kit so you're ready for minor injuries.",
+        "image": "/assets/quests/firstaid_assemble_basic_kit.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "firstaid",
+        "slug": "assemble-kit",
+        "route": "/quests/firstaid/assemble-kit",
+        "sourcePath": "./json/firstaid/assemble-kit.json"
+    },
+    {
+        "id": "firstaid/change-bandage",
+        "title": "Change a Bandage",
+        "description": "Swap an old bandage for a fresh one to keep a minor cut clean.",
+        "image": "/assets/quests/change_bandage_first_aid.jpg",
+        "requiresQuests": [
+            "firstaid/wound-care"
+        ],
+        "tree": "firstaid",
+        "slug": "change-bandage",
+        "route": "/quests/firstaid/change-bandage",
+        "sourcePath": "./json/firstaid/change-bandage.json"
+    },
+    {
+        "id": "firstaid/dispose-bandages",
+        "title": "Bag Used Bandages",
+        "description": "Use a biohazard bag to discard used bandages and wash up.",
+        "image": "/assets/quests/bag_used_bandages_biohazard.jpg",
+        "requiresQuests": [
+            "firstaid/change-bandage"
+        ],
+        "tree": "firstaid",
+        "slug": "dispose-bandages",
+        "route": "/quests/firstaid/dispose-bandages",
+        "sourcePath": "./json/firstaid/dispose-bandages.json"
+    },
+    {
+        "id": "firstaid/dispose-expired",
+        "title": "Dispose Expired First Aid Supplies",
+        "description": "Clear out old items so your first aid kit stays reliable.",
+        "image": "/assets/quests/firstaid_dispose_expired_supplies.jpg",
+        "requiresQuests": [
+            "firstaid/restock-kit"
+        ],
+        "tree": "firstaid",
+        "slug": "dispose-expired",
+        "route": "/quests/firstaid/dispose-expired",
+        "sourcePath": "./json/firstaid/dispose-expired.json"
+    },
+    {
+        "id": "firstaid/flashlight-battery",
+        "title": "Check Flashlight Battery",
+        "description": "Measure your emergency flashlight's 9 V battery with a digital multimeter.",
+        "image": "/assets/quests/firstaid_flashlight_battery_check.jpg",
+        "requiresQuests": [
+            "firstaid/assemble-kit"
+        ],
+        "tree": "firstaid",
+        "slug": "flashlight-battery",
+        "route": "/quests/firstaid/flashlight-battery",
+        "sourcePath": "./json/firstaid/flashlight-battery.json"
+    },
+    {
+        "id": "firstaid/learn-cpr",
+        "title": "Practice Basic CPR",
+        "description": "Practice 30:2 compressions on a CPR manikin using nitrile gloves, a pocket mask and antiseptic wipes from your first aid kit. Confirm the area is safe, call emergency services first and sanitize gear after. This exercise does not replace formal certification.",
+        "image": "/assets/quests/firstaid_cpr_practice_manikin.jpg",
+        "requiresQuests": [
+            "firstaid/assemble-kit"
+        ],
+        "tree": "firstaid",
+        "slug": "learn-cpr",
+        "route": "/quests/firstaid/learn-cpr",
+        "sourcePath": "./json/firstaid/learn-cpr.json"
+    },
+    {
+        "id": "firstaid/remove-splinter",
+        "title": "Remove a Splinter",
+        "description": "Take out a small splinter to prevent infection.",
+        "image": "/assets/quests/remove_splinter_first_aid.jpg",
+        "requiresQuests": [
+            "firstaid/wound-care"
+        ],
+        "tree": "firstaid",
+        "slug": "remove-splinter",
+        "route": "/quests/firstaid/remove-splinter",
+        "sourcePath": "./json/firstaid/remove-splinter.json"
+    },
+    {
+        "id": "firstaid/restock-kit",
+        "title": "Restock Your First Aid Kit",
+        "description": "Replace used supplies so you're ready for emergencies.",
+        "image": "/assets/quests/firstaid_restock_kit_supplies.jpg",
+        "requiresQuests": [
+            "firstaid/assemble-kit"
+        ],
+        "tree": "firstaid",
+        "slug": "restock-kit",
+        "route": "/quests/firstaid/restock-kit",
+        "sourcePath": "./json/firstaid/restock-kit.json"
+    },
+    {
+        "id": "firstaid/sanitize-pocket-mask",
+        "title": "Sanitize Your CPR Pocket Mask",
+        "description": "Clean and disinfect your CPR mask so it's safe for the next emergency.",
+        "image": "/assets/quests/firstaid_sanitize_cpr_pocket_mask.jpg",
+        "requiresQuests": [
+            "firstaid/learn-cpr"
+        ],
+        "tree": "firstaid",
+        "slug": "sanitize-pocket-mask",
+        "route": "/quests/firstaid/sanitize-pocket-mask",
+        "sourcePath": "./json/firstaid/sanitize-pocket-mask.json"
+    },
+    {
+        "id": "firstaid/splint-limb",
+        "title": "Splint a Minor Fracture",
+        "description": "Practice immobilizing a minor limb injury with supplies from a first aid kit. Only attempt this on stable injuries and call emergency services for serious fractures.",
+        "image": "/assets/quests/firstaid_splint_minor_limb_practice.jpg",
+        "requiresQuests": [
+            "firstaid/wound-care"
+        ],
+        "tree": "firstaid",
+        "slug": "splint-limb",
+        "route": "/quests/firstaid/splint-limb",
+        "sourcePath": "./json/firstaid/splint-limb.json"
+    },
+    {
+        "id": "firstaid/stop-nosebleed",
+        "title": "Stop a Nosebleed",
+        "description": "Sit upright, lean forward, and pinch the soft part of your nose with sterile gauze. Wear nitrile gloves, never tilt your head back, and escalate to urgent care when warning signs persist.",
+        "image": "/assets/quests/stop_nosebleed_first_aid.jpg",
+        "requiresQuests": [
+            "firstaid/restock-kit"
+        ],
+        "tree": "firstaid",
+        "slug": "stop-nosebleed",
+        "route": "/quests/firstaid/stop-nosebleed",
+        "sourcePath": "./json/firstaid/stop-nosebleed.json"
+    },
+    {
+        "id": "firstaid/treat-burn",
+        "title": "Treat a Minor Burn",
+        "description": "Cool and dress a small burn so it heals cleanly.",
+        "image": "/assets/quests/firstaid_treat_minor_burn.jpg",
+        "requiresQuests": [
+            "firstaid/stop-nosebleed"
+        ],
+        "tree": "firstaid",
+        "slug": "treat-burn",
+        "route": "/quests/firstaid/treat-burn",
+        "sourcePath": "./json/firstaid/treat-burn.json"
+    },
+    {
+        "id": "firstaid/wound-care",
+        "title": "Practice Basic Wound Care",
+        "description": "Practice cleaning a minor cut with soap, gloves, antiseptic wipe, ointment, and a bandage while using explicit escalation and re-clean loops.",
+        "image": "/assets/quests/basic_wound_care_practice.jpg",
+        "requiresQuests": [
+            "firstaid/learn-cpr"
+        ],
+        "tree": "firstaid",
+        "slug": "wound-care",
+        "route": "/quests/firstaid/wound-care",
+        "sourcePath": "./json/firstaid/wound-care.json"
+    },
+    {
+        "id": "geothermal/backflush-loop-filter",
+        "title": "Backflush Loop Filter",
+        "description": "Run a safe backflush with pre/post evidence and a re-entry loop when debris persists.",
+        "image": "/assets/quests/geothermal_backflush_loop_filter.jpg",
+        "requiresQuests": [
+            "geothermal/purge-loop-air"
+        ],
+        "tree": "geothermal",
+        "slug": "backflush-loop-filter",
+        "route": "/quests/geothermal/backflush-loop-filter",
+        "sourcePath": "./json/geothermal/backflush-loop-filter.json"
+    },
+    {
+        "id": "geothermal/calibrate-ground-sensor",
+        "title": "Calibrate Ground Sensor",
+        "description": "Use ice and boiling water checkpoints to calibrate your thermistor before burying it.",
+        "image": "/assets/quests/geothermal_calibrate_ground_thermistor_sensor.jpg",
+        "requiresQuests": [
+            "geothermal/survey-ground-temperature"
+        ],
+        "tree": "geothermal",
+        "slug": "calibrate-ground-sensor",
+        "route": "/quests/geothermal/calibrate-ground-sensor",
+        "sourcePath": "./json/geothermal/calibrate-ground-sensor.json"
+    },
+    {
+        "id": "geothermal/check-loop-inlet-temp",
+        "title": "Check Loop Inlet Temperature",
+        "description": "Log inlet temperature, classify against bounds, and run corrective re-test loops when readings drift.",
+        "image": "/assets/quests/geothermal_check_loop_inlet_temp_arduino.jpg",
+        "requiresQuests": [
+            "geothermal/survey-ground-temperature"
+        ],
+        "tree": "geothermal",
+        "slug": "check-loop-inlet-temp",
+        "route": "/quests/geothermal/check-loop-inlet-temp",
+        "sourcePath": "./json/geothermal/check-loop-inlet-temp.json"
+    },
+    {
+        "id": "geothermal/check-loop-outlet-temp",
+        "title": "Check Loop Outlet Temperature",
+        "description": "Log the water temperature leaving the heat pump, apply pass/fail bounds, and recover from unstable traces.",
+        "image": "/assets/quests/geothermal_check_loop_outlet_temp_arduino.jpg",
+        "requiresQuests": [
+            "geothermal/check-loop-inlet-temp"
+        ],
+        "tree": "geothermal",
+        "slug": "check-loop-outlet-temp",
+        "route": "/quests/geothermal/check-loop-outlet-temp",
+        "sourcePath": "./json/geothermal/check-loop-outlet-temp.json"
+    },
+    {
+        "id": "geothermal/check-loop-pressure",
+        "title": "Check Loop Pressure",
+        "description": "Capture a pressure reading, validate it against operating bounds, and recover safely when the loop is out of range.",
+        "image": "/assets/quests/geothermal_check_loop_pressure_gauge.jpg",
+        "requiresQuests": [
+            "geothermal/survey-ground-temperature"
+        ],
+        "tree": "geothermal",
+        "slug": "check-loop-pressure",
+        "route": "/quests/geothermal/check-loop-pressure",
+        "sourcePath": "./json/geothermal/check-loop-pressure.json"
+    },
+    {
+        "id": "geothermal/check-loop-temp-delta",
+        "title": "Check Loop Temperature Delta",
+        "description": "Use two thermistors with an Arduino to compare loop inlet and outlet temps.",
+        "image": "/assets/quests/geothermal_check_loop_temp_delta_dual_thermistors.jpg",
+        "requiresQuests": [
+            "geothermal/check-loop-inlet-temp",
+            "geothermal/check-loop-outlet-temp"
+        ],
+        "tree": "geothermal",
+        "slug": "check-loop-temp-delta",
+        "route": "/quests/geothermal/check-loop-temp-delta",
+        "sourcePath": "./json/geothermal/check-loop-temp-delta.json"
+    },
+    {
+        "id": "geothermal/compare-depth-ground-temps",
+        "title": "Compare Depth Ground Temps",
+        "description": "Capture shallow/deep temperature traces, compare spread, and re-test when variance looks suspicious.",
+        "image": "/assets/quests/geothermal_compare_depth_ground_temps.jpg",
+        "requiresQuests": [
+            "geothermal/log-ground-temperature"
+        ],
+        "tree": "geothermal",
+        "slug": "compare-depth-ground-temps",
+        "route": "/quests/geothermal/compare-depth-ground-temps",
+        "sourcePath": "./json/geothermal/compare-depth-ground-temps.json"
+    },
+    {
+        "id": "geothermal/compare-seasonal-ground-temps",
+        "title": "Compare Seasonal Ground Temps",
+        "description": "Measure seasonal shifts at fixed depth, classify risk bands, and retest when drift exceeds limits.",
+        "image": "/assets/quests/geothermal_compare_seasonal_ground_temps.jpg",
+        "requiresQuests": [
+            "geothermal/log-ground-temperature"
+        ],
+        "tree": "geothermal",
+        "slug": "compare-seasonal-ground-temps",
+        "route": "/quests/geothermal/compare-seasonal-ground-temps",
+        "sourcePath": "./json/geothermal/compare-seasonal-ground-temps.json"
+    },
+    {
+        "id": "geothermal/install-backup-thermistor",
+        "title": "Install Backup Thermistor",
+        "description": "Install a backup probe, verify parity with the primary sensor, and roll back safely if readings drift.",
+        "image": "/assets/quests/geothermal_install_backup_thermistor.jpg",
+        "requiresQuests": [
+            "geothermal/calibrate-ground-sensor"
+        ],
+        "tree": "geothermal",
+        "slug": "install-backup-thermistor",
+        "route": "/quests/geothermal/install-backup-thermistor",
+        "sourcePath": "./json/geothermal/install-backup-thermistor.json"
+    },
+    {
+        "id": "geothermal/log-ground-temperature",
+        "title": "Log Ground Temperature",
+        "description": "Capture a 24-hour buried baseline, classify anomalies, and verify corrections before closing.",
+        "image": "/assets/quests/geothermal_log_ground_temperature_arduino.jpg",
+        "requiresQuests": [
+            "geothermal/check-loop-pressure"
+        ],
+        "tree": "geothermal",
+        "slug": "log-ground-temperature",
+        "route": "/quests/geothermal/log-ground-temperature",
+        "sourcePath": "./json/geothermal/log-ground-temperature.json"
+    },
+    {
+        "id": "geothermal/log-heat-pump-warmup",
+        "title": "Log Heat Pump Warmup",
+        "description": "Capture and annotate warmup logs with explicit pass thresholds, then classify anomalies before closing.",
+        "image": "/assets/quests/geothermal_log_heat_pump_warmup.jpg",
+        "requiresQuests": [
+            "geothermal/log-ground-temperature"
+        ],
+        "tree": "geothermal",
+        "slug": "log-heat-pump-warmup",
+        "route": "/quests/geothermal/log-heat-pump-warmup",
+        "sourcePath": "./json/geothermal/log-heat-pump-warmup.json"
+    },
+    {
+        "id": "geothermal/monitor-heat-pump-energy",
+        "title": "Monitor Heat Pump Energy Use",
+        "description": "Capture a repeatable thermal trend log, classify anomalies, and verify corrections before closing.",
+        "image": "/assets/quests/heat_pump_smart_plug_monitor.jpg",
+        "requiresQuests": [
+            "geothermal/log-ground-temperature"
+        ],
+        "tree": "geothermal",
+        "slug": "monitor-heat-pump-energy",
+        "route": "/quests/geothermal/monitor-heat-pump-energy",
+        "sourcePath": "./json/geothermal/monitor-heat-pump-energy.json"
+    },
+    {
+        "id": "geothermal/purge-loop-air",
+        "title": "Purge Air from Ground Loop",
+        "description": "Run a controlled purge with pre/post evidence and a repeat-until-clear recovery loop.",
+        "image": "/assets/quests/geothermal_purge_air_from_ground_loop.jpg",
+        "requiresQuests": [
+            "geothermal/monitor-heat-pump-energy"
+        ],
+        "tree": "geothermal",
+        "slug": "purge-loop-air",
+        "route": "/quests/geothermal/purge-loop-air",
+        "sourcePath": "./json/geothermal/purge-loop-air.json"
+    },
+    {
+        "id": "geothermal/replace-faulty-thermistor",
+        "title": "Replace Faulty Thermistor",
+        "description": "Swap the failed probe, verify parity against baseline readings, and recover cleanly if drift remains.",
+        "image": "/assets/quests/geothermal_replace_faulty_thermistor.jpg",
+        "requiresQuests": [
+            "geothermal/install-backup-thermistor"
+        ],
+        "tree": "geothermal",
+        "slug": "replace-faulty-thermistor",
+        "route": "/quests/geothermal/replace-faulty-thermistor",
+        "sourcePath": "./json/geothermal/replace-faulty-thermistor.json"
+    },
+    {
+        "id": "geothermal/survey-ground-temperature",
+        "title": "Survey for Geothermal Heat",
+        "description": "Measure baseline ground temperature and verify the site is stable enough for a loop design.",
+        "image": "/assets/quests/geothermal_ground_temperature_probe.jpg",
+        "requiresQuests": [
+            "energy/solar"
+        ],
+        "tree": "geothermal",
+        "slug": "survey-ground-temperature",
+        "route": "/quests/geothermal/survey-ground-temperature",
+        "sourcePath": "./json/geothermal/survey-ground-temperature.json"
+    },
+    {
+        "id": "hydroponics/air-stone-soak",
+        "title": "Soak Air Stone",
+        "description": "Prime and verify an air stone with safety checks and recovery loops.",
+        "image": "/assets/quests/hydroponics_air_stone_soak.jpg",
+        "requiresQuests": [
+            "hydroponics/filter-clean"
+        ],
+        "tree": "hydroponics",
+        "slug": "air-stone-soak",
+        "route": "/quests/hydroponics/air-stone-soak",
+        "sourcePath": "./json/hydroponics/air-stone-soak.json"
+    },
+    {
+        "id": "hydroponics/basil",
+        "title": "Grow basil hydroponically",
+        "description": "Learn how to grow plants without soil!",
+        "image": "/assets/quests/hydroponic_basil_tub.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "hydroponics",
+        "slug": "basil",
+        "route": "/quests/hydroponics/basil",
+        "sourcePath": "./json/hydroponics/basil.json"
+    },
+    {
+        "id": "hydroponics/bucket_10",
+        "title": "Bucket, we'll do it live!",
+        "description": "Have 10 buckets of dechlorinated water in your inventory. For some reason.",
+        "image": "/assets/quests/benchy_10.jpg",
+        "requiresQuests": [
+            "3dprinting/start",
+            "hydroponics/basil"
+        ],
+        "tree": "hydroponics",
+        "slug": "bucket_10",
+        "route": "/quests/hydroponics/bucket_10",
+        "sourcePath": "./json/hydroponics/bucket_10.json"
+    },
+    {
+        "id": "hydroponics/ec-calibrate",
+        "title": "Calibrate EC Meter",
+        "description": "Use calibration solution so readings stay accurate.",
+        "image": "/assets/quests/hydroponic_ec_meter_calibration.jpg",
+        "requiresQuests": [
+            "hydroponics/ph-check"
+        ],
+        "tree": "hydroponics",
+        "slug": "ec-calibrate",
+        "route": "/quests/hydroponics/ec-calibrate",
+        "sourcePath": "./json/hydroponics/ec-calibrate.json"
+    },
+    {
+        "id": "hydroponics/ec-check",
+        "title": "Check Solution EC",
+        "description": "Measure nutrient strength with an EC meter.",
+        "image": "/assets/quests/hydroponic_ec_meter_check.jpg",
+        "requiresQuests": [
+            "hydroponics/ec-calibrate"
+        ],
+        "tree": "hydroponics",
+        "slug": "ec-check",
+        "route": "/quests/hydroponics/ec-check",
+        "sourcePath": "./json/hydroponics/ec-check.json"
+    },
+    {
+        "id": "hydroponics/filter-clean",
+        "title": "Rinse Grow Bed Filter",
+        "description": "Restore sponge filter flow without nuking beneficial bacteria.",
+        "image": "/assets/quests/hydroponics_grow_bed_filter_rinse.jpg",
+        "requiresQuests": [
+            "hydroponics/top-off"
+        ],
+        "tree": "hydroponics",
+        "slug": "filter-clean",
+        "route": "/quests/hydroponics/filter-clean",
+        "sourcePath": "./json/hydroponics/filter-clean.json"
+    },
+    {
+        "id": "hydroponics/grow-light",
+        "title": "Install a Grow Light",
+        "description": "Mount a full-spectrum LED grow lamp and automate a 12 h light cycle with a smart plug and timer.",
+        "image": "/assets/quests/hydroponic_lamp.jpg",
+        "requiresQuests": [
+            "hydroponics/bucket_10"
+        ],
+        "tree": "hydroponics",
+        "slug": "grow-light",
+        "route": "/quests/hydroponics/grow-light",
+        "sourcePath": "./json/hydroponics/grow-light.json"
+    },
+    {
+        "id": "hydroponics/lettuce",
+        "title": "Grow Lettuce Hydroponically",
+        "description": "Scale your hydroponics workflow from seed prep to steady lettuce harvest cycles.",
+        "image": "/assets/quests/hydroponic_lettuce_tub.jpg",
+        "requiresQuests": [
+            "hydroponics/basil"
+        ],
+        "tree": "hydroponics",
+        "slug": "lettuce",
+        "route": "/quests/hydroponics/lettuce",
+        "sourcePath": "./json/hydroponics/lettuce.json"
+    },
+    {
+        "id": "hydroponics/mint-cutting",
+        "title": "Clone Mint Cutting",
+        "description": "Stage a mint clone from setup proof to rooted outcome, with recovery loops for wilt or rot.",
+        "image": "/assets/quests/hydroponics_mint_cutting_clone.jpg",
+        "requiresQuests": [
+            "hydroponics/plug-soak"
+        ],
+        "tree": "hydroponics",
+        "slug": "mint-cutting",
+        "route": "/quests/hydroponics/mint-cutting",
+        "sourcePath": "./json/hydroponics/mint-cutting.json"
+    },
+    {
+        "id": "hydroponics/netcup-clean",
+        "title": "Clean Net Cups",
+        "description": "Sanitize net cups with contamination fallback and verified dry-ready evidence.",
+        "image": "/assets/quests/hydroponics_netcup_cleaning.jpg",
+        "requiresQuests": [
+            "hydroponics/tub-scrub"
+        ],
+        "tree": "hydroponics",
+        "slug": "netcup-clean",
+        "route": "/quests/hydroponics/netcup-clean",
+        "sourcePath": "./json/hydroponics/netcup-clean.json"
+    },
+    {
+        "id": "hydroponics/nutrient-check",
+        "title": "Refresh Nutrient Solution",
+        "description": "Top off your hydroponic tub with fresh nutrients while keeping yourself and the plants safe.",
+        "image": "/assets/quests/hydroponics_nutrient_solution_refresh.jpg",
+        "requiresQuests": [
+            "hydroponics/basil"
+        ],
+        "tree": "hydroponics",
+        "slug": "nutrient-check",
+        "route": "/quests/hydroponics/nutrient-check",
+        "sourcePath": "./json/hydroponics/nutrient-check.json"
+    },
+    {
+        "id": "hydroponics/ph-check",
+        "title": "Check Solution pH",
+        "description": "Measure the nutrient bath's pH and correct it to keep plants happy.",
+        "image": "/assets/quests/hydroponics_solution_ph_check.jpg",
+        "requiresQuests": [
+            "hydroponics/nutrient-check"
+        ],
+        "tree": "hydroponics",
+        "slug": "ph-check",
+        "route": "/quests/hydroponics/ph-check",
+        "sourcePath": "./json/hydroponics/ph-check.json"
+    },
+    {
+        "id": "hydroponics/ph-test",
+        "title": "Test Hydroponic pH",
+        "description": "Measure, interpret, and log reservoir pH with explicit correction thresholds.",
+        "image": "/assets/quests/hydroponics_reservoir_ph_test.jpg",
+        "requiresQuests": [
+            "hydroponics/nutrient-check"
+        ],
+        "tree": "hydroponics",
+        "slug": "ph-test",
+        "route": "/quests/hydroponics/ph-test",
+        "sourcePath": "./json/hydroponics/ph-test.json"
+    },
+    {
+        "id": "hydroponics/plug-soak",
+        "title": "Soak Starter Plugs",
+        "description": "Hydrate starter plugs, verify saturation, and recover safely when soak quality is off.",
+        "image": "/assets/quests/hydroponic_starter_plugs_soaking_tray.jpg",
+        "requiresQuests": [
+            "hydroponics/top-off"
+        ],
+        "tree": "hydroponics",
+        "slug": "plug-soak",
+        "route": "/quests/hydroponics/plug-soak",
+        "sourcePath": "./json/hydroponics/plug-soak.json"
+    },
+    {
+        "id": "hydroponics/pump-install",
+        "title": "Install Submersible Pump",
+        "description": "Install and validate a reservoir pump loop so nutrients circulate evenly.",
+        "image": "/assets/quests/hydroponics_submersible_pump_install.jpg",
+        "requiresQuests": [
+            "hydroponics/reservoir-refresh"
+        ],
+        "tree": "hydroponics",
+        "slug": "pump-install",
+        "route": "/quests/hydroponics/pump-install",
+        "sourcePath": "./json/hydroponics/pump-install.json"
+    },
+    {
+        "id": "hydroponics/pump-prime",
+        "title": "Prime Water Pump",
+        "description": "Prime and verify the pump loop so circulation starts without cavitation.",
+        "image": "/assets/quests/hydroponics_pump_prime.jpg",
+        "requiresQuests": [
+            "hydroponics/pump-install"
+        ],
+        "tree": "hydroponics",
+        "slug": "pump-prime",
+        "route": "/quests/hydroponics/pump-prime",
+        "sourcePath": "./json/hydroponics/pump-prime.json"
+    },
+    {
+        "id": "hydroponics/regrow-stevia",
+        "title": "Regrow Your Stevia",
+        "description": "Run stevia regrowth in staged gates with recovery checks before closure.",
+        "image": "/assets/quests/hydroponic_stevia_regrow.jpg",
+        "requiresQuests": [
+            "hydroponics/stevia"
+        ],
+        "tree": "hydroponics",
+        "slug": "regrow-stevia",
+        "route": "/quests/hydroponics/regrow-stevia",
+        "sourcePath": "./json/hydroponics/regrow-stevia.json"
+    },
+    {
+        "id": "hydroponics/reservoir-refresh",
+        "title": "Refresh the Reservoir",
+        "description": "Drain, remix, verify stability, and recover from contamination before returning plants to production.",
+        "image": "/assets/quests/hydroponics_reservoir_refresh.jpg",
+        "requiresQuests": [
+            "hydroponics/nutrient-check"
+        ],
+        "tree": "hydroponics",
+        "slug": "reservoir-refresh",
+        "route": "/quests/hydroponics/reservoir-refresh",
+        "sourcePath": "./json/hydroponics/reservoir-refresh.json"
+    },
+    {
+        "id": "hydroponics/root-rinse",
+        "title": "Rinse the Roots",
+        "description": "Flush salts from the root zone with clean water.",
+        "image": "/assets/quests/hydroponics_root_rinse.jpg",
+        "requiresQuests": [
+            "hydroponics/filter-clean"
+        ],
+        "tree": "hydroponics",
+        "slug": "root-rinse",
+        "route": "/quests/hydroponics/root-rinse",
+        "sourcePath": "./json/hydroponics/root-rinse.json"
+    },
+    {
+        "id": "hydroponics/stevia",
+        "title": "Grow Stevia Hydroponically",
+        "description": "Stage stevia from germination through harvest with stress checks and recovery loops.",
+        "image": "/assets/quests/hydroponic_stevia_starter_tub.jpg",
+        "requiresQuests": [
+            "hydroponics/lettuce"
+        ],
+        "tree": "hydroponics",
+        "slug": "stevia",
+        "route": "/quests/hydroponics/stevia",
+        "sourcePath": "./json/hydroponics/stevia.json"
+    },
+    {
+        "id": "hydroponics/temp-check",
+        "title": "Check Water Temperature",
+        "description": "Measure, log, and interpret reservoir temperature with corrective retest loops.",
+        "image": "/assets/quests/hydroponic_reservoir_temp_check.jpg",
+        "requiresQuests": [
+            "hydroponics/nutrient-check"
+        ],
+        "tree": "hydroponics",
+        "slug": "temp-check",
+        "route": "/quests/hydroponics/temp-check",
+        "sourcePath": "./json/hydroponics/temp-check.json"
+    },
+    {
+        "id": "hydroponics/top-off",
+        "title": "Top Off the Reservoir",
+        "description": "Add fresh water to keep nutrient levels stable.",
+        "image": "/assets/quests/hydroponics_reservoir_top_off.jpg",
+        "requiresQuests": [
+            "hydroponics/pump-install"
+        ],
+        "tree": "hydroponics",
+        "slug": "top-off",
+        "route": "/quests/hydroponics/top-off",
+        "sourcePath": "./json/hydroponics/top-off.json"
+    },
+    {
+        "id": "hydroponics/tub-scrub",
+        "title": "Scrub the Grow Tub",
+        "description": "Remove biofilm from the reservoir walls.",
+        "image": "/assets/quests/hydroponics_tub_scrub.jpg",
+        "requiresQuests": [
+            "hydroponics/reservoir-refresh"
+        ],
+        "tree": "hydroponics",
+        "slug": "tub-scrub",
+        "route": "/quests/hydroponics/tub-scrub",
+        "sourcePath": "./json/hydroponics/tub-scrub.json"
+    },
+    {
+        "id": "programming/avg-temp",
+        "title": "Compute Average Temperature",
+        "description": "Write a small script that reads your log file and prints the daily average temperature.",
+        "image": "/assets/quests/programming_compute_avg_temperature.jpg",
+        "requiresQuests": [
+            "programming/temp-logger"
+        ],
+        "tree": "programming",
+        "slug": "avg-temp",
+        "route": "/quests/programming/avg-temp",
+        "sourcePath": "./json/programming/avg-temp.json"
+    },
+    {
+        "id": "programming/graph-temp",
+        "title": "Graph Temperature Logs",
+        "description": "Plot the raw log from temp-logger to get a quick visual check that your sensor data looks reasonable.",
+        "image": "/assets/quests/programming_graph_temperature_data.jpg",
+        "requiresQuests": [
+            "programming/temp-logger"
+        ],
+        "tree": "programming",
+        "slug": "graph-temp",
+        "route": "/quests/programming/graph-temp",
+        "sourcePath": "./json/programming/graph-temp.json"
+    },
+    {
+        "id": "programming/graph-temp-data",
+        "title": "Clean and graph your temperature logs",
+        "description": "Parse your log file, smooth noisy readings, and annotate the highs and lows so the chart tells a clearer story than raw numbers alone.",
+        "image": "/assets/quests/programming_graph_temperature_logs_script.jpg",
+        "requiresQuests": [
+            "programming/graph-temp"
+        ],
+        "tree": "programming",
+        "slug": "graph-temp-data",
+        "route": "/quests/programming/graph-temp-data",
+        "sourcePath": "./json/programming/graph-temp-data.json"
+    },
+    {
+        "id": "programming/hello-sensor",
+        "title": "Log Temperature Data",
+        "description": "dChat shows you how a short script can capture sensor information for later analysis.",
+        "image": "/assets/quests/programming_hello_sensor_logging.jpg",
+        "requiresQuests": [
+            "electronics/arduino-blink"
+        ],
+        "tree": "programming",
+        "slug": "hello-sensor",
+        "route": "/quests/programming/hello-sensor",
+        "sourcePath": "./json/programming/hello-sensor.json"
+    },
+    {
+        "id": "programming/http-post",
+        "title": "Accept POST Data",
+        "description": "Update your server to handle POST requests and log JSON payloads.",
+        "image": "/assets/quests/programming_http_post_endpoint.jpg",
+        "requiresQuests": [
+            "programming/json-api"
+        ],
+        "tree": "programming",
+        "slug": "http-post",
+        "route": "/quests/programming/http-post",
+        "sourcePath": "./json/programming/http-post.json"
+    },
+    {
+        "id": "programming/json-api",
+        "title": "Serve JSON Data",
+        "description": "Extend your server to respond with structured JSON.",
+        "image": "/assets/quests/programming_json_api.jpg",
+        "requiresQuests": [
+            "programming/avg-temp",
+            "programming/json-endpoint",
+            "programming/web-server"
+        ],
+        "tree": "programming",
+        "slug": "json-api",
+        "route": "/quests/programming/json-api",
+        "sourcePath": "./json/programming/json-api.json"
+    },
+    {
+        "id": "programming/json-endpoint",
+        "title": "Serve JSON Data",
+        "description": "Extend your server to respond with structured JSON.",
+        "image": "/assets/quests/programming_json_endpoint.jpg",
+        "requiresQuests": [
+            "programming/web-server"
+        ],
+        "tree": "programming",
+        "slug": "json-endpoint",
+        "route": "/quests/programming/json-endpoint",
+        "sourcePath": "./json/programming/json-endpoint.json"
+    },
+    {
+        "id": "programming/median-temp",
+        "title": "Compute Median Temperature",
+        "description": "Extend your script to report the median temperature from your log.",
+        "image": "/assets/quests/programming_compute_median_temperature.jpg",
+        "requiresQuests": [
+            "programming/avg-temp"
+        ],
+        "tree": "programming",
+        "slug": "median-temp",
+        "route": "/quests/programming/median-temp",
+        "sourcePath": "./json/programming/median-temp.json"
+    },
+    {
+        "id": "programming/moving-avg-temp",
+        "title": "Compute Moving Average Temperature",
+        "description": "Add a moving average to your temperature analysis script.",
+        "image": "/assets/quests/programming_moving_average_temperature.jpg",
+        "requiresQuests": [
+            "programming/avg-temp"
+        ],
+        "tree": "programming",
+        "slug": "moving-avg-temp",
+        "route": "/quests/programming/moving-avg-temp",
+        "sourcePath": "./json/programming/moving-avg-temp.json"
+    },
+    {
+        "id": "programming/plot-temp-cli",
+        "title": "Plot Temperature Data via CLI",
+        "description": "Use Python to turn your temperature log into a line chart.",
+        "image": "/assets/quests/programming_plot_temp_cli.jpg",
+        "requiresQuests": [
+            "programming/temp-logger"
+        ],
+        "tree": "programming",
+        "slug": "plot-temp-cli",
+        "route": "/quests/programming/plot-temp-cli",
+        "sourcePath": "./json/programming/plot-temp-cli.json"
+    },
+    {
+        "id": "programming/stddev-temp",
+        "title": "Compute Temperature Standard Deviation",
+        "description": "Extend your script to report the standard deviation of daily temperature readings.",
+        "image": "/assets/quests/programming_temperature_stddev.jpg",
+        "requiresQuests": [
+            "programming/median-temp"
+        ],
+        "tree": "programming",
+        "slug": "stddev-temp",
+        "route": "/quests/programming/stddev-temp",
+        "sourcePath": "./json/programming/stddev-temp.json"
+    },
+    {
+        "id": "programming/temp-alert",
+        "title": "Set Temperature Alert",
+        "description": "Write a script that warns you when the sensor crosses a threshold.",
+        "image": "/assets/quests/programming_temperature_threshold_alert.jpg",
+        "requiresQuests": [
+            "programming/temp-graph"
+        ],
+        "tree": "programming",
+        "slug": "temp-alert",
+        "route": "/quests/programming/temp-alert",
+        "sourcePath": "./json/programming/temp-alert.json"
+    },
+    {
+        "id": "programming/temp-email",
+        "title": "Email Temperature Alert",
+        "description": "Trigger an email when the sensor exceeds a set temperature.",
+        "image": "/assets/quests/programming_temperature_email_alert.jpg",
+        "requiresQuests": [
+            "programming/temp-alert"
+        ],
+        "tree": "programming",
+        "slug": "temp-email",
+        "route": "/quests/programming/temp-email",
+        "sourcePath": "./json/programming/temp-email.json"
+    },
+    {
+        "id": "programming/temp-graph",
+        "title": "Serve a live temperature graph",
+        "description": "Host a simple web page that fetches your live temperature JSON endpoint and renders an auto-refreshing temperature chart.",
+        "image": "/assets/quests/temperature_log_line_chart.jpg",
+        "requiresQuests": [
+            "programming/graph-temp-data",
+            "programming/temp-json-api"
+        ],
+        "tree": "programming",
+        "slug": "temp-graph",
+        "route": "/quests/programming/temp-graph",
+        "sourcePath": "./json/programming/temp-graph.json"
+    },
+    {
+        "id": "programming/temp-json-api",
+        "title": "Serve Temperature as JSON",
+        "description": "Expose the latest sensor reading at a live temperature JSON endpoint.",
+        "image": "/assets/quests/programming_temperature_json_api.jpg",
+        "requiresQuests": [
+            "programming/json-api"
+        ],
+        "tree": "programming",
+        "slug": "temp-json-api",
+        "route": "/quests/programming/temp-json-api",
+        "sourcePath": "./json/programming/temp-json-api.json"
+    },
+    {
+        "id": "programming/temp-logger",
+        "title": "Log Temperature Data",
+        "description": "Write a simple script that records hourly temperature readings.",
+        "image": "/assets/quests/programming_temperature_logger_script.jpg",
+        "requiresQuests": [
+            "electronics/thermistor-reading"
+        ],
+        "tree": "programming",
+        "slug": "temp-logger",
+        "route": "/quests/programming/temp-logger",
+        "sourcePath": "./json/programming/temp-logger.json"
+    },
+    {
+        "id": "programming/thermistor-calibration",
+        "title": "Calibrate a Thermistor",
+        "description": "Use a 10k thermistor to measure temperature accurately with an Arduino script.",
+        "image": "/assets/quests/programming_thermistor_calibration_script.jpg",
+        "requiresQuests": [
+            "programming/hello-sensor"
+        ],
+        "tree": "programming",
+        "slug": "thermistor-calibration",
+        "route": "/quests/programming/thermistor-calibration",
+        "sourcePath": "./json/programming/thermistor-calibration.json"
+    },
+    {
+        "id": "programming/web-server",
+        "title": "Serve a Web Page",
+        "description": "Write a tiny HTTP server that responds with 'Hello, world'.",
+        "image": "/assets/quests/programming_minimal_web_server.jpg",
+        "requiresQuests": [
+            "programming/hello-sensor"
+        ],
+        "tree": "programming",
+        "slug": "web-server",
+        "route": "/quests/programming/web-server",
+        "sourcePath": "./json/programming/web-server.json"
+    },
+    {
+        "id": "robotics/gyro-balance",
+        "title": "Balance with a gyroscope",
+        "description": "Pair a gyro with tuned servo control so a two-wheeled platform can catch itself before tipping over.",
+        "image": "/assets/quests/robotics_gyro_balance_platform.jpg",
+        "requiresQuests": [
+            "robotics/odometry-basics"
+        ],
+        "tree": "robotics",
+        "slug": "gyro-balance",
+        "route": "/quests/robotics/gyro-balance",
+        "sourcePath": "./json/robotics/gyro-balance.json"
+    },
+    {
+        "id": "robotics/line-follower",
+        "title": "Build a line-following robot",
+        "description": "Train a two-wheel bot to read line sensors and stay on a taped track while you tune the code.",
+        "image": "/assets/quests/line_following_robot_track.jpg",
+        "requiresQuests": [
+            "robotics/reflectance-sensors",
+            "robotics/servo-control"
+        ],
+        "tree": "robotics",
+        "slug": "line-follower",
+        "route": "/quests/robotics/line-follower",
+        "sourcePath": "./json/robotics/line-follower.json"
+    },
+    {
+        "id": "robotics/maze-navigation",
+        "title": "Navigate a Simple Maze",
+        "description": "Layer line following, distance sensing, and encoder feedback to clear a taped maze without getting lost.",
+        "image": "/assets/quests/robot_maze_navigation.jpg",
+        "requiresQuests": [
+            "robotics/obstacle-avoidance",
+            "robotics/odometry-basics"
+        ],
+        "tree": "robotics",
+        "slug": "maze-navigation",
+        "route": "/quests/robotics/maze-navigation",
+        "sourcePath": "./json/robotics/maze-navigation.json"
+    },
+    {
+        "id": "robotics/obstacle-avoidance",
+        "title": "Add Obstacle Avoidance",
+        "description": "Give your line follower the awareness to pause, scan, and steer around boxes without leaving the track.",
+        "image": "/assets/quests/robot_obstacle_avoidance.jpg",
+        "requiresQuests": [
+            "robotics/line-follower",
+            "robotics/ultrasonic-rangefinder"
+        ],
+        "tree": "robotics",
+        "slug": "obstacle-avoidance",
+        "route": "/quests/robotics/obstacle-avoidance",
+        "sourcePath": "./json/robotics/obstacle-avoidance.json"
+    },
+    {
+        "id": "robotics/odometry-basics",
+        "title": "Track distance with wheel encoders",
+        "description": "Convert encoder ticks into centimeters traveled so navigation code can estimate position between sensor readings.",
+        "image": "/assets/quests/robot_odometry_wheel_encoders.jpg",
+        "requiresQuests": [
+            "robotics/wheel-encoders"
+        ],
+        "tree": "robotics",
+        "slug": "odometry-basics",
+        "route": "/quests/robotics/odometry-basics",
+        "sourcePath": "./json/robotics/odometry-basics.json"
+    },
+    {
+        "id": "robotics/pan-tilt",
+        "title": "Make a Pan-Tilt Mount",
+        "description": "Build a two-axis mount so cameras or sensors can pan and tilt to survey the space around your robot.",
+        "image": "/assets/quests/pan_tilt_sensor_mount.jpg",
+        "requiresQuests": [
+            "robotics/servo-control"
+        ],
+        "tree": "robotics",
+        "slug": "pan-tilt",
+        "route": "/quests/robotics/pan-tilt",
+        "sourcePath": "./json/robotics/pan-tilt.json"
+    },
+    {
+        "id": "robotics/reflectance-sensors",
+        "title": "Calibrate reflectance sensors",
+        "description": "Build a repeatable calibration workflow for floor-vs-line reflectance before closed-loop control.",
+        "image": "/assets/quests/robotics_reflectance_sensors.jpg",
+        "requiresQuests": [
+            "electronics/light-sensor",
+            "programming/hello-sensor"
+        ],
+        "tree": "robotics",
+        "slug": "reflectance-sensors",
+        "route": "/quests/robotics/reflectance-sensors",
+        "sourcePath": "./json/robotics/reflectance-sensors.json"
+    },
+    {
+        "id": "robotics/servo-arm",
+        "title": "Assemble a Servo Arm",
+        "description": "Assemble a two-joint servo arm with a gripper so you can practice smooth pick-and-place moves.",
+        "image": "/assets/quests/simple_servo_robot_arm.jpg",
+        "requiresQuests": [
+            "robotics/servo-gripper"
+        ],
+        "tree": "robotics",
+        "slug": "servo-arm",
+        "route": "/quests/robotics/servo-arm",
+        "sourcePath": "./json/robotics/servo-arm.json"
+    },
+    {
+        "id": "robotics/servo-control",
+        "title": "Control a Servo Motor",
+        "description": "Wire a hobby servo to your Arduino and use the Sweep example to understand position control.",
+        "image": "/assets/quests/arduino_servo_control.jpg",
+        "requiresQuests": [
+            "electronics/arduino-blink"
+        ],
+        "tree": "robotics",
+        "slug": "servo-control",
+        "route": "/quests/robotics/servo-control",
+        "sourcePath": "./json/robotics/servo-control.json"
+    },
+    {
+        "id": "robotics/servo-gripper",
+        "title": "Build a Servo Gripper",
+        "description": "Cut and hinge two jaws onto a micro servo so your robot can pinch and release small objects safely.",
+        "image": "/assets/quests/servo_gripper_claw.jpg",
+        "requiresQuests": [
+            "robotics/servo-control"
+        ],
+        "tree": "robotics",
+        "slug": "servo-gripper",
+        "route": "/quests/robotics/servo-gripper",
+        "sourcePath": "./json/robotics/servo-gripper.json"
+    },
+    {
+        "id": "robotics/servo-radar",
+        "title": "Scan with a servo-mounted sensor",
+        "description": "Combine a pan-tilt mount and ultrasonic sensor to sweep the room and build a quick proximity map.",
+        "image": "/assets/quests/servo_ultrasonic_radar_scan.jpg",
+        "requiresQuests": [
+            "robotics/pan-tilt",
+            "robotics/ultrasonic-rangefinder"
+        ],
+        "tree": "robotics",
+        "slug": "servo-radar",
+        "route": "/quests/robotics/servo-radar",
+        "sourcePath": "./json/robotics/servo-radar.json"
+    },
+    {
+        "id": "robotics/ultrasonic-rangefinder",
+        "title": "Measure distance with an ultrasonic sensor",
+        "description": "Wire and test an HC-SR04 so your Arduino can report clear distance readings for navigation code.",
+        "image": "/assets/quests/ultrasonic_distance_sensor_setup.jpg",
+        "requiresQuests": [
+            "electronics/arduino-blink"
+        ],
+        "tree": "robotics",
+        "slug": "ultrasonic-rangefinder",
+        "route": "/quests/robotics/ultrasonic-rangefinder",
+        "sourcePath": "./json/robotics/ultrasonic-rangefinder.json"
+    },
+    {
+        "id": "robotics/wheel-encoders",
+        "title": "Add Wheel Encoders",
+        "description": "Install wheel encoders so your robot can measure distance, hold headings, and repeat paths reliably.",
+        "image": "/assets/quests/robot_wheel_encoders_install.jpg",
+        "requiresQuests": [
+            "robotics/servo-gripper"
+        ],
+        "tree": "robotics",
+        "slug": "wheel-encoders",
+        "route": "/quests/robotics/wheel-encoders",
+        "sourcePath": "./json/robotics/wheel-encoders.json"
+    },
+    {
+        "id": "rocketry/firstlaunch",
+        "title": "First rocket launch!",
+        "description": "Print and launch your own model rocket. Follow the steps to print, assemble, and launch the rocket. Get ready for liftoff!",
+        "image": "/assets/quests/firstlaunch.jpg",
+        "requiresQuests": [
+            "3dprinting/start"
+        ],
+        "tree": "rocketry",
+        "slug": "firstlaunch",
+        "route": "/quests/rocketry/firstlaunch",
+        "sourcePath": "./json/rocketry/firstlaunch.json"
+    },
+    {
+        "id": "rocketry/fuel-mixture",
+        "title": "Fuel Mixture Calibration",
+        "description": "Dial in a safe oxidizer-to-fuel ratio for a hobbyist model rocket before launch.",
+        "image": "/assets/quests/rocket_fuel_mixture_calibration.jpg",
+        "requiresQuests": [
+            "rocketry/firstlaunch"
+        ],
+        "tree": "rocketry",
+        "slug": "fuel-mixture",
+        "route": "/quests/rocketry/fuel-mixture",
+        "sourcePath": "./json/rocketry/fuel-mixture.json"
+    },
+    {
+        "id": "rocketry/guided-rocket-build",
+        "title": "Build a Guided Model Rocket",
+        "description": "Build and validate a guided rocket stack with branching print strategy, bench diagnostics, and safe-launch readiness checks.",
+        "image": "/assets/quests/guided_model_rocket_build_bench.jpg",
+        "requiresQuests": [
+            "rocketry/firstlaunch",
+            "rocketry/parachute",
+            "rocketry/preflight-check"
+        ],
+        "tree": "rocketry",
+        "slug": "guided-rocket-build",
+        "route": "/quests/rocketry/guided-rocket-build",
+        "sourcePath": "./json/rocketry/guided-rocket-build.json"
+    },
+    {
+        "id": "rocketry/night-launch",
+        "title": "Night Launch",
+        "description": "Take your rocket experience to the stars with a night launch. Gather your gear and light up the sky.",
+        "image": "/assets/quests/model_rocket_night_launch.jpg",
+        "requiresQuests": [
+            "rocketry/recovery-run"
+        ],
+        "tree": "rocketry",
+        "slug": "night-launch",
+        "route": "/quests/rocketry/night-launch",
+        "sourcePath": "./json/rocketry/night-launch.json"
+    },
+    {
+        "id": "rocketry/parachute",
+        "title": "Add a parachute",
+        "description": "Install and validate a parachute recovery system with safety checks, verification evidence, and retry paths.",
+        "image": "/assets/quests/model_rocket_parachute_installation.jpg",
+        "requiresQuests": [
+            "rocketry/firstlaunch"
+        ],
+        "tree": "rocketry",
+        "slug": "parachute",
+        "route": "/quests/rocketry/parachute",
+        "sourcePath": "./json/rocketry/parachute.json"
+    },
+    {
+        "id": "rocketry/preflight-check",
+        "title": "Preflight Checklist",
+        "description": "Run a full preflight with wind data, safety holds, and a verified launch-ready checklist.",
+        "image": "/assets/quests/model_rocket_preflight_checklist.jpg",
+        "requiresQuests": [
+            "rocketry/parachute"
+        ],
+        "tree": "rocketry",
+        "slug": "preflight-check",
+        "route": "/quests/rocketry/preflight-check",
+        "sourcePath": "./json/rocketry/preflight-check.json"
+    },
+    {
+        "id": "rocketry/recovery-run",
+        "title": "Practice Rocket Recovery",
+        "description": "Run a full parachute flight recovery drill with evidence capture, anomaly handling, and go/no-go checks.",
+        "image": "/assets/quests/model_rocket_recovery_run_field.jpg",
+        "requiresQuests": [
+            "rocketry/parachute"
+        ],
+        "tree": "rocketry",
+        "slug": "recovery-run",
+        "route": "/quests/rocketry/recovery-run",
+        "sourcePath": "./json/rocketry/recovery-run.json"
+    },
+    {
+        "id": "rocketry/static-test",
+        "title": "Perform a Static Engine Test",
+        "description": "Run a controlled static burn, record measurements, and only clear flight when thrust data passes bounds.",
+        "image": "/assets/quests/model_rocket_static_engine_test.jpg",
+        "requiresQuests": [
+            "rocketry/parachute"
+        ],
+        "tree": "rocketry",
+        "slug": "static-test",
+        "route": "/quests/rocketry/static-test",
+        "sourcePath": "./json/rocketry/static-test.json"
+    },
+    {
+        "id": "rocketry/suborbital-hop",
+        "title": "Guided Model Rocket Hop",
+        "description": "Run the guided hop simulator, prep the range, and fly a servo-stabilized model rocket with onboard video.",
+        "image": "/assets/quests/guided_model_rocket_hop_launch.jpg",
+        "requiresQuests": [
+            "rocketry/guided-rocket-build",
+            "rocketry/preflight-check",
+            "rocketry/recovery-run"
+        ],
+        "tree": "rocketry",
+        "slug": "suborbital-hop",
+        "route": "/quests/rocketry/suborbital-hop",
+        "sourcePath": "./json/rocketry/suborbital-hop.json"
+    },
+    {
+        "id": "rocketry/wind-check",
+        "title": "Check the Launch Winds",
+        "description": "Measure wind speed, classify risk, and clear launch only after a verified retest window.",
+        "image": "/assets/quests/model_rocket_wind_check.jpg",
+        "requiresQuests": [
+            "rocketry/preflight-check"
+        ],
+        "tree": "rocketry",
+        "slug": "wind-check",
+        "route": "/quests/rocketry/wind-check",
+        "sourcePath": "./json/rocketry/wind-check.json"
+    },
+    {
+        "id": "sysadmin/basic-commands",
+        "title": "Learn Basic Linux Commands",
+        "description": "Practice core shell commands on an Ubuntu 24.04 LTS node and generate your first command artifacts.",
+        "image": "/assets/quests/linux_basic_shell_commands.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "sysadmin",
+        "slug": "basic-commands",
+        "route": "/quests/sysadmin/basic-commands",
+        "sourcePath": "./json/sysadmin/basic-commands.json"
+    },
+    {
+        "id": "sysadmin/log-analysis",
+        "title": "Inspect System Logs",
+        "description": "Use journalctl and tail to extract incident evidence from Ubuntu services.",
+        "image": "/assets/quests/linux_system_log_analysis.jpg",
+        "requiresQuests": [
+            "sysadmin/resource-monitoring"
+        ],
+        "tree": "sysadmin",
+        "slug": "log-analysis",
+        "route": "/quests/sysadmin/log-analysis",
+        "sourcePath": "./json/sysadmin/log-analysis.json"
+    },
+    {
+        "id": "sysadmin/resource-monitoring",
+        "title": "Monitor System Resources",
+        "description": "Track CPU, memory, and disk on Ubuntu with local checks first, then level up to remote node monitoring.",
+        "image": "/assets/quests/linux_resource_monitoring_dashboard.jpg",
+        "requiresQuests": [
+            "sysadmin/basic-commands"
+        ],
+        "tree": "sysadmin",
+        "slug": "resource-monitoring",
+        "route": "/quests/sysadmin/resource-monitoring",
+        "sourcePath": "./json/sysadmin/resource-monitoring.json"
+    },
+    {
+        "id": "ubi/basicincome",
+        "title": "Earn basic income",
+        "description": "Learn about the basic income system and how to earn dUSD.",
+        "image": "/assets/quests/ubi_basic_income_overview.jpg",
+        "requiresQuests": [
+            "3dprinting/start"
+        ],
+        "tree": "ubi",
+        "slug": "basicincome",
+        "route": "/quests/ubi/basicincome",
+        "sourcePath": "./json/ubi/basicincome.json"
+    },
+    {
+        "id": "ubi/first-payment",
+        "title": "Claim Your First UBI",
+        "description": "Withdraw your daily dUSD for the first time.",
+        "image": "/assets/quests/ubi_first_payment_claim.jpg",
+        "requiresQuests": [
+            "ubi/basicincome"
+        ],
+        "tree": "ubi",
+        "slug": "first-payment",
+        "route": "/quests/ubi/first-payment",
+        "sourcePath": "./json/ubi/first-payment.json"
+    },
+    {
+        "id": "ubi/reminder",
+        "title": "Set a UBI Reminder",
+        "description": "Set a recurring reminder on your phone so you never miss a daily dUSD claim.",
+        "image": "/assets/quests/ubi_daily_reminder.jpg",
+        "requiresQuests": [
+            "ubi/first-payment"
+        ],
+        "tree": "ubi",
+        "slug": "reminder",
+        "route": "/quests/ubi/reminder",
+        "sourcePath": "./json/ubi/reminder.json"
+    },
+    {
+        "id": "ubi/savings-goal",
+        "title": "Start a Savings Jar",
+        "description": "Buy a savings jar, deposit 100 dUSD (10x deposit runs), and track your stored balance.",
+        "image": "/assets/quests/ubi_savings_jar.jpg",
+        "requiresQuests": [
+            "ubi/first-payment"
+        ],
+        "tree": "ubi",
+        "slug": "savings-goal",
+        "route": "/quests/ubi/savings-goal",
+        "sourcePath": "./json/ubi/savings-goal.json"
+    },
+    {
+        "id": "welcome/connect-github",
+        "title": "Connect GitHub",
+        "description": "Link your GitHub account to enable cloud sync and quest submissions.",
+        "image": "/assets/quests/connect_github_integration.jpg",
+        "requiresQuests": [
+            "welcome/intro-inventory"
+        ],
+        "tree": "welcome",
+        "slug": "connect-github",
+        "route": "/quests/welcome/connect-github",
+        "sourcePath": "./json/welcome/connect-github.json"
+    },
+    {
+        "id": "welcome/howtodoquests",
+        "title": "How to do quests",
+        "description": "Learn how quest mechanics work, including dialogue choices, real items, and safe processes.",
+        "image": "/assets/quests/how_to_do_quests_flowchart.jpg",
+        "requiresQuests": [],
+        "tree": "welcome",
+        "slug": "howtodoquests",
+        "route": "/quests/welcome/howtodoquests",
+        "sourcePath": "./json/welcome/howtodoquests.json"
+    },
+    {
+        "id": "welcome/intro-inventory",
+        "title": "Check Your Inventory",
+        "description": "Learn how buying and selling works in /inventory.",
+        "image": "/assets/quests/intro_inventory_grid.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "welcome",
+        "slug": "intro-inventory",
+        "route": "/quests/welcome/intro-inventory",
+        "sourcePath": "./json/welcome/intro-inventory.json"
+    },
+    {
+        "id": "welcome/run-tests",
+        "title": "Run the Test Suite",
+        "description": "Learn the real DSPACE test commands before opening a PR.",
+        "image": "/assets/quests/run_tests_terminal_dashboard.jpg",
+        "requiresQuests": [
+            "welcome/connect-github"
+        ],
+        "tree": "welcome",
+        "slug": "run-tests",
+        "route": "/quests/welcome/run-tests",
+        "sourcePath": "./json/welcome/run-tests.json"
+    },
+    {
+        "id": "welcome/smart-plug-test",
+        "title": "Smart Plug Test",
+        "description": "Use the smart plug to buy grid energy and learn the dWatt ↔ dCarbon tradeoff.",
+        "image": "/assets/quests/smart_plug_test_dwatt_kwh.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "welcome",
+        "slug": "smart-plug-test",
+        "route": "/quests/welcome/smart-plug-test",
+        "sourcePath": "./json/welcome/smart-plug-test.json"
+    },
+    {
+        "id": "woodworking/apply-finish",
+        "title": "Apply a Wood Finish",
+        "description": "Brush on a thin protective finish that resists moisture and highlights the grain you just sanded smooth.",
+        "image": "/assets/quests/woodworking_apply_finish.jpg",
+        "requiresQuests": [
+            "woodworking/finish-sanding"
+        ],
+        "tree": "woodworking",
+        "slug": "apply-finish",
+        "route": "/quests/woodworking/apply-finish",
+        "sourcePath": "./json/woodworking/apply-finish.json"
+    },
+    {
+        "id": "woodworking/birdhouse",
+        "title": "Build a birdhouse",
+        "description": "Start woodworking with a straightforward birdhouse that teaches measuring, safe cuts, and clean glue joints.",
+        "image": "/assets/quests/woodworking_birdhouse_build.jpg",
+        "requiresQuests": [
+            "woodworking/planter-box"
+        ],
+        "tree": "woodworking",
+        "slug": "birdhouse",
+        "route": "/quests/woodworking/birdhouse",
+        "sourcePath": "./json/woodworking/birdhouse.json"
+    },
+    {
+        "id": "woodworking/bookshelf",
+        "title": "Build a small bookshelf",
+        "description": "Cut, dry-fit, and square a small bookshelf with safety checks and a wobble-recovery loop.",
+        "image": "/assets/quests/woodworking_small_bookshelf_build.jpg",
+        "requiresQuests": [
+            "woodworking/step-stool"
+        ],
+        "tree": "woodworking",
+        "slug": "bookshelf",
+        "route": "/quests/woodworking/bookshelf",
+        "sourcePath": "./json/woodworking/bookshelf.json"
+    },
+    {
+        "id": "woodworking/coffee-table",
+        "title": "Build a coffee table",
+        "description": "Build a coffee table with alternate assembly plans, stability proof, and a corrective rework loop.",
+        "image": "/assets/quests/woodworking_coffee_table_build.jpg",
+        "requiresQuests": [
+            "woodworking/bookshelf"
+        ],
+        "tree": "woodworking",
+        "slug": "coffee-table",
+        "route": "/quests/woodworking/coffee-table",
+        "sourcePath": "./json/woodworking/coffee-table.json"
+    },
+    {
+        "id": "woodworking/finish-sanding",
+        "title": "Finish Sand Your Project",
+        "description": "Smooth the surface of your latest build with fine-grit paper before applying finish.",
+        "image": "/assets/quests/woodworking_finish_sanding.jpg",
+        "requiresQuests": [
+            "woodworking/step-stool"
+        ],
+        "tree": "woodworking",
+        "slug": "finish-sanding",
+        "route": "/quests/woodworking/finish-sanding",
+        "sourcePath": "./json/woodworking/finish-sanding.json"
+    },
+    {
+        "id": "woodworking/picture-frame",
+        "title": "Craft a Picture Frame",
+        "description": "Make a simple frame to showcase your favorite photo.",
+        "image": "/assets/quests/woodworking_picture_frame_craft.jpg",
+        "requiresQuests": [
+            "woodworking/tool-rack"
+        ],
+        "tree": "woodworking",
+        "slug": "picture-frame",
+        "route": "/quests/woodworking/picture-frame",
+        "sourcePath": "./json/woodworking/picture-frame.json"
+    },
+    {
+        "id": "woodworking/planter-box",
+        "title": "Build a Planter Box",
+        "description": "Cut and nail a pine planter box that introduces square joints and waterproof glue-ups.",
+        "image": "/assets/quests/woodworking_planter_box_build.jpg",
+        "requiresQuests": [
+            "welcome/howtodoquests"
+        ],
+        "tree": "woodworking",
+        "slug": "planter-box",
+        "route": "/quests/woodworking/planter-box",
+        "sourcePath": "./json/woodworking/planter-box.json"
+    },
+    {
+        "id": "woodworking/step-stool",
+        "title": "Build a step stool",
+        "description": "Build and verify a stable step stool with measurement proof and a wobble-fix retry branch.",
+        "image": "/assets/quests/woodworking_step_stool_build.jpg",
+        "requiresQuests": [
+            "woodworking/birdhouse",
+            "woodworking/planter-box"
+        ],
+        "tree": "woodworking",
+        "slug": "step-stool",
+        "route": "/quests/woodworking/step-stool",
+        "sourcePath": "./json/woodworking/step-stool.json"
+    },
+    {
+        "id": "woodworking/tool-rack",
+        "title": "Build a Tool Rack",
+        "description": "Organize your workspace with a simple rack for hand tools.",
+        "image": "/assets/quests/wooden_wall_tool_rack.jpg",
+        "requiresQuests": [
+            "woodworking/workbench"
+        ],
+        "tree": "woodworking",
+        "slug": "tool-rack",
+        "route": "/quests/woodworking/tool-rack",
+        "sourcePath": "./json/woodworking/tool-rack.json"
+    },
+    {
+        "id": "woodworking/workbench",
+        "title": "Build a simple workbench",
+        "description": "Upgrade from a makeshift surface to a level, clamped-together workbench that can handle real projects.",
+        "image": "/assets/quests/woodworking_workbench_build.jpg",
+        "requiresQuests": [
+            "woodworking/step-stool"
+        ],
+        "tree": "woodworking",
+        "slug": "workbench",
+        "route": "/quests/woodworking/workbench",
+        "sourcePath": "./json/woodworking/workbench.json"
+    }
+]

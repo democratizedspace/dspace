@@ -2,98 +2,140 @@
     import Quest from './Quest.svelte';
     import Chip from '../../../components/svelte/Chip.svelte';
     import { onDestroy, onMount } from 'svelte';
-    import { questFinished, canStartQuest } from '../../../utils/gameState.js';
     import { listCustomQuests } from '../../../utils/customcontent.js';
-    import { loadGameState, state, ready } from '../../../utils/gameState/common.js';
+    import {
+        loadGameState,
+        state,
+        ready,
+        getPersistedGameStateLightweightSync,
+        getAuthoritativeQuestProgressSnapshot,
+    } from '../../../utils/gameState/common.js';
+    import { classifyQuestList } from '../../../utils/quests/listClassifier.js';
+    import { isBrowser } from '../../../utils/ssr.js';
 
     export let quests = [];
-    let filteredQuests = [];
-    let finishedQuests = [];
-    let mounted = false;
+
+    const markPerf = (name) => {
+        if (!isBrowser || typeof performance?.mark !== 'function') {
+            return;
+        }
+        performance.mark(name);
+    };
+
+    const measurePerf = (name, start, end) => {
+        if (!isBrowser || typeof performance?.measure !== 'function') {
+            return;
+        }
+
+        try {
+            performance.measure(name, start, end);
+        } catch {
+            // no-op
+        }
+    };
+
+    let builtInQuests = [];
+    let builtInClassified = [];
+    let completedBuiltInQuests = [];
+    let activeBuiltInQuests = [];
     let customQuestRecords = [];
-    let normalizedBuiltInQuests = [];
-    let normalizedCustomQuests = [];
+    let customClassified = [];
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
 
-    const normalizeQuest = (entry) => {
-        if (!entry) {
+    const normalizeQuest = (questData) => {
+        if (!questData || typeof questData !== 'object' || !questData.id) {
             return null;
         }
 
-        const questData = entry.default ?? entry;
-        if (!questData || !questData.id) {
+        const id = String(questData.id).trim();
+        if (!id) {
             return null;
         }
 
         const requiresQuests = Array.isArray(questData.requiresQuests)
-            ? questData.requiresQuests.filter((id) => typeof id === 'string' && id.trim() !== '')
+            ? questData.requiresQuests.filter(
+                  (questId) => typeof questId === 'string' && questId.trim()
+              )
             : [];
 
-        const normalizedDefault = questData.default
-            ? {
-                  ...questData.default,
-                  requiresQuests: Array.isArray(questData.default.requiresQuests)
-                      ? questData.default.requiresQuests
-                      : requiresQuests,
-              }
-            : { requiresQuests };
-
         return {
-            ...questData,
-            id: questData.id,
+            id,
+            title: typeof questData.title === 'string' ? questData.title : id,
+            description: typeof questData.description === 'string' ? questData.description : '',
+            image: typeof questData.image === 'string' ? questData.image : '',
             requiresQuests,
-            default: normalizedDefault,
+            route: typeof questData.route === 'string' ? questData.route : `/quests/${id}`,
         };
     };
 
-    const normalizeQuestList = (entries = []) => {
-        const normalized = [];
-        for (const quest of entries ?? []) {
-            const prepared = normalizeQuest(quest);
-            if (prepared) {
-                normalized.push(prepared);
-            }
-        }
-        return normalized;
+    const normalizeQuestList = (entries = []) => entries.map(normalizeQuest).filter(Boolean);
+
+    const applyBuiltInClassification = (snapshot) => {
+        builtInClassified = classifyQuestList({
+            quests: builtInQuests,
+            snapshot,
+        });
+
+        completedBuiltInQuests = builtInClassified.filter((quest) => quest.status === 'completed');
+        activeBuiltInQuests = builtInClassified.filter((quest) => quest.status !== 'completed');
     };
 
-    const dedupeById = (questList = []) => {
-        const byId = new Map();
-        for (const quest of questList) {
-            const key = String(quest.id);
-            byId.set(key, quest);
-        }
-        return Array.from(byId.values());
+    const classifyCustomQuests = (snapshot) => {
+        const normalizedCustomQuests = normalizeQuestList(customQuestRecords);
+        customClassified = classifyQuestList({ quests: normalizedCustomQuests, snapshot });
     };
 
-    const safeQuestFinished = (quest) => {
-        try {
-            return questFinished(quest.id);
-        } catch (error) {
-            console.error('Unable to determine quest completion status', error);
-            return false;
-        }
-    };
+    // Define buttons for easy expansion
+    const actionButtons = [
+        { text: 'Create a new quest', href: '/quests/create' },
+        { text: 'Manage quests', href: '/quests/manage' },
+    ];
 
-    const safeCanStartQuest = (quest) => {
-        try {
-            return canStartQuest(quest);
-        } catch (error) {
-            console.error('Unable to evaluate quest prerequisites', error);
-            return true;
-        }
-    };
+    $: builtInQuests = normalizeQuestList(quests);
+    $: if (builtInQuests.length > 0) {
+        applyBuiltInClassification({ authoritative: false, completedQuestIds: [] });
+    }
 
     onMount(async () => {
+        markPerf('quests:list-hydration-start');
+
+        const lightweightSnapshot = getPersistedGameStateLightweightSync();
+        const trustedSnapshot = getAuthoritativeQuestProgressSnapshot(lightweightSnapshot);
+
+        applyBuiltInClassification(trustedSnapshot);
+        markPerf('quests:list-visible');
+        markPerf('quests:snapshot-classification-ready');
+        measurePerf(
+            'quests:time-to-list-visible',
+            'quests:list-hydration-start',
+            'quests:list-visible'
+        );
+        measurePerf(
+            'quests:time-to-snapshot-classification',
+            'quests:list-hydration-start',
+            'quests:snapshot-classification-ready'
+        );
+
         await ready;
-        mounted = true;
-        const initialState = loadGameState();
-        showQuestGraphVisualizer = Boolean(initialState.settings?.showQuestGraphVisualizer);
+        const currentState = loadGameState();
+        showQuestGraphVisualizer = Boolean(currentState.settings?.showQuestGraphVisualizer);
+
+        const fullStateSnapshot = { state: currentState };
+        applyBuiltInClassification(fullStateSnapshot);
 
         unsubscribeState = state.subscribe((value) => {
             showQuestGraphVisualizer = Boolean(value?.settings?.showQuestGraphVisualizer);
+            applyBuiltInClassification({ state: value });
+            classifyCustomQuests({ state: value });
         });
+
+        markPerf('quests:full-state-reconciliation-complete');
+        measurePerf(
+            'quests:time-to-full-reconciliation',
+            'quests:list-hydration-start',
+            'quests:full-state-reconciliation-complete'
+        );
 
         try {
             const questsFromStorage = await listCustomQuests();
@@ -102,66 +144,62 @@
             console.error('Unable to load custom quests for listing:', error);
             customQuestRecords = [];
         }
+
+        classifyCustomQuests({ state: loadGameState() });
+        markPerf('quests:custom-quests-merge-complete');
+        measurePerf(
+            'quests:time-to-custom-merge',
+            'quests:list-hydration-start',
+            'quests:custom-quests-merge-complete'
+        );
     });
 
     onDestroy(() => {
         unsubscribeState?.();
     });
-
-    $: normalizedBuiltInQuests = normalizeQuestList(quests);
-    $: normalizedCustomQuests = normalizeQuestList(customQuestRecords);
-
-    $: if (mounted) {
-        const _gs = $state; // rerun when game state updates
-        const combinedQuests = dedupeById([...normalizedBuiltInQuests, ...normalizedCustomQuests]);
-        filteredQuests = [];
-        finishedQuests = [];
-        combinedQuests.forEach((quest) => {
-            if (safeQuestFinished(quest)) {
-                finishedQuests.push(quest);
-            } else if (safeCanStartQuest(quest)) {
-                filteredQuests.push(quest);
-            }
-        });
-    }
-
-    // Define buttons for easy expansion
-    const actionButtons = [
-        { text: 'Create a new quest', href: '/quests/create' },
-        { text: 'Manage quests', href: '/quests/manage' },
-    ];
 </script>
 
 <div class="container">
-    {#if mounted}
-        <div class="action-buttons">
-            {#each actionButtons as button}
-                <Chip text={button.text} href={button.href} inverted={true} />
-            {/each}
-        </div>
+    <div class="action-buttons">
+        {#each actionButtons as button}
+            <Chip text={button.text} href={button.href} inverted={true} />
+        {/each}
+    </div>
 
-        <div class="quests-grid" data-testid="quests-grid">
-            {#each filteredQuests as quest}
-                <a href="/quests/{quest.id}" aria-label={quest.title}>
-                    <Quest {quest} />
-                </a>
-            {/each}
-        </div>
+    <div class="quests-grid" data-testid="quests-grid">
+        {#each activeBuiltInQuests as quest}
+            <a href={quest.route} aria-label={quest.title}>
+                <Quest {quest} status={quest.status} />
+            </a>
+        {/each}
+    </div>
 
-        {#if showQuestGraphVisualizer}
-            <div class="visualizer-slot">
-                <slot name="visualizer" />
+    {#if showQuestGraphVisualizer}
+        <div class="visualizer-slot">
+            <slot name="visualizer" />
+        </div>
+    {/if}
+
+    <section class="custom-section" data-testid="custom-quests-section">
+        {#if customClassified.length > 0}
+            <h2>Custom Quests</h2>
+            <div class="quests-grid">
+                {#each customClassified as quest}
+                    <a href={quest.route} aria-label={quest.title}>
+                        <Quest {quest} status={quest.status} />
+                    </a>
+                {/each}
             </div>
         {/if}
+    </section>
 
-        {#if finishedQuests.length > 0}
-            <h2>Completed Quests</h2>
-            {#each finishedQuests as quest}
-                <a href="/quests/{quest.id}" aria-label={quest.title}>
-                    <Quest {quest} compact={true} />
-                </a>
-            {/each}
-        {/if}
+    {#if completedBuiltInQuests.length > 0}
+        <h2>Completed Quests</h2>
+        {#each completedBuiltInQuests as quest}
+            <a href={quest.route} aria-label={quest.title}>
+                <Quest {quest} compact={true} status={quest.status} />
+            </a>
+        {/each}
     {/if}
 </div>
 
@@ -223,5 +261,9 @@
         width: 100%;
         max-width: 100%;
         min-width: 0;
+    }
+
+    .custom-section {
+        min-height: 12px;
     }
 </style>
