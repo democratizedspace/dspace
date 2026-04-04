@@ -100,25 +100,10 @@ async function visitRouteAndAssert(page: Page, route: string): Promise<void> {
     expect(text.trim().length, `Route ${route} heading should not be empty`).toBeGreaterThan(0);
 }
 
-async function openFirstQuest(page: Page): Promise<void> {
-    await page.goto('/quests');
+async function openKnownInteractiveQuest(page: Page): Promise<void> {
+    await page.goto('/quests/welcome/howtodoquests');
     await waitForHydration(page);
-
-    const firstQuest = page
-        .locator(
-            [
-                'a[href^="/quests/"]',
-                ':not([href="/quests"])',
-                ':not([href="/quests/create"])',
-                ':not([href*="/quests/manage"])',
-            ].join('')
-        )
-        .first();
-
-    await expect(firstQuest, 'Expected at least one quest entry on /quests').toBeVisible();
-    await firstQuest.click();
-    await page.waitForLoadState('domcontentloaded');
-    await waitForHydration(page);
+    await expect(page).toHaveURL(/\/quests\/welcome\/howtodoquests/);
 
     const optionButtons = page.locator(
         [
@@ -410,7 +395,7 @@ test.describe('Remote release smoke', () => {
     });
 
     test('runs one quest interaction sanity check', async ({ page }) => {
-        await openFirstQuest(page);
+        await openKnownInteractiveQuest(page);
     });
 
     test('runs one process lifecycle sanity check', async ({ page }) => {

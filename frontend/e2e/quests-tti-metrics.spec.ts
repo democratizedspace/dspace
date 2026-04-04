@@ -33,7 +33,7 @@ test.describe('quests performance marks', () => {
 
         expect(loadedUrl.origin).toBe(configuredOrigin);
         expect(loadedUrl.pathname).toBe('/quests');
-        await expect(page.getByRole('heading', { name: 'Quests' })).toBeVisible();
+        await expect(page.getByRole('heading', { name: 'Quests', exact: true })).toBeVisible();
         await expect(page.getByTestId('quests-grid')).toBeVisible();
 
         const metrics = await page.evaluate((marks) => {

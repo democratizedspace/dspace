@@ -84,8 +84,9 @@ test.describe('quests tti behavior', () => {
     test('keeps built-in grid position stable when delayed custom quests merge', async ({
         page,
     }) => {
+        const uniqueCustomTitle = `Delayed custom quest ${Date.now()}`;
         await seedCustomQuest(page, {
-            title: 'Delayed custom quest',
+            title: uniqueCustomTitle,
             description: 'Ensures custom section merge does not push built-in tiles.',
             image: '/assets/quests/howtodoquests.jpg',
             custom: true,
@@ -128,16 +129,16 @@ test.describe('quests tti behavior', () => {
         const beforeBox = await firstBuiltInTile.boundingBox();
         expect(beforeBox).not.toBeNull();
 
-        await expect
-            .poll(async () =>
-                page.evaluate(
-                    () =>
-                        performance.getEntriesByName('quests:custom-quests-merge-complete').length >
-                        0
-                )
-            )
-            .toBeTruthy();
-        await expect(page.getByRole('heading', { name: 'Custom Quests' })).toBeVisible();
+        await expect(
+            page.getByRole('heading', { name: 'Custom Quests', exact: true })
+        ).toBeVisible();
+        await expect(
+            page
+                .locator('[data-testid="custom-quests-section"] [data-testid="quest-tile"]')
+                .filter({
+                    has: page.getByText(uniqueCustomTitle, { exact: true }),
+                })
+        ).toBeVisible();
 
         const afterBox = await firstBuiltInTile.boundingBox();
         expect(afterBox).not.toBeNull();
@@ -146,6 +147,9 @@ test.describe('quests tti behavior', () => {
 
     test('does not show optimistic Start before authoritative data exists', async ({ page }) => {
         await page.addInitScript(() => {
+            const globalWindow = window as Window & { __questsIdbDelayActive?: boolean };
+            globalWindow.__questsIdbDelayActive = true;
+
             localStorage.setItem(
                 'gameStateLite',
                 JSON.stringify({
@@ -153,10 +157,42 @@ test.describe('quests tti behavior', () => {
                     questProgress: { version: 999, completedQuestIds: [] },
                 })
             );
+
+            const delayMs = 1200;
+            const originalOpen = indexedDB.open.bind(indexedDB);
+            indexedDB.open = (...args) => {
+                const request = originalOpen(...args);
+                return new Proxy(request, {
+                    set(target, prop, value) {
+                        if (prop === 'onsuccess' && typeof value === 'function') {
+                            const originalSuccess = value;
+                            target.onsuccess = (event) => {
+                                setTimeout(() => {
+                                    globalWindow.__questsIdbDelayActive = false;
+                                    originalSuccess.call(target, event);
+                                }, delayMs);
+                            };
+                            return true;
+                        }
+
+                        target[prop] = value;
+                        return true;
+                    },
+                });
+            };
         });
 
         await page.goto('/quests');
         await expect(page.getByTestId('quests-grid')).toBeVisible();
+        await expect
+            .poll(async () =>
+                page.evaluate(
+                    () =>
+                        (window as Window & { __questsIdbDelayActive?: boolean })
+                            .__questsIdbDelayActive === true
+                )
+            )
+            .toBeTruthy();
 
         const statuses = page.getByTestId('quest-status-slot');
         await expect(statuses.first()).toBeVisible();
