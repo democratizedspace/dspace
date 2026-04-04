@@ -18,6 +18,7 @@ const LS_CHECKSUM_KEY = 'gameStateChecksum';
 const LS_LIGHTWEIGHT_KEY = 'gameStateLite';
 const META_KEY = '_meta';
 const BACKUP_SCHEMA_VERSION = 1;
+const QUEST_PROGRESS_SNAPSHOT_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
 const CURRENT_VERSION = '3';
@@ -228,20 +229,41 @@ const getPersistedDusd = (state) => {
 };
 
 const buildLightweightSnapshot = (state) => ({
+    version: QUEST_PROGRESS_SNAPSHOT_VERSION,
     checksum: state?.[META_KEY]?.checksum ?? '',
     dUSD: getPersistedDusd(state),
     lastUpdated: state?.[META_KEY]?.lastUpdated ?? Date.now(),
+    completedQuestIds: Object.entries(state?.quests ?? {})
+        .filter(([, progress]) => progress?.finished)
+        .map(([questId]) => questId)
+        .sort((a, b) => a.localeCompare(b)),
 });
 
 const normalizeLightweightSnapshot = (value) => {
     if (!value || typeof value !== 'object') {
-        return { checksum: '', dUSD: 0, lastUpdated: 0 };
+        return {
+            version: QUEST_PROGRESS_SNAPSHOT_VERSION,
+            checksum: '',
+            dUSD: 0,
+            lastUpdated: 0,
+            completedQuestIds: [],
+        };
     }
 
     return {
+        version:
+            Number.isFinite(value.version) && Number(value.version) > 0
+                ? Number(value.version)
+                : QUEST_PROGRESS_SNAPSHOT_VERSION,
         checksum: typeof value.checksum === 'string' ? value.checksum : '',
         dUSD: Number.isFinite(value.dUSD) ? Number(value.dUSD) : 0,
         lastUpdated: Number.isFinite(value.lastUpdated) ? Number(value.lastUpdated) : 0,
+        completedQuestIds: Array.isArray(value.completedQuestIds)
+            ? value.completedQuestIds
+                  .filter((entry) => typeof entry === 'string')
+                  .map((entry) => entry.trim())
+                  .filter(Boolean)
+            : [],
     };
 };
 
@@ -516,6 +538,19 @@ export const getPersistedGameStateLightweight = async () => {
     }
 
     return readLightweightSnapshotFromLocalStorage();
+};
+
+export const getPersistedQuestProgressSnapshot = async () => {
+    const snapshot = await getPersistedGameStateLightweight();
+    const trusted =
+        snapshot.version === QUEST_PROGRESS_SNAPSHOT_VERSION &&
+        typeof snapshot.checksum === 'string' &&
+        snapshot.checksum.length > 0;
+
+    return {
+        ...snapshot,
+        trusted,
+    };
 };
 
 export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {

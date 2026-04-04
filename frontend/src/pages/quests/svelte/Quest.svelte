@@ -1,27 +1,69 @@
 <script>
+    import { QUEST_STATUS } from '../questListClassifier.js';
+
     export let quest,
         compact = false;
+
+    let imageLoaded = false;
+
+    const statusLabelByType = {
+        [QUEST_STATUS.UNKNOWN]: 'Status pending',
+        [QUEST_STATUS.LOCKED]: 'Locked',
+        [QUEST_STATUS.AVAILABLE]: 'Available',
+        [QUEST_STATUS.COMPLETED]: 'Completed',
+    };
+
+    $: questStatus = statusLabelByType[quest?.status] ?? statusLabelByType[QUEST_STATUS.UNKNOWN];
 </script>
 
-<div class="container" class:quest data-testid="quest-tile">
+<div
+    class="container"
+    class:quest
+    data-testid="quest-tile"
+    data-status={quest?.status ?? 'unknown'}
+>
     {#if quest}
         {#if compact}
             <div class="content">
-                <img
-                    class="quest-img quest-img-compact"
-                    src={quest.image}
-                    alt={`Quest artwork for ${quest.title}`}
-                />
+                <div class="image-shell image-shell-compact" data-loaded={imageLoaded}>
+                    <img
+                        class="quest-img quest-img-compact"
+                        src={quest.image}
+                        alt={`Quest artwork for ${quest.title}`}
+                        width="100"
+                        height="100"
+                        loading="lazy"
+                        decoding="async"
+                        on:load={() => {
+                            imageLoaded = true;
+                        }}
+                    />
+                </div>
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
+                    <div class="status-slot" data-testid="quest-status">{questStatus}</div>
                 </div>
             </div>
         {:else}
             <div class="content">
-                <img class="quest-img" src={quest.image} alt={`Quest artwork for ${quest.title}`} />
+                <div class="image-shell" data-loaded={imageLoaded}>
+                    <img
+                        class="quest-img"
+                        src={quest.image}
+                        alt={`Quest artwork for ${quest.title}`}
+                        width="200"
+                        height="200"
+                        loading="lazy"
+                        decoding="async"
+                        on:load={() => {
+                            imageLoaded = true;
+                        }}
+                    />
+                </div>
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
                     <p>{quest.description}</p>
+                    <div class="status-slot" data-testid="quest-status">{questStatus}</div>
                 </div>
             </div>
         {/if}
@@ -52,23 +94,35 @@
         padding: 10px;
     }
 
-    .quest-img {
+    .image-shell {
         flex: 0 0 200px;
         width: 200px;
         height: 200px;
         border-radius: 20px;
         margin: -10px;
-        object-fit: contain;
-        object-position: center;
         background: #1d1d2e;
         border: 5px solid #68d46d;
         box-sizing: border-box;
+        overflow: hidden;
     }
 
-    .quest-img-compact {
-        flex: 0 1 auto;
+    .image-shell-compact {
+        flex: 0 0 100px;
         width: 100px;
         height: 100px;
+    }
+
+    .quest-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+        opacity: 0;
+        transition: opacity 180ms ease-in;
+    }
+
+    .image-shell[data-loaded='true'] .quest-img {
+        opacity: 1;
     }
 
     .content {
@@ -85,9 +139,9 @@
             flex-direction: column;
         }
 
-        .quest-img {
+        .image-shell {
             width: calc(100% - 20px);
-            height: auto;
+            height: 200px;
             margin: 0 10px;
         }
     }
@@ -114,5 +168,13 @@
         min-width: 0;
         overflow-wrap: anywhere;
         padding: 0;
+    }
+
+    .status-slot {
+        min-height: 1.5rem;
+        line-height: 1.5rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+        opacity: 0.9;
     }
 </style>
