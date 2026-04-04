@@ -2,28 +2,27 @@
 import Page from '../../components/Page.astro';
 import Quests from './svelte/Quests.svelte';
 import QuestGraphVisualizerGate from '../../components/quests/QuestGraphVisualizerGate.svelte';
+import questListManifest from '../../generated/quests/listManifest.json';
 import { buildQuestGraph, type QuestData } from '../../lib/quests/questGraph';
 
 const version =
     process.env.DSPACE_VERSION ?? process.env.npm_package_version ?? 'unknown';
 const buildTimestamp = process.env.DSPACE_BUILD_TIMESTAMP ?? new Date().toISOString();
 
-const questModules = import.meta.glob('./json/*/*.json', { eager: true });
-// Sort by file path for deterministic ordering across builds
-const questEntries = Object.entries(questModules).sort(([a], [b]) => a.localeCompare(b));
-const quests = questEntries.map(([, mod]) => mod);
-
-// Prepare quest data for graph builder
-const questData: QuestData[] = questEntries.map(([path, mod]) => ({
-    path,
-    quest: mod as { id?: string; title?: string; requiresQuests?: string[] },
+const questData: QuestData[] = questListManifest.map((quest) => ({
+    path: quest.sourcePath,
+    quest: {
+        id: quest.id,
+        title: quest.title,
+        requiresQuests: quest.requiresQuests,
+    },
 }));
 const graph = buildQuestGraph({ quests: questData });
 ---
 
 <Page title="Quests">
     <li class="page-section surface-plain">
-        <Quests client:load quests={quests}>
+        <Quests client:load quests={questListManifest}>
             <QuestGraphVisualizerGate slot="visualizer" client:load graph={graph} />
         </Quests>
     </li>
