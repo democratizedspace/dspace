@@ -10,6 +10,7 @@ const {
     getGameStateChecksum,
     getPersistedGameStateChecksum,
     syncGameStateFromLocalIfStale,
+    getPersistedQuestProgressSnapshot,
 } = require('../../src/utils/gameState/common.js');
 const { listBuiltInQuestIds } = require('../../src/utils/builtInQuests.js');
 const { getOfficialQuestStats } = require('../../src/utils/gameState/questStats.js');
@@ -211,5 +212,32 @@ describe('gameState - common utilities', () => {
         const changed = syncGameStateFromLocalIfStale(getGameStateChecksum());
         expect(changed).toBe(true);
         expect(loadGameState().inventory['multi-tab-item']).toBe(7);
+    });
+
+    test('quest progress snapshot includes completed IDs and trust semantics', async () => {
+        const state = loadGameState();
+        state.quests['quest/a'] = { finished: true };
+        state.quests['quest/b'] = { finished: false };
+        await saveGameState(state);
+
+        const snapshot = await getPersistedQuestProgressSnapshot();
+        expect(snapshot.completedQuestIds).toContain('quest/a');
+        expect(snapshot.completedQuestIds).not.toContain('quest/b');
+        expect(snapshot.version).toBe(1);
+        expect(snapshot.trusted).toBe(true);
+    });
+
+    test('quest progress snapshot falls back safely when stale/incompatible', async () => {
+        localStorage.setItem(
+            'gameStateLite',
+            JSON.stringify({
+                version: 999,
+                checksum: '',
+                completedQuestIds: ['quest/a'],
+            })
+        );
+
+        const snapshot = await getPersistedQuestProgressSnapshot();
+        expect(snapshot.trusted).toBe(false);
     });
 });
