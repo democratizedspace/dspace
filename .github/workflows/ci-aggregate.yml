@@ -1,0 +1,24 @@
+name: ci-aggregate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - v3
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Verify critical workflows exist and pass for this SHA
+        env:
+          GH_API_AUTH: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node .github/scripts/verify-workflow-health.mjs

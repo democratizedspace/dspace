@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-02-build-workflow-visibility-regression",
+  "date": "2026-04-02",
+  "component": "github-actions/workflows",
+  "rootCause": "The container build workflow identity drifted from the expected `build` check name, so PR reviewers looking for the historical `build` status interpreted the check as missing. The repository also lacked a cross-workflow guardrail to fail fast when critical workflow runs are absent, renamed, or stuck.",
+  "resolution": "Restored a stable `build` workflow + job name in `.github/workflows/build.yml`, added a new `ci-aggregate` workflow that polls workflow runs for the current SHA and fails if any critical CI workflow (`build`, `tests`, `CI`, `ci-sentinel`) is missing or non-success, and added regression tests that enforce the stable build check naming plus aggregate guard wiring. Investigation did not identify additional broken test suites in the affected GitHub Actions checks for this incident window.",
+  "references": [
+    ".github/workflows/build.yml",
+    ".github/workflows/ci-aggregate.yml",
+    ".github/scripts/verify-workflow-health.mjs",
+    "tests/workflowAggregateGuard.test.ts"
+  ]
+}
