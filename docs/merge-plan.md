@@ -89,6 +89,8 @@ git push origin vX.Y.Z
 
 - Deploy immutable approved tags only.
 - Keep a previous known-good immutable tag ready for rollback.
+- Canonical prod host is `democratized.space`; `prod.democratized.space` is optional rehearsal/alias
+  guidance only (see prod runbook).
 - Keep QA Cheats off (`DSPACE_ENV=prod`).
 - Treat `prod.democratized.space` as optional rehearsal/alias guidance only; the default production
   path is `democratized.space`.
