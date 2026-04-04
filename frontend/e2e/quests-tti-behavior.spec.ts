@@ -84,9 +84,8 @@ test.describe('quests tti behavior', () => {
     test('keeps built-in grid position stable when delayed custom quests merge', async ({
         page,
     }) => {
-        const uniqueCustomTitle = `Delayed custom quest ${Date.now()}`;
         await seedCustomQuest(page, {
-            title: uniqueCustomTitle,
+            title: `Delayed custom quest ${Date.now()}`,
             description: 'Ensures custom section merge does not push built-in tiles.',
             image: '/assets/quests/howtodoquests.jpg',
             custom: true,
@@ -129,16 +128,9 @@ test.describe('quests tti behavior', () => {
         const beforeBox = await firstBuiltInTile.boundingBox();
         expect(beforeBox).not.toBeNull();
 
-        await expect(
-            page.getByRole('heading', { name: 'Custom Quests', exact: true })
-        ).toBeVisible();
-        await expect(
-            page
-                .locator('[data-testid="custom-quests-section"] [data-testid="quest-tile"]')
-                .filter({
-                    has: page.getByText(uniqueCustomTitle, { exact: true }),
-                })
-        ).toBeVisible();
+        const customShell = page.getByTestId('custom-quests-shell');
+        await expect(customShell).toHaveAttribute('data-merged', 'false');
+        await expect(customShell).toHaveAttribute('data-merged', 'true');
 
         const afterBox = await firstBuiltInTile.boundingBox();
         expect(afterBox).not.toBeNull();

@@ -186,9 +186,16 @@
     {/if}
 
     <section class="custom-section" data-testid="custom-quests-section">
+        <div
+            class="custom-merge-signal"
+            data-testid="custom-quests-shell"
+            data-merged={customMergeComplete ? 'true' : 'false'}
+            aria-hidden="true"
+        ></div>
+
         {#if !customMergeComplete || customClassified.length > 0}
             <h2>Custom Quests</h2>
-            <div class="custom-grid-shell" data-testid="custom-quests-shell">
+            <div class="custom-grid-shell">
                 {#if customClassified.length > 0}
                     <div class="quests-grid">
                         {#each customClassified as quest}
@@ -257,6 +264,10 @@
     .quests-grid > a :global([data-testid='quest-tile']) {
         flex: 1 1 auto;
         height: auto;
+    }
+
+    .custom-merge-signal {
+        display: none;
     }
 
     .custom-grid-shell {

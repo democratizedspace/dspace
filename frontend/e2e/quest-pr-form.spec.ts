@@ -60,15 +60,22 @@ test('keeps form state when network errors occur', async ({ page }) => {
 
 test('quest PR form submits and shows link', async ({ page }) => {
     await page.route('https://api.github.com/**', async (route) => {
-        if (route.request().url().endsWith('/pulls')) {
+        const request = route.request();
+
+        if (request.method() === 'POST' && request.url().includes('/pulls')) {
             await route.fulfill({
                 status: 201,
                 contentType: 'application/json',
                 body: JSON.stringify({ html_url: 'https://example.com/pr/1' }),
             });
-        } else {
-            await route.fulfill({ status: 201, body: '{}' });
+            return;
         }
+
+        await route.fulfill({
+            status: 201,
+            contentType: 'application/json',
+            body: JSON.stringify({ content: { sha: 'abc123' } }),
+        });
     });
     await page.goto('/quests/submit');
     await waitForHydration(page);
@@ -77,6 +84,7 @@ test('quest PR form submits and shows link', async ({ page }) => {
     await page.getByLabel('Quest JSON*').fill('{"title":"t","description":"d"}');
     await page.getByRole('button', { name: 'Create Pull Request' }).click();
     await waitForHydration(page);
+    await expect(page.getByTestId('pr-success')).toBeVisible();
     await expect(page.getByTestId('pr-link')).toHaveAttribute('href', 'https://example.com/pr/1');
     await expect(page.getByLabel('GitHub Token*')).toHaveValue(validToken);
     await page.reload();
