@@ -103,6 +103,7 @@
 
         const lightweightSnapshot = getPersistedGameStateLightweightSync();
         const trustedSnapshot = getAuthoritativeQuestProgressSnapshot(lightweightSnapshot);
+        let customClassificationSnapshot = trustedSnapshot;
 
         applyBuiltInClassification(trustedSnapshot);
 
@@ -120,25 +121,30 @@
             'quests:snapshot-classification-ready'
         );
 
-        await ready;
-        const currentState = loadGameState();
-        showQuestGraphVisualizer = Boolean(currentState.settings?.showQuestGraphVisualizer);
+        try {
+            await ready;
+            const currentState = loadGameState();
+            showQuestGraphVisualizer = Boolean(currentState.settings?.showQuestGraphVisualizer);
 
-        const fullStateSnapshot = { state: currentState };
-        applyBuiltInClassification(fullStateSnapshot);
+            const fullStateSnapshot = { state: currentState };
+            customClassificationSnapshot = fullStateSnapshot;
+            applyBuiltInClassification(fullStateSnapshot);
 
-        unsubscribeState = state.subscribe((value) => {
-            showQuestGraphVisualizer = Boolean(value?.settings?.showQuestGraphVisualizer);
-            applyBuiltInClassification({ state: value });
-            classifyCustomQuests({ state: value });
-        });
-
-        markPerf('quests:full-state-reconciliation-complete');
-        measurePerf(
-            'quests:time-to-full-reconciliation',
-            'quests:list-hydration-start',
-            'quests:full-state-reconciliation-complete'
-        );
+            unsubscribeState = state.subscribe((value) => {
+                showQuestGraphVisualizer = Boolean(value?.settings?.showQuestGraphVisualizer);
+                applyBuiltInClassification({ state: value });
+                classifyCustomQuests({ state: value });
+            });
+        } catch (error) {
+            console.error('Unable to reconcile quests with full game state:', error);
+        } finally {
+            markPerf('quests:full-state-reconciliation-complete');
+            measurePerf(
+                'quests:time-to-full-reconciliation',
+                'quests:list-hydration-start',
+                'quests:full-state-reconciliation-complete'
+            );
+        }
 
         try {
             const questsFromStorage = await listCustomQuests();
@@ -146,11 +152,10 @@
         } catch (error) {
             console.error('Unable to load custom quests for listing:', error);
             customQuestRecords = [];
-        } finally {
-            customMergeComplete = true;
         }
 
-        classifyCustomQuests({ state: loadGameState() });
+        classifyCustomQuests(customClassificationSnapshot);
+        customMergeComplete = true;
         markPerf('quests:custom-quests-merge-complete');
         measurePerf(
             'quests:time-to-custom-merge',
