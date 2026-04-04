@@ -10,6 +10,8 @@ const {
     getGameStateChecksum,
     getPersistedGameStateChecksum,
     syncGameStateFromLocalIfStale,
+    getPersistedQuestListSnapshot,
+    QUEST_LIST_SNAPSHOT_VERSION,
 } = require('../../src/utils/gameState/common.js');
 const { listBuiltInQuestIds } = require('../../src/utils/builtInQuests.js');
 const { getOfficialQuestStats } = require('../../src/utils/gameState/questStats.js');
@@ -195,6 +197,35 @@ describe('gameState - common utilities', () => {
         expect(typeof checksum).toBe('string');
         expect(checksum.length).toBeGreaterThan(0);
         expect(getPersistedGameStateChecksum()).toBe(checksum);
+    });
+
+    test('getPersistedQuestListSnapshot returns trusted completed quest ids for matching snapshot schema', async () => {
+        const state = loadGameState();
+        state.quests['welcome/howtodoquests'] = { finished: true };
+        await saveGameState(state);
+
+        const snapshot = await getPersistedQuestListSnapshot();
+        expect(snapshot.authoritative).toBe(true);
+        expect(snapshot.reason).toBe('snapshot-trusted');
+        expect(snapshot.completedQuestIds).toContain('welcome/howtodoquests');
+    });
+
+    test('getPersistedQuestListSnapshot falls back to neutral when snapshot schema is stale', async () => {
+        localStorage.setItem(
+            'gameStateLite',
+            JSON.stringify({
+                checksum: 'legacy-checksum',
+                lastUpdated: Date.now(),
+                dUSD: 0,
+                snapshotVersion: QUEST_LIST_SNAPSHOT_VERSION - 1,
+                completedQuestIds: ['welcome/howtodoquests'],
+            })
+        );
+
+        const snapshot = await getPersistedQuestListSnapshot();
+        expect(snapshot.authoritative).toBe(false);
+        expect(snapshot.reason).toBe('snapshot-untrusted');
+        expect(snapshot.completedQuestIds).toEqual([]);
     });
 
     test('syncGameStateFromLocalIfStale hydrates newer localStorage state', async () => {

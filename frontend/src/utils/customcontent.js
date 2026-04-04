@@ -410,6 +410,19 @@ export async function listCustomQuests() {
     }
 }
 
+export async function listCustomQuestSummaries() {
+    const quests = await listCustomQuests();
+    return quests.map((quest) => ({
+        id: quest.id,
+        title: quest.title,
+        description: quest.description,
+        image: quest.image,
+        requiresQuests: Array.isArray(quest.requiresQuests) ? quest.requiresQuests : [],
+        route: typeof quest.route === 'string' ? quest.route : `/quests/${quest.id}`,
+        custom: true,
+    }));
+}
+
 export function getQuest(id) {
     return db.quests.get(id);
 }
