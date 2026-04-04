@@ -108,7 +108,7 @@
         "minisearch": "^7.2.0",
         "node-fetch": "^3.3.1",
         "openai": "^5.16.0",
-        "postcss": "^8.4.23",
+        "postcss": "^8.5.8",
         "pretty-date": "^0.2.0",
         "prom-client": "^15.1.0",
         "remarkable": "^2.0.1"
