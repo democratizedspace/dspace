@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import prettier from 'prettier';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -74,4 +75,10 @@ export const buildQuestListManifest = () => {
 
 const manifest = buildQuestListManifest();
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-fs.writeFileSync(outputPath, `${JSON.stringify(manifest, null, 4)}\n`);
+const manifestJson = JSON.stringify(manifest);
+const prettierConfig = (await prettier.resolveConfig(outputPath)) || {};
+const formattedManifest = await prettier.format(manifestJson, {
+    ...prettierConfig,
+    parser: 'json',
+});
+fs.writeFileSync(outputPath, formattedManifest);

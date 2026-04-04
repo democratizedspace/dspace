@@ -5,7 +5,7 @@ import path from 'path';
 describe('Prettier formatting', () => {
   test('frontend sources are formatted', () => {
     const frontendDir = path.join(__dirname, '../../frontend');
-    execSync('npm run format:check -- --cache', {
+    execSync('npm run format:check', {
       cwd: frontendDir,
       stdio: 'inherit',
     });
