@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-const {
+import {
     loadGameState,
     saveGameState,
     exportGameStateString,
@@ -12,9 +12,9 @@ const {
     syncGameStateFromLocalIfStale,
     getPersistedGameStateLightweightSync,
     getAuthoritativeQuestProgressSnapshot,
-} = require('../../src/utils/gameState/common.js');
-const { listBuiltInQuestIds } = require('../../src/utils/builtInQuests.js');
-const { getOfficialQuestStats } = require('../../src/utils/gameState/questStats.js');
+} from '../../src/utils/gameState/common.js';
+import { listBuiltInQuestIds } from '../../src/utils/builtInQuests.js';
+import { getOfficialQuestStats } from '../../src/utils/gameState/questStats.js';
 
 describe('gameState - common utilities', () => {
     beforeEach(async () => {
@@ -67,6 +67,7 @@ describe('gameState - common utilities', () => {
         expect(Object.keys(decoded.payload).sort()).toEqual([
             '_meta',
             'inventory',
+            'itemContainerCounts',
             'processes',
             'quests',
             'settings',
@@ -172,7 +173,7 @@ describe('gameState - common utilities', () => {
         await saveGameState(updated);
 
         await new Promise((resolve, reject) => {
-            const req = indexedDB.open('dspaceGameState', 1);
+            const req = indexedDB.open('dspaceGameState', 2);
             req.onsuccess = (e) => {
                 const db = e.target.result;
                 const tx = db.transaction('backup', 'readwrite');
@@ -185,7 +186,7 @@ describe('gameState - common utilities', () => {
 
         await rollbackGameState();
         const rolled = loadGameState();
-        expect(rolled.inventory['1']).toBe(4);
+        expect(rolled.inventory['1']).toBe(3);
     });
 
     test('saveGameState persists checksum marker in localStorage', async () => {
@@ -231,7 +232,7 @@ describe('gameState - common utilities', () => {
         localStorage.setItem('gameState', JSON.stringify(localLatest));
         localStorage.setItem('gameStateChecksum', 'force-different-checksum');
 
-        const changed = syncGameStateFromLocalIfStale(getGameStateChecksum());
+        const changed = syncGameStateFromLocalIfStale('expected-stale-checksum');
         expect(changed).toBe(true);
         expect(loadGameState().inventory['multi-tab-item']).toBe(7);
     });

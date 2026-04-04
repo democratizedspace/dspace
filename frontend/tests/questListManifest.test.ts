@@ -2,11 +2,19 @@ import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 
-const manifestPath = path.join(process.cwd(), 'frontend/src/generated/quests/listManifest.json');
+const manifestFilePathCandidates = [
+    path.resolve(process.cwd(), 'frontend/src/generated/quests/listManifest.json'),
+    path.resolve(process.cwd(), 'src/generated/quests/listManifest.json'),
+];
+const manifestFilePath = manifestFilePathCandidates.find((candidate) => fs.existsSync(candidate));
+
+if (!manifestFilePath) {
+    throw new Error('Unable to locate generated quest manifest file for tests.');
+}
 
 describe('quest list manifest', () => {
     it('is sorted deterministically and normalized', () => {
-        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        const manifest = JSON.parse(fs.readFileSync(manifestFilePath, 'utf8'));
         const ids = manifest.map((entry: { id: string }) => entry.id);
         const sortedIds = [...ids].sort((a, b) => a.localeCompare(b));
         expect(ids).toEqual(sortedIds);
@@ -21,7 +29,7 @@ describe('quest list manifest', () => {
     });
 
     it('does not include heavy dialogue payload fields', () => {
-        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        const manifest = JSON.parse(fs.readFileSync(manifestFilePath, 'utf8'));
         for (const entry of manifest) {
             expect(entry.dialogue).toBeUndefined();
             expect(entry.default).toBeUndefined();

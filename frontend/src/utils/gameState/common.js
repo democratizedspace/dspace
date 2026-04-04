@@ -552,8 +552,7 @@ export const getPersistedGameStateLightweight = async () => {
     return readLightweightSnapshotFromLocalStorage();
 };
 
-export const getPersistedGameStateLightweightSync = () =>
-    normalizeLightweightSnapshot(readLightweightSnapshotFromLocalStorage());
+export const getPersistedGameStateLightweightSync = () => readLightweightSnapshotFromLocalStorage();
 
 export const getAuthoritativeQuestProgressSnapshot = (snapshot) => {
     const normalizedSnapshot = normalizeLightweightSnapshot(snapshot);
@@ -580,7 +579,6 @@ export const getAuthoritativeQuestProgressSnapshot = (snapshot) => {
         checksum: normalizedSnapshot.checksum,
     };
 };
-
 
 export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {
     if (!isBrowser) {

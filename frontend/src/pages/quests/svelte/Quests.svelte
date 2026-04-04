@@ -104,6 +104,8 @@
         const trustedSnapshot = getAuthoritativeQuestProgressSnapshot(lightweightSnapshot);
 
         applyBuiltInClassification(trustedSnapshot);
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
         markPerf('quests:list-visible');
         markPerf('quests:snapshot-classification-ready');
         measurePerf(

@@ -107,8 +107,10 @@ export default defineConfig({
       'backend/**/*.test.ts',
       'frontend/src/components/__tests__/**/*.spec.ts',
       'frontend/src/pages/**/__tests__/**/*.spec.ts',
+      'frontend/__tests__/Quests.test.js',
+      'frontend/__tests__/gameState/common.test.js',
     ],
-    exclude: ['frontend/e2e/**', 'frontend/__tests__/**'],
+    exclude: ['frontend/e2e/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'json-summary'],

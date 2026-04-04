@@ -7,12 +7,10 @@ vi.mock('../src/utils/customcontent.js', () => ({
     listCustomQuests: vi.fn().mockResolvedValue([]),
 }));
 
-const stateStore = writable({ settings: { showQuestGraphVisualizer: false }, quests: {} });
-
 vi.mock('../src/utils/gameState/common.js', () => ({
+    state: writable({ settings: { showQuestGraphVisualizer: false }, quests: {} }),
     loadGameState: vi.fn(() => ({ settings: { showQuestGraphVisualizer: false }, quests: {} })),
     ready: Promise.resolve(),
-    state: stateStore,
     getPersistedGameStateLightweightSync: vi.fn(() => ({
         checksum: 'snapshot-1',
         questProgress: { version: 1, completedQuestIds: [] },
@@ -63,9 +61,9 @@ describe('Quests Component', () => {
 
     it('renders neutral status when authoritative data is unavailable', () => {
         mount(Quests, { target: host, props: { quests } });
-        const statuses = Array.from(
-            host.querySelectorAll("[data-testid='quest-status-slot']")
-        ).map((n) => n.textContent.trim());
+        const statuses = Array.from(host.querySelectorAll("[data-testid='quest-status-slot']")).map(
+            (n) => n.textContent.trim()
+        );
         expect(statuses).toContain('Checking');
         expect(statuses).not.toContain('Start');
     });

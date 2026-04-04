@@ -11,15 +11,22 @@ test.describe('quests tti behavior', () => {
             const originalOpen = indexedDB.open.bind(indexedDB);
             indexedDB.open = (...args) => {
                 const request = originalOpen(...args);
-                const originalSuccess = request.onsuccess;
-                request.onsuccess = (event) => {
-                    setTimeout(() => {
-                        if (originalSuccess) {
-                            originalSuccess.call(request, event);
+                return new Proxy(request, {
+                    set(target, prop, value) {
+                        if (prop === 'onsuccess' && typeof value === 'function') {
+                            const originalSuccess = value;
+                            target.onsuccess = (event) => {
+                                setTimeout(() => {
+                                    originalSuccess.call(target, event);
+                                }, 300);
+                            };
+                            return true;
                         }
-                    }, 300);
-                };
-                return request;
+
+                        target[prop] = value;
+                        return true;
+                    },
+                });
             };
         });
 

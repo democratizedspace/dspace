@@ -19,7 +19,7 @@
     {#if quest}
         {#if compact}
             <div class="content">
-                <div class="quest-img-shell">
+                <div class="quest-img-shell" class:compact-shell={compact}>
                     <img
                         class="quest-img quest-img-compact"
                         class:loaded={imageLoaded}
@@ -41,7 +41,7 @@
             </div>
         {:else}
             <div class="content">
-                <div class="quest-img-shell">
+                <div class="quest-img-shell" class:compact-shell={compact}>
                     <img
                         class="quest-img"
                         class:loaded={imageLoaded}
@@ -105,6 +105,11 @@
         flex: 0 0 200px;
     }
 
+    .quest-img-shell.compact-shell {
+        width: 100px;
+        min-height: 100px;
+        flex-basis: 100px;
+    }
     .quest-img {
         flex: 0 0 200px;
         width: 200px;
