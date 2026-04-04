@@ -63,7 +63,7 @@
     "@playwright/test": "^1.51.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.4",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/svelte": "^5.2.8",
+    "@testing-library/svelte": "^5.3.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^24.3.0",
