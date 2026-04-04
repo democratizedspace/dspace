@@ -76,7 +76,8 @@ export const buildQuestListManifest = () => {
 const manifest = buildQuestListManifest();
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 const manifestJson = JSON.stringify(manifest);
-const prettierConfig = (await prettier.resolveConfig(outputPath)) || {};
+const frontendPrettierTarget = path.join(root, 'src/pages/quests/svelte/Quests.svelte');
+const prettierConfig = (await prettier.resolveConfig(frontendPrettierTarget)) || {};
 const formattedManifest = await prettier.format(manifestJson, {
     ...prettierConfig,
     parser: 'json',
