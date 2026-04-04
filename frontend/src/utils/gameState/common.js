@@ -21,6 +21,7 @@ const BACKUP_SCHEMA_VERSION = 1;
 const LOCAL_EXPORT_PROVIDER = 'local-export';
 const isDev = Boolean(import.meta?.env?.DEV);
 const CURRENT_VERSION = '3';
+const QUEST_LIST_SNAPSHOT_VERSION = 1;
 
 const isPlainObject = (value) =>
     value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -227,21 +228,54 @@ const getPersistedDusd = (state) => {
     return 0;
 };
 
+const getCompletedQuestIds = (state) => {
+    if (!state?.quests || typeof state.quests !== 'object') {
+        return [];
+    }
+
+    return Object.entries(state.quests)
+        .filter(([, progress]) => Boolean(progress?.finished))
+        .map(([questId]) => questId)
+        .sort((a, b) => a.localeCompare(b));
+};
+
 const buildLightweightSnapshot = (state) => ({
     checksum: state?.[META_KEY]?.checksum ?? '',
     dUSD: getPersistedDusd(state),
     lastUpdated: state?.[META_KEY]?.lastUpdated ?? Date.now(),
+    questProgress: {
+        version: QUEST_LIST_SNAPSHOT_VERSION,
+        completedQuestIds: getCompletedQuestIds(state),
+    },
 });
 
 const normalizeLightweightSnapshot = (value) => {
     if (!value || typeof value !== 'object') {
-        return { checksum: '', dUSD: 0, lastUpdated: 0 };
+        return {
+            checksum: '',
+            dUSD: 0,
+            lastUpdated: 0,
+            questProgress: { version: 0, completedQuestIds: [] },
+        };
     }
+
+    const normalizedQuestProgress = value.questProgress;
+    const snapshotVersion = Number.isFinite(normalizedQuestProgress?.version)
+        ? Number(normalizedQuestProgress.version)
+        : 0;
 
     return {
         checksum: typeof value.checksum === 'string' ? value.checksum : '',
         dUSD: Number.isFinite(value.dUSD) ? Number(value.dUSD) : 0,
         lastUpdated: Number.isFinite(value.lastUpdated) ? Number(value.lastUpdated) : 0,
+        questProgress: {
+            version: snapshotVersion,
+            completedQuestIds: Array.isArray(normalizedQuestProgress?.completedQuestIds)
+                ? normalizedQuestProgress.completedQuestIds
+                      .filter((questId) => typeof questId === 'string' && questId.trim())
+                      .map((questId) => questId.trim())
+                : [],
+        },
     };
 };
 
@@ -516,6 +550,34 @@ export const getPersistedGameStateLightweight = async () => {
     }
 
     return readLightweightSnapshotFromLocalStorage();
+};
+
+export const getPersistedGameStateLightweightSync = () => readLightweightSnapshotFromLocalStorage();
+
+export const getAuthoritativeQuestProgressSnapshot = (snapshot) => {
+    const normalizedSnapshot = normalizeLightweightSnapshot(snapshot);
+    if (normalizedSnapshot.questProgress.version !== QUEST_LIST_SNAPSHOT_VERSION) {
+        return {
+            authoritative: false,
+            reason: 'snapshot-version-mismatch',
+            completedQuestIds: [],
+        };
+    }
+
+    if (!normalizedSnapshot.checksum) {
+        return {
+            authoritative: false,
+            reason: 'missing-checksum',
+            completedQuestIds: [],
+        };
+    }
+
+    return {
+        authoritative: true,
+        version: normalizedSnapshot.questProgress.version,
+        completedQuestIds: normalizedSnapshot.questProgress.completedQuestIds,
+        checksum: normalizedSnapshot.checksum,
+    };
 };
 
 export const syncGameStateFromLocalIfStale = (expectedChecksum = '') => {

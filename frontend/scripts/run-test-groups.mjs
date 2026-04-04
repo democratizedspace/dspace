@@ -219,6 +219,13 @@ const TEST_GROUPS = [
         parallel: false,
     },
     {
+        name: 'Quests TTI Harness',
+        // Keep in grouped-runner coverage list; verified by tests/run-test-groups.test.ts.
+        files: ['quests-tti-behavior.spec.ts', 'quests-tti-metrics.spec.ts'],
+        parallel: false,
+        workers: 1,
+    },
+    {
         name: 'Integration Tests',
         files: ['custom-content.spec.ts'],
         grep: 'integrate custom items, processes, and quests',

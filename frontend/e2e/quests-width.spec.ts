@@ -319,7 +319,9 @@ test.describe('Quests page responsive grid centering', () => {
         await clearUserData(page);
     });
 
-    test('centers quest tiles when the final row is not full on wide screens', async ({ page }) => {
+    test('centers custom quest tiles when the final row is not full on wide screens', async ({
+        page,
+    }) => {
         await page.setViewportSize({ width: 1920, height: 1080 });
 
         await page.goto('/');
@@ -355,12 +357,17 @@ test.describe('Quests page responsive grid centering', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const firstTile = page.locator('[data-testid="quests-grid"] > a').first();
+        const customGridSelector = '[data-testid="custom-quests-section"] .quests-grid';
+        const firstTile = page.locator(`${customGridSelector} > a`).first();
         await expect(firstTile).toBeVisible();
 
         const layout = await page.evaluate(() => {
-            const grid = document.querySelector('[data-testid="quests-grid"]');
-            const tiles = Array.from(document.querySelectorAll('[data-testid="quests-grid"] > a'));
+            const grid = document.querySelector(
+                '[data-testid="custom-quests-section"] .quests-grid'
+            );
+            const tiles = Array.from(
+                document.querySelectorAll('[data-testid="custom-quests-section"] .quests-grid > a')
+            );
             if (!grid || tiles.length === 0) {
                 return null;
             }
