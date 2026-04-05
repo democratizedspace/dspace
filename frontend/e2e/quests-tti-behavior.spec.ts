@@ -191,4 +191,24 @@ test.describe('quests tti behavior', () => {
         const firstStatuses = await statuses.allInnerTexts();
         expect(firstStatuses.some((status) => status.includes('Start'))).toBe(false);
     });
+
+    test('keeps locked built-in quests hidden while available quests stay visible', async ({
+        page,
+    }) => {
+        await page.goto('/quests');
+
+        const builtInGrid = page.getByTestId('quests-grid');
+        await expect(builtInGrid).toBeVisible();
+
+        const availableQuest = builtInGrid.getByRole('link', { name: 'How to do quests' });
+        const lockedQuest = builtInGrid.getByRole('link', { name: 'Level the Print Bed' });
+
+        await expect(availableQuest).toBeVisible();
+        await expect(lockedQuest).toHaveCount(0);
+
+        await page.waitForTimeout(1500);
+
+        await expect(availableQuest).toBeVisible();
+        await expect(lockedQuest).toHaveCount(0);
+    });
 });
