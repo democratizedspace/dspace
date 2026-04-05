@@ -137,6 +137,67 @@ test.describe('quests tti behavior', () => {
         expect(Math.abs((afterBox?.y ?? 0) - (beforeBox?.y ?? 0))).toBeLessThanOrEqual(1);
     });
 
+
+
+    test('does not render locked built-in quests before or after full-state reconciliation', async ({ page }) => {
+        await page.addInitScript(() => {
+            const delayMs = 1200;
+            const globalWindow = window as Window & { __questsIdbDelayActive?: boolean };
+            globalWindow.__questsIdbDelayActive = true;
+
+            localStorage.setItem(
+                'gameStateLite',
+                JSON.stringify({
+                    checksum: 'authoritative-snapshot',
+                    questProgress: { version: 1, completedQuestIds: [] },
+                })
+            );
+
+            const originalOpen = indexedDB.open.bind(indexedDB);
+            indexedDB.open = (...args) => {
+                const request = originalOpen(...args);
+                return new Proxy(request, {
+                    set(target, prop, value) {
+                        if (prop === 'onsuccess' && typeof value === 'function') {
+                            const originalSuccess = value;
+                            target.onsuccess = (event) => {
+                                setTimeout(() => {
+                                    globalWindow.__questsIdbDelayActive = false;
+                                    originalSuccess.call(target, event);
+                                }, delayMs);
+                            };
+                            return true;
+                        }
+
+                        target[prop] = value;
+                        return true;
+                    },
+                });
+            };
+        });
+
+        await page.goto('/quests');
+
+        const mainGrid = page.getByTestId('quests-grid');
+        await expect(mainGrid).toBeVisible();
+
+        await expect(mainGrid.getByRole('link', { name: 'How to do quests' })).toBeVisible();
+        await expect(mainGrid.getByRole('link', { name: 'Run the Test Suite' })).toHaveCount(0);
+
+        await expect
+            .poll(async () =>
+                page.evaluate(
+                    () =>
+                        (window as Window & { __questsIdbDelayActive?: boolean })
+                            .__questsIdbDelayActive === false
+                )
+            )
+            .toBeTruthy();
+
+        await expect(mainGrid.getByRole('link', { name: 'How to do quests' })).toBeVisible();
+        await expect(mainGrid.getByRole('link', { name: 'Run the Test Suite' })).toHaveCount(0);
+    });
+
     test('does not show optimistic Start before authoritative data exists', async ({ page }) => {
         await page.addInitScript(() => {
             const globalWindow = window as Window & { __questsIdbDelayActive?: boolean };
