@@ -16,7 +16,7 @@ vi.mock('../src/utils/gameState/common.js', () => ({
         questProgress: { version: 1, completedQuestIds: [] },
     })),
     getAuthoritativeQuestProgressSnapshot: vi.fn(() => ({
-        authoritative: false,
+        authoritative: true,
         completedQuestIds: [],
     })),
 }));
@@ -53,18 +53,60 @@ describe('Quests Component', () => {
         vi.clearAllMocks();
     });
 
-    it('renders meaningful built-in quest content immediately', () => {
+    const flushPromises = async () => {
+        await Promise.resolve();
+        await Promise.resolve();
+    };
+
+    it('renders only available built-in quests in the main list', async () => {
+        const gameStateModule = await import('../src/utils/gameState/common.js');
+        gameStateModule.getAuthoritativeQuestProgressSnapshot.mockReturnValue({
+            authoritative: true,
+            completedQuestIds: [],
+        });
+
         mount(Quests, { target: host, props: { quests } });
+        await flushPromises();
         expect(host.textContent).toContain('Test Quest 1');
-        expect(host.textContent).toContain('Test Quest 2');
+        expect(host.textContent).not.toContain('Test Quest 2');
     });
 
-    it('renders neutral status when authoritative data is unavailable', () => {
+    it('keeps locked and unknown built-in quests out of the main list', async () => {
+        const gameStateModule = await import('../src/utils/gameState/common.js');
+        gameStateModule.getAuthoritativeQuestProgressSnapshot.mockReturnValue({
+            authoritative: false,
+            completedQuestIds: [],
+        });
+
         mount(Quests, { target: host, props: { quests } });
-        const statuses = Array.from(host.querySelectorAll("[data-testid='quest-status-slot']")).map(
-            (n) => n.textContent.trim()
-        );
-        expect(statuses).toContain('Checking');
-        expect(statuses).not.toContain('Start');
+        await flushPromises();
+
+        const mainStatuses = Array.from(
+            host.querySelectorAll(
+                "[data-testid='quests-grid'] [data-testid='quest-status-slot']"
+            )
+        ).map((n) => n.textContent.trim());
+        expect(mainStatuses).toEqual([]);
+        expect(mainStatuses).not.toContain('Locked');
+        expect(mainStatuses).not.toContain('Checking');
+    });
+
+    it('renders completed built-in quests in the completed section', async () => {
+        const gameStateModule = await import('../src/utils/gameState/common.js');
+        gameStateModule.getAuthoritativeQuestProgressSnapshot.mockReturnValue({
+            authoritative: true,
+            completedQuestIds: ['welcome/test1'],
+        });
+
+        mount(Quests, { target: host, props: { quests } });
+        await flushPromises();
+
+        expect(host.textContent).toContain('Completed Quests');
+        const completedStatuses = Array.from(
+            host.querySelectorAll(
+                "h2 + a [data-testid='quest-status-slot'], h2 ~ a [data-testid='quest-status-slot']"
+            )
+        ).map((n) => n.textContent.trim());
+        expect(completedStatuses).toContain('Completed');
     });
 });

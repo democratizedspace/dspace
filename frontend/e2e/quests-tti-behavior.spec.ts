@@ -191,4 +191,45 @@ test.describe('quests tti behavior', () => {
         const firstStatuses = await statuses.allInnerTexts();
         expect(firstStatuses.some((status) => status.includes('Start'))).toBe(false);
     });
+
+    test('shows only actionable built-in quests and keeps them stable after reconciliation', async ({
+        page,
+    }) => {
+        await page.goto('/quests');
+        const grid = page.getByTestId('quests-grid');
+        await expect(grid).toBeVisible();
+
+        const availableTiles = grid.locator('[data-testid="quest-tile"][data-status="available"]');
+        await expect(availableTiles.first()).toBeVisible();
+        await expect(grid.locator('[data-testid="quest-tile"][data-status="locked"]')).toHaveCount(0);
+        await expect(grid.locator('[data-testid="quest-tile"][data-status="unknown"]')).toHaveCount(0);
+
+        const initialQuestLabels = await grid.locator('a[aria-label]').evaluateAll((links) =>
+            links
+                .map((link) => link.getAttribute('aria-label'))
+                .filter((label): label is string => Boolean(label))
+        );
+        expect(initialQuestLabels.length).toBeGreaterThan(0);
+
+        await expect
+            .poll(() =>
+                page.evaluate(() =>
+                    performance
+                        .getEntriesByType('mark')
+                        .some((entry) => entry.name === 'quests:full-state-reconciliation-complete')
+                )
+            )
+            .toBeTruthy();
+
+        const reconciledQuestLabels = await grid.locator('a[aria-label]').evaluateAll((links) =>
+            links
+                .map((link) => link.getAttribute('aria-label'))
+                .filter((label): label is string => Boolean(label))
+        );
+        for (const initialLabel of initialQuestLabels) {
+            expect(reconciledQuestLabels).toContain(initialLabel);
+        }
+        await expect(grid.locator('[data-testid="quest-tile"][data-status="locked"]')).toHaveCount(0);
+        await expect(grid.locator('[data-testid="quest-tile"][data-status="unknown"]')).toHaveCount(0);
+    });
 });
