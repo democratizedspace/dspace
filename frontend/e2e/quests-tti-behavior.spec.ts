@@ -191,4 +191,29 @@ test.describe('quests tti behavior', () => {
         const firstStatuses = await statuses.allInnerTexts();
         expect(firstStatuses.some((status) => status.includes('Start'))).toBe(false);
     });
+
+    test('shows only available built-in quests in the actionable grid before and after reconciliation', async ({
+        page,
+    }) => {
+        await page.goto('/quests');
+
+        const builtInGrid = page.getByTestId('quests-grid');
+        await expect(builtInGrid).toBeVisible();
+
+        const availableQuest = builtInGrid.getByRole('link', { name: 'How to do quests' });
+        const lockedQuest = builtInGrid.getByRole('link', { name: 'Run the Test Suite' });
+
+        await expect(availableQuest).toBeVisible();
+        await expect(lockedQuest).toHaveCount(0);
+
+        await expect
+            .poll(async () => {
+                const statuses = await page.getByTestId('quest-status-slot').allInnerTexts();
+                return statuses.some((status) => status.includes('Start'));
+            })
+            .toBeTruthy();
+
+        await expect(availableQuest).toBeVisible();
+        await expect(lockedQuest).toHaveCount(0);
+    });
 });

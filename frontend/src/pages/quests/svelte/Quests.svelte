@@ -79,7 +79,7 @@
         });
 
         completedBuiltInQuests = builtInClassified.filter((quest) => quest.status === 'completed');
-        activeBuiltInQuests = builtInClassified.filter((quest) => quest.status !== 'completed');
+        activeBuiltInQuests = builtInClassified.filter((quest) => quest.status === 'available');
     };
 
     const classifyCustomQuests = (snapshot) => {
