@@ -2,11 +2,15 @@ import { test, expect } from '@playwright/test';
 import { clearUserData, seedCustomQuest } from './test-helpers';
 
 test.describe('quests tti behavior', () => {
+    const availableBuiltInQuestSelector = '[data-questid="welcome/howtodoquests"]';
+
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
 
-    test('shows built-in quest content after delayed IndexedDB reconciliation', async ({ page }) => {
+    test('shows built-in quest content after delayed IndexedDB reconciliation', async ({
+        page,
+    }) => {
         await page.addInitScript(() => {
             const originalOpen = indexedDB.open.bind(indexedDB);
             indexedDB.open = (...args) => {
@@ -34,12 +38,10 @@ test.describe('quests tti behavior', () => {
         const builtInGrid = page.getByTestId('quests-grid');
         await expect(builtInGrid).toBeAttached();
         await expect
-            .poll(async () =>
-                builtInGrid.locator('[data-testid="quest-tile"]').count()
-            )
+            .poll(async () => builtInGrid.locator('[data-testid="quest-tile"]').count())
             .toBe(0);
 
-        await expect(builtInGrid.locator('[data-testid="quest-tile"]').first()).toBeVisible();
+        await expect(builtInGrid.locator(availableBuiltInQuestSelector)).toBeVisible();
     });
 
     test('does not render built-in quests before full persistence readiness resolves', async ({
@@ -99,7 +101,7 @@ test.describe('quests tti behavior', () => {
             )
             .toBeTruthy();
 
-        await expect(builtInGrid.locator('[data-testid="quest-tile"]').first()).toBeVisible();
+        await expect(builtInGrid.locator(availableBuiltInQuestSelector)).toBeVisible();
     });
 
     test('keeps built-in grid position stable when delayed custom quests merge', async ({
@@ -141,19 +143,18 @@ test.describe('quests tti behavior', () => {
         });
 
         await page.goto('/quests');
-        const firstBuiltInTile = page
+        const availableBuiltInQuest = page
             .getByTestId('quests-grid')
-            .locator('[data-testid="quest-tile"]')
-            .first();
-        await expect(firstBuiltInTile).toBeVisible();
-        const beforeBox = await firstBuiltInTile.boundingBox();
+            .locator(availableBuiltInQuestSelector);
+        await expect(availableBuiltInQuest).toBeVisible();
+        const beforeBox = await availableBuiltInQuest.boundingBox();
         expect(beforeBox).not.toBeNull();
 
         const customShell = page.getByTestId('custom-quests-shell');
         await expect(customShell).toHaveAttribute('data-merged', 'false');
         await expect(customShell).toHaveAttribute('data-merged', 'true');
 
-        const afterBox = await firstBuiltInTile.boundingBox();
+        const afterBox = await availableBuiltInQuest.boundingBox();
         expect(afterBox).not.toBeNull();
         expect(Math.abs((afterBox?.y ?? 0) - (beforeBox?.y ?? 0))).toBeLessThanOrEqual(1);
     });
