@@ -269,11 +269,14 @@ test.describe('Quests page horizontal overflow regression', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const firstTile = page.locator('.quests-grid > a').first();
+        const customGridSelector = '[data-testid="custom-quests-section"] .quests-grid';
+        const firstTile = page.locator(`${customGridSelector} > a`).first();
         await expect(firstTile).toBeVisible();
 
         const firstRowHeights = await page.evaluate(() => {
-            const tiles = Array.from(document.querySelectorAll('.quests-grid > a'));
+            const tiles = Array.from(
+                document.querySelectorAll('[data-testid="custom-quests-section"] .quests-grid > a')
+            );
             if (tiles.length === 0) {
                 return [];
             }
@@ -446,11 +449,14 @@ test.describe('Quests page responsive grid centering', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
 
-        const firstTile = page.locator('[data-testid="quests-grid"] > a').first();
+        const customGridSelector = '[data-testid="custom-quests-section"] .quests-grid';
+        const firstTile = page.locator(`${customGridSelector} > a`).first();
         await expect(firstTile).toBeVisible();
 
         const layout = await page.evaluate((tolerance) => {
-            const tiles = Array.from(document.querySelectorAll('[data-testid="quests-grid"] > a'));
+            const tiles = Array.from(
+                document.querySelectorAll('[data-testid="custom-quests-section"] .quests-grid > a')
+            );
             if (tiles.length === 0) {
                 return null;
             }
