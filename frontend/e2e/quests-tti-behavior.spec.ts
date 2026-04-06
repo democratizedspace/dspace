@@ -200,8 +200,8 @@ test.describe('quests tti behavior', () => {
         const builtInGrid = page.getByTestId('quests-grid');
         await expect(builtInGrid).toBeVisible();
 
-        const availableQuest = builtInGrid.getByRole('link', { name: 'How to do quests' });
-        const lockedQuest = builtInGrid.getByRole('link', { name: 'Run the Test Suite' });
+        const availableQuest = builtInGrid.locator('[data-questid="welcome/howtodoquests"]');
+        const lockedQuest = builtInGrid.locator('[data-questid="welcome/run-tests"]');
 
         await expect(availableQuest).toBeVisible();
         await expect(lockedQuest).toHaveCount(0);

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { mount } from 'svelte';
+import { mount, unmount } from 'svelte';
 import { writable } from 'svelte/store';
 import Quests from '../src/pages/quests/svelte/Quests.svelte';
 import { classifyQuestList } from '../src/utils/quests/listClassifier.js';
@@ -55,13 +55,19 @@ describe('Quests Component', () => {
     ];
 
     let host;
+    let mountedComponent;
 
     beforeEach(() => {
+        mountedComponent = null;
         host = document.createElement('div');
         document.body.appendChild(host);
     });
 
     afterEach(() => {
+        if (mountedComponent) {
+            unmount(mountedComponent);
+            mountedComponent = null;
+        }
         document.body.removeChild(host);
         vi.clearAllMocks();
     });
@@ -74,23 +80,26 @@ describe('Quests Component', () => {
             })
         );
 
-        mount(Quests, { target: host, props: { quests } });
+        mountedComponent = mount(Quests, { target: host, props: { quests } });
 
         const builtInGrid = host.querySelector("[data-testid='quests-grid']");
         expect(builtInGrid.textContent).toContain('Test Quest 1');
         expect(builtInGrid.textContent).not.toContain('Test Quest 2');
+        expect(builtInGrid.textContent).not.toContain('Test Quest 3');
 
         expect(host.textContent).toContain('Completed Quests');
         expect(host.textContent).toContain('Test Quest 3');
     });
 
     it('keeps locked and unknown quests out of the main built-in grid', () => {
-        classifyQuestList.mockReturnValue([
-            { ...quests[0], status: 'locked' },
-            { ...quests[1], status: 'unknown' },
-        ]);
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest, index) => ({
+                ...quest,
+                status: index === 0 ? 'locked' : 'unknown',
+            }))
+        );
 
-        mount(Quests, { target: host, props: { quests } });
+        mountedComponent = mount(Quests, { target: host, props: { quests } });
 
         const builtInGrid = host.querySelector("[data-testid='quests-grid']");
         expect(builtInGrid.textContent).not.toContain('Test Quest 1');
@@ -98,11 +107,15 @@ describe('Quests Component', () => {
     });
 
     it('does not render unknown quests in the actionable grid when authoritative data is unavailable', () => {
-        classifyQuestList.mockReturnValue([{ ...quests[0], status: 'unknown' }]);
-        mount(Quests, { target: host, props: { quests } });
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.length === 0 ? [] : [{ ...classifiedQuests[0], status: 'unknown' }]
+        );
+        mountedComponent = mount(Quests, { target: host, props: { quests } });
         const builtInGrid = host.querySelector("[data-testid='quests-grid']");
         expect(builtInGrid.textContent).not.toContain('Test Quest 1');
-        const statuses = Array.from(host.querySelectorAll("[data-testid='quest-status-slot']"));
+        const statuses = Array.from(
+            builtInGrid.querySelectorAll("[data-testid='quest-status-slot']")
+        );
         expect(statuses).toHaveLength(0);
     });
 });

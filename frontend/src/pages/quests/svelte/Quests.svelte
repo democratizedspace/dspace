@@ -189,7 +189,7 @@
 
     <div class="quests-grid" data-testid="quests-grid">
         {#each activeBuiltInQuests as quest}
-            <a href={quest.route} aria-label={quest.title}>
+            <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
                 <Quest {quest} status={quest.status} />
             </a>
         {/each}
@@ -215,7 +215,7 @@
                 {#if customClassified.length > 0}
                     <div class="quests-grid">
                         {#each customClassified as quest}
-                            <a href={quest.route} aria-label={quest.title}>
+                            <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
                                 <Quest {quest} status={quest.status} />
                             </a>
                         {/each}
@@ -232,7 +232,7 @@
     {#if completedBuiltInQuests.length > 0}
         <h2>Completed Quests</h2>
         {#each completedBuiltInQuests as quest}
-            <a href={quest.route} aria-label={quest.title}>
+            <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
                 <Quest {quest} compact={true} status={quest.status} />
             </a>
         {/each}
