@@ -1,5 +1,14 @@
 import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { purgeClientState, waitForHydration } from './test-helpers';
+
+async function waitForQuestPrFormHydration(page: Page) {
+    await waitForHydration(page);
+    await page.waitForFunction(() => {
+        const form = document.querySelector('.pr-form');
+        return form?.getAttribute('data-hydrated') === 'true';
+    });
+}
 
 test.beforeEach(async ({ page }) => {
     await purgeClientState(page);
@@ -7,14 +16,14 @@ test.beforeEach(async ({ page }) => {
 
 test('quest PR form is accessible', async ({ page }) => {
     await page.goto('/quests/submit');
-    await waitForHydration(page);
+    await waitForQuestPrFormHydration(page);
     await expect(page.getByLabel('GitHub Token*')).toBeVisible();
     await expect(page.getByRole('button', { name: /Create Pull Request/i })).toBeVisible();
 });
 
 test('shows validation guidance when token or quest JSON are missing', async ({ page }) => {
     await page.goto('/quests/submit');
-    await waitForHydration(page);
+    await waitForQuestPrFormHydration(page);
     await page.getByLabel('GitHub Token*').fill('   ');
     await page.getByLabel('Quest JSON*').fill('   ');
     await page.getByRole('button', { name: 'Create Pull Request' }).click();
@@ -32,10 +41,13 @@ test('surfaces GitHub scope errors when the API rejects the token', async ({ pag
         });
     });
     await page.goto('/quests/submit');
-    await waitForHydration(page);
+    await waitForQuestPrFormHydration(page);
     await page.getByLabel('GitHub Token*').fill(`ghp_${'a'.repeat(36)}`);
     await page.getByLabel('Quest JSON*').fill('{"title":"t","description":"d"}');
-    await page.getByRole('button', { name: 'Create Pull Request' }).click();
+    await Promise.all([
+        page.waitForRequest('https://api.github.com/**'),
+        page.getByRole('button', { name: 'Create Pull Request' }).click(),
+    ]);
     await expect(page.getByTestId('submit-error')).toHaveText('Failed to submit quest');
     await expect(page.getByTestId('pr-success')).toHaveCount(0);
 });
@@ -49,11 +61,14 @@ test('keeps form state when network errors occur', async ({ page }) => {
         });
     });
     await page.goto('/quests/submit');
-    await waitForHydration(page);
+    await waitForQuestPrFormHydration(page);
     const questInput = page.getByLabel('Quest JSON*');
     await page.getByLabel('GitHub Token*').fill(`ghp_${'a'.repeat(36)}`);
     await questInput.fill('{"title":"t","description":"d"}');
-    await page.getByRole('button', { name: 'Create Pull Request' }).click();
+    await Promise.all([
+        page.waitForRequest('https://api.github.com/**'),
+        page.getByRole('button', { name: 'Create Pull Request' }).click(),
+    ]);
     await expect(page.getByTestId('submit-error')).toHaveText('Failed to submit quest');
     await expect(questInput).toHaveValue('{"title":"t","description":"d"}');
 });
@@ -78,7 +93,7 @@ test('quest PR form submits and shows link', async ({ page }) => {
         });
     });
     await page.goto('/quests/submit');
-    await waitForHydration(page);
+    await waitForQuestPrFormHydration(page);
     const validToken = `ghp_${'a'.repeat(36)}`;
     await page.getByLabel('GitHub Token*').fill(validToken);
     await page.getByLabel('Quest JSON*').fill('{"title":"t","description":"d"}');

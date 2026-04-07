@@ -1,6 +1,6 @@
 # Code of Conduct
 
-This project follows the [Contributor Covenant](https://www.contributor-covenant.org/) Code of Conduct.
+This project follows the [Contributor Covenant](https://github.com/EthicalSource/contributor_covenant) Code of Conduct.
 
 ## Our Pledge
 
@@ -32,4 +32,4 @@ Instances of abusive behavior may be reported by contacting the maintainers via 
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/), version 2.1.
+This Code of Conduct is adapted from the [Contributor Covenant](https://github.com/EthicalSource/contributor_covenant), version 2.1.
