@@ -204,7 +204,9 @@ test.describe('quests tti behavior', () => {
         });
 
         await page.goto('/quests');
-        await expect(page.getByTestId('quests-grid').locator('[data-testid="quest-tile"]').first()).toBeVisible();
+        await expect(
+            page.getByTestId('quests-grid').locator('[data-testid="quest-tile"]').first()
+        ).toBeVisible();
 
         await page.waitForTimeout(200);
         await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
