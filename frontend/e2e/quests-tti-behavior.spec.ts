@@ -126,8 +126,9 @@ test.describe('quests tti behavior', () => {
         await waitForQuestRecordByTitle(page, delayedCustomQuestTitle);
 
         await page.addInitScript(() => {
-            (window as Window & { __questsCustomMergeDelayMs?: number }).__questsCustomMergeDelayMs =
-                700;
+            (
+                window as Window & { __questsCustomMergeDelayMs?: number }
+            ).__questsCustomMergeDelayMs = 700;
         });
 
         await page.goto('/quests');
@@ -157,8 +158,9 @@ test.describe('quests tti behavior', () => {
         page,
     }) => {
         await page.addInitScript(() => {
-            (window as Window & { __questsCustomMergeDelayMs?: number }).__questsCustomMergeDelayMs =
-                700;
+            (
+                window as Window & { __questsCustomMergeDelayMs?: number }
+            ).__questsCustomMergeDelayMs = 700;
         });
 
         await page.goto('/quests');
