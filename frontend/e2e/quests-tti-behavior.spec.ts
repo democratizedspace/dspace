@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, seedCustomQuest } from './test-helpers';
+import { clearUserData, seedCustomQuest, waitForQuestRecordByTitle } from './test-helpers';
 
 test.describe('quests tti behavior', () => {
     test.beforeEach(async ({ page }) => {
@@ -123,6 +123,7 @@ test.describe('quests tti behavior', () => {
             image: '/assets/quests/howtodoquests.jpg',
             custom: true,
         });
+        await waitForQuestRecordByTitle(page, delayedCustomQuestTitle);
 
         await page.addInitScript(() => {
             const delayMs = 700;
@@ -160,10 +161,13 @@ test.describe('quests tti behavior', () => {
         expect(beforeBox).not.toBeNull();
 
         const customQuestsSection = page.getByTestId('custom-quests-section');
-        await page.waitForTimeout(200);
+        const customMergeStatus = page.getByTestId('custom-quests-merge-status');
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'false');
         await expect(customQuestsSection).toHaveCount(0);
         await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
 
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'true');
+        await expect(customMergeStatus).toHaveAttribute('data-custom-count', '1');
         await expect(customQuestsSection).toBeVisible();
         await expect(customQuestsSection).toContainText(delayedCustomQuestTitle);
 
@@ -207,12 +211,14 @@ test.describe('quests tti behavior', () => {
         await expect(
             page.getByTestId('quests-grid').locator('[data-testid="quest-tile"]').first()
         ).toBeVisible();
+        const customMergeStatus = page.getByTestId('custom-quests-merge-status');
 
-        await page.waitForTimeout(200);
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'false');
         await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
         await expect(page.getByTestId('custom-quests-section')).toHaveCount(0);
 
-        await page.waitForTimeout(900);
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'true');
+        await expect(customMergeStatus).toHaveAttribute('data-custom-count', '0');
         await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
         await expect(page.getByTestId('custom-quests-section')).toHaveCount(0);
     });

@@ -195,6 +195,14 @@
         {/each}
     </div>
 
+    <div
+        hidden
+        aria-hidden="true"
+        data-testid="custom-quests-merge-status"
+        data-merge-complete={customMergeComplete ? 'true' : 'false'}
+        data-custom-count={String(customClassified.length)}
+    ></div>
+
     {#if showQuestGraphVisualizer}
         <div class="visualizer-slot">
             <slot name="visualizer" />
