@@ -156,7 +156,7 @@
             const customQuestsPromise = listCustomQuests();
             const timedCustomQuestLoad = Promise.race([
                 customQuestsPromise,
-                new Promise((resolve) => setTimeout(() => resolve([]), 5000)),
+                new Promise((resolve) => setTimeout(() => resolve([]), 15000)),
             ]);
             const questsFromStorage = await timedCustomQuestLoad;
             customQuestRecords = Array.isArray(questsFromStorage) ? questsFromStorage : [];
