@@ -153,12 +153,14 @@
         reconcileFullState();
 
         try {
-            const customQuestsPromise = listCustomQuests();
-            const timedCustomQuestLoad = Promise.race([
-                customQuestsPromise,
-                new Promise((resolve) => setTimeout(() => resolve([]), 15000)),
-            ]);
-            const questsFromStorage = await timedCustomQuestLoad;
+            const customQuestDelayMs = isBrowser
+                ? Number((window && window.__questsCustomMergeDelayMs) || 0)
+                : 0;
+            if (Number.isFinite(customQuestDelayMs) && customQuestDelayMs > 0) {
+                await new Promise((resolve) => setTimeout(resolve, customQuestDelayMs));
+            }
+
+            const questsFromStorage = await listCustomQuests();
             customQuestRecords = Array.isArray(questsFromStorage) ? questsFromStorage : [];
         } catch (error) {
             console.error('Unable to load custom quests for listing:', error);

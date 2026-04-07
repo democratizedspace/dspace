@@ -126,31 +126,8 @@ test.describe('quests tti behavior', () => {
         await waitForQuestRecordByTitle(page, delayedCustomQuestTitle);
 
         await page.addInitScript(() => {
-            const delayMs = 700;
-            const originalGetAll = IDBObjectStore.prototype.getAll;
-            IDBObjectStore.prototype.getAll = function (...args) {
-                const request = originalGetAll.apply(this, args);
-                if (this.name !== 'quests') {
-                    return request;
-                }
-
-                return new Proxy(request, {
-                    set(target, prop, value) {
-                        if (prop === 'onsuccess' && typeof value === 'function') {
-                            const originalSuccess = value;
-                            target.onsuccess = (event) => {
-                                setTimeout(() => {
-                                    originalSuccess.call(target, event);
-                                }, delayMs);
-                            };
-                            return true;
-                        }
-
-                        target[prop] = value;
-                        return true;
-                    },
-                });
-            };
+            (window as Window & { __questsCustomMergeDelayMs?: number }).__questsCustomMergeDelayMs =
+                700;
         });
 
         await page.goto('/quests');
@@ -180,31 +157,8 @@ test.describe('quests tti behavior', () => {
         page,
     }) => {
         await page.addInitScript(() => {
-            const delayMs = 700;
-            const originalGetAll = IDBObjectStore.prototype.getAll;
-            IDBObjectStore.prototype.getAll = function (...args) {
-                const request = originalGetAll.apply(this, args);
-                if (this.name !== 'quests') {
-                    return request;
-                }
-
-                return new Proxy(request, {
-                    set(target, prop, value) {
-                        if (prop === 'onsuccess' && typeof value === 'function') {
-                            const originalSuccess = value;
-                            target.onsuccess = (event) => {
-                                setTimeout(() => {
-                                    originalSuccess.call(target, event);
-                                }, delayMs);
-                            };
-                            return true;
-                        }
-
-                        target[prop] = value;
-                        return true;
-                    },
-                });
-            };
+            (window as Window & { __questsCustomMergeDelayMs?: number }).__questsCustomMergeDelayMs =
+                700;
         });
 
         await page.goto('/quests');
