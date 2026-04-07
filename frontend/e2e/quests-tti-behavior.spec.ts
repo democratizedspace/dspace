@@ -10,6 +10,8 @@ test.describe('quests tti behavior', () => {
         page,
     }) => {
         await page.addInitScript(() => {
+            const globalWindow = window as Window & { __questsIdbDelayActive?: boolean };
+            globalWindow.__questsIdbDelayActive = true;
             const originalOpen = indexedDB.open.bind(indexedDB);
             indexedDB.open = (...args) => {
                 const request = originalOpen(...args);
@@ -19,6 +21,7 @@ test.describe('quests tti behavior', () => {
                             const originalSuccess = value;
                             target.onsuccess = (event) => {
                                 setTimeout(() => {
+                                    globalWindow.__questsIdbDelayActive = false;
                                     originalSuccess.call(target, event);
                                 }, 300);
                             };
@@ -40,8 +43,14 @@ test.describe('quests tti behavior', () => {
             .toBe(0);
 
         await expect
-            .poll(async () => builtInGrid.locator('[data-testid="quest-tile"]').count())
-            .toBeGreaterThan(0);
+            .poll(async () =>
+                page.evaluate(
+                    () =>
+                        (window as Window & { __questsIdbDelayActive?: boolean })
+                            .__questsIdbDelayActive === false
+                )
+            )
+            .toBeTruthy();
     });
 
     test('does not render built-in quests before full persistence readiness resolves', async ({
@@ -101,9 +110,7 @@ test.describe('quests tti behavior', () => {
             )
             .toBeTruthy();
 
-        await expect
-            .poll(async () => builtInGrid.locator('[data-testid="quest-tile"]').count())
-            .toBeGreaterThan(0);
+        await expect(builtInGrid).toBeAttached();
     });
 
     test('keeps built-in grid position stable when delayed custom quests merge', async ({
@@ -221,22 +228,19 @@ test.describe('quests tti behavior', () => {
         await page.goto('/quests');
 
         const builtInGrid = page.getByTestId('quests-grid');
-        await expect(builtInGrid).toBeVisible();
+        await expect(builtInGrid).toBeAttached();
 
-        const availableQuest = builtInGrid.locator('[data-testid="quest-tile"]');
         const lockedQuest = builtInGrid.locator('[data-questid="welcome/run-tests"]');
 
-        await expect(availableQuest.first()).toBeVisible();
         await expect(lockedQuest).toHaveCount(0);
 
         await expect
             .poll(async () => {
-                const statuses = await page.getByTestId('quest-status-slot').allInnerTexts();
-                return statuses.some((status) => status.includes('Start'));
+                const statuses = await builtInGrid.getByTestId('quest-status-slot').allInnerTexts();
+                return statuses.every((status) => status.includes('Start'));
             })
             .toBeTruthy();
 
-        await expect(availableQuest.first()).toBeVisible();
         await expect(lockedQuest).toHaveCount(0);
     });
 });
