@@ -18,7 +18,7 @@
 <div class="container" class:quest data-testid="quest-tile" data-status={status}>
     {#if quest}
         {#if compact}
-            <div class="content">
+            <div class="content" class:compact-content={compact}>
                 <div class="quest-img-shell" class:compact-shell={compact}>
                     <img
                         class="quest-img quest-img-compact"
@@ -40,7 +40,7 @@
                 </div>
             </div>
         {:else}
-            <div class="content">
+            <div class="content" class:compact-content={compact}>
                 <div class="quest-img-shell" class:compact-shell={compact}>
                     <img
                         class="quest-img"
@@ -105,11 +105,6 @@
         flex: 0 0 200px;
     }
 
-    .quest-img-shell.compact-shell {
-        width: 100px;
-        min-height: 100px;
-        flex-basis: 100px;
-    }
     .quest-img {
         flex: 0 0 200px;
         width: 200px;
@@ -133,26 +128,50 @@
 
     .content {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: stretch;
         height: 100%;
         gap: 0;
         min-width: 0;
     }
 
+    .quest-img-shell.compact-shell {
+        width: 100px;
+        min-height: 100px;
+        flex-basis: 100px;
+    }
+
+    .content.compact-content {
+        flex-direction: row;
+    }
+
+    .content:not(.compact-content) .quest-img-shell {
+        width: calc(100% - 20px);
+        margin: 10px 10px 0;
+        flex: 0 0 auto;
+    }
+
+    .content:not(.compact-content) .quest-img {
+        width: 100%;
+        max-height: 220px;
+        height: auto;
+        flex: 0 0 auto;
+        object-fit: cover;
+    }
+
     @media only screen and (max-width: 640px) {
-        .content {
+        .content.compact-content {
             flex-direction: column;
         }
 
-        .quest-img-shell {
+        .content.compact-content .quest-img-shell {
             width: calc(100% - 20px);
             min-height: 200px;
             margin: 0 10px;
             flex-basis: auto;
         }
 
-        .quest-img {
+        .content.compact-content .quest-img {
             width: 100%;
             height: 200px;
         }
