@@ -3,6 +3,7 @@ import { mount, unmount } from 'svelte';
 import { writable } from 'svelte/store';
 import Quests from '../src/pages/quests/svelte/Quests.svelte';
 import { classifyQuestList } from '../src/utils/quests/listClassifier.js';
+import { listCustomQuests } from '../src/utils/customcontent.js';
 
 vi.mock('../src/utils/customcontent.js', () => ({
     listCustomQuests: vi.fn().mockResolvedValue([]),
@@ -117,5 +118,18 @@ describe('Quests Component', () => {
             builtInGrid.querySelectorAll("[data-testid='quest-status-slot']")
         );
         expect(statuses).toHaveLength(0);
+    });
+
+    it('does not render the Custom Quests header when there are no custom quests', async () => {
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => ({ ...quest, status: 'available' }))
+        );
+        listCustomQuests.mockResolvedValueOnce([]);
+
+        mountedComponent = mount(Quests, { target: host, props: { quests } });
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(host.textContent).not.toContain('Custom Quests');
+        expect(host.querySelector("[data-testid='custom-quests-section']")).toBeNull();
     });
 });

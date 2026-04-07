@@ -124,6 +124,8 @@ test.describe('quests tti behavior', () => {
         });
 
         await page.addInitScript(() => {
+            const globalWindow = window as Window & { __questsIdbDelayActive?: boolean };
+            globalWindow.__questsIdbDelayActive = true;
             const delayMs = 700;
             const originalGetAll = IDBObjectStore.prototype.getAll;
             IDBObjectStore.prototype.getAll = function (...args) {
@@ -138,6 +140,7 @@ test.describe('quests tti behavior', () => {
                             const originalSuccess = value;
                             target.onsuccess = (event) => {
                                 setTimeout(() => {
+                                    globalWindow.__questsIdbDelayActive = false;
                                     originalSuccess.call(target, event);
                                 }, delayMs);
                             };
@@ -158,9 +161,15 @@ test.describe('quests tti behavior', () => {
         const beforeBox = await availableBuiltInQuest.boundingBox();
         expect(beforeBox).not.toBeNull();
 
-        const customShell = page.getByTestId('custom-quests-shell');
-        await expect(customShell).toHaveAttribute('data-merged', 'false');
-        await expect(customShell).toHaveAttribute('data-merged', 'true');
+        await expect
+            .poll(async () =>
+                page.evaluate(
+                    () =>
+                        (window as Window & { __questsIdbDelayActive?: boolean })
+                            .__questsIdbDelayActive === false
+                )
+            )
+            .toBeTruthy();
 
         const afterBox = await availableBuiltInQuest.boundingBox();
         expect(afterBox).not.toBeNull();

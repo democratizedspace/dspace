@@ -201,33 +201,18 @@
         </div>
     {/if}
 
-    <section class="custom-section" data-testid="custom-quests-section">
-        <div
-            class="custom-merge-signal"
-            data-testid="custom-quests-shell"
-            data-merged={customMergeComplete ? 'true' : 'false'}
-            aria-hidden="true"
-        ></div>
-
-        {#if !customMergeComplete || customClassified.length > 0}
+    {#if customMergeComplete && customClassified.length > 0}
+        <section class="custom-section" data-testid="custom-quests-section">
             <h2>Custom Quests</h2>
-            <div class="custom-grid-shell">
-                {#if customClassified.length > 0}
-                    <div class="quests-grid">
-                        {#each customClassified as quest}
-                            <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
-                                <Quest {quest} status={quest.status} />
-                            </a>
-                        {/each}
-                    </div>
-                {:else}
-                    <div class="custom-placeholder-grid" aria-hidden="true">
-                        <div class="custom-placeholder-card" />
-                    </div>
-                {/if}
+            <div class="quests-grid">
+                {#each customClassified as quest}
+                    <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
+                        <Quest {quest} status={quest.status} />
+                    </a>
+                {/each}
             </div>
-        {/if}
-    </section>
+        </section>
+    {/if}
 
     {#if completedBuiltInQuests.length > 0}
         <h2>Completed Quests</h2>
@@ -280,26 +265,6 @@
     .quests-grid > a :global([data-testid='quest-tile']) {
         flex: 1 1 auto;
         height: auto;
-    }
-
-    .custom-merge-signal {
-        display: none;
-    }
-
-    .custom-grid-shell {
-        min-height: 246px;
-    }
-
-    .custom-placeholder-grid {
-        display: flex;
-        justify-content: center;
-    }
-
-    .custom-placeholder-card {
-        width: min(400px, 100%);
-        height: 220px;
-        border-radius: 20px;
-        background: transparent;
     }
 
     @media only screen and (max-width: 640px) {
