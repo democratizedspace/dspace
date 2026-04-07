@@ -37,7 +37,9 @@ test.describe('quests tti behavior', () => {
 
         await page.goto('/quests');
         const builtInGrid = page.getByTestId('quests-grid');
+        const customHeading = page.getByRole('heading', { name: 'Custom Quests' });
         await expect(builtInGrid).toBeAttached();
+        await expect(customHeading).toHaveCount(0);
         await expect
             .poll(async () => builtInGrid.locator('[data-testid="quest-tile"]').count())
             .toBe(0);
@@ -51,6 +53,7 @@ test.describe('quests tti behavior', () => {
                 )
             )
             .toBeTruthy();
+        await expect(customHeading).toHaveCount(0);
     });
 
     test('does not render built-in quests before full persistence readiness resolves', async ({

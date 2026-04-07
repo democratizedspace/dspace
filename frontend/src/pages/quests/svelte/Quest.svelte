@@ -18,7 +18,7 @@
 <div class="container" class:quest data-testid="quest-tile" data-status={status}>
     {#if quest}
         {#if compact}
-            <div class="content">
+            <div class="content compact-content">
                 <div class="quest-img-shell" class:compact-shell={compact}>
                     <img
                         class="quest-img quest-img-compact"
@@ -91,30 +91,30 @@
     }
 
     .quest-img-shell {
-        width: 200px;
+        width: 100%;
         min-height: 200px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: -10px;
-        border-radius: 20px;
-        background: #1d1d2e;
-        border: 5px solid #68d46d;
+        margin: 0;
+        border-radius: 20px 20px 0 0;
+        background: #151526;
         box-sizing: border-box;
         overflow: hidden;
-        flex: 0 0 200px;
+        flex: 0 0 auto;
     }
 
     .quest-img-shell.compact-shell {
         width: 100px;
         min-height: 100px;
+        border-radius: 20px 0 0 20px;
         flex-basis: 100px;
     }
     .quest-img {
-        flex: 0 0 200px;
-        width: 200px;
-        height: 200px;
-        object-fit: contain;
+        width: 100%;
+        height: 100%;
+        min-height: 200px;
+        object-fit: cover;
         object-position: center;
         box-sizing: border-box;
         opacity: 0;
@@ -129,43 +129,31 @@
         flex: 0 1 auto;
         width: 100px;
         height: 100px;
+        min-height: 100px;
+        object-fit: cover;
     }
 
     .content {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: stretch;
         height: 100%;
         gap: 0;
         min-width: 0;
     }
 
-    @media only screen and (max-width: 640px) {
-        .content {
-            flex-direction: column;
-        }
-
-        .quest-img-shell {
-            width: calc(100% - 20px);
-            min-height: 200px;
-            margin: 0 10px;
-            flex-basis: auto;
-        }
-
-        .quest-img {
-            width: 100%;
-            height: 200px;
-        }
+    .compact-content {
+        flex-direction: row;
     }
 
     .content-text {
         flex: 1 1 auto;
-        min-width: 180px;
+        min-width: 0;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        justify-content: center;
-        padding: 16px 24px;
+        justify-content: flex-start;
+        padding: 18px 20px 16px;
     }
 
     .status-slot {
