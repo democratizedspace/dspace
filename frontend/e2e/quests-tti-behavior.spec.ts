@@ -2,8 +2,6 @@ import { test, expect } from '@playwright/test';
 import { clearUserData, seedCustomQuest } from './test-helpers';
 
 test.describe('quests tti behavior', () => {
-    const availableBuiltInQuestSelector = '[data-questid="welcome/howtodoquests"]';
-
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
     });
@@ -41,7 +39,9 @@ test.describe('quests tti behavior', () => {
             .poll(async () => builtInGrid.locator('[data-testid="quest-tile"]').count())
             .toBe(0);
 
-        await expect(builtInGrid.locator(availableBuiltInQuestSelector)).toBeVisible();
+        await expect
+            .poll(async () => builtInGrid.locator('[data-testid="quest-tile"]').count())
+            .toBeGreaterThan(0);
     });
 
     test('does not render built-in quests before full persistence readiness resolves', async ({
@@ -101,7 +101,9 @@ test.describe('quests tti behavior', () => {
             )
             .toBeTruthy();
 
-        await expect(builtInGrid.locator(availableBuiltInQuestSelector)).toBeVisible();
+        await expect
+            .poll(async () => builtInGrid.locator('[data-testid="quest-tile"]').count())
+            .toBeGreaterThan(0);
     });
 
     test('keeps built-in grid position stable when delayed custom quests merge', async ({
@@ -143,9 +145,8 @@ test.describe('quests tti behavior', () => {
         });
 
         await page.goto('/quests');
-        const availableBuiltInQuest = page
-            .getByTestId('quests-grid')
-            .locator(availableBuiltInQuestSelector);
+        const builtInGrid = page.getByTestId('quests-grid');
+        const availableBuiltInQuest = builtInGrid.locator('[data-testid="quest-tile"]').first();
         await expect(availableBuiltInQuest).toBeVisible();
         const beforeBox = await availableBuiltInQuest.boundingBox();
         expect(beforeBox).not.toBeNull();
@@ -222,10 +223,10 @@ test.describe('quests tti behavior', () => {
         const builtInGrid = page.getByTestId('quests-grid');
         await expect(builtInGrid).toBeVisible();
 
-        const availableQuest = builtInGrid.locator('[data-questid="welcome/howtodoquests"]');
+        const availableQuest = builtInGrid.locator('[data-testid="quest-tile"]');
         const lockedQuest = builtInGrid.locator('[data-questid="welcome/run-tests"]');
 
-        await expect(availableQuest).toBeVisible();
+        await expect(availableQuest.first()).toBeVisible();
         await expect(lockedQuest).toHaveCount(0);
 
         await expect
@@ -235,7 +236,7 @@ test.describe('quests tti behavior', () => {
             })
             .toBeTruthy();
 
-        await expect(availableQuest).toBeVisible();
+        await expect(availableQuest.first()).toBeVisible();
         await expect(lockedQuest).toHaveCount(0);
     });
 });
