@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, seedCustomQuest } from './test-helpers';
+import { clearUserData, seedCustomQuest, waitForQuestRecordByTitle } from './test-helpers';
 
 test.describe('quests tti behavior', () => {
     test.beforeEach(async ({ page }) => {
@@ -116,39 +116,19 @@ test.describe('quests tti behavior', () => {
     test('keeps built-in grid position stable when delayed custom quests merge', async ({
         page,
     }) => {
+        const delayedCustomQuestTitle = `Delayed custom quest ${Date.now()}`;
         await seedCustomQuest(page, {
-            title: `Delayed custom quest ${Date.now()}`,
+            title: delayedCustomQuestTitle,
             description: 'Ensures custom section merge does not push built-in tiles.',
             image: '/assets/quests/howtodoquests.jpg',
             custom: true,
         });
+        await waitForQuestRecordByTitle(page, delayedCustomQuestTitle);
 
         await page.addInitScript(() => {
-            const delayMs = 700;
-            const originalGetAll = IDBObjectStore.prototype.getAll;
-            IDBObjectStore.prototype.getAll = function (...args) {
-                const request = originalGetAll.apply(this, args);
-                if (this.name !== 'quests') {
-                    return request;
-                }
-
-                return new Proxy(request, {
-                    set(target, prop, value) {
-                        if (prop === 'onsuccess' && typeof value === 'function') {
-                            const originalSuccess = value;
-                            target.onsuccess = (event) => {
-                                setTimeout(() => {
-                                    originalSuccess.call(target, event);
-                                }, delayMs);
-                            };
-                            return true;
-                        }
-
-                        target[prop] = value;
-                        return true;
-                    },
-                });
-            };
+            (
+                window as Window & { __questsCustomMergeDelayMs?: number }
+            ).__questsCustomMergeDelayMs = 700;
         });
 
         await page.goto('/quests');
@@ -158,13 +138,45 @@ test.describe('quests tti behavior', () => {
         const beforeBox = await availableBuiltInQuest.boundingBox();
         expect(beforeBox).not.toBeNull();
 
-        const customShell = page.getByTestId('custom-quests-shell');
-        await expect(customShell).toHaveAttribute('data-merged', 'false');
-        await expect(customShell).toHaveAttribute('data-merged', 'true');
+        const customQuestsSection = page.getByTestId('custom-quests-section');
+        const customMergeStatus = page.getByTestId('custom-quests-merge-status');
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'false');
+        await expect(customQuestsSection).toHaveCount(0);
+        await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
+
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'true');
+        await expect(customMergeStatus).toHaveAttribute('data-custom-count', '1');
+        await expect(customQuestsSection).toBeVisible();
+        await expect(customQuestsSection).toContainText(delayedCustomQuestTitle);
 
         const afterBox = await availableBuiltInQuest.boundingBox();
         expect(afterBox).not.toBeNull();
         expect(Math.abs((afterBox?.y ?? 0) - (beforeBox?.y ?? 0))).toBeLessThanOrEqual(1);
+    });
+
+    test('does not render Custom Quests before delayed merge completes when no custom quests exist', async ({
+        page,
+    }) => {
+        await page.addInitScript(() => {
+            (
+                window as Window & { __questsCustomMergeDelayMs?: number }
+            ).__questsCustomMergeDelayMs = 700;
+        });
+
+        await page.goto('/quests');
+        await expect(
+            page.getByTestId('quests-grid').locator('[data-testid="quest-tile"]').first()
+        ).toBeVisible();
+        const customMergeStatus = page.getByTestId('custom-quests-merge-status');
+
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'false');
+        await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
+        await expect(page.getByTestId('custom-quests-section')).toHaveCount(0);
+
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'true');
+        await expect(customMergeStatus).toHaveAttribute('data-custom-count', '0');
+        await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
+        await expect(page.getByTestId('custom-quests-section')).toHaveCount(0);
     });
 
     test('does not show optimistic Start before authoritative data exists', async ({ page }) => {
