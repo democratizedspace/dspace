@@ -171,6 +171,9 @@ test.describe('quests tti behavior', () => {
             )
             .toBeTruthy();
 
+        const customQuestsSection = page.getByTestId('custom-quests-section');
+        await expect(customQuestsSection).toBeVisible();
+
         const afterBox = await availableBuiltInQuest.boundingBox();
         expect(afterBox).not.toBeNull();
         expect(Math.abs((afterBox?.y ?? 0) - (beforeBox?.y ?? 0))).toBeLessThanOrEqual(1);

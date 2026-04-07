@@ -121,15 +121,21 @@ describe('Quests Component', () => {
     });
 
     it('does not render the Custom Quests header when there are no custom quests', async () => {
+        vi.useFakeTimers();
         classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
             classifiedQuests.map((quest) => ({ ...quest, status: 'available' }))
         );
         listCustomQuests.mockResolvedValueOnce([]);
 
-        mountedComponent = mount(Quests, { target: host, props: { quests } });
-        await new Promise((resolve) => setTimeout(resolve, 0));
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
 
-        expect(host.textContent).not.toContain('Custom Quests');
-        expect(host.querySelector("[data-testid='custom-quests-section']")).toBeNull();
+            expect(host.textContent).not.toContain('Custom Quests');
+            expect(host.querySelector("[data-testid='custom-quests-section']")).toBeNull();
+        } finally {
+            vi.useRealTimers();
+        }
     });
 });
