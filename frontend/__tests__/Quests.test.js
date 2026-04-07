@@ -90,6 +90,13 @@ describe('Quests Component', () => {
 
         expect(host.textContent).toContain('Completed Quests');
         expect(host.textContent).toContain('Test Quest 3');
+
+        const completedQuestTile = host.querySelector(
+            "a[data-questid='welcome/test3'] [data-testid='quest-tile']"
+        );
+        expect(completedQuestTile?.querySelector('.content.compact-content')).not.toBeNull();
+        expect(completedQuestTile?.querySelector('.quest-img-shell.compact-shell')).not.toBeNull();
+        expect(completedQuestTile?.querySelector('.quest-img-compact')).not.toBeNull();
     });
 
     it('keeps locked and unknown quests out of the main built-in grid', () => {

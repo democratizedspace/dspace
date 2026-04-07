@@ -116,16 +116,15 @@ test.describe('quests tti behavior', () => {
     test('keeps built-in grid position stable when delayed custom quests merge', async ({
         page,
     }) => {
+        const delayedCustomQuestTitle = `Delayed custom quest ${Date.now()}`;
         await seedCustomQuest(page, {
-            title: `Delayed custom quest ${Date.now()}`,
+            title: delayedCustomQuestTitle,
             description: 'Ensures custom section merge does not push built-in tiles.',
             image: '/assets/quests/howtodoquests.jpg',
             custom: true,
         });
 
         await page.addInitScript(() => {
-            const globalWindow = window as Window & { __questsIdbDelayActive?: boolean };
-            globalWindow.__questsIdbDelayActive = true;
             const delayMs = 700;
             const originalGetAll = IDBObjectStore.prototype.getAll;
             IDBObjectStore.prototype.getAll = function (...args) {
@@ -140,7 +139,6 @@ test.describe('quests tti behavior', () => {
                             const originalSuccess = value;
                             target.onsuccess = (event) => {
                                 setTimeout(() => {
-                                    globalWindow.__questsIdbDelayActive = false;
                                     originalSuccess.call(target, event);
                                 }, delayMs);
                             };
@@ -161,22 +159,60 @@ test.describe('quests tti behavior', () => {
         const beforeBox = await availableBuiltInQuest.boundingBox();
         expect(beforeBox).not.toBeNull();
 
-        await expect
-            .poll(async () =>
-                page.evaluate(
-                    () =>
-                        (window as Window & { __questsIdbDelayActive?: boolean })
-                            .__questsIdbDelayActive === false
-                )
-            )
-            .toBeTruthy();
-
         const customQuestsSection = page.getByTestId('custom-quests-section');
+        await page.waitForTimeout(200);
+        await expect(customQuestsSection).toHaveCount(0);
+        await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
+
         await expect(customQuestsSection).toBeVisible();
+        await expect(customQuestsSection).toContainText(delayedCustomQuestTitle);
 
         const afterBox = await availableBuiltInQuest.boundingBox();
         expect(afterBox).not.toBeNull();
         expect(Math.abs((afterBox?.y ?? 0) - (beforeBox?.y ?? 0))).toBeLessThanOrEqual(1);
+    });
+
+    test('does not render Custom Quests before delayed merge completes when no custom quests exist', async ({
+        page,
+    }) => {
+        await page.addInitScript(() => {
+            const delayMs = 700;
+            const originalGetAll = IDBObjectStore.prototype.getAll;
+            IDBObjectStore.prototype.getAll = function (...args) {
+                const request = originalGetAll.apply(this, args);
+                if (this.name !== 'quests') {
+                    return request;
+                }
+
+                return new Proxy(request, {
+                    set(target, prop, value) {
+                        if (prop === 'onsuccess' && typeof value === 'function') {
+                            const originalSuccess = value;
+                            target.onsuccess = (event) => {
+                                setTimeout(() => {
+                                    originalSuccess.call(target, event);
+                                }, delayMs);
+                            };
+                            return true;
+                        }
+
+                        target[prop] = value;
+                        return true;
+                    },
+                });
+            };
+        });
+
+        await page.goto('/quests');
+        await expect(page.getByTestId('quests-grid').locator('[data-testid="quest-tile"]').first()).toBeVisible();
+
+        await page.waitForTimeout(200);
+        await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
+        await expect(page.getByTestId('custom-quests-section')).toHaveCount(0);
+
+        await page.waitForTimeout(900);
+        await expect(page.getByRole('heading', { name: 'Custom Quests' })).toHaveCount(0);
+        await expect(page.getByTestId('custom-quests-section')).toHaveCount(0);
     });
 
     test('does not show optimistic Start before authoritative data exists', async ({ page }) => {
