@@ -209,22 +209,16 @@
             aria-hidden="true"
         ></div>
 
-        {#if !customMergeComplete || customClassified.length > 0}
+        {#if customMergeComplete && customClassified.length > 0}
             <h2>Custom Quests</h2>
             <div class="custom-grid-shell">
-                {#if customClassified.length > 0}
-                    <div class="quests-grid">
-                        {#each customClassified as quest}
-                            <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
-                                <Quest {quest} status={quest.status} />
-                            </a>
-                        {/each}
-                    </div>
-                {:else}
-                    <div class="custom-placeholder-grid" aria-hidden="true">
-                        <div class="custom-placeholder-card" />
-                    </div>
-                {/if}
+                <div class="quests-grid">
+                    {#each customClassified as quest}
+                        <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
+                            <Quest {quest} status={quest.status} />
+                        </a>
+                    {/each}
+                </div>
             </div>
         {/if}
     </section>
@@ -284,22 +278,6 @@
 
     .custom-merge-signal {
         display: none;
-    }
-
-    .custom-grid-shell {
-        min-height: 246px;
-    }
-
-    .custom-placeholder-grid {
-        display: flex;
-        justify-content: center;
-    }
-
-    .custom-placeholder-card {
-        width: min(400px, 100%);
-        height: 220px;
-        border-radius: 20px;
-        background: transparent;
     }
 
     @media only screen and (max-width: 640px) {

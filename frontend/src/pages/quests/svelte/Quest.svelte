@@ -40,10 +40,11 @@
                 </div>
             </div>
         {:else}
-            <div class="content">
+            <div class="content" class:compact-layout={compact}>
                 <div class="quest-img-shell" class:compact-shell={compact}>
                     <img
                         class="quest-img"
+                        class:compact-img={compact}
                         class:loaded={imageLoaded}
                         src={quest.image}
                         alt={`Quest artwork for ${quest.title}`}
@@ -91,30 +92,28 @@
     }
 
     .quest-img-shell {
-        width: 200px;
-        min-height: 200px;
+        width: 100%;
+        aspect-ratio: 1 / 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: -10px;
-        border-radius: 20px;
+        border-radius: 20px 20px 0 0;
         background: #1d1d2e;
-        border: 5px solid #68d46d;
         box-sizing: border-box;
         overflow: hidden;
-        flex: 0 0 200px;
     }
 
     .quest-img-shell.compact-shell {
         width: 100px;
         min-height: 100px;
+        border-radius: 20px;
         flex-basis: 100px;
+        aspect-ratio: auto;
     }
     .quest-img {
-        flex: 0 0 200px;
-        width: 200px;
-        height: 200px;
-        object-fit: contain;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
         object-position: center;
         box-sizing: border-box;
         opacity: 0;
@@ -125,36 +124,29 @@
         opacity: 1;
     }
 
-    .quest-img-compact {
-        flex: 0 1 auto;
+    .quest-img-compact,
+    .quest-img.compact-img {
         width: 100px;
         height: 100px;
+        object-fit: contain;
     }
 
     .content {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: stretch;
         height: 100%;
         gap: 0;
         min-width: 0;
     }
 
+    .content.compact-layout {
+        flex-direction: row;
+    }
+
     @media only screen and (max-width: 640px) {
-        .content {
-            flex-direction: column;
-        }
-
         .quest-img-shell {
-            width: calc(100% - 20px);
-            min-height: 200px;
-            margin: 0 10px;
             flex-basis: auto;
-        }
-
-        .quest-img {
-            width: 100%;
-            height: 200px;
         }
     }
 
@@ -164,7 +156,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        justify-content: center;
+        justify-content: flex-start;
         padding: 16px 24px;
     }
 
