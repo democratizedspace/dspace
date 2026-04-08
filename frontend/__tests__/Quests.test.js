@@ -90,6 +90,7 @@ describe('Quests Component', () => {
 
         expect(host.textContent).toContain('Completed Quests');
         expect(host.textContent).toContain('Test Quest 3');
+        expect(builtInGrid.querySelectorAll("[data-testid='quest-status-slot']")).toHaveLength(0);
 
         const completedQuestTile = host.querySelector(
             "a[data-questid='welcome/test3'] [data-testid='quest-tile']"

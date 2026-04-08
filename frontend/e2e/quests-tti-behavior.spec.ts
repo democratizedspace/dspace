@@ -249,7 +249,7 @@ test.describe('quests tti behavior', () => {
         await expect
             .poll(async () => {
                 const statuses = await builtInGrid.getByTestId('quest-status-slot').allInnerTexts();
-                return statuses.every((status) => status.includes('Start'));
+                return statuses.length === 0;
             })
             .toBeTruthy();
 
