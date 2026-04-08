@@ -103,7 +103,9 @@ describe('Quests Component', () => {
         expect(completedQuestTile?.querySelector('.quest-img-shell.compact-shell')).not.toBeNull();
         expect(completedQuestTile?.querySelector('.quest-img-compact')).not.toBeNull();
 
-        const completedStatusSlot = completedQuestTile?.querySelector("[data-testid='quest-status-slot']");
+        const completedStatusSlot = completedQuestTile?.querySelector(
+            "[data-testid='quest-status-slot']"
+        );
         expect(completedStatusSlot).not.toBeNull();
         expect(completedStatusSlot?.textContent?.trim()).toBe('Completed');
     });
