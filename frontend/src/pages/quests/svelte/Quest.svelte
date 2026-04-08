@@ -9,7 +9,7 @@
         status === 'completed'
             ? 'Completed'
             : status === 'available'
-              ? 'Start'
+              ? ''
               : status === 'locked'
                 ? 'Locked'
                 : 'Checking';
