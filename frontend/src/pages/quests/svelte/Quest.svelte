@@ -9,10 +9,19 @@
         status === 'completed'
             ? 'Completed'
             : status === 'available'
-              ? 'Start'
+              ? ''
               : status === 'locked'
                 ? 'Locked'
                 : 'Checking';
+
+    $: assistiveStatusLabel =
+        status === 'available'
+            ? 'Available'
+            : status === 'completed'
+              ? 'Completed'
+              : status === 'locked'
+                ? 'Locked'
+                : statusLabel;
 </script>
 
 <div class="container" class:quest data-testid="quest-tile" data-status={status}>
@@ -36,7 +45,10 @@
                 </div>
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
-                    <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                    {#if statusLabel}
+                        <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                    {/if}
+                    <span class="sr-only">Status: {assistiveStatusLabel}</span>
                 </div>
             </div>
         {:else}
@@ -59,7 +71,10 @@
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
                     <p>{quest.description}</p>
-                    <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                    {#if statusLabel}
+                        <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                    {/if}
+                    <span class="sr-only">Status: {assistiveStatusLabel}</span>
                 </div>
             </div>
         {/if}
@@ -161,6 +176,18 @@
         padding-top: 8px;
         font-weight: 600;
         opacity: 0.9;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
     }
 
     @media only screen and (max-width: 640px) {
