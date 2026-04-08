@@ -247,7 +247,7 @@ test.describe('quests tti behavior', () => {
         await expect(lockedQuest).toHaveCount(0);
 
         const availableQuestCard = builtInGrid.locator(
-            "a[data-questid='welcome/test1'] [data-testid='quest-tile']"
+            "a[data-questid='welcome/howtodoquests'] [data-testid='quest-tile']"
         );
         await expect(availableQuestCard).toBeVisible();
         await expect(availableQuestCard).not.toContainText('Start');
