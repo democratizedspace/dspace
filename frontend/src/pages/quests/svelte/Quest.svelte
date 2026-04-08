@@ -9,7 +9,7 @@
         status === 'completed'
             ? 'Completed'
             : status === 'available'
-              ? 'Start'
+              ? ''
               : status === 'locked'
                 ? 'Locked'
                 : 'Checking';
@@ -36,7 +36,9 @@
                 </div>
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
-                    <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                    {#if statusLabel}
+                        <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                    {/if}
                 </div>
             </div>
         {:else}
@@ -59,7 +61,9 @@
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
                     <p>{quest.description}</p>
-                    <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                    {#if statusLabel}
+                        <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                    {/if}
                 </div>
             </div>
         {/if}
