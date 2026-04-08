@@ -90,7 +90,11 @@ describe('Quests Component', () => {
 
         expect(host.textContent).toContain('Completed Quests');
         expect(host.textContent).toContain('Test Quest 3');
-        expect(builtInGrid.querySelectorAll("[data-testid='quest-status-slot']")).toHaveLength(0);
+        const availableQuestTile = host.querySelector(
+            "a[data-questid='welcome/test1'] [data-testid='quest-tile']"
+        );
+        expect(availableQuestTile).not.toBeNull();
+        expect(availableQuestTile?.querySelector("[data-testid='quest-status-slot']")).toBeNull();
 
         const completedQuestTile = host.querySelector(
             "a[data-questid='welcome/test3'] [data-testid='quest-tile']"
@@ -98,6 +102,10 @@ describe('Quests Component', () => {
         expect(completedQuestTile?.querySelector('.content.compact-content')).not.toBeNull();
         expect(completedQuestTile?.querySelector('.quest-img-shell.compact-shell')).not.toBeNull();
         expect(completedQuestTile?.querySelector('.quest-img-compact')).not.toBeNull();
+
+        const completedStatusSlot = completedQuestTile?.querySelector("[data-testid='quest-status-slot']");
+        expect(completedStatusSlot).not.toBeNull();
+        expect(completedStatusSlot?.textContent?.trim()).toBe('Completed');
     });
 
     it('keeps locked and unknown quests out of the main built-in grid', () => {
