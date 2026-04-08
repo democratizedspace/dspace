@@ -179,7 +179,7 @@ test.describe('quests tti behavior', () => {
         await expect(page.getByTestId('custom-quests-section')).toHaveCount(0);
     });
 
-    test('does not show optimistic Start before authoritative data exists', async ({ page }) => {
+    test('does not render built-in quests before authoritative data exists', async ({ page }) => {
         await page.addInitScript(() => {
             const globalWindow = window as Window & { __questsIdbDelayActive?: boolean };
             globalWindow.__questsIdbDelayActive = true;
@@ -246,12 +246,10 @@ test.describe('quests tti behavior', () => {
 
         await expect(lockedQuest).toHaveCount(0);
 
-        await expect
-            .poll(async () => {
-                const statuses = await builtInGrid.getByTestId('quest-status-slot').allInnerTexts();
-                return statuses.length === 0;
-            })
-            .toBeTruthy();
+        const questTiles = builtInGrid.locator('[data-testid="quest-tile"]');
+        await expect(questTiles.first()).toBeVisible();
+
+        await expect(builtInGrid.getByTestId('quest-status-slot')).toHaveCount(0);
 
         await expect(lockedQuest).toHaveCount(0);
     });
