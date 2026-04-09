@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/svelte';
 
@@ -33,6 +33,10 @@ const SECTIONS_FIXTURE = [
 ];
 
 describe('DocsIndex component', () => {
+    beforeEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('renders an accessible search box for docs', () => {
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
@@ -43,6 +47,11 @@ describe('DocsIndex component', () => {
     });
 
     it('filters links using the search query', async () => {
+        vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+            ok: true,
+            json: async () => ({ bySlug: {} }),
+        });
+
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });

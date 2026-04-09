@@ -6,6 +6,7 @@
      * @property {string[]=} keywords
      * @property {boolean=} external
      * @property {string[]=} features
+     * @property {string=} slug
      * @property {string=} bodyText
      */
 
@@ -19,8 +20,15 @@
 
     /** @type {DocsSection[]} */
     export let sections = [];
+    export let fullTextCorpusUrl = '/docs/json/fullTextCorpus.json';
 
     let query = '';
+    let isCorpusLoading = false;
+    let corpusLoaded = false;
+    /** @type {Promise<void> | null} */
+    let corpusLoadPromise = null;
+    /** @type {Record<string, string>} */
+    let deferredBodyTextBySlug = {};
 
     const normalize = (value) => value.toLowerCase().trim();
 
@@ -39,12 +47,14 @@
         return operators.every((operator) => normalizedFeatures.includes(operator));
     };
 
+    const getBodyText = (link) => link.bodyText ?? deferredBodyTextBySlug[link.slug ?? ''] ?? '';
+
     const matchLink = (link, parsedQuery) => {
         if (!parsedQuery.operators.length && !parsedQuery.keywords.length) {
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? []), link.bodyText ?? ''].map(
+        const searchableValues = [link.title, ...(link.keywords ?? []), getBodyText(link)].map(
             normalize
         );
 
@@ -54,7 +64,42 @@
         );
     };
 
+    const ensureFullTextCorpusLoaded = async () => {
+        if (corpusLoaded || corpusLoadPromise) {
+            return corpusLoadPromise;
+        }
+
+        const corpusUrl =
+            typeof window !== 'undefined'
+                ? new URL(fullTextCorpusUrl, window.location.href).toString()
+                : fullTextCorpusUrl;
+
+        isCorpusLoading = true;
+        corpusLoadPromise = fetch(corpusUrl)
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load docs search corpus: ${response.status}`);
+                }
+
+                const payload = await response.json();
+                deferredBodyTextBySlug = payload?.bySlug ?? {};
+                corpusLoaded = true;
+            })
+            .catch((error) => {
+                console.error(error);
+            })
+            .finally(() => {
+                isCorpusLoading = false;
+            });
+
+        return corpusLoadPromise;
+    };
+
     $: parsedQuery = parseDocsQuery(query);
+    $: needsDeferredCorpus = parsedQuery.keywords.length > 0;
+    $: if (needsDeferredCorpus) {
+        void ensureFullTextCorpusLoaded();
+    }
     $: filteredSections = sections
         .map((section) => ({
             title: section.title,
@@ -63,8 +108,16 @@
                 .map((link) => ({
                     ...link,
                     snippet:
-                        parsedQuery.keywords.length && !parsedQuery.isHasPredicate
-                            ? findDocSnippet(link, parsedQuery.keywords)
+                        parsedQuery.keywords.length &&
+                        !parsedQuery.isHasPredicate &&
+                        (link.bodyText || corpusLoaded)
+                            ? findDocSnippet(
+                                  {
+                                      ...link,
+                                      bodyText: getBodyText(link),
+                                  },
+                                  parsedQuery.keywords
+                              )
                             : null,
                 })),
         }))
@@ -83,7 +136,9 @@
         aria-label="Search docs"
     />
 
-    {#if parsedQuery.normalized && totalResults === 0}
+    {#if needsDeferredCorpus && isCorpusLoading}
+        <p class="empty-state">Loading docs search index…</p>
+    {:else if parsedQuery.normalized && totalResults === 0}
         <p class="empty-state">No docs found for "{query}".</p>
     {:else}
         <div class="docs-grid" data-testid="docs-grid">
