@@ -23,7 +23,6 @@ This is the canonical list of all historical DSPACE release tags.
 The files below exist in `docs/qa/` but are not listed in the table above unless a matching git tag
 exists:
 
-- `docs/qa/v3.0.0.1.md`
 - `docs/qa/v3.0.1.md`
 - `docs/qa/v3.1.md`
 
