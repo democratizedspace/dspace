@@ -125,6 +125,31 @@ describe('DocsIndex search operators', () => {
         expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
 
+    it('uses cached body text immediately for later keyword searches', async () => {
+        const fetchSpy = vi.fn().mockImplementation(() =>
+            createFetchResponse({
+                'quest-guidelines': 'Cached turbine guidance for docs search.',
+            })
+        );
+        vi.stubGlobal('fetch', fetchSpy);
+
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'cached' } });
+        expect(
+            await screen.findByRole('link', { name: 'Quest Development Guidelines' })
+        ).not.toBeNull();
+        expect(fetchSpy).toHaveBeenCalledTimes(1);
+
+        await fireEvent.input(searchBox, { target: { value: 'guidance' } });
+        expect(
+            await screen.findByRole('link', { name: 'Quest Development Guidelines' })
+        ).not.toBeNull();
+        expect(fetchSpy).toHaveBeenCalledTimes(1);
+    });
+
     it('retries corpus loading after an initial fetch failure', async () => {
         const fetchSpy = vi
             .fn()
@@ -149,6 +174,50 @@ describe('DocsIndex search operators', () => {
             await screen.findByRole('link', { name: 'Quest Development Guidelines' })
         ).not.toBeNull();
         expect(fetchSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('treats non-ok corpus responses as retryable failures', async () => {
+        const fetchSpy = vi
+            .fn()
+            .mockResolvedValueOnce({
+                ok: false,
+                status: 503,
+                json: () => Promise.resolve({ bodyBySlug: {} }),
+            })
+            .mockImplementationOnce(() =>
+                createFetchResponse({
+                    'quest-guidelines': 'Recovered corpus content after retry.',
+                })
+            );
+        vi.stubGlobal('fetch', fetchSpy);
+
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'recoveredx' } });
+        expect(screen.queryByRole('link', { name: 'Quest Development Guidelines' })).toBeNull();
+
+        await fireEvent.input(searchBox, { target: { value: 'has:link' } });
+        await fireEvent.input(searchBox, { target: { value: 'recovered' } });
+        expect(
+            await screen.findByRole('link', { name: 'Quest Development Guidelines' })
+        ).not.toBeNull();
+        expect(fetchSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('skips corpus fetch when fetch is unavailable in the runtime', async () => {
+        vi.stubGlobal('fetch', undefined);
+
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+        await fireEvent.input(searchBox, { target: { value: 'playbooks' } });
+
+        expect(screen.getByText('No docs found for "playbooks".')).not.toBeNull();
+
+        await fireEvent.input(searchBox, { target: { value: 'playbooks again' } });
+        expect(screen.getByText('No docs found for "playbooks again".')).not.toBeNull();
     });
 
     it('combines text queries with has:image operator filters', async () => {
