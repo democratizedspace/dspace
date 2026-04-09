@@ -35,13 +35,34 @@ describe('Processes list route contract', () => {
         customListMock.mockReset();
     });
 
-    it('renders built-in summary rows immediately and keeps navigation controls', () => {
-        customListMock.mockResolvedValue([]);
+    it('renders built-in summary rows from initial output before custom merge resolves', () => {
+        let resolveCustomProcesses;
+        const pendingCustomProcesses = new Promise((resolve) => {
+            resolveCustomProcesses = resolve;
+        });
+        customListMock.mockReturnValue(pendingCustomProcesses);
+
         render(Processes, { props: { builtInProcesses } });
 
         expect(screen.getByText('Built In Process')).toBeTruthy();
-        expect(screen.queryByText('Loading processes...')).toBeNull();
-        expect(screen.queryByRole('button', { name: 'Buy required items' })).toBeNull();
+        expect(screen.getByText('Duration')).toBeTruthy();
+        expect(screen.queryByText('No processes found')).toBeNull();
+
+        resolveCustomProcesses([]);
+    });
+
+    it('keeps list route summary-only without detail runtime controls', () => {
+        customListMock.mockResolvedValue([]);
+        render(Processes, { props: { builtInProcesses } });
+
+        for (const control of ['Buy required items', 'Start', 'Pause', 'Resume', 'Collect']) {
+            expect(screen.queryByRole('button', { name: control })).toBeNull();
+        }
+    });
+
+    it('keeps create and manage navigation affordances on the list route', () => {
+        customListMock.mockResolvedValue([]);
+        render(Processes, { props: { builtInProcesses } });
 
         expect(screen.getByRole('link', { name: 'Create a new process' }).getAttribute('href')).toBe(
             '/processes/create'
