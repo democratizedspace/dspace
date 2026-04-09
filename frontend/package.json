@@ -44,7 +44,9 @@
         "check": "npm run lint && npm run format:check",
         "sync": "node scripts/sync-package.js",
         "postinstall": "node scripts/postinstall.js",
-        "playwright:install": "playwright install --with-deps chromium chromium-headless-shell"
+        "playwright:install": "playwright install --with-deps chromium chromium-headless-shell",
+        "perf:quests": "npm run setup-test-env && node scripts/run-quests-perf.mjs",
+        "perf:quests:slowcpu": "npm run setup-test-env && cross-env QUESTS_TTI_CPU_SLOWDOWN=4 node scripts/run-quests-perf.mjs"
     },
     "devDependencies": {
         "@astrojs/svelte": "^6.0.0",
