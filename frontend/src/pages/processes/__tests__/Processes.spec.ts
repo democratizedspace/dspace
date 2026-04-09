@@ -64,9 +64,9 @@ describe('Processes list route contract', () => {
         customListMock.mockResolvedValue([]);
         render(Processes, { props: { builtInProcesses } });
 
-        expect(screen.getByRole('link', { name: 'Create a new process' }).getAttribute('href')).toBe(
-            '/processes/create'
-        );
+        expect(
+            screen.getByRole('link', { name: 'Create a new process' }).getAttribute('href')
+        ).toBe('/processes/create');
         expect(screen.getByRole('link', { name: 'Manage processes' }).getAttribute('href')).toBe(
             '/processes/manage'
         );
