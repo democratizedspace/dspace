@@ -3,7 +3,6 @@ import Page from '../../components/Page.astro';
 import DocsIndex from '../../components/svelte/DocsIndex.svelte';
 import sections from './json/sections.json';
 import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
-import { stripMarkdownToText } from '../../lib/docs/fullTextSearch';
 import { getQuestTreesFromModulePaths, mergeSkillLinks } from '../../utils/docsSkillsIndex.js';
 
 const docModules = await Astro.glob('./md/**/*.md');
@@ -32,7 +31,6 @@ const buildDocIndex = async () => {
                     slug,
                     {
                         features: detectDocFeatures(content),
-                        bodyText: stripMarkdownToText(content),
                     },
                 ];
             } catch (error) {
@@ -42,7 +40,7 @@ const buildDocIndex = async () => {
                     throw error;
                 }
 
-                return [slug, { features: [], bodyText: '' }];
+                return [slug, { features: [] }];
             }
         })
     );
@@ -87,7 +85,6 @@ const questSkillLinks = getQuestTreesFromModulePaths(questTreeModules).map((tree
         const docData = docSearchIndex.get(tree) ?? null;
         const missingDoc = !docData;
         const features = docData?.features ?? [];
-        const bodyText = docData?.bodyText ?? '';
 
         if (missingDoc) {
             console.warn(`Quest tree '${tree}' is missing matching docs page at ${href}`);
@@ -98,7 +95,6 @@ const questSkillLinks = getQuestTreesFromModulePaths(questTreeModules).map((tree
             href,
             keywords: missingDoc ? [tree, 'missing-doc'] : [tree],
             features,
-            bodyText,
         };
     });
 
@@ -119,9 +115,8 @@ const docsSections = sections.map((section) => ({
         const slug = getSlugFromHref(link.href);
         const docData = slug ? docSearchIndex.get(slug) ?? null : null;
         const features = docData?.features ?? [];
-        const bodyText = docData?.bodyText ?? '';
 
-        return { ...link, features, bodyText };
+        return { ...link, features };
     }),
 }));
 

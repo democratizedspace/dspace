@@ -34,7 +34,9 @@ const SECTIONS_FIXTURE = [
 
 describe('DocsIndex component', () => {
     it('renders an accessible search box for docs', () => {
-        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+        render(DocsIndex, {
+            props: { sections: SECTIONS_FIXTURE, loadFullTextCorpus: async () => ({}) },
+        });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
@@ -43,7 +45,9 @@ describe('DocsIndex component', () => {
     });
 
     it('filters links using the search query', async () => {
-        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+        render(DocsIndex, {
+            props: { sections: SECTIONS_FIXTURE, loadFullTextCorpus: async () => ({}) },
+        });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 

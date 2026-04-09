@@ -19,8 +19,23 @@
 
     /** @type {DocsSection[]} */
     export let sections = [];
+    /** @type {() => Promise<Record<string, string>>} */
+    export let loadFullTextCorpus = async () => {
+        const response = await fetch('/docs/full-text-corpus.json');
+
+        if (!response.ok) {
+            throw new Error(`Failed to load docs full-text corpus (${response.status})`);
+        }
+
+        return response.json();
+    };
 
     let query = '';
+    /** @type {Record<string, string> | null} */
+    let fullTextCorpus = null;
+    let fullTextCorpusPromise = null;
+    let isLoadingFullTextCorpus = false;
+    let filteredSections = [];
 
     const normalize = (value) => value.toLowerCase().trim();
 
@@ -39,14 +54,49 @@
         return operators.every((operator) => normalizedFeatures.includes(operator));
     };
 
-    const matchLink = (link, parsedQuery) => {
+    const ensureFullTextCorpus = async () => {
+        if (fullTextCorpus) {
+            return fullTextCorpus;
+        }
+
+        if (!fullTextCorpusPromise) {
+            isLoadingFullTextCorpus = true;
+            fullTextCorpusPromise = loadFullTextCorpus()
+                .then((corpus) => {
+                    fullTextCorpus = corpus ?? {};
+                    return fullTextCorpus;
+                })
+                .catch((error) => {
+                    console.error('Failed to load docs full-text corpus', error);
+                    fullTextCorpus = {};
+                    return fullTextCorpus;
+                })
+                .finally(() => {
+                    isLoadingFullTextCorpus = false;
+                });
+        }
+
+        return fullTextCorpusPromise;
+    };
+
+    const getBodyText = (link, corpus = fullTextCorpus) => {
+        if (typeof link.bodyText === 'string') {
+            return link.bodyText;
+        }
+
+        if (!corpus) {
+            return '';
+        }
+
+        return corpus[normalize(link.href ?? '')] ?? '';
+    };
+
+    const matchLink = (link, parsedQuery, corpus = fullTextCorpus) => {
         if (!parsedQuery.operators.length && !parsedQuery.keywords.length) {
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? []), link.bodyText ?? ''].map(
-            normalize
-        );
+        const searchableValues = [link.title, ...(link.keywords ?? []), getBodyText(link, corpus)].map(normalize);
 
         return (
             matchesWords(parsedQuery.keywords, searchableValues) &&
@@ -55,20 +105,33 @@
     };
 
     $: parsedQuery = parseDocsQuery(query);
-    $: filteredSections = sections
-        .map((section) => ({
-            title: section.title,
-            links: section.links
-                .filter((link) => matchLink(link, parsedQuery))
-                .map((link) => ({
-                    ...link,
-                    snippet:
-                        parsedQuery.keywords.length && !parsedQuery.isHasPredicate
-                            ? findDocSnippet(link, parsedQuery.keywords)
-                            : null,
-                })),
-        }))
-        .filter((section) => section.links.length > 0);
+    $: if (parsedQuery.keywords.length > 0) {
+        void ensureFullTextCorpus();
+    }
+    $: {
+        const corpus = fullTextCorpus;
+
+        filteredSections = sections
+            .map((section) => ({
+                title: section.title,
+                links: section.links
+                    .filter((link) => matchLink(link, parsedQuery, corpus))
+                    .map((link) => ({
+                        ...link,
+                        snippet:
+                            parsedQuery.keywords.length && !parsedQuery.isHasPredicate
+                                ? findDocSnippet(
+                                      {
+                                          ...link,
+                                          bodyText: getBodyText(link, corpus),
+                                      },
+                                      parsedQuery.keywords
+                                  )
+                                : null,
+                    })),
+            }))
+            .filter((section) => section.links.length > 0);
+    }
 
     $: totalResults = filteredSections.reduce((count, section) => count + section.links.length, 0);
 </script>
@@ -83,7 +146,9 @@
         aria-label="Search docs"
     />
 
-    {#if parsedQuery.normalized && totalResults === 0}
+    {#if parsedQuery.keywords.length > 0 && isLoadingFullTextCorpus}
+        <p class="empty-state">Loading docs index…</p>
+    {:else if parsedQuery.normalized && totalResults === 0}
         <p class="empty-state">No docs found for "{query}".</p>
     {:else}
         <div class="docs-grid" data-testid="docs-grid">

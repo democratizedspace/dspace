@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import DocsIndex from '../svelte/DocsIndex.svelte';
 
@@ -19,12 +19,14 @@ const SECTIONS_FIXTURE = [
                 href: '/docs/quest-guidelines',
                 keywords: ['quest'],
                 features: ['link'],
+                bodyText: 'Quest development starts with narrative goals.',
             },
             {
                 title: 'Quest Schema Requirements',
                 href: '/docs/quest-schema',
                 keywords: ['schema', 'quest'],
                 features: ['link', 'image'],
+                bodyText: 'Schema guides include image and link examples.',
             },
         ],
     },
@@ -41,7 +43,9 @@ describe('DocsIndex search operators', () => {
     });
 
     it('filters links using the search query', async () => {
-        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+        render(DocsIndex, {
+            props: { sections: SECTIONS_FIXTURE, loadFullTextCorpus: async () => ({}) },
+        });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
@@ -56,7 +60,8 @@ describe('DocsIndex search operators', () => {
     });
 
     it('applies has:link operator filters', async () => {
-        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+        const loadFullTextCorpus = vi.fn(async () => ({}));
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE, loadFullTextCorpus } });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
@@ -64,10 +69,13 @@ describe('DocsIndex search operators', () => {
 
         expect(screen.getByRole('link', { name: 'About' })).not.toBeNull();
         expect(screen.queryByRole('link', { name: 'Mission' })).toBeNull();
+        expect(loadFullTextCorpus).not.toHaveBeenCalled();
     });
 
     it('combines text queries with has:image operator filters', async () => {
-        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+        render(DocsIndex, {
+            props: { sections: SECTIONS_FIXTURE, loadFullTextCorpus: async () => ({}) },
+        });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
@@ -83,5 +91,33 @@ describe('DocsIndex search operators', () => {
                 name: 'Quest Development Guidelines',
             })
         ).toBeNull();
+    });
+
+    it('loads deferred full-text corpus once for keyword searches and reuses it', async () => {
+        const loadFullTextCorpus = vi.fn(async () => ({
+            '/docs/about': 'The mission includes turbine planning notes.',
+            '/docs/mission': 'Wind turbine output forecasts.',
+        }));
+        const sections = [
+            {
+                title: 'The basics',
+                links: [
+                    { title: 'About', href: '/docs/about', features: [] },
+                    { title: 'Mission', href: '/docs/mission', features: [] },
+                ],
+            },
+        ];
+        render(DocsIndex, { props: { sections, loadFullTextCorpus } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+        await fireEvent.input(searchBox, { target: { value: 'turbine' } });
+
+        expect(loadFullTextCorpus).toHaveBeenCalledTimes(1);
+        expect(await screen.findByRole('link', { name: 'Mission' })).not.toBeNull();
+        expect(await screen.findByTitle(/wind turbine output forecasts/i)).not.toBeNull();
+
+        await fireEvent.input(searchBox, { target: { value: 'wind' } });
+        expect(loadFullTextCorpus).toHaveBeenCalledTimes(1);
+        expect(await screen.findByRole('link', { name: 'Mission' })).not.toBeNull();
     });
 });
