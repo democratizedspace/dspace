@@ -100,7 +100,7 @@ git push origin vX.Y.Z
 - Scope is bugfixes and small improvements only.
 - Prefer direct work on `main` unless stabilization isolation is needed.
 - If risk is elevated, use short-lived `release/v3.0.1` plus RC tags.
-- Validate with patch-focused checklist: [docs/qa/v3.0.0.1.md](./qa/v3.0.0.1.md).
+- Validate with patch-focused checklist: [docs/qa/v3.0.1.md](./qa/v3.0.1.md).
 
 ### Feature release (example: `v3.1.x`)
 
