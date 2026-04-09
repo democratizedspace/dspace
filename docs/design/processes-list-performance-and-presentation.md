@@ -45,7 +45,7 @@ without adding new product functionality or changing gameplay semantics.
 - conditionally renders **Buy required items** CTA,
 - always mounts `<Process ... processId={slug} ... />`.
 
-This is reasonable for `/processes/[processId]` detail route, but expensive/noisy when repeated for
+This is reasonable for `/processes/:processId` detail route, but expensive/noisy when repeated for
 hundreds of list rows.
 
 ### `Process` component is high-interactivity and timer-heavy
@@ -270,15 +270,17 @@ cleanup**, and explicitly defer broader discovery/virtualization work.
    - Introduce a lightweight list-row component for `/processes`.
    - `/processes` must not mount `ProcessView`/`Process` for every row by default.
    - Row should show only summary fields and a clear link/button to detail route
-     (`/processes/[processId]`).
+     (`/processes/:processId`).
 
 2. **Move detail-only actions off list critical path**
    - Keep “Buy required items” and runtime process controls on detail route.
-   - List page remains browsable/scanable and links to detail for action-heavy operations.
+   - List page remains browsable/scannable and links to detail for action-heavy operations.
 
 3. **Render meaningful list content immediately (no full-page loading gate)**
-   - Show built-in list rows as soon as data is available from static import/SSR path.
-   - Custom processes can merge asynchronously without blocking built-in row visibility.
+   - For `v3.0.1`, built-in rows should come from an **Astro SSR-rendered list scaffold on the
+     route**, rather than relying on `<Processes client:load />` alone for first paint.
+   - Client code can then enhance the list and merge custom processes asynchronously without
+     blocking initial built-in row visibility.
 
 4. **Basic density cleanup for readability**
    - Reduce row chrome and vertical bulk.
@@ -321,7 +323,7 @@ cleanup**, and explicitly defer broader discovery/virtualization work.
 
 1. **Slice 1: list/detail separation (core)**
    - Add lightweight `ProcessListRow` (or equivalent) and migrate `/processes` to it.
-   - Keep `/processes/[processId]` using existing detail stack.
+   - Keep `/processes/:processId` using existing detail stack.
 
 2. **Slice 2: visibility + merge path cleanup**
    - Remove full-page mounted loading gate.
@@ -346,13 +348,15 @@ cleanup**, and explicitly defer broader discovery/virtualization work.
 - Optional but recommended measurement harness for implementation PRs:
   - add User Timing marks analogous to `/quests` TTI doc to compare before/after list-visible and
     hydration completion.
+  - add a formal `3.2 /processes TTI performance launch gate` section in `docs/qa/v3.0.1.md`
+    before merging the core implementation slice.
 
 ### Launch gates for `v3.0.1`
 
 1. Patch-scope gate: no new feature semantics.
 2. Functional parity gate:
    - `/processes` remains navigable and shows built-in + custom processes.
-   - `/processes/[processId]` retains current interactive behavior.
+   - `/processes/:processId` retains current interactive behavior.
 3. Stability gate: no SSR/browser API regressions.
 4. QA checklist alignment with `docs/qa/v3.0.1.md` required checks.
 
