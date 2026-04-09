@@ -3,7 +3,7 @@
 Related release docs:
 
 - [Release procedure](./merge-plan.md)
-- [Patch QA checklist (`v3.0.0.1`)](./qa/v3.0.0.1.md)
+- [Patch QA checklist (`v3.0.1`)](./qa/v3.0.1.md)
 - [Feature QA checklist (`v3.1`)](./qa/v3.1.md)
 
 ## Topology and role (current live state)
