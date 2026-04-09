@@ -5,6 +5,7 @@
     import { questFinished, canStartQuest } from '../../../utils/gameState.js';
     import { listCustomQuests } from '../../../utils/customcontent.js';
     import { loadGameState, state, ready } from '../../../utils/gameState/common.js';
+    import { isBrowser } from '../../../utils/ssr.js';
 
     export let quests = [];
     let filteredQuests = [];
@@ -15,6 +16,25 @@
     let normalizedCustomQuests = [];
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
+    let hasMarkedListVisible = false;
+
+    const markPerf = (name) => {
+        if (!isBrowser || typeof performance?.mark !== 'function') {
+            return;
+        }
+        performance.mark(name);
+    };
+
+    const measurePerf = (name, start, end) => {
+        if (!isBrowser || typeof performance?.measure !== 'function') {
+            return;
+        }
+        try {
+            performance.measure(name, start, end);
+        } catch {
+            // no-op
+        }
+    };
 
     const normalizeQuest = (entry) => {
         if (!entry) {
@@ -86,10 +106,28 @@
     };
 
     onMount(async () => {
+        markPerf('quests:list-hydration-start');
         await ready;
         mounted = true;
         const initialState = loadGameState();
         showQuestGraphVisualizer = Boolean(initialState.settings?.showQuestGraphVisualizer);
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        if (!hasMarkedListVisible) {
+            hasMarkedListVisible = true;
+            markPerf('quests:list-visible');
+            markPerf('quests:snapshot-classification-ready');
+            measurePerf(
+                'quests:time-to-list-visible',
+                'quests:list-hydration-start',
+                'quests:list-visible'
+            );
+            measurePerf(
+                'quests:time-to-snapshot-classification',
+                'quests:list-hydration-start',
+                'quests:snapshot-classification-ready'
+            );
+        }
 
         unsubscribeState = state.subscribe((value) => {
             showQuestGraphVisualizer = Boolean(value?.settings?.showQuestGraphVisualizer);
@@ -101,6 +139,13 @@
         } catch (error) {
             console.error('Unable to load custom quests for listing:', error);
             customQuestRecords = [];
+        } finally {
+            markPerf('quests:full-state-reconciliation-complete');
+            measurePerf(
+                'quests:time-to-full-reconciliation',
+                'quests:list-hydration-start',
+                'quests:full-state-reconciliation-complete'
+            );
         }
     });
 
