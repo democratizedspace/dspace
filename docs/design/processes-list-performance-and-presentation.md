@@ -261,8 +261,9 @@ custom processes after initial paint.
 
 ### Summary
 
-Adopt **B (must-have)** + **targeted subset of D (must-have if low-friction)** + **small presentation
-cleanup**, and explicitly defer broader discovery/virtualization work.
+Adopt **B (must-have core)** + **small presentation cleanup (must-have)**. Treat manifest/build-artifact
+work as optional and only pull it into implementation if it is clearly low-risk and needed after core
+changes are validated.
 
 ### Must-have / safest patch-release changes
 
@@ -286,10 +287,12 @@ cleanup**, and explicitly defer broader discovery/virtualization work.
    - Reduce row chrome and vertical bulk.
    - Keep required metadata concise (title, duration, compact IO counts, custom badge if needed).
 
-### Nice-to-have but plausible for patch release
+### Nice-to-have only (optional for implementation PRs)
 
-1. **Lightweight built-in list manifest (if straightforward in existing build flow)**
+1. **Lightweight built-in list manifest (only if clearly needed)**
    - Summary-only shape for list route to reduce payload/prop surface.
+   - Skip for `v3.0.1` if the core list-row split + async custom merge already achieves acceptable
+     behavior and keeps patch risk lower.
 
 2. **Staged hydration for secondary row details**
    - Keep core row text interactive quickly; defer non-critical extras where possible.
@@ -304,6 +307,12 @@ cleanup**, and explicitly defer broader discovery/virtualization work.
 3. Cross-route process data architecture overhaul.
 4. Advanced caching/indexing systems.
 5. Any gameplay semantic changes around requirement purchasing or process controls.
+
+### User-visible contract after implementation
+
+1. `/processes` is summary-first and primarily navigational.
+2. `/processes/:processId` retains full runtime controls, including “Buy required items.”
+3. No gameplay semantics change; this is presentation/performance shaping only.
 
 ---
 
@@ -333,7 +342,7 @@ cleanup**, and explicitly defer broader discovery/virtualization work.
    - Add minimal built-in process list manifest if low-risk.
    - Apply row density/layout polish and ensure no noticeable shifts.
 
-### Verification guidance
+### Verification guidance (anchored to `docs/qa/v3.0.1.md`)
 
 - Required baseline checks (for implementation PRs):
   - `npm run lint`
@@ -345,20 +354,30 @@ cleanup**, and explicitly defer broader discovery/virtualization work.
   - list still includes action buttons (`Create`, `Manage`) and links,
   - custom process merge behavior remains functional,
   - detail route retains buy/start/cancel/collect semantics.
-- Optional but recommended measurement harness for implementation PRs:
-  - add User Timing marks analogous to `/quests` TTI doc to compare before/after list-visible and
-    hydration completion.
-  - add a formal `3.2 /processes TTI performance launch gate` section in `docs/qa/v3.0.1.md`
-    before merging the core implementation slice.
+- Optional follow-up for implementation PRs (not required for this design PR):
+  - add minimal User Timing marks for `/processes` list-visible and hydration-complete checkpoints,
+    then decide if a formal `3.2 /processes TTI performance launch gate` should be added to
+    `docs/qa/v3.0.1.md`.
 
 ### Launch gates for `v3.0.1`
 
-1. Patch-scope gate: no new feature semantics.
-2. Functional parity gate:
+1. Follow `docs/qa/v3.0.1.md` required checks as the primary go/no-go gate for implementation PRs.
+2. Patch-scope gate: no new feature semantics.
+3. Functional parity gate:
    - `/processes` remains navigable and shows built-in + custom processes.
    - `/processes/:processId` retains current interactive behavior.
-3. Stability gate: no SSR/browser API regressions.
-4. QA checklist alignment with `docs/qa/v3.0.1.md` required checks.
+4. Stability gate: no SSR/browser API regressions.
+
+### Regression-risk checklist (implementation PRs)
+
+- `frontend/src/pages/processes/Processes.svelte`: list row wiring, mounted/loading behavior, and
+  built-in/custom merge ordering.
+- `frontend/src/pages/process/[slug]/ProcessView.svelte`: detail-only controls and “Buy required
+  items” remain on detail route.
+- `frontend/src/components/svelte/Process.svelte`: runtime controls/interval behavior unchanged for
+  detail route usage.
+- `frontend/src/utils/customcontent.js` (custom-process merge path): `db.list(ENTITY_TYPES.PROCESS)`
+  behavior remains compatible with list rendering.
 
 ---
 
