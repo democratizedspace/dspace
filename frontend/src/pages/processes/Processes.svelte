@@ -1,11 +1,10 @@
 <script>
     import { onMount } from 'svelte';
     import Chip from '../../components/svelte/Chip.svelte';
-    import generatedProcesses from '../../generated/processes.json';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
     import ProcessListRow from './ProcessListRow.svelte';
 
-    export let builtInProcesses = null;
+    export let builtInProcesses = [];
 
     let customProcesses = [];
 
@@ -16,34 +15,67 @@
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
 
-    const withBuiltinFlag = (process) => ({
-        ...process,
-        custom: Boolean(process?.custom),
-    });
+    const summarizeEntries = (entries = []) => {
+        if (!Array.isArray(entries) || entries.length === 0) {
+            return { types: 0, total: 0 };
+        }
 
-    const defaultBuiltIns = (Array.isArray(generatedProcesses) ? generatedProcesses : []).map(
-        (process) => ({
+        return entries.reduce(
+            (summary, entry) => {
+                const count = Number(entry?.count);
+                const normalizedCount = Number.isFinite(count) ? count : 0;
+                return {
+                    types: summary.types + 1,
+                    total: summary.total + normalizedCount,
+                };
+            },
+            { types: 0, total: 0 }
+        );
+    };
+
+    const toListProcess = (process, fallbackCustom = false) => {
+        const requireSummary = summarizeEntries(process?.requireItems);
+        const consumeSummary = summarizeEntries(process?.consumeItems);
+        const createSummary = summarizeEntries(process?.createItems);
+
+        return {
             ...process,
-            custom: false,
-        })
+            custom: Boolean(process?.custom ?? fallbackCustom),
+            requireItemTypes: Number(process?.requireItemTypes ?? requireSummary.types),
+            requireItemTotal: Number(process?.requireItemTotal ?? requireSummary.total),
+            consumeItemTypes: Number(process?.consumeItemTypes ?? consumeSummary.types),
+            consumeItemTotal: Number(process?.consumeItemTotal ?? consumeSummary.total),
+            createItemTypes: Number(process?.createItemTypes ?? createSummary.types),
+            createItemTotal: Number(process?.createItemTotal ?? createSummary.total),
+        };
+    };
+
+    const dedupeByNormalizedId = (processes) => {
+        const seenIds = new Set();
+        const deduped = [];
+
+        for (const process of processes) {
+            const processId = normalizeProcessId(process?.id);
+            if (processId.length === 0 || seenIds.has(processId)) {
+                continue;
+            }
+            seenIds.add(processId);
+            deduped.push(process);
+        }
+
+        return deduped;
+    };
+
+    $: resolvedBuiltIns = (Array.isArray(builtInProcesses) ? builtInProcesses : []).map((process) =>
+        toListProcess(process, false)
     );
 
-    $: resolvedBuiltIns = (
-        Array.isArray(builtInProcesses) && builtInProcesses.length > 0
-            ? builtInProcesses
-            : defaultBuiltIns
-    ).map(withBuiltinFlag);
-
-    $: allProcesses = [
+    $: allProcesses = dedupeByNormalizedId([
         ...resolvedBuiltIns,
-        ...(Array.isArray(customProcesses) ? customProcesses : []),
-    ]
-        .map(withBuiltinFlag)
-        .filter((process) => normalizeProcessId(process?.id).length > 0)
-        .filter((process, index, list) => {
-            const processId = normalizeProcessId(process?.id);
-            return list.findIndex((entry) => normalizeProcessId(entry?.id) === processId) === index;
-        });
+        ...(Array.isArray(customProcesses) ? customProcesses : []).map((process) =>
+            toListProcess(process, true)
+        ),
+    ]);
 
     onMount(async () => {
         try {

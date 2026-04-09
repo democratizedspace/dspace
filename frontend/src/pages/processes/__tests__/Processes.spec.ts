@@ -6,19 +6,6 @@ const { customListMock } = vi.hoisted(() => ({
     customListMock: vi.fn(),
 }));
 
-vi.mock('../../../generated/processes.json', () => ({
-    default: [
-        {
-            id: 'built-in-1',
-            title: 'Built In Process',
-            duration: '10m',
-            requireItems: [{ id: 'a', count: 1 }],
-            consumeItems: [{ id: 'b', count: 2 }],
-            createItems: [{ id: 'c', count: 3 }],
-        },
-    ],
-}));
-
 vi.mock('../../../utils/customcontent.js', () => ({
     db: {
         list: customListMock,
@@ -29,13 +16,28 @@ vi.mock('../../../utils/customcontent.js', () => ({
 }));
 
 describe('Processes list route contract', () => {
+    const builtInProcesses = [
+        {
+            id: 'built-in-1',
+            title: 'Built In Process',
+            duration: '10m',
+            requireItemTypes: 1,
+            requireItemTotal: 1,
+            consumeItemTypes: 1,
+            consumeItemTotal: 2,
+            createItemTypes: 1,
+            createItemTotal: 3,
+            custom: false,
+        },
+    ];
+
     beforeEach(() => {
         customListMock.mockReset();
     });
 
     it('renders built-in summary rows immediately and keeps navigation controls', () => {
         customListMock.mockResolvedValue([]);
-        render(Processes);
+        render(Processes, { props: { builtInProcesses } });
 
         expect(screen.getByText('Built In Process')).toBeTruthy();
         expect(screen.queryByText('Loading processes...')).toBeNull();
@@ -65,7 +67,7 @@ describe('Processes list route contract', () => {
             },
         ]);
 
-        render(Processes);
+        render(Processes, { props: { builtInProcesses } });
 
         expect(await screen.findByText('Custom Process')).toBeTruthy();
         expect(screen.getByText('Custom')).toBeTruthy();
@@ -73,5 +75,25 @@ describe('Processes list route contract', () => {
         const detailLinks = screen.getAllByRole('link', { name: 'View details' });
         expect(detailLinks.length).toBe(2);
         expect(detailLinks[1].getAttribute('href')).toBe('/processes/custom-1');
+    });
+
+    it('de-dupes by normalized id and keeps built-ins when custom ids collide', async () => {
+        customListMock.mockResolvedValue([
+            {
+                id: ' built-in-1 ',
+                title: 'Overriding Custom Process',
+                duration: '99m',
+                custom: true,
+                requireItems: [],
+                consumeItems: [],
+                createItems: [],
+            },
+        ]);
+
+        render(Processes, { props: { builtInProcesses } });
+
+        await screen.findByText('Built In Process');
+        expect(screen.queryByText('Overriding Custom Process')).toBeNull();
+        expect(screen.getAllByRole('link', { name: 'View details' })).toHaveLength(1);
     });
 });

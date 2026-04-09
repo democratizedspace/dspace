@@ -3,25 +3,15 @@
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
 
-    const summarizeEntries = (entries = []) => {
-        if (!Array.isArray(entries) || entries.length === 0) {
-            return 'none';
-        }
-
-        const totalCount = entries.reduce((sum, entry) => {
-            const count = Number(entry?.count);
-            return sum + (Number.isFinite(count) ? count : 0);
-        }, 0);
-
-        return `${entries.length} item${entries.length === 1 ? '' : 's'} (${totalCount})`;
-    };
+    const formatItemSummary = (types, total) =>
+        Number(types) > 0 ? `${types} item${types === 1 ? '' : 's'} (${total})` : 'none';
 
     $: processId = normalizeProcessId(process?.id);
     $: processTitle = process?.title || processId || 'Untitled process';
     $: duration = process?.duration || '—';
-    $: requireSummary = summarizeEntries(process?.requireItems);
-    $: consumeSummary = summarizeEntries(process?.consumeItems);
-    $: createSummary = summarizeEntries(process?.createItems);
+    $: requireSummary = formatItemSummary(process?.requireItemTypes, process?.requireItemTotal);
+    $: consumeSummary = formatItemSummary(process?.consumeItemTypes, process?.consumeItemTotal);
+    $: createSummary = formatItemSummary(process?.createItemTypes, process?.createItemTotal);
 </script>
 
 <article class="process-row" data-process-id={processId}>

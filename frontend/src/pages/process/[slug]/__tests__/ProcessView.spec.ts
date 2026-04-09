@@ -58,9 +58,18 @@ describe('ProcessView detail controls', () => {
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
         expect(buyButton.getAttribute('disabled')).toBeNull();
 
-        await fireEvent.click(buyButton);
+        vi.useFakeTimers();
+        try {
+            await fireEvent.click(buyButton);
 
-        expect(buyItemsMock).toHaveBeenCalledWith([{ id: 'req-item', quantity: 2, price: 5 }]);
-        expect((await screen.findByRole('status')).textContent).toContain('Added 2 items to inventory');
+            expect(buyItemsMock).toHaveBeenCalledWith([{ id: 'req-item', quantity: 2, price: 5 }]);
+            expect((await screen.findByRole('status')).textContent).toContain(
+                'Added 2 items to inventory'
+            );
+
+            vi.runAllTimers();
+        } finally {
+            vi.useRealTimers();
+        }
     });
 });
