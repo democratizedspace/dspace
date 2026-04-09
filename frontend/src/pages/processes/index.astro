@@ -1,8 +1,60 @@
 ---
 import Page from '../../components/Page.astro';
+import Chip from '../../components/svelte/Chip.svelte';
+import processes from '../../generated/processes.json';
+import ProcessListRow from './ProcessListRow.svelte';
 import Processes from './Processes.svelte';
+
+const builtInProcesses = (Array.isArray(processes) ? processes : []).map((process) => ({
+    ...process,
+    custom: false,
+}));
+
+const actionButtons = [
+    { text: 'Create a new process', href: '/processes/create' },
+    { text: 'Manage processes', href: '/processes/manage' },
+];
 ---
 
 <Page title="Processes" columns="1">
-    <Processes client:load />
+    <div class="processes-page">
+        <div class="action-buttons">
+            {
+                actionButtons.map((button) => (
+                    <Chip text={button.text} href={button.href} inverted={true} />
+                ))
+            }
+        </div>
+
+        <div class="processes-list" data-built-in-count={builtInProcesses.length}>
+            {
+                builtInProcesses.map((process) => (
+                    <ProcessListRow process={process} />
+                ))
+            }
+        </div>
+
+        <Processes client:load />
+    </div>
 </Page>
+
+<style>
+    .processes-page {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .processes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+</style>
