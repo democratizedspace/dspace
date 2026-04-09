@@ -45,6 +45,18 @@ describe('DocsIndex search operators', () => {
         vi.stubGlobal('fetch', vi.fn().mockImplementation(() => createFetchResponse()));
     });
 
+    it('renders default browse view from lightweight payload without fetching corpus', () => {
+        const fetchSpy = globalThis.fetch as unknown as ReturnType<typeof vi.fn>;
+
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        expect(screen.getByRole('link', { name: 'About' })).not.toBeNull();
+        expect(screen.getByRole('link', { name: 'Mission' })).not.toBeNull();
+        expect(screen.getByRole('link', { name: 'Quest Development Guidelines' })).not.toBeNull();
+        expect(screen.getByRole('link', { name: 'Quest Schema Requirements' })).not.toBeNull();
+        expect(fetchSpy).not.toHaveBeenCalled();
+    });
+
     it('renders an accessible search box for docs', () => {
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
@@ -83,13 +95,13 @@ describe('DocsIndex search operators', () => {
         expect(fetchSpy).not.toHaveBeenCalled();
     });
 
-    it('loads deferred corpus on first keyword query and reuses it', async () => {
-        const fetchSpy = vi.fn().mockImplementation(
-            () =>
-                createFetchResponse({
-                    'quest-guidelines': 'Playbooks include turbine setup and validation.',
-                    'quest-schema': 'Schema docs describe quest image metadata.',
-                })
+    it('loads deferred corpus once and reuses it for subsequent keyword searches', async () => {
+        const fetchSpy = vi.fn().mockImplementation(() =>
+            createFetchResponse({
+                'quest-guidelines': 'Playbooks include turbine setup and after-action validation.',
+                'quest-schema':
+                    'Schema docs describe quest image metadata and docssearchsnippettokenwithoutbreakpoints.',
+            })
         );
         vi.stubGlobal('fetch', fetchSpy);
 
@@ -98,16 +110,11 @@ describe('DocsIndex search operators', () => {
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
         await fireEvent.input(searchBox, { target: { value: 'turbine' } });
-
-        expect(
-            await screen.findByRole('link', { name: 'Quest Development Guidelines' })
-        ).not.toBeNull();
+        expect(await screen.findByRole('link', { name: 'Quest Development Guidelines' })).not.toBeNull();
         expect(fetchSpy).toHaveBeenCalledTimes(1);
 
-        await fireEvent.input(searchBox, { target: { value: 'schema' } });
-        expect(
-            await screen.findByRole('link', { name: 'Quest Schema Requirements' })
-        ).not.toBeNull();
+        await fireEvent.input(searchBox, { target: { value: 'after-action' } });
+        expect(await screen.findByRole('link', { name: 'Quest Development Guidelines' })).not.toBeNull();
         expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -136,12 +143,11 @@ describe('DocsIndex search operators', () => {
     });
 
     it('combines text queries with has:image operator filters', async () => {
-        const fetchSpy = vi.fn().mockImplementation(
-            () =>
-                createFetchResponse({
-                    'quest-guidelines': 'Quest development procedures.',
-                    'quest-schema': 'Quest schema includes image requirements.',
-                })
+        const fetchSpy = vi.fn().mockImplementation(() =>
+            createFetchResponse({
+                'quest-guidelines': 'Quest development procedures.',
+                'quest-schema': 'Quest schema includes image requirements.',
+            })
         );
         vi.stubGlobal('fetch', fetchSpy);
 
@@ -182,6 +188,29 @@ describe('DocsIndex search operators', () => {
 
         await waitFor(() => expect(container.querySelector('.doc-snippet')).not.toBeNull());
         const snippet = container.querySelector('.doc-snippet');
-        expect(snippet.textContent?.toLowerCase()).toContain('playbooks');
+        expect(snippet?.textContent?.toLowerCase()).toContain('playbooks');
+    });
+
+    it('preserves long-token snippet behavior after deferred corpus loading', async () => {
+        const longToken = 'docssearchsnippettokenwithoutbreakpoints1234567890abcdefghijklmnopqrstuvwxyz';
+
+        vi.stubGlobal(
+            'fetch',
+            vi.fn().mockImplementation(() =>
+                createFetchResponse({
+                    'quest-schema': `Token coverage ${longToken} remains visible in snippets.`,
+                })
+            )
+        );
+
+        const { container } = render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+        await fireEvent.input(searchBox, { target: { value: 'docssearchsnippettokenwithoutbreakpoints' } });
+
+        await waitFor(() => expect(container.querySelector('.doc-snippet')).not.toBeNull());
+        const snippet = container.querySelector('.doc-snippet');
+        expect(snippet?.getAttribute('title')).toContain(longToken);
+        expect(snippet?.textContent).toContain('docssearchsnippettokenwithoutbreakpoints');
     });
 });
