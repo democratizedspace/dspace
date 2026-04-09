@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/svelte';
+import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import DocsIndex from '../svelte/DocsIndex.svelte';
@@ -40,8 +40,9 @@ const createFetchResponse = (bodyBySlug = {}) =>
 
 describe('DocsIndex search operators', () => {
     beforeEach(() => {
-        vi.unstubAllGlobals();
         vi.restoreAllMocks();
+        vi.unstubAllGlobals();
+        vi.stubGlobal('fetch', vi.fn().mockImplementation(() => createFetchResponse()));
     });
 
     it('renders an accessible search box for docs', () => {
@@ -69,8 +70,7 @@ describe('DocsIndex search operators', () => {
     });
 
     it('applies has:link operator filters', async () => {
-        const fetchSpy = vi.fn().mockImplementation(() => createFetchResponse());
-        vi.stubGlobal('fetch', fetchSpy);
+        const fetchSpy = globalThis.fetch as unknown as ReturnType<typeof vi.fn>;
 
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
@@ -111,6 +111,30 @@ describe('DocsIndex search operators', () => {
         expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
 
+    it('retries corpus loading after an initial fetch failure', async () => {
+        const fetchSpy = vi
+            .fn()
+            .mockRejectedValueOnce(new Error('temporary failure'))
+            .mockImplementationOnce(() =>
+                createFetchResponse({
+                    'quest-guidelines': 'Playbooks include turbine setup and validation.',
+                })
+            );
+        vi.stubGlobal('fetch', fetchSpy);
+
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'playbooksx' } });
+        expect(screen.queryByRole('link', { name: 'Quest Development Guidelines' })).toBeNull();
+
+        await fireEvent.input(searchBox, { target: { value: 'has:link' } });
+        await fireEvent.input(searchBox, { target: { value: 'playbooks' } });
+        expect(await screen.findByRole('link', { name: 'Quest Development Guidelines' })).not.toBeNull();
+        expect(fetchSpy).toHaveBeenCalledTimes(2);
+    });
+
     it('combines text queries with has:image operator filters', async () => {
         const fetchSpy = vi.fn().mockImplementation(
             () =>
@@ -137,5 +161,27 @@ describe('DocsIndex search operators', () => {
                 name: 'Quest Development Guidelines',
             })
         ).toBeNull();
+    });
+
+    it('shows snippets for mixed keyword and has: queries', async () => {
+        vi.stubGlobal(
+            'fetch',
+            vi.fn().mockImplementation(() =>
+                createFetchResponse({
+                    'quest-guidelines':
+                        'Quest playbooks include turbine setup and guided link collections.',
+                })
+            )
+        );
+
+        const { container } = render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'playbooks has:link' } });
+
+        await waitFor(() => expect(container.querySelector('.doc-snippet')).not.toBeNull());
+        const snippet = container.querySelector('.doc-snippet');
+        expect(snippet.textContent?.toLowerCase()).toContain('playbooks');
     });
 });

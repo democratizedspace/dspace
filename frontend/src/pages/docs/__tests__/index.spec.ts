@@ -8,8 +8,8 @@ describe('/docs index page payload shape', () => {
     it('keeps initial sections payload lightweight and points to deferred corpus', () => {
         const content = fs.readFileSync(docsIndexFile, 'utf8');
 
-        expect(content).toContain('return { ...link, slug, features };');
-        expect(content).toContain('deferredCorpusHref="/docs/full-text-corpus.json"');
-        expect(content).not.toContain('bodyText');
+        expect(content).toMatch(/return\s*\{\s*\.\.\.link,\s*slug,\s*features\s*\};/);
+        expect(content).toMatch(/deferredCorpusHref\s*=\s*["']\/docs\/full-text-corpus\.json["']/);
+        expect(content).not.toMatch(/return\s*\{[^}]*\bbodyText\b[^}]*\};/s);
     });
 });

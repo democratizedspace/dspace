@@ -43,12 +43,12 @@
         return operators.every((operator) => normalizedFeatures.includes(operator));
     };
 
-    const getBodyText = (link) => {
-        if (!bodyTextBySlug || !link.slug) {
+    const getBodyText = (link, bodyBySlug = bodyTextBySlug) => {
+        if (!bodyBySlug || !link.slug) {
             return '';
         }
 
-        return bodyTextBySlug[link.slug] ?? '';
+        return bodyBySlug[link.slug] ?? '';
     };
 
     const loadDeferredCorpus = async () => {
@@ -76,8 +76,9 @@
                     return bodyTextBySlug;
                 })
                 .catch(() => {
-                    bodyTextBySlug = {};
-                    return bodyTextBySlug;
+                    bodyTextBySlug = null;
+                    deferredCorpusPromise = null;
+                    return {};
                 })
                 .finally(() => {
                     isLoadingCorpus = false;
@@ -87,12 +88,12 @@
         return deferredCorpusPromise;
     };
 
-    const matchLink = (link, parsedQuery) => {
+    const matchLink = (link, parsedQuery, bodyBySlug) => {
         if (!parsedQuery.operators.length && !parsedQuery.keywords.length) {
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? []), getBodyText(link)].map(
+        const searchableValues = [link.title, ...(link.keywords ?? []), getBodyText(link, bodyBySlug)].map(
             normalize
         );
 
@@ -112,15 +113,15 @@
         .map((section) => ({
             title: section.title,
             links: section.links
-                .filter((link) => matchLink(link, parsedQuery))
+                .filter((link) => matchLink(link, parsedQuery, bodyTextBySlug))
                 .map((link) => ({
                     ...link,
                     snippet:
-                        parsedQuery.keywords.length && !parsedQuery.isHasPredicate
+                        parsedQuery.keywords.length
                             ? findDocSnippet(
                                   {
                                       ...link,
-                                      bodyText: getBodyText(link),
+                                      bodyText: getBodyText(link, bodyTextBySlug),
                                   },
                                   parsedQuery.keywords
                               )
