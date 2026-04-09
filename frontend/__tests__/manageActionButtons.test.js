@@ -6,10 +6,6 @@ import ManageQuests from '../src/pages/quests/svelte/ManageQuests.svelte';
 import ManageProcesses from '../src/pages/processes/svelte/ManageProcesses.svelte';
 import Processes from '../src/pages/processes/Processes.svelte';
 
-vi.mock('../src/pages/process/[slug]/ProcessView.svelte', () => ({
-    default: {},
-}));
-
 vi.mock('../src/generated/processes.json', () => ({
     default: [
         {
