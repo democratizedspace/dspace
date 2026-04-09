@@ -79,9 +79,10 @@ improving perceived responsiveness and readability.
    curated Skills list: `completionist`, `devops`, `ubi`, `welcome`).
 3. A local script reproducing the current payload shape (`sections` + `features` + `bodyText`)
    estimates:
-   - Baseline `sections.json` JSON size: **~5.5 KB**.
-   - Enriched payload JSON size: **~356 KB**.
-   - Added payload from body/features enrichment: **~351 KB**.
+   - Baseline `sections.json` JSON size: **~5.5 KB** (uncompressed).
+   - Enriched payload JSON size: **~356 KB** (uncompressed).
+   - Added payload from body/features enrichment: **~351 KB** (uncompressed).
+   - Note: Brotli/gzip wire size is expected to be significantly lower than these raw JSON figures.
 4. The same analysis shows aggregate stripped body text for listed docs is
    **~346,635 characters**.
 
