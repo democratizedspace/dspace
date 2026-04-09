@@ -93,9 +93,11 @@
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? []), getBodyText(link, bodyBySlug)].map(
-            normalize
-        );
+        const searchableValues = [
+            link.title,
+            ...(link.keywords ?? []),
+            getBodyText(link, bodyBySlug),
+        ].map(normalize);
 
         return (
             matchesWords(parsedQuery.keywords, searchableValues) &&
@@ -116,16 +118,15 @@
                 .filter((link) => matchLink(link, parsedQuery, bodyTextBySlug))
                 .map((link) => ({
                     ...link,
-                    snippet:
-                        parsedQuery.keywords.length
-                            ? findDocSnippet(
-                                  {
-                                      ...link,
-                                      bodyText: getBodyText(link, bodyTextBySlug),
-                                  },
-                                  parsedQuery.keywords
-                              )
-                            : null,
+                    snippet: parsedQuery.keywords.length
+                        ? findDocSnippet(
+                              {
+                                  ...link,
+                                  bodyText: getBodyText(link, bodyTextBySlug),
+                              },
+                              parsedQuery.keywords
+                          )
+                        : null,
                 })),
         }))
         .filter((section) => section.links.length > 0);

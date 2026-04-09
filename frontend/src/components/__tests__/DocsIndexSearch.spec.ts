@@ -42,7 +42,10 @@ describe('DocsIndex search operators', () => {
     beforeEach(() => {
         vi.restoreAllMocks();
         vi.unstubAllGlobals();
-        vi.stubGlobal('fetch', vi.fn().mockImplementation(() => createFetchResponse()));
+        vi.stubGlobal(
+            'fetch',
+            vi.fn().mockImplementation(() => createFetchResponse())
+        );
     });
 
     it('renders default browse view from lightweight payload without fetching corpus', () => {
@@ -110,11 +113,15 @@ describe('DocsIndex search operators', () => {
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
         await fireEvent.input(searchBox, { target: { value: 'turbine' } });
-        expect(await screen.findByRole('link', { name: 'Quest Development Guidelines' })).not.toBeNull();
+        expect(
+            await screen.findByRole('link', { name: 'Quest Development Guidelines' })
+        ).not.toBeNull();
         expect(fetchSpy).toHaveBeenCalledTimes(1);
 
         await fireEvent.input(searchBox, { target: { value: 'after-action' } });
-        expect(await screen.findByRole('link', { name: 'Quest Development Guidelines' })).not.toBeNull();
+        expect(
+            await screen.findByRole('link', { name: 'Quest Development Guidelines' })
+        ).not.toBeNull();
         expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -138,7 +145,9 @@ describe('DocsIndex search operators', () => {
 
         await fireEvent.input(searchBox, { target: { value: 'has:link' } });
         await fireEvent.input(searchBox, { target: { value: 'playbooks' } });
-        expect(await screen.findByRole('link', { name: 'Quest Development Guidelines' })).not.toBeNull();
+        expect(
+            await screen.findByRole('link', { name: 'Quest Development Guidelines' })
+        ).not.toBeNull();
         expect(fetchSpy).toHaveBeenCalledTimes(2);
     });
 
@@ -192,7 +201,8 @@ describe('DocsIndex search operators', () => {
     });
 
     it('preserves long-token snippet behavior after deferred corpus loading', async () => {
-        const longToken = 'docssearchsnippettokenwithoutbreakpoints1234567890abcdefghijklmnopqrstuvwxyz';
+        const longToken =
+            'docssearchsnippettokenwithoutbreakpoints1234567890abcdefghijklmnopqrstuvwxyz';
 
         vi.stubGlobal(
             'fetch',
@@ -206,7 +216,9 @@ describe('DocsIndex search operators', () => {
         const { container } = render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
-        await fireEvent.input(searchBox, { target: { value: 'docssearchsnippettokenwithoutbreakpoints' } });
+        await fireEvent.input(searchBox, {
+            target: { value: 'docssearchsnippettokenwithoutbreakpoints' },
+        });
 
         await waitFor(() => expect(container.querySelector('.doc-snippet')).not.toBeNull());
         const snippet = container.querySelector('.doc-snippet');
