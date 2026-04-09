@@ -1,4 +1,6 @@
 <script>
+    import { findDocSnippet, parseDocsQuery } from '../../lib/docs/fullTextSearch';
+
     /**
      * @typedef {Object} DocLink
      * @property {string} title
@@ -15,14 +17,79 @@
      * @property {DocLink[]} links
      */
 
-    import { findDocSnippet, parseDocsQuery } from '../../lib/docs/fullTextSearch';
-
     /** @type {DocsSection[]} */
     export let sections = [];
 
+    export let fullTextCorpusHref = '/docs/json/full-text-corpus.json';
+
     let query = '';
+    let isLoadingCorpus = false;
+    let isCorpusLoaded = false;
+    let fullTextCorpusBySlug = new Map();
+    let corpusLoadPromise = null;
 
     const normalize = (value) => value.toLowerCase().trim();
+
+    const getSlugFromHref = (href = '') => {
+        const clean = href.split('#')[0].split('?')[0];
+
+        if (!clean.startsWith('/docs/')) {
+            return '';
+        }
+
+        return clean
+            .replace(/^\/docs\//, '')
+            .replace(/\/?$/, '')
+            .toLowerCase();
+    };
+
+    const getBodyText = (link) => {
+        if (typeof link.bodyText === 'string' && link.bodyText) {
+            return link.bodyText;
+        }
+
+        if (!isCorpusLoaded) {
+            return '';
+        }
+
+        const slug = getSlugFromHref(link.href);
+        return slug ? (fullTextCorpusBySlug.get(slug) ?? '') : '';
+    };
+
+    const loadFullTextCorpus = async () => {
+        if (isCorpusLoaded) {
+            return;
+        }
+
+        if (!corpusLoadPromise) {
+            isLoadingCorpus = true;
+            corpusLoadPromise = fetch(fullTextCorpusHref)
+                .then(async (response) => {
+                    if (!response.ok) {
+                        throw new Error(
+                            `Failed to load docs full-text corpus (${response.status})`
+                        );
+                    }
+
+                    const payload = await response.json();
+                    const corpusEntries = Object.entries(payload?.corpus ?? {});
+                    fullTextCorpusBySlug = new Map(
+                        corpusEntries.filter(
+                            ([slug, text]) => typeof slug === 'string' && typeof text === 'string'
+                        )
+                    );
+                    isCorpusLoaded = true;
+                })
+                .catch((error) => {
+                    console.error(error);
+                })
+                .finally(() => {
+                    isLoadingCorpus = false;
+                });
+        }
+
+        await corpusLoadPromise;
+    };
 
     // Note: `keywords` may be an empty array for operator-only queries (e.g. "has:link").
     // In that case, `every()` returns `true` by design, so word matching does not filter out
@@ -44,9 +111,8 @@
             return true;
         }
 
-        const searchableValues = [link.title, ...(link.keywords ?? []), link.bodyText ?? ''].map(
-            normalize
-        );
+        const bodyText = getBodyText(link);
+        const searchableValues = [link.title, ...(link.keywords ?? []), bodyText].map(normalize);
 
         return (
             matchesWords(parsedQuery.keywords, searchableValues) &&
@@ -55,20 +121,36 @@
     };
 
     $: parsedQuery = parseDocsQuery(query);
-    $: filteredSections = sections
-        .map((section) => ({
-            title: section.title,
-            links: section.links
-                .filter((link) => matchLink(link, parsedQuery))
-                .map((link) => ({
-                    ...link,
-                    snippet:
-                        parsedQuery.keywords.length && !parsedQuery.isHasPredicate
-                            ? findDocSnippet(link, parsedQuery.keywords)
-                            : null,
-                })),
-        }))
-        .filter((section) => section.links.length > 0);
+    $: requiresDeferredCorpus = parsedQuery.keywords.length > 0;
+    $: if (requiresDeferredCorpus && !isCorpusLoaded) {
+        void loadFullTextCorpus();
+    }
+
+    $: filteredSections =
+        requiresDeferredCorpus && !isCorpusLoaded
+            ? []
+            : sections
+                  .map((section) => ({
+                      title: section.title,
+                      links: section.links
+                          .filter((link) => matchLink(link, parsedQuery))
+                          .map((link) => {
+                              const bodyText = getBodyText(link);
+
+                              return {
+                                  ...link,
+                                  bodyText,
+                                  snippet:
+                                      parsedQuery.keywords.length && !parsedQuery.isHasPredicate
+                                          ? findDocSnippet(
+                                                { ...link, bodyText },
+                                                parsedQuery.keywords
+                                            )
+                                          : null,
+                              };
+                          }),
+                  }))
+                  .filter((section) => section.links.length > 0);
 
     $: totalResults = filteredSections.reduce((count, section) => count + section.links.length, 0);
 </script>
@@ -83,7 +165,9 @@
         aria-label="Search docs"
     />
 
-    {#if parsedQuery.normalized && totalResults === 0}
+    {#if requiresDeferredCorpus && isLoadingCorpus}
+        <p class="loading-state">Loading docs search index...</p>
+    {:else if parsedQuery.normalized && totalResults === 0}
         <p class="empty-state">No docs found for "{query}".</p>
     {:else}
         <div class="docs-grid" data-testid="docs-grid">
@@ -230,7 +314,8 @@
         opacity: 1;
     }
 
-    .empty-state {
+    .empty-state,
+    .loading-state {
         background-color: #2f5b2f;
         border-radius: 2rem;
         padding: 1.5rem;

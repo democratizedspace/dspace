@@ -3,12 +3,11 @@ import Page from '../../components/Page.astro';
 import DocsIndex from '../../components/svelte/DocsIndex.svelte';
 import sections from './json/sections.json';
 import { detectDocFeatures } from '../../utils/docsSearchFeatures.js';
-import { stripMarkdownToText } from '../../lib/docs/fullTextSearch';
 import { getQuestTreesFromModulePaths, mergeSkillLinks } from '../../utils/docsSkillsIndex.js';
 
 const docModules = await Astro.glob('./md/**/*.md');
 
-const buildDocIndex = async () => {
+const buildDocFeatureIndex = async () => {
     const entries = await Promise.all(
         docModules.map(async (doc) => {
             const slug = String(doc?.frontmatter?.slug ?? '').toLowerCase();
@@ -32,7 +31,6 @@ const buildDocIndex = async () => {
                     slug,
                     {
                         features: detectDocFeatures(content),
-                        bodyText: stripMarkdownToText(content),
                     },
                 ];
             } catch (error) {
@@ -42,7 +40,7 @@ const buildDocIndex = async () => {
                     throw error;
                 }
 
-                return [slug, { features: [], bodyText: '' }];
+                return [slug, { features: [] }];
             }
         })
     );
@@ -51,7 +49,7 @@ const buildDocIndex = async () => {
     return new Map(filteredEntries);
 };
 
-const docSearchIndex = await buildDocIndex();
+const docFeatureIndex = await buildDocFeatureIndex();
 const questTreeModules = Object.keys(import.meta.glob('../quests/json/*/*.json'));
 
 const TITLE_OVERRIDES = {
@@ -83,24 +81,22 @@ const toTitleCase = (value = '') =>
         .join(' ');
 
 const questSkillLinks = getQuestTreesFromModulePaths(questTreeModules).map((tree) => {
-        const href = `/docs/${tree}`;
-        const docData = docSearchIndex.get(tree) ?? null;
-        const missingDoc = !docData;
-        const features = docData?.features ?? [];
-        const bodyText = docData?.bodyText ?? '';
+    const href = `/docs/${tree}`;
+    const docData = docFeatureIndex.get(tree) ?? null;
+    const missingDoc = !docData;
+    const features = docData?.features ?? [];
 
-        if (missingDoc) {
-            console.warn(`Quest tree '${tree}' is missing matching docs page at ${href}`);
-        }
+    if (missingDoc) {
+        console.warn(`Quest tree '${tree}' is missing matching docs page at ${href}`);
+    }
 
-        return {
-            title: TITLE_OVERRIDES[tree] ?? toTitleCase(tree),
-            href,
-            keywords: missingDoc ? [tree, 'missing-doc'] : [tree],
-            features,
-            bodyText,
-        };
-    });
+    return {
+        title: TITLE_OVERRIDES[tree] ?? toTitleCase(tree),
+        href,
+        keywords: missingDoc ? [tree, 'missing-doc'] : [tree],
+        features,
+    };
+});
 
 const getSlugFromHref = (href = '') => {
     const clean = href.split('#')[0].split('?')[0];
@@ -117,11 +113,10 @@ const docsSections = sections.map((section) => ({
     title: section.title,
     links: section.links.map((link) => {
         const slug = getSlugFromHref(link.href);
-        const docData = slug ? docSearchIndex.get(slug) ?? null : null;
+        const docData = slug ? docFeatureIndex.get(slug) ?? null : null;
         const features = docData?.features ?? [];
-        const bodyText = docData?.bodyText ?? '';
 
-        return { ...link, features, bodyText };
+        return { ...link, features };
     }),
 }));
 
@@ -142,7 +137,7 @@ const docsSectionsWithAllSkills = docsSections.map((section) => {
 ---
 
 <Page title="Docs">
-    <DocsIndex sections={docsSectionsWithAllSkills} client:load />
+    <DocsIndex sections={docsSectionsWithAllSkills} fullTextCorpusHref="/docs/json/full-text-corpus.json" client:load />
 </Page>
 
 <style>

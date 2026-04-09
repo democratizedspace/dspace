@@ -7,17 +7,16 @@ const docsIndexFile = path.join(__dirname, '../src/pages/docs/index.astro');
 const docsSectionsFile = path.join(__dirname, '../src/pages/docs/json/sections.json');
 
 describe('docs index.astro', () => {
-    it('renders docs navigation from JSON sections', () => {
+    it('renders docs navigation from JSON sections with deferred full text corpus', () => {
         expect(fs.existsSync(docsSectionsFile)).toBe(true);
 
         const sections = JSON.parse(fs.readFileSync(docsSectionsFile, 'utf8'));
         const content = fs.readFileSync(docsIndexFile, 'utf8');
 
-        // Using import assertions for JSON imports
-        expect(content).toMatch(
-            /import sections from '\.\/json\/sections\.json' assert { type: 'json' }/
-        );
-        expect(content).toMatch(/sections\.map/);
+        expect(content).toMatch(/import sections from '\.\/json\/sections\.json'/);
+        expect(content).toMatch(/fullTextCorpusHref="\/docs\/json\/full-text-corpus\.json"/);
+        expect(content).toMatch(/return \{ \.\.\.link, features \};/);
+        expect(content).not.toMatch(/bodyText/);
 
         const allLinks = sections.flatMap((section) => section.links);
         const codexPromptLink = allLinks.find((link) => link.href === '/docs/prompts-codex');

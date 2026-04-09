@@ -1,9 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import { describe, it, expect } from 'vitest';
+import { afterEach, describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen } from '@testing-library/svelte';
+import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 
 import DocsIndex from '../src/components/svelte/DocsIndex.svelte';
 
@@ -33,6 +33,10 @@ const SECTIONS_FIXTURE = [
 ];
 
 describe('DocsIndex component', () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('renders an accessible search box for docs', () => {
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
@@ -42,18 +46,34 @@ describe('DocsIndex component', () => {
         expect(searchBox).toHaveAttribute('id', 'docs-search-input');
     });
 
-    it('filters links using the search query', async () => {
+    it('filters links using deferred corpus data', async () => {
+        vi.stubGlobal(
+            'fetch',
+            vi.fn().mockResolvedValue({
+                ok: true,
+                json: async () => ({
+                    corpus: {
+                        about: 'General overview',
+                        'quest-guidelines': 'Quest authoring handbook',
+                        'quest-schema': 'Quest schema specs',
+                    },
+                }),
+            })
+        );
+
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
-        await fireEvent.input(searchBox, { target: { value: 'quest' } });
+        await fireEvent.input(searchBox, { target: { value: 'authoring' } });
 
-        expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
-        expect(
-            screen.getByRole('link', {
-                name: 'Quest Development Guidelines',
-            })
-        ).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
+            expect(
+                screen.getByRole('link', {
+                    name: 'Quest Development Guidelines',
+                })
+            ).toBeInTheDocument();
+        });
     });
 });

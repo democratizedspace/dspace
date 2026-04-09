@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
+import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import DocsIndex from '../svelte/DocsIndex.svelte';
 
@@ -30,7 +30,19 @@ const SECTIONS_FIXTURE = [
     },
 ];
 
+const CORPUS_FIXTURE = {
+    corpus: {
+        about: 'Learn about the dSpace mission and long-term roadmap.',
+        'quest-guidelines': 'Quest writing covers drafting and testing guidance.',
+        'quest-schema': 'The quest schema requires start, middle, and completion nodes.',
+    },
+};
+
 describe('DocsIndex search operators', () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('renders an accessible search box for docs', () => {
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
@@ -40,22 +52,36 @@ describe('DocsIndex search operators', () => {
         expect(searchBox.getAttribute('id')).toBe('docs-search-input');
     });
 
-    it('filters links using the search query', async () => {
+    it('filters links using the search query after deferred corpus load', async () => {
+        const fetchMock = vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => CORPUS_FIXTURE,
+        });
+        vi.stubGlobal('fetch', fetchMock);
+
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
-        await fireEvent.input(searchBox, { target: { value: 'quest' } });
+        await fireEvent.input(searchBox, { target: { value: 'drafting' } });
+
+        await waitFor(() => {
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+            expect(
+                screen.getByRole('link', {
+                    name: 'Quest Development Guidelines',
+                })
+            ).not.toBeNull();
+        });
 
         expect(screen.queryByRole('link', { name: 'About' })).toBeNull();
-        expect(
-            screen.getByRole('link', {
-                name: 'Quest Development Guidelines',
-            })
-        ).not.toBeNull();
+        expect(screen.getByText(/writing covers/i)).not.toBeNull();
     });
 
-    it('applies has:link operator filters', async () => {
+    it('applies has:link operator filters without loading deferred corpus', async () => {
+        const fetchMock = vi.fn();
+        vi.stubGlobal('fetch', fetchMock);
+
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
@@ -64,24 +90,59 @@ describe('DocsIndex search operators', () => {
 
         expect(screen.getByRole('link', { name: 'About' })).not.toBeNull();
         expect(screen.queryByRole('link', { name: 'Mission' })).toBeNull();
+        expect(fetchMock).not.toHaveBeenCalled();
     });
 
     it('combines text queries with has:image operator filters', async () => {
+        const fetchMock = vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => CORPUS_FIXTURE,
+        });
+        vi.stubGlobal('fetch', fetchMock);
+
         render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
 
         const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
 
-        await fireEvent.input(searchBox, { target: { value: 'quest has:image' } });
+        await fireEvent.input(searchBox, { target: { value: 'completion has:image' } });
 
-        expect(
-            screen.getByRole('link', {
-                name: 'Quest Schema Requirements',
-            })
-        ).not.toBeNull();
+        await waitFor(() => {
+            expect(
+                screen.getByRole('link', {
+                    name: 'Quest Schema Requirements',
+                })
+            ).not.toBeNull();
+        });
+
         expect(
             screen.queryByRole('link', {
                 name: 'Quest Development Guidelines',
             })
         ).toBeNull();
+    });
+
+    it('reuses deferred corpus across subsequent keyword searches', async () => {
+        const fetchMock = vi.fn().mockResolvedValue({
+            ok: true,
+            json: async () => CORPUS_FIXTURE,
+        });
+        vi.stubGlobal('fetch', fetchMock);
+
+        render(DocsIndex, { props: { sections: SECTIONS_FIXTURE } });
+        const searchBox = screen.getByRole('searchbox', { name: /search docs/i });
+
+        await fireEvent.input(searchBox, { target: { value: 'drafting' } });
+        await waitFor(() => {
+            expect(
+                screen.getByRole('link', { name: 'Quest Development Guidelines' })
+            ).not.toBeNull();
+        });
+
+        await fireEvent.input(searchBox, { target: { value: 'completion' } });
+        await waitFor(() => {
+            expect(screen.getByRole('link', { name: 'Quest Schema Requirements' })).not.toBeNull();
+        });
+
+        expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 });
