@@ -216,26 +216,27 @@ Concept:
 
 ## Recommended approach (`v3.0.1`)
 
-Adopt **Approach B** with conservative scope:
+Adopt **Approach B** with a strict must-have core:
 
-1. **Two-tier docs payload**
-   - Tier 1 (initial): section metadata for browse presentation only.
+1. **Must-have core — two-tier docs payload**
+   - Tier 1 (initial): section metadata for browse presentation only (title/href/keywords/features).
    - Tier 2 (deferred): full-text corpus for snippet/match parity loaded on first non-empty query.
+   - This payload split is the required `v3.0.1` change; it is sufficient for the minimal slice.
 
-2. **Query-time work reduction (without semantic changes)**
+2. **Must-have behavior guardrails**
+   - Keep existing keyword/operator logic identical.
+   - Keep Skills merge/discovery behavior functionally unchanged.
+
+3. **Optional follow-up (not required for minimal `v3.0.1`) — query-time caching**
    - Cache normalized searchable fields per link.
    - Cache snippet tokenization per doc after first use in session.
-   - Keep existing keyword/operator logic identical.
+   - Treat as an optimization add-on after payload split parity is proven.
 
-3. **Patch-safe presentation polish for active search state**
+4. **Optional follow-up (not required for minimal `v3.0.1`) — patch-safe presentation polish**
    - Keep current card/pill structure.
    - Reduce visual noise by tightening snippet typography/spacing and optionally showing snippets only
      when match originates from body text (already mostly true by behavior).
    - Preserve long-token wrapping and 2-line clamp constraints.
-
-4. **Maintain Skills merge path as-is functionally**
-   - Do not redesign merge behavior.
-   - Ensure generated links can still participate in deferred full-text search once index is loaded.
 
 ---
 
@@ -246,6 +247,13 @@ Adopt **Approach B** with conservative scope:
 - It can be landed in small PR slices with strong regression tests.
 - It avoids introducing new infra, ranking logic, or content restructuring.
 
+### Intended user-visible contract after implementation
+
+1. Default `/docs` browse view works without full-text data in initial hydrated props.
+2. Keyword search loads the local full-text corpus on first need, then reuses it for later queries.
+3. `has:` operator behavior remains unchanged (`has:image` / `has:link` semantics unchanged).
+4. No new search features and no ranking changes are introduced in `v3.0.1`.
+
 ---
 
 ## Recommended implementation slices (future PRs)
@@ -255,16 +263,17 @@ Adopt **Approach B** with conservative scope:
    - Keep browse UI and filter behavior unchanged after index load.
    - Add unit/integration coverage for “search before index loaded”.
 
-2. **Slice 2 — Query-time caching (must-have)**
+2. **Slice 2 — Query-time caching (optional follow-up)**
    - Memoize normalized fields and snippet tokenization.
    - Add utility tests ensuring output parity with current behavior.
 
-3. **Slice 3 — Active-search presentation polish (nice-to-have)**
+3. **Slice 3 — Active-search presentation polish (nice-to-have, optional follow-up)**
    - Refine snippet spacing/contrast/line-height in search state only.
    - Verify no overflow regressions in existing long-token tests.
 
-4. **Slice 4 — Build-time index shaping (nice-to-have, optional for `v3.0.1`)**
+4. **Slice 4 — Build-time index shaping/field trimming (optional follow-up, not required for minimal `v3.0.1`)**
    - If needed, trim deferred index fields to minimal shape while preserving parity.
+   - Keep this explicitly out of scope for the minimal payload-split patch unless profiling shows a hard blocker.
 
 ---
 
@@ -272,6 +281,12 @@ Adopt **Approach B** with conservative scope:
 
 ### Pre-merge checks (implementation PRs)
 
+- Likely regression surfaces to inspect first:
+  - `frontend/src/pages/docs/index.astro`
+  - `frontend/src/components/svelte/DocsIndex.svelte`
+  - `frontend/src/lib/docs/fullTextSearch.ts`
+  - `frontend/src/utils/docsSkillsIndex.js`
+  - `frontend/e2e/docs-search.spec.ts`
 - Run existing docs/search suites:
   - `frontend/src/lib/__tests__/fullTextSearch.test.ts`
   - `frontend/src/components/__tests__/DocsIndexSearch.spec.ts`
@@ -323,8 +338,11 @@ A `v3.0.1` implementation is complete when:
    module, given current offline caching behavior?
 2. Do we want a tiny explicit “search index loading…” micro-state on first non-empty query, or rely
    on near-instant load without extra UI?
-3. Should generated Skills links without curated metadata include fallback snippet eligibility only
-   after index load, or always remain title/keyword-only?
+3. **Skills/generated-links expectation for minimal `v3.0.1`:**
+   - Operator-only queries such as `has:image` and `has:link` should be satisfiable from Tier 1
+     light payload alone (no full-text dependency).
+   - Generated Skills links without curated markdown metadata are expected to remain
+     title/keyword-only until deferred corpus data is available.
 4. Which exact performance budgets should be codified for `/docs` in CI (bundle size guard,
    hydration timing smoke check, or both)?
 
