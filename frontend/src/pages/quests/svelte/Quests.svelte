@@ -1,7 +1,7 @@
 <script>
     import Quest from './Quest.svelte';
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { onDestroy, onMount } from 'svelte';
+    import { onDestroy, onMount, tick } from 'svelte';
     import { questFinished, canStartQuest } from '../../../utils/gameState.js';
     import { listCustomQuests } from '../../../utils/customcontent.js';
     import { loadGameState, state, ready } from '../../../utils/gameState/common.js';
@@ -15,6 +15,23 @@
     let normalizedCustomQuests = [];
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
+    let didMarkSnapshotClassificationReady = false;
+    let didMarkFullReconciliation = false;
+    let customQuestsLoadSettled = false;
+
+    const markPerformance = (name) => {
+        if (typeof performance === 'undefined') {
+            return;
+        }
+        performance.mark(name);
+    };
+
+    const measurePerformance = (name, start, end) => {
+        if (typeof performance === 'undefined') {
+            return;
+        }
+        performance.measure(name, start, end);
+    };
 
     const normalizeQuest = (entry) => {
         if (!entry) {
@@ -86,8 +103,16 @@
     };
 
     onMount(async () => {
+        markPerformance('quests:list-hydration-start');
         await ready;
         mounted = true;
+        await tick();
+        markPerformance('quests:list-visible');
+        measurePerformance(
+            'quests:time-to-list-visible',
+            'quests:list-hydration-start',
+            'quests:list-visible'
+        );
         const initialState = loadGameState();
         showQuestGraphVisualizer = Boolean(initialState.settings?.showQuestGraphVisualizer);
 
@@ -98,9 +123,17 @@
         try {
             const questsFromStorage = await listCustomQuests();
             customQuestRecords = Array.isArray(questsFromStorage) ? questsFromStorage : [];
+            markPerformance('quests:custom-quests-merge-complete');
+            measurePerformance(
+                'quests:time-to-custom-merge',
+                'quests:list-hydration-start',
+                'quests:custom-quests-merge-complete'
+            );
         } catch (error) {
             console.error('Unable to load custom quests for listing:', error);
             customQuestRecords = [];
+        } finally {
+            customQuestsLoadSettled = true;
         }
     });
 
@@ -123,6 +156,30 @@
                 filteredQuests.push(quest);
             }
         });
+
+        if (!didMarkSnapshotClassificationReady) {
+            didMarkSnapshotClassificationReady = true;
+            markPerformance('quests:snapshot-classification-ready');
+            measurePerformance(
+                'quests:time-to-snapshot-classification',
+                'quests:list-hydration-start',
+                'quests:snapshot-classification-ready'
+            );
+        }
+
+        if (
+            didMarkSnapshotClassificationReady &&
+            !didMarkFullReconciliation &&
+            customQuestsLoadSettled
+        ) {
+            didMarkFullReconciliation = true;
+            markPerformance('quests:full-state-reconciliation-complete');
+            measurePerformance(
+                'quests:time-to-full-reconciliation',
+                'quests:list-hydration-start',
+                'quests:full-state-reconciliation-complete'
+            );
+        }
     }
 
     // Define buttons for easy expansion
