@@ -6,8 +6,8 @@ const PERF_MARKS = [
     'quests:list-visible',
     'quests:snapshot-classification-ready',
     'quests:full-state-reconciliation-complete',
-    'quests:custom-quests-merge-complete',
 ];
+const OPTIONAL_PERF_MARKS = ['quests:custom-quests-merge-complete'];
 
 test.describe('quests performance marks', () => {
     test.beforeEach(async ({ page }) => {
@@ -35,6 +35,13 @@ test.describe('quests performance marks', () => {
         expect(loadedUrl.pathname).toBe('/quests');
         await expect(page.getByRole('heading', { name: 'Quests', exact: true })).toBeVisible();
         await expect(page.getByTestId('quests-grid')).toBeVisible();
+        await page.waitForFunction(
+            (requiredMarks) =>
+                requiredMarks.every((name) =>
+                    performance.getEntriesByName(name, 'mark').some(Boolean)
+                ),
+            PERF_MARKS
+        );
 
         const metrics = await page.evaluate((marks) => {
             const allMarks = performance.getEntriesByType('mark');
@@ -54,9 +61,9 @@ test.describe('quests performance marks', () => {
             );
 
             return { markTimes, measureTimes };
-        }, PERF_MARKS);
+        }, [...PERF_MARKS, ...OPTIONAL_PERF_MARKS]);
 
-        for (const markName of PERF_MARKS.slice(0, 4)) {
+        for (const markName of PERF_MARKS) {
             expect(metrics.markTimes[markName]).not.toBeNull();
         }
 

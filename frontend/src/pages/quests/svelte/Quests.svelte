@@ -107,21 +107,25 @@
         markPerf('quests:list-hydration-start');
         await ready;
         mounted = true;
-        await tick();
-        await new Promise((resolve) => requestAnimationFrame(resolve));
-        markPerf('quests:list-visible');
-        measurePerf(
-            'quests:time-to-list-visible',
-            'quests:list-hydration-start',
-            'quests:list-visible'
-        );
+        void (async () => {
+            await tick();
+            await new Promise((resolve) => requestAnimationFrame(resolve));
+            markPerf('quests:list-visible');
+            measurePerf(
+                'quests:time-to-list-visible',
+                'quests:list-hydration-start',
+                'quests:list-visible'
+            );
 
-        markPerf('quests:snapshot-classification-ready');
-        measurePerf(
-            'quests:time-to-snapshot-classification',
-            'quests:list-hydration-start',
-            'quests:snapshot-classification-ready'
-        );
+            // Baseline intentionally emits this alongside list-visible because there is
+            // no separate deferred snapshot classification phase in v3.
+            markPerf('quests:snapshot-classification-ready');
+            measurePerf(
+                'quests:time-to-snapshot-classification',
+                'quests:list-hydration-start',
+                'quests:snapshot-classification-ready'
+            );
+        })();
 
         const initialState = loadGameState();
         showQuestGraphVisualizer = Boolean(initialState.settings?.showQuestGraphVisualizer);
