@@ -188,6 +188,7 @@ const TEST_GROUPS = [
     {
         name: 'Quest Tests',
         files: [
+            'quests-tti-metrics.spec.ts',
             'test-quest-chat.spec.ts',
             'custom-quest-chat.spec.ts',
             'tutorial-quest.spec.ts',

@@ -49,25 +49,28 @@ test.describe('quests performance marks', () => {
             PERF_MARKS
         );
 
-        const metrics = await page.evaluate((marks) => {
-            const allMarks = performance.getEntriesByType('mark');
-            const allMeasures = performance.getEntriesByType('measure');
+        const metrics = await page.evaluate(
+            (marks) => {
+                const allMarks = performance.getEntriesByType('mark');
+                const allMeasures = performance.getEntriesByType('measure');
 
-            const markTimes = Object.fromEntries(
-                marks.map((name) => {
-                    const entry = allMarks.find((mark) => mark.name === name);
-                    return [name, entry ? Number(entry.startTime.toFixed(2)) : null];
-                })
-            );
+                const markTimes = Object.fromEntries(
+                    marks.map((name) => {
+                        const entry = allMarks.find((mark) => mark.name === name);
+                        return [name, entry ? Number(entry.startTime.toFixed(2)) : null];
+                    })
+                );
 
-            const measureTimes = Object.fromEntries(
-                allMeasures
-                    .filter((entry) => entry.name.startsWith('quests:time-to-'))
-                    .map((entry) => [entry.name, Number(entry.duration.toFixed(2))])
-            );
+                const measureTimes = Object.fromEntries(
+                    allMeasures
+                        .filter((entry) => entry.name.startsWith('quests:time-to-'))
+                        .map((entry) => [entry.name, Number(entry.duration.toFixed(2))])
+                );
 
-            return { markTimes, measureTimes };
-        }, [...PERF_MARKS, ...OPTIONAL_PERF_MARKS]);
+                return { markTimes, measureTimes };
+            },
+            [...PERF_MARKS, ...OPTIONAL_PERF_MARKS]
+        );
 
         for (const markName of PERF_MARKS) {
             expect(metrics.markTimes[markName]).not.toBeNull();
