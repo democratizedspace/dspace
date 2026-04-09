@@ -1,11 +1,12 @@
 <script>
     import { onMount } from 'svelte';
     import Chip from '../../components/svelte/Chip.svelte';
-    import processes from '../../generated/processes.json';
+    import generatedProcesses from '../../generated/processes.json';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
-    import ProcessView from '../process/[slug]/ProcessView.svelte';
+    import ProcessListRow from './ProcessListRow.svelte';
 
-    let mounted = false;
+    export let builtInProcesses = null;
+
     let customProcesses = [];
 
     const actionButtons = [
@@ -15,8 +16,36 @@
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
 
+    const withBuiltinFlag = (process) => ({
+        ...process,
+        custom: Boolean(process?.custom),
+    });
+
+    const defaultBuiltIns = (Array.isArray(generatedProcesses) ? generatedProcesses : []).map(
+        (process) => ({
+            ...process,
+            custom: false,
+        })
+    );
+
+    $: resolvedBuiltIns = (
+        Array.isArray(builtInProcesses) && builtInProcesses.length > 0
+            ? builtInProcesses
+            : defaultBuiltIns
+    ).map(withBuiltinFlag);
+
+    $: allProcesses = [
+        ...resolvedBuiltIns,
+        ...(Array.isArray(customProcesses) ? customProcesses : []),
+    ]
+        .map(withBuiltinFlag)
+        .filter((process) => normalizeProcessId(process?.id).length > 0)
+        .filter((process, index, list) => {
+            const processId = normalizeProcessId(process?.id);
+            return list.findIndex((entry) => normalizeProcessId(entry?.id) === processId) === index;
+        });
+
     onMount(async () => {
-        mounted = true;
         try {
             customProcesses = (await db.list(ENTITY_TYPES.PROCESS)) ?? [];
         } catch (error) {
@@ -24,41 +53,24 @@
             customProcesses = [];
         }
     });
-
-    const builtInProcesses = (Array.isArray(processes) ? processes : []).map((process) => ({
-        ...process,
-        custom: false,
-    }));
-
-    $: allProcesses = [
-        ...builtInProcesses,
-        ...(Array.isArray(customProcesses) ? customProcesses : []),
-    ].filter(Boolean);
 </script>
 
-<div class="processes-page" data-hydrated={mounted ? 'true' : 'false'}>
+<div class="processes-page">
     <div class="action-buttons">
         {#each actionButtons as button}
             <Chip text={button.text} href={button.href} inverted={true} />
         {/each}
     </div>
 
-    {#if mounted}
-        <div class="processes-list">
-            {#if allProcesses.length === 0}
-                <div class="no-processes">No processes found</div>
-            {:else}
-                {#each allProcesses as process (normalizeProcessId(process?.id))}
-                    {@const processId = normalizeProcessId(process?.id)}
-                    <div class="process-row" data-process-id={processId}>
-                        <ProcessView slug={processId} />
-                    </div>
-                {/each}
-            {/if}
-        </div>
-    {:else}
-        <div class="loading">Loading processes...</div>
-    {/if}
+    <div class="processes-list">
+        {#if allProcesses.length === 0}
+            <div class="no-processes">No processes found</div>
+        {:else}
+            {#each allProcesses as process (normalizeProcessId(process.id))}
+                <ProcessListRow {process} />
+            {/each}
+        {/if}
+    </div>
 </div>
 
 <style>
@@ -78,18 +90,10 @@
     .processes-list {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 12px;
     }
 
-    .process-row {
-        background: #2c5837;
-        border-radius: 12px;
-        border: 2px solid #007006;
-        padding: 15px;
-    }
-
-    .no-processes,
-    .loading {
+    .no-processes {
         text-align: center;
         padding: 40px;
         background: #2c5837;

@@ -1,8 +1,14 @@
 ---
 import Page from '../../components/Page.astro';
+import generatedProcesses from '../../generated/processes.json';
 import Processes from './Processes.svelte';
+
+const builtInProcesses = (Array.isArray(generatedProcesses) ? generatedProcesses : []).map((process) => ({
+    ...process,
+    custom: false,
+}));
 ---
 
 <Page title="Processes" columns="1">
-    <Processes client:load />
+    <Processes builtInProcesses={builtInProcesses} client:load />
 </Page>
