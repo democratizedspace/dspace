@@ -7,6 +7,7 @@ const PERF_MARKS = [
     'quests:snapshot-classification-ready',
     'quests:full-state-reconciliation-complete',
 ];
+// Intentionally not emitted on this baseline; kept for comparable JSON shape vs v3.0.1.
 const OPTIONAL_PERF_MARKS = ['quests:custom-quests-merge-complete'];
 
 test.describe('quests performance marks', () => {
@@ -28,6 +29,11 @@ test.describe('quests performance marks', () => {
 
         const configuredBaseUrl =
             process.env.QUESTS_PERF_BASE_URL || process.env.BASE_URL || baseURL || page.url();
+        if (!/^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(configuredBaseUrl)) {
+            throw new Error(
+                `Invalid quests perf base URL "${configuredBaseUrl}": include scheme (e.g. http:// or https://).`
+            );
+        }
         const configuredOrigin = new URL(configuredBaseUrl).origin;
         const loadedUrl = new URL(page.url());
 

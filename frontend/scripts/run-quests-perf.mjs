@@ -10,11 +10,6 @@ if (requestedBaseUrl) {
     baseEnv.REMOTE_SMOKE = '1';
 }
 
-const cpuSlowdown = (baseEnv.QUESTS_TTI_CPU_SLOWDOWN || '').trim();
-if (cpuSlowdown) {
-    baseEnv.QUESTS_TTI_CPU_SLOWDOWN = cpuSlowdown;
-}
-
 const frontendRoot = fileURLToPath(new URL('..', import.meta.url));
 
 const result = spawnSync(

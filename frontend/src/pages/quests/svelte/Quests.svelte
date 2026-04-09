@@ -14,6 +14,7 @@
     let normalizedBuiltInQuests = [];
     let normalizedCustomQuests = [];
     let showQuestGraphVisualizer = false;
+    let hasMarkedSnapshotClassification = false;
     let unsubscribeState;
 
     const markPerf = (name) => {
@@ -110,20 +111,12 @@
         void (async () => {
             await tick();
             await new Promise((resolve) => requestAnimationFrame(resolve));
+            // Baseline milestone: list has been rendered visibly (distinct from classification work).
             markPerf('quests:list-visible');
             measurePerf(
                 'quests:time-to-list-visible',
                 'quests:list-hydration-start',
                 'quests:list-visible'
-            );
-
-            // Baseline intentionally emits this alongside list-visible because there is
-            // no separate deferred snapshot classification phase in v3.
-            markPerf('quests:snapshot-classification-ready');
-            measurePerf(
-                'quests:time-to-snapshot-classification',
-                'quests:list-hydration-start',
-                'quests:snapshot-classification-ready'
             );
         })();
 
@@ -170,6 +163,15 @@
                 filteredQuests.push(quest);
             }
         });
+        if (!hasMarkedSnapshotClassification) {
+            hasMarkedSnapshotClassification = true;
+            markPerf('quests:snapshot-classification-ready');
+            measurePerf(
+                'quests:time-to-snapshot-classification',
+                'quests:list-hydration-start',
+                'quests:snapshot-classification-ready'
+            );
+        }
     }
 
     // Define buttons for easy expansion
