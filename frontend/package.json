@@ -41,6 +41,8 @@
         "seed:custom": "node scripts/seed-custom-content.js",
         "benchmark:db": "node scripts/db-benchmark.js",
         "loadtest:custom-content": "node scripts/custom-content-load-test.js",
+        "perf:quests": "node scripts/run-quests-perf.mjs",
+        "perf:quests:slowcpu": "node scripts/run-quests-perf.mjs --slowcpu",
         "check": "npm run lint && npm run format:check",
         "sync": "node scripts/sync-package.js",
         "postinstall": "node scripts/postinstall.js",

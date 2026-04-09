@@ -1,7 +1,7 @@
 <script>
     import Quest from './Quest.svelte';
     import Chip from '../../../components/svelte/Chip.svelte';
-    import { onDestroy, onMount } from 'svelte';
+    import { onDestroy, onMount, tick } from 'svelte';
     import { questFinished, canStartQuest } from '../../../utils/gameState.js';
     import { listCustomQuests } from '../../../utils/customcontent.js';
     import { loadGameState, state, ready } from '../../../utils/gameState/common.js';
@@ -15,6 +15,41 @@
     let normalizedCustomQuests = [];
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
+    let hasMarkedListVisible = false;
+    let hasMarkedReconciliation = false;
+    const emittedMarks = new Set();
+    const emittedMeasures = new Set();
+
+    const supportsPerformanceApi = typeof performance !== 'undefined';
+
+    const markOnce = (name) => {
+        if (!supportsPerformanceApi || emittedMarks.has(name)) {
+            return;
+        }
+
+        performance.mark(name);
+        emittedMarks.add(name);
+    };
+
+    const measureOnce = (name, startMark, endMark) => {
+        if (
+            !supportsPerformanceApi ||
+            emittedMeasures.has(name) ||
+            !emittedMarks.has(startMark) ||
+            !emittedMarks.has(endMark)
+        ) {
+            return;
+        }
+
+        performance.measure(name, startMark, endMark);
+        emittedMeasures.add(name);
+    };
+
+    const markListVisible = async () => {
+        await tick();
+        markOnce('quests:list-visible');
+        measureOnce('quests:time-to-list-visible', 'quests:list-hydration-start', 'quests:list-visible');
+    };
 
     const normalizeQuest = (entry) => {
         if (!entry) {
@@ -86,6 +121,7 @@
     };
 
     onMount(async () => {
+        markOnce('quests:list-hydration-start');
         await ready;
         mounted = true;
         const initialState = loadGameState();
@@ -123,6 +159,27 @@
                 filteredQuests.push(quest);
             }
         });
+
+        if (!hasMarkedReconciliation) {
+            hasMarkedReconciliation = true;
+            markOnce('quests:snapshot-classification-ready');
+            measureOnce(
+                'quests:time-to-snapshot-classification',
+                'quests:list-hydration-start',
+                'quests:snapshot-classification-ready'
+            );
+            markOnce('quests:full-state-reconciliation-complete');
+            measureOnce(
+                'quests:time-to-full-reconciliation',
+                'quests:list-hydration-start',
+                'quests:full-state-reconciliation-complete'
+            );
+        }
+    }
+
+    $: if (mounted && !hasMarkedListVisible) {
+        hasMarkedListVisible = true;
+        void markListVisible();
     }
 
     // Define buttons for easy expansion
