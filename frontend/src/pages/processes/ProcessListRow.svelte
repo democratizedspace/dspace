@@ -1,5 +1,6 @@
 <script>
     export let process;
+    export let itemMetadataMap = new Map();
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
 
@@ -12,6 +13,33 @@
     $: requireSummary = formatItemSummary(process?.requireItemTypes, process?.requireItemTotal);
     $: consumeSummary = formatItemSummary(process?.consumeItemTypes, process?.consumeItemTotal);
     $: createSummary = formatItemSummary(process?.createItemTypes, process?.createItemTotal);
+
+    const toPreviewLine = (entry, metadataMap) => {
+        const entryId = normalizeProcessId(entry?.id);
+        const metadata = metadataMap?.get(entryId);
+        const count = Number(entry?.count);
+        const countLabel = Number.isFinite(count) ? count : 0;
+
+        return {
+            id: entryId,
+            countLabel,
+            name: metadata?.name || entry?.name || entryId || 'Unknown item',
+            image: metadata?.image || entry?.image || '/favicon.ico',
+        };
+    };
+
+    const getPreviewLines = (entries = [], metadataMap) =>
+        Array.isArray(entries)
+            ? entries
+                  .map((entry) => ({ ...entry, id: normalizeProcessId(entry?.id) }))
+                  .filter((entry) => entry.id.length > 0)
+                  .slice(0, 2)
+                  .map((entry) => toPreviewLine(entry, metadataMap))
+            : [];
+
+    $: requirePreviewLines = getPreviewLines(process?.requirePreviewEntries, itemMetadataMap);
+    $: consumePreviewLines = getPreviewLines(process?.consumePreviewEntries, itemMetadataMap);
+    $: createPreviewLines = getPreviewLines(process?.createPreviewEntries, itemMetadataMap);
 </script>
 
 <article class="process-row" data-process-id={processId}>
@@ -29,15 +57,51 @@
         </div>
         <div>
             <dt>Requires</dt>
-            <dd>{requireSummary}</dd>
+            <dd>
+                {requireSummary}
+                {#if requirePreviewLines.length > 0}
+                    <ul class="item-preview-list">
+                        {#each requirePreviewLines as item, index (`require-${item.id}-${index}`)}
+                            <li>
+                                <img src={item.image} alt={item.name} />
+                                <span>{item.countLabel}x {item.name}</span>
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+            </dd>
         </div>
         <div>
             <dt>Consumes</dt>
-            <dd>{consumeSummary}</dd>
+            <dd>
+                {consumeSummary}
+                {#if consumePreviewLines.length > 0}
+                    <ul class="item-preview-list">
+                        {#each consumePreviewLines as item, index (`consume-${item.id}-${index}`)}
+                            <li>
+                                <img src={item.image} alt={item.name} />
+                                <span>{item.countLabel}x {item.name}</span>
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+            </dd>
         </div>
         <div>
             <dt>Creates</dt>
-            <dd>{createSummary}</dd>
+            <dd>
+                {createSummary}
+                {#if createPreviewLines.length > 0}
+                    <ul class="item-preview-list">
+                        {#each createPreviewLines as item, index (`create-${item.id}-${index}`)}
+                            <li>
+                                <img src={item.image} alt={item.name} />
+                                <span>{item.countLabel}x {item.name}</span>
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+            </dd>
         </div>
     </dl>
 
@@ -80,8 +144,8 @@
     }
 
     .process-row__summary div {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
         gap: 6px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.15);
         padding-bottom: 2px;
@@ -91,6 +155,31 @@
     dt,
     dd {
         margin: 0;
+    }
+
+    .item-preview-list {
+        grid-column: 1 / -1;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 3px;
+    }
+
+    .item-preview-list li {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.82rem;
+        opacity: 0.95;
+    }
+
+    .item-preview-list img {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
     }
 
     .details-link {

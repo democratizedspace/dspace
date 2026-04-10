@@ -2,8 +2,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
 import Processes from '../Processes.svelte';
 
-const { customListMock } = vi.hoisted(() => ({
+const { customListMock, getItemMapMock } = vi.hoisted(() => ({
     customListMock: vi.fn(),
+    getItemMapMock: vi.fn(),
 }));
 
 vi.mock('../../../utils/customcontent.js', () => ({
@@ -13,6 +14,10 @@ vi.mock('../../../utils/customcontent.js', () => ({
     ENTITY_TYPES: {
         PROCESS: 'process',
     },
+}));
+
+vi.mock('../../../utils/itemResolver.js', () => ({
+    getItemMap: getItemMapMock,
 }));
 
 describe('Processes list route contract', () => {
@@ -33,6 +38,8 @@ describe('Processes list route contract', () => {
 
     beforeEach(() => {
         customListMock.mockReset();
+        getItemMapMock.mockReset();
+        getItemMapMock.mockResolvedValue(new Map());
     });
 
     it('renders built-in summary rows from initial output before custom merge resolves', () => {
@@ -116,5 +123,105 @@ describe('Processes list route contract', () => {
         await screen.findByText('Built In Process');
         expect(screen.queryByText('Overriding Custom Process')).toBeNull();
         expect(screen.getAllByRole('link', { name: 'View details' })).toHaveLength(1);
+    });
+
+    it('hydrates preview lines on the route list and dedupes metadata fetch ids across sections/processes', async () => {
+        customListMock.mockResolvedValue([]);
+        getItemMapMock.mockResolvedValue(
+            new Map([
+                ['shared-item', { id: 'shared-item', name: 'Shared Item', image: '/shared.png' }],
+                ['fuel-cell', { id: 'fuel-cell', name: 'Fuel Cell', image: '/fuel.png' }],
+                ['byproduct', { id: 'byproduct', name: 'Byproduct', image: '/byproduct.png' }],
+            ])
+        );
+
+        const routeShapedBuiltIns = [
+            {
+                id: 'built-in-1',
+                title: 'Built In Process',
+                duration: '10m',
+                requireItemTypes: 1,
+                requireItemTotal: 1,
+                consumeItemTypes: 2,
+                consumeItemTotal: 5,
+                createItemTypes: 1,
+                createItemTotal: 3,
+                requirePreviewEntries: [{ id: 'shared-item', count: 1 }],
+                consumePreviewEntries: [
+                    { id: 'shared-item', count: 2 },
+                    { id: 'fuel-cell', count: 3 },
+                ],
+                createPreviewEntries: [{ id: 'byproduct', count: 3 }],
+                custom: false,
+            },
+            {
+                id: 'built-in-2',
+                title: 'Secondary Process',
+                duration: '3m',
+                requireItemTypes: 1,
+                requireItemTotal: 2,
+                consumeItemTypes: 0,
+                consumeItemTotal: 0,
+                createItemTypes: 1,
+                createItemTotal: 1,
+                requirePreviewEntries: [{ id: 'shared-item', count: 2 }],
+                consumePreviewEntries: [],
+                createPreviewEntries: [{ id: 'fuel-cell', count: 1 }],
+                custom: false,
+            },
+        ];
+
+        render(Processes, { props: { builtInProcesses: routeShapedBuiltIns } });
+
+        expect(screen.getByText('Built In Process')).toBeTruthy();
+        expect(screen.getByText('Secondary Process')).toBeTruthy();
+        expect(screen.getAllByText('1 item (1)').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('1 item (3)').length).toBeGreaterThan(0);
+        expect(screen.queryByRole('button', { name: 'Start' })).toBeNull();
+        expect(screen.getAllByRole('link', { name: 'View details' })).toHaveLength(2);
+
+        expect(await screen.findByText('1x Shared Item')).toBeTruthy();
+        expect(screen.getByText('3x Fuel Cell')).toBeTruthy();
+        expect(screen.getByText('3x Byproduct')).toBeTruthy();
+
+        expect(getItemMapMock).toHaveBeenCalledTimes(1);
+        expect(getItemMapMock).toHaveBeenCalledWith(
+            expect.arrayContaining(['shared-item', 'fuel-cell', 'byproduct'])
+        );
+        expect(new Set(getItemMapMock.mock.calls[0][0]).size).toBe(
+            getItemMapMock.mock.calls[0][0].length
+        );
+    });
+
+    it('falls back to preview entry ids when at least one route-level preview metadata record is missing', async () => {
+        customListMock.mockResolvedValue([]);
+        getItemMapMock.mockResolvedValue(
+            new Map([['known-item', { id: 'known-item', name: 'Known Item', image: '/known.png' }]])
+        );
+
+        render(Processes, {
+            props: {
+                builtInProcesses: [
+                    {
+                        id: 'built-in-fallback',
+                        title: 'Fallback Process',
+                        duration: '8m',
+                        requireItemTypes: 1,
+                        requireItemTotal: 1,
+                        consumeItemTypes: 1,
+                        consumeItemTotal: 2,
+                        createItemTypes: 0,
+                        createItemTotal: 0,
+                        requirePreviewEntries: [{ id: 'known-item', count: 1 }],
+                        consumePreviewEntries: [{ id: 'missing-item', count: 2 }],
+                        createPreviewEntries: [],
+                        custom: false,
+                    },
+                ],
+            },
+        });
+
+        expect(await screen.findByText('1x Known Item')).toBeTruthy();
+        expect(screen.getByText('2x missing-item')).toBeTruthy();
     });
 });

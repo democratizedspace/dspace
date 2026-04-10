@@ -18,6 +18,17 @@ const summarizeEntries = (entries = []) =>
           )
         : { types: 0, total: 0 };
 
+const toPreviewEntries = (entries = [], limit = 2) =>
+    Array.isArray(entries)
+        ? entries
+              .filter((entry) => entry?.id !== undefined && entry?.id !== null)
+              .slice(0, limit)
+              .map((entry) => ({
+                  id: entry?.id,
+                  count: entry?.count,
+              }))
+        : [];
+
 const builtInProcesses = (Array.isArray(generatedProcesses) ? generatedProcesses : []).map((process) => {
     const requireSummary = summarizeEntries(process?.requireItems);
     const consumeSummary = summarizeEntries(process?.consumeItems);
@@ -34,6 +45,9 @@ const builtInProcesses = (Array.isArray(generatedProcesses) ? generatedProcesses
         consumeItemTotal: consumeSummary.total,
         createItemTypes: createSummary.types,
         createItemTotal: createSummary.total,
+        requirePreviewEntries: toPreviewEntries(process?.requireItems),
+        consumePreviewEntries: toPreviewEntries(process?.consumeItems),
+        createPreviewEntries: toPreviewEntries(process?.createItems),
     };
 });
 ---
