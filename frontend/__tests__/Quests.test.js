@@ -175,6 +175,12 @@ describe('Quests Component', () => {
                 route: '//evil.example/phish',
                 custom: true,
             },
+            {
+                id: 'custom/backslash',
+                title: 'Backslash Route Quest',
+                route: '/\\evil.example/phish',
+                custom: true,
+            },
         ]);
 
         try {
@@ -187,6 +193,9 @@ describe('Quests Component', () => {
 
             const externalQuestLink = host.querySelector("a[data-questid='custom/external']");
             expect(externalQuestLink?.getAttribute('href')).toBe('/quests/custom/external');
+
+            const backslashQuestLink = host.querySelector("a[data-questid='custom/backslash']");
+            expect(backslashQuestLink?.getAttribute('href')).toBe('/quests/custom/backslash');
         } finally {
             vi.useRealTimers();
         }

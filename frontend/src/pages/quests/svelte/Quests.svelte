@@ -55,7 +55,7 @@
             return fallbackRoute;
         }
 
-        if (normalizedRoute.startsWith('//')) {
+        if (normalizedRoute.startsWith('//') || normalizedRoute.startsWith('/\\')) {
             return fallbackRoute;
         }
 
