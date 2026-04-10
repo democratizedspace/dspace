@@ -44,6 +44,24 @@
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
 
+    const normalizeQuestRoute = (route, id) => {
+        const fallbackRoute = `/quests/${id}`;
+        if (typeof route !== 'string') {
+            return fallbackRoute;
+        }
+
+        const normalizedRoute = route.trim();
+        if (!normalizedRoute.startsWith('/')) {
+            return fallbackRoute;
+        }
+
+        if (normalizedRoute.startsWith('//') || normalizedRoute.startsWith('/\\')) {
+            return fallbackRoute;
+        }
+
+        return normalizedRoute;
+    };
+
     const normalizeQuest = (questData) => {
         if (!questData || typeof questData !== 'object' || !questData.id) {
             return null;
@@ -66,7 +84,7 @@
             description: typeof questData.description === 'string' ? questData.description : '',
             image: typeof questData.image === 'string' ? questData.image : '',
             requiresQuests,
-            route: typeof questData.route === 'string' ? questData.route : `/quests/${id}`,
+            route: normalizeQuestRoute(questData.route, id),
         };
     };
 

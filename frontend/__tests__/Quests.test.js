@@ -156,4 +156,48 @@ describe('Quests Component', () => {
             vi.useRealTimers();
         }
     });
+
+    it('falls back to safe internal quest routes for custom quests with unsafe hrefs', async () => {
+        vi.useFakeTimers();
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => ({ ...quest, status: 'available' }))
+        );
+        listCustomQuests.mockResolvedValueOnce([
+            {
+                id: 'custom/unsafe',
+                title: 'Unsafe Route Quest',
+                route: 'javascript:alert(1)',
+                custom: true,
+            },
+            {
+                id: 'custom/external',
+                title: 'External Route Quest',
+                route: '//evil.example/phish',
+                custom: true,
+            },
+            {
+                id: 'custom/backslash',
+                title: 'Backslash Route Quest',
+                route: '/\\evil.example/phish',
+                custom: true,
+            },
+        ]);
+
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+
+            const unsafeQuestLink = host.querySelector("a[data-questid='custom/unsafe']");
+            expect(unsafeQuestLink?.getAttribute('href')).toBe('/quests/custom/unsafe');
+
+            const externalQuestLink = host.querySelector("a[data-questid='custom/external']");
+            expect(externalQuestLink?.getAttribute('href')).toBe('/quests/custom/external');
+
+            const backslashQuestLink = host.querySelector("a[data-questid='custom/backslash']");
+            expect(backslashQuestLink?.getAttribute('href')).toBe('/quests/custom/backslash');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
 });
