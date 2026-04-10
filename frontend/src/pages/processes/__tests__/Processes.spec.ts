@@ -6,6 +6,10 @@ const { customListMock } = vi.hoisted(() => ({
     customListMock: vi.fn(),
 }));
 
+const { getItemMapMock } = vi.hoisted(() => ({
+    getItemMapMock: vi.fn(async () => new Map()),
+}));
+
 vi.mock('../../../utils/customcontent.js', () => ({
     db: {
         list: customListMock,
@@ -13,6 +17,10 @@ vi.mock('../../../utils/customcontent.js', () => ({
     ENTITY_TYPES: {
         PROCESS: 'process',
     },
+}));
+
+vi.mock('../../../utils/itemResolver.js', () => ({
+    getItemMap: getItemMapMock,
 }));
 
 describe('Processes list route contract', () => {
@@ -27,12 +35,16 @@ describe('Processes list route contract', () => {
             consumeItemTotal: 2,
             createItemTypes: 1,
             createItemTotal: 3,
+            requireItemsPreview: [{ id: '1', count: 1, name: 'Smart Plug', image: '/smart-plug.png' }],
+            consumeItemsPreview: [{ id: '2', count: 2, name: 'dUSD', image: '/dusd.png' }],
+            createItemsPreview: [{ id: '3', count: 3, name: 'dWatt', image: '/dwatt.png' }],
             custom: false,
         },
     ];
 
     beforeEach(() => {
         customListMock.mockReset();
+        getItemMapMock.mockClear();
     });
 
     it('renders built-in summary rows from initial output before custom merge resolves', () => {
@@ -46,6 +58,9 @@ describe('Processes list route contract', () => {
 
         expect(screen.getByText('Built In Process')).toBeTruthy();
         expect(screen.getByText('Duration')).toBeTruthy();
+        expect(screen.getByText('1x Smart Plug')).toBeTruthy();
+        expect(screen.getByText('2x dUSD')).toBeTruthy();
+        expect(screen.getByText('3x dWatt')).toBeTruthy();
         expect(screen.queryByText('No processes found')).toBeNull();
 
         resolveCustomProcesses([]);

@@ -1,7 +1,19 @@
 ---
 import Page from '../../components/Page.astro';
 import generatedProcesses from '../../generated/processes.json';
+import items from '../inventory/json/items';
 import Processes from './Processes.svelte';
+
+const ITEM_PREVIEW_LIMIT = 3;
+const itemMetadataById = new Map(
+    (Array.isArray(items) ? items : []).map((item) => [
+        String(item?.id ?? ''),
+        {
+            name: item?.name?.trim() || `Item ${item?.id ?? ''}`,
+            image: item?.image || '/favicon.ico',
+        },
+    ])
+);
 
 const summarizeEntries = (entries = []) =>
     Array.isArray(entries)
@@ -18,10 +30,31 @@ const summarizeEntries = (entries = []) =>
           )
         : { types: 0, total: 0 };
 
+const createItemPreview = (entries = []) => {
+    if (!Array.isArray(entries) || entries.length === 0) {
+        return [];
+    }
+
+    return entries.slice(0, ITEM_PREVIEW_LIMIT).map((entry) => {
+        const entryId = String(entry?.id ?? '');
+        const metadata = itemMetadataById.get(entryId);
+
+        return {
+            id: entryId,
+            count: Number(entry?.count ?? 0),
+            name: metadata?.name ?? `Item ${entryId}`,
+            image: metadata?.image ?? '/favicon.ico',
+        };
+    });
+};
+
 const builtInProcesses = (Array.isArray(generatedProcesses) ? generatedProcesses : []).map((process) => {
     const requireSummary = summarizeEntries(process?.requireItems);
     const consumeSummary = summarizeEntries(process?.consumeItems);
     const createSummary = summarizeEntries(process?.createItems);
+    const requireItemsPreview = createItemPreview(process?.requireItems);
+    const consumeItemsPreview = createItemPreview(process?.consumeItems);
+    const createItemsPreview = createItemPreview(process?.createItems);
 
     return {
         id: process?.id,
@@ -34,6 +67,21 @@ const builtInProcesses = (Array.isArray(generatedProcesses) ? generatedProcesses
         consumeItemTotal: consumeSummary.total,
         createItemTypes: createSummary.types,
         createItemTotal: createSummary.total,
+        requireItemsPreview,
+        requireItemsPreviewRemainder: Math.max(
+            (process?.requireItems?.length ?? 0) - requireItemsPreview.length,
+            0
+        ),
+        consumeItemsPreview,
+        consumeItemsPreviewRemainder: Math.max(
+            (process?.consumeItems?.length ?? 0) - consumeItemsPreview.length,
+            0
+        ),
+        createItemsPreview,
+        createItemsPreviewRemainder: Math.max(
+            (process?.createItems?.length ?? 0) - createItemsPreview.length,
+            0
+        ),
     };
 });
 ---
