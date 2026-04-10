@@ -2,8 +2,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
 import Processes from '../Processes.svelte';
 
-const { customListMock } = vi.hoisted(() => ({
+const { customListMock, getItemMapMock } = vi.hoisted(() => ({
     customListMock: vi.fn(),
+    getItemMapMock: vi.fn(),
 }));
 
 vi.mock('../../../utils/customcontent.js', () => ({
@@ -13,6 +14,10 @@ vi.mock('../../../utils/customcontent.js', () => ({
     ENTITY_TYPES: {
         PROCESS: 'process',
     },
+}));
+
+vi.mock('../../../utils/itemResolver.js', () => ({
+    getItemMap: getItemMapMock,
 }));
 
 describe('Processes list route contract', () => {
@@ -33,6 +38,19 @@ describe('Processes list route contract', () => {
 
     beforeEach(() => {
         customListMock.mockReset();
+        getItemMapMock.mockReset();
+        getItemMapMock.mockImplementation(async (ids = []) => {
+            const map = new Map();
+            ids.forEach((id) => {
+                map.set(String(id), {
+                    id: String(id),
+                    name: `Item ${id}`,
+                    image: `/img/${id}.png`,
+                    releaseImage: null,
+                });
+            });
+            return map;
+        });
     });
 
     it('renders built-in summary rows from initial output before custom merge resolves', () => {
@@ -96,6 +114,35 @@ describe('Processes list route contract', () => {
         const detailLinks = screen.getAllByRole('link', { name: 'View details' });
         expect(detailLinks.length).toBe(2);
         expect(detailLinks[1].getAttribute('href')).toBe('/processes/custom-1');
+    });
+
+    it('loads lightweight item previews for requires, consumes, and creates', async () => {
+        customListMock.mockResolvedValue([]);
+        render(Processes, {
+            props: {
+                builtInProcesses: [
+                    {
+                        id: 'preview-process',
+                        title: 'Preview Process',
+                        duration: '5s',
+                        requireItemTypes: 1,
+                        requireItemTotal: 1,
+                        consumeItemTypes: 1,
+                        consumeItemTotal: 2,
+                        createItemTypes: 1,
+                        createItemTotal: 3,
+                        requireItems: [{ id: 'req-item', count: 1 }],
+                        consumeItems: [{ id: 'con-item', count: 2 }],
+                        createItems: [{ id: 'crt-item', count: 3 }],
+                    },
+                ],
+            },
+        });
+
+        expect(await screen.findByText('Item req-item (1)')).toBeTruthy();
+        expect(screen.getByText('Item con-item (2)')).toBeTruthy();
+        expect(screen.getByText('Item crt-item (3)')).toBeTruthy();
+        expect(getItemMapMock).toHaveBeenCalled();
     });
 
     it('de-dupes by normalized id and keeps built-ins when custom ids collide', async () => {
