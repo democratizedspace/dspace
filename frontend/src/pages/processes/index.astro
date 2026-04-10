@@ -1,8 +1,43 @@
 ---
 import Page from '../../components/Page.astro';
+import generatedProcesses from '../../generated/processes.json';
 import Processes from './Processes.svelte';
+
+const summarizeEntries = (entries = []) =>
+    Array.isArray(entries)
+        ? entries.reduce(
+              (summary, entry) => {
+                  const count = Number(entry?.count);
+                  const normalizedCount = Number.isFinite(count) ? count : 0;
+                  return {
+                      types: summary.types + 1,
+                      total: summary.total + normalizedCount,
+                  };
+              },
+              { types: 0, total: 0 }
+          )
+        : { types: 0, total: 0 };
+
+const builtInProcesses = (Array.isArray(generatedProcesses) ? generatedProcesses : []).map((process) => {
+    const requireSummary = summarizeEntries(process?.requireItems);
+    const consumeSummary = summarizeEntries(process?.consumeItems);
+    const createSummary = summarizeEntries(process?.createItems);
+
+    return {
+        id: process?.id,
+        title: process?.title,
+        duration: process?.duration,
+        custom: false,
+        requireItemTypes: requireSummary.types,
+        requireItemTotal: requireSummary.total,
+        consumeItemTypes: consumeSummary.types,
+        consumeItemTotal: consumeSummary.total,
+        createItemTypes: createSummary.types,
+        createItemTotal: createSummary.total,
+    };
+});
 ---
 
 <Page title="Processes" columns="1">
-    <Processes client:load />
+    <Processes builtInProcesses={builtInProcesses} client:load />
 </Page>

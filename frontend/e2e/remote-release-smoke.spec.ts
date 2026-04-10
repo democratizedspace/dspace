@@ -128,24 +128,20 @@ async function runProcessLifecycle(page: Page): Promise<void> {
     await page.goto('/processes');
     await waitForHydration(page);
 
-    const processRow = page
-        .locator('tr, .process-row, [data-testid="process-row"], li, article, section, div')
-        .filter({ has: page.locator('button').filter({ hasText: /start/i }) })
-        .first();
-    const startButton = processRow.locator('button').filter({ hasText: /start/i }).first();
+    const detailLink = page.getByRole('link', { name: /view details/i }).first();
+    await expect(detailLink, 'Expected at least one process details link').toBeVisible();
+    await detailLink.click();
+    await expect(page).toHaveURL(/\/processes\/(?!manage$|create$)[^/]+$/);
+
+    const processContainer = page.locator('.process-view, main').first();
+    const startButton = processContainer.getByRole('button', { name: /start/i }).first();
 
     await expect(startButton, 'Expected at least one process start button').toBeVisible();
     await startButton.click();
 
-    const cancelButton = processRow
-        .locator('button')
-        .filter({ hasText: /cancel/i })
-        .first();
+    const cancelButton = processContainer.getByRole('button', { name: /cancel/i }).first();
 
-    const collectButton = processRow
-        .locator('button')
-        .filter({ hasText: /collect/i })
-        .first();
+    const collectButton = processContainer.getByRole('button', { name: /collect/i }).first();
 
     if (await cancelButton.isVisible({ timeout: 5_000 }).catch(() => false)) {
         await cancelButton.click();
@@ -159,7 +155,7 @@ async function runProcessLifecycle(page: Page): Promise<void> {
         return;
     }
 
-    const activeMarker = processRow.locator(
+    const activeMarker = processContainer.locator(
         '[data-status="active"], .process-running, :text("In progress")'
     );
     const state = await Promise.race([

@@ -1,11 +1,11 @@
 <script>
     import { onMount } from 'svelte';
     import Chip from '../../components/svelte/Chip.svelte';
-    import processes from '../../generated/processes.json';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
-    import ProcessView from '../process/[slug]/ProcessView.svelte';
+    import ProcessListRow from './ProcessListRow.svelte';
 
-    let mounted = false;
+    export let builtInProcesses = [];
+
     let customProcesses = [];
 
     const actionButtons = [
@@ -15,8 +15,69 @@
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
 
+    const summarizeEntries = (entries = []) => {
+        if (!Array.isArray(entries) || entries.length === 0) {
+            return { types: 0, total: 0 };
+        }
+
+        return entries.reduce(
+            (summary, entry) => {
+                const count = Number(entry?.count);
+                const normalizedCount = Number.isFinite(count) ? count : 0;
+                return {
+                    types: summary.types + 1,
+                    total: summary.total + normalizedCount,
+                };
+            },
+            { types: 0, total: 0 }
+        );
+    };
+
+    const toListProcess = (process, fallbackCustom = false) => {
+        const requireSummary = summarizeEntries(process?.requireItems);
+        const consumeSummary = summarizeEntries(process?.consumeItems);
+        const createSummary = summarizeEntries(process?.createItems);
+
+        return {
+            ...process,
+            custom: Boolean(process?.custom ?? fallbackCustom),
+            requireItemTypes: Number(process?.requireItemTypes ?? requireSummary.types),
+            requireItemTotal: Number(process?.requireItemTotal ?? requireSummary.total),
+            consumeItemTypes: Number(process?.consumeItemTypes ?? consumeSummary.types),
+            consumeItemTotal: Number(process?.consumeItemTotal ?? consumeSummary.total),
+            createItemTypes: Number(process?.createItemTypes ?? createSummary.types),
+            createItemTotal: Number(process?.createItemTotal ?? createSummary.total),
+        };
+    };
+
+    const dedupeByNormalizedId = (processes) => {
+        const seenIds = new Set();
+        const deduped = [];
+
+        for (const process of processes) {
+            const processId = normalizeProcessId(process?.id);
+            if (processId.length === 0 || seenIds.has(processId)) {
+                continue;
+            }
+            seenIds.add(processId);
+            deduped.push(process);
+        }
+
+        return deduped;
+    };
+
+    $: resolvedBuiltIns = (Array.isArray(builtInProcesses) ? builtInProcesses : []).map((process) =>
+        toListProcess(process, false)
+    );
+
+    $: allProcesses = dedupeByNormalizedId([
+        ...resolvedBuiltIns,
+        ...(Array.isArray(customProcesses) ? customProcesses : []).map((process) =>
+            toListProcess(process, true)
+        ),
+    ]);
+
     onMount(async () => {
-        mounted = true;
         try {
             customProcesses = (await db.list(ENTITY_TYPES.PROCESS)) ?? [];
         } catch (error) {
@@ -24,41 +85,24 @@
             customProcesses = [];
         }
     });
-
-    const builtInProcesses = (Array.isArray(processes) ? processes : []).map((process) => ({
-        ...process,
-        custom: false,
-    }));
-
-    $: allProcesses = [
-        ...builtInProcesses,
-        ...(Array.isArray(customProcesses) ? customProcesses : []),
-    ].filter(Boolean);
 </script>
 
-<div class="processes-page" data-hydrated={mounted ? 'true' : 'false'}>
+<div class="processes-page">
     <div class="action-buttons">
         {#each actionButtons as button}
             <Chip text={button.text} href={button.href} inverted={true} />
         {/each}
     </div>
 
-    {#if mounted}
-        <div class="processes-list">
-            {#if allProcesses.length === 0}
-                <div class="no-processes">No processes found</div>
-            {:else}
-                {#each allProcesses as process (normalizeProcessId(process?.id))}
-                    {@const processId = normalizeProcessId(process?.id)}
-                    <div class="process-row" data-process-id={processId}>
-                        <ProcessView slug={processId} />
-                    </div>
-                {/each}
-            {/if}
-        </div>
-    {:else}
-        <div class="loading">Loading processes...</div>
-    {/if}
+    <div class="processes-list">
+        {#if allProcesses.length === 0}
+            <div class="no-processes">No processes found</div>
+        {:else}
+            {#each allProcesses as process (normalizeProcessId(process.id))}
+                <ProcessListRow {process} />
+            {/each}
+        {/if}
+    </div>
 </div>
 
 <style>
@@ -78,18 +122,10 @@
     .processes-list {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 12px;
     }
 
-    .process-row {
-        background: #2c5837;
-        border-radius: 12px;
-        border: 2px solid #007006;
-        padding: 15px;
-    }
-
-    .no-processes,
-    .loading {
+    .no-processes {
         text-align: center;
         padding: 40px;
         background: #2c5837;
