@@ -2,11 +2,16 @@
     import { onMount } from 'svelte';
     import Chip from '../../components/svelte/Chip.svelte';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
+    import { getItemMap } from '../../utils/itemResolver.js';
     import ProcessListRow from './ProcessListRow.svelte';
 
     export let builtInProcesses = [];
 
     let customProcesses = [];
+    let itemMetadataMap = new Map();
+    let metadataRequestId = 0;
+    let isMounted = false;
+    let previousMetadataIdsKey = '';
 
     const actionButtons = [
         { text: 'Create a new process', href: '/processes/create' },
@@ -47,8 +52,39 @@
             consumeItemTotal: Number(process?.consumeItemTotal ?? consumeSummary.total),
             createItemTypes: Number(process?.createItemTypes ?? createSummary.types),
             createItemTotal: Number(process?.createItemTotal ?? createSummary.total),
+            requirePreviewEntries: Array.isArray(process?.requirePreviewEntries)
+                ? process.requirePreviewEntries
+                : (process?.requireItems ?? []),
+            consumePreviewEntries: Array.isArray(process?.consumePreviewEntries)
+                ? process.consumePreviewEntries
+                : (process?.consumeItems ?? []),
+            createPreviewEntries: Array.isArray(process?.createPreviewEntries)
+                ? process.createPreviewEntries
+                : (process?.createItems ?? []),
         };
     };
+
+    const releaseMapImages = (map) => {
+        if (!map) {
+            return;
+        }
+        Array.from(map.values()).forEach((item) => item?.releaseImage?.());
+    };
+
+    const getPreviewIds = (processes) =>
+        processes.flatMap((process) =>
+            [
+                ...(process?.requirePreviewEntries ?? []),
+                ...(process?.consumePreviewEntries ?? []),
+                ...(process?.createPreviewEntries ?? []),
+            ]
+                .map((entry) =>
+                    typeof entry?.id === 'string' || typeof entry?.id === 'number'
+                        ? String(entry.id)
+                        : ''
+                )
+                .filter((id) => id.length > 0)
+        );
 
     const dedupeByNormalizedId = (processes) => {
         const seenIds = new Set();
@@ -78,13 +114,42 @@
     ]);
 
     onMount(async () => {
+        isMounted = true;
         try {
             customProcesses = (await db.list(ENTITY_TYPES.PROCESS)) ?? [];
         } catch (error) {
             console.error('Failed to load custom processes:', error);
             customProcesses = [];
         }
+
+        return () => {
+            isMounted = false;
+            releaseMapImages(itemMetadataMap);
+            itemMetadataMap = new Map();
+        };
     });
+
+    $: if (isMounted) {
+        const uniqueIds = Array.from(new Set(getPreviewIds(allProcesses)));
+        const nextMetadataIdsKey = uniqueIds.join('|');
+        if (nextMetadataIdsKey !== previousMetadataIdsKey) {
+            previousMetadataIdsKey = nextMetadataIdsKey;
+            const requestId = ++metadataRequestId;
+            getItemMap(uniqueIds)
+                .then((nextMap) => {
+                    if (!isMounted || requestId !== metadataRequestId) {
+                        releaseMapImages(nextMap);
+                        return;
+                    }
+
+                    releaseMapImages(itemMetadataMap);
+                    itemMetadataMap = nextMap;
+                })
+                .catch((error) => {
+                    console.error('Failed to load process item metadata:', error);
+                });
+        }
+    }
 </script>
 
 <div class="processes-page">
@@ -99,7 +164,7 @@
             <div class="no-processes">No processes found</div>
         {:else}
             {#each allProcesses as process (normalizeProcessId(process.id))}
-                <ProcessListRow {process} />
+                <ProcessListRow {process} {itemMetadataMap} />
             {/each}
         {/if}
     </div>
