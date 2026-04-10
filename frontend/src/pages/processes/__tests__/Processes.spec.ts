@@ -6,6 +6,10 @@ const { customListMock } = vi.hoisted(() => ({
     customListMock: vi.fn(),
 }));
 
+const { getItemMapMock } = vi.hoisted(() => ({
+    getItemMapMock: vi.fn(),
+}));
+
 vi.mock('../../../utils/customcontent.js', () => ({
     db: {
         list: customListMock,
@@ -15,12 +19,19 @@ vi.mock('../../../utils/customcontent.js', () => ({
     },
 }));
 
+vi.mock('../../../utils/itemResolver.js', () => ({
+    getItemMap: getItemMapMock,
+}));
+
 describe('Processes list route contract', () => {
     const builtInProcesses = [
         {
             id: 'built-in-1',
             title: 'Built In Process',
             duration: '10m',
+            requireItems: [{ id: 'plug', count: 1 }],
+            consumeItems: [{ id: 'dusd', count: 0.18 }],
+            createItems: [{ id: 'dwatt', count: 1000 }],
             requireItemTypes: 1,
             requireItemTotal: 1,
             consumeItemTypes: 1,
@@ -33,6 +44,14 @@ describe('Processes list route contract', () => {
 
     beforeEach(() => {
         customListMock.mockReset();
+        getItemMapMock.mockReset();
+        getItemMapMock.mockResolvedValue(
+            new Map([
+                ['plug', { id: 'plug', name: 'Smart Plug', image: '/plug.png' }],
+                ['dusd', { id: 'dusd', name: 'dUSD', image: '/dusd.png' }],
+                ['dwatt', { id: 'dwatt', name: 'dWatt', image: '/dwatt.png' }],
+            ])
+        );
     });
 
     it('renders built-in summary rows from initial output before custom merge resolves', () => {
@@ -73,6 +92,15 @@ describe('Processes list route contract', () => {
         expect(screen.getByRole('link', { name: 'View details' }).getAttribute('href')).toBe(
             '/processes/built-in-1'
         );
+    });
+
+    it('renders lightweight metadata previews for process entries', async () => {
+        customListMock.mockResolvedValue([]);
+        render(Processes, { props: { builtInProcesses } });
+
+        expect(await screen.findByText('1 × Smart Plug')).toBeTruthy();
+        expect(screen.getByText('0.18 × dUSD')).toBeTruthy();
+        expect(screen.getByText('1000 × dWatt')).toBeTruthy();
     });
 
     it('merges custom processes asynchronously after mount', async () => {

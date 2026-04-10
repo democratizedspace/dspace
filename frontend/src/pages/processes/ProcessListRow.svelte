@@ -1,10 +1,32 @@
 <script>
     export let process;
+    export let itemMetadataMap = new Map();
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
 
     const formatItemSummary = (types, total) =>
         Number(types) > 0 ? `${types} item${types === 1 ? '' : 's'} (${total})` : 'none';
+
+    const getPreviewEntries = (entries = [], metadataMap = new Map(), maxItems = 2) => {
+        if (!Array.isArray(entries) || entries.length === 0) {
+            return [];
+        }
+
+        return entries.slice(0, maxItems).map((entry) => {
+            const itemId =
+                typeof entry?.id === 'string' || typeof entry?.id === 'number'
+                    ? String(entry.id)
+                    : '';
+            const metadata = metadataMap?.get(itemId);
+            const count = Number(entry?.count);
+            return {
+                id: itemId,
+                name: metadata?.name || entry?.name || itemId || 'Unknown item',
+                image: metadata?.image || entry?.image || '/favicon.ico',
+                count: Number.isFinite(count) ? count : null,
+            };
+        });
+    };
 
     $: processId = normalizeProcessId(process?.id);
     $: processTitle = process?.title || processId || 'Untitled process';
@@ -12,6 +34,9 @@
     $: requireSummary = formatItemSummary(process?.requireItemTypes, process?.requireItemTotal);
     $: consumeSummary = formatItemSummary(process?.consumeItemTypes, process?.consumeItemTotal);
     $: createSummary = formatItemSummary(process?.createItemTypes, process?.createItemTotal);
+    $: requirePreview = getPreviewEntries(process?.requireItems, itemMetadataMap);
+    $: consumePreview = getPreviewEntries(process?.consumeItems, itemMetadataMap);
+    $: createPreview = getPreviewEntries(process?.createItems, itemMetadataMap);
 </script>
 
 <article class="process-row" data-process-id={processId}>
@@ -40,6 +65,54 @@
             <dd>{createSummary}</dd>
         </div>
     </dl>
+
+    <div class="process-row__details">
+        <div>
+            <h3>Requires</h3>
+            {#if requirePreview.length > 0}
+                <ul>
+                    {#each requirePreview as item}
+                        <li>
+                            <img src={item.image} alt={item.name} loading="lazy" decoding="async" />
+                            <span>{item.count ?? '—'} × {item.name}</span>
+                        </li>
+                    {/each}
+                </ul>
+            {:else}
+                <p>None</p>
+            {/if}
+        </div>
+        <div>
+            <h3>Consumes</h3>
+            {#if consumePreview.length > 0}
+                <ul>
+                    {#each consumePreview as item}
+                        <li>
+                            <img src={item.image} alt={item.name} loading="lazy" decoding="async" />
+                            <span>{item.count ?? '—'} × {item.name}</span>
+                        </li>
+                    {/each}
+                </ul>
+            {:else}
+                <p>None</p>
+            {/if}
+        </div>
+        <div>
+            <h3>Creates</h3>
+            {#if createPreview.length > 0}
+                <ul>
+                    {#each createPreview as item}
+                        <li>
+                            <img src={item.image} alt={item.name} loading="lazy" decoding="async" />
+                            <span>{item.count ?? '—'} × {item.name}</span>
+                        </li>
+                    {/each}
+                </ul>
+            {:else}
+                <p>None</p>
+            {/if}
+        </div>
+    </div>
 
     <a class="details-link" href={`/processes/${processId}`}>View details</a>
 </article>
@@ -97,5 +170,53 @@
         display: inline-block;
         color: #fff;
         text-decoration: underline;
+    }
+
+    .process-row__details {
+        margin: 0 0 10px;
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .process-row__details h3 {
+        margin: 0 0 4px;
+        font-size: 0.8rem;
+        opacity: 0.9;
+    }
+
+    .process-row__details ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .process-row__details li {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+    }
+
+    .process-row__details img {
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        object-fit: cover;
+    }
+
+    .process-row__details p {
+        margin: 0;
+        font-size: 0.78rem;
+        opacity: 0.85;
+    }
+
+    @media (max-width: 700px) {
+        .process-row__details {
+            grid-template-columns: 1fr;
+        }
     }
 </style>

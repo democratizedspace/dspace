@@ -1,12 +1,15 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import Chip from '../../components/svelte/Chip.svelte';
     import { db, ENTITY_TYPES } from '../../utils/customcontent.js';
+    import { getItemMap } from '../../utils/itemResolver.js';
     import ProcessListRow from './ProcessListRow.svelte';
 
     export let builtInProcesses = [];
 
     let customProcesses = [];
+    let itemMetadataMap = new Map();
+    let itemMetadataRequestId = 0;
 
     const actionButtons = [
         { text: 'Create a new process', href: '/processes/create' },
@@ -66,6 +69,46 @@
         return deduped;
     };
 
+    const getProcessItemIds = (process) => {
+        const sections = [
+            ...(Array.isArray(process?.requireItems) ? process.requireItems : []),
+            ...(Array.isArray(process?.consumeItems) ? process.consumeItems : []),
+            ...(Array.isArray(process?.createItems) ? process.createItems : []),
+        ];
+
+        return sections
+            .map((entry) =>
+                typeof entry?.id === 'string' || typeof entry?.id === 'number'
+                    ? String(entry.id)
+                    : null
+            )
+            .filter((id) => Boolean(id));
+    };
+
+    const releaseItemImages = (map) => {
+        if (!map) {
+            return;
+        }
+
+        Array.from(map.values()).forEach((item) => item?.releaseImage?.());
+    };
+
+    const loadItemMetadata = async (processes) => {
+        const requestId = ++itemMetadataRequestId;
+        const uniqueIds = Array.from(
+            new Set(processes.flatMap((process) => getProcessItemIds(process)))
+        );
+        const map = await getItemMap(uniqueIds);
+
+        if (requestId !== itemMetadataRequestId) {
+            releaseItemImages(map);
+            return;
+        }
+
+        releaseItemImages(itemMetadataMap);
+        itemMetadataMap = map;
+    };
+
     $: resolvedBuiltIns = (Array.isArray(builtInProcesses) ? builtInProcesses : []).map((process) =>
         toListProcess(process, false)
     );
@@ -77,6 +120,13 @@
         ),
     ]);
 
+    $: if (allProcesses.length > 0) {
+        loadItemMetadata(allProcesses);
+    } else {
+        releaseItemImages(itemMetadataMap);
+        itemMetadataMap = new Map();
+    }
+
     onMount(async () => {
         try {
             customProcesses = (await db.list(ENTITY_TYPES.PROCESS)) ?? [];
@@ -84,6 +134,11 @@
             console.error('Failed to load custom processes:', error);
             customProcesses = [];
         }
+    });
+
+    onDestroy(() => {
+        itemMetadataRequestId += 1;
+        releaseItemImages(itemMetadataMap);
     });
 </script>
 
@@ -99,7 +154,7 @@
             <div class="no-processes">No processes found</div>
         {:else}
             {#each allProcesses as process (normalizeProcessId(process.id))}
-                <ProcessListRow {process} />
+                <ProcessListRow {process} {itemMetadataMap} />
             {/each}
         {/if}
     </div>
