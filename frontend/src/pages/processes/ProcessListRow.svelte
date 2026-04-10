@@ -14,12 +14,11 @@
     $: consumeSummary = formatItemSummary(process?.consumeItemTypes, process?.consumeItemTotal);
     $: createSummary = formatItemSummary(process?.createItemTypes, process?.createItemTotal);
 
-    const toPreviewLine = (entry) => {
+    const toPreviewLine = (entry, metadataMap) => {
         const entryId = normalizeProcessId(entry?.id);
-        const metadata = itemMetadataMap?.get(entryId);
+        const metadata = metadataMap?.get(entryId);
         const count = Number(entry?.count);
-        const normalizedCount = Number.isFinite(count) ? count : 0;
-        const countLabel = Number.isFinite(count) ? normalizedCount : 0;
+        const countLabel = Number.isFinite(count) ? count : 0;
 
         return {
             id: entryId,
@@ -29,17 +28,18 @@
         };
     };
 
-    const getPreviewLines = (entries = []) =>
+    const getPreviewLines = (entries = [], metadataMap) =>
         Array.isArray(entries)
             ? entries
-                  .filter((entry) => entry?.id !== undefined && entry?.id !== null)
+                  .map((entry) => ({ ...entry, id: normalizeProcessId(entry?.id) }))
+                  .filter((entry) => entry.id.length > 0)
                   .slice(0, 2)
-                  .map((entry) => toPreviewLine(entry))
+                  .map((entry) => toPreviewLine(entry, metadataMap))
             : [];
 
-    $: requirePreviewLines = getPreviewLines(process?.requirePreviewEntries);
-    $: consumePreviewLines = getPreviewLines(process?.consumePreviewEntries);
-    $: createPreviewLines = getPreviewLines(process?.createPreviewEntries);
+    $: requirePreviewLines = getPreviewLines(process?.requirePreviewEntries, itemMetadataMap);
+    $: consumePreviewLines = getPreviewLines(process?.consumePreviewEntries, itemMetadataMap);
+    $: createPreviewLines = getPreviewLines(process?.createPreviewEntries, itemMetadataMap);
 </script>
 
 <article class="process-row" data-process-id={processId}>
@@ -57,45 +57,51 @@
         </div>
         <div>
             <dt>Requires</dt>
-            <dd>{requireSummary}</dd>
-            {#if requirePreviewLines.length > 0}
-                <ul class="item-preview-list">
-                    {#each requirePreviewLines as item, index (`require-${item.id}-${index}`)}
-                        <li>
-                            <img src={item.image} alt={item.name} />
-                            <span>{item.countLabel}x {item.name}</span>
-                        </li>
-                    {/each}
-                </ul>
-            {/if}
+            <dd>
+                {requireSummary}
+                {#if requirePreviewLines.length > 0}
+                    <ul class="item-preview-list">
+                        {#each requirePreviewLines as item, index (`require-${item.id}-${index}`)}
+                            <li>
+                                <img src={item.image} alt={item.name} />
+                                <span>{item.countLabel}x {item.name}</span>
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+            </dd>
         </div>
         <div>
             <dt>Consumes</dt>
-            <dd>{consumeSummary}</dd>
-            {#if consumePreviewLines.length > 0}
-                <ul class="item-preview-list">
-                    {#each consumePreviewLines as item, index (`consume-${item.id}-${index}`)}
-                        <li>
-                            <img src={item.image} alt={item.name} />
-                            <span>{item.countLabel}x {item.name}</span>
-                        </li>
-                    {/each}
-                </ul>
-            {/if}
+            <dd>
+                {consumeSummary}
+                {#if consumePreviewLines.length > 0}
+                    <ul class="item-preview-list">
+                        {#each consumePreviewLines as item, index (`consume-${item.id}-${index}`)}
+                            <li>
+                                <img src={item.image} alt={item.name} />
+                                <span>{item.countLabel}x {item.name}</span>
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+            </dd>
         </div>
         <div>
             <dt>Creates</dt>
-            <dd>{createSummary}</dd>
-            {#if createPreviewLines.length > 0}
-                <ul class="item-preview-list">
-                    {#each createPreviewLines as item, index (`create-${item.id}-${index}`)}
-                        <li>
-                            <img src={item.image} alt={item.name} />
-                            <span>{item.countLabel}x {item.name}</span>
-                        </li>
-                    {/each}
-                </ul>
-            {/if}
+            <dd>
+                {createSummary}
+                {#if createPreviewLines.length > 0}
+                    <ul class="item-preview-list">
+                        {#each createPreviewLines as item, index (`create-${item.id}-${index}`)}
+                            <li>
+                                <img src={item.image} alt={item.name} />
+                                <span>{item.countLabel}x {item.name}</span>
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+            </dd>
         </div>
     </dl>
 

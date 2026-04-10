@@ -21,12 +21,12 @@ const summarizeEntries = (entries = []) =>
 const toPreviewEntries = (entries = [], limit = 2) =>
     Array.isArray(entries)
         ? entries
+              .filter((entry) => entry?.id !== undefined && entry?.id !== null)
               .slice(0, limit)
               .map((entry) => ({
                   id: entry?.id,
                   count: entry?.count,
               }))
-              .filter((entry) => entry.id !== undefined && entry.id !== null)
         : [];
 
 const builtInProcesses = (Array.isArray(generatedProcesses) ? generatedProcesses : []).map((process) => {

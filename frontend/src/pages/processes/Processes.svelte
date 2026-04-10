@@ -71,20 +71,18 @@
         Array.from(map.values()).forEach((item) => item?.releaseImage?.());
     };
 
+    const collectSectionPreviewIds = (entries = []) =>
+        (Array.isArray(entries) ? entries : [])
+            .map((entry) => normalizeProcessId(entry?.id))
+            .filter((id) => id.length > 0)
+            .slice(0, 2);
+
     const getPreviewIds = (processes) =>
-        processes.flatMap((process) =>
-            [
-                ...(process?.requirePreviewEntries ?? []),
-                ...(process?.consumePreviewEntries ?? []),
-                ...(process?.createPreviewEntries ?? []),
-            ]
-                .map((entry) =>
-                    typeof entry?.id === 'string' || typeof entry?.id === 'number'
-                        ? String(entry.id)
-                        : ''
-                )
-                .filter((id) => id.length > 0)
-        );
+        processes.flatMap((process) => [
+            ...collectSectionPreviewIds(process?.requirePreviewEntries),
+            ...collectSectionPreviewIds(process?.consumePreviewEntries),
+            ...collectSectionPreviewIds(process?.createPreviewEntries),
+        ]);
 
     const dedupeByNormalizedId = (processes) => {
         const seenIds = new Set();
@@ -113,14 +111,16 @@
         ),
     ]);
 
-    onMount(async () => {
+    onMount(() => {
         isMounted = true;
-        try {
-            customProcesses = (await db.list(ENTITY_TYPES.PROCESS)) ?? [];
-        } catch (error) {
-            console.error('Failed to load custom processes:', error);
-            customProcesses = [];
-        }
+        (async () => {
+            try {
+                customProcesses = (await db.list(ENTITY_TYPES.PROCESS)) ?? [];
+            } catch (error) {
+                console.error('Failed to load custom processes:', error);
+                customProcesses = [];
+            }
+        })();
 
         return () => {
             isMounted = false;
@@ -133,7 +133,6 @@
         const uniqueIds = Array.from(new Set(getPreviewIds(allProcesses)));
         const nextMetadataIdsKey = uniqueIds.join('|');
         if (nextMetadataIdsKey !== previousMetadataIdsKey) {
-            previousMetadataIdsKey = nextMetadataIdsKey;
             const requestId = ++metadataRequestId;
             getItemMap(uniqueIds)
                 .then((nextMap) => {
@@ -144,9 +143,13 @@
 
                     releaseMapImages(itemMetadataMap);
                     itemMetadataMap = nextMap;
+                    previousMetadataIdsKey = nextMetadataIdsKey;
                 })
                 .catch((error) => {
                     console.error('Failed to load process item metadata:', error);
+                    if (requestId === metadataRequestId) {
+                        previousMetadataIdsKey = '';
+                    }
                 });
         }
     }

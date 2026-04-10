@@ -57,4 +57,37 @@ describe('ProcessListRow', () => {
 
         expect(getByText('2x unknown-item')).toBeTruthy();
     });
+
+    test('updates preview lines when metadata map changes after mount', async () => {
+        const process = {
+            id: 'delayed-metadata',
+            title: 'Delayed metadata',
+            duration: '1s',
+            requireItemTypes: 1,
+            requireItemTotal: 1,
+            consumeItemTypes: 0,
+            consumeItemTotal: 0,
+            createItemTypes: 0,
+            createItemTotal: 0,
+            requirePreviewEntries: [{ id: 'smart-plug', count: 1 }],
+            consumePreviewEntries: [],
+            createPreviewEntries: [],
+        };
+
+        const { getByText, rerender, queryByText } = render(ProcessListRow, {
+            props: { process, itemMetadataMap: new Map() },
+        });
+
+        expect(getByText('1x smart-plug')).toBeTruthy();
+        expect(queryByText('1x Smart Plug')).toBeNull();
+
+        await rerender({
+            process,
+            itemMetadataMap: new Map([
+                ['smart-plug', { id: 'smart-plug', name: 'Smart Plug', image: '/smart-plug.png' }],
+            ]),
+        });
+
+        expect(getByText('1x Smart Plug')).toBeTruthy();
+    });
 });
