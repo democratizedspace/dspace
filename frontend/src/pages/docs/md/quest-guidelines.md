@@ -317,7 +317,7 @@ Before submitting a quest, verify:
 2. Validate the quest JSON with `node scripts/validate-quest.js path/to/quest.json`.
 3. Update the matching Skills-category quest-tree doc (for example, `/docs/composting`) so it
    reflects any new quests or changed gates/rewards.
-4. Submit a [pull request](https://github.com/democratizedspace/dspace/pulls) with your quest JSON
+4. Submit a [pull request](https://github.com/democratizedspace/dspace/compare) with your quest JSON
    file.
 5. Respond to feedback during code review.
 
