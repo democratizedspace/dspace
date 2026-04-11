@@ -63,7 +63,7 @@ Geothermal quests build practical progression through the geothermal skill tree.
     - Dialogue options/steps grantsItems: None
     - Quest-level `grantsItems`: None
 - Rewards:
-    - Solarpunk Award ×1
+    - temperature log CSV ×1
 - Processes used:
     - [arduino-thermistor-read](/processes/arduino-thermistor-read)
         - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1
