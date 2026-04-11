@@ -17,24 +17,56 @@ const DEFAULT_BASE_URL = 'http://127.0.0.1:4173';
 const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
 const SUPPORTED_NODE_RANGE = packageJson?.engines?.node ?? '>=20 <22';
 
-function parseNodeMajorBounds(range) {
-  const lowerMatch = />=\s*(\d+)/.exec(String(range));
-  const upperMatch = /<\s*(\d+)/.exec(String(range));
+function parseNodeMajorRangeClause(clause) {
+  const comparators = String(clause)
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
 
-  if (!lowerMatch || !upperMatch) {
+  if (comparators.length === 0) {
     return null;
   }
 
-  return {
-    minMajor: Number(lowerMatch[1]),
-    maxExclusiveMajor: Number(upperMatch[1]),
-  };
+  const checks = comparators.map((comparator) => {
+    const match = /^(>=|<=|>|<)?(\d+)$/.exec(comparator);
+    if (!match) {
+      return null;
+    }
+
+    const operator = match[1] ?? '=';
+    const major = Number(match[2]);
+
+    return (candidateMajor) => {
+      if (operator === '=') return candidateMajor === major;
+      if (operator === '>=') return candidateMajor >= major;
+      if (operator === '<=') return candidateMajor <= major;
+      if (operator === '>') return candidateMajor > major;
+      return candidateMajor < major;
+    };
+  });
+
+  if (checks.some((check) => check === null)) {
+    return null;
+  }
+
+  return (candidateMajor) => checks.every((check) => check(candidateMajor));
 }
 
-const SUPPORTED_NODE_MAJOR_BOUNDS = parseNodeMajorBounds(SUPPORTED_NODE_RANGE) ?? {
-  minMajor: 20,
-  maxExclusiveMajor: 22,
-};
+function parseNodeMajorRange(range) {
+  const clauses = String(range)
+    .split('||')
+    .map((clause) => parseNodeMajorRangeClause(clause))
+    .filter(Boolean);
+
+  if (clauses.length === 0) {
+    return null;
+  }
+
+  return (candidateMajor) => clauses.some((clause) => clause(candidateMajor));
+}
+
+const SUPPORTED_NODE_MAJOR_RANGE =
+  parseNodeMajorRange(SUPPORTED_NODE_RANGE) ?? ((major) => major >= 20 && major < 22);
 
 const require = createRequire(import.meta.url);
 
@@ -55,10 +87,7 @@ export function isSupportedNodeVersion(version = process.versions.node) {
   }
 
   const major = Number(majorMatch[1]);
-  return (
-    major >= SUPPORTED_NODE_MAJOR_BOUNDS.minMajor &&
-    major < SUPPORTED_NODE_MAJOR_BOUNDS.maxExclusiveMajor
-  );
+  return SUPPORTED_NODE_MAJOR_RANGE(major);
 }
 
 export function getUnsupportedNodeVersionMessage(version = process.versions.node) {

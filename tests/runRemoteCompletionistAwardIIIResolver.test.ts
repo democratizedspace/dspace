@@ -64,7 +64,7 @@ describe('Node version preflight', () => {
     const message = getUnsupportedNodeVersionMessage('18.18.0');
     expect(message).toContain('[qa:remote-completionist-award-iii]');
     expect(message).toContain('18.18.0');
-    expect(message).toContain('>=20 <22');
+    expect(message).toContain('20 || >=22');
     expect(message).toContain('nvm use');
     expect(message).toContain('pnpm install');
   });
@@ -72,8 +72,8 @@ describe('Node version preflight', () => {
   it('accepts supported versions in the declared engine range', () => {
     expect(isSupportedNodeVersion('19.9.0')).toBe(false);
     expect(isSupportedNodeVersion('20.0.0')).toBe(true);
-    expect(isSupportedNodeVersion('21.9.0')).toBe(true);
-    expect(isSupportedNodeVersion('22.0.0')).toBe(false);
+    expect(isSupportedNodeVersion('21.9.0')).toBe(false);
+    expect(isSupportedNodeVersion('22.0.0')).toBe(true);
   });
 
   it('rejects malformed versions and accepts optional v-prefix versions', () => {
