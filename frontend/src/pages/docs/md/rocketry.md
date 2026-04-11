@@ -118,7 +118,6 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - `requiresQuests`: `rocketry/parachute`
 - Dialogue `requiresItems` gates:
     - `supplies` → "All core gear is staged." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1, rocket launch checklist ×1
-    - `wind-evidence` → "Both readings are documented. Time to interpret." — wind log ×1
     - `arm` → "Launch complete and post-flight check passed." — damaged model rocket ×1
 - Troubleshooting/safety branches:
     - `range-walk` and `scrub` paths can halt unsafe range conditions before arming.
