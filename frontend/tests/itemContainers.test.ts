@@ -81,7 +81,6 @@ describe('itemContainers helpers', () => {
         expect(removeAllStoredItems(jarId, dusdId)).toBe(0);
     });
 
-
     test('normalizes malformed persisted counts to non-negative finite values', () => {
         mockGameState.itemContainerCounts[jarId] = {
             [dusdId]: Number.NaN,
