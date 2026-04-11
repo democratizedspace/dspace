@@ -55,6 +55,7 @@ describe('itemContainers helpers', () => {
     test('rejects invalid container-item pairs and invalid counts', () => {
         expect(canStoreItemInContainer('', dusdId)).toBe(false);
         expect(canStoreItemInContainer(jarId, '')).toBe(false);
+        expect(canStoreItemInContainer('missing-container', dusdId)).toBe(false);
         expect(canStoreItemInContainer(jarId, 'invalid-item')).toBe(false);
         expect(addStoredItems(jarId, 'invalid-item', 5)).toBe(false);
         expect(addStoredItems(jarId, dusdId, -1)).toBe(false);
@@ -78,5 +79,14 @@ describe('itemContainers helpers', () => {
         expect(removeAllStoredItems(jarId, dusdId)).toBe(12.5);
         expect(getStoredItemCount(jarId, dusdId)).toBe(0);
         expect(removeAllStoredItems(jarId, dusdId)).toBe(0);
+    });
+
+    test('does not expose invalid stored item ids from persisted state', () => {
+        mockGameState.itemContainerCounts[jarId] = {
+            [dusdId]: 4,
+            'unexpected-item-id': 10,
+        };
+
+        expect(getStoredItemCounts(jarId)).toEqual({ [dusdId]: 4 });
     });
 });
