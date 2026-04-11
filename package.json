@@ -99,13 +99,13 @@
   "overrides": {
     "esbuild": "0.25.8",
     "@esbuild/linux-x64": "0.25.8",
-    "glob": "9.3.5"
+    "glob": "^13.0.6"
   },
   "pnpm": {
     "overrides": {
       "esbuild": "0.25.8",
       "@esbuild/linux-x64": "0.25.8",
-      "glob": "9.3.5"
+      "glob": "^13.0.6"
     }
   },
   "license": "MIT"
