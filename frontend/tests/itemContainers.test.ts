@@ -81,6 +81,24 @@ describe('itemContainers helpers', () => {
         expect(removeAllStoredItems(jarId, dusdId)).toBe(0);
     });
 
+
+    test('normalizes malformed persisted counts to non-negative finite values', () => {
+        mockGameState.itemContainerCounts[jarId] = {
+            [dusdId]: Number.NaN,
+        };
+        expect(getStoredItemCounts(jarId)).toEqual({ [dusdId]: 0 });
+
+        mockGameState.itemContainerCounts[jarId] = {
+            [dusdId]: -3,
+        };
+        expect(getStoredItemCounts(jarId)).toEqual({ [dusdId]: 0 });
+
+        mockGameState.itemContainerCounts[jarId] = {
+            [dusdId]: Infinity,
+        };
+        expect(getStoredItemCounts(jarId)).toEqual({ [dusdId]: 0 });
+    });
+
     test('does not expose invalid stored item ids from persisted state', () => {
         mockGameState.itemContainerCounts[jarId] = {
             [dusdId]: 4,
