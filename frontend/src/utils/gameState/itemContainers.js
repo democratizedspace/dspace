@@ -38,12 +38,7 @@ const normalizePositiveCount = (count) => {
 
 const getContainerItem = (containerItemId) => getItemMap().get(containerItemId);
 
-const getAllowedStoredItemIds = (containerItemId) => {
-    if (!isValidId(containerItemId)) {
-        return [];
-    }
-
-    const containerItem = getContainerItem(containerItemId);
+const getAllowedStoredItemIdsFromContainerItem = (containerItem) => {
     if (
         !containerItem ||
         typeof containerItem.itemCounts !== 'object' ||
@@ -53,6 +48,14 @@ const getAllowedStoredItemIds = (containerItemId) => {
     }
 
     return Object.keys(containerItem.itemCounts);
+};
+
+const getAllowedStoredItemIds = (containerItemId) => {
+    if (!isValidId(containerItemId)) {
+        return [];
+    }
+
+    return getAllowedStoredItemIdsFromContainerItem(getContainerItem(containerItemId));
 };
 
 const ensureContainerMap = (gameState, containerItemId) => {
@@ -77,11 +80,11 @@ export const canStoreItemInContainer = (containerItemId, storedItemId) => {
 
     const containerItem = getContainerItem(containerItemId);
     if (!containerItem) {
-        // Allow custom container definitions that may not be loaded yet from IndexedDB.
-        return true;
+        return false;
     }
 
-    return getAllowedStoredItemIds(containerItemId).includes(storedItemId);
+    const allowedIds = getAllowedStoredItemIdsFromContainerItem(containerItem);
+    return allowedIds.includes(storedItemId);
 };
 
 export const getStateStoredItemCounts = (gameState, containerItemId) => {
@@ -92,16 +95,10 @@ export const getStateStoredItemCounts = (gameState, containerItemId) => {
     }
 
     const containerMap = gameState.itemContainerCounts?.[containerItemId] ?? {};
-    const allowedIds = new Set(getAllowedStoredItemIds(containerItemId));
+    const allowedIds = getAllowedStoredItemIds(containerItemId);
 
-    Object.keys(containerMap).forEach((storedItemId) => {
-        if (isValidId(storedItemId)) {
-            allowedIds.add(storedItemId);
-        }
-    });
-
-    return Array.from(allowedIds).reduce((acc, storedItemId) => {
-        acc[storedItemId] = Number(containerMap[storedItemId] ?? 0);
+    return allowedIds.reduce((acc, storedItemId) => {
+        acc[storedItemId] = normalizePositiveCount(containerMap[storedItemId]);
         return acc;
     }, {});
 };
