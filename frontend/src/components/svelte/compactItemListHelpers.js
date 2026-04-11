@@ -14,7 +14,7 @@ export function getItemMetadata(entry, itemMap) {
     return {
         id: entry?.id ?? key,
         name: entry?.name || FALLBACK_NAME,
-        image: entry?.image || FALLBACK_IMAGE,
+        image: FALLBACK_IMAGE,
         description: entry?.description || FALLBACK_DESCRIPTION,
         loading: Boolean(itemMap),
         missing: Boolean(itemMap),

@@ -58,6 +58,31 @@ describe('ProcessListRow', () => {
         expect(getByText('2x unknown-item')).toBeTruthy();
     });
 
+    test('does not render untrusted preview images when metadata is missing', () => {
+        const process = {
+            id: 'process-with-untrusted-image',
+            title: 'Untrusted image',
+            duration: '1s',
+            requireItemTypes: 1,
+            requireItemTotal: 1,
+            consumeItemTypes: 0,
+            consumeItemTotal: 0,
+            createItemTypes: 0,
+            createItemTotal: 0,
+            requirePreviewEntries: [
+                { id: 'unknown-item', count: 1, image: 'data:image/svg+xml,<svg></svg>' },
+            ],
+            consumePreviewEntries: [],
+            createPreviewEntries: [],
+        };
+
+        const { getByAltText } = render(ProcessListRow, {
+            props: { process, itemMetadataMap: new Map() },
+        });
+
+        expect(getByAltText('unknown-item').getAttribute('src')).toBe('/favicon.ico');
+    });
+
     test('updates preview lines when metadata map changes after mount', async () => {
         const process = {
             id: 'delayed-metadata',
