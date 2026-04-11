@@ -796,7 +796,7 @@
         "title": "Authentication Flow",
         "heading": "Local credential storage",
         "anchor": "local-credential-storage",
-        "text": "- Credentials are stored in IndexedDB so players do not need to re-enter tokens every session. - Settings provides clear/log-out controls that remove saved credentials from the device.",
+        "text": "- Credentials are stored in IndexedDB so players do not need to re-enter tokens every session. - Token values are persisted under game-state credential keys (for example gameState.github.token). - Settings provides Clear and Log out controls that remove saved credentials from the device.",
         "kind": "doc"
     },
     {
@@ -840,27 +840,37 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/backups:gamesave-exportimport:3:0",
+        "id": "doc:/docs/backups:exporting-and-importing-game-saves:3:0",
         "path": "frontend/src/pages/docs/md/backups.md",
         "slug": "/docs/backups",
         "title": "Backups",
-        "heading": "Gamesave export/import",
-        "anchor": "gamesave-exportimport",
-        "text": "At /gamesaves:\n - Export produces a portable encoded payload. - Import restores from either envelope or raw game-state payload.\n Use this route for full-profile migration between devices.",
+        "heading": "Exporting and importing game saves",
+        "anchor": "exporting-and-importing-game-saves",
+        "text": "At /gamesaves:\n - Export creates a Base64-encoded JSON snapshot (backup envelope + payload) that preserves quest progress, inventory, and processes. - Paste a game state backup string (envelope or raw state) here: the import textarea accepts either format. - Use Copy to copy the exported backup string to your clipboard. - Use Import to restore a backup into the current profile.\n Use this route for full-profile migration between devices.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/backups:custom-content-exportimport:4:0",
+        "id": "doc:/docs/backups:storage-locations-and-qa-reset-notes:4:0",
         "path": "frontend/src/pages/docs/md/backups.md",
         "slug": "/docs/backups",
         "title": "Backups",
-        "heading": "Custom content export/import",
-        "anchor": "custom-content-exportimport",
-        "text": "At /contentbackup:\n - Prepare backup builds a bundle from local custom content. - Download backup writes a .json bundle file. - Import accepts supported bundle files and merges content into local custom storage.\n Use this route for creator workflows and submission preparation.",
+        "heading": "Storage locations and QA reset notes",
+        "anchor": "storage-locations-and-qa-reset-notes",
+        "text": "- Canonical v3 save: IndexedDB database dspaceGameState (stores: state, backup, meta). - Local mirrors: localStorage gameState and gameStateBackup are written as resilience mirrors. - Legacy v2 detection keys: gameState and gameStateBackup are both scanned for v1/v2-shaped payloads. - First-load v2 auto-migration checks gameState first and falls back to gameStateBackup, so backup-only legacy storage still migrates unless QA skip mode is enabled. - Migration parse/read issues surface in /settings → Legacy save upgrades as inline warnings, and migration read errors are also emitted to the browser console.\n For QA resets:\n 1. Use /settings → Legacy save upgrades for v1/v2 cleanup controls. 2. If QA cheats are enabled, use Clear v3 save for testing to remove v3 state while preserving legacy v2 artifacts. 3. For manual inspection, use browser DevTools → Application → IndexedDB/localStorage.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/backups:cloud-sync-pairing:5:0",
+        "id": "doc:/docs/backups:exporting-and-importing-custom-content:5:0",
+        "path": "frontend/src/pages/docs/md/backups.md",
+        "slug": "/docs/backups",
+        "title": "Backups",
+        "heading": "Exporting and importing custom content",
+        "anchor": "exporting-and-importing-custom-content",
+        "text": "At /contentbackup:\n - Prepare backup builds a bundle from local custom content. - The UI shows Preparing backup… while collecting records. - Download backup writes a .json or .dspace-backup file depending on selected format. - Import supports Drag and drop or Choose backup file workflows. - During restore, the UI shows Importing… and then Import complete on success.\n Use this route for creator workflows and submission preparation.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/backups:cloud-sync-pairing:6:0",
         "path": "frontend/src/pages/docs/md/backups.md",
         "slug": "/docs/backups",
         "title": "Backups",
@@ -870,7 +880,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/backups:safety-checklist:6:0",
+        "id": "doc:/docs/backups:safety-checklist:7:0",
         "path": "frontend/src/pages/docs/md/backups.md",
         "slug": "/docs/backups",
         "title": "Backups",
@@ -896,7 +906,7 @@
         "title": "Changelog",
         "heading": "Changelog",
         "anchor": "top",
-        "text": "Stay up to date with the latest improvements to DSPACE. Every entry links to a full set of release notes so you can dive into gameplay updates, docs refreshes, and tooling changes as they land.",
+        "text": "Stay up to date with the latest improvements to DSPACE. Every entry links to a full set of release notes so you can dive into gameplay updates, docs refreshes, and tooling changes as they land.\n For v3 launch readiness details (including Completionist Award III in the v3 launch lane and OpenAI-only v3 chat with token.place deferred to v3.1), see v3 Release State.",
         "kind": "doc"
     },
     {
@@ -1116,7 +1126,7 @@
         "title": "Cloud Sync",
         "heading": "What Cloud Sync handles",
         "anchor": "what-cloud-sync-handles",
-        "text": "- Game-state backups - Custom content backups - Upload/download operations tied to your configured gist",
+        "text": "- Game-state backups - Custom content backups (Custom quests, items, and processes) - Upload/download operations tied to your configured gist",
         "kind": "doc"
     },
     {
@@ -1126,7 +1136,7 @@
         "title": "Cloud Sync",
         "heading": "Setup",
         "anchor": "setup",
-        "text": "1. Create a GitHub personal access token with gist scope. 2. Create or choose a private gist. 3. Open /cloudsync (or Settings cloud-sync controls). 4. Save token and gist ID. 5. Run an upload, then verify a download from another profile/device.",
+        "text": "1. Create a GitHub personal access token with gist scope. 2. Create or choose a private gist. 3. Open /cloudsync (or Settings cloud-sync controls). 4. Save token and Gist ID. 5. Run an upload, then verify a download from another profile/device.",
         "kind": "doc"
     },
     {
@@ -1136,7 +1146,7 @@
         "title": "Cloud Sync",
         "heading": "Credentials and storage",
         "anchor": "credentials-and-storage",
-        "text": "- Token and gist ID are stored locally in IndexedDB. - Credentials stay on your device except for authenticated requests to GitHub APIs. - You can clear credentials from Settings (logout/clear actions).",
+        "text": "- Token and gist ID are stored locally in IndexedDB. - Credentials stay on your device except for authenticated requests to GitHub APIs. - In Settings, use Clear / Log out actions to remove them from the device.",
         "kind": "doc"
     },
     {
@@ -1246,7 +1256,7 @@
         "title": "Completionist",
         "heading": "6) Forge the Completionist Award III (completionist/award-iii)",
         "anchor": "6-forge-the-completionist-award-iii-completionistaward-iii",
-        "text": "- Quest link: /quests/completionist/award-iii - Unlock prerequisite: - requiresQuests: all leaf quests in the current v3 DAG, which is the minimal sufficient set to prove all currently reachable quests are complete before this quest unlocks. - Dialogue requiresItems gates: - print-modules → \"Printed modules are dimensionally accurate\" — Completionist Award III module kit ×1 - wood-base → \"Pedestal is flat, sealed, and mount-ready\" — Completionist Award III wood pedestal ×1 - electronics-harness → \"Harness passes continuity and polarity checks\" — Completionist Award III smart harness ×1 - robotics-integration → \"Servo sweep is smooth and cable-safe\" — Completionist Award III motion core ×1 - planter-integration → \"Planter cup is stable and irrigated\" — Completionist Award III planter crown ×1 - final-assembly → \"Award III is complete and fully validated\" — Completionist Award III ×1 - Grants: - Dialogue options/steps grantsItems: None - Quest-level grantsItems: None - Rewards: - Completionist Award ×1 (legacy completion badge) - Processes used: - print-completionist-iii-modules - Requires: entry-level FDM 3D printer (leveled bed) ×1 - Consumes: white PLA filament ×260, dWatt ×2100 - Creates: Completionist Award III module kit ×1 - mill-completionist-iii-wood-base - Requires: Handsaw ×1, Sandpaper pack ×1 - Consumes: Pine board ×1, Wood glue ×0.2, Sandpaper pack ×0.3 - Creates: Completionist Award III wood pedestal ×1 - solder-completionist-iii-harness - Requires: soldering iron kit ×1, flux pen ×1, safety goggles ×1 - Consumes: solder wick ×0.2, dWatt ×40 - Creates: Completionist Award III smart harness ×1 - integrate-completionist-iii-robotics - Requires: Servo Motor ×1, precision screwdriver set ×1, Completionist Award III smart harness ×1, Completionist Award III module kit ×1 - Consumes: Completionist Award III smart harness ×1, Completionist Award III module kit ×1, dWatt ×25 - Creates: Completionist Award III motion core ×1 - assemble-completionist-iii-planter - Requires: Completionist Award III motion core ×1, hydroponic starter plug ×1, basil seedling ×1 - Consumes: Completionist Award III motion core ×1, hydroponic starter plug ×1, basil seedling ×1 - Creates: Completionist Award III planter crown ×1 - assemble-completionist-award-iii - Requires: Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×1 - Consumes: Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×0.2 - Creates: Completionist Award III ×1",
+        "text": "- Quest link: /quests/completionist/award-iii - Unlock prerequisite: - requiresQuests: all leaf quests in the current v3 DAG, which is the minimal sufficient set to prove all currently reachable quests are complete before this quest unlocks. - Dialogue requiresItems gates: - print-modules → \"Printed modules are dimensionally accurate\" — Completionist Award III module kit ×1 - wood-base → \"Pedestal is flat, sealed, and mount-ready\" — Completionist Award III wood pedestal ×1 - electronics-harness → \"Harness passes continuity and polarity checks\" — Completionist Award III smart harness ×1 - robotics-integration → \"Servo sweep is smooth and cable-safe\" — Completionist Award III motion core ×1 - planter-integration → \"Planter cup is stable and irrigated\" — Completionist Award III planter crown ×1 - final-assembly → \"Award III is complete and fully validated\" — Completionist Award III ×1 - Grants: - Dialogue options/steps grantsItems: None - Quest-level grantsItems: None - Rewards: - Completionist Award ×1 (legacy completion badge; Award III itself still comes from final assembly process output) - Processes used: - print-completionist-iii-modules - Requires: entry-level FDM 3D printer (leveled bed) ×1 - Consumes: white PLA filament ×260, dWatt ×2100 - Creates: Completionist Award III module kit ×1 - mill-completionist-iii-wood-base - Requires: Handsaw ×1, Sandpaper pack ×1 - Consumes: Pine board ×1, Wood glue ×0.2, Sandpaper pack ×0.3 - Creates: Completionist Award III wood pedestal ×1 - solder-completionist-iii-harness - Requires: soldering iron kit ×1, flux pen ×1, safety goggles ×1 - Consumes: solder wick ×0.2, dWatt ×40 - Creates: Completionist Award III smart harness ×1 - integrate-completionist-iii-robotics - Requires: Servo Motor ×1, precision screwdriver set ×1, Completionist Award III smart harness ×1, Completionist Award III module kit ×1 - Consumes: Completionist Award III smart harness ×1, Completionist Award III module kit ×1, dWatt ×25 - Creates: Completionist Award III motion core ×1 - assemble-completionist-iii-planter - Requires: Completionist Award III motion core ×1, hydroponic starter plug ×1, basil seedling ×1 - Consumes: Completionist Award III motion core ×1, hydroponic starter plug ×1, basil seedling ×1 - Creates: Completionist Award III planter crown ×1 - assemble-completionist-award-iii - Requires: Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×1 - Consumes: Completionist Award III wood pedestal ×1, Completionist Award III planter crown ×1, superglue ×0.2 - Creates: Completionist Award III ×1",
         "kind": "doc"
     },
     {
@@ -1577,6 +1587,76 @@
         "heading": "Validation checklist",
         "anchor": "validation-checklist",
         "text": "- All referenced item/process IDs exist inside the bundle or in built-in content. - Quest prerequisites resolve correctly. - No malformed IDs or broken dialogue node links. - Bundle re-import succeeds before submission.\n Related docs: Content Development, Quest Submission Guide, Quest Schema.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/custom-content:custom-content:0:0",
+        "path": "frontend/src/pages/docs/md/custom-content.md",
+        "slug": "/docs/custom-content",
+        "title": "Custom Content",
+        "heading": "Custom Content",
+        "anchor": "custom-content",
+        "text": "Custom content is the player-created layer of DSPACE. You can build your own quests, items, and processes directly in the game, test them locally, back them up, and package them for contribution.\n Custom Content creation side by side",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/custom-content:what-custom-content-includes:1:0",
+        "path": "frontend/src/pages/docs/md/custom-content.md",
+        "slug": "/docs/custom-content",
+        "title": "Custom Content",
+        "heading": "What custom content includes",
+        "anchor": "what-custom-content-includes",
+        "text": "DSPACE supports three editable content types that work as one system:\n 1. Quests: branching dialogue, requirements, rewards, and process-linked actions 2. Items: resources, tools, currencies, and custom dependencies used by quests and processes 3. Processes: timed transformations that require, consume, and create items\n Create routes:\n - Quests: /quests/create - Items: /inventory/create - Processes: /processes/create",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/custom-content:how-the-systems-interact:2:0",
+        "path": "frontend/src/pages/docs/md/custom-content.md",
+        "slug": "/docs/custom-content",
+        "title": "Custom Content",
+        "heading": "How the systems interact",
+        "anchor": "how-the-systems-interact",
+        "text": "Think of content authoring as a loop:\n 1. Define items that represent resources, tools, or rewards. 2. Build processes that consume and create those items over time. 3. Author quests that require items, grant items, and trigger relevant processes. 4. Playtest and adjust balancing across all three.\n Common interaction examples:\n - A quest option checks for required items before progression. - A quest option launches a process and then gates continuation on the outputs. - A process consumes one custom item and creates another, unlocking later quest branches. - A quest completion reward grants a custom item that can be used in future processes.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/custom-content:local-first-storage-and-backup:3:0",
+        "path": "frontend/src/pages/docs/md/custom-content.md",
+        "slug": "/docs/custom-content",
+        "title": "Custom Content",
+        "heading": "Local-first storage and backup",
+        "anchor": "local-first-storage-and-backup",
+        "text": "Custom content is local-first and stored on-device in IndexedDB (CustomContent database). This lets you iterate quickly without needing server-side authoring infrastructure.\n - If IndexedDB is unavailable, the app uses an in-memory fallback (non-persistent). - Custom content backup and restore is available at /contentbackup. - Gameplay save backup remains separate under /gamesaves.\n Recommended workflow:\n 1. Author or edit content locally. 2. Export from /contentbackup. 3. Re-import into a clean profile to verify integrity before sharing.\n Custom Content Backup",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/custom-content:packaging-and-submitting-a-content-pack:4:0",
+        "path": "frontend/src/pages/docs/md/custom-content.md",
+        "slug": "/docs/custom-content",
+        "title": "Custom Content",
+        "heading": "Packaging and submitting a content pack",
+        "anchor": "packaging-and-submitting-a-content-pack",
+        "text": "The current contribution flow supports packaging your custom content into a bundle JSON and submitting it through an in-game PR form.\n 1. Build quests/items/processes locally. 2. Export from /contentbackup. 3. Submit the bundle at /bundles/submit. 4. The app creates a PR containing a bundle file under submissions/bundles/ for maintainer review.\n This is the recommended route when your content has cross-dependencies.\n In-progress note:\n - The bundle submission path is implemented and opens PRs, but full downstream promotion/ingestion into canonical built-in content remains a maintainer-governed step and may continue evolving.\n Submit Custom Content Bundle",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/custom-content:practical-authoring-tips:5:0",
+        "path": "frontend/src/pages/docs/md/custom-content.md",
+        "slug": "/docs/custom-content",
+        "title": "Custom Content",
+        "heading": "Practical authoring tips",
+        "anchor": "practical-authoring-tips",
+        "text": "- Design item IDs and names with reuse in mind so process and quest references stay readable. - Keep process durations realistic enough to teach pacing, but short enough for playtesting loops. - Use quest prerequisites and rewards to communicate progression clearly. - Validate by replaying your quest chain after process outputs are collected.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/custom-content:related-docs:6:0",
+        "path": "frontend/src/pages/docs/md/custom-content.md",
+        "slug": "/docs/custom-content",
+        "title": "Custom Content",
+        "heading": "Related docs",
+        "anchor": "related-docs",
+        "text": "- Content Development Guide - Custom Content Bundles - Quest Submission Guide - Quest Development Guidelines - Item Development Guidelines - Process Development Guidelines - Backups",
         "kind": "doc"
     },
     {
@@ -2600,7 +2680,17 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:do-i-need-github-credentials:8:0",
+        "id": "doc:/docs/faq:how-do-i-submit-custom-quests:8:0",
+        "path": "frontend/src/pages/docs/md/faq.md",
+        "slug": "/docs/faq",
+        "title": "Frequently Asked Questions",
+        "heading": "How do I submit custom quests?",
+        "anchor": "how-do-i-submit-custom-quests",
+        "text": "Start with the Quest Submission Guide, then use /quests/submit for quest-only submissions or /bundles/submit when your quest depends on custom items/processes.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/faq:do-i-need-github-credentials:9:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -2610,7 +2700,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:where-is-data-stored:9:0",
+        "id": "doc:/docs/faq:where-is-data-stored:10:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -2620,7 +2710,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:what-are-dusd-dwatt-and-dcarbon:10:0",
+        "id": "doc:/docs/faq:what-are-dusd-dwatt-and-dcarbon:11:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -2630,7 +2720,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:are-guilds-and-locations-playable-yet:11:0",
+        "id": "doc:/docs/faq:are-guilds-and-locations-playable-yet:12:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -2640,7 +2730,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:where-can-i-see-all-major-pages-and-routes:12:0",
+        "id": "doc:/docs/faq:where-can-i-see-all-major-pages-and-routes:13:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -2650,7 +2740,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/faq:where-can-i-get-help-or-contribute:13:0",
+        "id": "doc:/docs/faq:where-can-i-get-help-or-contribute:14:0",
         "path": "frontend/src/pages/docs/md/faq.md",
         "slug": "/docs/faq",
         "title": "Frequently Asked Questions",
@@ -2916,7 +3006,7 @@
         "title": "Geothermal",
         "heading": "2) Calibrate Ground Sensor (geothermal/calibrate-ground-sensor)",
         "anchor": "2-calibrate-ground-sensor-geothermalcalibrate-ground-sensor",
-        "text": "- Quest link: /quests/geothermal/calibrate-ground-sensor - Unlock prerequisite: - requiresQuests: geothermal/survey-ground-temperature - Dialogue requiresItems gates: - start → \"Safety check done, start baseline\" — Arduino Uno ×1 - baseline → \"Captured baseline pair\" — thermistor calibration record ×1 - baseline → \"Baseline pair already logged\" — thermistor calibration record ×1 - interpret → \"Both readings are in tolerance\" — thermistor calibration record ×1 - Grants: - Dialogue options/steps grantsItems: None - Quest-level grantsItems: None - Rewards: - Solarpunk Award ×1 - Processes used: - arduino-thermistor-read - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1 - Consumes: none - Creates: thermistor calibration record ×1",
+        "text": "- Quest link: /quests/geothermal/calibrate-ground-sensor - Unlock prerequisite: - requiresQuests: geothermal/survey-ground-temperature - Dialogue requiresItems gates: - start → \"Safety check done, start baseline\" — Arduino Uno ×1 - baseline → \"Captured baseline pair\" — thermistor calibration record ×1 - baseline → \"Baseline pair already logged\" — thermistor calibration record ×1 - interpret → \"Both readings are in tolerance\" — thermistor calibration record ×1 - Grants: - Dialogue options/steps grantsItems: None - Quest-level grantsItems: None - Rewards: - temperature log CSV ×1 - Processes used: - arduino-thermistor-read - Requires: Arduino Uno ×1, solderless breadboard ×1, Jumper Wires ×3, USB Cable ×1, Thermistor (10k NTC) ×1, 10k Ohm Resistor ×1 - Consumes: none - Creates: thermistor calibration record ×1",
         "kind": "doc"
     },
     {
@@ -3946,7 +4036,7 @@
         "title": "Legacy saves & storage migrations",
         "heading": "v2.1 QA fixtures (seeded from /settings)",
         "anchor": "v21-qa-fixtures-seeded-from-settings",
-        "text": "The QA cheats panel uses frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json to seed localStorage[\"gameState\"] for testing. The fixture includes three profiles (minimal, in-progress, messy) to exercise inventory remapping, quest/process preservation, and unknown keys. These fixtures are intentionally small, representative samples — real-world saves may include additional keys.",
+        "text": "The QA cheats panel uses frontend/src/utils/legacySaveFixtures/legacy_v2_localstorage_save.json to seed localStorage[\"gameState\"] for testing. The fixture includes three profiles (minimal, in-progress, messy) to exercise inventory remapping, legacy process cleanup paths, and unknown keys. These fixtures are intentionally small, representative samples — real-world saves may include additional keys.",
         "kind": "doc"
     },
     {
@@ -3956,7 +4046,7 @@
         "title": "Legacy saves & storage migrations",
         "heading": "QA: v2 → v3 migration checklist",
         "anchor": "qa-v2--v3-migration-checklist",
-        "text": "1. Start clean: clear IndexedDB + localStorage. Confirm no legacy banner appears on v3. 2. Seed each v2 profile via the QA cheats panel (or manually set localStorage[\"gameState\"]), then reload and confirm /settings → Legacy save upgrades reports legacy v2 data. 3. Merge into existing v3 save: validate additive inventory behavior and that quests/processes are preserved (no overwrites). 4. Replace into existing v3 save: validate replacement behavior and that the v3 save is written to IndexedDB after import. 5. Legacy data cleanup: persistMigratedState removes gameState and gameStateBackup when IndexedDB is in use; confirm that behavior matches runtime storage mode (localStorage-only environments retain legacy keys).",
+        "text": "1. Start clean: clear IndexedDB + localStorage. Confirm no legacy banner appears on v3. 2. Seed each v2 profile via the QA cheats panel (or manually set localStorage[\"gameState\"]), then reload and confirm /settings → Legacy save upgrades reports legacy v2 data. 3. Merge into existing v3 save: validate additive inventory behavior and that quests/processes are preserved when IDs are missing on v3. Existing v3 quest/process IDs remain unchanged. 4. Replace into existing v3 save: validate replacement behavior and that the v3 save is written to IndexedDB after import. 5. Legacy data cleanup: persistMigratedState writes the validated v3 state first, then removes legacy gameState and gameStateBackup when IndexedDB is in use. In localStorage fallback mode, keys are retained.",
         "kind": "doc"
     },
     {
@@ -3976,7 +4066,7 @@
         "title": "Legacy saves & storage migrations",
         "heading": "V3 storage (IndexedDB)",
         "anchor": "v3-storage-indexeddb",
-        "text": "Schema: The canonical v3 save lives in IndexedDB, with localStorage used as a lightweight backup and fallback for unsupported environments.\n - Database: dspaceGameState (version 1). - Object stores: state, backup. - Key: root (the game state blob is stored under a fixed key). - LocalStorage mirrors: gameState and gameStateBackup are still written after every save to provide a recovery path when IndexedDB is unavailable.\n Code references:\n - IndexedDB constants and store layout: frontend/src/utils/gameState/common.js (DB_NAME, DB_VERSION, STATE_STORE, BACKUP_STORE, ROOT_KEY). - Persistence + fallback behavior: frontend/src/utils/gameState/common.js (read, write, warnFallback).\n DevTools inspection:\n - Application tab → IndexedDB → dspaceGameState → state / backup → key root. - Compare with localStorage fallback keys if IndexedDB is blocked (Safari private mode, etc.).",
+        "text": "Schema: The canonical v3 save lives in IndexedDB, with localStorage used as a lightweight backup and fallback for unsupported environments.\n - Database: dspaceGameState (version 2). - Object stores: state, backup, meta. - Key: root (the game state blob is stored under a fixed key). - LocalStorage mirrors: gameState and gameStateBackup are still written after every save to provide a recovery path when IndexedDB is unavailable.\n Code references:\n - IndexedDB constants and store layout: frontend/src/utils/gameState/common.js (DB_NAME, DB_VERSION, STATE_STORE, BACKUP_STORE, ROOT_KEY). - Persistence + fallback behavior: frontend/src/utils/gameState/common.js (read, write, warnFallback).\n DevTools inspection:\n - Application tab → IndexedDB → dspaceGameState → state / backup → key root. - Compare with localStorage fallback keys if IndexedDB is blocked (Safari private mode, etc.).",
         "kind": "doc"
     },
     {
@@ -3986,7 +4076,7 @@
         "title": "Legacy saves & storage migrations",
         "heading": "Detection & upgrade flow",
         "anchor": "detection--upgrade-flow",
-        "text": "Detection logic:\n - V1 cookies are detected on the client with detectV1CookieItems(document.cookie), which parses item- cookies plus currency-balance- for supported currency symbols (currently only dUSD via legacyV1ItemIdMap). - V2 localStorage detection reads gameState / gameStateBackup, parses JSON safely, and accepts either a versionNumberString/versionNumber prefix of 1/2 or a v2-shaped payload containing inventory, quests, or processes. - Shared detection entry point: frontend/src/utils/legacySaveDetection.ts (detectLegacyArtifacts).\n Merge vs. replace semantics:\n - V1 → V3: importV1V3 adds counts to the current inventory (merge) or starts from an empty validated state (replace). The LegacySaveUpgrade UI calls importV1V3 with grantUpgradeTrophy: true in the current codebase, so successful v1 imports grant the Early Adopter Token and the V2 Upgrade Trophy when legacy items are imported (see frontend/src/utils/gameState.js). - V2 → V3: importV2V3 replaces the current save with the legacy state, and mergeLegacyStateIntoCurrent combines inventory while preserving existing quests/processes. - Both flows update versionNumberString to 3 and persist to IndexedDB via persistMigratedState in frontend/src/utils/gameState.js.\n Cleanup behavior:\n - V1 cleanup expires each detected item- and currency-balance-dUSD cookie (see frontend/src/components/svelte/LegacySaveUpgrade.svelte). Other legacy cookies (ex: quest-, checkpoint-) are not cleared. - V2 cleanup deletes gameState / gameStateBackup during v2 → v3 migrations (when IndexedDB is in use) and also via the Delete v2 localStorage action in the Legacy Save Upgrade UI. Both flows are best-effort (they skip removal if IndexedDB is unavailable or the browser is already using localStorage for the active save). - The Clear v3 save for testing action (available when QA cheats are enabled) only removes v3 persistence data; it preserves legacy v2 gameState / gameStateBackup entries if they still contain v2-formatted saves.",
+        "text": "Detection logic:\n - V1 cookies are detected on the client with detectV1CookieItems(document.cookie), which parses item- cookies plus currency-balance- for supported currency symbols (currently only dUSD via legacyV1ItemIdMap). - V2 localStorage detection reads gameState / gameStateBackup, parses JSON safely, and accepts either a versionNumberString/versionNumber prefix of 1/2 or a v2-shaped payload containing inventory, quests, or processes. - On first v3 load, auto-migration starts when either key is present (primary gameState, fallback gameStateBackup) unless LEGACY_V2_SEED_SKIP_KEY is set for QA seeding. - Shared detection entry point: frontend/src/utils/legacySaveDetection.ts (detectLegacyArtifacts).\n Merge vs. replace semantics:\n - V1 → V3: importV1V3 adds counts to the current inventory (merge) or starts from an empty validated state (replace). The LegacySaveUpgrade UI calls importV1V3 with grantUpgradeTrophy: true in the current codebase, so successful v1 imports grant the Early Adopter Token and the V2 Upgrade Trophy when legacy items are imported (see frontend/src/utils/gameState.js). - V2 → V3: importV2V3 replaces the current save with the legacy state, and mergeLegacyStateIntoCurrent combines inventory while preserving existing quests/processes. - Both actions persist through saveGameState, which rewrites gameState / gameStateBackup mirrors as v3 snapshots instead of retaining raw legacy payload JSON. - In-progress process handling: during v2 migration, in-progress process entries are compensated by granting each process createItems output into inventory; those compensated process entries are removed from migrated processes. - Both flows update versionNumberString to 3 and persist to IndexedDB via persistMigratedState in frontend/src/utils/gameState.js.\n Cleanup behavior:\n - V1 cleanup expires each detected item- and currency-balance-dUSD cookie (see frontend/src/components/svelte/LegacySaveUpgrade.svelte). Other legacy cookies (ex: quest-, checkpoint-) are not cleared. - V2 cleanup deletes gameState / gameStateBackup during v2 → v3 migrations (when IndexedDB is in use) and also via the Discard legacy v2 data action in the Legacy Save Upgrade UI. Both flows are best-effort (they skip removal if IndexedDB is unavailable or the browser is already using localStorage for the active save). - During v2 → v3 migration, saveGameState writes localStorage mirrors synchronously and treats IndexedDB write failures as best-effort fallbacks. In those cases, legacy payload slots are typically rewritten as v3 snapshots rather than preserved byte-for-byte for retry. - Legacy keys remain untouched only when an unexpected exception aborts migration before cleanup (for example, a thrown write callback in tests). - The Clear v3 save for testing action (available when QA cheats are enabled) only removes v3 persistence data; it preserves legacy v2 gameState / gameStateBackup entries if they still contain v2-formatted saves.",
         "kind": "doc"
     },
     {
@@ -4917,6 +5007,16 @@
         "heading": "NPC docs images floated into body text (2026-03-14)",
         "anchor": "npc-docs-images-floated-into-body-text-2026-03-14",
         "text": "- Summary: /docs/npcs rendered portraits and biography text on the same horizontal line, making sections hard to read. - Impact: Visual regression on staging docs pages; NPC entries appeared misaligned and inconsistent with the rest of docs rendering. - Root cause: - frontend/src/pages/docs/md/npcs.md included an embedded block with a global img { float: left; ... } rule. - The global selector applied to every image in the document, overriding expected block presentation. - Resolution: - Removed inline blocks from docs markdown pages that injected image-specific CSS. - Added a markdown safety regression test that fails when any docs markdown file contains embedded blocks. - Lessons: - Presentation rules should live in page/component styles, not in ad-hoc markdown HTML style blocks. - Broad selectors like img inside docs content can cause layout regressions across an entire page. - Prevention: - frontend/tests/docsMarkdownSafety.test.ts now guards against embedded tags in docs markdown.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/outages/2026-03-30-changelog-image-width-regression:changelog-image-sizing-fix-regressed-docs-readability-2026-03-30:0:0",
+        "path": "frontend/src/pages/docs/md/outages/2026-03-30-changelog-image-width-regression.md",
+        "slug": "/docs/outages/2026-03-30-changelog-image-width-regression",
+        "title": "Changelog image sizing fix regressed docs readability (2026-03-30)",
+        "heading": "Changelog image sizing fix regressed docs readability (2026-03-30)",
+        "anchor": "changelog-image-sizing-fix-regressed-docs-readability-2026-03-30",
+        "text": "- Summary: The previous image-width fix did not resolve the stretching behavior on the homepage latest-update card and also made /docs/custom-content screenshots too small to read. - Impact: - / still stretched /assets/changelog/20260401/democratizedspace.jpg to container width. - Docs pages, including /docs/custom-content, inherited a 512px max-width cap that reduced readability. - Root cause: - The homepage renderer (WhatsNew.astro) injected img { width: 100%; } into compiled changelog HTML, so the homepage latest-update card kept stretching the April 1 hero even after PR #4173. - A global markdown image cap (max-width: min(100%, 512px)) was applied in shared docs/changelog templates, so unrelated docs content was constrained. - Resolution: - Replaced global width: 100% homepage image styling with intrinsic/responsive defaults (max-width: 100%; width: auto; height: auto). - Added an explicit image-level hook on the April 1 hero (.changelog-hero-image--20260401) and scoped the 512px cap to that hook on both homepage and /changelog. - Removed the global 512px cap from docs and outage markdown rendering so normal documentation imagery can use natural width. - Test strategy and regression prevention: - Updated Playwright coverage in frontend/e2e/docs-changelog.spec.ts to assert: 1. The targeted changelog image remains capped at <= 512px on / (homepage latest update). 2. The same hook remains capped at <= 512px on /changelog. 3. /docs/custom-content images are no longer hard-capped to 512px and render above 512px when the source image is wider. - This mix of positive + negative assertions prevents both prior failure modes (stretching on changelog and over-constraining docs). - Lessons: - Avoid global markdown image caps when only one asset is problematic. - Use asset-scoped selectors for one-off layout exceptions and keep docs defaults broadly readable.",
         "kind": "doc"
     },
     {
@@ -5950,7 +6050,17 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/quest-trees:active-quest-tree-catalog:2:0",
+        "id": "doc:/docs/quest-trees:highlighted-available-trees:2:0",
+        "path": "frontend/src/pages/docs/md/quest-trees.md",
+        "slug": "/docs/quest-trees",
+        "title": "Quest Trees",
+        "heading": "Highlighted available trees",
+        "anchor": "highlighted-available-trees",
+        "text": "- Chemistry – available now at /docs/chemistry. - Programming – available now at /docs/programming.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/quest-trees:active-quest-tree-catalog:3:0",
         "path": "frontend/src/pages/docs/md/quest-trees.md",
         "slug": "/docs/quest-trees",
         "title": "Quest Trees",
@@ -5960,7 +6070,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/quest-trees:hardware-first:3:0",
+        "id": "doc:/docs/quest-trees:hardware-first:4:0",
         "path": "frontend/src/pages/docs/md/quest-trees.md",
         "slug": "/docs/quest-trees",
         "title": "Quest Trees",
@@ -5970,7 +6080,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/quest-trees:bio-systems-first:4:0",
+        "id": "doc:/docs/quest-trees:bio-systems-first:5:0",
         "path": "frontend/src/pages/docs/md/quest-trees.md",
         "slug": "/docs/quest-trees",
         "title": "Quest Trees",
@@ -5980,7 +6090,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/quest-trees:automation--operations-first:5:0",
+        "id": "doc:/docs/quest-trees:automation--operations-first:6:0",
         "path": "frontend/src/pages/docs/md/quest-trees.md",
         "slug": "/docs/quest-trees",
         "title": "Quest Trees",
@@ -5990,7 +6100,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/quest-trees:contributor-contract-required:6:0",
+        "id": "doc:/docs/quest-trees:contributor-contract-required:7:0",
         "path": "frontend/src/pages/docs/md/quest-trees.md",
         "slug": "/docs/quest-trees",
         "title": "Quest Trees",
@@ -6486,7 +6596,7 @@
         "title": "Routes",
         "heading": "Content authoring and management routes",
         "anchor": "content-authoring-and-management-routes",
-        "text": "- Quests: /quests/create, /quests/manage, /quests/:id/edit (custom), /quests/:pathId/:questId (built-in detail) - Items: /inventory/create, /inventory/manage, /inventory/item/:itemId/edit - Processes: /processes/create, /processes/manage, /processes/:processId/edit - Bundles: /bundles/submit",
+        "text": "- Quests: /quests/create, /quests/manage, /quests/:pathId/:questId, /quests/:id/edit - Items: /inventory/create, /inventory/manage, /inventory/item/:itemId/edit - Processes: /processes/create, /processes/manage, /processes/:processId/edit - Bundles: /bundles/submit",
         "kind": "doc"
     },
     {
@@ -6510,7 +6620,17 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/routes:link-checking-behavior:6:0",
+        "id": "doc:/docs/routes:canonical-click-path-navigation-strings:6:0",
+        "path": "frontend/src/pages/docs/md/routes.md",
+        "slug": "/docs/routes",
+        "title": "Routes",
+        "heading": "Canonical click-path navigation strings",
+        "anchor": "canonical-click-path-navigation-strings",
+        "text": "- More → Processes opens /processes. - More → Import/export gamesaves opens /gamesaves. - More → Cloud Sync opens /cloudsync. - More → Custom Content Backup opens /contentbackup. - More → Guilds is marked Coming soon (no navigation yet). - More → Stats opens /stats. - More → Achievements opens /achievements. - More → Leaderboard opens /leaderboard. - More → Locations is marked Coming soon (no navigation yet). - More → Titles opens /titles. - More → Toolbox opens /toolbox. - More → Settings opens /settings. - More → Discord opens https://discord.gg/A3UAfYvnxM. - More → Twitter opens https://twitter.com/dspacegame. - More → Github opens https://github.com/democratizedspace/dspace. - Quests page → Manage button opens /quests/manage. - Quests manage page → Create button opens /quests/create. - Inventory page → Manage button opens /inventory/manage. - Inventory manage page → Create button opens /inventory/create. - Processes page → Manage button opens /processes/manage. - Processes manage page → Create button opens /processes/create.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/routes:link-checking-behavior:7:0",
         "path": "frontend/src/pages/docs/md/routes.md",
         "slug": "/docs/routes",
         "title": "Routes",
@@ -6666,11 +6786,21 @@
         "title": "Game State Migration",
         "heading": "Game State Migration",
         "anchor": "game-state-migration",
-        "text": "DSPACE v3 stores quests, inventory and processes in IndexedDB instead of localStorage. On first launch, the app checks for the legacy gameState key in localStorage. If it exists and no IndexedDB data has been saved yet, the importV2V3 helper copies the old state into IndexedDB and clears the legacy keys. The migration runs automatically and needs no manual action. If IndexedDB is unavailable, the game falls back to localStorage and warns the player that storage space will be limited. Note: New persistence features should favor IndexedDB end-to-end. Use localStorage strictly as a resilience fallback when IndexedDB cannot be opened, and migrate any remaining direct localStorage reads or writes into IndexedDB-backed helpers.",
+        "text": "DSPACE v3 stores quests, inventory and processes in IndexedDB instead of localStorage. On first launch, the app checks localStorage for legacy v2 payloads using readLegacyV2LocalStorage:\n - primary key: gameState - fallback key: gameStateBackup\n If a legacy payload is detected and QA seeding skip mode is not enabled, importV2V3 runs automatically, including backup-only cases where gameState is missing but gameStateBackup is present. Migration writes a validated v3 state first, then removes legacy v2 keys when IndexedDB is active.\n If IndexedDB is unavailable, DSPACE falls back to localStorage-backed persistence and shows a warning that storage space may be limited.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/state-migration:async-game-state:1:0",
+        "id": "doc:/docs/state-migration:v2-migration-semantics:1:0",
+        "path": "frontend/src/pages/docs/md/state-migration.md",
+        "slug": "/docs/state-migration",
+        "title": "Game State Migration",
+        "heading": "v2 migration semantics",
+        "anchor": "v2-migration-semantics",
+        "text": "- Replace migration (importV2V3): replaces the current v3 state with normalized v2 quests, inventory, processes, and settings. - Manual merge/replace persistence: both migration actions persist a v3 snapshot via saveGameState, so gameState/gameStateBackup are rewritten as v3 mirrors rather than preserving raw legacy payloads. - In-progress v2 processes: migration compensates in-progress entries by granting each process createItems outputs into inventory and removing those migrated process entries from the v3 processes map. - Re-run protection: once migration completes, legacy v2 keys are removed (IndexedDB mode), which prevents automatic re-runs from the same legacy source. - Failure behavior: saveGameState is best-effort. IndexedDB write errors are swallowed and the localStorage mirror remains available, so migration usually does not throw for ordinary storage failures. Legacy keys are retained only when an unexpected exception aborts migration before cleanup (for example, a thrown write callback in tests). Note: New persistence features should favor IndexedDB end-to-end. Use localStorage strictly as a resilience fallback when IndexedDB cannot be opened, and migrate any remaining direct localStorage reads or writes into IndexedDB-backed helpers.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/state-migration:async-game-state:2:0",
         "path": "frontend/src/pages/docs/md/state-migration.md",
         "slug": "/docs/state-migration",
         "title": "Game State Migration",
@@ -7126,21 +7256,71 @@
         "title": "Utility Surfaces",
         "heading": "Utility Surfaces",
         "anchor": "utility-surfaces",
-        "text": "v3 introduced several utility-focused pages that were placeholders in earlier versions.",
+        "text": "v3 promoted several utility-focused pages from placeholders to live destinations.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/utility-surfaces:live-utility-routes:1:0",
+        "id": "doc:/docs/utility-surfaces:gamesaves:1:0",
         "path": "frontend/src/pages/docs/md/utility-surfaces.md",
         "slug": "/docs/utility-surfaces",
         "title": "Utility Surfaces",
-        "heading": "Live utility routes",
-        "anchor": "live-utility-routes",
-        "text": "| Route | Purpose | | ---------------- | ------------------------------------------------------- | | /stats | High-level totals for quests, inventory, and processes. | | /achievements | Milestone unlock tracking. | | /titles | Progression titles unlocked from achievements. | | /leaderboard | Donation-oriented community leaderboard. | | /toolbox | Shortcut hub for saves, editors, and diagnostics. | | /settings | Preferences, cloud sync controls, migration/QA tools. | | /gamesaves | Full game-state export/import. | | /contentbackup | Custom content export/import. | | /cloudsync | GitHub gist sync for automated backups. |",
+        "heading": "/gamesaves",
+        "anchor": "gamesaves",
+        "text": "Use this page for full game-state import/export. It captures progression-oriented state (quests, inventory, wallet, and related progression data) so you can migrate between browsers or devices. For custom content data, pair this with /contentbackup.",
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/utility-surfaces:still-marked-coming-soon:2:0",
+        "id": "doc:/docs/utility-surfaces:settings:2:0",
+        "path": "frontend/src/pages/docs/md/utility-surfaces.md",
+        "slug": "/docs/utility-surfaces",
+        "title": "Utility Surfaces",
+        "heading": "/settings",
+        "anchor": "settings",
+        "text": "Settings is the configuration center for player preferences and advanced controls. It also hosts Cloud Sync credential controls and migration/QA toggles when available in your environment.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/utility-surfaces:stats:3:0",
+        "path": "frontend/src/pages/docs/md/utility-surfaces.md",
+        "slug": "/docs/utility-surfaces",
+        "title": "Utility Surfaces",
+        "heading": "/stats",
+        "anchor": "stats",
+        "text": "Stats provides high-level progress totals (quests, inventory, processes) that help you verify progress after restores or compare profile growth over time.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/utility-surfaces:toolbox:4:0",
+        "path": "frontend/src/pages/docs/md/utility-surfaces.md",
+        "slug": "/docs/utility-surfaces",
+        "title": "Utility Surfaces",
+        "heading": "/toolbox",
+        "anchor": "toolbox",
+        "text": "Toolbox is a launcher for power-user and creator workflows, including shortcuts to backup/import surfaces and editing/diagnostic utilities.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/utility-surfaces:leaderboard:5:0",
+        "path": "frontend/src/pages/docs/md/utility-surfaces.md",
+        "slug": "/docs/utility-surfaces",
+        "title": "Utility Surfaces",
+        "heading": "/leaderboard",
+        "anchor": "leaderboard",
+        "text": "Leaderboard is the public-facing social/progress board, centered on donation-oriented ranking and community visibility.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/utility-surfaces:related-utility-pages:6:0",
+        "path": "frontend/src/pages/docs/md/utility-surfaces.md",
+        "slug": "/docs/utility-surfaces",
+        "title": "Utility Surfaces",
+        "heading": "Related utility pages",
+        "anchor": "related-utility-pages",
+        "text": "- /achievements for milestone tracking - /titles for title progression unlocked from achievements - /cloudsync for automated gist-backed sync - /contentbackup for custom content import/export bundles",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/utility-surfaces:still-marked-coming-soon:7:0",
         "path": "frontend/src/pages/docs/md/utility-surfaces.md",
         "slug": "/docs/utility-surfaces",
         "title": "Utility Surfaces",
@@ -7150,7 +7330,7 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/utility-surfaces:related-docs:3:0",
+        "id": "doc:/docs/utility-surfaces:related-docs:8:0",
         "path": "frontend/src/pages/docs/md/utility-surfaces.md",
         "slug": "/docs/utility-surfaces",
         "title": "Utility Surfaces",
@@ -7166,7 +7346,7 @@
         "title": "v3 Release State",
         "heading": "v3 Release State",
         "anchor": "v3-release-state",
-        "text": "This page is the source-of-truth snapshot for what shipped in v3 and what remains intentionally limited. Use it alongside the v3 launch notes at /changelog#20260401 and the full release QA checklist in docs/qa/v3.md.",
+        "text": "This page is the source-of-truth snapshot for v3 release scope and current release-state limits. Use it alongside the v3 release notes at /docs/changelog/20260401 and the full release QA checklist in docs/qa/v3.md.",
         "kind": "doc"
     },
     {
@@ -7176,7 +7356,7 @@
         "title": "v3 Release State",
         "heading": "Core gameplay and progression",
         "anchor": "core-gameplay-and-progression",
-        "text": "- The quest + inventory + process loop is fully live in v3. - Official content now includes 248 quests across 19 quest trees. - Quest details render from canonical quest JSON, including branching dialogue, rewards, and requirements.",
+        "text": "- The quest + inventory + process loop is fully in scope for v3. - Official content now includes 248 quests across 19 quest trees (current v3 branch snapshot). - Quest details render from canonical quest JSON, including branching dialogue, rewards, and requirements. - Completionist Award III (completionist/award-iii) is in the v3 capstone lane and remains part of launch sign-off (not a v3.1 deferral); the canonical item is created by assemble-completionist-award-iii, and quest completion does not grant a second copy.",
         "kind": "doc"
     },
     {
@@ -7186,7 +7366,7 @@
         "title": "v3 Release State",
         "heading": "Navigation and utility surfaces",
         "anchor": "navigation-and-utility-surfaces",
-        "text": "The More menu now includes live routes for:\n - /processes - /gamesaves - /cloudsync - /contentbackup - /stats - /achievements - /leaderboard - /titles - /toolbox - /settings",
+        "text": "The More menu includes in-scope routes for:\n - /processes - /gamesaves - /cloudsync - /contentbackup - /stats - /achievements - /leaderboard - /titles - /toolbox - /settings",
         "kind": "doc"
     },
     {
@@ -7196,7 +7376,7 @@
         "title": "v3 Release State",
         "heading": "Custom content tooling (headline v3 feature)",
         "anchor": "custom-content-tooling-headline-v3-feature",
-        "text": "- Players can create custom quests at /quests/create. - Players can create custom items at /inventory/create. - Players can create custom processes at /processes/create. - Players can manage custom content from each matching /manage route. - Players can export/import custom content bundles from /contentbackup. - Players can submit bundles through /bundles/submit.",
+        "text": "- Players can create custom quests at /quests/create. - Players can create custom items at /inventory/create. - /items/create remains available as a legacy alias that resolves to the same custom item form. - Players can create custom processes at /processes/create. - Players can manage custom content from each matching /manage route. - Players can export/import custom content bundles from /contentbackup. - Players can submit bundles through /bundles/submit.",
         "kind": "doc"
     },
     {
@@ -7216,7 +7396,7 @@
         "title": "v3 Release State",
         "heading": "NPC chat and AI",
         "anchor": "npc-chat-and-ai",
-        "text": "- v3 ships persona-style chat experiences (for example Sydney, Nova, Hydro). - OpenAI-backed chat is the supported provider path in v3. - Chat surfaces include /chat and /dchat.",
+        "text": "- v3 includes persona-style chat experiences (for example Sydney, Nova, Hydro). - OpenAI-only chat is the supported provider path in v3. - Chat surfaces include /chat and /dchat.",
         "kind": "doc"
     },
     {
@@ -7246,7 +7426,7 @@
         "title": "v3 Release State",
         "heading": "token.place integration",
         "anchor": "tokenplace-integration",
-        "text": "- token.place integration is deferred to v3.1. - Current status is tracked at /docs/token-place.",
+        "text": "- token.place integration exists behind flags but remains disabled for the v3 launch release. - token.place activation is deferred to v3.1 in the follow-up track and is not a v3 launch gate. - Current status is tracked at /docs/token-place.",
         "kind": "doc"
     },
     {
@@ -7260,13 +7440,23 @@
         "kind": "doc"
     },
     {
-        "id": "doc:/docs/v3-release-state:documentation-quality-gate-for-v3-changes:10:0",
+        "id": "doc:/docs/v3-release-state:v2-only-mechanics-removed--not-applicable-in-v3:10:0",
+        "path": "frontend/src/pages/docs/md/v3-release-state.md",
+        "slug": "/docs/v3-release-state",
+        "title": "v3 Release State",
+        "heading": "v2-only mechanics removed / not applicable in v3",
+        "anchor": "v2-only-mechanics-removed--not-applicable-in-v3",
+        "text": "- v2 localStorage-first saving is replaced by IndexedDB-first persistence in v3. - Cookie-based v1/v2 save behavior is migration-only and no longer an active save path. - Legacy token/currency assumptions from pre-v3 docs are not applicable to v3 progression.",
+        "kind": "doc"
+    },
+    {
+        "id": "doc:/docs/v3-release-state:documentation-quality-gate-for-v3-changes:11:0",
         "path": "frontend/src/pages/docs/md/v3-release-state.md",
         "slug": "/docs/v3-release-state",
         "title": "v3 Release State",
         "heading": "Documentation quality gate for v3 changes",
         "anchor": "documentation-quality-gate-for-v3-changes",
-        "text": "When changing gameplay docs, verify all of the following:\n 1. Route is reachable and not marked coming soon. 2. Behavior matches shipped implementation. 3. Partially-live systems clearly call out live vs deferred scope. 4. Linked docs avoid duplicate guidance and defer to canonical pages for details.",
+        "text": "When changing gameplay docs, verify all of the following:\n 1. Route is reachable and not marked coming soon. 2. Behavior matches implemented behavior. 3. Partially-live systems clearly call out live vs deferred scope. 4. Linked docs avoid duplicate guidance and defer to canonical pages for details.",
         "kind": "doc"
     },
     {
@@ -7486,7 +7676,7 @@
         "title": "Changelog",
         "heading": "Changelog",
         "anchor": "changelog",
-        "text": "Stay up to date with the latest improvements to DSPACE. Every entry links to a full set of release notes so you can dive into gameplay updates, docs refreshes, and tooling changes as they land.",
+        "text": "Stay up to date with the latest improvements to DSPACE. Every entry links to a full set of release notes so you can dive into gameplay updates, docs refreshes, and tooling changes as they land.\n For v3 launch readiness details (including Completionist Award III in the v3 launch lane and OpenAI-only v3 chat with token.place deferred to v3.1), see v3 Release State.",
         "kind": "changelog"
     },
     {
@@ -7846,7 +8036,7 @@
         "title": "April 1, 2026",
         "heading": "April 1, 2026",
         "anchor": "20260401",
-        "text": "It's been a while! Time for a DSPACE update! v3 is here.\n What's DSPACE, you ask? You must be new around here, and if so, welcome! I'm glad you're here. DSPACE is a space exploration game that I've been working on for a while now. It's still in its early stages, but I'm excited to share it with you. You can learn more about the game on the About page.",
+        "text": "It's been a while! Time for a DSPACE update.\n What’s DSPACE, you ask? You must be new around here, and if so, welcome!!! I’m glad you’re here. DSPACE is a space exploration game that I’ve been working on for a while now. It’s still in its early stages, but I’m excited to share it with you. You can learn more about the game on the About page.\n Nano Banana Pro prompt: democratized.space \n DSPACE v3 is a major content and platform release focused on three goals:\n 1. Much more to do (quests, processes, and items) 2. Better creator workflows (build and submit custom content in-game) 3. Safer, local-first player data (migration, backups, and cloud sync)\n If you are new to DSPACE, start with About.",
         "kind": "changelog"
     },
     {
@@ -7854,9 +8044,9 @@
         "path": "frontend/src/pages/docs/md/changelog/20260401.md",
         "slug": "/changelog",
         "title": "April 1, 2026",
-        "heading": "Navigation",
+        "heading": "v3 at a glance (vs v2.1)",
         "anchor": "20260401",
-        "text": "- The main menu now highlights \"More\" links correctly even when the game runs from a subpath, so unpinned destinations stay active across deployments. - Added a persistent dark mode toggle to the site header, letting players switch themes without losing their preference on reload. - The Docs landing page now renders its sections from a JSON manifest and offers search with instant filtering, making navigation updates a single-data-source edit and ensuring a smoother docs navigation journey. - The FAQ now covers custom quest submissions and links straight to the Quest Submission Guide, replacing the \"more content soon\" placeholder with actionable steps. - /docs/changelog now ships with a proper landing page that spotlights the latest release notes instead of the GitHub placeholder card. - /docs/changelog now labels its release list as “Latest releases,” giving screen readers a clearer summary of the newest notes. - The quest creation form now keeps its controls full-width on small screens so mobile players can complete submissions without horizontal scrolling. - Inventory management now ships with category filter chips on the Manage Items page so you can narrow results to tools, awards, or hydroponics gear in a single click instead of paging through every item you own. - The Settings menu entry now appears alongside other destinations instead of posing as a coming soon teaser. - The Titles destination now opens a live roster of unlockable ranks, including progress toward each badge so you can see which achievement to chase next. - The Stats destination now opens a live breakdown of quests, inventory, and processes instead of a disabled placeholder link. - The Toolbox destination now opens a utilities hub with save management, content editors, and diagnostics links instead of a disabled placeholder button. - The Leaderboard destination now loads an in-game donation board highlighting the metaguild's top supporters. - The chat console now lets you select NPC personas like Sydney, Nova, and Hydro, delivering the long-promised AI-enabled companions.",
+        "text": "The current v3 release snapshot includes:\n - 248 quests across 19 quest trees - 311 processes - 507 items\n Compared with v2.1 (current main):\n | Category | v2.1 | v3 | New in v3 | | --------- | ---: | -: | --------: | | Quests | 22 | 248 | +226 | | Processes | 36 | 311 | +275 | | Items | 90 | 507 | +417 |\n That means v3 delivers roughly 11.3x more quests than v2.1, exceeding the original 10x target.",
         "kind": "changelog"
     },
     {
@@ -7864,9 +8054,9 @@
         "path": "frontend/src/pages/docs/md/changelog/20260401.md",
         "slug": "/changelog",
         "title": "April 1, 2026",
-        "heading": "Content updates",
+        "heading": "Custom content (headline v3 feature)",
         "anchor": "20260401",
-        "text": "- /docs/rockets now ships with a suborbital launch checklist covering pre-launch readiness, countdown automation, and new abort criteria so players can prep their first hops without missing safety gates. - The rocketry questline now splits the upgrade into \"Build a Guided Model Rocket\" and \"Guided Model Rocket Hop,\" covering fabrication, firmware, pad prep, and launch recovery with camera capture. - /docs/guilds now details the Metaguild's active structure instead of punting guild support to a future patch, so crews know how to join and contribute today. - The Chemistry and Programming quest trees graduated from draft status into the main progression, so /docs/quest-trees now highlights them alongside other established categories. - The CPR pocket mask in the inventory finally has a real 18 dUSD price tag, so first aid kits can budget for restocks without running into beta placeholders. - Antiseptic wipes now ship with a 0.15 dUSD price so restocking medical supplies no longer relies on placeholder values. - First aid consumables like adhesive bandages and sterile gauze now publish per-item prices instead of beta placeholders so your restock totals add up correctly. - Hydroponics inventory entries now price the harvested basil plant at 6 dUSD, replacing the beta placeholder so growers can track the value of mature crops. - The nutrient-deficient hydroponics tub is now soulbound instead of sitting on a beta placeholder price, keeping the broken setup out of the market while it guides players back to a healthy build. - In-game currency tokens dCarbon, dWatt, and dUSD now ship as declared currency items instead of beta placeholders, clarifying their status in inventory pricing checks.",
+        "text": "v3 ships end-to-end creator tooling for player-generated content:\n - Custom quest creation, including validation and preview - Custom item creation (with /items/create preserved as a legacy alias) - Custom process creation, including requires/consumes/creates modeling - Bundle submission workflow for grouped quest/item/process contributions\n Like custom quests, your creations are stored locally by default. When you're ready to contribute, package everything into a bundle following the Custom Content Bundles format and submit it through the in-game interface. This keeps related content synchronized and makes reviews more efficient.\n Reference docs:\n - Quest Submission Guide - Custom Content Bundles",
         "kind": "changelog"
     },
     {
@@ -7874,9 +8064,9 @@
         "path": "frontend/src/pages/docs/md/changelog/20260401.md",
         "slug": "/changelog",
         "title": "April 1, 2026",
-        "heading": "Infrastructure",
+        "heading": "Navigation, docs, and UX polish",
         "anchor": "20260401",
-        "text": "- The Helm chart now quotes the persistence storageClassName. New tests ensure the default Longhorn class keeps PVCs bound on k3s.",
+        "text": "v3 also promotes many previous placeholders into working destinations:\n - /stats, /titles, /toolbox, /leaderboard, and /settings now ship as active pages. - /docs/changelog now has a dedicated release-notes landing experience. - Docs navigation was improved with section manifests and search filtering. - Mobile usability was improved across custom-content forms and menu navigation. - Theme preference (dark mode) now persists across reloads.\n Notable docs updated for v3 workflows and gameplay:\n - Quest Trees - New Quests (release delta) - Rockets - Guilds - Authentication Flow - Cloud Sync - Backups",
         "kind": "changelog"
     },
     {
@@ -7884,9 +8074,9 @@
         "path": "frontend/src/pages/docs/md/changelog/20260401.md",
         "slug": "/changelog",
         "title": "April 1, 2026",
-        "heading": "Development milestones",
+        "heading": "Local-first saves, migration, and backups",
         "anchor": "20260401",
-        "text": "- Custom Quest System\n - In‑game quest creation UI - Implement QuestForm component with image upload - Add quest validation against JSON schema - Create quest preview functionality - Add quest requirements selection - Quest contribution workflow - Implement quest PR submission form - Add quest review interface - Create pull request generation system - Quest validation and testing - Expand test suite for custom quests - Validated quest dependencies against the live quest catalog to catch missing references automatically - Implement quest simulation testing - Quest submission process documentation - Write contribution guidelines - Document quest schema requirements - Create example quest templates\n - 10x More Quests\n - Create new official quests using the custom quest system - Balance progression curve across all quests - Test quest chains and dependencies\n - Custom Items and Processes (using the same system as quests)\n - Item Management - Item creation interface with ItemForm.svelte - Item validation schema - Item dependency tracking - Process System - Process creation UI with duration handling - Required/consumed/created items selection - Process validation and testing - Process state management - Preview and Testing - Content preview functionality - Testing environment for custom content - Validation feedback system\n - Local‑First Architecture\n - IndexedDB implementation - Data migration system - Schema version tracking - Migration scripts for v2 to v3 - Data integrity validation - Rollback functionality\n - AI Integration\n - token.place integration: Integration exists in code, but v3 ships OpenAI-only; token.place deferred to v3.1.\n - Infrastructure\n - Self‑hosted setup documentation - Docker deployment - Redundancy implementation - Load balancer setup - Backup system - Failover procedures - Monitoring setup - Migration from Netlify\n - License Migration\n - Testing & QA\n - Performance testing - Load testing custom content system - Database performance benchmarks - UI responsiveness metrics - Cross‑browser compatibility - Test IndexedDB in all major browsers - Verify UI components across browsers - Check offline functionality - Documentation coverage - Mobile responsiveness - Adapt quest creation UI for mobile - Test touch interactions - Verify mobile layouts\n - Security audit\n - Review content validation - Check data sanitization - Audit authentication flow\n - Added Playwright coverage to verify the mobile \"More\" menu toggle hides and reveals unpinned navigation links when tapped. - Hardened the custom item creation page for phones by tightening its padding and promoting the mobile form Playwright check from backlog into the main test suite. - Bundled the docs, management dashboards, and responsive UI Playwright specs into dedicated test groups so the coverage suite now exercises every E2E file. - Added a Playwright regression test to ensure /docs/changelog renders release notes instead of the GitHub contribution placeholder.\n - Developer Ergonomics & Infrastructure Debt (multi‑PR initiative) - Unify package management (pnpm workspaces) - Create pnpm-workspace.yaml at repo root - Remove frontend/package-lock.json - Added a repository .npmrc that pins Corepack to pnpm@9.0.0 so every workspace install uses the expected package manager version - Remove obsolete npm configs & warnings - Delete http-proxy and shamefully-hoist keys from .npmrc - Document proxy environment variables in AGENTS.md - Husky hardening for CI - Move husky install to a postinstall script gated by .git presence - Add ci:install script that skips hook execution in CI - Automate pnpm approve-builds - Add pnpmfile.cjs to pre‑approve native deps (canvas, esbuild, @swc/core) - Dependency upgrades & cleanup - Replace deprecated packages (rimraf ≥ 5, glob ≥ 10) - Remove node-domexception in favor of native API - Upgrade ESLint to current LTS and align plugins - Introduce weekly npm-check-updates workflow - Security & audit pipeline - Add GitHub Dependabot (npm, weekly) - Create npm run audit:ci that blocks merges on high‑severity issues - Test harness improvements - Make npm test run all suites by default - Emit a warning if zero tests are detected (unit & E2E) - Quest tooling enhancements - Script to generate UUIDs & inject item/process refs - Pre‑commit hook to validate quests before push - Hardening metadata refactor - Extract hardening blocks to /hardening/.json - Build‑time script to re‑inject metadata - Docs & build noise - Rename orphan /docs/new-quests-v3 folder to match actual path - Add Prism plaintext mapping to silence “language text” warnings - Removed the hardcoded numeric item ID from the shop index so the featured buy and sell chips lead to the correct item slug - Security automation - Ship a staged-diff secret scanner so PRs catch credential-like strings early - CI speed & log cleanliness - Silence non‑critical build messages - Consolidate install logs for readability - Cached the pnpm store in CI so each job reuses previously downloaded packages - Node version standardization - Add .nvmrc and document Node.js 20 LTS requirement\n Authentication for the quest submission form was audited. Tokens are now saved in IndexedDB so you don't need to re‑enter them, and you can clear them at any time. See the updated Authentication Flow documentation for details.",
+        "text": "v3 moves canonical save storage to IndexedDB and keeps migration from legacy v2 saves built in.\n - On first launch, v3 detects legacy localStorage save keys and migrates data to IndexedDB. - Save and content backup workflows are available in-game. - Cloud backup and restore is available through GitHub Gist integration.",
         "kind": "changelog"
     },
     {
@@ -7894,103 +8084,13 @@
         "path": "frontend/src/pages/docs/md/changelog/20260401.md",
         "slug": "/changelog",
         "title": "April 1, 2026",
-        "heading": "10x More Quests",
+        "heading": "AI chat in v3",
         "anchor": "20260401",
-        "text": "Finished all the quests already? As of v2.1 and its handful of quests, you could 100% the game in a little over a month. And most of the time you'd just be waiting for some multi‑week progress bar to complete. It was like watching paint dry.",
+        "text": "v3 launches with OpenAI-only chat in production.\n - NPC personas (such as Sydney, Nova, and Hydro) are available in chat. - token.place integration is coming in v3.1, bringing free LLM usage instead of the metered usage that currently requires an OpenAI API key.\n See:\n - v3 Release State - token.place rollout notes",
         "kind": "changelog"
     },
     {
         "id": "changelog:/changelog:20260401:6:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "Quest detail page",
-        "anchor": "20260401",
-        "text": "- Quest detail views now hydrate directly from the canonical quest JSON, so you see the full branching dialogue, NPC art, and rewards for any built-in quest without relying on placeholder text.\n Thanks to the new custom quest system, I managed to make all the new quests in‑game without touching a single JSON file directly. Well, except when it came time to merge v3 into the main branch. Speaking of... Work has begun on several new quest trees, including Chemistry, Astronomy, and Programming. Early stubs are now in place, paving the way toward the promised quest expansion.\n Astronomy now includes a meteor shower quest, bringing us closer to the full expansion.\n As of this release, DSPACE includes 246 official quests. For reference, v2.1 contained only 22 quests. Here's how the totals compare:\n | Release | Quest Count | | --------- | ----------- | | v2.1 | 22 | | v3 (HEAD) | 246 |\n With 246 quests, we've achieved the 10x milestone and then some—that's 11.2x more content than v2.1! The new custom quest system made adding content much faster.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:7:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "Custom Quests",
-        "anchor": "20260401",
-        "text": "You can now create your own custom quests on‑device for whatever you want! The game's source code contains the set of all official quests (which generally in some way relate to space exploration, however loosely), and anything on your device is considered non‑canon. However, if you choose to contribute to the base game, there's also a procedure to make your quests canon by submitting a pull request. The in‑game UI helps you do this without touching a single line of code or opening a text editor. Just follow the Quest Submission Guide.\n Quest art now stays on your machine, too—the quest editor converts uploaded images into data URLs, keeping previews and saved custom quests completely local even before you share them.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:8:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "Custom Items & Processes",
-        "anchor": "20260401",
-        "text": "Not only can you create custom quests, but v3 also introduces the ability to create your own items and processes! Want to design a new type of rocket fuel? Create a custom manufacturing process? Now you can! The game includes:\n - A visual editor for creating new items at /items/create - A process designer for creating custom manufacturing chains at /processes/create - Built‑in validation to ensure your creations will work - The ability to preview and test before finalizing - NEW: Unified bundle submission workflow at /bundles/submit that keeps related quests, items, and processes together in a single pull request\n Like custom quests, your creations are stored locally by default. When you're ready to contribute, package everything into a bundle following the Custom Content Bundles format and submit it through the in-game interface. This ensures related content stays synchronized and makes reviews more efficient.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:9:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "Process System Improvements",
-        "anchor": "20260401",
-        "text": "- Material and machine requirements are now enforced at process start, closing the gap first flagged in the October 19, 2022 release notes.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:10:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "UI Polish",
-        "anchor": "20260401",
-        "text": "- Hazard cards now share the same accessible markup as active cards while rendering with a distinct warning background, making dangerous actions easier to spot at a glance. - Added a lint-backed accessibility check that requires every interactive button to declare an explicit type, preventing accidental form submissions when navigating by keyboard. - Enhanced accessibility linting to validate aria-label attributes, catching empty or whitespace-only labels that fail to provide meaningful context for assistive technologies.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:11:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "Streamlined Game Systems",
-        "anchor": "20260401",
-        "text": "We've simplified DSPACE's core mechanics to focus purely on what matters most: the joy of space exploration and the real‑world impact of your achievements. The game now operates with a cleaner, more direct connection between virtual progress and real‑world space advancement.\n Our virtual units (dWatt, dUSD, etc.) remain as intuitive measurements of your progress, but they're now more tightly integrated with tangible outcomes. This change emerged from community feedback and our commitment to maintaining a clear path between in‑game achievements and real‑world space development.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:12:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "Local‑First Architecture",
-        "anchor": "20260401",
-        "text": "We've rebuilt DSPACE's architecture to be truly local‑first. Your progress, achievements, and contributions are now stored primarily on your own device. This approach gives you complete control over your data.\n A few technical details that might interest you:\n - Your v2 progress will automatically migrate to v3. On first launch, v3 checks for the legacy gameState key in localStorage. If found, it copies the data into IndexedDB and removes the old keys. - All custom content includes rollback functionality (in case something goes wrong)\n The new Cloud Sync feature lets you back up your progress across devices using a private GitHub gist. Visit the Cloud Sync page to enable it.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:13:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "Refined Virtual Economy",
-        "anchor": "20260401",
-        "text": "We've removed all blockchain integration plans from DSPACE. While Web3 features were originally planned, we realized they could potentially harm our core mission of democratizing space exploration. The virtual units (dWatt, dUSD, etc.) work perfectly well as simple progress metrics without needing tokenization.\n Coming in future updates: For social features and cross‑instance communication, we're planning to implement ActivityPub. This will give us all the benefits of decentralized social networking without the downsides of blockchain integration. Your achievements, collaborations, and contributions will be shareable and verifiable across instances, just in a simpler and more reliable way.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:14:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "AI Integration Updates",
-        "anchor": "20260401",
-        "text": "v3 ships with OpenAI-only chat in production today. token.place integration is implemented but deferred to v3.1 while the token.place API stabilizes. See v3 Release State and token.place.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:15:0",
         "path": "frontend/src/pages/docs/md/changelog/20260401.md",
         "slug": "/changelog",
         "title": "April 1, 2026",
@@ -8000,27 +8100,17 @@
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20260401:16:0",
+        "id": "changelog:/changelog:20260401:7:0",
         "path": "frontend/src/pages/docs/md/changelog/20260401.md",
         "slug": "/changelog",
         "title": "April 1, 2026",
-        "heading": "Community Features",
+        "heading": "Self-hosted",
         "anchor": "20260401",
-        "text": "Coming in future updates: Enhanced social features focused on direct collaboration between players. You'll be able to share your achievements, help others with their space missions, and contribute to collective goals – all without any intermediary systems. This will create a more immediate and meaningful connection between players working toward common space exploration objectives.",
+        "text": "DSPACE 2.1 was migrated from Netlify to a local Mac Mini M4. DSPACE v3 now runs on-premises on a k3s cluster across 9 Raspberry Pis.",
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20260401:17:0",
-        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
-        "slug": "/changelog",
-        "title": "April 1, 2026",
-        "heading": "Self‑hosted",
-        "anchor": "20260401",
-        "text": "Starting with DSPACE 2.1, the website is self‑hosted on premises, instead of deploying via Netlify. It's currently running on an M4 Mac Mini. Redundancy is here.",
-        "kind": "changelog"
-    },
-    {
-        "id": "changelog:/changelog:20260401:18:0",
+        "id": "changelog:/changelog:20260401:8:0",
         "path": "frontend/src/pages/docs/md/changelog/20260401.md",
         "slug": "/changelog",
         "title": "April 1, 2026",
@@ -8030,13 +8120,33 @@
         "kind": "changelog"
     },
     {
-        "id": "changelog:/changelog:20260401:19:0",
+        "id": "changelog:/changelog:20260401:9:0",
         "path": "frontend/src/pages/docs/md/changelog/20260401.md",
         "slug": "/changelog",
         "title": "April 1, 2026",
         "heading": "Looking Forward",
         "anchor": "20260401",
-        "text": "These changes reflect our commitment to keeping DSPACE focused on its core mission: democratizing space exploration through education, simulation, and real‑world impact. By removing unnecessary complexity, we've made the game more accessible while strengthening the connection between virtual achievements and actual space development.\n Thank you for being part of this journey. The future of space exploration belongs to everyone, and DSPACE will continue evolving to make that future more accessible to all.",
+        "text": "These changes reflect a commitment to keeping DSPACE focused on its core mission: democratizing space exploration through education, simulation, and real-world impact. By removing unnecessary complexity, the game is more accessible while strengthening the connection between virtual achievements and actual space development.\n v3 is the biggest DSPACE update yet, and it lays the groundwork for faster content releases moving forward.\n ---",
+        "kind": "changelog"
+    },
+    {
+        "id": "changelog:/changelog:20260401:10:0",
+        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
+        "slug": "/changelog",
+        "title": "April 1, 2026",
+        "heading": "June 1, 2026 — DSPACE v3.0.1 (patch addendum)",
+        "anchor": "20260401",
+        "text": "v3.0.1 is a patch update to the April 1 v3 release, focused on launch-readiness hardening.",
+        "kind": "changelog"
+    },
+    {
+        "id": "changelog:/changelog:20260401:11:0",
+        "path": "frontend/src/pages/docs/md/changelog/20260401.md",
+        "slug": "/changelog",
+        "title": "April 1, 2026",
+        "heading": "Patch notes",
+        "anchor": "20260401",
+        "text": "- /quests: improved list-path time-to-interactive and tightened built-in/custom coexistence behavior. - /quests security: sanitized custom quest tile routes to fall back to internal /quests/{id} links when values are unsafe, including protocol-relative prefixes like // and slash-backslash variants like /\\\\. - /processes: switched list rows to summary-first rendering while retaining runtime controls on /processes/:processId. - /docs: deferred full-text corpus fetch until first keyword search; browse and has: flows remain available immediately. - Release safety: expanded targeted regression coverage for quests, processes, docs search, and docs-backed chat checks.",
         "kind": "changelog"
     },
     {
