@@ -124,7 +124,7 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - `troubleshoot` enforces corrective actions and a mandatory re-test loop through `wind-readings`.
 - Grants:
     - Dialogue options/steps grantsItems:
-        - `wind-readings` → "Record both readings in the pad log." grants wind log ×1
+        - `wind-readings` declares wind log ×1 in quest JSON, but this `goto` option does not award items in the current UI runtime.
     - Quest-level `grantsItems`: None
 - Rewards:
     - rocket igniter ×10, hobbyist solid rocket motor ×5, Rocket Descent (animated) ×1
