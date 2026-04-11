@@ -34,7 +34,7 @@ creation process.
 
 ## Code Contributions
 
-- [Submit a pull request](https://github.com/democratizedspace/dspace/pulls)
+- [Submit a pull request](https://github.com/democratizedspace/dspace/compare)
 - Fix bugs or implement new features
 - Improve documentation
 - Enhance the user interface
