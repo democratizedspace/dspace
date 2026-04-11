@@ -107,13 +107,7 @@
                 {
                     "type": "goto",
                     "goto": "interpret",
-                    "text": "Both readings are documented. Time to interpret.",
-                    "requiresItems": [
-                        {
-                            "id": "15e3dd7e-374b-4233-b8c9-117e3057f009",
-                            "count": 1
-                        }
-                    ]
+                    "text": "Both readings are documented. Time to interpret."
                 }
             ]
         },

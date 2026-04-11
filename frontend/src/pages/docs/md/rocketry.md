@@ -118,14 +118,13 @@ Rocketry quests build practical progression through the rocketry skill tree. Thi
     - `requiresQuests`: `rocketry/parachute`
 - Dialogue `requiresItems` gates:
     - `supplies` → "All core gear is staged." — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1, rocket launch checklist ×1
-    - `wind-evidence` → "Both readings are documented. Time to interpret." — wind log ×1
     - `arm` → "Launch complete and post-flight check passed." — damaged model rocket ×1
 - Troubleshooting/safety branches:
     - `range-walk` and `scrub` paths can halt unsafe range conditions before arming.
     - `troubleshoot` enforces corrective actions and a mandatory re-test loop through `wind-readings`.
 - Grants:
     - Dialogue options/steps grantsItems:
-        - `wind-readings` → "Record both readings in the pad log." grants wind log ×1
+        - `wind-readings` declares wind log ×1 in quest JSON, but this `goto` option does not award items in the current UI runtime.
     - Quest-level `grantsItems`: None
 - Rewards:
     - rocket igniter ×10, hobbyist solid rocket motor ×5, Rocket Descent (animated) ×1
