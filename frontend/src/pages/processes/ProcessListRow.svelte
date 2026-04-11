@@ -24,7 +24,7 @@
             id: entryId,
             countLabel,
             name: metadata?.name || entry?.name || entryId || 'Unknown item',
-            image: metadata?.image || entry?.image || '/favicon.ico',
+            image: metadata?.image || '/favicon.ico',
         };
     };
 
