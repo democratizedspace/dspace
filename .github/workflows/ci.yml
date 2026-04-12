@@ -102,7 +102,7 @@ jobs:
       - name: Setup Playwright environment
         run: pnpm --dir frontend run setup-test-env
       - name: Install Playwright Chromium
-        run: pnpm --dir frontend exec playwright install --with-deps chromium
+        run: pnpm --dir frontend exec playwright install chromium
       - name: Run IndexedDB regression Playwright spec
         working-directory: frontend
         run: npx playwright test e2e/indexeddb-availability.spec.ts --project=chromium --reporter=dot
