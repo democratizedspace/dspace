@@ -25,17 +25,17 @@ describe('ProcessListRow', () => {
             createPreviewEntries: [{ id: 'dwatt', count: 1000 }],
         };
 
-        const { getByText, getAllByRole } = render(ProcessListRow, {
+        const { container, getAllByRole } = render(ProcessListRow, {
             props: { process, itemMetadataMap: metadataMap },
         });
 
-        expect(getByText('1x Smart Plug')).toBeTruthy();
-        expect(getByText('0.18x dUSD')).toBeTruthy();
-        expect(getByText('1000x dWatt')).toBeTruthy();
+        expect(container.textContent).toContain('1x Smart Plug');
+        expect(container.textContent).toContain('0.18x dUSD');
+        expect(container.textContent).toContain('1000x dWatt');
         expect(getAllByRole('img')).toHaveLength(3);
     });
 
-    test('falls back to entry ids when metadata is missing', () => {
+    test('leaves preview item names blank when metadata is still loading', () => {
         const process = {
             id: 'process-with-missing-item',
             title: 'Missing item metadata',
@@ -51,14 +51,17 @@ describe('ProcessListRow', () => {
             createPreviewEntries: [],
         };
 
-        const { getByText } = render(ProcessListRow, {
+        const { getByText, getByTestId } = render(ProcessListRow, {
             props: { process, itemMetadataMap: new Map() },
         });
 
-        expect(getByText('2x unknown-item')).toBeTruthy();
+        expect(getByText('Duration')).toBeTruthy();
+        expect(getByText('1 item (1)')).toBeTruthy();
+        expect(getByText('2x', { exact: false })).toBeTruthy();
+        expect(getByTestId('preview-item-name').textContent).toBe('');
     });
 
-    test('does not render untrusted preview images when metadata is missing', () => {
+    test('does not render preview images before metadata is available', () => {
         const process = {
             id: 'process-with-untrusted-image',
             title: 'Untrusted image',
@@ -76,11 +79,12 @@ describe('ProcessListRow', () => {
             createPreviewEntries: [],
         };
 
-        const { getByAltText } = render(ProcessListRow, {
+        const { container, queryByRole } = render(ProcessListRow, {
             props: { process, itemMetadataMap: new Map() },
         });
 
-        expect(getByAltText('unknown-item').getAttribute('src')).toBe('/favicon.ico');
+        expect(queryByRole('img')).toBeNull();
+        expect(container.querySelector('.preview-icon-placeholder')).toBeTruthy();
     });
 
     test('updates preview lines when metadata map changes after mount', async () => {
@@ -99,12 +103,12 @@ describe('ProcessListRow', () => {
             createPreviewEntries: [],
         };
 
-        const { getByText, rerender, queryByText } = render(ProcessListRow, {
+        const { container, getByText, rerender } = render(ProcessListRow, {
             props: { process, itemMetadataMap: new Map() },
         });
 
-        expect(getByText('1x smart-plug')).toBeTruthy();
-        expect(queryByText('1x Smart Plug')).toBeNull();
+        expect(getByText('1x', { exact: false })).toBeTruthy();
+        expect(container.textContent).not.toContain('1x Smart Plug');
 
         await rerender({
             process,
@@ -113,6 +117,6 @@ describe('ProcessListRow', () => {
             ]),
         });
 
-        expect(getByText('1x Smart Plug')).toBeTruthy();
+        expect(container.textContent).toContain('1x Smart Plug');
     });
 });

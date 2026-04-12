@@ -180,9 +180,11 @@ describe('Processes list route contract', () => {
         expect(screen.queryByRole('button', { name: 'Start' })).toBeNull();
         expect(screen.getAllByRole('link', { name: 'View details' })).toHaveLength(2);
 
-        expect(await screen.findByText('1x Shared Item')).toBeTruthy();
-        expect(screen.getByText('3x Fuel Cell')).toBeTruthy();
-        expect(screen.getByText('3x Byproduct')).toBeTruthy();
+        const listText = await screen.findByText('Built In Process');
+        expect(listText).toBeTruthy();
+        expect(document.body.textContent).toContain('1x Shared Item');
+        expect(document.body.textContent).toContain('3x Fuel Cell');
+        expect(document.body.textContent).toContain('3x Byproduct');
 
         expect(getItemMapMock).toHaveBeenCalledTimes(1);
         expect(getItemMapMock).toHaveBeenCalledWith(
@@ -193,7 +195,7 @@ describe('Processes list route contract', () => {
         );
     });
 
-    it('falls back to preview entry ids when at least one route-level preview metadata record is missing', async () => {
+    it('keeps preview names blank when metadata records are still unavailable', async () => {
         customListMock.mockResolvedValue([]);
         getItemMapMock.mockResolvedValue(
             new Map([['known-item', { id: 'known-item', name: 'Known Item', image: '/known.png' }]])
@@ -221,7 +223,10 @@ describe('Processes list route contract', () => {
             },
         });
 
-        expect(await screen.findByText('1x Known Item')).toBeTruthy();
-        expect(screen.getByText('2x missing-item')).toBeTruthy();
+        await screen.findByText('Fallback Process');
+        expect(document.body.textContent).toContain('1x Known Item');
+        expect(screen.getByText('2x', { exact: false })).toBeTruthy();
+        const previewNames = screen.getAllByTestId('preview-item-name');
+        expect(previewNames[previewNames.length - 1].textContent).toBe('');
     });
 });

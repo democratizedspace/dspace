@@ -19,12 +19,14 @@
         const metadata = metadataMap?.get(entryId);
         const count = Number(entry?.count);
         const countLabel = Number.isFinite(count) ? count : 0;
+        const hasMetadata = Boolean(metadata);
 
         return {
             id: entryId,
             countLabel,
-            name: metadata?.name || entry?.name || entryId || 'Unknown item',
-            image: metadata?.image || '/favicon.ico',
+            name: hasMetadata ? metadata?.name || entry?.name || 'Unknown item' : '',
+            image: hasMetadata ? metadata?.image || '/favicon.ico' : '',
+            hasMetadata,
         };
     };
 
@@ -63,8 +65,16 @@
                     <ul class="item-preview-list">
                         {#each requirePreviewLines as item, index (`require-${item.id}-${index}`)}
                             <li>
-                                <img src={item.image} alt={item.name} />
-                                <span>{item.countLabel}x {item.name}</span>
+                                {#if item.hasMetadata}
+                                    <img src={item.image} alt={item.name} />
+                                {:else}
+                                    <span class="preview-icon-placeholder" aria-hidden="true"
+                                    ></span>
+                                {/if}
+                                <span
+                                    >{item.countLabel}x
+                                    <span data-testid="preview-item-name">{item.name}</span></span
+                                >
                             </li>
                         {/each}
                     </ul>
@@ -79,8 +89,16 @@
                     <ul class="item-preview-list">
                         {#each consumePreviewLines as item, index (`consume-${item.id}-${index}`)}
                             <li>
-                                <img src={item.image} alt={item.name} />
-                                <span>{item.countLabel}x {item.name}</span>
+                                {#if item.hasMetadata}
+                                    <img src={item.image} alt={item.name} />
+                                {:else}
+                                    <span class="preview-icon-placeholder" aria-hidden="true"
+                                    ></span>
+                                {/if}
+                                <span
+                                    >{item.countLabel}x
+                                    <span data-testid="preview-item-name">{item.name}</span></span
+                                >
                             </li>
                         {/each}
                     </ul>
@@ -95,8 +113,16 @@
                     <ul class="item-preview-list">
                         {#each createPreviewLines as item, index (`create-${item.id}-${index}`)}
                             <li>
-                                <img src={item.image} alt={item.name} />
-                                <span>{item.countLabel}x {item.name}</span>
+                                {#if item.hasMetadata}
+                                    <img src={item.image} alt={item.name} />
+                                {:else}
+                                    <span class="preview-icon-placeholder" aria-hidden="true"
+                                    ></span>
+                                {/if}
+                                <span
+                                    >{item.countLabel}x
+                                    <span data-testid="preview-item-name">{item.name}</span></span
+                                >
                             </li>
                         {/each}
                     </ul>
@@ -179,6 +205,13 @@
         height: 16px;
         border-radius: 50%;
         object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .preview-icon-placeholder {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
         flex-shrink: 0;
     }
 
