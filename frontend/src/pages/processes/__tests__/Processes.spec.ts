@@ -193,7 +193,7 @@ describe('Processes list route contract', () => {
         );
     });
 
-    it('falls back to preview entry ids when at least one route-level preview metadata record is missing', async () => {
+    it('keeps preview names blank until route-level preview metadata resolves', async () => {
         customListMock.mockResolvedValue([]);
         getItemMapMock.mockResolvedValue(
             new Map([['known-item', { id: 'known-item', name: 'Known Item', image: '/known.png' }]])
@@ -222,6 +222,7 @@ describe('Processes list route contract', () => {
         });
 
         expect(await screen.findByText('1x Known Item')).toBeTruthy();
-        expect(screen.getByText('2x missing-item')).toBeTruthy();
+        expect(screen.getByText(/^2x\s*$/)).toBeTruthy();
+        expect(screen.queryByText('missing-item')).toBeNull();
     });
 });
