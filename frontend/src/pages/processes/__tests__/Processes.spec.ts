@@ -265,7 +265,13 @@ describe('Processes list route contract', () => {
 
         expect(screen.getByText('Loading Preview Process')).toBeTruthy();
         expect(screen.getByText('Duration')).toBeTruthy();
-        expect(screen.getByText('1x')).toBeTruthy();
+        expect(screen.getByText('1 item (1)')).toBeTruthy();
+        expect(screen.getByRole('link', { name: 'View details' }).getAttribute('href')).toBe(
+            '/processes/loading-preview-process'
+        );
+        expect(
+            screen.getAllByText((content, node) => node?.textContent?.trim() === '1x').length
+        ).toBeGreaterThan(0);
         expect(screen.queryByText('1x pending-item')).toBeNull();
         expect(screen.queryByText('1x Pending Item')).toBeNull();
 
@@ -274,5 +280,6 @@ describe('Processes list route contract', () => {
         );
 
         expect(await screen.findByText('1x Pending Item')).toBeTruthy();
+        expect(screen.queryByText('1x pending-item')).toBeNull();
     });
 });

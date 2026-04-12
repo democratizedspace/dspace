@@ -1,8 +1,43 @@
 import { expect, test } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { clearUserData, waitForHydration } from './test-helpers';
 
-const PROCESS_ID = 'outlet-dWatt-1e3';
-const PREVIEW_ITEM_ID = 'a5395e29-1862-4eb7-8517-5d161635e032';
+type ProcessCatalogEntry = {
+    id?: string;
+    requireItems?: Array<{ id?: string | number }>;
+    consumeItems?: Array<{ id?: string | number }>;
+    createItems?: Array<{ id?: string | number }>;
+};
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const frontendRoot = join(__dirname, '..');
+const generatedProcessesPath = join(frontendRoot, 'src', 'generated', 'processes.json');
+const generatedProcesses = JSON.parse(
+    readFileSync(generatedProcessesPath, 'utf8')
+) as ProcessCatalogEntry[];
+
+const targetProcess = generatedProcesses.find((process) => {
+    const previewId = [
+        process?.requireItems?.[0]?.id,
+        process?.consumeItems?.[0]?.id,
+        process?.createItems?.[0]?.id,
+    ].find((id) => id !== undefined && id !== null);
+    return Boolean(process?.id) && Boolean(previewId);
+});
+
+if (!targetProcess?.id) {
+    throw new Error('No built-in process with preview metadata was found.');
+}
+
+const PROCESS_ID = String(targetProcess.id);
+const PREVIEW_ITEM_ID = String(
+    targetProcess.requireItems?.[0]?.id ??
+        targetProcess.consumeItems?.[0]?.id ??
+        targetProcess.createItems?.[0]?.id
+);
 
 test.describe('/processes metadata loading behavior', () => {
     test.beforeEach(async ({ page }) => {
@@ -20,12 +55,19 @@ test.describe('/processes metadata loading behavior', () => {
 
         const processRow = page.locator(`[data-process-id="${PROCESS_ID}"]`);
         await expect(processRow).toBeVisible();
-        await expect(processRow).toContainText('Buy 1 kWh of electricity from a wall outlet');
+        await expect(processRow.getByRole('link', { name: 'View details' })).toHaveAttribute(
+            'href',
+            `/processes/${PROCESS_ID}`
+        );
 
-        await expect(processRow).not.toContainText(/smart plug/i);
+        const pendingPreviewLine = processRow.locator('.item-preview-list li').first();
+        await expect(pendingPreviewLine).toContainText(/x\s*$/);
         await expect(processRow).not.toContainText(PREVIEW_ITEM_ID);
+        await expect(pendingPreviewLine).toContainText(/^(\d+(?:\.\d+)?)x\s*$/);
 
-        await expect(processRow).toContainText(/smart plug/i, { timeout: 2500 });
+        await expect(pendingPreviewLine).not.toContainText(/^(\d+(?:\.\d+)?)x\s*$/, {
+            timeout: 2500,
+        });
         await expect(processRow).not.toContainText(PREVIEW_ITEM_ID);
     });
 });
