@@ -60,9 +60,9 @@ test.describe('/processes metadata loading behavior', () => {
         const pendingPreviewLine = processRow.locator('.item-preview-list li').first();
         await expect(pendingPreviewLine).toContainText(/x\s*$/);
         await expect(processRow).not.toContainText(PREVIEW_ITEM_ID);
-        await expect(pendingPreviewLine).toContainText(/^(\d+(?:\.\d+)?)x\s*$/);
+        await expect(pendingPreviewLine).toContainText(/^\s*(\d+(?:\.\d+)?)x\s*$/);
 
-        await expect(pendingPreviewLine).not.toContainText(/^(\d+(?:\.\d+)?)x\s*$/, {
+        await expect(pendingPreviewLine).not.toContainText(/^\s*(\d+(?:\.\d+)?)x\s*$/, {
             timeout: 8000,
         });
         await expect(processRow).not.toContainText(PREVIEW_ITEM_ID);
