@@ -9,6 +9,10 @@
 
     export let slug;
 
+    const QUANTITY_PRECISION = 1_000_000;
+    const CURRENCY_EPSILON = 1e-9;
+    const defaultCurrencyItem = items.find((item) => item.name === 'dUSD') ?? null;
+
     let builtInProcess = processes.find((p) => p.id === slug);
     let processData = null;
     let displayProcess = builtInProcess;
@@ -16,21 +20,47 @@
     let disabledReason = 'No required items are purchasable.';
     let toastVisible = false;
     let toastMessage = '';
-    const disabledReasonId = 'buy-required-disabled-reason';
+    const disabledReasonId = `buy-required-disabled-reason-${slug}`;
+
+    const roundDownQuantity = (value) => {
+        if (!Number.isFinite(value) || value <= 0) {
+            return 0;
+        }
+        return Math.floor((value + CURRENCY_EPSILON) * QUANTITY_PRECISION) / QUANTITY_PRECISION;
+    };
+
+    const roundCurrency = (value) => {
+        if (!Number.isFinite(value)) {
+            return 0;
+        }
+        return Math.round(value * QUANTITY_PRECISION) / QUANTITY_PRECISION;
+    };
+
+    const getCurrencyItem = (symbol) => {
+        if (!symbol) {
+            return defaultCurrencyItem;
+        }
+
+        return items.find((item) => item.name === symbol) ?? defaultCurrencyItem;
+    };
 
     const getUnitPrice = (item) => {
         const { price, symbol } = getPriceStringComponents(item?.price);
-        if (!Number.isFinite(price) || price <= 0 || !symbol) {
+        if (!Number.isFinite(price) || price <= 0) {
+            return null;
+        }
+
+        const currencyItem = getCurrencyItem(symbol);
+        if (!currencyItem) {
             return null;
         }
 
         return {
             unitPrice: price,
-            currencySymbol: symbol,
+            currencySymbol: symbol || defaultCurrencyItem?.name || 'dUSD',
+            currencyId: currencyItem.id,
         };
     };
-
-    const getCurrencyItem = (symbol) => items.find((item) => item.name === symbol);
 
     const getPendingBuyRequirements = () => {
         if (!displayProcess?.requireItems?.length) {
@@ -40,7 +70,7 @@
         return displayProcess.requireItems
             .map((req) => {
                 const have = getItemCount(req.id);
-                const neededQuantity = req.count - have;
+                const neededQuantity = roundDownQuantity(req.count - have);
                 if (neededQuantity <= 0) {
                     return null;
                 }
@@ -51,20 +81,63 @@
                     return null;
                 }
 
-                const currencyItem = getCurrencyItem(pricing.currencySymbol);
-                if (!currencyItem) {
-                    return null;
-                }
-
                 return {
                     id: req.id,
                     quantity: neededQuantity,
                     unitPrice: pricing.unitPrice,
                     currencySymbol: pricing.currencySymbol,
-                    currencyId: currencyItem.id,
+                    currencyId: pricing.currencyId,
                 };
             })
             .filter(Boolean);
+    };
+
+    const buildPurchasePlan = (pendingBuys) => {
+        const sortedRequirements = [...pendingBuys].sort(
+            (a, b) => a.unitPrice * a.quantity - b.unitPrice * b.quantity
+        );
+        const remainingByCurrency = sortedRequirements.reduce((acc, requirement) => {
+            if (acc[requirement.currencyId] == null) {
+                acc[requirement.currencyId] = roundCurrency(getItemCount(requirement.currencyId));
+            }
+            return acc;
+        }, {});
+
+        const purchasePlan = [];
+        let added = 0;
+        sortedRequirements.forEach((requirement) => {
+            const balance = remainingByCurrency[requirement.currencyId] ?? 0;
+            const affordableQuantity = roundDownQuantity(
+                (balance + CURRENCY_EPSILON) / requirement.unitPrice
+            );
+            if (affordableQuantity <= 0) {
+                return;
+            }
+
+            const quantity = roundDownQuantity(Math.min(requirement.quantity, affordableQuantity));
+            if (quantity <= 0) {
+                return;
+            }
+
+            const totalCost = roundCurrency(quantity * requirement.unitPrice);
+            if (totalCost > balance + CURRENCY_EPSILON) {
+                return;
+            }
+
+            purchasePlan.push({
+                id: requirement.id,
+                quantity,
+                price: requirement.unitPrice,
+                currencyId: requirement.currencyId,
+            });
+            remainingByCurrency[requirement.currencyId] = roundCurrency(balance - totalCost);
+            added = roundDownQuantity(added + quantity);
+        });
+
+        return {
+            purchasePlan,
+            added,
+        };
     };
 
     const getDisabledReason = () => {
@@ -73,7 +146,7 @@
         }
 
         const missingRequirements = displayProcess.requireItems.filter(
-            (req) => req.count - getItemCount(req.id) > 0
+            (req) => roundDownQuantity(req.count - getItemCount(req.id)) > 0
         );
         if (missingRequirements.length === 0) {
             return 'All required items are already available.';
@@ -81,36 +154,11 @@
 
         const pendingBuys = getPendingBuyRequirements();
         if (pendingBuys.length === 0) {
-            return 'No buyable required items are still needed.';
+            return 'Required items cannot be purchased.';
         }
 
-        const availableByCurrency = pendingBuys.reduce((acc, requirement) => {
-            if (acc[requirement.currencyId] != null) {
-                return acc;
-            }
-
-            acc[requirement.currencyId] = getItemCount(requirement.currencyId);
-            return acc;
-        }, {});
-
-        const sortedRequirements = [...pendingBuys].sort(
-            (a, b) => a.unitPrice * a.quantity - b.unitPrice * b.quantity
-        );
-        const canBuyAtLeastOne = sortedRequirements.some((requirement) => {
-            const balance = availableByCurrency[requirement.currencyId] ?? 0;
-            const affordableQuantity = Math.floor(balance / requirement.unitPrice);
-            if (affordableQuantity <= 0) {
-                return false;
-            }
-
-            const purchasedQuantity = Math.min(requirement.quantity, affordableQuantity);
-            availableByCurrency[requirement.currencyId] =
-                balance - purchasedQuantity * requirement.unitPrice;
-
-            return purchasedQuantity > 0;
-        });
-
-        if (!canBuyAtLeastOne) {
+        const { purchasePlan } = buildPurchasePlan(pendingBuys);
+        if (purchasePlan.length === 0) {
             return 'Not enough currency to buy any still-needed required items.';
         }
 
@@ -131,41 +179,7 @@
             return;
         }
 
-        const sortedRequirements = [...pendingBuys].sort(
-            (a, b) => a.unitPrice * a.quantity - b.unitPrice * b.quantity
-        );
-        const remainingByCurrency = sortedRequirements.reduce((acc, requirement) => {
-            if (acc[requirement.currencyId] == null) {
-                acc[requirement.currencyId] = getItemCount(requirement.currencyId);
-            }
-            return acc;
-        }, {});
-
-        const purchasePlan = [];
-        let added = 0;
-        sortedRequirements.forEach((requirement) => {
-            const balance = remainingByCurrency[requirement.currencyId] ?? 0;
-            const affordableQuantity = Math.floor(balance / requirement.unitPrice);
-            if (affordableQuantity <= 0) {
-                return;
-            }
-
-            const quantity = Math.min(requirement.quantity, affordableQuantity);
-            if (quantity <= 0) {
-                return;
-            }
-
-            purchasePlan.push({
-                id: requirement.id,
-                quantity,
-                price: requirement.unitPrice,
-                currencyId: requirement.currencyId,
-            });
-            remainingByCurrency[requirement.currencyId] =
-                balance - quantity * requirement.unitPrice;
-            added += quantity;
-        });
-
+        const { purchasePlan, added } = buildPurchasePlan(pendingBuys);
         if (purchasePlan.length === 0) {
             updateDisabled();
             return;
@@ -173,7 +187,7 @@
 
         buyItems(purchasePlan);
         if (added > 0) {
-            toastMessage = `\u2713 Added ${added} items to inventory`;
+            toastMessage = `✓ Added ${added} items to inventory`;
             toastVisible = true;
             setTimeout(() => (toastVisible = false), 3000);
         }
@@ -206,10 +220,12 @@
         <button
             class="primary"
             type="button"
-            on:click={buyRequired}
+            on:click={() => {
+                if (!disableBuy) buyRequired();
+            }}
             aria-disabled={disableBuy}
             aria-describedby={disableBuy ? disabledReasonId : undefined}
-            disabled={disableBuy}
+            class:is-disabled={disableBuy}
         >
             Buy required items
         </button>
@@ -239,7 +255,7 @@
         outline: 2px solid #fff;
         outline-offset: 2px;
     }
-    .primary[disabled] {
+    .primary.is-disabled {
         opacity: 0.6;
         cursor: not-allowed;
     }
@@ -270,7 +286,8 @@
         opacity: 0;
         transition: opacity 120ms ease-in-out;
     }
-    .buy-required-wrapper[data-disabled='true']:hover .buy-required-tooltip {
+    .buy-required-wrapper[data-disabled='true']:hover .buy-required-tooltip,
+    .buy-required-wrapper[data-disabled='true']:focus-within .buy-required-tooltip {
         visibility: visible;
         opacity: 1;
     }
