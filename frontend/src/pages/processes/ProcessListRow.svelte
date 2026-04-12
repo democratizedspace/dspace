@@ -1,6 +1,7 @@
 <script>
     export let process;
     export let itemMetadataMap = new Map();
+    export let pendingMetadataIds = new Set();
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
 
@@ -14,32 +15,45 @@
     $: consumeSummary = formatItemSummary(process?.consumeItemTypes, process?.consumeItemTotal);
     $: createSummary = formatItemSummary(process?.createItemTypes, process?.createItemTotal);
 
-    const toPreviewLine = (entry, metadataMap) => {
+    const toPreviewLine = (entry, metadataMap, pendingIds) => {
         const entryId = normalizeProcessId(entry?.id);
         const metadata = metadataMap?.get(entryId);
+        const metadataPending = !metadata && pendingIds instanceof Set && pendingIds.has(entryId);
         const count = Number(entry?.count);
         const countLabel = Number.isFinite(count) ? count : 0;
 
         return {
             id: entryId,
             countLabel,
-            name: metadata?.name || entry?.name || entryId || 'Unknown item',
-            image: metadata?.image || '/favicon.ico',
+            name: metadataPending ? '' : metadata?.name || entry?.name || entryId || 'Unknown item',
+            image: metadataPending ? null : metadata?.image || '/favicon.ico',
         };
     };
 
-    const getPreviewLines = (entries = [], metadataMap) =>
+    const getPreviewLines = (entries = [], metadataMap, pendingIds) =>
         Array.isArray(entries)
             ? entries
                   .map((entry) => ({ ...entry, id: normalizeProcessId(entry?.id) }))
                   .filter((entry) => entry.id.length > 0)
                   .slice(0, 2)
-                  .map((entry) => toPreviewLine(entry, metadataMap))
+                  .map((entry) => toPreviewLine(entry, metadataMap, pendingIds))
             : [];
 
-    $: requirePreviewLines = getPreviewLines(process?.requirePreviewEntries, itemMetadataMap);
-    $: consumePreviewLines = getPreviewLines(process?.consumePreviewEntries, itemMetadataMap);
-    $: createPreviewLines = getPreviewLines(process?.createPreviewEntries, itemMetadataMap);
+    $: requirePreviewLines = getPreviewLines(
+        process?.requirePreviewEntries,
+        itemMetadataMap,
+        pendingMetadataIds
+    );
+    $: consumePreviewLines = getPreviewLines(
+        process?.consumePreviewEntries,
+        itemMetadataMap,
+        pendingMetadataIds
+    );
+    $: createPreviewLines = getPreviewLines(
+        process?.createPreviewEntries,
+        itemMetadataMap,
+        pendingMetadataIds
+    );
 </script>
 
 <article class="process-row" data-process-id={processId}>
@@ -63,7 +77,9 @@
                     <ul class="item-preview-list">
                         {#each requirePreviewLines as item, index (`require-${item.id}-${index}`)}
                             <li>
-                                <img src={item.image} alt={item.name} />
+                                {#if item.image}
+                                    <img src={item.image} alt={item.name} />
+                                {/if}
                                 <span>{item.countLabel}x {item.name}</span>
                             </li>
                         {/each}
@@ -79,7 +95,9 @@
                     <ul class="item-preview-list">
                         {#each consumePreviewLines as item, index (`consume-${item.id}-${index}`)}
                             <li>
-                                <img src={item.image} alt={item.name} />
+                                {#if item.image}
+                                    <img src={item.image} alt={item.name} />
+                                {/if}
                                 <span>{item.countLabel}x {item.name}</span>
                             </li>
                         {/each}
@@ -95,7 +113,9 @@
                     <ul class="item-preview-list">
                         {#each createPreviewLines as item, index (`create-${item.id}-${index}`)}
                             <li>
-                                <img src={item.image} alt={item.name} />
+                                {#if item.image}
+                                    <img src={item.image} alt={item.name} />
+                                {/if}
                                 <span>{item.countLabel}x {item.name}</span>
                             </li>
                         {/each}

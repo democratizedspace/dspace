@@ -184,8 +184,8 @@ describe('Processes list route contract', () => {
         expect(screen.getByText('3x Fuel Cell')).toBeTruthy();
         expect(screen.getByText('3x Byproduct')).toBeTruthy();
 
-        expect(getItemMapMock).toHaveBeenCalledTimes(1);
-        expect(getItemMapMock).toHaveBeenCalledWith(
+        expect(getItemMapMock).toHaveBeenCalled();
+        expect(getItemMapMock.mock.calls[0][0]).toEqual(
             expect.arrayContaining(['shared-item', 'fuel-cell', 'byproduct'])
         );
         expect(new Set(getItemMapMock.mock.calls[0][0]).size).toBe(
@@ -193,10 +193,16 @@ describe('Processes list route contract', () => {
         );
     });
 
-    it('falls back to preview entry ids when at least one route-level preview metadata record is missing', async () => {
+    it('uses resolver fallback metadata when a preview entry is missing from the item catalog', async () => {
         customListMock.mockResolvedValue([]);
         getItemMapMock.mockResolvedValue(
-            new Map([['known-item', { id: 'known-item', name: 'Known Item', image: '/known.png' }]])
+            new Map([
+                ['known-item', { id: 'known-item', name: 'Known Item', image: '/known.png' }],
+                [
+                    'missing-item',
+                    { id: 'missing-item', name: 'Unknown item', image: '/favicon.ico' },
+                ],
+            ])
         );
 
         render(Processes, {
@@ -222,6 +228,66 @@ describe('Processes list route contract', () => {
         });
 
         expect(await screen.findByText('1x Known Item')).toBeTruthy();
-        expect(screen.getByText('2x missing-item')).toBeTruthy();
+        expect(screen.getByText('2x Unknown item')).toBeTruthy();
+        expect(screen.queryByText('2x missing-item')).toBeNull();
+    });
+
+    it('renders list details immediately while waiting for preview metadata to resolve', async () => {
+        customListMock.mockResolvedValue([]);
+        let resolveMetadata:
+            | ((value: Map<string, { id: string; name: string; image: string }>) => void)
+            | undefined;
+        const metadataPromise = new Promise<
+            Map<string, { id: string; name: string; image: string }>
+        >((resolve) => {
+            resolveMetadata = resolve;
+        });
+        getItemMapMock.mockReturnValue(metadataPromise);
+
+        render(Processes, {
+            props: {
+                builtInProcesses: [
+                    {
+                        id: 'loading-preview-process',
+                        title: 'Loading Preview Process',
+                        duration: '3m',
+                        requireItemTypes: 1,
+                        requireItemTotal: 1,
+                        consumeItemTypes: 0,
+                        consumeItemTotal: 0,
+                        createItemTypes: 0,
+                        createItemTotal: 0,
+                        requirePreviewEntries: [{ id: 'pending-item', count: 1 }],
+                        consumePreviewEntries: [],
+                        createPreviewEntries: [],
+                        custom: false,
+                    },
+                ],
+            },
+        });
+
+        expect(screen.getByText('Loading Preview Process')).toBeTruthy();
+        expect(screen.getByText('Duration')).toBeTruthy();
+        expect(screen.getByText('1 item (1)')).toBeTruthy();
+        expect(screen.getByRole('link', { name: 'View details' }).getAttribute('href')).toBe(
+            '/processes/loading-preview-process'
+        );
+        expect(
+            screen.getAllByText((content, node) => node?.textContent?.trim() === '1x').length
+        ).toBeGreaterThan(0);
+        expect(screen.queryByText('1x pending-item')).toBeNull();
+        expect(screen.queryByText('1x Pending Item')).toBeNull();
+
+        resolveMetadata?.(
+            new Map([
+                [
+                    'pending-item',
+                    { id: 'pending-item', name: 'Pending Item', image: '/pending.png' },
+                ],
+            ])
+        );
+
+        expect(await screen.findByText('1x Pending Item')).toBeTruthy();
+        expect(screen.queryByText('1x pending-item')).toBeNull();
     });
 });

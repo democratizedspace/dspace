@@ -35,7 +35,7 @@ describe('ProcessListRow', () => {
         expect(getAllByRole('img')).toHaveLength(3);
     });
 
-    test('falls back to entry ids when metadata is missing', () => {
+    test('leaves preview item name blank while metadata is still loading', () => {
         const process = {
             id: 'process-with-missing-item',
             title: 'Missing item metadata',
@@ -51,11 +51,16 @@ describe('ProcessListRow', () => {
             createPreviewEntries: [],
         };
 
-        const { getByText } = render(ProcessListRow, {
-            props: { process, itemMetadataMap: new Map() },
+        const { getByText, queryByText } = render(ProcessListRow, {
+            props: {
+                process,
+                itemMetadataMap: new Map(),
+                pendingMetadataIds: new Set(['unknown-item']),
+            },
         });
 
-        expect(getByText('2x unknown-item')).toBeTruthy();
+        expect(getByText('2x')).toBeTruthy();
+        expect(queryByText('2x unknown-item')).toBeNull();
     });
 
     test('does not render untrusted preview images when metadata is missing', () => {
@@ -100,10 +105,15 @@ describe('ProcessListRow', () => {
         };
 
         const { getByText, rerender, queryByText } = render(ProcessListRow, {
-            props: { process, itemMetadataMap: new Map() },
+            props: {
+                process,
+                itemMetadataMap: new Map(),
+                pendingMetadataIds: new Set(['smart-plug']),
+            },
         });
 
-        expect(getByText('1x smart-plug')).toBeTruthy();
+        expect(getByText('1x')).toBeTruthy();
+        expect(queryByText('1x smart-plug')).toBeNull();
         expect(queryByText('1x Smart Plug')).toBeNull();
 
         await rerender({
@@ -111,6 +121,7 @@ describe('ProcessListRow', () => {
             itemMetadataMap: new Map([
                 ['smart-plug', { id: 'smart-plug', name: 'Smart Plug', image: '/smart-plug.png' }],
             ]),
+            pendingMetadataIds: new Set(),
         });
 
         expect(getByText('1x Smart Plug')).toBeTruthy();
