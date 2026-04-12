@@ -106,12 +106,17 @@
             return 0;
         }
 
-        const hasTestHookAccess = window.__DSPACE_ENABLE_TEST_HOOKS__ === true;
+        const searchParams = new URLSearchParams(window.location.search);
+        const hasTestHookAccess =
+            window.__DSPACE_ENABLE_TEST_HOOKS__ === true ||
+            searchParams.get('__dspace_enable_test_hooks') === '1';
         if (import.meta.env.PROD && !hasTestHookAccess) {
             return 0;
         }
 
-        const delay = Number(window.__DSPACE_PROCESS_METADATA_DELAY_MS__);
+        const delay =
+            Number(window.__DSPACE_PROCESS_METADATA_DELAY_MS__) ||
+            Number(searchParams.get('__dspace_process_metadata_delay_ms'));
         return Number.isFinite(delay) && delay > 0 ? delay : 0;
     };
 

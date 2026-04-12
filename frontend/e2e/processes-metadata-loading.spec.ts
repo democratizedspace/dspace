@@ -45,14 +45,9 @@ test.describe('/processes metadata loading behavior', () => {
     });
 
     test('does not show preview item ids while metadata is still loading', async ({ page }) => {
-        await page.addInitScript(() => {
-            // @ts-expect-error test hook
-            window.__DSPACE_ENABLE_TEST_HOOKS__ = true;
-            // @ts-expect-error test hook
-            window.__DSPACE_PROCESS_METADATA_DELAY_MS__ = 1200;
-        });
-
-        await page.goto('/processes');
+        await page.goto(
+            '/processes?__dspace_enable_test_hooks=1&__dspace_process_metadata_delay_ms=6000'
+        );
         await waitForHydration(page, '.processes-page');
 
         const processRow = page.locator(`[data-process-id="${PROCESS_ID}"]`);
@@ -68,7 +63,7 @@ test.describe('/processes metadata loading behavior', () => {
         await expect(pendingPreviewLine).toContainText(/^(\d+(?:\.\d+)?)x\s*$/);
 
         await expect(pendingPreviewLine).not.toContainText(/^(\d+(?:\.\d+)?)x\s*$/, {
-            timeout: 2500,
+            timeout: 8000,
         });
         await expect(processRow).not.toContainText(PREVIEW_ITEM_ID);
     });
