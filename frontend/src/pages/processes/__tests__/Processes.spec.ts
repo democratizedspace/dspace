@@ -198,7 +198,10 @@ describe('Processes list route contract', () => {
         getItemMapMock.mockResolvedValue(
             new Map([
                 ['known-item', { id: 'known-item', name: 'Known Item', image: '/known.png' }],
-                ['missing-item', { id: 'missing-item', name: 'Unknown item', image: '/favicon.ico' }],
+                [
+                    'missing-item',
+                    { id: 'missing-item', name: 'Unknown item', image: '/favicon.ico' },
+                ],
             ])
         );
 
@@ -234,11 +237,11 @@ describe('Processes list route contract', () => {
         let resolveMetadata:
             | ((value: Map<string, { id: string; name: string; image: string }>) => void)
             | undefined;
-        const metadataPromise = new Promise<Map<string, { id: string; name: string; image: string }>>(
-            (resolve) => {
-                resolveMetadata = resolve;
-            }
-        );
+        const metadataPromise = new Promise<
+            Map<string, { id: string; name: string; image: string }>
+        >((resolve) => {
+            resolveMetadata = resolve;
+        });
         getItemMapMock.mockReturnValue(metadataPromise);
 
         render(Processes, {
@@ -276,7 +279,12 @@ describe('Processes list route contract', () => {
         expect(screen.queryByText('1x Pending Item')).toBeNull();
 
         resolveMetadata?.(
-            new Map([['pending-item', { id: 'pending-item', name: 'Pending Item', image: '/pending.png' }]])
+            new Map([
+                [
+                    'pending-item',
+                    { id: 'pending-item', name: 'Pending Item', image: '/pending.png' },
+                ],
+            ])
         );
 
         expect(await screen.findByText('1x Pending Item')).toBeTruthy();

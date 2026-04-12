@@ -175,7 +175,11 @@ const TEST_GROUPS = [
     },
     {
         name: 'Process Preview',
-        files: ['process-preview.spec.ts', 'process-hardening.spec.ts'],
+        files: [
+            'process-preview.spec.ts',
+            'process-hardening.spec.ts',
+            'processes-metadata-loading.spec.ts',
+        ],
         parallel: true,
         workers: 1,
     },
