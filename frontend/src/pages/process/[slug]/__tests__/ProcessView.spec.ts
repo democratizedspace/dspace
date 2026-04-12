@@ -16,6 +16,16 @@ vi.mock('../../../../generated/processes.json', () => ({
             consumeItems: [],
             createItems: [],
         },
+        {
+            id: 'partial-process',
+            title: 'Partial Process',
+            requireItems: [
+                { id: 'req-item', count: 2 },
+                { id: 'other-req-item', count: 2 },
+            ],
+            consumeItems: [],
+            createItems: [],
+        },
     ],
 }));
 
@@ -24,6 +34,14 @@ vi.mock('../../../inventory/json/items', () => ({
         {
             id: 'req-item',
             price: '5 dUSD',
+        },
+        {
+            id: 'other-req-item',
+            price: '2 dUSD',
+        },
+        {
+            id: 'dUSD',
+            name: 'dUSD',
         },
     ],
 }));
@@ -49,7 +67,7 @@ describe('ProcessView detail controls', () => {
     beforeEach(() => {
         buyItemsMock.mockReset();
         getItemCountMock.mockReset();
-        getItemCountMock.mockReturnValue(0);
+        getItemCountMock.mockImplementation((id: string) => (id === 'dUSD' ? 100 : 0));
     });
 
     it('keeps Buy required items on detail route and purchases missing requirements', async () => {
@@ -62,7 +80,9 @@ describe('ProcessView detail controls', () => {
         try {
             await fireEvent.click(buyButton);
 
-            expect(buyItemsMock).toHaveBeenCalledWith([{ id: 'req-item', quantity: 2, price: 5 }]);
+            expect(buyItemsMock).toHaveBeenCalledWith([
+                { id: 'req-item', quantity: 2, price: 5, currencyId: 'dUSD' },
+            ]);
             expect((await screen.findByRole('status')).textContent).toContain(
                 'Added 2 items to inventory'
             );
@@ -71,5 +91,42 @@ describe('ProcessView detail controls', () => {
         } finally {
             vi.useRealTimers();
         }
+    });
+
+    it('shows disabled reason when all required items are already available', async () => {
+        getItemCountMock.mockImplementation((id: string) => {
+            if (id === 'req-item') {
+                return 2;
+            }
+            return 0;
+        });
+
+        render(ProcessView, { props: { slug: 'detail-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.getAttribute('disabled')).toBe('');
+        expect(buyButton.getAttribute('aria-describedby')).toBe('buy-required-reason');
+        expect(screen.getByText('All required items are already available.')).toBeTruthy();
+    });
+
+    it('buys as many required items as possible in ascending price*quantity order', async () => {
+        getItemCountMock.mockImplementation((id: string) => {
+            if (id === 'dUSD') {
+                return 9;
+            }
+            return 0;
+        });
+
+        render(ProcessView, { props: { slug: 'partial-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.getAttribute('disabled')).toBeNull();
+
+        await fireEvent.click(buyButton);
+
+        expect(buyItemsMock).toHaveBeenCalledWith([
+            { id: 'other-req-item', quantity: 2, price: 2, currencyId: 'dUSD' },
+            { id: 'req-item', quantity: 1, price: 5, currencyId: 'dUSD' },
+        ]);
     });
 });

@@ -124,7 +124,11 @@ export const buyItems = (items) => {
 
     items.forEach((item) => {
         const { price, quantity } = item;
-        const currencyId = dUSDId;
+        const currencyId = item.currencyId || dUSDId;
+
+        if (!currencyId) {
+            return;
+        }
 
         const parsedPrice = parseFloat(price);
         const parsedQuantity = parseFloat(quantity);
