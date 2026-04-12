@@ -11,6 +11,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fsPromises from 'fs/promises';
 import { resolveBuildMeta, writeBuildMeta } from '../../scripts/write-build-meta.mjs';
+import { isRemotePlaywrightModeWithoutWebServerOverride } from './utils/playwright-remote-mode.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,30 +28,13 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
 const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
 
-const isRemotePlaywrightModeWithoutWebServerOverride = () => {
-    const remoteSmokeMode =
-        process.env.REMOTE_SMOKE === '1' || Boolean(process.env.QUESTS_PERF_BASE_URL?.trim());
-    const remoteMigrationMode = process.env.REMOTE_MIGRATION === '1';
-    const remoteCompletionistAwardIIIMode = process.env.REMOTE_COMPLETIONIST_AWARD_III === '1';
-    const remoteRunMode = remoteSmokeMode || remoteMigrationMode || remoteCompletionistAwardIIIMode;
-
-    if (!remoteRunMode) {
-        return false;
-    }
-
-    const useWebServerForRemoteSmoke = process.env.REMOTE_SMOKE_USE_WEBSERVER === '1';
-    const useWebServerForRemoteMigration = process.env.REMOTE_MIGRATION_USE_WEBSERVER === '1';
-    const useWebServerForRemoteCompletionistAwardIII =
-        process.env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1';
-
-    return (
-        !useWebServerForRemoteSmoke &&
-        !useWebServerForRemoteMigration &&
-        !useWebServerForRemoteCompletionistAwardIII
-    );
-};
-
-if (isRemotePlaywrightModeWithoutWebServerOverride()) {
+if (
+    isRemotePlaywrightModeWithoutWebServerOverride({
+        // Keep QUESTS_PERF_BASE_URL as an early remote signal: run-quests-perf.mjs
+        // sets REMOTE_SMOKE later, after this setup script has already run.
+        includeQuestsPerfBaseUrlSignal: true,
+    })
+) {
     console.log('Remote Playwright mode detected; skipping local Astro build setup.');
 } else {
     ensureAstroBuild();
