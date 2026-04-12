@@ -119,12 +119,17 @@ export const getSalesTaxPercentage = () => {
     return Math.min(dCarbonCount / 1000, 90);
 };
 
-export const buyItems = (items) => {
+export const buyItems = (transactionItems) => {
     const gameState = loadFreshStateForMutation();
 
-    items.forEach((item) => {
-        const { price, quantity } = item;
-        const currencyId = dUSDId;
+    transactionItems.forEach((item) => {
+        const { price, quantity, currencyId: explicitCurrencyId, symbol } = item;
+        const resolvedCurrencyId =
+            explicitCurrencyId ??
+            items.find(
+                (catalogItem) => catalogItem.symbol === symbol || catalogItem.name === symbol
+            )?.id ??
+            dUSDId;
 
         const parsedPrice = parseFloat(price);
         const parsedQuantity = parseFloat(quantity);
@@ -133,8 +138,12 @@ export const buyItems = (items) => {
         if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) return;
         if (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0) return;
 
-        if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= totalPrice) {
-            gameState.inventory[currencyId] -= totalPrice; // Subtracting the currency for buying.
+        if (
+            resolvedCurrencyId !== undefined &&
+            gameState.inventory[resolvedCurrencyId] &&
+            gameState.inventory[resolvedCurrencyId] >= totalPrice
+        ) {
+            gameState.inventory[resolvedCurrencyId] -= totalPrice; // Subtracting the currency for buying.
             gameState.inventory[item.id] = (gameState.inventory[item.id] || 0) + parsedQuantity; // Adding the bought item to inventory.
         }
     });

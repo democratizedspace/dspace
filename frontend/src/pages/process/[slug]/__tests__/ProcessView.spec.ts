@@ -12,7 +12,11 @@ vi.mock('../../../../generated/processes.json', () => ({
         {
             id: 'detail-process',
             title: 'Detail Process',
-            requireItems: [{ id: 'req-item', count: 2 }],
+            requireItems: [
+                { id: 'cheap-item', count: 2 },
+                { id: 'expensive-item', count: 2 },
+                { id: 'non-buyable-item', count: 1 },
+            ],
             consumeItems: [],
             createItems: [],
         },
@@ -22,8 +26,21 @@ vi.mock('../../../../generated/processes.json', () => ({
 vi.mock('../../../inventory/json/items', () => ({
     default: [
         {
-            id: 'req-item',
+            id: 'dusd',
+            name: 'dUSD',
+            symbol: 'dUSD',
+        },
+        {
+            id: 'cheap-item',
             price: '5 dUSD',
+        },
+        {
+            id: 'expensive-item',
+            price: '10 dUSD',
+        },
+        {
+            id: 'non-buyable-item',
+            price: '',
         },
     ],
 }));
@@ -46,13 +63,38 @@ vi.mock('../../../../utils/customcontent.js', async (importOriginal) => {
 });
 
 describe('ProcessView detail controls', () => {
+    let inventory;
+
     beforeEach(() => {
         buyItemsMock.mockReset();
         getItemCountMock.mockReset();
-        getItemCountMock.mockReturnValue(0);
+        inventory = {
+            dusd: 0,
+            'cheap-item': 0,
+            'expensive-item': 0,
+            'non-buyable-item': 1,
+        };
+        getItemCountMock.mockImplementation((id) => inventory[id] ?? 0);
+        buyItemsMock.mockImplementation((purchases) => {
+            purchases.forEach(({ id, quantity, price, currencyId = 'dusd' }) => {
+                inventory[currencyId] -= quantity * price;
+                inventory[id] = (inventory[id] ?? 0) + quantity;
+            });
+        });
     });
 
-    it('keeps Buy required items on detail route and purchases missing requirements', async () => {
+    it('always shows Buy required items and explains insufficient currency when disabled', async () => {
+        render(ProcessView, { props: { slug: 'detail-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.getAttribute('disabled')).not.toBeNull();
+        expect(
+            await screen.findByText('Not enough currency to buy any remaining required items.')
+        ).toBeTruthy();
+    });
+
+    it('purchases as many missing requirements as possible by increasing price*quantity', async () => {
+        inventory.dusd = 25;
         render(ProcessView, { props: { slug: 'detail-process' } });
 
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
@@ -62,14 +104,34 @@ describe('ProcessView detail controls', () => {
         try {
             await fireEvent.click(buyButton);
 
-            expect(buyItemsMock).toHaveBeenCalledWith([{ id: 'req-item', quantity: 2, price: 5 }]);
+            expect(buyItemsMock).toHaveBeenCalledWith([
+                { id: 'cheap-item', quantity: 2, price: 5, symbol: 'dUSD', currencyId: 'dusd' },
+                {
+                    id: 'expensive-item',
+                    quantity: 1.5,
+                    price: 10,
+                    symbol: 'dUSD',
+                    currencyId: 'dusd',
+                },
+            ]);
             expect((await screen.findByRole('status')).textContent).toContain(
-                'Added 2 items to inventory'
+                'Added 3.5 items to inventory'
             );
 
             vi.runAllTimers();
         } finally {
             vi.useRealTimers();
         }
+    });
+
+    it('shows disabled reason when all required items are already available', async () => {
+        inventory.dusd = 25;
+        inventory['cheap-item'] = 2;
+        inventory['expensive-item'] = 2;
+        render(ProcessView, { props: { slug: 'detail-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.getAttribute('disabled')).not.toBeNull();
+        expect(await screen.findByText('All required items are already available.')).toBeTruthy();
     });
 });
