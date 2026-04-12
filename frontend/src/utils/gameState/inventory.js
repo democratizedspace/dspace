@@ -124,7 +124,7 @@ export const buyItems = (items) => {
 
     items.forEach((item) => {
         const { price, quantity } = item;
-        const currencyId = dUSDId;
+        const currencyId = item.currencyId ?? dUSDId;
 
         const parsedPrice = parseFloat(price);
         const parsedQuantity = parseFloat(quantity);
@@ -132,6 +132,7 @@ export const buyItems = (items) => {
 
         if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) return;
         if (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0) return;
+        if (!currencyId) return;
 
         if (gameState.inventory[currencyId] && gameState.inventory[currencyId] >= totalPrice) {
             gameState.inventory[currencyId] -= totalPrice; // Subtracting the currency for buying.
