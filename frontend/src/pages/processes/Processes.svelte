@@ -102,7 +102,12 @@
     };
 
     const getMetadataDelayMs = () => {
-        if (import.meta.env.PROD || typeof window === 'undefined') {
+        if (typeof window === 'undefined') {
+            return 0;
+        }
+
+        const hasTestHookAccess = window.__DSPACE_ENABLE_TEST_HOOKS__ === true;
+        if (import.meta.env.PROD && !hasTestHookAccess) {
             return 0;
         }
 

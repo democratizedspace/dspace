@@ -47,6 +47,8 @@ test.describe('/processes metadata loading behavior', () => {
     test('does not show preview item ids while metadata is still loading', async ({ page }) => {
         await page.addInitScript(() => {
             // @ts-expect-error test hook
+            window.__DSPACE_ENABLE_TEST_HOOKS__ = true;
+            // @ts-expect-error test hook
             window.__DSPACE_PROCESS_METADATA_DELAY_MS__ = 1200;
         });
 
