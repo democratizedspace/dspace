@@ -9,6 +9,7 @@
 
     let customProcesses = [];
     let itemMetadataMap = new Map();
+    let pendingMetadataIds = new Set();
     let metadataRequestId = 0;
     let isMounted = false;
     let previousMetadataIdsKey = '';
@@ -100,6 +101,15 @@
         return deduped;
     };
 
+    const getMetadataDelayMs = () => {
+        if (typeof window === 'undefined') {
+            return 0;
+        }
+
+        const delay = Number(window.__DSPACE_PROCESS_METADATA_DELAY_MS__);
+        return Number.isFinite(delay) && delay > 0 ? delay : 0;
+    };
+
     $: resolvedBuiltIns = (Array.isArray(builtInProcesses) ? builtInProcesses : []).map((process) =>
         toListProcess(process, false)
     );
@@ -134,7 +144,16 @@
         const nextMetadataIdsKey = uniqueIds.join('|');
         if (nextMetadataIdsKey !== previousMetadataIdsKey) {
             const requestId = ++metadataRequestId;
-            getItemMap(uniqueIds)
+            pendingMetadataIds = new Set(uniqueIds);
+
+            Promise.resolve()
+                .then(async () => {
+                    const delayMs = getMetadataDelayMs();
+                    if (delayMs > 0) {
+                        await new Promise((resolve) => setTimeout(resolve, delayMs));
+                    }
+                    return getItemMap(uniqueIds);
+                })
                 .then((nextMap) => {
                     if (!isMounted || requestId !== metadataRequestId) {
                         releaseMapImages(nextMap);
@@ -143,11 +162,13 @@
 
                     releaseMapImages(itemMetadataMap);
                     itemMetadataMap = nextMap;
+                    pendingMetadataIds = new Set();
                     previousMetadataIdsKey = nextMetadataIdsKey;
                 })
                 .catch((error) => {
                     console.error('Failed to load process item metadata:', error);
                     if (requestId === metadataRequestId) {
+                        pendingMetadataIds = new Set();
                         previousMetadataIdsKey = '';
                     }
                 });
@@ -167,7 +188,7 @@
             <div class="no-processes">No processes found</div>
         {:else}
             {#each allProcesses as process (normalizeProcessId(process.id))}
-                <ProcessListRow {process} {itemMetadataMap} />
+                <ProcessListRow {process} {itemMetadataMap} {pendingMetadataIds} />
             {/each}
         {/if}
     </div>
