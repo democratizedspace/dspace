@@ -193,7 +193,7 @@ describe('Processes list route contract', () => {
         );
     });
 
-    it('falls back to preview entry ids when at least one route-level preview metadata record is missing', async () => {
+    it('uses resolver fallback metadata when a preview entry is missing from the item catalog', async () => {
         customListMock.mockResolvedValue([]);
         getItemMapMock.mockResolvedValue(
             new Map([
@@ -229,7 +229,7 @@ describe('Processes list route contract', () => {
         expect(screen.queryByText('2x missing-item')).toBeNull();
     });
 
-    it('renders list details immediately while waiting for preview metadata to resolve', () => {
+    it('renders list details immediately while waiting for preview metadata to resolve', async () => {
         customListMock.mockResolvedValue([]);
         let resolveMetadata:
             | ((value: Map<string, { id: string; name: string; image: string }>) => void)
@@ -267,9 +267,12 @@ describe('Processes list route contract', () => {
         expect(screen.getByText('Duration')).toBeTruthy();
         expect(screen.getByText('1x')).toBeTruthy();
         expect(screen.queryByText('1x pending-item')).toBeNull();
+        expect(screen.queryByText('1x Pending Item')).toBeNull();
 
         resolveMetadata?.(
             new Map([['pending-item', { id: 'pending-item', name: 'Pending Item', image: '/pending.png' }]])
         );
+
+        expect(await screen.findByText('1x Pending Item')).toBeTruthy();
     });
 });

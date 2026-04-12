@@ -22,11 +22,10 @@ test.describe('/processes metadata loading behavior', () => {
         await expect(processRow).toBeVisible();
         await expect(processRow).toContainText('Buy 1 kWh of electricity from a wall outlet');
 
+        await expect(processRow).not.toContainText(/smart plug/i);
         await expect(processRow).not.toContainText(PREVIEW_ITEM_ID);
 
-        await page.waitForTimeout(1400);
-
-        await expect(processRow).toContainText(/smart plug/i);
+        await expect(processRow).toContainText(/smart plug/i, { timeout: 2500 });
         await expect(processRow).not.toContainText(PREVIEW_ITEM_ID);
     });
 });

@@ -102,7 +102,7 @@
     };
 
     const getMetadataDelayMs = () => {
-        if (typeof window === 'undefined') {
+        if (import.meta.env.PROD || typeof window === 'undefined') {
             return 0;
         }
 
@@ -144,6 +144,7 @@
         const nextMetadataIdsKey = uniqueIds.join('|');
         if (nextMetadataIdsKey !== previousMetadataIdsKey) {
             const requestId = ++metadataRequestId;
+            previousMetadataIdsKey = nextMetadataIdsKey;
             pendingMetadataIds = new Set(uniqueIds);
 
             Promise.resolve()
@@ -163,13 +164,11 @@
                     releaseMapImages(itemMetadataMap);
                     itemMetadataMap = nextMap;
                     pendingMetadataIds = new Set();
-                    previousMetadataIdsKey = nextMetadataIdsKey;
                 })
                 .catch((error) => {
                     console.error('Failed to load process item metadata:', error);
                     if (requestId === metadataRequestId) {
                         pendingMetadataIds = new Set();
-                        previousMetadataIdsKey = '';
                     }
                 });
         }
