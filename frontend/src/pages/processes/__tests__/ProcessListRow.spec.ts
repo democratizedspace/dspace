@@ -35,7 +35,7 @@ describe('ProcessListRow', () => {
         expect(getAllByRole('img')).toHaveLength(3);
     });
 
-    test('falls back to entry ids when metadata is missing', () => {
+    test('keeps preview space blank while metadata is still loading', () => {
         const process = {
             id: 'process-with-missing-item',
             title: 'Missing item metadata',
@@ -55,10 +55,10 @@ describe('ProcessListRow', () => {
             props: { process, itemMetadataMap: new Map() },
         });
 
-        expect(getByText('2x unknown-item')).toBeTruthy();
+        expect(getByText('Requires')).toBeTruthy();
     });
 
-    test('does not render untrusted preview images when metadata is missing', () => {
+    test('does not render preview image shells when metadata is missing', () => {
         const process = {
             id: 'process-with-untrusted-image',
             title: 'Untrusted image',
@@ -76,11 +76,11 @@ describe('ProcessListRow', () => {
             createPreviewEntries: [],
         };
 
-        const { getByAltText } = render(ProcessListRow, {
+        const { queryByAltText } = render(ProcessListRow, {
             props: { process, itemMetadataMap: new Map() },
         });
 
-        expect(getByAltText('unknown-item').getAttribute('src')).toBe('/favicon.ico');
+        expect(queryByAltText('unknown-item')).toBeNull();
     });
 
     test('updates preview lines when metadata map changes after mount', async () => {
@@ -103,7 +103,7 @@ describe('ProcessListRow', () => {
             props: { process, itemMetadataMap: new Map() },
         });
 
-        expect(getByText('1x smart-plug')).toBeTruthy();
+        expect(queryByText('1x smart-plug')).toBeNull();
         expect(queryByText('1x Smart Plug')).toBeNull();
 
         await rerender({

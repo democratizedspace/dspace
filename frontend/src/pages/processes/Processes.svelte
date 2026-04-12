@@ -100,6 +100,19 @@
         return deduped;
     };
 
+    const waitForTestMetadataDelay = async () => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        const delayMs = Number(window.__DSPACE_TEST_DELAY_ITEM_METADATA_MS__ ?? 0);
+        if (!Number.isFinite(delayMs) || delayMs <= 0) {
+            return;
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+    };
+
     $: resolvedBuiltIns = (Array.isArray(builtInProcesses) ? builtInProcesses : []).map((process) =>
         toListProcess(process, false)
     );
@@ -134,7 +147,8 @@
         const nextMetadataIdsKey = uniqueIds.join('|');
         if (nextMetadataIdsKey !== previousMetadataIdsKey) {
             const requestId = ++metadataRequestId;
-            getItemMap(uniqueIds)
+            waitForTestMetadataDelay()
+                .then(() => getItemMap(uniqueIds))
                 .then((nextMap) => {
                     if (!isMounted || requestId !== metadataRequestId) {
                         releaseMapImages(nextMap);

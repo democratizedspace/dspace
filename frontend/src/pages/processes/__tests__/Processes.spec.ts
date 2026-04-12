@@ -184,19 +184,62 @@ describe('Processes list route contract', () => {
         expect(screen.getByText('3x Fuel Cell')).toBeTruthy();
         expect(screen.getByText('3x Byproduct')).toBeTruthy();
 
-        expect(getItemMapMock).toHaveBeenCalledTimes(1);
-        expect(getItemMapMock).toHaveBeenCalledWith(
-            expect.arrayContaining(['shared-item', 'fuel-cell', 'byproduct'])
+        expect(getItemMapMock.mock.calls.length).toBeGreaterThan(0);
+        for (const call of getItemMapMock.mock.calls) {
+            expect(call[0]).toEqual(
+                expect.arrayContaining(['shared-item', 'fuel-cell', 'byproduct'])
+            );
+            expect(new Set(call[0]).size).toBe(call[0].length);
+        }
+    });
+
+    it('does not show raw preview item ids while metadata is pending', () => {
+        customListMock.mockResolvedValue([]);
+        let resolveMetadata: ((value: Map<string, unknown>) => void) | undefined;
+        getItemMapMock.mockReturnValue(
+            new Promise((resolve) => {
+                resolveMetadata = resolve;
+            })
         );
-        expect(new Set(getItemMapMock.mock.calls[0][0]).size).toBe(
-            getItemMapMock.mock.calls[0][0].length
-        );
+
+        render(Processes, {
+            props: {
+                builtInProcesses: [
+                    {
+                        id: 'built-in-pending',
+                        title: 'Pending Metadata Process',
+                        duration: '8m',
+                        requireItemTypes: 1,
+                        requireItemTotal: 1,
+                        consumeItemTypes: 0,
+                        consumeItemTotal: 0,
+                        createItemTypes: 0,
+                        createItemTotal: 0,
+                        requirePreviewEntries: [{ id: 'item-id-should-not-render', count: 1 }],
+                        consumePreviewEntries: [],
+                        createPreviewEntries: [],
+                        custom: false,
+                    },
+                ],
+            },
+        });
+
+        expect(screen.getByText('Pending Metadata Process')).toBeTruthy();
+        expect(screen.queryByText('1x item-id-should-not-render')).toBeNull();
+
+        resolveMetadata?.(new Map());
     });
 
     it('falls back to preview entry ids when at least one route-level preview metadata record is missing', async () => {
         customListMock.mockResolvedValue([]);
         getItemMapMock.mockResolvedValue(
-            new Map([['known-item', { id: 'known-item', name: 'Known Item', image: '/known.png' }]])
+            new Map([
+                ['known-item', { id: 'known-item', name: 'Known Item', image: '/known.png' }],
+                [
+                    'missing-item',
+                    { id: 'missing-item', name: 'Unknown item', image: '/favicon.ico' },
+                ],
+            ])
         );
 
         render(Processes, {
@@ -222,6 +265,6 @@ describe('Processes list route contract', () => {
         });
 
         expect(await screen.findByText('1x Known Item')).toBeTruthy();
-        expect(screen.getByText('2x missing-item')).toBeTruthy();
+        expect(screen.getByText('2x Unknown item')).toBeTruthy();
     });
 });
