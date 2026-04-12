@@ -25,8 +25,35 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
+const shouldSkipLocalAstroBuildSetup = () => {
+    const remoteSmokeMode =
+        process.env.REMOTE_SMOKE === '1' || Boolean((process.env.QUESTS_PERF_BASE_URL || '').trim());
+    const remoteMigrationMode = process.env.REMOTE_MIGRATION === '1';
+    const remoteCompletionistAwardIIIMode = process.env.REMOTE_COMPLETIONIST_AWARD_III === '1';
+    const remoteRunMode = remoteSmokeMode || remoteMigrationMode || remoteCompletionistAwardIIIMode;
+
+    if (!remoteRunMode) {
+        return false;
+    }
+
+    const useWebServerForRemoteSmoke = process.env.REMOTE_SMOKE_USE_WEBSERVER === '1';
+    const useWebServerForRemoteMigration = process.env.REMOTE_MIGRATION_USE_WEBSERVER === '1';
+    const useWebServerForRemoteCompletionistAwardIII =
+        process.env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1';
+    const shouldUseWebServer =
+        useWebServerForRemoteSmoke ||
+        useWebServerForRemoteMigration ||
+        useWebServerForRemoteCompletionistAwardIII;
+
+    return !shouldUseWebServer;
+};
+
 const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
-ensureAstroBuild();
+if (shouldSkipLocalAstroBuildSetup()) {
+    console.log('Remote Playwright mode detected; skipping local Astro build setup.');
+} else {
+    ensureAstroBuild();
+}
 
 const readExistingBuildMetaSha = async () => {
     const buildMetaPath = path.join(rootDir, 'src', 'generated', 'build_meta.json');
