@@ -216,26 +216,20 @@
 
 <div class="process-view">
     <Process inverted={true} processId={slug} {processData} />
-    <div class="buy-required-wrapper" data-disabled={disableBuy ? 'true' : 'false'}>
+    <span class="buy-required-wrapper" title={disableBuy ? disabledReason : undefined}>
         <button
             class="primary"
             type="button"
-            on:click={() => {
-                if (!disableBuy) buyRequired();
-            }}
-            aria-disabled={disableBuy}
+            on:click={buyRequired}
+            disabled={disableBuy}
             aria-describedby={disableBuy ? disabledReasonId : undefined}
-            class:is-disabled={disableBuy}
         >
             Buy required items
         </button>
         {#if disableBuy}
             <span class="sr-only" id={disabledReasonId}>{disabledReason}</span>
-            <span class="buy-required-tooltip" role="tooltip">
-                {disabledReason}
-            </span>
         {/if}
-    </div>
+    </span>
     {#if toastVisible}
         <div class="toast" role="status" aria-live="polite">{toastMessage}</div>
     {/if}
@@ -255,7 +249,7 @@
         outline: 2px solid #fff;
         outline-offset: 2px;
     }
-    .primary.is-disabled {
+    .primary[disabled] {
         opacity: 0.6;
         cursor: not-allowed;
     }
@@ -266,30 +260,6 @@
     }
     .buy-required-wrapper {
         position: relative;
-    }
-    .buy-required-tooltip {
-        position: absolute;
-        top: calc(100% + 6px);
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.9);
-        color: #fff;
-        border-radius: 4px;
-        padding: 6px 8px;
-        font-size: 0.85rem;
-        line-height: 1.2;
-        width: max-content;
-        max-width: min(320px, 80vw);
-        text-align: center;
-        z-index: 2;
-        visibility: hidden;
-        opacity: 0;
-        transition: opacity 120ms ease-in-out;
-    }
-    .buy-required-wrapper[data-disabled='true']:hover .buy-required-tooltip,
-    .buy-required-wrapper[data-disabled='true']:focus-within .buy-required-tooltip {
-        visibility: visible;
-        opacity: 1;
     }
     .sr-only {
         position: absolute;

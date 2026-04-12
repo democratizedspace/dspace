@@ -103,7 +103,7 @@ describe('ProcessView detail controls', () => {
         render(ProcessView, { props: { slug: 'detail-process' } });
 
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
-        expect(buyButton.getAttribute('aria-disabled')).toBe('false');
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
 
         vi.useFakeTimers();
         try {
@@ -128,11 +128,14 @@ describe('ProcessView detail controls', () => {
         render(ProcessView, { props: { slug: 'detail-process' } });
 
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
-        expect(buyButton.getAttribute('aria-disabled')).toBe('true');
+        expect(buyButton.hasAttribute('disabled')).toBe(true);
         expect(buyButton.getAttribute('aria-describedby')).toBe(
             'buy-required-disabled-reason-detail-process'
         );
-        expect(screen.getAllByText('All required items are already available.')).toHaveLength(2);
+        const reasonElement = document.getElementById('buy-required-disabled-reason-detail-process');
+        expect(reasonElement).not.toBeNull();
+        expect(reasonElement?.textContent).toBe('All required items are already available.');
+        expect(screen.getByText('All required items are already available.')).toBe(reasonElement);
     });
 
     it('disables with not-enough-currency reason when no required quantity can be purchased', async () => {
@@ -145,10 +148,15 @@ describe('ProcessView detail controls', () => {
         render(ProcessView, { props: { slug: 'detail-process' } });
 
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
-        expect(buyButton.getAttribute('aria-disabled')).toBe('true');
-        expect(
-            screen.getAllByText('Not enough currency to buy any still-needed required items.')
-        ).toHaveLength(2);
+        expect(buyButton.hasAttribute('disabled')).toBe(true);
+        const reasonElement = document.getElementById('buy-required-disabled-reason-detail-process');
+        expect(reasonElement).not.toBeNull();
+        expect(reasonElement?.textContent).toBe(
+            'Not enough currency to buy any still-needed required items.'
+        );
+        expect(screen.getByText('Not enough currency to buy any still-needed required items.')).toBe(
+            reasonElement
+        );
     });
 
     it('buys as many as possible in ascending total-cost order when funds are limited', async () => {
@@ -161,7 +169,7 @@ describe('ProcessView detail controls', () => {
         render(ProcessView, { props: { slug: 'detail-process' } });
 
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
-        expect(buyButton.getAttribute('aria-disabled')).toBe('false');
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
         await fireEvent.click(buyButton);
 
         expect(buyItemsMock).toHaveBeenCalledWith([
@@ -180,7 +188,7 @@ describe('ProcessView detail controls', () => {
         render(ProcessView, { props: { slug: 'legacy-price-process' } });
 
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
-        expect(buyButton.getAttribute('aria-disabled')).toBe('false');
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
         await fireEvent.click(buyButton);
 
         expect(buyItemsMock).toHaveBeenCalledWith([
@@ -201,7 +209,7 @@ describe('ProcessView detail controls', () => {
         render(ProcessView, { props: { slug: 'multi-currency-process' } });
 
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
-        expect(buyButton.getAttribute('aria-disabled')).toBe('false');
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
         await fireEvent.click(buyButton);
 
         expect(buyItemsMock).toHaveBeenCalledWith([
