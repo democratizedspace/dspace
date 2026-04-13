@@ -11,6 +11,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fsPromises from 'fs/promises';
 import { resolveBuildMeta, writeBuildMeta } from '../../scripts/write-build-meta.mjs';
+import { isRemotePlaywrightModeWithoutWebServerOverride } from './utils/playwright-remote-mode.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,7 +27,11 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
 const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
-ensureAstroBuild();
+if (isRemotePlaywrightModeWithoutWebServerOverride({ includeQuestsPerfBaseUrlSignal: true })) {
+    console.log('Remote Playwright mode detected; skipping local Astro build setup.');
+} else {
+    ensureAstroBuild();
+}
 
 const readExistingBuildMetaSha = async () => {
     const buildMetaPath = path.join(rootDir, 'src', 'generated', 'build_meta.json');
