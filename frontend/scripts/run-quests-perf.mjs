@@ -9,10 +9,7 @@ if (requestedBaseUrl) {
     baseEnv.REMOTE_SMOKE = '1';
 }
 
-const cpuSlowdown = (baseEnv.QUESTS_TTI_CPU_SLOWDOWN || '').trim();
-if (cpuSlowdown) {
-    baseEnv.QUESTS_TTI_CPU_SLOWDOWN = cpuSlowdown;
-}
+// QUESTS_TTI_CPU_SLOWDOWN is forwarded automatically via baseEnv = { ...process.env }.
 
 const result = spawnSync(
     'playwright',
