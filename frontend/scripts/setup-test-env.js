@@ -28,6 +28,7 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
 const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
 if (isRemotePlaywrightModeWithoutWebServerOverride({ includeQuestsPerfBaseUrlSignal: true })) {
+    // Keep this message stable for remote perf verification commands in PR evidence.
     console.log('Remote Playwright mode detected; skipping local Astro build setup.');
 } else {
     ensureAstroBuild();
