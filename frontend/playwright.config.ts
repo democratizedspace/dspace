@@ -4,6 +4,10 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ensurePlaywrightBrowsers } from './scripts/utils/ensure-playwright-browsers.js';
+import {
+    getActiveRemotePlaywrightModes,
+    shouldUsePlaywrightWebServer,
+} from './scripts/utils/playwright-remote-mode.js';
 
 if (process.env.CI) {
     await import('fake-indexeddb/auto');
@@ -208,19 +212,13 @@ function resolveProjects(): PlaywrightProjectConfig[] {
 
 const projects = resolveProjects();
 
-const remoteSmokeMode = process.env.REMOTE_SMOKE === '1';
-const remoteMigrationMode = process.env.REMOTE_MIGRATION === '1';
-const remoteCompletionistAwardIIIMode = process.env.REMOTE_COMPLETIONIST_AWARD_III === '1';
-const useWebServerForRemoteSmoke = process.env.REMOTE_SMOKE_USE_WEBSERVER === '1';
-const useWebServerForRemoteMigration = process.env.REMOTE_MIGRATION_USE_WEBSERVER === '1';
-const useWebServerForRemoteCompletionistAwardIII =
-    process.env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1';
-const remoteRunMode = remoteSmokeMode || remoteMigrationMode || remoteCompletionistAwardIIIMode;
-const shouldUseWebServer =
-    !remoteRunMode ||
-    useWebServerForRemoteSmoke ||
-    useWebServerForRemoteMigration ||
-    useWebServerForRemoteCompletionistAwardIII;
+const activeRemoteModes = getActiveRemotePlaywrightModes();
+const remoteSmokeMode = activeRemoteModes.some(({ name }) => name === 'remoteSmoke');
+const remoteMigrationMode = activeRemoteModes.some(({ name }) => name === 'remoteMigration');
+const remoteCompletionistAwardIIIMode = activeRemoteModes.some(
+    ({ name }) => name === 'remoteCompletionistAwardIII'
+);
+const shouldUseWebServer = shouldUsePlaywrightWebServer();
 
 if (shouldUseWebServer) {
     ensureAstroBuildArtifacts();
