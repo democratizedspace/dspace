@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
 
 const baseEnv = { ...process.env };
 const requestedBaseUrl = (baseEnv.QUESTS_PERF_BASE_URL || '').trim();
@@ -10,13 +9,16 @@ if (requestedBaseUrl) {
     baseEnv.REMOTE_SMOKE = '1';
 }
 
-const frontendRoot = fileURLToPath(new URL('..', import.meta.url));
+const cpuSlowdown = (baseEnv.QUESTS_TTI_CPU_SLOWDOWN || '').trim();
+if (cpuSlowdown) {
+    baseEnv.QUESTS_TTI_CPU_SLOWDOWN = cpuSlowdown;
+}
 
 const result = spawnSync(
     'playwright',
     ['test', 'e2e/quests-tti-metrics.spec.ts', '--project=chromium'],
     {
-        cwd: frontendRoot,
+        cwd: new URL('..', import.meta.url),
         stdio: 'inherit',
         env: baseEnv,
         shell: true,
