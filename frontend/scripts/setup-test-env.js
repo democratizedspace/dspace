@@ -12,6 +12,35 @@ import { fileURLToPath } from 'url';
 import fsPromises from 'fs/promises';
 import { resolveBuildMeta, writeBuildMeta } from '../../scripts/write-build-meta.mjs';
 
+const isRemotePlaywrightModeWithoutWebServerOverride = () => {
+    const remoteModeMatrix = [
+        {
+            active:
+                process.env.REMOTE_SMOKE === '1' ||
+                // Keep QUESTS_PERF_BASE_URL as an early remote signal: run-quests-perf.mjs
+                // sets REMOTE_SMOKE later, after this setup script has already run.
+                Boolean(process.env.QUESTS_PERF_BASE_URL?.trim()),
+            useWebServer: process.env.REMOTE_SMOKE_USE_WEBSERVER === '1',
+        },
+        {
+            active: process.env.REMOTE_MIGRATION === '1',
+            useWebServer: process.env.REMOTE_MIGRATION_USE_WEBSERVER === '1',
+        },
+        {
+            active: process.env.REMOTE_COMPLETIONIST_AWARD_III === '1',
+            useWebServer: process.env.REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER === '1',
+        },
+    ];
+
+    const activeRemoteModes = remoteModeMatrix.filter(({ active }) => active);
+
+    if (activeRemoteModes.length === 0) {
+        return false;
+    }
+
+    return activeRemoteModes.some(({ useWebServer }) => !useWebServer);
+};
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
@@ -26,7 +55,12 @@ if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
 const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
-ensureAstroBuild();
+
+if (isRemotePlaywrightModeWithoutWebServerOverride()) {
+    console.log('Remote Playwright mode detected; skipping local Astro build setup.');
+} else {
+    ensureAstroBuild();
+}
 
 const readExistingBuildMetaSha = async () => {
     const buildMetaPath = path.join(rootDir, 'src', 'generated', 'build_meta.json');
