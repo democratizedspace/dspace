@@ -99,7 +99,7 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
 
         await page.addInitScript((processId) => {
             const preloadedState = {
-                version: 3,
+                quests: {},
                 inventory: {},
                 processes: {
                     [processId]: {
@@ -111,9 +111,19 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
                         consumeItemsSnapshot: [],
                     },
                 },
-                completedQuestIds: [],
+                itemContainerCounts: {},
+                settings: {
+                    showChatDebugPayload: false,
+                    showQuestGraphVisualizer: false,
+                },
+                versionNumberString: '3',
+                _meta: {
+                    lastUpdated: Date.now(),
+                    checksum: 'seed-checksum-process-list',
+                },
             };
             localStorage.setItem('gameState', JSON.stringify(preloadedState));
+            localStorage.setItem('gameStateChecksum', preloadedState._meta.checksum);
         }, activeProcessId);
 
         await page.goto('/');
@@ -267,13 +277,23 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
         await page.addInitScript(
             ({ inventory, targetItemId }) => {
                 const preloadedState = {
-                    version: 3,
+                    quests: {},
                     inventory,
                     processes: {},
-                    completedQuestIds: [],
+                    itemContainerCounts: {},
+                    settings: {
+                        showChatDebugPayload: false,
+                        showQuestGraphVisualizer: false,
+                    },
+                    versionNumberString: '3',
+                    _meta: {
+                        lastUpdated: Date.now(),
+                        checksum: 'seed-checksum-process-detail',
+                    },
                 };
                 preloadedState.inventory[targetItemId] = 0;
                 localStorage.setItem('gameState', JSON.stringify(preloadedState));
+                localStorage.setItem('gameStateChecksum', preloadedState._meta.checksum);
             },
             {
                 inventory: seededInventory,
