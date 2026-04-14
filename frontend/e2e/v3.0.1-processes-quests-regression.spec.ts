@@ -93,86 +93,47 @@ const seedGameStateForRoute = async (
         inventory: Record<string, number>;
         processes: Record<string, unknown>;
     },
-    checksum: string
+    checksum: string,
+    route = '/'
 ) => {
-    await page.goto('/');
-    await page.evaluate(
-        async ({ inventory, processes, checksumValue, dUSDItemId }) => {
-            const now = Date.now();
-            const gameState = {
-                quests: {},
-                inventory,
-                processes,
-                itemContainerCounts: {},
-                settings: {
-                    showChatDebugPayload: false,
-                    showQuestGraphVisualizer: false,
-                },
-                versionNumberString: '3',
-                _meta: {
-                    lastUpdated: now,
-                    checksum: checksumValue,
-                },
-            };
+    const now = Date.now();
+    const gameState = {
+        quests: {},
+        inventory: stateSeed.inventory,
+        processes: stateSeed.processes,
+        itemContainerCounts: {},
+        settings: {
+            showChatDebugPayload: false,
+            showQuestGraphVisualizer: false,
+        },
+        versionNumberString: '3',
+        _meta: {
+            lastUpdated: now,
+            checksum,
+        },
+    };
 
-            localStorage.setItem('gameState', JSON.stringify(gameState));
+    const lightweightSnapshot = {
+        checksum,
+        dUSD: Number(gameState.inventory?.[DUSD_ITEM_ID] ?? 0),
+        lastUpdated: now,
+        questProgress: { version: 1, completedQuestIds: [] },
+    };
+
+    await page.addInitScript(
+        ({ seedState, checksumValue, seedLite }) => {
+            localStorage.setItem('gameState', JSON.stringify(seedState));
             localStorage.setItem('gameStateChecksum', checksumValue);
-            localStorage.setItem(
-                'gameStateLite',
-                JSON.stringify({
-                    checksum: checksumValue,
-                    dUSD: Number(gameState.inventory?.[dUSDItemId] ?? 0),
-                    lastUpdated: now,
-                    questProgress: { version: 1, completedQuestIds: [] },
-                })
-            );
-
-            await new Promise<void>((resolve, reject) => {
-                const request = indexedDB.open('dspaceGameState', 2);
-
-                request.onupgradeneeded = () => {
-                    const db = request.result;
-                    if (!db.objectStoreNames.contains('state')) {
-                        db.createObjectStore('state');
-                    }
-                    if (!db.objectStoreNames.contains('backup')) {
-                        db.createObjectStore('backup');
-                    }
-                    if (!db.objectStoreNames.contains('meta')) {
-                        db.createObjectStore('meta');
-                    }
-                };
-
-                request.onerror = () => reject(request.error ?? new Error('Failed to open IDB'));
-                request.onsuccess = () => {
-                    const db = request.result;
-                    const tx = db.transaction(['state', 'meta'], 'readwrite');
-                    tx.objectStore('state').put(gameState, 'root');
-                    tx.objectStore('meta').put(
-                        {
-                            checksum: checksumValue,
-                            dUSD: Number(gameState.inventory?.[dUSDItemId] ?? 0),
-                            lastUpdated: now,
-                            questProgress: { version: 1, completedQuestIds: [] },
-                        },
-                        'root'
-                    );
-                    tx.oncomplete = () => {
-                        db.close();
-                        resolve();
-                    };
-                    tx.onerror = () =>
-                        reject(tx.error ?? new Error('Failed to write seeded game state to IDB'));
-                };
-            });
+            localStorage.setItem('gameStateLite', JSON.stringify(seedLite));
         },
         {
-            inventory: stateSeed.inventory,
-            processes: stateSeed.processes,
+            seedState: gameState,
             checksumValue: checksum,
-            dUSDItemId: DUSD_ITEM_ID,
+            seedLite: lightweightSnapshot,
         }
     );
+
+    await page.goto(route);
 };
 
 test.describe('v3.0.1 launch regression checks for processes and quests', () => {
@@ -357,10 +318,9 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
                 inventory: seededInventory,
                 processes: {},
             },
-            'seed-checksum-process-detail'
+            'seed-checksum-process-detail',
+            `/processes/${processId}`
         );
-
-        await page.goto(`/processes/${processId}`);
 
         const buyRequiredButton = page.getByRole('button', { name: 'Buy required items' });
         await expect(buyRequiredButton).toBeVisible();
