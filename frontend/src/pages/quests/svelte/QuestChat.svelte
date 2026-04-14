@@ -182,7 +182,7 @@
         {#if $finished}
             <p class="green">Complete</p>
         {:else if $available === false}
-            <p class="red">Locked</p>
+            <p class="red">Not available yet</p>
         {:else}
             <p class="orange">In Progress</p>
         {/if}

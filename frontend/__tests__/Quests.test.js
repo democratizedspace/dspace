@@ -157,6 +157,38 @@ describe('Quests Component', () => {
         }
     });
 
+    it('does not render locked custom quests or the Custom Quests section', async () => {
+        vi.useFakeTimers();
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => ({
+                ...quest,
+                status: quest.id.startsWith('custom/') ? 'locked' : 'available',
+            }))
+        );
+        listCustomQuests.mockResolvedValueOnce([
+            {
+                id: 'custom/locked-quest',
+                title: 'Locked Custom Quest',
+                description: 'Should not render before prerequisites are complete.',
+                route: '/quests/custom/locked-quest',
+                requiresQuests: ['3dprinting/start'],
+                custom: true,
+            },
+        ]);
+
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+
+            expect(host.querySelector("[data-testid='custom-quests-section']")).toBeNull();
+            expect(host.textContent).not.toContain('Custom Quests');
+            expect(host.textContent).not.toContain('Locked');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
     it('falls back to safe internal quest routes for custom quests with unsafe hrefs', async () => {
         vi.useFakeTimers();
         classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>

@@ -255,4 +255,37 @@ test.describe('quests tti behavior', () => {
 
         await expect(lockedQuest).toHaveCount(0);
     });
+
+    test('shows only startable custom quests after merge and hides locked custom quests', async ({
+        page,
+    }) => {
+        const availableCustomQuestTitle = `Available custom quest ${Date.now()}`;
+        const lockedCustomQuestTitle = `Locked custom quest ${Date.now()}`;
+
+        await seedCustomQuest(page, {
+            title: availableCustomQuestTitle,
+            description: 'No prerequisites, should be startable.',
+            image: '/assets/quests/howtodoquests.jpg',
+            custom: true,
+            requiresQuests: [],
+        });
+        await seedCustomQuest(page, {
+            title: lockedCustomQuestTitle,
+            description: 'Requires unfinished built-in quest.',
+            image: '/assets/quests/howtodoquests.jpg',
+            custom: true,
+            requiresQuests: ['3dprinting/start'],
+        });
+
+        await page.goto('/quests');
+        const customMergeStatus = page.getByTestId('custom-quests-merge-status');
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'true');
+        await expect(customMergeStatus).toHaveAttribute('data-custom-count', '1');
+
+        const customSection = page.getByTestId('custom-quests-section');
+        await expect(customSection).toBeVisible();
+        await expect(customSection).toContainText(availableCustomQuestTitle);
+        await expect(customSection).not.toContainText(lockedCustomQuestTitle);
+        await expect(customSection).not.toContainText('Locked');
+    });
 });

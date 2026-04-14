@@ -181,5 +181,7 @@ describe('QuestChat', () => {
         expect(
             getByRole('link', { name: 'Set up your first 3D printer' }).getAttribute('href')
         ).toBe('/quests/3dprinting/start');
+        expect(container.textContent).toContain('Not available yet');
+        expect(container.textContent).not.toContain('Locked');
     });
 });

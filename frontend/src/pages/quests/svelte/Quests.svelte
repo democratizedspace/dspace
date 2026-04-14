@@ -40,6 +40,7 @@
     let activeBuiltInQuests = [];
     let customQuestRecords = [];
     let customClassified = [];
+    let activeCustomQuests = [];
     let customMergeComplete = false;
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
@@ -103,6 +104,7 @@
     const classifyCustomQuests = (snapshot) => {
         const normalizedCustomQuests = normalizeQuestList(customQuestRecords);
         customClassified = classifyQuestList({ quests: normalizedCustomQuests, snapshot });
+        activeCustomQuests = customClassified.filter((quest) => quest.status === 'available');
     };
 
     // Define buttons for easy expansion
@@ -220,7 +222,7 @@
         aria-hidden="true"
         data-testid="custom-quests-merge-status"
         data-merge-complete={customMergeComplete ? 'true' : 'false'}
-        data-custom-count={String(customClassified.length)}
+        data-custom-count={String(activeCustomQuests.length)}
     ></div>
 
     {#if showQuestGraphVisualizer}
@@ -229,11 +231,11 @@
         </div>
     {/if}
 
-    {#if customMergeComplete && customClassified.length > 0}
+    {#if customMergeComplete && activeCustomQuests.length > 0}
         <section class="custom-section" data-testid="custom-quests-section">
             <h2>Custom Quests</h2>
             <div class="quests-grid">
-                {#each customClassified as quest}
+                {#each activeCustomQuests as quest}
                     <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
                         <Quest {quest} status={quest.status} />
                     </a>
