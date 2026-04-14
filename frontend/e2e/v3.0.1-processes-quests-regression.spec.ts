@@ -2,7 +2,12 @@ import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { clearUserData, seedCustomProcess, seedCustomQuest } from './test-helpers';
+import {
+    clearUserData,
+    seedCustomProcess,
+    seedCustomQuest,
+    waitForHydration,
+} from './test-helpers';
 
 type ProcessEntry = {
     id: string | number;
@@ -218,7 +223,7 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
         ).toBeVisible();
     });
 
-    test('custom quests stay actionable alongside built-ins across refresh and detail navigation', async ({
+    test('custom quests merge after initial built-in render without regressing grid/list behavior', async ({
         page,
     }) => {
         const customQuestId = `custom-quest-${Date.now()}`;
@@ -242,16 +247,42 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
             custom: true,
         });
 
-        await page.goto('/quests');
+        await page.addInitScript(() => {
+            (
+                window as Window & { __questsCustomMergeDelayMs?: number }
+            ).__questsCustomMergeDelayMs = 700;
+        });
 
-        const builtInQuestCard = page.locator("a[data-questid='welcome/howtodoquests']").first();
+        await page.goto('/quests');
+        await waitForHydration(page);
+
+        const builtInGrid = page.getByTestId('quests-grid');
+        await expect(builtInGrid).toBeVisible();
+
+        const customMergeStatus = page.getByTestId('custom-quests-merge-status');
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'false');
+
+        const builtInQuestCard = builtInGrid
+            .locator("a[data-questid='welcome/howtodoquests']")
+            .first();
         await expect(builtInQuestCard).toBeVisible();
+        await expect(builtInQuestCard).toHaveAttribute('href', '/quests/welcome/howtodoquests');
+        await expect(page.getByTestId('custom-quests-section')).toHaveCount(0);
+
+        await builtInQuestCard.click();
+        await expect(page).toHaveURL(/\/quests\/welcome\/howtodoquests$/);
+
+        await page.goto('/quests');
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'true');
+        await expect(customMergeStatus).toHaveAttribute('data-custom-count', '1');
 
         const customSection = page.getByTestId('custom-quests-section');
         await expect(customSection).toBeVisible();
 
         const customQuestCard = page.locator(`a[data-questid='${customQuestId}']`).first();
         await expect(customQuestCard).toBeVisible();
+        await expect(builtInGrid.locator(`a[data-questid='${customQuestId}']`)).toHaveCount(0);
+        await expect(builtInQuestCard).toBeVisible();
 
         await customQuestCard.click();
         await expect(page).toHaveURL(new RegExp(`/quests/${customQuestId}$`));
@@ -262,7 +293,14 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
 
         await page.goto('/quests');
         await page.reload();
+        await expect(page.getByTestId('custom-quests-merge-status')).toHaveAttribute(
+            'data-merge-complete',
+            'true'
+        );
         await expect(page.locator("a[data-questid='welcome/howtodoquests']").first()).toBeVisible();
         await expect(page.locator(`a[data-questid='${customQuestId}']`).first()).toBeVisible();
+
+        await page.locator(`a[data-questid='${customQuestId}']`).first().click();
+        await expect(page).toHaveURL(new RegExp(`/quests/${customQuestId}$`));
     });
 });
