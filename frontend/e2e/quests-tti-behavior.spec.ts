@@ -255,4 +255,65 @@ test.describe('quests tti behavior', () => {
 
         await expect(lockedQuest).toHaveCount(0);
     });
+
+    test('keeps custom and built-in quests actionable together through refresh and navigation', async ({
+        page,
+    }) => {
+        const customQuestTitle = `Coexist custom quest ${Date.now()}`;
+        await seedCustomQuest(page, {
+            id: `custom-coexist-${Date.now()}`,
+            title: customQuestTitle,
+            description: 'Validates built-in and custom coexistence through refresh.',
+            image: '/assets/quests/howtodoquests.jpg',
+            custom: true,
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Custom quest start',
+                    options: [
+                        {
+                            text: 'Finish quest',
+                            next: 'finish',
+                            type: 'finish',
+                        },
+                    ],
+                },
+            ],
+            requiresQuests: [],
+        });
+
+        await page.goto('/quests');
+
+        const builtInLink = page.locator("a[data-questid='welcome/howtodoquests']").first();
+        await expect(builtInLink).toBeVisible();
+        const customSection = page.getByTestId('custom-quests-section');
+        await expect(customSection).toBeVisible();
+        await expect(customSection).toContainText(customQuestTitle);
+
+        await builtInLink.click();
+        await expect(page).toHaveURL(/\/quests\/welcome\/howtodoquests$/);
+        await expect(
+            page.locator('.options button, main button:has-text("Continue"), main button:has-text("Start")').first()
+        ).toBeVisible();
+
+        await page.goto('/quests');
+        await expect(page.locator("a[data-questid='welcome/howtodoquests']").first()).toBeVisible();
+        await expect(page.getByRole('link', { name: customQuestTitle })).toBeVisible();
+
+        await page.reload();
+        await expect(page.locator("a[data-questid='welcome/howtodoquests']").first()).toBeVisible();
+        await expect(page.getByRole('link', { name: customQuestTitle })).toBeVisible();
+
+        const questCardIds = await page.locator('a[data-questid]').evaluateAll((cards) =>
+            cards.map((card) => card.getAttribute('data-questid')).filter(Boolean)
+        );
+        expect(new Set(questCardIds).size).toBe(questCardIds.length);
+
+        await page.getByRole('link', { name: customQuestTitle }).click();
+        await expect(page).toHaveURL(/\/quests\//);
+        await expect(
+            page.locator('.options button, main button:has-text("Finish"), main button:has-text("Continue")').first()
+        ).toBeVisible();
+    });
 });
