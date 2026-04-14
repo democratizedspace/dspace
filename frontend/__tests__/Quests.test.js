@@ -200,4 +200,44 @@ describe('Quests Component', () => {
             vi.useRealTimers();
         }
     });
+
+    it('does not render locked custom quests in the Custom Quests section', async () => {
+        vi.useFakeTimers();
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => ({
+                ...quest,
+                status: quest.id === 'custom/locked' ? 'locked' : 'available',
+            }))
+        );
+        listCustomQuests.mockResolvedValueOnce([
+            {
+                id: 'custom/available',
+                title: 'Available Custom Quest',
+                description: 'Custom quest that should be shown',
+                route: '/quests/custom/available',
+                custom: true,
+            },
+            {
+                id: 'custom/locked',
+                title: 'Locked Custom Quest',
+                description: 'Custom quest that should be hidden',
+                route: '/quests/custom/locked',
+                custom: true,
+            },
+        ]);
+
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+
+            const customSection = host.querySelector("[data-testid='custom-quests-section']");
+            expect(customSection).not.toBeNull();
+            expect(customSection?.textContent).toContain('Available Custom Quest');
+            expect(customSection?.textContent).not.toContain('Locked Custom Quest');
+            expect(customSection?.textContent).not.toContain('Locked');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
 });
