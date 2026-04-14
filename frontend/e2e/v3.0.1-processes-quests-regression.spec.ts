@@ -24,6 +24,13 @@ type ItemEntry = {
     price?: string;
 };
 
+type RequiredItemBudget = {
+    requirementId: string;
+    neededQuantity: number;
+    unitPrice: number;
+    currencyId: string;
+};
+
 import builtInItems from '../src/pages/inventory/json/items/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -176,9 +183,47 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
         page,
     }) => {
         const processId = String(purchasableRequiredProcess.id);
-        const requiredItem = (purchasableRequiredProcess.requireItems ?? []).find((entry) => {
+        const requiredItemBudgets: RequiredItemBudget[] = (
+            purchasableRequiredProcess.requireItems ?? []
+        )
+            .map((entry) => {
+                const neededQuantity = Number(entry.count ?? 1);
+                if (!Number.isFinite(neededQuantity) || neededQuantity <= 0) {
+                    return null;
+                }
+
+                const item = normalizedBuiltInItems.find(
+                    (candidate) => String(candidate.id) === String(entry.id)
+                );
+                if (!item?.price) {
+                    return null;
+                }
+
+                const [amount, currencySymbol = 'dUSD'] = item.price.split(' ');
+                const parsed = Number(amount);
+                if (!Number.isFinite(parsed) || parsed <= 0) {
+                    return null;
+                }
+
+                const currencyItem = normalizedBuiltInItems.find(
+                    (candidate) => candidate.name === currencySymbol
+                );
+                if (!currencyItem) {
+                    return null;
+                }
+
+                return {
+                    requirementId: String(entry.id),
+                    neededQuantity,
+                    unitPrice: parsed,
+                    currencyId: String(currencyItem.id),
+                };
+            })
+            .filter((entry): entry is RequiredItemBudget => entry !== null);
+
+        const requiredItem = requiredItemBudgets.find((entry) => {
             const item = normalizedBuiltInItems.find(
-                (candidate) => String(candidate.id) === String(entry.id)
+                (candidate) => String(candidate.id) === String(entry.requirementId)
             );
             if (!item?.price) {
                 return false;
@@ -192,35 +237,31 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
             throw new Error('Unable to resolve required item for buy-required validation.');
         }
 
-        const requiredItemDefinition = normalizedBuiltInItems.find(
-            (candidate) => String(candidate.id) === String(requiredItem.id)
+        const seededInventory = requiredItemBudgets.reduce<Record<string, number>>(
+            (acc, budget) => {
+                const subtotal = budget.unitPrice * budget.neededQuantity;
+                const headroomSubtotal = Math.max(1, Math.ceil(subtotal * 1.25));
+                acc[budget.currencyId] = Math.max(acc[budget.currencyId] ?? 0, headroomSubtotal);
+                return acc;
+            },
+            {}
         );
-        if (!requiredItemDefinition?.price) {
-            throw new Error('Required item is missing a purchasable price definition.');
-        }
-
-        const [, currencySymbol = 'dUSD'] = requiredItemDefinition.price.split(' ');
-        const currencyItem = normalizedBuiltInItems.find((item) => item.name === currencySymbol);
-        if (!currencyItem) {
-            throw new Error(`Unable to resolve currency item for symbol "${currencySymbol}".`);
-        }
+        seededInventory[requiredItem.requirementId] = 0;
 
         await page.addInitScript(
-            ({ currencyItemId, targetItemId }) => {
+            ({ inventory, targetItemId }) => {
                 const preloadedState = {
                     version: 3,
-                    inventory: {
-                        [currencyItemId]: 1_000_000,
-                        [targetItemId]: 0,
-                    },
+                    inventory,
                     processes: {},
                     completedQuestIds: [],
                 };
+                preloadedState.inventory[targetItemId] = 0;
                 localStorage.setItem('gameState', JSON.stringify(preloadedState));
             },
             {
-                currencyItemId: String(currencyItem.id),
-                targetItemId: String(requiredItem.id),
+                inventory: seededInventory,
+                targetItemId: requiredItem.requirementId,
             }
         );
 
@@ -234,7 +275,7 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
             const raw = localStorage.getItem('gameState');
             const parsed = raw ? JSON.parse(raw) : {};
             return Number(parsed?.inventory?.[itemId] ?? 0);
-        }, String(requiredItem.id));
+        }, requiredItem.requirementId);
 
         await buyRequiredButton.click();
 
@@ -244,7 +285,7 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
             const raw = localStorage.getItem('gameState');
             const parsed = raw ? JSON.parse(raw) : {};
             return Number(parsed?.inventory?.[itemId] ?? 0);
-        }, String(requiredItem.id));
+        }, requiredItem.requirementId);
 
         expect(afterCount).toBeGreaterThan(beforeCount);
 
