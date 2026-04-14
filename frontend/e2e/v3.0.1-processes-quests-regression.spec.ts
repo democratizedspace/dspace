@@ -74,6 +74,22 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
     }) => {
         const customProcessId = `custom-process-${Date.now()}`;
         const customProcessTitle = `Custom QA Process ${Date.now()}`;
+        const activeProcessId = String(stableBuiltInProcess.id);
+
+        await page.addInitScript((processId) => {
+            const preloadedState = {
+                version: 3,
+                inventory: {},
+                activeProcesses: {
+                    [processId]: {
+                        startedAt: Date.now() - 5_000,
+                    },
+                },
+                processHistory: {},
+                completedQuestIds: [],
+            };
+            localStorage.setItem('gameState', JSON.stringify(preloadedState));
+        }, activeProcessId);
 
         await page.goto('/');
         await seedCustomProcess(page, {
@@ -215,6 +231,21 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
         await expect(
             page.getByRole('button', { name: /Start|Pause|Resume|Collect/i })
         ).toBeVisible();
+
+        const startButton = page.getByRole('button', { name: /^Start$/i }).first();
+        await expect(startButton).toBeVisible();
+        await startButton.click();
+        await expect(page.getByRole('button', { name: /Pause|Collect/i }).first()).toBeVisible();
+
+        const cancelButton = page.getByRole('button', { name: /Cancel/i }).first();
+        if ((await cancelButton.count()) > 0) {
+            await cancelButton.click();
+            await expect(page.getByRole('button', { name: /^Start$/i }).first()).toBeVisible();
+            await page
+                .getByRole('button', { name: /^Start$/i })
+                .first()
+                .click();
+        }
 
         await page.goto(`/process/${processId}`);
         await expect(page).toHaveURL(new RegExp(`/process/${processId}$`));
