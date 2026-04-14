@@ -10,18 +10,14 @@
             ? 'Completed'
             : status === 'available'
               ? ''
-              : status === 'locked'
-                ? 'Locked'
-                : 'Checking';
+              : 'Checking';
 
     $: assistiveStatusLabel =
         status === 'available'
             ? 'Available'
             : status === 'completed'
               ? 'Completed'
-              : status === 'locked'
-                ? 'Locked'
-                : statusLabel;
+              : statusLabel;
 </script>
 
 <div class="container" class:quest data-testid="quest-tile" data-status={status}>

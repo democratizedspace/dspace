@@ -200,4 +200,39 @@ describe('Quests Component', () => {
             vi.useRealTimers();
         }
     });
+
+    it('renders only startable custom quests and omits locked cards from the custom section', async () => {
+        vi.useFakeTimers();
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => {
+                if (quest.id === 'custom/locked') {
+                    return { ...quest, status: 'locked' };
+                }
+                if (quest.id === 'custom/done') {
+                    return { ...quest, status: 'completed' };
+                }
+                return { ...quest, status: 'available' };
+            })
+        );
+        listCustomQuests.mockResolvedValueOnce([
+            { id: 'custom/locked', title: 'Locked Custom Quest' },
+            { id: 'custom/startable', title: 'Startable Custom Quest' },
+            { id: 'custom/done', title: 'Completed Custom Quest' },
+        ]);
+
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+
+            const customSection = host.querySelector("[data-testid='custom-quests-section']");
+            expect(customSection).not.toBeNull();
+            expect(customSection?.textContent).toContain('Startable Custom Quest');
+            expect(customSection?.textContent).not.toContain('Locked Custom Quest');
+            expect(customSection?.textContent).not.toContain('Completed Custom Quest');
+            expect(customSection?.textContent).not.toContain('Locked');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
 });
