@@ -200,4 +200,45 @@ describe('Quests Component', () => {
             vi.useRealTimers();
         }
     });
+
+    it('hides locked custom quests until prerequisites are complete', async () => {
+        vi.useFakeTimers();
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => ({
+                ...quest,
+                status: quest.id === 'custom/locked' ? 'locked' : 'available',
+            }))
+        );
+        listCustomQuests.mockResolvedValueOnce([
+            {
+                id: 'custom/locked',
+                title: 'Locked Custom Quest',
+                route: '/quests/custom/locked',
+                custom: true,
+            },
+            {
+                id: 'custom/ready',
+                title: 'Ready Custom Quest',
+                route: '/quests/custom/ready',
+                custom: true,
+            },
+        ]);
+
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+
+            const customSection = host.querySelector("[data-testid='custom-quests-section']");
+            expect(customSection).not.toBeNull();
+            expect(customSection?.textContent).toContain('Ready Custom Quest');
+            expect(customSection?.textContent).not.toContain('Locked Custom Quest');
+            expect(customSection?.textContent).not.toContain('Locked');
+
+            const mergeStatus = host.querySelector("[data-testid='custom-quests-merge-status']");
+            expect(mergeStatus?.getAttribute('data-custom-count')).toBe('1');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
 });

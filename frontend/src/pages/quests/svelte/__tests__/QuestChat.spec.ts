@@ -175,6 +175,7 @@ describe('QuestChat', () => {
 
         expect(queryByText('You should not see this if the quest is locked.')).toBeNull();
         expect(container.querySelector('.npcDialogue')).toBeNull();
+        expect(container.textContent).not.toContain('Locked');
         const howToDoQuestsLink = getByRole('link', { name: 'How to do quests' });
         expect(howToDoQuestsLink.getAttribute('href')).toBe('/quests/welcome/howtodoquests');
         expect(howToDoQuestsLink.classList.contains('inverted')).toBe(true);
