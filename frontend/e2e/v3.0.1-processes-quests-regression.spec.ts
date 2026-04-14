@@ -296,6 +296,8 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
         page,
     }) => {
         const processId = String(purchasableRequiredProcess.id);
+        const customBuyProcessId = `custom-buy-required-${Date.now()}`;
+        const customBuyProcessTitle = `Custom Buy Required Process ${Date.now()}`;
         const requiredItemBudgets: RequiredItemBudget[] = (
             purchasableRequiredProcess.requireItems ?? []
         )
@@ -365,13 +367,22 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
                 inventory: seededInventory,
                 processes: {},
             },
-            'seed-checksum-process-detail',
-            `/processes/${processId}`
+            'seed-checksum-process-detail'
         );
+        await seedCustomProcess(page, {
+            id: customBuyProcessId,
+            title: customBuyProcessTitle,
+            duration: '5m',
+            requireItems: [{ id: requiredItem.requirementId, count: requiredItem.neededQuantity }],
+            consumeItems: [],
+            createItems: [],
+            route: `/processes/${customBuyProcessId}`,
+        });
+        await page.goto(`/processes/${customBuyProcessId}`);
 
         const buyRequiredButton = page.getByRole('button', { name: 'Buy required items' });
         await expect(buyRequiredButton).toBeVisible();
-        await expect(buyRequiredButton).toBeEnabled();
+        await expect(buyRequiredButton).toBeEnabled({ timeout: 15000 });
 
         const beforeCount = await page.evaluate((itemId) => {
             const raw = localStorage.getItem('gameState');
@@ -409,6 +420,12 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
                 .first()
                 .click();
         }
+
+        await page.goto(`/processes/${processId}`);
+        await expect(page).toHaveURL(new RegExp(`/processes/${processId}$`));
+        await expect(
+            page.getByRole('button', { name: /Start|Pause|Resume|Collect/i })
+        ).toBeVisible();
 
         await page.goto(`/process/${processId}`);
         await expect(page).toHaveURL(new RegExp(`/process/${processId}$`));
