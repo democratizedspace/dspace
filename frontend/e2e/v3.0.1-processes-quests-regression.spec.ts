@@ -33,10 +33,6 @@ const normalizedBuiltInProcesses = JSON.parse(
     readFileSync(join(frontendRoot, 'src/generated/processes.json'), 'utf8')
 ) as ProcessEntry[];
 const normalizedBuiltInItems = builtInItems as ItemEntry[];
-const dUsdItem = normalizedBuiltInItems.find((item) => item.name === 'dUSD');
-if (!dUsdItem) {
-    throw new Error('Unable to find dUSD in built-in items catalog.');
-}
 
 const purchasableRequiredProcess = normalizedBuiltInProcesses.find((process) =>
     (process.requireItems ?? []).some((requirement) => {
@@ -196,21 +192,36 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
             throw new Error('Unable to resolve required item for buy-required validation.');
         }
 
+        const requiredItemDefinition = normalizedBuiltInItems.find(
+            (candidate) => String(candidate.id) === String(requiredItem.id)
+        );
+        if (!requiredItemDefinition?.price) {
+            throw new Error('Required item is missing a purchasable price definition.');
+        }
+
+        const [, currencySymbol = 'dUSD'] = requiredItemDefinition.price.split(' ');
+        const currencyItem = normalizedBuiltInItems.find((item) => item.name === currencySymbol);
+        if (!currencyItem) {
+            throw new Error(`Unable to resolve currency item for symbol "${currencySymbol}".`);
+        }
+
         await page.addInitScript(
-            ({ dUsdId, targetItemId }) => {
+            ({ currencyItemId, targetItemId }) => {
                 const preloadedState = {
                     version: 3,
                     inventory: {
-                        [dUsdId]: 100000,
+                        [currencyItemId]: 1_000_000,
                         [targetItemId]: 0,
                     },
-                    activeProcesses: {},
-                    processHistory: {},
+                    processes: {},
                     completedQuestIds: [],
                 };
                 localStorage.setItem('gameState', JSON.stringify(preloadedState));
             },
-            { dUsdId: String(dUsdItem.id), targetItemId: String(requiredItem.id) }
+            {
+                currencyItemId: String(currencyItem.id),
+                targetItemId: String(requiredItem.id),
+            }
         );
 
         await page.goto(`/processes/${processId}`);
