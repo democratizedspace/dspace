@@ -5,23 +5,14 @@
 
     let imageLoaded = false;
 
-    $: statusLabel =
-        status === 'completed'
-            ? 'Completed'
-            : status === 'available'
-              ? ''
-              : status === 'locked'
-                ? 'Locked'
-                : 'Checking';
+    $: statusLabel = status === 'completed' ? 'Completed' : '';
 
     $: assistiveStatusLabel =
         status === 'available'
             ? 'Available'
             : status === 'completed'
               ? 'Completed'
-              : status === 'locked'
-                ? 'Locked'
-                : statusLabel;
+              : 'Checking';
 </script>
 
 <div class="container" class:quest data-testid="quest-tile" data-status={status}>
