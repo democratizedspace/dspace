@@ -96,41 +96,88 @@ const seedGameStateForRoute = async (
     checksum: string,
     route = '/'
 ) => {
-    const now = Date.now();
-    const gameState = {
-        quests: {},
-        inventory: stateSeed.inventory,
-        processes: stateSeed.processes,
-        itemContainerCounts: {},
-        settings: {
-            showChatDebugPayload: false,
-            showQuestGraphVisualizer: false,
-        },
-        versionNumberString: '3',
-        _meta: {
-            lastUpdated: now,
+    const buildSeedPayload = () => {
+        const now = Date.now();
+        const gameState = {
+            quests: {},
+            inventory: stateSeed.inventory,
+            processes: stateSeed.processes,
+            itemContainerCounts: {},
+            settings: {
+                showChatDebugPayload: false,
+                showQuestGraphVisualizer: false,
+            },
+            versionNumberString: '3',
+            _meta: {
+                lastUpdated: now,
+                checksum,
+            },
+        };
+
+        const lightweightSnapshot = {
             checksum,
-        },
+            dUSD: Number(gameState.inventory?.[DUSD_ITEM_ID] ?? 0),
+            lastUpdated: now,
+            questProgress: { version: 1, completedQuestIds: [] },
+        };
+
+        return {
+            gameState,
+            lightweightSnapshot,
+            checksum,
+        };
     };
 
-    const lightweightSnapshot = {
-        checksum,
-        dUSD: Number(gameState.inventory?.[DUSD_ITEM_ID] ?? 0),
-        lastUpdated: now,
-        questProgress: { version: 1, completedQuestIds: [] },
-    };
+    const seedPayload = buildSeedPayload();
 
     await page.addInitScript(
-        ({ seedState, checksumValue, seedLite }) => {
-            localStorage.setItem('gameState', JSON.stringify(seedState));
-            localStorage.setItem('gameStateChecksum', checksumValue);
-            localStorage.setItem('gameStateLite', JSON.stringify(seedLite));
+        ({ seed }) => {
+            localStorage.setItem('gameState', JSON.stringify(seed.gameState));
+            localStorage.setItem('gameStateChecksum', seed.checksum);
+            localStorage.setItem('gameStateLite', JSON.stringify(seed.lightweightSnapshot));
         },
         {
-            seedState: gameState,
-            checksumValue: checksum,
-            seedLite: lightweightSnapshot,
+            seed: seedPayload,
         }
+    );
+
+    await page.goto(route);
+
+    await page.evaluate(
+        async ({ seed }) => {
+            localStorage.setItem('gameState', JSON.stringify(seed.gameState));
+            localStorage.setItem('gameStateChecksum', seed.checksum);
+            localStorage.setItem('gameStateLite', JSON.stringify(seed.lightweightSnapshot));
+
+            await new Promise<void>((resolve) => {
+                const request = indexedDB.open('dspaceGameState', 2);
+                request.onupgradeneeded = () => {
+                    const db = request.result;
+                    if (!db.objectStoreNames.contains('state')) {
+                        db.createObjectStore('state');
+                    }
+                    if (!db.objectStoreNames.contains('meta')) {
+                        db.createObjectStore('meta');
+                    }
+                };
+                request.onerror = () => resolve();
+                request.onsuccess = () => {
+                    const db = request.result;
+                    const tx = db.transaction(['state', 'meta'], 'readwrite');
+                    tx.objectStore('state').put(seed.gameState, 'root');
+                    tx.objectStore('meta').put(seed.lightweightSnapshot, 'root');
+                    tx.oncomplete = () => {
+                        db.close();
+                        resolve();
+                    };
+                    tx.onerror = () => {
+                        db.close();
+                        resolve();
+                    };
+                };
+            });
+        },
+        { seed: seedPayload }
     );
 
     await page.goto(route);
