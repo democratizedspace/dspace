@@ -85,6 +85,96 @@ if (!stableBuiltInProcess) {
     throw new Error('Unable to find secondary built-in process for coexistence checks.');
 }
 
+const DUSD_ITEM_ID = '5247a603-294a-4a34-a884-1ae20969b2a1';
+
+const seedGameStateForRoute = async (
+    page: import('@playwright/test').Page,
+    stateSeed: {
+        inventory: Record<string, number>;
+        processes: Record<string, unknown>;
+    },
+    checksum: string
+) => {
+    await page.goto('/');
+    await page.evaluate(
+        async ({ inventory, processes, checksumValue, dUSDItemId }) => {
+            const now = Date.now();
+            const gameState = {
+                quests: {},
+                inventory,
+                processes,
+                itemContainerCounts: {},
+                settings: {
+                    showChatDebugPayload: false,
+                    showQuestGraphVisualizer: false,
+                },
+                versionNumberString: '3',
+                _meta: {
+                    lastUpdated: now,
+                    checksum: checksumValue,
+                },
+            };
+
+            localStorage.setItem('gameState', JSON.stringify(gameState));
+            localStorage.setItem('gameStateChecksum', checksumValue);
+            localStorage.setItem(
+                'gameStateLite',
+                JSON.stringify({
+                    checksum: checksumValue,
+                    dUSD: Number(gameState.inventory?.[dUSDItemId] ?? 0),
+                    lastUpdated: now,
+                    questProgress: { version: 1, completedQuestIds: [] },
+                })
+            );
+
+            await new Promise<void>((resolve, reject) => {
+                const request = indexedDB.open('dspaceGameState', 2);
+
+                request.onupgradeneeded = () => {
+                    const db = request.result;
+                    if (!db.objectStoreNames.contains('state')) {
+                        db.createObjectStore('state');
+                    }
+                    if (!db.objectStoreNames.contains('backup')) {
+                        db.createObjectStore('backup');
+                    }
+                    if (!db.objectStoreNames.contains('meta')) {
+                        db.createObjectStore('meta');
+                    }
+                };
+
+                request.onerror = () => reject(request.error ?? new Error('Failed to open IDB'));
+                request.onsuccess = () => {
+                    const db = request.result;
+                    const tx = db.transaction(['state', 'meta'], 'readwrite');
+                    tx.objectStore('state').put(gameState, 'root');
+                    tx.objectStore('meta').put(
+                        {
+                            checksum: checksumValue,
+                            dUSD: Number(gameState.inventory?.[dUSDItemId] ?? 0),
+                            lastUpdated: now,
+                            questProgress: { version: 1, completedQuestIds: [] },
+                        },
+                        'root'
+                    );
+                    tx.oncomplete = () => {
+                        db.close();
+                        resolve();
+                    };
+                    tx.onerror = () =>
+                        reject(tx.error ?? new Error('Failed to write seeded game state to IDB'));
+                };
+            });
+        },
+        {
+            inventory: stateSeed.inventory,
+            processes: stateSeed.processes,
+            checksumValue: checksum,
+            dUSDItemId: DUSD_ITEM_ID,
+        }
+    );
+};
+
 test.describe('v3.0.1 launch regression checks for processes and quests', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
@@ -97,12 +187,12 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
         const customProcessTitle = `Custom QA Process ${Date.now()}`;
         const activeProcessId = String(stableBuiltInProcess.id);
 
-        await page.addInitScript((processId) => {
-            const preloadedState = {
-                quests: {},
+        await seedGameStateForRoute(
+            page,
+            {
                 inventory: {},
                 processes: {
-                    [processId]: {
+                    [activeProcessId]: {
                         startedAt: Date.now() - 5_000,
                         duration: 60_000,
                         pausedAt: null,
@@ -111,22 +201,9 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
                         consumeItemsSnapshot: [],
                     },
                 },
-                itemContainerCounts: {},
-                settings: {
-                    showChatDebugPayload: false,
-                    showQuestGraphVisualizer: false,
-                },
-                versionNumberString: '3',
-                _meta: {
-                    lastUpdated: Date.now(),
-                    checksum: 'seed-checksum-process-list',
-                },
-            };
-            localStorage.setItem('gameState', JSON.stringify(preloadedState));
-            localStorage.setItem('gameStateChecksum', preloadedState._meta.checksum);
-        }, activeProcessId);
-
-        await page.goto('/');
+            },
+            'seed-checksum-process-list'
+        );
         await seedCustomProcess(page, {
             id: customProcessId,
             title: customProcessTitle,
@@ -274,31 +351,13 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
         );
         seededInventory[requiredItem.requirementId] = 0;
 
-        await page.addInitScript(
-            ({ inventory, targetItemId }) => {
-                const preloadedState = {
-                    quests: {},
-                    inventory,
-                    processes: {},
-                    itemContainerCounts: {},
-                    settings: {
-                        showChatDebugPayload: false,
-                        showQuestGraphVisualizer: false,
-                    },
-                    versionNumberString: '3',
-                    _meta: {
-                        lastUpdated: Date.now(),
-                        checksum: 'seed-checksum-process-detail',
-                    },
-                };
-                preloadedState.inventory[targetItemId] = 0;
-                localStorage.setItem('gameState', JSON.stringify(preloadedState));
-                localStorage.setItem('gameStateChecksum', preloadedState._meta.checksum);
-            },
+        await seedGameStateForRoute(
+            page,
             {
                 inventory: seededInventory,
-                targetItemId: requiredItem.requirementId,
-            }
+                processes: {},
+            },
+            'seed-checksum-process-detail'
         );
 
         await page.goto(`/processes/${processId}`);
