@@ -225,7 +225,11 @@ const TEST_GROUPS = [
     {
         name: 'Quests TTI Harness',
         // Keep in grouped-runner coverage list; verified by tests/run-test-groups.test.ts.
-        files: ['quests-tti-behavior.spec.ts', 'quests-tti-metrics.spec.ts'],
+        files: [
+            'quests-tti-behavior.spec.ts',
+            'quests-tti-metrics.spec.ts',
+            'v3.0.1-processes-quests-regression.spec.ts',
+        ],
         parallel: false,
         workers: 1,
     },
