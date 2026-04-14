@@ -80,12 +80,16 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
             const preloadedState = {
                 version: 3,
                 inventory: {},
-                activeProcesses: {
+                processes: {
                     [processId]: {
                         startedAt: Date.now() - 5_000,
+                        duration: 60_000,
+                        pausedAt: null,
+                        elapsedBeforePause: 0,
+                        pauseModelVersion: 2,
+                        consumeItemsSnapshot: [],
                     },
                 },
-                processHistory: {},
                 completedQuestIds: [],
             };
             localStorage.setItem('gameState', JSON.stringify(preloadedState));
@@ -180,7 +184,12 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
             const item = normalizedBuiltInItems.find(
                 (candidate) => String(candidate.id) === String(entry.id)
             );
-            return Boolean(item?.price);
+            if (!item?.price) {
+                return false;
+            }
+            const [amount] = item.price.split(' ');
+            const parsed = Number(amount);
+            return Number.isFinite(parsed) && parsed > 0;
         });
 
         if (!requiredItem) {
@@ -281,17 +290,19 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
         await page.addInitScript(() => {
             (
                 window as Window & { __questsCustomMergeDelayMs?: number }
-            ).__questsCustomMergeDelayMs = 700;
+            ).__questsCustomMergeDelayMs = 2_500;
         });
 
         await page.goto('/quests');
-        await waitForHydration(page);
 
         const builtInGrid = page.getByTestId('quests-grid');
-        await expect(builtInGrid).toBeVisible();
-
         const customMergeStatus = page.getByTestId('custom-quests-merge-status');
-        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'false');
+        await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'false', {
+            timeout: 200,
+        });
+
+        await waitForHydration(page);
+        await expect(builtInGrid).toBeVisible();
 
         const builtInQuestCard = builtInGrid
             .locator("a[data-questid='welcome/howtodoquests']")
