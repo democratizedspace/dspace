@@ -1,8 +1,8 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { clearUserData, seedCustomQuest } from './test-helpers';
+import { clearUserData, seedCustomProcess, seedCustomQuest } from './test-helpers';
 
 type ProcessEntry = {
     id: string | number;
@@ -41,7 +41,7 @@ const purchasableRequiredProcess = normalizedBuiltInProcesses.find((process) =>
         if (!item?.price) {
             return false;
         }
-        const [, amount] = item.price.split(' ');
+        const [amount] = item.price.split(' ');
         const parsed = Number(amount);
         return Number.isFinite(parsed) && parsed > 0;
     })
@@ -57,51 +57,6 @@ const stableBuiltInProcess = normalizedBuiltInProcesses.find(
 
 if (!stableBuiltInProcess) {
     throw new Error('Unable to find secondary built-in process for coexistence checks.');
-}
-
-async function seedCustomProcess(page: Page, process: Record<string, unknown>): Promise<string> {
-    const seededId = await page.evaluate(
-        async ({ processData }) => {
-            const request = indexedDB.open('CustomContent', 3);
-            const db = await new Promise<IDBDatabase>((resolve, reject) => {
-                request.onupgradeneeded = () => {
-                    const upgradeDb = request.result;
-                    if (!upgradeDb.objectStoreNames.contains('meta')) {
-                        upgradeDb.createObjectStore('meta');
-                    }
-                    if (!upgradeDb.objectStoreNames.contains('items')) {
-                        upgradeDb.createObjectStore('items', { keyPath: 'id' });
-                    }
-                    if (!upgradeDb.objectStoreNames.contains('processes')) {
-                        upgradeDb.createObjectStore('processes', { keyPath: 'id' });
-                    }
-                    if (!upgradeDb.objectStoreNames.contains('quests')) {
-                        upgradeDb.createObjectStore('quests', { keyPath: 'id' });
-                    }
-                };
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-
-            await new Promise<void>((resolve, reject) => {
-                const tx = db.transaction('processes', 'readwrite');
-                tx.objectStore('processes').put({
-                    ...processData,
-                    entityType: 'process',
-                    custom: true,
-                    createdAt: new Date().toISOString(),
-                });
-                tx.oncomplete = () => resolve();
-                tx.onerror = () => reject(tx.error);
-            });
-
-            db.close();
-            return String(processData.id ?? '');
-        },
-        { processData: process }
-    );
-
-    return seededId;
 }
 
 test.describe('v3.0.1 launch regression checks for processes and quests', () => {
@@ -139,8 +94,19 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
 
         await page.goto('/processes');
 
-        const builtInRow = page.locator(`[data-process-id="${stableBuiltInProcess.id}"]`).first();
+        const builtInRow = page
+            .locator(`[data-process-id="${stableBuiltInProcess.id}"]`)
+            .filter({ hasNotText: 'Custom' })
+            .first();
         await expect(builtInRow).toBeVisible();
+        if (stableBuiltInProcess.title) {
+            await expect(builtInRow).toContainText(stableBuiltInProcess.title);
+        }
+        await expect(
+            page.locator(`[data-process-id="${stableBuiltInProcess.id}"]`, {
+                hasText: 'Colliding custom process should be ignored',
+            })
+        ).toHaveCount(0);
 
         await expect(builtInRow).toContainText(/Duration/i);
         await expect(builtInRow).toContainText(/Requires/i);
@@ -231,7 +197,7 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
 
         await buyRequiredButton.click();
 
-        await expect(page.getByRole('status')).toContainText(/Added/i);
+        await expect(page.getByRole('status')).toContainText(/Added/i, { timeout: 5000 });
 
         const afterCount = await page.evaluate((itemId) => {
             const raw = localStorage.getItem('gameState');

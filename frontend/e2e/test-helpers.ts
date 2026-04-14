@@ -355,20 +355,28 @@ export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
 }
 
-export async function seedCustomQuest(page: Page, quest: Record<string, unknown>): Promise<string> {
-    const resolvedQuestId = (quest as { id?: string | number }).id ?? generateQuestId();
+async function seedCustomEntity(
+    page: Page,
+    entity: Record<string, unknown>,
+    {
+        storeName,
+        entityType,
+        fallbackId,
+    }: { storeName: 'items' | 'processes' | 'quests'; entityType: string; fallbackId: string }
+): Promise<string> {
+    const resolvedId = (entity as { id?: string | number }).id ?? fallbackId;
 
     const seededId = await page.evaluate(
-        async ({ questData, questId }) => {
+        async ({ entityData, entityId, targetStoreName, targetEntityType }) => {
             const databaseName = 'CustomContent';
             const databaseVersion = 3;
 
-            const preparedQuest = {
-                ...questData,
-                id: questId,
-                entityType: 'quest',
+            const preparedEntity = {
+                ...entityData,
+                id: entityId,
+                entityType: targetEntityType,
                 custom: true,
-                createdAt: questData.createdAt ?? new Date().toISOString(),
+                createdAt: entityData.createdAt ?? new Date().toISOString(),
             };
 
             const db = (await new Promise<unknown>((resolve, reject) => {
@@ -393,20 +401,44 @@ export async function seedCustomQuest(page: Page, quest: Record<string, unknown>
             })) as unknown as IndexedDbDatabase;
 
             await new Promise<void>((resolve, reject) => {
-                const tx = db.transaction('quests', 'readwrite');
-                const store = tx.objectStore('quests');
-                store.put(preparedQuest);
+                const tx = db.transaction(targetStoreName, 'readwrite');
+                const store = tx.objectStore(targetStoreName);
+                store.put(preparedEntity);
                 tx.oncomplete = () => resolve();
                 tx.onerror = () => reject(tx.error);
             });
 
             db.close();
-            return String(questId);
+            return String(entityId);
         },
-        { questData: quest, questId: resolvedQuestId }
+        {
+            entityData: entity,
+            entityId: resolvedId,
+            targetStoreName: storeName,
+            targetEntityType: entityType,
+        }
     );
 
     return seededId;
+}
+
+export async function seedCustomProcess(
+    page: Page,
+    process: Record<string, unknown>
+): Promise<string> {
+    return seedCustomEntity(page, process, {
+        storeName: 'processes',
+        entityType: 'process',
+        fallbackId: generateUuidFallback(),
+    });
+}
+
+export async function seedCustomQuest(page: Page, quest: Record<string, unknown>): Promise<string> {
+    return seedCustomEntity(page, quest, {
+        storeName: 'quests',
+        entityType: 'quest',
+        fallbackId: generateQuestId(),
+    });
 }
 
 export async function waitForQuestRecordByTitle(
