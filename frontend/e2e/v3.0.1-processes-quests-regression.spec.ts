@@ -32,6 +32,7 @@ type RequiredItemBudget = {
 };
 
 import builtInItems from '../src/pages/inventory/json/items/index.js';
+import { getPriceStringComponents } from '../src/utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -40,6 +41,23 @@ const normalizedBuiltInProcesses = JSON.parse(
     readFileSync(join(frontendRoot, 'src/generated/processes.json'), 'utf8')
 ) as ProcessEntry[];
 const normalizedBuiltInItems = builtInItems as ItemEntry[];
+const defaultCurrencyItem = normalizedBuiltInItems.find((item) => item.name === 'dUSD') ?? null;
+
+const resolveCurrencyItemId = (price?: string) => {
+    const { symbol } = getPriceStringComponents(price);
+    if (symbol) {
+        const explicitCurrency = normalizedBuiltInItems.find((item) => item.name === symbol);
+        if (explicitCurrency) {
+            return String(explicitCurrency.id);
+        }
+    }
+
+    if (defaultCurrencyItem) {
+        return String(defaultCurrencyItem.id);
+    }
+
+    return null;
+};
 
 const purchasableRequiredProcess = normalizedBuiltInProcesses.find((process) =>
     (process.requireItems ?? []).some((requirement) => {
@@ -199,16 +217,14 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
                     return null;
                 }
 
-                const [amount, currencySymbol = 'dUSD'] = item.price.split(' ');
-                const parsed = Number(amount);
+                const { price } = getPriceStringComponents(item.price);
+                const parsed = Number(price);
                 if (!Number.isFinite(parsed) || parsed <= 0) {
                     return null;
                 }
 
-                const currencyItem = normalizedBuiltInItems.find(
-                    (candidate) => candidate.name === currencySymbol
-                );
-                if (!currencyItem) {
+                const currencyId = resolveCurrencyItemId(item.price);
+                if (!currencyId) {
                     return null;
                 }
 
@@ -216,7 +232,7 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
                     requirementId: String(entry.id),
                     neededQuantity,
                     unitPrice: parsed,
-                    currencyId: String(currencyItem.id),
+                    currencyId,
                 };
             })
             .filter((entry): entry is RequiredItemBudget => entry !== null);
