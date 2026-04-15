@@ -45,10 +45,11 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Enable pnpm via Corepack
-        run: |
-          corepack enable
-          corepack prepare pnpm@9 --activate
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+          run_install: false
 
       - name: Verify pnpm is on PATH
         run: |
@@ -283,10 +284,11 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Enable pnpm via Corepack
-        run: |
-          corepack enable
-          corepack prepare pnpm@9 --activate
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+          run_install: false
 
       - name: Verify pnpm is on PATH
         run: |

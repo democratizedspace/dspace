@@ -21,10 +21,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Enable pnpm via Corepack
-        run: |
-          corepack enable
-          corepack prepare pnpm@9 --activate
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+          run_install: false
 
       - name: Determine pnpm store path
         id: pnpm-store
@@ -56,10 +57,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Enable pnpm via Corepack
-        run: |
-          corepack enable
-          corepack prepare pnpm@9 --activate
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+          run_install: false
 
       - name: Determine pnpm store path
         id: pnpm-store
@@ -104,10 +106,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Enable pnpm via Corepack
-        run: |
-          corepack enable
-          corepack prepare pnpm@9 --activate
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+          run_install: false
 
       - name: Determine pnpm store path
         id: pnpm-store
