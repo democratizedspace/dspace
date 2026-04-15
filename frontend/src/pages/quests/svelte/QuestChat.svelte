@@ -3,7 +3,12 @@
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
     import { getUnmetQuestRequirements, questFinished } from '../../../utils/gameState.js';
-    import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
+    import {
+        state,
+        syncGameStateFromLocalIfStale,
+        ready,
+        isGameStateReady,
+    } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
@@ -16,6 +21,7 @@
     const clientSideRendered = writable(false);
     const finished = writable(false);
     const available = writable(null);
+    const gameStateReady = writable(false);
 
     let unmetRequirements = [];
 
@@ -71,6 +77,10 @@
         '/assets/pfp/7ecc9e2a-dd79-4bf8-87b5-57f090dd8c14.jpg';
 
     onMount(() => {
+        void ready.finally(() => {
+            gameStateReady.set(true);
+        });
+
         refreshIntervalId = setInterval(() => {
             syncGameStateFromLocalIfStale();
         }, 3000);
@@ -103,13 +113,18 @@
 
     $: {
         if ($state && quest) {
-            unmetRequirements = getUnmetQuestRequirements(quest);
-            available.set(!questFinished(quest.id) && unmetRequirements.length === 0);
-            if ($state.quests[quest.id]) {
-                pointer = $state.quests[quest.id].stepId;
-                currentDialogue = dialogueMap?.get(pointer);
+            if (!$gameStateReady && !isGameStateReady()) {
+                available.set(null);
+                finished.set(false);
+            } else {
+                unmetRequirements = getUnmetQuestRequirements(quest);
+                available.set(!questFinished(quest.id) && unmetRequirements.length === 0);
+                if ($state.quests[quest.id]) {
+                    pointer = $state.quests[quest.id].stepId;
+                    currentDialogue = dialogueMap?.get(pointer);
+                }
+                finished.set(questFinished(quest.id));
             }
-            finished.set(questFinished(quest.id));
         }
     }
 
@@ -144,6 +159,12 @@
                 <h4>Quest not available yet</h4>
                 <p>Complete these quests first:</p>
                 <QuestLinkChips questIds={unmetRequirements} />
+            </div>
+        </div>
+    {:else if $available === null}
+        <div class="chat" data-testid="chat-panel">
+            <div class="chat-body">
+                <div class="temp-container"></div>
             </div>
         </div>
     {:else}
