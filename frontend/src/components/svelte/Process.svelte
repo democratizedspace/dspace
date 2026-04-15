@@ -17,14 +17,13 @@
     } from '../../utils/gameState/processes.js';
     import { syncGameStateFromLocalIfStale } from '../../utils/gameState/common.js';
     import processes from '../../generated/processes.json';
-    import { durationInSeconds } from '../../utils.js';
+    import { durationInSeconds, getPriceStringComponents } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
     import { buyItems, getItemCount, getItemCounts } from '../../utils/gameState/inventory.js';
     import items from '../../pages/inventory/json/items';
     import { getItemMetadata } from './compactItemListHelpers.js';
     import { getItemMap } from '../../utils/itemResolver.js';
-    import { getPriceStringComponents } from '../../utils.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
 
     export let processId;
@@ -66,11 +65,13 @@
     let toastVisible = false;
     let toastMessage = '';
     let toastTimeoutId = null;
-    let disabledReasonId = `buy-required-disabled-reason-${processId}`;
+    const instanceIdSuffix = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    let disabledReasonId = `buy-required-disabled-reason-${processId ?? 'unknown'}-${instanceIdSuffix}`;
 
     const QUANTITY_PRECISION = 1_000_000;
     const CURRENCY_EPSILON = 1e-9;
-    const defaultCurrencyItem = items.find((item) => item.name === 'dUSD') ?? null;
+    const itemDefinitions = items;
+    const defaultCurrencyItem = itemDefinitions.find((item) => item.name === 'dUSD') ?? null;
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
@@ -95,7 +96,7 @@
             return defaultCurrencyItem;
         }
 
-        return items.find((item) => item.name === symbol) ?? defaultCurrencyItem;
+        return itemDefinitions.find((item) => item.name === symbol) ?? defaultCurrencyItem;
     };
 
     const getUnitPrice = (item) => {
@@ -116,8 +117,8 @@
         };
     };
 
-    const releaseItemImages = (items) => {
-        items.forEach((item) => item?.releaseImage?.());
+    const releaseItemImages = (itemEntries) => {
+        itemEntries.forEach((item) => item?.releaseImage?.());
     };
 
     const getPendingBuyRequirements = () => {
@@ -133,7 +134,7 @@
                     return null;
                 }
 
-                const item = items.find((i) => i.id === req.id);
+                const item = itemDefinitions.find((i) => i.id === req.id);
                 const pricing = getUnitPrice(item);
                 if (!pricing) {
                     return null;
@@ -254,13 +255,13 @@
     };
 
     // Collect item deficits for a specific requirement list.
-    const getMissingEntries = (items) => {
-        if (!Array.isArray(items) || items.length === 0) {
+    const getMissingEntries = (requiredItems) => {
+        if (!Array.isArray(requiredItems) || requiredItems.length === 0) {
             return [];
         }
 
-        const counts = getItemCounts(items);
-        return items.reduce((missing, item) => {
+        const counts = getItemCounts(requiredItems);
+        return requiredItems.reduce((missing, item) => {
             const itemId =
                 typeof item?.id === 'string' && item.id.trim().length > 0 ? item.id : null;
             if (!itemId) {
@@ -421,6 +422,7 @@
             processStartedAt = undefined;
             currentTime = Date.now();
             runtimeCreateItems = [];
+            updateDisabled();
             return;
         }
 
@@ -433,6 +435,7 @@
         }
 
         runtimeCreateItems = getRuntimeCreateItems(processId, process);
+        updateDisabled();
     };
 
     const onProcessStart = async () => {
@@ -587,7 +590,7 @@
 
     $: if (processId !== customProcessId) {
         customProcessId = processId;
-        disabledReasonId = `buy-required-disabled-reason-${processId}`;
+        disabledReasonId = `buy-required-disabled-reason-${processId ?? 'unknown'}-${instanceIdSuffix}`;
         customProcess = null;
         customProcessAttemptedId = null;
         customProcessRequest = null;
@@ -640,7 +643,6 @@
             previousRequirementKey = nextKey;
             void loadRequirementItemMap(requirementItems);
         }
-        updateDisabled();
     }
 </script>
 
@@ -918,8 +920,8 @@
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
-        background-color: #cacaca;
-        color: #fff;
+        background-color: #1f2937;
+        color: #f9fafb;
         padding: 10px 20px;
         border-radius: 5px;
         text-align: center;

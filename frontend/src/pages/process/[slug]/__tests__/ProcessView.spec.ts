@@ -133,12 +133,9 @@ describe('ProcessView detail controls', () => {
 
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
         expect(buyButton.hasAttribute('disabled')).toBe(true);
-        expect(buyButton.getAttribute('aria-describedby')).toBe(
-            'buy-required-disabled-reason-detail-process'
-        );
-        const reasonElement = document.getElementById(
-            'buy-required-disabled-reason-detail-process'
-        );
+        const disabledReasonId = buyButton.getAttribute('aria-describedby');
+        expect(disabledReasonId).toMatch(/^buy-required-disabled-reason-detail-process-/);
+        const reasonElement = document.getElementById(disabledReasonId ?? '');
         expect(reasonElement).not.toBeNull();
         expect(reasonElement?.textContent).toBe('All required items are already available.');
         expect(screen.getByText('All required items are already available.')).toBe(reasonElement);
@@ -155,9 +152,9 @@ describe('ProcessView detail controls', () => {
 
         const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
         expect(buyButton.hasAttribute('disabled')).toBe(true);
-        const reasonElement = document.getElementById(
-            'buy-required-disabled-reason-detail-process'
-        );
+        const disabledReasonId = buyButton.getAttribute('aria-describedby');
+        expect(disabledReasonId).toMatch(/^buy-required-disabled-reason-detail-process-/);
+        const reasonElement = document.getElementById(disabledReasonId ?? '');
         expect(reasonElement).not.toBeNull();
         expect(reasonElement?.textContent).toBe(
             'Not enough currency to buy any still-needed required items.'

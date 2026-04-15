@@ -266,7 +266,7 @@ test('disables Buy required items with the expected reason when requirements are
     const buyButton = getByRole('button', { name: 'Buy required items' });
 
     expect(buyButton.hasAttribute('disabled')).toBe(true);
-    expect(buyButton.getAttribute('aria-describedby')).toBe('buy-required-disabled-reason-p2');
+    expect(buyButton.getAttribute('aria-describedby')).toMatch(/^buy-required-disabled-reason-p2-/);
 });
 
 test('renders container-withdraw outputs in creates list', async () => {
