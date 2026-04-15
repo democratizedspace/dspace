@@ -32,7 +32,7 @@
     let rewardItemsKey = '';
     let isMounted = false;
     let refreshIntervalId;
-    let gameStateReady = false;
+    let gameStateReady = isGameStateReady();
 
     const releaseRewardImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
@@ -112,6 +112,7 @@
     });
 
     onDestroy(() => {
+        isMounted = false;
         clearInterval(refreshIntervalId);
         releaseRewardImages(rewardItems);
     });
