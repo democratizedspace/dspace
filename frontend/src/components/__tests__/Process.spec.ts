@@ -53,6 +53,12 @@ vi.mock('../../pages/inventory/json/items', () => ({
             image: '/test.png',
         },
         {
+            id: 'item-5',
+            name: 'Fifth Item',
+            image: '/test.png',
+            price: '3',
+        },
+        {
             id: 'currency-item',
             name: 'dUSD',
             image: '/test.png',
@@ -267,6 +273,83 @@ test('disables Buy required items with the expected reason when requirements are
 
     expect(buyButton.hasAttribute('disabled')).toBe(true);
     expect(buyButton.getAttribute('aria-describedby')).toMatch(/^buy-required-disabled-reason-p2-/);
+});
+
+test('disables Buy required items when required entries are not purchasable', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-3': 0 });
+    getItemCountMock.mockReturnValue(0);
+
+    const customProcess = {
+        id: 'custom-non-purchasable',
+        title: 'Non Purchasable',
+        duration: '5s',
+        requireItems: [{ id: 'item-3', count: 1 }],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByRole, getByText } = render(Process, {
+        processId: 'custom-non-purchasable',
+        processData: customProcess,
+    });
+    const buyButton = getByRole('button', { name: 'Buy required items' });
+
+    expect(buyButton.hasAttribute('disabled')).toBe(true);
+    expect(getByText('Required items cannot be purchased.')).toBeTruthy();
+});
+
+test('uses default currency item when price symbol is omitted', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-5': 0 });
+    getItemCountMock.mockImplementation((itemId: string) => (itemId === 'currency-item' ? 9 : 0));
+
+    const customProcess = {
+        id: 'custom-default-currency',
+        title: 'Default Currency',
+        duration: '5s',
+        requireItems: [{ id: 'item-5', count: 2 }],
+        consumeItems: [],
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByRole } = render(Process, {
+        processId: 'custom-default-currency',
+        processData: customProcess,
+    });
+    const buyButton = getByRole('button', { name: 'Buy required items' });
+    await fireEvent.click(buyButton);
+
+    expect(buyItemsMock).toHaveBeenCalledWith([
+        { id: 'item-5', quantity: 2, price: 3, currencyId: 'currency-item' },
+    ]);
+});
+
+test('handles invalid durations without crashing', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+
+    const customProcess = {
+        id: 'custom-bad-duration',
+        title: 'Bad Duration',
+        duration: 'not-a-duration',
+        requireItems: undefined,
+        consumeItems: undefined,
+        createItems: [],
+        custom: true,
+    };
+
+    const { getByText } = render(Process, {
+        processId: 'custom-bad-duration',
+        processData: customProcess,
+    });
+
+    await tick();
+    expect(getByText('Duration: not-a-duration')).toBeTruthy();
 });
 
 test('renders container-withdraw outputs in creates list', async () => {
