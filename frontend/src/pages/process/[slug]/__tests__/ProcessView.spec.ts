@@ -36,6 +36,17 @@ vi.mock('../../../../generated/processes.json', () => ({
             consumeItems: [],
             createItems: [],
         },
+        {
+            id: 'consume-only-process',
+            title: 'Consume Only Process',
+            requireItems: [],
+            consumeItems: [
+                { id: 'printer-item', count: 1 },
+                { id: 'green-pla-item', count: 18.48 },
+                { id: 'energy-item', count: 266.67 },
+            ],
+            createItems: [],
+        },
     ],
 }));
 
@@ -64,6 +75,17 @@ vi.mock('../../../inventory/json/items', () => ({
         {
             id: 'dbi-item',
             name: 'dBI',
+        },
+        {
+            id: 'printer-item',
+            price: '100 dUSD',
+        },
+        {
+            id: 'green-pla-item',
+            price: '4 dUSD',
+        },
+        {
+            id: 'energy-item',
         },
     ],
 }));
@@ -219,6 +241,25 @@ describe('ProcessView detail controls', () => {
         expect(buyItemsMock).toHaveBeenCalledWith([
             { id: 'req-item-b', quantity: 1, price: 2, currencyId: 'dusd-item' },
             { id: 'dbi-item-required', quantity: 2, price: 4, currencyId: 'dbi-item' },
+        ]);
+    });
+
+    it('treats consumed items as buyable requirements when requireItems is empty', async () => {
+        getItemCountMock.mockImplementation((itemId: string) => {
+            if (itemId === 'dusd-item') {
+                return 200;
+            }
+            return 0;
+        });
+        render(ProcessView, { props: { slug: 'consume-only-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
+
+        await fireEvent.click(buyButton);
+        expect(buyItemsMock).toHaveBeenCalledWith([
+            { id: 'green-pla-item', quantity: 18.48, price: 4, currencyId: 'dusd-item' },
+            { id: 'printer-item', quantity: 1, price: 100, currencyId: 'dusd-item' },
         ]);
     });
 });

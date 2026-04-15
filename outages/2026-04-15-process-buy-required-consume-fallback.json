@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-15-process-buy-required-consume-fallback",
+  "date": "2026-04-15",
+  "component": "frontend:process-buy-required-items",
+  "rootCause": "The process detail Buy required items logic only evaluated process.requireItems. Processes that gate startability through consumeItems (with empty requireItems) were treated as already satisfied, incorrectly disabling the button with 'All required items are already available.'",
+  "resolution": "Updated ProcessView purchase requirement derivation to include both requireItems and consumeItems (using per-item max quantity), so consume-only process inputs are considered missing when absent. Added unit coverage for consume-only process purchasing behavior.",
+  "references": [
+    "frontend/src/pages/process/[slug]/ProcessView.svelte",
+    "frontend/src/pages/process/[slug]/__tests__/ProcessView.spec.ts"
+  ]
+}

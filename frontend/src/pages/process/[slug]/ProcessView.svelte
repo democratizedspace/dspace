@@ -62,12 +62,37 @@
         };
     };
 
-    const getPendingBuyRequirements = () => {
-        if (!displayProcess?.requireItems?.length) {
+    const getRequiredPurchaseItems = () => {
+        if (!displayProcess) {
             return [];
         }
 
-        return displayProcess.requireItems
+        const requiredCounts = new Map();
+        const addCounts = (sourceItems = []) => {
+            sourceItems.forEach((item) => {
+                const id = item?.id;
+                const count = Number(item?.count);
+                if (!id || !Number.isFinite(count) || count <= 0) {
+                    return;
+                }
+
+                requiredCounts.set(id, Math.max(requiredCounts.get(id) ?? 0, count));
+            });
+        };
+
+        addCounts(displayProcess.requireItems);
+        addCounts(displayProcess.consumeItems);
+
+        return Array.from(requiredCounts.entries()).map(([id, count]) => ({ id, count }));
+    };
+
+    const getPendingBuyRequirements = () => {
+        const requiredItems = getRequiredPurchaseItems();
+        if (!requiredItems.length) {
+            return [];
+        }
+
+        return requiredItems
             .map((req) => {
                 const have = getItemCount(req.id);
                 const neededQuantity = roundDownQuantity(req.count - have);
@@ -141,11 +166,12 @@
     };
 
     const getDisabledReason = () => {
-        if (!displayProcess || !displayProcess.requireItems) {
+        const requiredItems = getRequiredPurchaseItems();
+        if (!requiredItems.length) {
             return 'No required items are purchasable.';
         }
 
-        const missingRequirements = displayProcess.requireItems.filter(
+        const missingRequirements = requiredItems.filter(
             (req) => roundDownQuantity(req.count - getItemCount(req.id)) > 0
         );
         if (missingRequirements.length === 0) {
