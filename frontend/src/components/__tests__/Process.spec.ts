@@ -14,6 +14,8 @@ const ProcessStates = vi.hoisted(() => ({
 
 const stateInfo = vi.hoisted(() => ({ state: ProcessStates.IN_PROGRESS, progress: 0 }));
 const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
+const getItemCountMock = vi.hoisted(() => vi.fn(() => 0));
+const buyItemsMock = vi.hoisted(() => vi.fn());
 const getItemMapMock = vi.hoisted(() => vi.fn());
 const getProcessStartedAtMock = vi.hoisted(() => vi.fn(() => Date.now()));
 const cheatsAvailabilityStore = writable(false);
@@ -48,11 +50,18 @@ vi.mock('../../pages/inventory/json/items', () => ({
             name: 'Fourth Item',
             image: '/test.png',
         },
+        {
+            id: 'dusd-item',
+            name: 'dUSD',
+            image: '/test.png',
+        },
     ],
 }));
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
     getItemCounts: (...args: unknown[]) => getItemCountsMock(...args),
+    getItemCount: (...args: unknown[]) => getItemCountMock(...args),
+    buyItems: (...args: unknown[]) => buyItemsMock(...args),
 }));
 
 vi.mock('../../utils/itemResolver.js', () => ({
@@ -137,6 +146,9 @@ beforeEach(() => {
     finishProcessNow.mockClear();
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
+    getItemCountMock.mockReset();
+    getItemCountMock.mockReturnValue(0);
+    buyItemsMock.mockReset();
     startProcess.mockClear();
     getItemCountOperationStartError.mockReset();
     getItemCountOperationStartError.mockReturnValue('');
