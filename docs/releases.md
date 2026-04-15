@@ -9,16 +9,17 @@ This is the canonical list of all historical DSPACE release tags.
 
 ## Tagged releases
 
-| Tag | Channel | GitHub release page |
-| --- | --- | --- |
-| `v1.0.0` | Stable release | [`v1.0.0`](https://github.com/democratizedspace/dspace/releases/tag/v1.0.0) |
-| `v2.1.0` | Stable release | [`v2.1.0`](https://github.com/democratizedspace/dspace/releases/tag/v2.1.0) |
+| Tag           | Channel           | GitHub release page                                                                   |
+| ------------- | ----------------- | ------------------------------------------------------------------------------------- |
+| `v1.0.0`      | Stable release    | [`v1.0.0`](https://github.com/democratizedspace/dspace/releases/tag/v1.0.0)           |
+| `v2.1.0`      | Stable release    | [`v2.1.0`](https://github.com/democratizedspace/dspace/releases/tag/v2.1.0)           |
 | `v3.0.0-rc.1` | Release candidate | [`v3.0.0-rc.1`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.1) |
 | `v3.0.0-rc.2` | Release candidate | [`v3.0.0-rc.2`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.2) |
 | `v3.0.0-rc.3` | Release candidate | [`v3.0.0-rc.3`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.3) |
 | `v3.0.0-rc.4` | Release candidate | [`v3.0.0-rc.4`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.4) |
 | `v3.0.1-rc.1` | Release candidate | [`v3.0.1-rc.1`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.1) |
 | `v3.0.1-rc.2` | Release candidate | [`v3.0.1-rc.2`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.2) |
+| `v3.0.1-rc.3` | Release candidate | [`v3.0.1-rc.3`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.3) |
 
 ## QA checklists tracked separately (not a tag list)
 
