@@ -36,6 +36,17 @@ vi.mock('../../../../generated/processes.json', () => ({
             consumeItems: [],
             createItems: [],
         },
+        {
+            id: 'consume-fallback-process',
+            title: 'Consume Fallback Process',
+            requireItems: [],
+            consumeItems: [
+                { id: 'req-item', count: 1 },
+                { id: 'req-item-b', count: 18.48 },
+                { id: 'unpriced-item', count: 10 },
+            ],
+            createItems: [],
+        },
     ],
 }));
 
@@ -64,6 +75,9 @@ vi.mock('../../../inventory/json/items', () => ({
         {
             id: 'dbi-item',
             name: 'dBI',
+        },
+        {
+            id: 'unpriced-item',
         },
     ],
 }));
@@ -219,6 +233,26 @@ describe('ProcessView detail controls', () => {
         expect(buyItemsMock).toHaveBeenCalledWith([
             { id: 'req-item-b', quantity: 1, price: 2, currencyId: 'dusd-item' },
             { id: 'dbi-item-required', quantity: 2, price: 4, currencyId: 'dbi-item' },
+        ]);
+    });
+
+    it('falls back to consumeItems when requireItems is empty', async () => {
+        getItemCountMock.mockImplementation((itemId: string) => {
+            if (itemId === 'dusd-item') {
+                return 100;
+            }
+            return 0;
+        });
+        render(ProcessView, { props: { slug: 'consume-fallback-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
+
+        await fireEvent.click(buyButton);
+
+        expect(buyItemsMock).toHaveBeenCalledWith([
+            { id: 'req-item', quantity: 1, price: 5, currencyId: 'dusd-item' },
+            { id: 'req-item-b', quantity: 18.48, price: 2, currencyId: 'dusd-item' },
         ]);
     });
 });
