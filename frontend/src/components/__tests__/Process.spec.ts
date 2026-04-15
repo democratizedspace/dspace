@@ -14,6 +14,8 @@ const ProcessStates = vi.hoisted(() => ({
 
 const stateInfo = vi.hoisted(() => ({ state: ProcessStates.IN_PROGRESS, progress: 0 }));
 const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
+const getItemCountMock = vi.hoisted(() => vi.fn(() => 0));
+const buyItemsMock = vi.hoisted(() => vi.fn());
 const getItemMapMock = vi.hoisted(() => vi.fn());
 const getProcessStartedAtMock = vi.hoisted(() => vi.fn(() => Date.now()));
 const cheatsAvailabilityStore = writable(false);
@@ -32,11 +34,13 @@ vi.mock('../../pages/inventory/json/items', () => ({
             id: 'item-1',
             name: 'Test Item',
             image: '/test.png',
+            price: '5 dUSD',
         },
         {
             id: 'item-2',
             name: 'Second Item',
             image: '/test.png',
+            price: '2 dUSD',
         },
         {
             id: 'item-3',
@@ -48,10 +52,17 @@ vi.mock('../../pages/inventory/json/items', () => ({
             name: 'Fourth Item',
             image: '/test.png',
         },
+        {
+            id: 'currency-item',
+            name: 'dUSD',
+            image: '/test.png',
+        },
     ],
 }));
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
+    buyItems: (...args: unknown[]) => buyItemsMock(...args),
+    getItemCount: (...args: unknown[]) => getItemCountMock(...args),
     getItemCounts: (...args: unknown[]) => getItemCountsMock(...args),
 }));
 
@@ -138,6 +149,9 @@ beforeEach(() => {
     getProcessStartedAtMock.mockReset();
     getProcessStartedAtMock.mockImplementation(() => Date.now());
     startProcess.mockClear();
+    buyItemsMock.mockReset();
+    getItemCountMock.mockReset();
+    getItemCountMock.mockReturnValue(0);
     getItemCountOperationStartError.mockReset();
     getItemCountOperationStartError.mockReturnValue('');
     getRuntimeCreateItems.mockReset();
@@ -210,6 +224,49 @@ test('shows required items even when counts are zero', async () => {
         expect(normalizedText).toMatch(/Test Item/);
         expect(normalizedText).not.toMatch(/0\s*\/\s*2/);
     });
+});
+
+test('shows Buy required items inside the process card and purchases missing requirements', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 0 });
+    getItemCountMock.mockImplementation((itemId: string) => {
+        if (itemId === 'currency-item') {
+            return 10;
+        }
+        return 0;
+    });
+
+    const { getByRole, getByTestId } = render(Process, { processId: 'p2' });
+
+    const buyButton = getByRole('button', { name: 'Buy required items' });
+    expect(getByTestId('process-chip').contains(buyButton)).toBe(true);
+
+    await fireEvent.click(buyButton);
+    expect(buyItemsMock).toHaveBeenCalledWith([
+        { id: 'item-1', quantity: 2, price: 5, currencyId: 'currency-item' },
+    ]);
+});
+
+test('disables Buy required items with the expected reason when requirements are already met', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountsMock.mockReturnValue({ 'item-1': 2 });
+    getItemCountMock.mockImplementation((itemId: string) => {
+        if (itemId === 'item-1') {
+            return 2;
+        }
+        if (itemId === 'currency-item') {
+            return 100;
+        }
+        return 0;
+    });
+
+    const { getByRole } = render(Process, { processId: 'p2' });
+    const buyButton = getByRole('button', { name: 'Buy required items' });
+
+    expect(buyButton.hasAttribute('disabled')).toBe(true);
+    expect(buyButton.getAttribute('aria-describedby')).toBe('buy-required-disabled-reason-p2');
 });
 
 test('renders container-withdraw outputs in creates list', async () => {

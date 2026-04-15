@@ -2,9 +2,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import ProcessView from '../ProcessView.svelte';
 
-const { buyItemsMock, getItemCountMock } = vi.hoisted(() => ({
+const { buyItemsMock, getItemCountMock, getItemCountsMock } = vi.hoisted(() => ({
     buyItemsMock: vi.fn(),
     getItemCountMock: vi.fn(),
+    getItemCountsMock: vi.fn(),
 }));
 
 vi.mock('../../../../generated/processes.json', () => ({
@@ -74,6 +75,7 @@ vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
         ...actual,
         buyItems: buyItemsMock,
         getItemCount: getItemCountMock,
+        getItemCounts: getItemCountsMock,
     };
 });
 
@@ -89,7 +91,9 @@ describe('ProcessView detail controls', () => {
     beforeEach(() => {
         buyItemsMock.mockReset();
         getItemCountMock.mockReset();
+        getItemCountsMock.mockReset();
         getItemCountMock.mockReturnValue(0);
+        getItemCountsMock.mockReturnValue({});
     });
 
     it('keeps Buy required items on detail route and purchases missing requirements', async () => {

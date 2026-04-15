@@ -20,9 +20,11 @@
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
-    import { getItemCounts } from '../../utils/gameState/inventory.js';
+    import { buyItems, getItemCount, getItemCounts } from '../../utils/gameState/inventory.js';
+    import items from '../../pages/inventory/json/items';
     import { getItemMetadata } from './compactItemListHelpers.js';
     import { getItemMap } from '../../utils/itemResolver.js';
+    import { getPriceStringComponents } from '../../utils.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
 
     export let processId;
@@ -59,13 +61,196 @@
     let requirementItemMap = new Map();
     let requirementItemRequestId = 0;
     let previousRequirementKey = '';
+    let disableBuy = true;
+    let disabledReason = 'No required items are purchasable.';
+    let toastVisible = false;
+    let toastMessage = '';
+    let toastTimeoutId = null;
+    let disabledReasonId = `buy-required-disabled-reason-${processId}`;
+
+    const QUANTITY_PRECISION = 1_000_000;
+    const CURRENCY_EPSILON = 1e-9;
+    const defaultCurrencyItem = items.find((item) => item.name === 'dUSD') ?? null;
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
     const updateIntervalMs = 100;
 
+    const roundDownQuantity = (value) => {
+        if (!Number.isFinite(value) || value <= 0) {
+            return 0;
+        }
+        return Math.floor((value + CURRENCY_EPSILON) * QUANTITY_PRECISION) / QUANTITY_PRECISION;
+    };
+
+    const roundCurrency = (value) => {
+        if (!Number.isFinite(value)) {
+            return 0;
+        }
+        return Math.round(value * QUANTITY_PRECISION) / QUANTITY_PRECISION;
+    };
+
+    const getCurrencyItem = (symbol) => {
+        if (!symbol) {
+            return defaultCurrencyItem;
+        }
+
+        return items.find((item) => item.name === symbol) ?? defaultCurrencyItem;
+    };
+
+    const getUnitPrice = (item) => {
+        const { price, symbol } = getPriceStringComponents(item?.price);
+        if (!Number.isFinite(price) || price <= 0) {
+            return null;
+        }
+
+        const currencyItem = getCurrencyItem(symbol);
+        if (!currencyItem) {
+            return null;
+        }
+
+        return {
+            unitPrice: price,
+            currencySymbol: symbol || defaultCurrencyItem?.name || 'dUSD',
+            currencyId: currencyItem.id,
+        };
+    };
+
     const releaseItemImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
+    };
+
+    const getPendingBuyRequirements = () => {
+        if (!process?.requireItems?.length) {
+            return [];
+        }
+
+        return process.requireItems
+            .map((req) => {
+                const have = getItemCount(req.id);
+                const neededQuantity = roundDownQuantity(req.count - have);
+                if (neededQuantity <= 0) {
+                    return null;
+                }
+
+                const item = items.find((i) => i.id === req.id);
+                const pricing = getUnitPrice(item);
+                if (!pricing) {
+                    return null;
+                }
+
+                return {
+                    id: req.id,
+                    quantity: neededQuantity,
+                    unitPrice: pricing.unitPrice,
+                    currencySymbol: pricing.currencySymbol,
+                    currencyId: pricing.currencyId,
+                };
+            })
+            .filter(Boolean);
+    };
+
+    const buildPurchasePlan = (pendingBuys) => {
+        const sortedRequirements = [...pendingBuys].sort(
+            (a, b) => a.unitPrice * a.quantity - b.unitPrice * b.quantity
+        );
+        const remainingByCurrency = sortedRequirements.reduce((acc, requirement) => {
+            if (acc[requirement.currencyId] == null) {
+                acc[requirement.currencyId] = roundCurrency(getItemCount(requirement.currencyId));
+            }
+            return acc;
+        }, {});
+
+        const purchasePlan = [];
+        let added = 0;
+        sortedRequirements.forEach((requirement) => {
+            const balance = remainingByCurrency[requirement.currencyId] ?? 0;
+            const affordableQuantity = roundDownQuantity(
+                (balance + CURRENCY_EPSILON) / requirement.unitPrice
+            );
+            if (affordableQuantity <= 0) {
+                return;
+            }
+
+            const quantity = roundDownQuantity(Math.min(requirement.quantity, affordableQuantity));
+            if (quantity <= 0) {
+                return;
+            }
+
+            const totalCost = roundCurrency(quantity * requirement.unitPrice);
+            if (totalCost > balance + CURRENCY_EPSILON) {
+                return;
+            }
+
+            purchasePlan.push({
+                id: requirement.id,
+                quantity,
+                price: requirement.unitPrice,
+                currencyId: requirement.currencyId,
+            });
+            remainingByCurrency[requirement.currencyId] = roundCurrency(balance - totalCost);
+            added = roundDownQuantity(added + quantity);
+        });
+
+        return {
+            purchasePlan,
+            added,
+        };
+    };
+
+    const getDisabledReason = () => {
+        if (!process || !process.requireItems) {
+            return 'No required items are purchasable.';
+        }
+
+        const missingRequirements = process.requireItems.filter(
+            (req) => roundDownQuantity(req.count - getItemCount(req.id)) > 0
+        );
+        if (missingRequirements.length === 0) {
+            return 'All required items are already available.';
+        }
+
+        const pendingBuys = getPendingBuyRequirements();
+        if (pendingBuys.length === 0) {
+            return 'Required items cannot be purchased.';
+        }
+
+        const { purchasePlan } = buildPurchasePlan(pendingBuys);
+        if (purchasePlan.length === 0) {
+            return 'Not enough currency to buy any still-needed required items.';
+        }
+
+        return '';
+    };
+
+    const updateDisabled = () => {
+        disabledReason = getDisabledReason();
+        disableBuy = Boolean(disabledReason);
+    };
+
+    const buyRequired = () => {
+        if (!process) return;
+
+        const pendingBuys = getPendingBuyRequirements();
+        if (pendingBuys.length === 0) {
+            updateDisabled();
+            return;
+        }
+
+        const { purchasePlan, added } = buildPurchasePlan(pendingBuys);
+        if (purchasePlan.length === 0) {
+            updateDisabled();
+            return;
+        }
+
+        buyItems(purchasePlan);
+        if (added > 0) {
+            toastMessage = `✓ Added ${added} items to inventory`;
+            toastVisible = true;
+            clearTimeout(toastTimeoutId);
+            toastTimeoutId = setTimeout(() => (toastVisible = false), 3000);
+        }
+        updateDisabled();
     };
 
     // Collect item deficits for a specific requirement list.
@@ -390,6 +575,7 @@
         clearInterval(refreshIntervalId);
         clearInterval(intervalId);
         clearTimeout(pulseTimeoutId);
+        clearTimeout(toastTimeoutId);
         requiresContainer = null;
         consumesContainer = null;
         releaseItemImages(Array.from(requirementItemMap.values()));
@@ -401,6 +587,7 @@
 
     $: if (processId !== customProcessId) {
         customProcessId = processId;
+        disabledReasonId = `buy-required-disabled-reason-${processId}`;
         customProcess = null;
         customProcessAttemptedId = null;
         customProcessRequest = null;
@@ -453,6 +640,7 @@
             previousRequirementKey = nextKey;
             void loadRequirementItemMap(requirementItems);
         }
+        updateDisabled();
     }
 </script>
 
@@ -528,6 +716,20 @@
                         {startFeedbackMessage}
                     </p>
                 {/if}
+                <span class="buy-required-wrapper" title={disableBuy ? disabledReason : undefined}>
+                    <button
+                        class="primary"
+                        type="button"
+                        on:click={buyRequired}
+                        disabled={disableBuy}
+                        aria-describedby={disableBuy ? disabledReasonId : undefined}
+                    >
+                        Buy required items
+                    </button>
+                    {#if disableBuy}
+                        <span class="sr-only" id={disabledReasonId}>{disabledReason}</span>
+                    {/if}
+                </span>
             {:else if state === ProcessStates.IN_PROGRESS}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={!inverted} />
                 <Chip text="Pause" onClick={onProcessPause} inverted={!inverted} />
@@ -583,6 +785,9 @@
             {/if}
         </div>
     </Chip>
+    {#if toastVisible}
+        <div class="toast" role="status" aria-live="polite">{toastMessage}</div>
+    {/if}
 {:else if mounted}
     <div class="process-error">Unknown process.</div>
 {/if}
@@ -672,6 +877,53 @@
         background: #2c5837;
         color: white;
         text-align: center;
+    }
+
+    .primary {
+        background-color: #2f5b2f;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+    .primary:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+    .primary[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .buy-required-wrapper {
+        position: relative;
+        align-self: center;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #cacaca;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-align: center;
+        z-index: 30;
     }
 
     @keyframes requirements-pulse {
