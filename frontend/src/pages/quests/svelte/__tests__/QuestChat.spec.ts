@@ -13,7 +13,13 @@ type Store<T> = {
     update: (updater: (value: T) => T) => void;
 };
 
-const { mockState, canStartQuestMock, getUnmetQuestRequirementsMock } = vi.hoisted(() => {
+const {
+    mockState,
+    canStartQuestMock,
+    getUnmetQuestRequirementsMock,
+    isGameStateReadyMock,
+    readyPromiseRef,
+} = vi.hoisted(() => {
     let value: QuestState = { quests: {}, inventory: {} };
     const subscribers = new Set<(current: QuestState) => void>();
     const subscribe = (run: (current: QuestState) => void) => {
@@ -33,6 +39,8 @@ const { mockState, canStartQuestMock, getUnmetQuestRequirementsMock } = vi.hoist
         mockState: { subscribe, set, update } as Store<QuestState>,
         canStartQuestMock: vi.fn(() => true),
         getUnmetQuestRequirementsMock: vi.fn(() => [] as string[]),
+        isGameStateReadyMock: vi.fn(() => true),
+        readyPromiseRef: { current: Promise.resolve() as Promise<void> },
     };
 });
 
@@ -42,8 +50,10 @@ vi.mock('../../../../utils/gameState/common.js', async (importOriginal) => {
         ...actual,
         state: mockState,
         syncGameStateFromLocalIfStale: vi.fn(),
-        isGameStateReady: vi.fn(() => true),
-        ready: Promise.resolve(),
+        isGameStateReady: (...args: unknown[]) => isGameStateReadyMock(...args),
+        get ready() {
+            return readyPromiseRef.current;
+        },
     };
 });
 
@@ -65,6 +75,8 @@ describe('QuestChat', () => {
     beforeEach(() => {
         canStartQuestMock.mockReturnValue(true);
         getUnmetQuestRequirementsMock.mockReturnValue([]);
+        isGameStateReadyMock.mockReturnValue(true);
+        readyPromiseRef.current = Promise.resolve();
     });
 
     it('renders newline and inline code formatting while escaping raw HTML', async () => {
@@ -184,5 +196,47 @@ describe('QuestChat', () => {
         expect(
             getByRole('link', { name: 'Set up your first 3D printer' }).getAttribute('href')
         ).toBe('/quests/3dprinting/start');
+    });
+
+    it('waits for game state readiness before showing unavailable messaging', async () => {
+        let resolveReady = () => {};
+        readyPromiseRef.current = new Promise<void>((resolve) => {
+            resolveReady = resolve;
+        });
+        isGameStateReadyMock.mockReturnValue(false);
+        canStartQuestMock.mockReturnValue(false);
+        getUnmetQuestRequirementsMock.mockReturnValue(['welcome/howtodoquests']);
+
+        const quest = {
+            id: 'hydroponics/bucket_10',
+            title: "Bucket, we'll do it live!",
+            description: 'Locked quest',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            requiresQuests: ['welcome/howtodoquests'],
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'You should not see this if the quest is locked.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const { container, queryByTestId, queryByText } = render(QuestChat, {
+            props: { quest },
+        });
+
+        expect(container.querySelector('.temp-container')).not.toBeNull();
+        expect(queryByTestId('quest-unavailable')).toBeNull();
+        expect(queryByText('Quest not available yet')).toBeNull();
+
+        resolveReady();
+
+        await waitFor(() => {
+            expect(queryByTestId('quest-unavailable')).not.toBeNull();
+        });
     });
 });

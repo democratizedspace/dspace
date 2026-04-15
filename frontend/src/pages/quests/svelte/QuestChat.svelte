@@ -3,7 +3,12 @@
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
     import { getUnmetQuestRequirements, questFinished } from '../../../utils/gameState.js';
-    import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
+    import {
+        isGameStateReady,
+        ready,
+        state,
+        syncGameStateFromLocalIfStale,
+    } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
@@ -27,6 +32,7 @@
     let rewardItemsKey = '';
     let isMounted = false;
     let refreshIntervalId;
+    let gameStateReady = isGameStateReady();
 
     const releaseRewardImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
@@ -74,6 +80,15 @@
         refreshIntervalId = setInterval(() => {
             syncGameStateFromLocalIfStale();
         }, 3000);
+        gameStateReady = isGameStateReady();
+        if (!gameStateReady) {
+            void ready.then(() => {
+                if (!isMounted) {
+                    return;
+                }
+                gameStateReady = true;
+            });
+        }
         rewardItemsKey = (quest?.rewards ?? []).map((reward) => reward?.id ?? '').join('|');
         isMounted = true;
         // Initialize quest-related data after component is mounted
@@ -97,12 +112,13 @@
     });
 
     onDestroy(() => {
+        isMounted = false;
         clearInterval(refreshIntervalId);
         releaseRewardImages(rewardItems);
     });
 
     $: {
-        if ($state && quest) {
+        if (gameStateReady && $state && quest) {
             unmetRequirements = getUnmetQuestRequirements(quest);
             available.set(!questFinished(quest.id) && unmetRequirements.length === 0);
             if ($state.quests[quest.id]) {
@@ -128,7 +144,13 @@
             <h3>{quest?.title}</h3>
         </div>
     </div>
-    {#if $finished}
+    {#if !gameStateReady}
+        <div class="chat" data-testid="chat-panel">
+            <div class="chat-body">
+                <div class="temp-container"></div>
+            </div>
+        </div>
+    {:else if $finished}
         <div class="chat" data-testid="chat-panel">
             <div class="vertical">
                 <h4>Quest Complete!</h4>
