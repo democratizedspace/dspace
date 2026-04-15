@@ -3,7 +3,12 @@
     import { writable } from 'svelte/store';
     import QuestChatOption from './QuestChatOption.svelte';
     import { getUnmetQuestRequirements, questFinished } from '../../../utils/gameState.js';
-    import { state, syncGameStateFromLocalIfStale } from '../../../utils/gameState/common.js';
+    import {
+        isGameStateReady,
+        ready,
+        state,
+        syncGameStateFromLocalIfStale,
+    } from '../../../utils/gameState/common.js';
     import { isBrowser } from '../../../utils/ssr.js';
     import { getItemMap } from '../../../utils/itemResolver.js';
     import { formatDialogue } from '../../../utils/formatDialogue.ts';
@@ -26,6 +31,7 @@
     let rewardRequestId = 0;
     let rewardItemsKey = '';
     let isMounted = false;
+    let gameStateLoaded = false;
     let refreshIntervalId;
 
     const releaseRewardImages = (items) => {
@@ -92,6 +98,14 @@
             currentDialogue = dialogueMap.get(pointer);
         }
 
+        gameStateLoaded = isGameStateReady();
+
+        if (!gameStateLoaded) {
+            void ready.finally(() => {
+                gameStateLoaded = true;
+            });
+        }
+
         clientSideRendered.set(true);
         void loadRewardItems();
     });
@@ -138,7 +152,7 @@
                 </p>
             </div>
         </div>
-    {:else if $available === false}
+    {:else if gameStateLoaded && $available === false}
         <div class="chat" data-testid="chat-panel">
             <div class="vertical unavailable-content" data-testid="quest-unavailable">
                 <h4>Quest not available yet</h4>
@@ -149,7 +163,7 @@
     {:else}
         <div class="chat" data-testid="chat-panel">
             <div class="chat-body">
-                {#if $clientSideRendered && quest && dialogueMap}
+                {#if gameStateLoaded && $clientSideRendered && quest && dialogueMap}
                     <div class="quest-banner">
                         <img class="banner" src={quest.image} alt={quest.title} />
                     </div>
@@ -181,8 +195,10 @@
         <h5>Status:</h5>
         {#if $finished}
             <p class="green">Complete</p>
-        {:else if $available === false}
+        {:else if gameStateLoaded && $available === false}
             <p>Not available yet</p>
+        {:else if !gameStateLoaded}
+            <p>Loading…</p>
         {:else}
             <p class="orange">In Progress</p>
         {/if}
