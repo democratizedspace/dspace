@@ -277,6 +277,8 @@ describe('Processes list route contract', () => {
         ).toBeGreaterThan(0);
         expect(screen.queryByText('1x pending-item')).toBeNull();
         expect(screen.queryByText('1x Pending Item')).toBeNull();
+        expect(screen.queryByRole('img', { name: 'pending-item' })).toBeNull();
+        expect(screen.queryByRole('img', { name: 'Pending Item' })).toBeNull();
 
         resolveMetadata?.(
             new Map([
@@ -289,5 +291,8 @@ describe('Processes list route contract', () => {
 
         expect(await screen.findByText('1x Pending Item')).toBeTruthy();
         expect(screen.queryByText('1x pending-item')).toBeNull();
+        expect(screen.getByRole('img', { name: 'Pending Item' }).getAttribute('src')).toBe(
+            '/pending.png'
+        );
     });
 });
