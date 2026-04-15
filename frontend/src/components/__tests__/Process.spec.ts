@@ -14,6 +14,8 @@ const ProcessStates = vi.hoisted(() => ({
 
 const stateInfo = vi.hoisted(() => ({ state: ProcessStates.IN_PROGRESS, progress: 0 }));
 const getItemCountsMock = vi.hoisted(() => vi.fn(() => ({ 'item-1': 0 })));
+const getItemCountMock = vi.hoisted(() => vi.fn(() => 0));
+const buyItemsMock = vi.hoisted(() => vi.fn());
 const getItemMapMock = vi.hoisted(() => vi.fn());
 const getProcessStartedAtMock = vi.hoisted(() => vi.fn(() => Date.now()));
 const cheatsAvailabilityStore = writable(false);
@@ -32,26 +34,41 @@ vi.mock('../../pages/inventory/json/items', () => ({
             id: 'item-1',
             name: 'Test Item',
             image: '/test.png',
+            price: '5 dUSD',
         },
         {
             id: 'item-2',
             name: 'Second Item',
             image: '/test.png',
+            price: '2 dUSD',
         },
         {
             id: 'item-3',
             name: 'Third Item',
             image: '/test.png',
+            price: '4 dBI',
         },
         {
             id: 'item-4',
             name: 'Fourth Item',
             image: '/test.png',
         },
+        {
+            id: 'dusd-item',
+            name: 'dUSD',
+            image: '/test.png',
+        },
+        {
+            id: 'dbi-item',
+            name: 'dBI',
+            image: '/test.png',
+        },
     ],
 }));
 
 vi.mock('../../utils/gameState/inventory.js', () => ({
+    buyItems: (...args: unknown[]) => buyItemsMock(...args),
+    getItemCount: (...args: unknown[]) => getItemCountMock(...args),
     getItemCounts: (...args: unknown[]) => getItemCountsMock(...args),
 }));
 
@@ -160,6 +177,9 @@ beforeEach(() => {
             ],
         ])
     );
+    getItemCountMock.mockReset();
+    getItemCountMock.mockReturnValue(0);
+    buyItemsMock.mockReset();
 });
 
 afterEach(() => {
@@ -210,6 +230,80 @@ test('shows required items even when counts are zero', async () => {
         expect(normalizedText).toMatch(/Test Item/);
         expect(normalizedText).not.toMatch(/0\s*\/\s*2/);
     });
+});
+
+test('keeps Buy required items on the process component and purchases missing requirements', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountMock.mockImplementation((itemId: string) => {
+        if (itemId === 'dusd-item') {
+            return 20;
+        }
+        return 0;
+    });
+
+    const customProcess = {
+        id: 'custom-buy',
+        title: 'Buy Requirements',
+        duration: '5s',
+        requireItems: [
+            { id: 'item-1', count: 2 },
+            { id: 'item-2', count: 2 },
+        ],
+        consumeItems: [],
+        createItems: [],
+    };
+
+    const { getByRole, findByRole } = render(Process, {
+        processId: 'custom-buy',
+        processData: customProcess,
+    });
+
+    const buyButton = getByRole('button', { name: 'Buy required items' });
+    expect(buyButton.hasAttribute('disabled')).toBe(false);
+
+    vi.useFakeTimers();
+    try {
+        await fireEvent.click(buyButton);
+        expect(buyItemsMock).toHaveBeenCalledWith([
+            { id: 'item-2', quantity: 2, price: 2, currencyId: 'dusd-item' },
+            { id: 'item-1', quantity: 2, price: 5, currencyId: 'dusd-item' },
+        ]);
+        expect((await findByRole('status')).textContent).toContain('Added 4 items to inventory');
+        vi.runAllTimers();
+    } finally {
+        vi.useRealTimers();
+    }
+});
+
+test('disables Buy required items with reason when all requirements are already met', async () => {
+    stateInfo.state = ProcessStates.NOT_STARTED;
+    getProcessState.mockReturnValue({ state: ProcessStates.NOT_STARTED, progress: 0 });
+    getItemCountMock.mockImplementation((itemId: string) => {
+        if (itemId === 'item-1') {
+            return 2;
+        }
+        return 10;
+    });
+
+    const customProcess = {
+        id: 'custom-met',
+        title: 'Requirements Met',
+        duration: '5s',
+        requireItems: [{ id: 'item-1', count: 2 }],
+        consumeItems: [],
+        createItems: [],
+    };
+
+    const { findByRole } = render(Process, {
+        processId: 'custom-met',
+        processData: customProcess,
+    });
+    const buyButton = await findByRole('button', { name: 'Buy required items' });
+    expect(buyButton.hasAttribute('disabled')).toBe(true);
+    expect(document.getElementById('buy-required-disabled-reason-custom-met')?.textContent).toBe(
+        'All required items are already available.'
+    );
 });
 
 test('renders container-withdraw outputs in creates list', async () => {
