@@ -1,5 +1,5 @@
 {
-  "id": "process-buy-required-consume-items-regression",
+  "id": "2026-04-15-process-buy-required-consume-items-regression",
   "date": "2026-04-15",
   "component": "frontend ProcessView",
   "rootCause": "ProcessView only evaluated requireItems for the Buy required items action. Built-in processes like 3dprint-rocket-body-tube define required inputs in consumeItems, so the UI incorrectly treated missing items as already available.",
