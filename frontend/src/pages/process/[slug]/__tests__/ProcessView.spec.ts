@@ -262,7 +262,7 @@ describe('ProcessView detail controls', () => {
             'energy-item': 9000,
         };
         getItemCountMock.mockImplementation((itemId: string) => counts[itemId] ?? 0);
-        buyItemsMock.mockImplementation((plannedBuys: Array<{id: string; quantity: number}>) => {
+        buyItemsMock.mockImplementation((plannedBuys: Array<{ id: string; quantity: number }>) => {
             plannedBuys.forEach(({ id, quantity }) => {
                 counts[id] = (counts[id] ?? 0) + quantity;
             });
