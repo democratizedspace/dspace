@@ -225,12 +225,13 @@ describe('QuestChat', () => {
             rewards: [{ id: 'item-1', count: 1 }],
         };
 
-        const { queryByTestId, getByText } = render(QuestChat, {
+        const { container, queryByTestId, queryByText } = render(QuestChat, {
             props: { quest },
         });
 
+        expect(container.querySelector('.temp-container')).not.toBeNull();
         expect(queryByTestId('quest-unavailable')).toBeNull();
-        expect(getByText('Loading...')).toBeTruthy();
+        expect(queryByText('Quest not available yet')).toBeNull();
 
         resolveReady();
 

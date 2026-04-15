@@ -201,9 +201,7 @@
     {/if}
     <div class="vertical">
         <h5>Status:</h5>
-        {#if !gameStateReady}
-            <p class="orange">Loading...</p>
-        {:else if $finished}
+        {#if $finished}
             <p class="green">Complete</p>
         {:else if $available === false}
             <p>Not available yet</p>
