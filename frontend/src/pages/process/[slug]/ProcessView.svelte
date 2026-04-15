@@ -62,12 +62,49 @@
         };
     };
 
+    /**
+     * Returns the canonical requirement list for the "Buy required items" button.
+     * Merges requireItems and consumeItems, deduping by item id and keeping the
+     * higher count so buy/disable logic matches process start prerequisites.
+     */
+    const getProcessRequirements = () => {
+        const requireItems = displayProcess?.requireItems ?? [];
+        const consumeItems = displayProcess?.consumeItems ?? [];
+        const mergedRequirements = new Map();
+
+        [...requireItems, ...consumeItems].forEach((requirement) => {
+            if (!requirement?.id) {
+                return;
+            }
+
+            const normalizedCount = Number.isFinite(requirement.count) ? requirement.count : 0;
+            const existingRequirement = mergedRequirements.get(requirement.id);
+
+            if (!existingRequirement) {
+                mergedRequirements.set(requirement.id, {
+                    ...requirement,
+                    count: normalizedCount,
+                });
+                return;
+            }
+
+            mergedRequirements.set(requirement.id, {
+                ...existingRequirement,
+                ...requirement,
+                count: Math.max(existingRequirement.count, normalizedCount),
+            });
+        });
+
+        return Array.from(mergedRequirements.values());
+    };
+
     const getPendingBuyRequirements = () => {
-        if (!displayProcess?.requireItems?.length) {
+        const requirements = getProcessRequirements();
+        if (!requirements.length) {
             return [];
         }
 
-        return displayProcess.requireItems
+        return requirements
             .map((req) => {
                 const have = getItemCount(req.id);
                 const neededQuantity = roundDownQuantity(req.count - have);
@@ -141,11 +178,12 @@
     };
 
     const getDisabledReason = () => {
-        if (!displayProcess || !displayProcess.requireItems) {
+        const requirements = getProcessRequirements();
+        if (!requirements.length) {
             return 'No required items are purchasable.';
         }
 
-        const missingRequirements = displayProcess.requireItems.filter(
+        const missingRequirements = requirements.filter(
             (req) => roundDownQuantity(req.count - getItemCount(req.id)) > 0
         );
         if (missingRequirements.length === 0) {
