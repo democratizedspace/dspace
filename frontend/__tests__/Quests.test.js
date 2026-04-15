@@ -187,6 +187,9 @@ describe('Quests Component', () => {
             mountedComponent = mount(Quests, { target: host, props: { quests } });
             await vi.runAllTimersAsync();
             await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+            await vi.waitFor(() =>
+                expect(host.querySelector("a[data-questid='custom/unsafe']")).not.toBeNull()
+            );
 
             const unsafeQuestLink = host.querySelector("a[data-questid='custom/unsafe']");
             expect(unsafeQuestLink?.getAttribute('href')).toBe('/quests/custom/unsafe');
