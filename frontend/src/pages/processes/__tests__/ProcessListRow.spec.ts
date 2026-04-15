@@ -55,7 +55,6 @@ describe('ProcessListRow', () => {
             props: {
                 process,
                 itemMetadataMap: new Map(),
-                pendingMetadataIds: new Set(['unknown-item']),
             },
         });
 
@@ -63,7 +62,7 @@ describe('ProcessListRow', () => {
         expect(queryByText('2x unknown-item')).toBeNull();
     });
 
-    test('never renders raw preview ids when metadata is unresolved and pending ids are empty', () => {
+    test('never renders raw preview ids when metadata is unresolved', () => {
         const process = {
             id: 'process-with-unresolved-item',
             title: 'Unresolved item metadata',
@@ -83,7 +82,6 @@ describe('ProcessListRow', () => {
             props: {
                 process,
                 itemMetadataMap: new Map(),
-                pendingMetadataIds: new Set(),
             },
         });
 
@@ -136,7 +134,6 @@ describe('ProcessListRow', () => {
             props: {
                 process,
                 itemMetadataMap: new Map(),
-                pendingMetadataIds: new Set(['smart-plug']),
             },
         });
 
@@ -149,7 +146,6 @@ describe('ProcessListRow', () => {
             itemMetadataMap: new Map([
                 ['smart-plug', { id: 'smart-plug', name: 'Smart Plug', image: '/smart-plug.png' }],
             ]),
-            pendingMetadataIds: new Set(),
         });
 
         expect(getByText('1x Smart Plug')).toBeTruthy();

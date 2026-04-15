@@ -197,7 +197,7 @@
             <div class="no-processes">No processes found</div>
         {:else}
             {#each allProcesses as process (normalizeProcessId(process.id))}
-                <ProcessListRow {process} {itemMetadataMap} {pendingMetadataIds} />
+                <ProcessListRow {process} {itemMetadataMap} />
             {/each}
         {/if}
     </div>
