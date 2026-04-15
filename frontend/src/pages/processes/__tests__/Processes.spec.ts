@@ -232,7 +232,7 @@ describe('Processes list route contract', () => {
         expect(screen.queryByText('2x missing-item')).toBeNull();
     });
 
-    it('renders list details immediately while waiting for preview metadata to resolve', async () => {
+    it('does not leak raw preview ids on first render while metadata is unresolved', async () => {
         customListMock.mockResolvedValue([]);
         let resolveMetadata:
             | ((value: Map<string, { id: string; name: string; image: string }>) => void)
@@ -277,6 +277,7 @@ describe('Processes list route contract', () => {
         ).toBeGreaterThan(0);
         expect(screen.queryByText('1x pending-item')).toBeNull();
         expect(screen.queryByText('1x Pending Item')).toBeNull();
+        expect(screen.queryByRole('img')).toBeNull();
 
         resolveMetadata?.(
             new Map([
@@ -289,5 +290,8 @@ describe('Processes list route contract', () => {
 
         expect(await screen.findByText('1x Pending Item')).toBeTruthy();
         expect(screen.queryByText('1x pending-item')).toBeNull();
+        expect(screen.getByRole('img', { name: 'Pending Item' }).getAttribute('src')).toBe(
+            '/pending.png'
+        );
     });
 });
