@@ -121,12 +121,42 @@
         itemEntries.forEach((item) => item?.releaseImage?.());
     };
 
-    const getPendingBuyRequirements = () => {
-        if (!process?.requireItems?.length) {
+    const getBuyRequirementItems = () => {
+        if (!process) {
             return [];
         }
 
-        return process.requireItems
+        const requireItems = Array.isArray(process.requireItems) ? process.requireItems : [];
+        const consumeItems = Array.isArray(process.consumeItems) ? process.consumeItems : [];
+        const sourceItems =
+            requireItems.length > 0 ? [...requireItems, ...consumeItems] : consumeItems;
+
+        if (sourceItems.length === 0) {
+            return [];
+        }
+
+        const mergedById = new Map();
+        sourceItems.forEach((item) => {
+            const itemId = typeof item?.id === 'string' ? item.id : null;
+            const count = Number(item?.count ?? 0);
+            if (!itemId || !Number.isFinite(count) || count <= 0) {
+                return;
+            }
+
+            const existingCount = mergedById.get(itemId) ?? 0;
+            mergedById.set(itemId, Math.max(existingCount, count));
+        });
+
+        return Array.from(mergedById, ([id, count]) => ({ id, count }));
+    };
+
+    const getPendingBuyRequirements = () => {
+        const buyRequirementItems = getBuyRequirementItems();
+        if (buyRequirementItems.length === 0) {
+            return [];
+        }
+
+        return buyRequirementItems
             .map((req) => {
                 const have = getItemCount(req.id);
                 const neededQuantity = roundDownQuantity(req.count - have);
@@ -200,11 +230,12 @@
     };
 
     const getDisabledReason = () => {
-        if (!process || !process.requireItems) {
+        const buyRequirementItems = getBuyRequirementItems();
+        if (buyRequirementItems.length === 0) {
             return 'No required items are purchasable.';
         }
 
-        const missingRequirements = process.requireItems.filter(
+        const missingRequirements = buyRequirementItems.filter(
             (req) => roundDownQuantity(req.count - getItemCount(req.id)) > 0
         );
         if (missingRequirements.length === 0) {
