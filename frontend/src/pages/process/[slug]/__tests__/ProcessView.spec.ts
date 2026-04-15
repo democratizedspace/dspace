@@ -36,6 +36,17 @@ vi.mock('../../../../generated/processes.json', () => ({
             consumeItems: [],
             createItems: [],
         },
+        {
+            id: 'consume-fallback-process',
+            title: 'Consume Fallback Process',
+            requireItems: [],
+            consumeItems: [
+                { id: 'printer-item', count: 1 },
+                { id: 'green-pla-item', count: 18.48 },
+                { id: 'dwatt-item', count: 266.67 },
+            ],
+            createItems: [{ id: 'printer-item', count: 1 }],
+        },
     ],
 }));
 
@@ -64,6 +75,17 @@ vi.mock('../../../inventory/json/items', () => ({
         {
             id: 'dbi-item',
             name: 'dBI',
+        },
+        {
+            id: 'printer-item',
+            price: '300 dUSD',
+        },
+        {
+            id: 'green-pla-item',
+            price: '2 dUSD',
+        },
+        {
+            id: 'dwatt-item',
         },
     ],
 }));
@@ -220,5 +242,37 @@ describe('ProcessView detail controls', () => {
             { id: 'req-item-b', quantity: 1, price: 2, currencyId: 'dusd-item' },
             { id: 'dbi-item-required', quantity: 2, price: 4, currencyId: 'dbi-item' },
         ]);
+    });
+
+    it('falls back to consumeItems when requireItems is empty and disables after buying missing items', async () => {
+        const inventory: Record<string, number> = {
+            'dusd-item': 400,
+            'dwatt-item': 9000,
+            'printer-item': 0,
+            'green-pla-item': 0,
+        };
+        getItemCountMock.mockImplementation((itemId: string) => inventory[itemId] ?? 0);
+        buyItemsMock.mockImplementation((purchases: Array<{ id: string; quantity: number }>) => {
+            purchases.forEach(({ id, quantity }) => {
+                inventory[id] = (inventory[id] ?? 0) + quantity;
+            });
+        });
+        render(ProcessView, { props: { slug: 'consume-fallback-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
+
+        await fireEvent.click(buyButton);
+
+        expect(buyItemsMock).toHaveBeenCalledWith([
+            { id: 'green-pla-item', quantity: 18.48, price: 2, currencyId: 'dusd-item' },
+            { id: 'printer-item', quantity: 1, price: 300, currencyId: 'dusd-item' },
+        ]);
+
+        expect(buyButton.hasAttribute('disabled')).toBe(true);
+        const reasonElement = document.getElementById(
+            'buy-required-disabled-reason-consume-fallback-process'
+        );
+        expect(reasonElement?.textContent).toBe('All required items are already available.');
     });
 });

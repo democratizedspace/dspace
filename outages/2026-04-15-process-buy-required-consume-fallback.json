@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-15-process-buy-required-consume-fallback",
+  "date": "2026-04-15",
+  "component": "frontend:process-detail-buy-required",
+  "rootCause": "The process detail Buy required items control only inspected process.requireItems. Several production processes define required inputs exclusively in consumeItems, so the button incorrectly reported \"All required items are already available.\" even when consumables were missing.",
+  "resolution": "Updated ProcessView to fall back to consumeItems when requireItems is empty, preserving existing requireItems behavior. Added a regression test covering a process that consumes a durable tool and feedstock, verifies the purchase plan (1 printer + 18.48 green PLA filament), and verifies the control disables after the missing inputs are purchased.",
+  "references": [
+    "frontend/src/pages/process/[slug]/ProcessView.svelte",
+    "frontend/src/pages/process/[slug]/__tests__/ProcessView.spec.ts"
+  ]
+}
