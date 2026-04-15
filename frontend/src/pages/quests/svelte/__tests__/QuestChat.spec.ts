@@ -13,7 +13,13 @@ type Store<T> = {
     update: (updater: (value: T) => T) => void;
 };
 
-const { mockState, canStartQuestMock, getUnmetQuestRequirementsMock } = vi.hoisted(() => {
+const {
+    mockState,
+    canStartQuestMock,
+    getUnmetQuestRequirementsMock,
+    isGameStateReadyMock,
+    resolveReadyMock,
+} = vi.hoisted(() => {
     let value: QuestState = { quests: {}, inventory: {} };
     const subscribers = new Set<(current: QuestState) => void>();
     const subscribe = (run: (current: QuestState) => void) => {
@@ -33,17 +39,25 @@ const { mockState, canStartQuestMock, getUnmetQuestRequirementsMock } = vi.hoist
         mockState: { subscribe, set, update } as Store<QuestState>,
         canStartQuestMock: vi.fn(() => true),
         getUnmetQuestRequirementsMock: vi.fn(() => [] as string[]),
+        isGameStateReadyMock: vi.fn(() => true),
+        resolveReadyMock: vi.fn(() => {}),
     };
 });
 
 vi.mock('../../../../utils/gameState/common.js', async (importOriginal) => {
     const actual = await importOriginal<typeof import('../../../../utils/gameState/common.js')>();
+    let resolveReady: (() => void) | null = null;
+    const readyPromise = new Promise<void>((resolve) => {
+        resolveReady = resolve;
+    });
+    resolveReadyMock.mockImplementation(() => resolveReady?.());
+
     return {
         ...actual,
         state: mockState,
         syncGameStateFromLocalIfStale: vi.fn(),
-        isGameStateReady: vi.fn(() => true),
-        ready: Promise.resolve(),
+        isGameStateReady: (...args: unknown[]) => isGameStateReadyMock(...args),
+        ready: readyPromise,
     };
 });
 
@@ -65,6 +79,7 @@ describe('QuestChat', () => {
     beforeEach(() => {
         canStartQuestMock.mockReturnValue(true);
         getUnmetQuestRequirementsMock.mockReturnValue([]);
+        isGameStateReadyMock.mockReturnValue(true);
     });
 
     it('renders newline and inline code formatting while escaping raw HTML', async () => {
@@ -184,5 +199,44 @@ describe('QuestChat', () => {
         expect(
             getByRole('link', { name: 'Set up your first 3D printer' }).getAttribute('href')
         ).toBe('/quests/3dprinting/start');
+    });
+
+    it('keeps a blank chat container until game state readiness is confirmed', async () => {
+        isGameStateReadyMock.mockReturnValue(false);
+        canStartQuestMock.mockReturnValue(false);
+        getUnmetQuestRequirementsMock.mockReturnValue(['welcome/howtodoquests']);
+
+        const quest = {
+            id: 'hydroponics/bucket_10',
+            title: "Bucket, we'll do it live!",
+            description: 'Locked quest',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            requiresQuests: ['welcome/howtodoquests'],
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'You should not see this if the quest is locked.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const { container, queryByTestId, getByText } = render(QuestChat, { props: { quest } });
+
+        await waitFor(() => {
+            expect(container.querySelector('.temp-container')).not.toBeNull();
+        });
+        expect(queryByTestId('quest-unavailable')).toBeNull();
+        expect(container.querySelector('.npcDialogue')).toBeNull();
+        expect(getByText('Loading…')).toBeTruthy();
+
+        resolveReadyMock();
+
+        await waitFor(() => {
+            expect(queryByTestId('quest-unavailable')).not.toBeNull();
+        });
     });
 });
