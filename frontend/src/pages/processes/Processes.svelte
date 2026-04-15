@@ -9,7 +9,6 @@
 
     let customProcesses = [];
     let itemMetadataMap = new Map();
-    let pendingMetadataIds = new Set();
     let metadataRequestId = 0;
     let isMounted = false;
     let previousMetadataIdsKey = '';
@@ -155,7 +154,6 @@
         if (nextMetadataIdsKey !== previousMetadataIdsKey) {
             const requestId = ++metadataRequestId;
             previousMetadataIdsKey = nextMetadataIdsKey;
-            pendingMetadataIds = new Set(uniqueIds);
 
             Promise.resolve()
                 .then(async () => {
@@ -173,13 +171,9 @@
 
                     releaseMapImages(itemMetadataMap);
                     itemMetadataMap = nextMap;
-                    pendingMetadataIds = new Set();
                 })
                 .catch((error) => {
                     console.error('Failed to load process item metadata:', error);
-                    if (requestId === metadataRequestId) {
-                        pendingMetadataIds = new Set();
-                    }
                 });
         }
     }
@@ -197,7 +191,7 @@
             <div class="no-processes">No processes found</div>
         {:else}
             {#each allProcesses as process (normalizeProcessId(process.id))}
-                <ProcessListRow {process} {itemMetadataMap} {pendingMetadataIds} />
+                <ProcessListRow {process} {itemMetadataMap} />
             {/each}
         {/if}
     </div>

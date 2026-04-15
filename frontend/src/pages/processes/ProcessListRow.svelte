@@ -1,7 +1,6 @@
 <script>
     export let process;
     export let itemMetadataMap = new Map();
-    export let pendingMetadataIds = new Set();
 
     const normalizeProcessId = (id) => String(id ?? '').trim();
 
@@ -15,44 +14,41 @@
     $: consumeSummary = formatItemSummary(process?.consumeItemTypes, process?.consumeItemTotal);
     $: createSummary = formatItemSummary(process?.createItemTypes, process?.createItemTotal);
 
-    const toPreviewLine = (entry, metadataMap, pendingIds) => {
+    const toPreviewLine = (entry, metadataMap) => {
         const entryId = normalizeProcessId(entry?.id);
-        const metadata = metadataMap?.get(entryId);
-        const metadataPending = !metadata && pendingIds instanceof Set && pendingIds.has(entryId);
+        const metadataResolved = metadataMap instanceof Map && metadataMap.has(entryId);
+        const metadata = metadataResolved ? metadataMap.get(entryId) : null;
         const count = Number(entry?.count);
         const countLabel = Number.isFinite(count) ? count : 0;
 
         return {
             id: entryId,
             countLabel,
-            name: metadataPending ? '' : metadata?.name || entry?.name || entryId || 'Unknown item',
-            image: metadataPending ? null : metadata?.image || '/favicon.ico',
+            name: metadataResolved ? metadata?.name || 'Unknown item' : '',
+            image: metadataResolved ? metadata?.image || '/favicon.ico' : null,
         };
     };
 
-    const getPreviewLines = (entries = [], metadataMap, pendingIds) =>
+    const getPreviewLines = (entries = [], metadataMap) =>
         Array.isArray(entries)
             ? entries
                   .map((entry) => ({ ...entry, id: normalizeProcessId(entry?.id) }))
                   .filter((entry) => entry.id.length > 0)
                   .slice(0, 2)
-                  .map((entry) => toPreviewLine(entry, metadataMap, pendingIds))
+                  .map((entry) => toPreviewLine(entry, metadataMap))
             : [];
 
     $: requirePreviewLines = getPreviewLines(
         process?.requirePreviewEntries,
-        itemMetadataMap,
-        pendingMetadataIds
+        itemMetadataMap
     );
     $: consumePreviewLines = getPreviewLines(
         process?.consumePreviewEntries,
-        itemMetadataMap,
-        pendingMetadataIds
+        itemMetadataMap
     );
     $: createPreviewLines = getPreviewLines(
         process?.createPreviewEntries,
-        itemMetadataMap,
-        pendingMetadataIds
+        itemMetadataMap
     );
 </script>
 

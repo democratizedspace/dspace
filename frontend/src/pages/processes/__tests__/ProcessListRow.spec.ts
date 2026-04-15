@@ -35,7 +35,7 @@ describe('ProcessListRow', () => {
         expect(getAllByRole('img')).toHaveLength(3);
     });
 
-    test('leaves preview item name blank while metadata is still loading', () => {
+    test('leaves preview item name blank while metadata is unresolved even without pending ids', () => {
         const process = {
             id: 'process-with-missing-item',
             title: 'Missing item metadata',
@@ -55,7 +55,6 @@ describe('ProcessListRow', () => {
             props: {
                 process,
                 itemMetadataMap: new Map(),
-                pendingMetadataIds: new Set(['unknown-item']),
             },
         });
 
@@ -63,7 +62,7 @@ describe('ProcessListRow', () => {
         expect(queryByText('2x unknown-item')).toBeNull();
     });
 
-    test('does not render untrusted preview images when metadata is missing', () => {
+    test('does not render preview images before metadata resolves', () => {
         const process = {
             id: 'process-with-untrusted-image',
             title: 'Untrusted image',
@@ -81,11 +80,12 @@ describe('ProcessListRow', () => {
             createPreviewEntries: [],
         };
 
-        const { getByAltText } = render(ProcessListRow, {
+        const { container, queryByRole } = render(ProcessListRow, {
             props: { process, itemMetadataMap: new Map() },
         });
 
-        expect(getByAltText('unknown-item').getAttribute('src')).toBe('/favicon.ico');
+        expect(container.querySelector('.item-preview-list img')).toBeNull();
+        expect(queryByRole('img')).toBeNull();
     });
 
     test('updates preview lines when metadata map changes after mount', async () => {
@@ -108,7 +108,6 @@ describe('ProcessListRow', () => {
             props: {
                 process,
                 itemMetadataMap: new Map(),
-                pendingMetadataIds: new Set(['smart-plug']),
             },
         });
 
@@ -121,7 +120,6 @@ describe('ProcessListRow', () => {
             itemMetadataMap: new Map([
                 ['smart-plug', { id: 'smart-plug', name: 'Smart Plug', image: '/smart-plug.png' }],
             ]),
-            pendingMetadataIds: new Set(),
         });
 
         expect(getByText('1x Smart Plug')).toBeTruthy();
