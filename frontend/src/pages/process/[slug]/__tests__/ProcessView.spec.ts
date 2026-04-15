@@ -37,6 +37,27 @@ vi.mock('../../../../generated/processes.json', () => ({
             consumeItems: [],
             createItems: [],
         },
+        {
+            id: 'consume-only-process',
+            title: 'Consume Only Process',
+            requireItems: [],
+            consumeItems: [
+                { id: 'printer-item', count: 1 },
+                { id: 'green-pla-item', count: 18.48 },
+                { id: 'energy-item', count: 266.67 },
+            ],
+            createItems: [],
+        },
+        {
+            id: 'mixed-requirements-process',
+            title: 'Mixed Requirements Process',
+            requireItems: [{ id: 'req-item', count: 1 }],
+            consumeItems: [
+                { id: 'green-pla-item', count: 2 },
+                { id: 'req-item', count: 3 },
+            ],
+            createItems: [],
+        },
     ],
 }));
 
@@ -65,6 +86,17 @@ vi.mock('../../../inventory/json/items', () => ({
         {
             id: 'dbi-item',
             name: 'dBI',
+        },
+        {
+            id: 'printer-item',
+            price: '300 dUSD',
+        },
+        {
+            id: 'green-pla-item',
+            price: '1.5 dUSD',
+        },
+        {
+            id: 'energy-item',
         },
     ],
 }));
@@ -220,6 +252,57 @@ describe('ProcessView detail controls', () => {
         expect(buyItemsMock).toHaveBeenCalledWith([
             { id: 'req-item-b', quantity: 1, price: 2, currencyId: 'dusd-item' },
             { id: 'dbi-item-required', quantity: 2, price: 4, currencyId: 'dbi-item' },
+        ]);
+    });
+
+    it('falls back to consumeItems when requireItems is empty and disables after buying', async () => {
+        const counts: Record<string, number> = {
+            'dusd-item': 500,
+            'printer-item': 0,
+            'green-pla-item': 0,
+            'energy-item': 9000,
+        };
+        getItemCountMock.mockImplementation((itemId: string) => counts[itemId] ?? 0);
+        buyItemsMock.mockImplementation((plannedBuys: Array<{ id: string; quantity: number }>) => {
+            plannedBuys.forEach(({ id, quantity }) => {
+                counts[id] = (counts[id] ?? 0) + quantity;
+            });
+        });
+        render(ProcessView, { props: { slug: 'consume-only-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
+
+        await fireEvent.click(buyButton);
+
+        expect(buyItemsMock).toHaveBeenCalledWith([
+            { id: 'green-pla-item', quantity: 18.48, price: 1.5, currencyId: 'dusd-item' },
+            { id: 'printer-item', quantity: 1, price: 300, currencyId: 'dusd-item' },
+        ]);
+        expect(buyButton.hasAttribute('disabled')).toBe(true);
+        expect(screen.getByText('All required items are already available.')).toBeTruthy();
+    });
+
+    it('merges requireItems and consumeItems when both are present', async () => {
+        getItemCountMock.mockImplementation((itemId: string) => {
+            if (itemId === 'dusd-item') {
+                return 20;
+            }
+            if (itemId === 'req-item') {
+                return 1;
+            }
+            return 0;
+        });
+        render(ProcessView, { props: { slug: 'mixed-requirements-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
+
+        await fireEvent.click(buyButton);
+
+        expect(buyItemsMock).toHaveBeenCalledWith([
+            { id: 'green-pla-item', quantity: 2, price: 1.5, currencyId: 'dusd-item' },
+            { id: 'req-item', quantity: 2, price: 5, currencyId: 'dusd-item' },
         ]);
     });
 });
