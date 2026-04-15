@@ -62,16 +62,40 @@
         };
     };
 
+    /**
+     * Returns the canonical requirement list for the "Buy required items" button.
+     * Merges requireItems and consumeItems, deduping by item id and keeping the
+     * higher count so buy/disable logic matches process start prerequisites.
+     */
     const getProcessRequirements = () => {
-        if (displayProcess?.requireItems?.length) {
-            return displayProcess.requireItems;
-        }
+        const requireItems = displayProcess?.requireItems ?? [];
+        const consumeItems = displayProcess?.consumeItems ?? [];
+        const mergedRequirements = new Map();
 
-        if (displayProcess?.consumeItems?.length) {
-            return displayProcess.consumeItems;
-        }
+        [...requireItems, ...consumeItems].forEach((requirement) => {
+            if (!requirement?.id) {
+                return;
+            }
 
-        return [];
+            const normalizedCount = Number.isFinite(requirement.count) ? requirement.count : 0;
+            const existingRequirement = mergedRequirements.get(requirement.id);
+
+            if (!existingRequirement) {
+                mergedRequirements.set(requirement.id, {
+                    ...requirement,
+                    count: normalizedCount,
+                });
+                return;
+            }
+
+            mergedRequirements.set(requirement.id, {
+                ...existingRequirement,
+                ...requirement,
+                count: Math.max(existingRequirement.count, normalizedCount),
+            });
+        });
+
+        return Array.from(mergedRequirements.values());
     };
 
     const getPendingBuyRequirements = () => {

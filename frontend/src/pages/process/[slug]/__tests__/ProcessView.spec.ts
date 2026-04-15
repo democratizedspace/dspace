@@ -47,6 +47,16 @@ vi.mock('../../../../generated/processes.json', () => ({
             ],
             createItems: [],
         },
+        {
+            id: 'mixed-requirements-process',
+            title: 'Mixed Requirements Process',
+            requireItems: [{ id: 'req-item', count: 1 }],
+            consumeItems: [
+                { id: 'green-pla-item', count: 2 },
+                { id: 'req-item', count: 3 },
+            ],
+            createItems: [],
+        },
     ],
 }));
 
@@ -270,5 +280,28 @@ describe('ProcessView detail controls', () => {
         ]);
         expect(buyButton.hasAttribute('disabled')).toBe(true);
         expect(screen.getByText('All required items are already available.')).toBeTruthy();
+    });
+
+    it('merges requireItems and consumeItems when both are present', async () => {
+        getItemCountMock.mockImplementation((itemId: string) => {
+            if (itemId === 'dusd-item') {
+                return 20;
+            }
+            if (itemId === 'req-item') {
+                return 1;
+            }
+            return 0;
+        });
+        render(ProcessView, { props: { slug: 'mixed-requirements-process' } });
+
+        const buyButton = await screen.findByRole('button', { name: 'Buy required items' });
+        expect(buyButton.hasAttribute('disabled')).toBe(false);
+
+        await fireEvent.click(buyButton);
+
+        expect(buyItemsMock).toHaveBeenCalledWith([
+            { id: 'green-pla-item', quantity: 2, price: 1.5, currencyId: 'dusd-item' },
+            { id: 'req-item', quantity: 2, price: 5, currencyId: 'dusd-item' },
+        ]);
     });
 });
