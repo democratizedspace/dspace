@@ -63,7 +63,35 @@ describe('ProcessListRow', () => {
         expect(queryByText('2x unknown-item')).toBeNull();
     });
 
-    test('does not render untrusted preview images when metadata is missing', () => {
+    test('never renders raw preview ids when metadata is unresolved and pending ids are empty', () => {
+        const process = {
+            id: 'process-with-unresolved-item',
+            title: 'Unresolved item metadata',
+            duration: '1s',
+            requireItemTypes: 1,
+            requireItemTotal: 1,
+            consumeItemTypes: 0,
+            consumeItemTotal: 0,
+            createItemTypes: 0,
+            createItemTotal: 0,
+            requirePreviewEntries: [{ id: 'unknown-item', count: 2 }],
+            consumePreviewEntries: [],
+            createPreviewEntries: [],
+        };
+
+        const { getByText, queryByText } = render(ProcessListRow, {
+            props: {
+                process,
+                itemMetadataMap: new Map(),
+                pendingMetadataIds: new Set(),
+            },
+        });
+
+        expect(getByText('2x')).toBeTruthy();
+        expect(queryByText('2x unknown-item')).toBeNull();
+    });
+
+    test('does not render untrusted preview images when metadata is unresolved', () => {
         const process = {
             id: 'process-with-untrusted-image',
             title: 'Untrusted image',
@@ -81,11 +109,11 @@ describe('ProcessListRow', () => {
             createPreviewEntries: [],
         };
 
-        const { getByAltText } = render(ProcessListRow, {
+        const { queryByRole } = render(ProcessListRow, {
             props: { process, itemMetadataMap: new Map() },
         });
 
-        expect(getByAltText('unknown-item').getAttribute('src')).toBe('/favicon.ico');
+        expect(queryByRole('img')).toBeNull();
     });
 
     test('updates preview lines when metadata map changes after mount', async () => {

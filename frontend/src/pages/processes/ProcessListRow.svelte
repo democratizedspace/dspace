@@ -17,16 +17,18 @@
 
     const toPreviewLine = (entry, metadataMap, pendingIds) => {
         const entryId = normalizeProcessId(entry?.id);
-        const metadata = metadataMap?.get(entryId);
-        const metadataPending = !metadata && pendingIds instanceof Set && pendingIds.has(entryId);
+        const hasResolvedMetadata = metadataMap instanceof Map && metadataMap.has(entryId);
+        const metadata = hasResolvedMetadata ? metadataMap.get(entryId) : undefined;
+        const metadataPending = !hasResolvedMetadata && pendingIds instanceof Set && pendingIds.has(entryId);
+        const metadataUnresolved = !hasResolvedMetadata;
         const count = Number(entry?.count);
         const countLabel = Number.isFinite(count) ? count : 0;
 
         return {
             id: entryId,
             countLabel,
-            name: metadataPending ? '' : metadata?.name || entry?.name || entryId || 'Unknown item',
-            image: metadataPending ? null : metadata?.image || '/favicon.ico',
+            name: metadataUnresolved || metadataPending ? '' : metadata?.name || 'Unknown item',
+            image: metadataUnresolved || metadataPending ? null : metadata?.image || '/favicon.ico',
         };
     };
 
