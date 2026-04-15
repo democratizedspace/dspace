@@ -39,18 +39,9 @@
                   .map((entry) => toPreviewLine(entry, metadataMap))
             : [];
 
-    $: requirePreviewLines = getPreviewLines(
-        process?.requirePreviewEntries,
-        itemMetadataMap
-    );
-    $: consumePreviewLines = getPreviewLines(
-        process?.consumePreviewEntries,
-        itemMetadataMap
-    );
-    $: createPreviewLines = getPreviewLines(
-        process?.createPreviewEntries,
-        itemMetadataMap
-    );
+    $: requirePreviewLines = getPreviewLines(process?.requirePreviewEntries, itemMetadataMap);
+    $: consumePreviewLines = getPreviewLines(process?.consumePreviewEntries, itemMetadataMap);
+    $: createPreviewLines = getPreviewLines(process?.createPreviewEntries, itemMetadataMap);
 </script>
 
 <article class="process-row" data-process-id={processId}>
