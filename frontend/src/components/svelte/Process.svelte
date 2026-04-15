@@ -20,10 +20,12 @@
     import { durationInSeconds } from '../../utils.js';
     import Chip from './Chip.svelte';
     import CompactItemList from './CompactItemList.svelte';
-    import { getItemCounts } from '../../utils/gameState/inventory.js';
+    import { buyItems, getItemCount, getItemCounts } from '../../utils/gameState/inventory.js';
     import { getItemMetadata } from './compactItemListHelpers.js';
     import { getItemMap } from '../../utils/itemResolver.js';
     import { initializeQaCheats, qaCheatsAvailability, qaCheatsEnabled } from '../../lib/qaCheats';
+    import items from '../../pages/inventory/json/items';
+    import { getPriceStringComponents } from '../../utils.js';
 
     export let processId;
     export let processData = null;
@@ -59,10 +61,190 @@
     let requirementItemMap = new Map();
     let requirementItemRequestId = 0;
     let previousRequirementKey = '';
+    let disableBuy = true;
+    let disabledReason = 'No required items are purchasable.';
+    let toastVisible = false;
+    let toastMessage = '';
+    let disabledReasonId = 'buy-required-disabled-reason-process';
 
     // Slightly longer than the 1s CSS animation to avoid timing races.
     const pulseDurationMs = 1050;
     const updateIntervalMs = 100;
+    const QUANTITY_PRECISION = 1_000_000;
+    const CURRENCY_EPSILON = 1e-9;
+    const defaultCurrencyItem = items.find((item) => item.name === 'dUSD') ?? null;
+
+    const roundDownQuantity = (value) => {
+        if (!Number.isFinite(value) || value <= 0) {
+            return 0;
+        }
+        return Math.floor((value + CURRENCY_EPSILON) * QUANTITY_PRECISION) / QUANTITY_PRECISION;
+    };
+
+    const roundCurrency = (value) => {
+        if (!Number.isFinite(value)) {
+            return 0;
+        }
+        return Math.round(value * QUANTITY_PRECISION) / QUANTITY_PRECISION;
+    };
+
+    const getCurrencyItem = (symbol) => {
+        if (!symbol) {
+            return defaultCurrencyItem;
+        }
+
+        return items.find((item) => item.name === symbol) ?? defaultCurrencyItem;
+    };
+
+    const getUnitPrice = (item) => {
+        const { price, symbol } = getPriceStringComponents(item?.price);
+        if (!Number.isFinite(price) || price <= 0) {
+            return null;
+        }
+
+        const currencyItem = getCurrencyItem(symbol);
+        if (!currencyItem) {
+            return null;
+        }
+
+        return {
+            unitPrice: price,
+            currencySymbol: symbol || defaultCurrencyItem?.name || 'dUSD',
+            currencyId: currencyItem.id,
+        };
+    };
+
+    const getPendingBuyRequirements = () => {
+        if (!process?.requireItems?.length) {
+            return [];
+        }
+
+        return process.requireItems
+            .map((req) => {
+                const have = getItemCount(req.id);
+                const neededQuantity = roundDownQuantity(req.count - have);
+                if (neededQuantity <= 0) {
+                    return null;
+                }
+
+                const item = items.find((i) => i.id === req.id);
+                const pricing = getUnitPrice(item);
+                if (!pricing) {
+                    return null;
+                }
+
+                return {
+                    id: req.id,
+                    quantity: neededQuantity,
+                    unitPrice: pricing.unitPrice,
+                    currencySymbol: pricing.currencySymbol,
+                    currencyId: pricing.currencyId,
+                };
+            })
+            .filter(Boolean);
+    };
+
+    const buildPurchasePlan = (pendingBuys) => {
+        const sortedRequirements = [...pendingBuys].sort(
+            (a, b) => a.unitPrice * a.quantity - b.unitPrice * b.quantity
+        );
+        const remainingByCurrency = sortedRequirements.reduce((acc, requirement) => {
+            if (acc[requirement.currencyId] == null) {
+                acc[requirement.currencyId] = roundCurrency(getItemCount(requirement.currencyId));
+            }
+            return acc;
+        }, {});
+
+        const purchasePlan = [];
+        let added = 0;
+        sortedRequirements.forEach((requirement) => {
+            const balance = remainingByCurrency[requirement.currencyId] ?? 0;
+            const affordableQuantity = roundDownQuantity(
+                (balance + CURRENCY_EPSILON) / requirement.unitPrice
+            );
+            if (affordableQuantity <= 0) {
+                return;
+            }
+
+            const quantity = roundDownQuantity(Math.min(requirement.quantity, affordableQuantity));
+            if (quantity <= 0) {
+                return;
+            }
+
+            const totalCost = roundCurrency(quantity * requirement.unitPrice);
+            if (totalCost > balance + CURRENCY_EPSILON) {
+                return;
+            }
+
+            purchasePlan.push({
+                id: requirement.id,
+                quantity,
+                price: requirement.unitPrice,
+                currencyId: requirement.currencyId,
+            });
+            remainingByCurrency[requirement.currencyId] = roundCurrency(balance - totalCost);
+            added = roundDownQuantity(added + quantity);
+        });
+
+        return {
+            purchasePlan,
+            added,
+        };
+    };
+
+    const getDisabledReason = () => {
+        if (!process || !process.requireItems) {
+            return 'No required items are purchasable.';
+        }
+
+        const missingRequirements = process.requireItems.filter(
+            (req) => roundDownQuantity(req.count - getItemCount(req.id)) > 0
+        );
+        if (missingRequirements.length === 0) {
+            return 'All required items are already available.';
+        }
+
+        const pendingBuys = getPendingBuyRequirements();
+        if (pendingBuys.length === 0) {
+            return 'Required items cannot be purchased.';
+        }
+
+        const { purchasePlan } = buildPurchasePlan(pendingBuys);
+        if (purchasePlan.length === 0) {
+            return 'Not enough currency to buy any still-needed required items.';
+        }
+
+        return '';
+    };
+
+    const updateDisabled = () => {
+        disabledReason = getDisabledReason();
+        disableBuy = Boolean(disabledReason);
+    };
+
+    const buyRequired = () => {
+        if (!process) return;
+
+        const pendingBuys = getPendingBuyRequirements();
+        if (pendingBuys.length === 0) {
+            updateDisabled();
+            return;
+        }
+
+        const { purchasePlan, added } = buildPurchasePlan(pendingBuys);
+        if (purchasePlan.length === 0) {
+            updateDisabled();
+            return;
+        }
+
+        buyItems(purchasePlan);
+        if (added > 0) {
+            toastMessage = `✓ Added ${added} items to inventory`;
+            toastVisible = true;
+            setTimeout(() => (toastVisible = false), 3000);
+        }
+        updateDisabled();
+    };
 
     const releaseItemImages = (items) => {
         items.forEach((item) => item?.releaseImage?.());
@@ -289,6 +471,7 @@
         }
         intervalId = setInterval(updateState, updateIntervalMs);
         updateState();
+        updateDisabled();
     };
 
     const onProcessCancel = () => {
@@ -410,6 +593,7 @@
         cheatsAvailable &&
         cheatsEnabled &&
         (state === ProcessStates.IN_PROGRESS || state === ProcessStates.PAUSED);
+    $: disabledReasonId = `buy-required-disabled-reason-${processId ?? 'process'}`;
 
     $: builtInProcess = processes.find((p) => p.id === processId);
 
@@ -444,6 +628,7 @@
         }
 
         updateState();
+        updateDisabled();
     }
 
     $: if (mounted && process) {
@@ -517,6 +702,24 @@
                         dataTestId="process-start-button"
                     />
                 </div>
+                <span
+                    class="buy-required-wrapper"
+                    title={disableBuy ? disabledReason : undefined}
+                    data-testid="buy-required-wrapper"
+                >
+                    <button
+                        class="buy-required-button"
+                        type="button"
+                        on:click={buyRequired}
+                        disabled={disableBuy}
+                        aria-describedby={disableBuy ? disabledReasonId : undefined}
+                    >
+                        Buy required items
+                    </button>
+                    {#if disableBuy}
+                        <span class="sr-only" id={disabledReasonId}>{disabledReason}</span>
+                    {/if}
+                </span>
                 {#if startFeedbackMessage}
                     <p
                         class="start-feedback"
@@ -527,6 +730,9 @@
                     >
                         {startFeedbackMessage}
                     </p>
+                {/if}
+                {#if toastVisible}
+                    <div class="toast" role="status" aria-live="polite">{toastMessage}</div>
                 {/if}
             {:else if state === ProcessStates.IN_PROGRESS}
                 <Chip text="Cancel" onClick={onProcessCancel} inverted={!inverted} />
@@ -643,6 +849,47 @@
 
     .start-feedback {
         margin: 0;
+        font-size: 0.9rem;
+        color: #fff7ed;
+        text-align: center;
+    }
+
+    .buy-required-wrapper {
+        margin-top: -4px;
+    }
+
+    .buy-required-button {
+        background-color: #2f5b2f;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+    .buy-required-button:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+
+    .buy-required-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .toast {
         font-size: 0.9rem;
         color: #fff7ed;
         text-align: center;

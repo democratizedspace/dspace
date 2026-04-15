@@ -68,6 +68,35 @@ vi.mock('../../../inventory/json/items', () => ({
     ],
 }));
 
+vi.mock('../../../../pages/inventory/json/items', () => ({
+    default: [
+        {
+            id: 'req-item',
+            price: '5 dUSD',
+        },
+        {
+            id: 'req-item-b',
+            price: '2 dUSD',
+        },
+        {
+            id: 'legacy-price-item',
+            price: '15',
+        },
+        {
+            id: 'dbi-item-required',
+            price: '4 dBI',
+        },
+        {
+            id: 'dusd-item',
+            name: 'dUSD',
+        },
+        {
+            id: 'dbi-item',
+            name: 'dBI',
+        },
+    ],
+}));
+
 vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
     const actual = await importOriginal();
     return {
