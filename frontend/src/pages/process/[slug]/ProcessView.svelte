@@ -62,12 +62,25 @@
         };
     };
 
+    const getProcessRequirements = () => {
+        if (displayProcess?.requireItems?.length) {
+            return displayProcess.requireItems;
+        }
+
+        if (displayProcess?.consumeItems?.length) {
+            return displayProcess.consumeItems;
+        }
+
+        return [];
+    };
+
     const getPendingBuyRequirements = () => {
-        if (!displayProcess?.requireItems?.length) {
+        const requirements = getProcessRequirements();
+        if (!requirements.length) {
             return [];
         }
 
-        return displayProcess.requireItems
+        return requirements
             .map((req) => {
                 const have = getItemCount(req.id);
                 const neededQuantity = roundDownQuantity(req.count - have);
@@ -141,11 +154,12 @@
     };
 
     const getDisabledReason = () => {
-        if (!displayProcess || !displayProcess.requireItems) {
+        const requirements = getProcessRequirements();
+        if (!requirements.length) {
             return 'No required items are purchasable.';
         }
 
-        const missingRequirements = displayProcess.requireItems.filter(
+        const missingRequirements = requirements.filter(
             (req) => roundDownQuantity(req.count - getItemCount(req.id)) > 0
         );
         if (missingRequirements.length === 0) {

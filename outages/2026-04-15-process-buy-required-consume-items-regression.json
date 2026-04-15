@@ -1,0 +1,11 @@
+{
+  "id": "process-buy-required-consume-items-regression",
+  "date": "2026-04-15",
+  "component": "frontend ProcessView",
+  "rootCause": "ProcessView only evaluated requireItems for the Buy required items action. Built-in processes like 3dprint-rocket-body-tube define required inputs in consumeItems, so the UI incorrectly treated missing items as already available.",
+  "resolution": "Use consumeItems as a fallback requirement source when requireItems is empty, then recompute buy-disabled state from those requirements. Added regression coverage for consume-only processes to ensure the button enables, buys the missing printer and filament, then disables once requirements are met.",
+  "references": [
+    "frontend/src/pages/process/[slug]/ProcessView.svelte",
+    "frontend/src/pages/process/[slug]/__tests__/ProcessView.spec.ts"
+  ]
+}
