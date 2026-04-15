@@ -8,6 +8,8 @@ import { clearItemResolverCache } from '../../../../utils/itemResolver.js';
 
 const getItemCountsMock = vi.fn();
 const getContainedItemCountsMock = vi.fn();
+const getItemCountMock = vi.fn();
+const buyItemsMock = vi.fn();
 const isGameStateReadyMock = vi.fn();
 const mockProcessesByType = {
     requireItem: [],
@@ -36,6 +38,8 @@ vi.mock('../../../../utils/gameState/inventory.js', async (importOriginal) => {
         ...actual,
         getItemCounts: (...args) => getItemCountsMock(...args),
         getContainedItemCounts: (...args) => getContainedItemCountsMock(...args),
+        getItemCount: (...args) => getItemCountMock(...args),
+        buyItems: (...args) => buyItemsMock(...args),
     };
 });
 
@@ -81,6 +85,8 @@ afterEach(async () => {
     await deleteCustomContentDb();
     getItemCountsMock.mockReset();
     getContainedItemCountsMock.mockReset();
+    getItemCountMock.mockReset();
+    buyItemsMock.mockReset();
     isGameStateReadyMock.mockReset();
     mockProcessesByType.requireItem = [];
     mockProcessesByType.consumeItem = [];
@@ -257,6 +263,55 @@ describe('ItemPage', () => {
         for (const group of remountDetails) {
             expect(group.hasAttribute('open')).toBe(false);
         }
+    });
+
+    it('renders a usable Buy required items action for processes embedded on the item page', async () => {
+        const builtIn = items[0];
+        const processId = 'outlet-dWatt-1e3';
+        const pricedRequiredItemId = 'a5395e29-1862-4eb7-8517-5d161635e032';
+        const currencyItemId = '5247a603-294a-4a34-a884-1ae20969b2a1';
+
+        mockProcessesByType.requireItem = [processId];
+
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
+        getItemCountsMock.mockReturnValue({
+            [builtIn.id]: 1,
+            [pricedRequiredItemId]: 0,
+        });
+        getItemCountMock.mockImplementation((itemId: string) => {
+            if (itemId === pricedRequiredItemId) {
+                return 0;
+            }
+            if (itemId === currencyItemId) {
+                return 15;
+            }
+            return 0;
+        });
+        isGameStateReadyMock.mockReturnValue(true);
+
+        const { container, getByRole } = render(ItemPage, {
+            props: { itemId: builtIn.id },
+        });
+
+        await waitFor(() => {
+            expect(getByRole('button', { name: 'Buy required items' })).toBeTruthy();
+        });
+
+        const requiredSummary = container.querySelector('details.process-group > summary');
+        expect(requiredSummary).toBeTruthy();
+        await fireEvent.click(requiredSummary as HTMLElement);
+
+        const buyButton = getByRole('button', { name: 'Buy required items' });
+        await fireEvent.click(buyButton);
+
+        expect(buyItemsMock).toHaveBeenCalledWith([
+            {
+                id: pricedRequiredItemId,
+                quantity: 1,
+                price: 15,
+                currencyId: currencyItemId,
+            },
+        ]);
     });
 
     it('canonicalizes legacy quest ids when rendering quest chips', async () => {
