@@ -167,6 +167,12 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
             href: '/docs/releases',
             linkLabel: 'Release history',
         },
+        {
+            message:
+                'Reader guide for the June 1, 2026 v3.0.1 addendum: validate `/quests`, `/processes`, and `/docs` first, then confirm migration and release-runbook updates in the linked references.',
+            href: '/docs/qa/v3',
+            linkLabel: 'v3 QA checklist',
+        },
     ],
 };
 
