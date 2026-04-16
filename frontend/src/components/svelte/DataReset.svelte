@@ -197,7 +197,7 @@
         padding: 1.5rem;
         display: grid;
         gap: 0.75rem;
-        max-width: 640px;
+        width: 100%;
         background: linear-gradient(135deg, #2c0c13, #19070c);
         color: #f9fafb;
         box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);

@@ -68,15 +68,15 @@
 
 <style>
     .logout-panel {
-        background: #2c5837;
-        border: 2px solid #007006;
+        background: linear-gradient(135deg, #133727, #0f291d);
+        border: 1px solid #1c7f49;
         border-radius: 12px;
-        padding: 16px;
-        max-width: 480px;
-        color: #fff;
+        padding: 1.25rem;
+        color: #e6f8ec;
         display: flex;
         flex-direction: column;
         gap: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
     }
 
     h3 {
@@ -90,7 +90,7 @@
 
     button {
         align-self: flex-start;
-        background: #007006;
+        background: #0f8f42;
         border: none;
         border-radius: 8px;
         color: #fff;
@@ -114,6 +114,6 @@
 
     .state {
         font-style: italic;
-        color: #d1f7d1;
+        color: #c9f0d5;
     }
 </style>
