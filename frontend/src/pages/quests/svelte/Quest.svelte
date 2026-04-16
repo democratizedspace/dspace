@@ -46,7 +46,9 @@
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
                     {#if statusLabel}
-                        <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                        <div class="status-slot" data-testid="quest-status-slot">
+                            {statusLabel}
+                        </div>
                     {/if}
                     <span class="sr-only">Status: {assistiveStatusLabel}</span>
                 </div>
@@ -72,7 +74,9 @@
                     <h3>{quest.title}</h3>
                     <p>{quest.description}</p>
                     {#if statusLabel}
-                        <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                        <div class="status-slot" data-testid="quest-status-slot">
+                            {statusLabel}
+                        </div>
                     {/if}
                     <span class="sr-only">Status: {assistiveStatusLabel}</span>
                 </div>
