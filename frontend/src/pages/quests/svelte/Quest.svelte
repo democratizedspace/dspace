@@ -9,8 +9,8 @@
         status === 'available' || status === 'completed'
             ? ''
             : status === 'locked'
-                ? 'Locked'
-                : 'Checking';
+              ? 'Locked'
+              : 'Checking';
 
     $: assistiveStatusLabel =
         status === 'available'
