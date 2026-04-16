@@ -5,34 +5,21 @@
 
     let imageLoaded = false;
 
-    const getStatusLabel = (currentStatus) => {
-        switch (currentStatus) {
-            case 'completed':
-                return 'Completed';
-            case 'available':
-                return '';
-            case 'locked':
-                return 'Locked';
-            default:
-                return 'Checking';
-        }
-    };
+    $: statusLabel =
+        status === 'available' || status === 'completed'
+            ? ''
+            : status === 'locked'
+                ? 'Locked'
+                : 'Checking';
 
-    const getAssistiveStatusLabel = (currentStatus, currentStatusLabel) => {
-        switch (currentStatus) {
-            case 'available':
-                return 'Available';
-            case 'completed':
-                return 'Completed';
-            case 'locked':
-                return 'Locked';
-            default:
-                return currentStatusLabel;
-        }
-    };
-
-    $: statusLabel = getStatusLabel(status);
-    $: assistiveStatusLabel = getAssistiveStatusLabel(status, statusLabel);
+    $: assistiveStatusLabel =
+        status === 'available'
+            ? 'Available'
+            : status === 'completed'
+              ? 'Completed'
+              : status === 'locked'
+                ? 'Locked'
+                : statusLabel;
 </script>
 
 <div class="container" class:quest data-testid="quest-tile" data-status={status}>
