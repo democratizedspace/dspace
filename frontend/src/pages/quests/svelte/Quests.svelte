@@ -37,6 +37,8 @@
     let builtInQuests = [];
     let builtInClassified = [];
     let completedBuiltInQuests = [];
+    let completedCustomQuests = [];
+    let completedQuests = [];
     let activeBuiltInQuests = [];
     let customQuestRecords = [];
     let customClassified = [];
@@ -104,10 +106,11 @@
     const classifyCustomQuests = (snapshot) => {
         const normalizedCustomQuests = normalizeQuestList(customQuestRecords);
         customClassified = classifyQuestList({ quests: normalizedCustomQuests, snapshot });
-        visibleCustomQuests = customClassified.filter(
-            (quest) => quest.status === 'available' || quest.status === 'completed'
-        );
+        visibleCustomQuests = customClassified.filter((quest) => quest.status === 'available');
+        completedCustomQuests = customClassified.filter((quest) => quest.status === 'completed');
     };
+
+    $: completedQuests = [...completedBuiltInQuests, ...completedCustomQuests];
 
     // Define buttons for easy expansion
     const actionButtons = [
@@ -246,9 +249,9 @@
         </section>
     {/if}
 
-    {#if completedBuiltInQuests.length > 0}
+    {#if completedQuests.length > 0}
         <h2>Completed Quests</h2>
-        {#each completedBuiltInQuests as quest}
+        {#each completedQuests as quest}
             <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
                 <Quest {quest} compact={true} status={quest.status} />
             </a>
