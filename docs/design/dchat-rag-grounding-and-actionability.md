@@ -5,6 +5,10 @@
 **Scope:** `/chat` response grounding, confidence calibration, mixed-context retrieval, and
 actionability patterns using existing v3 architecture
 
+**Related documents:** Builds on and should be implemented alongside
+[`docs/design/rag_discoverability.md`](./rag_discoverability.md), which defines the
+`{ text, contextSources }` response shape and baseline "Sources used" UX.
+
 ## 1) Problem statement
 
 The transcript is a strong success signal for dChat:
@@ -82,11 +86,27 @@ Render it in response UI as:
 
 1. **Inline citation chips** after factual claim groups (e.g., `[changelog:20260401]`).
 2. **Expandable evidence drawer** per chip with:
-   - source label (`/docs/changelog/20260401`),
+   - source display label (human-readable title),
+   - source URL/link (e.g., `/docs/changelog/20260401`),
    - anchor/section,
    - short excerpt,
    - support type (`direct` or `synthesis`).
 3. **Claim-group citations** when many bullets share one source (avoid visual noise).
+
+#### Claim-to-source binding contract
+
+`contextSources` today is a per-turn list. To support per-claim inspectability, add a lightweight
+mapping layer in the answer payload:
+
+- `claimGroups[]`: ordered claim-group blocks rendered in the response body.
+- Each claim group has a stable `claimGroupId` and `sourceRefs[]`.
+- `sourceRefs[]` contains `Source.id` values from `contextSources` (or stable positional indexes
+  if `Source.id` is unavailable during migration).
+- Each `sourceRef` can optionally include `supportType` (`direct` / `synthesis`) and
+  `excerptSpan`/`anchor`.
+
+This keeps existing `contextSources` plumbing intact while making inline chips and evidence drawers
+deterministically renderable.
 
 #### Repo-fit notes
 
@@ -126,7 +146,12 @@ Questions can span static docs and live local state. Use staged assembly by sour
    - Lane 2: live player snapshot (`PlayerState`, quest progress, inventory/process state).
    - Lane 3: static game catalogs (items/processes/quests summaries).
 3. **Answer planner merges lanes** into a structured draft with claim tags:
-   - `source:doc`, `source:changelog`, `source:state`, `source:catalog`, `source:synthesis`.
+   - `source:doc`, `source:changelog`, `source:state`, `source:item`, `source:process`,
+     `source:quest`, `source:achievement`, `source:synthesis`.
+
+> Note: Lane 3 ("catalogs") is a retrieval concept. Attribution should use the existing granular
+> `SourceType` values (`item`/`process`/`quest`/`achievement`) unless/until a deliberate type
+> extension is approved.
 
 #### Freshness and conflict rules
 
@@ -243,7 +268,8 @@ Use scenario-based checks modeled on this transcript.
 ### Retrieval pipeline changes
 
 1. Extend `contextSources` metadata to include chunk/anchor and support type.
-2. Add source-lane tagging (`doc`, `changelog`, `state`, `catalog`) in retrieval payloads.
+2. Add source-lane tagging using existing source types (`doc`, `changelog`, `state`, `item`,
+   `process`, `quest`, `achievement`) in retrieval payloads.
 3. Add deterministic freshness ordering for dated changelog/docs claims.
 
 ### Answer-planning / prompt policy changes
