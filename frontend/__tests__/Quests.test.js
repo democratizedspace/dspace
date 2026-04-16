@@ -244,4 +244,50 @@ describe('Quests Component', () => {
             vi.useRealTimers();
         }
     });
+
+    it('moves completed custom quests into Completed Quests and keeps Custom Quests actionable only', async () => {
+        vi.useFakeTimers();
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => {
+                if (quest.id === 'custom/completed') {
+                    return { ...quest, status: 'completed' };
+                }
+
+                return { ...quest, status: 'available' };
+            })
+        );
+        listCustomQuests.mockResolvedValueOnce([
+            {
+                id: 'custom/available',
+                title: 'Available Custom Quest',
+                route: '/quests/custom/available',
+                custom: true,
+            },
+            {
+                id: 'custom/completed',
+                title: 'Completed Custom Quest',
+                route: '/quests/custom/completed',
+                custom: true,
+            },
+        ]);
+
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+
+            const customSection = host.querySelector("[data-testid='custom-quests-section']");
+            expect(customSection?.textContent).toContain('Available Custom Quest');
+            expect(customSection?.textContent).not.toContain('Completed Custom Quest');
+
+            expect(host.textContent).toContain('Completed Quests');
+            const completedCustomQuestLink = host.querySelector("a[data-questid='custom/completed']");
+            expect(completedCustomQuestLink).not.toBeNull();
+
+            const mergeStatus = host.querySelector("[data-testid='custom-quests-merge-status']");
+            expect(mergeStatus?.getAttribute('data-custom-count')).toBe('1');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
 });
