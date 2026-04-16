@@ -106,8 +106,7 @@ describe('Quests Component', () => {
         const completedStatusSlot = completedQuestTile?.querySelector(
             "[data-testid='quest-status-slot']"
         );
-        expect(completedStatusSlot).not.toBeNull();
-        expect(completedStatusSlot?.textContent?.trim()).toBe('Completed');
+        expect(completedStatusSlot).toBeNull();
     });
 
     it('keeps locked and unknown quests out of the main built-in grid', () => {
@@ -240,6 +239,52 @@ describe('Quests Component', () => {
 
             const mergeStatus = host.querySelector("[data-testid='custom-quests-merge-status']");
             expect(mergeStatus?.getAttribute('data-custom-count')).toBe('1');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('shows completed custom quests in Completed Quests and not in Custom Quests', async () => {
+        vi.useFakeTimers();
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => ({
+                ...quest,
+                status: quest.id === 'custom/done' ? 'completed' : 'available',
+            }))
+        );
+        listCustomQuests.mockResolvedValueOnce([
+            {
+                id: 'custom/done',
+                title: 'Done Custom Quest',
+                route: '/quests/custom/done',
+                custom: true,
+            },
+            {
+                id: 'custom/ready',
+                title: 'Ready Custom Quest',
+                route: '/quests/custom/ready',
+                custom: true,
+            },
+        ]);
+
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+
+            const customSection = host.querySelector("[data-testid='custom-quests-section']");
+            expect(customSection).not.toBeNull();
+            expect(customSection?.textContent).toContain('Ready Custom Quest');
+            expect(customSection?.textContent).not.toContain('Done Custom Quest');
+
+            expect(host.textContent).toContain('Completed Quests');
+            const completedCustomQuestTile = host.querySelector(
+                "a[data-questid='custom/done'] [data-testid='quest-tile']"
+            );
+            expect(completedCustomQuestTile).not.toBeNull();
+            expect(
+                completedCustomQuestTile?.querySelector("[data-testid='quest-status-slot']")
+            ).toBeNull();
         } finally {
             vi.useRealTimers();
         }
