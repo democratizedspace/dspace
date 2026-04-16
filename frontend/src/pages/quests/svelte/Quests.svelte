@@ -41,6 +41,8 @@
     let customQuestRecords = [];
     let customClassified = [];
     let visibleCustomQuests = [];
+    let completedCustomQuests = [];
+    let completedQuests = [];
     let customMergeComplete = false;
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
@@ -104,9 +106,8 @@
     const classifyCustomQuests = (snapshot) => {
         const normalizedCustomQuests = normalizeQuestList(customQuestRecords);
         customClassified = classifyQuestList({ quests: normalizedCustomQuests, snapshot });
-        visibleCustomQuests = customClassified.filter(
-            (quest) => quest.status === 'available' || quest.status === 'completed'
-        );
+        visibleCustomQuests = customClassified.filter((quest) => quest.status === 'available');
+        completedCustomQuests = customClassified.filter((quest) => quest.status === 'completed');
     };
 
     // Define buttons for easy expansion
@@ -119,6 +120,7 @@
     $: if (builtInQuests.length > 0) {
         applyBuiltInClassification({ authoritative: false, completedQuestIds: [] });
     }
+    $: completedQuests = [...completedBuiltInQuests, ...completedCustomQuests];
 
     onMount(async () => {
         markPerf('quests:list-hydration-start');
@@ -246,9 +248,9 @@
         </section>
     {/if}
 
-    {#if completedBuiltInQuests.length > 0}
+    {#if completedQuests.length > 0}
         <h2>Completed Quests</h2>
-        {#each completedBuiltInQuests as quest}
+        {#each completedQuests as quest}
             <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
                 <Quest {quest} compact={true} status={quest.status} />
             </a>

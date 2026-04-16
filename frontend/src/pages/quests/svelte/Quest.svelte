@@ -6,11 +6,9 @@
     let imageLoaded = false;
 
     $: statusLabel =
-        status === 'completed'
-            ? 'Completed'
-            : status === 'available'
-              ? ''
-              : status === 'locked'
+        status === 'available' || status === 'completed'
+            ? ''
+            : status === 'locked'
                 ? 'Locked'
                 : 'Checking';
 
