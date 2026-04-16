@@ -72,7 +72,7 @@
         border: 2px solid #007006;
         border-radius: 12px;
         padding: 16px;
-        max-width: 480px;
+        width: 100%;
         color: #fff;
         display: flex;
         flex-direction: column;
