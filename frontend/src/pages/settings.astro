@@ -40,8 +40,36 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
 <style>
     .settings-content {
         display: grid;
-        justify-content: center;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        align-items: start;
         gap: 1rem;
         padding: 1rem;
+        width: min(1600px, 100%);
+        margin: 0 auto;
+    }
+
+    .settings-content > :global(*) {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .settings-content > :global(.qa-tools),
+    .settings-content > :global(.legacy-upgrade) {
+        grid-column: 1 / -1;
+    }
+
+    .settings-content > :global(.logout-panel),
+    .settings-content > :global(.qa-cheats),
+    .settings-content > :global(.panel),
+    .settings-content > :global(.data-reset),
+    .settings-content > :global(.legacy-upgrade) {
+        max-width: none;
+    }
+
+    @media (max-width: 720px) {
+        .settings-content {
+            grid-template-columns: 1fr;
+            padding: 0.75rem;
+        }
     }
 </style>
