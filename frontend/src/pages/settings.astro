@@ -15,33 +15,71 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
 ---
 
 <Page title="Settings" message="Manage your DSPACE session" columns="1">
-    <div class="settings-content">
-        <LogoutPanel client:idle />
+    <section class="settings-content" aria-label="Settings controls">
+        <div class="settings-item">
+            <LogoutPanel client:idle />
+        </div>
+        <div class="settings-item">
+            <QuestGraphToggle client:idle />
+        </div>
         {
             cheatsAvailable ? (
-                <QaCheatsToggle
-                    cheatsAvailable={cheatsAvailable}
-                    stagingEnvironment={stagingEnvironment}
-                    client:idle
-                />
+                <div class="settings-item settings-item--wide">
+                    <QaCheatsToggle
+                        cheatsAvailable={cheatsAvailable}
+                        stagingEnvironment={stagingEnvironment}
+                        client:idle
+                    />
+                </div>
             ) : null
         }
-        <QuestGraphToggle client:idle />
-        <LegacySaveUpgrade
-            legacyV1Items={legacyV1Items}
-            legacyCookieKeys={legacyCookieKeys}
-            cheatsAvailable={cheatsAvailable}
-            client:idle
-        />
-        <DataReset client:idle />
-    </div>
+        <div class="settings-item settings-item--wide">
+            <LegacySaveUpgrade
+                legacyV1Items={legacyV1Items}
+                legacyCookieKeys={legacyCookieKeys}
+                cheatsAvailable={cheatsAvailable}
+                client:idle
+            />
+        </div>
+        <div class="settings-item">
+            <DataReset client:idle />
+        </div>
+    </section>
 </Page>
 
 <style>
     .settings-content {
         display: grid;
-        justify-content: center;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 1rem;
+        width: min(100%, 1800px);
+        margin: 0 auto;
         padding: 1rem;
+        align-items: start;
+    }
+
+    .settings-item {
+        min-width: 0;
+    }
+
+    .settings-item--wide {
+        grid-column: 1 / -1;
+    }
+
+    .settings-item :global(.logout-panel),
+    .settings-item :global(.panel),
+    .settings-item :global(.qa-cheats),
+    .settings-item :global(.legacy-upgrade),
+    .settings-item :global(.data-reset) {
+        max-width: none;
+        width: 100%;
+        height: 100%;
+    }
+
+    @media (max-width: 720px) {
+        .settings-content {
+            grid-template-columns: 1fr;
+            padding: 0.75rem;
+        }
     }
 </style>
