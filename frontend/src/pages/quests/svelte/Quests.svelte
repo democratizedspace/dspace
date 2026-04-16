@@ -42,6 +42,7 @@
     let customClassified = [];
     let visibleCustomQuests = [];
     let completedCustomQuests = [];
+    let completedQuests = [];
     let customMergeComplete = false;
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
@@ -119,6 +120,7 @@
     $: if (builtInQuests.length > 0) {
         applyBuiltInClassification({ authoritative: false, completedQuestIds: [] });
     }
+    $: completedQuests = [...completedBuiltInQuests, ...completedCustomQuests];
 
     onMount(async () => {
         markPerf('quests:list-hydration-start');
@@ -246,14 +248,9 @@
         </section>
     {/if}
 
-    {#if completedBuiltInQuests.length + completedCustomQuests.length > 0}
+    {#if completedQuests.length > 0}
         <h2>Completed Quests</h2>
-        {#each completedBuiltInQuests as quest}
-            <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
-                <Quest {quest} compact={true} status={quest.status} />
-            </a>
-        {/each}
-        {#each completedCustomQuests as quest}
+        {#each completedQuests as quest}
             <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
                 <Quest {quest} compact={true} status={quest.status} />
             </a>

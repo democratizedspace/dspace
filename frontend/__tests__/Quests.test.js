@@ -284,6 +284,11 @@ describe('Quests Component', () => {
             expect(
                 completedCustomQuestTile?.querySelector("[data-testid='quest-status-slot']")
             ).toBeNull();
+            expect(
+                completedCustomQuestTile
+                    ?.querySelector('.sr-only')
+                    ?.textContent?.includes('Status: Completed')
+            ).toBe(true);
         } finally {
             vi.useRealTimers();
         }

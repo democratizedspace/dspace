@@ -7,8 +7,8 @@
 
     $: statusLabel =
         status === 'available' || status === 'completed'
-              ? ''
-              : status === 'locked'
+            ? ''
+            : status === 'locked'
                 ? 'Locked'
                 : 'Checking';
 
