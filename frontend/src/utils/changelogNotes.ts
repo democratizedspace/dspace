@@ -169,9 +169,39 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         },
         {
             message:
-                'Reader guide for the June 1, 2026 v3.0.1 addendum: validate `/quests`, `/processes`, and `/docs` first, then confirm migration and release-runbook updates in the linked references.',
+                'June 1, 2026 v3.0.1 (reader guide) — Gameplay / UI: `/quests` list-path time-to-interactive and correctness updates landed with locked-quest visibility fixes and preflight-check gating cleanup, and `/processes` now renders summary-first rows while retaining runtime controls on `/processes/:processId`.',
+            href: '/docs/changelog/20260401',
+            linkLabel: 'June 1 patch addendum',
+        },
+        {
+            message:
+                'June 1, 2026 v3.0.1 (reader guide) — Security / Safety + stricter behavior: custom quest tile routes are sanitized to internal `/quests/{id}` fallbacks when values are unsafe, and unknown item containers are rejected.',
+            href: '/docs/changelog/20260401',
+            linkLabel: 'Security and integrity details',
+        },
+        {
+            message:
+                'June 1, 2026 v3.0.1 (reader guide) — Saves / Migration / Data Integrity: stored item counts were normalized and remote migration/smoke coverage was hardened for real-v2 and custom-item mutation flows.',
+            href: '/docs/legacy-save-storage',
+            linkLabel: 'Legacy migration context',
+        },
+        {
+            message:
+                'June 1, 2026 v3.0.1 (reader guide) — Docs / Chat: `/docs` full-text corpus fetch is deferred until first keyword search, while docs-index and chat smoke assertions were hardened.',
+            href: '/docs/changelog/20260401',
+            linkLabel: 'Docs and chat notes',
+        },
+        {
+            message:
+                'June 1, 2026 v3.0.1 (reader guide) — Dev / Release / QA: v3.0.1 checklists and evidence gates were tightened, release-history tracking was added, and rollback/promotion runbook links were clarified.',
             href: '/docs/qa/v3',
             linkLabel: 'v3 QA checklist',
+        },
+        {
+            message:
+                'How to verify (player-visible routes): `/quests` (list + locked quest visibility + safe custom tile links), `/processes` (summary-first rows + runtime controls on detail pages), `/docs` (browse/`has:` first, then keyword search).',
+            href: '/docs/changelog/20260401',
+            linkLabel: 'Player route checks',
         },
     ],
 };
