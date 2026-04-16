@@ -106,8 +106,7 @@ describe('Quests Component', () => {
         const completedStatusSlot = completedQuestTile?.querySelector(
             "[data-testid='quest-status-slot']"
         );
-        expect(completedStatusSlot).not.toBeNull();
-        expect(completedStatusSlot?.textContent?.trim()).toBe('Completed');
+        expect(completedStatusSlot).toBeNull();
     });
 
     it('keeps locked and unknown quests out of the main built-in grid', () => {
@@ -240,6 +239,51 @@ describe('Quests Component', () => {
 
             const mergeStatus = host.querySelector("[data-testid='custom-quests-merge-status']");
             expect(mergeStatus?.getAttribute('data-custom-count')).toBe('1');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('moves completed custom quests into Completed Quests and removes completed label text', async () => {
+        vi.useFakeTimers();
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => ({
+                ...quest,
+                status: quest.id === 'custom/completed' ? 'completed' : 'available',
+            }))
+        );
+        listCustomQuests.mockResolvedValueOnce([
+            {
+                id: 'custom/completed',
+                title: 'Completed Custom Quest',
+                route: '/quests/custom/completed',
+                custom: true,
+            },
+            {
+                id: 'custom/available',
+                title: 'Available Custom Quest',
+                route: '/quests/custom/available',
+                custom: true,
+            },
+        ]);
+
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+
+            const customSection = host.querySelector("[data-testid='custom-quests-section']");
+            expect(customSection?.textContent).toContain('Available Custom Quest');
+            expect(customSection?.textContent).not.toContain('Completed Custom Quest');
+
+            expect(host.textContent).toContain('Completed Quests');
+            const completedCustomQuestTile = host.querySelector(
+                "a[data-questid='custom/completed'] [data-testid='quest-tile']"
+            );
+            expect(completedCustomQuestTile).not.toBeNull();
+            expect(
+                completedCustomQuestTile?.querySelector("[data-testid='quest-status-slot']")
+            ).toBeNull();
         } finally {
             vi.useRealTimers();
         }

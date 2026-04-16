@@ -41,6 +41,7 @@
     let customQuestRecords = [];
     let customClassified = [];
     let visibleCustomQuests = [];
+    let completedCustomQuests = [];
     let customMergeComplete = false;
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
@@ -104,9 +105,8 @@
     const classifyCustomQuests = (snapshot) => {
         const normalizedCustomQuests = normalizeQuestList(customQuestRecords);
         customClassified = classifyQuestList({ quests: normalizedCustomQuests, snapshot });
-        visibleCustomQuests = customClassified.filter(
-            (quest) => quest.status === 'available' || quest.status === 'completed'
-        );
+        visibleCustomQuests = customClassified.filter((quest) => quest.status === 'available');
+        completedCustomQuests = customClassified.filter((quest) => quest.status === 'completed');
     };
 
     // Define buttons for easy expansion
@@ -246,9 +246,14 @@
         </section>
     {/if}
 
-    {#if completedBuiltInQuests.length > 0}
+    {#if completedBuiltInQuests.length + completedCustomQuests.length > 0}
         <h2>Completed Quests</h2>
         {#each completedBuiltInQuests as quest}
+            <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
+                <Quest {quest} compact={true} status={quest.status} />
+            </a>
+        {/each}
+        {#each completedCustomQuests as quest}
             <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
                 <Quest {quest} compact={true} status={quest.status} />
             </a>
