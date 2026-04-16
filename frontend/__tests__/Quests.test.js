@@ -73,7 +73,7 @@ describe('Quests Component', () => {
         vi.clearAllMocks();
     });
 
-    it('renders only available quests in the main built-in grid', () => {
+    it('renders only available quests in the main built-in grid', async () => {
         classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
             classifiedQuests.map((quest, index) => {
                 const statuses = ['available', 'locked', 'completed', 'unknown'];
@@ -88,7 +88,7 @@ describe('Quests Component', () => {
         expect(builtInGrid.textContent).not.toContain('Test Quest 2');
         expect(builtInGrid.textContent).not.toContain('Test Quest 3');
 
-        expect(host.textContent).toContain('Completed Quests');
+        await vi.waitFor(() => expect(host.textContent).toContain('Completed Quests'));
         expect(host.textContent).toContain('Test Quest 3');
         const availableQuestTile = host.querySelector(
             "a[data-questid='welcome/test1'] [data-testid='quest-tile']"
@@ -240,6 +240,55 @@ describe('Quests Component', () => {
 
             const mergeStatus = host.querySelector("[data-testid='custom-quests-merge-status']");
             expect(mergeStatus?.getAttribute('data-custom-count')).toBe('1');
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
+    it('moves completed custom quests into the Completed Quests list', async () => {
+        vi.useFakeTimers();
+        classifyQuestList.mockImplementation(({ quests: classifiedQuests = [] }) =>
+            classifiedQuests.map((quest) => {
+                if (quest.id === 'custom/completed') {
+                    return { ...quest, status: 'completed' };
+                }
+                return { ...quest, status: 'available' };
+            })
+        );
+        listCustomQuests.mockResolvedValueOnce([
+            {
+                id: 'custom/completed',
+                title: 'Completed Custom Quest',
+                route: '/quests/custom/completed',
+                custom: true,
+            },
+            {
+                id: 'custom/open',
+                title: 'Open Custom Quest',
+                route: '/quests/custom/open',
+                custom: true,
+            },
+        ]);
+
+        try {
+            mountedComponent = mount(Quests, { target: host, props: { quests } });
+            await vi.runAllTimersAsync();
+            await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+
+            const customSection = host.querySelector("[data-testid='custom-quests-section']");
+            expect(customSection).not.toBeNull();
+            expect(customSection?.textContent).toContain('Open Custom Quest');
+            expect(customSection?.textContent).not.toContain('Completed Custom Quest');
+            expect(customSection?.textContent).not.toContain('Completed');
+
+            expect(host.textContent).toContain('Completed Quests');
+            const completedQuestLink = host.querySelector("a[data-questid='custom/completed']");
+            expect(completedQuestLink).not.toBeNull();
+            const completedQuestTile = completedQuestLink?.querySelector("[data-testid='quest-tile']");
+            const completedStatusSlot = completedQuestTile?.querySelector(
+                "[data-testid='quest-status-slot']"
+            );
+            expect(completedStatusSlot?.textContent?.trim()).toBe('Completed');
         } finally {
             vi.useRealTimers();
         }
