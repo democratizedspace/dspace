@@ -73,7 +73,7 @@ A single retrieval mode underperforms one of those groups.
 ### Where lexical retrieval must dominate
 
 - Exact route/path mentions (`/quests/manage`, `/processes/launch-rocket`, `/docs/routes`).
-- Version strings (`3.0.1`, `v3.0.0`, dated changelog anchors).
+- Version strings (`v3.0.1`, `v3.0.0`, dated changelog anchors).
 - Quest/item/process identifiers and slug tokens.
 - Literal patch-note wording and literal error text.
 
@@ -81,7 +81,7 @@ A single retrieval mode underperforms one of those groups.
 
 - Paraphrased gameplay intent (“How do I move forward when a process is blocked?”).
 - Design-doc intent and tradeoff queries.
-- Evaluative phrasing (“Is 3.0.1 strictly better?”) where evidence is distributed.
+- Evaluative phrasing (“Is v3.0.1 strictly better?”) where evidence is distributed.
 - Summaries and critiques that do not reuse exact source wording.
 
 ### Proposed high-level retrieval flow
@@ -244,8 +244,9 @@ When sources disagree:
    - Preserve historical changelog markdown as authoritative source content; do not substantively
      rewrite historical entries, but allow limited typo/spacing/broken-link corrections when they
      are recorded via `changelogCorrections.json`.
-   - Treat changelog notes/annotations as additive context for newer facts or clarifications, with
-     newer-facts priority for “current/latest” interpretations.
+   - Treat changelog notes/annotations as additive context for newer facts or clarifications (using
+     `frontend/src/utils/changelogNotes.ts` as the concrete repo pattern), with newer-facts priority
+     for “current/latest” interpretations.
 
 ---
 
@@ -341,6 +342,8 @@ Retrieval quality must be diagnosable at stage granularity.
 - Source-type distribution summary in selected context.
 - “Why selected” explanation fields per chunk (score components + metadata boosts/penalties).
 - Query-class tags attached to traces and eval runs.
+- Persisted retrieval traces must redact or hash live player-state fields before storage/logging so
+  privacy boundaries remain aligned with separate live/local state handling.
 
 ### Debugging failure patterns
 
@@ -370,19 +373,19 @@ Use a query-suite with explicit expected source behaviors and failure attributio
 - Likely miss type: authority/freshness ranking.
 - Catch metric/rubric: top-3 source freshness score + human recency correctness check.
 
-### Scenario 2: “Please list the changes in 3.0.1”
-- Success: version-specific retrieval (3.0.1 patch content) with minimal spillover.
+### Scenario 2: “Please list the changes in v3.0.1”
+- Success: version-specific retrieval (v3.0.1 patch content) with minimal spillover.
 - Failure: v3.0.0 or unrelated releases dominate.
 - Likely miss type: lexical recall/ranking on version token.
 - Catch metric/rubric: version precision@K and answer version contamination rate.
 
-### Scenario 3: “Is 3.0.1 strictly better?”
+### Scenario 3: “Is v3.0.1 strictly better?”
 - Success: balanced evaluative synthesis using authoritative release evidence.
 - Failure: purely opinionated output without evidence mix.
 - Likely miss type: semantic retrieval coverage + rerank diversity.
 - Catch metric/rubric: evidence diversity rubric + grounded-claim rate.
 
-### Scenario 4: “How could the 3.0.1 notes be better?”
+### Scenario 4: “How could the v3.0.1 notes be better?”
 - Success: critique grounded in release-note content plus actionable improvements.
 - Failure: generic critique that does not reference retrieved release details.
 - Likely miss type: semantic alignment and chunk context quality.
