@@ -9,6 +9,22 @@ actionability patterns using existing v3 architecture
 [`docs/design/rag_discoverability.md`](./rag_discoverability.md), which defines the
 `{ text, contextSources }` response shape and baseline "Sources used" UX.
 
+
+**Structure note:** This document intentionally follows the tone/shape of nearby design docs
+(especially [`docs/design/rag_discoverability.md`](./rag_discoverability.md)) while
+limiting scope to this proposal only.
+
+## Repo grounding / existing references
+
+This is a design-only follow-up that is grounded in existing repository materials:
+
+- [`AGENTS.md`](../../AGENTS.md) for repo-wide constraints, including changelog-history policy.
+- [`docs/design/rag_discoverability.md`](./rag_discoverability.md) for prior RAG/source-surface design decisions.
+- [`frontend/src/utils/changelogNotes.ts`](../../frontend/src/utils/changelogNotes.ts) for appended-note patterns that preserve historical changelog bodies.
+- Current chat/docs retrieval primitives (`buildChatPrompt`, `GPT5ChatV2`, `docsRag`,
+  `contextSources`) as baseline building blocks, not evidence that claim-level
+  grounding/actionability behavior is already implemented.
+
 ## 1) Problem statement
 
 The transcript is a strong success signal for dChat:
@@ -286,7 +302,10 @@ Use scenario-based checks modeled on this transcript.
 
 ## Constraints and compatibility notes
 
-- Keep changelog history immutable; improvements should be in retrieval, rendering, and response
-  formatting layers, not retroactive edits to historical changelog markdown bodies.
+- Published changelog markdown under `frontend/src/pages/docs/md/changelog/` is immutable narrative
+  history and must not be rewritten retroactively.
+- Changelog-related improvements proposed here apply to future retrieval/rendering/UI behavior and
+  appended-note patterns (for example via `frontend/src/utils/changelogNotes.ts`), not edits to
+  historical changelog markdown bodies.
 - Keep architecture client-compatible and incremental: reuse existing `docsRag`,
   `buildChatPrompt`, and `GPT5ChatV2` pathways before introducing new infrastructure.
