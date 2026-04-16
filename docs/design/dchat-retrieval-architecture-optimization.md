@@ -240,10 +240,12 @@ When sources disagree:
    - Elevate user-authored/custom content when query explicitly references custom entities or current
      local game state.
 
-5. **Immutable historical changelog bodies vs render-time notes**
-   - Preserve historical changelog markdown as immutable source content.
-   - Treat changelog notes/annotations as additive context with newer-facts priority for
-     “current/latest” interpretations.
+5. **Historical changelog bodies vs render-time notes**
+   - Preserve historical changelog markdown as authoritative source content; do not substantively
+     rewrite historical entries, but allow limited typo/spacing/broken-link corrections when they
+     are recorded via `changelogCorrections.json`.
+   - Treat changelog notes/annotations as additive context for newer facts or clarifications, with
+     newer-facts priority for “current/latest” interpretations.
 
 ---
 
