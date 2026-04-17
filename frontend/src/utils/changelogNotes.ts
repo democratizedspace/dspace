@@ -163,7 +163,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         },
         {
             message:
-                'Patch addendum: the v3.0.1 launch-readiness hardening delta is tracked as immutable refs from v3.0.0 (3ec45a5517a35c96767f6b946c01104e6ec88f93) through v3.0.1-rc.3 (899fcb93f705d0fe4051d7ecb74ee242cb8ab59c).',
+                'Patch addendum: the v3.0.1 launch-readiness hardening delta is tracked as immutable refs from v3.0.0 (3ec45a5517a35c96767f6b946c01104e6ec88f93) through v3.0.1-rc.4 (2d7f93daa4869ae223825cbd00a37bc83ac5703e).',
             href: '/docs/releases',
             linkLabel: 'Release history',
         },
