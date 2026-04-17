@@ -238,8 +238,15 @@ export function renderChangelogNotes(slug: string | undefined): string {
     return `<aside class="changelog-note" aria-label="Historical note"><strong>Note:</strong>${body}</aside>`;
 }
 
-export function appendChangelogNotes(html: string, slug: string | undefined): string {
-    return html + renderChangelogNotes(slug);
+/**
+ * Intentionally returns the compiled changelog HTML unchanged.
+ *
+ * `notesBySlug` is source metadata and must stay available via
+ * `renderChangelogNotes`/`getChangelogNotes` for programmatic consumers,
+ * but it should not be injected into user-facing HTML.
+ */
+export function appendChangelogNotes(html: string, _slug: string | undefined): string {
+    return html;
 }
 
 export function getChangelogNotes(slug: string | undefined): ChangelogNote[] {
