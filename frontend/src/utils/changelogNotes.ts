@@ -206,40 +206,12 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     ],
 };
 
-function escapeHtml(value: string): string {
-    return value
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+export function renderChangelogNotes(_slug: string | undefined): string {
+    return '';
 }
 
-export function renderChangelogNotes(slug: string | undefined): string {
-    if (!slug) {
-        return '';
-    }
-
-    const notes = notesBySlug[slug];
-
-    if (!notes || notes.length === 0) {
-        return '';
-    }
-
-    const body = notes
-        .map((note) => {
-            const safeMessage = escapeHtml(note.message);
-            const safeHref = escapeHtml(note.href);
-            const safeLabel = escapeHtml(note.linkLabel);
-            return `<p>${safeMessage} <a href="${safeHref}">${safeLabel}</a>.</p>`;
-        })
-        .join('');
-
-    return `<aside class="changelog-note" aria-label="Historical note"><strong>Note:</strong>${body}</aside>`;
-}
-
-export function appendChangelogNotes(html: string, slug: string | undefined): string {
-    return html + renderChangelogNotes(slug);
+export function appendChangelogNotes(html: string, _slug: string | undefined): string {
+    return html;
 }
 
 export function getChangelogNotes(slug: string | undefined): ChangelogNote[] {
