@@ -1,6 +1,5 @@
 ---
 import Button from './Button.astro';
-import { appendChangelogNotes } from '../utils/changelogNotes';
 import { logServerError } from '../utils/serverLogger';
 
 let changelogs = [];
@@ -11,9 +10,8 @@ let changelogRenderError: Error | undefined;
 const route = Astro.url?.pathname ?? '/';
 const method = Astro.request?.method ?? 'GET';
 
-function prepareHtml(html, slug) {
-    const withNotes = appendChangelogNotes(html, slug);
-    return withNotes + `
+function prepareHtml(html) {
+    return html + `
         <style>
             .latest-update-html img {
                 max-width: 100%;
@@ -30,18 +28,6 @@ function prepareHtml(html, slug) {
                 max-width: min(100%, 512px);
                 display: block;
                 margin: 0.75rem auto;
-            }
-
-            .changelog-note {
-                margin-top: 1.5rem;
-                padding: 1rem;
-                border-left: 4px solid var(--color-highlight, #5b21b6);
-                background: rgba(91, 33, 182, 0.08);
-                border-radius: 12px;
-            }
-
-            .changelog-note p {
-                margin: 0.5rem 0 0;
             }
         </style>
     `;
@@ -67,7 +53,7 @@ try {
     if (changelogsReversed.length > 0) {
         const [latest] = changelogsReversed;
         latestUpdateTitle = latest?.frontmatter?.title;
-        latestUpdateHtml = prepareHtml(latest?.compiledContent(), latest?.frontmatter?.slug);
+        latestUpdateHtml = prepareHtml(latest?.compiledContent());
     }
 } catch (error) {
     changelogRenderError = error instanceof Error ? error : new Error(String(error));
