@@ -5020,6 +5020,16 @@
         "kind": "doc"
     },
     {
+        "id": "doc:/docs/outages/2026-04-16-custom-quest-completion-listing-regression:custom-quest-completion-listing-regression-2026-04-16:0:0",
+        "path": "frontend/src/pages/docs/md/outages/2026-04-16-custom-quest-completion-listing-regression.md",
+        "slug": "/docs/outages/2026-04-16-custom-quest-completion-listing-regression",
+        "title": "Custom quest completion listing regression (2026-04-16)",
+        "heading": "Custom quest completion listing regression (2026-04-16)",
+        "anchor": "custom-quest-completion-listing-regression-2026-04-16",
+        "text": "- Summary: Completed custom quests remained in the Custom Quests section and showed a visible \"Completed\" label. - Impact: Players saw inconsistent completion behavior between built-in and custom quests on /quests. - Root cause: - Custom quest filtering included both available and completed statuses for the Custom Quests section. - The tile component rendered a visible Completed status label for completed quests. - Resolution: - Updated quest list classification usage so custom completed quests render under Completed Quests. - Removed the visible Completed status label from quest tiles while preserving completion state handling. - Added regression coverage to verify completed custom quests appear in Completed Quests and not in Custom Quests. - Prevention: - Keep completed quest presentation unified regardless of quest source (built-in vs custom). - Maintain explicit regression tests for list placement and status label rendering in /quests.",
+        "kind": "doc"
+    },
+    {
         "id": "doc:/docs/process-guidelines:process-development-guidelines:0:0",
         "path": "frontend/src/pages/docs/md/process-guidelines.md",
         "slug": "/docs/process-guidelines",
@@ -6416,7 +6426,7 @@
         "title": "Rocketry",
         "heading": "4) Preflight Checklist (rocketry/preflight-check)",
         "anchor": "4-preflight-checklist-rocketrypreflight-check",
-        "text": "- Quest link: /quests/rocketry/preflight-check - Unlock prerequisite: - requiresQuests: rocketry/parachute - Dialogue requiresItems gates: - supplies → \"All core gear is staged.\" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1, rocket launch checklist ×1 - wind-evidence → \"Both readings are documented. Time to interpret.\" — wind log ×1 - arm → \"Launch complete and post-flight check passed.\" — damaged model rocket ×1 - Troubleshooting/safety branches: - range-walk and scrub paths can halt unsafe range conditions before arming. - troubleshoot enforces corrective actions and a mandatory re-test loop through wind-readings. - Grants: - Dialogue options/steps grantsItems: - wind-readings → \"Record both readings in the pad log.\" grants wind log ×1 - Quest-level grantsItems: None - Rewards: - rocket igniter ×10, hobbyist solid rocket motor ×5, Rocket Descent (animated) ×1 - Processes used: - launch-rocket - Requires: launch controller ×1, Model rocket launchpad ×1, rocket launch checklist ×1 - Consumes: launch-capable model rocket ×1, rocket igniter ×1 - Creates: damaged model rocket ×1, dLaunch ×1",
+        "text": "- Quest link: /quests/rocketry/preflight-check - Unlock prerequisite: - requiresQuests: rocketry/parachute - Dialogue requiresItems gates: - supplies → \"All core gear is staged.\" — launch controller ×1, rocket igniter ×1, Model rocket launchpad ×1, rocket launch checklist ×1 - arm → \"Launch complete and post-flight check passed.\" — damaged model rocket ×1 - Troubleshooting/safety branches: - range-walk and scrub paths can halt unsafe range conditions before arming. - troubleshoot enforces corrective actions and a mandatory re-test loop through wind-readings. - Grants: - Dialogue options/steps grantsItems: - wind-readings declares wind log ×1 in quest JSON, but this goto option does not award items in the current UI runtime. - Quest-level grantsItems: None - Rewards: - rocket igniter ×10, hobbyist solid rocket motor ×5, Rocket Descent (animated) ×1 - Processes used: - launch-rocket - Requires: launch controller ×1, Model rocket launchpad ×1, rocket launch checklist ×1 - Consumes: launch-capable model rocket ×1, rocket igniter ×1 - Creates: damaged model rocket ×1, dLaunch ×1",
         "kind": "doc"
     },
     {
@@ -8136,7 +8146,7 @@
         "title": "April 1, 2026",
         "heading": "June 1, 2026 — DSPACE v3.0.1 (patch addendum)",
         "anchor": "20260401",
-        "text": "v3.0.1 is a patch update to the April 1 v3 release, focused on launch-readiness hardening.",
+        "text": "v3.0.1 is a patch update to the April 1 v3 release, focused on launch-readiness hardening across the audited delta 3ec45a5517a35c96767f6b946c01104e6ec88f93..2d7f93daa4869ae223825cbd00a37bc83ac5703e.",
         "kind": "changelog"
     },
     {
@@ -8146,7 +8156,7 @@
         "title": "April 1, 2026",
         "heading": "Patch notes",
         "anchor": "20260401",
-        "text": "- /quests: improved list-path time-to-interactive and tightened built-in/custom coexistence behavior. - /quests security: sanitized custom quest tile routes to fall back to internal /quests/{id} links when values are unsafe, including protocol-relative prefixes like // and slash-backslash variants like /\\\\. - /processes: switched list rows to summary-first rendering while retaining runtime controls on /processes/:processId. - /docs: deferred full-text corpus fetch until first keyword search; browse and has: flows remain available immediately. - Release safety: expanded targeted regression coverage for quests, processes, docs search, and docs-backed chat checks.",
+        "text": "- /quests performance + correctness: improved list-path time-to-interactive, tightened built-in/custom coexistence behavior, fixed locked-quest status visibility regressions, and removed dead-end gating in preflight-check quest flow. - Cold run: list visible 30.3 ms → 0.3 ms (101x faster); full reconciliation 72.6 ms → 0.7 ms (104x faster). - 4x CPU-throttled run: list visible 115.5 ms → 1.9 ms (61x faster); full reconciliation 262.6 ms → 6.2 ms (42x faster). - Gameplay/data integrity hardening: normalized stored item counts, rejected unknown item containers, aligned geothermal reward docs with quest data, and sanitized compact item/process preview image handling. - /quests security: sanitized custom quest tile routes to fall back to internal /quests/{id} links when values are unsafe, including protocol-relative prefixes like // and slash-backslash variants like /\\. - /processes reliability: switched list rows to summary-first rendering while retaining runtime controls on /processes/:processId, and hardened buy-required metadata-loading behavior plus regression coverage. - /docs and chat retrieval: deferred /docs full-text corpus fetch until first keyword search (with immediate browse/has: access), plus hardened docs-index/chat smoke assertions. - Migration + remote-smoke harness hardening: fixed remote legacy migration real-v2 coverage and strengthened remote smoke flow reliability for custom-item mutations and live-chat checks. - Release governance/runbook updates: tightened v3.0.1 QA checklists/evidence gates, added canonical release-history tracking, and clarified rollback/promotion runbook links and compare-based PR references.",
         "kind": "changelog"
     },
     {

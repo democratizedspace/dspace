@@ -1,5 +1,5 @@
 {
-    "generatedAt": "2026-04-11T23:14:12.983Z",
+    "generatedAt": "2026-04-17T07:19:16.600Z",
     "envName": "unknown",
     "sourceRef": null,
     "generatedFrom": {
@@ -57,7 +57,7 @@
             "frontend/src/pages/docs/md/changelog/20230915.md"
         ]
     },
-    "counts": { "totalChunks": 816, "docs": 767, "routes": 1, "changelog": 48 },
-    "gitSha": "4143c7afc6ac5495b7d6b5ce91a09eb9a814078a",
-    "docsGitSha": "4143c7afc6ac5495b7d6b5ce91a09eb9a814078a"
+    "counts": { "totalChunks": 817, "docs": 768, "routes": 1, "changelog": 48 },
+    "gitSha": "2d7f93daa4869ae223825cbd00a37bc83ac5703e",
+    "docsGitSha": "2d7f93daa4869ae223825cbd00a37bc83ac5703e"
 }
