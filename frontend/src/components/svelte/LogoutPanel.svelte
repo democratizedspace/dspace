@@ -68,30 +68,32 @@
 
 <style>
     .logout-panel {
-        background: #2c5837;
-        border: 2px solid #007006;
+        border: 1px solid #1f6b3f;
         border-radius: 12px;
-        padding: 16px;
-        max-width: 480px;
-        color: #fff;
+        padding: 1.25rem;
+        color: #f0fdf4;
         display: flex;
         flex-direction: column;
         gap: 12px;
+        background: linear-gradient(135deg, #0e2a1b, #08150f);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
     }
 
     h3 {
         margin: 0;
+        color: #dcfce7;
     }
 
     p {
         margin: 0;
         line-height: 1.5;
+        color: #bbf7d0;
     }
 
     button {
         align-self: flex-start;
-        background: #007006;
-        border: none;
+        background: #15803d;
+        border: 1px solid #22c55e;
         border-radius: 8px;
         color: #fff;
         cursor: pointer;
@@ -105,15 +107,15 @@
     }
 
     .status {
-        color: #90ee90;
+        color: #86efac;
     }
 
     .error {
-        color: #ff9f9f;
+        color: #fecaca;
     }
 
     .state {
         font-style: italic;
-        color: #d1f7d1;
+        color: #dcfce7;
     }
 </style>

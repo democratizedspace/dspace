@@ -5,14 +5,21 @@
 
     let imageLoaded = false;
 
-    const statusLabels = {
-        completed: 'Completed',
-        locked: 'Locked',
-    };
+    $: statusLabel =
+        status === 'available' || status === 'completed'
+            ? ''
+            : status === 'locked'
+              ? 'Locked'
+              : 'Checking';
 
-    $: statusLabel = status === 'available' ? '' : (statusLabels[status] ?? 'Checking');
-
-    $: assistiveStatusLabel = status === 'available' ? 'Available' : statusLabel;
+    $: assistiveStatusLabel =
+        status === 'available'
+            ? 'Available'
+            : status === 'completed'
+              ? 'Completed'
+              : status === 'locked'
+                ? 'Locked'
+                : statusLabel;
 </script>
 
 <div class="container" class:quest data-testid="quest-tile" data-status={status}>
@@ -37,7 +44,9 @@
                 <div class="content-text" data-testid="quest-tile-text">
                     <h3>{quest.title}</h3>
                     {#if statusLabel}
-                        <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                        <div class="status-slot" data-testid="quest-status-slot">
+                            {statusLabel}
+                        </div>
                     {/if}
                     <span class="sr-only">Status: {assistiveStatusLabel}</span>
                 </div>
@@ -63,7 +72,9 @@
                     <h3>{quest.title}</h3>
                     <p>{quest.description}</p>
                     {#if statusLabel}
-                        <div class="status-slot" data-testid="quest-status-slot">{statusLabel}</div>
+                        <div class="status-slot" data-testid="quest-status-slot">
+                            {statusLabel}
+                        </div>
                     {/if}
                     <span class="sr-only">Status: {assistiveStatusLabel}</span>
                 </div>
