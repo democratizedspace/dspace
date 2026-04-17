@@ -17,9 +17,11 @@ This is the canonical list of all historical DSPACE release tags.
 | `v3.0.0-rc.2` | Release candidate | [`v3.0.0-rc.2`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.2) |
 | `v3.0.0-rc.3` | Release candidate | [`v3.0.0-rc.3`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.3) |
 | `v3.0.0-rc.4` | Release candidate | [`v3.0.0-rc.4`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0-rc.4) |
+| `v3.0.0` | Stable release | [`v3.0.0`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.0) |
 | `v3.0.1-rc.1` | Release candidate | [`v3.0.1-rc.1`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.1) |
 | `v3.0.1-rc.2` | Release candidate | [`v3.0.1-rc.2`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.2) |
 | `v3.0.1-rc.3` | Release candidate | [`v3.0.1-rc.3`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.3) |
+| `v3.0.1-rc.4` | Release candidate | [`v3.0.1-rc.4`](https://github.com/democratizedspace/dspace/releases/tag/v3.0.1-rc.4) |
 
 ## QA checklists tracked separately (not a tag list)
 
