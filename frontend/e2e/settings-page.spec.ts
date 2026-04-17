@@ -42,17 +42,20 @@ test.describe('Settings route', () => {
             const uniqueCardRows = new Set(cards.map(toRoundedTop));
             const settingsRect = settingsContent.getBoundingClientRect();
             const legacyRect = legacyUpgrade.getBoundingClientRect();
-            const gridColumns = getComputedStyle(settingsContent)
-                .gridTemplateColumns.split(' ')
-                .filter(Boolean);
+            const settingsStyles = getComputedStyle(settingsContent);
+            const gridColumns = settingsStyles.gridTemplateColumns.split(' ').filter(Boolean);
+            const settingsContentLeft =
+                settingsRect.left + parseFloat(settingsStyles.paddingLeft || '0');
+            const settingsContentRight =
+                settingsRect.right - parseFloat(settingsStyles.paddingRight || '0');
 
             return {
                 rowCount: uniqueCardRows.size,
                 cardCount: cards.length,
                 gridColumnCount: gridColumns.length,
                 legacyGridColumn: getComputedStyle(legacyUpgrade).gridColumn,
-                settingsWidth: settingsRect.width,
-                legacyWidth: legacyRect.width,
+                legacyLeftGap: Math.abs(legacyRect.left - settingsContentLeft),
+                legacyRightGap: Math.abs(settingsContentRight - legacyRect.right),
             };
         });
 
@@ -60,9 +63,8 @@ test.describe('Settings route', () => {
         expect(desktopLayout?.gridColumnCount).toBeGreaterThan(1);
         expect(desktopLayout?.rowCount).toBeLessThan(desktopLayout?.cardCount ?? 0);
         expect(desktopLayout?.legacyGridColumn).toContain('1 / -1');
-        expect(desktopLayout?.legacyWidth ?? 0).toBeGreaterThanOrEqual(
-            (desktopLayout?.settingsWidth ?? 0) - 2
-        );
+        expect(desktopLayout?.legacyLeftGap ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(4);
+        expect(desktopLayout?.legacyRightGap ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(4);
 
         await page.setViewportSize({ width: 390, height: 844 });
         await page.reload();
