@@ -239,7 +239,8 @@ export function renderChangelogNotes(slug: string | undefined): string {
 }
 
 export function appendChangelogNotes(html: string, slug: string | undefined): string {
-    return html + renderChangelogNotes(slug);
+    void slug;
+    return html;
 }
 
 export function getChangelogNotes(slug: string | undefined): ChangelogNote[] {
