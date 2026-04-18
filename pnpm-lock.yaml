@@ -86,6 +86,9 @@ importers:
       minisearch:
         specifier: ^7.2.0
         version: 7.2.0
+      prettier:
+        specifier: ^3.4.2
+        version: 3.8.1
       prettier-plugin-svelte:
         specifier: ^2.10.1
         version: 2.10.1(prettier@3.8.1)(svelte@5.46.0)

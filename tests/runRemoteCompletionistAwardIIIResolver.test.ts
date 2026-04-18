@@ -7,6 +7,18 @@ import {
   resolvePlaywrightCli,
 } from '../scripts/run-remote-completionist-award-iii.mjs';
 
+type SpawnFn = (
+  command: string,
+  args: ReadonlyArray<string>,
+  options: {
+    cwd: string;
+    stdio: 'inherit';
+    env: NodeJS.ProcessEnv;
+  }
+) => {
+  on: (event: string, handler: (...args: unknown[]) => void) => unknown;
+};
+
 describe('resolvePlaywrightCli', () => {
   it('looks up the Playwright CLI package via require.resolve search paths', () => {
     const calls = [];
@@ -114,7 +126,7 @@ describe('Node version preflight', () => {
         return child;
       }),
     };
-    const spawnFn = vi.fn(() => child);
+    const spawnFn = vi.fn<SpawnFn>(() => child);
     const exitFn = vi.fn();
 
     main({
