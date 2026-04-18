@@ -1,6 +1,5 @@
 ---
 import Page from '../components/Page.astro';
-import { appendChangelogNotes } from '../utils/changelogNotes';
 
 const changelogs = await Astro.glob('./docs/md/changelog/*.md');
 
@@ -8,8 +7,8 @@ const changelogsReversed = changelogs.reverse();
 
 const slugToHeadingId = (slug) => (slug ? String(slug).toLowerCase() : 'changelog');
 
-function prepareHtml(html, slug) {
-    return appendChangelogNotes(html, slug);
+function prepareHtml(html) {
+    return html;
 }
 
 const CHANGELOG_SCROLL_BUFFER_PX = 16;
@@ -34,7 +33,7 @@ const CHANGELOG_SCROLL_BUFFER_PX = 16;
                         </div>
                         <div
                             class="entry-body"
-                            set:html={prepareHtml(doc.compiledContent(), doc.frontmatter.slug)}
+                            set:html={prepareHtml(doc.compiledContent())}
                         ></div>
                     </div>
                 </section>
