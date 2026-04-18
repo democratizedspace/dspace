@@ -15,6 +15,14 @@ const requiredWorkflows = [
   'link-check.yml',
 ];
 
+const launchGateCommandPatterns = [
+  { description: 'lint launch gate', pattern: /pnpm run lint/ },
+  { description: 'type-check launch gate', pattern: /pnpm run type-check/ },
+  { description: 'build launch gate', pattern: /pnpm run build/ },
+  { description: 'root unit-test launch gate', pattern: /pnpm run test:root/ },
+  { description: 'internal link-check launch gate', pattern: /node scripts\/link-check\.mjs/ },
+];
+
 const errors = [];
 
 function asArray(value) {
@@ -59,6 +67,18 @@ for (const workflow of requiredWorkflows) {
   if (!workflowFiles.includes(workflow)) {
     errors.push(`Missing required workflow: ${workflow}`);
   }
+}
+
+const ciWorkflowPath = path.join(workflowsDir, 'ci.yml');
+try {
+  const ciWorkflowContents = readFileSync(ciWorkflowPath, 'utf8');
+  for (const { description, pattern } of launchGateCommandPatterns) {
+    if (!pattern.test(ciWorkflowContents)) {
+      errors.push(`Workflow ci.yml is missing ${description} coverage`);
+    }
+  }
+} catch (error) {
+  errors.push(`Unable to read ci.yml for launch-gate coverage checks: ${error.message}`);
 }
 
 for (const workflowFile of workflowFiles) {

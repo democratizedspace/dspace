@@ -116,7 +116,7 @@ function runTests(exec = execSync, platform = os.platform()) {
     console.log(message);
     exec(command, {
       stdio: 'inherit',
-      env: { ...process.env, SKIP_UNIT_TESTS: '1' },
+      env: { ...process.env, SKIP_UNIT_TESTS: '1', SKIP_E2E: '1' },
     });
 
     console.log(

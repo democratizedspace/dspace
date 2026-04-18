@@ -129,4 +129,35 @@ jobs:
       'Workflow ci.yml pushes to main but pull_request.branches does not include main'
     );
   });
+
+  it('fails when ci.yml omits required launch-gate commands', () => {
+    const result = withTempWorkflows((workflowsDir) => {
+      writeFileSync(
+        join(workflowsDir, 'ci.yml'),
+        `name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  root-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pnpm run lint
+      - run: pnpm run build
+`,
+        'utf8'
+      );
+    });
+
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain('Workflow ci.yml is missing type-check launch gate coverage');
+    expect(result.stderr).toContain(
+      'Workflow ci.yml is missing root unit-test launch gate coverage'
+    );
+    expect(result.stderr).toContain(
+      'Workflow ci.yml is missing internal link-check launch gate coverage'
+    );
+  });
 });
