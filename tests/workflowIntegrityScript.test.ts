@@ -129,4 +129,21 @@ jobs:
       'Workflow ci.yml pushes to main but pull_request.branches does not include main'
     );
   });
+
+  it('fails when ci.yml is missing a required launch-gate command', () => {
+    const result = withTempWorkflows((workflowsDir) => {
+      const ciPath = join(workflowsDir, 'ci.yml');
+      const ciContents = readFileSync(ciPath, 'utf8');
+      writeFileSync(
+        ciPath,
+        ciContents.replace('node scripts/link-check.mjs', 'echo "link check skipped"'),
+        'utf8'
+      );
+    });
+
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain(
+      'Workflow ci.yml must include launch-gate command: node scripts/link-check.mjs'
+    );
+  });
 });

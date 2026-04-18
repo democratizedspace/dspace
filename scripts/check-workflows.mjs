@@ -16,6 +16,13 @@ const requiredWorkflows = [
 ];
 
 const errors = [];
+const requiredLaunchGateCommands = [
+  'npm run lint',
+  'npm run type-check',
+  'npm run build',
+  'npm test',
+  'node scripts/link-check.mjs',
+];
 
 function asArray(value) {
   if (value === undefined || value === null) {
@@ -114,6 +121,14 @@ for (const workflowFile of workflowFiles) {
       errors.push(
         `Workflow ${workflowFile} pushes to main but pull_request.branches does not include main`
       );
+    }
+  }
+
+  if (workflowFile === 'ci.yml') {
+    for (const command of requiredLaunchGateCommands) {
+      if (!contents.includes(command)) {
+        errors.push(`Workflow ci.yml must include launch-gate command: ${command}`);
+      }
     }
   }
 }
