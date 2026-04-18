@@ -34,9 +34,7 @@ let processCreateItemsByIdPromise;
 
 const getProcessCreateItemsById = async () => {
     if (!processCreateItemsByIdPromise) {
-        processCreateItemsByIdPromise = import('../generated/processes.json', {
-            assert: { type: 'json' },
-        })
+        processCreateItemsByIdPromise = import('../generated/processes.json')
             .then(
                 ({ default: processCatalog }) =>
                     new Map(
