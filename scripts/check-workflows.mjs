@@ -4,7 +4,8 @@ import process from 'node:process';
 import { parse } from 'yaml';
 
 const repoRoot = process.cwd();
-const workflowsDir = process.env.WORKFLOWS_DIR || path.join(repoRoot, '.github', 'workflows');
+const workflowsDir =
+  process.env.WORKFLOWS_DIR || path.join(repoRoot, '.github', 'workflows');
 
 const requiredWorkflows = [
   'build.yml',
@@ -16,6 +17,17 @@ const requiredWorkflows = [
 ];
 
 const errors = [];
+
+const launchGateChecks = [
+  { pattern: /npm run lint/, label: 'npm run lint' },
+  { pattern: /npm run type-check/, label: 'npm run type-check' },
+  { pattern: /npm run build/, label: 'npm run build' },
+  { pattern: /npm test/, label: 'npm test' },
+  {
+    pattern: /node scripts\/link-check\.mjs/,
+    label: 'node scripts/link-check.mjs',
+  },
+];
 
 function asArray(value) {
   if (value === undefined || value === null) {
@@ -118,6 +130,22 @@ for (const workflowFile of workflowFiles) {
   }
 }
 
+const ciWorkflowPath = path.join(workflowsDir, 'ci.yml');
+try {
+  const ciWorkflowContents = readFileSync(ciWorkflowPath, 'utf8');
+  for (const launchGateCheck of launchGateChecks) {
+    if (!launchGateCheck.pattern.test(ciWorkflowContents)) {
+      errors.push(
+        `Workflow ci.yml is missing launch-gate command: ${launchGateCheck.label}`
+      );
+    }
+  }
+} catch (error) {
+  errors.push(
+    `Unable to read ci.yml for launch-gate validation: ${error.message}`
+  );
+}
+
 if (errors.length > 0) {
   console.error('Workflow integrity check failed:');
   for (const error of errors) {
@@ -126,4 +154,6 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log(`Workflow integrity check passed for ${workflowFiles.length} workflow file(s).`);
+console.log(
+  `Workflow integrity check passed for ${workflowFiles.length} workflow file(s).`
+);

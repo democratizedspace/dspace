@@ -10,7 +10,7 @@
         "dev:safe": "concurrently \"npm run dev\" \"npm run fix-artifacts\"",
         "fix-artifacts": "node scripts/fix-artifact-error.js",
         "start": "astro dev --host 0.0.0.0 --port=$PORT",
-        "build": "astro build",
+        "build": "astro build --silent",
         "preview": "node scripts/ensure-astro-build.mjs && astro preview --host 0.0.0.0 --port=3000",
         "astro": "astro",
         "setup-test-env": "node scripts/setup-test-env.js",
