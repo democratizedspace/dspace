@@ -129,4 +129,53 @@ jobs:
       'Workflow ci.yml pushes to main but pull_request.branches does not include main'
     );
   });
+
+  it('fails when ci.yml is missing a required launch-gate command', () => {
+    const result = withTempWorkflows((workflowsDir) => {
+      const ciPath = join(workflowsDir, 'ci.yml');
+      const ciContents = readFileSync(ciPath, 'utf8');
+      writeFileSync(
+        ciPath,
+        ciContents.replace('node scripts/link-check.mjs', 'echo "link check skipped"'),
+        'utf8'
+      );
+    });
+
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain(
+      'Workflow ci.yml root-tests launch-gate script must include link-check; expected one of: node scripts/link-check.mjs'
+    );
+  });
+
+  it('fails when bare test command is replaced with scoped test command', () => {
+    const result = withTempWorkflows((workflowsDir) => {
+      const ciPath = join(workflowsDir, 'ci.yml');
+      const ciContents = readFileSync(ciPath, 'utf8');
+      writeFileSync(ciPath, ciContents.replace('npm test', 'npm run test:root'), 'utf8');
+    });
+
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain(
+      'Workflow ci.yml root-tests launch-gate script must include test; expected one of: npm test'
+    );
+  });
+
+  it('fails when launch-gate commands exist outside root-tests but not inside it', () => {
+    const result = withTempWorkflows((workflowsDir) => {
+      const ciPath = join(workflowsDir, 'ci.yml');
+      const ciContents = readFileSync(ciPath, 'utf8');
+      const mutated = ciContents
+        .replace('npm run lint', 'echo "lint skipped"')
+        .replace(
+          '          output: lychee/out.md',
+          '          output: lychee/out.md\n      - name: Non-root-tests lint\n        run: npm run lint'
+        );
+      writeFileSync(ciPath, mutated, 'utf8');
+    });
+
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain(
+      'Workflow ci.yml root-tests launch-gate script must include lint; expected one of: npm run lint'
+    );
+  });
 });

@@ -82,10 +82,13 @@ jobs:
             ${{ runner.os }}-pnpm-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --reporter=append-only
-      - name: Run lint and type checks
-        run: pnpm run check
-      - name: Run root tests
-        run: pnpm run test:root -- --testTimeout=20000
+      - name: Run launch-gate checks from repo root
+        run: |
+          npm run lint
+          npm run type-check
+          npm run build
+          npm test
+          node scripts/link-check.mjs
 
   frontend-indexeddb-regression-e2e:
     runs-on: ubuntu-latest
