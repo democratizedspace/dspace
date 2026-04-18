@@ -114,7 +114,17 @@ describe('Node version preflight', () => {
         return child;
       }),
     };
-    const spawnFn = vi.fn(() => child);
+    const spawnFn = vi.fn<
+      (
+        command: string,
+        args: string[],
+        options: {
+          cwd: string;
+          stdio: 'inherit';
+          env: NodeJS.ProcessEnv;
+        }
+      ) => typeof child
+    >(() => child);
     const exitFn = vi.fn();
 
     main({
