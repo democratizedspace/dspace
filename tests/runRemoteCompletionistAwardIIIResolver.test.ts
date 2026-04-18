@@ -7,6 +7,20 @@ import {
   resolvePlaywrightCli,
 } from '../scripts/run-remote-completionist-award-iii.mjs';
 
+type ChildProcessLike = {
+  on: (event: string, handler: (...args: unknown[]) => void) => ChildProcessLike;
+};
+
+type SpawnFn = (
+  command: string,
+  args: string[],
+  options: {
+    cwd: string;
+    stdio: 'inherit';
+    env: NodeJS.ProcessEnv;
+  }
+) => ChildProcessLike;
+
 describe('resolvePlaywrightCli', () => {
   it('looks up the Playwright CLI package via require.resolve search paths', () => {
     const calls = [];
@@ -83,7 +97,7 @@ describe('Node version preflight', () => {
   });
 
   it('fails before attempting Playwright launch on unsupported Node', () => {
-    const spawnFn = vi.fn();
+    const spawnFn = vi.fn<SpawnFn>();
     const resolvePlaywrightCliFn = vi.fn();
     const errorLog = vi.fn();
     const exitFn = vi.fn();
@@ -108,13 +122,13 @@ describe('Node version preflight', () => {
   it('uses the current Node runtime to launch Playwright', () => {
     const events = new Map<string, (...args: unknown[]) => void>();
     const printChecklistSummaryFn = vi.fn();
-    const child = {
+    const child: ChildProcessLike = {
       on: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
         events.set(event, handler);
         return child;
       }),
     };
-    const spawnFn = vi.fn(() => child);
+    const spawnFn = vi.fn<SpawnFn>(() => child);
     const exitFn = vi.fn();
 
     main({
