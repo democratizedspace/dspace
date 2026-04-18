@@ -7,6 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
+    "postinstall": "node scripts/postinstall-frontend-deps.mjs",
     "pretest": "node frontend/scripts/build-processes.mjs",
     "pretest:root": "node frontend/scripts/build-processes.mjs",
     "dev": "cd frontend && npm run dev",
