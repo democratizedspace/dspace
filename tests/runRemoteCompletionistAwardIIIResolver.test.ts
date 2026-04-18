@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, type Mock, vi } from 'vitest';
 
 import {
   getUnsupportedNodeVersionMessage,
@@ -58,6 +58,18 @@ describe('resolvePlaywrightCli', () => {
 });
 
 describe('Node version preflight', () => {
+  type SpawnFn = (
+    command: string,
+    args: string[],
+    options: {
+      cwd: string;
+      stdio: 'inherit';
+      env: NodeJS.ProcessEnv;
+    }
+  ) => {
+    on: (event: string, handler: (...args: unknown[]) => void) => unknown;
+  };
+
   it('rejects unsupported versions and reports guidance', () => {
     expect(isSupportedNodeVersion('18.18.0')).toBe(false);
 
@@ -114,7 +126,7 @@ describe('Node version preflight', () => {
         return child;
       }),
     };
-    const spawnFn = vi.fn(() => child);
+    const spawnFn: Mock<SpawnFn> = vi.fn(() => child);
     const exitFn = vi.fn();
 
     main({
