@@ -1,5 +1,5 @@
 import items from '../pages/inventory/json/items/index.js';
-import processes from '../generated/processes.json' assert { type: 'json' };
+import processes from '../generated/processes.json';
 import { evaluateAchievements } from './achievements.js';
 import { mergeSources } from './contextSources.js';
 
