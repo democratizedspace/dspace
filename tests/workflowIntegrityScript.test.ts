@@ -143,7 +143,39 @@ jobs:
 
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain(
-      'Workflow ci.yml must include launch-gate command: node scripts/link-check.mjs'
+      'Workflow ci.yml root-tests launch-gate script must include link-check; expected one of: node scripts/link-check.mjs'
+    );
+  });
+
+  it('fails when bare test command is replaced with scoped test command', () => {
+    const result = withTempWorkflows((workflowsDir) => {
+      const ciPath = join(workflowsDir, 'ci.yml');
+      const ciContents = readFileSync(ciPath, 'utf8');
+      writeFileSync(ciPath, ciContents.replace('pnpm test', 'pnpm test:root'), 'utf8');
+    });
+
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain(
+      'Workflow ci.yml root-tests launch-gate script must include test; expected one of: npm test, pnpm test'
+    );
+  });
+
+  it('fails when launch-gate commands exist outside root-tests but not inside it', () => {
+    const result = withTempWorkflows((workflowsDir) => {
+      const ciPath = join(workflowsDir, 'ci.yml');
+      const ciContents = readFileSync(ciPath, 'utf8');
+      const mutated = ciContents
+        .replace('pnpm run lint', 'echo "lint skipped"')
+        .replace(
+          '          output: lychee/out.md',
+          '          output: lychee/out.md\n      - name: Non-root-tests lint\n        run: pnpm run lint'
+        );
+      writeFileSync(ciPath, mutated, 'utf8');
+    });
+
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain(
+      'Workflow ci.yml root-tests launch-gate script must include lint; expected one of: npm run lint, pnpm run lint'
     );
   });
 });

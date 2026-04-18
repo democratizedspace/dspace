@@ -84,10 +84,10 @@ jobs:
         run: pnpm install --frozen-lockfile --reporter=append-only
       - name: Run launch-gate checks from repo root
         run: |
-          npm run lint
-          npm run type-check
-          npm run build
-          npm test
+          pnpm run lint
+          pnpm run type-check
+          pnpm run build
+          pnpm test
           node scripts/link-check.mjs
 
   frontend-indexeddb-regression-e2e:

@@ -17,11 +17,31 @@ const requiredWorkflows = [
 
 const errors = [];
 const requiredLaunchGateCommands = [
-  'npm run lint',
-  'npm run type-check',
-  'npm run build',
-  'npm test',
-  'node scripts/link-check.mjs',
+  {
+    label: 'lint',
+    pattern: /^(npm|pnpm)\s+run\s+lint(\s|$)/m,
+    expectedExamples: ['npm run lint', 'pnpm run lint'],
+  },
+  {
+    label: 'type-check',
+    pattern: /^(npm|pnpm)\s+run\s+type-check(\s|$)/m,
+    expectedExamples: ['npm run type-check', 'pnpm run type-check'],
+  },
+  {
+    label: 'build',
+    pattern: /^(npm|pnpm)\s+run\s+build(\s|$)/m,
+    expectedExamples: ['npm run build', 'pnpm run build'],
+  },
+  {
+    label: 'test',
+    pattern: /^(npm|pnpm)\s+test(\s|$)/m,
+    expectedExamples: ['npm test', 'pnpm test'],
+  },
+  {
+    label: 'link-check',
+    pattern: /^node\s+scripts\/link-check\.mjs(\s|$)/m,
+    expectedExamples: ['node scripts/link-check.mjs'],
+  },
 ];
 
 function asArray(value) {
@@ -29,6 +49,25 @@ function asArray(value) {
     return [];
   }
   return Array.isArray(value) ? value : [value];
+}
+
+function getRootTestsRunScript(ciWorkflowContents) {
+  const jobs = ciWorkflowContents?.jobs;
+  if (!jobs || typeof jobs !== 'object') {
+    return '';
+  }
+
+  const rootTestsJob = jobs['root-tests'];
+  if (!rootTestsJob || typeof rootTestsJob !== 'object') {
+    return '';
+  }
+
+  const steps = asArray(rootTestsJob.steps).filter((step) => step && typeof step === 'object');
+  const runSnippets = steps
+    .map((step) => (typeof step.run === 'string' ? step.run : ''))
+    .filter((runStep) => runStep.trim().length > 0);
+
+  return runSnippets.join('\n');
 }
 
 function pushConfigIncludesMain(pushConfig) {
@@ -125,9 +164,19 @@ for (const workflowFile of workflowFiles) {
   }
 
   if (workflowFile === 'ci.yml') {
+    const rootTestsRunScript = getRootTestsRunScript(parsed);
+    if (!rootTestsRunScript) {
+      errors.push('Workflow ci.yml must define jobs.root-tests.steps with run commands');
+      continue;
+    }
+
     for (const command of requiredLaunchGateCommands) {
-      if (!contents.includes(command)) {
-        errors.push(`Workflow ci.yml must include launch-gate command: ${command}`);
+      if (!command.pattern.test(rootTestsRunScript)) {
+        errors.push(
+          `Workflow ci.yml root-tests launch-gate script must include ${command.label}; expected one of: ${command.expectedExamples.join(
+            ', '
+          )}`
+        );
       }
     }
   }

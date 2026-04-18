@@ -8,6 +8,7 @@ describe('Prettier formatting', () => {
     try {
       execSync('npm run format:check', {
         cwd: frontendDir,
+        maxBuffer: 200 * 1024 * 1024,
         stdio: 'pipe',
       });
     } catch (error) {

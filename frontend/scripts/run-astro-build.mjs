@@ -14,6 +14,10 @@ const forwardOutput = (chunk, writer) => {
     const text = chunk.toString();
     const lines = text.split('\n');
     const filtered = lines.filter((line) => {
+        if (line.trim() === '') {
+            return false;
+        }
+
         return !(
             line.includes(UNSUPPORTED_FILE_WARNING_FRAGMENT) &&
             line.includes(UNDERSCORE_HINT_FRAGMENT)
@@ -29,6 +33,11 @@ const forwardOutput = (chunk, writer) => {
 
 astro.stdout.on('data', (chunk) => forwardOutput(chunk, process.stdout));
 astro.stderr.on('data', (chunk) => forwardOutput(chunk, process.stderr));
+
+astro.on('error', (error) => {
+    process.stderr.write(`Failed to start astro build: ${error.message}\n`);
+    process.exit(1);
+});
 
 astro.on('close', (code, signal) => {
     if (signal) {
