@@ -19,27 +19,27 @@ const errors = [];
 const requiredLaunchGateCommands = [
   {
     label: 'lint',
-    pattern: /^(npm|pnpm)\s+run\s+lint(\s|$)/m,
-    expectedExamples: ['npm run lint', 'pnpm run lint'],
+    pattern: /^\s*npm run lint\s*$/m,
+    expectedExamples: ['npm run lint'],
   },
   {
     label: 'type-check',
-    pattern: /^(npm|pnpm)\s+run\s+type-check(\s|$)/m,
-    expectedExamples: ['npm run type-check', 'pnpm run type-check'],
+    pattern: /^\s*npm run type-check\s*$/m,
+    expectedExamples: ['npm run type-check'],
   },
   {
     label: 'build',
-    pattern: /^(npm|pnpm)\s+run\s+build(\s|$)/m,
-    expectedExamples: ['npm run build', 'pnpm run build'],
+    pattern: /^\s*npm run build\s*$/m,
+    expectedExamples: ['npm run build'],
   },
   {
     label: 'test',
-    pattern: /^(npm|pnpm)\s+test(\s|$)/m,
-    expectedExamples: ['npm test', 'pnpm test'],
+    pattern: /^\s*npm test\s*$/m,
+    expectedExamples: ['npm test'],
   },
   {
     label: 'link-check',
-    pattern: /^node\s+scripts\/link-check\.mjs(\s|$)/m,
+    pattern: /^\s*node scripts\/link-check\.mjs\s*$/m,
     expectedExamples: ['node scripts/link-check.mjs'],
   },
 ];

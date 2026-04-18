@@ -151,12 +151,12 @@ jobs:
     const result = withTempWorkflows((workflowsDir) => {
       const ciPath = join(workflowsDir, 'ci.yml');
       const ciContents = readFileSync(ciPath, 'utf8');
-      writeFileSync(ciPath, ciContents.replace('pnpm test', 'pnpm test:root'), 'utf8');
+      writeFileSync(ciPath, ciContents.replace('npm test', 'npm run test:root'), 'utf8');
     });
 
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain(
-      'Workflow ci.yml root-tests launch-gate script must include test; expected one of: npm test, pnpm test'
+      'Workflow ci.yml root-tests launch-gate script must include test; expected one of: npm test'
     );
   });
 
@@ -165,17 +165,17 @@ jobs:
       const ciPath = join(workflowsDir, 'ci.yml');
       const ciContents = readFileSync(ciPath, 'utf8');
       const mutated = ciContents
-        .replace('pnpm run lint', 'echo "lint skipped"')
+        .replace('npm run lint', 'echo "lint skipped"')
         .replace(
           '          output: lychee/out.md',
-          '          output: lychee/out.md\n      - name: Non-root-tests lint\n        run: pnpm run lint'
+          '          output: lychee/out.md\n      - name: Non-root-tests lint\n        run: npm run lint'
         );
       writeFileSync(ciPath, mutated, 'utf8');
     });
 
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain(
-      'Workflow ci.yml root-tests launch-gate script must include lint; expected one of: npm run lint, pnpm run lint'
+      'Workflow ci.yml root-tests launch-gate script must include lint; expected one of: npm run lint'
     );
   });
 });
