@@ -97,7 +97,12 @@ describe('ensurePlaywrightBrowsers', () => {
     });
     const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-    await ensurePlaywrightBrowsers({ cwd: repoRoot, browser, env: envWithProxy });
+    await ensurePlaywrightBrowsers({
+      cwd: repoRoot,
+      browser,
+      env: envWithProxy,
+      platform: 'linux',
+    });
 
     expect(execFileSync).toHaveBeenCalledTimes(2);
     expect(execFileSync.mock.calls[0]).toEqual([
