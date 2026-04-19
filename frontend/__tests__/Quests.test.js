@@ -231,8 +231,10 @@ describe('Quests Component', () => {
             await vi.runAllTimersAsync();
             await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
 
+            await vi.waitFor(() =>
+                expect(host.querySelector("[data-testid='custom-quests-section']")).not.toBeNull()
+            );
             const customSection = host.querySelector("[data-testid='custom-quests-section']");
-            expect(customSection).not.toBeNull();
             expect(customSection?.textContent).toContain('Ready Custom Quest');
             expect(customSection?.textContent).not.toContain('Locked Custom Quest');
             expect(customSection?.textContent).not.toContain('Locked');
