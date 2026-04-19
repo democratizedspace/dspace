@@ -231,14 +231,18 @@ describe('Quests Component', () => {
             await vi.runAllTimersAsync();
             await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
 
+            await vi.waitFor(() => {
+                const mergeStatus = host.querySelector(
+                    "[data-testid='custom-quests-merge-status']"
+                );
+                expect(mergeStatus?.getAttribute('data-custom-count')).toBe('1');
+            });
+
             const customSection = host.querySelector("[data-testid='custom-quests-section']");
             expect(customSection).not.toBeNull();
             expect(customSection?.textContent).toContain('Ready Custom Quest');
             expect(customSection?.textContent).not.toContain('Locked Custom Quest');
             expect(customSection?.textContent).not.toContain('Locked');
-
-            const mergeStatus = host.querySelector("[data-testid='custom-quests-merge-status']");
-            expect(mergeStatus?.getAttribute('data-custom-count')).toBe('1');
         } finally {
             vi.useRealTimers();
         }
