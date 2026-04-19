@@ -6,6 +6,23 @@ on:
     branches: [v3, main]
 
 jobs:
+  launch-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Run launch-gate checks
+        run: |
+          npm run lint
+          npm run type-check
+          npm run build
+          npm test
+          node scripts/link-check.mjs
+
   build:
     runs-on: ubuntu-latest
     steps:

@@ -89,9 +89,8 @@ describe('registerOfflineWorker', () => {
         });
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -131,9 +130,8 @@ describe('registerOfflineWorker', () => {
         serviceWorker.register.mockResolvedValue(registration);
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -156,9 +154,8 @@ describe('registerOfflineWorker', () => {
     it('skips registration when offline worker disabled via config', async () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: false } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -171,9 +168,8 @@ describe('registerOfflineWorker', () => {
         window.__DS_DISABLE_SW = true;
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -198,9 +194,8 @@ describe('registerOfflineWorker', () => {
             return mockFetchResponse({ offlineWorker: { enabled: true } });
         });
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -221,9 +216,8 @@ describe('registerOfflineWorker', () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: {} }));
         serviceWorker.register.mockRejectedValue(new Error('Registration failed'));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -246,9 +240,8 @@ describe('registerOfflineWorker', () => {
         });
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
         registerOfflineWorker();
         await dispatchLoad();
@@ -272,9 +265,8 @@ describe('registerOfflineWorker', () => {
         });
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
 
-        const { registerOfflineWorker } = await import(
-            '../public/scripts/offlineWorkerRegistration.js'
-        );
+        const { registerOfflineWorker } =
+            await import('../public/scripts/offlineWorkerRegistration.js');
 
         registerOfflineWorker();
         await dispatchLoad();

@@ -14,8 +14,7 @@ import {
 } from './itemContainers.js';
 import { durationInSeconds } from '../../utils.js';
 
-// Using import assertions for JSON imports
-import processes from '../../generated/processes.json' assert { type: 'json' };
+import processes from '../../generated/processes.json';
 
 const loadFreshStateForMutation = () => {
     const checksum = getGameStateChecksum();

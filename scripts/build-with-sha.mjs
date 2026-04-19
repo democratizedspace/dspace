@@ -6,12 +6,44 @@ import {
     writeBuildMeta,
 } from './write-build-meta.mjs';
 
+const UNSUPPORTED_PAGES_FILE_WARNING =
+    /\[WARN\] Unsupported file type .* Prefix filename with an underscore \(`_`\) to ignore\./;
+
 const run = (command, args, options = {}) => {
+    const { suppressAstroUnsupportedFileWarnings = false, ...spawnOptions } = options;
+    const defaultStdio = suppressAstroUnsupportedFileWarnings ? 'pipe' : 'inherit';
     const result = spawnSync(command, args, {
-        stdio: 'inherit',
+        stdio: defaultStdio,
         env: process.env,
-        ...options,
+        encoding: suppressAstroUnsupportedFileWarnings ? 'utf8' : undefined,
+        ...spawnOptions,
     });
+
+    if (suppressAstroUnsupportedFileWarnings) {
+        const stdout = result.stdout ?? '';
+        const stderr = result.stderr ?? '';
+        const combined = `${stdout}${stderr}`;
+        let suppressedWarnings = 0;
+
+        for (const line of combined.split(/\r?\n/)) {
+            if (!line) {
+                continue;
+            }
+
+            if (UNSUPPORTED_PAGES_FILE_WARNING.test(line)) {
+                suppressedWarnings += 1;
+                continue;
+            }
+
+            console.log(line);
+        }
+
+        if (suppressedWarnings > 0) {
+            console.log(
+                `[build] Suppressed ${suppressedWarnings} Astro unsupported-file warnings under frontend/src/pages.`
+            );
+        }
+    }
 
     if (result.error) {
         console.error(`Failed to run ${command}:`, result.error);
@@ -37,4 +69,6 @@ try {
 }
 
 run('npm', ['run', 'build:docs-rag']);
-run('npm', ['--prefix', 'frontend', 'run', 'build']);
+run('npm', ['--prefix', 'frontend', 'run', 'build'], {
+    suppressAstroUnsupportedFileWarnings: true,
+});
