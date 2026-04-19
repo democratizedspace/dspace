@@ -99,22 +99,14 @@ describe('ensurePlaywrightBrowsers', () => {
 
     await ensurePlaywrightBrowsers({ cwd: repoRoot, browser, env: envWithProxy });
 
-    expect(execFileSync).toHaveBeenCalledTimes(2);
-    expect(execFileSync.mock.calls[0]).toEqual([
-      process.execPath,
-      expect.arrayContaining([
-        expect.stringContaining(
-          path.join('node_modules', '@playwright', 'test', 'cli.js')
-        ),
-        'install-deps',
-      ]),
-      expect.objectContaining({
-        cwd: repoRoot,
-        stdio: 'inherit',
-        env: sanitizedEnv,
-      }),
-    ]);
-    expect(execFileSync.mock.calls[1]).toEqual([
+    const installDepsCall = execFileSync.mock.calls.find(([, args]) =>
+      Array.isArray(args) && args[1] === 'install-deps'
+    );
+    const installCall = execFileSync.mock.calls.find(([, args]) =>
+      Array.isArray(args) && args[1] === 'install'
+    );
+
+    expect(installCall).toEqual([
       process.execPath,
       expect.arrayContaining([
         expect.stringContaining(
@@ -130,6 +122,24 @@ describe('ensurePlaywrightBrowsers', () => {
         env: sanitizedEnv,
       }),
     ]);
+    if (process.platform === 'linux') {
+      expect(installDepsCall).toEqual([
+        process.execPath,
+        expect.arrayContaining([
+          expect.stringContaining(
+            path.join('node_modules', '@playwright', 'test', 'cli.js')
+          ),
+          'install-deps',
+        ]),
+        expect.objectContaining({
+          cwd: repoRoot,
+          stdio: 'inherit',
+          env: sanitizedEnv,
+        }),
+      ]);
+    } else {
+      expect(installDepsCall).toBeUndefined();
+    }
     expect(executablePath).toHaveBeenCalledTimes(2);
     expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
     expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
