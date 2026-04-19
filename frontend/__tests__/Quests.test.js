@@ -230,6 +230,9 @@ describe('Quests Component', () => {
             mountedComponent = mount(Quests, { target: host, props: { quests } });
             await vi.runAllTimersAsync();
             await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
+            await vi.waitFor(() =>
+                expect(host.querySelector("[data-testid='custom-quests-section']")).not.toBeNull()
+            );
 
             const customSection = host.querySelector("[data-testid='custom-quests-section']");
             expect(customSection).not.toBeNull();
