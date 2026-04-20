@@ -57,7 +57,7 @@ describe('ensurePlaywrightBrowsers', () => {
     let chromeExists = false;
     let depsSentinelExists = false;
     const existingHeadless = new Set<string>();
-    const envWithProxy = {
+    const envWithProxy: NodeJS.ProcessEnv = {
       ...process.env,
       HTTPS_PROXY: 'http://legit-proxy:3128',
       npm_config_https_proxy: 'http://legit-proxy:3128',
