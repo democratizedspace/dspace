@@ -62,15 +62,11 @@ describe('ensurePlaywrightBrowsers', () => {
       HTTPS_PROXY: 'http://legit-proxy:3128',
       npm_config_https_proxy: 'http://legit-proxy:3128',
     };
+    delete envWithProxy.NODE_OPTIONS;
     const sanitizedEnv = sanitizeProxyEnv(envWithProxy);
-    const expectedNodeOptions = sanitizedEnv.NODE_OPTIONS?.includes(
-      '--dns-result-order'
-    )
-      ? sanitizedEnv.NODE_OPTIONS
-      : `${sanitizedEnv.NODE_OPTIONS ?? ''} --dns-result-order=ipv4first`.trim();
     const expectedEnv = {
       ...sanitizedEnv,
-      NODE_OPTIONS: expectedNodeOptions,
+      NODE_OPTIONS: '--dns-result-order=ipv4first',
     };
     const execFileSync = vi.fn((_command, args: string[]) => {
       const action = args[1];

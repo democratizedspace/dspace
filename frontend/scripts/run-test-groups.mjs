@@ -8,6 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
+import { withPlaywrightNetworkEnv } from './utils/ensure-playwright-browsers.js';
 
 // Get the directory name in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -276,17 +277,6 @@ if (!fs.existsSync(PLAYWRIGHT_CLI)) {
 
 const PLAYWRIGHT_COMMAND = `node ${JSON.stringify(PLAYWRIGHT_CLI)} test`;
 
-function getPlaywrightEnv(baseEnv = process.env) {
-    const env = { ...baseEnv };
-    const nodeOptions = env.NODE_OPTIONS || '';
-
-    if (!nodeOptions.includes('--dns-result-order')) {
-        env.NODE_OPTIONS = `${nodeOptions} --dns-result-order=ipv4first`.trim();
-    }
-
-    return env;
-}
-
 // Function to run a test group
 function runTestGroup(group) {
     console.log(`${colors.bright}${colors.blue}Running ${group.name}${colors.reset}`);
@@ -318,7 +308,11 @@ function runTestGroup(group) {
         console.log(
             `${colors.cyan}Using ${group.parallel ? group.workers || MAX_WORKERS : 1} worker(s)${colors.reset}`
         );
-        execSync(command, { stdio: 'inherit', cwd: rootDir, env: getPlaywrightEnv() });
+        execSync(command, {
+            stdio: 'inherit',
+            cwd: rootDir,
+            env: withPlaywrightNetworkEnv(),
+        });
         console.log(`${colors.green}✓ ${group.name} completed successfully${colors.reset}`);
         return true;
     } catch (error) {

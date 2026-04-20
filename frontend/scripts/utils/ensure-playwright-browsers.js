@@ -31,7 +31,7 @@ function hasPlaceholderProxyEnv(env = process.env) {
     });
 }
 
-function withPlaywrightNetworkEnv(env = process.env) {
+export function withPlaywrightNetworkEnv(env = process.env) {
     const mergedEnv = { ...env };
     const existingNodeOptions = mergedEnv.NODE_OPTIONS || '';
 
