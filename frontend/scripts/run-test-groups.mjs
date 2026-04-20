@@ -8,6 +8,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
+import { withPlaywrightNetworkEnv } from './utils/ensure-playwright-browsers.js';
 
 // Get the directory name in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -307,7 +308,11 @@ function runTestGroup(group) {
         console.log(
             `${colors.cyan}Using ${group.parallel ? group.workers || MAX_WORKERS : 1} worker(s)${colors.reset}`
         );
-        execSync(command, { stdio: 'inherit', cwd: rootDir });
+        execSync(command, {
+            stdio: 'inherit',
+            cwd: rootDir,
+            env: withPlaywrightNetworkEnv(),
+        });
         console.log(`${colors.green}✓ ${group.name} completed successfully${colors.reset}`);
         return true;
     } catch (error) {

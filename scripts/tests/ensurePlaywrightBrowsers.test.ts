@@ -57,12 +57,17 @@ describe('ensurePlaywrightBrowsers', () => {
     let chromeExists = false;
     let depsSentinelExists = false;
     const existingHeadless = new Set<string>();
-    const envWithProxy = {
+    const envWithProxy: NodeJS.ProcessEnv = {
       ...process.env,
       HTTPS_PROXY: 'http://legit-proxy:3128',
       npm_config_https_proxy: 'http://legit-proxy:3128',
     };
+    delete envWithProxy.NODE_OPTIONS;
     const sanitizedEnv = sanitizeProxyEnv(envWithProxy);
+    const expectedEnv = {
+      ...sanitizedEnv,
+      NODE_OPTIONS: '--dns-result-order=ipv4first',
+    };
     const execFileSync = vi.fn((_command, args: string[]) => {
       const action = args[1];
       if (action === 'install-deps') {
@@ -134,7 +139,7 @@ describe('ensurePlaywrightBrowsers', () => {
       expect.objectContaining({
         cwd: repoRoot,
         stdio: 'inherit',
-        env: sanitizedEnv,
+        env: expectedEnv,
       }),
     ]);
     expect(execFileSync.mock.calls[1]).toEqual([
@@ -150,7 +155,7 @@ describe('ensurePlaywrightBrowsers', () => {
       expect.objectContaining({
         cwd: repoRoot,
         stdio: 'inherit',
-        env: sanitizedEnv,
+        env: expectedEnv,
       }),
     ]);
     expect(executablePath).toHaveBeenCalledTimes(2);
@@ -215,9 +220,9 @@ describe('ensurePlaywrightBrowsers', () => {
     });
     expect(execFileSync.mock.calls[0][2]?.env?.HTTP_PROXY).toBeUndefined();
     expect(execFileSync.mock.calls[0][2]?.env?.HTTPS_PROXY).toBeUndefined();
-    expect(Object.keys(execFileSync.mock.calls[0][2]?.env ?? {})).toHaveLength(
-      0
-    );
+    expect(execFileSync.mock.calls[0][2]?.env).toEqual({
+      NODE_OPTIONS: '--dns-result-order=ipv4first',
+    });
     expect(writeFileSync).toHaveBeenCalledTimes(1);
   });
 

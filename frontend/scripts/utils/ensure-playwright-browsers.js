@@ -31,6 +31,17 @@ function hasPlaceholderProxyEnv(env = process.env) {
     });
 }
 
+export function withPlaywrightNetworkEnv(env = process.env) {
+    const mergedEnv = { ...env };
+    const existingNodeOptions = mergedEnv.NODE_OPTIONS || '';
+
+    if (!existingNodeOptions.includes('--dns-result-order')) {
+        mergedEnv.NODE_OPTIONS = `${existingNodeOptions} --dns-result-order=ipv4first`.trim();
+    }
+
+    return mergedEnv;
+}
+
 export function sanitizeProxyEnv(env = process.env) {
     const sanitized = { ...env };
 
@@ -168,7 +179,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         fs = { existsSync, writeFileSync },
     } = options;
 
-    const sanitizedEnv = sanitizeProxyEnv(env);
+    const sanitizedEnv = withPlaywrightNetworkEnv(sanitizeProxyEnv(env));
     const browser = providedBrowser ?? (await getChromiumBrowser());
 
     const executableOverride = env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
@@ -253,7 +264,7 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         return false;
     }
 
-    const sanitizedEnv = sanitizeProxyEnv(env);
+    const sanitizedEnv = withPlaywrightNetworkEnv(sanitizeProxyEnv(env));
     const hadPlaceholderProxy = hasPlaceholderProxyEnv(env);
     if (hadPlaceholderProxy) {
         console.warn(
