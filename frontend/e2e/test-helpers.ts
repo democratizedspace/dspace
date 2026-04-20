@@ -896,8 +896,6 @@ export async function waitForHydration(page: Page, target?: string): Promise<voi
 
     await expect(page.getByRole('main')).toBeVisible();
 
-    await page.waitForTimeout(100);
-
     if (target) {
         if (target.startsWith('data-testid=')) {
             const testId = target.replace('data-testid=', '').trim();
