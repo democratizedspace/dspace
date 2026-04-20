@@ -62,6 +62,7 @@ function setupDom(): HTMLElement {
 describe('QuestForm image uploads', () => {
     let container: HTMLElement;
     const sampleDataUrl = 'data:image/png;base64,FALLBACKDATA';
+    let consoleErrorSpy: ReturnType<typeof vi.spyOn> | null = null;
 
     beforeEach(() => {
         container = setupDom();
@@ -72,6 +73,11 @@ describe('QuestForm image uploads', () => {
         questsUpdateMock.mockResolvedValue(undefined);
         listMock.mockReset();
         listMock.mockResolvedValue([]);
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation((message) => {
+            if (String(message).includes('Error preparing quest image:')) {
+                return;
+            }
+        });
         const globalWithMocks = globalThis as typeof globalThis & {
             fetch?: typeof fetch;
             File?: typeof File;
@@ -128,6 +134,8 @@ describe('QuestForm image uploads', () => {
         delete globalWithMocks.fetch;
         delete globalWithMocks.File;
         delete globalWithMocks.FileReader;
+        consoleErrorSpy?.mockRestore();
+        consoleErrorSpy = null;
     });
 
     it('stores quest images locally without calling a remote upload endpoint', async () => {

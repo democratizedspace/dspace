@@ -25,9 +25,18 @@ vi.mock('../../utils/questPersistence.js', async () => {
 
 let listSpy: ReturnType<typeof vi.spyOn> | null = null;
 let consoleErrorSpy: ReturnType<typeof vi.spyOn> | null = null;
+let consoleNoiseSpy: ReturnType<typeof vi.spyOn> | null = null;
 
 beforeEach(async () => {
     vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValue([]);
+    const originalConsoleError = console.error.bind(console);
+    consoleNoiseSpy = vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+        if (String(args[0]).includes('Custom content validation failed; continuing with DB.')) {
+            return;
+        }
+
+        originalConsoleError(...args);
+    });
 
     const quests = await db.list(ENTITY_TYPES.QUEST);
     await Promise.all(quests.map((quest) => db.quests.delete(quest.id)));
@@ -42,6 +51,8 @@ afterEach(() => {
     listSpy = null;
     consoleErrorSpy?.mockRestore();
     consoleErrorSpy = null;
+    consoleNoiseSpy?.mockRestore();
+    consoleNoiseSpy = null;
 });
 
 const clearQuests = async () => {
@@ -1040,6 +1051,7 @@ test('clears rewards after creating a quest', async () => {
 
 test('dispatches an error when quest creation fails', async () => {
     const addSpy = vi.spyOn(db.quests, 'add').mockRejectedValueOnce(new Error('Boom'));
+    const saveErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const { getByLabelText } = render(QuestForm);
 
     await fireEvent.input(getByLabelText(/Title/i), {
@@ -1055,8 +1067,10 @@ test('dispatches an error when quest creation fails', async () => {
 
     await waitFor(() => {
         expect(addSpy).toHaveBeenCalledTimes(1);
+        expect(saveErrorSpy).toHaveBeenCalledWith('Error saving quest:', expect.any(Error));
     });
 
+    saveErrorSpy.mockRestore();
     addSpy.mockRestore();
 });
 

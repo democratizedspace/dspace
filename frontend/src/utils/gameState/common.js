@@ -64,10 +64,15 @@ function warnFallback() {
     const message =
         'IndexedDB is unavailable; falling back to localStorage. Storage may be limited.';
     if (isBrowser && typeof window.alert === 'function') {
-        window.alert(message);
-    } else {
-        console.warn(message);
+        try {
+            window.alert(message);
+            return;
+        } catch {
+            // jsdom throws for alert; fall through to console warning.
+        }
     }
+
+    console.warn(message);
 }
 
 function openDB() {

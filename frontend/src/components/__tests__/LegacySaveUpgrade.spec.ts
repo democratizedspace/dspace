@@ -128,6 +128,7 @@ describe('LegacySaveUpgrade', () => {
 
     test('shows v2 parse warnings when localStorage contains invalid JSON', async () => {
         localStorage.setItem('gameState', '{bad json');
+        const parseWarningSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
         const { findByText } = render(LegacySaveUpgrade, {
             legacyV1Items: [],
@@ -136,6 +137,11 @@ describe('LegacySaveUpgrade', () => {
         });
 
         await findByText(/Legacy v2 data could not be parsed/i);
+        expect(parseWarningSpy).toHaveBeenCalledWith(
+            'Error reading from localStorage:',
+            expect.any(String)
+        );
+        parseWarningSpy.mockRestore();
     });
 
     test('shows conflict warning and QA clear button for v2 + v3 saves', async () => {
