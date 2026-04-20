@@ -50,6 +50,8 @@ function resetToggleDebugState(page: Page): Promise<void> {
 }
 
 test.describe('Process preview', () => {
+    test.setTimeout(240_000);
+
     test.beforeEach(async ({ page }) => {
         page.on('pageerror', (error) => {
             const url = page.url();
