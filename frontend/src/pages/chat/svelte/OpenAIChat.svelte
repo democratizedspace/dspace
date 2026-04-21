@@ -365,9 +365,7 @@
         const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         const resolvedDocsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
         const resolvedDocsRagHost =
-            typeof window !== 'undefined' && window.location
-                ? window.location.host
-                : 'unknown';
+            typeof window !== 'undefined' && window.location ? window.location.host : 'unknown';
         const resolvedHostEnvName = deriveEnvNameFromHostname(resolvedDocsRagHost);
         const allowDocsFallback = resolvedHostEnvName === 'dev';
         const appShaInfo = allowDocsFallback

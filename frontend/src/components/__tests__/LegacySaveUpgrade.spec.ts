@@ -27,10 +27,7 @@ describe('LegacySaveUpgrade', () => {
         const originalConsoleError = console.error;
         consoleErrorMock = vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
             const [first] = args;
-            if (
-                typeof first === 'string' &&
-                first.startsWith('Error reading from localStorage:')
-            ) {
+            if (typeof first === 'string' && first.startsWith('Error reading from localStorage:')) {
                 return;
             }
             originalConsoleError(...args);

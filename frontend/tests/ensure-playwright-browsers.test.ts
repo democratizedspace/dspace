@@ -218,7 +218,9 @@ describe('ensurePlaywrightBrowsers', () => {
             const [first] = args;
             if (
                 typeof first === 'string' &&
-                (first.startsWith('Playwright chromium executable is still missing after installation.') ||
+                (first.startsWith(
+                    'Playwright chromium executable is still missing after installation.'
+                ) ||
                     first.startsWith(
                         'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing.'
                     ))
