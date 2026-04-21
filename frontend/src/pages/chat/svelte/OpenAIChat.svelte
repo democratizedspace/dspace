@@ -267,7 +267,11 @@
             return null;
         }
         try {
-            const response = await fetch('/build-meta.json', { cache: 'no-store' });
+            const buildMetaUrl =
+                typeof window !== 'undefined' && window.location
+                    ? new URL('/build-meta.json', window.location.href).toString()
+                    : 'http://localhost/build-meta.json';
+            const response = await fetch(buildMetaUrl, { cache: 'no-store' });
             if (!response.ok) {
                 return null;
             }
@@ -360,7 +364,10 @@
         const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
         const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         const resolvedDocsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        const resolvedDocsRagHost = window?.location?.host || 'unknown';
+        const resolvedDocsRagHost =
+            typeof window !== 'undefined' && window.location
+                ? window.location.host
+                : 'unknown';
         const resolvedHostEnvName = deriveEnvNameFromHostname(resolvedDocsRagHost);
         const allowDocsFallback = resolvedHostEnvName === 'dev';
         const appShaInfo = allowDocsFallback

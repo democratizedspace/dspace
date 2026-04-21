@@ -25,8 +25,26 @@ vi.mock('../../utils/questPersistence.js', async () => {
 
 let listSpy: ReturnType<typeof vi.spyOn> | null = null;
 let consoleErrorSpy: ReturnType<typeof vi.spyOn> | null = null;
+const originalConsoleError = console.error;
 
 beforeEach(async () => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation((...args) => {
+        const firstArg = typeof args[0] === 'string' ? args[0] : '';
+        const expectedNoisePrefixes = [
+            'Error loading quest:',
+            'Error loading quests:',
+            'Error synchronizing existing quests:',
+            'Error saving quest:',
+            'Error loading items:',
+            'Error loading processes:',
+            'Custom content validation failed; continuing with DB.',
+        ];
+        if (expectedNoisePrefixes.some((prefix) => firstArg.startsWith(prefix))) {
+            return;
+        }
+        originalConsoleError(...args);
+    });
+
     vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValue([]);
 
     const quests = await db.list(ENTITY_TYPES.QUEST);
@@ -564,7 +582,6 @@ test('includes custom processes in the process picker list', async () => {
 });
 
 test('handles item and process list failures gracefully', async () => {
-    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     listSpy = vi.spyOn(db, 'list').mockImplementation(async (entityType) => {
         if (entityType === ENTITY_TYPES.ITEM) {
             throw new Error('Items unavailable');

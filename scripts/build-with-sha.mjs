@@ -6,12 +6,31 @@ import {
     writeBuildMeta,
 } from './write-build-meta.mjs';
 
+const stripNoisyAstroWarnings = (text) => {
+    if (!text) {
+        return '';
+    }
+    const ignoredPatterns = [
+        /Unsupported file type .*Prefix filename with an underscore/,
+    ];
+    return text
+        .split('\n')
+        .filter((line) => !ignoredPatterns.some((pattern) => pattern.test(line)))
+        .join('\n');
+};
+
 const run = (command, args, options = {}) => {
+    const { filterOutput = false, ...spawnOptions } = options;
     const result = spawnSync(command, args, {
-        stdio: 'inherit',
+        stdio: filterOutput ? 'pipe' : 'inherit',
         env: process.env,
-        ...options,
+        ...spawnOptions,
     });
+
+    if (filterOutput) {
+        process.stdout.write(stripNoisyAstroWarnings(result.stdout?.toString()));
+        process.stderr.write(stripNoisyAstroWarnings(result.stderr?.toString()));
+    }
 
     if (result.error) {
         console.error(`Failed to run ${command}:`, result.error);
@@ -37,4 +56,4 @@ try {
 }
 
 run('npm', ['run', 'build:docs-rag']);
-run('npm', ['--prefix', 'frontend', 'run', 'build']);
+run('npm', ['--prefix', 'frontend', 'run', 'build'], { filterOutput: true });
