@@ -68,6 +68,7 @@ describe('OpenAIChat build metadata', () => {
     };
 
     beforeEach(() => {
+        vi.spyOn(console, 'warn').mockImplementation(() => {});
         setHost('https://localhost:3000/chat');
         fetchMock = vi.fn().mockResolvedValue({ ok: false });
         vi.stubGlobal('fetch', fetchMock);

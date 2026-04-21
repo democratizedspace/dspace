@@ -18,10 +18,11 @@ const getStoredGameState = () => {
 
 const waitForAssertion = async (assertion: () => void, timeoutMs = 2000) => {
     const started = Date.now();
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
+    let assertionPassed = false;
+    while (!assertionPassed) {
         try {
             assertion();
+            assertionPassed = true;
             return;
         } catch (error) {
             if (Date.now() - started >= timeoutMs) {

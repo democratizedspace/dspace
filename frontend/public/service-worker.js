@@ -1,4 +1,5 @@
 /* eslint-env serviceworker */
+/* global importScripts */
 
 importScripts('/cache-version.js');
 

@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { Page } from '../frontend/e2e/test-helpers';
 import { navigateWithRetry } from '../frontend/e2e/test-helpers';
@@ -21,6 +21,14 @@ function createMockPage(failures: number): Page {
 }
 
 describe('navigateWithRetry', () => {
+    beforeEach(() => {
+        vi.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('handles a handful of connection refusals before succeeding with default retries', async () => {
         const page = createMockPage(3);
 

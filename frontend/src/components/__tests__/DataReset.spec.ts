@@ -35,6 +35,7 @@ const setWindowLocation = (value: Location | undefined) => {
 
 describe('DataReset', () => {
     beforeEach(() => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
         localStorage.clear();
         document.cookie = '';
         reloadSpy = vi.fn();

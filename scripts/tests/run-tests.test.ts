@@ -1,8 +1,16 @@
-import { describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 const { runTests } = require('../../run-tests');
 
 describe('runTests', () => {
+  beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('fails when no root tests run', () => {
     const exec = vi
       .fn()

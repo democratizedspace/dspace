@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { fireEvent, render, waitFor } from '@testing-library/svelte';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/svelte';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import items from '../../json/items';
 import ItemPage from '../ItemPage.svelte';
@@ -81,6 +81,9 @@ async function deleteCustomContentDb() {
 }
 
 afterEach(async () => {
+    cleanup();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    vi.restoreAllMocks();
     clearItemResolverCache();
     await deleteCustomContentDb();
     getItemCountsMock.mockReset();
@@ -95,6 +98,15 @@ afterEach(async () => {
 });
 
 describe('ItemPage', () => {
+    beforeEach(() => {
+        vi.spyOn(console, 'error').mockImplementation(() => {});
+        getItemCountsMock.mockReturnValue({});
+        getContainedItemCountsMock.mockReturnValue({});
+        getItemCountMock.mockReturnValue(0);
+        isGameStateReadyMock.mockReturnValue(true);
+        getQuestsForItemMock.mockReturnValue({ requires: [], rewards: [] });
+    });
+
     it('renders built-in item details', async () => {
         const builtIn = items.find((item) => !item.price) ?? items[0];
 
