@@ -60,6 +60,7 @@ vi.mock('../../../../utils/docsRag.js', () => ({
 describe('OpenAIChat build metadata', () => {
     const originalLocation = window.location;
     let fetchMock: ReturnType<typeof vi.fn>;
+    let consoleWarnMock: ReturnType<typeof vi.spyOn>;
     const setHost = (url: string) => {
         Object.defineProperty(window, 'location', {
             value: new URL(url),
@@ -71,6 +72,7 @@ describe('OpenAIChat build metadata', () => {
         setHost('https://localhost:3000/chat');
         fetchMock = vi.fn().mockResolvedValue({ ok: false });
         vi.stubGlobal('fetch', fetchMock);
+        consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation(() => {});
         mockGetDocsRagMeta.mockResolvedValue({
             gitSha: 'abc123',
             docsGitSha: 'abc123',
@@ -93,6 +95,7 @@ describe('OpenAIChat build metadata', () => {
             writable: true,
         });
         vi.unstubAllGlobals();
+        consoleWarnMock.mockRestore();
         vi.clearAllMocks();
         mockGetDocsRagMeta.mockReset();
         mockGetDocsRagComparison.mockReset();

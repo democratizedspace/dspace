@@ -67,16 +67,19 @@ const quotaError = () => {
 
 describe('OpenAIChat error messaging', () => {
     let consoleErrorMock: ReturnType<typeof vi.spyOn>;
+    let consoleWarnMock: ReturnType<typeof vi.spyOn>;
 
     beforeEach(() => {
         GPT5ChatV2.mockReset();
         messages.set([]);
         activePersonaId.set('dchat');
         consoleErrorMock = vi.spyOn(console, 'error').mockImplementation(() => {});
+        consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation(() => {});
     });
 
     afterEach(() => {
         consoleErrorMock.mockRestore();
+        consoleWarnMock.mockRestore();
     });
 
     it('surfaces actionable guidance when quota is exhausted', async () => {

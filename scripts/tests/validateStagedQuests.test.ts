@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 const fs = require('fs');
 const path = require('path');
 const child_process = require('child_process');
@@ -13,6 +13,16 @@ const validQuest = path.join(
 );
 
 describe('validate-staged-quests', () => {
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
+  });
+
   it('returns true for valid staged quest files', () => {
     expect(validateStagedQuests([validQuest])).toBe(true);
   });

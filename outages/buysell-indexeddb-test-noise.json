@@ -1,0 +1,11 @@
+{
+  "id": "buysell-indexeddb-test-noise",
+  "date": "2026-04-21",
+  "component": "qa",
+  "longForm": "outages/buysell-indexeddb-test-noise.md",
+  "rootCause": "Expected-path regressions and test diagnostics created avoidable QA gate noise.",
+  "resolution": "Applied targeted test/config hardening documented in the companion markdown outage note.",
+  "references": [
+    "docs/qa/v3.0.1.md"
+  ]
+}

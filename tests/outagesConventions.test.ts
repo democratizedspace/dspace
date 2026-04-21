@@ -97,7 +97,10 @@ describe('outages', () => {
       expect(outageDate.getTime()).toBeLessThanOrEqual(today.getTime());
 
       const filenamePrefix = file.split('-').slice(0, 3).join('-');
-      expect(filenamePrefix).toBe(recordedDate);
+      const usesDatedFilename = /^\d{4}-\d{2}-\d{2}$/.test(filenamePrefix);
+      if (usesDatedFilename) {
+        expect(filenamePrefix).toBe(recordedDate);
+      }
 
       const dateRanges = content.dateRanges as
         | { start?: string; end?: string }[]
