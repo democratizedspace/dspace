@@ -5,6 +5,7 @@ import 'prism-svelte';
 
 // https://astro.build/config
 export default defineConfig({
+    logLevel: 'error',
     output: 'server',
     adapter: node({ mode: 'standalone' }),
     integrations: [svelte()],

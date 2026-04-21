@@ -1,5 +1,5 @@
 import { render, fireEvent, waitFor } from '@testing-library/svelte';
-import { vi } from 'vitest';
+import { afterEach, vi } from 'vitest';
 
 const { createProcessMock, updateProcessMock, listCustomItemsMock, mockedItems } = vi.hoisted(
     () => ({
@@ -27,9 +27,15 @@ vi.mock('../../utils/customcontent.js', () => ({
 import ProcessForm from '../svelte/ProcessForm.svelte';
 
 beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
     createProcessMock.mockClear();
     updateProcessMock.mockClear();
     listCustomItemsMock.mockClear();
+});
+
+afterEach(() => {
+    vi.restoreAllMocks();
 });
 
 test('submits text then clears field', async () => {

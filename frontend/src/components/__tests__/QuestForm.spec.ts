@@ -25,8 +25,11 @@ vi.mock('../../utils/questPersistence.js', async () => {
 
 let listSpy: ReturnType<typeof vi.spyOn> | null = null;
 let consoleErrorSpy: ReturnType<typeof vi.spyOn> | null = null;
+let consoleWarnSpy: ReturnType<typeof vi.spyOn> | null = null;
 
 beforeEach(async () => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     vi.mocked(syncExistingQuestsToIndexedDB).mockResolvedValue([]);
 
     const quests = await db.list(ENTITY_TYPES.QUEST);
@@ -42,6 +45,8 @@ afterEach(() => {
     listSpy = null;
     consoleErrorSpy?.mockRestore();
     consoleErrorSpy = null;
+    consoleWarnSpy?.mockRestore();
+    consoleWarnSpy = null;
 });
 
 const clearQuests = async () => {
