@@ -1,4 +1,4 @@
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import {
     assertBuildMetaComplete,
     readBuildMeta,
@@ -6,20 +6,76 @@ import {
     writeBuildMeta,
 } from './write-build-meta.mjs';
 
-const run = (command, args, options = {}) => {
-    const result = spawnSync(command, args, {
-        stdio: 'inherit',
+const ignoredPatterns = [/Unsupported file type .*Prefix filename with an underscore/];
+
+const shouldKeepLine = (line) => !ignoredPatterns.some((pattern) => pattern.test(line));
+
+const createFilteredWriter = (stream, filterOutput) => {
+    if (!filterOutput) {
+        return (chunk) => {
+            stream.write(chunk);
+        };
+    }
+
+    let buffered = '';
+    return (chunk, flush = false) => {
+        buffered += chunk;
+        const parts = buffered.split('\n');
+        buffered = parts.pop() ?? '';
+
+        for (const line of parts) {
+            if (shouldKeepLine(line)) {
+                stream.write(`${line}\n`);
+            }
+        }
+
+        if (flush && buffered && shouldKeepLine(buffered)) {
+            stream.write(buffered);
+            buffered = '';
+        }
+    };
+};
+
+const run = async (command, args, options = {}) => {
+    const { filterOutput = false, stdio: _stdio, ...spawnOptions } = options;
+    const child = spawn(command, args, {
+        stdio: 'pipe',
         env: process.env,
-        ...options,
+        ...spawnOptions,
     });
 
-    if (result.error) {
-        console.error(`Failed to run ${command}:`, result.error);
-    }
+    const writeStdout = createFilteredWriter(process.stdout, filterOutput);
+    const writeStderr = createFilteredWriter(process.stderr, filterOutput);
 
-    if (result.status !== 0) {
-        process.exit(result.status ?? 1);
-    }
+    child.stdout.on('data', (chunk) => {
+        writeStdout(chunk.toString());
+    });
+
+    child.stderr.on('data', (chunk) => {
+        writeStderr(chunk.toString());
+    });
+
+    return await new Promise((resolve, reject) => {
+        child.on('error', (error) => {
+            reject(error);
+        });
+
+        child.on('close', (code, signal) => {
+            writeStdout('', true);
+            writeStderr('', true);
+
+            if (signal) {
+                reject(new Error(`${command} exited due to signal ${signal}`));
+                return;
+            }
+
+            if (code !== 0) {
+                process.exit(code ?? 1);
+            }
+
+            resolve();
+        });
+    });
 };
 
 const { gitSha, source } = resolveBuildMeta();
@@ -36,5 +92,10 @@ try {
     process.exit(1);
 }
 
-run('npm', ['run', 'build:docs-rag']);
-run('npm', ['--prefix', 'frontend', 'run', 'build']);
+try {
+    await run('npm', ['run', 'build:docs-rag']);
+    await run('npm', ['--prefix', 'frontend', 'run', 'build'], { filterOutput: true });
+} catch (error) {
+    console.error('Failed to run build commands:', error);
+    process.exit(1);
+}

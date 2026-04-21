@@ -41,6 +41,7 @@
         getDocsRagMismatchWarning,
     } from '../../../utils/docsRag.js';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
+    import { isBrowser } from '../../../utils/ssr.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -76,6 +77,7 @@
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
+    let componentDestroyed = false;
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -267,7 +269,11 @@
             return null;
         }
         try {
-            const response = await fetch('/build-meta.json', { cache: 'no-store' });
+            const buildMetaUrl =
+                typeof window !== 'undefined' && window.location
+                    ? new URL('/build-meta.json', window.location.href).toString()
+                    : 'http://localhost/build-meta.json';
+            const response = await fetch(buildMetaUrl, { cache: 'no-store' });
             if (!response.ok) {
                 return null;
             }
@@ -360,7 +366,8 @@
         const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
         const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
         const resolvedDocsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
-        const resolvedDocsRagHost = window?.location?.host || 'unknown';
+        const resolvedDocsRagHost =
+            typeof window !== 'undefined' && window.location ? window.location.host : 'unknown';
         const resolvedHostEnvName = deriveEnvNameFromHostname(resolvedDocsRagHost);
         const allowDocsFallback = resolvedHostEnvName === 'dev';
         const appShaInfo = allowDocsFallback
@@ -408,6 +415,10 @@
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         appGitSha = resolvedAppShaInfo.sha;
         playerStateSummary = getPlayerStateSummary(currentState);
+        if (componentDestroyed || !isBrowser) {
+            return;
+        }
+
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
@@ -432,11 +443,12 @@
     });
 
     onDestroy(() => {
+        componentDestroyed = true;
         settingsUnsubscribe?.();
-        if (saveSnapshotHintFocusListener) {
+        if (isBrowser && saveSnapshotHintFocusListener) {
             window.removeEventListener('focus', saveSnapshotHintFocusListener);
         }
-        if (promptDebugLinkListener) {
+        if (isBrowser && promptDebugLinkListener) {
             window.removeEventListener('hashchange', promptDebugLinkListener);
             window.removeEventListener('popstate', promptDebugLinkListener);
         }

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync, readdirSync } from 'fs';
 import path from 'path';
 import Ajv from 'ajv';
@@ -52,8 +52,27 @@ function loadJsonFile(filePath: string) {
 }
 
 describe('outages', () => {
+  let consoleWarnMock: ReturnType<typeof vi.spyOn>;
   const repoRoot = process.cwd();
   const outagesDir = path.join(repoRoot, 'outages');
+
+  beforeEach(() => {
+    const originalConsoleWarn = console.warn;
+    consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation((...args: unknown[]) => {
+      const [first] = args;
+      if (
+        typeof first === 'string' &&
+        first.startsWith('Warning: Failed to fetch current UTC time from time API;')
+      ) {
+        return;
+      }
+      originalConsoleWarn(...args);
+    });
+  });
+
+  afterEach(() => {
+    consoleWarnMock.mockRestore();
+  });
 
   it('dates are not in the future and filenames align', async () => {
     const today = await resolveCurrentUtcDate();

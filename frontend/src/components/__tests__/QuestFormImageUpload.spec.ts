@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 import { render, fireEvent, waitFor, act } from '@testing-library/svelte';
 import QuestForm from '../svelte/QuestForm.svelte';
 import { downsampleAndCompressToJpeg } from '../../utils/imageDownsample.js';
+const originalConsoleError = console.error;
 
 const { questsAddMock, questsUpdateMock, questsGetMock, listMock } = vi.hoisted(() => ({
     questsAddMock: vi.fn(),
@@ -61,9 +62,20 @@ function setupDom(): HTMLElement {
 
 describe('QuestForm image uploads', () => {
     let container: HTMLElement;
+    let consoleErrorSpy: ReturnType<typeof vi.spyOn> | null = null;
     const sampleDataUrl = 'data:image/png;base64,FALLBACKDATA';
 
     beforeEach(() => {
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation((...args) => {
+            const firstArg = typeof args[0] === 'string' ? args[0] : '';
+            if (
+                firstArg.startsWith('Error preparing quest image:') ||
+                firstArg.startsWith('Error creating quest image preview:')
+            ) {
+                return;
+            }
+            originalConsoleError(...args);
+        });
         container = setupDom();
         questsAddMock.mockReset();
         questsUpdateMock.mockReset();
@@ -119,6 +131,8 @@ describe('QuestForm image uploads', () => {
     });
 
     afterEach(() => {
+        consoleErrorSpy?.mockRestore();
+        consoleErrorSpy = null;
         container.innerHTML = '';
         const globalWithMocks = globalThis as typeof globalThis & {
             fetch?: typeof fetch;
