@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterAll, describe, expect, it, vi } from 'vitest';
 
 import type { Page } from '../frontend/e2e/test-helpers';
 import { navigateWithRetry } from '../frontend/e2e/test-helpers';
@@ -21,6 +21,8 @@ function createMockPage(failures: number): Page {
 }
 
 describe('navigateWithRetry', () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
     it('handles a handful of connection refusals before succeeding with default retries', async () => {
         const page = createMockPage(3);
 
@@ -38,5 +40,9 @@ describe('navigateWithRetry', () => {
         ).rejects.toThrow('net::ERR_CONNECTION_REFUSED');
 
         expect(page.goto).toHaveBeenCalledTimes(2);
+    });
+
+    afterAll(() => {
+        consoleWarnSpy.mockRestore();
     });
 });

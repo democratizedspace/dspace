@@ -1,7 +1,7 @@
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import validateQuest from '../scripts/validate-quest.js';
 
 const defaultHardening = {
@@ -42,6 +42,7 @@ test('returns true for valid quest json', () => {
 });
 
 test('returns false for invalid quest json', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const invalidQuest = {
         title: 'Test',
         description: 'desc',
@@ -59,11 +60,13 @@ test('returns false for invalid quest json', () => {
     };
     const file = writeQuestFile(invalidQuest);
     const result = validateQuest(file);
+    consoleErrorSpy.mockRestore();
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(false);
 });
 
 test('fails when quest depends on an unknown quest id', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const questWithMissingDep = {
         id: 'q-missing-dep',
         title: 'Needs Review',
@@ -83,6 +86,7 @@ test('fails when quest depends on an unknown quest id', () => {
     };
     const file = writeQuestFile(questWithMissingDep);
     const result = validateQuest(file, { knownQuestIds: new Set(['quests/existing']) });
+    consoleErrorSpy.mockRestore();
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(false);
 });
@@ -112,6 +116,7 @@ test('passes when dependencies exist in the known quest set', () => {
 });
 
 test('fails when a process option references an unknown process id', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const questWithMissingProcess = {
         id: 'q-missing-proc',
         title: 'Needs Process',
@@ -133,6 +138,7 @@ test('fails when a process option references an unknown process id', () => {
     };
     const file = writeQuestFile(questWithMissingProcess);
     const result = validateQuest(file, { knownProcessIds: new Set(['existing-process']) });
+    consoleErrorSpy.mockRestore();
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(false);
 });
@@ -162,4 +168,3 @@ test('passes when all process references exist in the known process set', () => 
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(true);
 });
-

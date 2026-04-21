@@ -18,9 +18,11 @@ describe('validate-staged-quests', () => {
   });
 
   it('returns false when a staged quest file is invalid', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const temp = path.join(__dirname, 'temp-invalid.json');
     fs.writeFileSync(temp, JSON.stringify({ title: 'invalid' }));
     const result = validateStagedQuests([temp]);
+    consoleErrorSpy.mockRestore();
     try {
       fs.unlinkSync(temp);
     } catch {

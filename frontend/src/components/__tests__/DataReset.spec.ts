@@ -21,6 +21,7 @@ const originalLocation = globalThis.location;
 const originalIndexedDB = globalThis.indexedDB;
 const flushMicrotasks = () => new Promise((resolve) => queueMicrotask(resolve));
 let reloadSpy: ReturnType<typeof vi.fn>;
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 const setWindowLocation = (value: Location | undefined) => {
     try {
         Object.defineProperty(window, 'location', {
@@ -38,6 +39,7 @@ describe('DataReset', () => {
         localStorage.clear();
         document.cookie = '';
         reloadSpy = vi.fn();
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
         const mockLocation = {
             ...originalLocation,
             reload: reloadSpy,
@@ -46,6 +48,7 @@ describe('DataReset', () => {
     });
 
     afterEach(() => {
+        consoleErrorSpy?.mockRestore();
         vi.restoreAllMocks();
         localStorage.clear();
         document.cookie = '';

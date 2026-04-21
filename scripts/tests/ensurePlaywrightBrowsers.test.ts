@@ -186,6 +186,7 @@ describe('ensurePlaywrightBrowsers', () => {
     };
     const execFileSync = vi.fn();
     const writeFileSync = vi.fn();
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
 
@@ -224,6 +225,10 @@ describe('ensurePlaywrightBrowsers', () => {
       NODE_OPTIONS: '--dns-result-order=ipv4first',
     });
     expect(writeFileSync).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(
+      'Proxy environment variables point to the placeholder proxy:8080 host. Proceeding with sanitized env.'
+    );
+    warnSpy.mockRestore();
   });
 
   it('preserves non-placeholder proxies during system deps install', async () => {

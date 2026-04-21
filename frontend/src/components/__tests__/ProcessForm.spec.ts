@@ -9,6 +9,7 @@ const { createProcessMock, updateProcessMock, listCustomItemsMock, mockedItems }
         mockedItems: [
             { id: 'water', name: 'Water', description: 'Fresh water' },
             { id: 'ore', name: 'Ore', description: 'Raw ore' },
+            { id: '5247a603-294a-4a34-a884-1ae20969b2a1', name: 'dUSD', description: 'Currency' },
         ],
     })
 );
@@ -26,10 +27,20 @@ vi.mock('../../utils/customcontent.js', () => ({
 
 import ProcessForm from '../svelte/ProcessForm.svelte';
 
+let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
 beforeEach(() => {
     createProcessMock.mockClear();
     updateProcessMock.mockClear();
     listCustomItemsMock.mockClear();
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterEach(() => {
+    consoleWarnSpy?.mockRestore();
+    consoleErrorSpy?.mockRestore();
 });
 
 test('submits text then clears field', async () => {

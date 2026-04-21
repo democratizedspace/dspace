@@ -10,6 +10,13 @@ const mockItems = vi.hoisted(() => [
         category: 'Awards',
     },
     {
+        id: '5247a603-294a-4a34-a884-1ae20969b2a1',
+        name: 'dUSD',
+        description: 'Currency.',
+        image: '/images/dusd.png',
+        category: 'Currency',
+    },
+    {
         id: 'custom-alpha',
         name: 'Custom Alpha',
         description: 'Custom alpha item.',

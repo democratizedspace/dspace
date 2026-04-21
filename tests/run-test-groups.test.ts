@@ -66,10 +66,12 @@ describe('run-test-groups', () => {
   });
 
   it('returns false when exec fails', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     execSyncMock.mockImplementation(() => {
       throw new Error('fail');
     });
     const result = runTestGroup({ name: 'Fail', files: ['fail.spec.ts'], parallel: true, workers: 2 });
+    consoleErrorSpy.mockRestore();
     expect(execSyncMock).toHaveBeenCalledWith(
       expect.stringContaining('fail.spec.ts --workers=2 --reporter=dot'),
       expect.objectContaining({ cwd: frontendRoot })

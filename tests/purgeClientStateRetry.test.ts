@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterAll, describe, expect, it, vi } from 'vitest';
 
 vi.mock('/src/utils/gameState/common.js', () => ({}), { virtual: true });
 
@@ -6,6 +6,7 @@ import type { Page } from '../frontend/e2e/test-helpers';
 import { navigateWithRetry } from '../frontend/e2e/test-helpers';
 
 describe('navigateWithRetry', () => {
+  const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
   it('retries navigation when the preview server is not ready', async () => {
     const goto = vi
       .fn(async () => undefined as Awaited<ReturnType<Page['goto']>>)
@@ -44,5 +45,9 @@ describe('navigateWithRetry', () => {
     } as unknown as Page;
 
     await expect(navigateWithRetry(page, '/')).rejects.toThrow(navigationError);
+  });
+
+  afterAll(() => {
+    consoleWarnSpy.mockRestore();
   });
 });

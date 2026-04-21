@@ -10,6 +10,7 @@ describe('runTests', () => {
     const write = vi
       .spyOn(process.stdout, 'write')
       .mockImplementation(() => true);
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const code = runTests(exec, 'linux');
     expect(code).toBe(1);
     expect(exec).toHaveBeenCalledWith(
@@ -21,6 +22,7 @@ describe('runTests', () => {
       })
     );
     expect(exec).toHaveBeenCalledTimes(1);
+    consoleErrorSpy.mockRestore();
     write.mockRestore();
   });
 
@@ -117,12 +119,14 @@ describe('runTests', () => {
     const write = vi
       .spyOn(process.stdout, 'write')
       .mockImplementation(() => true);
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const code = runTests(exec, 'linux');
 
     expect(code).toBe(1);
     expect(exec).toHaveBeenCalledTimes(2);
     expect(write).toHaveBeenCalledWith(timeoutError.stdout);
+    consoleErrorSpy.mockRestore();
     write.mockRestore();
   });
 });
