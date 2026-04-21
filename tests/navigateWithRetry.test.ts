@@ -22,15 +22,18 @@ function createMockPage(failures: number): Page {
 
 describe('navigateWithRetry', () => {
     it('handles a handful of connection refusals before succeeding with default retries', async () => {
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
         const page = createMockPage(3);
 
         await expect(navigateWithRetry(page, 'http://127.0.0.1:3000')).resolves.toBeUndefined();
 
         expect(page.goto).toHaveBeenCalledTimes(4);
         expect(page.waitForTimeout).toHaveBeenCalled();
+        warnSpy.mockRestore();
     });
 
     it('propagates the last error after exhausting retries', async () => {
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
         const page = createMockPage(Number.POSITIVE_INFINITY);
 
         await expect(
@@ -38,5 +41,6 @@ describe('navigateWithRetry', () => {
         ).rejects.toThrow('net::ERR_CONNECTION_REFUSED');
 
         expect(page.goto).toHaveBeenCalledTimes(2);
+        warnSpy.mockRestore();
     });
 });

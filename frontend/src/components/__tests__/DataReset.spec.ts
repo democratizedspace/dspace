@@ -209,6 +209,7 @@ describe('DataReset', () => {
     });
 
     it('handles unexpected errors by surfacing a warning and skipping reload', async () => {
+        const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
         Object.defineProperty(globalThis, 'indexedDB', {
             value: null,
             configurable: true,
@@ -224,6 +225,7 @@ describe('DataReset', () => {
         );
 
         expect(reloadSpy).not.toHaveBeenCalled();
+        consoleErrorSpy.mockRestore();
     });
 
     it('expires cookies across hostname and parent-domain combinations', async () => {

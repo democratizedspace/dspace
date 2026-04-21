@@ -3,6 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockItems = vi.hoisted(() => [
     {
+        id: '5247a603-294a-4a34-a884-1ae20969b2a1',
+        name: 'dUSD',
+        description: 'Currency',
+        image: '/images/dusd.png',
+        category: 'Currency',
+    },
+    {
         id: 'trophy',
         name: 'Trophy',
         description: 'A shiny trophy.',

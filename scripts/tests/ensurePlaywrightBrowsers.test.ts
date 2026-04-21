@@ -4,7 +4,7 @@ import { sanitizeProxyEnv } from '../../frontend/scripts/utils/ensure-playwright
 
 const MODULE_PATH =
   '../../frontend/scripts/utils/ensure-playwright-browsers.js';
-const repoRoot = path.join(path.sep, 'workspace', 'dspace', 'frontend');
+const repoRoot = path.resolve(__dirname, '../../frontend');
 const originalEnv = process.env;
 
 describe('ensurePlaywrightBrowsers', () => {
@@ -187,6 +187,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const execFileSync = vi.fn();
     const writeFileSync = vi.fn();
 
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
 
     const installed = ensurePlaywrightSystemDeps({
@@ -224,6 +225,10 @@ describe('ensurePlaywrightBrowsers', () => {
       NODE_OPTIONS: '--dns-result-order=ipv4first',
     });
     expect(writeFileSync).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('placeholder proxy:8080 host')
+    );
+    warnSpy.mockRestore();
   });
 
   it('preserves non-placeholder proxies during system deps install', async () => {

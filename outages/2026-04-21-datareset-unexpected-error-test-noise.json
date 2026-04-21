@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-21-datareset-unexpected-error-test-noise",
+  "date": "2026-04-21",
+  "component": "v3.0.1 QA launch-gate hardening",
+  "longForm": "outages/2026-04-21-datareset-unexpected-error-test-noise.md",
+  "rootCause": "Regression/noise surfaced by launch-gate checks and negative-path tests.",
+  "resolution": "Applied minimal targeted test/config hardening to eliminate failures and suppress expected-path noise without weakening assertions.",
+  "references": [
+    "outages/2026-04-21-datareset-unexpected-error-test-noise.md"
+  ]
+}

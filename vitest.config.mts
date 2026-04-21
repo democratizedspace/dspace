@@ -27,7 +27,7 @@ export default defineConfig({
   plugins: [
     createSvelteSubpathResolver(),
     svelte({
-      configFile: path.resolve(__dirname, './svelte.config.js'),
+      configFile: path.resolve(__dirname, './svelte.config.mjs'),
     }),
   ],
   resolve: {

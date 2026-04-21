@@ -7,6 +7,7 @@ import { navigateWithRetry } from '../frontend/e2e/test-helpers';
 
 describe('navigateWithRetry', () => {
   it('retries navigation when the preview server is not ready', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const goto = vi
       .fn(async () => undefined as Awaited<ReturnType<Page['goto']>>)
       .mockRejectedValueOnce(
@@ -30,6 +31,7 @@ describe('navigateWithRetry', () => {
 
     expect(goto).toHaveBeenCalledTimes(2);
     expect(waitForTimeout).toHaveBeenCalledTimes(1);
+    warnSpy.mockRestore();
   });
 
   it('rethrows non retryable navigation errors', async () => {

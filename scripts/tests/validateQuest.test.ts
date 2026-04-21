@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import path from 'path';
 import fs from 'fs';
 const validateQuest = require('../validate-quest');
@@ -13,10 +13,12 @@ describe('validateQuest script', () => {
   });
 
   it('returns false for an invalid quest file', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const tempPath = path.join(__dirname, 'temp-invalid.json');
     fs.writeFileSync(tempPath, JSON.stringify({ title: 'invalid' }));
     const result = validateQuest(tempPath);
     fs.unlinkSync(tempPath);
     expect(result).toBe(false);
+    consoleErrorSpy.mockRestore();
   });
 });

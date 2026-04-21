@@ -70,6 +70,7 @@ function isInsideOpenProcessGroup(element: Element) {
 
 const TEST_IMAGE =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
 async function deleteCustomContentDb() {
     await new Promise<void>((resolve) => {
@@ -92,6 +93,7 @@ afterEach(async () => {
     mockProcessesByType.consumeItem = [];
     mockProcessesByType.createItem = [];
     getQuestsForItemMock.mockReset();
+    consoleErrorSpy?.mockRestore();
 });
 
 describe('ItemPage', () => {
@@ -178,6 +180,7 @@ describe('ItemPage', () => {
     });
 
     it('keeps all process groups collapsed by default and allows multiple groups open', async () => {
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
         const builtIn = items[0];
 
         mockProcessesByType.requireItem = ['test-require-process'];
