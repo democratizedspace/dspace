@@ -43,7 +43,6 @@
     });
 
     $: totalItemCount = itemList.length;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const newcomerTokenCount = derived(state, (_state) => getItemCount(newcomerToken.id));
 </script>
 

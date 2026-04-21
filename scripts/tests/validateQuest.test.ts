@@ -1,9 +1,17 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import path from 'path';
 import fs from 'fs';
 const validateQuest = require('../validate-quest');
 
 describe('validateQuest script', () => {
+  beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   const validQuest = path.join(
     __dirname,
     '../../frontend/src/pages/quests/json/aquaria/walstad.json'

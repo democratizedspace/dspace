@@ -1,9 +1,17 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import path from 'path';
 import fs from 'fs';
 const validateItem = require('../validate-item');
 
 describe('validateItem script', () => {
+  beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('returns true for a valid item file', () => {
     const tempPath = path.join(__dirname, 'temp-item.json');
     const item = { id: '1', name: 'test', description: 'ok item', image: 'foo.jpg' };

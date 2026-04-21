@@ -1,7 +1,7 @@
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { expect, test } from 'vitest';
+import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import validateQuest from '../scripts/validate-quest.js';
 
 const defaultHardening = {
@@ -17,6 +17,14 @@ function writeQuestFile(data: object): string {
     writeFileSync(file, JSON.stringify(data));
     return file;
 }
+
+beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterEach(() => {
+    vi.restoreAllMocks();
+});
 
 test('returns true for valid quest json', () => {
     const validQuest = {
@@ -162,4 +170,3 @@ test('passes when all process references exist in the known process set', () => 
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(true);
 });
-

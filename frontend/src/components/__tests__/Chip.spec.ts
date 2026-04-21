@@ -87,7 +87,7 @@ describe('Chip', () => {
         const { getByRole: getActiveLinkByRole } = render(Chip, {
             props: {
                 text: 'Active Docs',
-                href: '/docs',
+                href: '#/docs',
                 onClick: activeOnClick,
             },
         });

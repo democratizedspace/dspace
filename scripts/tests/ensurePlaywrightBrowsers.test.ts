@@ -11,6 +11,7 @@ describe('ensurePlaywrightBrowsers', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
     process.env = { ...originalEnv };
     delete process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD;
   });
