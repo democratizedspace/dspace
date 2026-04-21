@@ -188,47 +188,56 @@ describe('ensurePlaywrightBrowsers', () => {
     const writeFileSync = vi.fn();
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-    const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
+    try {
+      const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
 
-    const installed = ensurePlaywrightSystemDeps({
-      cwd: repoRoot,
-      env: envWithProxy,
-      platform: 'linux',
-      cliPath: path.join(
-        repoRoot,
-        'node_modules',
-        '@playwright',
-        'test',
-        'cli.js'
-      ),
-      exec: execFileSync,
-      fs: {
-        existsSync: vi.fn((candidate: string) => {
-          return (
-            candidate ===
-            path.join(repoRoot, 'node_modules', '@playwright', 'test', 'cli.js')
-          );
-        }),
-        writeFileSync,
-      },
-    });
+      const installed = ensurePlaywrightSystemDeps({
+        cwd: repoRoot,
+        env: envWithProxy,
+        platform: 'linux',
+        cliPath: path.join(
+          repoRoot,
+          'node_modules',
+          '@playwright',
+          'test',
+          'cli.js'
+        ),
+        exec: execFileSync,
+        fs: {
+          existsSync: vi.fn((candidate: string) => {
+            return (
+              candidate ===
+              path.join(
+                repoRoot,
+                'node_modules',
+                '@playwright',
+                'test',
+                'cli.js'
+              )
+            );
+          }),
+          writeFileSync,
+        },
+      });
 
-    expect(installed).toBe(true);
-    expect(execFileSync).toHaveBeenCalledTimes(1);
-    expect(execFileSync.mock.calls[0][2]).toMatchObject({
-      cwd: repoRoot,
-      stdio: 'inherit',
-    });
-    expect(execFileSync.mock.calls[0][2]?.env?.HTTP_PROXY).toBeUndefined();
-    expect(execFileSync.mock.calls[0][2]?.env?.HTTPS_PROXY).toBeUndefined();
-    expect(execFileSync.mock.calls[0][2]?.env).toEqual({
-      NODE_OPTIONS: '--dns-result-order=ipv4first',
-    });
-    expect(writeFileSync).toHaveBeenCalledTimes(1);
-    expect(warnSpy).toHaveBeenCalledWith(
-      'Proxy environment variables point to the placeholder proxy:8080 host. Proceeding with sanitized env.'
-    );
-    warnSpy.mockRestore();
+      expect(installed).toBe(true);
+      expect(execFileSync).toHaveBeenCalledTimes(1);
+      expect(execFileSync.mock.calls[0][2]).toMatchObject({
+        cwd: repoRoot,
+        stdio: 'inherit',
+      });
+      expect(execFileSync.mock.calls[0][2]?.env?.HTTP_PROXY).toBeUndefined();
+      expect(execFileSync.mock.calls[0][2]?.env?.HTTPS_PROXY).toBeUndefined();
+      expect(execFileSync.mock.calls[0][2]?.env).toEqual({
+        NODE_OPTIONS: '--dns-result-order=ipv4first',
+      });
+      expect(writeFileSync).toHaveBeenCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledWith(
+        'Proxy environment variables point to the placeholder proxy:8080 host. Proceeding with sanitized env.'
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 
   it('preserves non-placeholder proxies during system deps install', async () => {
@@ -346,18 +355,21 @@ describe('ensurePlaywrightBrowsers', () => {
       };
     });
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
+    try {
+      const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-    await ensurePlaywrightBrowsers({ cwd: repoRoot, browser });
+      await ensurePlaywrightBrowsers({ cwd: repoRoot, browser });
 
-    expect(execFileSync).not.toHaveBeenCalled();
-    expect(executablePath).toHaveBeenCalledTimes(1);
-    expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
-    expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('headless shell is missing')
-    );
-    warnSpy.mockRestore();
+      expect(execFileSync).not.toHaveBeenCalled();
+      expect(executablePath).toHaveBeenCalledTimes(1);
+      expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
+      expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('headless shell is missing')
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 
   it('skips install when chromium and headless shell already exist', async () => {

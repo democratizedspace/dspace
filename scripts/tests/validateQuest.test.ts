@@ -13,12 +13,18 @@ describe('validateQuest script', () => {
   });
 
   it('returns false for an invalid quest file', () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     const tempPath = path.join(__dirname, 'temp-invalid.json');
+    let result = true;
     fs.writeFileSync(tempPath, JSON.stringify({ title: 'invalid' }));
-    const result = validateQuest(tempPath);
-    consoleErrorSpy.mockRestore();
-    fs.unlinkSync(tempPath);
+    try {
+      result = validateQuest(tempPath);
+    } finally {
+      consoleErrorSpy.mockRestore();
+      fs.unlinkSync(tempPath);
+    }
     expect(result).toBe(false);
   });
 });

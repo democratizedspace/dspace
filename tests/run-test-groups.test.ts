@@ -26,7 +26,9 @@ vi.mock('fs', async () => {
 });
 
 beforeAll(async () => {
-  const fileUrl = pathToFileURL(path.resolve(__dirname, '../frontend/scripts/run-test-groups.mjs'));
+  const fileUrl = pathToFileURL(
+    path.resolve(__dirname, '../frontend/scripts/run-test-groups.mjs')
+  );
   const mod = await import(fileUrl.toString());
   runTestGroup = mod.runTestGroup;
   TEST_GROUPS = mod.TEST_GROUPS;
@@ -43,7 +45,9 @@ afterEach(() => {
 async function loadTestGroupsWithEnv(env: Record<string, string>) {
   vi.resetModules();
   Object.assign(process.env, env);
-  const fileUrl = pathToFileURL(path.resolve(__dirname, '../frontend/scripts/run-test-groups.mjs'));
+  const fileUrl = pathToFileURL(
+    path.resolve(__dirname, '../frontend/scripts/run-test-groups.mjs')
+  );
   const mod = await import(fileUrl.toString());
   return mod.TEST_GROUPS;
 }
@@ -56,8 +60,12 @@ describe('run-test-groups', () => {
   });
 
   it('returns true when exec succeeds', () => {
-    execSyncMock.mockImplementation(() => ({} as any));
-    const result = runTestGroup({ name: 'Demo', files: ['demo.spec.ts'], parallel: false });
+    execSyncMock.mockImplementation(() => ({}) as any);
+    const result = runTestGroup({
+      name: 'Demo',
+      files: ['demo.spec.ts'],
+      parallel: false,
+    });
     expect(execSyncMock).toHaveBeenCalledWith(
       expect.stringContaining('demo.spec.ts --workers=1 --reporter=dot'),
       expect.objectContaining({ cwd: frontendRoot })
@@ -66,12 +74,23 @@ describe('run-test-groups', () => {
   });
 
   it('returns false when exec fails', () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    execSyncMock.mockImplementation(() => {
-      throw new Error('fail');
-    });
-    const result = runTestGroup({ name: 'Fail', files: ['fail.spec.ts'], parallel: true, workers: 2 });
-    consoleErrorSpy.mockRestore();
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    let result = true;
+    try {
+      execSyncMock.mockImplementation(() => {
+        throw new Error('fail');
+      });
+      result = runTestGroup({
+        name: 'Fail',
+        files: ['fail.spec.ts'],
+        parallel: true,
+        workers: 2,
+      });
+    } finally {
+      consoleErrorSpy.mockRestore();
+    }
     expect(execSyncMock).toHaveBeenCalledWith(
       expect.stringContaining('fail.spec.ts --workers=2 --reporter=dot'),
       expect.objectContaining({ cwd: frontendRoot })
@@ -80,7 +99,7 @@ describe('run-test-groups', () => {
   });
 
   it('applies grep patterns when provided', () => {
-    execSyncMock.mockImplementation(() => ({} as any));
+    execSyncMock.mockImplementation(() => ({}) as any);
     runTestGroup({
       name: 'Grep',
       files: ['alpha.spec.ts'],
@@ -89,7 +108,9 @@ describe('run-test-groups', () => {
       grep: 'foo|bar',
     });
     expect(execSyncMock).toHaveBeenCalledWith(
-      expect.stringContaining('alpha.spec.ts -g "foo|bar" --workers=3 --reporter=dot'),
+      expect.stringContaining(
+        'alpha.spec.ts -g "foo|bar" --workers=3 --reporter=dot'
+      ),
       expect.objectContaining({ cwd: frontendRoot })
     );
   });
@@ -119,11 +140,15 @@ describe('run-test-groups', () => {
   });
 
   it('keeps an explicit integration group for the custom content journey', () => {
-    const integrationGroup = TEST_GROUPS.find((group: any) => group.name === 'Integration Tests');
+    const integrationGroup = TEST_GROUPS.find(
+      (group: any) => group.name === 'Integration Tests'
+    );
 
     expect(integrationGroup).toBeDefined();
     expect(integrationGroup.files).toContain('custom-content.spec.ts');
-    expect(integrationGroup.grep).toContain('integrate custom items, processes, and quests');
+    expect(integrationGroup.grep).toContain(
+      'integrate custom items, processes, and quests'
+    );
     expect(integrationGroup.parallel).toBe(false);
   });
 
@@ -133,10 +158,14 @@ describe('run-test-groups', () => {
       REMOTE_MIGRATION: '1',
       REMOTE_COMPLETIONIST_AWARD_III: '1',
     });
-    const allGroupedFiles = new Set(groups.flatMap((group: any) => group.files || []));
+    const allGroupedFiles = new Set(
+      groups.flatMap((group: any) => group.files || [])
+    );
 
     expect(allGroupedFiles.has('remote-release-smoke.spec.ts')).toBe(true);
     expect(allGroupedFiles.has('remote-legacy-migration.spec.ts')).toBe(true);
-    expect(allGroupedFiles.has('remote-completionist-award-iii.spec.ts')).toBe(true);
+    expect(allGroupedFiles.has('remote-completionist-award-iii.spec.ts')).toBe(
+      true
+    );
   });
 });

@@ -114,9 +114,16 @@ function runTests(exec = execSync, platform = os.platform()) {
     };
     const { message, command } = scripts[platform] || scripts.default;
     console.log(message);
+    const preparePrEnv = {
+      ...process.env,
+      SKIP_UNIT_TESTS: '1',
+      ...(process.env.SKIP_E2E !== undefined
+        ? { SKIP_E2E: process.env.SKIP_E2E }
+        : {}),
+    };
     exec(command, {
       stdio: 'inherit',
-      env: { ...process.env, SKIP_UNIT_TESTS: '1', SKIP_E2E: '1' },
+      env: preparePrEnv,
     });
 
     console.log(

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../src/utils/gameState/common.js', () => ({
@@ -82,6 +82,7 @@ describe('OpenAIChat error messaging', () => {
         consoleErrorMock.mockRestore();
         consoleWarnMock.mockRestore();
         vi.unstubAllGlobals();
+        cleanup();
     });
 
     it('surfaces actionable guidance when quota is exhausted', async () => {
@@ -97,6 +98,11 @@ describe('OpenAIChat error messaging', () => {
         expect(
             await screen.findAllByText(/openai could not generate a reply because this account/i)
         ).toHaveLength(2);
+        expect(consoleErrorMock).toHaveBeenCalledWith(
+            'OpenAI chat request failed',
+            expect.any(Error)
+        );
+        expect(consoleWarnMock).not.toHaveBeenCalled();
     });
 
     it('surfaces invalid API key errors to the user', async () => {
@@ -112,5 +118,10 @@ describe('OpenAIChat error messaging', () => {
         const banner = await screen.findByRole('alert');
         expect(banner.getAttribute('data-error-type')).toBe('auth');
         expect(await screen.findAllByText(/api key/i)).toHaveLength(2);
+        expect(consoleErrorMock).toHaveBeenCalledWith(
+            'OpenAI chat request failed',
+            expect.any(Error)
+        );
+        expect(consoleWarnMock).not.toHaveBeenCalled();
     });
 });
