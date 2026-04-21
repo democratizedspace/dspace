@@ -61,9 +61,11 @@ function setupDom(): HTMLElement {
 
 describe('QuestForm image uploads', () => {
     let container: HTMLElement;
+    let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
     const sampleDataUrl = 'data:image/png;base64,FALLBACKDATA';
 
     beforeEach(() => {
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
         container = setupDom();
         questsAddMock.mockReset();
         questsUpdateMock.mockReset();
@@ -119,6 +121,7 @@ describe('QuestForm image uploads', () => {
     });
 
     afterEach(() => {
+        consoleErrorSpy.mockRestore();
         container.innerHTML = '';
         const globalWithMocks = globalThis as typeof globalThis & {
             fetch?: typeof fetch;

@@ -33,7 +33,7 @@ const config = {
         '!jest.config.cjs',
         '!jest.teardown.js',
         '!playwright.config.ts',
-        '!svelte.config.js',
+        '!svelte.config.mjs',
         '!coverage/**',
     ],
 
