@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import {
     exportGameStateString,
     importGameStateString,
@@ -92,9 +92,21 @@ const overwriteCustomContent = async () => {
 };
 
 describe('cloud sync custom content', () => {
+    let consoleErrorSpy: ReturnType<typeof vi.spyOn> | null = null;
+    let consoleWarnSpy: ReturnType<typeof vi.spyOn> | null = null;
+
     beforeEach(async () => {
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
         await resetGameState();
         await deleteCustomContentDatabase();
+    });
+
+    afterEach(() => {
+        consoleErrorSpy?.mockRestore();
+        consoleErrorSpy = null;
+        consoleWarnSpy?.mockRestore();
+        consoleWarnSpy = null;
     });
 
     test('uploads custom content in gist payload', async () => {

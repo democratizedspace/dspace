@@ -27,7 +27,14 @@ export default defineConfig({
   plugins: [
     createSvelteSubpathResolver(),
     svelte({
-      configFile: path.resolve(__dirname, './svelte.config.js'),
+      configFile: path.resolve(__dirname, './svelte.config.mjs'),
+      onwarn(warning, defaultHandler) {
+        if (warning.code === 'css_unused_selector' || warning.code === 'store_rune_conflict') {
+          return;
+        }
+
+        defaultHandler(warning);
+      },
     }),
   ],
   resolve: {
