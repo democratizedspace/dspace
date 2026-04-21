@@ -66,6 +66,8 @@ describe('run-test-groups', () => {
   });
 
   it('returns false when exec fails', () => {
+    const stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     execSyncMock.mockImplementation(() => {
       throw new Error('fail');
     });
@@ -75,6 +77,8 @@ describe('run-test-groups', () => {
       expect.objectContaining({ cwd: frontendRoot })
     );
     expect(result).toBe(false);
+    consoleErrorSpy.mockRestore();
+    stderrSpy.mockRestore();
   });
 
   it('applies grep patterns when provided', () => {

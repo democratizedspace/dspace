@@ -1,7 +1,7 @@
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import validateQuest from '../scripts/validate-quest.js';
 
 const defaultHardening = {
@@ -42,6 +42,7 @@ test('returns true for valid quest json', () => {
 });
 
 test('returns false for invalid quest json', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const invalidQuest = {
         title: 'Test',
         description: 'desc',
@@ -61,9 +62,11 @@ test('returns false for invalid quest json', () => {
     const result = validateQuest(file);
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(false);
+    consoleErrorSpy.mockRestore();
 });
 
 test('fails when quest depends on an unknown quest id', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const questWithMissingDep = {
         id: 'q-missing-dep',
         title: 'Needs Review',
@@ -85,6 +88,7 @@ test('fails when quest depends on an unknown quest id', () => {
     const result = validateQuest(file, { knownQuestIds: new Set(['quests/existing']) });
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(false);
+    consoleErrorSpy.mockRestore();
 });
 
 test('passes when dependencies exist in the known quest set', () => {
@@ -112,6 +116,7 @@ test('passes when dependencies exist in the known quest set', () => {
 });
 
 test('fails when a process option references an unknown process id', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const questWithMissingProcess = {
         id: 'q-missing-proc',
         title: 'Needs Process',
@@ -135,6 +140,7 @@ test('fails when a process option references an unknown process id', () => {
     const result = validateQuest(file, { knownProcessIds: new Set(['existing-process']) });
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(false);
+    consoleErrorSpy.mockRestore();
 });
 
 test('passes when all process references exist in the known process set', () => {
@@ -162,4 +168,3 @@ test('passes when all process references exist in the known process set', () => 
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(true);
 });
-

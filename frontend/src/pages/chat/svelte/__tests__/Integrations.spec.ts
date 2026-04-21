@@ -34,9 +34,11 @@ describe('Integrations chat entrypoint', () => {
         mockRefs.resetStore();
         delete process.env.VITE_TOKEN_PLACE_URL;
         delete process.env.VITE_TOKEN_PLACE_ENABLED;
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }));
     });
 
     afterEach(() => {
+        vi.unstubAllGlobals();
         vi.clearAllMocks();
     });
 
