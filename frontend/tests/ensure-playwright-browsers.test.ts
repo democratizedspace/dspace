@@ -44,10 +44,23 @@ describe('ensurePlaywrightSystemDeps', () => {
     const depsStampPath = path.join(cwd, '.playwright-deps-installed-test');
 
     beforeEach(() => {
+        const originalConsoleWarn = console.warn;
         execFileSyncMock.mockReset();
         existsSyncMock.mockReset();
         writeFileSyncMock.mockReset();
         process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS = '0';
+        vi.spyOn(console, 'warn').mockImplementation((...args: unknown[]) => {
+            const [first] = args;
+            if (
+                typeof first === 'string' &&
+                first.startsWith(
+                    'Proxy environment variables point to the placeholder proxy:8080 host.'
+                )
+            ) {
+                return;
+            }
+            originalConsoleWarn(...args);
+        });
     });
 
     it('invokes install-deps on linux when sentinel is missing', async () => {
@@ -193,6 +206,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const depsStampPath = path.join(cwd, '.playwright-deps-installed-test');
 
     beforeEach(() => {
+        const originalConsoleWarn = console.warn;
         execFileSyncMock.mockReset();
         existsSyncMock.mockReset();
         writeFileSyncMock.mockReset();
@@ -200,6 +214,19 @@ describe('ensurePlaywrightBrowsers', () => {
         chromiumExecutablePathMock.mockReturnValue(chromiumPath);
         process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS = '0';
         delete process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD;
+        vi.spyOn(console, 'warn').mockImplementation((...args: unknown[]) => {
+            const [first] = args;
+            if (
+                typeof first === 'string' &&
+                (first.startsWith('Playwright chromium executable is still missing after installation.') ||
+                    first.startsWith(
+                        'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing.'
+                    ))
+            ) {
+                return;
+            }
+            originalConsoleWarn(...args);
+        });
     });
 
     it('installs system deps before browsers when chromium is missing', async () => {
@@ -279,6 +306,7 @@ describe('ensurePlaywrightBrowsers', () => {
 });
 
 afterAll(() => {
+    vi.restoreAllMocks();
     if (originalSkipInstallDeps === undefined) {
         delete process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS;
     } else {

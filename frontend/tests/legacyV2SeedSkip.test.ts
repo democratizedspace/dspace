@@ -2,6 +2,7 @@ import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { LEGACY_V2_SEED_SKIP_KEY } from '../src/utils/legacySaveParsing.js';
 
 const originalIndexedDB = globalThis.indexedDB;
+const originalConsoleError = console.error;
 
 const legacyState = {
     versionNumberString: '2.1',
@@ -34,12 +35,24 @@ const waitForAssertion = async (assertion: () => void, timeoutMs = 2000) => {
 beforeEach(() => {
     vi.resetModules();
     localStorage.clear();
+    vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+        const [first] = args;
+        if (typeof first === 'string' && first.startsWith('IndexedDB read failed:')) {
+            return;
+        }
+        if (first instanceof Error && first.message.includes('Not implemented: window.alert')) {
+            return;
+        }
+        originalConsoleError(...args);
+    });
+    vi.spyOn(window, 'alert').mockImplementation(() => {});
     // @ts-expect-error: deliberately remove IndexedDB for deterministic localStorage behavior
     delete globalThis.indexedDB;
 });
 
 afterEach(() => {
     globalThis.indexedDB = originalIndexedDB;
+    vi.restoreAllMocks();
 });
 
 test('auto-migration skips when QA seed flag is present', async () => {

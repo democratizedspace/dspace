@@ -21,7 +21,21 @@ import { readLegacyV2LocalStorage } from '../../utils/legacySaveParsing.js';
 const EARLY_ADOPTER_ID = items.find((item) => item.name === 'Early Adopter Token')?.id;
 
 describe('LegacySaveUpgrade', () => {
+    let consoleErrorMock: ReturnType<typeof vi.spyOn>;
+
     beforeEach(async () => {
+        const originalConsoleError = console.error;
+        consoleErrorMock = vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+            const [first] = args;
+            if (
+                typeof first === 'string' &&
+                first.startsWith('Error reading from localStorage:')
+            ) {
+                return;
+            }
+            originalConsoleError(...args);
+        });
+
         document.cookie = '';
         localStorage.clear();
         document.documentElement.dataset.cheatsAvailable = 'false';
@@ -32,6 +46,7 @@ describe('LegacySaveUpgrade', () => {
 
     afterEach(async () => {
         await closeGameStateDatabaseForTesting();
+        consoleErrorMock.mockRestore();
         document.cookie = '';
         localStorage.clear();
         document.documentElement.dataset.cheatsAvailable = 'false';

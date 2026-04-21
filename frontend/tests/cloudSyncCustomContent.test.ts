@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import {
     exportGameStateString,
     importGameStateString,
@@ -92,9 +92,40 @@ const overwriteCustomContent = async () => {
 };
 
 describe('cloud sync custom content', () => {
+    let consoleWarnMock: ReturnType<typeof vi.spyOn>;
+    let consoleErrorMock: ReturnType<typeof vi.spyOn>;
+
     beforeEach(async () => {
+        const originalConsoleWarn = console.warn;
+        const originalConsoleError = console.error;
+        consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation((...args: unknown[]) => {
+            const [first] = args;
+            if (
+                typeof first === 'string' &&
+                first.startsWith('Custom content validation failed; continuing with DB.')
+            ) {
+                return;
+            }
+            originalConsoleWarn(...args);
+        });
+        consoleErrorMock = vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+            const [first] = args;
+            if (
+                typeof first === 'string' &&
+                first.startsWith('Custom content validation failed; continuing with DB.')
+            ) {
+                return;
+            }
+            originalConsoleError(...args);
+        });
+
         await resetGameState();
         await deleteCustomContentDatabase();
+    });
+
+    afterEach(() => {
+        consoleWarnMock.mockRestore();
+        consoleErrorMock.mockRestore();
     });
 
     test('uploads custom content in gist payload', async () => {
