@@ -41,6 +41,7 @@
         getDocsRagMismatchWarning,
     } from '../../../utils/docsRag.js';
     import { copyToClipboard } from '../../../utils/copyToClipboard.js';
+    import { isBrowser } from '../../../utils/ssr.js';
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
@@ -76,6 +77,7 @@
     let debugOverride = false;
     let currentSettings = { showChatDebugPayload: false };
     let lastShowChatDebugPayload;
+    let componentDestroyed = false;
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -413,6 +415,10 @@
         docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
         appGitSha = resolvedAppShaInfo.sha;
         playerStateSummary = getPlayerStateSummary(currentState);
+        if (componentDestroyed || !isBrowser) {
+            return;
+        }
+
         syncSaveSnapshotHintDismissed();
         saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
         window.addEventListener('focus', saveSnapshotHintFocusListener);
@@ -437,11 +443,12 @@
     });
 
     onDestroy(() => {
+        componentDestroyed = true;
         settingsUnsubscribe?.();
-        if (saveSnapshotHintFocusListener) {
+        if (isBrowser && saveSnapshotHintFocusListener) {
             window.removeEventListener('focus', saveSnapshotHintFocusListener);
         }
-        if (promptDebugLinkListener) {
+        if (isBrowser && promptDebugLinkListener) {
             window.removeEventListener('hashchange', promptDebugLinkListener);
             window.removeEventListener('popstate', promptDebugLinkListener);
         }
