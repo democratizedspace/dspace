@@ -52,12 +52,14 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
     let originalLocation;
     let originalViteSha;
     let fetchMock;
+    let consoleWarnMock;
 
     beforeEach(() => {
         originalLocation = window.location;
         originalViteSha = process.env.VITE_GIT_SHA;
         fetchMock = vi.fn().mockResolvedValue({ ok: false });
         vi.stubGlobal('fetch', fetchMock);
+        consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation(() => {});
         Object.defineProperty(window, 'location', {
             configurable: true,
             value: {
@@ -77,6 +79,7 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
             process.env.VITE_GIT_SHA = originalViteSha;
         }
         vi.unstubAllGlobals();
+        consoleWarnMock.mockRestore();
         Object.defineProperty(window, 'location', {
             configurable: true,
             value: originalLocation,

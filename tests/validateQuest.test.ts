@@ -1,7 +1,7 @@
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { expect, test } from 'vitest';
+import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import validateQuest from '../scripts/validate-quest.js';
 
 const defaultHardening = {
@@ -10,6 +10,15 @@ const defaultHardening = {
     emoji: '🛠️',
     history: [],
 };
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+beforeEach(() => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterEach(() => {
+    consoleErrorSpy.mockRestore();
+});
 
 function writeQuestFile(data: object): string {
     const dir = mkdtempSync(path.join(tmpdir(), 'quest-'));
@@ -162,4 +171,3 @@ test('passes when all process references exist in the known process set', () => 
     rmSync(path.dirname(file), { recursive: true, force: true });
     expect(result).toBe(true);
 });
-

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeAll, afterEach } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from 'vitest';
 let runTestGroup: any;
 let TEST_GROUPS: any;
 
@@ -50,6 +50,14 @@ async function loadTestGroupsWithEnv(env: Record<string, string>) {
 
 // Basic sanity check that TEST_GROUPS is populated
 describe('run-test-groups', () => {
+  let stderrSpy: ReturnType<typeof vi.spyOn>;
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
   it('exposes test groups', () => {
     expect(Array.isArray(TEST_GROUPS)).toBe(true);
     expect(TEST_GROUPS.length).toBeGreaterThan(0);
@@ -136,5 +144,10 @@ describe('run-test-groups', () => {
     expect(allGroupedFiles.has('remote-release-smoke.spec.ts')).toBe(true);
     expect(allGroupedFiles.has('remote-legacy-migration.spec.ts')).toBe(true);
     expect(allGroupedFiles.has('remote-completionist-award-iii.spec.ts')).toBe(true);
+  });
+
+  afterEach(() => {
+    stderrSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
   });
 });

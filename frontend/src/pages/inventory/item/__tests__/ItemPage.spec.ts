@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto';
 import { fireEvent, render, waitFor } from '@testing-library/svelte';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import items from '../../json/items';
 import ItemPage from '../ItemPage.svelte';
 import { db } from '../../../../utils/customcontent.js';
@@ -17,6 +17,7 @@ const mockProcessesByType = {
     createItem: [],
 };
 const getQuestsForItemMock = vi.fn();
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
 vi.mock('../../../../utils/gameState/processes.js', async (importOriginal) => {
     const actual = await importOriginal();
@@ -81,6 +82,7 @@ async function deleteCustomContentDb() {
 }
 
 afterEach(async () => {
+    consoleErrorSpy?.mockRestore();
     clearItemResolverCache();
     await deleteCustomContentDb();
     getItemCountsMock.mockReset();
@@ -95,6 +97,10 @@ afterEach(async () => {
 });
 
 describe('ItemPage', () => {
+    beforeEach(() => {
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
     it('renders built-in item details', async () => {
         const builtIn = items.find((item) => !item.price) ?? items[0];
 

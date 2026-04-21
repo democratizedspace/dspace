@@ -8,11 +8,14 @@ const repoRoot = path.join(path.sep, 'workspace', 'dspace', 'frontend');
 const originalEnv = process.env;
 
 describe('ensurePlaywrightBrowsers', () => {
+  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
     process.env = { ...originalEnv };
     delete process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD;
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -25,6 +28,7 @@ describe('ensurePlaywrightBrowsers', () => {
     } catch (error) {
       // Module might not have been mocked in the test.
     }
+    consoleWarnSpy.mockRestore();
   });
 
   it('installs system deps and browsers when chromium executable is missing', async () => {

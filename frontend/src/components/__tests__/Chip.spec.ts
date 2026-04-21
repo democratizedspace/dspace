@@ -1,6 +1,8 @@
 import { render, fireEvent } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Chip from '../svelte/Chip.svelte';
+
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
 function ensureChipStaticOpacityStyle() {
     if (document.getElementById('chip-static-opacity-regression-style')) {
@@ -14,6 +16,14 @@ function ensureChipStaticOpacityStyle() {
 }
 
 describe('Chip', () => {
+    beforeEach(() => {
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+        consoleErrorSpy.mockRestore();
+    });
+
     it('renders an opaque static container for inverted chips without inline opacity styles', () => {
         ensureChipStaticOpacityStyle();
 
@@ -83,7 +93,7 @@ describe('Chip', () => {
         expect((disabledLinkChip as HTMLElement).getAttribute('tabindex')).toBe('-1');
         expect(onClick).not.toHaveBeenCalled();
 
-        const activeOnClick = vi.fn();
+        const activeOnClick = vi.fn((event: MouseEvent) => event.preventDefault());
         const { getByRole: getActiveLinkByRole } = render(Chip, {
             props: {
                 text: 'Active Docs',
