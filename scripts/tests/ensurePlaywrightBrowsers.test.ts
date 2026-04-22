@@ -4,7 +4,10 @@ import { sanitizeProxyEnv } from '../../frontend/scripts/utils/ensure-playwright
 
 const MODULE_PATH =
   '../../frontend/scripts/utils/ensure-playwright-browsers.js';
-const repoRoot = path.join(path.sep, 'workspace', 'dspace', 'frontend');
+const repoRoot =
+  path.basename(process.cwd()) === 'frontend'
+    ? process.cwd()
+    : path.resolve(process.cwd(), 'frontend');
 const originalEnv = process.env;
 
 describe('ensurePlaywrightBrowsers', () => {
@@ -185,6 +188,7 @@ describe('ensurePlaywrightBrowsers', () => {
       npm_config_http_proxy: 'http://proxy:8080',
     };
     const execFileSync = vi.fn();
+    const mkdirSync = vi.fn();
     const writeFileSync = vi.fn();
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
@@ -216,6 +220,7 @@ describe('ensurePlaywrightBrowsers', () => {
               )
             );
           }),
+          mkdirSync,
           writeFileSync,
         },
       });
@@ -230,6 +235,9 @@ describe('ensurePlaywrightBrowsers', () => {
       expect(execFileSync.mock.calls[0][2]?.env?.HTTPS_PROXY).toBeUndefined();
       expect(execFileSync.mock.calls[0][2]?.env).toEqual({
         NODE_OPTIONS: '--dns-result-order=ipv4first',
+      });
+      expect(mkdirSync).toHaveBeenCalledWith(path.join(repoRoot), {
+        recursive: true,
       });
       expect(writeFileSync).toHaveBeenCalledTimes(1);
       expect(warnSpy).toHaveBeenCalledWith(
@@ -247,6 +255,7 @@ describe('ensurePlaywrightBrowsers', () => {
       HTTP_PROXY: 'http://corp-proxy.internal:8080',
     };
     const execFileSync = vi.fn();
+    const mkdirSync = vi.fn();
     const writeFileSync = vi.fn();
 
     const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
@@ -270,6 +279,7 @@ describe('ensurePlaywrightBrowsers', () => {
             path.join(repoRoot, 'node_modules', '@playwright', 'test', 'cli.js')
           );
         }),
+        mkdirSync,
         writeFileSync,
       },
     });
@@ -279,6 +289,9 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(execFileSync.mock.calls[0][2]?.env).toMatchObject({
       HTTP_PROXY: envWithProxy.HTTP_PROXY,
       HTTPS_PROXY: envWithProxy.HTTPS_PROXY,
+    });
+    expect(mkdirSync).toHaveBeenCalledWith(path.join(repoRoot), {
+      recursive: true,
     });
     expect(writeFileSync).toHaveBeenCalledTimes(1);
   });

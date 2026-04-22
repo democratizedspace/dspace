@@ -3,6 +3,7 @@ import path from 'node:path';
 
 const execFileSyncMock = vi.fn();
 const existsSyncMock = vi.fn();
+const mkdirSyncMock = vi.fn();
 const writeFileSyncMock = vi.fn();
 const chromiumExecutablePathMock = vi.fn();
 
@@ -38,8 +39,14 @@ async function importModule(): Promise<EnsureModule> {
     return module;
 }
 
+function resolveFrontendCwd(): string {
+    return path.basename(process.cwd()) === 'frontend'
+        ? process.cwd()
+        : path.resolve(process.cwd(), 'frontend');
+}
+
 describe('ensurePlaywrightSystemDeps', () => {
-    const cwd = '/workspace/dspace/frontend';
+    const cwd = resolveFrontendCwd();
     const cliPath = `${cwd}/node_modules/@playwright/test/cli.js`;
     const depsStampPath = path.join(cwd, '.playwright-deps-installed-test');
 
@@ -47,6 +54,7 @@ describe('ensurePlaywrightSystemDeps', () => {
         const originalConsoleWarn = console.warn;
         execFileSyncMock.mockReset();
         existsSyncMock.mockReset();
+        mkdirSyncMock.mockReset();
         writeFileSyncMock.mockReset();
         process.env.PLAYWRIGHT_SKIP_INSTALL_DEPS = '0';
         vi.spyOn(console, 'warn').mockImplementation((...args: unknown[]) => {
@@ -85,7 +93,11 @@ describe('ensurePlaywrightSystemDeps', () => {
             cliPath,
             depsStampPath,
             exec: execFileSyncMock,
-            fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: mkdirSyncMock,
+                writeFileSync: writeFileSyncMock,
+            },
         });
 
         expect(result).toBe(true);
@@ -95,6 +107,9 @@ describe('ensurePlaywrightSystemDeps', () => {
             depsStampPath,
             expect.stringMatching(/\d{4}-\d{2}-\d{2}/)
         );
+        expect(mkdirSyncMock).toHaveBeenCalledWith(path.dirname(depsStampPath), {
+            recursive: true,
+        });
     });
 
     it('skips installation when sentinel exists', async () => {
@@ -119,7 +134,11 @@ describe('ensurePlaywrightSystemDeps', () => {
             cliPath,
             depsStampPath,
             exec: execFileSyncMock,
-            fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: mkdirSyncMock,
+                writeFileSync: writeFileSyncMock,
+            },
         });
 
         expect(result).toBe(false);
@@ -152,7 +171,11 @@ describe('ensurePlaywrightSystemDeps', () => {
                 cliPath,
                 depsStampPath,
                 exec: execFileSyncMock,
-                fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
+                fs: {
+                    existsSync: existsSyncMock,
+                    mkdirSync: mkdirSyncMock,
+                    writeFileSync: writeFileSyncMock,
+                },
             })
         ).toThrow('install-deps failed');
     });
@@ -183,7 +206,11 @@ describe('ensurePlaywrightSystemDeps', () => {
             cliPath,
             depsStampPath,
             exec: execFileSyncMock,
-            fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: mkdirSyncMock,
+                writeFileSync: writeFileSyncMock,
+            },
         });
 
         expect(result).toBe(true);
@@ -198,7 +225,7 @@ describe('ensurePlaywrightSystemDeps', () => {
 });
 
 describe('ensurePlaywrightBrowsers', () => {
-    const cwd = '/workspace/dspace/frontend';
+    const cwd = resolveFrontendCwd();
     const cliPath = `${cwd}/node_modules/@playwright/test/cli.js`;
     const chromiumPath = '/root/.cache/ms-playwright/chromium-1234/chrome';
     const headlessShellPath =
@@ -209,6 +236,7 @@ describe('ensurePlaywrightBrowsers', () => {
         const originalConsoleWarn = console.warn;
         execFileSyncMock.mockReset();
         existsSyncMock.mockReset();
+        mkdirSyncMock.mockReset();
         writeFileSyncMock.mockReset();
         chromiumExecutablePathMock.mockReset();
         chromiumExecutablePathMock.mockReturnValue(chromiumPath);
@@ -271,7 +299,11 @@ describe('ensurePlaywrightBrowsers', () => {
             platform: 'linux',
             depsStampPath,
             exec: execFileSyncMock,
-            fs: { existsSync: existsSyncMock, writeFileSync: writeFileSyncMock },
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: mkdirSyncMock,
+                writeFileSync: writeFileSyncMock,
+            },
         });
 
         expect(execFileSyncMock).toHaveBeenCalledTimes(2);
