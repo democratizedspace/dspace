@@ -268,9 +268,7 @@
         if (typeof fetch !== 'function') {
             return null;
         }
-        const isTestEnvironment =
-            (typeof import.meta !== 'undefined' && import.meta.env?.MODE === 'test') ||
-            (typeof process !== 'undefined' && process.env?.VITEST === 'true');
+        const isTestEnvironment = import.meta.env?.MODE === 'test';
         try {
             const buildMetaUrl =
                 typeof window !== 'undefined' && window.location

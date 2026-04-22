@@ -200,8 +200,10 @@
             console.error('Unable to load custom quests for listing:', error);
             customQuestRecords = [];
         } finally {
-            classifyCustomQuests(latestClassificationSnapshot);
-            customMergeComplete = true;
+            if (!componentDestroyed) {
+                classifyCustomQuests(latestClassificationSnapshot);
+                customMergeComplete = true;
+            }
             markPerf('quests:custom-quests-merge-complete');
             measurePerf(
                 'quests:time-to-custom-merge',
