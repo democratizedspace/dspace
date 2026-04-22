@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -249,6 +249,7 @@ export function ensurePlaywrightSystemDeps(options = {}) {
 
     const {
         existsSync: fsExistsSync = existsSync,
+        mkdirSync: fsMkdirSync = mkdirSync,
         writeFileSync: fsWriteFileSync = writeFileSync,
     } = fs ?? {};
 
@@ -293,6 +294,7 @@ export function ensurePlaywrightSystemDeps(options = {}) {
     }
 
     try {
+        fsMkdirSync(path.dirname(depsStampPath), { recursive: true });
         fsWriteFileSync(depsStampPath, `${new Date().toISOString()}\n`);
     } catch (error) {
         console.warn(

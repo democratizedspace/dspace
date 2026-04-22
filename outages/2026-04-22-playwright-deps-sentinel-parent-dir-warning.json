@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-22-playwright-deps-sentinel-parent-dir-warning",
+  "date": "2026-04-22",
+  "component": "frontend:scripts-playwright",
+  "rootCause": "ensure-playwright-browsers wrote the deps sentinel file without ensuring the parent directory exists, triggering ENOENT warnings in synthetic test paths.",
+  "resolution": "Created the sentinel parent directory recursively before writing the deps stamp file.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts"
+  ]
+}
