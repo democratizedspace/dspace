@@ -283,6 +283,54 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(writeFileSync).toHaveBeenCalledTimes(1);
   });
 
+  it('does not touch the real filesystem when a custom fs omits mkdirSync', async () => {
+    const execFileSync = vi.fn();
+    const writeFileSync = vi.fn();
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    try {
+      const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
+
+      const installed = ensurePlaywrightSystemDeps({
+        cwd: repoRoot,
+        env: { PLAYWRIGHT_SKIP_INSTALL_DEPS: '0' },
+        platform: 'linux',
+        cliPath: path.join(
+          repoRoot,
+          'node_modules',
+          '@playwright',
+          'test',
+          'cli.js'
+        ),
+        exec: execFileSync,
+        fs: {
+          existsSync: vi.fn((candidate: string) => {
+            return (
+              candidate ===
+              path.join(
+                repoRoot,
+                'node_modules',
+                '@playwright',
+                'test',
+                'cli.js'
+              )
+            );
+          }),
+          writeFileSync,
+        },
+      });
+
+      expect(installed).toBe(true);
+      expect(execFileSync).toHaveBeenCalledTimes(1);
+      expect(writeFileSync).toHaveBeenCalledTimes(1);
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining('Unable to create Playwright deps sentinel directory')
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it('warns but continues when headless shell is missing', async () => {
     const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
     const chromeExecutable = path.join(
