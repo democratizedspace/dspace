@@ -39,7 +39,7 @@ async function importModule(): Promise<EnsureModule> {
 }
 
 describe('ensurePlaywrightSystemDeps', () => {
-    const cwd = '/workspace/dspace/frontend';
+    const cwd = process.cwd();
     const cliPath = `${cwd}/node_modules/@playwright/test/cli.js`;
     const depsStampPath = path.join(cwd, '.playwright-deps-installed-test');
 
@@ -198,7 +198,7 @@ describe('ensurePlaywrightSystemDeps', () => {
 });
 
 describe('ensurePlaywrightBrowsers', () => {
-    const cwd = '/workspace/dspace/frontend';
+    const cwd = process.cwd();
     const cliPath = `${cwd}/node_modules/@playwright/test/cli.js`;
     const chromiumPath = '/root/.cache/ms-playwright/chromium-1234/chrome';
     const headlessShellPath =

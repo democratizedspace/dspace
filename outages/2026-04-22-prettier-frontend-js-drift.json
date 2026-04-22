@@ -1,0 +1,14 @@
+{
+  "id": "2026-04-22-prettier-frontend-js-drift",
+  "date": "2026-04-22",
+  "component": "frontend-formatting-gate",
+  "longForm": "outages/2026-04-22-prettier-frontend-js-drift.md",
+  "rootCause": "Frontend JavaScript files drifted from Prettier style, causing format:check to fail inside the launch-gate suite.",
+  "resolution": "Reformatted the flagged frontend JavaScript files with the frontend Prettier configuration to restore format:check compliance.",
+  "references": [
+    "frontend/__tests__/migrations.test.js",
+    "frontend/__tests__/offlineWorkerRegistration.test.js",
+    "frontend/src/utils/legacySaveParsing.js",
+    "scripts/tests/prettierFormatting.test.ts"
+  ]
+}
