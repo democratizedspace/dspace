@@ -21,6 +21,8 @@ const originalLocation = globalThis.location;
 const originalIndexedDB = globalThis.indexedDB;
 const flushMicrotasks = () => new Promise((resolve) => queueMicrotask(resolve));
 let reloadSpy: ReturnType<typeof vi.fn>;
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+let allowConsoleError = false;
 const setWindowLocation = (value: Location | undefined) => {
     try {
         Object.defineProperty(window, 'location', {
@@ -38,6 +40,8 @@ describe('DataReset', () => {
         localStorage.clear();
         document.cookie = '';
         reloadSpy = vi.fn();
+        allowConsoleError = false;
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
         const mockLocation = {
             ...originalLocation,
             reload: reloadSpy,
@@ -46,6 +50,10 @@ describe('DataReset', () => {
     });
 
     afterEach(() => {
+        if (!allowConsoleError) {
+            expect(consoleErrorSpy).not.toHaveBeenCalled();
+        }
+        consoleErrorSpy?.mockRestore();
         vi.restoreAllMocks();
         localStorage.clear();
         document.cookie = '';
@@ -209,6 +217,7 @@ describe('DataReset', () => {
     });
 
     it('handles unexpected errors by surfacing a warning and skipping reload', async () => {
+        allowConsoleError = true;
         Object.defineProperty(globalThis, 'indexedDB', {
             value: null,
             configurable: true,

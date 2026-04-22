@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-21-buysell-indexeddb-test-noise",
+  "date": "2026-04-21",
+  "component": "frontend-item-tests",
+  "longForm": "outages/2026-04-21-buysell-indexeddb-test-noise.md",
+  "rootCause": "Expected IndexedDB fallback paths in item page tests emitted console errors without local suppression.",
+  "resolution": "Added test-local console spies for expected negative-path logs to keep CI output clean while preserving assertions.",
+  "references": [
+    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts"
+  ]
+}

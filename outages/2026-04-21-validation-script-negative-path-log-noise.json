@@ -1,0 +1,14 @@
+{
+  "id": "2026-04-21-validation-script-negative-path-log-noise",
+  "date": "2026-04-21",
+  "component": "validator-script-tests",
+  "longForm": "outages/2026-04-21-validation-script-negative-path-log-noise.md",
+  "rootCause": "Validation script negative-path tests printed expected validation errors to stderr.",
+  "resolution": "Added local console error spies and guaranteed cleanup around invalid-fixture assertions.",
+  "references": [
+    "scripts/tests/validateQuest.test.ts",
+    "scripts/tests/validateItem.test.ts",
+    "scripts/tests/validateStagedQuests.test.ts",
+    "tests/validateQuest.test.ts"
+  ]
+}

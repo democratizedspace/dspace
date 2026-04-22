@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import path from 'path';
 import fs from 'fs';
 const validateItem = require('../validate-item');
@@ -6,17 +6,30 @@ const validateItem = require('../validate-item');
 describe('validateItem script', () => {
   it('returns true for a valid item file', () => {
     const tempPath = path.join(__dirname, 'temp-item.json');
-    const item = { id: '1', name: 'test', description: 'ok item', image: 'foo.jpg' };
+    const item = {
+      id: '1',
+      name: 'test',
+      description: 'ok item',
+      image: 'foo.jpg',
+    };
     fs.writeFileSync(tempPath, JSON.stringify(item));
     expect(validateItem(tempPath)).toBe(true);
     fs.unlinkSync(tempPath);
   });
 
   it('returns false for an invalid item file', () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     const tempPath = path.join(__dirname, 'temp-invalid-item.json');
+    let result = true;
     fs.writeFileSync(tempPath, JSON.stringify({ name: 'bad' }));
-    const result = validateItem(tempPath);
-    fs.unlinkSync(tempPath);
+    try {
+      result = validateItem(tempPath);
+    } finally {
+      consoleErrorSpy.mockRestore();
+      fs.unlinkSync(tempPath);
+    }
     expect(result).toBe(false);
   });
 });

@@ -83,7 +83,9 @@ describe('Chip', () => {
         expect((disabledLinkChip as HTMLElement).getAttribute('tabindex')).toBe('-1');
         expect(onClick).not.toHaveBeenCalled();
 
-        const activeOnClick = vi.fn();
+        const activeOnClick = vi.fn((event: Event) => {
+            event.preventDefault();
+        });
         const { getByRole: getActiveLinkByRole } = render(Chip, {
             props: {
                 text: 'Active Docs',

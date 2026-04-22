@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-21-dusd-fallback-warning-test-noise",
+  "date": "2026-04-21",
+  "component": "frontend-fixtures",
+  "longForm": "outages/2026-04-21-dusd-fallback-warning-test-noise.md",
+  "rootCause": "Test fixtures omitted canonical dUSD, causing fallback warnings in inventory/process tests.",
+  "resolution": "Added canonical dUSD fixture entries so tests execute expected paths without fallback-warning noise.",
+  "references": [
+    "frontend/src/pages/inventory/__tests__/Inventory.filtering.spec.ts",
+    "frontend/src/components/__tests__/ProcessForm.spec.ts"
+  ]
+}

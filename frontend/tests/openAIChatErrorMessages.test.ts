@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../src/utils/gameState/common.js', () => ({
@@ -67,16 +67,22 @@ const quotaError = () => {
 
 describe('OpenAIChat error messaging', () => {
     let consoleErrorMock: ReturnType<typeof vi.spyOn>;
+    let consoleWarnMock: ReturnType<typeof vi.spyOn>;
 
     beforeEach(() => {
         GPT5ChatV2.mockReset();
         messages.set([]);
         activePersonaId.set('dchat');
         consoleErrorMock = vi.spyOn(console, 'error').mockImplementation(() => {});
+        consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }));
     });
 
     afterEach(() => {
         consoleErrorMock.mockRestore();
+        consoleWarnMock.mockRestore();
+        vi.unstubAllGlobals();
+        cleanup();
     });
 
     it('surfaces actionable guidance when quota is exhausted', async () => {
@@ -92,6 +98,11 @@ describe('OpenAIChat error messaging', () => {
         expect(
             await screen.findAllByText(/openai could not generate a reply because this account/i)
         ).toHaveLength(2);
+        expect(consoleErrorMock).toHaveBeenCalledWith(
+            'OpenAI chat request failed',
+            expect.any(Error)
+        );
+        expect(consoleWarnMock).not.toHaveBeenCalled();
     });
 
     it('surfaces invalid API key errors to the user', async () => {
@@ -107,5 +118,10 @@ describe('OpenAIChat error messaging', () => {
         const banner = await screen.findByRole('alert');
         expect(banner.getAttribute('data-error-type')).toBe('auth');
         expect(await screen.findAllByText(/api key/i)).toHaveLength(2);
+        expect(consoleErrorMock).toHaveBeenCalledWith(
+            'OpenAI chat request failed',
+            expect.any(Error)
+        );
+        expect(consoleWarnMock).not.toHaveBeenCalled();
     });
 });

@@ -70,6 +70,7 @@ function isInsideOpenProcessGroup(element: Element) {
 
 const TEST_IMAGE =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==';
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
 async function deleteCustomContentDb() {
     await new Promise<void>((resolve) => {
@@ -81,6 +82,7 @@ async function deleteCustomContentDb() {
 }
 
 afterEach(async () => {
+    consoleErrorSpy?.mockRestore();
     clearItemResolverCache();
     await deleteCustomContentDb();
     getItemCountsMock.mockReset();
@@ -95,6 +97,10 @@ afterEach(async () => {
 });
 
 describe('ItemPage', () => {
+    beforeEach(() => {
+        consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
     it('renders built-in item details', async () => {
         const builtIn = items.find((item) => !item.price) ?? items[0];
 

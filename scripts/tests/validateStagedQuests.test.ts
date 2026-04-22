@@ -18,13 +18,21 @@ describe('validate-staged-quests', () => {
   });
 
   it('returns false when a staged quest file is invalid', () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     const temp = path.join(__dirname, 'temp-invalid.json');
     fs.writeFileSync(temp, JSON.stringify({ title: 'invalid' }));
-    const result = validateStagedQuests([temp]);
+    let result = true;
     try {
-      fs.unlinkSync(temp);
-    } catch {
-      // File might already have been deleted by the validator
+      result = validateStagedQuests([temp]);
+    } finally {
+      consoleErrorSpy.mockRestore();
+      try {
+        fs.unlinkSync(temp);
+      } catch {
+        // File might already have been deleted by the validator
+      }
     }
     expect(result).toBe(false);
   });

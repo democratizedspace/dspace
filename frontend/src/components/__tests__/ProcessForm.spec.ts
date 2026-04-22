@@ -9,6 +9,7 @@ const { createProcessMock, updateProcessMock, listCustomItemsMock, mockedItems }
         mockedItems: [
             { id: 'water', name: 'Water', description: 'Fresh water' },
             { id: 'ore', name: 'Ore', description: 'Raw ore' },
+            { id: '5247a603-294a-4a34-a884-1ae20969b2a1', name: 'dUSD', description: 'Currency' },
         ],
     })
 );
@@ -26,10 +27,26 @@ vi.mock('../../utils/customcontent.js', () => ({
 
 import ProcessForm from '../svelte/ProcessForm.svelte';
 
+let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+let allowConsoleError = false;
+
 beforeEach(() => {
     createProcessMock.mockClear();
     updateProcessMock.mockClear();
     listCustomItemsMock.mockClear();
+    allowConsoleError = false;
+    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterEach(() => {
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    if (!allowConsoleError) {
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+    }
+    consoleWarnSpy?.mockRestore();
+    consoleErrorSpy?.mockRestore();
 });
 
 test('submits text then clears field', async () => {
@@ -326,6 +343,7 @@ test('uses processId prop when editing without a processData id', async () => {
 });
 
 test('shows an error when editing without a process id', async () => {
+    allowConsoleError = true;
     const { getByLabelText, container, findByText } = render(ProcessForm, {
         props: {
             isEdit: true,
@@ -621,6 +639,7 @@ test('hides the preview after a successful create', async () => {
 });
 
 test('shows an error when update fails', async () => {
+    allowConsoleError = true;
     updateProcessMock.mockRejectedValueOnce(new Error('Update failed'));
 
     const { getByLabelText, container, findByText } = render(ProcessForm, {

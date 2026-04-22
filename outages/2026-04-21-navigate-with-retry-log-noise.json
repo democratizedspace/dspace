@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-21-navigate-with-retry-log-noise",
+  "date": "2026-04-21",
+  "component": "retry-helper-tests",
+  "longForm": "outages/2026-04-21-navigate-with-retry-log-noise.md",
+  "rootCause": "Retry helper negative-path tests intentionally emitted repeated warning logs.",
+  "resolution": "Added test-local console warn spies around expected retry warnings and restored mocks after each test.",
+  "references": [
+    "tests/navigateWithRetry.test.ts",
+    "tests/purgeClientStateRetry.test.ts"
+  ]
+}

@@ -1,8 +1,13 @@
-import { describe, expect, test, vi } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 const { runTests } = require('../../run-tests');
 
 describe('runTests', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    delete process.env.SKIP_E2E;
+  });
+
   test('fails when no root tests run', () => {
     const exec = vi
       .fn()
@@ -10,6 +15,9 @@ describe('runTests', () => {
     const write = vi
       .spyOn(process.stdout, 'write')
       .mockImplementation(() => true);
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     const code = runTests(exec, 'linux');
     expect(code).toBe(1);
     expect(exec).toHaveBeenCalledWith(
@@ -21,7 +29,8 @@ describe('runTests', () => {
       })
     );
     expect(exec).toHaveBeenCalledTimes(1);
-    write.mockRestore();
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    expect(write).toHaveBeenCalled();
   });
 
   test('runs platform script when tests pass', () => {
@@ -50,6 +59,30 @@ describe('runTests', () => {
       expect.objectContaining({
         stdio: 'inherit',
         env: expect.objectContaining({ SKIP_UNIT_TESTS: '1' }),
+      })
+    );
+    const preparePrCallEnv = exec.mock.calls[4][1].env;
+    expect(preparePrCallEnv.SKIP_E2E).toBeUndefined();
+  });
+
+  test('forwards SKIP_E2E only when explicitly set', () => {
+    process.env.SKIP_E2E = '1';
+    const exec = vi
+      .fn()
+      .mockReturnValueOnce('Test Files  1 passed\nTests  1 passed')
+      .mockReturnValueOnce('')
+      .mockReturnValueOnce('')
+      .mockReturnValueOnce('');
+
+    const code = runTests(exec, 'linux');
+
+    expect(code).toBe(0);
+    expect(exec).toHaveBeenNthCalledWith(
+      5,
+      'bash ./frontend/scripts/prepare-pr.sh',
+      expect.objectContaining({
+        stdio: 'inherit',
+        env: expect.objectContaining({ SKIP_UNIT_TESTS: '1', SKIP_E2E: '1' }),
       })
     );
   });
@@ -93,7 +126,7 @@ describe('runTests', () => {
         maxBuffer: 200 * 1024 * 1024,
       })
     );
-    write.mockRestore();
+    expect(write).toHaveBeenCalled();
   });
 
   test('fails when retry also fails after vitest worker onTaskUpdate timeout', () => {
@@ -117,12 +150,16 @@ describe('runTests', () => {
     const write = vi
       .spyOn(process.stdout, 'write')
       .mockImplementation(() => true);
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     const code = runTests(exec, 'linux');
 
     expect(code).toBe(1);
     expect(exec).toHaveBeenCalledTimes(2);
     expect(write).toHaveBeenCalledWith(timeoutError.stdout);
-    write.mockRestore();
+    expect(consoleErrorSpy).toHaveBeenCalled();
+    expect(write).toHaveBeenCalled();
   });
 });

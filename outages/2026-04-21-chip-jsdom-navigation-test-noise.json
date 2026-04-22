@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-21-chip-jsdom-navigation-test-noise",
+  "date": "2026-04-21",
+  "component": "frontend-chip-tests",
+  "longForm": "outages/2026-04-21-chip-jsdom-navigation-test-noise.md",
+  "rootCause": "Chip link test triggered jsdom navigation warnings during click assertions.",
+  "resolution": "Updated test click handling to prevent default navigation while asserting callback behavior.",
+  "references": [
+    "frontend/src/components/__tests__/Chip.spec.ts"
+  ]
+}

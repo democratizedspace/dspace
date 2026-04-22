@@ -275,7 +275,11 @@ describe('Quests Component', () => {
             await vi.runAllTimersAsync();
             await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
             await vi.waitFor(() =>
-                expect(host.querySelector("[data-testid='custom-quests-section']")).not.toBeNull()
+                expect(
+                    host.querySelector(
+                        "a[data-questid='custom/completed'] [data-testid='quest-tile']"
+                    )
+                ).not.toBeNull()
             );
 
             const customSection = host.querySelector("[data-testid='custom-quests-section']");

@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-21-quests-completed-custom-quests-regression",
+  "date": "2026-04-21",
+  "component": "frontend-quests-tests",
+  "longForm": "outages/2026-04-21-quests-completed-custom-quests-regression.md",
+  "rootCause": "Completed custom quest assertion used a broad selector that could observe transient render state.",
+  "resolution": "Hardened test selector to target the completed custom quest tile via data-questid and scoped assertions.",
+  "references": [
+    "frontend/__tests__/Quests.test.js"
+  ]
+}
