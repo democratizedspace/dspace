@@ -22,6 +22,7 @@ vi.mock('node:fs', async () => {
     return {
         ...actual,
         existsSync: existsSyncMock,
+        mkdirSync: mkdirSyncMock,
         writeFileSync: writeFileSyncMock,
     };
 });
@@ -47,7 +48,7 @@ function resolveFrontendCwd(): string {
 
 describe('ensurePlaywrightSystemDeps', () => {
     const cwd = resolveFrontendCwd();
-    const cliPath = `${cwd}/node_modules/@playwright/test/cli.js`;
+    const cliPath = path.join(cwd, 'node_modules', '@playwright', 'test', 'cli.js');
     const depsStampPath = path.join(cwd, '.playwright-deps-installed-test');
 
     beforeEach(() => {
@@ -226,7 +227,7 @@ describe('ensurePlaywrightSystemDeps', () => {
 
 describe('ensurePlaywrightBrowsers', () => {
     const cwd = resolveFrontendCwd();
-    const cliPath = `${cwd}/node_modules/@playwright/test/cli.js`;
+    const cliPath = path.join(cwd, 'node_modules', '@playwright', 'test', 'cli.js');
     const chromiumPath = '/root/.cache/ms-playwright/chromium-1234/chrome';
     const headlessShellPath =
         '/root/.cache/ms-playwright/chromium-headless-shell-1234/headless_shell';
