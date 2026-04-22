@@ -3,10 +3,10 @@
   "date": "2026-04-22",
   "component": "playwright-bootstrap",
   "longForm": "outages/2026-04-22-playwright-deps-sentinel-parent-dir.md",
-  "rootCause": "Sentinel file creation did not ensure parent directory creation, causing ENOENT warnings in tests.",
-  "resolution": "Added recursive parent-directory creation before writing the Playwright deps sentinel file.",
+  "rootCause": "Playwright bootstrap tests used a hardcoded /workspace path and incomplete fs mocks, so sentinel mkdir/write calls hit missing parent paths and emitted ENOENT warnings.",
+  "resolution": "Updated Playwright bootstrap tests to use repo-relative frontend paths and pass mkdirSync mocks alongside writeFileSync so sentinel creation stays test-safe without stderr noise.",
   "references": [
-    "frontend/scripts/utils/ensure-playwright-browsers.js",
-    "scripts/tests/ensurePlaywrightBrowsers.test.ts"
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts",
+    "frontend/tests/ensure-playwright-browsers.test.ts"
   ]
 }

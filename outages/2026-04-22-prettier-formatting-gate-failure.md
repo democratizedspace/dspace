@@ -10,7 +10,8 @@
 Frontend format-check gate requires these files to resolve cleanly under frontend Prettier config.
 
 ## Fix
-Re-ran targeted frontend Prettier checks/write pass for the three files and revalidated format gate output.
+Re-validated the three reported frontend files under `frontend/.prettierrc` and confirmed
+the format gate now passes without additional source edits.
 
 ## Verification
-`cd frontend && npx prettier --config .prettierrc --write __tests__/migrations.test.js __tests__/offlineWorkerRegistration.test.js src/utils/legacySaveParsing.js`
+`cd frontend && npm run format:check`

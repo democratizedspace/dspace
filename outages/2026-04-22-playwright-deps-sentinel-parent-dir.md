@@ -5,10 +5,13 @@ Test stderr emitted:
 `Unable to create Playwright deps sentinel file at /workspace/dspace/frontend/.playwright-deps-installed: ENOENT...`.
 
 ## Root cause
-`ensurePlaywrightSystemDeps` attempted to write the sentinel file without first ensuring parent directory existence.
+Playwright helper tests hardcoded `/workspace/dspace/frontend` and only mocked `existsSync`/`writeFileSync`.
+In environments where that absolute path is absent, sentinel `mkdirSync`/`writeFileSync` emitted `ENOENT`
+warnings to stderr.
 
 ## Fix
-Created the sentinel parent directory recursively before writing the sentinel file.
+Made tests path-agnostic (`path.resolve(process.cwd(), 'frontend')`) and injected `mkdirSync` mocks
+alongside `writeFileSync` so sentinel creation remains isolated from host filesystem layout.
 
 ## Verification
-`npm run test:root -- scripts/tests/ensurePlaywrightBrowsers.test.ts`
+`npm run test:root -- scripts/tests/ensurePlaywrightBrowsers.test.ts frontend/tests/ensure-playwright-browsers.test.ts`
