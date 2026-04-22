@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-22-playwright-sentinel-hardcoded-cwd",
+  "date": "2026-04-22",
+  "component": "playwright-bootstrap-tests",
+  "longForm": "outages/2026-04-22-playwright-sentinel-hardcoded-cwd.md",
+  "rootCause": "Playwright bootstrap tests hardcoded /workspace/dspace/frontend as cwd, which does not exist in all local test environments and caused ENOENT noise when sentinel directories were created.",
+  "resolution": "Resolved test cwd from process.cwd() so sentinel writes target the active frontend workspace path regardless of host filesystem layout.",
+  "references": [
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts",
+    "frontend/tests/ensure-playwright-browsers.test.ts",
+    "frontend/scripts/utils/ensure-playwright-browsers.js"
+  ]
+}

@@ -4,7 +4,7 @@ import { sanitizeProxyEnv } from '../../frontend/scripts/utils/ensure-playwright
 
 const MODULE_PATH =
   '../../frontend/scripts/utils/ensure-playwright-browsers.js';
-const repoRoot = path.join(path.sep, 'workspace', 'dspace', 'frontend');
+const repoRoot = path.resolve(process.cwd(), 'frontend');
 const originalEnv = process.env;
 
 describe('ensurePlaywrightBrowsers', () => {
