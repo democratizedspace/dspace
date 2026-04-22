@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -293,6 +293,10 @@ export function ensurePlaywrightSystemDeps(options = {}) {
     }
 
     try {
+        const sentinelDir = path.dirname(depsStampPath);
+        if (sentinelDir) {
+            mkdirSync(sentinelDir, { recursive: true });
+        }
         fsWriteFileSync(depsStampPath, `${new Date().toISOString()}\n`);
     } catch (error) {
         console.warn(
