@@ -31,6 +31,9 @@
     let refreshTick = 0;
     let lastSeenChecksum = '';
 
+    const isExpectedMissingItemError = (error) =>
+        typeof error?.message === 'string' && error.message.includes('item not found with id:');
+
     function handleTypeClick(type) {
         activeType = type;
     }
@@ -89,11 +92,13 @@
             item = loadedItem ?? null;
         } catch (error) {
             item = null;
-            console.error('Failed to load item from IndexedDB in BuySell.svelte', {
-                itemId,
-                entityType: ENTITY_TYPES.ITEM,
-                error,
-            });
+            if (!isExpectedMissingItemError(error)) {
+                console.error('Failed to load item from IndexedDB in BuySell.svelte', {
+                    itemId,
+                    entityType: ENTITY_TYPES.ITEM,
+                    error,
+                });
+            }
         } finally {
             isLoading = false;
         }

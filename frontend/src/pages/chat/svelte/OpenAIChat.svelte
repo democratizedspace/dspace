@@ -268,6 +268,9 @@
         if (typeof fetch !== 'function') {
             return null;
         }
+        const isTestEnvironment =
+            (typeof import.meta !== 'undefined' && import.meta.env?.MODE === 'test') ||
+            (typeof process !== 'undefined' && process.env?.VITEST === 'true');
         try {
             const buildMetaUrl =
                 typeof window !== 'undefined' && window.location
@@ -283,7 +286,9 @@
             }
             return payload;
         } catch (error) {
-            console.warn('Failed to fetch runtime build metadata', error);
+            if (!isTestEnvironment) {
+                console.warn('Failed to fetch runtime build metadata', error);
+            }
             return null;
         }
     }

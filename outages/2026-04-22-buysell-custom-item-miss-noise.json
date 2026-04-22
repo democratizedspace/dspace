@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-22-buysell-custom-item-miss-noise",
+  "date": "2026-04-22",
+  "component": "frontend-inventory",
+  "longForm": "outages/2026-04-22-buysell-custom-item-miss-noise.md",
+  "rootCause": "Expected custom-item-missing lookups were treated as hard errors and emitted noisy stderr during tests.",
+  "resolution": "Ignored known missing-item lookup errors while preserving error logs for unexpected IndexedDB failures.",
+  "references": [
+    "frontend/src/components/svelte/BuySell.svelte",
+    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts",
+    "frontend/src/utils/customcontent.js"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "2026-04-22-prettier-formatting-gate-failure",
+  "date": "2026-04-22",
+  "component": "frontend-formatting",
+  "longForm": "outages/2026-04-22-prettier-formatting-gate-failure.md",
+  "rootCause": "Format check gate reported drift in three frontend files used by launch-gate verification.",
+  "resolution": "Validated and normalized the listed files with frontend Prettier configuration.",
+  "references": [
+    "scripts/tests/prettierFormatting.test.ts",
+    "frontend/__tests__/migrations.test.js",
+    "frontend/__tests__/offlineWorkerRegistration.test.js",
+    "frontend/src/utils/legacySaveParsing.js"
+  ]
+}

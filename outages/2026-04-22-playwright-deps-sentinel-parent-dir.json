@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-22-playwright-deps-sentinel-parent-dir",
+  "date": "2026-04-22",
+  "component": "playwright-bootstrap",
+  "longForm": "outages/2026-04-22-playwright-deps-sentinel-parent-dir.md",
+  "rootCause": "Sentinel file creation did not ensure parent directory creation, causing ENOENT warnings in tests.",
+  "resolution": "Added recursive parent-directory creation before writing the Playwright deps sentinel file.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts"
+  ]
+}

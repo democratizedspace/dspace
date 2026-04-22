@@ -46,6 +46,7 @@
     let customMergeComplete = false;
     let showQuestGraphVisualizer = false;
     let unsubscribeState;
+    let componentDestroyed = false;
 
     const normalizeQuestRoute = (route, id) => {
         const fallbackRoute = `/quests/${id}`;
@@ -148,6 +149,9 @@
         const reconcileFullState = async () => {
             try {
                 await ready;
+                if (componentDestroyed) {
+                    return;
+                }
                 const currentState = loadGameState();
                 showQuestGraphVisualizer = Boolean(currentState.settings?.showQuestGraphVisualizer);
 
@@ -183,8 +187,14 @@
             if (Number.isFinite(customQuestDelayMs) && customQuestDelayMs > 0) {
                 await new Promise((resolve) => setTimeout(resolve, customQuestDelayMs));
             }
+            if (componentDestroyed) {
+                return;
+            }
 
             const questsFromStorage = await listCustomQuests();
+            if (componentDestroyed) {
+                return;
+            }
             customQuestRecords = Array.isArray(questsFromStorage) ? questsFromStorage : [];
         } catch (error) {
             console.error('Unable to load custom quests for listing:', error);
@@ -202,6 +212,7 @@
     });
 
     onDestroy(() => {
+        componentDestroyed = true;
         unsubscribeState?.();
     });
 </script>
