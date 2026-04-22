@@ -283,6 +283,14 @@
             }
             return payload;
         } catch (error) {
+            const runtimeCode =
+                error && typeof error === 'object'
+                    ? String(error?.cause?.code || error?.code || '')
+                    : '';
+            const isExpectedLocalRefusal = runtimeCode === 'ECONNREFUSED';
+            if (isExpectedLocalRefusal) {
+                return null;
+            }
             console.warn('Failed to fetch runtime build metadata', error);
             return null;
         }

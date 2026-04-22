@@ -89,11 +89,15 @@
             item = loadedItem ?? null;
         } catch (error) {
             item = null;
-            console.error('Failed to load item from IndexedDB in BuySell.svelte', {
-                itemId,
-                entityType: ENTITY_TYPES.ITEM,
-                error,
-            });
+            const message = String(error?.message || '');
+            const isMissingItemError = message.includes(`not found with id: ${itemId}`);
+            if (!isMissingItemError) {
+                console.error('Failed to load item from IndexedDB in BuySell.svelte', {
+                    itemId,
+                    entityType: ENTITY_TYPES.ITEM,
+                    error,
+                });
+            }
         } finally {
             isLoading = false;
         }
