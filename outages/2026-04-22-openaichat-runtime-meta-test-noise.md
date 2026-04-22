@@ -7,7 +7,7 @@ Test stderr repeatedly logged runtime metadata fetch failures with `ECONNREFUSED
 When `fetch('/build-meta.json')` fails in test contexts, `fetchRuntimeBuildMeta` warned even though the fallback behavior is intentional.
 
 ## Fix
-Added a targeted test-environment guard so failed runtime metadata fetches do not emit warnings in test mode.
+Replaced broad test-mode suppression with narrow filtering for expected local runtime-metadata fetch failures (`Failed to fetch` / `ECONNREFUSED`) while preserving warnings for unexpected errors.
 
 ## Verification
 `npm run test:root`
