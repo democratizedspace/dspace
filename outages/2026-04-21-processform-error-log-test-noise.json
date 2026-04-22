@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-21-processform-error-log-test-noise",
+  "date": "2026-04-21",
+  "component": "frontend-process-tests",
+  "longForm": "outages/2026-04-21-processform-error-log-test-noise.md",
+  "rootCause": "Process form negative-path tests intentionally logged save failures to console.",
+  "resolution": "Added scoped console spies for expected error/warn output in process form tests.",
+  "references": [
+    "frontend/src/components/__tests__/ProcessForm.spec.ts"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-21-module-typeless-package-json-warning",
+  "date": "2026-04-21",
+  "component": "vitest-svelte-config",
+  "longForm": "outages/2026-04-21-module-typeless-package-json-warning.md",
+  "rootCause": "Vitest loaded an ESM-style Svelte config from a .js file in a CommonJS package context.",
+  "resolution": "Renamed Svelte config to .mjs and updated Vitest config references to remove typeless-module warnings.",
+  "references": [
+    "svelte.config.mjs",
+    "vitest.config.mts"
+  ]
+}

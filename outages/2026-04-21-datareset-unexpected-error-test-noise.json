@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-21-datareset-unexpected-error-test-noise",
+  "date": "2026-04-21",
+  "component": "frontend-datareset-tests",
+  "longForm": "outages/2026-04-21-datareset-unexpected-error-test-noise.md",
+  "rootCause": "Negative-path DataReset test intentionally triggered cleanup errors that were logged to stderr.",
+  "resolution": "Scoped console error suppression to the test path that validates graceful failure behavior.",
+  "references": [
+    "frontend/src/components/__tests__/DataReset.spec.ts"
+  ]
+}

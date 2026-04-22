@@ -1,0 +1,14 @@
+{
+  "id": "2026-04-21-prettier-formatting-regression",
+  "date": "2026-04-21",
+  "component": "frontend-formatting",
+  "longForm": "outages/2026-04-21-prettier-formatting-regression.md",
+  "rootCause": "Frontend formatting drift caused format-check failures in launch-gate validation.",
+  "resolution": "Ran frontend Prettier with workspace config on drifted files and recommitted normalized formatting.",
+  "references": [
+    "scripts/tests/prettierFormatting.test.ts",
+    "frontend/__tests__/migrations.test.js",
+    "frontend/__tests__/offlineWorkerRegistration.test.js",
+    "frontend/src/utils/legacySaveParsing.js"
+  ]
+}

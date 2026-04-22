@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-21-playwright-deps-sentinel-test-noise",
+  "date": "2026-04-21",
+  "component": "script-tests",
+  "longForm": "outages/2026-04-21-playwright-deps-sentinel-test-noise.md",
+  "rootCause": "Playwright bootstrap sentinel tests logged expected proxy/deps warnings to stderr.",
+  "resolution": "Captured and asserted expected warning output via local console spies in sentinel tests.",
+  "references": [
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts"
+  ]
+}

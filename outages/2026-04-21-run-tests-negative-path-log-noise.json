@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-21-run-tests-negative-path-log-noise",
+  "date": "2026-04-21",
+  "component": "test-runner-tests",
+  "longForm": "outages/2026-04-21-run-tests-negative-path-log-noise.md",
+  "rootCause": "Negative-path run-tests suites emitted expected stderr output during failure simulations.",
+  "resolution": "Added test-local console error spies and deterministic cleanup so intentional failures stay quiet.",
+  "references": [
+    "scripts/tests/run-tests.test.ts",
+    "tests/run-test-groups.test.ts"
+  ]
+}

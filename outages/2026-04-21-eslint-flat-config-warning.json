@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-21-eslint-flat-config-warning",
+  "date": "2026-04-21",
+  "component": "frontend-lint-scripts",
+  "longForm": "outages/2026-04-21-eslint-flat-config-warning.md",
+  "rootCause": "Frontend lint scripts produced ESLintRC deprecation warnings on launch-gate runs.",
+  "resolution": "Adjusted lint script warning handling to suppress the targeted ESLint warning without muting unrelated diagnostics.",
+  "references": [
+    "frontend/package.json"
+  ]
+}

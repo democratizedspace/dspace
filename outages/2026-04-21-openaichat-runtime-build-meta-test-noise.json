@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-21-openaichat-runtime-build-meta-test-noise",
+  "date": "2026-04-21",
+  "component": "frontend-chat-tests",
+  "longForm": "outages/2026-04-21-openaichat-runtime-build-meta-test-noise.md",
+  "rootCause": "Chat error-path tests attempted runtime metadata fetches and logged expected warnings.",
+  "resolution": "Stubbed fetch and scoped warning suppression to expected chat test error paths.",
+  "references": [
+    "frontend/tests/openAIChatErrorMessages.test.ts"
+  ]
+}
