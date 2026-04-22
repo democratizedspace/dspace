@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-22-playwright-sentinel-enoent",
+  "date": "2026-04-22",
+  "component": "frontend:scripts-ensure-playwright-browsers",
+  "rootCause": "Playwright dependency bootstrap attempted to create sentinel directories unconditionally and logged ENOENT warnings when test environments used non-existent absolute cwd paths like /workspace/dspace/frontend.",
+  "resolution": "Made sentinel writes conditional on directory availability, suppressed non-actionable ENOENT warnings for sentinel creation/write, and added a regression test to keep install-deps behavior quiet and deterministic in missing-path environments.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "frontend/tests/ensure-playwright-browsers.test.ts",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts"
+  ]
+}

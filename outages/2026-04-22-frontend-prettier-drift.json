@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-22-frontend-prettier-drift",
+  "date": "2026-04-22",
+  "component": "frontend:formatting",
+  "rootCause": "Frontend format gate detected style drift in tracked JavaScript test/utility files, causing scripts/tests/prettierFormatting.test.ts to fail the QA launch sequence.",
+  "resolution": "Normalized formatting for the flagged frontend files with the frontend Prettier configuration so npm run format:check and the formatting regression test pass cleanly.",
+  "references": [
+    "frontend/__tests__/migrations.test.js",
+    "frontend/__tests__/offlineWorkerRegistration.test.js",
+    "frontend/src/utils/legacySaveParsing.js",
+    "scripts/tests/prettierFormatting.test.ts"
+  ]
+}

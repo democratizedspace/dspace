@@ -293,20 +293,35 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         return false;
     }
 
+    const depsDirectory = path.dirname(depsStampPath);
+    let canWriteSentinel = fsExistsSync(depsDirectory);
+
     try {
-        fsMkdirSync(path.dirname(depsStampPath), { recursive: true });
+        if (!canWriteSentinel) {
+            fsMkdirSync(depsDirectory, { recursive: true });
+            canWriteSentinel = true;
+        }
     } catch (error) {
-        console.warn(
-            `Unable to create Playwright deps sentinel directory for ${depsStampPath}: ${error.message}`
-        );
+        if (error?.code !== 'ENOENT') {
+            console.warn(
+                `Unable to create Playwright deps sentinel directory for ${depsStampPath}: ${error.message}`
+            );
+        }
+        canWriteSentinel = false;
+    }
+
+    if (!canWriteSentinel) {
+        return true;
     }
 
     try {
         fsWriteFileSync(depsStampPath, `${new Date().toISOString()}\n`);
     } catch (error) {
-        console.warn(
-            `Unable to create Playwright deps sentinel file at ${depsStampPath}: ${error.message}`
-        );
+        if (error?.code !== 'ENOENT') {
+            console.warn(
+                `Unable to create Playwright deps sentinel file at ${depsStampPath}: ${error.message}`
+            );
+        }
     }
 
     return true;
