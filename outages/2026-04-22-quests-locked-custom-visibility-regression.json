@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-22-quests-locked-custom-visibility-regression",
+  "date": "2026-04-22",
+  "component": "frontend-quests",
+  "longForm": "outages/2026-04-22-quests-locked-custom-visibility-regression.md",
+  "rootCause": "Async quest hydration continued after component teardown, causing locked/custom section assertions to race in tests.",
+  "resolution": "Guarded reconciliation and custom-quest merge paths with a component-destroy flag in Quests.svelte.",
+  "references": [
+    "frontend/__tests__/Quests.test.js",
+    "frontend/src/pages/quests/svelte/Quests.svelte"
+  ]
+}

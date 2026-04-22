@@ -264,10 +264,27 @@
         ].join('\n');
     }
 
+    function isExpectedRuntimeBuildMetaFetchFailure(error) {
+        if (!error || typeof error !== 'object') {
+            return false;
+        }
+
+        const message = String(error?.message ?? '');
+        const code = String(error?.code ?? error?.cause?.code ?? '');
+        const causeMessage = String(error?.cause?.message ?? '');
+
+        return (
+            /Failed to fetch/i.test(message) ||
+            /ECONNREFUSED/i.test(code) ||
+            /ECONNREFUSED/i.test(causeMessage)
+        );
+    }
+
     async function fetchRuntimeBuildMeta() {
         if (typeof fetch !== 'function') {
             return null;
         }
+
         try {
             const buildMetaUrl =
                 typeof window !== 'undefined' && window.location
@@ -283,7 +300,9 @@
             }
             return payload;
         } catch (error) {
-            console.warn('Failed to fetch runtime build metadata', error);
+            if (!isExpectedRuntimeBuildMetaFetchFailure(error)) {
+                console.warn('Failed to fetch runtime build metadata', error);
+            }
             return null;
         }
     }

@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -176,7 +176,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         browser: providedBrowser,
         depsStampPath,
         exec = execFileSync,
-        fs = { existsSync, writeFileSync },
+        fs = { existsSync, mkdirSync, writeFileSync },
     } = options;
 
     const sanitizedEnv = withPlaywrightNetworkEnv(sanitizeProxyEnv(env));
@@ -244,11 +244,12 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         cliPath,
         depsStampPath = getSystemDepsSentinelPath(cwd),
         exec = execFileSync,
-        fs = { existsSync, writeFileSync },
+        fs = { existsSync, mkdirSync, writeFileSync },
     } = options;
 
     const {
         existsSync: fsExistsSync = existsSync,
+        mkdirSync: fsMkdirSync = mkdirSync,
         writeFileSync: fsWriteFileSync = writeFileSync,
     } = fs ?? {};
 
@@ -290,6 +291,14 @@ export function ensurePlaywrightSystemDeps(options = {}) {
             'Run "npx playwright install-deps" manually if browsers fail to launch.';
         console.warn(message);
         return false;
+    }
+
+    try {
+        fsMkdirSync(path.dirname(depsStampPath), { recursive: true });
+    } catch (error) {
+        console.warn(
+            `Unable to create Playwright deps sentinel directory for ${depsStampPath}: ${error.message}`
+        );
     }
 
     try {
