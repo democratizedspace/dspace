@@ -44,6 +44,13 @@
         }
     }
 
+    function isExpectedItemNotFoundError(error) {
+        return (
+            error instanceof Error &&
+            error.message === `${ENTITY_TYPES.ITEM} not found with id: ${itemId}`
+        );
+    }
+
     function handleTransactionClick() {
         if (!item) {
             return;
@@ -89,11 +96,13 @@
             item = loadedItem ?? null;
         } catch (error) {
             item = null;
-            console.error('Failed to load item from IndexedDB in BuySell.svelte', {
-                itemId,
-                entityType: ENTITY_TYPES.ITEM,
-                error,
-            });
+            if (!isExpectedItemNotFoundError(error)) {
+                console.error('Failed to load item from IndexedDB in BuySell.svelte', {
+                    itemId,
+                    entityType: ENTITY_TYPES.ITEM,
+                    error,
+                });
+            }
         } finally {
             isLoading = false;
         }

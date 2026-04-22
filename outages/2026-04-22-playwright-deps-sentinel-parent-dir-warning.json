@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-22-playwright-deps-sentinel-parent-dir-warning",
+  "date": "2026-04-22",
+  "component": "test-infra-playwright-bootstrap",
+  "longForm": "outages/2026-04-22-playwright-deps-sentinel-parent-dir-warning.md",
+  "rootCause": "Playwright dependency bootstrap attempted to write the deps sentinel file without guaranteeing the parent path exists in test scenarios, causing noisy ENOENT warnings.",
+  "resolution": "Updated Playwright bootstrap/test setup to ensure sentinel path handling is deterministic and avoids warning-only ENOENT noise in passing test paths.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts"
+  ]
+}
