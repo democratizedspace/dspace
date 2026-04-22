@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-22-prettier-formatting-failures-three-files",
+  "date": "2026-04-22",
+  "component": "frontend:formatting",
+  "rootCause": "Prettier formatting drift in __tests__/migrations.test.js, __tests__/offlineWorkerRegistration.test.js, and src/utils/legacySaveParsing.js caused scripts/tests/prettierFormatting.test.ts to fail.",
+  "resolution": "Reformatted the flagged files to restore compliance with the frontend Prettier config and clear npm run format:check.",
+  "references": [
+    "frontend/__tests__/migrations.test.js",
+    "frontend/__tests__/offlineWorkerRegistration.test.js",
+    "frontend/src/utils/legacySaveParsing.js",
+    "scripts/tests/prettierFormatting.test.ts"
+  ]
+}

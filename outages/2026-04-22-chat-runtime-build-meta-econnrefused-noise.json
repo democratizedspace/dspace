@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-22-chat-runtime-build-meta-econnrefused-noise",
+  "date": "2026-04-22",
+  "component": "frontend:chat",
+  "rootCause": "OpenAIChat runtime build metadata fetch warnings were logged for expected network-unavailable cases (ECONNREFUSED/fetch failed) in unit tests.",
+  "resolution": "Added targeted filtering so expected runtime metadata fetch failures return null silently while preserving warnings for unexpected failure modes.",
+  "references": [
+    "frontend/src/pages/chat/svelte/OpenAIChat.svelte",
+    "frontend/src/pages/chat/svelte/__tests__/Integrations.spec.ts"
+  ]
+}

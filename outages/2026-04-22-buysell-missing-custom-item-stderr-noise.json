@@ -1,0 +1,11 @@
+{
+  "id": "2026-04-22-buysell-missing-custom-item-stderr-noise",
+  "date": "2026-04-22",
+  "component": "frontend:inventory-buysell",
+  "rootCause": "BuySell.svelte emitted console.error for expected 'item not found' custom-content lookups used by test fixtures and valid missing-item flows.",
+  "resolution": "Kept error logging for unexpected failures but treated the specific missing-item lookup as a non-error path so tests no longer emit noisy stderr.",
+  "references": [
+    "frontend/src/components/svelte/BuySell.svelte",
+    "frontend/src/pages/inventory/item/__tests__/ItemPage.spec.ts"
+  ]
+}

@@ -264,6 +264,23 @@
         ].join('\n');
     }
 
+    function isExpectedRuntimeMetaFetchFailure(error) {
+        const errorCode = error?.code ?? error?.cause?.code;
+        if (
+            errorCode === 'ECONNREFUSED' ||
+            errorCode === 'ENOTFOUND' ||
+            errorCode === 'EAI_AGAIN'
+        ) {
+            return true;
+        }
+
+        return (
+            error instanceof TypeError &&
+            typeof error.message === 'string' &&
+            error.message.toLowerCase().includes('fetch failed')
+        );
+    }
+
     async function fetchRuntimeBuildMeta() {
         if (typeof fetch !== 'function') {
             return null;
@@ -283,7 +300,9 @@
             }
             return payload;
         } catch (error) {
-            console.warn('Failed to fetch runtime build metadata', error);
+            if (!isExpectedRuntimeMetaFetchFailure(error)) {
+                console.warn('Failed to fetch runtime build metadata', error);
+            }
             return null;
         }
     }

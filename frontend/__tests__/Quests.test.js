@@ -231,6 +231,13 @@ describe('Quests Component', () => {
             await vi.runAllTimersAsync();
             await vi.waitFor(() => expect(listCustomQuests).toHaveBeenCalled());
             await vi.waitFor(() =>
+                expect(
+                    host
+                        .querySelector("[data-testid='custom-quests-merge-status']")
+                        ?.getAttribute('data-merge-complete')
+                ).toBe('true')
+            );
+            await vi.waitFor(() =>
                 expect(host.querySelector("[data-testid='custom-quests-section']")).not.toBeNull()
             );
 
