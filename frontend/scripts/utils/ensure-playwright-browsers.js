@@ -295,6 +295,13 @@ export function ensurePlaywrightSystemDeps(options = {}) {
 
     try {
         fsMkdirSync(path.dirname(depsStampPath), { recursive: true });
+    } catch (error) {
+        console.warn(
+            `Unable to create Playwright deps sentinel directory for ${depsStampPath}: ${error.message}`
+        );
+    }
+
+    try {
         fsWriteFileSync(depsStampPath, `${new Date().toISOString()}\n`);
     } catch (error) {
         console.warn(
