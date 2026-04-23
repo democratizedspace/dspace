@@ -1,9 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-const QUEST_JSON_ROOT = path.join(process.cwd(), 'frontend', 'src', 'pages', 'quests', 'json');
+const TEST_DIR = path.dirname(fileURLToPath(import.meta.url));
+const QUEST_JSON_ROOT = path.resolve(TEST_DIR, '..', 'src', 'pages', 'quests', 'json');
 
 function getQuestFiles(): string[] {
     const questFiles: string[] = [];
