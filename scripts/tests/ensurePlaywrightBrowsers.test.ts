@@ -4,7 +4,7 @@ import { sanitizeProxyEnv } from '../../frontend/scripts/utils/ensure-playwright
 
 const MODULE_PATH =
   '../../frontend/scripts/utils/ensure-playwright-browsers.js';
-const repoRoot =
+const frontendRoot =
   path.basename(process.cwd()) === 'frontend'
     ? process.cwd()
     : path.resolve(process.cwd(), 'frontend');
@@ -51,7 +51,7 @@ describe('ensurePlaywrightBrowsers', () => {
       'headless_shell'
     );
     const cliPath = path.join(
-      repoRoot,
+      frontendRoot,
       'node_modules',
       '@playwright',
       'test',
@@ -90,7 +90,7 @@ describe('ensurePlaywrightBrowsers', () => {
       if (candidate === chromeExecutable) {
         return chromeExists;
       }
-      if (candidate === path.join(repoRoot, '.playwright-deps-installed')) {
+      if (candidate === path.join(frontendRoot, '.playwright-deps-installed')) {
         return depsSentinelExists;
       }
       return existingHeadless.has(candidate);
@@ -124,7 +124,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
     await ensurePlaywrightBrowsers({
-      cwd: repoRoot,
+      cwd: frontendRoot,
       browser,
       env: envWithProxy,
       platform: 'linux',
@@ -140,7 +140,7 @@ describe('ensurePlaywrightBrowsers', () => {
         'install-deps',
       ]),
       expect.objectContaining({
-        cwd: repoRoot,
+        cwd: frontendRoot,
         stdio: 'inherit',
         env: expectedEnv,
       }),
@@ -156,7 +156,7 @@ describe('ensurePlaywrightBrowsers', () => {
         'chromium-headless-shell',
       ]),
       expect.objectContaining({
-        cwd: repoRoot,
+        cwd: frontendRoot,
         stdio: 'inherit',
         env: expectedEnv,
       }),
@@ -196,11 +196,11 @@ describe('ensurePlaywrightBrowsers', () => {
       const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
 
       const installed = ensurePlaywrightSystemDeps({
-        cwd: repoRoot,
+        cwd: frontendRoot,
         env: envWithProxy,
         platform: 'linux',
         cliPath: path.join(
-          repoRoot,
+          frontendRoot,
           'node_modules',
           '@playwright',
           'test',
@@ -212,7 +212,7 @@ describe('ensurePlaywrightBrowsers', () => {
             return (
               candidate ===
               path.join(
-                repoRoot,
+                frontendRoot,
                 'node_modules',
                 '@playwright',
                 'test',
@@ -228,7 +228,7 @@ describe('ensurePlaywrightBrowsers', () => {
       expect(installed).toBe(true);
       expect(execFileSync).toHaveBeenCalledTimes(1);
       expect(execFileSync.mock.calls[0][2]).toMatchObject({
-        cwd: repoRoot,
+        cwd: frontendRoot,
         stdio: 'inherit',
       });
       expect(execFileSync.mock.calls[0][2]?.env?.HTTP_PROXY).toBeUndefined();
@@ -236,7 +236,7 @@ describe('ensurePlaywrightBrowsers', () => {
       expect(execFileSync.mock.calls[0][2]?.env).toEqual({
         NODE_OPTIONS: '--dns-result-order=ipv4first',
       });
-      expect(mkdirSync).toHaveBeenCalledWith(path.join(repoRoot), {
+      expect(mkdirSync).toHaveBeenCalledWith(frontendRoot, {
         recursive: true,
       });
       expect(writeFileSync).toHaveBeenCalledTimes(1);
@@ -261,11 +261,11 @@ describe('ensurePlaywrightBrowsers', () => {
     const { ensurePlaywrightSystemDeps } = await import(MODULE_PATH);
 
     const installed = ensurePlaywrightSystemDeps({
-      cwd: repoRoot,
+      cwd: frontendRoot,
       env: envWithProxy,
       platform: 'linux',
       cliPath: path.join(
-        repoRoot,
+        frontendRoot,
         'node_modules',
         '@playwright',
         'test',
@@ -276,7 +276,7 @@ describe('ensurePlaywrightBrowsers', () => {
         existsSync: vi.fn((candidate: string) => {
           return (
             candidate ===
-            path.join(repoRoot, 'node_modules', '@playwright', 'test', 'cli.js')
+            path.join(frontendRoot, 'node_modules', '@playwright', 'test', 'cli.js')
           );
         }),
         mkdirSync,
@@ -290,7 +290,7 @@ describe('ensurePlaywrightBrowsers', () => {
       HTTP_PROXY: envWithProxy.HTTP_PROXY,
       HTTPS_PROXY: envWithProxy.HTTPS_PROXY,
     });
-    expect(mkdirSync).toHaveBeenCalledWith(path.join(repoRoot), {
+    expect(mkdirSync).toHaveBeenCalledWith(frontendRoot, {
       recursive: true,
     });
     expect(writeFileSync).toHaveBeenCalledTimes(1);
@@ -317,7 +317,7 @@ describe('ensurePlaywrightBrowsers', () => {
       'headless_shell'
     );
     const cliPath = path.join(
-      repoRoot,
+      frontendRoot,
       'node_modules',
       '@playwright',
       'test',
@@ -335,7 +335,7 @@ describe('ensurePlaywrightBrowsers', () => {
       if (candidate === headlessUnderscore) {
         return headlessInstalled;
       }
-      if (candidate === path.join(repoRoot, '.playwright-deps-installed')) {
+      if (candidate === path.join(frontendRoot, '.playwright-deps-installed')) {
         return depsSentinelExists;
       }
       return false;
@@ -371,7 +371,7 @@ describe('ensurePlaywrightBrowsers', () => {
     try {
       const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-      await ensurePlaywrightBrowsers({ cwd: repoRoot, browser });
+      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
 
       expect(execFileSync).not.toHaveBeenCalled();
       expect(executablePath).toHaveBeenCalledTimes(1);
@@ -406,7 +406,7 @@ describe('ensurePlaywrightBrowsers', () => {
       'headless_shell'
     );
     const cliPath = path.join(
-      repoRoot,
+      frontendRoot,
       'node_modules',
       '@playwright',
       'test',
@@ -444,7 +444,7 @@ describe('ensurePlaywrightBrowsers', () => {
     });
     const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-    await ensurePlaywrightBrowsers({ cwd: repoRoot, browser });
+    await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
 
     expect(execFileSync).not.toHaveBeenCalled();
     expect(executablePath).toHaveBeenCalledTimes(1);
@@ -581,7 +581,7 @@ describe('ensurePlaywrightBrowsers', () => {
 
     const { resolvePlaywrightCLI } = await import(MODULE_PATH);
 
-    expect(() => resolvePlaywrightCLI(repoRoot)).toThrow(
+    expect(() => resolvePlaywrightCLI(frontendRoot)).toThrow(
       /Playwright CLI not found/
     );
   });
