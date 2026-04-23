@@ -1,8 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-const docsRoot = path.join(process.cwd(), 'frontend/src/pages/docs/md');
+const testDir = path.dirname(fileURLToPath(import.meta.url));
+const docsRoot = path.resolve(testDir, '../src/pages/docs/md');
 
 function collectMarkdownFiles(dir: string): string[] {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
