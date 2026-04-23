@@ -1,9 +1,13 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { describe, expect, it } from 'vitest';
 import { getQuestTreesFromModulePaths, mergeSkillLinks } from '../src/utils/docsSkillsIndex.js';
 
-const questsJsonRoot = path.join(process.cwd(), 'frontend/src/pages/quests/json');
+const testDir = path.dirname(fileURLToPath(import.meta.url));
+const frontendRoot = path.resolve(testDir, '..');
+const questsJsonRoot = path.join(frontendRoot, 'src/pages/quests/json');
+const docsRoot = path.join(frontendRoot, 'src/pages/docs/md');
 
 describe('docs Skills quest-tree mapping', () => {
     it('maps quest module paths to exactly one tree per quests/json subdirectory', () => {
@@ -34,7 +38,6 @@ describe('docs Skills quest-tree mapping', () => {
             .map((entry) => entry.name)
             .sort((left, right) => left.localeCompare(right));
 
-        const docsRoot = path.join(process.cwd(), 'frontend/src/pages/docs/md');
         const docsSlugs = fs
             .readdirSync(docsRoot, { withFileTypes: true })
             .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
