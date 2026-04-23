@@ -4,8 +4,28 @@ import { flushGameStateWrites, registerClientStateHooks, waitForHydration } from
 registerClientStateHooks(test);
 
 test('Authentication flow saves and clears token', async ({ page }) => {
+    const corsHeaders = {
+        'access-control-allow-origin': '*',
+        'access-control-allow-headers': '*',
+        'access-control-allow-methods': 'GET,POST,OPTIONS',
+    };
+
     await page.route('**/gists?per_page=1', (route) =>
-        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' })
+        route.fulfill({
+            status: 200,
+            headers: corsHeaders,
+            contentType: 'application/json',
+            body: '[]',
+        })
+    );
+
+    await page.route('**/gists?per_page=30', (route) =>
+        route.fulfill({
+            status: 200,
+            headers: corsHeaders,
+            contentType: 'application/json',
+            body: '[]',
+        })
     );
 
     const token = 'ghp_' + 'a'.repeat(36);
