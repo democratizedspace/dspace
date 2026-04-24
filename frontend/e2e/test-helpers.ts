@@ -14,6 +14,7 @@ const DEFAULT_RETRY_ATTEMPTS = 6;
 const DEFAULT_RETRY_DELAY_MS = 300;
 const DEFAULT_MAX_LOG_ATTEMPTS = 4;
 const DEFAULT_MAX_DURATION_MS = 10_000;
+const E2E_VERBOSE_LOGS = process.env.E2E_VERBOSE_LOGS === '1';
 const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
 type CryptoLike = { randomUUID?: () => string };
 type IndexedDbRequest<T = unknown> = {
@@ -73,6 +74,12 @@ async function wait(page: Page, ms: number): Promise<void> {
     }
 
     await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function debugLog(...args: unknown[]): void {
+    if (E2E_VERBOSE_LOGS) {
+        console.log(...args);
+    }
 }
 
 export async function navigateWithRetry(
@@ -597,7 +604,7 @@ export async function createTestItems(page: Page, count = 2): Promise<string[]> 
             }
         } catch (e) {
             // If no success message, we might have been redirected to inventory already
-            console.log('No success message found, checking for redirect');
+            debugLog('No success message found, checking for redirect');
         }
 
         // If we couldn't extract an ID but the item was created, at least return something
@@ -773,17 +780,17 @@ export async function fillProcessForm(
         const nameInput = page.locator('#name, #title').first();
         if ((await nameInput.count()) > 0) {
             await nameInput.fill(title);
-            console.log('Filled process title');
+            debugLog('Filled process title');
         } else {
-            console.log('Could not find name/title input');
+            debugLog('Could not find name/title input');
         }
 
         const durationInput = page.locator('#duration');
         if ((await durationInput.count()) > 0) {
             await durationInput.fill(duration);
-            console.log('Filled duration');
+            debugLog('Filled duration');
         } else {
-            console.log('Could not find duration input');
+            debugLog('Could not find duration input');
         }
 
         // Screenshot after filling basic details
@@ -810,7 +817,7 @@ export async function fillProcessForm(
                 if ((await buttonSelector.count()) > 0) {
                     for (let i = 0; i < count; i++) {
                         await buttonSelector.click();
-                        console.log(`Added ${type} item ${i + 1}`);
+                        debugLog(`Added ${type} item ${i + 1}`);
 
                         // Try to select an item from the dropdown or selector if one appears
                         await expect.poll(async () => await trySelectItem(page)).toBe(true);
@@ -821,7 +828,7 @@ export async function fillProcessForm(
             }
 
             if (!foundButton && count > 0) {
-                console.log(`Could not find button to add ${type} items`);
+                debugLog(`Could not find button to add ${type} items`);
             }
         };
 
