@@ -3,14 +3,14 @@
     import CompactItemList from '../../../../components/svelte/CompactItemList.svelte';
     import { get, writable } from 'svelte/store';
     import { finishQuest } from '../../../../utils/gameState.js';
-    import { state } from '../../../../utils/gameState/common.js';
+    import { state as gameStateStore } from '../../../../utils/gameState/common.js';
     import { isValidGitHubToken } from '../../../../utils/githubToken.js';
     import { areItemRequirementsMet } from './itemRequirements.js';
 
     export let quest, option;
     let githubConnected = false;
     const itemRequirementsMet = writable(
-        areItemRequirementsMet(option.requiresItems, get(state)?.inventory, get(state))
+        areItemRequirementsMet(option.requiresItems, get(gameStateStore)?.inventory, get(gameStateStore))
     );
     let isDisabled = false;
 
@@ -21,15 +21,15 @@
     }
 
     $: {
-        if ($state) {
+        if ($gameStateStore) {
             itemRequirementsMet.set(
-                areItemRequirementsMet(option.requiresItems, $state.inventory, $state)
+                areItemRequirementsMet(option.requiresItems, $gameStateStore.inventory, $gameStateStore)
             );
         }
     }
 
     $: {
-        githubConnected = option.requiresGitHub ? isValidGitHubToken($state?.github?.token) : false;
+        githubConnected = option.requiresGitHub ? isValidGitHubToken($gameStateStore?.github?.token) : false;
     }
 
     $: isDisabled = (option.requiresGitHub && !githubConnected) || !$itemRequirementsMet;
