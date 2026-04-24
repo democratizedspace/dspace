@@ -276,7 +276,13 @@ describe('ensurePlaywrightBrowsers', () => {
         existsSync: vi.fn((candidate: string) => {
           return (
             candidate ===
-            path.join(frontendRoot, 'node_modules', '@playwright', 'test', 'cli.js')
+            path.join(
+              frontendRoot,
+              'node_modules',
+              '@playwright',
+              'test',
+              'cli.js'
+            )
           );
         }),
         mkdirSync,
@@ -379,6 +385,124 @@ describe('ensurePlaywrightBrowsers', () => {
       expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
       expect(warnSpy).toHaveBeenCalledWith(
         expect.stringContaining('headless shell is missing')
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it('logs missing headless shell warning only once per process', async () => {
+    const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
+    const chromeExecutable = path.join(
+      cacheRoot,
+      'chromium-1181',
+      'chrome-linux',
+      'chrome'
+    );
+    const cliPath = path.join(
+      frontendRoot,
+      'node_modules',
+      '@playwright',
+      'test',
+      'cli.js'
+    );
+    const existsSync = vi.fn((candidate: string) => {
+      if (candidate === cliPath || candidate === chromeExecutable) {
+        return true;
+      }
+      return false;
+    });
+    const browser = { executablePath: vi.fn(() => chromeExecutable) };
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    vi.doMock('node:fs', async () => {
+      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
+      return {
+        ...actual,
+        existsSync,
+        default: { ...actual, existsSync },
+      };
+    });
+
+    try {
+      const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
+
+      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('headless shell is missing')
+      );
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('npm run playwright:install')
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it('logs missing headless shell warning for each distinct chromium path', async () => {
+    const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
+    const firstChromeExecutable = path.join(
+      cacheRoot,
+      'chromium-1181',
+      'chrome-linux',
+      'chrome'
+    );
+    const secondChromeExecutable = path.join(
+      cacheRoot,
+      'chromium-1200',
+      'chrome-linux',
+      'chrome'
+    );
+    const cliPath = path.join(
+      frontendRoot,
+      'node_modules',
+      '@playwright',
+      'test',
+      'cli.js'
+    );
+    const existsSync = vi.fn((candidate: string) => {
+      if (
+        candidate === cliPath ||
+        candidate === firstChromeExecutable ||
+        candidate === secondChromeExecutable
+      ) {
+        return true;
+      }
+      return false;
+    });
+    const executablePath = vi
+      .fn<() => string>()
+      .mockReturnValueOnce(firstChromeExecutable)
+      .mockReturnValueOnce(secondChromeExecutable);
+    const browser = { executablePath };
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    vi.doMock('node:fs', async () => {
+      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
+      return {
+        ...actual,
+        existsSync,
+        default: { ...actual, existsSync },
+      };
+    });
+
+    try {
+      const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
+
+      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+
+      expect(warnSpy).toHaveBeenCalledTimes(2);
+      expect(warnSpy).toHaveBeenNthCalledWith(
+        1,
+        expect.stringContaining(firstChromeExecutable)
+      );
+      expect(warnSpy).toHaveBeenNthCalledWith(
+        2,
+        expect.stringContaining(secondChromeExecutable)
       );
     } finally {
       warnSpy.mockRestore();
