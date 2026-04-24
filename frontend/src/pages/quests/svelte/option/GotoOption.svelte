@@ -3,13 +3,17 @@
     import Chip from '../../../../components/svelte/Chip.svelte';
     import CompactItemList from '../../../../components/svelte/CompactItemList.svelte';
     import { setCurrentDialogueStep } from '../../../../utils/gameState.js';
-    import { state } from '../../../../utils/gameState/common.js';
+    import { state as gameStateStore } from '../../../../utils/gameState/common.js';
     import { areItemRequirementsMet } from './itemRequirements.js';
 
     export let option, questId;
 
     const itemRequirementsMet = writable(
-        areItemRequirementsMet(option.requiresItems, get(state)?.inventory, get(state))
+        areItemRequirementsMet(
+            option.requiresItems,
+            get(gameStateStore)?.inventory,
+            get(gameStateStore)
+        )
     );
 
     function onClick() {
@@ -19,9 +23,13 @@
     }
 
     $: {
-        if ($state) {
+        if ($gameStateStore) {
             itemRequirementsMet.set(
-                areItemRequirementsMet(option.requiresItems, $state.inventory, $state)
+                areItemRequirementsMet(
+                    option.requiresItems,
+                    $gameStateStore.inventory,
+                    $gameStateStore
+                )
             );
         }
     }
