@@ -98,12 +98,14 @@
     "openai": "^5.16.0"
   },
   "overrides": {
+    "caniuse-lite": "1.0.30001790",
     "esbuild": "0.25.8",
     "@esbuild/linux-x64": "0.25.8",
     "glob": "13.0.6"
   },
   "pnpm": {
     "overrides": {
+      "caniuse-lite": "1.0.30001790",
       "esbuild": "0.25.8",
       "@esbuild/linux-x64": "0.25.8",
       "glob": "13.0.6"
