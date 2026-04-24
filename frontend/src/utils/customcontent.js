@@ -496,7 +496,7 @@ export async function importCustomContentString(dataString) {
         throw new Error('Invalid backup data');
     }
 
-    if (!parsed || typeof parsed !== 'object') {
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
         throw new Error('Invalid backup data');
     }
 
@@ -505,19 +505,18 @@ export async function importCustomContentString(dataString) {
         throw new Error('Invalid backup data');
     }
 
-    const isValidEntity = (entity) =>
-        entity &&
-        typeof entity === 'object' &&
-        !Array.isArray(entity) &&
-        Object.getPrototypeOf(entity) === Object.prototype;
+    const isValidEntity = (entity) => entity && typeof entity === 'object' && !Array.isArray(entity);
 
     if (![...items, ...processes, ...quests].every(isValidEntity)) {
         throw new Error('Invalid backup data');
     }
 
+    const cloneEntity = (entity) =>
+        typeof structuredClone === 'function' ? structuredClone(entity) : JSON.parse(JSON.stringify(entity));
+
     await Promise.all([
-        ...items.map((i) => db.items.add({ ...i })),
-        ...processes.map((p) => db.processes.add({ ...p })),
-        ...quests.map((q) => db.quests.add({ ...q })),
+        ...items.map((item) => db.items.add(cloneEntity(item))),
+        ...processes.map((process) => db.processes.add(cloneEntity(process))),
+        ...quests.map((quest) => db.quests.add(cloneEntity(quest))),
     ]);
 }
