@@ -10,7 +10,11 @@
     export let quest, option;
     let githubConnected = false;
     const itemRequirementsMet = writable(
-        areItemRequirementsMet(option.requiresItems, get(gameStateStore)?.inventory, get(gameStateStore))
+        areItemRequirementsMet(
+            option.requiresItems,
+            get(gameStateStore)?.inventory,
+            get(gameStateStore)
+        )
     );
     let isDisabled = false;
 
@@ -23,13 +27,19 @@
     $: {
         if ($gameStateStore) {
             itemRequirementsMet.set(
-                areItemRequirementsMet(option.requiresItems, $gameStateStore.inventory, $gameStateStore)
+                areItemRequirementsMet(
+                    option.requiresItems,
+                    $gameStateStore.inventory,
+                    $gameStateStore
+                )
             );
         }
     }
 
     $: {
-        githubConnected = option.requiresGitHub ? isValidGitHubToken($gameStateStore?.github?.token) : false;
+        githubConnected = option.requiresGitHub
+            ? isValidGitHubToken($gameStateStore?.github?.token)
+            : false;
     }
 
     $: isDisabled = (option.requiresGitHub && !githubConnected) || !$itemRequirementsMet;

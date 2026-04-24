@@ -9,7 +9,11 @@
     export let option, questId;
 
     const itemRequirementsMet = writable(
-        areItemRequirementsMet(option.requiresItems, get(gameStateStore)?.inventory, get(gameStateStore))
+        areItemRequirementsMet(
+            option.requiresItems,
+            get(gameStateStore)?.inventory,
+            get(gameStateStore)
+        )
     );
 
     function onClick() {
@@ -21,7 +25,11 @@
     $: {
         if ($gameStateStore) {
             itemRequirementsMet.set(
-                areItemRequirementsMet(option.requiresItems, $gameStateStore.inventory, $gameStateStore)
+                areItemRequirementsMet(
+                    option.requiresItems,
+                    $gameStateStore.inventory,
+                    $gameStateStore
+                )
             );
         }
     }
