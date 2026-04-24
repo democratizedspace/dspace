@@ -890,19 +890,6 @@
         color: #1f2937;
     }
 
-    .deposit-input-label {
-        color: #ffffff;
-        font-size: 0.9rem;
-    }
-
-    .deposit-input {
-        border: 1px solid rgba(255, 255, 255, 0.35);
-        border-radius: 8px;
-        background: rgba(17, 24, 39, 0.45);
-        color: #ffffff;
-        padding: 8px 10px;
-    }
-
     .process-error {
         padding: 1rem;
         border-radius: 12px;
