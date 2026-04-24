@@ -1,15 +1,22 @@
 import { spawn } from 'node:child_process';
-const ignoredLinePatterns = [/Prefix filename with an underscore/];
+
+// Intentionally filter only Astro's unsupported-file warning spam for known support/content files
+// under frontend/src/pages/**, while preserving every other warning and normal build output.
+const ignoredPatterns = [/Prefix filename with an underscore/];
+const unsupportedFileTypeMarker = 'Unsupported file type';
+const underscoreHintMarker = 'Prefix filename with an underscore';
 
 const knownSvelteRouteSupportFiles = new Set([
     '/src/pages/achievements/Achievements.svelte',
     '/src/pages/dchat/TokenBadge.svelte',
     '/src/pages/inventory/Inventory.svelte',
     '/src/pages/inventory/item/ItemPage.svelte',
+    '/src/pages/item/[slug]/ItemProcesses.svelte',
     '/src/pages/leaderboard/Leaderboard.svelte',
     '/src/pages/process/[slug]/ProcessView.svelte',
     '/src/pages/processes/ProcessListRow.svelte',
     '/src/pages/processes/Processes.svelte',
+    '/src/pages/profile/ProfileTitles.svelte',
     '/src/pages/shop/ShoppingForm.svelte',
     '/src/pages/titles/Titles.svelte',
 ]);
@@ -36,7 +43,7 @@ const knownDataFiles = new Set([
 const normalizePath = (value) => value.replaceAll('\\', '/');
 
 const extractUnsupportedFilePath = (line) => {
-    const match = line.match(/Unsupported file type (.+?) found\./);
+    const match = line.match(/Unsupported file type\s+(.+?)(?:\s+found\.)?(?:\s+Prefix filename with an underscore.*)?$/);
     return match?.[1] ? normalizePath(match[1]) : null;
 };
 
@@ -76,11 +83,11 @@ const createFilteredWriter = (stream) => {
         for (const line of parts) {
             const unsupportedPath = extractUnsupportedFilePath(line);
             if (unsupportedPath && isKnownIntentionalUnsupportedFile(unsupportedPath)) {
-                suppressUnderscoreHintLine = true;
+                suppressUnderscoreHintLine = line.includes(unsupportedFileTypeMarker) && !line.includes(underscoreHintMarker);
                 continue;
             }
 
-            if (suppressUnderscoreHintLine && ignoredLinePatterns.some((pattern) => pattern.test(line))) {
+            if (suppressUnderscoreHintLine && ignoredPatterns.some((pattern) => pattern.test(line))) {
                 suppressUnderscoreHintLine = false;
                 continue;
             }
@@ -92,7 +99,7 @@ const createFilteredWriter = (stream) => {
         if (flush && buffered) {
             const unsupportedPath = extractUnsupportedFilePath(buffered);
             if (!(unsupportedPath && isKnownIntentionalUnsupportedFile(unsupportedPath))) {
-                if (!(suppressUnderscoreHintLine && ignoredLinePatterns.some((pattern) => pattern.test(buffered)))) {
+                if (!(suppressUnderscoreHintLine && ignoredPatterns.some((pattern) => pattern.test(buffered)))) {
                     stream.write(buffered);
                 }
             }
