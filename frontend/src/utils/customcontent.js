@@ -505,14 +505,17 @@ export async function importCustomContentString(dataString) {
         throw new Error('Invalid backup data');
     }
 
-    const isValidEntity = (entity) => entity && typeof entity === 'object' && !Array.isArray(entity);
+    const isValidEntity = (entity) =>
+        entity && typeof entity === 'object' && !Array.isArray(entity);
 
     if (![...items, ...processes, ...quests].every(isValidEntity)) {
         throw new Error('Invalid backup data');
     }
 
     const cloneEntity = (entity) =>
-        typeof structuredClone === 'function' ? structuredClone(entity) : JSON.parse(JSON.stringify(entity));
+        typeof structuredClone === 'function'
+            ? structuredClone(entity)
+            : JSON.parse(JSON.stringify(entity));
 
     await Promise.all([
         ...items.map((item) => db.items.add(cloneEntity(item))),
