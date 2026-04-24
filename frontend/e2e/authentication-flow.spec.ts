@@ -5,28 +5,40 @@ registerClientStateHooks(test);
 
 test('Authentication flow saves and clears token', async ({ page }) => {
     const corsHeaders = {
-        'access-control-allow-origin': '*',
-        'access-control-allow-headers': '*',
-        'access-control-allow-methods': 'GET,POST,OPTIONS',
+        'Access-Control-Allow-Origin': '*',
     };
 
-    await page.route('**/gists?per_page=1', (route) =>
-        route.fulfill({
-            status: 200,
-            headers: corsHeaders,
-            contentType: 'application/json',
-            body: '[]',
-        })
-    );
+    await page.route('**/gists*', (route) => {
+        const request = route.request();
+        const url = new URL(request.url());
+        const isListEndpoint = url.pathname.endsWith('/gists');
 
-    await page.route('**/gists?per_page=30', (route) =>
-        route.fulfill({
-            status: 200,
-            headers: corsHeaders,
-            contentType: 'application/json',
-            body: '[]',
-        })
-    );
+        if (!isListEndpoint) {
+            return route.continue();
+        }
+
+        if (request.method() === 'OPTIONS') {
+            return route.fulfill({
+                status: 200,
+                headers: {
+                    ...corsHeaders,
+                    'Access-Control-Allow-Headers': 'Authorization, Content-Type, Accept',
+                    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                },
+            });
+        }
+
+        if (request.method() === 'GET') {
+            return route.fulfill({
+                status: 200,
+                headers: corsHeaders,
+                contentType: 'application/json',
+                body: '[]',
+            });
+        }
+
+        return route.continue();
+    });
 
     const token = 'ghp_' + 'a'.repeat(36);
     await page.goto('/cloudsync');
