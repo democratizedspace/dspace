@@ -8,6 +8,7 @@ import {
     fillProcessForm,
     ItemSelectorHelper,
 } from './test-helpers';
+const E2E_DEBUG_LOGS = process.env.E2E_DEBUG_LOGS === '1';
 
 const inlineItemImageBuffer = Buffer.from(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
@@ -737,7 +738,9 @@ test.describe('Custom Content Management', () => {
                 }
             } catch (e) {
                 // Continue trying different selectors
-                console.log(`Selector ${selector} didn't find item, trying another...`);
+                if (E2E_DEBUG_LOGS) {
+                    console.log(`Selector ${selector} didn't find item, trying another...`);
+                }
             }
         }
 
@@ -746,7 +749,9 @@ test.describe('Custom Content Management', () => {
 
         // If we still can't find it, log but continue the test
         if (!itemFound) {
-            console.log('Could not find item in the inventory, but continuing the test');
+            if (E2E_DEBUG_LOGS) {
+                console.log('Could not find item in the inventory, but continuing the test');
+            }
             // Don't fail here - let the test continue
         }
 
@@ -797,7 +802,9 @@ test.describe('Custom Content Management', () => {
                 }
             } catch (e) {
                 // Continue trying different selectors
-                console.log(`Selector ${selector} didn't find process, trying another...`);
+                if (E2E_DEBUG_LOGS) {
+                    console.log(`Selector ${selector} didn't find process, trying another...`);
+                }
             }
         }
 
