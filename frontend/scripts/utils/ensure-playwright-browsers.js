@@ -7,6 +7,7 @@ const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test',
 const INSTALL_ARGS = ['install', 'chromium', 'chromium-headless-shell'];
 const INSTALL_DEPS_ARGS = ['install-deps'];
 const INSTALL_DEPS_SENTINEL = '.playwright-deps-installed';
+const warnedMissingHeadlessShellPaths = new Set();
 const PROXY_ENV_KEYS = [
     'HTTP_PROXY',
     'http_proxy',
@@ -144,9 +145,12 @@ export function hasChromiumExecutable(browser) {
 
         const headlessShellPath = resolveHeadlessShellPath(executablePath);
         if (!headlessShellPath || !existsSync(headlessShellPath)) {
-            console.warn(
-                `Playwright chromium executable found at ${executablePath} but headless shell is missing. Proceeding with chromium binary only.`
-            );
+            if (!warnedMissingHeadlessShellPaths.has(executablePath)) {
+                warnedMissingHeadlessShellPaths.add(executablePath);
+                console.warn(
+                    `Playwright chromium executable found at ${executablePath} but headless shell is missing. Proceeding with chromium binary only.`
+                );
+            }
             return true;
         }
 
