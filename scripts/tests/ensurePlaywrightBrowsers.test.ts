@@ -276,7 +276,13 @@ describe('ensurePlaywrightBrowsers', () => {
         existsSync: vi.fn((candidate: string) => {
           return (
             candidate ===
-            path.join(frontendRoot, 'node_modules', '@playwright', 'test', 'cli.js')
+            path.join(
+              frontendRoot,
+              'node_modules',
+              '@playwright',
+              'test',
+              'cli.js'
+            )
           );
         }),
         mkdirSync,
@@ -377,6 +383,62 @@ describe('ensurePlaywrightBrowsers', () => {
       expect(executablePath).toHaveBeenCalledTimes(1);
       expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
       expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('headless shell is missing')
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it('logs missing headless shell warning at most once per chromium executable', async () => {
+    const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
+    const chromeExecutable = path.join(
+      cacheRoot,
+      'chromium-1181',
+      'chrome-linux',
+      'chrome'
+    );
+    const cliPath = path.join(
+      frontendRoot,
+      'node_modules',
+      '@playwright',
+      'test',
+      'cli.js'
+    );
+    const existsSync = vi.fn(
+      (candidate: string) =>
+        candidate === cliPath || candidate === chromeExecutable
+    );
+    const executablePath = vi.fn(() => chromeExecutable);
+    const browser = { executablePath };
+
+    vi.doMock('node:child_process', async () => {
+      const actual =
+        await vi.importActual<typeof import('node:child_process')>(
+          'node:child_process'
+        );
+      return {
+        ...actual,
+        execFileSync: vi.fn(),
+        default: { ...actual, execFileSync: vi.fn() },
+      };
+    });
+    vi.doMock('node:fs', async () => {
+      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
+      return {
+        ...actual,
+        existsSync,
+        default: { ...actual, existsSync },
+      };
+    });
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
+      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+
+      expect(warnSpy).toHaveBeenCalledTimes(1);
       expect(warnSpy).toHaveBeenCalledWith(
         expect.stringContaining('headless shell is missing')
       );
