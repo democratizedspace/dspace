@@ -215,9 +215,9 @@ test.describe('Custom Content Management', () => {
         // Create some items first that we can use in the process
         try {
             const itemIds = await createTestItems(page, 2);
-            console.log(`Created ${itemIds.length} test items for process test`);
+            debugLog(`Created ${itemIds.length} test items for process test`);
         } catch (e) {
-            console.log('Failed to create test items, but continuing with test');
+            debugLog('Failed to create test items, but continuing with test');
         }
 
         // Navigate to the process creation page
@@ -279,7 +279,7 @@ test.describe('Custom Content Management', () => {
             expect(success).toBe(true);
         } else {
             // If we couldn't find a submit button, take a screenshot and mark test as passed if we at least filled some fields
-            console.log('No submit button found - form may have changed');
+            debugLog('No submit button found - form may have changed');
             await page.screenshot({ path: './test-artifacts/process-form-no-submit.png' });
 
             // Consider test successful if we at least filled the name field
@@ -626,7 +626,7 @@ test.describe('Custom Content Management', () => {
             // Wait for navigation
             await page.waitForLoadState('networkidle');
         } catch (e) {
-            console.log('Failed to create initial test item, but continuing with test');
+            debugLog('Failed to create initial test item, but continuing with test');
         }
 
         // Navigate to the inventory page
@@ -669,7 +669,7 @@ test.describe('Custom Content Management', () => {
             // Check that we're on the processes page
             expect(page.url()).toContain('/process');
         } catch (e) {
-            console.log('Processes page may not exist, skipping');
+            debugLog('Processes page may not exist, skipping');
         }
     });
 

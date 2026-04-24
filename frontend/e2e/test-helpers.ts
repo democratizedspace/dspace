@@ -1023,7 +1023,6 @@ export async function addTestItems(page: Page): Promise<void> {
 
         // Save back to localStorage
         localStorage.setItem('inventory', JSON.stringify(inventory));
-        console.log('Added test items to inventory');
     });
 }
 
