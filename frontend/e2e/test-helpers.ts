@@ -5,7 +5,7 @@ import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 export type { Page };
 const E2E_DEBUG_LOGS = process.env.E2E_DEBUG_LOGS === '1';
 
-function debugLog(...args: unknown[]): void {
+export function debugLog(...args: unknown[]): void {
     if (E2E_DEBUG_LOGS) {
         console.log(...args);
     }
@@ -886,7 +886,7 @@ async function trySelectItem(page: Page): Promise<boolean> {
             return true;
         }
     } catch (e) {
-        console.log('Error trying to select item:', e);
+        debugLog('Error trying to select item:', e);
     }
 
     return false;

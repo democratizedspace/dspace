@@ -8,7 +8,6 @@ const PERF_MARKS = [
     'quests:full-state-reconciliation-complete',
     'quests:custom-quests-merge-complete',
 ];
-const E2E_DEBUG_LOGS = process.env.E2E_DEBUG_LOGS === '1';
 
 test.describe('quests performance marks', () => {
     test.beforeEach(async ({ page }) => {
@@ -61,11 +60,6 @@ test.describe('quests performance marks', () => {
             expect(metrics.markTimes[markName]).not.toBeNull();
         }
 
-        if (E2E_DEBUG_LOGS) {
-            console.log(
-                '[quests-tti-metrics]',
-                JSON.stringify({ cpuSlowdown, ...metrics }, null, 2)
-            );
-        }
+        console.log('[quests-tti-metrics]', JSON.stringify({ cpuSlowdown, ...metrics }, null, 2));
     });
 });

@@ -5,10 +5,10 @@ import { test, expect, Page } from '@playwright/test';
 import {
     clearUserData,
     createTestItems,
+    debugLog,
     fillProcessForm,
     ItemSelectorHelper,
 } from './test-helpers';
-const E2E_DEBUG_LOGS = process.env.E2E_DEBUG_LOGS === '1';
 
 const inlineItemImageBuffer = Buffer.from(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAgIBJ3QpJ8gAAAAASUVORK5CYII=',
@@ -738,9 +738,7 @@ test.describe('Custom Content Management', () => {
                 }
             } catch (e) {
                 // Continue trying different selectors
-                if (E2E_DEBUG_LOGS) {
-                    console.log(`Selector ${selector} didn't find item, trying another...`);
-                }
+                debugLog(`Selector ${selector} didn't find item, trying another...`);
             }
         }
 
@@ -749,9 +747,7 @@ test.describe('Custom Content Management', () => {
 
         // If we still can't find it, log but continue the test
         if (!itemFound) {
-            if (E2E_DEBUG_LOGS) {
-                console.log('Could not find item in the inventory, but continuing the test');
-            }
+            debugLog('Could not find item in the inventory, but continuing the test');
             // Don't fail here - let the test continue
         }
 
@@ -802,9 +798,7 @@ test.describe('Custom Content Management', () => {
                 }
             } catch (e) {
                 // Continue trying different selectors
-                if (E2E_DEBUG_LOGS) {
-                    console.log(`Selector ${selector} didn't find process, trying another...`);
-                }
+                debugLog(`Selector ${selector} didn't find process, trying another...`);
             }
         }
 
@@ -862,13 +856,13 @@ test.describe('Custom Content Management', () => {
                 }
             } catch (e) {
                 // Continue trying different selectors
-                console.log(`Selector ${selector} didn't find quest, trying another...`);
+                debugLog(`Selector ${selector} didn't find quest, trying another...`);
             }
         }
 
         // If we can't find it, log but continue the test
         if (!questFound) {
-            console.log('Could not find quest entry immediately, may be due to delayed indexing');
+            debugLog('Could not find quest entry immediately, may be due to delayed indexing');
         }
 
         // Take the final test screenshot
