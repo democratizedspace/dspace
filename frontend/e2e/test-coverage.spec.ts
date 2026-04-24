@@ -38,11 +38,6 @@ test('verify no e2e test files are orphaned from test:pr workflow', async () => 
     // Find orphaned files (files not referenced in any test group)
     const orphanedFiles = allTestFiles.filter((file) => !referencedFiles.has(file));
 
-    // Log the found files for debugging
-    console.log('All test files:', allTestFiles);
-    console.log('Referenced files:', Array.from(referencedFiles));
-    console.log('Orphaned files:', orphanedFiles);
-
     // Test will fail if there are any orphaned files
     if (orphanedFiles.length > 0) {
         const errorMessage = `Found ${
@@ -186,8 +181,6 @@ test('verify Jest test files are included in Jest configuration', async () => {
         jestConfigCapturesAllFiles = true;
     }
 
-    console.log('All Jest test files:', allJestTestFiles);
-
     if (!jestConfigCapturesAllFiles) {
         const errorMessage =
             'Jest configuration might not capture all test files. ' +
@@ -262,9 +255,8 @@ test('verify playwright web server is properly configured', async ({ page }, tes
     // Take a screenshot to see what loaded
     await page.screenshot({ path: './test-artifacts/webserver-test.png' });
 
-    // Check that the page loaded successfully
     const pageTitle = await page.title();
-    console.log('Page title:', pageTitle);
+    expect(pageTitle.length).toBeGreaterThan(0);
 
     // Verify we can interact with the page - using a specific element to avoid strict mode violations
     const mainContent = page.locator('main').first();
@@ -286,8 +278,6 @@ test('verify playwright web server is properly configured', async ({ page }, tes
         expect(url).toContain(configuredBaseURL.replace(/\/$/, ''));
     }
 
-    console.log('Page URL:', url);
-
     // Get the playwright config to confirm the webServer settings
     const configPath = path.resolve(__dirname, '../playwright.config.ts');
 
@@ -301,8 +291,6 @@ test('verify playwright web server is properly configured', async ({ page }, tes
         /command:\s*`[^`]*?(?:npx\s+)?astro preview --host 0\.0\.0\.0 --port \$\{port}/
     );
     expect(configContent).toContain('url: baseURL');
-
-    console.log('Playwright webServer is properly configured and running');
 });
 
 test('verify browser has necessary capabilities for tests', async ({ page }) => {
@@ -310,10 +298,8 @@ test('verify browser has necessary capabilities for tests', async ({ page }) => 
     await navigateWithRetry(page, '/');
     await page.waitForLoadState('networkidle');
 
-    // Check that JavaScript is enabled (will always pass if we got this far)
     const jsEnabled = await page.evaluate(() => true);
     expect(jsEnabled).toBeTruthy();
-    console.log('JavaScript is enabled');
 
     // Store the results of optional capability checks
     const capabilities = {
@@ -336,13 +322,10 @@ test('verify browser has necessary capabilities for tests', async ({ page }) => 
             }
         });
 
-        console.log('localStorage test result:', localStorageAvailable);
         capabilities.localStorage = localStorageAvailable;
 
         if (!localStorageAvailable) {
             console.warn('localStorage is not available. This may affect game save tests.');
-        } else {
-            console.log('localStorage is available and functioning correctly');
         }
     } catch (e) {
         console.warn('Could not test localStorage:', e);
@@ -359,13 +342,10 @@ test('verify browser has necessary capabilities for tests', async ({ page }) => 
             }
         });
 
-        console.log('Cookies enabled test result:', cookiesEnabled);
         capabilities.cookies = cookiesEnabled;
 
         if (!cookiesEnabled) {
             console.warn('Cookies may be disabled. This could affect login/session tests.');
-        } else {
-            console.log('Cookies are enabled');
         }
     } catch (e) {
         console.warn('Could not test cookies:', e);
@@ -383,26 +363,14 @@ test('verify browser has necessary capabilities for tests', async ({ page }) => 
             }
         });
 
-        console.log('Fetch test result:', fetchWorks);
         capabilities.fetch = fetchWorks;
 
         if (!fetchWorks) {
             console.warn('Fetch API may not be working. This could affect API tests.');
-        } else {
-            console.log('Browser can make fetch requests');
         }
     } catch (e) {
         console.warn('Could not test fetch capability:', e);
     }
-
-    // Overall browser capability check
-    console.log('Browser capability summary:');
-    console.log('- JavaScript: ✅ (required)');
-    console.log(
-        `- localStorage: ${capabilities.localStorage ? '✅' : '❌'} (optional but recommended)`
-    );
-    console.log(`- Cookies: ${capabilities.cookies ? '✅' : '❌'} (optional but recommended)`);
-    console.log(`- Fetch API: ${capabilities.fetch ? '✅' : '❌'} (optional but recommended)`);
 
     // Log a warning if some capabilities are missing
     if (!capabilities.localStorage || !capabilities.cookies || !capabilities.fetch) {

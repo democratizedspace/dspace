@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData } from './test-helpers';
+import { clearUserData, logE2EDebug } from './test-helpers';
 
 const PERF_MARKS = [
     'quests:list-hydration-start',
@@ -60,6 +60,6 @@ test.describe('quests performance marks', () => {
             expect(metrics.markTimes[markName]).not.toBeNull();
         }
 
-        console.log('[quests-tti-metrics]', JSON.stringify({ cpuSlowdown, ...metrics }, null, 2));
+        logE2EDebug('[quests-tti-metrics]', JSON.stringify({ cpuSlowdown, ...metrics }, null, 2));
     });
 });
