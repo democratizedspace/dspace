@@ -109,6 +109,7 @@ export default defineConfig({
       'frontend/src/pages/**/__tests__/**/*.spec.ts',
       'frontend/__tests__/Quests.test.js',
       'frontend/__tests__/gameState/common.test.js',
+      'frontend/__tests__/ShoppingForm.test.js',
     ],
     exclude: ['frontend/e2e/**'],
     coverage: {
