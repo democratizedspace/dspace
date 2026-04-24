@@ -385,6 +385,54 @@ describe('ensurePlaywrightBrowsers', () => {
     }
   });
 
+  it('logs missing headless shell warning only once per process', async () => {
+    const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
+    const chromeExecutable = path.join(
+      cacheRoot,
+      'chromium-1181',
+      'chrome-linux',
+      'chrome'
+    );
+    const cliPath = path.join(
+      frontendRoot,
+      'node_modules',
+      '@playwright',
+      'test',
+      'cli.js'
+    );
+    const existsSync = vi.fn((candidate: string) => {
+      if (candidate === cliPath || candidate === chromeExecutable) {
+        return true;
+      }
+      return false;
+    });
+    const browser = { executablePath: vi.fn(() => chromeExecutable) };
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    vi.doMock('node:fs', async () => {
+      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
+      return {
+        ...actual,
+        existsSync,
+        default: { ...actual, existsSync },
+      };
+    });
+
+    try {
+      const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
+
+      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('headless shell is missing')
+      );
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it('skips install when chromium and headless shell already exist', async () => {
     const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
     const chromeExecutable = path.join(
