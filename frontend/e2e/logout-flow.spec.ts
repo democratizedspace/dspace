@@ -1,5 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, expectLocalStorageCleared, waitForHydration } from './test-helpers';
+import {
+    clearUserData,
+    expectLocalStorageCleared,
+    flushGameStateWrites,
+    waitForHydration,
+} from './test-helpers';
 
 async function setCloudGistId(page, gistId) {
     await page.evaluate(async (value) => {
@@ -102,6 +107,8 @@ test.describe('Logout flow', () => {
         const tokenField = page.getByLabel(/GitHub Token/i);
         await tokenField.fill(token);
         await page.getByRole('button', { name: /save/i }).click();
+        await expect(page.getByTestId('sync-success')).toHaveText(/Token saved and validated/i);
+        await flushGameStateWrites(page);
 
         await page.reload();
         await waitForHydration(page);
