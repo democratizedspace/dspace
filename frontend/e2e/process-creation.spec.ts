@@ -5,6 +5,7 @@ import {
     fillProcessForm,
     ItemSelectorHelper,
     findAndClickButton,
+    logE2EDebug,
     waitForHydration,
 } from './test-helpers';
 
@@ -76,7 +77,7 @@ test.describe('Process Creation', () => {
 
         // Add a single item to test the selector
         if (await findAndClickButton(page, 'Add Created Item')) {
-            console.log('Added a created item row');
+            logE2EDebug('Added a created item row');
 
             // Take a screenshot
             await page.screenshot({
@@ -86,14 +87,14 @@ test.describe('Process Creation', () => {
             // Get the item row
             const itemRow = page.locator('.form-group:has-text("Created Items") .item-row').first();
             if ((await itemRow.count()) > 0) {
-                console.log('Found the item row');
+                logE2EDebug('Found the item row');
 
                 // Create a helper for this selector
                 const helper = new ItemSelectorHelper(page, itemRow);
 
                 // Try to open the selector
                 const opened = await helper.open();
-                console.log('Opened selector:', opened);
+                logE2EDebug('Opened selector:', opened);
 
                 if (opened) {
                     // Take a screenshot
@@ -104,18 +105,18 @@ test.describe('Process Creation', () => {
                     // Look for the selector-expanded element and log its HTML
                     const expandedSelector = itemRow.locator('.selector-expanded');
                     if ((await expandedSelector.count()) > 0) {
-                        console.log('Expanded selector HTML:', await expandedSelector.innerHTML());
+                        logE2EDebug('Expanded selector HTML:', await expandedSelector.innerHTML());
 
                         // Check for item rows
                         const itemRows = expandedSelector.locator('.item-option');
-                        console.log(
+                        logE2EDebug(
                             `Found ${await itemRows.count()} item rows in the expanded selector`
                         );
 
                         if ((await itemRows.count()) > 0) {
                             // Try to select the first item
                             const selected = await helper.selectItem(0);
-                            console.log('Selected item:', selected);
+                            logE2EDebug('Selected item:', selected);
 
                             if (selected) {
                                 // Take a screenshot
@@ -125,7 +126,7 @@ test.describe('Process Creation', () => {
 
                                 // Try to set the quantity
                                 const quantitySet = await helper.setQuantity(3);
-                                console.log('Set quantity:', quantitySet);
+                                logE2EDebug('Set quantity:', quantitySet);
 
                                 if (quantitySet) {
                                     // Take a screenshot
