@@ -15,6 +15,13 @@ const DEFAULT_RETRY_DELAY_MS = 300;
 const DEFAULT_MAX_LOG_ATTEMPTS = 4;
 const DEFAULT_MAX_DURATION_MS = 10_000;
 const UUID_FALLBACK_TEMPLATE = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+
+const isDebugLoggingEnabled = process.env.E2E_DEBUG_LOGS === '1';
+const debugLog = (...args: unknown[]) => {
+    if (isDebugLoggingEnabled) {
+        console.log(...args);
+    }
+};
 type CryptoLike = { randomUUID?: () => string };
 type IndexedDbRequest<T = unknown> = {
     onsuccess: ((event: Event) => void) | null;
@@ -597,7 +604,7 @@ export async function createTestItems(page: Page, count = 2): Promise<string[]> 
             }
         } catch (e) {
             // If no success message, we might have been redirected to inventory already
-            console.log('No success message found, checking for redirect');
+            debugLog('No success message found, checking for redirect');
         }
 
         // If we couldn't extract an ID but the item was created, at least return something
@@ -631,12 +638,12 @@ export async function findAndClickButton(page: Page, buttonText: string): Promis
     }
 
     // Log what we found
-    console.log(`Found ${await buttonLocator.count()} buttons matching "${buttonText}"`);
+    debugLog(`Found ${await buttonLocator.count()} buttons matching "${buttonText}"`);
 
     // Click if found
     if ((await buttonLocator.count()) > 0) {
         await buttonLocator.click();
-        console.log(`Clicked "${buttonText}" button`);
+        debugLog(`Clicked "${buttonText}" button`);
         return true;
     }
 
@@ -669,7 +676,7 @@ export class ItemSelectorHelper {
 
         // If either is visible, consider it expanded
         if ((await expandedView.count()) > 0 || (await itemsList.count()) > 0) {
-            console.log('Item selector already expanded');
+            debugLog('Item selector already expanded');
             await expect(expansionLocator.first()).toBeVisible();
             return true;
         }
@@ -685,13 +692,13 @@ export class ItemSelectorHelper {
             });
 
             await selectButton.first().click();
-            console.log('Clicked Select Item button');
+            debugLog('Clicked Select Item button');
 
             await expect(expansionLocator.first()).toBeVisible();
             return true;
         }
 
-        console.log('Could not open item selector');
+        debugLog('Could not open item selector');
         return false;
     }
 
@@ -714,12 +721,12 @@ export class ItemSelectorHelper {
         const itemRows = container.locator('.item-option');
         const count = await itemRows.count();
 
-        console.log(`Found ${count} item rows`);
+        debugLog(`Found ${count} item rows`);
 
         if (count > index) {
             // Click the item at specified index
             await itemRows.nth(index).click();
-            console.log(`Clicked item at index ${index}`);
+            debugLog(`Clicked item at index ${index}`);
 
             // Wait for selection to take effect (selector should collapse)
             await expect
@@ -730,7 +737,7 @@ export class ItemSelectorHelper {
             return true;
         }
 
-        console.log(`Could not select item at index ${index}`);
+        debugLog(`Could not select item at index ${index}`);
         return false;
     }
 
@@ -747,11 +754,11 @@ export class ItemSelectorHelper {
 
         if ((await quantityInput.count()) > 0) {
             await quantityInput.fill(quantity.toString());
-            console.log(`Set quantity to ${quantity}`);
+            debugLog(`Set quantity to ${quantity}`);
             return true;
         }
 
-        console.log('Quantity input not found');
+        debugLog('Quantity input not found');
         return false;
     }
 }
@@ -773,17 +780,17 @@ export async function fillProcessForm(
         const nameInput = page.locator('#name, #title').first();
         if ((await nameInput.count()) > 0) {
             await nameInput.fill(title);
-            console.log('Filled process title');
+            debugLog('Filled process title');
         } else {
-            console.log('Could not find name/title input');
+            debugLog('Could not find name/title input');
         }
 
         const durationInput = page.locator('#duration');
         if ((await durationInput.count()) > 0) {
             await durationInput.fill(duration);
-            console.log('Filled duration');
+            debugLog('Filled duration');
         } else {
-            console.log('Could not find duration input');
+            debugLog('Could not find duration input');
         }
 
         // Screenshot after filling basic details
@@ -810,7 +817,7 @@ export async function fillProcessForm(
                 if ((await buttonSelector.count()) > 0) {
                     for (let i = 0; i < count; i++) {
                         await buttonSelector.click();
-                        console.log(`Added ${type} item ${i + 1}`);
+                        debugLog(`Added ${type} item ${i + 1}`);
 
                         // Try to select an item from the dropdown or selector if one appears
                         await expect.poll(async () => await trySelectItem(page)).toBe(true);
@@ -821,7 +828,7 @@ export async function fillProcessForm(
             }
 
             if (!foundButton && count > 0) {
-                console.log(`Could not find button to add ${type} items`);
+                debugLog(`Could not find button to add ${type} items`);
             }
         };
 
@@ -879,7 +886,7 @@ async function trySelectItem(page: Page): Promise<boolean> {
             return true;
         }
     } catch (e) {
-        console.log('Error trying to select item:', e);
+        debugLog('Error trying to select item:', e);
     }
 
     return false;
@@ -1016,7 +1023,7 @@ export async function addTestItems(page: Page): Promise<void> {
 
         // Save back to localStorage
         localStorage.setItem('inventory', JSON.stringify(inventory));
-        console.log('Added test items to inventory');
+        debugLog('Added test items to inventory');
     });
 }
 

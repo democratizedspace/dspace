@@ -9,6 +9,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const e2eDir = __dirname;
 const testsDir = path.resolve(__dirname, '../__tests__');
+const isDebugLoggingEnabled = process.env.E2E_DEBUG_LOGS === '1';
+const debugLog = (...args: unknown[]) => {
+    if (isDebugLoggingEnabled) {
+        console.log(...args);
+    }
+};
 
 test('verify no e2e test files are orphaned from test:pr workflow', async () => {
     // Read the run-test-groups.mjs file content
@@ -38,16 +44,14 @@ test('verify no e2e test files are orphaned from test:pr workflow', async () => 
     // Find orphaned files (files not referenced in any test group)
     const orphanedFiles = allTestFiles.filter((file) => !referencedFiles.has(file));
 
-    // Log the found files for debugging
-    console.log('All test files:', allTestFiles);
-    console.log('Referenced files:', Array.from(referencedFiles));
-    console.log('Orphaned files:', orphanedFiles);
-
     // Test will fail if there are any orphaned files
     if (orphanedFiles.length > 0) {
         const errorMessage = `Found ${
             orphanedFiles.length
         } orphaned test files not included in test:pr workflow: ${orphanedFiles.join(', ')}`;
+        console.error('All test files:', allTestFiles);
+        console.error('Referenced files:', Array.from(referencedFiles));
+        console.error('Orphaned files:', orphanedFiles);
         console.error(errorMessage);
         test.fail(true, errorMessage);
     }
@@ -186,9 +190,8 @@ test('verify Jest test files are included in Jest configuration', async () => {
         jestConfigCapturesAllFiles = true;
     }
 
-    console.log('All Jest test files:', allJestTestFiles);
-
     if (!jestConfigCapturesAllFiles) {
+        console.error('All Jest test files:', allJestTestFiles);
         const errorMessage =
             'Jest configuration might not capture all test files. ' +
             'Make sure testMatch includes "**/*.test.js" or similar pattern in package.json or jest.config.js.';
@@ -264,7 +267,7 @@ test('verify playwright web server is properly configured', async ({ page }, tes
 
     // Check that the page loaded successfully
     const pageTitle = await page.title();
-    console.log('Page title:', pageTitle);
+    debugLog('Page title:', pageTitle);
 
     // Verify we can interact with the page - using a specific element to avoid strict mode violations
     const mainContent = page.locator('main').first();
@@ -286,7 +289,7 @@ test('verify playwright web server is properly configured', async ({ page }, tes
         expect(url).toContain(configuredBaseURL.replace(/\/$/, ''));
     }
 
-    console.log('Page URL:', url);
+    debugLog('Page URL:', url);
 
     // Get the playwright config to confirm the webServer settings
     const configPath = path.resolve(__dirname, '../playwright.config.ts');
@@ -302,7 +305,7 @@ test('verify playwright web server is properly configured', async ({ page }, tes
     );
     expect(configContent).toContain('url: baseURL');
 
-    console.log('Playwright webServer is properly configured and running');
+    debugLog('Playwright webServer is properly configured and running');
 });
 
 test('verify browser has necessary capabilities for tests', async ({ page }) => {
@@ -313,7 +316,7 @@ test('verify browser has necessary capabilities for tests', async ({ page }) => 
     // Check that JavaScript is enabled (will always pass if we got this far)
     const jsEnabled = await page.evaluate(() => true);
     expect(jsEnabled).toBeTruthy();
-    console.log('JavaScript is enabled');
+    debugLog('JavaScript is enabled');
 
     // Store the results of optional capability checks
     const capabilities = {
@@ -336,13 +339,13 @@ test('verify browser has necessary capabilities for tests', async ({ page }) => 
             }
         });
 
-        console.log('localStorage test result:', localStorageAvailable);
+        debugLog('localStorage test result:', localStorageAvailable);
         capabilities.localStorage = localStorageAvailable;
 
         if (!localStorageAvailable) {
             console.warn('localStorage is not available. This may affect game save tests.');
         } else {
-            console.log('localStorage is available and functioning correctly');
+            debugLog('localStorage is available and functioning correctly');
         }
     } catch (e) {
         console.warn('Could not test localStorage:', e);
@@ -359,13 +362,13 @@ test('verify browser has necessary capabilities for tests', async ({ page }) => 
             }
         });
 
-        console.log('Cookies enabled test result:', cookiesEnabled);
+        debugLog('Cookies enabled test result:', cookiesEnabled);
         capabilities.cookies = cookiesEnabled;
 
         if (!cookiesEnabled) {
             console.warn('Cookies may be disabled. This could affect login/session tests.');
         } else {
-            console.log('Cookies are enabled');
+            debugLog('Cookies are enabled');
         }
     } catch (e) {
         console.warn('Could not test cookies:', e);
@@ -383,26 +386,26 @@ test('verify browser has necessary capabilities for tests', async ({ page }) => 
             }
         });
 
-        console.log('Fetch test result:', fetchWorks);
+        debugLog('Fetch test result:', fetchWorks);
         capabilities.fetch = fetchWorks;
 
         if (!fetchWorks) {
             console.warn('Fetch API may not be working. This could affect API tests.');
         } else {
-            console.log('Browser can make fetch requests');
+            debugLog('Browser can make fetch requests');
         }
     } catch (e) {
         console.warn('Could not test fetch capability:', e);
     }
 
     // Overall browser capability check
-    console.log('Browser capability summary:');
-    console.log('- JavaScript: ✅ (required)');
-    console.log(
+    debugLog('Browser capability summary:');
+    debugLog('- JavaScript: ✅ (required)');
+    debugLog(
         `- localStorage: ${capabilities.localStorage ? '✅' : '❌'} (optional but recommended)`
     );
-    console.log(`- Cookies: ${capabilities.cookies ? '✅' : '❌'} (optional but recommended)`);
-    console.log(`- Fetch API: ${capabilities.fetch ? '✅' : '❌'} (optional but recommended)`);
+    debugLog(`- Cookies: ${capabilities.cookies ? '✅' : '❌'} (optional but recommended)`);
+    debugLog(`- Fetch API: ${capabilities.fetch ? '✅' : '❌'} (optional but recommended)`);
 
     // Log a warning if some capabilities are missing
     if (!capabilities.localStorage || !capabilities.cookies || !capabilities.fetch) {
