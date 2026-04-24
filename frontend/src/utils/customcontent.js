@@ -496,10 +496,28 @@ export async function importCustomContentString(dataString) {
         throw new Error('Invalid backup data');
     }
 
+    if (!parsed || typeof parsed !== 'object') {
+        throw new Error('Invalid backup data');
+    }
+
     const { items = [], processes = [], quests = [] } = parsed;
+    if (!Array.isArray(items) || !Array.isArray(processes) || !Array.isArray(quests)) {
+        throw new Error('Invalid backup data');
+    }
+
+    const isValidEntity = (entity) =>
+        entity &&
+        typeof entity === 'object' &&
+        !Array.isArray(entity) &&
+        Object.getPrototypeOf(entity) === Object.prototype;
+
+    if (![...items, ...processes, ...quests].every(isValidEntity)) {
+        throw new Error('Invalid backup data');
+    }
+
     await Promise.all([
-        ...items.map((i) => db.items.add(i)),
-        ...processes.map((p) => db.processes.add(p)),
-        ...quests.map((q) => db.quests.add(q)),
+        ...items.map((i) => db.items.add({ ...i })),
+        ...processes.map((p) => db.processes.add({ ...p })),
+        ...quests.map((q) => db.quests.add({ ...q })),
     ]);
 }
