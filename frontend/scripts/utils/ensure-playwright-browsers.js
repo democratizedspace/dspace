@@ -18,6 +18,7 @@ const PROXY_ENV_KEYS = [
     'npm_config_https_proxy',
 ];
 const PROXY_PLACEHOLDERS = new Set(['http://proxy:8080', 'https://proxy:8080', 'proxy:8080']);
+const warnedMissingHeadlessShellPaths = new Set();
 
 function hasPlaceholderProxyEnv(env = process.env) {
     return PROXY_ENV_KEYS.some((key) => {
@@ -144,9 +145,12 @@ export function hasChromiumExecutable(browser) {
 
         const headlessShellPath = resolveHeadlessShellPath(executablePath);
         if (!headlessShellPath || !existsSync(headlessShellPath)) {
-            console.warn(
-                `Playwright chromium executable found at ${executablePath} but headless shell is missing. Proceeding with chromium binary only.`
-            );
+            if (!warnedMissingHeadlessShellPaths.has(executablePath)) {
+                warnedMissingHeadlessShellPaths.add(executablePath);
+                console.warn(
+                    `Playwright chromium executable found at ${executablePath} but headless shell is missing. Proceeding with chromium binary only.`
+                );
+            }
             return true;
         }
 
