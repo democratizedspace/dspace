@@ -8,6 +8,7 @@ export default defineConfig({
     output: 'server',
     adapter: node({ mode: 'standalone' }),
     integrations: [svelte()],
+    logLevel: 'error',
     style: {
         postcss: {},
     },
