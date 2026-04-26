@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-22-playwright-sentinel-custom-fs-mkdir-guard",
+  "date": "2026-04-22",
+  "component": "playwright-bootstrap",
+  "longForm": "outages/2026-04-22-playwright-sentinel-custom-fs-mkdir-guard.md",
+  "rootCause": "ensurePlaywrightSystemDeps defaulted to node:fs.mkdirSync even when tests supplied a partial custom fs adapter, which triggered host-path mkdir attempts and ENOENT stderr noise.",
+  "resolution": "Guarded sentinel parent directory creation so mkdirSync is only invoked when explicitly available on the selected fs adapter.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts",
+    "frontend/tests/ensure-playwright-browsers.test.ts"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "2026-04-22-v301-prettier-three-files-gate-drift",
+  "date": "2026-04-22",
+  "component": "frontend-formatting",
+  "longForm": "outages/2026-04-22-v301-prettier-three-files-gate-drift.md",
+  "rootCause": "The v3.0.1 launch gate reported Prettier drift in frontend test and utility files, which caused scripts/tests/prettierFormatting.test.ts to fail.",
+  "resolution": "Revalidated frontend formatting for the reported files under frontend/.prettierrc and confirmed the format-check gate is green.",
+  "references": [
+    "scripts/tests/prettierFormatting.test.ts",
+    "frontend/__tests__/migrations.test.js",
+    "frontend/__tests__/offlineWorkerRegistration.test.js",
+    "frontend/src/utils/legacySaveParsing.js"
+  ]
+}

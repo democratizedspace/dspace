@@ -251,9 +251,10 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         fs = { existsSync, mkdirSync, writeFileSync },
     } = options;
 
+    const hasCustomFs = fs !== undefined;
     const {
         existsSync: fsExistsSync = existsSync,
-        mkdirSync: fsMkdirSync = mkdirSync,
+        mkdirSync: fsMkdirSync = hasCustomFs ? undefined : mkdirSync,
         writeFileSync: fsWriteFileSync = writeFileSync,
     } = fs ?? {};
 
@@ -297,12 +298,14 @@ export function ensurePlaywrightSystemDeps(options = {}) {
         return false;
     }
 
-    try {
-        fsMkdirSync(path.dirname(depsStampPath), { recursive: true });
-    } catch (error) {
-        console.warn(
-            `Unable to create Playwright deps sentinel directory for ${depsStampPath}: ${error.message}`
-        );
+    if (typeof fsMkdirSync === 'function') {
+        try {
+            fsMkdirSync(path.dirname(depsStampPath), { recursive: true });
+        } catch (error) {
+            console.warn(
+                `Unable to create Playwright deps sentinel directory for ${depsStampPath}: ${error.message}`
+            );
+        }
     }
 
     try {
