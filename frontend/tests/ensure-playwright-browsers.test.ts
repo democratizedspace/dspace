@@ -223,6 +223,37 @@ describe('ensurePlaywrightSystemDeps', () => {
         expect(execFileSyncMock.mock.calls[0][2]?.env?.HTTP_PROXY).toBeUndefined();
         expect(execFileSyncMock.mock.calls[0][2]?.env?.HTTPS_PROXY).toBeUndefined();
     });
+
+    it('does not warn when sentinel directory is unavailable with ENOENT', async () => {
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        const missingDirError = Object.assign(new Error('missing'), { code: 'ENOENT' });
+
+        existsSyncMock.mockImplementation((target: string) => target === cliPath);
+
+        const { ensurePlaywrightSystemDeps } = await importModule();
+
+        const result = ensurePlaywrightSystemDeps({
+            cwd,
+            env: { PLAYWRIGHT_SKIP_INSTALL_DEPS: '0' },
+            platform: 'linux',
+            cliPath,
+            depsStampPath,
+            exec: execFileSyncMock,
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: vi.fn(() => {
+                    throw missingDirError;
+                }),
+                writeFileSync: writeFileSyncMock,
+            },
+        });
+
+        expect(result).toBe(true);
+        expect(execFileSyncMock).toHaveBeenCalledTimes(1);
+        expect(writeFileSyncMock).not.toHaveBeenCalled();
+        expect(warnSpy).not.toHaveBeenCalled();
+        warnSpy.mockRestore();
+    });
 });
 
 describe('ensurePlaywrightBrowsers', () => {
