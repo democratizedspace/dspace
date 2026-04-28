@@ -132,32 +132,25 @@ export function resolveHeadlessShellPath(executablePath) {
     return '';
 }
 
-export function hasChromiumExecutable(browser) {
+function getChromiumAssetStatus(browser) {
     try {
         const executablePath = browser.executablePath();
-        if (!executablePath) {
-            return false;
-        }
-
-        if (!existsSync(executablePath)) {
-            return false;
+        if (!executablePath || !existsSync(executablePath)) {
+            return { hasChromium: false, hasHeadlessShell: false, executablePath: '' };
         }
 
         const headlessShellPath = resolveHeadlessShellPath(executablePath);
-        if (!headlessShellPath || !existsSync(headlessShellPath)) {
-            if (!warnedMissingHeadlessShellPaths.has(executablePath)) {
-                warnedMissingHeadlessShellPaths.add(executablePath);
-                console.warn(
-                    `Playwright chromium executable found at ${executablePath} but headless shell is missing. Proceeding with chromium binary only. Run "npm run playwright:install" to install it.`
-                );
-            }
-            return true;
-        }
+        const hasHeadlessShell = Boolean(headlessShellPath && existsSync(headlessShellPath));
 
-        return true;
+        return { hasChromium: true, hasHeadlessShell, executablePath };
     } catch (error) {
-        return false;
+        return { hasChromium: false, hasHeadlessShell: false, executablePath: '' };
     }
+}
+
+export function hasChromiumExecutable(browser) {
+    const { hasChromium, hasHeadlessShell } = getChromiumAssetStatus(browser);
+    return hasChromium && hasHeadlessShell;
 }
 
 async function getChromiumBrowser() {
@@ -192,10 +185,18 @@ export async function ensurePlaywrightBrowsers(options = {}) {
     }
 
     if (process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD === '1') {
-        if (browser && !hasChromiumExecutable(browser)) {
-            console.warn(
-                'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing. E2E tests may fail.'
-            );
+        if (browser) {
+            const { hasChromium, hasHeadlessShell, executablePath } = getChromiumAssetStatus(browser);
+            if (!hasChromium) {
+                console.warn(
+                    'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing. E2E tests may fail.'
+                );
+            } else if (!hasHeadlessShell && !warnedMissingHeadlessShellPaths.has(executablePath)) {
+                warnedMissingHeadlessShellPaths.add(executablePath);
+                console.warn(
+                    `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium headless shell is missing for ${executablePath}. E2E tests may fail.`
+                );
+            }
         }
         return;
     }
@@ -205,7 +206,8 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         return;
     }
 
-    if (hasChromiumExecutable(browser)) {
+    const chromiumAssets = getChromiumAssetStatus(browser);
+    if (chromiumAssets.hasChromium && chromiumAssets.hasHeadlessShell) {
         return;
     }
 
@@ -229,9 +231,11 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         env: sanitizedEnv,
     });
 
-    if (!hasChromiumExecutable(browser)) {
+    const postInstallAssets = getChromiumAssetStatus(browser);
+    if (!postInstallAssets.hasChromium || !postInstallAssets.hasHeadlessShell) {
+        const missingAsset = !postInstallAssets.hasChromium ? 'chromium executable' : 'chromium headless shell';
         console.warn(
-            'Playwright chromium executable is still missing after installation. Tests may fail if browsers are unavailable.'
+            `Playwright ${missingAsset} is still missing after installation. Tests may fail if browsers are unavailable.`
         );
     }
 }
