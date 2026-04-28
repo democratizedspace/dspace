@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-28-playwright-headless-shell-warning",
+  "date": "2026-04-28",
+  "component": "playwright-bootstrap",
+  "longForm": "outages/2026-04-28-playwright-headless-shell-warning.md",
+  "rootCause": "Playwright browser readiness considered Chromium alone sufficient, so grouped E2E skipped installation when chromium-headless-shell was missing and repeatedly logged warning noise.",
+  "resolution": "Updated ensure-playwright-browsers readiness checks to require both Chromium and chromium-headless-shell before early exit, and added a regression test covering Chromium-present/headless-shell-missing reinstalls.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "frontend/tests/ensure-playwright-browsers.test.ts"
+  ]
+}

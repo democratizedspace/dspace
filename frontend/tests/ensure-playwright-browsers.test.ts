@@ -338,6 +338,55 @@ describe('ensurePlaywrightBrowsers', () => {
 
         expect(execFileSyncMock).not.toHaveBeenCalled();
     });
+
+    it('reinstalls browsers when chromium exists but headless shell is missing', async () => {
+        let installInvoked = false;
+
+        existsSyncMock.mockImplementation((target: string) => {
+            if (target === cliPath) {
+                return true;
+            }
+            if (target === chromiumPath) {
+                return true;
+            }
+            if (target === headlessShellPath) {
+                return installInvoked;
+            }
+            if (target.includes('chromium-headless-shell-1234')) {
+                return installInvoked && target === headlessShellPath;
+            }
+            return false;
+        });
+
+        execFileSyncMock.mockImplementation((_command, args: string[]) => {
+            if (args[1] === 'install') {
+                installInvoked = true;
+            }
+        });
+
+        const { ensurePlaywrightBrowsers } = await importModule();
+
+        await ensurePlaywrightBrowsers({
+            cwd,
+            env: { ...process.env },
+            platform: 'darwin',
+            installSystemDeps: false,
+            exec: execFileSyncMock,
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: mkdirSyncMock,
+                writeFileSync: writeFileSyncMock,
+            },
+        });
+
+        expect(execFileSyncMock).toHaveBeenCalledTimes(1);
+        expect(execFileSyncMock.mock.calls[0][1]).toEqual([
+            cliPath,
+            'install',
+            'chromium',
+            'chromium-headless-shell',
+        ]);
+    });
 });
 
 afterAll(() => {
