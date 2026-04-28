@@ -8,7 +8,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
-import { withPlaywrightNetworkEnv } from './utils/ensure-playwright-browsers.js';
+import {
+    ensurePlaywrightBrowsers,
+    withPlaywrightNetworkEnv,
+} from './utils/ensure-playwright-browsers.js';
 
 // Get the directory name in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -322,7 +325,7 @@ function runTestGroup(group) {
     }
 }
 
-function main() {
+async function main() {
     console.log(
         `${colors.bright}${colors.magenta}Starting DSpace Test Suite in Groups${colors.reset}`
     );
@@ -330,6 +333,11 @@ function main() {
     console.log(
         `${colors.yellow}System has ${CPU_CORES} CPU cores, using up to ${MAX_WORKERS} workers for parallel tests${colors.reset}\n`
     );
+
+    await ensurePlaywrightBrowsers({
+        cwd: rootDir,
+        env: withPlaywrightNetworkEnv(),
+    });
 
     let startTime = Date.now();
     let successCount = 0;
@@ -381,7 +389,7 @@ if (
     import.meta.url === `file://${process.argv[1]}` ||
     process.argv[1].endsWith('run-test-groups.mjs')
 ) {
-    main();
+    await main();
 }
 
 export { TEST_GROUPS, runTestGroup, main, CPU_CORES, MAX_WORKERS };

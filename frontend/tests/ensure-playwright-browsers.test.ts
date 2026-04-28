@@ -248,7 +248,7 @@ describe('ensurePlaywrightBrowsers', () => {
             if (
                 typeof first === 'string' &&
                 (first.startsWith(
-                    'Playwright chromium executable is still missing after installation.'
+                    'Playwright chromium or chromium-headless-shell is still missing after installation.'
                 ) ||
                     first.startsWith(
                         'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing.'
@@ -337,6 +337,63 @@ describe('ensurePlaywrightBrowsers', () => {
         }
 
         expect(execFileSyncMock).not.toHaveBeenCalled();
+    });
+
+    it('installs missing headless shell when chromium exists without it', async () => {
+        let sentinelExists = false;
+        let headlessInstalled = false;
+
+        existsSyncMock.mockImplementation((target: string) => {
+            if (target === cliPath) {
+                return true;
+            }
+            if (target === depsStampPath) {
+                return sentinelExists;
+            }
+            if (target === chromiumPath) {
+                return true;
+            }
+            if (target === headlessShellPath) {
+                return headlessInstalled;
+            }
+            if (target.includes('chromium-headless-shell-1234')) {
+                return headlessInstalled && target === headlessShellPath;
+            }
+            return false;
+        });
+
+        execFileSyncMock.mockImplementation((_command, args: string[]) => {
+            if (args[1] === 'install-deps') {
+                sentinelExists = true;
+            }
+            if (args[1] === 'install') {
+                headlessInstalled = true;
+            }
+        });
+
+        const { ensurePlaywrightBrowsers } = await importModule();
+
+        await ensurePlaywrightBrowsers({
+            cwd,
+            env: { ...process.env },
+            platform: 'linux',
+            depsStampPath,
+            exec: execFileSyncMock,
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: mkdirSyncMock,
+                writeFileSync: writeFileSyncMock,
+            },
+        });
+
+        expect(execFileSyncMock).toHaveBeenCalledTimes(2);
+        expect(execFileSyncMock.mock.calls[0][1]).toEqual([cliPath, 'install-deps']);
+        expect(execFileSyncMock.mock.calls[1][1]).toEqual([
+            cliPath,
+            'install',
+            'chromium',
+            'chromium-headless-shell',
+        ]);
     });
 });
 
