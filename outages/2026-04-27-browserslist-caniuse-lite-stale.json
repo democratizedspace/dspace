@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-27-browserslist-caniuse-lite-stale",
+  "date": "2026-04-27",
+  "component": "build-tooling",
+  "longForm": "outages/2026-04-27-browserslist-caniuse-lite-stale.md",
+  "rootCause": "The npm lockfile still resolved an older caniuse-lite package, so Browserslist browser data age warnings appeared during build.",
+  "resolution": "Updated lockfile metadata to refresh caniuse-lite and remove stale Browserslist warning noise from QA launch-gate logs.",
+  "references": [
+    "package-lock.json",
+    "scripts/run-astro-build.mjs"
+  ]
+}
