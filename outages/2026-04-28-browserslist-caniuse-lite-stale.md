@@ -1,4 +1,4 @@
-# Browserslist caniuse-lite stale warning in v3.0.1 QA launch gate
+# Browserslist caniuse-lite stale warning in v3.0.1 QA launch-gate
 
 ## Symptom
 During the v3.0.1 QA launch-gate run, `npm run build` completed successfully but logged a

@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-28-browserslist-caniuse-lite-stale",
+  "date": "2026-04-28",
+  "component": "frontend-build-tooling",
+  "longForm": "outages/2026-04-28-browserslist-caniuse-lite-stale.md",
+  "rootCause": "package-lock.json resolved caniuse-lite to an outdated dataset that triggered Browserslist stale-data warnings during build output.",
+  "resolution": "Refreshed lockfile metadata to caniuse-lite 1.0.30001791 so build logs no longer emit the stale Browserslist warning.",
+  "references": [
+    "package-lock.json",
+    "outages/2026-04-28-browserslist-caniuse-lite-stale.md"
+  ]
+}
