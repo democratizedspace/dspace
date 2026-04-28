@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-28-playwright-chromium-headless-shell-bootstrap",
+  "date": "2026-04-28",
+  "component": "qa:e2e-playwright",
+  "longForm": "outages/2026-04-28-playwright-chromium-headless-shell-bootstrap.md",
+  "rootCause": "The Playwright browser bootstrap treated a missing chromium headless shell as acceptable and returned success as long as the Chromium executable existed.",
+  "resolution": "Updated browser presence checks to require both Chromium and headless_shell before skipping install, which triggers a one-time install path in setup and removes repeated warning spam during grouped runs.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts",
+    "frontend/playwright.config.ts"
+  ]
+}

@@ -302,7 +302,7 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(writeFileSync).toHaveBeenCalledTimes(1);
   });
 
-  it('warns but continues when headless shell is missing', async () => {
+  it('installs browsers when headless shell is missing', async () => {
     const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
     const chromeExecutable = path.join(
       cacheRoot,
@@ -346,7 +346,11 @@ describe('ensurePlaywrightBrowsers', () => {
       }
       return false;
     });
-    const execFileSync = vi.fn();
+    const execFileSync = vi.fn((_command: string, args: string[]) => {
+      if (args[1] === 'install') {
+        headlessInstalled = true;
+      }
+    });
     const writeFileSync = vi.fn(() => {
       depsSentinelExists = true;
     });
@@ -379,8 +383,14 @@ describe('ensurePlaywrightBrowsers', () => {
 
       await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
 
-      expect(execFileSync).not.toHaveBeenCalled();
-      expect(executablePath).toHaveBeenCalledTimes(1);
+      expect(execFileSync).toHaveBeenCalledTimes(2);
+      expect(execFileSync).toHaveBeenNthCalledWith(
+        2,
+        process.execPath,
+        [cliPath, 'install', 'chromium', 'chromium-headless-shell'],
+        expect.objectContaining({ cwd: frontendRoot, stdio: 'inherit' })
+      );
+      expect(executablePath).toHaveBeenCalledTimes(2);
       expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
       expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
       expect(warnSpy).toHaveBeenCalledWith(
@@ -406,14 +416,41 @@ describe('ensurePlaywrightBrowsers', () => {
       'test',
       'cli.js'
     );
+    let headlessInstalled = false;
+    const headlessPath = path.join(
+      cacheRoot,
+      'chromium-headless-shell-1181',
+      'chrome-linux',
+      'headless_shell'
+    );
     const existsSync = vi.fn((candidate: string) => {
       if (candidate === cliPath || candidate === chromeExecutable) {
         return true;
+      }
+      if (candidate === headlessPath) {
+        return headlessInstalled;
       }
       return false;
     });
     const browser = { executablePath: vi.fn(() => chromeExecutable) };
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const execFileSync = vi.fn((_command: string, args: string[]) => {
+      if (args[1] === 'install') {
+        headlessInstalled = true;
+      }
+    });
+
+    vi.doMock('node:child_process', async () => {
+      const actual =
+        await vi.importActual<typeof import('node:child_process')>(
+          'node:child_process'
+        );
+      return {
+        ...actual,
+        execFileSync,
+        default: { ...actual, execFileSync },
+      };
+    });
 
     vi.doMock('node:fs', async () => {
       const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
@@ -434,9 +471,7 @@ describe('ensurePlaywrightBrowsers', () => {
       expect(warnSpy).toHaveBeenCalledWith(
         expect.stringContaining('headless shell is missing')
       );
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('npm run playwright:install')
-      );
+      expect(execFileSync).toHaveBeenCalledTimes(2);
     } finally {
       warnSpy.mockRestore();
     }
@@ -479,6 +514,19 @@ describe('ensurePlaywrightBrowsers', () => {
       .mockReturnValueOnce(secondChromeExecutable);
     const browser = { executablePath };
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const execFileSync = vi.fn();
+
+    vi.doMock('node:child_process', async () => {
+      const actual =
+        await vi.importActual<typeof import('node:child_process')>(
+          'node:child_process'
+        );
+      return {
+        ...actual,
+        execFileSync,
+        default: { ...actual, execFileSync },
+      };
+    });
 
     vi.doMock('node:fs', async () => {
       const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
@@ -495,7 +543,7 @@ describe('ensurePlaywrightBrowsers', () => {
       await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
       await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
 
-      expect(warnSpy).toHaveBeenCalledTimes(2);
+      expect(warnSpy).toHaveBeenCalledTimes(4);
       expect(warnSpy).toHaveBeenNthCalledWith(
         1,
         expect.stringContaining(firstChromeExecutable)
@@ -504,6 +552,7 @@ describe('ensurePlaywrightBrowsers', () => {
         2,
         expect.stringContaining(secondChromeExecutable)
       );
+      expect(execFileSync).toHaveBeenCalledTimes(4);
     } finally {
       warnSpy.mockRestore();
     }

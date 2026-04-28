@@ -151,7 +151,7 @@ export function hasChromiumExecutable(browser) {
                     `Playwright chromium executable found at ${executablePath} but headless shell is missing. Proceeding with chromium binary only. Run "npm run playwright:install" to install it.`
                 );
             }
-            return true;
+            return false;
         }
 
         return true;
