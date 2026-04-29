@@ -228,6 +228,15 @@ export function registerOfflineWorker() {
                 }
             })
             .catch((error) => {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                const blockedByPlaywright =
+                    isAutomation && errorMessage.includes('Service Worker registration blocked by Playwright');
+
+                if (blockedByPlaywright) {
+                    console.info('Service worker registration skipped in Playwright automation mode.');
+                    return;
+                }
+
                 console.warn('Service worker registration failed:', error);
             });
     });

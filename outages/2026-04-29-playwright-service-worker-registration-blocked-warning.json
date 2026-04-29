@@ -1,0 +1,12 @@
+{
+  "id": "2026-04-29-playwright-service-worker-registration-blocked-warning",
+  "date": "2026-04-29",
+  "component": "frontend:offline-worker-registration",
+  "longForm": "outages/2026-04-29-playwright-service-worker-registration-blocked-warning.md",
+  "rootCause": "Offline worker bootstrap attempted service worker registration in Playwright automation runs where `serviceWorkers: 'block'` intentionally rejects registration, and the known Playwright rejection message was logged as a warning each time.",
+  "resolution": "Added a narrow Playwright-only suppression in offline worker registration error handling: when automation is detected and the rejection message matches the known Playwright block warning, downgrade to informational logging while preserving warnings for all other registration errors.",
+  "references": [
+    "frontend/public/scripts/offlineWorkerRegistration.js",
+    "outages/2026-04-29-playwright-service-worker-registration-blocked-warning.md"
+  ]
+}
