@@ -1,0 +1,22 @@
+{
+  "id": "2026-04-29-quest-graph-debug-flag-rebuild-noise",
+  "date": "2026-04-29",
+  "component": "frontend/scripts/setup-test-env.js",
+  "impact": "Grouped Playwright E2E setup rebuilt Astro despite a freshly completed build, adding avoidable QA latency and noisy diagnostics.",
+  "rootCause": "ensure-astro-build checked a quest graph debug compatibility marker, but the standard Astro build wrapper did not persist that marker and setup scripts could evaluate debug env state at import time.",
+  "resolution": "Persist dist/.quest-graph-debug-flag after successful astro builds and resolve PUBLIC_ENABLE_QUEST_GRAPH_DEBUG at ensureAstroBuild invocation time for deterministic compatibility checks.",
+  "verification": [
+    "npm run lint",
+    "npm run type-check",
+    "npm run build",
+    "npm test",
+    "node scripts/link-check.mjs",
+    "npm --prefix frontend run test:e2e:groups"
+  ],
+  "references": [
+    "frontend/scripts/run-astro-build.mjs",
+    "frontend/scripts/ensure-astro-build.mjs",
+    "outages/2026-04-29-quest-graph-debug-flag-rebuild-noise.md"
+  ],
+  "longForm": "outages/2026-04-29-quest-graph-debug-flag-rebuild-noise.md"
+}

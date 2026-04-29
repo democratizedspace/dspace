@@ -1,4 +1,26 @@
 import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendRoot = path.resolve(__dirname, '..');
+
+const writeQuestGraphDebugMarker = () => {
+    const markerPath = path.join(frontendRoot, 'dist', '.quest-graph-debug-flag');
+
+    try {
+        fs.mkdirSync(path.dirname(markerPath), { recursive: true });
+        fs.writeFileSync(
+            markerPath,
+            process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true' ? 'true' : 'false'
+        );
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn(`Failed to write quest graph debug marker: ${message}`);
+    }
+};
 
 // Intentionally filter only Astro's unsupported-file warning spam for known support/content files
 // under frontend/src/pages/**, while preserving every other warning and normal build output.
@@ -129,6 +151,10 @@ child.on('close', (code, signal) => {
         console.error(`astro build exited due to signal ${signal}`);
         process.kill(process.pid, signal);
         return;
+    }
+
+    if (code === 0) {
+        writeQuestGraphDebugMarker();
     }
 
     process.exit(code ?? 1);
