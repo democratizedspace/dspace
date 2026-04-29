@@ -217,6 +217,34 @@ describe('registerOfflineWorker', () => {
         });
     });
 
+    it('logs info instead of warning for expected Playwright service worker blocking', async () => {
+        Object.defineProperty(navigator, 'webdriver', {
+            configurable: true,
+            value: true,
+        });
+        fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: {} }));
+        serviceWorker.register.mockRejectedValue(
+            new Error('Service Worker registration blocked by Playwright')
+        );
+
+        const { registerOfflineWorker } = await import(
+            '../public/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        await vi.waitFor(() => {
+            expect(consoleInfoSpy).toHaveBeenCalledWith(
+                'Service worker registration skipped in Playwright (blocked).'
+            );
+        });
+        expect(consoleWarnSpy).not.toHaveBeenCalledWith(
+            'Service worker registration failed:',
+            expect.any(Error)
+        );
+    });
+
     it('logs warning when service worker registration fails', async () => {
         fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: {} }));
         serviceWorker.register.mockRejectedValue(new Error('Registration failed'));

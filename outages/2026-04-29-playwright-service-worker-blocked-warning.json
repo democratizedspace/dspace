@@ -1,0 +1,20 @@
+{
+  "id": "2026-04-29-playwright-service-worker-blocked-warning",
+  "date": "2026-04-29",
+  "component": "frontend/public/scripts/offlineWorkerRegistration.js",
+  "impact": "Grouped Playwright E2E runs emitted repeated console warnings even when suites passed, obscuring actionable warning noise in QA logs.",
+  "rootCause": "Playwright blocks service worker registration when serviceWorkers is set to block, and the offline worker registration catch path logged the expected block as a warning.",
+  "resolution": "Detect the Playwright-specific blocked registration error only in automation contexts and log it as an informational skip while preserving warning logs for all other registration failures.",
+  "verification": [
+    "npm run lint",
+    "npm run type-check",
+    "npm run build",
+    "npm test",
+    "node scripts/link-check.mjs",
+    "npm --prefix frontend run test:e2e:groups"
+  ],
+  "references": [
+    "frontend/public/scripts/offlineWorkerRegistration.js",
+    "frontend/__tests__/offlineWorkerRegistration.test.js"
+  ]
+}
