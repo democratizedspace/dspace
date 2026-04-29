@@ -251,7 +251,13 @@ describe('ensurePlaywrightBrowsers', () => {
                     'Playwright chromium executable is still missing after installation.'
                 ) ||
                     first.startsWith(
+                        'Playwright chromium headless shell is still missing after installation.'
+                    ) ||
+                    first.startsWith(
                         'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing.'
+                    ) ||
+                    first.startsWith(
+                        'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium headless shell is missing'
                     ))
             ) {
                 return;
@@ -316,6 +322,40 @@ describe('ensurePlaywrightBrowsers', () => {
             'chromium-headless-shell',
         ]);
         expect(writeFileSyncMock).toHaveBeenCalled();
+    });
+
+    it('uses provided env for skip-download behavior', async () => {
+        const chromiumPath = '/root/.cache/ms-playwright/chromium-1234/chrome';
+        existsSyncMock.mockImplementation((target: string) => target === chromiumPath);
+        chromiumExecutablePathMock.mockReturnValue(chromiumPath);
+
+        const { ensurePlaywrightBrowsers } = await importModule();
+
+        await ensurePlaywrightBrowsers({
+            cwd,
+            env: { PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1' },
+            platform: 'linux',
+            exec: execFileSyncMock,
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: mkdirSyncMock,
+                writeFileSync: writeFileSyncMock,
+            },
+        });
+
+        await ensurePlaywrightBrowsers({
+            cwd,
+            env: { PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1' },
+            platform: 'linux',
+            exec: execFileSyncMock,
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: mkdirSyncMock,
+                writeFileSync: writeFileSyncMock,
+            },
+        });
+
+        expect(execFileSyncMock).not.toHaveBeenCalled();
     });
 
     it('respects skip flag for browser download', async () => {

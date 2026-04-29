@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-28-playwright-headless-shell-bootstrap-warning",
+  "date": "2026-04-28",
+  "component": "frontend:playwright-bootstrap",
+  "longForm": "outages/2026-04-28-playwright-headless-shell-bootstrap-warning.md",
+  "rootCause": "The Playwright bootstrap check treated Chromium as fully installed even when chromium-headless-shell was missing, so grouped E2E runs skipped browser installation and emitted repeated launcher warnings in each Playwright invocation.",
+  "resolution": "Updated browser asset validation to require both Chromium and chromium-headless-shell before skipping installation, and kept installation centralized through ensurePlaywrightBrowsers so grouped E2E installs missing assets once up front.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts",
+    "outages/2026-04-28-playwright-headless-shell-bootstrap-warning.md"
+  ]
+}

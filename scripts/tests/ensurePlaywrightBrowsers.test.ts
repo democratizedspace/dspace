@@ -302,7 +302,7 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(writeFileSync).toHaveBeenCalledTimes(1);
   });
 
-  it('warns but continues when headless shell is missing', async () => {
+  it('installs missing headless shell when chromium executable already exists', async () => {
     const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
     const chromeExecutable = path.join(
       cacheRoot,
@@ -377,132 +377,26 @@ describe('ensurePlaywrightBrowsers', () => {
     try {
       const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+      await ensurePlaywrightBrowsers({
+        cwd: frontendRoot,
+        browser,
+        platform: 'linux',
+        env: { ...process.env, PLAYWRIGHT_SKIP_INSTALL_DEPS: '0' },
+      });
 
-      expect(execFileSync).not.toHaveBeenCalled();
-      expect(executablePath).toHaveBeenCalledTimes(1);
+      expect(execFileSync).toHaveBeenCalledTimes(2);
+      expect(execFileSync.mock.calls[0][1]).toEqual([cliPath, 'install-deps']);
+      expect(execFileSync.mock.calls[1][1]).toEqual([
+        cliPath,
+        'install',
+        'chromium',
+        'chromium-headless-shell',
+      ]);
+      expect(executablePath).toHaveBeenCalledTimes(2);
       expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
       expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('headless shell is missing')
-      );
-    } finally {
-      warnSpy.mockRestore();
-    }
-  });
-
-  it('logs missing headless shell warning only once per process', async () => {
-    const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
-    const chromeExecutable = path.join(
-      cacheRoot,
-      'chromium-1181',
-      'chrome-linux',
-      'chrome'
-    );
-    const cliPath = path.join(
-      frontendRoot,
-      'node_modules',
-      '@playwright',
-      'test',
-      'cli.js'
-    );
-    const existsSync = vi.fn((candidate: string) => {
-      if (candidate === cliPath || candidate === chromeExecutable) {
-        return true;
-      }
-      return false;
-    });
-    const browser = { executablePath: vi.fn(() => chromeExecutable) };
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-    vi.doMock('node:fs', async () => {
-      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
-      return {
-        ...actual,
-        existsSync,
-        default: { ...actual, existsSync },
-      };
-    });
-
-    try {
-      const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
-
-      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
-      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
-
-      expect(warnSpy).toHaveBeenCalledTimes(1);
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('headless shell is missing')
-      );
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('npm run playwright:install')
-      );
-    } finally {
-      warnSpy.mockRestore();
-    }
-  });
-
-  it('logs missing headless shell warning for each distinct chromium path', async () => {
-    const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
-    const firstChromeExecutable = path.join(
-      cacheRoot,
-      'chromium-1181',
-      'chrome-linux',
-      'chrome'
-    );
-    const secondChromeExecutable = path.join(
-      cacheRoot,
-      'chromium-1200',
-      'chrome-linux',
-      'chrome'
-    );
-    const cliPath = path.join(
-      frontendRoot,
-      'node_modules',
-      '@playwright',
-      'test',
-      'cli.js'
-    );
-    const existsSync = vi.fn((candidate: string) => {
-      if (
-        candidate === cliPath ||
-        candidate === firstChromeExecutable ||
-        candidate === secondChromeExecutable
-      ) {
-        return true;
-      }
-      return false;
-    });
-    const executablePath = vi
-      .fn<() => string>()
-      .mockReturnValueOnce(firstChromeExecutable)
-      .mockReturnValueOnce(secondChromeExecutable);
-    const browser = { executablePath };
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-    vi.doMock('node:fs', async () => {
-      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
-      return {
-        ...actual,
-        existsSync,
-        default: { ...actual, existsSync },
-      };
-    });
-
-    try {
-      const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
-
-      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
-      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
-
-      expect(warnSpy).toHaveBeenCalledTimes(2);
-      expect(warnSpy).toHaveBeenNthCalledWith(
-        1,
-        expect.stringContaining(firstChromeExecutable)
-      );
-      expect(warnSpy).toHaveBeenNthCalledWith(
-        2,
-        expect.stringContaining(secondChromeExecutable)
+      expect(warnSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining('Proceeding with chromium binary only')
       );
     } finally {
       warnSpy.mockRestore();
