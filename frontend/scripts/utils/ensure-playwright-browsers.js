@@ -149,6 +149,11 @@ function getChromiumAssetStatus(browser) {
 }
 
 export function hasChromiumExecutable(browser) {
+    const { hasChromium } = getChromiumAssetStatus(browser);
+    return hasChromium;
+}
+
+export function hasChromiumAssets(browser) {
     const { hasChromium, hasHeadlessShell } = getChromiumAssetStatus(browser);
     return hasChromium && hasHeadlessShell;
 }
@@ -184,7 +189,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         return;
     }
 
-    if (process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD === '1') {
+    if (env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD === '1') {
         if (browser) {
             const { hasChromium, hasHeadlessShell, executablePath } = getChromiumAssetStatus(browser);
             if (!hasChromium) {
@@ -206,8 +211,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         return;
     }
 
-    const chromiumAssets = getChromiumAssetStatus(browser);
-    if (chromiumAssets.hasChromium && chromiumAssets.hasHeadlessShell) {
+    if (hasChromiumAssets(browser)) {
         return;
     }
 

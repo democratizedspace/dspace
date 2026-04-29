@@ -377,7 +377,12 @@ describe('ensurePlaywrightBrowsers', () => {
     try {
       const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
 
-      await ensurePlaywrightBrowsers({ cwd: frontendRoot, browser });
+      await ensurePlaywrightBrowsers({
+        cwd: frontendRoot,
+        browser,
+        platform: 'linux',
+        env: { ...process.env, PLAYWRIGHT_SKIP_INSTALL_DEPS: '0' },
+      });
 
       expect(execFileSync).toHaveBeenCalledTimes(2);
       expect(execFileSync.mock.calls[0][1]).toEqual([cliPath, 'install-deps']);
