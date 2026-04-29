@@ -302,7 +302,7 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(writeFileSync).toHaveBeenCalledTimes(1);
   });
 
-  it('installs missing headless shell when chromium executable already exists', async () => {
+  it('skips install when chromium executable already exists even if headless shell is missing', async () => {
     const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
     const chromeExecutable = path.join(
       cacheRoot,
@@ -384,15 +384,8 @@ describe('ensurePlaywrightBrowsers', () => {
         env: { ...process.env, PLAYWRIGHT_SKIP_INSTALL_DEPS: '0' },
       });
 
-      expect(execFileSync).toHaveBeenCalledTimes(2);
-      expect(execFileSync.mock.calls[0][1]).toEqual([cliPath, 'install-deps']);
-      expect(execFileSync.mock.calls[1][1]).toEqual([
-        cliPath,
-        'install',
-        'chromium',
-        'chromium-headless-shell',
-      ]);
-      expect(executablePath).toHaveBeenCalledTimes(2);
+      expect(execFileSync).not.toHaveBeenCalled();
+      expect(executablePath).toHaveBeenCalledTimes(1);
       expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
       expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
       expect(warnSpy).not.toHaveBeenCalledWith(
