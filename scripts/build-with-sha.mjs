@@ -94,7 +94,14 @@ try {
 
 try {
     await run('npm', ['run', 'build:docs-rag']);
-    await run('npm', ['--prefix', 'frontend', 'run', 'build'], { filterOutput: true });
+    await run('npm', ['--prefix', 'frontend', 'run', 'build'], {
+        filterOutput: true,
+        env: {
+            ...process.env,
+            PUBLIC_ENABLE_QUEST_GRAPH_DEBUG:
+                process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG ?? 'true',
+        },
+    });
 } catch (error) {
     console.error('Failed to run build commands:', error);
     process.exit(1);
