@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-29-browserslist-caniuse-lite-warning",
+  "date": "2026-04-29",
+  "component": "frontend/build",
+  "symptom": "`npm run build` intermittently printed `Browserslist: browsers data (caniuse-lite) is 10 months old` while the build still completed successfully.",
+  "rootCause": "The warning is emitted when local Browserslist metadata drifts behind the latest caniuse-lite dataset; this affects warning output but not Astro/Vite build correctness.",
+  "fix": "Ran `npx update-browserslist-db@latest` using the repository's existing lockfile conventions. In this environment, caniuse-lite was already at the latest dataset (`1.0.30001791`), so no dependency or lockfile diff was required.",
+  "verification": [
+    "npm run build",
+    "npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs"
+  ],
+  "impact": "Warning-only; this issue did not fail CI gates or block artifact generation."
+}
