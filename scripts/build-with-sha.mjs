@@ -81,9 +81,12 @@ const run = async (command, args, options = {}) => {
 const { gitSha, source } = resolveBuildMeta();
 process.env.VITE_GIT_SHA = gitSha;
 
-// Keep root build output compatible with grouped E2E setup checks.
-// setup-test-env defaults this flag to true and compares dist marker state.
-if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
+// Only opt quest-graph debug behavior in for explicit test/debug build paths.
+// PUBLIC_* values are baked into client bundles, so keep the default build opt-out.
+if (
+    process.env.ENABLE_QUEST_GRAPH_DEBUG_DEFAULT === 'true' &&
+    !process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG
+) {
     process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG = 'true';
 }
 try {
