@@ -104,7 +104,7 @@
   },
   "pnpm": {
     "overrides": {
-      "caniuse-lite": ">=1.0.30001790",
+      "caniuse-lite": ">=1.0.30001791",
       "esbuild": "0.25.8",
       "@esbuild/linux-x64": "0.25.8",
       "glob": "13.0.6"

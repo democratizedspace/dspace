@@ -1,0 +1,18 @@
+{
+  "id": "2026-04-29-browserslist-caniuse-lite-warning",
+  "date": "2026-04-29",
+  "component": "frontend:astro-build-browserslist",
+  "symptom": "`npm run build` printed `Browserslist: browsers data (caniuse-lite) is 10 months old` before Astro completed successfully.",
+  "rootCause": "The Browserslist metadata floor in repo dependency metadata allowed an older caniuse-lite dataset than current upstream release metadata expected by the build toolchain.",
+  "resolution": "Bumped the root pnpm override floor for `caniuse-lite` to `>=1.0.30001791` and regenerated `pnpm-lock.yaml` lock metadata so the toolchain resolves fresh Browserslist data.",
+  "verification": [
+    "npm run build",
+    "npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs"
+  ],
+  "impact": "warning-only",
+  "gateFailure": false,
+  "references": [
+    "package.json",
+    "pnpm-lock.yaml"
+  ]
+}
