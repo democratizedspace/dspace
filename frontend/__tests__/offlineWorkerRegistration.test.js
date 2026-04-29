@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import '../vitest.setup';
+import '../../vitest.setup.ts';
 
 let loadHandlers;
 let serviceWorker;
@@ -218,10 +218,7 @@ describe('registerOfflineWorker', () => {
     });
 
     it('logs info instead of warning for expected Playwright service worker blocking', async () => {
-        const originalWebdriverDescriptor = Object.getOwnPropertyDescriptor(
-            navigator,
-            'webdriver'
-        );
+        const originalWebdriverDescriptor = Object.getOwnPropertyDescriptor(navigator, 'webdriver');
 
         Object.defineProperty(navigator, 'webdriver', {
             configurable: true,
@@ -252,11 +249,7 @@ describe('registerOfflineWorker', () => {
             );
         } finally {
             if (originalWebdriverDescriptor) {
-                Object.defineProperty(
-                    navigator,
-                    'webdriver',
-                    originalWebdriverDescriptor
-                );
+                Object.defineProperty(navigator, 'webdriver', originalWebdriverDescriptor);
             } else {
                 delete navigator.webdriver;
             }

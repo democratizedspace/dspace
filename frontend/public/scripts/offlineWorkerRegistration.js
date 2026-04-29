@@ -47,7 +47,6 @@ export function registerOfflineWorker() {
     const SW_REGISTRATION_OPTIONS = { updateViaCache: 'none' };
     const UPDATE_CHECK_SESSION_KEY = 'offlineWorkerUpdateChecked';
 
-
     function isExpectedPlaywrightServiceWorkerBlock(error) {
         if (!isAutomation || !error) {
             return false;
