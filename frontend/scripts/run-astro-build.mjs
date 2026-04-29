@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 
 // Intentionally filter only Astro's unsupported-file warning spam for known support/content files
@@ -71,6 +74,23 @@ const isKnownIntentionalUnsupportedFile = (filePath) => {
     return knownDataFilePrefixes.some((prefix) => pagesRelativePath.startsWith(prefix));
 };
 
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, '..');
+
+const writeQuestGraphDebugMarker = () => {
+    const markerPath = path.join(projectRoot, 'dist', '.quest-graph-debug-flag');
+    const questGraphDebugEnabled = process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true';
+
+    try {
+        fs.mkdirSync(path.dirname(markerPath), { recursive: true });
+        fs.writeFileSync(markerPath, questGraphDebugEnabled ? 'true' : 'false');
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn(`Failed to persist quest graph debug marker: ${message}`);
+    }
+};
+
 const createFilteredWriter = (stream) => {
     let buffered = '';
     let suppressUnderscoreHintLine = false;
@@ -129,6 +149,10 @@ child.on('close', (code, signal) => {
         console.error(`astro build exited due to signal ${signal}`);
         process.kill(process.pid, signal);
         return;
+    }
+
+    if ((code ?? 1) === 0) {
+        writeQuestGraphDebugMarker();
     }
 
     process.exit(code ?? 1);
