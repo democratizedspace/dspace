@@ -110,6 +110,7 @@ export default defineConfig({
       'frontend/__tests__/Quests.test.js',
       'frontend/__tests__/gameState/common.test.js',
       'frontend/__tests__/ShoppingForm.test.js',
+      'frontend/__tests__/offlineWorkerRegistration.test.js',
     ],
     exclude: ['frontend/e2e/**'],
     coverage: {
