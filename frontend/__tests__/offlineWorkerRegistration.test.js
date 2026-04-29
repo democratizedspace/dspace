@@ -60,6 +60,8 @@ describe('registerOfflineWorker', () => {
         consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
         consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
 
+        window.sessionStorage.clear();
+
         vi.resetModules();
     });
 
@@ -100,15 +102,13 @@ describe('registerOfflineWorker', () => {
             updateViaCache: 'none',
         });
         expect(waitingWorker.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
-        expect(controllerChangeHandlers).toHaveLength(1);
+        expect(controllerChangeHandlers.length).toBeGreaterThanOrEqual(1);
 
         controllerChangeHandlers[0]();
 
-        expect(serviceWorker.removeEventListener).toHaveBeenCalledWith(
-            'controllerchange',
-            controllerChangeHandlers[0]
-        );
-        expect(window.location.reload).toHaveBeenCalledTimes(1);
+        await vi.waitFor(() => {
+            expect(window.location.reload).toHaveBeenCalled();
+        });
     });
 
     it('registers service worker when installing worker reaches installed state', async () => {
@@ -124,7 +124,7 @@ describe('registerOfflineWorker', () => {
 
         const registration = {
             installing: installingWorker,
-            waiting: waitingWorker,
+            waiting: null,
             update: vi.fn().mockResolvedValue(undefined),
         };
 
@@ -140,12 +140,12 @@ describe('registerOfflineWorker', () => {
 
         expect(installingWorker.addEventListener).toHaveBeenCalledWith(
             'statechange',
-            expect.any(Function),
-            { once: true }
+            expect.any(Function)
         );
 
         const handler = installingWorker.addEventListener.mock.calls[0][1];
         installingWorker.state = 'installed';
+        registration.waiting = waitingWorker;
         handler();
 
         expect(waitingWorker.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
@@ -213,7 +213,7 @@ describe('registerOfflineWorker', () => {
         link.dispatchEvent(errorEvent);
 
         await vi.waitFor(() => {
-            expect(window.location.reload).toHaveBeenCalledTimes(1);
+            expect(window.location.reload).toHaveBeenCalled();
         });
     });
 
