@@ -11,8 +11,8 @@
     "pretest:root": "node frontend/scripts/build-processes.mjs",
     "dev": "cd frontend && npm run dev",
     "test": "npm run test:pr",
-    "test:root": "vitest run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1",
-    "coverage": "vitest run --config vitest.config.mts --coverage",
+    "test:root": "npm run build:meta && npm run build:docs-rag && vitest run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1",
+    "coverage": "npm run build:meta && npm run build:docs-rag && vitest run --config vitest.config.mts --coverage",
     "test:watch": "cd frontend && npm run test:watch",
     "test:e2e": "cd frontend && npm run test:e2e",
     "test:e2e:coverage": "cd frontend && npm run test:e2e:coverage",
@@ -29,7 +29,7 @@
     "format": "cd frontend && npm run format",
     "format:check": "cd frontend && npm run format:check",
     "format:check:frontend-canary": "npx prettier --check frontend/__tests__/offlineWorkerRegistration.test.js",
-    "type-check": "tsc --noEmit",
+    "type-check": "npm run build:meta && npm run build:docs-rag && tsc --noEmit",
     "build:docs-rag": "node scripts/build-docs-rag-index.mjs",
     "build": "node scripts/build-with-sha.mjs",
     "verify:chat-build-stamp": "node scripts/verify-chat-build-stamp.mjs",
@@ -56,7 +56,8 @@
     "preview": "cd frontend && npm run preview",
     "lint:a11y": "cd frontend && npm run lint:a11y",
     "dev:legacy": "npm run dev",
-    "playwright:install": "npm --prefix frontend run playwright:install"
+    "playwright:install": "npm --prefix frontend run playwright:install",
+    "build:meta": "node scripts/write-build-meta.mjs"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
@@ -104,7 +105,7 @@
   },
   "pnpm": {
     "overrides": {
-      "caniuse-lite": ">=1.0.30001790",
+      "caniuse-lite": ">=1.0.30001791",
       "esbuild": "0.25.8",
       "@esbuild/linux-x64": "0.25.8",
       "glob": "13.0.6"

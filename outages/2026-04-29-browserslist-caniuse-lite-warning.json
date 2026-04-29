@@ -1,0 +1,20 @@
+{
+  "id": "2026-04-29-browserslist-caniuse-lite-warning",
+  "date": "2026-04-29",
+  "component": "frontend:astro-build-browserslist",
+  "symptom": "`npm run build` printed `Browserslist: browsers data (caniuse-lite) is 10 months old` before Astro completed successfully.",
+  "rootCause": "Unlike the 2026-04-28 incident (package-lock.json drift), this recurrence came from pnpm override floor drift: `pnpm.overrides.caniuse-lite` still permitted an older dataset, so Browserslist emitted a stale-data warning during build output.",
+  "resolution": "Bumped the root pnpm override floor for `caniuse-lite` to `>=1.0.30001791` and regenerated `pnpm-lock.yaml` lock metadata so pnpm resolution aligns with the previously refreshed npm lock path and resolves fresh Browserslist data.",
+  "verification": [
+    "npm run build",
+    "npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs"
+  ],
+  "impact": "warning-only",
+  "gateFailure": false,
+  "references": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "outages/2026-04-28-browserslist-caniuse-lite-stale.json",
+    "outages/2026-04-28-browserslist-caniuse-lite-stale.md"
+  ]
+}

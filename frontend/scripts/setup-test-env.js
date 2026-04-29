@@ -10,6 +10,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fsPromises from 'fs/promises';
+import { execSync } from 'child_process';
 import { resolveBuildMeta, writeBuildMeta } from '../../scripts/write-build-meta.mjs';
 
 const isRemotePlaywrightModeWithoutWebServerOverride = () => {
@@ -59,6 +60,8 @@ const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
 if (isRemotePlaywrightModeWithoutWebServerOverride()) {
     console.log('Remote Playwright mode detected; skipping local Astro build setup.');
 } else {
+    execSync('npm run build:meta', { cwd: path.resolve(rootDir, '..'), stdio: 'inherit' });
+    execSync('npm run build:docs-rag', { cwd: path.resolve(rootDir, '..'), stdio: 'inherit' });
     ensureAstroBuild();
 }
 
