@@ -44,6 +44,18 @@ export function registerOfflineWorker() {
         return true;
     };
 
+    const shouldSkipRegistrationForAutomation = () => {
+        if (!isAutomation) {
+            return false;
+        }
+
+        if (typeof window !== 'undefined' && window.__DS_ENABLE_SW_IN_AUTOMATION === true) {
+            return false;
+        }
+
+        return true;
+    };
+
     const SW_REGISTRATION_OPTIONS = { updateViaCache: 'none' };
     const UPDATE_CHECK_SESSION_KEY = 'offlineWorkerUpdateChecked';
 
@@ -212,6 +224,11 @@ export function registerOfflineWorker() {
 
         if (!(await shouldEnableOfflineWorker())) {
             console.info('Offline worker disabled via runtime config.');
+            return;
+        }
+
+        if (shouldSkipRegistrationForAutomation()) {
+            console.info('Offline worker registration skipped for browser automation.');
             return;
         }
 
