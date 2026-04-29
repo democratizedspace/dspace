@@ -47,6 +47,21 @@ export function registerOfflineWorker() {
     const SW_REGISTRATION_OPTIONS = { updateViaCache: 'none' };
     const UPDATE_CHECK_SESSION_KEY = 'offlineWorkerUpdateChecked';
 
+    function isExpectedPlaywrightServiceWorkerBlock(error) {
+        if (!isAutomation || !error) {
+            return false;
+        }
+
+        const message =
+            typeof error === 'string'
+                ? error
+                : typeof error?.message === 'string'
+                  ? error.message
+                  : '';
+
+        return /service worker registration blocked by playwright/i.test(message);
+    }
+
     function attachControllerReload() {
         let refreshing = false;
 
@@ -228,6 +243,11 @@ export function registerOfflineWorker() {
                 }
             })
             .catch((error) => {
+                if (isExpectedPlaywrightServiceWorkerBlock(error)) {
+                    console.info('Service worker registration skipped in Playwright (blocked).');
+                    return;
+                }
+
                 console.warn('Service worker registration failed:', error);
             });
     });
