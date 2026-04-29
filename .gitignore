@@ -70,6 +70,12 @@ test-artifacts/**/*.jpeg
 # Ignore generated quest tree image
 frontend/src/pages/docs/images/quest-tree-stats.png
 
+# Ignore generated frontend metadata and RAG artifacts
+frontend/src/generated/build_meta.json
+frontend/src/generated/rag/docs_chunks.json
+frontend/src/generated/rag/docs_index.json
+frontend/src/generated/rag/docs_meta.json
+
 frontend/package-lock.json
 
 # Backups
