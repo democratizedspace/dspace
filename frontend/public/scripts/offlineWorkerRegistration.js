@@ -1,4 +1,11 @@
 export function registerOfflineWorker() {
+
+function isExpectedPlaywrightServiceWorkerBlock(error) {
+    const message = typeof error?.message === 'string' ? error.message : String(error ?? '');
+    return message.includes('Service Worker registration blocked by Playwright');
+}
+
+
     if (!('serviceWorker' in navigator)) {
         return;
     }
@@ -228,6 +235,9 @@ export function registerOfflineWorker() {
                 }
             })
             .catch((error) => {
+                if (isExpectedPlaywrightServiceWorkerBlock(error)) {
+                    return;
+                }
                 console.warn('Service worker registration failed:', error);
             });
     });

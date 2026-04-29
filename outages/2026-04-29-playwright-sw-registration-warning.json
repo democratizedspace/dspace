@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-29-playwright-sw-registration-warning",
+  "date": "2026-04-29",
+  "component": "frontend:service-worker-registration",
+  "longForm": "outages/2026-04-29-playwright-sw-registration-warning.md",
+  "rootCause": "The offline worker registration script logs registration failures as console warnings. In Playwright runs that use serviceWorkers: 'block', browser-level service worker registration is intentionally rejected with the message 'Service Worker registration blocked by Playwright', which surfaced as repetitive warning noise across grouped E2E suites.",
+  "resolution": "Added a narrow suppression path in offlineWorkerRegistration so registration rejections matching the exact Playwright blocked message are treated as expected in automation while preserving warning logs for all other service worker registration failures.",
+  "references": [
+    "frontend/public/scripts/offlineWorkerRegistration.js",
+    "frontend/__tests__/offlineWorkerRegistration.test.js",
+    "outages/2026-04-29-playwright-sw-registration-warning.md"
+  ]
+}
