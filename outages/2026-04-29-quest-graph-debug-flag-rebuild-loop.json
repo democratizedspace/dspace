@@ -1,0 +1,22 @@
+{
+  "id": "2026-04-29-quest-graph-debug-flag-rebuild-loop",
+  "date": "2026-04-29",
+  "component": "frontend/scripts/run-astro-build.mjs",
+  "impact": "QA launch-gate runs rebuilt Astro during grouped E2E setup even when a build had just completed, adding avoidable runtime and noisy logs.",
+  "rootCause": "The quest-graph debug compatibility marker was only written by ensure-astro-build.mjs. Regular npm run build completed without emitting the marker, so setup-test-env treated the build as a debug-flag mismatch and rebuilt.",
+  "resolution": "Write dist/.quest-graph-debug-flag at the end of successful Astro builds in run-astro-build.mjs using the same PUBLIC_ENABLE_QUEST_GRAPH_DEBUG value that setup verification reads.",
+  "verification": [
+    "npm run lint",
+    "npm run type-check",
+    "npm run build",
+    "npm test",
+    "node scripts/link-check.mjs",
+    "npm --prefix frontend run test:e2e:groups"
+  ],
+  "references": [
+    "frontend/scripts/run-astro-build.mjs",
+    "frontend/scripts/ensure-astro-build.mjs",
+    "frontend/scripts/setup-test-env.js"
+  ],
+  "longForm": "outages/2026-04-29-quest-graph-debug-flag-rebuild-loop.md"
+}
