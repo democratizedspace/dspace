@@ -154,8 +154,8 @@ export function hasChromiumExecutable(browser) {
 }
 
 export function hasChromiumAssets(browser) {
-    const { hasChromium, hasHeadlessShell } = getChromiumAssetStatus(browser);
-    return hasChromium && hasHeadlessShell;
+    const { hasChromium } = getChromiumAssetStatus(browser);
+    return hasChromium;
 }
 
 async function getChromiumBrowser() {
@@ -179,6 +179,7 @@ export async function ensurePlaywrightBrowsers(options = {}) {
         depsStampPath,
         exec = execFileSync,
         fs = { existsSync, mkdirSync, writeFileSync },
+        requireHeadlessShell = env.PLAYWRIGHT_REQUIRE_HEADLESS_SHELL === '1',
     } = options;
 
     const sanitizedEnv = withPlaywrightNetworkEnv(sanitizeProxyEnv(env));
@@ -197,7 +198,11 @@ export async function ensurePlaywrightBrowsers(options = {}) {
                 console.warn(
                     'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium browser is missing. E2E tests may fail.'
                 );
-            } else if (!hasHeadlessShell && !warnedMissingHeadlessShellPaths.has(executablePath)) {
+            } else if (
+                requireHeadlessShell &&
+                !hasHeadlessShell &&
+                !warnedMissingHeadlessShellPaths.has(executablePath)
+            ) {
                 warnedMissingHeadlessShellPaths.add(executablePath);
                 console.warn(
                     `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium headless shell is missing for ${executablePath}. E2E tests may fail.`
@@ -237,10 +242,8 @@ export async function ensurePlaywrightBrowsers(options = {}) {
     });
 
     const postInstallAssets = getChromiumAssetStatus(browser);
-    if (!postInstallAssets.hasChromium || !postInstallAssets.hasHeadlessShell) {
-        const missingAsset = !postInstallAssets.hasChromium
-            ? 'chromium executable'
-            : 'chromium headless shell';
+    if (!postInstallAssets.hasChromium || (requireHeadlessShell && !postInstallAssets.hasHeadlessShell)) {
+        const missingAsset = !postInstallAssets.hasChromium ? 'chromium executable' : 'chromium headless shell';
         console.warn(
             `Playwright ${missingAsset} is still missing after installation. Tests may fail if browsers are unavailable.`
         );
