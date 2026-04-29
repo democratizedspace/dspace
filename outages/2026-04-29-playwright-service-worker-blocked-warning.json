@@ -16,5 +16,6 @@
   "references": [
     "frontend/public/scripts/offlineWorkerRegistration.js",
     "frontend/__tests__/offlineWorkerRegistration.test.js"
-  ]
+  ],
+  "longForm": "outages/2026-04-29-playwright-service-worker-blocked-warning.md"
 }
