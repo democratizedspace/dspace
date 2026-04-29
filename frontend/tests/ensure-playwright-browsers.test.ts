@@ -324,7 +324,6 @@ describe('ensurePlaywrightBrowsers', () => {
         expect(writeFileSyncMock).toHaveBeenCalled();
     });
 
-
     it('uses provided env for skip-download behavior', async () => {
         const chromiumPath = '/root/.cache/ms-playwright/chromium-1234/chrome';
         existsSyncMock.mockImplementation((target: string) => target === chromiumPath);
