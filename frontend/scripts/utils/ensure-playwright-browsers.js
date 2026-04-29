@@ -132,11 +132,16 @@ export function resolveHeadlessShellPath(executablePath) {
     return '';
 }
 
-function getChromiumAssetStatus(browser) {
+function getChromiumAssetStatus(browser, options = {}) {
+    const { includeHeadlessShell = true } = options;
     try {
         const executablePath = browser.executablePath();
         if (!executablePath || !existsSync(executablePath)) {
             return { hasChromium: false, hasHeadlessShell: false, executablePath: '' };
+        }
+
+        if (!includeHeadlessShell) {
+            return { hasChromium: true, hasHeadlessShell: false, executablePath };
         }
 
         const headlessShellPath = resolveHeadlessShellPath(executablePath);
@@ -155,7 +160,9 @@ export function hasChromiumExecutable(browser) {
 
 export function hasChromiumAssets(browser, options = {}) {
     const { requireHeadlessShell = false } = options;
-    const { hasChromium, hasHeadlessShell } = getChromiumAssetStatus(browser);
+    const { hasChromium, hasHeadlessShell } = getChromiumAssetStatus(browser, {
+        includeHeadlessShell: requireHeadlessShell,
+    });
     return requireHeadlessShell ? hasChromium && hasHeadlessShell : hasChromium;
 }
 
