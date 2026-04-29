@@ -96,10 +96,24 @@ export function resolveHeadlessShellPath(executablePath) {
             const executableExtension = path.extname(executablePath);
             const headlessExecutable = `headless_shell${executableExtension}`;
             const relativeDirectory = path.dirname(relativeExecutablePath);
-            const headlessRelativePath =
+            const defaultHeadlessRelativePath =
                 !relativeDirectory || relativeDirectory === '.'
                     ? headlessExecutable
                     : path.join(relativeDirectory, headlessExecutable);
+            const headlessRelativePaths = [defaultHeadlessRelativePath];
+
+            if (relativeExecutablePath.includes(path.join('Chromium.app', 'Contents', 'MacOS'))) {
+                headlessRelativePaths.push(path.join('chrome-mac', headlessExecutable));
+                headlessRelativePaths.push(
+                    path.join(
+                        'chrome-mac',
+                        'HeadlessShell.app',
+                        'Contents',
+                        'MacOS',
+                        headlessExecutable
+                    )
+                );
+            }
 
             const revisionSuffix = revisionBasename.replace(/^chromium[-_]/, '');
             const headlessBasenames = [
@@ -111,17 +125,18 @@ export function resolveHeadlessShellPath(executablePath) {
 
             for (const headlessBasename of headlessBasenames) {
                 const headlessRevisionDir = path.join(parentDir, headlessBasename);
-                const candidatePath = path.join(headlessRevisionDir, headlessRelativePath);
-
-                if (existsSync(candidatePath)) {
-                    return candidatePath;
+                for (const headlessRelativePath of headlessRelativePaths) {
+                    const candidatePath = path.join(headlessRevisionDir, headlessRelativePath);
+                    if (existsSync(candidatePath)) {
+                        return candidatePath;
+                    }
                 }
             }
 
             return path.join(
                 parentDir,
                 `chromium-headless-shell-${revisionSuffix}`,
-                headlessRelativePath
+                headlessRelativePaths[0]
             );
         }
 

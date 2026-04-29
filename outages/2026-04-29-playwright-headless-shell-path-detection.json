@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-29-playwright-headless-shell-path-detection",
+  "date": "2026-04-29",
+  "component": "frontend:playwright-bootstrap",
+  "longForm": "outages/2026-04-29-playwright-headless-shell-path-detection.md",
+  "rootCause": "The Playwright browser helper derived headless-shell paths by mirroring Chromium's executable subtree, which produced a false missing status on macOS installations where headless_shell is stored at chrome-mac root.",
+  "resolution": "Updated headless-shell path resolution to probe macOS-specific alternate install layouts and added regression tests so grouped E2E runs stop printing repeated false-missing warnings.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts",
+    "outages/2026-04-29-playwright-headless-shell-path-detection.md"
+  ]
+}
