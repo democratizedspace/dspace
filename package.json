@@ -29,7 +29,7 @@
     "format": "cd frontend && npm run format",
     "format:check": "cd frontend && npm run format:check",
     "format:check:frontend-canary": "npx prettier --check frontend/__tests__/offlineWorkerRegistration.test.js",
-    "type-check": "tsc --noEmit",
+    "type-check": "npm run build:meta && npm run build:docs-rag && tsc --noEmit",
     "build:docs-rag": "node scripts/build-docs-rag-index.mjs",
     "build": "node scripts/build-with-sha.mjs",
     "verify:chat-build-stamp": "node scripts/verify-chat-build-stamp.mjs",
