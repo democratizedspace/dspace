@@ -237,12 +237,9 @@ export async function ensurePlaywrightBrowsers(options = {}) {
     });
 
     const postInstallAssets = getChromiumAssetStatus(browser);
-    if (!postInstallAssets.hasChromium || !postInstallAssets.hasHeadlessShell) {
-        const missingAsset = !postInstallAssets.hasChromium
-            ? 'chromium executable'
-            : 'chromium headless shell';
+    if (!postInstallAssets.hasChromium) {
         console.warn(
-            `Playwright ${missingAsset} is still missing after installation. Tests may fail if browsers are unavailable.`
+            'Playwright chromium executable is still missing after installation. Tests may fail if browsers are unavailable.'
         );
     }
 }

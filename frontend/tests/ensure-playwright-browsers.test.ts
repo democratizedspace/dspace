@@ -324,6 +324,49 @@ describe('ensurePlaywrightBrowsers', () => {
         expect(writeFileSyncMock).toHaveBeenCalled();
     });
 
+
+    it('does not warn when chromium exists but headless shell is absent after install', async () => {
+        let browserInstalled = false;
+        existsSyncMock.mockImplementation((target: string) => {
+            if (target === cliPath) {
+                return true;
+            }
+            if (target === chromiumPath) {
+                return browserInstalled;
+            }
+            if (target.includes('chromium-headless-shell-1234')) {
+                return false;
+            }
+            return false;
+        });
+
+        execFileSyncMock.mockImplementation((_command, args: string[]) => {
+            if (args[1] === 'install') {
+                browserInstalled = true;
+            }
+        });
+
+        const { ensurePlaywrightBrowsers } = await importModule();
+
+        await ensurePlaywrightBrowsers({
+            cwd,
+            env: { ...process.env },
+            platform: 'darwin',
+            installSystemDeps: false,
+            exec: execFileSyncMock,
+            fs: {
+                existsSync: existsSyncMock,
+                mkdirSync: mkdirSyncMock,
+                writeFileSync: writeFileSyncMock,
+            },
+        });
+
+        expect(execFileSyncMock).toHaveBeenCalledTimes(1);
+        expect(console.warn).not.toHaveBeenCalledWith(
+            expect.stringContaining('headless shell is still missing after installation')
+        );
+    });
+
     it('uses provided env for skip-download behavior', async () => {
         const chromiumPath = '/root/.cache/ms-playwright/chromium-1234/chrome';
         existsSyncMock.mockImplementation((target: string) => target === chromiumPath);

@@ -1,0 +1,19 @@
+{
+  "id": "2026-04-29-playwright-headless-shell-repeat-warning",
+  "date": "2026-04-29",
+  "component": "frontend:playwright-bootstrap",
+  "longForm": "outages/2026-04-29-playwright-headless-shell-repeat-warning.md",
+  "symptom": "Grouped E2E runs repeatedly logged 'Playwright chromium headless shell is still missing after installation' even though tests passed.",
+  "rootCause": "The bootstrap helper warned whenever chromium-headless-shell was absent after install, even when Chromium itself was available and sufficient for the current Playwright launch path. Because Playwright config loads per group invocation, the warning repeated across groups.",
+  "resolution": "Adjusted post-install validation to warn only when the Chromium executable is still missing. This preserves actionable failure signaling while eliminating false-positive headless-shell noise in successful grouped runs.",
+  "verification": [
+    "npm run test:root -- frontend/tests/ensure-playwright-browsers.test.ts",
+    "npm run test:e2e:groups"
+  ],
+  "whyTestsPassed": "Playwright could still launch tests with the installed Chromium executable, so test groups succeeded despite the headless-shell warning.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "frontend/tests/ensure-playwright-browsers.test.ts",
+    "outages/2026-04-29-playwright-headless-shell-repeat-warning.md"
+  ]
+}
