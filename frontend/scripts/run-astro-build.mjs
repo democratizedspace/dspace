@@ -10,11 +10,14 @@ const questGraphDebugMarkerPath = path.join(frontendRoot, 'dist', '.quest-graph-
 
 const writeQuestGraphDebugMarker = () => {
     try {
+        const questGraphDebugEnabled =
+            process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === undefined
+                ? 'true'
+                : process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true'
+                  ? 'true'
+                  : 'false';
         fs.mkdirSync(path.dirname(questGraphDebugMarkerPath), { recursive: true });
-        fs.writeFileSync(
-            questGraphDebugMarkerPath,
-            process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true' ? 'true' : 'false'
-        );
+        fs.writeFileSync(questGraphDebugMarkerPath, questGraphDebugEnabled);
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         console.warn(`Failed to write quest graph debug marker: ${message}`);
