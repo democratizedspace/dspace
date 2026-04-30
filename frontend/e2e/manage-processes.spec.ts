@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
+const isExpectedPlaywrightServiceWorkerWarning = (message: string) =>
+    message.trim() === 'Service Worker registration blocked by Playwright';
+
 test.describe('Manage Processes', () => {
     test.beforeEach(async ({ page }) => {
         page.on('pageerror', (error) => {
@@ -11,6 +14,12 @@ test.describe('Manage Processes', () => {
         });
 
         page.on('console', (message) => {
+            if (
+                message.type() === 'warning' &&
+                isExpectedPlaywrightServiceWorkerWarning(message.text())
+            ) {
+                return;
+            }
             console.log(`[console.${message.type()}] ${message.text()}`);
         });
 

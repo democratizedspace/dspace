@@ -1,6 +1,9 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 import { clearUserData, waitForHydration, navigateWithRetry } from './test-helpers';
 
+const isExpectedPlaywrightServiceWorkerWarning = (message: string) =>
+    message.trim() === 'Service Worker registration blocked by Playwright';
+
 type ToggleDebugState = {
     calls: number;
     before: string;
@@ -61,6 +64,12 @@ test.describe('Process preview', () => {
         });
 
         page.on('console', (message) => {
+            if (
+                message.type() === 'warning' &&
+                isExpectedPlaywrightServiceWorkerWarning(message.text())
+            ) {
+                return;
+            }
             console.log(`[console.${message.type()}] ${message.text()}`);
         });
 
