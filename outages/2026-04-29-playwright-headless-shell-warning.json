@@ -1,0 +1,21 @@
+{
+  "id": "2026-04-29-playwright-headless-shell-warning",
+  "date": "2026-04-29",
+  "component": "frontend-e2e",
+  "symptom": "Grouped Playwright E2E runs repeatedly logged that chromium headless shell was still missing after installation, even when tests passed.",
+  "rootCause": "The browser bootstrap helper treated headless shell as mandatory for all Chromium runs and warned after each group, but the test configuration runs Chromium with --headless=new where the shell artifact is optional.",
+  "resolution": "Updated Playwright browser asset detection to require only Chromium by default and require headless shell only when PLAYWRIGHT_REQUIRE_HEADLESS_SHELL=1 is explicitly set.",
+  "references": [
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "scripts/tests/ensurePlaywrightBrowsers.test.ts"
+  ],
+  "verification": [
+    "npm run test:e2e:groups",
+    "npm test",
+    "npm run lint",
+    "npm run type-check",
+    "npm run build",
+    "node scripts/link-check.mjs"
+  ],
+  "whyTestsPassed": "Playwright launched successfully with the installed Chromium executable, so tests executed normally despite the helper's overly strict post-install warning."
+}

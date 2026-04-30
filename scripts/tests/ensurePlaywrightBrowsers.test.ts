@@ -302,7 +302,7 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(writeFileSync).toHaveBeenCalledTimes(1);
   });
 
-  it('installs missing headless shell when chromium executable already exists', async () => {
+  it('skips install when chromium executable already exists and headless shell is optional', async () => {
     const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
     const chromeExecutable = path.join(
       cacheRoot,
@@ -384,19 +384,175 @@ describe('ensurePlaywrightBrowsers', () => {
         env: { ...process.env, PLAYWRIGHT_SKIP_INSTALL_DEPS: '0' },
       });
 
-      expect(execFileSync).toHaveBeenCalledTimes(2);
-      expect(execFileSync.mock.calls[0][1]).toEqual([cliPath, 'install-deps']);
-      expect(execFileSync.mock.calls[1][1]).toEqual([
-        cliPath,
-        'install',
-        'chromium',
-        'chromium-headless-shell',
-      ]);
-      expect(executablePath).toHaveBeenCalledTimes(2);
-      expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
-      expect(existsSync).toHaveBeenCalledWith(headlessUnderscore);
-      expect(warnSpy).not.toHaveBeenCalledWith(
-        expect.stringContaining('Proceeding with chromium binary only')
+      expect(execFileSync).not.toHaveBeenCalled();
+      expect(executablePath).toHaveBeenCalledTimes(1);
+      expect(existsSync).not.toHaveBeenCalledWith(headlessHyphen);
+      expect(existsSync).not.toHaveBeenCalledWith(headlessUnderscore);
+      expect(warnSpy).not.toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it('installs headless shell in strict mode when chromium executable exists', async () => {
+    const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
+    const chromeExecutable = path.join(
+      cacheRoot,
+      'chromium-1181',
+      'chrome-linux',
+      'chrome'
+    );
+    const headlessUnderscore = path.join(
+      cacheRoot,
+      'chromium_headless_shell-1181',
+      'chrome-linux',
+      'headless_shell'
+    );
+    const cliPath = path.join(
+      frontendRoot,
+      'node_modules',
+      '@playwright',
+      'test',
+      'cli.js'
+    );
+    let headlessInstalled = false;
+    let depsSentinelExists = false;
+    const existsSync = vi.fn((candidate: string) => {
+      if (candidate === cliPath || candidate === chromeExecutable) {
+        return true;
+      }
+      if (candidate === headlessUnderscore) {
+        return headlessInstalled;
+      }
+      if (candidate === path.join(frontendRoot, '.playwright-deps-installed')) {
+        return depsSentinelExists;
+      }
+      return false;
+    });
+    const execFileSync = vi.fn((_cmd, args) => {
+      const joinedArgs = Array.isArray(args) ? args.join(' ') : '';
+      if (joinedArgs.includes('install chromium chromium-headless-shell')) {
+        headlessInstalled = true;
+      }
+    });
+    const writeFileSync = vi.fn(() => {
+      depsSentinelExists = true;
+    });
+    const executablePath = vi.fn(() => chromeExecutable);
+    const browser = { executablePath };
+
+    vi.doMock('node:child_process', async () => {
+      const actual =
+        await vi.importActual<typeof import('node:child_process')>(
+          'node:child_process'
+        );
+      return {
+        ...actual,
+        execFileSync,
+        default: { ...actual, execFileSync },
+      };
+    });
+    vi.doMock('node:fs', async () => {
+      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
+      return {
+        ...actual,
+        existsSync,
+        writeFileSync,
+        default: { ...actual, existsSync },
+      };
+    });
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
+
+      await ensurePlaywrightBrowsers({
+        cwd: frontendRoot,
+        browser,
+        platform: 'linux',
+        env: {
+          ...process.env,
+          PLAYWRIGHT_REQUIRE_HEADLESS_SHELL: '1',
+          PLAYWRIGHT_SKIP_INSTALL_DEPS: '0',
+        },
+      });
+
+      expect(execFileSync).toHaveBeenCalled();
+      expect(warnSpy).not.toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it('warns once in strict skip-download mode when headless shell is missing', async () => {
+    const cacheRoot = path.join(path.sep, 'root', '.cache', 'ms-playwright');
+    const chromeExecutable = path.join(
+      cacheRoot,
+      'chromium-1181',
+      'chrome-linux',
+      'chrome'
+    );
+    const headlessUnderscore = path.join(
+      cacheRoot,
+      'chromium_headless_shell-1181',
+      'chrome-linux',
+      'headless_shell'
+    );
+    const existsSync = vi.fn((candidate: string) => {
+      if (candidate === chromeExecutable) {
+        return true;
+      }
+      if (candidate === headlessUnderscore) {
+        return false;
+      }
+      return false;
+    });
+    const execFileSync = vi.fn();
+    const executablePath = vi.fn(() => chromeExecutable);
+    const browser = { executablePath };
+
+    vi.doMock('node:child_process', async () => {
+      const actual =
+        await vi.importActual<typeof import('node:child_process')>(
+          'node:child_process'
+        );
+      return {
+        ...actual,
+        execFileSync,
+        default: { ...actual, execFileSync },
+      };
+    });
+    vi.doMock('node:fs', async () => {
+      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
+      return {
+        ...actual,
+        existsSync,
+        default: { ...actual, existsSync },
+      };
+    });
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const { ensurePlaywrightBrowsers } = await import(MODULE_PATH);
+      const strictSkipEnv = {
+        ...process.env,
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1',
+        PLAYWRIGHT_REQUIRE_HEADLESS_SHELL: '1',
+      };
+
+      await ensurePlaywrightBrowsers({
+        cwd: frontendRoot,
+        browser,
+        env: strictSkipEnv,
+      });
+      await ensurePlaywrightBrowsers({
+        cwd: frontendRoot,
+        browser,
+        env: strictSkipEnv,
+      });
+
+      expect(execFileSync).not.toHaveBeenCalled();
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy).toHaveBeenCalledWith(
+        `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 but Playwright chromium headless shell is missing for ${chromeExecutable}. E2E tests may fail.`
       );
     } finally {
       warnSpy.mockRestore();
@@ -466,7 +622,7 @@ describe('ensurePlaywrightBrowsers', () => {
 
     expect(execFileSync).not.toHaveBeenCalled();
     expect(executablePath).toHaveBeenCalledTimes(1);
-    expect(existsSync).toHaveBeenCalledWith(headlessHyphen);
+    expect(existsSync).not.toHaveBeenCalledWith(headlessHyphen);
   });
 
   it('prefers underscore headless directories when present', async () => {
