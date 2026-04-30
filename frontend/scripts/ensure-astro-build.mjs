@@ -7,7 +7,21 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const defaultRootDir = path.resolve(__dirname, '..');
 
-const questGraphDebugEnvFlag = process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true';
+function getRequestedQuestGraphDebugFlag() {
+    const raw = process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG;
+
+    if (raw === 'true') {
+        return true;
+    }
+
+    if (raw === 'false') {
+        return false;
+    }
+
+    return null;
+}
+
+
 
 function hasClientAssets(rootDir, logger) {
     const clientAssetsDir = path.join(rootDir, 'dist', 'client', '_astro');
@@ -55,10 +69,13 @@ export function ensureAstroBuild(options = {}) {
     const serverBuilt = fs.existsSync(serverEntrypoint);
     const clientBuilt = hasClientAssets(root, logger);
     const questGraphDebugMarker = getQuestGraphDebugMarker(root);
+    const requestedQuestGraphDebugFlag = getRequestedQuestGraphDebugFlag();
     const buildConfigMismatch =
-        questGraphDebugMarker === null
-            ? questGraphDebugEnvFlag
-            : questGraphDebugMarker !== questGraphDebugEnvFlag;
+        requestedQuestGraphDebugFlag === null
+            ? false
+            : questGraphDebugMarker === null
+              ? true
+              : questGraphDebugMarker !== requestedQuestGraphDebugFlag;
 
     if (serverBuilt && clientBuilt && !buildConfigMismatch) {
         logger.log?.('Astro build artifacts detected. Skipping rebuild.');
@@ -75,7 +92,7 @@ export function ensureAstroBuild(options = {}) {
 
     try {
         runBuild();
-        writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
+        writeQuestGraphDebugMarker(root, requestedQuestGraphDebugFlag === true);
     } catch (error) {
         const errorOutput =
             (error instanceof Error ? error.message : '') +
@@ -98,7 +115,7 @@ export function ensureAstroBuild(options = {}) {
         try {
             fs.rmSync(path.join(root, 'dist'), { recursive: true, force: true });
             runBuild();
-            writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
+            writeQuestGraphDebugMarker(root, requestedQuestGraphDebugFlag === true);
         } catch (retryError) {
             (logger.error ?? console.error)(
                 'Failed to build Astro project required for Playwright preview (retry after dist/ removal).'
