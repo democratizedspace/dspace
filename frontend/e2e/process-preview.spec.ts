@@ -1,5 +1,5 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
-import { clearUserData, waitForHydration, navigateWithRetry } from './test-helpers';
+import { clearUserData, logBrowserConsoleMessage, waitForHydration, navigateWithRetry } from './test-helpers';
 
 type ToggleDebugState = {
     calls: number;
@@ -61,7 +61,7 @@ test.describe('Process preview', () => {
         });
 
         page.on('console', (message) => {
-            console.log(`[console.${message.type()}] ${message.text()}`);
+            logBrowserConsoleMessage(message);
         });
 
         await clearUserData(page);
