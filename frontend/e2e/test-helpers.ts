@@ -5,6 +5,13 @@ import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 export type { Page };
 const E2E_DEBUG_LOGS = process.env.E2E_DEBUG_LOGS === '1';
 
+export const PLAYWRIGHT_SERVICE_WORKER_WARNING =
+    'Service Worker registration blocked by Playwright';
+
+export function isExpectedConsoleNoise(message: { type(): string; text(): string }): boolean {
+    return message.type() === 'warning' && message.text() === PLAYWRIGHT_SERVICE_WORKER_WARNING;
+}
+
 export function debugLog(...args: unknown[]): void {
     if (E2E_DEBUG_LOGS) {
         console.log(...args);

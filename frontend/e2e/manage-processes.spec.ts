@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, isExpectedConsoleNoise, waitForHydration } from './test-helpers';
 
 test.describe('Manage Processes', () => {
     test.beforeEach(async ({ page }) => {
@@ -11,10 +11,7 @@ test.describe('Manage Processes', () => {
         });
 
         page.on('console', (message) => {
-            if (
-                message.type() === 'warning' &&
-                message.text() === 'Service Worker registration blocked by Playwright'
-            ) {
+            if (isExpectedConsoleNoise(message)) {
                 return;
             }
             console.log(`[console.${message.type()}] ${message.text()}`);

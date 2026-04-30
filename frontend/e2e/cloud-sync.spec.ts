@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, isExpectedConsoleNoise, waitForHydration } from './test-helpers';
 
 test.describe('Cloud Sync', () => {
     test.beforeEach(async ({ page }) => {
@@ -47,10 +47,7 @@ test.describe('Cloud Sync', () => {
         });
 
         page.on('console', (message) => {
-            if (
-                message.type() === 'warning' &&
-                message.text() === 'Service Worker registration blocked by Playwright'
-            ) {
+            if (isExpectedConsoleNoise(message)) {
                 return;
             }
             if (message.type() === 'error' || message.type() === 'warning') {
