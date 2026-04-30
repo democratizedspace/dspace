@@ -46,13 +46,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-// Ensure the quest graph debug handle is available in test builds
-// even though Astro builds with production settings for preview.
-// This flag is read at build time, so we need to default it here.
-if (!process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG) {
-    process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG = 'true';
-}
-
+// Respect caller-provided quest graph debug state.
+// Do not force-enable here: setup-test-env runs after standalone builds, and
+// forcing this flag would create artificial build-marker mismatches.
 // Do *not* touch Playwright here; this file is used by unit tests too.
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
 const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
