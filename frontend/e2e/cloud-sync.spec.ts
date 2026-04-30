@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { clearUserData, waitForHydration } from './test-helpers';
 
+const isExpectedPlaywrightServiceWorkerWarning = (message: string) =>
+    message.trim() === 'Service Worker registration blocked by Playwright';
+
 test.describe('Cloud Sync', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
@@ -52,6 +55,12 @@ test.describe('Cloud Sync', () => {
                 const locationHint = location?.url
                     ? ` @ ${location.url}:${location.lineNumber}`
                     : '';
+                if (
+                    message.type() === 'warning' &&
+                    isExpectedPlaywrightServiceWorkerWarning(message.text())
+                ) {
+                    return;
+                }
                 console.log(`[console.${message.type()}] ${message.text()}${locationHint}`);
             }
         });

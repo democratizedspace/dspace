@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-30-playwright-service-worker-registration-warning-noise",
+  "date": "2026-04-30",
+  "severity": "low",
+  "summary": "Playwright E2E logs printed expected blocked-service-worker warnings repeatedly.",
+  "impact": "Warning noise reduced observability for unexpected console warnings during grouped E2E runs.",
+  "rootCause": "Spec-local console listeners printed all browser warnings, including Playwright's expected warning when service workers are blocked.",
+  "resolution": "Added an exact-match warning filter in affected E2E console listeners while preserving all other warning/error logging.",
+  "verification": [
+    "rg \"Service Worker registration blocked by Playwright\"",
+    "npm --prefix frontend run test:e2e:groups",
+    "npm test",
+    "npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs"
+  ],
+  "warningOnly": true
+}
