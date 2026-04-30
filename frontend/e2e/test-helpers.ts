@@ -5,6 +5,21 @@ import { ITEM_SELECTOR_OPTION_LOCATORS } from './utils/itemSelectors';
 export type { Page };
 const E2E_DEBUG_LOGS = process.env.E2E_DEBUG_LOGS === '1';
 
+const PLAYWRIGHT_EXPECTED_SW_BLOCK_WARNING = 'Service Worker registration blocked by Playwright';
+
+export function isExpectedPlaywrightSwWarning(messageText: string): boolean {
+    return messageText.trim() === PLAYWRIGHT_EXPECTED_SW_BLOCK_WARNING;
+}
+
+export function logBrowserConsoleMessage(message: { type(): string; text(): string }): void {
+    const text = message.text();
+    if (message.type() === 'warning' && isExpectedPlaywrightSwWarning(text)) {
+        return;
+    }
+
+    console.log(`[console.${message.type()}] ${text}`);
+}
+
 export function debugLog(...args: unknown[]): void {
     if (E2E_DEBUG_LOGS) {
         console.log(...args);

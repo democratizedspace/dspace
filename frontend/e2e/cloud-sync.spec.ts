@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, isExpectedPlaywrightSwWarning, waitForHydration } from './test-helpers';
 
 test.describe('Cloud Sync', () => {
     test.beforeEach(async ({ page }) => {
@@ -52,7 +52,9 @@ test.describe('Cloud Sync', () => {
                 const locationHint = location?.url
                     ? ` @ ${location.url}:${location.lineNumber}`
                     : '';
-                console.log(`[console.${message.type()}] ${message.text()}${locationHint}`);
+                if (!(message.type() === 'warning' && isExpectedPlaywrightSwWarning(message.text()))) {
+                    console.log(`[console.${message.type()}] ${message.text()}${locationHint}`);
+                }
             }
         });
 

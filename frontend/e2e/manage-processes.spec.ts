@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, logBrowserConsoleMessage, waitForHydration } from './test-helpers';
 
 test.describe('Manage Processes', () => {
     test.beforeEach(async ({ page }) => {
@@ -11,7 +11,7 @@ test.describe('Manage Processes', () => {
         });
 
         page.on('console', (message) => {
-            console.log(`[console.${message.type()}] ${message.text()}`);
+            logBrowserConsoleMessage(message);
         });
 
         await clearUserData(page);
