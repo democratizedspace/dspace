@@ -12,10 +12,7 @@ const createBuiltArtifacts = (root: string) => {
     fs.writeFileSync(path.join(root, 'dist', 'client', '_astro', 'asset.js'), 'console.log("ok");');
 };
 
-const loadEnsureAstroBuild = async (
-    questGraphDebug: 'true' | 'false' | undefined,
-    variant: 'a' | 'b'
-) => {
+const loadEnsureAstroBuild = async (questGraphDebug: 'true' | 'false' | undefined) => {
     vi.resetModules();
 
     if (questGraphDebug === undefined) {
@@ -24,16 +21,13 @@ const loadEnsureAstroBuild = async (
         process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG = questGraphDebug;
     }
 
-    if (variant === 'a') {
-        return await import('../frontend/scripts/ensure-astro-build.mjs?case=a');
-    }
-
-    return await import('../frontend/scripts/ensure-astro-build.mjs?case=b');
+    return await import('../frontend/scripts/ensure-astro-build.mjs');
 };
 
 describe('ensureAstroBuild quest graph debug marker matching', () => {
     afterEach(() => {
         vi.restoreAllMocks();
+        vi.resetModules();
         delete process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG;
     });
 
@@ -43,7 +37,7 @@ describe('ensureAstroBuild quest graph debug marker matching', () => {
             createBuiltArtifacts(root);
             fs.writeFileSync(path.join(root, 'dist', '.quest-graph-debug-flag'), 'false');
 
-            const { ensureAstroBuild } = await loadEnsureAstroBuild('false', 'a');
+            const { ensureAstroBuild } = await loadEnsureAstroBuild('false');
             const execSpy = vi.fn();
             const logger = { log: vi.fn(), warn: vi.fn(), error: vi.fn() };
 
@@ -62,7 +56,7 @@ describe('ensureAstroBuild quest graph debug marker matching', () => {
             createBuiltArtifacts(root);
             fs.writeFileSync(path.join(root, 'dist', '.quest-graph-debug-flag'), 'false');
 
-            const { ensureAstroBuild } = await loadEnsureAstroBuild('true', 'b');
+            const { ensureAstroBuild } = await loadEnsureAstroBuild('true');
             const execSpy = vi.fn();
             const logger = { log: vi.fn(), warn: vi.fn(), error: vi.fn() };
 
