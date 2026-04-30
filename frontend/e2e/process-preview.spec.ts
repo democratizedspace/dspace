@@ -1,8 +1,6 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
 import {
-    clearUserData,
-    isExpectedConsoleNoise,
-    waitForHydration,
+    clearUserData,    waitForHydration,
     navigateWithRetry,
 } from './test-helpers';
 
@@ -66,7 +64,10 @@ test.describe('Process preview', () => {
         });
 
         page.on('console', (message) => {
-            if (isExpectedConsoleNoise(message)) {
+            if (
+                message.type() === 'warning' &&
+                message.text() === 'Service Worker registration blocked by Playwright'
+            ) {
                 return;
             }
             console.log(`[console.${message.type()}] ${message.text()}`);

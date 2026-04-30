@@ -6,9 +6,10 @@
   "rootCause": "E2E specs logged console warnings verbatim and included the expected Playwright service-worker block warning.",
   "resolution": "Added an exact warning-text filter in affected Playwright spec console listeners so only this expected warning is suppressed.",
   "verification": [
-    "rg \"Service Worker registration blocked by Playwright\" frontend/e2e",
-    "npm --prefix frontend run test:e2e:groups",
-    "npm test"
+    "rg \"Service Worker registration blocked by Playwright\"",
+    "npm run test:e2e:groups",
+    "npm test",
+    "npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs"
   ],
   "whyWarningOnly": "Test suites passed and service worker behavior remained unchanged; only expected warning noise was affected.",
   "references": [

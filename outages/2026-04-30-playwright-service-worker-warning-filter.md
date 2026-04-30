@@ -24,9 +24,10 @@ All other warning and error messages continue to be logged.
 
 ## Verification commands
 
-- `rg "Service Worker registration blocked by Playwright" frontend/e2e`
-- `npm --prefix frontend run test:e2e:groups`
+- `rg "Service Worker registration blocked by Playwright"`
+- `npm run test:e2e:groups`
 - `npm test`
+- `npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs`
 
 ## Why this was warning-only
 
