@@ -1,5 +1,10 @@
 import { test, expect, type Locator, type Page } from '@playwright/test';
-import { clearUserData, waitForHydration, navigateWithRetry } from './test-helpers';
+import {
+    clearUserData,
+    waitForHydration,
+    isExpectedConsoleNoise,
+    navigateWithRetry,
+} from './test-helpers';
 
 type ToggleDebugState = {
     calls: number;
@@ -61,6 +66,9 @@ test.describe('Process preview', () => {
         });
 
         page.on('console', (message) => {
+            if (isExpectedConsoleNoise(message)) {
+                return;
+            }
             console.log(`[console.${message.type()}] ${message.text()}`);
         });
 

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, waitForHydration, isExpectedConsoleNoise } from './test-helpers';
 
 test.describe('Cloud Sync', () => {
     test.beforeEach(async ({ page }) => {
@@ -47,6 +47,9 @@ test.describe('Cloud Sync', () => {
         });
 
         page.on('console', (message) => {
+            if (isExpectedConsoleNoise(message)) {
+                return;
+            }
             if (message.type() === 'error' || message.type() === 'warning') {
                 const location = message.location();
                 const locationHint = location?.url

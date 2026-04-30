@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, waitForHydration, isExpectedConsoleNoise } from './test-helpers';
 
 test.describe('Manage Processes', () => {
     test.beforeEach(async ({ page }) => {
@@ -11,6 +11,9 @@ test.describe('Manage Processes', () => {
         });
 
         page.on('console', (message) => {
+            if (isExpectedConsoleNoise(message)) {
+                return;
+            }
             console.log(`[console.${message.type()}] ${message.text()}`);
         });
 
