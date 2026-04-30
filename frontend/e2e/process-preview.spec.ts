@@ -61,6 +61,12 @@ test.describe('Process preview', () => {
         });
 
         page.on('console', (message) => {
+            if (
+                message.type() === 'warning' &&
+                message.text() === 'Service Worker registration blocked by Playwright'
+            ) {
+                return;
+            }
             console.log(`[console.${message.type()}] ${message.text()}`);
         });
 

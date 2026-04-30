@@ -1,0 +1,20 @@
+{
+  "id": "2026-04-30-playwright-service-worker-warning-filter",
+  "date": "2026-04-30",
+  "component": "frontend/e2e console listeners",
+  "impact": "Expected Playwright service-worker block warnings were repeatedly printed in passing grouped E2E runs, reducing warning signal quality.",
+  "rootCause": "E2E specs logged console warnings verbatim and included the expected Playwright service-worker block warning.",
+  "resolution": "Added an exact warning-text filter in affected Playwright spec console listeners so only this expected warning is suppressed.",
+  "verification": [
+    "rg \"Service Worker registration blocked by Playwright\" frontend/e2e",
+    "npm --prefix frontend run test:e2e:groups",
+    "npm test"
+  ],
+  "whyWarningOnly": "Test suites passed and service worker behavior remained unchanged; only expected warning noise was affected.",
+  "references": [
+    "frontend/e2e/process-preview.spec.ts",
+    "frontend/e2e/manage-processes.spec.ts",
+    "frontend/e2e/cloud-sync.spec.ts"
+  ],
+  "longForm": "outages/2026-04-30-playwright-service-worker-warning-filter.md"
+}

@@ -47,6 +47,12 @@ test.describe('Cloud Sync', () => {
         });
 
         page.on('console', (message) => {
+            if (
+                message.type() === 'warning' &&
+                message.text() === 'Service Worker registration blocked by Playwright'
+            ) {
+                return;
+            }
             if (message.type() === 'error' || message.type() === 'warning') {
                 const location = message.location();
                 const locationHint = location?.url
