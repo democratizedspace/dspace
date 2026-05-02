@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-28-browserslist-caniuse-lite-stale-launch-gate-noise",
+  "date": "2026-04-28",
+  "component": "build-tooling",
+  "longForm": "outages/2026-04-28-browserslist-caniuse-lite-stale-launch-gate-noise.md",
+  "rootCause": "The npm graph captured in package-lock.json resolved an older caniuse-lite dataset, so Browserslist reported stale browser data during Astro builds.",
+  "resolution": "Pinned caniuse-lite via npm overrides and regenerated package-lock.json so npm-based builds consume refreshed browser data and stop emitting the stale-data warning.",
+  "references": [
+    "package.json",
+    "package-lock.json",
+    "outages/2026-04-28-browserslist-caniuse-lite-stale-launch-gate-noise.md"
+  ]
+}
