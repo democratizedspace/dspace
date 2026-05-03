@@ -20,6 +20,9 @@ const writeQuestGraphDebugMarker = () => {
     }
 };
 
+import fs from 'node:fs';
+import path from 'node:path';
+
 // Intentionally filter only Astro's unsupported-file warning spam for known support/content files
 // under frontend/src/pages/**, while preserving every other warning and normal build output.
 const ignoredPatterns = [/Prefix filename with an underscore/];
@@ -127,6 +130,15 @@ const createFilteredWriter = (stream) => {
             suppressUnderscoreHintLine = false;
         }
     };
+};
+
+
+const writeQuestGraphDebugMarker = () => {
+    const markerPath = path.join(process.cwd(), 'dist', '.quest-graph-debug-flag');
+    const questGraphDebugEnabled = process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true';
+
+    fs.mkdirSync(path.dirname(markerPath), { recursive: true });
+    fs.writeFileSync(markerPath, questGraphDebugEnabled ? 'true' : 'false');
 };
 
 const child = spawn('astro', ['build', ...process.argv.slice(2)], {
