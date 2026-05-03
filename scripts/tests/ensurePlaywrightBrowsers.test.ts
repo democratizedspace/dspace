@@ -706,6 +706,46 @@ describe('ensurePlaywrightBrowsers', () => {
     expect(resolveHeadlessShellPath(macExecutablePath)).toBe(headlessHyphen);
   });
 
+  it('resolves macOS headless shell paths stored at chrome-mac root', async () => {
+    const macCacheRoot = path.join(
+      path.sep,
+      'Users',
+      'dev',
+      'Library',
+      'Caches',
+      'ms-playwright'
+    );
+    const macExecutablePath = path.join(
+      macCacheRoot,
+      'chromium-1181',
+      'chrome-mac',
+      'Chromium.app',
+      'Contents',
+      'MacOS',
+      'Chromium'
+    );
+    const headlessAtChromeMacRoot = path.join(
+      macCacheRoot,
+      'chromium-headless-shell-1181',
+      'chrome-mac',
+      'headless_shell'
+    );
+
+    vi.doMock('node:fs', async () => {
+      const actual = await vi.importActual<typeof import('node:fs')>('node:fs');
+      const check = (candidate: string) => candidate === headlessAtChromeMacRoot;
+      return {
+        ...actual,
+        existsSync: check,
+        default: { ...actual, existsSync: check },
+      };
+    });
+
+    const { resolveHeadlessShellPath } = await import(MODULE_PATH);
+
+    expect(resolveHeadlessShellPath(macExecutablePath)).toBe(headlessAtChromeMacRoot);
+  });
+
   it('includes executable extensions when deriving headless shell path', async () => {
     const winCacheRoot = path.join(
       'C:',
