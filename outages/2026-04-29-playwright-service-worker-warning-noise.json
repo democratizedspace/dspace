@@ -1,0 +1,16 @@
+{
+  "id": "playwright-service-worker-warning-noise",
+  "date": "2026-04-29",
+  "component": "frontend-e2e",
+  "impact": "Passing Playwright group runs emitted repeated '[console.warning] Service Worker registration blocked by Playwright' messages that obscured actionable warning noise in QA logs.",
+  "rootCause": "The app's offline worker bootstrap attempted navigator.serviceWorker.register() on every page load. In default Playwright contexts where serviceWorkers is 'block', Chromium blocks registration and emits a warning to the browser console.",
+  "resolution": "Skip automatic offline worker registration when navigator.webdriver is true, unless explicitly re-enabled with window.__DS_ENABLE_SW_IN_AUTOMATION. This keeps production/staging behavior unchanged while removing known-benign warning noise from blocked Playwright contexts.",
+  "verification": [
+    "npm --prefix frontend run test:e2e:groups",
+    "npm run lint",
+    "npm run type-check",
+    "npm run build",
+    "npm test",
+    "node scripts/link-check.mjs"
+  ]
+}

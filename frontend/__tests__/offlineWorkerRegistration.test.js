@@ -184,6 +184,26 @@ describe('registerOfflineWorker', () => {
         );
     });
 
+    it('skips registration during browser automation by default', async () => {
+        Object.defineProperty(navigator, 'webdriver', {
+            configurable: true,
+            value: true,
+        });
+        fetch.mockImplementation(() => mockFetchResponse({ offlineWorker: { enabled: true } }));
+
+        const { registerOfflineWorker } = await import(
+            '../public/scripts/offlineWorkerRegistration.js'
+        );
+
+        registerOfflineWorker();
+        await dispatchLoad();
+
+        expect(serviceWorker.register).not.toHaveBeenCalled();
+        expect(consoleInfoSpy).toHaveBeenCalledWith(
+            'Offline worker registration skipped for browser automation.'
+        );
+    });
+
     it('retries stylesheets that 404 shortly after load when controlled by service worker', async () => {
         const waitingWorker = { postMessage: vi.fn() };
         serviceWorker.register.mockResolvedValue({
