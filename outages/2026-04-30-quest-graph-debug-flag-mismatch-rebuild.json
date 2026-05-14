@@ -1,0 +1,14 @@
+{
+  "id": "2026-04-30-quest-graph-debug-flag-mismatch-rebuild",
+  "date": "2026-04-30",
+  "component": "frontend-test-setup-and-astro-build-reuse",
+  "longForm": "outages/2026-04-30-quest-graph-debug-flag-mismatch-rebuild.md",
+  "rootCause": "Test setup forced PUBLIC_ENABLE_QUEST_GRAPH_DEBUG=true, creating a mismatch with the previous build marker and triggering an unnecessary rebuild.",
+  "resolution": "Stopped forcing the debug flag in setup-test-env, retained mismatch detection for real config drift, and added focused ensure-astro-build tests for match/mismatch behavior.",
+  "references": [
+    "frontend/scripts/setup-test-env.js",
+    "frontend/scripts/ensure-astro-build.mjs",
+    "tests/ensure-astro-build-quest-debug-flag.test.ts",
+    "outages/2026-04-30-quest-graph-debug-flag-mismatch-rebuild.md"
+  ]
+}
