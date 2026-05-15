@@ -13,6 +13,13 @@ ORIGINAL_DIR=$(pwd)
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 cd "$SCRIPT_DIR/.." || exit 1
 
+# Filter only known third-party Node ExperimentalWarning noise from child npm/node tools.
+NODE_WARNING_FILTER="--require=../scripts/node-warning-filter.cjs"
+case " ${NODE_OPTIONS:-} " in
+  *" $NODE_WARNING_FILTER "*) ;;
+  *) export NODE_OPTIONS="$NODE_WARNING_FILTER ${NODE_OPTIONS:-}" ;;
+esac
+
 # Ensure Playwright browsers are installed before running tests when needed
 if [ -z "$SKIP_E2E" ]; then
   echo "Ensuring Playwright browsers are installed..."

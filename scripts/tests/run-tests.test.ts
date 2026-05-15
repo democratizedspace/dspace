@@ -42,16 +42,35 @@ describe('runTests', () => {
       .mockReturnValueOnce('');
     const code = runTests(exec, 'linux');
     expect(code).toBe(0);
-    expect(exec).toHaveBeenNthCalledWith(2, 'npm run test:quest-validation', {
-      stdio: 'inherit',
-    });
-    expect(exec).toHaveBeenNthCalledWith(3, 'npm run hardening:validate', {
-      stdio: 'inherit',
-    });
+    expect(exec).toHaveBeenNthCalledWith(
+      2,
+      'npm run test:quest-validation',
+      expect.objectContaining({
+        stdio: 'inherit',
+        env: expect.objectContaining({
+          NODE_OPTIONS: expect.stringContaining('node-warning-filter.cjs'),
+        }),
+      })
+    );
+    expect(exec).toHaveBeenNthCalledWith(
+      3,
+      'npm run hardening:validate',
+      expect.objectContaining({
+        stdio: 'inherit',
+        env: expect.objectContaining({
+          NODE_OPTIONS: expect.stringContaining('node-warning-filter.cjs'),
+        }),
+      })
+    );
     expect(exec).toHaveBeenNthCalledWith(
       4,
       'npm run test:docs-rag',
-      expect.objectContaining({ stdio: 'inherit' })
+      expect.objectContaining({
+        stdio: 'inherit',
+        env: expect.objectContaining({
+          NODE_OPTIONS: expect.stringContaining('node-warning-filter.cjs'),
+        }),
+      })
     );
     expect(exec).toHaveBeenNthCalledWith(
       5,

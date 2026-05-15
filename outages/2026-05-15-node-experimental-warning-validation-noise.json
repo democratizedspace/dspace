@@ -1,0 +1,18 @@
+{
+  "id": "2026-05-15-node-experimental-warning-validation-noise",
+  "date": "2026-05-15",
+  "component": "validation-tooling",
+  "longForm": "outages/2026-05-15-node-experimental-warning-validation-noise.md",
+  "rootCause": "Node emitted ExperimentalWarning diagnostics for known third-party CommonJS-to-ESM interop inside npm's debug/supports-color dependency path and ESLint's eslintrc/svelte-eslint-parser compatibility path while validation scripts nested npm, npx, ESLint, and Playwright web server invocations.",
+  "resolution": "Added a targeted Node preload filter for only those third-party ExperimentalWarning messages, removed avoidable nested npm setup calls from common frontend scripts, passed the filter through scripted npm/build/test child processes, and started the Playwright Astro preview through the local Astro CLI instead of npx so real lint, type, build, test, console, and Playwright failures still surface normally.",
+  "references": [
+    "scripts/node-warning-filter.cjs",
+    "package.json",
+    "frontend/package.json",
+    "frontend/scripts/run-test-groups.mjs",
+    "frontend/scripts/run-astro-build.mjs",
+    "scripts/build-with-sha.mjs",
+    "frontend/scripts/prepare-pr.sh",
+    "frontend/playwright.config.ts"
+  ]
+}

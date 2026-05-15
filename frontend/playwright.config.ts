@@ -293,7 +293,7 @@ export default defineConfig({
         ? {
               // Ensure preview always has complete, test-compatible build artifacts, including
               // quest-graph debug marker checks for direct Playwright invocation.
-              command: `node ./scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
+              command: `node ./scripts/ensure-astro-build.mjs && node ./node_modules/astro/astro.js preview --host 0.0.0.0 --port ${port}`,
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,
@@ -301,6 +301,12 @@ export default defineConfig({
               env: {
                   ...process.env,
                   PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
+                  NODE_OPTIONS: [
+                      '--require=../scripts/node-warning-filter.cjs',
+                      process.env.NODE_OPTIONS || '',
+                  ]
+                      .join(' ')
+                      .trim(),
               },
           }
         : undefined,

@@ -1,11 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
+import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const defaultRootDir = path.resolve(__dirname, '..');
+const require = createRequire(import.meta.url);
+const { addNodeWarningFilterToEnv } = require('../../scripts/node-warning-filter.cjs');
 
 const questGraphDebugEnvFlag = process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true';
 
@@ -71,7 +74,12 @@ export function ensureAstroBuild(options = {}) {
 
     logger.log?.(rebuildReason);
 
-    const runBuild = () => exec('npm run build', { cwd: root, stdio: ['inherit', 'inherit', 'pipe'] });
+    const runBuild = () =>
+        exec('npm run build', {
+            cwd: root,
+            env: addNodeWarningFilterToEnv(),
+            stdio: ['inherit', 'inherit', 'pipe'],
+        });
 
     try {
         runBuild();
@@ -82,8 +90,7 @@ export function ensureAstroBuild(options = {}) {
             (error && typeof error === 'object' && error.stderr
                 ? `\n${error.stderr.toString()}`
                 : '');
-        const shouldRetryCleanBuild =
-            /ENOENT|no such file or directory/i.test(errorOutput);
+        const shouldRetryCleanBuild = /ENOENT|no such file or directory/i.test(errorOutput);
 
         if (!shouldRetryCleanBuild) {
             (logger.error ?? console.error)(
@@ -108,6 +115,9 @@ export function ensureAstroBuild(options = {}) {
     }
 }
 
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('ensure-astro-build.mjs')) {
+if (
+    import.meta.url === `file://${process.argv[1]}` ||
+    process.argv[1]?.endsWith('ensure-astro-build.mjs')
+) {
     ensureAstroBuild();
 }

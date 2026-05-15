@@ -8,6 +8,9 @@
 const { execSync } = require('child_process');
 const os = require('os');
 const { hasZeroTests } = require('./scripts/utils/detect-zero-tests');
+const {
+  addNodeWarningFilterToEnv,
+} = require('./scripts/node-warning-filter.cjs');
 
 // ANSI color codes for pretty output
 const colors = Object.freeze({
@@ -27,6 +30,7 @@ function runRootUnitTests(exec) {
     encoding: 'utf-8',
     stdio: 'pipe',
     maxBuffer: 200 * 1024 * 1024,
+    env: addNodeWarningFilterToEnv(),
   };
 
   try {
@@ -85,7 +89,10 @@ function runTests(exec = execSync, platform = os.platform()) {
       console.log(
         `${colors.yellow}Running quest validation regression tests...${colors.reset}`
       );
-      exec('npm run test:quest-validation', { stdio: 'inherit' });
+      exec('npm run test:quest-validation', {
+        stdio: 'inherit',
+        env: addNodeWarningFilterToEnv(),
+      });
     } else {
       console.log(
         `${colors.yellow}Skipping root unit tests — coverage already generated in CI.${colors.reset}`
@@ -95,12 +102,18 @@ function runTests(exec = execSync, platform = os.platform()) {
     console.log(
       `${colors.yellow}Validating hardening metadata...${colors.reset}`
     );
-    exec('npm run hardening:validate', { stdio: 'inherit' });
+    exec('npm run hardening:validate', {
+      stdio: 'inherit',
+      env: addNodeWarningFilterToEnv(),
+    });
 
     console.log(
       `${colors.yellow}Validating docs RAG artifacts...${colors.reset}`
     );
-    exec('npm run test:docs-rag', { stdio: 'inherit' });
+    exec('npm run test:docs-rag', {
+      stdio: 'inherit',
+      env: addNodeWarningFilterToEnv(),
+    });
 
     const scripts = {
       win32: {
@@ -114,13 +127,13 @@ function runTests(exec = execSync, platform = os.platform()) {
     };
     const { message, command } = scripts[platform] || scripts.default;
     console.log(message);
-    const preparePrEnv = {
+    const preparePrEnv = addNodeWarningFilterToEnv({
       ...process.env,
       SKIP_UNIT_TESTS: '1',
       ...(process.env.SKIP_E2E !== undefined
         ? { SKIP_E2E: process.env.SKIP_E2E }
         : {}),
-    };
+    });
     exec(command, {
       stdio: 'inherit',
       env: preparePrEnv,
