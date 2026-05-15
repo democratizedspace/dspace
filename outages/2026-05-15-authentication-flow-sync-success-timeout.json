@@ -1,0 +1,25 @@
+{
+  "id": "2026-05-15-authentication-flow-sync-success-timeout",
+  "date": "2026-05-15",
+  "component": "frontend cloud sync authentication E2E",
+  "impact": "The full local validation command sequence failed during grouped Structure Tests because the authentication-flow E2E clicked the cloud-sync Save action before the Svelte island had finished hydrating.",
+  "rootCause": "The cloud sync form rendered enabled SSR buttons before client hydration attached Svelte click handlers, while frontend/e2e/authentication-flow.spec.ts only waited for generic page hydration. Under parallel Structure Tests, the test could click the inert pre-hydration Save button, so no token validation ran and data-testid=\"sync-success\" was never rendered.",
+  "resolution": "Gate cloud-sync action buttons behind a component-local hydrated flag, mark the form hydrated only after token and gist initialization finish, and make authentication-flow.spec.ts wait for that specific hydrated form before saving the token.",
+  "verification": [
+    "npm --prefix frontend run test:e2e -- authentication-flow.spec.ts",
+    "node frontend/node_modules/@playwright/test/cli.js test page-structure.spec.ts nav-route-smoke.spec.ts error-pages.spec.ts svelte-component-hydration.spec.ts builtin-quests.spec.ts custom-backup.spec.ts authentication-flow.spec.ts header-actions-placement.spec.ts cloud-sync.spec.ts cookie-consent.spec.ts docs-navigation.spec.ts docs-changelog.spec.ts changelog-container.spec.ts homepage-responsive-width.spec.ts failover-status.spec.ts home-page-basic.spec.ts inventory-items-bug.spec.ts indexeddb-availability.spec.ts profile-avatar-selection.spec.ts profile-page.spec.ts service-worker-update.spec.ts mobile-page-overflow.spec.ts mobile-process-form.spec.ts mobile-create-pages-overflow.spec.ts leaderboard.spec.ts settings-page.spec.ts --workers=7 --reporter=dot",
+    "npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts",
+    "npm test",
+    "npm run lint",
+    "npm run type-check",
+    "npm run build",
+    "node scripts/link-check.mjs",
+    "npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs"
+  ],
+  "references": [
+    "frontend/src/pages/cloudsync/svelte/Syncer.svelte",
+    "frontend/e2e/authentication-flow.spec.ts",
+    "frontend/src/pages/cloudsync/svelte/__tests__/Syncer.spec.ts"
+  ],
+  "longForm": "outages/2026-05-15-authentication-flow-sync-success-timeout.md"
+}

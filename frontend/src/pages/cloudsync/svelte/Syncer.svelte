@@ -30,6 +30,7 @@
     let refreshing = false;
     let backups = [];
     let backupError = '';
+    let hydrated = false;
 
     const announce = (text, type = '') => {
         message = text;
@@ -62,6 +63,7 @@
         token = await loadGitHubToken();
         gistId = '';
         await clearCloudGistId();
+        hydrated = true;
         root?.setAttribute('data-hydrated', 'true');
         if (token) {
             await loadBackups(token);
@@ -195,7 +197,7 @@
                         text={savingToken ? 'Saving…' : 'Save'}
                         onClick={saveToken}
                         inverted={true}
-                        disabled={savingToken}
+                        disabled={!hydrated || savingToken}
                         dataTestId="save-token"
                     >
                         {#if savingToken}
@@ -207,7 +209,7 @@
                         onClick={clearTokenLocal}
                         hazard={true}
                         dataTestId="clear-sync-token"
-                        disabled={savingToken || uploading || downloading}
+                        disabled={!hydrated || savingToken || uploading || downloading}
                     />
                 </div>
             </div>
@@ -231,7 +233,7 @@
                     onClick={clearGistId}
                     hazard={true}
                     dataTestId="clear-gist-id"
-                    disabled={uploading || downloading}
+                    disabled={!hydrated || uploading || downloading}
                 />
             </div>
             <p class="hint">Optional: paste a gist ID if you need a manual restore.</p>
@@ -241,7 +243,7 @@
                 text={uploading ? 'Uploading…' : 'Upload'}
                 onClick={handleUpload}
                 inverted={true}
-                disabled={uploading || savingToken}
+                disabled={!hydrated || uploading || savingToken}
             >
                 {#if uploading}
                     <span class="spinner" aria-hidden="true"></span>
@@ -250,7 +252,7 @@
             <Chip
                 text={downloading && downloadingId === 'manual' ? 'Downloading…' : 'Download'}
                 onClick={handleDownload}
-                disabled={downloading || savingToken}
+                disabled={!hydrated || downloading || savingToken}
             >
                 {#if downloading && downloadingId === 'manual'}
                     <span class="spinner" aria-hidden="true"></span>
@@ -277,7 +279,7 @@
                     text={refreshing ? 'Refreshing…' : 'Refresh'}
                     onClick={() => loadBackups()}
                     inverted={true}
-                    disabled={refreshing || !token}
+                    disabled={!hydrated || refreshing || !token}
                     dataTestId="refresh-backups"
                 >
                     {#if refreshing}
@@ -317,7 +319,7 @@
                                             : 'Restore'}
                                         onClick={() => handleDownload(backup.id)}
                                         inverted={true}
-                                        disabled={downloading || savingToken}
+                                        disabled={!hydrated || downloading || savingToken}
                                         dataTestId={`restore-backup-${backup.id}`}
                                     >
                                         {#if downloading && downloadingId === backup.id}
