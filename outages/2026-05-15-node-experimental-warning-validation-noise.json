@@ -1,0 +1,31 @@
+{
+  "id": "2026-05-15-node-experimental-warning-validation-noise",
+  "date": "2026-05-15",
+  "component": "repo validation command wrappers and Node warning filtering",
+  "impact": "The normal validation sequence passed with repeated third-party Node ExperimentalWarning output, making local and CI logs look noisy even when there were no actionable repo failures.",
+  "rootCause": "Newer Node releases surface ExperimentalWarning messages when CommonJS tooling requires ES modules. The recurring warnings came from npm's debug dependency requiring supports-color and from ESLint's legacy eslintrc loader requiring svelte-eslint-parser; grouped Playwright runs repeated the npm/debug warning for each managed web server startup.",
+  "resolution": "Added a repo warning preload that runs under --no-warnings and re-emits every warning except the two known third-party CommonJS-to-ESM ExperimentalWarning patterns. Root and frontend npm scripts now receive that preload through .npmrc node-options, while the existing ESLintRCWarning suppression is preserved for explicit ESLint invocations.",
+  "verification": [
+    "npm run lint",
+    "npm run type-check",
+    "npm run build",
+    "npm test",
+    "node scripts/link-check.mjs",
+    "npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts",
+    "npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs"
+  ],
+  "references": [
+    ".npmrc",
+    "frontend/.npmrc",
+    "scripts/node-warning-filter.cjs",
+    "frontend/scripts/node-warning-filter.cjs",
+    "tests/nodeWarningFilter.test.ts",
+    "frontend/package.json",
+    "frontend/scripts/run-test-groups.mjs",
+    "frontend/scripts/run-astro-build.mjs",
+    "scripts/build-with-sha.mjs",
+    "frontend/scripts/prepare-pr.sh",
+    "frontend/playwright.config.ts"
+  ],
+  "longForm": "outages/2026-05-15-node-experimental-warning-validation-noise.md"
+}
