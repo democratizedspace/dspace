@@ -1,0 +1,13 @@
+{
+  "id": "2026-05-15-authentication-flow-sync-success-timeout",
+  "date": "2026-05-15",
+  "component": "frontend-cloudsync-e2e-authentication-flow",
+  "longForm": "outages/2026-05-15-authentication-flow-sync-success-timeout.md",
+  "rootCause": "The authentication-flow E2E used the generic hydration helper, which can return after any hydrated component appears; in parallel Structure Tests this allowed the Save click to race ahead of the Cloud Sync component's client handler, so no sync-success status was rendered.",
+  "resolution": "Wait for the Cloud Sync form's own hydration marker and readiness flag before filling and saving the token, then click the stable save-token test id while preserving validation, persistence, reload, and clear coverage.",
+  "references": [
+    "frontend/e2e/authentication-flow.spec.ts",
+    "frontend/src/pages/cloudsync/svelte/Syncer.svelte",
+    "outages/2026-05-15-authentication-flow-sync-success-timeout.md"
+  ]
+}
