@@ -44,6 +44,54 @@ describe('Cloud Sync token save flow', () => {
         delete (window as typeof window & { __cloudSyncReady?: boolean }).__cloudSyncReady;
     });
 
+    it('resets the global readiness flag on remount until the current startup finishes', async () => {
+        const cloudSyncWindow = window as typeof window & { __cloudSyncReady?: boolean };
+        let resolveLoadedCredential: (credential: string) => void = () => {};
+        loadGitHubTokenMock.mockReturnValue(
+            new Promise<string>((resolve) => {
+                resolveLoadedCredential = resolve;
+            })
+        );
+        cloudSyncWindow.__cloudSyncReady = true;
+
+        const { getByTestId, unmount } = render(Syncer);
+
+        expect(cloudSyncWindow.__cloudSyncReady).toBe(false);
+        expect(getByTestId('save-token')).toBeDisabled();
+
+        resolveLoadedCredential('');
+        await waitFor(() => expect(cloudSyncWindow.__cloudSyncReady).toBe(true));
+
+        unmount();
+        expect(cloudSyncWindow.__cloudSyncReady).toBe(false);
+    });
+
+    it('enables the form and marks readiness when startup storage fails', async () => {
+        const cloudSyncWindow = window as typeof window & { __cloudSyncReady?: boolean };
+        loadGitHubTokenMock.mockRejectedValue(new Error('storage unavailable'));
+
+        const { getByTestId } = render(Syncer);
+
+        await waitFor(() => expect(getByTestId('save-token')).toBeEnabled());
+        expect(cloudSyncWindow.__cloudSyncReady).toBe(true);
+        expect(getByTestId('sync-error')).toHaveTextContent('storage unavailable');
+    });
+
+    it('marks readiness before the saved-token backup refresh completes', async () => {
+        const cloudSyncWindow = window as typeof window & { __cloudSyncReady?: boolean };
+        const savedCredential = `ghp_${'b'.repeat(36)}`;
+        loadGitHubTokenMock.mockResolvedValue(savedCredential);
+        fetchBackupListMock.mockReturnValue(new Promise(() => {}));
+
+        const { getByLabelText, getByTestId } = render(Syncer);
+        const tokenInput = getByLabelText(/GitHub Token/i) as HTMLInputElement;
+
+        await waitFor(() => expect(getByTestId('save-token')).toBeEnabled());
+        expect(cloudSyncWindow.__cloudSyncReady).toBe(true);
+        expect(tokenInput).toHaveValue(savedCredential);
+        expect(fetchBackupListMock).toHaveBeenCalledWith(savedCredential);
+    });
+
     it('waits for initialization before Save and preserves a token typed during startup', async () => {
         let resolveLoadedCredential: (credential: string) => void = () => {};
         loadGitHubTokenMock.mockReturnValue(

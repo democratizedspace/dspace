@@ -59,22 +59,55 @@
         }
     };
 
-    onMount(async () => {
-        const savedCredential = await loadGitHubToken();
-        const enteredCredential = token;
-        if (!enteredCredential) {
-            token ||= savedCredential;
-        }
-        gistId = '';
-        await clearCloudGistId();
-        if (!enteredCredential && savedCredential) {
-            await loadBackups(savedCredential);
-        }
+    const markReady = () => {
         initializing = false;
         root?.setAttribute('data-hydrated', 'true');
         if (typeof window !== 'undefined') {
             window.__cloudSyncReady = true;
         }
+    };
+
+    onMount(() => {
+        let mounted = true;
+        if (typeof window !== 'undefined') {
+            window.__cloudSyncReady = false;
+        }
+
+        const initialize = async () => {
+            let savedCredential = '';
+            let shouldRefreshBackups = false;
+            try {
+                savedCredential = await loadGitHubToken();
+                const enteredCredential = token;
+                if (!enteredCredential) {
+                    token ||= savedCredential;
+                    shouldRefreshBackups = Boolean(savedCredential);
+                }
+                gistId = '';
+                await clearCloudGistId();
+            } catch (err) {
+                const startupMessage =
+                    err?.message || 'Cloud Sync startup failed. You can retry manually.';
+                backupError = startupMessage;
+                announce(startupMessage, 'error');
+            } finally {
+                if (mounted) {
+                    markReady();
+                    if (shouldRefreshBackups && savedCredential) {
+                        void loadBackups(savedCredential);
+                    }
+                }
+            }
+        };
+
+        void initialize();
+
+        return () => {
+            mounted = false;
+            if (typeof window !== 'undefined') {
+                window.__cloudSyncReady = false;
+            }
+        };
     });
 
     const saveToken = async () => {
