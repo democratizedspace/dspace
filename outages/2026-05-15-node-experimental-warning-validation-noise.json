@@ -1,0 +1,18 @@
+{
+  "id": "2026-05-15-node-experimental-warning-validation-noise",
+  "date": "2026-05-15",
+  "component": "validation-scripts",
+  "longForm": "outages/2026-05-15-node-experimental-warning-validation-noise.md",
+  "rootCause": "Normal validation commands routed through nested npm/npx and legacy ESLint interop paths. On newer Node/npm combinations, npm's debug package requires supports-color as an ES module, and @eslint/eslintrc requires svelte-eslint-parser as an ES module, causing repeated Node ExperimentalWarning blocks even when validation passed.",
+  "resolution": "Replaced the noisy nested npm/npx validation paths with direct Node/binary invocations and added a narrow output filter for the two known third-party ExperimentalWarning blocks while preserving command exit codes and all other stderr/stdout output.",
+  "references": [
+    "package.json",
+    "frontend/package.json",
+    "frontend/scripts/run-lint.mjs",
+    "frontend/scripts/run-check.mjs",
+    "frontend/scripts/utils/filter-known-node-warnings.mjs",
+    "frontend/playwright.config.ts",
+    "frontend/scripts/prepare-pr.sh",
+    "scripts/build-with-sha.mjs"
+  ]
+}

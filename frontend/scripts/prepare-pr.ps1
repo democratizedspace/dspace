@@ -31,7 +31,7 @@ try {
 
     # Step 1: Run linting and formatting
     Write-Host "Step 1/3: Checking code formatting and linting..."
-    npm run check
+    node scripts/run-check.mjs
     if ($LASTEXITCODE -ne 0) {
         Write-Host "❌ Formatting or linting issues found. Please fix them before submitting your PR." -ForegroundColor Red
         Set-Location -Path $originalDir
@@ -42,9 +42,24 @@ try {
     # Step 2: Run unit tests unless skipped
     if (-not $env:SKIP_UNIT_TESTS) {
         Write-Host "`nStep 2/3: Running unit tests..."
-        $testOutput = npm run test:root 2>&1
+        Push-Location ..
+        try {
+            $testOutput = & {
+                node frontend/scripts/build-processes.mjs
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                node scripts/write-build-meta.mjs
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                node scripts/build-docs-rag-index.mjs
+                if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+                node node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1
+            } 2>&1
+            $testExit = $LASTEXITCODE
+        }
+        finally {
+            Pop-Location
+        }
         Write-Host $testOutput
-        if ($LASTEXITCODE -ne 0) {
+        if ($testExit -ne 0) {
             Write-Host "❌ Unit tests failed. Please fix them before submitting your PR." -ForegroundColor Red
             Set-Location -Path $originalDir
             exit 1
@@ -60,9 +75,14 @@ try {
     # Step 3: Run grouped E2E tests unless disabled
     if (-not $env:SKIP_E2E) {
         Write-Host "`nStep 3/3: Running end-to-end tests (grouped)..."
-        $e2eOutput = npm run test:e2e:groups 2>&1
+        $e2eOutput = & {
+            node scripts/setup-test-env.js
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            node scripts/run-test-groups.mjs
+        } 2>&1
+        $e2eExit = $LASTEXITCODE
         Write-Host $e2eOutput
-        if ($LASTEXITCODE -ne 0) {
+        if ($e2eExit -ne 0) {
             Write-Host "❌ End-to-end tests failed. Please fix them before submitting your PR." -ForegroundColor Red
             Set-Location -Path $originalDir
             exit 1

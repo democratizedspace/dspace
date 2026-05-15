@@ -72,7 +72,10 @@ function ensureAstroBuildArtifacts(): void {
 
     console.log('Astro build artifacts not found. Building before Playwright preview.');
     try {
-        execSync('npm run build', { cwd: frontendDir, stdio: 'inherit' });
+        execSync('node scripts/run-frontend-build.mjs', {
+            cwd: frontendDir,
+            stdio: 'inherit',
+        });
     } catch (error) {
         console.error('Failed to build Astro project required for Playwright preview.');
         throw error;
@@ -293,7 +296,7 @@ export default defineConfig({
         ? {
               // Ensure preview always has complete, test-compatible build artifacts, including
               // quest-graph debug marker checks for direct Playwright invocation.
-              command: `node ./scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
+              command: `node ./scripts/ensure-astro-build.mjs && node ./node_modules/astro/astro.js preview --host 0.0.0.0 --port ${port}`,
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,

@@ -31,7 +31,7 @@ fi
 # Step 1: Run linting and formatting (unless skipped)
 if [ -z "$SKIP_LINT" ]; then
   echo "Step 1/3: Checking code formatting and linting..."
-  npm run check
+  node scripts/run-check.mjs
   if [ $? -ne 0 ]; then
     echo "❌ Formatting or linting issues found. Please fix them before submitting your PR."
     cd "$ORIGINAL_DIR" || exit 1
@@ -45,7 +45,7 @@ fi
 # Step 2: Run unit tests unless skipped
 if [ -z "$SKIP_UNIT_TESTS" ]; then
   echo -e "\nStep 2/3: Running unit tests..."
-  TEST_OUTPUT=$(npm run test:root 2>&1)
+  TEST_OUTPUT=$(cd .. && node frontend/scripts/build-processes.mjs && node scripts/write-build-meta.mjs && node scripts/build-docs-rag-index.mjs && node node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1 2>&1)
   TEST_EXIT=$?
   echo "$TEST_OUTPUT"
   if [ $TEST_EXIT -ne 0 ]; then
@@ -64,7 +64,7 @@ fi
 # Step 3: Run grouped E2E tests (unless disabled)
 if [ -z "$SKIP_E2E" ]; then
   echo -e "\nStep 3/3: Running end-to-end tests (grouped)..."
-  E2E_OUTPUT=$(npm run test:e2e:groups 2>&1)
+  E2E_OUTPUT=$(node scripts/setup-test-env.js && node scripts/run-test-groups.mjs 2>&1)
   E2E_EXIT=$?
   echo "$E2E_OUTPUT"
   if [ $E2E_EXIT -ne 0 ]; then

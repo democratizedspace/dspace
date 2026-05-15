@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frontendRoot = path.resolve(__dirname, '..');
 const questGraphDebugMarkerPath = path.join(frontendRoot, 'dist', '.quest-graph-debug-flag');
+const astroCliPath = path.join(frontendRoot, 'node_modules', 'astro', 'astro.js');
 
 const writeQuestGraphDebugMarker = () => {
     try {
@@ -63,7 +64,9 @@ const knownDataFiles = new Set([
 const normalizePath = (value) => value.replaceAll('\\', '/');
 
 const extractUnsupportedFilePath = (line) => {
-    const match = line.match(/Unsupported file type\s+(.+?)(?:\s+found\.)?(?:\s+Prefix filename with an underscore.*)?$/);
+    const match = line.match(
+        /Unsupported file type\s+(.+?)(?:\s+found\.)?(?:\s+Prefix filename with an underscore.*)?$/
+    );
     return match?.[1] ? normalizePath(match[1]) : null;
 };
 
@@ -78,7 +81,11 @@ const isKnownIntentionalUnsupportedFile = (filePath) => {
         return true;
     }
 
-    if (knownSvelteRouteSupportFiles.has(normalizedPath.slice(normalizedPath.indexOf('/src/pages/')))) {
+    if (
+        knownSvelteRouteSupportFiles.has(
+            normalizedPath.slice(normalizedPath.indexOf('/src/pages/'))
+        )
+    ) {
         return true;
     }
 
@@ -103,11 +110,16 @@ const createFilteredWriter = (stream) => {
         for (const line of parts) {
             const unsupportedPath = extractUnsupportedFilePath(line);
             if (unsupportedPath && isKnownIntentionalUnsupportedFile(unsupportedPath)) {
-                suppressUnderscoreHintLine = line.includes(unsupportedFileTypeMarker) && !line.includes(underscoreHintMarker);
+                suppressUnderscoreHintLine =
+                    line.includes(unsupportedFileTypeMarker) &&
+                    !line.includes(underscoreHintMarker);
                 continue;
             }
 
-            if (suppressUnderscoreHintLine && ignoredPatterns.some((pattern) => pattern.test(line))) {
+            if (
+                suppressUnderscoreHintLine &&
+                ignoredPatterns.some((pattern) => pattern.test(line))
+            ) {
                 suppressUnderscoreHintLine = false;
                 continue;
             }
@@ -119,7 +131,12 @@ const createFilteredWriter = (stream) => {
         if (flush && buffered) {
             const unsupportedPath = extractUnsupportedFilePath(buffered);
             if (!(unsupportedPath && isKnownIntentionalUnsupportedFile(unsupportedPath))) {
-                if (!(suppressUnderscoreHintLine && ignoredPatterns.some((pattern) => pattern.test(buffered)))) {
+                if (
+                    !(
+                        suppressUnderscoreHintLine &&
+                        ignoredPatterns.some((pattern) => pattern.test(buffered))
+                    )
+                ) {
                     stream.write(buffered);
                 }
             }
@@ -129,10 +146,10 @@ const createFilteredWriter = (stream) => {
     };
 };
 
-const child = spawn('astro', ['build', ...process.argv.slice(2)], {
+const child = spawn(process.execPath, [astroCliPath, 'build', ...process.argv.slice(2)], {
+    cwd: frontendRoot,
     env: process.env,
     stdio: 'pipe',
-    shell: true,
 });
 
 const writeStdout = createFilteredWriter(process.stdout);

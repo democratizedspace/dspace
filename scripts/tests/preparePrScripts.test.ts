@@ -6,7 +6,9 @@ test('prepare-pr scripts call Playwright bootstrap helper and run root tests', (
   const ps = readFileSync('frontend/scripts/prepare-pr.ps1', 'utf8');
 
   // Shell helper assignment allows optional quotes/spacing
-  expect(sh).toMatch(/PLAYWRIGHT_BOOTSTRAP\s*=\s*"?scripts\/utils\/ensure-playwright-browsers\.js"?/);
+  expect(sh).toMatch(
+    /PLAYWRIGHT_BOOTSTRAP\s*=\s*"?scripts\/utils\/ensure-playwright-browsers\.js"?/
+  );
 
   // PowerShell helper path expectation
   expect(ps).toMatch(/ensure-playwright-browsers\.js/);
@@ -22,6 +24,6 @@ test('prepare-pr scripts call Playwright bootstrap helper and run root tests', (
   expect(ps).not.toMatch(/--with-deps/);
 
   // Root tests are run afterward
-  expect(sh).toMatch(/npm run test:root/);
-  expect(ps).toMatch(/npm run test:root/);
+  expect(sh).toMatch(/node frontend\/scripts\/build-processes\.mjs/);
+  expect(ps).toMatch(/node frontend\/scripts\/build-processes\.mjs/);
 });
