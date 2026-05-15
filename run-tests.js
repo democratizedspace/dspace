@@ -7,7 +7,45 @@
 
 const { execSync } = require('child_process');
 const os = require('os');
+const path = require('path');
 const { hasZeroTests } = require('./scripts/utils/detect-zero-tests');
+
+const knownWarningFilterPath = path.join(
+  __dirname,
+  'scripts',
+  'known-node-warning-filter.cjs'
+);
+
+function appendNodeOption(existingOptions, option) {
+  const current = existingOptions || '';
+  return current.includes(option)
+    ? current.trim()
+    : `${current} ${option}`.trim();
+}
+
+function withKnownNodeWarningFilter(env = process.env) {
+  return {
+    ...env,
+    NODE_OPTIONS: appendNodeOption(
+      env.NODE_OPTIONS,
+      `--require=${knownWarningFilterPath}`
+    ),
+  };
+}
+
+const rootUnitTestCommand = [
+  'node frontend/scripts/build-processes.mjs',
+  'node scripts/write-build-meta.mjs',
+  'node scripts/build-docs-rag-index.mjs',
+  'node ./node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1',
+].join(' && ');
+
+const questValidationCommand = [
+  'node frontend/scripts/build-processes.mjs',
+  'node scripts/write-build-meta.mjs',
+  'node scripts/build-docs-rag-index.mjs',
+  'node ./node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1 tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts',
+].join(' && ');
 
 // ANSI color codes for pretty output
 const colors = Object.freeze({
@@ -22,11 +60,12 @@ const colors = Object.freeze({
 });
 
 function runRootUnitTests(exec) {
-  const rootCommand = 'npm run test:root';
+  const rootCommand = rootUnitTestCommand;
   const execOptions = {
     encoding: 'utf-8',
     stdio: 'pipe',
     maxBuffer: 200 * 1024 * 1024,
+    env: withKnownNodeWarningFilter(),
   };
 
   try {
@@ -85,7 +124,10 @@ function runTests(exec = execSync, platform = os.platform()) {
       console.log(
         `${colors.yellow}Running quest validation regression tests...${colors.reset}`
       );
-      exec('npm run test:quest-validation', { stdio: 'inherit' });
+      exec(questValidationCommand, {
+        stdio: 'inherit',
+        env: withKnownNodeWarningFilter(),
+      });
     } else {
       console.log(
         `${colors.yellow}Skipping root unit tests — coverage already generated in CI.${colors.reset}`
@@ -95,12 +137,18 @@ function runTests(exec = execSync, platform = os.platform()) {
     console.log(
       `${colors.yellow}Validating hardening metadata...${colors.reset}`
     );
-    exec('npm run hardening:validate', { stdio: 'inherit' });
+    exec('node frontend/scripts/validate-hardening.mjs', {
+      stdio: 'inherit',
+      env: withKnownNodeWarningFilter(),
+    });
 
     console.log(
       `${colors.yellow}Validating docs RAG artifacts...${colors.reset}`
     );
-    exec('npm run test:docs-rag', { stdio: 'inherit' });
+    exec('node scripts/test-docs-rag.mjs', {
+      stdio: 'inherit',
+      env: withKnownNodeWarningFilter(),
+    });
 
     const scripts = {
       win32: {
@@ -115,7 +163,7 @@ function runTests(exec = execSync, platform = os.platform()) {
     const { message, command } = scripts[platform] || scripts.default;
     console.log(message);
     const preparePrEnv = {
-      ...process.env,
+      ...withKnownNodeWarningFilter(process.env),
       SKIP_UNIT_TESTS: '1',
       ...(process.env.SKIP_E2E !== undefined
         ? { SKIP_E2E: process.env.SKIP_E2E }

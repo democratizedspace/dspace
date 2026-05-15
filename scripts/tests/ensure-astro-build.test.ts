@@ -34,7 +34,7 @@ describe('ensureAstroBuild', () => {
         ensureAstroBuild({ root: tempDir, exec: execSpy, logger });
 
         expect(execSpy).toHaveBeenCalledTimes(1);
-        expect(execSpy.mock.calls[0][0]).toBe('npm run build');
+        expect(execSpy.mock.calls[0][0]).toBe('node scripts/run-astro-build.mjs');
     });
 
     it('skips rebuild when both server and client assets are present', () => {
@@ -48,7 +48,7 @@ describe('ensureAstroBuild', () => {
     });
 
     it('retries once after removing dist when stderr includes ENOENT', () => {
-        const buildError = new Error('Command failed: npm run build') as Error & { stderr?: Buffer };
+        const buildError = new Error('Command failed: node scripts/run-astro-build.mjs') as Error & { stderr?: Buffer };
         buildError.stderr = Buffer.from('ENOENT: no such file or directory');
         execSpy
             .mockImplementationOnce(() => {
@@ -65,7 +65,7 @@ describe('ensureAstroBuild', () => {
     });
 
     it('logs a retry-specific error message when retry build fails', () => {
-        const firstError = new Error('Command failed: npm run build') as Error & { stderr?: Buffer };
+        const firstError = new Error('Command failed: node scripts/run-astro-build.mjs') as Error & { stderr?: Buffer };
         firstError.stderr = Buffer.from('ENOENT: no such file or directory');
         const secondError = new Error('second build failed');
 

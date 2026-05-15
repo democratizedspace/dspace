@@ -9,22 +9,22 @@ describe('prepare-pr.sh automation', () => {
     const scriptPath = path.join(__dirname, '..', 'frontend', 'scripts', 'prepare-pr.sh');
     const script = fs.readFileSync(scriptPath, 'utf8');
 
-    it('invokes lint and formatting via npm run check when lint is not skipped', () => {
+    it('invokes lint and formatting directly when lint is not skipped', () => {
         // Intentionally keep this match loose: we only assert the skip flag appears before
         // the lint command somewhere in the script to avoid brittleness to refactors.
-        expect(script).toMatch(/SKIP_LINT[\s\S]*npm run check/);
+        expect(script).toMatch(/SKIP_LINT[\s\S]*node scripts\/run-lint\.mjs[\s\S]*prettier/);
     });
 
     it('runs root unit tests when not explicitly skipped', () => {
         // Intentionally keep this match loose: we only assert the skip flag appears before
         // the root test command somewhere in the script to avoid brittleness to refactors.
-        expect(script).toMatch(/SKIP_UNIT_TESTS[\s\S]*npm run test:root/);
+        expect(script).toMatch(/SKIP_UNIT_TESTS[\s\S]*node frontend\/scripts\/build-processes\.mjs[\s\S]*vitest\.mjs/);
     });
 
     it('executes grouped Playwright suites when E2E checks are enabled', () => {
         // Intentionally keep this match loose: we only assert the skip flag appears before
         // the E2E command somewhere in the script to avoid brittleness to refactors.
-        expect(script).toMatch(/SKIP_E2E[\s\S]*npm run test:e2e:groups/);
+        expect(script).toMatch(/SKIP_E2E[\s\S]*node scripts\/setup-test-env\.js[\s\S]*node scripts\/run-test-groups\.mjs/);
     });
 });
 

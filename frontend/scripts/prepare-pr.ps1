@@ -31,7 +31,7 @@ try {
 
     # Step 1: Run linting and formatting
     Write-Host "Step 1/3: Checking code formatting and linting..."
-    npm run check
+    node scripts/run-lint.mjs; if ($LASTEXITCODE -eq 0) { & .\node_modules\.bin\prettier.cmd --config .prettierrc --check "**/*.{js,ts,svelte,json,md}" }
     if ($LASTEXITCODE -ne 0) {
         Write-Host "❌ Formatting or linting issues found. Please fix them before submitting your PR." -ForegroundColor Red
         Set-Location -Path $originalDir
@@ -42,7 +42,7 @@ try {
     # Step 2: Run unit tests unless skipped
     if (-not $env:SKIP_UNIT_TESTS) {
         Write-Host "`nStep 2/3: Running unit tests..."
-        $testOutput = npm run test:root 2>&1
+        $testOutput = & powershell -NoProfile -Command "Set-Location ..; node frontend/scripts/build-processes.mjs; if ($LASTEXITCODE -eq 0) { node scripts/write-build-meta.mjs }; if ($LASTEXITCODE -eq 0) { node scripts/build-docs-rag-index.mjs }; if ($LASTEXITCODE -eq 0) { node ./node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1 }" 2>&1
         Write-Host $testOutput
         if ($LASTEXITCODE -ne 0) {
             Write-Host "❌ Unit tests failed. Please fix them before submitting your PR." -ForegroundColor Red
@@ -60,7 +60,7 @@ try {
     # Step 3: Run grouped E2E tests unless disabled
     if (-not $env:SKIP_E2E) {
         Write-Host "`nStep 3/3: Running end-to-end tests (grouped)..."
-        $e2eOutput = npm run test:e2e:groups 2>&1
+        $e2eOutput = & powershell -NoProfile -Command "node scripts/setup-test-env.js; if ($LASTEXITCODE -eq 0) { node scripts/run-test-groups.mjs }" 2>&1
         Write-Host $e2eOutput
         if ($LASTEXITCODE -ne 0) {
             Write-Host "❌ End-to-end tests failed. Please fix them before submitting your PR." -ForegroundColor Red

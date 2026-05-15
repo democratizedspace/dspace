@@ -69,7 +69,7 @@ describe('ensurePlaywrightBrowsers', () => {
     const sanitizedEnv = sanitizeProxyEnv(envWithProxy);
     const expectedEnv = {
       ...sanitizedEnv,
-      NODE_OPTIONS: '--dns-result-order=ipv4first',
+      NODE_OPTIONS: expect.stringContaining('--dns-result-order=ipv4first'),
     };
     const execFileSync = vi.fn((_command, args: string[]) => {
       const action = args[1];
@@ -234,8 +234,11 @@ describe('ensurePlaywrightBrowsers', () => {
       expect(execFileSync.mock.calls[0][2]?.env?.HTTP_PROXY).toBeUndefined();
       expect(execFileSync.mock.calls[0][2]?.env?.HTTPS_PROXY).toBeUndefined();
       expect(execFileSync.mock.calls[0][2]?.env).toEqual({
-        NODE_OPTIONS: '--dns-result-order=ipv4first',
+        NODE_OPTIONS: expect.stringContaining('--dns-result-order=ipv4first'),
       });
+      expect(execFileSync.mock.calls[0][2]?.env?.NODE_OPTIONS).toContain(
+        'known-node-warning-filter.cjs'
+      );
       expect(mkdirSync).toHaveBeenCalledWith(frontendRoot, {
         recursive: true,
       });

@@ -2,6 +2,7 @@ import { defineConfig } from '@playwright/test';
 import { execSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { withKnownNodeWarningFilter } from '../scripts/node-warning-filter-env.mjs';
 import { fileURLToPath } from 'node:url';
 import { ensurePlaywrightBrowsers } from './scripts/utils/ensure-playwright-browsers.js';
 import {
@@ -72,7 +73,11 @@ function ensureAstroBuildArtifacts(): void {
 
     console.log('Astro build artifacts not found. Building before Playwright preview.');
     try {
-        execSync('npm run build', { cwd: frontendDir, stdio: 'inherit' });
+        execSync('node scripts/run-astro-build.mjs', {
+            cwd: frontendDir,
+            stdio: 'inherit',
+            env: withKnownNodeWarningFilter(process.env),
+        });
     } catch (error) {
         console.error('Failed to build Astro project required for Playwright preview.');
         throw error;
@@ -293,13 +298,13 @@ export default defineConfig({
         ? {
               // Ensure preview always has complete, test-compatible build artifacts, including
               // quest-graph debug marker checks for direct Playwright invocation.
-              command: `node ./scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
+              command: `node ./scripts/ensure-astro-build.mjs && node ./node_modules/astro/astro.js preview --host 0.0.0.0 --port ${port}`,
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,
               timeout: 180000,
               env: {
-                  ...process.env,
+                  ...withKnownNodeWarningFilter(process.env),
                   PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
               },
           }
