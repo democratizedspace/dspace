@@ -1,0 +1,27 @@
+{
+  "id": "2026-05-15-node-experimental-warning-validation-noise",
+  "date": "2026-05-15",
+  "component": "validation scripts and Playwright webServer output",
+  "impact": "The normal validation sequence completed with repeated third-party ExperimentalWarning snippets, making local and CI logs look noisy even when checks passed.",
+  "rootCause": "Newer Node/npm toolchains emitted ExperimentalWarning messages when npm's bundled debug package required supports-color as ESM, and ESLint legacy eslintrc loading emitted the same warning when @eslint/eslintrc required svelte-eslint-parser. Nested npm/npx invocations and Playwright webServer startup repeated the warning across lint, a11y lint, ESLint, and grouped E2E preview output.",
+  "resolution": "Added a narrow Node warning preload that drops only the known npm/debug/supports-color and @eslint/eslintrc/svelte-eslint-parser ExperimentalWarning messages, routed lint/build/Playwright child processes through that preload, and replaced recurring nested npm/npx validation invocations with direct node-based tool calls where practical. Existing ESLintRCWarning suppression remains in place, and real lint, type, build, test, console error, and Playwright failures continue to surface normally.",
+  "verification": [
+    "npm run lint",
+    "npm run type-check",
+    "npm run build",
+    "npm test",
+    "node scripts/link-check.mjs",
+    "npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts"
+  ],
+  "references": [
+    "scripts/known-node-warning-filter.cjs",
+    "scripts/node-warning-filter-env.mjs",
+    "frontend/scripts/run-lint.mjs",
+    "frontend/scripts/utils/ensure-playwright-browsers.js",
+    "frontend/playwright.config.ts",
+    "frontend/scripts/prepare-pr.sh",
+    "scripts/build-with-sha.mjs",
+    "run-tests.js"
+  ],
+  "longForm": "outages/2026-05-15-node-experimental-warning-validation-noise.md"
+}

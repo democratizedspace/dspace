@@ -21,7 +21,9 @@ test('prepare-pr scripts call Playwright bootstrap helper and run root tests', (
   expect(sh).not.toMatch(/--with-deps/);
   expect(ps).not.toMatch(/--with-deps/);
 
-  // Root tests are run afterward
-  expect(sh).toMatch(/npm run test:root/);
-  expect(ps).toMatch(/npm run test:root/);
+  // Root tests are run afterward without re-entering npm.
+  expect(sh).toMatch(/node frontend\/scripts\/build-processes\.mjs/);
+  expect(sh).toMatch(/vitest\.mjs/);
+  expect(ps).toMatch(/node frontend\/scripts\/build-processes\.mjs/);
+  expect(ps).toMatch(/vitest\.mjs/);
 });

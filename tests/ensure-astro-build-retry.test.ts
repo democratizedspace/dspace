@@ -26,7 +26,7 @@ describe('ensureAstroBuild retry behavior', () => {
     });
 
     it('cleans dist/ once and retries once when first build failure contains ENOENT', () => {
-        const retryableError = new Error('Command failed: npm run build') as Error & { stderr?: Buffer };
+        const retryableError = new Error('Command failed: node scripts/run-astro-build.mjs') as Error & { stderr?: Buffer };
         retryableError.stderr = Buffer.from('ENOENT: no such file or directory, open dist/client/_astro/x');
         const execSpy = vi
             .fn()
@@ -47,7 +47,7 @@ describe('ensureAstroBuild retry behavior', () => {
     });
 
     it('does not retry when build failure is non-ENOENT', () => {
-        const nonRetryableError = new Error('Command failed: npm run build') as Error & { stderr?: Buffer };
+        const nonRetryableError = new Error('Command failed: node scripts/run-astro-build.mjs') as Error & { stderr?: Buffer };
         nonRetryableError.stderr = Buffer.from('TypeError: Cannot read properties of undefined');
         const execSpy = vi.fn().mockImplementation(() => {
             throw nonRetryableError;

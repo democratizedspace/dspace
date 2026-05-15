@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { appendNodeOption, warningFilterPath } from '../../../scripts/node-warning-filter-env.mjs';
 
 const PLAYWRIGHT_RELATIVE_CLI = path.join('node_modules', '@playwright', 'test', 'cli.js');
 const INSTALL_ARGS = ['install', 'chromium', 'chromium-headless-shell'];
@@ -36,9 +37,14 @@ export function withPlaywrightNetworkEnv(env = process.env) {
     const mergedEnv = { ...env };
     const existingNodeOptions = mergedEnv.NODE_OPTIONS || '';
 
-    if (!existingNodeOptions.includes('--dns-result-order')) {
-        mergedEnv.NODE_OPTIONS = `${existingNodeOptions} --dns-result-order=ipv4first`.trim();
+    let nextNodeOptions = existingNodeOptions;
+
+    if (!nextNodeOptions.includes('--dns-result-order')) {
+        nextNodeOptions = appendNodeOption(nextNodeOptions, '--dns-result-order=ipv4first');
     }
+
+    nextNodeOptions = appendNodeOption(nextNodeOptions, `--require=${warningFilterPath}`);
+    mergedEnv.NODE_OPTIONS = nextNodeOptions;
 
     return mergedEnv;
 }

@@ -33,22 +33,22 @@ describe('run-tests.js', () => {
         expect(code).toBe(0);
         expect(execSyncMock).toHaveBeenNthCalledWith(
             1,
-            'npm run test:root',
+            expect.stringContaining('vitest.mjs run --config vitest.config.mts'),
             expect.objectContaining({ encoding: 'utf-8', stdio: 'pipe' })
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
             2,
-            'npm run test:quest-validation',
+            expect.stringContaining('tests/questDialogueValidation.test.ts'),
             expect.objectContaining({ stdio: 'inherit' })
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
             3,
-            'npm run hardening:validate',
+            'node frontend/scripts/validate-hardening.mjs',
             expect.objectContaining({ stdio: 'inherit' })
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
             4,
-            'npm run test:docs-rag',
+            'node scripts/test-docs-rag.mjs',
             expect.objectContaining({ stdio: 'inherit' })
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
@@ -71,12 +71,12 @@ describe('run-tests.js', () => {
         expect(execSyncMock).toHaveBeenCalledTimes(3);
         expect(execSyncMock).toHaveBeenNthCalledWith(
             1,
-            'npm run hardening:validate',
+            'node frontend/scripts/validate-hardening.mjs',
             expect.objectContaining({ stdio: 'inherit' })
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(
             2,
-            'npm run test:docs-rag',
+            'node scripts/test-docs-rag.mjs',
             expect.objectContaining({ stdio: 'inherit' })
         );
         expect(execSyncMock).toHaveBeenNthCalledWith(

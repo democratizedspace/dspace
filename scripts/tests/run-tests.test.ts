@@ -21,7 +21,7 @@ describe('runTests', () => {
     const code = runTests(exec, 'linux');
     expect(code).toBe(1);
     expect(exec).toHaveBeenCalledWith(
-      'npm run test:root',
+      expect.stringContaining('vitest.mjs run --config vitest.config.mts'),
       expect.objectContaining({
         encoding: 'utf-8',
         stdio: 'pipe',
@@ -42,15 +42,19 @@ describe('runTests', () => {
       .mockReturnValueOnce('');
     const code = runTests(exec, 'linux');
     expect(code).toBe(0);
-    expect(exec).toHaveBeenNthCalledWith(2, 'npm run test:quest-validation', {
-      stdio: 'inherit',
-    });
-    expect(exec).toHaveBeenNthCalledWith(3, 'npm run hardening:validate', {
-      stdio: 'inherit',
-    });
+    expect(exec).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('tests/questDialogueValidation.test.ts'),
+      expect.objectContaining({ stdio: 'inherit' })
+    );
+    expect(exec).toHaveBeenNthCalledWith(
+      3,
+      'node frontend/scripts/validate-hardening.mjs',
+      expect.objectContaining({ stdio: 'inherit' })
+    );
     expect(exec).toHaveBeenNthCalledWith(
       4,
-      'npm run test:docs-rag',
+      'node scripts/test-docs-rag.mjs',
       expect.objectContaining({ stdio: 'inherit' })
     );
     expect(exec).toHaveBeenNthCalledWith(
@@ -110,7 +114,7 @@ describe('runTests', () => {
     expect(code).toBe(0);
     expect(exec).toHaveBeenNthCalledWith(
       1,
-      'npm run test:root',
+      expect.stringContaining('vitest.mjs run --config vitest.config.mts'),
       expect.objectContaining({
         encoding: 'utf-8',
         stdio: 'pipe',
@@ -119,7 +123,7 @@ describe('runTests', () => {
     );
     expect(exec).toHaveBeenNthCalledWith(
       2,
-      'npm run test:root',
+      expect.stringContaining('vitest.mjs run --config vitest.config.mts'),
       expect.objectContaining({
         encoding: 'utf-8',
         stdio: 'pipe',
