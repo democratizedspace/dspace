@@ -30,6 +30,8 @@
     let refreshing = false;
     let backups = [];
     let backupError = '';
+    let initializing = true;
+    let backupRefreshSequence = 0;
 
     const announce = (text, type = '') => {
         message = text;
@@ -47,28 +49,75 @@
     const loadBackups = async (providedToken = token) => {
         const trimmedToken = providedToken?.trim?.();
         if (!trimmedToken) return;
+
+        const refreshId = ++backupRefreshSequence;
         refreshing = true;
         backupError = '';
         try {
-            backups = await fetchBackupList(trimmedToken);
+            const nextBackups = await fetchBackupList(trimmedToken);
+            if (refreshId === backupRefreshSequence && token.trim() === trimmedToken) {
+                backups = nextBackups;
+            }
         } catch (err) {
-            backupError = err?.message || 'Unable to load backups right now.';
+            if (refreshId === backupRefreshSequence && token.trim() === trimmedToken) {
+                backupError = err?.message || 'Unable to load backups right now.';
+            }
         } finally {
-            refreshing = false;
+            if (refreshId === backupRefreshSequence) {
+                refreshing = false;
+            }
         }
     };
 
-    onMount(async () => {
-        token = await loadGitHubToken();
-        gistId = '';
-        await clearCloudGistId();
+    const markReady = () => {
+        initializing = false;
         root?.setAttribute('data-hydrated', 'true');
-        if (token) {
-            await loadBackups(token);
-        }
         if (typeof window !== 'undefined') {
             window.__cloudSyncReady = true;
         }
+    };
+
+    onMount(() => {
+        let mounted = true;
+        if (typeof window !== 'undefined') {
+            window.__cloudSyncReady = false;
+        }
+
+        const initialize = async () => {
+            let savedCredential = '';
+            let shouldRefreshBackups = false;
+            try {
+                savedCredential = await loadGitHubToken();
+                const enteredCredential = token;
+                if (!enteredCredential) {
+                    token ||= savedCredential;
+                    shouldRefreshBackups = Boolean(savedCredential);
+                }
+                gistId = '';
+                await clearCloudGistId();
+            } catch (err) {
+                const startupMessage =
+                    err?.message || 'Cloud Sync startup failed. You can retry manually.';
+                backupError = startupMessage;
+                announce(startupMessage, 'error');
+            } finally {
+                if (mounted) {
+                    markReady();
+                    if (shouldRefreshBackups && savedCredential) {
+                        void loadBackups(savedCredential);
+                    }
+                }
+            }
+        };
+
+        void initialize();
+
+        return () => {
+            mounted = false;
+            if (typeof window !== 'undefined') {
+                window.__cloudSyncReady = false;
+            }
+        };
     });
 
     const saveToken = async () => {
@@ -93,8 +142,11 @@
     };
 
     const clearTokenLocal = async () => {
+        backupRefreshSequence += 1;
         token = '';
         backups = [];
+        backupError = '';
+        refreshing = false;
         await clearGitHubToken();
     };
 
@@ -195,7 +247,7 @@
                         text={savingToken ? 'Saving…' : 'Save'}
                         onClick={saveToken}
                         inverted={true}
-                        disabled={savingToken}
+                        disabled={initializing || savingToken}
                         dataTestId="save-token"
                     >
                         {#if savingToken}
@@ -207,7 +259,7 @@
                         onClick={clearTokenLocal}
                         hazard={true}
                         dataTestId="clear-sync-token"
-                        disabled={savingToken || uploading || downloading}
+                        disabled={initializing || savingToken || uploading || downloading}
                     />
                 </div>
             </div>
@@ -231,7 +283,7 @@
                     onClick={clearGistId}
                     hazard={true}
                     dataTestId="clear-gist-id"
-                    disabled={uploading || downloading}
+                    disabled={initializing || uploading || downloading}
                 />
             </div>
             <p class="hint">Optional: paste a gist ID if you need a manual restore.</p>
@@ -241,7 +293,7 @@
                 text={uploading ? 'Uploading…' : 'Upload'}
                 onClick={handleUpload}
                 inverted={true}
-                disabled={uploading || savingToken}
+                disabled={initializing || uploading || savingToken}
             >
                 {#if uploading}
                     <span class="spinner" aria-hidden="true"></span>
@@ -250,7 +302,7 @@
             <Chip
                 text={downloading && downloadingId === 'manual' ? 'Downloading…' : 'Download'}
                 onClick={handleDownload}
-                disabled={downloading || savingToken}
+                disabled={initializing || downloading || savingToken}
             >
                 {#if downloading && downloadingId === 'manual'}
                     <span class="spinner" aria-hidden="true"></span>
@@ -277,7 +329,7 @@
                     text={refreshing ? 'Refreshing…' : 'Refresh'}
                     onClick={() => loadBackups()}
                     inverted={true}
-                    disabled={refreshing || !token}
+                    disabled={initializing || refreshing || !token}
                     dataTestId="refresh-backups"
                 >
                     {#if refreshing}
@@ -317,7 +369,7 @@
                                             : 'Restore'}
                                         onClick={() => handleDownload(backup.id)}
                                         inverted={true}
-                                        disabled={downloading || savingToken}
+                                        disabled={initializing || downloading || savingToken}
                                         dataTestId={`restore-backup-${backup.id}`}
                                     >
                                         {#if downloading && downloadingId === backup.id}

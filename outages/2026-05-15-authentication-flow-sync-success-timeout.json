@@ -1,0 +1,26 @@
+{
+    "id": "2026-05-15-authentication-flow-sync-success-timeout",
+    "date": "2026-05-15",
+    "component": "frontend/e2e/authentication-flow.spec.ts and Cloud Sync token form",
+    "impact": "The full local validation sequence could fail during grouped Structure Tests even though token validation and persistence still worked in isolation.",
+    "rootCause": "The authentication-flow E2E test interacted with the Cloud Sync form after a generic hydration wait. That wait could complete before the Syncer component finished loading saved credentials and marking itself ready. In parallel grouped runs, the test could fill and save while component startup was still in flight, allowing startup state to race the typed token and preventing the stable sync-success status from being observed.",
+    "resolution": "The Cloud Sync form now keeps token actions disabled until initialization completes, preserves a token typed during startup, resets the global readiness sentinel on mount/unmount, and only marks the form hydrated after token startup work is done. Startup failures finalize readiness so the user can recover, saved-token backup refresh runs after readiness instead of blocking the form, and the E2E test waits for the Cloud Sync form readiness sentinel before clicking the explicit save-token control and asserting the sync-success status.",
+    "verification": [
+        "npm run test:root -- frontend/src/pages/cloudsync/__tests__/Syncer.spec.ts tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts",
+        "npm run test:root -- frontend/src/pages/cloudsync/__tests__/Syncer.spec.ts",
+        "npm --prefix frontend run test:e2e -- authentication-flow.spec.ts",
+        "npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts",
+        "npm test",
+        "npm run lint",
+        "npm run type-check",
+        "npm run build",
+        "node scripts/link-check.mjs",
+        "npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs"
+    ],
+    "references": [
+        "frontend/e2e/authentication-flow.spec.ts",
+        "frontend/src/pages/cloudsync/svelte/Syncer.svelte",
+        "frontend/src/pages/cloudsync/__tests__/Syncer.spec.ts"
+    ],
+    "longForm": "outages/2026-05-15-authentication-flow-sync-success-timeout.md"
+}
