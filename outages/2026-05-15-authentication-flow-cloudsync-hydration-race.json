@@ -1,0 +1,24 @@
+{
+    "id": "2026-05-15-authentication-flow-cloudsync-hydration-race",
+    "date": "2026-05-15",
+    "component": "frontend/e2e authentication flow",
+    "impact": "The full local validation sequence could fail during grouped Structure Tests even though token validation and persistence still worked when the cloud sync form was fully hydrated.",
+    "rootCause": "frontend/e2e/authentication-flow.spec.ts waited for any hydrated node on /cloudsync, which could be the shared shell instead of the cloud-sync form. Under parallel grouped E2E load, Playwright could click the server-rendered Save button before Syncer.svelte finished mounting and attaching the saveToken handler, so no success status was rendered.",
+    "resolution": "Changed the authentication-flow E2E to wait for the cloud sync form's data-hydrated marker and __cloudSyncReady flag before saving the token, and repeated the targeted wait after reload before asserting the persisted token value.",
+    "verification": [
+        "npm --prefix frontend run test:e2e -- authentication-flow.spec.ts",
+        "npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts",
+        "npm test",
+        "npm run lint",
+        "npm run type-check",
+        "npm run build",
+        "node scripts/link-check.mjs",
+        "npm run lint; npm run type-check; npm run build; npm test; node scripts/link-check.mjs"
+    ],
+    "references": [
+        "frontend/e2e/authentication-flow.spec.ts",
+        "frontend/src/pages/cloudsync/svelte/Syncer.svelte",
+        "frontend/e2e/test-helpers.ts"
+    ],
+    "longForm": "outages/2026-05-15-authentication-flow-cloudsync-hydration-race.md"
+}
