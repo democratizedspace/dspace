@@ -21,7 +21,7 @@ describe('runTests', () => {
     const code = runTests(exec, 'linux');
     expect(code).toBe(1);
     expect(exec).toHaveBeenCalledWith(
-      'npm run test:root',
+      'node frontend/scripts/build-processes.mjs && node scripts/write-build-meta.mjs && node scripts/build-docs-rag-index.mjs && node node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1',
       expect.objectContaining({
         encoding: 'utf-8',
         stdio: 'pipe',
@@ -42,15 +42,23 @@ describe('runTests', () => {
       .mockReturnValueOnce('');
     const code = runTests(exec, 'linux');
     expect(code).toBe(0);
-    expect(exec).toHaveBeenNthCalledWith(2, 'npm run test:quest-validation', {
-      stdio: 'inherit',
-    });
-    expect(exec).toHaveBeenNthCalledWith(3, 'npm run hardening:validate', {
-      stdio: 'inherit',
-    });
+    expect(exec).toHaveBeenNthCalledWith(
+      2,
+      'node frontend/scripts/build-processes.mjs && node scripts/write-build-meta.mjs && node scripts/build-docs-rag-index.mjs && node node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1 tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts',
+      {
+        stdio: 'inherit',
+      }
+    );
+    expect(exec).toHaveBeenNthCalledWith(
+      3,
+      'node frontend/scripts/validate-hardening.mjs',
+      {
+        stdio: 'inherit',
+      }
+    );
     expect(exec).toHaveBeenNthCalledWith(
       4,
-      'npm run test:docs-rag',
+      'node scripts/test-docs-rag.mjs',
       expect.objectContaining({ stdio: 'inherit' })
     );
     expect(exec).toHaveBeenNthCalledWith(
@@ -110,7 +118,7 @@ describe('runTests', () => {
     expect(code).toBe(0);
     expect(exec).toHaveBeenNthCalledWith(
       1,
-      'npm run test:root',
+      'node frontend/scripts/build-processes.mjs && node scripts/write-build-meta.mjs && node scripts/build-docs-rag-index.mjs && node node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1',
       expect.objectContaining({
         encoding: 'utf-8',
         stdio: 'pipe',
@@ -119,7 +127,7 @@ describe('runTests', () => {
     );
     expect(exec).toHaveBeenNthCalledWith(
       2,
-      'npm run test:root',
+      'node frontend/scripts/build-processes.mjs && node scripts/write-build-meta.mjs && node scripts/build-docs-rag-index.mjs && node node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1',
       expect.objectContaining({
         encoding: 'utf-8',
         stdio: 'pipe',

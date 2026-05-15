@@ -22,7 +22,8 @@ const colors = Object.freeze({
 });
 
 function runRootUnitTests(exec) {
-  const rootCommand = 'npm run test:root';
+  const rootCommand =
+    'node frontend/scripts/build-processes.mjs && node scripts/write-build-meta.mjs && node scripts/build-docs-rag-index.mjs && node node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1';
   const execOptions = {
     encoding: 'utf-8',
     stdio: 'pipe',
@@ -85,7 +86,10 @@ function runTests(exec = execSync, platform = os.platform()) {
       console.log(
         `${colors.yellow}Running quest validation regression tests...${colors.reset}`
       );
-      exec('npm run test:quest-validation', { stdio: 'inherit' });
+      exec(
+        'node frontend/scripts/build-processes.mjs && node scripts/write-build-meta.mjs && node scripts/build-docs-rag-index.mjs && node node_modules/vitest/vitest.mjs run --config vitest.config.mts --testTimeout 20000 --maxWorkers=1 tests/questDialogueValidation.test.ts tests/questCompletableItems.test.ts tests/runTestsQuestRegression.test.ts',
+        { stdio: 'inherit' }
+      );
     } else {
       console.log(
         `${colors.yellow}Skipping root unit tests — coverage already generated in CI.${colors.reset}`
@@ -95,12 +99,12 @@ function runTests(exec = execSync, platform = os.platform()) {
     console.log(
       `${colors.yellow}Validating hardening metadata...${colors.reset}`
     );
-    exec('npm run hardening:validate', { stdio: 'inherit' });
+    exec('node frontend/scripts/validate-hardening.mjs', { stdio: 'inherit' });
 
     console.log(
       `${colors.yellow}Validating docs RAG artifacts...${colors.reset}`
     );
-    exec('npm run test:docs-rag', { stdio: 'inherit' });
+    exec('node scripts/test-docs-rag.mjs', { stdio: 'inherit' });
 
     const scripts = {
       win32: {
