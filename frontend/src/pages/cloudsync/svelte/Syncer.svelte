@@ -31,6 +31,7 @@
     let backups = [];
     let backupError = '';
     let initializing = true;
+    let backupRefreshSequence = 0;
 
     const announce = (text, type = '') => {
         message = text;
@@ -48,14 +49,23 @@
     const loadBackups = async (providedToken = token) => {
         const trimmedToken = providedToken?.trim?.();
         if (!trimmedToken) return;
+
+        const refreshId = ++backupRefreshSequence;
         refreshing = true;
         backupError = '';
         try {
-            backups = await fetchBackupList(trimmedToken);
+            const nextBackups = await fetchBackupList(trimmedToken);
+            if (refreshId === backupRefreshSequence && token.trim() === trimmedToken) {
+                backups = nextBackups;
+            }
         } catch (err) {
-            backupError = err?.message || 'Unable to load backups right now.';
+            if (refreshId === backupRefreshSequence && token.trim() === trimmedToken) {
+                backupError = err?.message || 'Unable to load backups right now.';
+            }
         } finally {
-            refreshing = false;
+            if (refreshId === backupRefreshSequence) {
+                refreshing = false;
+            }
         }
     };
 
@@ -132,8 +142,11 @@
     };
 
     const clearTokenLocal = async () => {
+        backupRefreshSequence += 1;
         token = '';
         backups = [];
+        backupError = '';
+        refreshing = false;
         await clearGitHubToken();
     };
 

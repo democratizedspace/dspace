@@ -92,6 +92,60 @@ describe('Cloud Sync token save flow', () => {
         expect(fetchBackupListMock).toHaveBeenCalledWith(savedCredential);
     });
 
+    it('ignores stale startup backup results after saving a different token', async () => {
+        const savedCredential = `ghp_${'b'.repeat(36)}`;
+        const newCredential = `ghp_${'c'.repeat(36)}`;
+        let resolveSavedBackups: (backups: unknown[]) => void = () => {};
+        let resolveNewBackups: (backups: unknown[]) => void = () => {};
+        loadGitHubTokenMock.mockResolvedValue(savedCredential);
+        fetchBackupListMock.mockImplementation((requestedToken: string) => {
+            if (requestedToken === savedCredential) {
+                return new Promise((resolve) => {
+                    resolveSavedBackups = resolve;
+                });
+            }
+            if (requestedToken === newCredential) {
+                return new Promise((resolve) => {
+                    resolveNewBackups = resolve;
+                });
+            }
+            return Promise.resolve([]);
+        });
+
+        const { getByLabelText, getByTestId, queryByTestId } = render(Syncer);
+        const tokenInput = getByLabelText(/GitHub Token/i) as HTMLInputElement;
+        const saveButton = getByTestId('save-token');
+
+        await waitFor(() => expect(saveButton).toBeEnabled());
+        await waitFor(() => expect(fetchBackupListMock).toHaveBeenCalledWith(savedCredential));
+
+        await fireEvent.input(tokenInput, { target: { value: newCredential } });
+        await fireEvent.click(saveButton);
+
+        await waitFor(() => expect(fetchBackupListMock).toHaveBeenCalledWith(newCredential));
+        resolveNewBackups([
+            {
+                id: 'new-backup',
+                filename: 'New token backup',
+                htmlUrl: 'https://example.com/new',
+                createdAt: '2026-05-15T00:00:00.000Z',
+            },
+        ]);
+
+        await waitFor(() => expect(getByTestId('backup-link-new-backup')).toBeInTheDocument());
+        resolveSavedBackups([
+            {
+                id: 'saved-backup',
+                filename: 'Saved token backup',
+                htmlUrl: 'https://example.com/saved',
+                createdAt: '2026-05-14T00:00:00.000Z',
+            },
+        ]);
+
+        await waitFor(() => expect(getByTestId('backup-link-new-backup')).toBeInTheDocument());
+        expect(queryByTestId('backup-link-saved-backup')).not.toBeInTheDocument();
+    });
+
     it('waits for initialization before Save and preserves a token typed during startup', async () => {
         let resolveLoadedCredential: (credential: string) => void = () => {};
         loadGitHubTokenMock.mockReturnValue(
