@@ -41,8 +41,13 @@ then race the typed token, so the test did not reliably observe the production s
 
 - Keep Cloud Sync token actions disabled until component initialization completes.
 - Preserve a token typed during startup instead of overwriting it with the late-loaded saved token.
-- Mark `data-hydrated="true"` and `window.__cloudSyncReady` only after Cloud Sync startup work
-  completes.
+- Reset `window.__cloudSyncReady` on Cloud Sync mount/unmount so reloads and remounts observe the
+  newly loaded page state instead of a stale previous readiness value.
+- Mark `data-hydrated="true"` and `window.__cloudSyncReady` only after Cloud Sync token startup
+  work completes, and finalize readiness in the startup cleanup path so storage failures do not leave
+  the form permanently disabled.
+- Start saved-token backup refresh after readiness is marked so a slow backup listing does not block
+  token actions.
 - Update `authentication-flow.spec.ts` to wait for the Cloud Sync form's own hydration/readiness
   sentinel and click `data-testid="save-token"`.
 - Add focused component regression coverage for typing a token during startup and saving it after
@@ -50,8 +55,9 @@ then race the typed token, so the test did not reliably observe the production s
 
 ## Verification commands
 
+- `npm run test:root -- frontend/src/pages/cloudsync/__tests__/Syncer.spec.ts tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts`
+- `npm run test:root -- frontend/src/pages/cloudsync/__tests__/Syncer.spec.ts`
 - `npm --prefix frontend run test:e2e -- authentication-flow.spec.ts`
-- `npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts`
 - `npm test`
 - `npm run lint`
 - `npm run type-check`
