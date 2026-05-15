@@ -42,11 +42,12 @@ test('Authentication flow saves and clears token', async ({ page }) => {
 
     const token = 'ghp_' + 'a'.repeat(36);
     await page.goto('/cloudsync');
-    await waitForHydration(page);
+    await waitForHydration(page, 'data-testid=cloud-sync-form');
+    await expect.poll(() => page.evaluate(() => window.__cloudSyncReady === true)).toBeTruthy();
 
     const tokenInput = page.getByLabel(/GitHub Token/i);
     await tokenInput.fill(token);
-    await page.getByRole('button', { name: 'Save' }).click();
+    await page.getByTestId('save-token').click();
     await expect(page.getByTestId('sync-success')).toHaveText(/Token saved and validated/i);
 
     const getStoredToken = async () =>
@@ -86,7 +87,8 @@ test('Authentication flow saves and clears token', async ({ page }) => {
     await expect.poll(getStoredToken, { timeout: 30_000 }).toBe(token);
 
     await page.reload();
-    await waitForHydration(page);
+    await waitForHydration(page, 'data-testid=cloud-sync-form');
+    await expect.poll(() => page.evaluate(() => window.__cloudSyncReady === true)).toBeTruthy();
     await expect(tokenInput).toHaveValue(token);
 
     // clear token and verify removal
