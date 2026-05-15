@@ -11,7 +11,8 @@ $originalDir = Get-Location
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location -Path "$scriptDir\.."
 
-$nodeWarningFilter = "--require=../scripts/node-warning-filter.cjs"
+$nodeWarningFilterPath = Resolve-Path (Join-Path $PSScriptRoot "..\..\scripts\node-warning-filter.cjs")
+$nodeWarningFilter = "--require=$nodeWarningFilterPath"
 if (-not ($env:NODE_OPTIONS -split " " | Where-Object { $_ -eq $nodeWarningFilter })) {
     $env:NODE_OPTIONS = "$nodeWarningFilter $env:NODE_OPTIONS".Trim()
 }

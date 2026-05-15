@@ -32,12 +32,16 @@ declare const process: {
         REMOTE_MIGRATION_USE_WEBSERVER?: string;
         REMOTE_COMPLETIONIST_AWARD_III?: string;
         REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER?: string;
+        NODE_OPTIONS?: string;
     };
     argv: string[];
 };
 
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
+const nodeWarningFilterRequire = `--require=${fileURLToPath(
+    new URL('../scripts/node-warning-filter.cjs', import.meta.url)
+)}`;
 
 // Try to ensure Playwright browsers are available
 // In CI, browsers may be pre-installed or handled separately
@@ -301,10 +305,7 @@ export default defineConfig({
               env: {
                   ...process.env,
                   PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
-                  NODE_OPTIONS: [
-                      '--require=../scripts/node-warning-filter.cjs',
-                      process.env.NODE_OPTIONS || '',
-                  ]
+                  NODE_OPTIONS: [nodeWarningFilterRequire, process.env.NODE_OPTIONS || '']
                       .join(' ')
                       .trim(),
               },

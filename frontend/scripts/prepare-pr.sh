@@ -14,7 +14,7 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 cd "$SCRIPT_DIR/.." || exit 1
 
 # Filter only known third-party Node ExperimentalWarning noise from child npm/node tools.
-NODE_WARNING_FILTER="--require=../scripts/node-warning-filter.cjs"
+NODE_WARNING_FILTER="--require=$(realpath "$SCRIPT_DIR/../../scripts/node-warning-filter.cjs")"
 case " ${NODE_OPTIONS:-} " in
   *" $NODE_WARNING_FILTER "*) ;;
   *) export NODE_OPTIONS="$NODE_WARNING_FILTER ${NODE_OPTIONS:-}" ;;

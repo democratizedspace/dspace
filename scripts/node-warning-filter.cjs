@@ -1,7 +1,5 @@
 'use strict';
 
-const path = require('node:path');
-
 const FILTER_REQUIRE_OPTION = `--require=${__filename}`;
 
 const knownExperimentalWarningPairs = [

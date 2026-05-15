@@ -33,8 +33,9 @@ describe('node third-party warning filter', () => {
   it('prepends its preload hook without dropping existing NODE_OPTIONS', () => {
     const env = addNodeWarningFilterToEnv({ NODE_OPTIONS: '--trace-warnings' });
 
-    expect(env.NODE_OPTIONS).toContain('--require=');
-    expect(env.NODE_OPTIONS).toContain('node-warning-filter.cjs');
+    expect(env.NODE_OPTIONS.split(/\s+/)[0]).toBe(
+      `--require=${require.resolve('../scripts/node-warning-filter.cjs')}`
+    );
     expect(env.NODE_OPTIONS).toContain('--trace-warnings');
   });
 });
