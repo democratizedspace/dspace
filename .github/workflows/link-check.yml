@@ -16,6 +16,7 @@ jobs:
           args: >-
             --accept 200,403,429,503
             --exclude "http://localhost"
+            --exclude-path ".*node_modules.*"
             --timeout 30
             --max-retries 2
             --retry-wait-time 5
