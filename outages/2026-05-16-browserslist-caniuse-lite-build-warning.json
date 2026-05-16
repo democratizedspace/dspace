@@ -1,0 +1,14 @@
+{
+  "id": "2026-05-16-browserslist-caniuse-lite-build-warning",
+  "date": "2026-05-16",
+  "component": "frontend:astro-build-browserslist",
+  "longForm": "outages/2026-05-16-browserslist-caniuse-lite-build-warning.md",
+  "rootCause": "The pnpm override floor and npm/pnpm lock metadata still resolved Browserslist consumers to caniuse-lite 1.0.30001791, allowing stale browser-compat data to be installed for Astro/Vite build tooling.",
+  "resolution": "Raised the caniuse-lite override floor to >=1.0.30001792 and refreshed both package-lock.json and pnpm-lock.yaml to caniuse-lite 1.0.30001792 without changing browser support policy or broad dependency versions.",
+  "references": [
+    "package.json",
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "outages/2026-05-16-browserslist-caniuse-lite-build-warning.md"
+  ]
+}
