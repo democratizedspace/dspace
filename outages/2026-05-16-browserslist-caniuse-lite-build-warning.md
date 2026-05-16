@@ -5,7 +5,9 @@
 `npm run build` completed, but the Astro build log printed:
 
 ```text
-Browserslist: browsers data (caniuse-lite) is 11 months old
+Browserslist: browsers data (caniuse-lite) is 11 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
 ```
 
 ## Impact

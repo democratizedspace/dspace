@@ -4,7 +4,9 @@ import { describe, it, expect } from 'vitest';
 
 describe('package.json', () => {
   it('declares pnpm with a full semver version', () => {
-    const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
+    const pkg = JSON.parse(
+      readFileSync(join(__dirname, '..', 'package.json'), 'utf8')
+    );
     expect(pkg.packageManager).toMatch(/^pnpm@\d+\.\d+\.\d+$/);
   });
 });
@@ -31,14 +33,14 @@ describe('frontend/package.json', () => {
 });
 
 describe('.npmrc', () => {
-  it('pins pnpm via Corepack configuration', () => {
+  it('keeps pnpm declaration in package.json instead of npm config', () => {
     const npmrcPath = join(__dirname, '..', '.npmrc');
     expect(existsSync(npmrcPath)).toBe(true);
     const lines = readFileSync(npmrcPath, 'utf8')
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter(Boolean);
-    expect(lines).toContain('packageManager=pnpm@9.0.0');
+    expect(lines).not.toContain('packageManager=pnpm@9.0.0');
   });
 
   it('keeps frontend npm peer behavior explicit for local installs', () => {
