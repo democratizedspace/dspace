@@ -1,0 +1,15 @@
+{
+  "id": "2026-05-16-npm-update-notifier-validation-noise",
+  "date": "2026-05-16",
+  "component": "validation-tooling:npm-config",
+  "longForm": "outages/2026-05-16-npm-update-notifier-validation-noise.md",
+  "rootCause": "Root and frontend project-level .npmrc files did not disable npm's update notifier, and root scripts delegate to nested npm commands from frontend/ where the frontend npm config is used.",
+  "resolution": "Added update-notifier=false to both root and frontend .npmrc files so repo-local validation and nested frontend npm scripts suppress only npm's version-update banner while preserving normal command behavior and failure output.",
+  "references": [
+    ".npmrc",
+    "frontend/.npmrc",
+    "package.json",
+    "frontend/package.json",
+    "outages/2026-05-16-npm-update-notifier-validation-noise.md"
+  ]
+}
