@@ -9,13 +9,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import os from 'os';
 import { withPlaywrightNetworkEnv } from './utils/ensure-playwright-browsers.js';
-import { createRequire } from 'module';
 
 // Get the directory name in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const require = createRequire(import.meta.url);
-const { addNodeWarningFilterToEnv } = require('../../scripts/node-warning-filter.cjs');
 
 // Determine optimal number of workers based on CPU cores
 const CPU_CORES = os.cpus().length;
@@ -314,7 +311,7 @@ function runTestGroup(group) {
         execSync(command, {
             stdio: 'inherit',
             cwd: rootDir,
-            env: addNodeWarningFilterToEnv(withPlaywrightNetworkEnv()),
+            env: withPlaywrightNetworkEnv(),
         });
         console.log(`${colors.green}✓ ${group.name} completed successfully${colors.reset}`);
         return true;

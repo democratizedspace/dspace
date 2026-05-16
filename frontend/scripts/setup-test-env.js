@@ -11,7 +11,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fsPromises from 'fs/promises';
 import { execSync } from 'child_process';
-import { createRequire } from 'module';
 import { resolveBuildMeta, writeBuildMeta } from '../../scripts/write-build-meta.mjs';
 
 const isRemotePlaywrightModeWithoutWebServerOverride = () => {
@@ -45,8 +44,6 @@ const isRemotePlaywrightModeWithoutWebServerOverride = () => {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const require = createRequire(import.meta.url);
-const { addNodeWarningFilterToEnv } = require('../../scripts/node-warning-filter.cjs');
 const rootDir = path.resolve(__dirname, '..');
 
 // Keep quest-graph debug flag opt-in. setup-test-env must not force a different
@@ -60,17 +57,8 @@ const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
 if (isRemotePlaywrightModeWithoutWebServerOverride()) {
     console.log('Remote Playwright mode detected; skipping local Astro build setup.');
 } else {
-    const rootExecEnv = addNodeWarningFilterToEnv();
-    execSync('npm run build:meta', {
-        cwd: path.resolve(rootDir, '..'),
-        env: rootExecEnv,
-        stdio: 'inherit',
-    });
-    execSync('npm run build:docs-rag', {
-        cwd: path.resolve(rootDir, '..'),
-        env: rootExecEnv,
-        stdio: 'inherit',
-    });
+    execSync('npm run build:meta', { cwd: path.resolve(rootDir, '..'), stdio: 'inherit' });
+    execSync('npm run build:docs-rag', { cwd: path.resolve(rootDir, '..'), stdio: 'inherit' });
     ensureAstroBuild();
 }
 
