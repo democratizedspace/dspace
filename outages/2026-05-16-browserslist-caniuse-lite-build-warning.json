@@ -1,0 +1,14 @@
+{
+  "id": "2026-05-16-browserslist-caniuse-lite-build-warning",
+  "date": "2026-05-16",
+  "component": "frontend:astro-build-browserslist",
+  "longForm": "outages/2026-05-16-browserslist-caniuse-lite-build-warning.md",
+  "rootCause": "The repository is pnpm-managed and normal builds resolve Browserslist data through the pnpm lockfile. The pnpm caniuse-lite override floor and pnpm-lock.yaml still resolved caniuse-lite 1.0.30001791 while the Browserslist database update flow reported 1.0.30001792 as the current dataset, allowing stale-data warnings such as `Browserslist: browsers data (caniuse-lite) is 11 months old` to appear during `npm run build` when local installs drifted behind the current Browserslist metadata.",
+  "resolution": "Ran `npx update-browserslist-db@latest`, preserved the repo's pnpm package-manager convention, bumped only the pnpm caniuse-lite override floor to `>=1.0.30001792`, regenerated the pnpm lock metadata, and aligned the existing npm lockfile caniuse-lite entry to the same dataset so both checked-in lockfiles carry current Browserslist data without changing browser support policy or broadly upgrading packages.",
+  "references": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "package-lock.json",
+    "frontend/package.json"
+  ]
+}
