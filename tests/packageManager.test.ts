@@ -30,24 +30,34 @@ describe('frontend/package.json', () => {
   });
 });
 
+function readNpmrcLines(...segments: string[]) {
+  const npmrcPath = join(__dirname, '..', ...segments);
+  expect(existsSync(npmrcPath)).toBe(true);
+
+  return readFileSync(npmrcPath, 'utf8')
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
 describe('.npmrc', () => {
-  it('pins pnpm via Corepack configuration', () => {
-    const npmrcPath = join(__dirname, '..', '.npmrc');
-    expect(existsSync(npmrcPath)).toBe(true);
-    const lines = readFileSync(npmrcPath, 'utf8')
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean);
-    expect(lines).toContain('packageManager=pnpm@9.0.0');
+  it('keeps package-manager pinning in package.json instead of npm project config', () => {
+    const lines = readNpmrcLines('.npmrc');
+    expect(lines).not.toContain('packageManager=pnpm@9.0.0');
+  });
+
+  it('disables npm update-notifier noise for root scripts', () => {
+    const lines = readNpmrcLines('.npmrc');
+    expect(lines).toContain('update-notifier=false');
   });
 
   it('keeps frontend npm peer behavior explicit for local installs', () => {
-    const npmrcPath = join(__dirname, '..', 'frontend', '.npmrc');
-    expect(existsSync(npmrcPath)).toBe(true);
-    const lines = readFileSync(npmrcPath, 'utf8')
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean);
+    const lines = readNpmrcLines('frontend', '.npmrc');
     expect(lines).toContain('legacy-peer-deps=true');
+  });
+
+  it('disables npm update-notifier noise for frontend scripts', () => {
+    const lines = readNpmrcLines('frontend', '.npmrc');
+    expect(lines).toContain('update-notifier=false');
   });
 });
