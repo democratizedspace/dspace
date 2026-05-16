@@ -1,0 +1,15 @@
+{
+  "id": "2026-05-16-npm-update-notifier-validation-noise",
+  "date": "2026-05-16",
+  "component": "npm-validation-scripts",
+  "longForm": "outages/2026-05-16-npm-update-notifier-validation-noise.md",
+  "rootCause": "npm's default update notifier remained enabled for root and frontend npm script invocations, so local validation could print an npm 10.9.0 to 11.14.1 upgrade banner even when commands succeeded. The root .npmrc also duplicated the pnpm package-manager pin that already belongs in package.json, which made newer npm versions treat it as an unknown project config.",
+  "resolution": "Disabled npm's update notifier in the repository-local root and frontend .npmrc files, and kept the pnpm package-manager pin only in package.json so normal root scripts and nested frontend npm scripts keep their usual behavior and failure output without npm banner noise.",
+  "references": [
+    ".npmrc",
+    "frontend/.npmrc",
+    "package.json",
+    "tests/packageManager.test.ts",
+    "outages/2026-05-16-npm-update-notifier-validation-noise.md"
+  ]
+}
