@@ -1,0 +1,15 @@
+{
+  "id": "2026-05-16-npm-update-notifier-validation-noise",
+  "date": "2026-05-16",
+  "component": "validation-tooling:npm-config",
+  "longForm": "outages/2026-05-16-npm-update-notifier-validation-noise.md",
+  "rootCause": "The root and frontend npm scripts run npm from separate package directories, but neither repo-local .npmrc disabled npm's update notifier, allowing the host npm update banner to appear when npm 10.9.0 detected npm 11.14.1; the root .npmrc also duplicated packageManager even though package.json is the package-manager declaration source.",
+  "resolution": "Added update-notifier=false to both the root .npmrc and frontend/.npmrc, and removed the duplicate packageManager config from root .npmrc while leaving package.json as the package-manager declaration source, so normal validation commands suppress only npm's self-update notice while preserving script behavior and real failure output.",
+  "references": [
+    ".npmrc",
+    "frontend/.npmrc",
+    "package.json",
+    "frontend/package.json",
+    "outages/2026-05-16-npm-update-notifier-validation-noise.md"
+  ]
+}
