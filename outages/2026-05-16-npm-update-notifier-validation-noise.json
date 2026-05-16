@@ -1,0 +1,13 @@
+{
+  "id": "2026-05-16-npm-update-notifier-validation-noise",
+  "date": "2026-05-16",
+  "component": "validation-tooling:npm-config",
+  "longForm": "outages/2026-05-16-npm-update-notifier-validation-noise.md",
+  "rootCause": "The repo-local npm configuration did not disable npm's update notifier, so npm could print the global CLI upgrade banner during otherwise successful root and nested frontend validation scripts when the installed npm 10.9.0 detected npm 11.14.1 was available.",
+  "resolution": "Added update-notifier=false to both the root and frontend .npmrc files so normal repo validation commands and nested frontend npm invocations suppress only npm's update-notifier banner while preserving normal script output and failure reporting.",
+  "references": [
+    ".npmrc",
+    "frontend/.npmrc",
+    "outages/2026-05-16-npm-update-notifier-validation-noise.md"
+  ]
+}
