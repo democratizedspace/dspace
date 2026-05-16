@@ -41,6 +41,9 @@ install or script errors, upgrade global npm, or change the package-manager conv
 - `npm run lint`
 - `npm run type-check`
 - `npm run build`
-- `npm test`
 - `node scripts/link-check.mjs`
 - `npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts`
+
+`npm test` was also attempted as a full-suite check, but it did not complete in this
+environment because Playwright could not download Chromium due to an unrelated network
+`ENETUNREACH` error.
