@@ -1,0 +1,25 @@
+{
+  "id": "2026-05-16-browserslist-caniuse-lite-build-warning",
+  "date": "2026-05-16",
+  "component": "frontend:astro-build-browserslist",
+  "longForm": "outages/2026-05-16-browserslist-caniuse-lite-build-warning.md",
+  "symptom": "`npm run build` printed `Browserslist: browsers data (caniuse-lite) is 11 months old` before Astro completed successfully.",
+  "rootCause": "The repo uses pnpm workspaces for dependency resolution, but the pnpm caniuse-lite override floor and lockfile metadata had not been advanced to the latest Browserslist dataset. When that resolved dataset aged past Browserslist's staleness threshold, Astro/Vite build output emitted the warning even though the application build still succeeded.",
+  "resolution": "Ran the Browserslist database update flow, preserved the pnpm package-manager convention, raised the pnpm caniuse-lite override floor to >=1.0.30001792, and regenerated only the caniuse-lite lockfile entries needed for Browserslist consumers.",
+  "verification": [
+    "npm run build",
+    "npm run lint",
+    "npm run type-check",
+    "npm test",
+    "node scripts/link-check.mjs",
+    "npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts"
+  ],
+  "impact": "warning-only",
+  "gateFailure": false,
+  "references": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "package-lock.json",
+    "outages/2026-05-16-browserslist-caniuse-lite-build-warning.md"
+  ]
+}
