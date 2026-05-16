@@ -5,7 +5,9 @@
 `npm run build` completed, but the Astro build log printed:
 
 ```text
-Browserslist: browsers data (caniuse-lite) is 11 months old
+Browserslist: browsers data (caniuse-lite) is 11 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
 ```
 
 ## Impact
@@ -24,8 +26,9 @@ for Astro/Vite build tooling.
 
 Ran the Browserslist database update flow for the pnpm workspace, then raised the repository
 `caniuse-lite` override floor to `>=1.0.30001792` and refreshed the npm and pnpm lock metadata to
-`caniuse-lite` `1.0.30001792`. No browser support policy changed and no broad dependency upgrades
-were introduced.
+`caniuse-lite` `1.0.30001792`. A follow-up `npx update-browserslist-db@latest` check reported
+`1.0.30001792` as the latest available dataset, so no browser support policy changed and no broad
+dependency upgrades were introduced.
 
 ## Verification commands
 
