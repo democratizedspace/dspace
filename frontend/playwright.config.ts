@@ -32,12 +32,16 @@ declare const process: {
         REMOTE_MIGRATION_USE_WEBSERVER?: string;
         REMOTE_COMPLETIONIST_AWARD_III?: string;
         REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER?: string;
+        NODE_OPTIONS?: string;
     };
     argv: string[];
 };
 
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
+const nodeWarningFilterRequire = `--require=${fileURLToPath(
+    new URL('../scripts/node-warning-filter.cjs', import.meta.url)
+)}`;
 
 // Try to ensure Playwright browsers are available
 // In CI, browsers may be pre-installed or handled separately
@@ -293,7 +297,7 @@ export default defineConfig({
         ? {
               // Ensure preview always has complete, test-compatible build artifacts, including
               // quest-graph debug marker checks for direct Playwright invocation.
-              command: `node ./scripts/ensure-astro-build.mjs && npx astro preview --host 0.0.0.0 --port ${port}`,
+              command: `node ./scripts/ensure-astro-build.mjs && node ./node_modules/astro/astro.js preview --host 0.0.0.0 --port ${port}`,
               cwd: frontendDir,
               url: baseURL,
               reuseExistingServer: !isCI,
@@ -301,6 +305,9 @@ export default defineConfig({
               env: {
                   ...process.env,
                   PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
+                  NODE_OPTIONS: [nodeWarningFilterRequire, process.env.NODE_OPTIONS || '']
+                      .join(' ')
+                      .trim(),
               },
           }
         : undefined,

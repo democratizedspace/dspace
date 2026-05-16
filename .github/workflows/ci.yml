@@ -50,6 +50,7 @@ jobs:
           args: >-
             --accept 200,403,429,503
             --exclude "http://localhost"
+            --exclude-path ".*node_modules.*"
             --no-progress --verbose
             "docs/**/*.md" "frontend/src/pages/docs/**/*.md"
           format: markdown

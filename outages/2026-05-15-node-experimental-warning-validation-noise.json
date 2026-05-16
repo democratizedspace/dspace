@@ -1,0 +1,16 @@
+{
+  "id": "2026-05-15-node-experimental-warning-validation-noise",
+  "date": "2026-05-15",
+  "component": "validation-tooling",
+  "longForm": "outages/2026-05-15-node-experimental-warning-validation-noise.md",
+  "rootCause": "Node emitted ExperimentalWarning diagnostics for known third-party CommonJS-to-ESM interop inside npm's debug/supports-color dependency path and ESLint's eslintrc/svelte-eslint-parser compatibility path while validation scripts ran npm, npx, ESLint, and Playwright web server invocations.",
+  "resolution": "Added a targeted Node preload filter for only those third-party ExperimentalWarning messages and applied it to the prompt-surface validation entry points that emitted the noise, using absolute preload paths so inherited NODE_OPTIONS does not depend on child process working directories. Real lint, type, build, test, console, and Playwright failures still surface normally.",
+  "references": [
+    "scripts/node-warning-filter.cjs",
+    "frontend/package.json",
+    "frontend/scripts/prepare-pr.sh",
+    "frontend/scripts/prepare-pr.ps1",
+    "frontend/playwright.config.ts",
+    "tests/nodeWarningFilter.test.ts"
+  ]
+}
