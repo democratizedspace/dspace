@@ -1,0 +1,25 @@
+{
+  "id": "2026-05-16-browserslist-caniuse-lite-refresh",
+  "date": "2026-05-16",
+  "component": "frontend:astro-build-browserslist",
+  "longForm": "outages/2026-05-16-browserslist-caniuse-lite-refresh.md",
+  "symptom": "`npm run build` printed `Browserslist: browsers data (caniuse-lite) is 11 months old` before Astro completed successfully.",
+  "rootCause": "The repository lockfiles still resolved Browserslist consumers to caniuse-lite metadata older than the latest published dataset, and the pnpm override floor still allowed the previous dataset floor.",
+  "resolution": "Refreshed npm and pnpm lock metadata to caniuse-lite 1.0.30001792 and raised the pnpm override floor to >=1.0.30001792 without changing browser support policy or performing broad package upgrades.",
+  "verification": [
+    "npm run build",
+    "npm run lint",
+    "npm run type-check",
+    "npm test",
+    "node scripts/link-check.mjs",
+    "npm run test:root -- tests/outagesConventions.test.ts tests/docsPromptsOutages.test.ts"
+  ],
+  "impact": "warning-only",
+  "gateFailure": false,
+  "references": [
+    "package.json",
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "outages/2026-05-16-browserslist-caniuse-lite-refresh.md"
+  ]
+}
