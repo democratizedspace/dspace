@@ -40,7 +40,7 @@ describe('.npmrc', () => {
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter(Boolean);
-    expect(lines).not.toContain('packageManager=pnpm@9.0.0');
+    expect(lines.some((line) => /^packageManager\s*=/.test(line))).toBe(false);
   });
 
   it('keeps frontend npm peer behavior explicit for local installs', () => {
