@@ -14,6 +14,8 @@ describe('April 1, 2026 changelog release checklist', () => {
     '20260401.md'
   );
 
+  const qaChecklistPath = join(process.cwd(), 'docs', 'qa', 'v3.0.1.md');
+
   it('drops the prerelease checklist language from the published notes', () => {
     const content = readFileSync(changelogPath, 'utf8');
 
@@ -24,6 +26,19 @@ describe('April 1, 2026 changelog release checklist', () => {
     expect(content).not.toMatch(/💯/);
   });
 
+  it('keeps the v3.0.1 audit signoff open until rc.4-specific paths are covered', () => {
+    const content = readFileSync(qaChecklistPath, 'utf8');
+
+    expect(content).toContain(
+      '- [ ] QA signoff confirms this checklist and executed test scope were derived from the audited commit delta above'
+    );
+    expect(content).toMatch(
+      /completed custom quests in\s+the completed section/
+    );
+    expect(content).toContain('`/settings` responsive layout');
+    expect(content).toContain('QuestChat readiness/status behavior');
+  });
+
   it('publishes the v3.0.1 reader guide in the changelog body', () => {
     const content = readFileSync(changelogPath, 'utf8');
 
@@ -32,5 +47,10 @@ describe('April 1, 2026 changelog release checklist', () => {
     );
     expect(content).toContain('### Reader guide and verification routes');
     expect(content).toContain('The player-visible route checks for v3.0.1');
+    expect(content).toContain(
+      'completed custom quests into the Completed Quests section'
+    );
+    expect(content).toContain('stabilized QuestChat readiness/status behavior');
+    expect(content).toContain('responsive `/settings` layout');
   });
 });
