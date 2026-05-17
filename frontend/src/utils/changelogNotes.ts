@@ -203,18 +203,6 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
             href: '/docs/changelog/20260401',
             linkLabel: 'Player route checks',
         },
-        {
-            message:
-                'v3.1 mainline QA note: token.place remains the headline v3.1 release gate, and staging/production/rollback/closeout evidence remains open until the v3.1 QA checklist closes those gates.',
-            href: '/docs/token-place',
-            linkLabel: 'token.place integration doc',
-        },
-        {
-            message:
-                'v3.1 mainline QA note: post-v3 baseline work also covers faster `/quests` browsing, safer custom quest links, summary-first `/processes` rows, deferred `/docs` corpus loading, dChat confidence checks, custom-content import hardening, Cloud Sync race fixes, and operator/runbook reliability work.',
-            href: '/docs/qa/v3.1',
-            linkLabel: 'v3.1 QA checklist',
-        },
     ],
 };
 
