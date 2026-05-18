@@ -26,14 +26,15 @@ describe('April 1, 2026 changelog release checklist', () => {
     expect(content).not.toMatch(/💯/);
   });
 
-  it('keeps the v3.0.1 audit signoff open until rc.4-specific paths are covered', () => {
+  it('records rc.5 audit signoff with evidence for required checklist paths', () => {
     const content = readFileSync(qaChecklistPath, 'utf8');
 
     expect(content).toContain(
-      '- [ ] QA signoff confirms this checklist and executed test scope were derived from the audited commit delta above'
+      '- [x] QA signoff confirms this checklist and executed test scope were derived from the audited commit delta above'
     );
+    expect(content).toContain('92a1bcb847cb5c8ec3d0d6cd82fcee05d1e22cdc');
     expect(content).toMatch(
-      /completed custom quests in\s+the completed section/
+      /Completed custom quests move into the Completed Quests section/
     );
     expect(content).toContain('`/settings` responsive layout');
     expect(content).toContain('QuestChat readiness/status behavior');
