@@ -95,7 +95,7 @@ test.describe('Custom quest chat rendering', () => {
             `[data-testid="custom-quests-section"] [data-questid="${questId}"]`
         );
         const completedCustomQuestCard = page.locator(
-            `xpath=//h2[normalize-space(.)="Completed Quests"]/following-sibling::a[@data-questid="${questId}"]`
+            `h2:has-text("Completed Quests") ~ a[data-questid="${questId}"]`
         );
 
         await expect(activeCustomQuestCard).toHaveCount(0);
