@@ -79,21 +79,23 @@ test.describe('Custom quest chat rendering', () => {
 
         await page.goto('/quests');
         await waitForHydration(page);
-        await expect(page.locator('[data-testid="custom-quests-merge-status"]')).toHaveAttribute(
+        await expect(page.getByTestId('custom-quests-merge-status')).toHaveAttribute(
             'data-merge-complete',
             'true'
         );
 
         await page.reload();
         await waitForHydration(page);
-        await expect(page.locator('[data-testid="custom-quests-merge-status"]')).toHaveAttribute(
+        await expect(page.getByTestId('custom-quests-merge-status')).toHaveAttribute(
             'data-merge-complete',
             'true'
         );
 
-        const activeCustomQuestCard = page.locator(
-            `[data-testid="custom-quests-section"] [data-questid="${questId}"]`
-        );
+        await expect(page.getByRole('heading', { name: 'Completed Quests' })).toBeVisible();
+
+        const activeCustomQuestCard = page
+            .getByTestId('custom-quests-section')
+            .locator(`[data-questid="${questId}"]`);
         const completedCustomQuestCard = page.locator(
             `h2:has-text("Completed Quests") ~ a[data-questid="${questId}"]`
         );
@@ -103,7 +105,7 @@ test.describe('Custom quest chat rendering', () => {
         await expect(
             completedCustomQuestCard.locator('[data-testid="quest-tile"]')
         ).toHaveAttribute('data-status', 'completed');
-        await expect(completedCustomQuestCard).toContainText('Status: Completed');
+        await expect(completedCustomQuestCard.getByText('Status: Completed')).toBeVisible();
     });
 
     test('built-in quest chat still renders', async ({ page }) => {
