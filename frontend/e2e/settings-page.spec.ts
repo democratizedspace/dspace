@@ -47,11 +47,17 @@ test.describe('Settings route', () => {
 
             const layout = await page.evaluate(() => {
                 const settingsContent = document.querySelector('.settings-content');
-                const cards = Array.from(
-                    document.querySelectorAll(
-                        '.settings-content > .logout-panel, .settings-content > .qa-cheats, .settings-content > .qa-tools, .settings-content > .panel, .settings-content > .legacy-upgrade, .settings-content > .data-reset'
-                    )
-                );
+                const cardSelector = [
+                    '.logout-panel',
+                    '.qa-cheats',
+                    '.qa-tools',
+                    '.panel',
+                    '.legacy-upgrade',
+                    '.data-reset',
+                ].join(', ');
+                const cards = settingsContent
+                    ? Array.from(settingsContent.querySelectorAll(cardSelector))
+                    : [];
 
                 if (!settingsContent || cards.length < 3) {
                     return null;
@@ -204,15 +210,22 @@ test.describe('Settings route', () => {
             expectedColumns: 'multiple',
         });
 
+        const qaCheatsToggle = page.getByTestId('qa-cheats-toggle');
+        await expect(qaCheatsToggle).toBeVisible();
+        await qaCheatsToggle.click();
+        await expect(page.locator('.settings-content .qa-tools')).toBeVisible();
+
         const desktopLayout = await page.evaluate(() => {
             const settingsContent = document.querySelector('.settings-content');
-            const legacyUpgrade = document.querySelector('.legacy-upgrade');
-            const qaTools = document.querySelector('.qa-tools');
-            const cards = ['.logout-panel', '.qa-cheats', '.panel', '.data-reset']
-                .map((selector) => document.querySelector(selector))
-                .filter((element): element is Element => element !== null);
+            const legacyUpgrade = settingsContent?.querySelector('.legacy-upgrade');
+            const qaTools = settingsContent?.querySelector('.qa-tools');
+            const cards = settingsContent
+                ? ['.logout-panel', '.qa-cheats', '.panel', '.data-reset']
+                      .map((selector) => settingsContent.querySelector(selector))
+                      .filter((element): element is Element => element !== null)
+                : [];
 
-            if (!settingsContent || !legacyUpgrade || cards.length < 3) {
+            if (!settingsContent || !legacyUpgrade || !qaTools || cards.length < 3) {
                 return null;
             }
 
@@ -224,9 +237,7 @@ test.describe('Settings route', () => {
             const settingsContentRight =
                 settingsRect.right - parseFloat(settingsStyles.paddingRight || '0');
             const contentWidth = settingsContentRight - settingsContentLeft;
-            const fullWidthElements = [legacyUpgrade, qaTools].filter(
-                (element): element is Element => element !== null
-            );
+            const fullWidthElements = [legacyUpgrade, qaTools];
 
             const toRoundedTop = (element: Element): number =>
                 Math.round(element.getBoundingClientRect().top);
