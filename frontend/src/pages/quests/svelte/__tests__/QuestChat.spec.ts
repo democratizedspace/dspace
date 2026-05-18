@@ -198,6 +198,98 @@ describe('QuestChat', () => {
         ).toBe('/quests/3dprinting/start');
     });
 
+    it('clears placeholder loading copy once readiness resolves and keeps status current', async () => {
+        let resolveReady = () => {};
+        readyPromiseRef.current = new Promise<void>((resolve) => {
+            resolveReady = resolve;
+        });
+        isGameStateReadyMock.mockReturnValue(false);
+
+        const quest = {
+            id: 'readiness/status-check',
+            title: 'Readiness status check',
+            description: 'Ensures no stale status persists after ready.',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Ready now.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const { container } = render(QuestChat, { props: { quest } });
+
+        expect(container.querySelector('.temp-container')).not.toBeNull();
+        expect(container.textContent).toContain('Status:');
+        expect(container.textContent).toContain('In Progress');
+
+        isGameStateReadyMock.mockReturnValue(true);
+        resolveReady();
+
+        await waitFor(() => {
+            expect(container.querySelector('.npcDialogue')?.textContent).toContain('Ready now.');
+        });
+
+        expect(container.querySelector('.chat .temp-container')).toBeNull();
+        expect(container.textContent).toContain('Status:');
+        expect(container.textContent).toContain('In Progress');
+    });
+
+    it('cleans up readiness listeners and refresh timer on unmount/remount', async () => {
+        vi.useFakeTimers();
+        let resolveReady = () => {};
+        readyPromiseRef.current = new Promise<void>((resolve) => {
+            resolveReady = resolve;
+        });
+        isGameStateReadyMock.mockReturnValue(false);
+
+        const quest = {
+            id: 'cleanup/status-check',
+            title: 'Cleanup status check',
+            description: 'Ensures timer cleanup is deterministic.',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Mounted and active.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const firstRender = render(QuestChat, { props: { quest } });
+        expect(vi.getTimerCount()).toBeGreaterThan(0);
+
+        firstRender.unmount();
+        resolveReady();
+        await Promise.resolve();
+        expect(vi.getTimerCount()).toBe(0);
+
+        isGameStateReadyMock.mockReturnValue(true);
+        readyPromiseRef.current = Promise.resolve();
+        const secondRender = render(QuestChat, { props: { quest } });
+
+        await waitFor(() => {
+            expect(secondRender.container.querySelector('.npcDialogue')?.textContent).toContain(
+                'Mounted and active.'
+            );
+        });
+
+        expect(secondRender.container.textContent).toContain('Status:');
+        expect(secondRender.container.textContent).toContain('In Progress');
+
+        secondRender.unmount();
+        expect(vi.getTimerCount()).toBe(0);
+        vi.useRealTimers();
+    });
     it('waits for game state readiness before showing unavailable messaging', async () => {
         let resolveReady = () => {};
         readyPromiseRef.current = new Promise<void>((resolve) => {
