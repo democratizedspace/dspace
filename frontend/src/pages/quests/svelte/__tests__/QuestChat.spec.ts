@@ -198,6 +198,82 @@ describe('QuestChat', () => {
         ).toBe('/quests/3dprinting/start');
     });
 
+
+
+    it('clears stale unavailable status once readiness resolves and quest is startable', async () => {
+        let resolveReady = () => {};
+        readyPromiseRef.current = new Promise<void>((resolve) => {
+            resolveReady = resolve;
+        });
+        isGameStateReadyMock.mockReturnValue(false);
+        canStartQuestMock.mockReturnValue(false);
+        getUnmetQuestRequirementsMock.mockReturnValue(['welcome/howtodoquests']);
+
+        const quest = {
+            id: 'welcome/startable-after-ready',
+            title: 'Ready state transition',
+            description: 'Readiness status regression fixture',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            requiresQuests: ['welcome/howtodoquests'],
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Ready quest dialogue.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const { queryByTestId, queryByText } = render(QuestChat, { props: { quest } });
+
+        expect(queryByTestId('quest-unavailable')).toBeNull();
+
+        canStartQuestMock.mockReturnValue(true);
+        getUnmetQuestRequirementsMock.mockReturnValue([]);
+        isGameStateReadyMock.mockReturnValue(true);
+        resolveReady();
+
+        await waitFor(() => {
+            expect(queryByTestId('quest-unavailable')).toBeNull();
+            expect(queryByText('Quest not available yet')).toBeNull();
+            expect(queryByText('In Progress')).not.toBeNull();
+        });
+    });
+
+    it('cleans up readiness polling interval when unmounted', async () => {
+        const setIntervalSpy = vi.spyOn(globalThis, 'setInterval');
+        const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval');
+
+        const quest = {
+            id: 'welcome/interval-cleanup',
+            title: 'Cleanup test',
+            description: 'Unmount cleanup fixture',
+            image: '/quest.png',
+            npc: '/npc.png',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Cleanup dialogue.',
+                    options: [{ id: 'finish', text: 'Finish', type: 'finish' }],
+                },
+            ],
+            rewards: [{ id: 'item-1', count: 1 }],
+        };
+
+        const { unmount } = render(QuestChat, { props: { quest } });
+        unmount();
+
+        expect(setIntervalSpy).toHaveBeenCalled();
+        expect(clearIntervalSpy).toHaveBeenCalled();
+
+        setIntervalSpy.mockRestore();
+        clearIntervalSpy.mockRestore();
+    });
+
     it('waits for game state readiness before showing unavailable messaging', async () => {
         let resolveReady = () => {};
         readyPromiseRef.current = new Promise<void>((resolve) => {
