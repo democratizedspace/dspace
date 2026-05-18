@@ -26,12 +26,14 @@ describe('April 1, 2026 changelog release checklist', () => {
     expect(content).not.toMatch(/💯/);
   });
 
-  it('records rc.5 audit signoff with evidence for required checklist paths', () => {
+  it('records rc.5 SHA/range resolution signoff without implying full scope validation', () => {
     const content = readFileSync(qaChecklistPath, 'utf8');
 
     expect(content).toContain(
-      '- [x] QA signoff confirms this checklist and executed test scope were derived from the audited commit delta above'
+      '- [x] QA signoff confirms the audited commit delta above resolves to the immutable rc.5 SHA and'
     );
+    expect(content).toMatch(/SHA\/range resolution gate only/i);
+    expect(content).toMatch(/does not certify execution of every mapped checklist item/i);
     expect(content).toContain('92a1bcb847cb5c8ec3d0d6cd82fcee05d1e22cdc');
     expect(content).toMatch(
       /Completed custom quests move into the Completed Quests section/
