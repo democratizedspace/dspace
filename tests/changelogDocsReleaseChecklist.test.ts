@@ -33,7 +33,7 @@ describe('April 1, 2026 changelog release checklist', () => {
       '- [x] QA signoff confirms the audited commit delta above resolves to the immutable rc.5 SHA and'
     );
     expect(content).toMatch(/SHA\/range resolution gate only/i);
-    expect(content).toMatch(/does not certify execution of every mapped checklist item/i);
+    expect(content).toMatch(/does not certify execution of every mapped\s+checklist item/i);
     expect(content).toContain('92a1bcb847cb5c8ec3d0d6cd82fcee05d1e22cdc');
     expect(content).toMatch(
       /Completed custom quests move into the Completed Quests section/
