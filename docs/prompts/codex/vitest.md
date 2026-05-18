@@ -1,6 +1,6 @@
 # Vitest test prompts for the _dspace_ repo
 
-Use this template to add unit tests with [Vitest](https://vitest.dev). Lean on it when
+Use this template to add unit tests with [Vitest](https://github.com/vitest-dev/vitest). Lean on it when
 new features or bug fixes need coverage. Treat the prompt as living documentation and
 refresh it using other `docs/prompts/codex/*.md` files for inspiration. Use this guide alongside
 [Codex Prompts](baseline.md). To keep the prompt docs evolving, see the
