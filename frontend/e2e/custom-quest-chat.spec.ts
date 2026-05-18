@@ -58,6 +58,8 @@ test.describe('Custom quest chat rendering', () => {
         await expect(page.locator('[data-testid="chat-panel"]')).toBeVisible();
         await expect(page.getByText('In Progress')).toBeVisible();
         await expect(page.getByText('Quest not available yet')).toHaveCount(0);
+        await expect(page.locator('text=Custom quest next node.')).toBeVisible();
+        await expect(page.locator('text=Custom quest start node.')).toHaveCount(0);
     });
 
     test('moves completed custom quests out of the active custom list after refreshing /quests', async ({

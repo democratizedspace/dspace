@@ -1,5 +1,5 @@
 import { render, waitFor } from '@testing-library/svelte';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import QuestChat from '../QuestChat.svelte';
 
 type QuestState = {
@@ -72,6 +72,10 @@ vi.mock('../../../../utils/itemResolver.js', () => ({
 }));
 
 describe('QuestChat', () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     beforeEach(() => {
         canStartQuestMock.mockReturnValue(true);
         getUnmetQuestRequirementsMock.mockReturnValue([]);
@@ -197,15 +201,7 @@ describe('QuestChat', () => {
             getByRole('link', { name: 'Set up your first 3D printer' }).getAttribute('href')
         ).toBe('/quests/3dprinting/start');
     });
-
-
-
     it('clears stale unavailable status once readiness resolves and quest is startable', async () => {
-        let resolveReady = () => {};
-        readyPromiseRef.current = new Promise<void>((resolve) => {
-            resolveReady = resolve;
-        });
-        isGameStateReadyMock.mockReturnValue(false);
         canStartQuestMock.mockReturnValue(false);
         getUnmetQuestRequirementsMock.mockReturnValue(['welcome/howtodoquests']);
 
@@ -229,12 +225,14 @@ describe('QuestChat', () => {
 
         const { queryByTestId, queryByText } = render(QuestChat, { props: { quest } });
 
-        expect(queryByTestId('quest-unavailable')).toBeNull();
+        await waitFor(() => {
+            expect(queryByTestId('quest-unavailable')).not.toBeNull();
+            expect(queryByText('Quest not available yet')).not.toBeNull();
+        });
 
         canStartQuestMock.mockReturnValue(true);
         getUnmetQuestRequirementsMock.mockReturnValue([]);
-        isGameStateReadyMock.mockReturnValue(true);
-        resolveReady();
+        mockState.update((current) => ({ ...current }));
 
         await waitFor(() => {
             expect(queryByTestId('quest-unavailable')).toBeNull();
@@ -244,7 +242,10 @@ describe('QuestChat', () => {
     });
 
     it('cleans up readiness polling interval when unmounted', async () => {
-        const setIntervalSpy = vi.spyOn(globalThis, 'setInterval');
+        const intervalHandle = { __test: 'quest-chat-interval' };
+        const setIntervalSpy = vi
+            .spyOn(globalThis, 'setInterval')
+            .mockReturnValue(intervalHandle as unknown as ReturnType<typeof setInterval>);
         const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval');
 
         const quest = {
@@ -268,10 +269,7 @@ describe('QuestChat', () => {
         unmount();
 
         expect(setIntervalSpy).toHaveBeenCalled();
-        expect(clearIntervalSpy).toHaveBeenCalled();
-
-        setIntervalSpy.mockRestore();
-        clearIntervalSpy.mockRestore();
+        expect(clearIntervalSpy).toHaveBeenCalledWith(intervalHandle);
     });
 
     it('waits for game state readiness before showing unavailable messaging', async () => {
