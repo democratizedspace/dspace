@@ -262,12 +262,14 @@
     {/if}
 
     {#if completedQuests.length > 0}
-        <h2>Completed Quests</h2>
-        {#each completedQuests as quest}
-            <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
-                <Quest {quest} compact={true} status={quest.status} />
-            </a>
-        {/each}
+        <section data-testid="completed-quests-section">
+            <h2>Completed Quests</h2>
+            {#each completedQuests as quest}
+                <a href={quest.route} aria-label={quest.title} data-questid={quest.id}>
+                    <Quest {quest} compact={true} status={quest.status} />
+                </a>
+            {/each}
+        </section>
     {/if}
 </div>
 
