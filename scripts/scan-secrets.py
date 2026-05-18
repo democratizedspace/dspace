@@ -13,6 +13,12 @@ import sys
 from typing import Iterable, List, Tuple
 
 # Each tuple contains (pattern, human readable description)
+CREDENTIAL_ASSIGNMENT_RE = re.compile(
+    r"(?i)(?:api[_-]?key|secret|token|password)\s*[:=]\s*"
+    r"(?P<value>\"[^\"]*\"|'[^']*'|\S*)"
+)
+
+
 SUSPICIOUS_PATTERNS: List[Tuple[re.Pattern[str], str]] = [
     (re.compile(r"AKIA[0-9A-Z]{16}"), "AWS access key"),
     (re.compile(r"ASIA[0-9A-Z]{16}"), "Temporary AWS access key"),
@@ -28,10 +34,24 @@ SUSPICIOUS_PATTERNS: List[Tuple[re.Pattern[str], str]] = [
     (re.compile(r"(?i)-----BEGIN [A-Z ]+PRIVATE KEY-----"), "Private key block"),
     (re.compile(r"sk-[A-Za-z0-9]{16,}"), "OpenAI/Stripe style secret key"),
     (
-        re.compile(r"(?i)(?:api[_-]?key|secret|token|password)\s*[:=]\s*"),
+        CREDENTIAL_ASSIGNMENT_RE,
         "Credential keyword assignment",
     ),
 ]
+
+
+def is_placeholder_value(value: str) -> bool:
+    """Return true when a credential value is a shell environment placeholder."""
+
+    unquoted = value.strip().strip('"\'')
+    return bool(re.fullmatch(r"\$[A-Z_][A-Z0-9_]*|\$\{[A-Z_][A-Z0-9_]*\}", unquoted))
+
+
+def has_only_placeholder_credential_assignments(candidate: str) -> bool:
+    """Allow examples such as token="$TOKEN" without requiring scanner bypass notes."""
+
+    matches = list(CREDENTIAL_ASSIGNMENT_RE.finditer(candidate))
+    return bool(matches) and all(is_placeholder_value(match.group("value")) for match in matches)
 
 
 def collect_findings(lines: Iterable[str]) -> List[Tuple[int, str, str]]:
@@ -50,6 +70,12 @@ def collect_findings(lines: Iterable[str]) -> List[Tuple[int, str, str]]:
 
         for pattern, description in SUSPICIOUS_PATTERNS:
             if pattern.search(candidate):
+                if (
+                    description == "Credential keyword assignment"
+                    and has_only_placeholder_credential_assignments(candidate)
+                ):
+                    continue
+
                 snippet = candidate.strip()
                 if len(snippet) > 120:
                     snippet = snippet[:117] + "..."
