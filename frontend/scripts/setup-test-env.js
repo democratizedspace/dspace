@@ -46,6 +46,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
+const shouldUseLocalPlaywrightPreview = !isRemotePlaywrightModeWithoutWebServerOverride();
+const defaultPlaywrightDspaceEnv = 'dev';
+
+if (shouldUseLocalPlaywrightPreview && !process.env.DSPACE_ENV?.trim()) {
+    process.env.DSPACE_ENV = defaultPlaywrightDspaceEnv;
+}
+
 // Keep quest-graph debug flag opt-in. setup-test-env must not force a different
 // build-time PUBLIC_* value than the preceding root build, otherwise we trigger
 // an avoidable rebuild during launch-gate checks.
@@ -54,7 +61,7 @@ const rootDir = path.resolve(__dirname, '..');
 // Playwright browser management is handled by playwright.config.ts for E2E tests only.
 const { ensureAstroBuild } = await import('./ensure-astro-build.mjs');
 
-if (isRemotePlaywrightModeWithoutWebServerOverride()) {
+if (!shouldUseLocalPlaywrightPreview) {
     console.log('Remote Playwright mode detected; skipping local Astro build setup.');
 } else {
     execSync('npm run build:meta', { cwd: path.resolve(rootDir, '..'), stdio: 'inherit' });

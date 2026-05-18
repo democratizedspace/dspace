@@ -8,6 +8,7 @@ const __dirname = path.dirname(__filename);
 const defaultRootDir = path.resolve(__dirname, '..');
 
 const questGraphDebugEnvFlag = process.env.PUBLIC_ENABLE_QUEST_GRAPH_DEBUG === 'true';
+const dspaceEnvFlag = (process.env.DSPACE_ENV || '').trim().toLowerCase();
 
 function hasClientAssets(rootDir, logger) {
     const clientAssetsDir = path.join(rootDir, 'dist', 'client', '_astro');
@@ -23,28 +24,45 @@ function hasClientAssets(rootDir, logger) {
     }
 }
 
-function getQuestGraphDebugMarker(rootDir) {
-    const markerPath = path.join(rootDir, 'dist', '.quest-graph-debug-flag');
+function readBuildMarker(rootDir, fileName, label) {
+    const markerPath = path.join(rootDir, 'dist', fileName);
 
     try {
-        const contents = fs.readFileSync(markerPath, 'utf8').trim();
-        return contents === 'true';
+        return fs.readFileSync(markerPath, 'utf8').trim();
     } catch (error) {
         if (error.code !== 'ENOENT') {
-            console.warn(`Failed to read quest graph debug marker: ${error.message}`);
+            console.warn(`Failed to read ${label} marker: ${error.message}`);
         }
         return null;
     }
 }
 
-function writeQuestGraphDebugMarker(rootDir, enabled) {
-    const markerPath = path.join(rootDir, 'dist', '.quest-graph-debug-flag');
+function writeBuildMarker(rootDir, fileName, contents, label) {
+    const markerPath = path.join(rootDir, 'dist', fileName);
 
     try {
         fs.mkdirSync(path.dirname(markerPath), { recursive: true });
-        fs.writeFileSync(markerPath, enabled ? 'true' : 'false');
+        fs.writeFileSync(markerPath, contents);
     } catch (error) {
-        console.warn(`Failed to write quest graph debug marker: ${error.message}`);
+        console.warn(`Failed to write ${label} marker: ${error.message}`);
+    }
+}
+
+function getQuestGraphDebugMarker(rootDir) {
+    const contents = readBuildMarker(rootDir, '.quest-graph-debug-flag', 'quest graph debug');
+    return contents === null ? null : contents === 'true';
+}
+
+function writeBuildConfigMarkers(rootDir) {
+    writeBuildMarker(
+        rootDir,
+        '.quest-graph-debug-flag',
+        questGraphDebugEnvFlag ? 'true' : 'false',
+        'quest graph debug'
+    );
+
+    if (dspaceEnvFlag) {
+        writeBuildMarker(rootDir, '.dspace-env-flag', dspaceEnvFlag, 'DSPACE_ENV');
     }
 }
 
@@ -55,10 +73,13 @@ export function ensureAstroBuild(options = {}) {
     const serverBuilt = fs.existsSync(serverEntrypoint);
     const clientBuilt = hasClientAssets(root, logger);
     const questGraphDebugMarker = getQuestGraphDebugMarker(root);
-    const buildConfigMismatch =
+    const dspaceEnvMarker = readBuildMarker(root, '.dspace-env-flag', 'DSPACE_ENV');
+    const questGraphDebugMismatch =
         questGraphDebugMarker === null
             ? questGraphDebugEnvFlag
             : questGraphDebugMarker !== questGraphDebugEnvFlag;
+    const dspaceEnvMismatch = dspaceEnvFlag ? dspaceEnvMarker !== dspaceEnvFlag : false;
+    const buildConfigMismatch = questGraphDebugMismatch || dspaceEnvMismatch;
 
     if (serverBuilt && clientBuilt && !buildConfigMismatch) {
         logger.log?.('Astro build artifacts detected. Skipping rebuild.');
@@ -66,24 +87,24 @@ export function ensureAstroBuild(options = {}) {
     }
 
     const rebuildReason = buildConfigMismatch
-        ? 'Quest graph debug flag mismatch detected. Rebuilding Astro app...'
+        ? 'Build environment marker mismatch detected. Rebuilding Astro app...'
         : 'Astro build artifacts missing or incomplete. Building the app for Playwright preview...';
 
     logger.log?.(rebuildReason);
 
-    const runBuild = () => exec('npm run build', { cwd: root, stdio: ['inherit', 'inherit', 'pipe'] });
+    const runBuild = () =>
+        exec('npm run build', { cwd: root, stdio: ['inherit', 'inherit', 'pipe'] });
 
     try {
         runBuild();
-        writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
+        writeBuildConfigMarkers(root);
     } catch (error) {
         const errorOutput =
             (error instanceof Error ? error.message : '') +
             (error && typeof error === 'object' && error.stderr
                 ? `\n${error.stderr.toString()}`
                 : '');
-        const shouldRetryCleanBuild =
-            /ENOENT|no such file or directory/i.test(errorOutput);
+        const shouldRetryCleanBuild = /ENOENT|no such file or directory/i.test(errorOutput);
 
         if (!shouldRetryCleanBuild) {
             (logger.error ?? console.error)(
@@ -98,7 +119,7 @@ export function ensureAstroBuild(options = {}) {
         try {
             fs.rmSync(path.join(root, 'dist'), { recursive: true, force: true });
             runBuild();
-            writeQuestGraphDebugMarker(root, questGraphDebugEnvFlag);
+            writeBuildConfigMarkers(root);
         } catch (retryError) {
             (logger.error ?? console.error)(
                 'Failed to build Astro project required for Playwright preview (retry after dist/ removal).'
@@ -108,6 +129,9 @@ export function ensureAstroBuild(options = {}) {
     }
 }
 
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('ensure-astro-build.mjs')) {
+if (
+    import.meta.url === `file://${process.argv[1]}` ||
+    process.argv[1]?.endsWith('ensure-astro-build.mjs')
+) {
     ensureAstroBuild();
 }
