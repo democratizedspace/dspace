@@ -159,15 +159,17 @@ uses approximate ordering from the operator's deployment and diagnostic journey.
    - The operator initially ran:
 
      ```sh
-     just cf-tunnel-install env=staging token="$CF_TUNNEL_TOKEN" # scan-secrets: ignore - placeholder only
+     just cf-tunnel-install env=staging token="$CF_TUNNEL_TOKEN"
      ```
 
+   - The token value above is a placeholder only; do not commit real Cloudflare tunnel
+     credentials.
    - This exposed the same named-environment parsing class of bug. The tunnel name became
      `sugarkube-env=staging`.
    - Until the recipe bug is fixed, the intended command form is positional:
 
      ```sh
-     just cf-tunnel-install staging token="$CF_TUNNEL_TOKEN" # scan-secrets: ignore - placeholder only
+     just cf-tunnel-install staging token="$CF_TUNNEL_TOKEN"
      ```
 
 10. **The fresh cluster needed Helm install semantics, not upgrade-only semantics.**
@@ -258,8 +260,9 @@ Immediate remediation focused on restoring staging, not implementing permanent p
 4. Inspected k3s service state and logs, including embedded-etcd errors.
 5. Compared k3s durable configuration against the node's current network addresses.
 6. Chose a clean rebuild because no cluster state needed preservation.
-7. Stopped and uninstalled k3s, then rebuilt the full three-server HA cluster across
-   `sugarkube3.local`, `sugarkube4.local`, and `sugarkube5.local`.
+7. Stopped and uninstalled k3s on all three server nodes, then rebuilt the full
+   three-server HA cluster across `sugarkube3.local`, `sugarkube4.local`, and
+   `sugarkube5.local`.
 8. Avoided the malformed named-environment `just up env=staging` form and used
    `just up staging`.
 9. Removed stale malformed Avahi service files and restarted Avahi.
@@ -276,6 +279,10 @@ Recovery was considered complete when the following checks were true:
 
 - All three HA server nodes were `Ready`.
 - `sugarkube3`, `sugarkube4`, and `sugarkube5` all had `control-plane,etcd` roles.
+- In this incident, all three specific staging server nodes (`sugarkube3`, `sugarkube4`,
+  and `sugarkube5`) had to be wiped to avoid stale k3s/etcd membership. Those names are
+  only the hostnames used by this Sugarkube instantiation; other operators can choose
+  different hostnames for their own staging nodes.
 - Workload scheduling on the homelab control-plane nodes was enabled after taint removal.
 - Traefik was deployed successfully in `kube-system`.
 - The Cloudflare tunnel route for staging was restored.

@@ -11,6 +11,8 @@ Related release docs:
 - Environment: `env=staging`
 - Public host: `https://staging.democratized.space`
 - Live cluster nodes: `sugarkube3`, `sugarkube4`, `sugarkube5`
+  - These are the hostnames used by this staging instantiation. Sugarkube operators may
+    choose arbitrary hostnames for their own three-node HA staging clusters.
 - Availability model: 3-node HA
 - QA Cheats: **ON** (`DSPACE_ENV=staging`)
 
@@ -39,6 +41,16 @@ See the cross-environment release procedure: [docs/merge-plan.md](./merge-plan.m
 ```bash
 cd ~/sugarkube
 ```
+
+Use install semantics when the `dspace` Helm release does not exist yet, such as after a
+cluster wipe or first-time staging bootstrap. The upgrade helper requires an existing deployed
+release and fails on a fresh cluster with `UPGRADE FAILED: "dspace" has no deployed releases`.
+
+```bash
+just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_SHORTSHA
+```
+
+Use upgrade semantics only after the `dspace` release exists in the staging namespace.
 
 ```bash
 just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_SHORTSHA
