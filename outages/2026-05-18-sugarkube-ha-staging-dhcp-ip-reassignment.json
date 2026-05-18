@@ -1,0 +1,14 @@
+{
+  "id": "2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment",
+  "date": "2026-05-18",
+  "component": "sugarkube:ha-staging-k3s",
+  "longForm": "outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md",
+  "rootCause": "A brief home power outage caused DHCP to reassign LAN IPs for the Sugarkube HA staging Raspberry Pi control-plane nodes, exposing a Sugarkube bug where raw DHCP IP addresses were baked into durable k3s/cluster configuration, including TLS SANs, instead of consistently using stable .local node identities wherever possible.",
+  "resolution": "Because no Kubernetes cluster state needed preservation, the operator performed a clean three-server HA k3s rebuild across sugarkube3.local, sugarkube4.local, and sugarkube5.local; cleaned malformed Avahi records created by the named-env Just recipe bug; untainted the control-plane nodes for homelab scheduling; reinstalled Traefik and the Cloudflare tunnel; used the Helm OCI install path on the fresh cluster; and verified the DSPACE v3.0.1-rc.5 staging deployment online at staging.democratized.space while production remained on v3.0.0.",
+  "references": [
+    "outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md",
+    "docs/k3s-sugarkube-staging.md",
+    "docs/k3s-sugarkube-prod.md",
+    "docs/k3s-sugarkube-dev.md"
+  ]
+}
