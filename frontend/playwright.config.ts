@@ -33,6 +33,7 @@ declare const process: {
         REMOTE_COMPLETIONIST_AWARD_III?: string;
         REMOTE_COMPLETIONIST_AWARD_III_USE_WEBSERVER?: string;
         NODE_OPTIONS?: string;
+        DSPACE_ENV?: string;
     };
     argv: string[];
 };
@@ -95,6 +96,8 @@ process.env.PORT = String(port);
 // net::ERR_CONNECTION_REFUSED failures when the preview server binds only to
 // 0.0.0.0). CI can still override BASE_URL when running behind tunnels.
 const baseURL = process.env.BASE_URL || `${protocol}://127.0.0.1:${port}`;
+const playwrightDspaceEnv = process.env.DSPACE_ENV || 'dev';
+process.env.DSPACE_ENV = playwrightDspaceEnv;
 
 // Allow setting workers via environment variable for CI and local runs
 const isCI = Boolean(process.env.CI);
@@ -304,6 +307,7 @@ export default defineConfig({
               timeout: 180000,
               env: {
                   ...process.env,
+                  DSPACE_ENV: playwrightDspaceEnv,
                   PUBLIC_ENABLE_QUEST_GRAPH_DEBUG: 'true',
                   NODE_OPTIONS: [nodeWarningFilterRequire, process.env.NODE_OPTIONS || '']
                       .join(' ')
