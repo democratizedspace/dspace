@@ -43,6 +43,57 @@ test.describe('Custom quest chat rendering', () => {
         await expect(page.locator('text=Custom quest next node.')).toBeVisible();
     });
 
+    test('moves completed custom quests to Completed Quests without active duplicates after refresh', async ({
+        page,
+    }) => {
+        await page.goto('/');
+
+        const questTitle = `Completed Custom Quest ${Date.now()}`;
+        const questId = await seedCustomQuest(page, {
+            id: `custom-quest-completion-${Date.now()}`,
+            title: questTitle,
+            description: 'Quest created for completed custom quest listing test.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Complete this custom quest for list classification.',
+                    options: [{ type: 'finish', text: 'Finish custom quest' }],
+                },
+            ],
+            requiresQuests: [],
+        });
+
+        await page.goto(`/quests/${questId}`);
+        await waitForHydration(page);
+        await page.getByRole('button', { name: 'Finish custom quest' }).click();
+        await expect(page.getByRole('heading', { name: 'Quest Complete!' })).toBeVisible();
+
+        const assertCompletedQuestPlacement = async () => {
+            await expect(page.getByRole('heading', { name: 'Completed Quests' })).toBeVisible();
+            await expect(
+                page.locator(
+                    `a[data-questid="${questId}"] [data-testid="quest-tile"][data-status="completed"]`
+                )
+            ).toBeVisible();
+            await expect(
+                page.getByTestId('quests-grid').locator(`a[data-questid="${questId}"]`)
+            ).toHaveCount(0);
+            await expect(
+                page.getByTestId('custom-quests-section').locator(`a[data-questid="${questId}"]`)
+            ).toHaveCount(0);
+            await expect(page.locator(`a[data-questid="${questId}"]`)).toHaveCount(1);
+        };
+
+        await page.goto('/quests');
+        await assertCompletedQuestPlacement();
+
+        await page.reload();
+        await assertCompletedQuestPlacement();
+    });
+
     test('built-in quest chat still renders', async ({ page }) => {
         await page.goto('/quests/welcome/howtodoquests');
         await expect(page.locator('[data-testid="chat-panel"]')).toBeVisible();
