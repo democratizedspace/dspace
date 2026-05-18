@@ -1,5 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { clearUserData, seedCustomQuest, waitForHydration } from './test-helpers';
+import {
+    clearUserData,
+    flushGameStateWrites,
+    seedCustomQuest,
+    waitForHydration,
+} from './test-helpers';
 
 test.describe('Custom quest chat rendering', () => {
     test.beforeEach(async ({ page }) => {
@@ -41,6 +46,64 @@ test.describe('Custom quest chat rendering', () => {
         await optionButton.click();
 
         await expect(page.locator('text=Custom quest next node.')).toBeVisible();
+    });
+
+    test('moves completed custom quests out of the active custom list after refreshing /quests', async ({
+        page,
+    }) => {
+        await page.goto('/');
+
+        const questId = await seedCustomQuest(page, {
+            id: 'custom-quest-completion-regression',
+            title: 'Custom Quest Completion Regression',
+            description: 'Quest created for completed custom quest listing regression coverage.',
+            image: '/assets/quests/howtodoquests.jpg',
+            npc: '/assets/npc/dChat.jpg',
+            start: 'start',
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Finish this custom quest to verify completed list placement.',
+                    options: [{ type: 'finish', text: 'Finish custom quest' }],
+                },
+            ],
+            requiresQuests: [],
+        });
+
+        await page.goto(`/quests/${questId}`);
+        await waitForHydration(page);
+
+        await page.getByRole('button', { name: /Finish custom quest/ }).click();
+        await expect(page.getByRole('heading', { name: 'Quest Complete!' })).toBeVisible();
+        await flushGameStateWrites(page);
+
+        await page.goto('/quests');
+        await waitForHydration(page);
+        await expect(page.locator('[data-testid="custom-quests-merge-status"]')).toHaveAttribute(
+            'data-merge-complete',
+            'true'
+        );
+
+        await page.reload();
+        await waitForHydration(page);
+        await expect(page.locator('[data-testid="custom-quests-merge-status"]')).toHaveAttribute(
+            'data-merge-complete',
+            'true'
+        );
+
+        const activeCustomQuestCard = page.locator(
+            `[data-testid="custom-quests-section"] [data-questid="${questId}"]`
+        );
+        const completedCustomQuestCard = page.locator(
+            `xpath=//h2[normalize-space(.)="Completed Quests"]/following-sibling::a[@data-questid="${questId}"]`
+        );
+
+        await expect(activeCustomQuestCard).toHaveCount(0);
+        await expect(completedCustomQuestCard).toHaveCount(1);
+        await expect(
+            completedCustomQuestCard.locator('[data-testid="quest-tile"]')
+        ).toHaveAttribute('data-status', 'completed');
+        await expect(completedCustomQuestCard).toContainText('Status: Completed');
     });
 
     test('built-in quest chat still renders', async ({ page }) => {
