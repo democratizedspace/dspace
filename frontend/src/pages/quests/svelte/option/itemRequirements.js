@@ -1,8 +1,14 @@
+import { canStoreItemInContainer } from '../../../../utils/gameState/itemContainers.js';
+
 function getContainedItemCount(requirement, fullState = {}) {
     const containerId = requirement?.containerItemId;
     const itemId = requirement?.id;
 
     if (!containerId || !itemId) {
+        return null;
+    }
+
+    if (!canStoreItemInContainer(containerId, itemId)) {
         return null;
     }
 

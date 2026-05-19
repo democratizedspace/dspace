@@ -18,6 +18,137 @@ const ALLOWED_IMAGE_DATA_PREFIXES = [
     'data:application/octet-stream',
 ];
 
+const UNSAFE_TEXT_PATTERN = /[<>]/;
+const UNSAFE_ROUTE_PREFIXES = ['//', '/\\'];
+const SAFE_FALLBACK_IMAGE = '/favicon.ico';
+
+function hasUnsafePreviewText(value) {
+    return typeof value === 'string' && UNSAFE_TEXT_PATTERN.test(value);
+}
+
+function assertSafePreviewText(value, label) {
+    if (hasUnsafePreviewText(value)) {
+        throw new Error(`Unsafe preview text in ${label}.`);
+    }
+}
+
+function assertSafePreviewTexts(entity, fields, entityLabel) {
+    fields.forEach((field) => {
+        if (field in entity) {
+            assertSafePreviewText(entity[field], `${entityLabel}.${field}`);
+        }
+    });
+}
+
+function assertSafeQuestDialogue(quest) {
+    if (!Array.isArray(quest.dialogue)) {
+        return;
+    }
+
+    quest.dialogue.forEach((node, nodeIndex) => {
+        if (!node || typeof node !== 'object') {
+            return;
+        }
+        assertSafePreviewText(node.text, `quest.dialogue[${nodeIndex}].text`);
+        if (!Array.isArray(node.options)) {
+            return;
+        }
+        node.options.forEach((option, optionIndex) => {
+            if (!option || typeof option !== 'object') {
+                return;
+            }
+            assertSafePreviewText(
+                option.text,
+                `quest.dialogue[${nodeIndex}].options[${optionIndex}].text`
+            );
+        });
+    });
+}
+
+function normalizeImportedRoute(route, fallbackRoute) {
+    if (typeof route !== 'string') {
+        return fallbackRoute;
+    }
+
+    const normalizedRoute = route.trim();
+    if (!normalizedRoute.startsWith('/')) {
+        return fallbackRoute;
+    }
+
+    if (UNSAFE_ROUTE_PREFIXES.some((prefix) => normalizedRoute.startsWith(prefix))) {
+        return fallbackRoute;
+    }
+
+    return normalizedRoute;
+}
+
+function normalizeImportedImage(image, fallbackImage = '') {
+    if (typeof image !== 'string') {
+        return fallbackImage;
+    }
+
+    const normalizedImage = image.trim();
+    if (!normalizedImage) {
+        return fallbackImage;
+    }
+
+    if (isDataUrl(normalizedImage)) {
+        if (!isValidImageDataUrl(normalizedImage)) {
+            throw new Error('Invalid image data in backup.');
+        }
+        return normalizedImage;
+    }
+
+    if (
+        normalizedImage.startsWith('javascript:') ||
+        normalizedImage.startsWith('//') ||
+        normalizedImage.startsWith('/\\')
+    ) {
+        return fallbackImage;
+    }
+
+    return normalizedImage;
+}
+
+function sanitizeImportedItem(item) {
+    if (!item || typeof item !== 'object') {
+        return item;
+    }
+
+    assertSafePreviewTexts(item, ['name', 'description', 'unit', 'type', 'price'], 'item');
+    return {
+        ...item,
+        image: normalizeImportedImage(item.image, SAFE_FALLBACK_IMAGE),
+    };
+}
+
+function sanitizeImportedProcess(process) {
+    if (!process || typeof process !== 'object') {
+        return process;
+    }
+
+    assertSafePreviewTexts(process, ['title', 'name', 'description', 'duration'], 'process');
+    return process;
+}
+
+function sanitizeImportedQuest(quest) {
+    if (!quest || typeof quest !== 'object') {
+        return quest;
+    }
+
+    assertSafePreviewTexts(quest, ['title', 'description', 'npc', 'start'], 'quest');
+    assertSafeQuestDialogue(quest);
+
+    const id = String(quest.id ?? '').trim();
+    const fallbackRoute = `/quests/${id || 'custom'}`;
+
+    return {
+        ...quest,
+        image: normalizeImportedImage(quest.image, SAFE_FALLBACK_IMAGE),
+        route: normalizeImportedRoute(quest.route, fallbackRoute),
+    };
+}
+
 function padNumber(value) {
     return String(value).padStart(2, '0');
 }
@@ -503,9 +634,11 @@ export async function restoreCustomContentBackup(
     { onProgress, overwriteExisting = false } = {}
 ) {
     const normalized = normalizeBackupData(data);
-    const items = normalized.items.map((item) => sanitizeEntity(item));
-    const processes = normalized.processes.map((process) => sanitizeEntity(process));
-    const quests = normalized.quests.map((quest) => sanitizeEntity(quest));
+    const items = normalized.items.map((item) => sanitizeImportedItem(sanitizeEntity(item)));
+    const processes = normalized.processes.map((process) =>
+        sanitizeImportedProcess(sanitizeEntity(process))
+    );
+    const quests = normalized.quests.map((quest) => sanitizeImportedQuest(sanitizeEntity(quest)));
     const images = normalized.images;
 
     await ensureCustomContentSchema();

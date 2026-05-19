@@ -457,6 +457,38 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
             ],
             custom: true,
         });
+        await seedCustomQuest(page, {
+            id: `${customQuestId}-protocol-relative`,
+            title: `${customQuestTitle} protocol-relative route`,
+            description: 'Protocol-relative custom quest tile routes must fall back safely.',
+            route: '//evil.example/quest',
+            image: '/assets/quests/howtodoquests.jpg',
+            requiresQuests: [],
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Protocol-relative route fallback check.',
+                    options: [{ type: 'finish', text: 'Complete check' }],
+                },
+            ],
+            custom: true,
+        });
+        await seedCustomQuest(page, {
+            id: `${customQuestId}-slash-backslash`,
+            title: `${customQuestTitle} slash-backslash route`,
+            description: 'Slash-backslash custom quest tile routes must fall back safely.',
+            route: '/\\evil.example/quest',
+            image: '/assets/quests/howtodoquests.jpg',
+            requiresQuests: [],
+            dialogue: [
+                {
+                    id: 'start',
+                    text: 'Slash-backslash route fallback check.',
+                    options: [{ type: 'finish', text: 'Complete check' }],
+                },
+            ],
+            custom: true,
+        });
 
         await page.addInitScript(() => {
             (
@@ -487,7 +519,7 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
 
         await page.goto('/quests');
         await expect(customMergeStatus).toHaveAttribute('data-merge-complete', 'true');
-        await expect(customMergeStatus).toHaveAttribute('data-custom-count', '1');
+        await expect(customMergeStatus).toHaveAttribute('data-custom-count', '3');
 
         const customSection = page.getByTestId('custom-quests-section');
         await expect(customSection).toBeVisible();
@@ -495,6 +527,12 @@ test.describe('v3.0.1 launch regression checks for processes and quests', () => 
         const customQuestCard = page.locator(`a[data-questid='${customQuestId}']`).first();
         await expect(customQuestCard).toBeVisible();
         await expect(builtInGrid.locator(`a[data-questid='${customQuestId}']`)).toHaveCount(0);
+        await expect(
+            page.locator(`a[data-questid='${customQuestId}-protocol-relative']`).first()
+        ).toHaveAttribute('href', `/quests/${customQuestId}-protocol-relative`);
+        await expect(
+            page.locator(`a[data-questid='${customQuestId}-slash-backslash']`).first()
+        ).toHaveAttribute('href', `/quests/${customQuestId}-slash-backslash`);
         await expect(builtInQuestCard).toBeVisible();
 
         await customQuestCard.click();
