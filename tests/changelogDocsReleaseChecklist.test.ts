@@ -26,15 +26,20 @@ describe('April 1, 2026 changelog release checklist', () => {
     expect(content).not.toMatch(/💯/);
   });
 
-  it('records rc.6 SHA/range resolution signoff without implying full scope validation', () => {
+  it('records rc.6 SHA/range signoff with SHA-anchored evidence and explicit tag follow-up', () => {
     const content = readFileSync(qaChecklistPath, 'utf8');
 
     expect(content).toContain(
       '- [x] QA signoff confirms the audited commit delta above resolves to the immutable rc.6 SHA and'
     );
     expect(content).toMatch(/SHA\/range resolution gate only/i);
-    expect(content).toMatch(/does not certify execution of every mapped\s+checklist item/i);
+    expect(content).toMatch(/origin.*unavailable|no configured `origin`/i);
+    expect(content).toMatch(/release-owner follow-up artifact/i);
+    expect(content).toMatch(/git ls-remote --tags origin v3\.0\.1-rc\.6/i);
     expect(content).toContain('8a1fa6ca2b4206c3e481da6b8f02c912b56dfdb0');
+    expect(content).toContain(
+      '`3ec45a5517a35c96767f6b946c01104e6ec88f93..8a1fa6ca2b4206c3e481da6b8f02c912b56dfdb0`'
+    );
     expect(content).toMatch(
       /Completed custom quests move into the Completed Quests section/
     );
