@@ -188,4 +188,82 @@ test.describe('Custom content backup', () => {
             )
             .toBe(true);
     });
+
+    test('rejects unsafe custom-content import payloads without running preview markup', async ({
+        page,
+    }) => {
+        let dialogOpened = false;
+        page.on('dialog', async (dialog) => {
+            dialogOpened = true;
+            await dialog.dismiss();
+        });
+
+        await page.goto('/contentbackup');
+        await waitForHydration(page);
+
+        const unsafeBackup = {
+            schemaVersion: 1,
+            timestamp: new Date().toISOString(),
+            counts: { items: 1, processes: 0, quests: 1, images: 0 },
+            items: [
+                {
+                    id: 'unsafe-import-item',
+                    name: '<img src=x onerror=alert(1)>',
+                    description: 'Unsafe item import should be rejected before preview.',
+                },
+            ],
+            processes: [],
+            quests: [
+                {
+                    id: 'unsafe-import-quest',
+                    title: 'Unsafe import quest',
+                    description: 'Unsafe quest import should not execute route or image payloads.',
+                    image: 'data:image/svg+xml,<svg onload="alert(1)"></svg>',
+                    route: '//evil.example/quest',
+                },
+            ],
+            images: [],
+        };
+
+        await page.locator('input[type="file"]').setInputFiles({
+            name: 'unsafe-import.json',
+            mimeType: 'application/json',
+            buffer: Buffer.from(JSON.stringify(unsafeBackup)),
+        });
+
+        await expect(page.getByRole('status')).toContainText(/Unsafe preview text/i);
+        expect(dialogOpened).toBe(false);
+
+        const persistedIds = await page.evaluate(async () => {
+            const request = indexedDB.open('CustomContent');
+            const db = await new Promise<IDBDatabase>((resolve, reject) => {
+                request.onerror = () => reject(request.error ?? new Error('open failed'));
+                request.onsuccess = () => resolve(request.result);
+            });
+
+            try {
+                const readStore = (storeName: string) =>
+                    new Promise<string[]>((resolve, reject) => {
+                        if (!db.objectStoreNames.contains(storeName)) {
+                            resolve([]);
+                            return;
+                        }
+                        const tx = db.transaction(storeName, 'readonly');
+                        const getAll = tx.objectStore(storeName).getAllKeys();
+                        getAll.onerror = () => reject(getAll.error ?? new Error('read failed'));
+                        getAll.onsuccess = () => resolve(getAll.result.map(String));
+                    });
+                const [items, quests] = await Promise.all([
+                    readStore('items'),
+                    readStore('quests'),
+                ]);
+                return [...items, ...quests];
+            } finally {
+                db.close();
+            }
+        });
+
+        expect(persistedIds).not.toContain('unsafe-import-item');
+        expect(persistedIds).not.toContain('unsafe-import-quest');
+    });
 });
