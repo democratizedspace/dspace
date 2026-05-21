@@ -102,3 +102,48 @@ just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democr
 - Keep `environment: dev` in the dev values file so QA Cheats remain enabled.
 - Because dev is single-node and non-HA, expect lower resilience than staging/prod.
 - If public ingress is ever enabled for dev, keep it explicitly non-production and low-trust.
+
+
+## Troubleshooting and recovery notes
+
+- Use positional Sugarkube env args for day-to-day operations:
+  - `just up dev`
+  - `just save-logs dev`
+- For Cloudflare tunnels, prefer positional env form until named env parsing is fully fixed:
+  - preferred: `just cf-tunnel-install dev token="$CF_TUNNEL_TOKEN"`
+  - avoid: `just cf-tunnel-install env=dev token="$CF_TUNNEL_TOKEN"`
+- Fresh cluster/dev namespace bootstrap must use install first:
+  - pattern examples only; use the full copy-paste-ready `just helm-oci-*` commands documented earlier in this runbook.
+  - first deploy pattern: `just helm-oci-install ... values=docs/examples/dspace.values.dev.yaml ...`
+  - later deploy pattern: `just helm-oci-upgrade ... values=docs/examples/dspace.values.dev.yaml ...`
+  - wrong-first-step symptom: `UPGRADE FAILED: "dspace" has no deployed releases`
+- GHCR Helm OCI auth failures typically show `403 denied: denied`. Re-authenticate and verify:
+
+  ```bash
+  helm registry login ghcr.io
+  CHART_VERSION="$(grep -E "^[0-9]+\.[0-9]+\.[0-9]+" docs/apps/dspace.version | head -n1)"
+  helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version "$CHART_VERSION"
+  ```
+
+- If dev is rebuilt and ingress was enabled, verify infrastructure dependencies first:
+
+  ```bash
+  just cluster-status
+  just traefik-status
+  just traefik-crd-doctor
+  ```
+
+  Reinstall only if needed:
+
+  ```bash
+  just traefik-install
+  just cf-tunnel-install dev token="$CF_TUNNEL_TOKEN"
+  ```
+
+- Cluster-level DHCP/IP reassignment and multi-node k3s failure remediation is maintained in
+  Sugarkube docs/outages (canonical source):
+  - [Sugarkube setup](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
+  - [Sugarkube operations](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
+  - [Sugarkube troubleshooting](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md)
+  - [Canonical outage markdown](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md)
+  - [Canonical outage JSON](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json)

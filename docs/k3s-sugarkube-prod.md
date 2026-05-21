@@ -61,7 +61,7 @@ kubectl -n dspace rollout status deploy/dspace --timeout=180s
 ```
 
 ```bash
-curl -fsS https://democratized.space/config.json
+curl -fsS https://democratized.space/healthz
 ```
 
 ```bash
@@ -120,3 +120,49 @@ curl -fsS https://prod.democratized.space/healthz
 ```
 
 If rehearsal succeeds and you proceed to production, switch back to `docs/examples/dspace.values.prod.yaml` for the real prod deployment.
+
+
+## Troubleshooting and cross-environment guardrails
+
+- Use positional Sugarkube env args in operator commands (`just up prod`, `just save-logs prod`)
+  for consistency with staging/dev runbooks.
+- For Cloudflare tunnel install, prefer positional form until named env parsing is fully fixed:
+  - preferred: `just cf-tunnel-install prod token="$CF_TUNNEL_TOKEN"`
+  - avoid: `just cf-tunnel-install env=prod token="$CF_TUNNEL_TOKEN"`
+- If cluster state is rebuilt, install first and upgrade later:
+  - pattern examples only; use the full copy-paste-ready `just helm-oci-*` commands documented earlier in this runbook.
+  - fresh state pattern: `just helm-oci-install ... values=docs/examples/dspace.values.prod.yaml ...`
+  - existing release pattern: `just helm-oci-upgrade ... values=docs/examples/dspace.values.prod.yaml ...`
+  - fresh-state symptom when using upgrade too early: `UPGRADE FAILED: "dspace" has no deployed releases`
+- If GHCR auth fails with `403 denied: denied`, run `helm registry login ghcr.io` with a PAT
+  containing `read:packages`, then verify with:
+
+  ```bash
+  CHART_VERSION="$(grep -E "^[0-9]+\.[0-9]+\.[0-9]+" docs/apps/dspace.version | head -n1)"
+  helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version "$CHART_VERSION"
+  ```
+
+- After infra churn/rebuild, verify cluster ingress components before app-level rollback:
+
+  ```bash
+  just cluster-status
+  just traefik-status
+  just traefik-crd-doctor
+  ```
+
+  Reinstall only if required:
+
+  ```bash
+  just traefik-install
+  just cf-tunnel-install prod token="$CF_TUNNEL_TOKEN"
+  ```
+
+- Do not deploy staging RC tags to prod by accident. For staging-only validation windows, verify:
+  - `https://staging.democratized.space/healthz` is on the intended candidate SHA/tag
+  - `https://democratized.space/healthz` remains on the intended production release
+- Cluster-level DHCP/IP reassignment failures are canonicalized in Sugarkube docs/outages:
+  - [Sugarkube setup](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
+  - [Sugarkube operations](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
+  - [Sugarkube troubleshooting](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md)
+  - [Canonical outage markdown](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md)
+  - [Canonical outage JSON](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json)
