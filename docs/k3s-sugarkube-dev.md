@@ -102,3 +102,50 @@ just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democr
 - Keep `environment: dev` in the dev values file so QA Cheats remain enabled.
 - Because dev is single-node and non-HA, expect lower resilience than staging/prod.
 - If public ingress is ever enabled for dev, keep it explicitly non-production and low-trust.
+
+## Troubleshooting and recovery notes
+
+### Prefer positional env arguments for Sugarkube commands
+
+Use positional env form in dev operations:
+
+```bash
+just up dev
+just save-logs dev
+```
+
+### Cloudflare tunnel install caveat
+
+If/when dev tunnel routing is used, prefer positional env form:
+
+```bash
+just cf-tunnel-install dev token="$CF_TUNNEL_TOKEN"
+```
+
+Avoid `just cf-tunnel-install env=dev token="$CF_TUNNEL_TOKEN"` until Sugarkube tunnel parsing
+fixes are fully rolled out.
+
+### Fresh cluster install before upgrade
+
+After node reset or namespace wipe, run install before upgrade. If you run upgrade first, expect:
+`UPGRADE FAILED: "dspace" has no deployed releases`
+
+### GHCR Helm OCI auth failure handling
+
+If Helm OCI pulls fail with `403 denied: denied`, re-login to GHCR using a PAT with
+`read:packages`, then verify chart access:
+
+```bash
+helm registry login ghcr.io
+helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+```
+
+### Cluster-level remediation ownership
+
+For k3s/Sugarkube cluster internals (DHCP/IP churn, control-plane instability, Traefik/tunnel
+recovery), follow Sugarkube docs and outage records instead of duplicating RCA here:
+
+- <https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md>
+- <https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md>
+- <https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md>
+- <https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md>

@@ -120,3 +120,50 @@ curl -fsS https://prod.democratized.space/healthz
 ```
 
 If rehearsal succeeds and you proceed to production, switch back to `docs/examples/dspace.values.prod.yaml` for the real prod deployment.
+
+## Troubleshooting and recovery notes
+
+### Keep prod release scope strict
+
+- Do not deploy staging RC tags to production unless explicitly promoted.
+- For staging-only deploy windows, verify production/apex remains on the intended stable release
+  by checking `https://democratized.space/config.json`.
+
+### Prefer positional env arguments for Sugarkube commands
+
+Use positional env form:
+
+```bash
+just up prod
+just save-logs prod
+```
+
+### Fresh cluster install vs. existing release upgrade
+
+If prod cluster state is rebuilt and the `dspace` release is missing, use install first:
+
+```bash
+just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.prod.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_APPROVED_SHORTSHA
+```
+
+Then return to `helm-oci-upgrade` for steady-state releases. Running upgrade first on a wiped
+cluster can fail with `UPGRADE FAILED: "dspace" has no deployed releases`.
+
+### GHCR Helm OCI auth failure handling
+
+If chart pulls fail with `403 denied: denied`, re-auth to GHCR with a PAT that has
+`read:packages`:
+
+```bash
+helm registry login ghcr.io
+helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+```
+
+### Cluster-level failures: use Sugarkube canonical docs/outage
+
+DSPACE runbooks cover app deploy flows; Sugarkube owns cluster-level RCA and remediation:
+
+- <https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md>
+- <https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md>
+- <https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md>
+- <https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md>
