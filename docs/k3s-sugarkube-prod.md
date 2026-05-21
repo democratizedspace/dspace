@@ -120,3 +120,53 @@ curl -fsS https://prod.democratized.space/healthz
 ```
 
 If rehearsal succeeds and you proceed to production, switch back to `docs/examples/dspace.values.prod.yaml` for the real prod deployment.
+
+
+## Troubleshooting and recovery notes
+
+- Prefer positional Sugarkube env arguments in operator commands (for example `just up prod`
+  and `just save-logs prod`) to avoid legacy named-arg parsing pitfalls.
+- Until the Sugarkube tunnel parsing fix lands, avoid
+  `just cf-tunnel-install env=prod token="$CF_TUNNEL_TOKEN"`; prefer:
+
+```bash
+just cf-tunnel-install prod token="$CF_TUNNEL_TOKEN"
+```
+
+- On fresh or rebuilt clusters, run install first and upgrade second:
+
+```bash
+just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.prod.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_APPROVED_SHORTSHA
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.prod.yaml version_file=docs/apps/dspace.version default_tag=main-REPLACE_APPROVED_SHORTSHA
+```
+
+  If upgrade is run first on a fresh cluster, Helm returns
+  `UPGRADE FAILED: "dspace" has no deployed releases`.
+- If GHCR Helm OCI pulls fail with `403 denied: denied`, rotate/re-login with a PAT that has
+  `read:packages`, then verify access:
+
+```bash
+helm registry login ghcr.io
+helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+```
+
+- After cluster rebuilds, verify Traefik and Cloudflare tunnel plumbing before app-level
+  troubleshooting:
+
+```bash
+just cluster-status
+just traefik-status
+just traefik-crd-doctor
+```
+
+  Run `just traefik-install` only if required, then reinstall tunnel with positional env.
+- For DHCP/IP reassignment and other cluster-internal RCA, use Sugarkube docs/outage records as
+  canonical sources:
+  - `https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md`
+  - `https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md`
+  - `https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md`
+  - `https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md`
+  - `https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json`
+- During staging-only cycles, explicitly verify prod remains on the intended tag after staging
+  validation.
+- Never deploy RC/staging tags (for example `3.0.1-rc.*`) to apex production.

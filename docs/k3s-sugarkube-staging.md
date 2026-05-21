@@ -102,6 +102,101 @@ cd ~/sugarkube
 just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version tag=<previous-immutable-tag>
 ```
 
+
+## Troubleshooting and recovery notes (v3.0.1-rc.5 lessons)
+
+### Use positional Sugarkube environment arguments
+
+Use positional env arguments for Sugarkube commands:
+
+```bash
+just up staging
+just save-logs staging
+```
+
+Legacy named form (`just up env=staging`) previously produced malformed values before
+Sugarkube PR #2165. Prefer positional form in operator runbooks.
+
+### Cloudflare tunnel command caveat
+
+Until the Sugarkube tunnel parsing fix lands, prefer positional env for tunnel install:
+
+```bash
+just cf-tunnel-install staging token="$CF_TUNNEL_TOKEN"
+```
+
+Avoid `just cf-tunnel-install env=staging token="$CF_TUNNEL_TOKEN"` for now because it can
+create malformed tunnel names such as `sugarkube-env=staging`.
+
+### Fresh cluster install vs upgrade
+
+If k3s state was wiped or the namespace was rebuilt, run install first:
+
+```bash
+just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=3.0.1-rc.5
+```
+
+Use upgrade only after the release exists:
+
+```bash
+just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=3.0.1-rc.5
+```
+
+If you run upgrade first on a fresh cluster, Helm reports:
+
+```
+UPGRADE FAILED: "dspace" has no deployed releases
+```
+
+### GHCR Helm OCI authentication failures
+
+If GHCR auth is stale or PAT scope is wrong, you can see `403 denied: denied` during chart
+pulls. Re-login with a token that has `read:packages`:
+
+```bash
+helm registry login ghcr.io
+```
+
+Then verify chart access:
+
+```bash
+helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+```
+
+### Validate cluster add-ons after rebuild
+
+After cluster rebuilds, validate infra before blaming DSPACE app deploys:
+
+```bash
+just cluster-status
+just traefik-status
+just traefik-crd-doctor
+```
+
+Run `just traefik-install` only when Traefik is missing or broken, then reinstall tunnel as
+needed:
+
+```bash
+just cf-tunnel-install staging token="$CF_TUNNEL_TOKEN"
+```
+
+For cluster-level remediation after DHCP/IP reassignment incidents, use Sugarkube docs and the
+canonical Sugarkube outage record instead of duplicating RCA in DSPACE:
+
+- `https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md`
+- `https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md`
+- `https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md`
+- `https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md`
+- `https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json`
+
+### Post-deploy release verification
+
+For staging-only deploys, confirm both outcomes:
+
+1. `https://staging.democratized.space/config.json` shows the expected deployed SHA/tag.
+2. `https://democratized.space/config.json` remains on the intended production release (for the
+   v3.0.1-rc.5 cycle, prod remained on v3.0.0).
+
 ## Promotion handoff to prod
 
 Promote only after staging sign-off. Hand off:
