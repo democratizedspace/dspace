@@ -112,3 +112,87 @@ Promote only after staging sign-off. Hand off:
 - rollback tag confirmed
 
 Prod should deploy the same approved immutable artifact (not `main-latest`).
+
+## Troubleshooting and recovery notes (v3.0.1-rc.5 lessons)
+
+Cluster-level failures after DHCP/IP reassignment are owned by Sugarkube operations (not DSPACE app
+release logic). For cluster rebuild/remediation steps, use Sugarkube docs first:
+
+- [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
+- [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
+- [raspi_cluster_troubleshooting.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md)
+- Canonical outage record:
+  - [outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md)
+  - [outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json)
+
+### Use positional Sugarkube environment arguments
+
+Prefer positional environment arguments in Sugarkube commands:
+
+```bash
+just up staging
+just save-logs staging
+```
+
+Legacy named form (`just up env=staging`) previously produced malformed env values before
+Sugarkube PR #2165. Prefer positional form for operator consistency.
+
+### Cloudflare tunnel install: avoid named env form for now
+
+Use positional env argument:
+
+```bash
+just cf-tunnel-install staging token="$CF_TUNNEL_TOKEN"
+```
+
+Avoid `just cf-tunnel-install env=staging token="$CF_TUNNEL_TOKEN"` until the Sugarkube tunnel
+parsing/naming fix lands, because it can produce malformed names like `sugarkube-env=staging`.
+
+### Fresh cluster vs steady state Helm command choice
+
+After cluster wipe/rebuild, run install first, then upgrade on later deploys:
+
+- Fresh cluster / no release yet: `just helm-oci-install ...`
+- Existing deployed release: `just helm-oci-upgrade ...`
+
+If you run upgrade on a fresh cluster, expect:
+
+`UPGRADE FAILED: "<release>" has no deployed releases`
+
+### GHCR Helm OCI auth failures
+
+If Helm chart pulls fail with `403 denied: denied`, rotate/re-login GHCR credentials:
+
+```bash
+helm registry login ghcr.io
+```
+
+Use a PAT that includes `read:packages`, then verify:
+
+```bash
+helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+```
+
+### Re-verify ingress stack after rebuild
+
+After k3s rebuild, verify cluster health and ingress plumbing before blaming DSPACE app deploys:
+
+```bash
+just cluster-status
+just traefik-status
+just traefik-crd-doctor
+```
+
+Use reinstall commands only when needed:
+
+```bash
+just traefik-install
+just cf-tunnel-install staging token="$CF_TUNNEL_TOKEN"
+```
+
+### Post-deploy verification guardrails
+
+For staging-only deploys (including RCs like `v3.0.1-rc.5`), verify both:
+
+1. `https://staging.democratized.space` reports the expected deployed SHA/tag.
+2. `https://democratized.space` (apex/prod) remains on the intended production release.

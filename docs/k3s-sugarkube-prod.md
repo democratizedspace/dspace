@@ -120,3 +120,34 @@ curl -fsS https://prod.democratized.space/healthz
 ```
 
 If rehearsal succeeds and you proceed to production, switch back to `docs/examples/dspace.values.prod.yaml` for the real prod deployment.
+
+## Troubleshooting and recovery notes
+
+For Sugarkube cluster-level failures (for example DHCP/IP reassignment fallout, k3s quorum or
+control-plane health issues), use Sugarkube docs and outage records as the source of truth:
+
+- [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
+- [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
+- [raspi_cluster_troubleshooting.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md)
+- [Canonical outage record (.md)](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md)
+- [Canonical outage record (.json)](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json)
+
+DSPACE runbooks should troubleshoot app release/deploy workflow here; Sugarkube owns cluster
+rebuild internals.
+
+### Command patterns to avoid known failure modes
+
+- Prefer positional env args in Sugarkube commands (for example `just up prod`,
+  `just save-logs prod`).
+- For tunnel install, prefer positional form (for example
+  `just cf-tunnel-install prod token="$CF_TUNNEL_TOKEN"`) and avoid the named form
+  `cf-tunnel-install env=prod` until the parsing/naming fix lands.
+- Fresh cluster bootstraps should use `just helm-oci-install ...` first; use
+  `just helm-oci-upgrade ...` only after release creation to avoid
+  `UPGRADE FAILED: "<release>" has no deployed releases`.
+- If GHCR Helm OCI access fails with `403 denied: denied`, re-run:
+
+```bash
+helm registry login ghcr.io
+helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+```

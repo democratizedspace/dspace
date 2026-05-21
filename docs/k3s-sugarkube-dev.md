@@ -102,3 +102,34 @@ just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democr
 - Keep `environment: dev` in the dev values file so QA Cheats remain enabled.
 - Because dev is single-node and non-HA, expect lower resilience than staging/prod.
 - If public ingress is ever enabled for dev, keep it explicitly non-production and low-trust.
+
+## Troubleshooting and recovery notes
+
+For Sugarkube cluster-level failures (for example DHCP/IP reassignment fallout, k3s quorum or
+control-plane health issues), use Sugarkube docs and outage records as the source of truth:
+
+- [raspi_cluster_setup.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
+- [raspi_cluster_operations.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
+- [raspi_cluster_troubleshooting.md](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md)
+- [Canonical outage record (.md)](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md)
+- [Canonical outage record (.json)](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json)
+
+DSPACE runbooks should troubleshoot app release/deploy workflow here; Sugarkube owns cluster
+rebuild internals.
+
+### Command patterns to avoid known failure modes
+
+- Prefer positional env args in Sugarkube commands (for example `just up dev`,
+  `just save-logs dev`).
+- For tunnel install, prefer positional form (for example
+  `just cf-tunnel-install dev token="$CF_TUNNEL_TOKEN"`) and avoid the named form
+  `cf-tunnel-install env=dev` until the parsing/naming fix lands.
+- Fresh cluster bootstraps should use `just helm-oci-install ...` first; use
+  `just helm-oci-upgrade ...` only after release creation to avoid
+  `UPGRADE FAILED: "<release>" has no deployed releases`.
+- If GHCR Helm OCI access fails with `403 denied: denied`, re-run:
+
+```bash
+helm registry login ghcr.io
+helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+```
