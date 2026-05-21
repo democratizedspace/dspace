@@ -113,8 +113,9 @@ just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democr
   - preferred: `just cf-tunnel-install dev token="$CF_TUNNEL_TOKEN"`
   - avoid: `just cf-tunnel-install env=dev token="$CF_TUNNEL_TOKEN"`
 - Fresh cluster/dev namespace bootstrap must use install first:
-  - first deploy: `just helm-oci-install ... values=docs/examples/dspace.values.dev.yaml ...`
-  - later deploys: `just helm-oci-upgrade ... values=docs/examples/dspace.values.dev.yaml ...`
+  - pattern examples only; use the full copy-paste-ready `just helm-oci-*` commands documented earlier in this runbook.
+  - first deploy pattern: `just helm-oci-install ... values=docs/examples/dspace.values.dev.yaml ...`
+  - later deploy pattern: `just helm-oci-upgrade ... values=docs/examples/dspace.values.dev.yaml ...`
   - wrong-first-step symptom: `UPGRADE FAILED: "dspace" has no deployed releases`
 - GHCR Helm OCI auth failures typically show `403 denied: denied`. Re-authenticate and verify:
 

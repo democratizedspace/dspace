@@ -130,8 +130,9 @@ If rehearsal succeeds and you proceed to production, switch back to `docs/exampl
   - preferred: `just cf-tunnel-install prod token="$CF_TUNNEL_TOKEN"`
   - avoid: `just cf-tunnel-install env=prod token="$CF_TUNNEL_TOKEN"`
 - If cluster state is rebuilt, install first and upgrade later:
-  - fresh state: `just helm-oci-install ... values=docs/examples/dspace.values.prod.yaml ...`
-  - existing release: `just helm-oci-upgrade ... values=docs/examples/dspace.values.prod.yaml ...`
+  - pattern examples only; use the full copy-paste-ready `just helm-oci-*` commands documented earlier in this runbook.
+  - fresh state pattern: `just helm-oci-install ... values=docs/examples/dspace.values.prod.yaml ...`
+  - existing release pattern: `just helm-oci-upgrade ... values=docs/examples/dspace.values.prod.yaml ...`
   - fresh-state symptom when using upgrade too early: `UPGRADE FAILED: "dspace" has no deployed releases`
 - If GHCR auth fails with `403 denied: denied`, run `helm registry login ghcr.io` with a PAT
   containing `read:packages`, then verify with:

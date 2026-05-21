@@ -127,6 +127,17 @@ Prod should deploy the same approved immutable artifact (not `main-latest`).
 - After a cluster wipe/rebuild, use `helm-oci-install` first.
   `helm-oci-upgrade` is for steady-state updates and fails on fresh state with
   `UPGRADE FAILED: "dspace" has no deployed releases`.
+  Fresh/rebuilt staging cluster example:
+
+  ```bash
+  just helm-oci-install release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=3.0.1-rc.5
+  ```
+
+  Existing staging release example:
+
+  ```bash
+  just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democratizedspace/charts/dspace values=docs/examples/dspace.values.staging.yaml version_file=docs/apps/dspace.version default_tag=3.0.1-rc.5
+  ```
 - If Helm OCI pulls fail with `403 denied: denied`, rotate/re-login GHCR credentials:
 
   ```bash
