@@ -112,3 +112,56 @@ Promote only after staging sign-off. Hand off:
 - rollback tag confirmed
 
 Prod should deploy the same approved immutable artifact (not `main-latest`).
+
+## Troubleshooting and recovery notes
+
+- Prefer positional environment arguments in Sugarkube commands:
+  - `just up staging`
+  - `just save-logs staging`
+- Legacy named syntax (`just up env=staging`) had malformed env parsing before
+  Sugarkube PR #2165; keep using positional form for operator consistency.
+- For Cloudflare tunnel install, use positional env form until the named env parser fix lands:
+  - preferred: `just cf-tunnel-install staging token="$CF_TUNNEL_TOKEN"`
+  - avoid: `just cf-tunnel-install env=staging token="$CF_TUNNEL_TOKEN"`
+    (`sugarkube-env=staging` tunnel-name bug)
+- After a cluster wipe/rebuild, use `helm-oci-install` first.
+  `helm-oci-upgrade` is for steady-state updates and fails on fresh state with
+  `UPGRADE FAILED: "dspace" has no deployed releases`.
+- If Helm OCI pulls fail with `403 denied: denied`, rotate/re-login GHCR credentials:
+
+  ```bash
+  helm registry login ghcr.io
+  ```
+
+  Use a PAT with `read:packages`, then verify access:
+
+  ```bash
+  helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+  ```
+
+- After rebuilds, verify cluster networking/ingress before blaming app release content:
+
+  ```bash
+  just cluster-status
+  just traefik-status
+  just traefik-crd-doctor
+  ```
+
+  Reinstall only if required:
+
+  ```bash
+  just traefik-install
+  just cf-tunnel-install staging token="$CF_TUNNEL_TOKEN"
+  ```
+
+- Cluster-level failures after DHCP/IP reassignment are owned by Sugarkube operations.
+  Use Sugarkube docs and canonical outage RCA for remediation details:
+  - [Sugarkube setup guide](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
+  - [Sugarkube operations guide](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)
+  - [Sugarkube troubleshooting guide](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_troubleshooting.md)
+  - [Canonical outage markdown](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.md)
+  - [Canonical outage JSON](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json)
+
+- For staging-only deploys (for example `v3.0.1-rc.5` validation), verify that:
+  - `https://staging.democratized.space/config.json` reports the expected SHA/tag
+  - `https://democratized.space/config.json` remains on the intended prod release (for example `3.0.0`)
