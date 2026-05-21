@@ -67,7 +67,7 @@ kubectl -n dspace rollout status deploy/dspace --timeout=180s
 ```
 
 ```bash
-curl -fsS https://staging.democratized.space/config.json
+curl -fsS https://staging.democratized.space/healthz
 ```
 
 ```bash
@@ -136,7 +136,8 @@ Prod should deploy the same approved immutable artifact (not `main-latest`).
   Use a PAT with `read:packages`, then verify access:
 
   ```bash
-  helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+  CHART_VERSION="$(cat docs/apps/dspace.version)"
+  helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version "$CHART_VERSION"
   ```
 
 - After rebuilds, verify cluster networking/ingress before blaming app release content:
@@ -163,5 +164,5 @@ Prod should deploy the same approved immutable artifact (not `main-latest`).
   - [Canonical outage JSON](https://github.com/futuroptimist/sugarkube/blob/main/outages/2026-05-18-sugarkube-ha-staging-dhcp-ip-reassignment.json)
 
 - For staging-only deploys (for example `v3.0.1-rc.5` validation), verify that:
-  - `https://staging.democratized.space/config.json` reports the expected SHA/tag
-  - `https://democratized.space/config.json` remains on the intended prod release (for example `3.0.0`)
+  - `https://staging.democratized.space/healthz` reports the expected SHA/tag
+  - `https://democratized.space/healthz` remains on the intended prod release (for example `3.0.0`)

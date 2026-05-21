@@ -61,7 +61,7 @@ kubectl -n dspace rollout status deploy/dspace --timeout=180s
 ```
 
 ```bash
-curl -fsS https://democratized.space/config.json
+curl -fsS https://democratized.space/healthz
 ```
 
 ```bash
@@ -137,7 +137,8 @@ If rehearsal succeeds and you proceed to production, switch back to `docs/exampl
   containing `read:packages`, then verify with:
 
   ```bash
-  helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+  CHART_VERSION="$(cat docs/apps/dspace.version)"
+  helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version "$CHART_VERSION"
   ```
 
 - After infra churn/rebuild, verify cluster ingress components before app-level rollback:
@@ -156,8 +157,8 @@ If rehearsal succeeds and you proceed to production, switch back to `docs/exampl
   ```
 
 - Do not deploy staging RC tags to prod by accident. For staging-only validation windows, verify:
-  - `https://staging.democratized.space/config.json` is on the intended candidate SHA/tag
-  - `https://democratized.space/config.json` remains on the intended production release
+  - `https://staging.democratized.space/healthz` is on the intended candidate SHA/tag
+  - `https://democratized.space/healthz` remains on the intended production release
 - Cluster-level DHCP/IP reassignment failures are canonicalized in Sugarkube docs/outages:
   - [Sugarkube setup](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_setup.md)
   - [Sugarkube operations](https://github.com/futuroptimist/sugarkube/blob/main/docs/raspi_cluster_operations.md)

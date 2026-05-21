@@ -120,7 +120,8 @@ just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democr
 
   ```bash
   helm registry login ghcr.io
-  helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version 3.0.0
+  CHART_VERSION="$(cat docs/apps/dspace.version)"
+  helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version "$CHART_VERSION"
   ```
 
 - If dev is rebuilt and ingress was enabled, verify infrastructure dependencies first:
