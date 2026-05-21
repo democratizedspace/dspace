@@ -147,7 +147,7 @@ Prod should deploy the same approved immutable artifact (not `main-latest`).
   Use a PAT with `read:packages`, then verify access:
 
   ```bash
-  CHART_VERSION="$(cat docs/apps/dspace.version)"
+  CHART_VERSION="$(grep -E "^[0-9]+\.[0-9]+\.[0-9]+" docs/apps/dspace.version | head -n1)"
   helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version "$CHART_VERSION"
   ```
 

@@ -121,7 +121,7 @@ just helm-oci-upgrade release=dspace namespace=dspace chart=oci://ghcr.io/democr
 
   ```bash
   helm registry login ghcr.io
-  CHART_VERSION="$(cat docs/apps/dspace.version)"
+  CHART_VERSION="$(grep -E "^[0-9]+\.[0-9]+\.[0-9]+" docs/apps/dspace.version | head -n1)"
   helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version "$CHART_VERSION"
   ```
 

@@ -138,7 +138,7 @@ If rehearsal succeeds and you proceed to production, switch back to `docs/exampl
   containing `read:packages`, then verify with:
 
   ```bash
-  CHART_VERSION="$(cat docs/apps/dspace.version)"
+  CHART_VERSION="$(grep -E "^[0-9]+\.[0-9]+\.[0-9]+" docs/apps/dspace.version | head -n1)"
   helm show chart oci://ghcr.io/democratizedspace/charts/dspace --version "$CHART_VERSION"
   ```
 
