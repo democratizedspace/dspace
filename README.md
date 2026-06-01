@@ -92,7 +92,8 @@ Create quests, items, and processes for the game:
 
 - [Operations Runbooks](./docs/ops/README.md) - Deployment and maintenance procedures
   - [Raspberry Pi Deployment](./docs/ops/RPI_DEPLOYMENT_GUIDE.md) - Deploy on Raspberry Pi with k3s
-  - [Docker Deployment](./docs/ops/deploy/docker.md) - Container-based deployment
+  - [DSPACE Sugarkube release runbook](./docs/ops/sugarkube-release.md) - Staging/prod release source of truth
+  - [Docker Deployment](./docs/ops/deploy/docker.md) - Local/container-based development deployment
   - [Monitoring Setup](./docs/ops/monitoring_setup.md) - Prometheus and Grafana
   - [Backup System](./docs/ops/backup_system.md) - Automated backups
 - [Cloudflare Load Balancing](./docs/ops/cloudflare_load_balancing.md) - High availability
@@ -102,6 +103,7 @@ Create quests, items, and processes for the game:
 - [Raspberry Pi 9-node topology](./docs/raspi_cluster_topology_9_nodes.md) - Inventory and role map
 - [Power budget and load test](./docs/power_budget_load_test.md) - Verify PoE headroom
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
+- [DSPACE Sugarkube release runbook](./docs/ops/sugarkube-release.md) - Current staging/prod deployment flow
 - k3s + Sugarkube runbooks: [dev](./docs/k3s-sugarkube-dev.md) / [staging](./docs/k3s-sugarkube-staging.md) / [prod](./docs/k3s-sugarkube-prod.md)
 
 ### Verification (environment split)
@@ -165,6 +167,7 @@ Prompts for AI-assisted development:
 We welcome contributions! See our [Contributing Guide](./CONTRIBUTING.md) to get started.
 
 Key contribution areas:
+
 - Create quests, items, and processes
 - Improve documentation
 - Fix bugs and add features
