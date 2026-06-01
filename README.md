@@ -91,6 +91,7 @@ Create quests, items, and processes for the game:
 ### Operations & Deployment
 
 - [Operations Runbooks](./docs/ops/README.md) - Deployment and maintenance procedures
+  - [Sugarkube Release Runbook](./docs/ops/sugarkube-release.md) - Standard GHCR image/chart release, staging deployment, production promotion, validation, and rollback flow
   - [Raspberry Pi Deployment](./docs/ops/RPI_DEPLOYMENT_GUIDE.md) - Deploy on Raspberry Pi with k3s
   - [Docker Deployment](./docs/ops/deploy/docker.md) - Container-based deployment
   - [Monitoring Setup](./docs/ops/monitoring_setup.md) - Prometheus and Grafana

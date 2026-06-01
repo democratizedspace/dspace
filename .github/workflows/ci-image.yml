@@ -446,6 +446,20 @@ jobs:
             dspace-verify:latest \
             node /scripts/verify-chat-build-stamp.mjs
 
+      - name: Summarize published image tags
+        if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
+        run: |
+          {
+            echo "## Published DSPACE image"
+            echo ""
+            echo "| Field | Value |"
+            echo "| --- | --- |"
+            echo "| Immutable image tag | `${{ steps.tags.outputs.sha_tag }}` |"
+            echo "| Mutable branch convenience tag | `${{ steps.tags.outputs.latest_tag }}` |"
+            echo "| Version tag | `${{ steps.tags.outputs.version_tag }}` |"
+            echo "| Short SHA | `${{ steps.tags.outputs.short_sha }}` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Fail if both image pushes failed
         if: steps.build_push_1.outcome == 'failure' && steps.build_push_2.outcome == 'failure'
         run: exit 1

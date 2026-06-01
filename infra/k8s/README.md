@@ -1,15 +1,17 @@
 # Kubernetes Manifests for DSPACE
 
 These manifests deploy the `dspace-app` container built from the root `Dockerfile`. They match the
-k3s + sugarkube deployment documented in [`docs/k3s-sugarkube-staging.md`](../../docs/k3s-sugarkube-staging.md)
-for the staging cluster.
+k3s + Sugarkube deployment model documented in the
+[DSPACE Sugarkube release runbook](../../docs/ops/sugarkube-release.md) and the
+[staging environment runbook](../../docs/k3s-sugarkube-staging.md).
 
 The container exposes port **8080** and provides health endpoints at `/healthz` (readiness)
 and `/livez` (liveness).
 
 ## Using GHCR images (recommended)
 
-The deployment uses pre-built images from GHCR by default:
+The deployment uses pre-built images from GHCR by default. For staging and production, prefer the
+Sugarkube release flow instead of applying these manifests directly.
 
 ```bash
 kubectl apply -f infra/k8s/
@@ -17,7 +19,8 @@ kubectl apply -f infra/k8s/
 
 ## Building locally
 
-To build and load the image locally for k3s:
+Local builds are for development and debugging only; they are not the normal Sugarkube staging or
+production release path. To build and load the image locally for k3s:
 
 ```bash
 docker build -t dspace-app:latest .

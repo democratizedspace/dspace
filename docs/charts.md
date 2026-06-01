@@ -63,6 +63,14 @@ helm install dspace charts/dspace \
 
 Replace `dspace.example.com` with a domain routed to your Traefik ingress controller.
 
+## Sugarkube releases
+
+For the standard staging and production flow, use the
+[DSPACE Sugarkube release runbook](./ops/sugarkube-release.md). That page is the source of truth
+for selecting immutable GHCR image tags, confirming the published OCI chart version, deploying
+staging from Sugarkube, promoting production, validating runtime endpoints, and rolling back. The
+direct Helm examples below remain useful when operating outside Sugarkube.
+
 ## Install from GHCR (OCI)
 
 The chart is published to the GitHub Container Registry on `v3` pushes. Install it directly
