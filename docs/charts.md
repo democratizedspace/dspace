@@ -65,8 +65,13 @@ Replace `dspace.example.com` with a domain routed to your Traefik ingress contro
 
 ## Install from GHCR (OCI)
 
-The chart is published to the GitHub Container Registry on `v3` pushes. Install it directly
-from the OCI registry using the latest version (currently `3.0.1`; see
+For the standard Sugarkube staging and production flow, use the
+[DSPACE Sugarkube release runbook](./ops/sugarkube-release.md) as the source of truth. The direct
+Helm commands below remain useful for local clusters, development environments, and manual chart
+inspection.
+
+The chart is published to the GitHub Container Registry on `v3` and `main` pushes. Install it
+directly from the OCI registry using the latest version (currently `3.0.1`; see
 `docs/apps/dspace.version` or the registry for available versions):
 
 ```bash
