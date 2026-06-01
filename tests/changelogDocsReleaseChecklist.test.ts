@@ -50,7 +50,7 @@ describe('April 1, 2026 changelog release checklist', () => {
     const content = readFileSync(changelogPath, 'utf8');
 
     expect(content).toContain(
-      '## June 1, 2026 — DSPACE v3.0.1 (patch addendum)'
+      '## May 21, 2026 — DSPACE v3.0.1 (patch addendum)'
     );
     expect(content).toContain('### Reader guide and verification routes');
     expect(content).toContain('The player-visible route checks for v3.0.1');
