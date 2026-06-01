@@ -35,8 +35,10 @@ production deploy.
 
 1. Open the `ci-image.yml` workflow run for the desired commit and branch (`main` or `v3`).
 2. Confirm the image workflow succeeded.
-3. Copy the immutable image tag from the workflow summary or from GHCR, such as
-   `main-REPLACE_SHORTSHA` or `v3-REPLACE_SHORTSHA`.
+3. Copy the immutable tag-only value from the workflow summary, such as
+   `main-REPLACE_SHORTSHA` or `v3-REPLACE_SHORTSHA`. If GHCR or another UI shows a full image
+   reference like `ghcr.io/democratizedspace/dspace:main-REPLACE_SHORTSHA`, copy only the portion
+   after the colon into Sugarkube `tag=...` commands.
 4. Confirm the Helm chart version in `charts/dspace/Chart.yaml`, `docs/apps/dspace.version`, and/or
    the `ci-helm.yml` publish workflow run.
 5. From the Sugarkube checkout, deploy the immutable image tag to staging:
@@ -68,7 +70,7 @@ From the Sugarkube checkout, promote the approved version or immutable branch-SH
 
 ```bash
 cd ~/sugarkube
-just dspace-oci-promote-prod tag=3.0.1
+just dspace-oci-promote-prod tag=v3.0.1
 ```
 
 or:
