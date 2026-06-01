@@ -316,18 +316,12 @@ jobs:
           branch="${{ github.event.inputs.branch || github.ref_name }}"
           short_sha="$(git rev-parse --short HEAD)"
           tag_prefix="${branch//\//-}"
-          sha_tag_value="${tag_prefix}-${short_sha}"
-          latest_tag_value="${tag_prefix}-latest"
-          version_tag_value="v${{ steps.version.outputs.version }}"
-          sha_tag="ghcr.io/democratizedspace/dspace:${sha_tag_value}"
-          latest_tag="ghcr.io/democratizedspace/dspace:${latest_tag_value}"
-          version_tag="ghcr.io/democratizedspace/dspace:${version_tag_value}"
+          sha_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-${short_sha}"
+          latest_tag="ghcr.io/democratizedspace/dspace:${tag_prefix}-latest"
+          version_tag="ghcr.io/democratizedspace/dspace:v${{ steps.version.outputs.version }}"
           echo "sha_tag=${sha_tag}" >> "$GITHUB_OUTPUT"
           echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
           echo "version_tag=${version_tag}" >> "$GITHUB_OUTPUT"
-          echo "sha_tag_value=${sha_tag_value}" >> "$GITHUB_OUTPUT"
-          echo "latest_tag_value=${latest_tag_value}" >> "$GITHUB_OUTPUT"
-          echo "version_tag_value=${version_tag_value}" >> "$GITHUB_OUTPUT"
           echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
 
       - name: Set image build version
@@ -455,6 +449,9 @@ jobs:
       - name: Summarize published image tags
         if: steps.build_push_1.outcome == 'success' || steps.build_push_2.outcome == 'success'
         run: |
+          sha_tag="${{ steps.tags.outputs.sha_tag }}"
+          latest_tag="${{ steps.tags.outputs.latest_tag }}"
+          version_tag="${{ steps.tags.outputs.version_tag }}"
           {
             echo "## DSPACE image tags"
             echo
@@ -462,9 +459,9 @@ jobs:
             echo
             echo "| Name | Tag-only value for Sugarkube | Published image ref |"
             echo "| --- | --- | --- |"
-            echo "| Immutable image tag | \`${{ steps.tags.outputs.sha_tag_value }}\` | \`${{ steps.tags.outputs.sha_tag }}\` |"
-            echo "| Mutable branch convenience tag | \`${{ steps.tags.outputs.latest_tag_value }}\` | \`${{ steps.tags.outputs.latest_tag }}\` |"
-            echo "| Version image tag | \`${{ steps.tags.outputs.version_tag_value }}\` | \`${{ steps.tags.outputs.version_tag }}\` |"
+            echo "| Immutable image tag | \`${sha_tag##*:}\` | \`${sha_tag}\` |"
+            echo "| Mutable branch convenience tag | \`${latest_tag##*:}\` | \`${latest_tag}\` |"
+            echo "| Version image tag | \`${version_tag##*:}\` | \`${version_tag}\` |"
             echo "| Short SHA | \`${{ steps.tags.outputs.short_sha }}\` | n/a |"
           } >> "$GITHUB_STEP_SUMMARY"
 

@@ -70,8 +70,13 @@ From the Sugarkube checkout, promote the approved version or immutable branch-SH
 
 ```bash
 cd ~/sugarkube
-just dspace-oci-promote-prod tag=v3.0.1
+just dspace-oci-promote-prod tag=3.0.1
 ```
+
+The bare `3.0.1` value is the existing Sugarkube compatibility/version promote form. The image
+workflow publishes the version image tag as `v3.0.1`; branch-SHA tags such as
+`main-REPLACE_SHORTSHA` or `v3-REPLACE_SHORTSHA` remain the preferred immutable audit path for exact
+image promotion and rollback.
 
 or:
 
