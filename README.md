@@ -102,6 +102,7 @@ Create quests, items, and processes for the game:
 - [Raspberry Pi 9-node topology](./docs/raspi_cluster_topology_9_nodes.md) - Inventory and role map
 - [Power budget and load test](./docs/power_budget_load_test.md) - Verify PoE headroom
 - [Kubernetes Deployment](./docs/charts.md) - Helm chart installation
+- [DSPACE Sugarkube Release Runbook](./docs/ops/sugarkube-release.md) - GHCR artifact selection, staging deployment, production promotion, and rollback
 - k3s + Sugarkube runbooks: [dev](./docs/k3s-sugarkube-dev.md) / [staging](./docs/k3s-sugarkube-staging.md) / [prod](./docs/k3s-sugarkube-prod.md)
 
 ### Verification (environment split)
@@ -165,6 +166,7 @@ Prompts for AI-assisted development:
 We welcome contributions! See our [Contributing Guide](./CONTRIBUTING.md) to get started.
 
 Key contribution areas:
+
 - Create quests, items, and processes
 - Improve documentation
 - Fix bugs and add features

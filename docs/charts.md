@@ -2,6 +2,9 @@
 
 The `charts/dspace` Helm chart deploys the DSPACE application with sensible defaults for
 Traefik-based ingress, HTTP health checks, and optional configuration via ConfigMaps or Secrets.
+For Sugarkube staging and production releases, use the steady-state
+[DSPACE Sugarkube release runbook](./ops/sugarkube-release.md) rather than ad hoc local image
+builds.
 It is a lightweight chart intended for direct Helm usage; Flux-managed environments continue to
 use the existing production chart at `deploy/charts/dspace/`, which includes additional features
 like network policies, metrics, and production ingress/TLS automation. The chart uses the
@@ -26,7 +29,7 @@ settings.
   token automount disabled.
 - `podSecurityContext` / `securityContext`: Hardened defaults with non-root user/group `1000`,
   `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and `seccompProfile:
-  RuntimeDefault`.
+RuntimeDefault`.
 - `ingress.annotations`: Map of annotations applied to the ingress object.
 - `resources.requests` / `resources.limits`: Default to `500m` CPU / `768Mi` memory requests and
   `1` CPU / `1536Mi` memory limits, matching the production baseline. Override as needed for
@@ -65,7 +68,11 @@ Replace `dspace.example.com` with a domain routed to your Traefik ingress contro
 
 ## Install from GHCR (OCI)
 
-The chart is published to the GitHub Container Registry on `v3` pushes. Install it directly
+For the mature DSPACE Sugarkube release path, follow the
+[DSPACE Sugarkube release runbook](./ops/sugarkube-release.md), which ties the GHCR image tag,
+chart version, staging validation, production promotion, and rollback steps together.
+
+The chart is published to the GitHub Container Registry on `v3` and `main` pushes. Install it directly
 from the OCI registry using the latest version (currently `3.0.1`; see
 `docs/apps/dspace.version` or the registry for available versions):
 
