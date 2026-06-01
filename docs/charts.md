@@ -25,8 +25,8 @@ settings.
 - `serviceAccount.create`: Create a service account for the deployment. Defaults to `true` with
   token automount disabled.
 - `podSecurityContext` / `securityContext`: Hardened defaults with non-root user/group `1000`,
-  `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and `seccompProfile:
-  RuntimeDefault`.
+  `runAsNonRoot: true`, dropped capabilities, read-only root filesystem, and
+  `seccompProfile: RuntimeDefault`.
 - `ingress.annotations`: Map of annotations applied to the ingress object.
 - `resources.requests` / `resources.limits`: Default to `500m` CPU / `768Mi` memory requests and
   `1` CPU / `1536Mi` memory limits, matching the production baseline. Override as needed for
@@ -40,6 +40,13 @@ settings.
 
 For development, `charts/dspace/values.dev.yaml` enables ingress and sets a placeholder host:
 `dspace-v3.example.dev`. Override this host for your own environment.
+
+## Sugarkube release source of truth
+
+For staging and production releases, use the mature Sugarkube flow documented in
+[`docs/ops/sugarkube-release.md`](./ops/sugarkube-release.md). This chart page stays focused on
+Helm chart values and direct install examples; the runbook owns the image tag selection, staging
+deploy, production promotion, validation, and rollback steps.
 
 ## Common commands
 

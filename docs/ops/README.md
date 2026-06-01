@@ -10,6 +10,7 @@ incidents, or performing maintenance.
 - [Cloudflare load balancing](./cloudflare_load_balancing.md)
 - [Deployments](./deploy/)
 - [Release procedure](../merge-plan.md)
+- [Sugarkube release and deploy runbook](./sugarkube-release.md)
 - Release-management QA quick links:
   - [Patch checklist (`v3.0.1`)](../qa/v3.0.1.md)
   - [Feature checklist (`v3.1`)](../qa/v3.1.md)

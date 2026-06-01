@@ -91,6 +91,8 @@ Create quests, items, and processes for the game:
 ### Operations & Deployment
 
 - [Operations Runbooks](./docs/ops/README.md) - Deployment and maintenance procedures
+  - [Sugarkube Release Runbook](./docs/ops/sugarkube-release.md) - Staging/prod release flow
+    from GHCR image and OCI chart artifacts
   - [Raspberry Pi Deployment](./docs/ops/RPI_DEPLOYMENT_GUIDE.md) - Deploy on Raspberry Pi with k3s
   - [Docker Deployment](./docs/ops/deploy/docker.md) - Container-based deployment
   - [Monitoring Setup](./docs/ops/monitoring_setup.md) - Prometheus and Grafana
@@ -165,6 +167,7 @@ Prompts for AI-assisted development:
 We welcome contributions! See our [Contributing Guide](./CONTRIBUTING.md) to get started.
 
 Key contribution areas:
+
 - Create quests, items, and processes
 - Improve documentation
 - Fix bugs and add features

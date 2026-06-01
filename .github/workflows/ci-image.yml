@@ -324,6 +324,21 @@ jobs:
           echo "version_tag=${version_tag}" >> "$GITHUB_OUTPUT"
           echo "short_sha=${short_sha}" >> "$GITHUB_OUTPUT"
 
+      - name: Summarize image tags
+        run: |
+          {
+            echo "## DSPACE image tags"
+            echo ""
+            echo "| Purpose | Value |"
+            echo "| --- | --- |"
+            echo "| Immutable image tag | `${{ steps.tags.outputs.sha_tag }}` |"
+            echo "| Mutable branch convenience tag | `${{ steps.tags.outputs.latest_tag }}` |"
+            echo "| Version convenience tag | `${{ steps.tags.outputs.version_tag }}` |"
+            echo "| Short SHA | `${{ steps.tags.outputs.short_sha }}` |"
+            echo ""
+            echo "Use the immutable branch/SHA tag for Sugarkube staging sign-off."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Set image build version
         id: build_version
         run: |
