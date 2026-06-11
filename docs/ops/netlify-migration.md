@@ -18,7 +18,8 @@ and k3s on small servers, replacing Netlify's static hosting.
 For deployment details, see:
 
 - [Docker Deployment](deploy/docker.md)
-- [Raspberry Pi k3s Deployment](deploy/raspi.md)
+- [DSPACE Sugarkube release runbook](sugarkube-release.md)
+- [Sugarkube DSPACE app runbook](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md)
 
 ## Contributing
 

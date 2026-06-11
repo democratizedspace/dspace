@@ -23,15 +23,15 @@ const CANONICAL_HEALTH_PATH = '/healthz';
 const CANONICAL_LIVENESS_PATH = '/livez';
 
 function readFile(relativePath: string): string {
-    const fullPath = join(repoRoot, relativePath);
-    if (!existsSync(fullPath)) {
-        throw new Error(`File not found: ${fullPath}`);
-    }
-    return readFileSync(fullPath, 'utf8');
+  const fullPath = join(repoRoot, relativePath);
+  if (!existsSync(fullPath)) {
+    throw new Error(`File not found: ${fullPath}`);
+  }
+  return readFileSync(fullPath, 'utf8');
 }
 
 function parseYamlFile<T = unknown>(relativePath: string): T {
-    return parseYaml(readFile(relativePath)) as T;
+  return parseYaml(readFile(relativePath)) as T;
 }
 
 /**
@@ -40,216 +40,288 @@ function parseYamlFile<T = unknown>(relativePath: string): T {
  * Additional fields in the YAML files are allowed but not type-checked.
  */
 interface HelmValues {
-    service: {
-        port: number;
-        [key: string]: unknown;
-    };
-    probes: {
-        readinessPath: string;
-        livenessPath: string;
-        [key: string]: unknown;
-    };
+  service: {
+    port: number;
     [key: string]: unknown;
+  };
+  probes: {
+    readinessPath: string;
+    livenessPath: string;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
 }
 
 interface DockerComposeConfig {
-    services: {
-        app: {
-            ports: string[];
-            environment: string[];
-            healthcheck: {
-                test: string[];
-                [key: string]: unknown;
-            };
-            [key: string]: unknown;
-        };
+  services: {
+    app: {
+      ports: string[];
+      environment: string[];
+      healthcheck: {
+        test: string[];
         [key: string]: unknown;
+      };
+      [key: string]: unknown;
     };
     [key: string]: unknown;
+  };
+  [key: string]: unknown;
 }
 
 interface K8sDeployment {
-    spec: {
-        template: {
-            spec: {
-                containers: Array<{
-                    ports: Array<{ containerPort: number; [key: string]: unknown }>;
-                    env: Array<{ name: string; value: string; [key: string]: unknown }>;
-                    livenessProbe?: { httpGet: { path: string; port: number; [key: string]: unknown }; [key: string]: unknown };
-                    readinessProbe?: { httpGet: { path: string; port: number; [key: string]: unknown }; [key: string]: unknown };
-                    [key: string]: unknown;
-                }>;
-                [key: string]: unknown;
-            };
+  spec: {
+    template: {
+      spec: {
+        containers: Array<{
+          ports: Array<{ containerPort: number; [key: string]: unknown }>;
+          env: Array<{ name: string; value: string; [key: string]: unknown }>;
+          livenessProbe?: {
+            httpGet: { path: string; port: number; [key: string]: unknown };
             [key: string]: unknown;
-        };
+          };
+          readinessProbe?: {
+            httpGet: { path: string; port: number; [key: string]: unknown };
+            [key: string]: unknown;
+          };
+          [key: string]: unknown;
+        }>;
         [key: string]: unknown;
+      };
+      [key: string]: unknown;
     };
     [key: string]: unknown;
+  };
+  [key: string]: unknown;
 }
 
 interface K8sService {
-    spec: {
-        ports: Array<{ port: number; targetPort: number; [key: string]: unknown }>;
-        [key: string]: unknown;
-    };
+  spec: {
+    ports: Array<{ port: number; targetPort: number; [key: string]: unknown }>;
     [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+interface PrometheusConfig {
+  scrape_configs: Array<{
+    job_name: string;
+    static_configs?: Array<{ targets?: string[]; [key: string]: unknown }>;
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
 }
 
 describe('config consistency: Dockerfile', () => {
-    const dockerfile = readFile('Dockerfile');
+  const dockerfile = readFile('Dockerfile');
 
-    it('sets PORT environment variable to canonical port', () => {
-        expect(dockerfile).toMatch(new RegExp(`ENV\\s+PORT\\s*=\\s*${CANONICAL_PORT}`));
-    });
+  it('sets PORT environment variable to canonical port', () => {
+    expect(dockerfile).toMatch(
+      new RegExp(`ENV\\s+PORT\\s*=\\s*${CANONICAL_PORT}`)
+    );
+  });
 
-    it('exposes the canonical port', () => {
-        expect(dockerfile).toMatch(new RegExp(`EXPOSE\\s+${CANONICAL_PORT}`));
-    });
+  it('exposes the canonical port', () => {
+    expect(dockerfile).toMatch(new RegExp(`EXPOSE\\s+${CANONICAL_PORT}`));
+  });
 
-    it('healthcheck uses canonical health endpoint', () => {
-        expect(dockerfile).toContain(CANONICAL_HEALTH_PATH);
-    });
+  it('healthcheck uses canonical health endpoint', () => {
+    expect(dockerfile).toContain(CANONICAL_HEALTH_PATH);
+  });
 
-    it('healthcheck uses canonical port', () => {
-        expect(dockerfile).toMatch(
-            new RegExp(`HEALTHCHECK.*${CANONICAL_PORT}.*${CANONICAL_HEALTH_PATH}`)
-        );
-    });
+  it('healthcheck uses canonical port', () => {
+    expect(dockerfile).toMatch(
+      new RegExp(`HEALTHCHECK.*${CANONICAL_PORT}.*${CANONICAL_HEALTH_PATH}`)
+    );
+  });
 });
 
 describe('config consistency: Helm chart (charts/dspace)', () => {
-    const values = parseYamlFile<HelmValues>('charts/dspace/values.yaml');
+  const values = parseYamlFile<HelmValues>('charts/dspace/values.yaml');
 
-    it('service.port matches canonical port', () => {
-        expect(values.service.port).toBe(CANONICAL_PORT);
-    });
+  it('service.port matches canonical port', () => {
+    expect(values.service.port).toBe(CANONICAL_PORT);
+  });
 
-    it('readiness probe uses canonical health endpoint', () => {
-        expect(values.probes.readinessPath).toBe(CANONICAL_HEALTH_PATH);
-    });
+  it('readiness probe uses canonical health endpoint', () => {
+    expect(values.probes.readinessPath).toBe(CANONICAL_HEALTH_PATH);
+  });
 
-    it('liveness probe uses canonical liveness endpoint', () => {
-        expect(values.probes.livenessPath).toBe(CANONICAL_LIVENESS_PATH);
-    });
+  it('liveness probe uses canonical liveness endpoint', () => {
+    expect(values.probes.livenessPath).toBe(CANONICAL_LIVENESS_PATH);
+  });
 });
 
 describe('config consistency: Helm deployment template', () => {
-    const deploymentYaml = readFile('charts/dspace/templates/deployment.yaml');
+  const deploymentYaml = readFile('charts/dspace/templates/deployment.yaml');
 
-    it('container port is derived from values.service.port', () => {
-        expect(deploymentYaml).toContain('containerPort: {{ .Values.service.port }}');
-    });
+  it('container port is derived from values.service.port', () => {
+    expect(deploymentYaml).toContain(
+      'containerPort: {{ .Values.service.port }}'
+    );
+  });
 
-    it('PORT env is set from values.service.port', () => {
-        expect(deploymentYaml).toContain('value: "{{ .Values.service.port }}"');
-    });
+  it('PORT env is set from values.service.port', () => {
+    expect(deploymentYaml).toContain('value: "{{ .Values.service.port }}"');
+  });
 
-    it('probes reference paths from values', () => {
-        expect(deploymentYaml).toContain('path: {{ .Values.probes.livenessPath }}');
-        expect(deploymentYaml).toContain('path: {{ .Values.probes.readinessPath }}');
-    });
+  it('probes reference paths from values', () => {
+    expect(deploymentYaml).toContain('path: {{ .Values.probes.livenessPath }}');
+    expect(deploymentYaml).toContain(
+      'path: {{ .Values.probes.readinessPath }}'
+    );
+  });
 });
 
 describe('config consistency: docker-compose.yml', () => {
-    const dockerCompose = parseYamlFile<DockerComposeConfig>('docker-compose.yml');
-    const appService = dockerCompose.services.app;
+  const dockerCompose =
+    parseYamlFile<DockerComposeConfig>('docker-compose.yml');
+  const appService = dockerCompose.services.app;
 
-    it('port mapping uses canonical port', () => {
-        const portMapping = appService.ports.find((p) => p.includes(String(CANONICAL_PORT)));
-        expect(portMapping).toBeDefined();
-        expect(portMapping).toBe(`${CANONICAL_PORT}:${CANONICAL_PORT}`);
-    });
+  it('port mapping uses canonical port', () => {
+    const portMapping = appService.ports.find((p) =>
+      p.includes(String(CANONICAL_PORT))
+    );
+    expect(portMapping).toBeDefined();
+    expect(portMapping).toBe(`${CANONICAL_PORT}:${CANONICAL_PORT}`);
+  });
 
-    it('PORT environment variable is canonical port', () => {
-        const portEnv = appService.environment.find((e) => e.startsWith('PORT='));
-        expect(portEnv).toBe(`PORT=${CANONICAL_PORT}`);
-    });
+  it('PORT environment variable is canonical port', () => {
+    const portEnv = appService.environment.find((e) => e.startsWith('PORT='));
+    expect(portEnv).toBe(`PORT=${CANONICAL_PORT}`);
+  });
 
-    it('healthcheck uses canonical health endpoint', () => {
-        const healthcheckCmd = appService.healthcheck.test.join(' ');
-        expect(healthcheckCmd).toContain(CANONICAL_HEALTH_PATH);
-    });
+  it('healthcheck uses canonical health endpoint', () => {
+    const healthcheckCmd = appService.healthcheck.test.join(' ');
+    expect(healthcheckCmd).toContain(CANONICAL_HEALTH_PATH);
+  });
 });
 
 describe('config consistency: infra/k8s manifests', () => {
-    const deployment = parseYamlFile<K8sDeployment>('infra/k8s/dspace-deployment.yaml');
-    const service = parseYamlFile<K8sService>('infra/k8s/dspace-service.yaml');
-    const container = deployment.spec.template.spec.containers[0];
+  const deployment = parseYamlFile<K8sDeployment>(
+    'infra/k8s/dspace-deployment.yaml'
+  );
+  const service = parseYamlFile<K8sService>('infra/k8s/dspace-service.yaml');
+  const container = deployment.spec.template.spec.containers[0];
 
-    it('deployment container port is canonical', () => {
-        expect(container.ports[0].containerPort).toBe(CANONICAL_PORT);
-    });
+  it('deployment container port is canonical', () => {
+    expect(container.ports[0].containerPort).toBe(CANONICAL_PORT);
+  });
 
-    it('deployment PORT env is canonical', () => {
-        const portEnv = container.env.find((e) => e.name === 'PORT');
-        expect(portEnv?.value).toBe(String(CANONICAL_PORT));
-    });
+  it('deployment PORT env is canonical', () => {
+    const portEnv = container.env.find((e) => e.name === 'PORT');
+    expect(portEnv?.value).toBe(String(CANONICAL_PORT));
+  });
 
-    it('deployment readiness probe uses canonical health endpoint', () => {
-        expect(container.readinessProbe?.httpGet.path).toBe(CANONICAL_HEALTH_PATH);
-        expect(container.readinessProbe?.httpGet.port).toBe(CANONICAL_PORT);
-    });
+  it('deployment readiness probe uses canonical health endpoint', () => {
+    expect(container.readinessProbe?.httpGet.path).toBe(CANONICAL_HEALTH_PATH);
+    expect(container.readinessProbe?.httpGet.port).toBe(CANONICAL_PORT);
+  });
 
-    it('deployment liveness probe uses canonical liveness endpoint', () => {
-        expect(container.livenessProbe?.httpGet.path).toBe(CANONICAL_LIVENESS_PATH);
-        expect(container.livenessProbe?.httpGet.port).toBe(CANONICAL_PORT);
-    });
+  it('deployment liveness probe uses canonical liveness endpoint', () => {
+    expect(container.livenessProbe?.httpGet.path).toBe(CANONICAL_LIVENESS_PATH);
+    expect(container.livenessProbe?.httpGet.port).toBe(CANONICAL_PORT);
+  });
 
-    it('service port is canonical', () => {
-        expect(service.spec.ports[0].port).toBe(CANONICAL_PORT);
-    });
+  it('service port is canonical', () => {
+    expect(service.spec.ports[0].port).toBe(CANONICAL_PORT);
+  });
 
-    it('service targetPort is canonical', () => {
-        expect(service.spec.ports[0].targetPort).toBe(CANONICAL_PORT);
-    });
+  it('service targetPort is canonical', () => {
+    expect(service.spec.ports[0].targetPort).toBe(CANONICAL_PORT);
+  });
+});
+
+describe('config consistency: monitoring', () => {
+  const prometheus = parseYamlFile<PrometheusConfig>(
+    'infra/monitoring/prometheus/prometheus.yml'
+  );
+  const dspaceJob = prometheus.scrape_configs.find(
+    (config) => config.job_name === 'dspace'
+  );
+  const targets = dspaceJob?.static_configs?.flatMap(
+    (config) => config.targets ?? []
+  );
+
+  it('Prometheus scrapes DSPACE on the canonical runtime port', () => {
+    expect(targets).toContain(`host.docker.internal:${CANONICAL_PORT}`);
+  });
+
+  it('Prometheus does not scrape the stale development port', () => {
+    expect(targets).not.toContain('host.docker.internal:3002');
+  });
 });
 
 describe('config consistency: documentation', () => {
-    const rpiGuide = readFile('docs/ops/RPI_DEPLOYMENT_GUIDE.md');
-    const k8sReadme = readFile('infra/k8s/README.md');
+  const deploymentDocPaths = [
+    'infra/k8s/README.md',
+    'docs/ops/deploy/docker.md',
+    'docs/ops/cloudflare_load_balancing.md',
+    'docs/ops/failover_procedures.md',
+    'docs/ops/monitoring_setup.md',
+  ];
+  const readinessDocPaths = deploymentDocPaths.filter(
+    (relativePath) => relativePath !== 'docs/ops/monitoring_setup.md'
+  );
+  const deploymentDocs = Object.fromEntries(
+    deploymentDocPaths.map((relativePath) => [
+      relativePath,
+      readFile(relativePath),
+    ])
+  );
 
-    it('RPI deployment guide references canonical port', () => {
-        expect(rpiGuide).toContain(String(CANONICAL_PORT));
-    });
+  it.each(deploymentDocPaths)(
+    '%s references canonical port',
+    (relativePath) => {
+      expect(deploymentDocs[relativePath]).toContain(String(CANONICAL_PORT));
+    }
+  );
 
-    it('RPI deployment guide does not reference old dev port 3002 for production', () => {
-        // 3002 should not appear as the production/staging port
-        expect(rpiGuide).not.toMatch(/localhost:3002/);
-        expect(rpiGuide).not.toMatch(/port\s*\*\*3002\*\*/);
-    });
+  it.each(readinessDocPaths)(
+    '%s references canonical readiness endpoint',
+    (relativePath) => {
+      expect(deploymentDocs[relativePath]).toContain(CANONICAL_HEALTH_PATH);
+    }
+  );
 
-    it('k8s README references canonical port', () => {
-        expect(k8sReadme).toContain(String(CANONICAL_PORT));
-    });
+  it('k8s README references canonical liveness endpoint', () => {
+    expect(deploymentDocs['infra/k8s/README.md']).toContain(
+      CANONICAL_LIVENESS_PATH
+    );
+  });
 
-    it('k8s README references canonical health endpoints', () => {
-        expect(k8sReadme).toContain(CANONICAL_HEALTH_PATH);
-        expect(k8sReadme).toContain(CANONICAL_LIVENESS_PATH);
-    });
+  it('active deployment docs do not reference stale runtime ports or health checks', () => {
+    const staleRuntimePattern =
+      /localhost:3002|host\.docker\.internal:3002|port \*\*3002\*\*|port 3002|GET \/health\b|localhost:8080\/health\b/i;
+
+    for (const [relativePath, content] of Object.entries(deploymentDocs)) {
+      expect(content, relativePath).not.toMatch(staleRuntimePattern);
+    }
+  });
 });
 
 describe('config consistency: health endpoint implementation', () => {
-    it('healthz.ts endpoint exists', () => {
-        const healthz = readFile('frontend/src/pages/healthz.ts');
-        expect(healthz).toContain('buildHealthResponse');
-    });
+  it('healthz.ts endpoint exists', () => {
+    const healthz = readFile('frontend/src/pages/healthz.ts');
+    expect(healthz).toContain('buildHealthResponse');
+  });
 
-    it('livez.ts endpoint exists', () => {
-        const livez = readFile('frontend/src/pages/livez.ts');
-        expect(livez).toContain('buildLivezResponse');
-    });
+  it('livez.ts endpoint exists', () => {
+    const livez = readFile('frontend/src/pages/livez.ts');
+    expect(livez).toContain('buildLivezResponse');
+  });
 
-    it('health payload returns readiness and liveness statuses with uptime', () => {
-        const helpers = readFile('frontend/src/utils/runtimeEndpoints.ts');
-        expect(helpers).toContain("'ready'");
-        expect(helpers).toContain("'alive'");
-        expect(helpers).toContain('uptimeSeconds');
-    });
+  it('health payload returns readiness and liveness statuses with uptime', () => {
+    const helpers = readFile('frontend/src/utils/runtimeEndpoints.ts');
+    expect(helpers).toContain("'ready'");
+    expect(helpers).toContain("'alive'");
+    expect(helpers).toContain('uptimeSeconds');
+  });
 
-    it('/health is an alias for /healthz', () => {
-        const health = readFile('frontend/src/pages/health.ts');
-        // Verify actual re-export from healthz.ts, not just string match
-        expect(health).toMatch(/export\s*\{\s*GET\s*\}\s*from\s+['"]\.\/healthz(\.ts)?['"]/);
-    });
+  it('/health is an alias for /healthz', () => {
+    const health = readFile('frontend/src/pages/health.ts');
+    // Verify actual re-export from healthz.ts, not just string match
+    expect(health).toMatch(
+      /export\s*\{\s*GET\s*\}\s*from\s+['"]\.\/healthz(\.ts)?['"]/
+    );
+  });
 });

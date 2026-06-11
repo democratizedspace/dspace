@@ -10,7 +10,7 @@ scrape_configs:
       - targets: ['localhost:9090']
   - job_name: 'dspace'
     static_configs:
-      - targets: ['host.docker.internal:3002']
+      - targets: ['host.docker.internal:8080']
     authorization:
       type: Bearer
       credentials_file: /etc/prometheus/secrets/dspace_metrics_token

@@ -15,7 +15,7 @@ Clone the repository and start the stack:
 docker compose up --build -d
 ```
 
-The application listens on port **3002**. Visit `http://localhost:3002` to confirm it is running.
+The application listens on port **8080**. Visit `http://localhost:8080` to confirm it is running.
 
 ### Troubleshooting
 
@@ -28,7 +28,7 @@ The application listens on port **3002**. Visit `http://localhost:3002` to confi
 
 The container reads these environment variables:
 
-- `PORT` (default: `3002`)
+- `PORT` (default: `8080`)
 - `HOST` (default: `0.0.0.0`)
 - `METRICS_TOKEN` for the `/metrics` endpoint (optional)
 
@@ -36,7 +36,7 @@ To override them, create a `docker-compose.override.yml` file or pass them at ru
 
 ## Health Checks and Metrics
 
-The Docker Compose file defines a health check against `GET /health` and exposes Prometheus metrics at `GET /metrics`.
+The Docker Compose file defines a readiness health check against `GET /healthz`. The app also exposes `GET /livez` for liveness probes and `GET /metrics` for Prometheus metrics.
 
 ## Updating
 
@@ -52,5 +52,5 @@ Stop the containers with `docker compose down`.
 ## High Availability
 
 For redundancy across multiple hosts, use [Cloudflare Load Balancing](../cloudflare_load_balancing.md)
-to distribute traffic among instances. Each host exposes port **3002** through its own Cloudflare
-Tunnel, and the load balancer handles health checks automatically.
+to distribute traffic among instances. Each host exposes port **8080** through its own Cloudflare
+Tunnel, and the load balancer should check `/healthz` before routing traffic to an origin.

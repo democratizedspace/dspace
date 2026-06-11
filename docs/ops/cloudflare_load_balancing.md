@@ -4,17 +4,20 @@ This guide explains how to load balance multiple DSPACE instances using Cloudfla
 
 ## Overview
 
-Instead of running an Nginx reverse proxy, each DSPACE instance exposes port **3002** through its
-own Cloudflare Tunnel. Cloudflare's load balancer distributes incoming traffic across these
-tunnels, providing high availability without additional infrastructure.
+Instead of running an Nginx reverse proxy, each DSPACE instance exposes port **8080** through its
+own Cloudflare Tunnel. Configure Cloudflare health checks against `/healthz` so the load balancer
+only sends traffic to ready origins. Cloudflare's load balancer distributes incoming traffic across
+these tunnels, providing high availability without additional infrastructure.
 
 ## Steps
 
 1. **Create a tunnel for each instance**
+
    ```bash
    cloudflared tunnel create dspace-1
    cloudflared tunnel route dns dspace-1 dspace.example.com
    ```
+
    Repeat for `dspace-2`, `dspace-3`, etc.
 
 2. **Enable Cloudflare Load Balancing**
@@ -41,7 +44,8 @@ After configuring the load balancer, verify that traffic fails over when an inst
 
 ## Related Guides
 
-- [Raspberry Pi Deployment Guide](./RPI_DEPLOYMENT_GUIDE.md) – shows how to run DSPACE on a k3s
-  cluster with Cloudflare Tunnel.
+- [DSPACE Sugarkube release runbook](./sugarkube-release.md) – source of truth for the
+  canonical GHCR image and Helm-based deployment flow.
+- [Sugarkube DSPACE app runbook](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md) – deploy DSPACE through Sugarkube `just app-*` recipes.
 - [Monitoring Setup](./monitoring_setup.md) – add Prometheus and Grafana to watch the health of
   each instance.
