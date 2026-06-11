@@ -4,9 +4,10 @@ This guide explains how to load balance multiple DSPACE instances using Cloudfla
 
 ## Overview
 
-Instead of running an Nginx reverse proxy, each DSPACE instance exposes port **3002** through its
-own Cloudflare Tunnel. Cloudflare's load balancer distributes incoming traffic across these
-tunnels, providing high availability without additional infrastructure.
+Instead of running an Nginx reverse proxy, each DSPACE instance exposes port **8080** through its
+own Cloudflare Tunnel. Configure Cloudflare health checks against `/healthz` so the load balancer
+only sends traffic to ready origins. Cloudflare's load balancer distributes incoming traffic across
+these tunnels, providing high availability without additional infrastructure.
 
 ## Steps
 

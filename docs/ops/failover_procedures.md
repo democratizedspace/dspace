@@ -11,14 +11,14 @@ However, you should still investigate the failed instance and restore it promptl
 
 1. **Confirm the outage**
    - Visit your Cloudflare dashboard and check the Load Balancing pool health.
-   - You can also open `/health` on each instance directly.
+   - You can also open `/healthz` on each instance directly to confirm readiness.
 
 2. **Restart the container**
    - SSH into the affected host and run:
      ```bash
      docker compose restart app
      ```
-   - Wait a few seconds, then verify that `curl http://localhost:3002/health` returns `{ "status": "ok" }`.
+   - Wait a few seconds, then verify that `curl -fsS http://localhost:8080/healthz` reports readiness and `curl -fsS http://localhost:8080/livez` reports liveness.
 
 3. **Check Prometheus metrics**
    - Navigate to your Grafana dashboard (default `http://localhost:3001`) and confirm the
