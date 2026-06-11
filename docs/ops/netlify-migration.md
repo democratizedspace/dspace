@@ -12,13 +12,15 @@ production runs on self-hosted infrastructure.
 
 ## Current setup
 
-The main instance at democratized.space is served from on-premises hardware. The stack uses Docker
-and k3s on small servers, replacing Netlify's static hosting.
+The main instance at democratized.space is served from on-premises hardware. Canonical images
+are published by [ci-image.yml](../../.github/workflows/ci-image.yml), the Helm chart is
+published by [ci-helm.yml](../../.github/workflows/ci-helm.yml), and Sugarkube deploys DSPACE
+via Helm using its [DSPACE app runbook](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md).
 
 For deployment details, see:
 
 - [Docker Deployment](deploy/docker.md)
-- [Raspberry Pi k3s Deployment](deploy/raspi.md)
+- [DSPACE Sugarkube release runbook](sugarkube-release.md)
 
 ## Contributing
 

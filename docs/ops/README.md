@@ -17,7 +17,6 @@ incidents, or performing maintenance.
 - [Failover procedures](./failover_procedures.md)
 - [Monitoring setup](./monitoring_setup.md)
 - [Netlify migration history](./netlify-migration.md)
-- [Raspberry Pi deployment guide](./RPI_DEPLOYMENT_GUIDE.md)
 - [Offline-first strategy](./offline-first.md)
 - k3s + Sugarkube runbooks:
   - [Dev](../k3s-sugarkube-dev.md) (QA Cheats ON, port-forward by default)

@@ -25,9 +25,10 @@ However, you should still investigate the failed instance and restore it promptl
       `up` metric shows `1` for all instances.
 
 4. **Fallback option**
-    - If a node becomes corrupted or unreachable, spin up a new instance using the deployment steps from the
-      [Raspberry Pi Deployment Guide](./RPI_DEPLOYMENT_GUIDE.md).
-    - Once the new node is running, add it to your [Cloudflare load balancer](./cloudflare_load_balancing.md)
+    - If a node becomes corrupted or unreachable, restore capacity through the canonical
+      [DSPACE Sugarkube release runbook](./sugarkube-release.md) and the
+      [Sugarkube DSPACE app runbook](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md).
+    - Once the replacement instance is running, add it to your [Cloudflare load balancer](./cloudflare_load_balancing.md)
       as an origin.
 
 Cloudflare automatically returns the restored instance to rotation once it reports as healthy.
