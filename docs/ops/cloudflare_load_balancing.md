@@ -41,7 +41,8 @@ After configuring the load balancer, verify that traffic fails over when an inst
 
 ## Related Guides
 
-- [Raspberry Pi Deployment Guide](./RPI_DEPLOYMENT_GUIDE.md) – shows how to run DSPACE on a k3s
-  cluster with Cloudflare Tunnel.
+- [DSPACE Sugarkube release runbook](./sugarkube-release.md) – summarizes the canonical
+  image and Helm chart release flow.
+- [Sugarkube DSPACE runbook](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md) – covers cluster deployment via Helm.
 - [Monitoring Setup](./monitoring_setup.md) – add Prometheus and Grafana to watch the health of
   each instance.

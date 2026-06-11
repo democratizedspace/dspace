@@ -206,18 +206,7 @@ describe('config consistency: infra/k8s manifests', () => {
 });
 
 describe('config consistency: documentation', () => {
-    const rpiGuide = readFile('docs/ops/RPI_DEPLOYMENT_GUIDE.md');
     const k8sReadme = readFile('infra/k8s/README.md');
-
-    it('RPI deployment guide references canonical port', () => {
-        expect(rpiGuide).toContain(String(CANONICAL_PORT));
-    });
-
-    it('RPI deployment guide does not reference old dev port 3002 for production', () => {
-        // 3002 should not appear as the production/staging port
-        expect(rpiGuide).not.toMatch(/localhost:3002/);
-        expect(rpiGuide).not.toMatch(/port\s*\*\*3002\*\*/);
-    });
 
     it('k8s README references canonical port', () => {
         expect(k8sReadme).toContain(String(CANONICAL_PORT));

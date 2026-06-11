@@ -25,8 +25,9 @@ However, you should still investigate the failed instance and restore it promptl
       `up` metric shows `1` for all instances.
 
 4. **Fallback option**
-    - If a node becomes corrupted or unreachable, spin up a new instance using the deployment steps from the
-      [Raspberry Pi Deployment Guide](./RPI_DEPLOYMENT_GUIDE.md).
+    - If a node becomes corrupted or unreachable, follow the
+      [Sugarkube DSPACE runbook](https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md)
+      to redeploy DSPACE via Helm.
     - Once the new node is running, add it to your [Cloudflare load balancer](./cloudflare_load_balancing.md)
       as an origin.
 
