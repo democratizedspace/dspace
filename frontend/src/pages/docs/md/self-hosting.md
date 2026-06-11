@@ -43,10 +43,12 @@ The repository includes a convenience script for Docker workflows:
 
 These additional documents cover more complex deployments:
 
-- [Raspberry Pi k3s Deployment][raspi-k3s]
+- [DSPACE Sugarkube release runbook][sugarkube-release]
+- [Sugarkube DSPACE app runbook][sugarkube-dspace]
 - [Failover Procedures][failover]
 - [Monitoring Setup][monitoring]
 
-[raspi-k3s]: https://github.com/democratizedspace/dspace/blob/main/docs/deploy/raspi.md
-[failover]: https://github.com/democratizedspace/dspace/blob/main/docs/failover_procedures.md
-[monitoring]: https://github.com/democratizedspace/dspace/blob/main/docs/monitoring_setup.md
+[sugarkube-release]: https://github.com/democratizedspace/dspace/blob/main/docs/ops/sugarkube-release.md
+[sugarkube-dspace]: https://github.com/futuroptimist/sugarkube/blob/main/docs/apps/dspace.md
+[failover]: https://github.com/democratizedspace/dspace/blob/main/docs/ops/failover_procedures.md
+[monitoring]: https://github.com/democratizedspace/dspace/blob/main/docs/ops/monitoring_setup.md
