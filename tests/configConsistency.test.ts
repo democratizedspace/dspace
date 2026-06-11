@@ -102,6 +102,15 @@ interface K8sService {
   [key: string]: unknown;
 }
 
+interface PrometheusConfig {
+  scrape_configs: Array<{
+    job_name: string;
+    static_configs?: Array<{ targets?: string[]; [key: string]: unknown }>;
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
+}
+
 describe('config consistency: Dockerfile', () => {
   const dockerfile = readFile('Dockerfile');
 
@@ -222,13 +231,37 @@ describe('config consistency: infra/k8s manifests', () => {
   });
 });
 
+describe('config consistency: monitoring', () => {
+  const prometheus = parseYamlFile<PrometheusConfig>(
+    'infra/monitoring/prometheus/prometheus.yml'
+  );
+  const dspaceJob = prometheus.scrape_configs.find(
+    (config) => config.job_name === 'dspace'
+  );
+  const targets = dspaceJob?.static_configs?.flatMap(
+    (config) => config.targets ?? []
+  );
+
+  it('Prometheus scrapes DSPACE on the canonical runtime port', () => {
+    expect(targets).toContain(`host.docker.internal:${CANONICAL_PORT}`);
+  });
+
+  it('Prometheus does not scrape the stale development port', () => {
+    expect(targets).not.toContain('host.docker.internal:3002');
+  });
+});
+
 describe('config consistency: documentation', () => {
   const deploymentDocPaths = [
     'infra/k8s/README.md',
     'docs/ops/deploy/docker.md',
     'docs/ops/cloudflare_load_balancing.md',
     'docs/ops/failover_procedures.md',
+    'docs/ops/monitoring_setup.md',
   ];
+  const readinessDocPaths = deploymentDocPaths.filter(
+    (relativePath) => relativePath !== 'docs/ops/monitoring_setup.md'
+  );
   const deploymentDocs = Object.fromEntries(
     deploymentDocPaths.map((relativePath) => [
       relativePath,
@@ -243,7 +276,7 @@ describe('config consistency: documentation', () => {
     }
   );
 
-  it.each(deploymentDocPaths)(
+  it.each(readinessDocPaths)(
     '%s references canonical readiness endpoint',
     (relativePath) => {
       expect(deploymentDocs[relativePath]).toContain(CANONICAL_HEALTH_PATH);
@@ -258,7 +291,7 @@ describe('config consistency: documentation', () => {
 
   it('active deployment docs do not reference stale runtime ports or health checks', () => {
     const staleRuntimePattern =
-      /localhost:3002|port \*\*3002\*\*|port 3002|GET \/health\b|localhost:8080\/health\b/i;
+      /localhost:3002|host\.docker\.internal:3002|port \*\*3002\*\*|port 3002|GET \/health\b|localhost:8080\/health\b/i;
 
     for (const [relativePath, content] of Object.entries(deploymentDocs)) {
       expect(content, relativePath).not.toMatch(staleRuntimePattern);
