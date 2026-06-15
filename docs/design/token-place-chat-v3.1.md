@@ -36,8 +36,7 @@ parallel token.place panel:
   persona selector, welcome messages, avatars, save-snapshot hints, debug payload UI,
   docs-RAG build metadata, spinner/error banners, shared chat stores, and response source display.
 - `frontend/src/utils/openAI.js` owns the mature message-building/RAG/player-state pipeline:
-  the existing chat message builder, persona system messages, `PlayerState` snapshots, curated
-  knowledge pack,
+  `buildChatPrompt()`, persona system messages, `PlayerState` snapshots, curated knowledge pack,
   docs RAG, context source merging, response validation/sanitization, OpenAI error summaries,
   and `GPT5ChatV2()`.
 - `frontend/src/pages/chat/svelte/TokenPlaceChat.svelte` is a simpler parallel chat UI with a
@@ -173,6 +172,9 @@ UI ownership changes:
   token.place this should be the OpenAI-compatible `messages` array sent to API v1.
 - token.place responses should pass through the same DSPACE response validation and source-link
   sanitization currently used for OpenAI responses.
+- Any reuse or extraction from `buildChatPrompt()` must first audit, update, or remove the current
+  `providerRealityLine` text that says v3 chat uses OpenAI and token.place is deferred to v3.1,
+  so token.place default requests do not send stale provider-reality instructions.
 
 ## Proposed implementation sequence
 
@@ -234,10 +236,12 @@ This sequence keeps each implementation PR reviewable:
   that token.place blocked the request by policy.
 - **Preserving RAG/player-state/persona behavior:** before sharing the existing message-building
   path with token.place, update or remove provider-specific reality guidance such as the
-  `providerRealityLine` that says OpenAI is the v3 provider and token.place is deferred. Then
+  `providerRealityLine` that says v3 chat uses OpenAI and token.place is deferred to v3.1. Then
   reuse only provider-neutral message-building pieces, or extract them, so token.place receives
   accurate system/persona/player-state/docs-RAG context. Update guardrail tests for the new
-  provider reality and do not regress debug payload, source display, or response sanitization.
+  provider reality; token.place default requests and debug/system payloads must not contain stale
+  v3 OpenAI-default wording. Do not regress debug payload, source display, or response
+  sanitization.
 - **No OpenAI key or Authorization header to token.place:** keep token.place and OpenAI client
   functions separate. token.place requests should set only content headers and should never read
   `state.openAI.apiKey`. Unit tests must assert no `Authorization` header and no token.place API
@@ -264,6 +268,8 @@ Unit tests:
   `content_policy_violation` payloads.
 - token.place client does not include an `Authorization` header, OpenAI API key, or token.place API
   key in headers/body.
+- token.place default request payloads and debug/system payload views do not include stale
+  provider guidance that says v3 chat uses OpenAI or token.place is deferred to v3.1.
 - provider selection helper chooses token.place for fresh/invalid settings and OpenAI only for
   explicit `settings.chatProvider === 'openai'`.
 - OpenAI selected without a saved key returns a guidance state instead of calling OpenAI.
