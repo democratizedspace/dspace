@@ -361,9 +361,13 @@ Run `npm test` to verify configuration stays in sync.
   immutable narrative history.
 - Only fix typos, spacing, or broken links in historical files — document those adjustments in
   `frontend/tests/fixtures/changelogCorrections.json` and refresh the associated snapshots.
-- When you need to reference newer context from an older release, add an entry to
-  `frontend/src/utils/changelogNotes.ts` so the UI appends a note at render time instead of
-  editing the archived markdown body.
+- Patch updates append addenda or UI notes to the latest relevant changelog entry instead of
+  creating a new dated changelog file. When you need to reference newer context from an older
+  release, add an entry to `frontend/src/utils/changelogNotes.ts` so the UI appends a note at
+  render time instead of editing the archived markdown body.
+- Major and minor versions require new dated changelog markdown files under
+  `frontend/src/pages/docs/md/changelog/` (for example, `20260801.md` for a dated v3.1 minor
+  release entry).
 
 ## Additional Resources
 

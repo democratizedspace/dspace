@@ -7,8 +7,8 @@ OpenAI API key, and no per-token cost concern. The default chat provider must be
 token.place API v1. OpenAI remains supported only as an explicit opt-in provider selected from
 `/settings` with the user's own API key.
 
-This document is planning-only for prompts 2-7. It should make the later implementation prompts
-safe without changing production behavior yet.
+This document is planning-only for the staged implementation sequence below. It should make the
+later implementation work safe without changing production behavior yet.
 
 Non-goals and hard constraints:
 
@@ -16,7 +16,9 @@ Non-goals and hard constraints:
 - Do not add streaming; API v1 is non-streaming and rejects `stream: true`.
 - Do not use the token.place npm package or add a token.place runtime dependency.
 - Do not send, store, or request a token.place API key.
-- Do not use legacy `/api/chat`, `/chat`, relay sink/source/faucet, or other legacy relay paths.
+- Do not use legacy token.place/backend `/api/chat`, token.place/backend `/chat`, relay
+  sink/source/faucet, or other legacy relay paths. This does not prohibit the DSPACE `/chat`
+  UI route.
 - Do not reintroduce OpenAI as the default provider during rollback.
 
 ## Current DSPACE Chat state
@@ -31,10 +33,11 @@ parallel token.place panel:
   `TokenPlaceChat` when `isTokenPlaceEnabled()` returns true. When token.place is disabled it
   shows a banner saying token.place is coming in v3.1.
 - `frontend/src/pages/chat/svelte/OpenAIChat.svelte` owns the full production NPC chat UI:
-  persona selector, welcome messages, avatars, save-snapshot hints, debug/prompt UI,
+  persona selector, welcome messages, avatars, save-snapshot hints, debug payload UI,
   docs-RAG build metadata, spinner/error banners, shared chat stores, and response source display.
-- `frontend/src/utils/openAI.js` owns the mature prompt/RAG/player-state pipeline:
-  `buildChatPrompt()`, persona system prompts, `PlayerState` snapshots, curated knowledge pack,
+- `frontend/src/utils/openAI.js` owns the mature message-building/RAG/player-state pipeline:
+  the existing chat message builder, persona system messages, `PlayerState` snapshots, curated
+  knowledge pack,
   docs RAG, context source merging, response validation/sanitization, OpenAI error summaries,
   and `GPT5ChatV2()`.
 - `frontend/src/pages/chat/svelte/TokenPlaceChat.svelte` is a simpler parallel chat UI with a
@@ -57,7 +60,7 @@ parallel token.place panel:
   upgrade, and data reset panels, but not chat provider selection or OpenAI key management.
 - `frontend/__tests__/tokenPlace.test.js` tests the legacy opt-in flag, legacy `/chat` endpoint,
   `{ reply }` parsing, and disabled-by-default behavior. Those tests should be replaced or
-  updated in prompt 2.
+  updated in the client-layer phase.
 - Relevant Playwright coverage currently assumes OpenAI by default in specs such as
   `frontend/e2e/chat-message-flow.spec.ts`, `frontend/e2e/chat-rag-context.spec.ts`, and
   `frontend/e2e/chat-persona-switching.spec.ts`. `frontend/e2e/token-place-chat-banners.spec.ts`
@@ -99,7 +102,7 @@ Implementation should use direct HTTPS `fetch` calls to token.place API v1:
 Forbidden integration targets:
 
 - No `/api/chat`.
-- No bare `/chat`.
+- No bare token.place/backend `/chat`.
 - No legacy `/sink`, `/source`, `/faucet`, `/retrieve`, or `/next_server` fallbacks.
 - No API v2 routes such as `/api/v2/chat/completions` or `/v2/chat/completions`.
 - No streaming/SSE code paths.
@@ -129,13 +132,14 @@ Normalization rules:
 - Do not migrate or rename existing OpenAI keys in v3.1; simply continue reading/writing
   `openAI.apiKey` from the new settings panel.
 - Treat old `state.tokenPlace.enabled` and `VITE_TOKEN_PLACE_ENABLED` behavior as legacy only.
-  Those flags must not disable default v3.1 Chat. Prompt 2 can keep compatibility helpers for old
-  tests if needed, but provider selection should not depend on `tokenPlace.enabled`.
+  Those flags must not disable default v3.1 Chat. The client-layer phase can keep compatibility
+  helpers for old tests if needed, but provider selection should not depend on
+  `tokenPlace.enabled`.
 - A token.place base URL may be read from an environment variable such as `VITE_TOKEN_PLACE_URL`
   or the existing compatibility field `state.tokenPlace.url`. Normalize it as an origin:
   `https://token.place` by default, `https://staging.token.place` for staging, or an explicit test
   override. The API client appends `/api/v1/chat/completions`.
-- There must be no `tokenPlace.apiKey`, token.place credential prompt, or token.place
+- There must be no `tokenPlace.apiKey`, token.place credential form, or token.place
   `Authorization` header.
 - Recommended optional model override: `VITE_TOKEN_PLACE_CHAT_MODEL`, defaulting to
   `gpt-5-chat-latest`. Do not make the model a user-facing key-management setting in v3.1.
@@ -162,7 +166,7 @@ UI ownership changes:
   simpler UI.
 - The active panel should expose a stable provider marker such as
   `data-provider="token-place"` or `data-provider="openai"` for Playwright tests.
-- The persona selector, welcome messages, avatars, save-snapshot hints, debug prompt payload,
+- The persona selector, welcome messages, avatars, save-snapshot hints, debug message payload,
   docs-RAG metadata, source display, and player-state summary should continue to work regardless
   of provider.
 - Debug payload should show the actual message payload sent to the selected provider. For
@@ -172,9 +176,9 @@ UI ownership changes:
 
 ## Proposed implementation sequence
 
-This sequence matches prompts 2-7 and keeps each PR reviewable:
+This sequence keeps each implementation PR reviewable:
 
-1. **Prompt 2: token.place API v1 client layer**
+1. **Phase 1: token.place API v1 client layer**
    - Replace legacy `/chat` fetch logic with a `POST /api/v1/chat/completions` client.
    - Build direct `fetch` requests with `Content-Type: application/json` only.
    - Include `model` and OpenAI-compatible `messages`.
@@ -184,31 +188,33 @@ This sequence matches prompts 2-7 and keeps each PR reviewable:
      content policy, rate limit, URL normalization, model default, abort signal, and absence of
      Authorization/token.place API key headers.
 
-2. **Prompt 3: Settings provider configuration**
+2. **Phase 2: Settings provider configuration**
    - Add `settings.chatProvider` normalization/defaulting.
    - Move OpenAI key management to `/settings` while continuing to store `openAI.apiKey`.
    - Add a settings panel for provider selection: token.place default, OpenAI opt-in.
    - Persist provider preference and key changes through existing game-state storage.
 
-3. **Prompt 4: Single NPC chat UI**
+3. **Phase 3: Single NPC chat UI**
    - Refactor the full NPC/persona/debug UI into one provider-aware chat panel.
    - Default fresh users to token.place.
    - Use OpenAI only when `settings.chatProvider === 'openai'`.
    - Remove `OpenAIAPIKeySettings` from `/chat`.
    - Retire or reduce `TokenPlaceChat.svelte` to a compatibility wrapper only if needed.
 
-4. **Prompt 5: Unit and e2e coverage**
+4. **Phase 4: Unit and e2e coverage**
    - Update OpenAI-by-default Playwright tests to select OpenAI in settings when testing OpenAI.
    - Add fresh-user token.place default tests with fetch stubs.
    - Add settings persistence and provider switching tests.
    - Add error banner tests for token.place network/provider/content-policy/rate-limit failures.
 
-5. **Prompt 6: User-facing docs and release QA**
+5. **Phase 5: User-facing docs and release QA**
    - Update Chat and Settings docs for token.place default and OpenAI opt-in.
-   - Create the `20260801` changelog entry following the historical changelog policy.
+   - Create the `frontend/src/pages/docs/md/changelog/20260801.md` changelog entry for the v3.1
+     minor release. The historical changelog policy only appends patch updates to existing
+     changelog files; major and minor versions require new dated changelog files.
    - Flesh out `docs/qa/v3.1.md` with staging/prod verification steps and expected results.
 
-6. **Prompt 7: Cleanup and hardening**
+6. **Phase 6: Cleanup and hardening**
    - Audit legacy routes and stale flags.
    - Remove dead token.place `/chat` assumptions.
    - Verify staging/prod base URLs, model override, and no credential leakage.
@@ -226,9 +232,12 @@ This sequence matches prompts 2-7 and keeps each PR reviewable:
   `status`, `error.type`, `error.code`, `error.param`, and `error.message`, and map known cases to
   clear banners. HTTP 429 should be a rate-limit banner. `content_policy_violation` should explain
   that token.place blocked the request by policy.
-- **Preserving RAG/player-state/persona behavior:** reuse `buildChatPrompt()` or extract its
-  provider-neutral pieces so token.place receives the same system/persona/player-state/docs-RAG
-  context as OpenAI. Do not regress debug payload, source display, or response sanitization.
+- **Preserving RAG/player-state/persona behavior:** before sharing the existing message-building
+  path with token.place, update or remove provider-specific reality guidance such as the
+  `providerRealityLine` that says OpenAI is the v3 provider and token.place is deferred. Then
+  reuse only provider-neutral message-building pieces, or extract them, so token.place receives
+  accurate system/persona/player-state/docs-RAG context. Update guardrail tests for the new
+  provider reality and do not regress debug payload, source display, or response sanitization.
 - **No OpenAI key or Authorization header to token.place:** keep token.place and OpenAI client
   functions separate. token.place requests should set only content headers and should never read
   `state.openAI.apiKey`. Unit tests must assert no `Authorization` header and no token.place API
@@ -275,7 +284,7 @@ Playwright/e2e tests:
 - Existing chat persona, debug navigation, build stamp, and docs-RAG tests are updated to run
   against the provider-aware panel or explicitly opt into OpenAI where needed.
 
-Manual/staging checks for prompt 6/7:
+Manual/staging checks for release QA and hardening:
 
 - Staging `/chat` defaults to token.place against `https://staging.token.place` when configured.
 - Production `/chat` defaults to `https://token.place`.
@@ -293,7 +302,7 @@ Manual/staging checks for prompt 6/7:
   opt-in to OpenAI.
 - Keep the v3.1 data model stable so future fixes do not churn saved settings.
 
-## Implementation checklist for later prompts
+## Implementation checklist for later phases
 
 - [ ] token.place default provider is represented as `settings.chatProvider = 'token-place'`.
 - [ ] OpenAI opt-in is represented as `settings.chatProvider = 'openai'` plus `openAI.apiKey`.
@@ -302,4 +311,4 @@ Manual/staging checks for prompt 6/7:
 - [ ] token.place requests use `POST /api/v1/chat/completions`.
 - [ ] token.place responses parse `choices[0].message.content`.
 - [ ] API v2, streaming, token.place npm package integration, token.place auth/API keys, and
-      legacy `/api/chat` or `/chat` endpoints are absent.
+      legacy token.place/backend `/api/chat` or `/chat` endpoints are absent.
