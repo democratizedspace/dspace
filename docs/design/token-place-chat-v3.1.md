@@ -212,8 +212,8 @@ This sequence keeps each implementation PR reviewable:
 5. **Phase 5: User-facing docs and release QA**
    - Update Chat and Settings docs for token.place default and OpenAI opt-in.
    - Create the `frontend/src/pages/docs/md/changelog/20260801.md` changelog entry for the v3.1
-     minor release. The historical changelog policy only appends patch updates to existing
-     changelog files; major and minor versions require new dated changelog files.
+     minor release (this is an explicit human-requested minor-release changelog entry, not a
+     general license for agents to create or update changelogs).
    - Flesh out `docs/qa/v3.1.md` with staging/prod verification steps and expected results.
 
 6. **Phase 6: Cleanup and hardening**
