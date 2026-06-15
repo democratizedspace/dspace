@@ -85,22 +85,45 @@ Implementation should use direct HTTPS `fetch` calls to token.place API v1:
 ```
 
 - Response parsing: read `choices[0].message.content` from the OpenAI-compatible response.
+- Client return-shape contract:
+  - Keep `tokenPlaceChat(messages, options)` as a string-returning compatibility helper only if
+    existing callers/tests need it.
+  - Add or expose a richer helper that returns a stable object shaped exactly as
+    `{ text, contextSources, usage, metadata }`.
+  - `text` comes from `choices[0].message.content`.
+  - `contextSources` comes from DSPACE prompt/RAG context-source handling, not from token.place.
+  - `usage` comes from the token.place OpenAI-compatible response `usage` object when present.
+  - `metadata` comes from the token.place response `metadata` object when present.
 - API v1 is non-streaming. Do not send `stream: true`; if a future helper accepts options, force
   or omit `stream` rather than passing user-provided streaming options through.
+- API v1 rejects `stream: true` with a structured OpenAI-style error whose `param` is `stream`.
 - Prefer model `gpt-5-chat-latest` for DSPACE compatibility. token.place's public integration
   test sends a DSPACE-style request with this model and asserts the same response model and a
   non-empty `choices[0].message.content`; token.place's model aliases route
   `gpt-5-chat-latest` to the canonical API v1 launch backend.
 - API v1 returns structured OpenAI-style errors as `{ error: { message, type, param?, code? } }`.
   The client should preserve status/type/code/message for UI summaries and tests.
+- API v1 validates `model` and `messages`; validation failures should stay classified as
+  structured provider errors internally.
 - Content moderation can return `error.type = "content_policy_violation"` and
   `error.code = "content_blocked"`.
 - Rate limits and daily quotas may surface as HTTP 429 provider errors. Preserve response status
   even when parsing fails.
+- Metadata behavior is limited to the current API v1 JSON echo behavior:
+  - token.place echoes request `metadata` into the response only when request `metadata` is a
+    non-empty object.
+  - token.place `tests/integration/test_dspace_chat_alias.py` includes a metadata round-trip test
+    using `{ client: "dspace", conversation_id: "conv-42" }`.
+  - DSPACE may send safe, non-secret metadata for correlation, for example
+    `{ client: "dspace", provider: "token.place" }` plus a local conversation id if useful.
+  - Metadata must not contain OpenAI keys, token.place credentials, player inventory details, raw
+    save data, or any secret.
+  - Do not treat metadata as arbitrary telemetry, analytics, auth, or billing metadata beyond the
+    current request/response JSON echo behavior.
 
 Forbidden integration targets:
 
-- No `/api/chat`.
+- No legacy token.place/backend `/api/chat`.
 - No bare token.place/backend `/chat`.
 - No legacy `/sink`, `/source`, `/faucet`, `/retrieve`, or `/next_server` fallbacks.
 - No API v2 routes such as `/api/v2/chat/completions` or `/v2/chat/completions`.
@@ -134,10 +157,15 @@ Normalization rules:
   Those flags must not disable default v3.1 Chat. The client-layer phase can keep compatibility
   helpers for old tests if needed, but provider selection should not depend on
   `tokenPlace.enabled`.
-- A token.place base URL may be read from an environment variable such as `VITE_TOKEN_PLACE_URL`
-  or the existing compatibility field `state.tokenPlace.url`. Normalize it as an origin:
-  `https://token.place` by default, `https://staging.token.place` for staging, or an explicit test
-  override. The API client appends `/api/v1/chat/completions`.
+- The token.place origin/base URL must use the existing DSPACE compatibility environment variable
+  `VITE_TOKEN_PLACE_URL`, or the existing compatibility field `state.tokenPlace.url` when needed.
+  Default to `https://token.place`; DSPACE staging should configure
+  `VITE_TOKEN_PLACE_URL=https://staging.token.place`; production should omit the override or
+  configure `VITE_TOKEN_PLACE_URL=https://token.place`.
+- Normalize token.place URL values before appending `/api/v1/chat/completions`: accept
+  origin-style values such as `https://token.place`, strip trailing slashes, tolerate legacy
+  `https://token.place/api` by normalizing it to the origin, and never produce
+  `/api/api/v1/chat/completions`.
 - There must be no `tokenPlace.apiKey`, token.place credential form, or token.place
   `Authorization` header.
 - Recommended optional model override: `VITE_TOKEN_PLACE_CHAT_MODEL`, defaulting to
@@ -175,13 +203,21 @@ UI ownership changes:
 - Any reuse or extraction from `buildChatPrompt()` must first audit, update, or remove the current
   `providerRealityLine` text that says v3 chat uses OpenAI and token.place is deferred to v3.1,
   so token.place default requests do not send stale provider-reality instructions.
+- Hard shared prompt/RAG requirement: token.place and OpenAI should receive the same DSPACE
+  persona, `PlayerState`, curated DSPACE knowledge, docs RAG, and context-source handling by
+  reusing or extracting the existing `buildChatPrompt()` path, but only after provider-reality
+  guidance is v3.1-accurate and either provider-neutral or provider-aware.
+- Test requirement: token.place request payloads and debug prompt payloads must not contain
+  "token.place is deferred", "chat uses OpenAI" as a default-provider claim, or equivalent stale
+  v3.0 wording.
 
 ## Proposed implementation sequence
 
 This sequence keeps each implementation PR reviewable:
 
 1. **Phase 1: token.place API v1 client layer**
-   - Replace legacy `/chat` fetch logic with a `POST /api/v1/chat/completions` client.
+   - Replace legacy token.place/backend `/chat` fetch logic with a
+     `POST /api/v1/chat/completions` client.
    - Build direct `fetch` requests with `Content-Type: application/json` only.
    - Include `model` and OpenAI-compatible `messages`.
    - Parse `choices[0].message.content`.
@@ -189,6 +225,8 @@ This sequence keeps each implementation PR reviewable:
    - Add unit tests for success parsing, malformed responses, network failure, HTTP errors,
      content policy, rate limit, URL normalization, model default, abort signal, and absence of
      Authorization/token.place API key headers.
+   - Cover the richer `{ text, contextSources, usage, metadata }` return shape, including API v1
+     `usage`/`metadata` passthrough and DSPACE-owned `contextSources`.
 
 2. **Phase 2: Settings provider configuration**
    - Add `settings.chatProvider` normalization/defaulting.
@@ -232,8 +270,11 @@ This sequence keeps each implementation PR reviewable:
   live network.
 - **Structured provider errors and rate limits:** parse JSON error payloads first, preserve
   `status`, `error.type`, `error.code`, `error.param`, and `error.message`, and map known cases to
-  clear banners. HTTP 429 should be a rate-limit banner. `content_policy_violation` should explain
-  that token.place blocked the request by policy.
+  internal classification while rendering only safe user-facing summaries rather than raw relay or
+  provider internals. HTTP 429 should be a rate/quota banner. Provider 5xx should be a
+  token.place/server unavailable banner. Malformed HTTP 200 responses missing usable
+  `choices[0].message.content` should be a malformed/provider response banner.
+  `content_policy_violation` should explain that token.place blocked the request by policy.
 - **Preserving RAG/player-state/persona behavior:** before sharing the existing message-building
   path with token.place, update or remove provider-specific reality guidance such as the
   `providerRealityLine` that says v3 chat uses OpenAI and token.place is deferred to v3.1. Then
@@ -294,7 +335,12 @@ Manual/staging checks for release QA and hardening:
 
 - Staging `/chat` defaults to token.place against `https://staging.token.place` when configured.
 - Production `/chat` defaults to `https://token.place`.
-- Browser devtools show no token.place `Authorization` header.
+- Local/dev tests use fetch stubs or explicit local/test overrides, not live token.place calls in
+  CI.
+- Browser devtools show `POST https://token.place/api/v1/chat/completions` in production, or the
+  staging equivalent, with no token.place `Authorization` header.
+- Browser devtools show a JSON body with `model`, `messages`, optional safe `metadata`, and
+  `stream` absent or `false`, never `true`.
 - Browser storage contains no token.place credential.
 - OpenAI remains available only after selecting OpenAI and saving an OpenAI key in `/settings`.
 
