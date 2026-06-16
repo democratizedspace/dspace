@@ -111,6 +111,8 @@ export default defineConfig({
       'frontend/__tests__/gameState/common.test.js',
       'frontend/__tests__/ShoppingForm.test.js',
       'frontend/__tests__/offlineWorkerRegistration.test.js',
+      'frontend/__tests__/tokenPlace.test.js',
+      '__tests__/tokenPlace.test.js',
     ],
     exclude: ['frontend/e2e/**'],
     coverage: {
