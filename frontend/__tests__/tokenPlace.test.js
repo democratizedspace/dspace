@@ -21,6 +21,7 @@ const {
     tokenPlaceChat,
 } = await import('../src/utils/tokenPlace.js');
 const { getTokenPlaceErrorSummary } = await import('../src/utils/tokenPlaceErrors.js');
+const { buildChatPrompt } = await import('../src/utils/openAI.js');
 
 const okResponse = (body = {}) => ({
     ok: true,
@@ -191,10 +192,12 @@ describe('token.place API v1 client', () => {
         }
 
         expect(thrownError).toMatchObject({ type: 'malformed' });
-        expect(getTokenPlaceErrorSummary(thrownError)).toEqual({
-            type: 'malformed',
-            message: 'token.place returned an unexpected response. Please try again shortly.',
-        });
+        const summary = getTokenPlaceErrorSummary(thrownError);
+        expect(summary.type).toBe('malformed');
+        expect(summary.message).toBe(
+            'token.place returned an unexpected response. Please try again shortly.'
+        );
+        expect(summary.message).not.toMatch(/OpenAI/i);
     });
 
     test('structured API errors produce expected summaries', async () => {
@@ -247,11 +250,41 @@ describe('token.place API v1 client', () => {
         await expect(tokenPlaceChat([])).rejects.toMatchObject({ type: 'network' });
     });
 
-    test('stale provider guidance is absent from token.place request payloads', async () => {
-        await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        const serialized = JSON.stringify(getFetchCall().body);
-        expect(serialized).not.toMatch(/token\.place is deferred/i);
-        expect(serialized).not.toMatch(/chat uses OpenAI/i);
+    test('abort errors classify safely', async () => {
+        const abortError = new Error('The operation was aborted.');
+        abortError.name = 'AbortError';
+        fetch.mockRejectedValueOnce(abortError);
+
+        let thrownError;
+        try {
+            await tokenPlaceChat([]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({ type: 'abort' });
+        const summary = getTokenPlaceErrorSummary(thrownError);
+        expect(summary).toEqual({
+            type: 'abort',
+            message: 'The token.place request was canceled. Please try again.',
+        });
+        expect(summary.message).not.toMatch(/OpenAI/i);
+    });
+
+    test('shared prompt and token.place payload omit stale provider guidance', async () => {
+        const promptPayload = await buildChatPrompt([{ role: 'user', content: 'hello' }]);
+        const serializedPrompt = JSON.stringify({
+            combinedMessages: promptPayload.combinedMessages,
+            debugMessages: promptPayload.debugMessages,
+        });
+
+        expect(serializedPrompt).not.toMatch(/token\.place is deferred/i);
+        expect(serializedPrompt).not.toMatch(/chat uses OpenAI/i);
+
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], { promptPayload });
+        const serializedRequest = JSON.stringify(getFetchCall().body.messages);
+        expect(serializedRequest).not.toMatch(/token\.place is deferred/i);
+        expect(serializedRequest).not.toMatch(/chat uses OpenAI/i);
     });
 });
 
