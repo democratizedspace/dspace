@@ -59,13 +59,16 @@ REQUEST:
    to make them pass. Extend coverage for edge cases when feasible.
 4. Update or remove the original promise (TODO comment, checklist entry, doc note) so the repo no
    longer advertises incomplete work.
-5. Refresh related documentation or changelog entries to reflect the shipped behavior. When
-   touching the changelog, do **not** create a new dated file—append your notes to the most
-   recent future-dated entry instead (for example,
-   [`frontend/src/pages/docs/md/changelog/20260401.md`](../../../frontend/src/pages/docs/md/changelog/20260401.md)
-   on the `v3` branch). Never rewrite the body of published changelog markdown; use
-   `frontend/src/utils/changelogNotes.ts` to append clarifying notes and reserve direct edits for
-   spelling, whitespace, or broken link fixes recorded in
+5. Refresh related documentation to reflect the shipped behavior. Do not create, update, or
+   append changelog entries by default; only do changelog work when the human task prompt
+   explicitly requests it. Human release-engineer instructions control SemVer level and changelog
+   scope: if the prompt names a new changelog file/date, create or use that file exactly as
+   requested; if the prompt explicitly requests a patch changelog update without naming a new
+   file, append/update the appropriate existing changelog entry. Never infer a release level,
+   invent a release date, create a changelog file, or append changelog notes on your own. Never
+   rewrite the body of published changelog markdown; use `frontend/src/utils/changelogNotes.ts`
+   only when explicitly requested changelog work needs appended render-time notes, and reserve
+   direct edits for spelling, whitespace, or broken link fixes recorded in
    `frontend/tests/fixtures/changelogCorrections.json`.
 6. Run `npm run audit:ci`, `npm run lint`, `npm run type-check`, `npm run build`, and
    `npm run test:ci`. Install Playwright browsers with

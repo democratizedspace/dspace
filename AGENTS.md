@@ -357,13 +357,24 @@ Run `npm test` to verify configuration stays in sync.
 
 ## Historical changelog policy
 
+- Default: do not create, update, or append changelog entries unless the human task prompt
+  explicitly requests changelog work. Do not infer that a feature, fix, patch, minor release,
+  major release, or release-like change requires a changelog update.
+- Human release-engineer instructions control SemVer level and changelog scope. Do not infer
+  major/minor/patch level, invent a release date, create a changelog file, or append changelog
+  notes without explicit human direction. If this AGENTS.md guidance and a narrower human task
+  prompt conflict, the explicit human task prompt controls for that task.
+- When the human task prompt explicitly names a new changelog file/date, create or use that file
+  exactly as requested.
+- When the human task prompt explicitly requests a patch changelog update without naming a new
+  file, append/update the appropriate existing changelog entry.
 - Treat published changelog markdown under `frontend/src/pages/docs/md/changelog/` as
   immutable narrative history.
 - Only fix typos, spacing, or broken links in historical files — document those adjustments in
   `frontend/tests/fixtures/changelogCorrections.json` and refresh the associated snapshots.
-- When you need to reference newer context from an older release, add an entry to
-  `frontend/src/utils/changelogNotes.ts` so the UI appends a note at render time instead of
-  editing the archived markdown body.
+- When explicitly requested changelog work needs to reference newer context from an older release,
+  add an entry to `frontend/src/utils/changelogNotes.ts` so the UI appends a note at render time
+  instead of editing the archived markdown body.
 
 ## Additional Resources
 
