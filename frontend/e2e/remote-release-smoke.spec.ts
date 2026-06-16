@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url';
 import { expect, test, type Page } from '@playwright/test';
 import path from 'path';
-import { waitForHydration } from './test-helpers';
+import { seedOpenAIChatState, waitForHydration } from './test-helpers';
 
 const TOP_NAV_ROUTES = [
     '/',
@@ -281,6 +281,7 @@ async function createAndDeleteCustomItem(page: Page): Promise<void> {
 async function verifyChat(page: Page): Promise<void> {
     if (CHAT_MODE === 'live') {
         await configureLiveChatTransport(page);
+        await seedOpenAIChatState(page);
     }
 
     await page.goto('/chat');

@@ -369,6 +369,15 @@ export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
 }
 
+export async function seedOpenAIChatState(page: Page, apiKey = 'e2e-openai-key'): Promise<void> {
+    await page.evaluate((key) => {
+        const raw = localStorage.getItem('gameState');
+        const state = raw ? JSON.parse(raw) : {};
+        state.openAI = { ...(state.openAI || {}), apiKey: key };
+        localStorage.setItem('gameState', JSON.stringify(state));
+    }, apiKey);
+}
+
 async function seedCustomEntity(
     page: Page,
     entity: Record<string, unknown>,

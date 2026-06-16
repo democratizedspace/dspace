@@ -12,6 +12,7 @@ test.describe('chat RAG context', () => {
                 const gameState = {
                     _meta: { lastUpdated: now },
                     settings: { showChatDebugPayload: true },
+                    openAI: { apiKey: 'e2e-openai-key' },
                     inventory: { [inventoryId]: 2 },
                     quests: {
                         [questId]: { stepId: 2 },

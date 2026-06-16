@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { npcPersonas } from '../src/data/npcPersonas.js';
-import { waitForHydration } from './test-helpers';
+import { seedOpenAIChatState, waitForHydration } from './test-helpers';
 
 const personaExpectations = npcPersonas.map((persona) => ({
     id: persona.id,
@@ -27,6 +27,8 @@ test.beforeEach(async ({ page }) => {
             }
         }
     });
+
+    await seedOpenAIChatState(page);
 });
 
 test.describe('Chat NPC persona switching', () => {

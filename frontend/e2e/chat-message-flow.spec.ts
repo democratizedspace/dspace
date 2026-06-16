@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-import { clearUserData, waitForHydration } from './test-helpers';
+import { clearUserData, seedOpenAIChatState, waitForHydration } from './test-helpers';
 
 const LONG_REPLY =
     'This is a long assistant response that should render in the chat history without breaking the layout or truncating text, even when it spans multiple sentences and needs wrapping across several lines for readability.';
@@ -133,6 +133,7 @@ const sendMessage = async (page: Page, text: string) => {
 test.describe('Chat message flow', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+        await seedOpenAIChatState(page);
     });
 
     test('shows loading state and renders assistant replies', async ({ page }) => {
