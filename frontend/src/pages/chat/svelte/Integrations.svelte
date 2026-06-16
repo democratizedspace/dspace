@@ -11,6 +11,10 @@
     const tokenPlaceEnabled = derived(gameState, ($gameState) =>
         isTokenPlaceEnabled({ state: $gameState })
     );
+    const showTokenPlaceChat = derived(
+        [tokenPlaceEnabled, apiKey],
+        ([$tokenPlaceEnabled, $apiKey]) => $tokenPlaceEnabled && !$apiKey
+    );
 
     onMount(async () => {
         await ready;
@@ -26,12 +30,12 @@
             <a href="https://token.place" target="_blank" rel="noopener">token.place</a> — no key needed.
         </div>
     {/if}
-    {#if $tokenPlaceEnabled}
+    <div class="api-container">
+        <OpenAIAPIKeySettings {apiKey} />
+    </div>
+    {#if $showTokenPlaceChat}
         <TokenPlaceChat />
     {:else}
-        <div class="api-container">
-            <OpenAIAPIKeySettings {apiKey} />
-        </div>
         <OpenAIChat />
     {/if}
 </div>

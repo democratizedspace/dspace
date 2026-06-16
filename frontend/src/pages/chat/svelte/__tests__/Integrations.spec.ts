@@ -9,7 +9,7 @@ vi.mock('svelte/transition', () => ({
 
 const mockRefs = vi.hoisted(() => ({
     baseState: {
-        openAI: { apiKey: 'sk-test' },
+        openAI: { apiKey: '' },
         tokenPlace: undefined,
     },
     resetStore: () => undefined,
@@ -31,6 +31,7 @@ vi.mock('../../../../utils/gameState/common.js', async () => {
 
 describe('Integrations chat entrypoint', () => {
     beforeEach(() => {
+        mockRefs.baseState.openAI.apiKey = '';
         mockRefs.resetStore();
         delete process.env.VITE_TOKEN_PLACE_URL;
         delete process.env.VITE_TOKEN_PLACE_ENABLED;
@@ -40,7 +41,7 @@ describe('Integrations chat entrypoint', () => {
         vi.clearAllMocks();
     });
 
-    it('renders token.place chat by default without the deferred banner', async () => {
+    it('renders token.place chat by default without the deferred banner while keeping OpenAI settings reachable', async () => {
         render(Integrations);
 
         await waitFor(() =>
@@ -50,6 +51,24 @@ describe('Integrations chat entrypoint', () => {
         );
         expect(
             document.querySelector('[data-testid="chat-panel"][data-provider="openai"]')
+        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId('token-place-disabled-banner')).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.getByText(/OpenAI API Key/i)).toBeInTheDocument());
+    });
+
+    it('renders OpenAI chat for users with an existing OpenAI API key', async () => {
+        mockRefs.baseState.openAI.apiKey = 'sk-test';
+        mockRefs.resetStore();
+
+        render(Integrations);
+
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-testid="chat-panel"][data-provider="openai"]')
+            ).toBeInTheDocument()
+        );
+        expect(
+            document.querySelector('[data-testid="chat-panel"][data-provider="token-place"]')
         ).not.toBeInTheDocument();
         expect(screen.queryByTestId('token-place-disabled-banner')).not.toBeInTheDocument();
     });
