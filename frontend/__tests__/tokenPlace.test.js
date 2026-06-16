@@ -289,15 +289,16 @@ describe('token.place API v1 client', () => {
 });
 
 describe('isTokenPlaceEnabled', () => {
-    test('keeps the legacy token.place panel disabled by default', () => {
-        expect(isTokenPlaceEnabled({ state: {} })).toBe(false);
+    test('enables token.place by default unless explicitly disabled', () => {
+        expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: undefined } } })).toBe(true);
         expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(false);
     });
 
-    test('supports explicit legacy opt-in while provider-aware UI is pending', () => {
+    test('supports explicit state and environment overrides', () => {
         expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(true);
         process.env.VITE_TOKEN_PLACE_ENABLED = 'true';
-        expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(true);
         process.env.VITE_TOKEN_PLACE_ENABLED = 'false';
         expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(false);
     });

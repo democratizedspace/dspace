@@ -92,6 +92,7 @@ export default defineConfig({
     ],
   },
   test: {
+    root: __dirname,
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
@@ -111,8 +112,8 @@ export default defineConfig({
       'frontend/__tests__/gameState/common.test.js',
       'frontend/__tests__/ShoppingForm.test.js',
       'frontend/__tests__/offlineWorkerRegistration.test.js',
-      '__tests__/tokenPlace.test.js',
-      '__tests__/tokenPlaceErrors.test.js',
+      'frontend/__tests__/tokenPlace.test.js',
+      'frontend/__tests__/tokenPlaceErrors.test.js',
     ],
     exclude: ['frontend/e2e/**'],
     coverage: {

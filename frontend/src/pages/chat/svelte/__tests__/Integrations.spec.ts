@@ -40,17 +40,17 @@ describe('Integrations chat entrypoint', () => {
         vi.clearAllMocks();
     });
 
-    it('renders OpenAI chat and hides token.place by default', async () => {
+    it('renders token.place chat by default without the deferred banner', async () => {
         render(Integrations);
 
         await waitFor(() =>
             expect(
-                document.querySelector('[data-testid="chat-panel"][data-provider="openai"]')
+                document.querySelector('[data-testid="chat-panel"][data-provider="token-place"]')
             ).toBeInTheDocument()
         );
         expect(
-            document.querySelector('[data-testid="chat-panel"][data-provider="token-place"]')
+            document.querySelector('[data-testid="chat-panel"][data-provider="openai"]')
         ).not.toBeInTheDocument();
-        expect(screen.getByTestId('token-place-disabled-banner')).toBeInTheDocument();
+        expect(screen.queryByTestId('token-place-disabled-banner')).not.toBeInTheDocument();
     });
 });

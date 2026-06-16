@@ -26,12 +26,13 @@
             <a href="https://token.place" target="_blank" rel="noopener">token.place</a> — no key needed.
         </div>
     {/if}
-    <div class="api-container">
-        <OpenAIAPIKeySettings {apiKey} />
-    </div>
-    <OpenAIChat />
     {#if $tokenPlaceEnabled}
         <TokenPlaceChat />
+    {:else}
+        <div class="api-container">
+            <OpenAIAPIKeySettings {apiKey} />
+        </div>
+        <OpenAIChat />
     {/if}
 </div>
 

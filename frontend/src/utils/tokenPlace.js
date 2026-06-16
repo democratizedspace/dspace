@@ -70,7 +70,7 @@ export const isTokenPlaceEnabled = (options = {}) => {
     if (envOverride !== undefined) return envOverride;
 
     const state = options.state || loadGameState();
-    return parseEnabledOverride(state?.tokenPlace?.enabled) === true;
+    return parseEnabledOverride(state?.tokenPlace?.enabled) !== false;
 };
 
 const sanitizeChatMessage = (message) => ({
