@@ -107,6 +107,7 @@ describe('token.place API v1 client', () => {
         });
         const { init, body } = getFetchCall();
         expect(init.headers.Authorization).toBeUndefined();
+        expect(init.credentials).toBe('omit');
         const serialized = JSON.stringify({ headers: init.headers, body });
         expect(serialized).not.toContain('sk-secret-openai-key');
         expect(serialized).not.toContain('token-place-secret');
@@ -118,12 +119,25 @@ describe('token.place API v1 client', () => {
         });
     });
 
-    test('request body includes model, messages, safe metadata, and no true stream', async () => {
-        await TokenPlaceChatV2([{ role: 'user', content: 'hello' }]);
+    test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
+        await TokenPlaceChatV2([
+            {
+                role: 'user',
+                content: 'hello',
+                id: 'ui-message-id',
+                timestamp: 123,
+                tokens: 1,
+                avatar: 'pilot.png',
+            },
+        ]);
         const { body } = getFetchCall();
         expect(body.model).toBe('gpt-5-chat-latest');
         expect(body.messages[0].role).toBe('system');
         expect(body.messages.at(-1)).toEqual({ role: 'user', content: 'hello' });
+        expect(body.messages.at(-1)).not.toHaveProperty('id');
+        expect(body.messages.at(-1)).not.toHaveProperty('timestamp');
+        expect(body.messages.at(-1)).not.toHaveProperty('tokens');
+        expect(body.messages.at(-1)).not.toHaveProperty('avatar');
         expect(body.metadata).toEqual({ client: 'dspace', provider: 'token.place' });
         expect(body.stream).not.toBe(true);
     });
@@ -169,15 +183,18 @@ describe('token.place API v1 client', () => {
 
     test('malformed responses throw and classify safely', async () => {
         fetch.mockResolvedValueOnce(okResponse({ choices: [{ message: { content: '' } }] }));
-        await expect(tokenPlaceChat([])).rejects.toMatchObject({ type: 'malformed' });
+        let thrownError;
         try {
             await tokenPlaceChat([]);
         } catch (error) {
-            expect(getTokenPlaceErrorSummary(error)).toEqual({
-                type: 'malformed',
-                message: 'token.place returned an unexpected response. Please try again shortly.',
-            });
+            thrownError = error;
         }
+
+        expect(thrownError).toMatchObject({ type: 'malformed' });
+        expect(getTokenPlaceErrorSummary(thrownError)).toEqual({
+            type: 'malformed',
+            message: 'token.place returned an unexpected response. Please try again shortly.',
+        });
     });
 
     test('structured API errors produce expected summaries', async () => {
@@ -239,8 +256,16 @@ describe('token.place API v1 client', () => {
 });
 
 describe('isTokenPlaceEnabled', () => {
-    test('defaults to true and ignores legacy disabled state for v3.1', () => {
+    test('keeps the legacy token.place panel disabled by default', () => {
+        expect(isTokenPlaceEnabled({ state: {} })).toBe(false);
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(false);
+    });
+
+    test('supports explicit legacy opt-in while provider-aware UI is pending', () => {
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(true);
+        process.env.VITE_TOKEN_PLACE_ENABLED = 'true';
         expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(true);
+        process.env.VITE_TOKEN_PLACE_ENABLED = 'false';
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(false);
     });
 });

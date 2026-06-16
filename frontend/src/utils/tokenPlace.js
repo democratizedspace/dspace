@@ -56,7 +56,31 @@ export const getTokenPlaceChatModel = (options = {}) =>
         options.model || readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') || DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
-export const isTokenPlaceEnabled = () => true;
+const parseEnabledOverride = (value) => {
+    if (value === true || value === false) return value;
+    if (typeof value !== 'string') return undefined;
+    const normalized = value.trim().toLowerCase();
+    if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
+    if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
+    return undefined;
+};
+
+export const isTokenPlaceEnabled = (options = {}) => {
+    const envOverride = parseEnabledOverride(readEnvValue('VITE_TOKEN_PLACE_ENABLED'));
+    if (envOverride !== undefined) return envOverride;
+
+    const state = options.state || loadGameState();
+    return parseEnabledOverride(state?.tokenPlace?.enabled) === true;
+};
+
+const sanitizeChatMessage = (message) => ({
+    role: typeof message?.role === 'string' ? message.role : 'user',
+    content:
+        typeof message?.content === 'string' ? message.content : String(message?.content || ''),
+});
+
+export const sanitizeTokenPlaceMessages = (messages = []) =>
+    (Array.isArray(messages) ? messages : []).map(sanitizeChatMessage);
 
 const sanitizeMetadataValue = (value) => {
     if (typeof value === 'string') return value.slice(0, 200);
@@ -113,7 +137,7 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         : [];
     const requestBody = {
         model: getTokenPlaceChatModel(options),
-        messages: promptPayload.combinedMessages || [],
+        messages: sanitizeTokenPlaceMessages(promptPayload.combinedMessages),
         metadata: buildTokenPlaceMetadata(options.metadata),
     };
 
@@ -128,6 +152,7 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestBody),
             signal: options.signal,
+            credentials: 'omit',
         });
     } catch (error) {
         throw createTokenPlaceNetworkError(error);

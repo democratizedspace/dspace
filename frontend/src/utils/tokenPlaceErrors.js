@@ -71,6 +71,13 @@ export const getTokenPlaceErrorSummary = (error) => {
         };
     }
 
+    if (message.includes('token.place is disabled')) {
+        return {
+            type: 'disabled',
+            message: 'token.place is disabled. Enable it in settings or configure the integration.',
+        };
+    }
+
     if (
         type === 'network' ||
         message.includes('failed to fetch') ||
@@ -118,7 +125,12 @@ export const getTokenPlaceErrorSummary = (error) => {
         };
     }
 
-    if (type === 'provider' || status >= 400) {
+    if (
+        type === 'provider' ||
+        status >= 400 ||
+        message.includes('token.place api request failed') ||
+        message.includes('token.place api v1 request failed')
+    ) {
         return {
             type: 'provider',
             message: 'token.place returned an error. Please try again in a moment.',
