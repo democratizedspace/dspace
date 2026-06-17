@@ -2,7 +2,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/svelte';
-import OpenAIAPIKeySettings from '../src/components/svelte/OpenAIAPIKeySettings.svelte';
+import OpenAIAPIKeySettings from '../src/pages/chat/svelte/OpenAIAPIKeySettings.svelte';
 
 vi.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
