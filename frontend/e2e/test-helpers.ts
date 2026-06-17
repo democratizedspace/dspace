@@ -372,7 +372,9 @@ export async function clearUserData(page: Page): Promise<void> {
 const seedOpenAIChatStateInLocalStorage = (key: string) => {
     const raw = localStorage.getItem('gameState');
     const state = raw ? JSON.parse(raw) : {};
+    const previousMeta = state._meta && typeof state._meta === 'object' ? state._meta : {};
     state.openAI = { ...(state.openAI || {}), apiKey: key };
+    state._meta = { ...previousMeta, lastUpdated: Date.now() };
     localStorage.setItem('gameState', JSON.stringify(state));
 };
 
