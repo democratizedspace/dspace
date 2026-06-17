@@ -10,6 +10,7 @@ vi.mock('svelte/transition', () => ({
 const mockRefs = vi.hoisted(() => ({
     baseState: {
         openAI: { apiKey: '' },
+        settings: { chatProvider: 'token-place' },
         tokenPlace: undefined,
     },
     resetStore: () => undefined,
@@ -32,6 +33,7 @@ vi.mock('../../../../utils/gameState/common.js', async () => {
 describe('Integrations chat entrypoint', () => {
     beforeEach(() => {
         mockRefs.baseState.openAI.apiKey = '';
+        mockRefs.baseState.settings = { chatProvider: 'token-place' };
         mockRefs.resetStore();
         delete process.env.VITE_TOKEN_PLACE_URL;
     });
@@ -40,7 +42,7 @@ describe('Integrations chat entrypoint', () => {
         vi.clearAllMocks();
     });
 
-    it('renders token.place chat by default without the deferred banner while keeping OpenAI settings reachable', async () => {
+    it('renders token.place chat by default without the deferred banner', async () => {
         render(Integrations);
 
         await waitFor(() =>
@@ -52,11 +54,12 @@ describe('Integrations chat entrypoint', () => {
             document.querySelector('[data-testid="chat-panel"][data-provider="openai"]')
         ).not.toBeInTheDocument();
         expect(screen.queryByTestId('token-place-disabled-banner')).not.toBeInTheDocument();
-        await waitFor(() => expect(screen.getByText(/OpenAI API Key/i)).toBeInTheDocument());
+        expect(screen.queryByText(/OpenAI API Key/i)).not.toBeInTheDocument();
     });
 
-    it('renders OpenAI chat for users with an existing OpenAI API key', async () => {
+    it('renders OpenAI chat for users who select OpenAI and have an existing OpenAI API key', async () => {
         mockRefs.baseState.openAI.apiKey = 'sk-test';
+        mockRefs.baseState.settings = { chatProvider: 'openai' };
         mockRefs.resetStore();
 
         render(Integrations);
