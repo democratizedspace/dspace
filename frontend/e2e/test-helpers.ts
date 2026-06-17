@@ -369,20 +369,61 @@ export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
 }
 
-const seedOpenAIChatStateInLocalStorage = (key: string) => {
-    const raw = localStorage.getItem('gameState');
-    const state = raw ? JSON.parse(raw) : {};
-    const previousMeta = state._meta && typeof state._meta === 'object' ? state._meta : {};
-    state.openAI = { ...(state.openAI || {}), apiKey: key };
-    state._meta = { ...previousMeta, lastUpdated: Date.now() };
-    localStorage.setItem('gameState', JSON.stringify(state));
+const seedOpenAIChatStateInBrowser = async ({
+    key,
+    updateLiveState = false,
+}: {
+    key: string;
+    updateLiveState?: boolean;
+}) => {
+    const applyOpenAIKey = (source: Record<string, unknown> | null | undefined) => {
+        const state = source && typeof source === 'object' ? { ...source } : {};
+        const previousMeta =
+            state._meta && typeof state._meta === 'object' && !Array.isArray(state._meta)
+                ? state._meta
+                : {};
+        state.openAI = {
+            ...((state.openAI && typeof state.openAI === 'object' ? state.openAI : {}) as Record<
+                string,
+                unknown
+            >),
+            apiKey: key,
+        };
+        state._meta = { ...previousMeta, lastUpdated: Date.now() };
+        return state;
+    };
+
+    const readLocalState = () => {
+        const raw = localStorage.getItem('gameState');
+        return raw ? JSON.parse(raw) : {};
+    };
+
+    const seededLocalState = applyOpenAIKey(readLocalState());
+    localStorage.setItem('gameState', JSON.stringify(seededLocalState));
+
+    if (!updateLiveState) {
+        return;
+    }
+
+    try {
+        const gameStateModulePath = '/src/utils/gameState/common.js';
+        const gameStateModule = await import(/* @vite-ignore */ gameStateModulePath);
+        await gameStateModule.ready;
+        const liveState = gameStateModule.loadGameState();
+        await gameStateModule.saveGameState(applyOpenAIKey(liveState));
+    } catch (error) {
+        console.warn(
+            'Failed to seed live OpenAI chat state; localStorage seed remains set.',
+            error
+        );
+    }
 };
 
 export async function seedOpenAIChatState(page: Page, apiKey = 'e2e-openai-key'): Promise<void> {
-    await page.addInitScript(seedOpenAIChatStateInLocalStorage, apiKey);
+    await page.addInitScript(seedOpenAIChatStateInBrowser, { key: apiKey, updateLiveState: false });
 
     if (page.url() !== 'about:blank') {
-        await page.evaluate(seedOpenAIChatStateInLocalStorage, apiKey);
+        await page.evaluate(seedOpenAIChatStateInBrowser, { key: apiKey, updateLiveState: true });
     }
 }
 
