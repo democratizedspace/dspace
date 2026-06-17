@@ -40,6 +40,7 @@ declare const process: {
 
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
+const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 const nodeWarningFilterRequire = `--require=${fileURLToPath(
     new URL('../scripts/node-warning-filter.cjs', import.meta.url)
 )}`;
@@ -77,7 +78,7 @@ function ensureAstroBuildArtifacts(): void {
 
     console.log('Astro build artifacts not found. Building before Playwright preview.');
     try {
-        execSync('npm run build', { cwd: frontendDir, stdio: 'inherit' });
+        execSync('npm run build', { cwd: repoRoot, stdio: 'inherit' });
     } catch (error) {
         console.error('Failed to build Astro project required for Playwright preview.');
         throw error;
