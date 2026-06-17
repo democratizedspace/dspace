@@ -14,6 +14,20 @@ const SETTINGS_VIEWPORTS: SettingsViewport[] = [
     { name: 'desktop', width: 1280, height: 900, expectedColumns: 'multiple' },
 ];
 
+async function readGameState(page: Page) {
+    return page.evaluate(async () => {
+        const gameStateModule = await import('/src/utils/gameState/common.js');
+        await gameStateModule.ready;
+        return gameStateModule.loadGameState();
+    });
+}
+
+async function expectNoTokenPlaceKeyInput(page: Page) {
+    await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
+    await expect(page.getByPlaceholder(/token\.place/i)).toHaveCount(0);
+    await expect(page.locator('input[name*="tokenPlace"], input[id*="tokenPlace"]')).toHaveCount(0);
+}
+
 async function openSettingsAtViewport(page: Page, viewport: SettingsViewport) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto('/settings');
@@ -24,6 +38,58 @@ async function openSettingsAtViewport(page: Page, viewport: SettingsViewport) {
 test.describe('Settings route', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+    });
+
+    test('manages Chat provider and OpenAI key on settings page', async ({ page }) => {
+        await page.goto('/settings');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await expect(page.getByRole('heading', { level: 3, name: 'Chat provider' })).toBeVisible();
+        await expect(
+            page.getByText('token.place is the default DSPACE Chat provider')
+        ).toBeVisible();
+        await expect(page.getByTestId('chat-provider-token-place')).toBeChecked();
+        await expect(page.getByTestId('token-place-no-key-note')).toContainText(
+            'does not need any credential field'
+        );
+        await expectNoTokenPlaceKeyInput(page);
+
+        let state = await readGameState(page);
+        expect(state.settings.chatProvider).toBe('token-place');
+        expect(state.tokenPlace?.apiKey).toBeUndefined();
+
+        await page.getByTestId('chat-provider-openai').check();
+        await expect(page.getByTestId('openai-key-panel')).toBeVisible();
+        await expect(page.getByTestId('chat-provider-status')).toContainText('OpenAI selected');
+        state = await readGameState(page);
+        expect(state.settings.chatProvider).toBe('openai');
+
+        await page.getByTestId('openai-api-key-input').fill('sk-e2e-settings-key');
+        await page.getByRole('button', { name: 'Save OpenAI key' }).click();
+        await expect(page.getByTestId('openai-key-configured')).toContainText(
+            'OpenAI API key configured'
+        );
+        state = await readGameState(page);
+        expect(state.openAI.apiKey).toBe('sk-e2e-settings-key');
+
+        await page.reload();
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.getByTestId('chat-provider-openai')).toBeChecked();
+        await expect(page.getByTestId('openai-key-configured')).toBeVisible();
+
+        await page.getByRole('button', { name: 'Clear key' }).click();
+        await expect(page.getByTestId('openai-api-key-input')).toBeVisible();
+        state = await readGameState(page);
+        expect(state.openAI.apiKey).toBe('');
+
+        await page.getByTestId('chat-provider-token-place').check();
+        await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+        await expectNoTokenPlaceKeyInput(page);
+        state = await readGameState(page);
+        expect(state.settings.chatProvider).toBe('token-place');
+        expect(state.tokenPlace?.apiKey).toBeUndefined();
     });
 
     test('loads settings page', async ({ page }) => {

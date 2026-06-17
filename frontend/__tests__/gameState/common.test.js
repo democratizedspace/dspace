@@ -32,7 +32,11 @@ describe('gameState - common utilities', () => {
             quests: {},
             inventory: {},
             processes: {},
-            settings: { showChatDebugPayload: false, showQuestGraphVisualizer: false },
+            settings: {
+                chatProvider: 'token-place',
+                showChatDebugPayload: false,
+                showQuestGraphVisualizer: false,
+            },
             versionNumberString: '3',
         });
         expect(typeof fresh._meta?.lastUpdated).toBe('number');
@@ -144,9 +148,25 @@ describe('gameState - common utilities', () => {
             quests: {},
             inventory: {},
             processes: {},
-            settings: { showChatDebugPayload: false, showQuestGraphVisualizer: false },
+            settings: {
+                chatProvider: 'token-place',
+                showChatDebugPayload: false,
+                showQuestGraphVisualizer: false,
+            },
         });
         expect(typeof validated._meta?.lastUpdated).toBe('number');
+    });
+
+    test('validateGameState ignores legacy tokenPlace.enabled when defaulting chat provider', () => {
+        const validated = validateGameState({
+            quests: {},
+            inventory: {},
+            processes: {},
+            tokenPlace: { enabled: false },
+            settings: {},
+        });
+
+        expect(validated.settings.chatProvider).toBe('token-place');
     });
 
     test('rollbackGameState should restore previous state', async () => {
