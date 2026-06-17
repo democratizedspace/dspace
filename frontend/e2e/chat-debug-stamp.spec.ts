@@ -1,10 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-import { clearUserData, navigateWithRetry, waitForHydration } from './test-helpers';
+import {
+    clearUserData,
+    navigateWithRetry,
+    seedOpenAIChatState,
+    waitForHydration,
+} from './test-helpers';
 
 test.describe('Chat debug build stamp', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+        await seedOpenAIChatState(page);
     });
 
     test('shows non-missing prompt/app build stamps', async ({ page }) => {

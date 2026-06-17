@@ -21,6 +21,6 @@ jobs:
             --max-retries 2
             --retry-wait-time 5
             --no-progress --verbose
-            "**/*.md"
+            $(git ls-files '*.md')
           format: markdown
           output: lychee/out.md

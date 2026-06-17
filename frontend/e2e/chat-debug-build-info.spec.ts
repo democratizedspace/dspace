@@ -1,10 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-import { clearUserData, navigateWithRetry, waitForHydration } from './test-helpers';
+import {
+    clearUserData,
+    navigateWithRetry,
+    seedOpenAIChatState,
+    waitForHydration,
+} from './test-helpers';
 
 test.describe('Chat debug build metadata', () => {
     test.beforeEach(async ({ page }) => {
         await clearUserData(page);
+        await seedOpenAIChatState(page);
     });
 
     test('shows prompt/app/docs build info with sync comparison', async ({ page }) => {

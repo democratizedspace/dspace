@@ -1,110 +1,174 @@
 import { loadGameState, ready } from './gameState/common.js';
+import { buildChatPrompt, validateChatResponseText } from './openAI.js';
+import {
+    createMalformedTokenPlaceResponseError,
+    createTokenPlaceHttpError,
+    createTokenPlaceNetworkError,
+} from './tokenPlaceErrors.js';
 
-const DEFAULT_URL = 'https://token.place/api';
+const DEFAULT_ORIGIN = 'https://token.place';
+const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
+const DEFAULT_CHAT_MODEL = 'gpt-5-chat-latest';
+const METADATA_DENY_PATTERN =
+    /(?:key|token|secret|credential|password|authorization|auth|inventory|save|state|player)/i;
 
-const parseBoolean = (value) => {
-    if (value === undefined || value === null) return undefined;
-
-    if (typeof value === 'boolean') return value;
-
-    const normalized = String(value).trim().toLowerCase();
-
-    if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
-    if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
-
+const readEnvValue = (key) => {
+    if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
+        return import.meta.env[key];
+    }
+    if (typeof process !== 'undefined' && process.env?.[key]) {
+        return process.env[key];
+    }
     return undefined;
 };
 
-const getEnvUrl = () => {
-    // Prefer Vite-style environment variables but fall back to Node env for tests
-    if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_TOKEN_PLACE_URL) {
-        return import.meta.env.VITE_TOKEN_PLACE_URL;
-    }
-    if (typeof process !== 'undefined' && process.env?.VITE_TOKEN_PLACE_URL) {
-        return process.env.VITE_TOKEN_PLACE_URL;
-    }
-    return null;
+const stripTrailingSlashes = (value) =>
+    String(value || '')
+        .trim()
+        .replace(/\/+$/g, '');
+
+const isPlainObject = (value) =>
+    Boolean(value) &&
+    typeof value === 'object' &&
+    Object.getPrototypeOf(value) === Object.prototype;
+
+export const resolveTokenPlaceBaseUrl = (options = {}) => {
+    const state = options.state || loadGameState();
+    const candidate =
+        options.url ||
+        state?.tokenPlace?.url ||
+        readEnvValue('VITE_TOKEN_PLACE_URL') ||
+        DEFAULT_ORIGIN;
+    let baseUrl = stripTrailingSlashes(candidate) || DEFAULT_ORIGIN;
+
+    baseUrl = baseUrl.replace(/\/api\/v1\/chat\/completions$/i, '');
+    baseUrl = baseUrl.replace(/\/api\/v1$/i, '');
+    baseUrl = baseUrl.replace(/\/api$/i, '');
+
+    return stripTrailingSlashes(baseUrl) || DEFAULT_ORIGIN;
 };
 
-const getEnabledOverride = () => {
-    const envValue =
-        (typeof import.meta !== 'undefined' &&
-        import.meta.env?.VITE_TOKEN_PLACE_ENABLED !== undefined
-            ? import.meta.env.VITE_TOKEN_PLACE_ENABLED
-            : undefined) ??
-        (typeof process !== 'undefined' ? process.env?.VITE_TOKEN_PLACE_ENABLED : undefined);
+export const buildTokenPlaceChatCompletionsUrl = (baseUrl) =>
+    `${resolveTokenPlaceBaseUrl({ url: baseUrl })}${CHAT_COMPLETIONS_PATH}`;
 
-    return parseBoolean(envValue);
+export const getTokenPlaceChatModel = (options = {}) =>
+    String(
+        options.model || readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') || DEFAULT_CHAT_MODEL
+    ).trim() || DEFAULT_CHAT_MODEL;
+
+export const isTokenPlaceEnabled = () => true;
+
+const sanitizeChatMessage = (message) => ({
+    role: typeof message?.role === 'string' ? message.role : 'user',
+    content:
+        typeof message?.content === 'string' ? message.content : String(message?.content || ''),
+});
+
+export const sanitizeTokenPlaceMessages = (messages = []) =>
+    (Array.isArray(messages) ? messages : []).map(sanitizeChatMessage);
+
+const sanitizeMetadataValue = (value) => {
+    if (typeof value === 'string') return value.slice(0, 200);
+    if (typeof value === 'number' || typeof value === 'boolean') return value;
+    return undefined;
 };
 
-export const isTokenPlaceEnabled = (options = {}) => {
-    const { state = loadGameState() } = options;
-    const enabledOverride = getEnabledOverride();
+export const buildTokenPlaceMetadata = (metadata = {}) => {
+    const safeMetadata = {
+        client: 'dspace',
+        provider: 'token.place',
+    };
 
-    if (enabledOverride !== undefined) {
-        // Explicit env flag takes precedence over any configured URLs or saved state
-        return enabledOverride;
+    if (isPlainObject(metadata)) {
+        Object.entries(metadata).forEach(([key, value]) => {
+            if (!key || METADATA_DENY_PATTERN.test(key)) return;
+            const safeValue = sanitizeMetadataValue(value);
+            if (safeValue !== undefined) {
+                safeMetadata[key] = safeValue;
+            }
+        });
     }
 
-    const stateEnabled = parseBoolean(state?.tokenPlace?.enabled);
-
-    return stateEnabled === true;
+    return safeMetadata;
 };
 
-export const tokenPlaceChat = async (messages, { signal } = {}) => {
+export const extractTokenPlaceAssistantText = (response) => {
+    const content = response?.choices?.[0]?.message?.content;
+    if (typeof content !== 'string' || !content.trim()) {
+        throw createMalformedTokenPlaceResponseError(
+            'Malformed token.place response: missing assistant content.'
+        );
+    }
+    return content;
+};
+
+const parseErrorPayload = async (response) => {
+    try {
+        return await response.json();
+    } catch {
+        try {
+            return { message: await response.text() };
+        } catch {
+            return { message: response.statusText };
+        }
+    }
+};
+
+export const TokenPlaceChatV2 = async (messages, options = {}) => {
     await ready;
-    const envUrl = getEnvUrl();
-    const state = loadGameState();
-    const enabled = isTokenPlaceEnabled({ state });
+    const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
+    const contextSources = Array.isArray(promptPayload.contextSources)
+        ? promptPayload.contextSources
+        : [];
+    const requestBody = {
+        model: getTokenPlaceChatModel(options),
+        messages: sanitizeTokenPlaceMessages(promptPayload.combinedMessages),
+        metadata: buildTokenPlaceMetadata(options.metadata),
+    };
 
-    if (!enabled) {
-        throw new Error(
-            'token.place is disabled. Set VITE_TOKEN_PLACE_ENABLED=true or set tokenPlace.enabled=true in game settings.'
+    const url = buildTokenPlaceChatCompletionsUrl(
+        options.url || resolveTokenPlaceBaseUrl({ state: promptPayload.gameState })
+    );
+
+    let response;
+    try {
+        response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody),
+            signal: options.signal,
+            credentials: 'omit',
+        });
+    } catch (error) {
+        throw createTokenPlaceNetworkError(error);
+    }
+
+    if (!response.ok) {
+        const errorPayload = await parseErrorPayload(response);
+        throw createTokenPlaceHttpError(response.status, errorPayload, response.statusText);
+    }
+
+    let data;
+    try {
+        data = await response.json();
+    } catch (error) {
+        throw createMalformedTokenPlaceResponseError(
+            'Malformed token.place response: invalid JSON.'
         );
     }
 
-    const baseUrl = state.tokenPlace?.url || envUrl || DEFAULT_URL;
+    const outputText = extractTokenPlaceAssistantText(data);
+    const { text } = validateChatResponseText(outputText, { contextSources });
 
-    const systemMessage = {
-        role: 'system',
-        content:
-            "You are dChat, a helpful assistant in the game DSPACE. Your purpose is to assist players by providing information, guidance, and support related to the game. DSPACE is a web-based space exploration idle game where you can 3D print things, grow plants hydroponically, and create and launch model rockets. The game is fully open source, and development is ongoing. If you're unsure about something, suggest checking the docs or joining the Discord server. Have fun!",
+    return {
+        text,
+        contextSources,
+        usage: data?.usage,
+        metadata: data?.metadata,
     };
+};
 
-    const openingMessage = {
-        role: 'assistant',
-        content: 'Welcome! How can I assist you today?',
-    };
-
-    let combinedMessages = [...messages];
-    if (combinedMessages.length === 0) {
-        combinedMessages = [systemMessage, openingMessage];
-    } else {
-        combinedMessages = [systemMessage, ...combinedMessages];
-    }
-
-    const response = await fetch(`${baseUrl}/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: combinedMessages }),
-        signal,
-    });
-
-    if (!response.ok) {
-        let details;
-        try {
-            const err = await response.json();
-            details = err.error || err.message || response.statusText;
-        } catch {
-            try {
-                details = await response.text();
-            } catch {
-                details = response.statusText;
-            }
-        }
-        throw new Error(`token.place API request failed: ${details}`);
-    }
-
-    const data = await response.json();
-    return data.reply;
+export const tokenPlaceChat = async (messages, options = {}) => {
+    const result = await TokenPlaceChatV2(messages, options);
+    return result.text;
 };

@@ -1,4 +1,4 @@
-const { vi } = require('vitest');
+import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest';
 const jest = vi;
 
 jest.mock('../src/utils/gameState/common.js', () => ({
@@ -6,103 +6,314 @@ jest.mock('../src/utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
 }));
 
-const { tokenPlaceChat, isTokenPlaceEnabled } = require('../src/utils/tokenPlace.js');
-const { loadGameState } = require('../src/utils/gameState/common.js');
+jest.mock('../src/utils/docsRag.js', () => ({
+    searchDocsRag: jest.fn(async () => ({ excerptsText: '', sources: [] })),
+}));
 
-describe('tokenPlaceChat', () => {
+const { loadGameState } = await import('../src/utils/gameState/common.js');
+const {
+    TokenPlaceChatV2,
+    buildTokenPlaceChatCompletionsUrl,
+    extractTokenPlaceAssistantText,
+    getTokenPlaceChatModel,
+    isTokenPlaceEnabled,
+    resolveTokenPlaceBaseUrl,
+    tokenPlaceChat,
+} = await import('../src/utils/tokenPlace.js');
+const { getTokenPlaceErrorSummary } = await import('../src/utils/tokenPlaceErrors.js');
+const { buildChatPrompt } = await import('../src/utils/openAI.js');
+
+const okResponse = (body = {}) => ({
+    ok: true,
+    status: 200,
+    json: () =>
+        Promise.resolve({
+            choices: [{ message: { content: 'mocked reply' } }],
+            ...body,
+        }),
+});
+
+const getFetchCall = () => {
+    const [url, init] = fetch.mock.calls[0];
+    return { url, init, body: JSON.parse(init.body) };
+};
+
+describe('token.place API v1 client', () => {
     beforeEach(() => {
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve({ reply: 'mocked reply' }),
-            })
-        );
+        global.fetch = jest.fn(() => Promise.resolve(okResponse()));
+        loadGameState.mockReturnValue({});
     });
 
     afterEach(() => {
         jest.resetAllMocks();
         delete process.env.VITE_TOKEN_PLACE_URL;
-        delete process.env.VITE_TOKEN_PLACE_ENABLED;
+        delete process.env.VITE_TOKEN_PLACE_CHAT_MODEL;
     });
 
-    test('uses game state url when configured', async () => {
-        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place', enabled: true } });
+    test('fresh/default state posts to token.place API v1 chat completions', async () => {
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(fetch).toHaveBeenCalledWith('http://token.place/chat', expect.any(Object));
+        const { url, init } = getFetchCall();
+        expect(url).toBe('https://token.place/api/v1/chat/completions');
+        expect(init.method).toBe('POST');
     });
 
-    test('falls back to env url when game state missing', async () => {
-        loadGameState.mockReturnValue({});
-        process.env.VITE_TOKEN_PLACE_URL = 'http://env.token';
-        process.env.VITE_TOKEN_PLACE_ENABLED = 'true';
-        await tokenPlaceChat([]);
-        expect(fetch).toHaveBeenCalledWith('http://env.token/chat', expect.any(Object));
+    test('VITE_TOKEN_PLACE_URL override works', async () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'https://staging.token.place/';
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
+        expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/chat/completions');
     });
 
-    test('prepends system message and returns response', async () => {
-        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place', enabled: true } });
-        const result = await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        const body = JSON.parse(fetch.mock.calls[0][1].body);
-        expect(body.messages[0].role).toBe('system');
-        expect(result).toBe('mocked reply');
+    test('state tokenPlace url compatibility override works', async () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'https://env.token.place';
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'https://state.token.place/' } });
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
+        expect(getFetchCall().url).toBe('https://state.token.place/api/v1/chat/completions');
     });
 
-    test('passes abort signal to fetch', async () => {
-        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place', enabled: true } });
-        const controller = new AbortController();
-        await tokenPlaceChat([], { signal: controller.signal });
-        expect(fetch.mock.calls[0][1].signal).toBe(controller.signal);
-    });
-
-    test('throws helpful error when request fails', async () => {
-        loadGameState.mockReturnValue({ tokenPlace: { url: 'http://token.place', enabled: true } });
-        fetch.mockResolvedValueOnce({
-            ok: false,
-            json: () => Promise.resolve({ error: 'bad request' }),
-        });
-        await expect(tokenPlaceChat([])).rejects.toThrow(
-            'token.place API request failed: bad request'
+    test('legacy /api base normalizes without /api/api duplication', () => {
+        expect(resolveTokenPlaceBaseUrl({ url: 'https://token.place/api' })).toBe(
+            'https://token.place'
+        );
+        expect(buildTokenPlaceChatCompletionsUrl('https://token.place/api')).toBe(
+            'https://token.place/api/v1/chat/completions'
+        );
+        expect(buildTokenPlaceChatCompletionsUrl('https://token.place/api')).not.toContain(
+            '/api/api/v1/chat/completions'
         );
     });
 
-    test('throws when disabled by default', async () => {
-        loadGameState.mockReturnValue({});
-        await expect(tokenPlaceChat([])).rejects.toThrow('token.place is disabled');
+    test('does not post to legacy token.place backend chat endpoints', async () => {
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
+        expect(getFetchCall().url).not.toMatch(/\/api\/chat$|\/chat$/);
     });
 
-    test('uses default url when explicitly enabled without overrides', async () => {
-        loadGameState.mockReturnValue({});
-        process.env.VITE_TOKEN_PLACE_ENABLED = 'true';
-        await tokenPlaceChat([]);
-        expect(fetch).toHaveBeenCalledWith('https://token.place/api/chat', expect.any(Object));
+    test('uses default model and model override', async () => {
+        expect(getTokenPlaceChatModel()).toBe('gpt-5-chat-latest');
+        process.env.VITE_TOKEN_PLACE_CHAT_MODEL = 'custom-model';
+        expect(getTokenPlaceChatModel()).toBe('custom-model');
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
+        expect(getFetchCall().body.model).toBe('custom-model');
+    });
+
+    test('request is zero-auth and excludes secrets from headers/body/metadata', async () => {
+        loadGameState.mockReturnValue({ openAI: { apiKey: 'sk-secret-openai-key' } });
+        await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
+            metadata: {
+                conversation_id: 'conv-42',
+                apiKey: 'token-place-secret',
+                playerSave: { raw: true },
+                token: 'hidden',
+            },
+        });
+        const { init, body } = getFetchCall();
+        expect(init.headers.Authorization).toBeUndefined();
+        expect(init.credentials).toBe('omit');
+        const serialized = JSON.stringify({ headers: init.headers, body });
+        expect(serialized).not.toContain('sk-secret-openai-key');
+        expect(serialized).not.toContain('token-place-secret');
+        expect(serialized).not.toContain('hidden');
+        expect(body.metadata).toEqual({
+            client: 'dspace',
+            provider: 'token.place',
+            conversation_id: 'conv-42',
+        });
+    });
+
+    test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
+        await TokenPlaceChatV2([
+            {
+                role: 'user',
+                content: 'hello',
+                id: 'ui-message-id',
+                timestamp: 123,
+                tokens: 1,
+                avatar: 'pilot.png',
+            },
+        ]);
+        const { body } = getFetchCall();
+        expect(body.model).toBe('gpt-5-chat-latest');
+        expect(body.messages[0].role).toBe('system');
+        expect(body.messages.at(-1)).toEqual({ role: 'user', content: 'hello' });
+        expect(body.messages.at(-1)).not.toHaveProperty('id');
+        expect(body.messages.at(-1)).not.toHaveProperty('timestamp');
+        expect(body.messages.at(-1)).not.toHaveProperty('tokens');
+        expect(body.messages.at(-1)).not.toHaveProperty('avatar');
+        expect(body.metadata).toEqual({ client: 'dspace', provider: 'token.place' });
+        expect(body.stream).not.toBe(true);
+    });
+
+    test('parses assistant text and compatibility helper returns string', async () => {
+        expect(extractTokenPlaceAssistantText({ choices: [{ message: { content: 'hi' } }] })).toBe(
+            'hi'
+        );
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
+            'mocked reply'
+        );
+    });
+
+    test('richer helper returns text, DSPACE contextSources, usage, and metadata', async () => {
+        fetch.mockResolvedValueOnce(
+            okResponse({
+                usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
+                metadata: { client: 'dspace', conversation_id: 'conv-42' },
+                contextSources: [{ title: 'provider field should not be used' }],
+            })
+        );
+        const dspaceSources = [{ title: 'DSPACE docs', url: '/docs/about' }];
+        const result = await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [{ role: 'user', content: 'hello' }],
+                contextSources: dspaceSources,
+                gameState: {},
+            },
+        });
+        expect(result).toEqual({
+            text: 'mocked reply',
+            contextSources: dspaceSources,
+            usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
+            metadata: { client: 'dspace', conversation_id: 'conv-42' },
+        });
+    });
+
+    test('passes abort signal to fetch', async () => {
+        const controller = new AbortController();
+        await tokenPlaceChat([], { signal: controller.signal });
+        expect(getFetchCall().init.signal).toBe(controller.signal);
+    });
+
+    test('malformed responses throw and classify safely', async () => {
+        fetch.mockResolvedValueOnce(okResponse({ choices: [{ message: { content: '' } }] }));
+        let thrownError;
+        try {
+            await tokenPlaceChat([]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({ type: 'malformed' });
+        const summary = getTokenPlaceErrorSummary(thrownError);
+        expect(summary.type).toBe('malformed');
+        expect(summary.message).toBe(
+            'token.place returned an unexpected response. Please try again shortly.'
+        );
+        expect(summary.message).not.toMatch(/OpenAI/i);
+    });
+
+    test('structured API errors produce expected summaries', async () => {
+        const cases = [
+            [
+                400,
+                {
+                    error: {
+                        message: 'blocked',
+                        type: 'content_policy_violation',
+                        code: 'content_blocked',
+                    },
+                },
+                'content_policy',
+            ],
+            [429, { error: { message: 'slow down', type: 'rate_limit' } }, 'rate_limit'],
+            [503, { error: { message: 'unavailable', type: 'server_error' } }, 'server'],
+            [
+                400,
+                {
+                    error: {
+                        message: 'stream true rejected',
+                        type: 'invalid_request_error',
+                        param: 'stream',
+                    },
+                },
+                'validation',
+            ],
+            [400, { error: { message: 'bad model', type: 'invalid_request_error' } }, 'provider'],
+        ];
+
+        for (const [status, payload, expectedType] of cases) {
+            fetch.mockResolvedValueOnce({
+                ok: false,
+                status,
+                statusText: 'Bad Request',
+                json: () => Promise.resolve(payload),
+            });
+            try {
+                await tokenPlaceChat([]);
+            } catch (error) {
+                expect(getTokenPlaceErrorSummary(error).type).toBe(expectedType);
+                expect(getTokenPlaceErrorSummary(error).message).not.toMatch(/OpenAI/i);
+            }
+        }
+    });
+
+    test('network errors classify safely', async () => {
+        fetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+        await expect(tokenPlaceChat([])).rejects.toMatchObject({ type: 'network' });
+    });
+
+    test('unexpected fetch errors classify safely', async () => {
+        fetch.mockRejectedValueOnce(new Error('Unexpected token.place failure'));
+
+        let thrownError;
+        try {
+            await tokenPlaceChat([]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({ type: 'unknown' });
+        const summary = getTokenPlaceErrorSummary(thrownError);
+        expect(summary).toEqual({
+            type: 'unknown',
+            message: 'token.place hit an unexpected error. Please try again shortly.',
+        });
+        expect(summary.message).not.toMatch(/OpenAI/i);
+    });
+
+    test('abort errors classify safely', async () => {
+        const abortError = new Error('The operation was aborted.');
+        abortError.name = 'AbortError';
+        fetch.mockRejectedValueOnce(abortError);
+
+        let thrownError;
+        try {
+            await tokenPlaceChat([]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({ type: 'abort' });
+        const summary = getTokenPlaceErrorSummary(thrownError);
+        expect(summary).toEqual({
+            type: 'abort',
+            message: 'The token.place request was canceled. Please try again.',
+        });
+        expect(summary.message).not.toMatch(/OpenAI/i);
+    });
+
+    test('shared prompt and token.place payload omit stale provider guidance', async () => {
+        const promptPayload = await buildChatPrompt([{ role: 'user', content: 'hello' }]);
+        const serializedPrompt = JSON.stringify({
+            combinedMessages: promptPayload.combinedMessages,
+            debugMessages: promptPayload.debugMessages,
+        });
+
+        expect(serializedPrompt).not.toMatch(/token\.place is deferred/i);
+        expect(serializedPrompt).not.toMatch(/chat uses OpenAI/i);
+
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], { promptPayload });
+        const serializedRequest = JSON.stringify(getFetchCall().body.messages);
+        expect(serializedRequest).not.toMatch(/token\.place is deferred/i);
+        expect(serializedRequest).not.toMatch(/chat uses OpenAI/i);
     });
 });
 
 describe('isTokenPlaceEnabled', () => {
-    afterEach(() => {
-        delete process.env.VITE_TOKEN_PLACE_URL;
-        delete process.env.VITE_TOKEN_PLACE_ENABLED;
-    });
-
-    test('is false when no overrides are set', () => {
-        expect(isTokenPlaceEnabled({ state: {} })).toBe(false);
-    });
-
-    test('is false when tokenPlace url exists in state without opt-in', () => {
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { url: 'http://tp' } } })).toBe(false);
-    });
-
-    test('is true when tokenPlace is explicitly enabled in state', () => {
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(true);
-    });
-
-    test('respects explicit env disable', () => {
-        process.env.VITE_TOKEN_PLACE_ENABLED = 'false';
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(false);
-    });
-
-    test('is true when env override enables it', () => {
-        process.env.VITE_TOKEN_PLACE_ENABLED = 'true';
+    test('enables token.place for fresh or missing legacy state', () => {
+        expect(isTokenPlaceEnabled()).toBe(true);
         expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: undefined } })).toBe(true);
+    });
+
+    test('ignores legacy saved disabled flags', () => {
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(true);
     });
 });

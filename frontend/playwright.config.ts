@@ -40,6 +40,7 @@ declare const process: {
 
 // Determine important paths for running tests regardless of the current working directory
 const frontendDir = fileURLToPath(new URL('.', import.meta.url));
+const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 const nodeWarningFilterRequire = `--require=${fileURLToPath(
     new URL('../scripts/node-warning-filter.cjs', import.meta.url)
 )}`;

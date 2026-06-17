@@ -40,7 +40,7 @@ type IndexedDbRequest<T = unknown> = {
 type IndexedDbTransaction = {
     objectStore: (name: string) => {
         clear: () => void;
-        put: (value: unknown) => void;
+        put: (value: unknown, key?: string) => void;
         getAll: () => IndexedDbRequest<unknown[]>;
     };
     oncomplete: (() => void) | null;
@@ -367,6 +367,98 @@ export async function createTestPngBuffer(
  */
 export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
+}
+
+const seedOpenAIChatStateInBrowser = async ({
+    key,
+    updateLiveState = false,
+}: {
+    key: string;
+    updateLiveState?: boolean;
+}) => {
+    const writeIndexedDbState = async (nextState: Record<string, unknown>) => {
+        if (!('indexedDB' in globalThis)) {
+            return;
+        }
+
+        const db = await new Promise<IndexedDbDatabase>((resolve, reject) => {
+            const request = indexedDB.open('dspaceGameState', 2);
+            request.onupgradeneeded = () => {
+                const upgradeDb = request.result as unknown as IndexedDbDatabase;
+                if (!upgradeDb.objectStoreNames.contains('state')) {
+                    upgradeDb.createObjectStore('state');
+                }
+                if (!upgradeDb.objectStoreNames.contains('backup')) {
+                    upgradeDb.createObjectStore('backup');
+                }
+                if (!upgradeDb.objectStoreNames.contains('meta')) {
+                    upgradeDb.createObjectStore('meta');
+                }
+            };
+            request.onsuccess = () => resolve(request.result as unknown as IndexedDbDatabase);
+            request.onerror = () => reject(request.error);
+        });
+
+        await new Promise<void>((resolve, reject) => {
+            const tx = db.transaction('state', 'readwrite');
+            tx.objectStore('state').put(nextState, 'root');
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+
+        db.close();
+    };
+
+    const applyOpenAIKey = (source: Record<string, unknown> | null | undefined) => {
+        const state = source && typeof source === 'object' ? { ...source } : {};
+        const previousMeta =
+            state._meta && typeof state._meta === 'object' && !Array.isArray(state._meta)
+                ? state._meta
+                : {};
+        state.openAI = {
+            ...((state.openAI && typeof state.openAI === 'object' ? state.openAI : {}) as Record<
+                string,
+                unknown
+            >),
+            apiKey: key,
+        };
+        state._meta = { ...previousMeta, lastUpdated: Date.now() };
+        return state;
+    };
+
+    const readLocalState = () => {
+        const raw = localStorage.getItem('gameState');
+        return raw ? JSON.parse(raw) : {};
+    };
+
+    const seededLocalState = applyOpenAIKey(readLocalState());
+    localStorage.setItem('gameState', JSON.stringify(seededLocalState));
+    await writeIndexedDbState(seededLocalState);
+
+    if (!updateLiveState) {
+        return;
+    }
+
+    try {
+        const gameStateModulePath = '/src/utils/gameState/common.js';
+        const gameStateModule = await import(/* @vite-ignore */ gameStateModulePath);
+        await gameStateModule.ready;
+        const liveState = gameStateModule.loadGameState();
+        await gameStateModule.saveGameState(applyOpenAIKey(liveState));
+    } catch (error) {
+        console.warn(
+            'Failed to seed live OpenAI chat state; localStorage seed remains set.',
+            error
+        );
+    }
+};
+
+export async function seedOpenAIChatState(page: Page, apiKey = 'e2e-openai-key'): Promise<void> {
+    await page.addInitScript(seedOpenAIChatStateInBrowser, { key: apiKey, updateLiveState: false });
+
+    if (page.url() !== 'about:blank') {
+        await page.evaluate(seedOpenAIChatStateInBrowser, { key: apiKey, updateLiveState: true });
+    }
 }
 
 async function seedCustomEntity(
