@@ -250,6 +250,25 @@ describe('token.place API v1 client', () => {
         await expect(tokenPlaceChat([])).rejects.toMatchObject({ type: 'network' });
     });
 
+    test('unexpected fetch errors classify safely', async () => {
+        fetch.mockRejectedValueOnce(new Error('Unexpected token.place failure'));
+
+        let thrownError;
+        try {
+            await tokenPlaceChat([]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({ type: 'unknown' });
+        const summary = getTokenPlaceErrorSummary(thrownError);
+        expect(summary).toEqual({
+            type: 'unknown',
+            message: 'token.place hit an unexpected error. Please try again shortly.',
+        });
+        expect(summary.message).not.toMatch(/OpenAI/i);
+    });
+
     test('abort errors classify safely', async () => {
         const abortError = new Error('The operation was aborted.');
         abortError.name = 'AbortError';

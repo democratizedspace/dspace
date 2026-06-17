@@ -12,6 +12,7 @@
     let showSpinner = false;
     let messageCounter = 0;
     let errorBanner = null;
+    let hydrated = false;
     // Default dChat persona; callers can override for other NPCs/personas.
     export let welcomeMessage =
         "Hello, adventurer! I'm dChat! I'm here to answer any questions you may have about DSPACE or nearly any other topic. I may accidentally generate incorrect information, so please double-check anything I say.";
@@ -83,6 +84,7 @@
     }
 
     onMount(() => {
+        hydrated = true;
         if ($messageHistory.length === 0) {
             const welcome = {
                 role: 'assistant',
@@ -97,7 +99,12 @@
     });
 </script>
 
-<div class="chat" data-testid="chat-panel" data-provider="token-place">
+<div
+    class="chat"
+    data-testid="chat-panel"
+    data-provider="token-place"
+    data-hydrated={hydrated ? 'true' : undefined}
+>
     {#if errorBanner}
         <div class="chat-error" role="alert" data-error-type={errorBanner.type}>
             {errorBanner.message}

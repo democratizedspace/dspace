@@ -17,6 +17,18 @@ const isAbortError = (error) =>
         .toLowerCase()
         .includes('abort');
 
+const isNetworkError = (error) => {
+    const name = String(error?.name || '').toLowerCase();
+    const message = String(error?.message || '').toLowerCase();
+    return (
+        name.includes('typeerror') ||
+        name.includes('network') ||
+        message.includes('failed to fetch') ||
+        message.includes('network') ||
+        message.includes('load failed')
+    );
+};
+
 export const createTokenPlaceHttpError = (status, errorPayload = {}, fallbackMessage = '') => {
     const providerError =
         errorPayload?.error && typeof errorPayload.error === 'object' ? errorPayload.error : {};
@@ -48,7 +60,7 @@ export const createTokenPlaceHttpError = (status, errorPayload = {}, fallbackMes
 
 export const createTokenPlaceNetworkError = (error) =>
     new TokenPlaceError('Could not reach token.place.', {
-        type: isAbortError(error) ? 'abort' : 'network',
+        type: isAbortError(error) ? 'abort' : isNetworkError(error) ? 'network' : 'unknown',
         providerMessage: error?.message,
         cause: error,
     });
