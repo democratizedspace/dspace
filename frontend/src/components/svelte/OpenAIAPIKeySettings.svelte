@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { loadGameState, saveGameState, ready } from '../../utils/gameState/common.js';
 
-    export let apiKey = '';
+    let apiKey = '';
 
     let hydrated = false;
     let isEditing = true;

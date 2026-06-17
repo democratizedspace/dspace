@@ -1,25 +1,23 @@
 <script>
-    import { onMount } from 'svelte';
-    import { derived, writable } from 'svelte/store';
-    import { loadGameState, ready, state as gameState } from '../../../utils/gameState/common.js';
+    import { derived } from 'svelte/store';
+    import { state as gameState } from '../../../utils/gameState/common.js';
+    import { normalizeSettings } from '../../../utils/settingsDefaults.js';
     import OpenAIChat from './OpenAIChat.svelte';
     import TokenPlaceChat from './TokenPlaceChat.svelte';
     import { isTokenPlaceEnabled } from '../../../utils/tokenPlace.js';
 
-    const apiKey = writable('');
     const tokenPlaceEnabled = derived(gameState, ($gameState) =>
         isTokenPlaceEnabled({ state: $gameState })
     );
-    const showTokenPlaceChat = derived(
-        [tokenPlaceEnabled, apiKey],
-        ([$tokenPlaceEnabled, $apiKey]) => $tokenPlaceEnabled && !$apiKey
+    const chatProvider = derived(
+        gameState,
+        ($gameState) => normalizeSettings($gameState?.settings).chatProvider
     );
-
-    onMount(async () => {
-        await ready;
-        const state = loadGameState();
-        apiKey.set(state.openAI?.apiKey || '');
-    });
+    const showTokenPlaceChat = derived(
+        [tokenPlaceEnabled, chatProvider],
+        ([$tokenPlaceEnabled, $chatProvider]) =>
+            $tokenPlaceEnabled && $chatProvider === 'token-place'
+    );
 </script>
 
 <div class="container">

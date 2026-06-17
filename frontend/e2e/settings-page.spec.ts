@@ -54,9 +54,9 @@ test.describe('Settings route', () => {
         ).toBeVisible();
         await expect(page.getByLabel('token.place')).toBeChecked();
         await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
-        await expect(chatPanel.locator('input').filter({ hasText: /token\.place/i })).toHaveCount(
-            0
-        );
+        await expect(
+            chatPanel.locator('input:is([type="password"], [type="text"], :not([type]))')
+        ).toHaveCount(0);
         await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
 
         await page.getByLabel('OpenAI').check();
@@ -73,6 +73,14 @@ test.describe('Settings route', () => {
             )
             .toBe('openai');
 
+        await page.goto('/chat');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.getByTestId('chat-panel')).toHaveAttribute('data-provider', 'openai');
+
+        await page.goto('/settings');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
         await page.getByLabel('OpenAI API key').fill('sk-settings-e2e-key');
         await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
         await expect(page.getByTestId('openai-key-status')).toHaveText(
@@ -114,6 +122,9 @@ test.describe('Settings route', () => {
         await expect(page.getByLabel('token.place')).toBeChecked();
         await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
         await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
+        await expect(
+            chatPanel.locator('input:is([type="password"], [type="text"], :not([type]))')
+        ).toHaveCount(0);
         await expect
             .poll(() =>
                 page.evaluate(async () => {
@@ -127,6 +138,14 @@ test.describe('Settings route', () => {
                 })
             )
             .toEqual({ chatProvider: 'token-place', tokenPlaceApiKey: null });
+
+        await page.goto('/chat');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.getByTestId('chat-panel')).toHaveAttribute(
+            'data-provider',
+            'token-place'
+        );
     });
 
     for (const viewport of SETTINGS_VIEWPORTS) {
