@@ -78,7 +78,7 @@ function ensureAstroBuildArtifacts(): void {
 
     console.log('Astro build artifacts not found. Building before Playwright preview.');
     try {
-        execSync('npm run build', { cwd: repoRoot, stdio: 'inherit' });
+        execSync('npm run build', { cwd: frontendDir, stdio: 'inherit' });
     } catch (error) {
         console.error('Failed to build Astro project required for Playwright preview.');
         throw error;
