@@ -274,3 +274,60 @@ test.describe('Settings route', () => {
         }
     });
 });
+
+test.describe('Settings Chat provider panel', () => {
+    test.beforeEach(async ({ page }) => {
+        await clearUserData(page);
+    });
+
+    async function readGameState(page: Page) {
+        return page.evaluate(async () => {
+            const gameStateModule = await import('/src/utils/gameState/common.js');
+            await gameStateModule.ready;
+            return gameStateModule.loadGameState();
+        });
+    }
+
+    test('persists Chat provider and OpenAI key settings without token.place credentials', async ({
+        page,
+    }) => {
+        await page.goto('/settings');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await expect(page.getByRole('heading', { level: 3, name: 'Chat provider' })).toBeVisible();
+        await expect(page.getByText('token.place is the default Chat provider')).toBeVisible();
+        await expect(page.getByLabel('token.place', { exact: true })).toBeChecked();
+        await expect(page.getByLabel(/token\.place API key/i)).toHaveCount(0);
+        await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+
+        await page.getByLabel('OpenAI', { exact: true }).check();
+        await expect(page.getByLabel('OpenAI', { exact: true })).toBeChecked();
+        await expect
+            .poll(async () => (await readGameState(page)).settings?.chatProvider)
+            .toBe('openai');
+
+        await page.getByLabel('OpenAI API key').fill('sk-settings-e2e');
+        await page.getByRole('button', { name: 'Save OpenAI key' }).click();
+        await expect(page.getByTestId('openai-key-configured')).toBeVisible();
+        await expect
+            .poll(async () => (await readGameState(page)).openAI?.apiKey)
+            .toBe('sk-settings-e2e');
+
+        await page.getByRole('button', { name: 'Clear OpenAI key' }).click();
+        await expect.poll(async () => (await readGameState(page)).openAI?.apiKey).toBe('');
+
+        await page.reload();
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.getByLabel('OpenAI', { exact: true })).toBeChecked();
+
+        await page.getByLabel('token.place', { exact: true }).check();
+        await expect
+            .poll(async () => (await readGameState(page)).settings?.chatProvider)
+            .toBe('token-place');
+        await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+        await expect(page.getByLabel(/token\.place API key/i)).toHaveCount(0);
+        expect((await readGameState(page)).tokenPlace?.apiKey).toBeUndefined();
+    });
+});
