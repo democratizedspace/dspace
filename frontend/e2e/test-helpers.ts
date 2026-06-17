@@ -40,7 +40,7 @@ type IndexedDbRequest<T = unknown> = {
 type IndexedDbTransaction = {
     objectStore: (name: string) => {
         clear: () => void;
-        put: (value: unknown) => void;
+        put: (value: unknown, key?: string) => void;
         getAll: () => IndexedDbRequest<unknown[]>;
     };
     oncomplete: (() => void) | null;
@@ -376,6 +376,39 @@ const seedOpenAIChatStateInBrowser = async ({
     key: string;
     updateLiveState?: boolean;
 }) => {
+    const writeIndexedDbState = async (nextState: Record<string, unknown>) => {
+        if (!('indexedDB' in globalThis)) {
+            return;
+        }
+
+        const db = await new Promise<IndexedDbDatabase>((resolve, reject) => {
+            const request = indexedDB.open('dspaceGameState', 2);
+            request.onupgradeneeded = () => {
+                const upgradeDb = request.result as unknown as IndexedDbDatabase;
+                if (!upgradeDb.objectStoreNames.contains('state')) {
+                    upgradeDb.createObjectStore('state');
+                }
+                if (!upgradeDb.objectStoreNames.contains('backup')) {
+                    upgradeDb.createObjectStore('backup');
+                }
+                if (!upgradeDb.objectStoreNames.contains('meta')) {
+                    upgradeDb.createObjectStore('meta');
+                }
+            };
+            request.onsuccess = () => resolve(request.result as unknown as IndexedDbDatabase);
+            request.onerror = () => reject(request.error);
+        });
+
+        await new Promise<void>((resolve, reject) => {
+            const tx = db.transaction('state', 'readwrite');
+            tx.objectStore('state').put(nextState, 'root');
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        });
+
+        db.close();
+    };
+
     const applyOpenAIKey = (source: Record<string, unknown> | null | undefined) => {
         const state = source && typeof source === 'object' ? { ...source } : {};
         const previousMeta =
@@ -400,6 +433,7 @@ const seedOpenAIChatStateInBrowser = async ({
 
     const seededLocalState = applyOpenAIKey(readLocalState());
     localStorage.setItem('gameState', JSON.stringify(seededLocalState));
+    await writeIndexedDbState(seededLocalState);
 
     if (!updateLiveState) {
         return;
