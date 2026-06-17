@@ -52,7 +52,7 @@ jobs:
             --exclude "http://localhost"
             --exclude-path ".*node_modules.*"
             --no-progress --verbose
-            "docs/**/*.md" "frontend/src/pages/docs/**/*.md"
+            $(git ls-files 'docs/**/*.md' 'frontend/src/pages/docs/**/*.md')
           format: markdown
           output: lychee/out.md
   root-tests:
