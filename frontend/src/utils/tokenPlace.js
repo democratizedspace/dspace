@@ -56,22 +56,7 @@ export const getTokenPlaceChatModel = (options = {}) =>
         options.model || readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') || DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
-const parseEnabledOverride = (value) => {
-    if (value === true || value === false) return value;
-    if (typeof value !== 'string') return undefined;
-    const normalized = value.trim().toLowerCase();
-    if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
-    if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
-    return undefined;
-};
-
-export const isTokenPlaceEnabled = (options = {}) => {
-    const envOverride = parseEnabledOverride(readEnvValue('VITE_TOKEN_PLACE_ENABLED'));
-    if (envOverride !== undefined) return envOverride;
-
-    const state = options.state || loadGameState();
-    return parseEnabledOverride(state?.tokenPlace?.enabled) !== false;
-};
+export const isTokenPlaceEnabled = () => true;
 
 const sanitizeChatMessage = (message) => ({
     role: typeof message?.role === 'string' ? message.role : 'user',

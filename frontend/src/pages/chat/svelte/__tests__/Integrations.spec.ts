@@ -34,7 +34,6 @@ describe('Integrations chat entrypoint', () => {
         mockRefs.baseState.openAI.apiKey = '';
         mockRefs.resetStore();
         delete process.env.VITE_TOKEN_PLACE_URL;
-        delete process.env.VITE_TOKEN_PLACE_ENABLED;
     });
 
     afterEach(() => {

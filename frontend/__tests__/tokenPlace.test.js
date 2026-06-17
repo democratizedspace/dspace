@@ -48,7 +48,6 @@ describe('token.place API v1 client', () => {
         jest.resetAllMocks();
         delete process.env.VITE_TOKEN_PLACE_URL;
         delete process.env.VITE_TOKEN_PLACE_CHAT_MODEL;
-        delete process.env.VITE_TOKEN_PLACE_ENABLED;
     });
 
     test('fresh/default state posts to token.place API v1 chat completions', async () => {
@@ -308,17 +307,13 @@ describe('token.place API v1 client', () => {
 });
 
 describe('isTokenPlaceEnabled', () => {
-    test('enables token.place by default unless explicitly disabled', () => {
+    test('enables token.place for fresh or missing legacy state', () => {
+        expect(isTokenPlaceEnabled()).toBe(true);
         expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: undefined } } })).toBe(true);
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(false);
+        expect(isTokenPlaceEnabled({ state: { tokenPlace: undefined } })).toBe(true);
     });
 
-    test('supports explicit state and environment overrides', () => {
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(true);
-        process.env.VITE_TOKEN_PLACE_ENABLED = 'true';
+    test('ignores legacy saved disabled flags', () => {
         expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(true);
-        process.env.VITE_TOKEN_PLACE_ENABLED = 'false';
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: true } } })).toBe(false);
     });
 });
