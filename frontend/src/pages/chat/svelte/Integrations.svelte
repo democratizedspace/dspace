@@ -1,5 +1,4 @@
 <script>
-    import OpenAIAPIKeySettings from './OpenAIAPIKeySettings.svelte';
     import { onMount } from 'svelte';
     import { derived, writable } from 'svelte/store';
     import { loadGameState, ready, state as gameState } from '../../../utils/gameState/common.js';
@@ -30,9 +29,6 @@
             <a href="https://token.place" target="_blank" rel="noopener">token.place</a> — no key needed.
         </div>
     {/if}
-    <div class="api-container">
-        <OpenAIAPIKeySettings {apiKey} />
-    </div>
     {#if $showTokenPlaceChat}
         <TokenPlaceChat />
     {:else}
@@ -61,10 +57,5 @@
         text-align: center;
         font-weight: 600;
         border: 1px dashed rgba(0, 0, 0, 0.2);
-    }
-
-    .api-container {
-        min-height: 70px;
-        transition: opacity 0.5s;
     }
 </style>

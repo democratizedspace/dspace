@@ -39,6 +39,96 @@ test.describe('Settings route', () => {
         await expect(page.getByTestId('logout-state')).toHaveText('No saved credentials detected.');
     });
 
+    test('manages Chat provider and OpenAI key without token.place credentials', async ({
+        page,
+    }) => {
+        await page.goto('/settings');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const chatPanel = page.getByTestId('chat-provider-settings');
+        await expect(chatPanel).toBeVisible();
+        await expect(page.getByRole('heading', { level: 2, name: 'Chat provider' })).toBeVisible();
+        await expect(
+            page.getByText('token.place is the default DSPACE Chat provider')
+        ).toBeVisible();
+        await expect(page.getByLabel('token.place')).toBeChecked();
+        await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+        await expect(chatPanel.locator('input').filter({ hasText: /token\.place/i })).toHaveCount(
+            0
+        );
+        await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
+
+        await page.getByLabel('OpenAI').check();
+        await expect(page.getByLabel('OpenAI')).toBeChecked();
+        await expect(page.getByLabel('OpenAI API key')).toBeVisible();
+
+        await expect
+            .poll(() =>
+                page.evaluate(async () => {
+                    const gameStateModule = await import('/src/utils/gameState/common.js');
+                    await gameStateModule.ready;
+                    return gameStateModule.loadGameState().settings?.chatProvider;
+                })
+            )
+            .toBe('openai');
+
+        await page.getByLabel('OpenAI API key').fill('sk-settings-e2e-key');
+        await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
+        await expect(page.getByTestId('openai-key-status')).toHaveText(
+            'OpenAI API key configured.'
+        );
+        await expect(page.getByLabel('OpenAI API key')).toHaveCount(0);
+
+        await expect
+            .poll(() =>
+                page.evaluate(async () => {
+                    const gameStateModule = await import('/src/utils/gameState/common.js');
+                    await gameStateModule.ready;
+                    return gameStateModule.loadGameState().openAI?.apiKey;
+                })
+            )
+            .toBe('sk-settings-e2e-key');
+
+        await page.reload();
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.getByLabel('OpenAI')).toBeChecked();
+        await expect(page.getByTestId('openai-key-status')).toHaveText(
+            'OpenAI API key configured.'
+        );
+
+        await page.getByRole('button', { name: 'Clear API key' }).click();
+        await expect(page.getByLabel('OpenAI API key')).toBeVisible();
+        await expect
+            .poll(() =>
+                page.evaluate(async () => {
+                    const gameStateModule = await import('/src/utils/gameState/common.js');
+                    await gameStateModule.ready;
+                    return gameStateModule.loadGameState().openAI?.apiKey;
+                })
+            )
+            .toBe('');
+
+        await page.getByLabel('token.place').check();
+        await expect(page.getByLabel('token.place')).toBeChecked();
+        await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+        await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
+        await expect
+            .poll(() =>
+                page.evaluate(async () => {
+                    const gameStateModule = await import('/src/utils/gameState/common.js');
+                    await gameStateModule.ready;
+                    const state = gameStateModule.loadGameState();
+                    return {
+                        chatProvider: state.settings?.chatProvider,
+                        tokenPlaceApiKey: state.tokenPlace?.apiKey ?? null,
+                    };
+                })
+            )
+            .toEqual({ chatProvider: 'token-place', tokenPlaceApiKey: null });
+    });
+
     for (const viewport of SETTINGS_VIEWPORTS) {
         test(`keeps settings cards spaced without overlap at ${viewport.name} width`, async ({
             page,
