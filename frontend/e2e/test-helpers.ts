@@ -369,13 +369,19 @@ export async function clearUserData(page: Page): Promise<void> {
     await purgeClientState(page);
 }
 
+const seedOpenAIChatStateInLocalStorage = (key: string) => {
+    const raw = localStorage.getItem('gameState');
+    const state = raw ? JSON.parse(raw) : {};
+    state.openAI = { ...(state.openAI || {}), apiKey: key };
+    localStorage.setItem('gameState', JSON.stringify(state));
+};
+
 export async function seedOpenAIChatState(page: Page, apiKey = 'e2e-openai-key'): Promise<void> {
-    await page.evaluate((key) => {
-        const raw = localStorage.getItem('gameState');
-        const state = raw ? JSON.parse(raw) : {};
-        state.openAI = { ...(state.openAI || {}), apiKey: key };
-        localStorage.setItem('gameState', JSON.stringify(state));
-    }, apiKey);
+    await page.addInitScript(seedOpenAIChatStateInLocalStorage, apiKey);
+
+    if (page.url() !== 'about:blank') {
+        await page.evaluate(seedOpenAIChatStateInLocalStorage, apiKey);
+    }
 }
 
 async function seedCustomEntity(
