@@ -1,5 +1,5 @@
 <script>
-    import OpenAIAPIKeySettings from './OpenAIAPIKeySettings.svelte';
+    import OpenAIAPIKeySettings from '../../../components/svelte/OpenAIAPIKeySettings.svelte';
     import { onMount } from 'svelte';
     import { derived, writable } from 'svelte/store';
     import { loadGameState, ready, state as gameState } from '../../../utils/gameState/common.js';

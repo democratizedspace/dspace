@@ -39,6 +39,81 @@ test.describe('Settings route', () => {
         await expect(page.getByTestId('logout-state')).toHaveText('No saved credentials detected.');
     });
 
+    test('manages Chat provider and OpenAI key settings', async ({ page }) => {
+        await page.goto('/settings');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        await expect(page.getByRole('heading', { level: 2, name: 'Chat provider' })).toBeVisible();
+        await expect(page.getByTestId('chat-provider-token-place')).toBeChecked();
+        await expect(page.getByLabel(/token\.place.*api key/i)).toHaveCount(0);
+        await expect(page.getByTestId('openai-key-panel')).toHaveCount(0);
+
+        await page.getByTestId('chat-provider-openai').check();
+        await expect(page.getByTestId('chat-provider-openai')).toBeChecked();
+        await expect(page.getByTestId('openai-key-panel')).toBeVisible();
+
+        await expect
+            .poll(() =>
+                page.evaluate(() => {
+                    const raw = localStorage.getItem('gameState');
+                    return raw ? JSON.parse(raw).settings?.chatProvider : undefined;
+                })
+            )
+            .toBe('openai');
+
+        await page.getByTestId('openai-api-key-input').fill('sk-settings-e2e');
+        await page.getByTestId('openai-api-key-save').click();
+        await expect(page.getByTestId('openai-api-key-configured')).toBeVisible();
+        await expect
+            .poll(() =>
+                page.evaluate(() => {
+                    const raw = localStorage.getItem('gameState');
+                    return raw ? JSON.parse(raw).openAI?.apiKey : undefined;
+                })
+            )
+            .toBe('sk-settings-e2e');
+
+        await page.reload();
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.getByTestId('chat-provider-openai')).toBeChecked();
+        await expect(page.getByTestId('openai-api-key-configured')).toBeVisible();
+
+        await page.getByTestId('openai-api-key-clear').click();
+        await expect(page.getByTestId('openai-api-key-input')).toBeVisible();
+        await expect
+            .poll(() =>
+                page.evaluate(() => {
+                    const raw = localStorage.getItem('gameState');
+                    return raw ? JSON.parse(raw).openAI?.apiKey : undefined;
+                })
+            )
+            .toBe('');
+
+        await page.getByTestId('chat-provider-token-place').check();
+        await expect(page.getByTestId('chat-provider-token-place')).toBeChecked();
+        await expect(page.getByTestId('openai-key-panel')).toHaveCount(0);
+        await expect
+            .poll(() =>
+                page.evaluate(() => {
+                    const raw = localStorage.getItem('gameState');
+                    return raw ? JSON.parse(raw).settings?.chatProvider : undefined;
+                })
+            )
+            .toBe('token-place');
+
+        const tokenPlaceCredentialInputs = page.locator(
+            'input[aria-label*="token.place" i], input[name*="tokenPlace" i], input[name*="token-place" i], input[id*="tokenPlace" i], input[id*="token-place" i]'
+        );
+        await expect(tokenPlaceCredentialInputs).toHaveCount(0);
+        const savedState = await page.evaluate(() => {
+            const raw = localStorage.getItem('gameState');
+            return raw ? JSON.parse(raw) : {};
+        });
+        expect(savedState.tokenPlace?.apiKey).toBeUndefined();
+    });
+
     for (const viewport of SETTINGS_VIEWPORTS) {
         test(`keeps settings cards spaced without overlap at ${viewport.name} width`, async ({
             page,

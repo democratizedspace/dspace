@@ -5,6 +5,7 @@ import DataReset from '../components/svelte/DataReset.svelte';
 import QaCheatsToggle from '../components/svelte/QaCheatsToggle.svelte';
 import LegacySaveUpgrade from '../components/svelte/LegacySaveUpgrade.svelte';
 import QuestGraphToggle from '../components/svelte/QuestGraphToggle.svelte';
+import ChatProviderSettings from '../components/svelte/ChatProviderSettings.svelte';
 import { getCheatsAvailabilityFlag, isStagingEnvironment } from '../utils/cheatsAvailability';
 import { getCookieItemsFromStore, getCookieKeysFromStore } from '../utils/migrationCookies.js';
 
@@ -26,6 +27,7 @@ const legacyCookieKeys = getCookieKeysFromStore(Astro.cookies);
                 />
             ) : null
         }
+        <ChatProviderSettings client:idle />
         <QuestGraphToggle client:idle />
         <LegacySaveUpgrade
             legacyV1Items={legacyV1Items}

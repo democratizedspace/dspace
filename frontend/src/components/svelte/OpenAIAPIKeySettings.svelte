@@ -1,9 +1,12 @@
 <script>
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import { loadGameState, saveGameState, ready } from '../../../utils/gameState/common.js';
+    import { loadGameState, saveGameState, ready } from '../../utils/gameState/common.js';
 
     export let apiKey = writable('');
+    export let reloadOnSave = true;
+
+    let status = '';
 
     const isMounted = writable(false);
     const isEditing = writable(true);
@@ -23,6 +26,7 @@
         gameState.openAI = gameState.openAI || {};
         gameState.openAI.apiKey = $apiKey;
         await saveGameState(gameState);
+        status = 'OpenAI API key saved.';
         isEditing.set(false);
     }
 
@@ -33,13 +37,15 @@
         gameState.openAI.apiKey = '';
         await saveGameState(gameState);
         apiKey.set('');
+        status = 'OpenAI API key cleared.';
         isEditing.set(true);
     }
 
     async function handleSubmit() {
         await saveAPIKey();
-        // reload the page
-        window.location.reload();
+        if (reloadOnSave) {
+            window.location.reload();
+        }
     }
 
     function editAPIKey() {
@@ -61,23 +67,47 @@
                     <a href="https://platform.openai.com/account/usage">here.</a>
                 </p>
                 <form on:submit|preventDefault={handleSubmit}>
-                    <input type="text" bind:value={$apiKey} />
+                    <label for="openai-api-key">OpenAI API key</label>
+                    <input
+                        id="openai-api-key"
+                        type="password"
+                        autocomplete="off"
+                        bind:value={$apiKey}
+                        data-testid="openai-api-key-input"
+                    />
                     <div class="horizontal">
-                        <button type="submit">Submit</button>
+                        <button type="submit" data-testid="openai-api-key-save"
+                            >Save OpenAI API key</button
+                        >
                         <button class="red" type="button" on:click={() => deleteAPIKey()}
                             >Clear</button
                         >
                     </div>
                 </form>
             {:else}
-                <button type="button" on:click={() => editAPIKey()}>Edit API Key</button>
+                <p class="configured" data-testid="openai-api-key-configured">
+                    OpenAI API key configured.
+                </p>
+                <div class="horizontal">
+                    <button type="button" on:click={() => editAPIKey()}>Edit API Key</button>
+                    <button
+                        class="red"
+                        type="button"
+                        on:click={() => deleteAPIKey()}
+                        data-testid="openai-api-key-clear">Clear</button
+                    >
+                </div>
             {/if}
         </div>
 
+        {#if status}
+            <p class="status" role="status" data-testid="openai-api-key-status">{status}</p>
+        {/if}
+
         <p>
-            When you connect your API key, the chat can tap a curated knowledge base of quest lore,
-            items, and highlights from your local inventory so NPCs can answer gameplay questions
-            and show their unique personalities right away.
+            When you connect your API key, the chat can tap a curated knowledge base covering quest
+            lore, items, and highlights from your local inventory so NPCs can answer gameplay
+            questions and show their unique personalities right away.
         </p>
     </div>
 {/if}
@@ -104,6 +134,15 @@
     .red {
         background-color: #8a2c2c;
         color: white;
+    }
+
+    label {
+        font-weight: 700;
+    }
+
+    .configured,
+    .status {
+        font-weight: 700;
     }
 
     input {
