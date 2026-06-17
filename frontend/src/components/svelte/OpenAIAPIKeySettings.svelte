@@ -19,10 +19,13 @@
     });
 
     async function saveAPIKey() {
+        const trimmedApiKey = draftApiKey.trim();
+        if (!trimmedApiKey) return;
+
         await ready;
         const gameState = loadGameState();
         gameState.openAI = gameState.openAI || {};
-        gameState.openAI.apiKey = draftApiKey.trim();
+        gameState.openAI.apiKey = trimmedApiKey;
         await saveGameState(gameState);
         apiKey = gameState.openAI.apiKey;
         draftApiKey = '';
