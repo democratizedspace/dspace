@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { cleanup, render, screen, waitFor, fireEvent } from '@testing-library/svelte';
-import OpenAIChat from '../OpenAIChat.svelte';
+import ChatPanel from '../ChatPanel.svelte';
 import { loadGameState } from '../../../../utils/gameState/common.js';
 
 vi.mock('../../../../generated/build_meta.json', () => ({
@@ -57,7 +57,7 @@ vi.mock('../../../../utils/docsRag.js', () => ({
     getDocsRagMismatchWarning: mockGetDocsRagMismatchWarning,
 }));
 
-describe('OpenAIChat build metadata', () => {
+describe('ChatPanel build metadata', () => {
     const originalLocation = window.location;
     let fetchMock: ReturnType<typeof vi.fn>;
     const setHost = (url: string) => {
@@ -103,7 +103,7 @@ describe('OpenAIChat build metadata', () => {
     it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
         // Set process.env before import so the module reads the fallback path for VITE_GIT_SHA.
         process.env.VITE_GIT_SHA = 'abc123def456';
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const promptVersion = await screen.findByText('Prompt version: v3:abc123d');
         expect(promptVersion).toBeInTheDocument();
@@ -141,7 +141,7 @@ describe('OpenAIChat build metadata', () => {
             sourceRef: 'refs/heads/main',
         });
 
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const promptVersion = await screen.findByText('Prompt version: v3:docs-on');
         expect(promptVersion).toBeInTheDocument();
@@ -173,7 +173,7 @@ describe('OpenAIChat build metadata', () => {
             message: '⚠️ cannot verify app/docs sync (app SHA missing)',
         }));
 
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const appBuildLabel = await screen.findByText('App build SHA');
         await waitFor(() => {
@@ -205,7 +205,7 @@ describe('OpenAIChat build metadata', () => {
             }),
         });
 
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const appBuildLabel = await screen.findByText('App build SHA');
         await waitFor(() => {
@@ -238,7 +238,7 @@ describe('OpenAIChat build metadata', () => {
             },
         });
 
-        render(OpenAIChat);
+        render(ChatPanel);
         await waitFor(async () => {
             const includedLabel = await screen.findByText('PlayerState included');
             expect(includedLabel.nextElementSibling).toHaveTextContent('yes');
@@ -267,7 +267,7 @@ describe('OpenAIChat build metadata', () => {
     });
 
     it('updates PlayerState summary when the game state store changes', async () => {
-        render(OpenAIChat);
+        render(ChatPanel);
 
         await waitFor(async () => {
             const includedLabel = await screen.findByText('PlayerState included');
@@ -331,7 +331,7 @@ describe('OpenAIChat build metadata', () => {
             message: '✅ in sync',
         }));
 
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const appBuildLabel = await screen.findByText('App build SHA');
         expect(appBuildLabel.nextElementSibling?.textContent).toContain('abc123def456');
@@ -354,7 +354,7 @@ describe('OpenAIChat build metadata', () => {
         });
 
         try {
-            render(OpenAIChat);
+            render(ChatPanel);
 
             await screen.findByText('Prompt version: v3:abc123d');
 

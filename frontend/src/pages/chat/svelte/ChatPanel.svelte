@@ -99,9 +99,12 @@
     $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
     $: docsRagComparisonMessage = docsRagComparison.message;
     $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
-    $: activeProvider = normalizeSettings(currentSettings).chatProvider;
+    $: activeProvider = currentSettings.chatProvider;
     $: providerLabel =
         activeProvider === 'openai' ? 'OpenAI selected in Settings' : 'Powered by token.place';
+    $: if (errorBanner?.type === 'missing-key' && activeProvider !== 'openai') {
+        errorBanner = null;
+    }
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -696,6 +699,12 @@
                     <span>PlayerState inventory total</span>
                     <span class="debug-mono">{playerStateSummary.inventoryTotalCount}</span>
                 </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory truncated</span>
+                    <span class="debug-mono">
+                        {playerStateSummary.inventoryTruncated ? 'yes' : 'no'}
+                    </span>
+                </div>
                 {#if providerUsage}
                     <div class="debug-meta-row">
                         <span>Provider usage</span>
@@ -708,12 +717,6 @@
                         <span class="debug-mono">{JSON.stringify(providerMetadata)}</span>
                     </div>
                 {/if}
-                <div class="debug-meta-row">
-                    <span>PlayerState inventory truncated</span>
-                    <span class="debug-mono">
-                        {playerStateSummary.inventoryTruncated ? 'yes' : 'no'}
-                    </span>
-                </div>
             </div>
             {#if docsRagWarning}
                 <div class="debug-warning" role="alert" aria-live="polite">

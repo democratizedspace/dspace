@@ -3,10 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: vi.fn(() => ({
-        openAI: {},
+        openAI: { apiKey: 'test-openai-key' },
         settings: {
             showChatDebugPayload: false,
             showQuestGraphVisualizer: false,
+            chatProvider: 'openai',
         },
     })),
     ready: Promise.resolve(),
@@ -43,7 +44,7 @@ vi.mock('../src/utils/openAI.js', async () => {
     };
 });
 
-import OpenAIChat from '../src/pages/chat/svelte/OpenAIChat.svelte';
+import ChatPanel from '../src/pages/chat/svelte/ChatPanel.svelte';
 import { activePersonaId, messages } from '../src/stores/chat.js';
 
 const sendMessage = async (text: string) => {
@@ -65,7 +66,7 @@ const quotaError = () => {
     return error;
 };
 
-describe('OpenAIChat error messaging', () => {
+describe('ChatPanel error messaging', () => {
     let consoleErrorMock: ReturnType<typeof vi.spyOn>;
     let consoleWarnMock: ReturnType<typeof vi.spyOn>;
 
@@ -88,7 +89,7 @@ describe('OpenAIChat error messaging', () => {
     it('surfaces actionable guidance when quota is exhausted', async () => {
         GPT5ChatV2.mockRejectedValueOnce(quotaError());
 
-        render(OpenAIChat);
+        render(ChatPanel);
         await sendMessage('Hello');
 
         await waitFor(() => expect(GPT5ChatV2).toHaveBeenCalled());
@@ -99,7 +100,7 @@ describe('OpenAIChat error messaging', () => {
             await screen.findAllByText(/openai could not generate a reply because this account/i)
         ).toHaveLength(2);
         expect(consoleErrorMock).toHaveBeenCalledWith(
-            'OpenAI chat request failed',
+            'openai chat request failed',
             expect.any(Error)
         );
         expect(consoleWarnMock).not.toHaveBeenCalled();
@@ -111,7 +112,7 @@ describe('OpenAIChat error messaging', () => {
         error.status = 401;
         GPT5ChatV2.mockRejectedValueOnce(error);
 
-        render(OpenAIChat);
+        render(ChatPanel);
         await sendMessage('Hello again');
 
         await waitFor(() => expect(GPT5ChatV2).toHaveBeenCalled());
@@ -119,7 +120,7 @@ describe('OpenAIChat error messaging', () => {
         expect(banner.getAttribute('data-error-type')).toBe('auth');
         expect(await screen.findAllByText(/api key/i)).toHaveLength(2);
         expect(consoleErrorMock).toHaveBeenCalledWith(
-            'OpenAI chat request failed',
+            'openai chat request failed',
             expect.any(Error)
         );
         expect(consoleWarnMock).not.toHaveBeenCalled();

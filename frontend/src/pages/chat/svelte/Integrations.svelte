@@ -1,9 +1,9 @@
 <script>
-    import OpenAIChat from './OpenAIChat.svelte';
+    import ChatPanel from './ChatPanel.svelte';
 </script>
 
 <div class="container">
-    <OpenAIChat />
+    <ChatPanel />
 </div>
 
 <style>
