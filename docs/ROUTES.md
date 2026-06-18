@@ -47,7 +47,7 @@ page and uses the exact UI labels from `frontend/src/config/menu.json`.
 | Settings                | /settings                                   | User settings, including Chat provider selection and optional OpenAI key storage |
 | Discord                 | https://discord.gg/A3UAfYvnxM               | External link                                                                    |
 | Twitter                 | https://twitter.com/dspacegame              | External link                                                                    |
-| Github                  | https://github.com/democratizedspace/dspace | External link                                                                    |
+| GitHub                  | https://github.com/democratizedspace/dspace | External link                                                                    |
 
 ## Navigation click-paths (canonical)
 
@@ -70,7 +70,7 @@ answer "how do I get there?" with citeable pathing.
 - More → Settings opens /settings.
 - More → Discord opens https://discord.gg/A3UAfYvnxM.
 - More → Twitter opens https://twitter.com/dspacegame.
-- More → Github opens https://github.com/democratizedspace/dspace.
+- More → GitHub opens https://github.com/democratizedspace/dspace.
 
 ### Settings page click-paths
 
