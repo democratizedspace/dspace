@@ -422,6 +422,12 @@ const seedOpenAIChatStateInBrowser = async ({
             >),
             apiKey: key,
         };
+        state.settings = {
+            ...((state.settings && typeof state.settings === 'object'
+                ? state.settings
+                : {}) as Record<string, unknown>),
+            chatProvider: 'openai',
+        };
         state._meta = { ...previousMeta, lastUpdated: Date.now() };
         return state;
     };
