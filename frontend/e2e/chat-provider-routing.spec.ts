@@ -242,6 +242,7 @@ test.describe('Chat provider routing', () => {
 
         await sendFromPanel(chatPanel, 'Show the debug payload with RAG context');
         await expect(chatPanel.getByText('token.place assistant reply')).toBeVisible();
+        expect(requests).toHaveLength(1);
         await expect(page.getByTestId('debug-provider-row')).toContainText('token-place');
         await page.getByRole('button', { name: 'Show prompt' }).click();
         await expect(page.getByRole('button', { name: 'Hide prompt' })).toBeVisible();

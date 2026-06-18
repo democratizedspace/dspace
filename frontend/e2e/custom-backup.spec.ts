@@ -103,6 +103,8 @@ test.describe('Custom content backup', () => {
 
         const prepareButton = page.getByTestId('contentbackup-prepare');
         await prepareButton.click();
+        // The prepare action can complete before Playwright observes the transient disabled state,
+        // so this test asserts the durable preparing/prepared/error states instead.
 
         const preparingPreview = page.getByTestId('contentbackup-preparing');
         const preparedPreview = page.getByTestId('contentbackup-prepared');
