@@ -61,7 +61,7 @@ test.describe('Settings route', () => {
 
         await page.getByLabel('OpenAI').check();
         await expect(page.getByLabel('OpenAI')).toBeChecked();
-        await expect(page.getByLabel('OpenAI API key')).toBeVisible();
+        await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
 
         await expect
             .poll(() =>
@@ -81,12 +81,12 @@ test.describe('Settings route', () => {
         await page.goto('/settings');
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        await page.getByLabel('OpenAI API key').fill('sk-settings-e2e-key');
+        await page.getByLabel('OpenAI API key', { exact: true }).fill('sk-settings-e2e-key');
         await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
         await expect(page.getByTestId('openai-key-status')).toHaveText(
             'OpenAI API key configured.'
         );
-        await expect(page.getByLabel('OpenAI API key')).toHaveCount(0);
+        await expect(page.getByLabel('OpenAI API key', { exact: true })).toHaveCount(0);
 
         await expect
             .poll(() =>
@@ -107,7 +107,7 @@ test.describe('Settings route', () => {
         );
 
         await page.getByRole('button', { name: 'Clear API key' }).click();
-        await expect(page.getByLabel('OpenAI API key')).toBeVisible();
+        await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
         await expect
             .poll(() =>
                 page.evaluate(async () => {
