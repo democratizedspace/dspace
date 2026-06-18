@@ -52,15 +52,19 @@ test.describe('Settings route', () => {
         await expect(
             page.getByText('token.place is the default DSPACE Chat provider')
         ).toBeVisible();
-        await expect(page.getByLabel('token.place', { exact: true })).toBeChecked();
+        await expect(
+            chatPanel.locator('input[name="chat-provider"][value="token-place"]')
+        ).toBeChecked();
         await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
         await expect(
             chatPanel.locator('input:is([type="password"], [type="text"], :not([type]))')
         ).toHaveCount(0);
         await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
 
-        await page.getByLabel('OpenAI', { exact: true }).check();
-        await expect(page.getByLabel('OpenAI', { exact: true })).toBeChecked();
+        await chatPanel.locator('input[name="chat-provider"][value="openai"]').check();
+        await expect(
+            chatPanel.locator('input[name="chat-provider"][value="openai"]')
+        ).toBeChecked();
         await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
 
         await expect
@@ -101,7 +105,9 @@ test.describe('Settings route', () => {
         await page.reload();
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        await expect(page.getByLabel('OpenAI', { exact: true })).toBeChecked();
+        await expect(
+            chatPanel.locator('input[name="chat-provider"][value="openai"]')
+        ).toBeChecked();
         await expect(page.getByTestId('openai-key-status')).toHaveText(
             'OpenAI API key configured.'
         );
@@ -118,8 +124,10 @@ test.describe('Settings route', () => {
             )
             .toBe('');
 
-        await page.getByLabel('token.place', { exact: true }).check();
-        await expect(page.getByLabel('token.place', { exact: true })).toBeChecked();
+        await chatPanel.locator('input[name="chat-provider"][value="token-place"]').check();
+        await expect(
+            chatPanel.locator('input[name="chat-provider"][value="token-place"]')
+        ).toBeChecked();
         await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
         await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
         await expect(
@@ -280,7 +288,22 @@ test.describe('Settings route', () => {
                 const selector =
                     '.settings-content a[href], .settings-content button:not([disabled]), .settings-content select:not([disabled]), .settings-content input:not([disabled]), .settings-content textarea:not([disabled])';
                 return Array.from(document.querySelectorAll<HTMLElement>(selector))
-                    .filter((element) => element.offsetParent !== null)
+                    .filter((element) => {
+                        if (element.offsetParent === null) {
+                            return false;
+                        }
+
+                        if (element instanceof HTMLInputElement && element.type === 'radio') {
+                            const radioGroup = Array.from(
+                                document.querySelectorAll<HTMLInputElement>(
+                                    `input[type="radio"][name="${element.name}"]`
+                                )
+                            );
+                            return element.checked || !radioGroup.some((radio) => radio.checked);
+                        }
+
+                        return true;
+                    })
                     .map((element, index) => {
                         const id = `settings-focus-target-${index}`;
                         element.dataset.settingsFocusTarget = id;
