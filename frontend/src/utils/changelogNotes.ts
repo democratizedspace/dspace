@@ -127,7 +127,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
         },
         {
             message:
-                'AI chat ships OpenAI-only in v3; token.place is deferred to v3.1 for future enablement.',
+                'AI chat now defaults to token.place in v3.1, with OpenAI available as an opt-in provider from Settings.',
             href: '/docs/v3-release-state',
             linkLabel: 'v3 Release State',
         },

@@ -21,7 +21,7 @@ the OpenAI-backed flow.
   enablement so old saved disabled flags cannot block fresh default token.place chat.
 - Users with an existing OpenAI API key still use the OpenAI-backed flow, and the OpenAI key
   settings remain available separately (see
-  `frontend/src/pages/chat/svelte/OpenAIChat.svelte`).
+  `frontend/src/pages/chat/svelte/ChatPanel.svelte`).
 
 ## Local URL override
 

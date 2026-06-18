@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { npcPersonas } from '../src/data/npcPersonas.js';
-import { seedOpenAIChatState, waitForHydration } from './test-helpers';
+import { waitForHydration } from './test-helpers';
 
 const personaExpectations = npcPersonas.map((persona) => ({
     id: persona.id,
@@ -27,8 +27,6 @@ test.beforeEach(async ({ page }) => {
             }
         }
     });
-
-    await seedOpenAIChatState(page);
 });
 
 test.describe('Chat NPC persona switching', () => {
@@ -37,16 +35,20 @@ test.describe('Chat NPC persona switching', () => {
         await page.waitForLoadState('networkidle');
         await waitForHydration(
             page,
-            '[data-testid="chat-panel"][data-provider="openai"][data-hydrated="true"]'
+            '[data-testid="chat-panel"][data-provider="token-place"][data-hydrated="true"]'
         );
 
-        const openAIChatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
-        await expect(openAIChatPanel).toBeVisible();
-        await expect(openAIChatPanel).toHaveAttribute('data-hydrated', 'true');
+        const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="token-place"]');
+        await expect(chatPanel).toBeVisible();
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+        await expect(page.locator('[data-testid="chat-panel"]')).toHaveCount(1);
+        await expect(page.locator('[data-provider="openai"]')).toHaveCount(0);
+        await expect(page.getByText(/OpenAI API Key/i)).toHaveCount(0);
+        await expect(page.getByText(/OpenAI.?API.?Key.?Settings/i)).toHaveCount(0);
 
-        const personaSelect = openAIChatPanel.locator('#chat-persona');
-        const personaSummary = openAIChatPanel.locator('.persona-summary');
-        const personaAvatar = openAIChatPanel.locator('.persona-selector img');
+        const personaSelect = chatPanel.locator('#chat-persona');
+        const personaSummary = chatPanel.locator('.persona-summary');
+        const personaAvatar = chatPanel.locator('.persona-selector img');
 
         for (const persona of personaExpectations) {
             const currentValue = await personaSelect.evaluate((select) => select.value);
@@ -58,7 +60,7 @@ test.describe('Chat NPC persona switching', () => {
             await expect(personaSummary).toHaveText(persona.summary);
             await expect(personaAvatar).toHaveAttribute('alt', `${persona.name} portrait`);
 
-            const assistantMessages = openAIChatPanel.locator('.assistant');
+            const assistantMessages = chatPanel.locator('.assistant');
             await expect(assistantMessages).toHaveCount(1);
             await expect(assistantMessages.first()).toContainText(persona.welcomeText);
         }

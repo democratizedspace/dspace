@@ -46,9 +46,9 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     ],
 }));
 
-import OpenAIChat from '../src/pages/chat/svelte/OpenAIChat.svelte';
+import ChatPanel from '../src/pages/chat/svelte/ChatPanel.svelte';
 
-describe('OpenAIChat docs RAG comparison messaging', () => {
+describe('ChatPanel docs RAG comparison messaging', () => {
     let originalLocation;
     let originalViteSha;
     let fetchMock;
@@ -84,7 +84,7 @@ describe('OpenAIChat docs RAG comparison messaging', () => {
     });
 
     const expectComparisonMessage = async (expected: RegExp | string) => {
-        render(OpenAIChat);
+        render(ChatPanel);
         const label = await screen.findByText('Docs RAG comparison');
         const row = label.closest('.debug-meta-row');
         await waitFor(() => {

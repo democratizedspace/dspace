@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { cleanup, render, screen, waitFor, fireEvent } from '@testing-library/svelte';
-import OpenAIChat from '../OpenAIChat.svelte';
+import ChatPanel from '../ChatPanel.svelte';
 import { loadGameState } from '../../../../utils/gameState/common.js';
 
 vi.mock('../../../../generated/build_meta.json', () => ({
@@ -28,6 +28,14 @@ const mockGetDocsRagComparison = vi.hoisted(() =>
     }))
 );
 const mockGetDocsRagMismatchWarning = vi.hoisted(() => vi.fn(() => null));
+const mockTokenPlaceChatV2 = vi.hoisted(() =>
+    vi.fn(async () => ({
+        text: 'token.place debug reply',
+        contextSources: [{ type: 'doc', label: 'DSPACE docs', url: '/docs/about' }],
+        usage: { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 },
+        metadata: { request_id: 'tp-123', provider: 'token.place' },
+    }))
+);
 let gameStateSubscriber: ((state: { settings: { showChatDebugPayload: boolean } }) => void) | null =
     null;
 
@@ -55,9 +63,17 @@ vi.mock('../../../../utils/docsRag.js', () => ({
     getDocsRagMeta: mockGetDocsRagMeta,
     getDocsRagComparison: mockGetDocsRagComparison,
     getDocsRagMismatchWarning: mockGetDocsRagMismatchWarning,
+    searchDocsRag: vi.fn(async () => ({
+        excerptsText: 'DSPACE docs RAG context',
+        sources: [{ type: 'doc', label: 'DSPACE docs', url: '/docs/about' }],
+    })),
 }));
 
-describe('OpenAIChat build metadata', () => {
+vi.mock('../../../../utils/tokenPlace.js', () => ({
+    TokenPlaceChatV2: mockTokenPlaceChatV2,
+}));
+
+describe('ChatPanel build metadata', () => {
     const originalLocation = window.location;
     let fetchMock: ReturnType<typeof vi.fn>;
     const setHost = (url: string) => {
@@ -83,6 +99,12 @@ describe('OpenAIChat build metadata', () => {
             message: '✅ in sync',
         }));
         mockGetDocsRagMismatchWarning.mockReturnValue(null);
+        mockTokenPlaceChatV2.mockResolvedValue({
+            text: 'token.place debug reply',
+            contextSources: [{ type: 'doc', label: 'DSPACE docs', url: '/docs/about' }],
+            usage: { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 },
+            metadata: { request_id: 'tp-123', provider: 'token.place' },
+        });
     });
 
     afterEach(() => {
@@ -103,7 +125,7 @@ describe('OpenAIChat build metadata', () => {
     it('shows non-empty build metadata from VITE_GIT_SHA', async () => {
         // Set process.env before import so the module reads the fallback path for VITE_GIT_SHA.
         process.env.VITE_GIT_SHA = 'abc123def456';
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const promptVersion = await screen.findByText('Prompt version: v3:abc123d');
         expect(promptVersion).toBeInTheDocument();
@@ -141,7 +163,7 @@ describe('OpenAIChat build metadata', () => {
             sourceRef: 'refs/heads/main',
         });
 
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const promptVersion = await screen.findByText('Prompt version: v3:docs-on');
         expect(promptVersion).toBeInTheDocument();
@@ -173,7 +195,7 @@ describe('OpenAIChat build metadata', () => {
             message: '⚠️ cannot verify app/docs sync (app SHA missing)',
         }));
 
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const appBuildLabel = await screen.findByText('App build SHA');
         await waitFor(() => {
@@ -205,7 +227,7 @@ describe('OpenAIChat build metadata', () => {
             }),
         });
 
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const appBuildLabel = await screen.findByText('App build SHA');
         await waitFor(() => {
@@ -238,7 +260,7 @@ describe('OpenAIChat build metadata', () => {
             },
         });
 
-        render(OpenAIChat);
+        render(ChatPanel);
         await waitFor(async () => {
             const includedLabel = await screen.findByText('PlayerState included');
             expect(includedLabel.nextElementSibling).toHaveTextContent('yes');
@@ -267,7 +289,7 @@ describe('OpenAIChat build metadata', () => {
     });
 
     it('updates PlayerState summary when the game state store changes', async () => {
-        render(OpenAIChat);
+        render(ChatPanel);
 
         await waitFor(async () => {
             const includedLabel = await screen.findByText('PlayerState included');
@@ -331,7 +353,7 @@ describe('OpenAIChat build metadata', () => {
             message: '✅ in sync',
         }));
 
-        render(OpenAIChat);
+        render(ChatPanel);
 
         const appBuildLabel = await screen.findByText('App build SHA');
         expect(appBuildLabel.nextElementSibling?.textContent).toContain('abc123def456');
@@ -344,6 +366,62 @@ describe('OpenAIChat build metadata', () => {
         expect(comparisonRow?.textContent).toContain('✅ in sync');
     });
 
+    it('copies selected provider and token.place response metadata without stale provider wording', async () => {
+        const originalClipboardDescriptor = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
+        const writeText = vi.fn().mockResolvedValue(undefined);
+        Object.defineProperty(navigator, 'clipboard', {
+            value: { writeText },
+            configurable: true,
+        });
+
+        try {
+            render(ChatPanel);
+
+            const messageBox = await screen.findByRole('textbox');
+            await fireEvent.input(messageBox, {
+                target: { value: 'Show token.place debug metadata' },
+            });
+            await fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+            await screen.findByText('token.place debug reply');
+
+            const copyButton = await screen.findByRole('button', { name: 'Copy debug info' });
+            await fireEvent.click(copyButton);
+
+            expect(writeText).toHaveBeenCalledTimes(1);
+            const copiedText = writeText.mock.calls[0][0];
+            expect(copiedText).toContain('Selected provider: token-place');
+            expect(copiedText).toContain(
+                'Provider usage: {"prompt_tokens":7,"completion_tokens":3,"total_tokens":10}'
+            );
+            expect(copiedText).toContain(
+                'Provider metadata: {"request_id":"tp-123","provider":"token.place"}'
+            );
+            const staleProviderClaims = [
+                `token.place is ${'deferred'}`,
+                `AI chat ships ${'OpenAI-only'}`,
+                `In v3, chat uses ${'OpenAI'}`,
+            ];
+            for (const staleClaim of staleProviderClaims) {
+                expect(copiedText).not.toContain(staleClaim);
+            }
+
+            const promptPayloadText = screen
+                .queryAllByTestId('chat-debug-message')
+                .map((node) => node.textContent || '')
+                .join('\n');
+            for (const staleClaim of staleProviderClaims) {
+                expect(promptPayloadText).not.toContain(staleClaim);
+            }
+        } finally {
+            if (originalClipboardDescriptor) {
+                Object.defineProperty(navigator, 'clipboard', originalClipboardDescriptor);
+            } else {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                delete (navigator as any).clipboard;
+            }
+        }
+    });
+
     it('copies debug info with non-empty SHAs', async () => {
         process.env.VITE_GIT_SHA = 'abc123def456';
         const originalClipboardDescriptor = Object.getOwnPropertyDescriptor(navigator, 'clipboard');
@@ -354,7 +432,7 @@ describe('OpenAIChat build metadata', () => {
         });
 
         try {
-            render(OpenAIChat);
+            render(ChatPanel);
 
             await screen.findByText('Prompt version: v3:abc123d');
 
@@ -363,6 +441,7 @@ describe('OpenAIChat build metadata', () => {
 
             expect(writeText).toHaveBeenCalledTimes(1);
             const copiedText = writeText.mock.calls[0][0];
+            expect(copiedText).toContain('Selected provider: token-place');
             expect(copiedText).toContain('Prompt version: v3:abc123d');
             expect(copiedText).toContain('App build SHA: abc123def456');
             expect(copiedText).toContain('App build SHA source: vite');
