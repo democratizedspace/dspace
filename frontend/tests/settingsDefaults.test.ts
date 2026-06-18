@@ -1,7 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeSettings } from '../src/utils/settingsDefaults.js';
+import {
+    DEFAULT_CHAT_PROVIDER,
+    DEFAULT_SETTINGS,
+    normalizeSettings,
+} from '../src/utils/settingsDefaults.js';
 
 describe('normalizeSettings', () => {
+    it('defaults chatProvider to token-place', () => {
+        expect(DEFAULT_CHAT_PROVIDER).toBe('token-place');
+        expect(DEFAULT_SETTINGS.chatProvider).toBe('token-place');
+        expect(normalizeSettings().chatProvider).toBe('token-place');
+    });
+
     it.each([
         ['missing', {}, 'token-place'],
         ['null', { chatProvider: null }, 'token-place'],
@@ -22,6 +32,11 @@ describe('normalizeSettings', () => {
             showChatDebugPayload: true,
             showQuestGraphVisualizer: false,
         });
+    });
+
+    it('persists accepted OpenAI and token.place provider values', () => {
+        expect(normalizeSettings({ chatProvider: 'openai' }).chatProvider).toBe('openai');
+        expect(normalizeSettings({ chatProvider: 'token-place' }).chatProvider).toBe('token-place');
     });
 
     it('does not let legacy tokenPlace.enabled affect chatProvider defaults', () => {
