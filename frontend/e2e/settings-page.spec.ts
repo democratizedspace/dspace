@@ -52,15 +52,15 @@ test.describe('Settings route', () => {
         await expect(
             page.getByText('token.place is the default DSPACE Chat provider')
         ).toBeVisible();
-        await expect(page.getByLabel('token.place')).toBeChecked();
+        await expect(page.getByLabel('token.place', { exact: true })).toBeChecked();
         await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
         await expect(
             chatPanel.locator('input:is([type="password"], [type="text"], :not([type]))')
         ).toHaveCount(0);
         await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
 
-        await page.getByLabel('OpenAI').check();
-        await expect(page.getByLabel('OpenAI')).toBeChecked();
+        await page.getByLabel('OpenAI', { exact: true }).check();
+        await expect(page.getByLabel('OpenAI', { exact: true })).toBeChecked();
         await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
 
         await expect
@@ -101,7 +101,7 @@ test.describe('Settings route', () => {
         await page.reload();
         await page.waitForLoadState('networkidle');
         await waitForHydration(page);
-        await expect(page.getByLabel('OpenAI')).toBeChecked();
+        await expect(page.getByLabel('OpenAI', { exact: true })).toBeChecked();
         await expect(page.getByTestId('openai-key-status')).toHaveText(
             'OpenAI API key configured.'
         );
@@ -118,8 +118,8 @@ test.describe('Settings route', () => {
             )
             .toBe('');
 
-        await page.getByLabel('token.place').check();
-        await expect(page.getByLabel('token.place')).toBeChecked();
+        await page.getByLabel('token.place', { exact: true }).check();
+        await expect(page.getByLabel('token.place', { exact: true })).toBeChecked();
         await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
         await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
         await expect(
