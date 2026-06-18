@@ -56,7 +56,8 @@ The More menu includes in-scope routes for:
 ### NPC chat and AI
 
 - v3 includes persona-style chat experiences (for example Sydney, Nova, Hydro).
-- OpenAI-only chat is the supported provider path in v3.
+- v3.1 updates `/chat` so token.place is the default provider, with OpenAI available as an
+  optional bring-your-own-key path from `/settings`.
 - Chat surfaces include `/chat` and `/dchat`.
 
 ## Deferred or intentionally limited in v3
@@ -72,8 +73,8 @@ The More menu includes in-scope routes for:
 
 ### token.place integration
 
-- token.place integration exists behind flags but remains disabled for the v3 launch release.
-- token.place activation is deferred to v3.1 in the follow-up track and is not a v3 launch gate.
+- token.place is the v3.1 default Chat provider.
+- `/chat` works without auth or API keys for the default provider.
 - Current status is tracked at [/docs/token-place](/docs/token-place).
 
 ## What changed from earlier versions

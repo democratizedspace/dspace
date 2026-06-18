@@ -23,7 +23,8 @@ current shipped status where relevant.
 ## Shipped in v3 (April 2026)
 
 - [x] DSPACE v3 released
-- [x] OpenAI-backed NPC chat personas shipped in `/chat`
+- [x] token.place-backed NPC chat personas are the v3.1 `/chat` default, with OpenAI still
+      available as an opt-in provider in `/settings`
 - [x] Utility destinations shipped in the More menu (`/stats`, `/leaderboard`, `/titles`,
       `/toolbox`, `/settings`, `/gamesaves`, `/cloudsync`, `/contentbackup`)
 

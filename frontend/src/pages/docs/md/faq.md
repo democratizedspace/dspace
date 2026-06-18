@@ -74,6 +74,12 @@ quest-only submissions or `/bundles/submit` when your quest depends on custom it
 Only for GitHub-connected features (bundle submission and cloud sync). See
 [Authentication](/docs/authentication) for scope requirements and storage behavior.
 
+## Does Chat require an API key?
+
+No. In v3.1, `/chat` defaults to token.place and works without auth, billing setup, or an
+API key. If you prefer OpenAI, choose it in `/settings` and bring your own OpenAI API key. DSPACE
+never asks users to create a token.place API key.
+
 ## Where is data stored?
 
 Primary v3 storage is IndexedDB. Legacy localStorage/cookies are treated as migration sources.

@@ -9,9 +9,8 @@ DSPACE's chat console now lets you pick an NPC persona before starting a
 conversation. Choose dChat for general knowledge, or switch to Sydney,
 Nova, or Hydro to receive guidance steeped in their specialties. Each
 persona keeps its existing lore and draws from the shared quest, item, and
-process knowledge base once you connect an OpenAI API key in the chat
-settings. The chat payload now also includes your live quest progress,
-active process timers, and current inventory so answers stay grounded.
+process knowledge base through the default token.place provider, or through OpenAI if you opt in
+from `/settings`. The chat payload now also includes your live quest progress, active process timers, and current inventory so answers stay grounded.
 Ask open-ended questions about quests, items, or processes and the
 personas will answer with that live context.
 
@@ -25,9 +24,9 @@ bios below describe intended roles rather than live multiplayer features.
 dChat is a compact, spherical smart assistant powered by large language models. Equipped with reasoning
 and information retrieval capabilities, it can answer questions and engage in conversation effortlessly.
 dChat now has a curated knowledge base covering the game's quests, achievements, items, processes, and the player's
-current inventory snapshot. Connect your OpenAI API key in the chat settings and dChat will
-automatically include this context when answering questions. dChat will be provided free of charge
-to Metaguild members once guilds launch, and it's fully open source and self-hosted.
+current inventory snapshot. In v3.1 this context is available through the default token.place Chat
+provider without an API key; OpenAI remains optional from `/settings`. dChat is fully open source
+and self-hosted.
 
 ### Sample Dialogue
 
