@@ -57,10 +57,16 @@ describe('token.place API v1 client', () => {
         expect(init.method).toBe('POST');
     });
 
-    test('VITE_TOKEN_PLACE_URL override works', async () => {
+    test('VITE_TOKEN_PLACE_URL staging override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://staging.token.place/';
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
         expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/chat/completions');
+    });
+
+    test('VITE_TOKEN_PLACE_URL production override works', async () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'https://token.place/';
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
+        expect(getFetchCall().url).toBe('https://token.place/api/v1/chat/completions');
     });
 
     test('state tokenPlace url compatibility override works', async () => {

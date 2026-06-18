@@ -155,9 +155,26 @@ test.describe('Chat provider routing', () => {
             openAiCalls += 1;
             await route.abort();
         });
-        await seedState(page, { settings: { chatProvider: 'openai' }, openAI: { apiKey: '' } });
+
+        await page.goto('/settings');
+        await waitForHydration(page);
+        await page.locator('input[name="chat-provider"][value="openai"]').check();
+        await expect(page.getByRole('status')).toHaveText('Chat provider saved: OpenAI.');
+        await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
+        await expect
+            .poll(async () =>
+                page.evaluate(() => {
+                    const state = JSON.parse(localStorage.getItem('gameState') || '{}');
+                    return {
+                        apiKey: state.openAI?.apiKey ?? '',
+                        chatProvider: state.settings?.chatProvider,
+                    };
+                })
+            )
+            .toEqual({ apiKey: '', chatProvider: 'openai' });
 
         const chatPanel = await openChat(page, 'openai');
+        await expect(chatPanel).toHaveAttribute('data-provider', 'openai');
         await sendFromPanel(chatPanel, 'OpenAI should be gated');
 
         const banner = chatPanel.locator('.chat-error');
