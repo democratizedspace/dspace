@@ -13,16 +13,18 @@ across `dev`, `int`, and `prod` clusters.
 
 ## Environment Variables
 
-| Name | Required | Description | Example | Source |
-| --- | --- | --- | --- | --- |
-| `PORT` | No (default `8080`) | TCP port that the HTTP server binds to. The Helm chart maps this to the service port automatically. | `8080` | ConfigMap / values.yaml |
-| `HOST` | No (default `0.0.0.0`) | Interface for the listener. Leave at the default to accept traffic from the Service/Ingress. | `0.0.0.0` | ConfigMap / values.yaml |
-| `NODE_ENV` | No (default `production`) | Sets Node.js runtime mode. Keep `production` for optimized builds. | `production` | ConfigMap / values.yaml |
-| `DSPACE_FEATURE_FLAGS` | No | Comma-separated feature flag identifiers surfaced in readiness probes and startup logs. Supports `key=value` overrides consumed by `/config.json` (for example `offlineWorker.enabled=false`). | `beta-chat,balance-panel` | ConfigMap / values.yaml |
-| `DSPACE_TELEMETRY_ENABLED` | No (default `false`) | Opt-in switch for telemetry; `/config.json` mirrors it. The feature flag override `telemetry.enabled=true` also enables telemetry. | `true` | ConfigMap / values.yaml |
-| `METRICS_TOKEN` | Recommended | Bearer token that protects the `/metrics` endpoint. When set, Prometheus or other collectors must send `Authorization: Bearer <token>`. | *(generated)* | Kubernetes Secret (`dspace-secrets`, key `metricsToken` managed via SOPS) |
-| `SERVER_CERT_PATH` | Optional | Path to a TLS certificate inside the container. Provide along with `SERVER_KEY_PATH` to terminate TLS in-process instead of via Traefik. | `/app/tls/tls.crt` | Kubernetes Secret (mounted volume) |
-| `SERVER_KEY_PATH` | Optional | Private key paired with `SERVER_CERT_PATH`. | `/app/tls/tls.key` | Kubernetes Secret (mounted volume) |
+| Name                          | Required                           | Description                                                                                                                                                                                       | Example                       | Source                                                                    |
+| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------- |
+| `PORT`                        | No (default `8080`)                | TCP port that the HTTP server binds to. The Helm chart maps this to the service port automatically.                                                                                               | `8080`                        | ConfigMap / values.yaml                                                   |
+| `HOST`                        | No (default `0.0.0.0`)             | Interface for the listener. Leave at the default to accept traffic from the Service/Ingress.                                                                                                      | `0.0.0.0`                     | ConfigMap / values.yaml                                                   |
+| `NODE_ENV`                    | No (default `production`)          | Sets Node.js runtime mode. Keep `production` for optimized builds.                                                                                                                                | `production`                  | ConfigMap / values.yaml                                                   |
+| `DSPACE_FEATURE_FLAGS`        | No                                 | Comma-separated feature flag identifiers surfaced in readiness probes and startup logs. Supports `key=value` overrides consumed by `/config.json` (for example `offlineWorker.enabled=false`).    | `beta-chat,balance-panel`     | ConfigMap / values.yaml                                                   |
+| `DSPACE_TELEMETRY_ENABLED`    | No (default `false`)               | Opt-in switch for telemetry; `/config.json` mirrors it. The feature flag override `telemetry.enabled=true` also enables telemetry.                                                                | `true`                        | ConfigMap / values.yaml                                                   |
+| `METRICS_TOKEN`               | Recommended                        | Bearer token that protects the `/metrics` endpoint. When set, Prometheus or other collectors must send `Authorization: Bearer <token>`.                                                           | _(generated)_                 | Kubernetes Secret (`dspace-secrets`, key `metricsToken` managed via SOPS) |
+| `VITE_TOKEN_PLACE_URL`        | No (default `https://token.place`) | Origin used by the v3.1 default Chat provider before appending `/api/v1/chat/completions`. Staging should set `https://staging.token.place`; production can omit it or set `https://token.place`. | `https://staging.token.place` | ConfigMap / values.yaml                                                   |
+| `VITE_TOKEN_PLACE_CHAT_MODEL` | No (default `gpt-5-chat-latest`)   | Model name sent to token.place API v1 Chat completions. Use only for deployment-level compatibility or rollback mitigation.                                                                       | `gpt-5-chat-latest`           | ConfigMap / values.yaml                                                   |
+| `SERVER_CERT_PATH`            | Optional                           | Path to a TLS certificate inside the container. Provide along with `SERVER_KEY_PATH` to terminate TLS in-process instead of via Traefik.                                                          | `/app/tls/tls.crt`            | Kubernetes Secret (mounted volume)                                        |
+| `SERVER_KEY_PATH`             | Optional                           | Private key paired with `SERVER_CERT_PATH`.                                                                                                                                                       | `/app/tls/tls.key`            | Kubernetes Secret (mounted volume)                                        |
 
 > **Secrets**: `METRICS_TOKEN`, TLS material, and any future API keys should live in a SOPS-managed
 > secret named `dspace-secrets` (see Helm values below). Flux/SOPS will render them into the
@@ -35,11 +37,11 @@ into a deterministic ConfigMap that the corresponding `HelmRelease` consumes. Th
 summarises the runtime differences so operators can confirm hostnames, scaling choices, and
 feature toggles without opening each values file.
 
-| Environment | Hostname | Image strategy | Metrics | Feature flags | Notes |
-| --- | --- | --- | --- | --- | --- |
-| dev | `dev.dspace.example.com` | Follows tag `main` for rapid iteration | Disabled (`serviceMonitor.enabled=false`) | `beta-chat` | Single replica, metrics exporter left off to minimize noise. |
-| int | `int.dspace.example.com` | Pins an immutable digest for release verification | Enabled (`serviceMonitor` scrapes namespace `dspace`) | `beta-chat,balance-panel` | Autoscaling between two and four replicas with 60% CPU target. |
-| prod | `dspace.example.com` | Pins an immutable digest for production rollouts | Enabled (`serviceMonitor` scrapes namespace `dspace`) | `beta-chat,balance-panel,observability` | Alerts enabled and resources raised (500m/768Mi requests). |
+| Environment | Hostname                 | Image strategy                                    | Metrics                                               | Feature flags                           | Notes                                                          |
+| ----------- | ------------------------ | ------------------------------------------------- | ----------------------------------------------------- | --------------------------------------- | -------------------------------------------------------------- |
+| dev         | `dev.dspace.example.com` | Follows tag `main` for rapid iteration            | Disabled (`serviceMonitor.enabled=false`)             | `beta-chat`                             | Single replica, metrics exporter left off to minimize noise.   |
+| int         | `int.dspace.example.com` | Pins an immutable digest for release verification | Enabled (`serviceMonitor` scrapes namespace `dspace`) | `beta-chat,balance-panel`               | Autoscaling between two and four replicas with 60% CPU target. |
+| prod        | `dspace.example.com`     | Pins an immutable digest for production rollouts  | Enabled (`serviceMonitor` scrapes namespace `dspace`) | `beta-chat,balance-panel,observability` | Alerts enabled and resources raised (500m/768Mi requests).     |
 
 Flux consumption details:
 

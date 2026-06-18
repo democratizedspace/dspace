@@ -84,6 +84,12 @@ Primary v3 storage is IndexedDB. Legacy localStorage/cookies are treated as migr
 - [dWatt](/docs/dwatt): energy accounting unit.
 - [dCarbon](/docs/dcarbon): carbon/emissions accounting unit.
 
+## Does Chat require an API key?
+
+No. In v3.1, `/chat` defaults to token.place and works without auth, without an OpenAI API key,
+and without token.place credentials. If you prefer OpenAI, choose it in `/settings` and bring your
+own OpenAI key.
+
 ## Are guilds and locations playable yet?
 
 Not fully. `/guilds` and `/locations` remain menu placeholders marked coming soon.

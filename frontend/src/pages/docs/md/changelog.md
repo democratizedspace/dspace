@@ -7,9 +7,7 @@ Stay up to date with the latest improvements to DSPACE. Every entry links to a
 full set of release notes so you can dive into gameplay updates, docs refreshes,
 and tooling changes as they land.
 
-For v3 launch readiness details (including Completionist Award III in the v3 launch lane and
-OpenAI-only v3 chat with token.place deferred to v3.1), see
-[v3 Release State](/docs/v3-release-state).
+For v3.1 Chat details, see the [August 1, 2026 changelog](/docs/changelog/20260801) and [token.place integration guide](/docs/token-place). For historical v3 launch readiness details, see [v3 Release State](/docs/v3-release-state).
 
 ## Latest releases
 
