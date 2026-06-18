@@ -16,7 +16,6 @@ const {
     buildTokenPlaceChatCompletionsUrl,
     extractTokenPlaceAssistantText,
     getTokenPlaceChatModel,
-    isTokenPlaceEnabled,
     resolveTokenPlaceBaseUrl,
     tokenPlaceChat,
 } = await import('../src/utils/tokenPlace.js');
@@ -309,17 +308,5 @@ describe('token.place API v1 client', () => {
         const serializedRequest = JSON.stringify(getFetchCall().body.messages);
         expect(serializedRequest).not.toMatch(/token\.place is deferred/i);
         expect(serializedRequest).not.toMatch(/chat uses OpenAI/i);
-    });
-});
-
-describe('isTokenPlaceEnabled', () => {
-    test('enables token.place for fresh or missing legacy state', () => {
-        expect(isTokenPlaceEnabled()).toBe(true);
-        expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: undefined } })).toBe(true);
-    });
-
-    test('ignores legacy saved disabled flags', () => {
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(true);
     });
 });

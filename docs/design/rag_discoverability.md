@@ -2,7 +2,8 @@
 
 **Status:** Draft (grounded to current v3 implementation)  
 **Audience:** Maintainers + contributors working on chat UX, RAG context, and QA  
-**Scope:** `/chat` and dChat knowledge-base grounding in v3 (OpenAI first, token.place later)
+**Scope:** `/chat` and dChat knowledge-base grounding in v3.1 (provider-aware Chat with
+token.place as the default and OpenAI as an opt-in provider)
 
 ## Why this exists
 
@@ -42,13 +43,12 @@ without introducing heavyweight infrastructure.
 ## Current Architecture (as-is)
 
 ### Chat UI + message flow
-- The `/chat` page hydrates the Svelte chat integrations via
+- The `/chat` page hydrates one provider-aware Svelte chat panel via
   `frontend/src/pages/chat/index.astro` and `frontend/src/pages/chat/svelte/Integrations.svelte`.
-- OpenAI chat renders in `frontend/src/pages/chat/svelte/OpenAIChat.svelte` and calls
-  `GPT5Chat` from `frontend/src/utils/openAI.js` with the message history.
-- token.place chat (gated by feature flags) renders in
-  `frontend/src/pages/chat/svelte/TokenPlaceChat.svelte` and calls `tokenPlaceChat` from
-  `frontend/src/utils/tokenPlace.js`.
+- The active panel lives in `frontend/src/pages/chat/svelte/ChatPanel.svelte`, defaults to
+  token.place, and switches to OpenAI only when `settings.chatProvider` is `openai`.
+- token.place calls use `TokenPlaceChatV2` from `frontend/src/utils/tokenPlace.js`; OpenAI calls
+  use `GPT5ChatV2` from `frontend/src/utils/openAI.js`.
 
 ### Retrieval / “RAG” context (current)
 - The only retrieval mechanism is **string assembly** inside
@@ -83,12 +83,14 @@ without introducing heavyweight infrastructure.
 - Stage 3 adds a non-breaking `GPT5ChatV2` that returns `{ text, contextSources }`, where
   `contextSources` is a deterministic list of `Source` objects
   (`type`, `id`, `label`, optional `url`/`detail`) for docs and knowledge-pack grounding.
-- token.place chat builds a simple system + user message list and returns a string reply.
+- token.place and OpenAI both use the shared DSPACE prompt/RAG message-building path so persona,
+  docs, route, and player-state context stay consistent across providers.
 
 ### Error handling + uncertainty
 - OpenAI errors are mapped to user-facing copy in `frontend/src/utils/openAI.js` and surfaced
   by `OpenAIChat.svelte`.
-- token.place errors are caught in `TokenPlaceChat.svelte` with a generic fallback message.
+- token.place errors are summarized by `frontend/src/utils/tokenPlaceErrors.js` and surfaced in
+  the shared Chat panel without leaking raw relay/provider internals.
 - There is **no UI affordance** to show what sources were used or how much context was present.
 
 ### Telemetry
