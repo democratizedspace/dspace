@@ -1,25 +1,57 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeSettings } from '../src/utils/settingsDefaults.js';
+import {
+    DEFAULT_CHAT_PROVIDER,
+    DEFAULT_SETTINGS,
+    normalizeSettings,
+} from '../src/utils/settingsDefaults.js';
 
 describe('normalizeSettings', () => {
+    it('defaults chatProvider to token-place', () => {
+        expect(DEFAULT_CHAT_PROVIDER).toBe('token-place');
+        expect(DEFAULT_SETTINGS.chatProvider).toBe('token-place');
+        expect(normalizeSettings().chatProvider).toBe('token-place');
+        expect(normalizeSettings({}).chatProvider).toBe('token-place');
+    });
+
     it.each([
-        ['missing', {}, 'token-place'],
-        ['null', { chatProvider: null }, 'token-place'],
-        ['invalid', { chatProvider: 'legacy-token-place' }, 'token-place'],
-        ['token-place', { chatProvider: 'token-place' }, 'token-place'],
-        ['openai', { chatProvider: 'openai' }, 'openai'],
-    ])('normalizes %s chatProvider to %s', (_caseName, settings, expectedProvider) => {
-        expect(normalizeSettings(settings).chatProvider).toBe(expectedProvider);
+        ['null', { chatProvider: null }],
+        ['undefined', { chatProvider: undefined }],
+        ['empty string', { chatProvider: '' }],
+        ['legacy value', { chatProvider: 'legacy-token-place' }],
+        ['camel case', { chatProvider: 'tokenPlace' }],
+        ['dotted value', { chatProvider: 'token.place' }],
+        ['misspelled OpenAI', { chatProvider: 'open-ai' }],
+        ['boolean', { chatProvider: false }],
+    ])('normalizes %s chatProvider to token-place', (_caseName, settings) => {
+        expect(normalizeSettings(settings).chatProvider).toBe('token-place');
+    });
+
+    it('persists allowed OpenAI and token.place provider values', () => {
+        expect(normalizeSettings({ chatProvider: 'openai' }).chatProvider).toBe('openai');
+        expect(normalizeSettings({ chatProvider: 'token-place' }).chatProvider).toBe('token-place');
     });
 
     it('keeps existing boolean settings behavior unchanged', () => {
         expect(
             normalizeSettings({
+                chatProvider: 'openai',
                 showChatDebugPayload: 1,
+                showQuestGraphVisualizer: 'yes',
+            })
+        ).toMatchObject({
+            chatProvider: 'openai',
+            showChatDebugPayload: true,
+            showQuestGraphVisualizer: true,
+        });
+
+        expect(
+            normalizeSettings({
+                showChatDebugPayload: 0,
                 showQuestGraphVisualizer: '',
             })
         ).toMatchObject({
-            showChatDebugPayload: true,
+            chatProvider: 'token-place',
+            showChatDebugPayload: false,
             showQuestGraphVisualizer: false,
         });
     });
