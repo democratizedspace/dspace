@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/svelte';
-import OpenAIAPIKeySettings from '../svelte/OpenAIAPIKeySettings.svelte';
+import OpenAIKeySettings from '../svelte/OpenAIKeySettings.svelte';
 import { loadGameState, saveGameState } from '../../utils/gameState/common.js';
 
 vi.mock('../../utils/gameState/common.js', () => ({
@@ -10,7 +10,7 @@ vi.mock('../../utils/gameState/common.js', () => ({
     ready: Promise.resolve(),
 }));
 
-describe('OpenAIAPIKeySettings', () => {
+describe('OpenAIKeySettings', () => {
     beforeEach(() => {
         vi.mocked(loadGameState).mockReturnValue({
             openAI: { apiKey: '' },
@@ -20,7 +20,7 @@ describe('OpenAIAPIKeySettings', () => {
     });
 
     it('mentions the built-in knowledge base used for chat responses', async () => {
-        const { findByText } = render(OpenAIAPIKeySettings);
+        const { findByText } = render(OpenAIKeySettings);
         const info = await findByText((content) =>
             content.includes(
                 'curated knowledge base covering quest lore, items, and highlights from your local inventory'
@@ -35,7 +35,7 @@ describe('OpenAIAPIKeySettings', () => {
             inventory: {},
         });
 
-        const { findByRole, queryByText } = render(OpenAIAPIKeySettings);
+        const { findByRole, queryByText } = render(OpenAIKeySettings);
 
         await fireEvent.click(await findByRole('button', { name: /edit api key/i }));
         await fireEvent.click(await findByRole('button', { name: /save openai api key/i }));
@@ -45,7 +45,7 @@ describe('OpenAIAPIKeySettings', () => {
     });
 
     it('saves a trimmed OpenAI API key and shows the configured state', async () => {
-        const { findByLabelText, findByRole, findByText } = render(OpenAIAPIKeySettings);
+        const { findByLabelText, findByRole, findByText } = render(OpenAIKeySettings);
 
         await fireEvent.input(await findByLabelText(/openai api key/i), {
             target: { value: '  sk-new-key  ' },
@@ -65,7 +65,7 @@ describe('OpenAIAPIKeySettings', () => {
             inventory: {},
         });
 
-        const { findByRole, findByText, findByLabelText } = render(OpenAIAPIKeySettings);
+        const { findByRole, findByText, findByLabelText } = render(OpenAIKeySettings);
 
         await fireEvent.click(await findByRole('button', { name: /clear api key/i }));
 

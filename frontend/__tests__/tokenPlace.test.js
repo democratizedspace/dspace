@@ -12,11 +12,10 @@ jest.mock('../src/utils/docsRag.js', () => ({
 
 const { loadGameState } = await import('../src/utils/gameState/common.js');
 const {
-    TokenPlaceChatV2,
+    runTokenPlaceChatCompletion,
     buildTokenPlaceChatCompletionsUrl,
     extractTokenPlaceAssistantText,
     getTokenPlaceChatModel,
-    isTokenPlaceEnabled,
     resolveTokenPlaceBaseUrl,
     tokenPlaceChat,
 } = await import('../src/utils/tokenPlace.js');
@@ -103,7 +102,7 @@ describe('token.place API v1 client', () => {
 
     test('request is zero-auth and excludes secrets from headers/body/metadata', async () => {
         loadGameState.mockReturnValue({ openAI: { apiKey: 'sk-secret-openai-key' } });
-        await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
+        await runTokenPlaceChatCompletion([{ role: 'user', content: 'hello' }], {
             metadata: {
                 conversation_id: 'conv-42',
                 apiKey: 'token-place-secret',
@@ -126,7 +125,7 @@ describe('token.place API v1 client', () => {
     });
 
     test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
-        await TokenPlaceChatV2([
+        await runTokenPlaceChatCompletion([
             {
                 role: 'user',
                 content: 'hello',
@@ -166,7 +165,7 @@ describe('token.place API v1 client', () => {
             })
         );
         const dspaceSources = [{ title: 'DSPACE docs', url: '/docs/about' }];
-        const result = await TokenPlaceChatV2([], {
+        const result = await runTokenPlaceChatCompletion([], {
             promptPayload: {
                 combinedMessages: [{ role: 'user', content: 'hello' }],
                 contextSources: dspaceSources,
@@ -309,17 +308,5 @@ describe('token.place API v1 client', () => {
         const serializedRequest = JSON.stringify(getFetchCall().body.messages);
         expect(serializedRequest).not.toMatch(/token\.place is deferred/i);
         expect(serializedRequest).not.toMatch(/chat uses OpenAI/i);
-    });
-});
-
-describe('isTokenPlaceEnabled', () => {
-    test('enables token.place for fresh or missing legacy state', () => {
-        expect(isTokenPlaceEnabled()).toBe(true);
-        expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: undefined } })).toBe(true);
-    });
-
-    test('ignores legacy saved disabled flags', () => {
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(true);
     });
 });

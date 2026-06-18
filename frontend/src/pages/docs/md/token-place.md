@@ -18,7 +18,7 @@ message that the Chat UI displays.
 
 - token.place is selected by default for new and migrated users.
 - DSPACE does not charge players for token.place Chat usage.
-- DSPACE does not ask users to create a token.place API key.
+- DSPACE does not ask users to create token.place credentials.
 - DSPACE does not store token.place credentials because none are required for the v3.1 Chat flow.
 - token.place requests do not use your OpenAI key, even if you have one saved for the optional
   OpenAI provider.

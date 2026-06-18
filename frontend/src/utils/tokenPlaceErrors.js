@@ -82,14 +82,6 @@ export const getTokenPlaceErrorSummary = (error) => {
             message: 'The token.place request was canceled. Please try again.',
         };
     }
-
-    if (message.includes('token.place is disabled')) {
-        return {
-            type: 'disabled',
-            message: 'token.place is disabled. Enable it in settings or configure the integration.',
-        };
-    }
-
     if (
         type === 'network' ||
         message.includes('failed to fetch') ||

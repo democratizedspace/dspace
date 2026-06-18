@@ -28,7 +28,7 @@ const mockGetDocsRagComparison = vi.hoisted(() =>
     }))
 );
 const mockGetDocsRagMismatchWarning = vi.hoisted(() => vi.fn(() => null));
-const mockTokenPlaceChatV2 = vi.hoisted(() =>
+const mockRunTokenPlaceChatCompletion = vi.hoisted(() =>
     vi.fn(async () => ({
         text: 'token.place debug reply',
         contextSources: [{ type: 'doc', label: 'DSPACE docs', url: '/docs/about' }],
@@ -70,7 +70,7 @@ vi.mock('../../../../utils/docsRag.js', () => ({
 }));
 
 vi.mock('../../../../utils/tokenPlace.js', () => ({
-    TokenPlaceChatV2: mockTokenPlaceChatV2,
+    runTokenPlaceChatCompletion: mockRunTokenPlaceChatCompletion,
 }));
 
 describe('ChatPanel build metadata', () => {
@@ -99,7 +99,7 @@ describe('ChatPanel build metadata', () => {
             message: '✅ in sync',
         }));
         mockGetDocsRagMismatchWarning.mockReturnValue(null);
-        mockTokenPlaceChatV2.mockResolvedValue({
+        mockRunTokenPlaceChatCompletion.mockResolvedValue({
             text: 'token.place debug reply',
             contextSources: [{ type: 'doc', label: 'DSPACE docs', url: '/docs/about' }],
             usage: { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 },

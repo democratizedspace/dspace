@@ -56,8 +56,6 @@ export const getTokenPlaceChatModel = (options = {}) =>
         options.model || readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') || DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
-export const isTokenPlaceEnabled = () => true;
-
 const sanitizeChatMessage = (message) => ({
     role: typeof message?.role === 'string' ? message.role : 'user',
     content:
@@ -114,7 +112,7 @@ const parseErrorPayload = async (response) => {
     }
 };
 
-export const TokenPlaceChatV2 = async (messages, options = {}) => {
+export const runTokenPlaceChatCompletion = async (messages, options = {}) => {
     await ready;
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const contextSources = Array.isArray(promptPayload.contextSources)
@@ -169,6 +167,6 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
 };
 
 export const tokenPlaceChat = async (messages, options = {}) => {
-    const result = await TokenPlaceChatV2(messages, options);
+    const result = await runTokenPlaceChatCompletion(messages, options);
     return result.text;
 };
