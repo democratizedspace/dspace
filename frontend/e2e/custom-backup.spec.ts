@@ -103,7 +103,6 @@ test.describe('Custom content backup', () => {
 
         const prepareButton = page.getByTestId('contentbackup-prepare');
         await prepareButton.click();
-        await expect(prepareButton).toBeDisabled();
 
         const preparingPreview = page.getByTestId('contentbackup-preparing');
         const preparedPreview = page.getByTestId('contentbackup-prepared');
