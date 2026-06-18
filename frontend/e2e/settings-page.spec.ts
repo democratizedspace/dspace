@@ -14,6 +14,10 @@ const SETTINGS_VIEWPORTS: SettingsViewport[] = [
     { name: 'desktop', width: 1280, height: 900, expectedColumns: 'multiple' },
 ];
 
+async function readStoredGameState(page: Page) {
+    return page.evaluate(() => JSON.parse(localStorage.getItem('gameState') || '{}'));
+}
+
 async function openSettingsAtViewport(page: Page, viewport: SettingsViewport) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto('/settings');
@@ -68,13 +72,10 @@ test.describe('Settings route', () => {
         await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
 
         await expect
-            .poll(() =>
-                page.evaluate(async () => {
-                    const gameStateModule = await import('/src/utils/gameState/common.js');
-                    await gameStateModule.ready;
-                    return gameStateModule.loadGameState().settings?.chatProvider;
-                })
-            )
+            .poll(async () => {
+                const state = await readStoredGameState(page);
+                return state.settings?.chatProvider;
+            })
             .toBe('openai');
 
         await page.goto('/chat');
@@ -93,13 +94,10 @@ test.describe('Settings route', () => {
         await expect(page.getByLabel('OpenAI API key', { exact: true })).toHaveCount(0);
 
         await expect
-            .poll(() =>
-                page.evaluate(async () => {
-                    const gameStateModule = await import('/src/utils/gameState/common.js');
-                    await gameStateModule.ready;
-                    return gameStateModule.loadGameState().openAI?.apiKey;
-                })
-            )
+            .poll(async () => {
+                const state = await readStoredGameState(page);
+                return state.openAI?.apiKey;
+            })
             .toBe('sk-settings-e2e-key');
 
         await page.reload();
@@ -115,13 +113,10 @@ test.describe('Settings route', () => {
         await page.getByRole('button', { name: 'Clear API key' }).click();
         await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
         await expect
-            .poll(() =>
-                page.evaluate(async () => {
-                    const gameStateModule = await import('/src/utils/gameState/common.js');
-                    await gameStateModule.ready;
-                    return gameStateModule.loadGameState().openAI?.apiKey;
-                })
-            )
+            .poll(async () => {
+                const state = await readStoredGameState(page);
+                return state.openAI?.apiKey;
+            })
             .toBe('');
 
         await chatPanel.locator('input[name="chat-provider"][value="token-place"]').check();
@@ -134,17 +129,13 @@ test.describe('Settings route', () => {
             chatPanel.locator('input:is([type="password"], [type="text"], :not([type]))')
         ).toHaveCount(0);
         await expect
-            .poll(() =>
-                page.evaluate(async () => {
-                    const gameStateModule = await import('/src/utils/gameState/common.js');
-                    await gameStateModule.ready;
-                    const state = gameStateModule.loadGameState();
-                    return {
-                        chatProvider: state.settings?.chatProvider,
-                        tokenPlaceApiKey: state.tokenPlace?.apiKey ?? null,
-                    };
-                })
-            )
+            .poll(async () => {
+                const state = await readStoredGameState(page);
+                return {
+                    chatProvider: state.settings?.chatProvider,
+                    tokenPlaceApiKey: state.tokenPlace?.apiKey ?? null,
+                };
+            })
             .toEqual({ chatProvider: 'token-place', tokenPlaceApiKey: null });
 
         await page.goto('/chat');
