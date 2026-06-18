@@ -1,0 +1,1072 @@
+<script>
+    import { onDestroy, onMount, tick } from 'svelte';
+    import {
+        defaultOpenAIErrorMessage,
+        describeOpenAIError,
+        buildChatPrompt,
+        CHAT_PROMPT_VERSION,
+        getPlayerStateSummary,
+        getOpenAIErrorSummary,
+        GPT5ChatV2,
+    } from '../../../utils/openAI.js';
+    import { tokenPlaceChatV2 } from '../../../utils/tokenPlace.js';
+    import { getTokenPlaceErrorSummary } from '../../../utils/tokenPlaceErrors.js';
+    import { writable } from 'svelte/store';
+    import {
+        messages,
+        countTokens,
+        personaOptions,
+        activePersona,
+        activePersonaId,
+        setActivePersona,
+    } from '../../../stores/chat.js';
+    import {
+        loadGameState,
+        ready,
+        state as gameStateStore,
+    } from '../../../utils/gameState/common.js';
+    import { normalizeSettings } from '../../../utils/settingsDefaults.js';
+    import {
+        SAVE_SNAPSHOT_HINT_TEXT,
+        shouldShowSaveSnapshotHint,
+    } from '../../../utils/chatHints.js';
+    import {
+        getAppGitSha,
+        getAppGitShaWithFallback,
+        deriveEnvNameFromHostname,
+        getPromptVersionLabelForSha,
+        isPlaceholderSha,
+    } from '../../../utils/buildInfo.js';
+    import {
+        getDocsRagMeta,
+        getDocsRagComparison,
+        getDocsRagMismatchWarning,
+    } from '../../../utils/docsRag.js';
+    import { copyToClipboard } from '../../../utils/copyToClipboard.js';
+    import { isBrowser } from '../../../utils/ssr.js';
+    import Message from './Message.svelte';
+    import Spinner from '../../../components/svelte/Spinner.svelte';
+
+    const message = writable('');
+    const messageHistory = writable([]);
+    const saveSnapshotHintStorageKey = 'dspace.chat.dismissSaveSnapshotHint';
+    let showSpinner = false;
+    let hydrated = false;
+    let messageCounter = 0;
+    let errorBanner = null;
+    let showDebug = false;
+    let debugMessages = [];
+    let debugExpanded = false;
+    let settingsUnsubscribe;
+    let saveSnapshotHintDismissed = false;
+    let saveSnapshotHintFocusListener;
+    let promptDebugLinkListener;
+    let appGitSha = getAppGitSha();
+    let appGitShaForComparison = appGitSha;
+    let appGitShaDisplay = appGitSha;
+    let appGitShaSource = 'dev-local';
+    let promptVersionLabel = CHAT_PROMPT_VERSION;
+    let docsRagGitSha = 'unavailable';
+    let docsRagEnvName = 'unavailable';
+    let docsRagDerivedEnv = 'unavailable';
+    let docsRagSourceRef = 'unavailable';
+    let docsRagGeneratedAt = 'unavailable';
+    let docsRagHost = 'unavailable';
+    let docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
+    let docsRagComparisonMessage = docsRagComparison.message;
+    let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
+    let docsRagEnvWarning = null;
+    let debugOverride = false;
+    let currentSettings = { chatProvider: 'token-place', showChatDebugPayload: false };
+    let lastShowChatDebugPayload;
+    let componentDestroyed = false;
+    let lastTokenPlaceUsage = null;
+    let lastTokenPlaceMetadata = null;
+    let playerStateSummary = {
+        included: false,
+        questsFinishedCount: 0,
+        completedQuestCount: 0,
+        totalOfficialQuestCount: 0,
+        remainingOfficialQuestCount: 0,
+        inventoryIncludedCount: 0,
+        inventoryTotalCount: 0,
+        inventoryTruncated: false,
+    };
+
+    $: currentPersona = $activePersona;
+    $: personaSummary = currentPersona?.summary;
+    $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
+    $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
+    $: docsRagComparisonMessage = docsRagComparison.message;
+    $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
+    $: selectedProvider = normalizeSettings(currentSettings).chatProvider;
+    $: providerLabel =
+        selectedProvider === 'openai' ? 'OpenAI selected in Settings' : 'Powered by token.place';
+
+    function getWelcomeText(persona) {
+        return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
+    }
+
+    function getPersonaAvatar(persona) {
+        return persona?.avatar ?? null;
+    }
+
+    function getPersonaAlt(persona) {
+        return persona?.name ? `${persona.name} portrait` : 'NPC portrait';
+    }
+
+    function hasPlayerStateDetails(value) {
+        return (
+            value &&
+            typeof value === 'object' &&
+            ('quests' in value || 'inventory' in value || 'openAI' in value)
+        );
+    }
+
+    function createMessageId() {
+        messageCounter += 1;
+        return `${Date.now()}-${messageCounter}`;
+    }
+
+    function addMessage(msg) {
+        const timestampedMessage = {
+            ...msg,
+            timestamp: msg.timestamp ?? Date.now(),
+            id: msg.id ?? createMessageId(),
+        };
+        messageHistory.update((history) => [...history, timestampedMessage]);
+        messages.update((all) => [...all, timestampedMessage]);
+    }
+
+    function addWelcomeMessage(persona = currentPersona) {
+        const welcomeText = getWelcomeText(persona);
+        if (!welcomeText) {
+            return;
+        }
+        const welcome = {
+            role: 'assistant',
+            content: welcomeText,
+            tokens: countTokens(welcomeText),
+            avatarUrl: getPersonaAvatar(persona),
+            avatarAlt: getPersonaAlt(persona),
+            timestamp: Date.now(),
+        };
+        addMessage(welcome);
+    }
+
+    async function submitMessage() {
+        const messageText = $message;
+        if (!messageText.trim() || showSpinner) {
+            return;
+        }
+        const provider = selectedProvider;
+        const currentState = loadGameState();
+        if (provider === 'openai' && !currentState?.openAI?.apiKey) {
+            errorBanner = {
+                type: 'missing-key',
+                message:
+                    'OpenAI is selected, but no API key is saved. Add your key in Settings before chatting with OpenAI.',
+            };
+            return;
+        }
+        const userMessage = {
+            role: 'user',
+            content: messageText,
+            tokens: countTokens(messageText),
+            timestamp: Date.now(),
+        };
+
+        addMessage(userMessage);
+        message.set('');
+        const historyForApi = [...$messageHistory];
+        showSpinner = true;
+        errorBanner = null;
+        lastTokenPlaceUsage = null;
+        lastTokenPlaceMetadata = null;
+        const debugPayload = await buildChatPrompt(historyForApi, {
+            persona: currentPersona,
+        });
+        if (showDebug) {
+            debugMessages = debugPayload.debugMessages;
+        } else {
+            debugMessages = [];
+        }
+        playerStateSummary = debugPayload.playerStateSummary ?? playerStateSummary;
+
+        try {
+            const aiResponse =
+                provider === 'openai'
+                    ? await GPT5ChatV2(historyForApi, {
+                          persona: currentPersona,
+                          promptPayload: debugPayload,
+                      })
+                    : await tokenPlaceChatV2(historyForApi, {
+                          persona: currentPersona,
+                          promptPayload: debugPayload,
+                      });
+            if (provider === 'token-place') {
+                lastTokenPlaceUsage = aiResponse?.usage ?? null;
+                lastTokenPlaceMetadata = aiResponse?.metadata ?? null;
+            }
+            const responseText = aiResponse?.text ?? '';
+            const aiMessage = {
+                role: 'assistant',
+                content: responseText,
+                tokens: countTokens(responseText),
+                avatarUrl: getPersonaAvatar(currentPersona),
+                avatarAlt: getPersonaAlt(currentPersona),
+                timestamp: Date.now(),
+                contextSources: aiResponse?.contextSources ?? [],
+            };
+
+            addMessage(aiMessage);
+        } catch (error) {
+            console.error(`${provider} chat request failed`, error);
+            errorBanner =
+                provider === 'openai'
+                    ? getOpenAIErrorSummary(error)
+                    : getTokenPlaceErrorSummary(error);
+            const fallback =
+                provider === 'openai'
+                    ? describeOpenAIError(error) || defaultOpenAIErrorMessage
+                    : errorBanner.message;
+            addMessage({
+                role: 'assistant',
+                content: fallback,
+                tokens: countTokens(fallback),
+                avatarUrl: getPersonaAvatar(currentPersona),
+                avatarAlt: getPersonaAlt(currentPersona),
+                timestamp: Date.now(),
+            });
+        }
+
+        showSpinner = false;
+    }
+
+    function handleKeyDown(event) {
+        if (event.key === 'Enter' && event.target.tagName === 'TEXTAREA' && !event.shiftKey) {
+            event.preventDefault();
+            submitMessage();
+        }
+    }
+
+    function normalizeEnvName(value) {
+        const normalized = String(value || '')
+            .trim()
+            .toLowerCase();
+        if (!normalized || normalized === 'unknown') {
+            return null;
+        }
+        if (['production', 'prod'].includes(normalized)) {
+            return 'prod';
+        }
+        if (['staging', 'stage', 'stg'].includes(normalized)) {
+            return 'staging';
+        }
+        if (['dev', 'development', 'local'].includes(normalized)) {
+            return 'dev';
+        }
+        return normalized;
+    }
+
+    function buildDocsEnvMismatchWarning(hostname, docsEnvName) {
+        const hostEnv = deriveEnvNameFromHostname(hostname);
+        const docsEnv = normalizeEnvName(docsEnvName);
+        if (!hostEnv || !docsEnv || hostEnv === docsEnv) {
+            return null;
+        }
+        return `Docs pack env (${docsEnvName}) does not match host (${hostname}).`;
+    }
+
+    function dismissSaveSnapshotHint() {
+        saveSnapshotHintDismissed = true;
+        if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.setItem(saveSnapshotHintStorageKey, '1');
+        }
+    }
+
+    function getDebugInfoText() {
+        return [
+            `Selected provider: ${selectedProvider}`,
+            `Prompt version: ${promptVersionLabel}`,
+            `App build SHA: ${appGitShaDisplay}`,
+            `App build SHA source: ${appGitShaSource}`,
+            `Docs RAG SHA: ${docsRagGitSha}`,
+            `Docs pack env: ${docsRagEnvName}`,
+            `Docs env derived: ${docsRagDerivedEnv}`,
+            `Docs host: ${docsRagHost}`,
+            `Docs RAG generatedAt: ${docsRagGeneratedAt}`,
+            `Docs pack sourceRef: ${docsRagSourceRef}`,
+            `Docs RAG comparison: ${docsRagComparisonMessage}`,
+        ].join('\n');
+    }
+
+    function isExpectedRuntimeBuildMetaFetchFailure(error) {
+        if (!error || typeof error !== 'object') {
+            return false;
+        }
+
+        const message = String(error?.message ?? '');
+        const code = String(error?.code ?? error?.cause?.code ?? '');
+        const causeMessage = String(error?.cause?.message ?? '');
+
+        return (
+            /Failed to fetch/i.test(message) ||
+            /ECONNREFUSED/i.test(code) ||
+            /ECONNREFUSED/i.test(causeMessage)
+        );
+    }
+
+    async function fetchRuntimeBuildMeta() {
+        if (typeof fetch !== 'function') {
+            return null;
+        }
+
+        try {
+            const buildMetaUrl =
+                typeof window !== 'undefined' && window.location
+                    ? new URL('/build-meta.json', window.location.href).toString()
+                    : 'http://localhost/build-meta.json';
+            const response = await fetch(buildMetaUrl, { cache: 'no-store' });
+            if (!response.ok) {
+                return null;
+            }
+            const payload = await response.json();
+            if (!payload || typeof payload !== 'object') {
+                return null;
+            }
+            return payload;
+        } catch (error) {
+            if (!isExpectedRuntimeBuildMetaFetchFailure(error)) {
+                console.warn('Failed to fetch runtime build metadata', error);
+            }
+            return null;
+        }
+    }
+
+    async function copyDebugInfo() {
+        try {
+            await copyToClipboard(getDebugInfoText());
+        } catch (error) {
+            console.error('Failed to copy debug info', error);
+        }
+    }
+
+    function syncSaveSnapshotHintDismissed() {
+        if (typeof sessionStorage === 'undefined') {
+            return;
+        }
+        saveSnapshotHintDismissed = sessionStorage.getItem(saveSnapshotHintStorageKey) === '1';
+    }
+
+    function getPromptDebugDeepLink() {
+        if (typeof window === 'undefined') {
+            return { forceDebug: false, autoExpand: false };
+        }
+
+        const hasPromptHash = window.location.hash === '#prompt-debug';
+        const debugParam = new URLSearchParams(window.location.search).get('debug');
+        const hasPromptParam = debugParam === 'prompt';
+        const shouldOpen = hasPromptHash || hasPromptParam;
+
+        return { forceDebug: shouldOpen, autoExpand: shouldOpen };
+    }
+
+    function syncDebugVisibility() {
+        showDebug = currentSettings.showChatDebugPayload || debugOverride;
+        if (!showDebug) {
+            debugExpanded = false;
+            debugMessages = [];
+        }
+    }
+
+    function syncPromptDebugDeepLink({ allowAutoExpand = false } = {}) {
+        const deepLink = getPromptDebugDeepLink();
+        if (deepLink.forceDebug) {
+            debugOverride = true;
+            if (allowAutoExpand && deepLink.autoExpand) {
+                debugExpanded = true;
+            }
+        } else if (!currentSettings.showChatDebugPayload) {
+            debugOverride = false;
+        }
+        syncDebugVisibility();
+    }
+
+    async function handlePersonaChange(event) {
+        const selectedId = event.target.value;
+        const nextPersona =
+            personaOptions.find((option) => option.id === selectedId) || currentPersona;
+
+        setActivePersona(selectedId);
+        messageHistory.set([]);
+        messages.set([]);
+        showSpinner = false;
+        errorBanner = null;
+        message.set('');
+        await tick();
+        addWelcomeMessage(nextPersona);
+    }
+
+    onMount(async () => {
+        hydrated = true;
+        await ready;
+        const currentState = loadGameState();
+        const normalized = normalizeSettings(currentState?.settings);
+        currentSettings = {
+            ...normalized,
+            openAIKeyAvailable: Boolean(currentState?.openAI?.apiKey),
+        };
+        lastShowChatDebugPayload = normalized.showChatDebugPayload;
+        syncPromptDebugDeepLink({ allowAutoExpand: true });
+        const docsMeta = await getDocsRagMeta();
+        const runtimeBuildMeta = await fetchRuntimeBuildMeta();
+        const resolvedDocsRagGitSha = docsMeta?.docsGitSha ?? docsMeta?.gitSha ?? 'unknown';
+        const resolvedDocsRagEnvName = docsMeta?.envName ?? 'unknown';
+        const resolvedDocsRagSourceRef = docsMeta?.sourceRef ?? 'unknown';
+        const resolvedDocsRagGeneratedAt = docsMeta?.generatedAt ?? 'unknown';
+        const resolvedDocsRagHost =
+            typeof window !== 'undefined' && window.location ? window.location.host : 'unknown';
+        const resolvedHostEnvName = deriveEnvNameFromHostname(resolvedDocsRagHost);
+        const allowDocsFallback = resolvedHostEnvName === 'dev';
+        const appShaInfo = allowDocsFallback
+            ? getAppGitShaWithFallback(resolvedDocsRagGitSha)
+            : getAppGitShaWithFallback();
+        const runtimeGitSha = String(runtimeBuildMeta?.gitSha || '').trim();
+        const runtimeSource = String(runtimeBuildMeta?.source || '').trim();
+        const runtimeShaAvailable = runtimeGitSha && !isPlaceholderSha(runtimeGitSha);
+        const resolvedAppShaInfo = runtimeShaAvailable
+            ? {
+                  sha: runtimeGitSha,
+                  source: runtimeSource ? `${runtimeSource} (runtime)` : 'runtime',
+              }
+            : appShaInfo;
+        let resolvedAppGitShaDisplay = resolvedAppShaInfo.sha;
+        let resolvedAppGitShaSource = resolvedAppShaInfo.source;
+        let resolvedAppGitShaForComparison = resolvedAppShaInfo.sha;
+        const resolvedAppGitShaMissing = isPlaceholderSha(resolvedAppShaInfo.sha);
+        if (!allowDocsFallback && resolvedAppGitShaMissing) {
+            resolvedAppGitShaDisplay = 'missing';
+            resolvedAppGitShaSource = 'missing';
+            resolvedAppGitShaForComparison = 'missing';
+        }
+        if (allowDocsFallback && resolvedAppGitShaSource === 'docs-pack-fallback') {
+            resolvedAppGitShaSource = 'docs-pack-fallback (dev)';
+        }
+
+        docsRagGitSha = resolvedDocsRagGitSha;
+        docsRagEnvName = resolvedDocsRagEnvName;
+        docsRagSourceRef = resolvedDocsRagSourceRef;
+        docsRagGeneratedAt = resolvedDocsRagGeneratedAt;
+        docsRagHost = resolvedDocsRagHost;
+        appGitShaDisplay = resolvedAppGitShaDisplay;
+        appGitShaSource = resolvedAppGitShaSource;
+        appGitShaForComparison = resolvedAppGitShaForComparison;
+        // NOTE: This label is for UI/debug purposes only and is derived from the effective app
+        // Git SHA (which may use a fallback). The actual prompt version sent to the active
+        // chat provider is determined by the module-level CHAT_PROMPT_VERSION in openAI.js and
+        // may differ when build metadata is missing or a placeholder.
+        promptVersionLabel = getPromptVersionLabelForSha(appGitShaDisplay);
+        const normalizedDocsEnv = normalizeEnvName(docsRagEnvName);
+        docsRagDerivedEnv = normalizedDocsEnv
+            ? 'n/a'
+            : (deriveEnvNameFromHostname(docsRagHost) ?? 'unavailable');
+        docsRagEnvWarning = buildDocsEnvMismatchWarning(docsRagHost, docsRagEnvName);
+        appGitSha = resolvedAppShaInfo.sha;
+        playerStateSummary = getPlayerStateSummary(currentState);
+        if (componentDestroyed || !isBrowser) {
+            return;
+        }
+
+        syncSaveSnapshotHintDismissed();
+        saveSnapshotHintFocusListener = () => syncSaveSnapshotHintDismissed();
+        window.addEventListener('focus', saveSnapshotHintFocusListener);
+        promptDebugLinkListener = () => syncPromptDebugDeepLink({ allowAutoExpand: true });
+        window.addEventListener('hashchange', promptDebugLinkListener);
+        window.addEventListener('popstate', promptDebugLinkListener);
+        settingsUnsubscribe = gameStateStore.subscribe((value) => {
+            const nextNormalized = normalizeSettings(value?.settings);
+            currentSettings = {
+                ...nextNormalized,
+                openAIKeyAvailable: Boolean(value?.openAI?.apiKey),
+            };
+            if (hasPlayerStateDetails(value)) {
+                playerStateSummary = getPlayerStateSummary(value);
+            }
+            if (lastShowChatDebugPayload && !nextNormalized.showChatDebugPayload) {
+                debugOverride = false;
+            }
+            lastShowChatDebugPayload = nextNormalized.showChatDebugPayload;
+            syncDebugVisibility();
+        });
+        if ($messageHistory.length === 0) {
+            addWelcomeMessage();
+        }
+    });
+
+    onDestroy(() => {
+        componentDestroyed = true;
+        settingsUnsubscribe?.();
+        if (isBrowser && saveSnapshotHintFocusListener) {
+            window.removeEventListener('focus', saveSnapshotHintFocusListener);
+        }
+        if (isBrowser && promptDebugLinkListener) {
+            window.removeEventListener('hashchange', promptDebugLinkListener);
+            window.removeEventListener('popstate', promptDebugLinkListener);
+        }
+    });
+</script>
+
+<div
+    class="chat"
+    data-testid="chat-panel"
+    data-provider={selectedProvider}
+    data-hydrated={hydrated ? 'true' : 'false'}
+>
+    <div class="provider-label" data-testid="chat-provider-label">{providerLabel}</div>
+    {#if selectedProvider === 'openai' && !currentSettings?.openAIKeyAvailable}
+        <div class="provider-guidance" data-testid="openai-key-guidance">
+            OpenAI requires your API key. Add it in <a href="/settings">Settings</a> before sending messages
+            with the OpenAI provider.
+        </div>
+    {/if}
+    {#if errorBanner}
+        <div class="chat-error" role="alert" data-error-type={errorBanner.type}>
+            {errorBanner.message}
+            {#if errorBanner.type === 'missing-key'}
+                <a href="/settings">Open Settings</a>
+            {/if}
+        </div>
+    {/if}
+    <div class="persona-selector">
+        <label for="chat-persona">Talk to</label>
+        <select id="chat-persona" bind:value={$activePersonaId} on:change={handlePersonaChange}>
+            {#each personaOptions as persona}
+                <option value={persona.id}>{persona.name}</option>
+            {/each}
+        </select>
+        {#if currentPersona?.avatar || personaSummary}
+            <div class="persona-details">
+                {#if currentPersona?.avatar}
+                    <img src={currentPersona.avatar} alt={getPersonaAlt(currentPersona)} />
+                {/if}
+                {#if personaSummary}
+                    <p class="persona-summary">{personaSummary}</p>
+                {/if}
+            </div>
+        {/if}
+    </div>
+
+    <div class="vertical">
+        <textarea
+            class="message-textarea"
+            bind:value={$message}
+            on:keydown={handleKeyDown}
+            style="font-size: 18px;"
+        ></textarea>
+        {#if showSaveSnapshotHint}
+            <div class="save-snapshot-hint" role="note">
+                <span>{SAVE_SNAPSHOT_HINT_TEXT}</span>
+                <button
+                    type="button"
+                    class="hint-dismiss"
+                    aria-label="Dismiss save snapshot hint"
+                    on:click={dismissSaveSnapshotHint}
+                >
+                    ×
+                </button>
+            </div>
+        {/if}
+        <button type="button" on:click={submitMessage}>Send</button>
+    </div>
+
+    <div class="chat-container">
+        <div class="spinner-container" style="display: {showSpinner ? 'flex' : 'none'}">
+            <Spinner />
+        </div>
+        {#if $messageHistory.length}
+            {#each $messageHistory.slice().reverse() as message (message.id)}
+                <Message
+                    messageMarkdown={message.content}
+                    className={message.role}
+                    timestamp={message.timestamp}
+                    avatarUrl={message.avatarUrl}
+                    avatarAlt={message.avatarAlt}
+                    contextSources={message.contextSources}
+                />
+            {/each}
+        {/if}
+    </div>
+
+    {#if showDebug}
+        <div class="debug-panel" id="prompt-debug" data-testid="chat-debug-panel">
+            <div class="debug-heading">
+                <div>
+                    <h3>Chat prompt debug</h3>
+                    <p>Displays the full prompt payload, with RAG content highlighted.</p>
+                    <p class="debug-version">Prompt version: {promptVersionLabel}</p>
+                </div>
+                <div class="debug-actions">
+                    <button
+                        class="debug-copy"
+                        type="button"
+                        on:click={copyDebugInfo}
+                        data-testid="chat-debug-copy"
+                    >
+                        Copy debug info
+                    </button>
+                    <button
+                        class="debug-toggle"
+                        type="button"
+                        on:click={() => {
+                            debugExpanded = !debugExpanded;
+                        }}
+                    >
+                        {debugExpanded ? 'Hide prompt' : 'Show prompt'}
+                    </button>
+                </div>
+            </div>
+            <div class="debug-metadata">
+                <div class="debug-meta-row">
+                    <span>Selected provider</span>
+                    <span class="debug-mono">{selectedProvider}</span>
+                </div>
+                <div class="debug-meta-row" data-testid="debug-app-sha-row">
+                    <span>App build SHA</span>
+                    <span class="debug-mono">{appGitShaDisplay}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>App build SHA source</span>
+                    <span class="debug-mono">{appGitShaSource}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs RAG SHA</span>
+                    <span class="debug-mono">{docsRagGitSha}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs pack env</span>
+                    <span class="debug-mono">{docsRagEnvName}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs env derived</span>
+                    <span class="debug-mono">{docsRagDerivedEnv}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs host</span>
+                    <span class="debug-mono">{docsRagHost}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs RAG generatedAt</span>
+                    <span class="debug-mono">{docsRagGeneratedAt}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs pack sourceRef</span>
+                    <span class="debug-mono">{docsRagSourceRef}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>Docs RAG comparison</span>
+                    <span class="debug-mono">{docsRagComparisonMessage}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState included</span>
+                    <span class="debug-mono">{playerStateSummary.included ? 'yes' : 'no'}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState questsFinished</span>
+                    <span class="debug-mono">{playerStateSummary.questsFinishedCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState completed official quests</span>
+                    <span class="debug-mono">{playerStateSummary.completedQuestCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState total official quests</span>
+                    <span class="debug-mono">{playerStateSummary.totalOfficialQuestCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState remaining official quests</span>
+                    <span class="debug-mono">{playerStateSummary.remainingOfficialQuestCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory entries</span>
+                    <span class="debug-mono">{playerStateSummary.inventoryIncludedCount}</span>
+                </div>
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory total</span>
+                    <span class="debug-mono">{playerStateSummary.inventoryTotalCount}</span>
+                </div>
+                {#if selectedProvider === 'token-place' && lastTokenPlaceUsage}
+                    <div class="debug-meta-row">
+                        <span>token.place usage</span>
+                        <span class="debug-mono">{JSON.stringify(lastTokenPlaceUsage)}</span>
+                    </div>
+                {/if}
+                {#if selectedProvider === 'token-place' && lastTokenPlaceMetadata}
+                    <div class="debug-meta-row">
+                        <span>token.place metadata</span>
+                        <span class="debug-mono">{JSON.stringify(lastTokenPlaceMetadata)}</span>
+                    </div>
+                {/if}
+                <div class="debug-meta-row">
+                    <span>PlayerState inventory truncated</span>
+                    <span class="debug-mono">
+                        {playerStateSummary.inventoryTruncated ? 'yes' : 'no'}
+                    </span>
+                </div>
+            </div>
+            {#if docsRagWarning}
+                <div class="debug-warning" role="alert" aria-live="polite">
+                    {docsRagWarning}
+                </div>
+            {/if}
+            {#if docsRagEnvWarning}
+                <div class="debug-warning" role="alert" aria-live="polite">
+                    {docsRagEnvWarning}
+                </div>
+            {/if}
+            {#if debugExpanded}
+                {#if debugMessages.length}
+                    <div class="debug-list">
+                        {#each debugMessages as debugMessage, index (index)}
+                            <div
+                                class="debug-message"
+                                class:rag={debugMessage.kind === 'rag'}
+                                class:main={debugMessage.kind === 'main'}
+                                data-testid="chat-debug-message"
+                                data-kind={debugMessage.kind}
+                            >
+                                <div class="debug-meta">
+                                    <span class="debug-role">{debugMessage.role}</span>
+                                    <span class="debug-kind">
+                                        {debugMessage.kind === 'rag' ? 'RAG' : 'Main'}
+                                    </span>
+                                </div>
+                                <pre>{debugMessage.content}</pre>
+                            </div>
+                        {/each}
+                    </div>
+                {:else}
+                    <p class="debug-empty">Send a message to view the prompt payload.</p>
+                {/if}
+            {/if}
+        </div>
+    {/if}
+</div>
+
+<style>
+    .chat {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: 1.5rem;
+    }
+
+    .provider-label {
+        align-self: flex-end;
+        padding: 0.25rem 0.5rem;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.08);
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .provider-guidance {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(59, 130, 246, 0.4);
+        background: rgba(219, 234, 254, 0.9);
+        color: #1e3a8a;
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .persona-selector {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .persona-selector label {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+    }
+
+    .persona-selector select {
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: none;
+        font-size: 1rem;
+    }
+
+    .persona-details {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .persona-details img {
+        width: min(128px, 40vw);
+        height: min(128px, 40vw);
+        object-fit: cover;
+        border-radius: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .persona-summary {
+        margin: 0;
+        font-size: 0.9rem;
+        text-align: left;
+        color: rgba(0, 0, 0, 0.8);
+    }
+
+    .chat-error {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(248, 113, 113, 0.6);
+        background: rgba(254, 226, 226, 0.9);
+        color: #7f1d1d;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+    }
+
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .vertical {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .spinner-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    button {
+        height: 40px;
+        border-radius: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background-color: #1f2937;
+        color: white;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    textarea {
+        width: 100%;
+        height: 100px;
+        border-radius: 5px;
+        border: none;
+        padding: 10px;
+        font-size: 16px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .save-snapshot-hint {
+        width: 100%;
+        margin-top: 0.25rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        background: rgba(148, 163, 184, 0.12);
+        color: rgba(15, 23, 42, 0.9);
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .save-snapshot-hint span {
+        flex: 1;
+    }
+
+    .hint-dismiss {
+        height: 28px;
+        width: 28px;
+        margin: 0;
+        padding: 0;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.08);
+        color: rgba(15, 23, 42, 0.8);
+        font-size: 1.1rem;
+        line-height: 1;
+    }
+
+    .hint-dismiss:hover {
+        background: rgba(15, 23, 42, 0.18);
+    }
+
+    .debug-panel {
+        width: 100%;
+        background: #0f172a;
+        color: #e2e8f0;
+        border-radius: 12px;
+        padding: 1rem;
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .debug-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .debug-heading h3 {
+        margin: 0;
+        font-size: 1.05rem;
+    }
+
+    .debug-heading p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #cbd5e1;
+    }
+
+    .debug-metadata {
+        display: grid;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: #cbd5e1;
+    }
+
+    .debug-meta-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .debug-mono {
+        font-family:
+            'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
+            monospace;
+        color: #f8fafc;
+        word-break: break-all;
+    }
+
+    .debug-warning {
+        padding: 0.6rem 0.75rem;
+        border-radius: 0.65rem;
+        border: 1px solid rgba(248, 113, 113, 0.7);
+        background: rgba(127, 29, 29, 0.4);
+        color: #fecaca;
+        font-size: 0.9rem;
+    }
+
+    .debug-version {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+
+    .debug-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .debug-copy,
+    .debug-toggle {
+        height: 32px;
+        margin: 0;
+        padding: 0 0.75rem;
+        font-size: 0.85rem;
+        background: #1e293b;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        border-radius: 999px;
+        color: #e2e8f0;
+    }
+
+    .debug-toggle:hover {
+        background: #334155;
+    }
+
+    .debug-copy:hover {
+        background: #334155;
+    }
+
+    .debug-list {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .debug-message {
+        border-radius: 10px;
+        padding: 0.75rem;
+        display: grid;
+        gap: 0.5rem;
+        border: 1px solid transparent;
+    }
+
+    .debug-message.rag {
+        background: rgba(250, 204, 21, 0.18);
+        border-color: rgba(250, 204, 21, 0.45);
+    }
+
+    .debug-message.main {
+        background: rgba(59, 130, 246, 0.18);
+        border-color: rgba(59, 130, 246, 0.45);
+    }
+
+    .debug-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #e2e8f0;
+        opacity: 0.85;
+    }
+
+    .debug-meta span {
+        display: inline-flex;
+        gap: 0.25rem;
+    }
+
+    .debug-message pre {
+        margin: 0;
+        font-family:
+            'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New',
+            monospace;
+        font-size: 0.85rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .debug-empty {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #cbd5e1;
+    }
+</style>

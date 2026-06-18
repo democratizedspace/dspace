@@ -12,7 +12,7 @@ jest.mock('../src/utils/docsRag.js', () => ({
 
 const { loadGameState } = await import('../src/utils/gameState/common.js');
 const {
-    TokenPlaceChatV2,
+    tokenPlaceChatV2,
     buildTokenPlaceChatCompletionsUrl,
     extractTokenPlaceAssistantText,
     getTokenPlaceChatModel,
@@ -97,7 +97,7 @@ describe('token.place API v1 client', () => {
 
     test('request is zero-auth and excludes secrets from headers/body/metadata', async () => {
         loadGameState.mockReturnValue({ openAI: { apiKey: 'sk-secret-openai-key' } });
-        await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
+        await tokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
             metadata: {
                 conversation_id: 'conv-42',
                 apiKey: 'token-place-secret',
@@ -120,7 +120,7 @@ describe('token.place API v1 client', () => {
     });
 
     test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
-        await TokenPlaceChatV2([
+        await tokenPlaceChatV2([
             {
                 role: 'user',
                 content: 'hello',
@@ -160,7 +160,7 @@ describe('token.place API v1 client', () => {
             })
         );
         const dspaceSources = [{ title: 'DSPACE docs', url: '/docs/about' }];
-        const result = await TokenPlaceChatV2([], {
+        const result = await tokenPlaceChatV2([], {
             promptPayload: {
                 combinedMessages: [{ role: 'user', content: 'hello' }],
                 contextSources: dspaceSources,

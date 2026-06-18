@@ -114,7 +114,7 @@ const parseErrorPayload = async (response) => {
     }
 };
 
-export const TokenPlaceChatV2 = async (messages, options = {}) => {
+export const tokenPlaceChatV2 = async (messages, options = {}) => {
     await ready;
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const contextSources = Array.isArray(promptPayload.contextSources)
@@ -169,6 +169,6 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
 };
 
 export const tokenPlaceChat = async (messages, options = {}) => {
-    const result = await TokenPlaceChatV2(messages, options);
+    const result = await tokenPlaceChatV2(messages, options);
     return result.text;
 };
