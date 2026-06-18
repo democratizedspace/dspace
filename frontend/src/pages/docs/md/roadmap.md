@@ -23,7 +23,7 @@ current shipped status where relevant.
 ## Shipped in v3 (April 2026)
 
 - [x] DSPACE v3 released
-- [x] OpenAI-backed NPC chat personas shipped in `/chat`
+- [x] token.place-backed NPC chat is the v3.1 default in `/chat`, with OpenAI available as an optional provider from `/settings`
 - [x] Utility destinations shipped in the More menu (`/stats`, `/leaderboard`, `/titles`,
       `/toolbox`, `/settings`, `/gamesaves`, `/cloudsync`, `/contentbackup`)
 
@@ -43,7 +43,7 @@ Maintenance and groundwork leading into v3.
 ### 2023
 
 - [x] in-game guided model rocket hop (servo + camera upgrade)
-- [x] AI-enabled NPCs (chat supports persona-powered conversations)
+- [x] AI-enabled NPCs (chat supports persona-powered conversations; token.place is the v3.1 Chat default)
 - [x] content update (suborbital launch checklist for rockets)
 - [x] [DSPACE v2 release notes](/changelog#20230630)
 

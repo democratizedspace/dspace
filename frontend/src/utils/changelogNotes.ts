@@ -101,7 +101,7 @@ const notesBySlug: Record<string, ChangelogNote[]> = {
     '20260201': [
         {
             message:
-                'Note: token.place support was deferred after this changelog. DSPACE v3 continues to use OpenAI, with token.place integration planned for v3.1.',
+                'Update: token.place is now the default Chat provider in DSPACE v3.1, with OpenAI still available as an opt-in provider from Settings.',
             href: '/docs/token-place',
             linkLabel: 'token.place integration doc',
         },

@@ -3,33 +3,53 @@ title: 'token.place Integration'
 slug: 'token-place'
 ---
 
-DSPACE ships with a token.place integration for in-game chat. In v3.1, fresh chat defaults to
-the zero-auth token.place API v1 endpoint (`https://token.place/api/v1/chat/completions`), while
-users with an existing OpenAI API key continue to use
-the OpenAI-backed flow.
+DSPACE v3.1 uses token.place as the default provider for the NPC Chat experience at `/chat`.
+Fresh users can open Chat, choose an NPC/persona when needed, and send a message without creating an
+account, adding an API key, or configuring a provider first.
 
-## How it works
+## What token.place does in DSPACE
 
-- The chat client calls `tokenPlaceChat` (see `frontend/src/utils/tokenPlace.js`), which posts
-  OpenAI-compatible `messages` and `model` fields to `/api/v1/chat/completions` without sending
-  credentials or an `Authorization` header.
-- The default origin is `https://token.place`. Deployments can point to a custom token.place
-  origin with `VITE_TOKEN_PLACE_URL`, and legacy saved `tokenPlace.url` values are still honored
-  for compatibility.
-- Token.place is the default v3.1 chat provider and is not disabled by default. Legacy
-  `VITE_TOKEN_PLACE_ENABLED` and `state.tokenPlace.enabled` values are ignored by provider
-  enablement so old saved disabled flags cannot block fresh default token.place chat.
-- Users with an existing OpenAI API key still use the OpenAI-backed flow, and the OpenAI key
-  settings remain available separately (see
-  `frontend/src/pages/chat/svelte/ChatPanel.svelte`).
+- token.place powers the default Chat completion request for DSPACE NPC conversations.
+- The Chat UI still provides DSPACE-specific context such as NPC persona instructions, relevant docs
+  context, and local player-state summaries.
+- DSPACE does not charge users for token.place Chat access and does not ask players for token.place
+  credentials.
+- No token.place API key is stored, requested, or sent by the DSPACE client.
 
-## Local URL override
+## Provider choices
 
-Use `VITE_TOKEN_PLACE_URL` only to point local development at another token.place origin:
+The default Chat provider is **token.place**. OpenAI remains available as an optional
+bring-your-own-key provider:
+
+1. Open [/settings](/settings).
+2. Choose OpenAI as the Chat provider.
+3. Save your own OpenAI API key.
+
+Switching back to token.place in `/settings` returns Chat to the no-key default path. `/chat` no
+longer requires an OpenAI key unless you explicitly select OpenAI as your provider.
+
+## Current API behavior
+
+DSPACE currently talks to token.place with direct HTTPS API v1 requests:
+
+- Endpoint: `POST /api/v1/chat/completions` on the configured token.place origin.
+- Default origin: `https://token.place`.
+- Staging origin: `https://staging.token.place` when configured by the deployment.
+- Response text comes from the OpenAI-compatible `choices[0].message.content` field.
+- API v1 is non-streaming, so responses may appear only after the full completion is ready.
+
+The integration will move to the token.place npm package only after that package path is ready for
+DSPACE's browser-side Chat use case. v3.1 does not use token.place API v2 and does not send
+streaming requests.
+
+## Deployment overrides
+
+Operators can override the default token.place origin and model with these environment variables:
 
 ```bash
-VITE_TOKEN_PLACE_URL=$TOKEN_PLACE_API_URL npm run dev
+VITE_TOKEN_PLACE_URL=https://staging.token.place
+VITE_TOKEN_PLACE_CHAT_MODEL=gpt-5-chat-latest
 ```
 
-The URL preference order is `tokenPlace.url` (legacy saved game state), then
-`VITE_TOKEN_PLACE_URL`, then `https://token.place`.
+Do not configure user-facing token.place credentials for DSPACE; the v3.1 Chat path is designed to
+run without them.

@@ -74,6 +74,11 @@
             "type": "formatting",
             "description": "Moved ship-ready v3 release summary content into changelog notes to preserve historical markdown.",
             "date": "2026-03-01"
+        },
+        {
+            "type": "formatting",
+            "description": "Updated v3 Chat wording after the explicit v3.1 token.place release docs request so current docs no longer describe token.place as only future work.",
+            "date": "2026-08-01"
         }
     ]
 }

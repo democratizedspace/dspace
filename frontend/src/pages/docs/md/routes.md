@@ -10,34 +10,34 @@ Use this as the docs-facing companion to `docs/ROUTES.md`.
 
 ## Top navigation (pinned)
 
-| UI label  | Route        |
-| --------- | ------------ |
-| Home      | `/`          |
-| Quests    | `/quests`    |
-| Inventory | `/inventory` |
-| Energy    | `/energy`    |
-| Wallet    | `/wallet`    |
-| Profile   | `/profile`   |
-| Docs      | `/docs`      |
-| Chat      | `/chat`      |
-| Changelog | `/changelog` |
+| UI label  | Route        | Notes                                                |
+| --------- | ------------ | ---------------------------------------------------- |
+| Home      | `/`          |                                                      |
+| Quests    | `/quests`    |                                                      |
+| Inventory | `/inventory` |                                                      |
+| Energy    | `/energy`    |                                                      |
+| Wallet    | `/wallet`    |                                                      |
+| Profile   | `/profile`   |                                                      |
+| Docs      | `/docs`      |                                                      |
+| Chat      | `/chat`      | token.place default; OpenAI optional via `/settings` |
+| Changelog | `/changelog` |                                                      |
 
 ## More menu (unpinned)
 
-| UI label                | Route            | Status      |
-| ----------------------- | ---------------- | ----------- |
-| Processes               | `/processes`     | live        |
-| Import/export gamesaves | `/gamesaves`     | live        |
-| Cloud Sync              | `/cloudsync`     | live        |
-| Custom Content Backup   | `/contentbackup` | live        |
-| Guilds                  | `/guilds`        | coming soon |
-| Stats                   | `/stats`         | live        |
-| Achievements            | `/achievements`  | live        |
-| Leaderboard             | `/leaderboard`   | live        |
-| Locations               | `/locations`     | coming soon |
-| Titles                  | `/titles`        | live        |
-| Toolbox                 | `/toolbox`       | live        |
-| Settings                | `/settings`      | live        |
+| UI label                | Route            | Status                                             |
+| ----------------------- | ---------------- | -------------------------------------------------- |
+| Processes               | `/processes`     | live                                               |
+| Import/export gamesaves | `/gamesaves`     | live                                               |
+| Cloud Sync              | `/cloudsync`     | live                                               |
+| Custom Content Backup   | `/contentbackup` | live                                               |
+| Guilds                  | `/guilds`        | coming soon                                        |
+| Stats                   | `/stats`         | live                                               |
+| Achievements            | `/achievements`  | live                                               |
+| Leaderboard             | `/leaderboard`   | live                                               |
+| Locations               | `/locations`     | coming soon                                        |
+| Titles                  | `/titles`        | live                                               |
+| Toolbox                 | `/toolbox`       | live                                               |
+| Settings                | `/settings`      | live; Chat provider + optional OpenAI key settings |
 
 External links in the More menu:
 
@@ -56,7 +56,7 @@ External links in the More menu:
 
 - Save portability: `/gamesaves`, `/cloudsync`, `/contentbackup`
 - Progress visibility: `/stats`, `/achievements`, `/titles`, `/leaderboard`
-- Configuration/tools: `/settings`, `/toolbox`
+- Configuration/tools: `/settings` (including Chat provider settings), `/toolbox`
 - Debug: `/debug`
 
 ## Dynamic route patterns
