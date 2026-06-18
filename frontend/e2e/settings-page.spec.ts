@@ -14,6 +14,10 @@ const SETTINGS_VIEWPORTS: SettingsViewport[] = [
     { name: 'desktop', width: 1280, height: 900, expectedColumns: 'multiple' },
 ];
 
+async function readStoredGameState(page: Page) {
+    return page.evaluate(() => JSON.parse(localStorage.getItem('gameState') || '{}'));
+}
+
 async function openSettingsAtViewport(page: Page, viewport: SettingsViewport) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.goto('/settings');
@@ -37,6 +41,110 @@ test.describe('Settings route', () => {
         await expect(page.getByRole('heading', { level: 3, name: 'Log out' })).toBeVisible();
         await expect(page.getByRole('button', { name: 'Log out' })).toBeVisible();
         await expect(page.getByTestId('logout-state')).toHaveText('No saved credentials detected.');
+    });
+
+    test('manages Chat provider and OpenAI key without token.place credentials', async ({
+        page,
+    }) => {
+        await page.goto('/settings');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+
+        const chatPanel = page.getByTestId('chat-provider-settings');
+        await expect(chatPanel).toBeVisible();
+        await expect(page.getByRole('heading', { level: 2, name: 'Chat provider' })).toBeVisible();
+        await expect(
+            page.getByText('token.place is the default DSPACE Chat provider')
+        ).toBeVisible();
+        await expect(
+            chatPanel.locator('input[name="chat-provider"][value="token-place"]')
+        ).toBeChecked();
+        await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+        await expect(
+            chatPanel.locator('input:is([type="password"], [type="text"], :not([type]))')
+        ).toHaveCount(0);
+        await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
+
+        await chatPanel.locator('input[name="chat-provider"][value="openai"]').check();
+        await expect(
+            chatPanel.locator('input[name="chat-provider"][value="openai"]')
+        ).toBeChecked();
+        await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
+
+        await expect
+            .poll(async () => {
+                const state = await readStoredGameState(page);
+                return state.settings?.chatProvider;
+            })
+            .toBe('openai');
+
+        await page.goto('/chat');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.getByTestId('chat-panel')).toHaveAttribute('data-provider', 'openai');
+
+        await page.goto('/settings');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await page.getByLabel('OpenAI API key', { exact: true }).fill('sk-settings-e2e-key');
+        await page.getByRole('button', { name: 'Save OpenAI API key' }).click();
+        await expect(page.getByTestId('openai-key-status')).toHaveText(
+            'OpenAI API key configured.'
+        );
+        await expect(page.getByLabel('OpenAI API key', { exact: true })).toHaveCount(0);
+
+        await expect
+            .poll(async () => {
+                const state = await readStoredGameState(page);
+                return state.openAI?.apiKey;
+            })
+            .toBe('sk-settings-e2e-key');
+
+        await page.reload();
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(
+            chatPanel.locator('input[name="chat-provider"][value="openai"]')
+        ).toBeChecked();
+        await expect(page.getByTestId('openai-key-status')).toHaveText(
+            'OpenAI API key configured.'
+        );
+
+        await page.getByRole('button', { name: 'Clear API key' }).click();
+        await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
+        await expect
+            .poll(async () => {
+                const state = await readStoredGameState(page);
+                return state.openAI?.apiKey;
+            })
+            .toBe('');
+
+        await chatPanel.locator('input[name="chat-provider"][value="token-place"]').check();
+        await expect(
+            chatPanel.locator('input[name="chat-provider"][value="token-place"]')
+        ).toBeChecked();
+        await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+        await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
+        await expect(
+            chatPanel.locator('input:is([type="password"], [type="text"], :not([type]))')
+        ).toHaveCount(0);
+        await expect
+            .poll(async () => {
+                const state = await readStoredGameState(page);
+                return {
+                    chatProvider: state.settings?.chatProvider,
+                    tokenPlaceApiKey: state.tokenPlace?.apiKey ?? null,
+                };
+            })
+            .toEqual({ chatProvider: 'token-place', tokenPlaceApiKey: null });
+
+        await page.goto('/chat');
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.getByTestId('chat-panel')).toHaveAttribute(
+            'data-provider',
+            'token-place'
+        );
     });
 
     for (const viewport of SETTINGS_VIEWPORTS) {
@@ -171,7 +279,22 @@ test.describe('Settings route', () => {
                 const selector =
                     '.settings-content a[href], .settings-content button:not([disabled]), .settings-content select:not([disabled]), .settings-content input:not([disabled]), .settings-content textarea:not([disabled])';
                 return Array.from(document.querySelectorAll<HTMLElement>(selector))
-                    .filter((element) => element.offsetParent !== null)
+                    .filter((element) => {
+                        if (element.offsetParent === null) {
+                            return false;
+                        }
+
+                        if (element instanceof HTMLInputElement && element.type === 'radio') {
+                            const radioGroup = Array.from(
+                                document.querySelectorAll<HTMLInputElement>(
+                                    `input[type="radio"][name="${element.name}"]`
+                                )
+                            );
+                            return element.checked || !radioGroup.some((radio) => radio.checked);
+                        }
+
+                        return true;
+                    })
                     .map((element, index) => {
                         const id = `settings-focus-target-${index}`;
                         element.dataset.settingsFocusTarget = id;
