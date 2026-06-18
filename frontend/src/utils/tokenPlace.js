@@ -56,8 +56,6 @@ export const getTokenPlaceChatModel = (options = {}) =>
         options.model || readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') || DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
-export const isTokenPlaceEnabled = () => true;
-
 const sanitizeChatMessage = (message) => ({
     role: typeof message?.role === 'string' ? message.role : 'user',
     content:

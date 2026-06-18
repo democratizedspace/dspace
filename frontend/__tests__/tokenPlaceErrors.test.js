@@ -1,12 +1,6 @@
 const { getTokenPlaceErrorSummary } = require('../src/utils/tokenPlaceErrors.js');
 
 describe('getTokenPlaceErrorSummary', () => {
-    test('categorizes disabled errors', () => {
-        const summary = getTokenPlaceErrorSummary(new Error('token.place is disabled'));
-        expect(summary.type).toBe('disabled');
-        expect(summary.message).toMatch(/disabled/i);
-    });
-
     test('categorizes network errors', () => {
         const summary = getTokenPlaceErrorSummary(new Error('Failed to fetch'));
         expect(summary.type).toBe('network');
