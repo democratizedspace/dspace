@@ -101,11 +101,9 @@ test.describe('Chat provider routing', () => {
         expect(request.body.stream).not.toBe(true);
         expect(request.body.metadata).toEqual({ client: 'dspace', provider: 'token.place' });
         const serializedBody = JSON.stringify(request.body);
-        expect(serializedBody).not.toMatch(/apiKey|tokenPlaceApiKey|sk-/i);
+        expect(serializedBody).not.toMatch(/apiKey|sk-/i);
         expect(serializedBody).not.toMatch(/raw save|inventory details/i);
-        expect(JSON.stringify(request.headers)).not.toMatch(
-            /authorization|apiKey|tokenPlaceApiKey|sk-/i
-        );
+        expect(JSON.stringify(request.headers)).not.toMatch(/authorization|apiKey|sk-/i);
     });
 
     test('staging token.place base URL can be used without hitting production', async ({
