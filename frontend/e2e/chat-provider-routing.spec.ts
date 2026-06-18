@@ -185,6 +185,15 @@ test.describe('Chat provider routing', () => {
         await waitForHydration(page);
         await page.getByRole('button', { name: 'Clear API key' }).click();
         await page.locator('input[name="chat-provider"][value="token-place"]').check();
+        await expect(page.getByRole('status')).toHaveText('Chat provider saved: token.place.');
+        await expect
+            .poll(async () =>
+                page.evaluate(() => {
+                    const state = JSON.parse(localStorage.getItem('gameState') || '{}');
+                    return state.settings?.chatProvider;
+                })
+            )
+            .toBe('token-place');
 
         const chatPanel = await openChat(page, 'token-place');
         await sendFromPanel(chatPanel, 'Back to default provider');
@@ -216,6 +225,7 @@ test.describe('Chat provider routing', () => {
         await sendFromPanel(chatPanel, 'Show the debug payload with RAG context');
         await expect(chatPanel.getByText('token.place assistant reply')).toBeVisible();
         await expect(page.getByTestId('debug-provider-row')).toContainText('token-place');
+        await page.getByRole('button', { name: 'Show prompt' }).click();
         await expect(page.getByRole('button', { name: 'Hide prompt' })).toBeVisible();
 
         const debugMessages = page.getByTestId('chat-debug-message');

@@ -12,6 +12,25 @@ type TokenPlaceStubMode =
     | 'unknown-error';
 
 const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
+    if (mode === 'unknown-error') {
+        await page.addInitScript(() => {
+            const originalFetch = window.fetch.bind(window);
+            window.fetch = (input, init) => {
+                const url =
+                    typeof input === 'string'
+                        ? input
+                        : input instanceof URL
+                          ? input.href
+                          : input.url;
+                if (url === 'https://token.place/api/v1/chat/completions') {
+                    return Promise.reject(new Error('Unexpected token.place failure'));
+                }
+                return originalFetch(input, init);
+            };
+        });
+        return;
+    }
+
     await page.route('https://token.place/api/v1/chat/completions', async (route) => {
         if (mode === 'network-error') {
             await route.abort('failed');
@@ -70,12 +89,6 @@ const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
             });
             return;
         }
-
-        await route.fulfill({
-            status: 418,
-            contentType: 'text/plain',
-            body: 'Unexpected token.place failure',
-        });
     });
 };
 
@@ -167,10 +180,10 @@ test.describe('Token.place chat error banners', () => {
             message: /token\.place returned an error/i,
         },
         {
-            name: 'shows an unknown banner for unexpected token.place errors',
+            name: 'shows an unknown banner for unclassified token.place failures',
             mode: 'unknown-error',
-            type: 'provider',
-            message: /token\.place returned an error/i,
+            type: 'unknown',
+            message: /token\.place hit an unexpected error/i,
         },
     ];
 
