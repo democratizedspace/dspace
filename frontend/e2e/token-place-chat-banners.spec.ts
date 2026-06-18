@@ -2,48 +2,93 @@ import { expect, test, type Page } from '@playwright/test';
 
 import { clearUserData, waitForHydration } from './test-helpers';
 
-type TokenPlaceStubMode = 'network-error' | 'provider-error' | 'unknown-error';
+type TokenPlaceStubMode =
+    | 'network-error'
+    | 'content-policy'
+    | 'rate-limit'
+    | 'server-error'
+    | 'malformed'
+    | 'provider-error'
+    | 'unexpected-http-error';
 
 const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
-    await page.addInitScript(
-        ({ stubMode }) => {
-            const originalFetch = window.fetch.bind(window);
-            window.fetch = async (input, init) => {
-                const url = typeof input === 'string' ? input : input?.url;
+    await page.route('https://token.place/api/v1/chat/completions', async (route) => {
+        if (mode === 'network-error') {
+            await route.abort('failed');
+            return;
+        }
 
-                if (typeof url === 'string' && url.includes('token.place')) {
-                    if (stubMode === 'network-error') {
-                        throw new Error('Failed to fetch');
-                    }
+        if (mode === 'content-policy') {
+            await route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    error: {
+                        message: 'Content blocked',
+                        type: 'content_policy_violation',
+                        code: 'content_blocked',
+                    },
+                }),
+            });
+            return;
+        }
 
-                    if (stubMode === 'provider-error') {
-                        return {
-                            ok: false,
-                            statusText: 'Bad Request',
-                            json: async () => ({ error: 'provider down' }),
-                        };
-                    }
+        if (mode === 'rate-limit') {
+            await route.fulfill({
+                status: 429,
+                contentType: 'application/json',
+                body: JSON.stringify({ error: { message: 'Slow down', type: 'rate_limit' } }),
+            });
+            return;
+        }
 
-                    if (stubMode === 'unknown-error') {
-                        throw new Error('Unexpected token.place failure');
-                    }
-                }
+        if (mode === 'server-error') {
+            await route.fulfill({
+                status: 503,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    error: { message: 'Unavailable', type: 'server_error' },
+                }),
+            });
+            return;
+        }
 
-                return originalFetch(input, init);
-            };
-        },
-        { stubMode: mode }
-    );
+        if (mode === 'malformed') {
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ choices: [{ message: { content: '' } }] }),
+            });
+            return;
+        }
+
+        if (mode === 'provider-error') {
+            await route.fulfill({
+                status: 400,
+                contentType: 'application/json',
+                body: JSON.stringify({ error: { message: 'Provider down' } }),
+            });
+            return;
+        }
+
+        if (mode === 'unexpected-http-error') {
+            await route.fulfill({
+                status: 418,
+                contentType: 'application/json',
+                body: JSON.stringify({ error: { message: 'Unexpected token.place failure' } }),
+            });
+        }
+    });
 };
 
-const seedTokenPlaceEnabledState = async (page: Page) => {
+const seedTokenPlaceDefaultState = async (page: Page) => {
     await page.addInitScript(() => {
         const state = {
-            tokenPlace: { enabled: true },
+            tokenPlace: { enabled: false },
             quests: {},
             inventory: {},
             processes: {},
-            settings: {},
+            settings: { chatProvider: 'token-place' },
             versionNumberString: '3',
             _meta: { lastUpdated: Date.now() },
         };
@@ -81,42 +126,68 @@ test.describe('Token.place chat error banners', () => {
         await clearUserData(page);
     });
 
-    test('shows a network banner when token.place is unreachable', async ({ page }) => {
-        await installTokenPlaceStub(page, 'network-error');
-        await seedTokenPlaceEnabledState(page);
+    const cases: Array<{
+        name: string;
+        mode: TokenPlaceStubMode;
+        type: string;
+        message: RegExp;
+    }> = [
+        {
+            name: 'shows a network banner when token.place is unreachable',
+            mode: 'network-error',
+            type: 'network',
+            message: /could not reach token\.place/i,
+        },
+        {
+            name: 'shows a content-policy-safe banner when token.place blocks content',
+            mode: 'content-policy',
+            type: 'content_policy',
+            message: /blocked that request by policy|rephrasing/i,
+        },
+        {
+            name: 'shows a rate/quota banner when token.place returns HTTP 429',
+            mode: 'rate-limit',
+            type: 'rate_limit',
+            message: /rate limit|quota|too many/i,
+        },
+        {
+            name: 'shows a server unavailable banner when token.place returns HTTP 5xx',
+            mode: 'server-error',
+            type: 'server',
+            message: /unavailable|server/i,
+        },
+        {
+            name: 'shows a malformed response banner when token.place returns no assistant text',
+            mode: 'malformed',
+            type: 'malformed',
+            message: /unexpected response/i,
+        },
+        {
+            name: 'shows a provider banner when token.place returns an unclassified API error',
+            mode: 'provider-error',
+            type: 'provider',
+            message: /token\.place returned an error/i,
+        },
+        {
+            name: 'shows a provider banner when token.place returns unexpected HTTP errors',
+            mode: 'unexpected-http-error',
+            type: 'provider',
+            message: /token\.place returned an error/i,
+        },
+    ];
 
-        const { chatPanel, spinner } = await sendMessage(page, 'Trigger token.place network error');
+    for (const { name, mode, type, message } of cases) {
+        test(name, async ({ page }) => {
+            await installTokenPlaceStub(page, mode);
+            await seedTokenPlaceDefaultState(page);
 
-        const banner = chatPanel.locator('.chat-error');
-        await expect(banner).toHaveAttribute('data-error-type', 'network');
-        await expect(banner).toContainText(/could not reach token\.place/i);
-        await expect(spinner).not.toBeVisible();
-    });
+            const { chatPanel, spinner } = await sendMessage(page, `Trigger ${mode}`);
 
-    test('shows a provider banner when token.place returns an error', async ({ page }) => {
-        await installTokenPlaceStub(page, 'provider-error');
-        await seedTokenPlaceEnabledState(page);
-
-        const { chatPanel, spinner } = await sendMessage(
-            page,
-            'Trigger token.place provider error'
-        );
-
-        const banner = chatPanel.locator('.chat-error');
-        await expect(banner).toHaveAttribute('data-error-type', 'provider');
-        await expect(banner).toContainText(/token\.place returned an error/i);
-        await expect(spinner).not.toBeVisible();
-    });
-
-    test('shows an unknown banner for unexpected token.place errors', async ({ page }) => {
-        await installTokenPlaceStub(page, 'unknown-error');
-        await seedTokenPlaceEnabledState(page);
-
-        const { chatPanel, spinner } = await sendMessage(page, 'Trigger token.place unknown error');
-
-        const banner = chatPanel.locator('.chat-error');
-        await expect(banner).toHaveAttribute('data-error-type', 'unknown');
-        await expect(banner).toContainText(/token\.place hit an unexpected error/i);
-        await expect(spinner).not.toBeVisible();
-    });
+            const banner = chatPanel.locator('.chat-error');
+            await expect(banner).toHaveAttribute('data-error-type', type);
+            await expect(banner).toContainText(message);
+            await expect(banner).not.toContainText(/OpenAI/i);
+            await expect(spinner).not.toBeVisible();
+        });
+    }
 });

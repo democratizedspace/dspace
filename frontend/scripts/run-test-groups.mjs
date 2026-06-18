@@ -136,6 +136,7 @@ const TEST_GROUPS = [
             'chat-debug-build-info.spec.ts',
             'chat-debug-stamp.spec.ts',
             'chat-debug-navigation.spec.ts',
+            'chat-provider-routing.spec.ts',
             'token-place-chat-banners.spec.ts',
             'dark-mode-toggle.spec.ts',
             'local-storage-helpers.spec.ts',
