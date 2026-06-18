@@ -9,6 +9,8 @@
         getOpenAIErrorSummary,
         GPT5ChatV2,
     } from '../../../utils/openAI.js';
+    import { TokenPlaceChatV2 } from '../../../utils/tokenPlace.js';
+    import { getTokenPlaceErrorSummary } from '../../../utils/tokenPlaceErrors.js';
     import { writable } from 'svelte/store';
     import {
         messages,
@@ -75,9 +77,11 @@
     let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     let docsRagEnvWarning = null;
     let debugOverride = false;
-    let currentSettings = { showChatDebugPayload: false };
+    let currentSettings = normalizeSettings();
     let lastShowChatDebugPayload;
     let componentDestroyed = false;
+    let providerUsage = null;
+    let providerMetadata = null;
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -95,6 +99,9 @@
     $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
     $: docsRagComparisonMessage = docsRagComparison.message;
     $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
+    $: activeProvider = normalizeSettings(currentSettings).chatProvider;
+    $: providerLabel =
+        activeProvider === 'openai' ? 'OpenAI selected in Settings' : 'Powered by token.place';
 
     function getWelcomeText(persona) {
         return persona?.welcomeMessage ?? persona?.welcomeSnippet ?? '';
@@ -173,11 +180,43 @@
             playerStateSummary = getPlayerStateSummary();
         }
 
-        try {
-            const aiResponse = await GPT5ChatV2(historyForApi, {
-                persona: currentPersona,
-                promptPayload: debugPayload,
+        providerUsage = null;
+        providerMetadata = null;
+        const selectedProvider = activeProvider;
+        const currentState = loadGameState();
+        if (selectedProvider === 'openai' && !currentState?.openAI?.apiKey) {
+            const fallback =
+                'OpenAI is selected in Settings, but no API key is saved. Add your key on /settings to use OpenAI, or switch back to token.place.';
+            errorBanner = {
+                type: 'missing-key',
+                message:
+                    'OpenAI requires an API key. Visit /settings to add one or switch providers.',
+            };
+            addMessage({
+                role: 'assistant',
+                content: fallback,
+                tokens: countTokens(fallback),
+                avatarUrl: getPersonaAvatar(currentPersona),
+                avatarAlt: getPersonaAlt(currentPersona),
+                timestamp: Date.now(),
             });
+            showSpinner = false;
+            return;
+        }
+
+        try {
+            const aiResponse =
+                selectedProvider === 'openai'
+                    ? await GPT5ChatV2(historyForApi, {
+                          persona: currentPersona,
+                          promptPayload: debugPayload,
+                      })
+                    : await TokenPlaceChatV2(historyForApi, {
+                          persona: currentPersona,
+                          promptPayload: debugPayload,
+                      });
+            providerUsage = aiResponse?.usage ?? null;
+            providerMetadata = aiResponse?.metadata ?? null;
             const responseText = aiResponse?.text ?? '';
             const aiMessage = {
                 role: 'assistant',
@@ -191,9 +230,15 @@
 
             addMessage(aiMessage);
         } catch (error) {
-            console.error('OpenAI chat request failed', error);
-            errorBanner = getOpenAIErrorSummary(error);
-            const fallback = describeOpenAIError(error) || defaultOpenAIErrorMessage;
+            console.error(`${selectedProvider} chat request failed`, error);
+            errorBanner =
+                selectedProvider === 'openai'
+                    ? getOpenAIErrorSummary(error)
+                    : getTokenPlaceErrorSummary(error);
+            const fallback =
+                selectedProvider === 'openai'
+                    ? describeOpenAIError(error) || defaultOpenAIErrorMessage
+                    : errorBanner.message;
             addMessage({
                 role: 'assistant',
                 content: fallback,
@@ -251,6 +296,7 @@
 
     function getDebugInfoText() {
         return [
+            `Selected provider: ${activeProvider}`,
             `Prompt version: ${promptVersionLabel}`,
             `App build SHA: ${appGitShaDisplay}`,
             `App build SHA source: ${appGitShaSource}`,
@@ -261,7 +307,11 @@
             `Docs RAG generatedAt: ${docsRagGeneratedAt}`,
             `Docs pack sourceRef: ${docsRagSourceRef}`,
             `Docs RAG comparison: ${docsRagComparisonMessage}`,
-        ].join('\n');
+            providerUsage ? `Provider usage: ${JSON.stringify(providerUsage)}` : null,
+            providerMetadata ? `Provider metadata: ${JSON.stringify(providerMetadata)}` : null,
+        ]
+            .filter(Boolean)
+            .join('\n');
     }
 
     function isExpectedRuntimeBuildMetaFetchFailure(error) {
@@ -477,12 +527,16 @@
 <div
     class="chat"
     data-testid="chat-panel"
-    data-provider="openai"
+    data-provider={activeProvider}
     data-hydrated={hydrated ? 'true' : 'false'}
 >
+    <div class="provider-label" data-testid="chat-provider-label">{providerLabel}</div>
     {#if errorBanner}
         <div class="chat-error" role="alert" data-error-type={errorBanner.type}>
             {errorBanner.message}
+            {#if errorBanner.type === 'missing-key'}
+                <a href="/settings">Open Settings</a>
+            {/if}
         </div>
     {/if}
     <div class="persona-selector">
@@ -574,6 +628,10 @@
                 </div>
             </div>
             <div class="debug-metadata">
+                <div class="debug-meta-row" data-testid="debug-provider-row">
+                    <span>Selected provider</span>
+                    <span class="debug-mono">{activeProvider}</span>
+                </div>
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
                     <span>App build SHA</span>
                     <span class="debug-mono">{appGitShaDisplay}</span>
@@ -638,6 +696,18 @@
                     <span>PlayerState inventory total</span>
                     <span class="debug-mono">{playerStateSummary.inventoryTotalCount}</span>
                 </div>
+                {#if providerUsage}
+                    <div class="debug-meta-row">
+                        <span>Provider usage</span>
+                        <span class="debug-mono">{JSON.stringify(providerUsage)}</span>
+                    </div>
+                {/if}
+                {#if providerMetadata}
+                    <div class="debug-meta-row">
+                        <span>Provider metadata</span>
+                        <span class="debug-mono">{JSON.stringify(providerMetadata)}</span>
+                    </div>
+                {/if}
                 <div class="debug-meta-row">
                     <span>PlayerState inventory truncated</span>
                     <span class="debug-mono">
@@ -692,6 +762,13 @@
         align-items: center;
         width: 100%;
         gap: 1.5rem;
+    }
+
+    .provider-label {
+        align-self: flex-end;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.65);
     }
 
     .persona-selector {
