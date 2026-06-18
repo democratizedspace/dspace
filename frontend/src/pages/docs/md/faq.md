@@ -69,6 +69,12 @@ aligned. See [Custom Content Bundles](/docs/custom-content-bundles).
 Start with the [Quest Submission Guide](/docs/quest-submission), then use `/quests/submit` for
 quest-only submissions or `/bundles/submit` when your quest depends on custom items/processes.
 
+## Do I need an API key for Chat?
+
+No for the default path. In v3.1, [/chat](/chat) defaults to token.place and works without
+DSPACE auth, an OpenAI key, or token.place credentials. If you prefer OpenAI, choose it in
+[/settings](/settings) and bring your own OpenAI API key.
+
 ## Do I need GitHub credentials?
 
 Only for GitHub-connected features (bundle submission and cloud sync). See

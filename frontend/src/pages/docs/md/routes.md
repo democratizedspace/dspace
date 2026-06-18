@@ -57,6 +57,7 @@ External links in the More menu:
 - Save portability: `/gamesaves`, `/cloudsync`, `/contentbackup`
 - Progress visibility: `/stats`, `/achievements`, `/titles`, `/leaderboard`
 - Configuration/tools: `/settings`, `/toolbox`
+- Chat: `/chat` defaults to token.place in v3.1; `/settings` manages Chat provider selection and the optional OpenAI bring-your-own-key path.
 - Debug: `/debug`
 
 ## Dynamic route patterns
