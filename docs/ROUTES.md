@@ -17,37 +17,37 @@ page and uses the exact UI labels from `frontend/src/config/menu.json`.
 
 ### Top navigation (pinned)
 
-| UI label | Route | Notes |
-| --- | --- | --- |
-| Home | / | Homepage |
-| Quests | /quests | Quest list |
-| Inventory | /inventory | Inventory list |
-| Energy | /energy | Energy management |
-| Wallet | /wallet | Wallet overview |
-| Profile | /profile | Player profile |
-| Docs | /docs | Documentation index |
-| Chat | /chat | Chat interface |
-| Changelog | /changelog | Release notes |
+| UI label  | Route      | Notes                                                                              |
+| --------- | ---------- | ---------------------------------------------------------------------------------- |
+| Home      | /          | Homepage                                                                           |
+| Quests    | /quests    | Quest list                                                                         |
+| Inventory | /inventory | Inventory list                                                                     |
+| Energy    | /energy    | Energy management                                                                  |
+| Wallet    | /wallet    | Wallet overview                                                                    |
+| Profile   | /profile   | Player profile                                                                     |
+| Docs      | /docs      | Documentation index                                                                |
+| Chat      | /chat      | Chat interface; defaults to token.place in v3.1 with OpenAI optional from Settings |
+| Changelog | /changelog | Release notes                                                                      |
 
 ### More menu (unpinned)
 
-| UI label | Route | Notes |
-| --- | --- | --- |
-| Processes | /processes | Process list |
-| Import/export gamesaves | /gamesaves | Save import/export |
-| Cloud Sync | /cloudsync | Cloud sync setup |
-| Custom Content Backup | /contentbackup | Backup management |
-| Guilds | /guilds | Coming soon |
-| Stats | /stats | Player statistics |
-| Achievements | /achievements | Achievement list |
-| Leaderboard | /leaderboard | Global leaderboard |
-| Locations | /locations | Coming soon |
-| Titles | /titles | Player titles |
-| Toolbox | /toolbox | Utilities & QA tools |
-| Settings | /settings | User settings |
-| Discord | https://discord.gg/A3UAfYvnxM | External link |
-| Twitter | https://twitter.com/dspacegame | External link |
-| Github | https://github.com/democratizedspace/dspace | External link |
+| UI label                | Route                                       | Notes                                                                            |
+| ----------------------- | ------------------------------------------- | -------------------------------------------------------------------------------- |
+| Processes               | /processes                                  | Process list                                                                     |
+| Import/export gamesaves | /gamesaves                                  | Save import/export                                                               |
+| Cloud Sync              | /cloudsync                                  | Cloud sync setup                                                                 |
+| Custom Content Backup   | /contentbackup                              | Backup management                                                                |
+| Guilds                  | /guilds                                     | Coming soon                                                                      |
+| Stats                   | /stats                                      | Player statistics                                                                |
+| Achievements            | /achievements                               | Achievement list                                                                 |
+| Leaderboard             | /leaderboard                                | Global leaderboard                                                               |
+| Locations               | /locations                                  | Coming soon                                                                      |
+| Titles                  | /titles                                     | Player titles                                                                    |
+| Toolbox                 | /toolbox                                    | Utilities & QA tools                                                             |
+| Settings                | /settings                                   | User settings, including Chat provider selection and optional OpenAI key storage |
+| Discord                 | https://discord.gg/A3UAfYvnxM               | External link                                                                    |
+| Twitter                 | https://twitter.com/dspacegame              | External link                                                                    |
+| GitHub                  | https://github.com/democratizedspace/dspace | External link                                                                    |
 
 ## Navigation click-paths (canonical)
 
@@ -70,10 +70,11 @@ answer "how do I get there?" with citeable pathing.
 - More → Settings opens /settings.
 - More → Discord opens https://discord.gg/A3UAfYvnxM.
 - More → Twitter opens https://twitter.com/dspacegame.
-- More → Github opens https://github.com/democratizedspace/dspace.
+- More → GitHub opens https://github.com/democratizedspace/dspace.
 
 ### Settings page click-paths
 
+- Settings → Chat provider lets users keep token.place as the default or opt in to OpenAI.
 - Settings → Debug opens /chat#prompt-debug.
 
 ### Editor/manage entrypoints (CTA labels)
@@ -94,17 +95,17 @@ This section is the citeable route catalog and anchors the canonical routes unde
 
 ### Custom content authoring
 
-| Route | Description |
-| --- | --- |
-| /quests/create | Create a custom quest |
-| /quests/manage | Manage custom quests |
-| /quests/:id/edit | Edit a custom quest |
-| /inventory/create | Create a custom item |
-| /inventory/manage | Manage custom inventory |
+| Route                        | Description                  |
+| ---------------------------- | ---------------------------- |
+| /quests/create               | Create a custom quest        |
+| /quests/manage               | Manage custom quests         |
+| /quests/:id/edit             | Edit a custom quest          |
+| /inventory/create            | Create a custom item         |
+| /inventory/manage            | Manage custom inventory      |
 | /inventory/item/:itemId/edit | Edit a custom inventory item |
-| /processes/create | Create a custom process |
-| /processes/manage | Manage custom processes |
-| /processes/:processId/edit | Edit a custom process |
+| /processes/create            | Create a custom process      |
+| /processes/manage            | Manage custom processes      |
+| /processes/:processId/edit   | Edit a custom process        |
 
 ## Static routes
 
@@ -112,7 +113,7 @@ This section is the citeable route catalog and anchors the canonical routes unde
 
 - / - Homepage (index.astro)
 - /404 - 404 error page
-- /settings - User settings
+- /settings - User settings, including Chat provider selection
 - /stats - User statistics
 - /skills - Skills page
 - /task - Task page
@@ -143,7 +144,7 @@ This section is the citeable route catalog and anchors the canonical routes unde
 
 ### Chat & debug
 
-- /chat - Chat interface
+- /chat - Chat interface; defaults to token.place and does not require an OpenAI key
 - /dchat - dChat interface (AI assistant)
 - /debug - Debug tools
 

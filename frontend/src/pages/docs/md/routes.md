@@ -52,6 +52,11 @@ External links in the More menu:
 - Processes: `/processes/create`, `/processes/manage`, `/processes/:processId/edit`
 - Bundles: `/bundles/submit`
 
+## Chat and settings routes
+
+- `/chat` opens the NPC Chat UI. In v3.1, it defaults to token.place and does not require an OpenAI key.
+- `/settings` includes Chat provider settings. Use it to keep token.place as the default or opt in to OpenAI with your own key.
+
 ## Utility routes and diagnostics
 
 - Save portability: `/gamesaves`, `/cloudsync`, `/contentbackup`
@@ -82,9 +87,10 @@ External links in the More menu:
 - More → Titles opens /titles.
 - More → Toolbox opens /toolbox.
 - More → Settings opens /settings.
+- Settings → Chat provider lets you keep token.place or opt in to OpenAI.
 - More → Discord opens https://discord.gg/A3UAfYvnxM.
 - More → Twitter opens https://twitter.com/dspacegame.
-- More → Github opens https://github.com/democratizedspace/dspace.
+- More → GitHub opens https://github.com/democratizedspace/dspace.
 - Quests page → Manage button opens /quests/manage.
 - Quests manage page → Create button opens /quests/create.
 - Inventory page → Manage button opens /inventory/manage.

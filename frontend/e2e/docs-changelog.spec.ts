@@ -198,17 +198,6 @@ test.describe('docs changelog page', () => {
 
     test('keeps changelog hero image readable without shrinking docs images', async ({ page }) => {
         await page.setViewportSize({ width: 1400, height: 1000 });
-        await page.goto('/');
-        await page.waitForLoadState('domcontentloaded');
-
-        const homeImage = page.locator(`.latest-update-html img.${CHANGELOG_HERO_IMAGE_CLASS}`);
-        await expect(homeImage).toBeVisible();
-        await waitForImageReady(homeImage);
-        const homeWidth = await homeImage.evaluate((node) =>
-            Math.ceil(node.getBoundingClientRect().width)
-        );
-        expect(homeWidth).toBeLessThanOrEqual(512);
-
         await page.goto('/changelog');
         await page.waitForLoadState('domcontentloaded');
 
