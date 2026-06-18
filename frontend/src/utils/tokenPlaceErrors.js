@@ -85,9 +85,10 @@ export const getTokenPlaceErrorSummary = (error) => {
 
     if (
         type === 'network' ||
-        message.includes('failed to fetch') ||
-        message.includes('network') ||
-        message.includes('fetch')
+        (!type &&
+            (message.includes('failed to fetch') ||
+                message.includes('network') ||
+                message.includes('fetch')))
     ) {
         return {
             type: 'network',

@@ -14,6 +14,7 @@ const { loadGameState } = await import('../src/utils/gameState/common.js');
 const {
     TokenPlaceChatV2,
     buildTokenPlaceChatCompletionsUrl,
+    buildTokenPlaceMetadata,
     extractTokenPlaceAssistantText,
     getTokenPlaceChatModel,
     resolveTokenPlaceBaseUrl,
@@ -118,16 +119,16 @@ describe('token.place API v1 client', () => {
         expect(serialized).not.toContain('token-place-secret');
         expect(serialized).not.toContain('hidden');
         expect(body.metadata).toEqual({
+            conversation_id: 'conv-42',
             client: 'dspace',
             provider: 'token.place',
-            conversation_id: 'conv-42',
         });
     });
 
     test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
         await TokenPlaceChatV2([
             {
-                role: 'user',
+                role: 'developer',
                 content: 'hello',
                 id: 'ui-message-id',
                 timestamp: 123,
@@ -145,6 +146,20 @@ describe('token.place API v1 client', () => {
         expect(body.messages.at(-1)).not.toHaveProperty('avatar');
         expect(body.metadata).toEqual({ client: 'dspace', provider: 'token.place' });
         expect(body.stream).not.toBe(true);
+    });
+
+    test('safe metadata preserves trusted client and provider fields', () => {
+        expect(
+            buildTokenPlaceMetadata({
+                client: 'attacker',
+                provider: 'openai',
+                conversation_id: 'conv-42',
+            })
+        ).toEqual({
+            conversation_id: 'conv-42',
+            client: 'dspace',
+            provider: 'token.place',
+        });
     });
 
     test('parses assistant text and compatibility helper returns string', async () => {

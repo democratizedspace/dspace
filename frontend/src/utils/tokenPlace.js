@@ -11,6 +11,7 @@ const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
 const DEFAULT_CHAT_MODEL = 'gpt-5-chat-latest';
 const METADATA_DENY_PATTERN =
     /(?:key|token|secret|credential|password|authorization|auth|inventory|save|state|player)/i;
+const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
 
 const readEnvValue = (key) => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
@@ -57,7 +58,7 @@ export const getTokenPlaceChatModel = (options = {}) =>
     ).trim() || DEFAULT_CHAT_MODEL;
 
 const sanitizeChatMessage = (message) => ({
-    role: typeof message?.role === 'string' ? message.role : 'user',
+    role: VALID_CHAT_ROLES.has(message?.role) ? message.role : 'user',
     content:
         typeof message?.content === 'string' ? message.content : String(message?.content || ''),
 });
@@ -72,10 +73,7 @@ const sanitizeMetadataValue = (value) => {
 };
 
 export const buildTokenPlaceMetadata = (metadata = {}) => {
-    const safeMetadata = {
-        client: 'dspace',
-        provider: 'token.place',
-    };
+    const safeMetadata = {};
 
     if (isPlainObject(metadata)) {
         Object.entries(metadata).forEach(([key, value]) => {
@@ -87,7 +85,11 @@ export const buildTokenPlaceMetadata = (metadata = {}) => {
         });
     }
 
-    return safeMetadata;
+    return {
+        ...safeMetadata,
+        client: 'dspace',
+        provider: 'token.place',
+    };
 };
 
 export const extractTokenPlaceAssistantText = (response) => {
@@ -124,9 +126,10 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         metadata: buildTokenPlaceMetadata(options.metadata),
     };
 
-    const url = buildTokenPlaceChatCompletionsUrl(
-        options.url || resolveTokenPlaceBaseUrl({ state: promptPayload.gameState })
+    const baseUrl = resolveTokenPlaceBaseUrl(
+        options.url ? { url: options.url } : { state: promptPayload.gameState }
     );
+    const url = `${baseUrl}${CHAT_COMPLETIONS_PATH}`;
 
     let response;
     try {
