@@ -9,6 +9,8 @@
         getOpenAIErrorSummary,
         GPT5ChatV2,
     } from '../../../utils/openAI.js';
+    import { TokenPlaceChatV2 } from '../../../utils/tokenPlace.js';
+    import { getTokenPlaceErrorSummary } from '../../../utils/tokenPlaceErrors.js';
     import { writable } from 'svelte/store';
     import {
         messages,
@@ -75,9 +77,11 @@
     let docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     let docsRagEnvWarning = null;
     let debugOverride = false;
-    let currentSettings = { showChatDebugPayload: false };
+    let currentSettings = { chatProvider: 'token-place', showChatDebugPayload: false };
     let lastShowChatDebugPayload;
     let componentDestroyed = false;
+    let tokenPlaceUsage = null;
+    let tokenPlaceMetadata = null;
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -91,6 +95,8 @@
 
     $: currentPersona = $activePersona;
     $: personaSummary = currentPersona?.summary;
+    $: selectedProvider = normalizeSettings(currentSettings).chatProvider;
+    $: providerLabel = selectedProvider === 'openai' ? 'OpenAI opt-in' : 'Powered by token.place';
     $: showSaveSnapshotHint = !saveSnapshotHintDismissed && shouldShowSaveSnapshotHint($message);
     $: docsRagComparison = getDocsRagComparison(appGitShaForComparison, docsRagGitSha);
     $: docsRagComparisonMessage = docsRagComparison.message;
@@ -174,10 +180,44 @@
         }
 
         try {
-            const aiResponse = await GPT5ChatV2(historyForApi, {
-                persona: currentPersona,
-                promptPayload: debugPayload,
-            });
+            const promptPayload =
+                debugPayload ||
+                (await buildChatPrompt(historyForApi, {
+                    persona: currentPersona,
+                }));
+            if (!showDebug) {
+                playerStateSummary = promptPayload.playerStateSummary ?? playerStateSummary;
+            }
+
+            if (selectedProvider === 'openai' && !promptPayload.gameState?.openAI?.apiKey) {
+                const guidance =
+                    'OpenAI is selected in Settings, but no API key is saved. Add your OpenAI API key in /settings or switch back to token.place to chat without a key.';
+                errorBanner = { type: 'missing-key', message: guidance };
+                addMessage({
+                    role: 'assistant',
+                    content: guidance,
+                    tokens: countTokens(guidance),
+                    avatarUrl: getPersonaAvatar(currentPersona),
+                    avatarAlt: getPersonaAlt(currentPersona),
+                    timestamp: Date.now(),
+                });
+                showSpinner = false;
+                return;
+            }
+
+            const aiResponse =
+                selectedProvider === 'openai'
+                    ? await GPT5ChatV2(historyForApi, {
+                          persona: currentPersona,
+                          promptPayload,
+                      })
+                    : await TokenPlaceChatV2(historyForApi, {
+                          persona: currentPersona,
+                          promptPayload,
+                      });
+            tokenPlaceUsage = selectedProvider === 'token-place' ? aiResponse?.usage || null : null;
+            tokenPlaceMetadata =
+                selectedProvider === 'token-place' ? aiResponse?.metadata || null : null;
             const responseText = aiResponse?.text ?? '';
             const aiMessage = {
                 role: 'assistant',
@@ -191,9 +231,15 @@
 
             addMessage(aiMessage);
         } catch (error) {
-            console.error('OpenAI chat request failed', error);
-            errorBanner = getOpenAIErrorSummary(error);
-            const fallback = describeOpenAIError(error) || defaultOpenAIErrorMessage;
+            console.error(`${selectedProvider} chat request failed`, error);
+            errorBanner =
+                selectedProvider === 'openai'
+                    ? getOpenAIErrorSummary(error)
+                    : getTokenPlaceErrorSummary(error);
+            const fallback =
+                selectedProvider === 'openai'
+                    ? describeOpenAIError(error) || defaultOpenAIErrorMessage
+                    : "Sorry, I'm having some trouble reaching token.place and can't generate a response.";
             addMessage({
                 role: 'assistant',
                 content: fallback,
@@ -251,6 +297,7 @@
 
     function getDebugInfoText() {
         return [
+            `Selected provider: ${selectedProvider}`,
             `Prompt version: ${promptVersionLabel}`,
             `App build SHA: ${appGitShaDisplay}`,
             `App build SHA source: ${appGitShaSource}`,
@@ -261,6 +308,12 @@
             `Docs RAG generatedAt: ${docsRagGeneratedAt}`,
             `Docs pack sourceRef: ${docsRagSourceRef}`,
             `Docs RAG comparison: ${docsRagComparisonMessage}`,
+            ...(selectedProvider === 'token-place' && tokenPlaceUsage
+                ? [`token.place usage: ${JSON.stringify(tokenPlaceUsage)}`]
+                : []),
+            ...(selectedProvider === 'token-place' && tokenPlaceMetadata
+                ? [`token.place metadata: ${JSON.stringify(tokenPlaceMetadata)}`]
+                : []),
         ].join('\n');
     }
 
@@ -477,9 +530,15 @@
 <div
     class="chat"
     data-testid="chat-panel"
-    data-provider="openai"
+    data-provider={selectedProvider}
     data-hydrated={hydrated ? 'true' : 'false'}
 >
+    <div class="provider-label" data-testid="chat-provider-label">
+        {providerLabel}
+        {#if selectedProvider === 'openai'}
+            <span> · configure in <a href="/settings">Settings</a></span>
+        {/if}
+    </div>
     {#if errorBanner}
         <div class="chat-error" role="alert" data-error-type={errorBanner.type}>
             {errorBanner.message}
@@ -574,6 +633,10 @@
                 </div>
             </div>
             <div class="debug-metadata">
+                <div class="debug-meta-row">
+                    <span>Selected provider</span>
+                    <span class="debug-mono">{selectedProvider}</span>
+                </div>
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
                     <span>App build SHA</span>
                     <span class="debug-mono">{appGitShaDisplay}</span>
@@ -644,6 +707,18 @@
                         {playerStateSummary.inventoryTruncated ? 'yes' : 'no'}
                     </span>
                 </div>
+                {#if selectedProvider === 'token-place' && tokenPlaceUsage}
+                    <div class="debug-meta-row">
+                        <span>token.place usage</span>
+                        <span class="debug-mono">{JSON.stringify(tokenPlaceUsage)}</span>
+                    </div>
+                {/if}
+                {#if selectedProvider === 'token-place' && tokenPlaceMetadata}
+                    <div class="debug-meta-row">
+                        <span>token.place metadata</span>
+                        <span class="debug-mono">{JSON.stringify(tokenPlaceMetadata)}</span>
+                    </div>
+                {/if}
             </div>
             {#if docsRagWarning}
                 <div class="debug-warning" role="alert" aria-live="polite">
@@ -692,6 +767,21 @@
         align-items: center;
         width: 100%;
         gap: 1.5rem;
+    }
+
+    .provider-label {
+        align-self: flex-end;
+        padding: 0.25rem 0.6rem;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.08);
+        color: rgba(15, 23, 42, 0.78);
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .provider-label a {
+        color: inherit;
+        text-decoration: underline;
     }
 
     .persona-selector {
