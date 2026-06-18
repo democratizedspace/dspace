@@ -43,4 +43,36 @@ describe('OpenAIAPIKeySettings', () => {
         expect(saveGameState).not.toHaveBeenCalled();
         expect(queryByText(/openai api key cleared/i)).not.toBeInTheDocument();
     });
+
+    it('saves a trimmed OpenAI API key and shows the configured state', async () => {
+        const { findByLabelText, findByRole, findByText } = render(OpenAIAPIKeySettings);
+
+        await fireEvent.input(await findByLabelText(/openai api key/i), {
+            target: { value: '  sk-new-key  ' },
+        });
+        await fireEvent.click(await findByRole('button', { name: /save openai api key/i }));
+
+        expect(saveGameState).toHaveBeenCalledWith(
+            expect.objectContaining({ openAI: { apiKey: 'sk-new-key' } })
+        );
+        expect(await findByText(/openai api key saved/i)).toBeInTheDocument();
+        expect(await findByText(/openai api key configured/i)).toBeInTheDocument();
+    });
+
+    it('clears an existing OpenAI API key when requested', async () => {
+        vi.mocked(loadGameState).mockReturnValue({
+            openAI: { apiKey: 'sk-existing' },
+            inventory: {},
+        });
+
+        const { findByRole, findByText, findByLabelText } = render(OpenAIAPIKeySettings);
+
+        await fireEvent.click(await findByRole('button', { name: /clear api key/i }));
+
+        expect(saveGameState).toHaveBeenCalledWith(
+            expect.objectContaining({ openAI: { apiKey: '' } })
+        );
+        expect(await findByText(/openai api key cleared/i)).toBeInTheDocument();
+        expect(await findByLabelText(/openai api key/i)).toBeInTheDocument();
+    });
 });
