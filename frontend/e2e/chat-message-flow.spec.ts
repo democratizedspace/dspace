@@ -325,7 +325,12 @@ test.describe('Chat provider routing', () => {
         });
         const legacyRequests: string[] = [];
         await page.route(/\/api\/chat$|\/chat$/, async (route) => {
-            legacyRequests.push(route.request().url());
+            const request = route.request();
+            if (request.isNavigationRequest()) {
+                await route.continue();
+                return;
+            }
+            legacyRequests.push(request.url());
             await route.abort();
         });
 
