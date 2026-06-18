@@ -54,7 +54,16 @@ describe('Integrations chat entrypoint', () => {
             document.querySelector('[data-testid="chat-panel"][data-provider="openai"]')
         ).not.toBeInTheDocument();
         expect(screen.queryByTestId('token-place-disabled-banner')).not.toBeInTheDocument();
+        expect(
+            document.querySelectorAll('[data-testid="chat-panel"][data-provider="token-place"]')
+        ).toHaveLength(1);
+        expect(screen.getByTestId('chat-provider-label')).toHaveTextContent(
+            'Powered by token.place'
+        );
+        expect(screen.getByLabelText('Talk to')).toBeInTheDocument();
+        expect(document.querySelector('.persona-summary')).toBeInTheDocument();
         expect(screen.queryByText(/OpenAI API Key/i)).not.toBeInTheDocument();
+        expect(screen.queryByText(/OpenAI.?API.?Key.?Settings/i)).not.toBeInTheDocument();
     });
 
     it('renders OpenAI chat for users who select OpenAI and have an existing OpenAI API key', async () => {

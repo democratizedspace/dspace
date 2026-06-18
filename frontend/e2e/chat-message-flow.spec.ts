@@ -248,3 +248,113 @@ test.describe('Chat message flow', () => {
         await expect(spinner).not.toBeVisible();
     });
 });
+
+test.describe('Chat provider routing', () => {
+    test.beforeEach(async ({ page }) => {
+        await clearUserData(page);
+    });
+
+    test('OpenAI opt-in without a saved key shows settings guidance without making an OpenAI request', async ({
+        page,
+    }) => {
+        await page.addInitScript(() => {
+            localStorage.setItem(
+                'gameState',
+                JSON.stringify({ settings: { chatProvider: 'openai' }, openAI: { apiKey: '' } })
+            );
+            // @ts-expect-error test hook for OpenAI client
+            window.__openAIRequests = 0;
+            // @ts-expect-error test hook for OpenAI client
+            window.__DSpaceOpenAIClient = function () {
+                // @ts-expect-error test hook for OpenAI client
+                window.__openAIRequests += 1;
+                return {
+                    responses: {
+                        create: async () => ({ output_text: 'unexpected OpenAI reply' }),
+                    },
+                };
+            };
+        });
+
+        await page.goto('/chat');
+        await waitForHydration(page);
+
+        const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="openai"]');
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+        await chatPanel.getByRole('textbox').fill('Try OpenAI without a saved key');
+        await chatPanel.getByRole('button', { name: 'Send' }).click();
+
+        const banner = chatPanel.locator('.chat-error');
+        await expect(banner).toHaveAttribute('data-error-type', 'missing-key');
+        await expect(banner).toContainText(/OpenAI requires an API key/i);
+        await expect(banner.getByRole('link', { name: 'Open Settings' })).toHaveAttribute(
+            'href',
+            '/settings'
+        );
+        await expect(chatPanel.getByText(/Add your key on \/settings/i)).toBeVisible();
+        await expect.poll(() => page.evaluate(() => window.__openAIRequests)).toBe(0);
+    });
+
+    test('default token.place path sends shared prompt payload without OpenAI secrets or legacy endpoints', async ({
+        page,
+    }) => {
+        const tokenPlaceRequests: Array<{
+            url: string;
+            body: Record<string, unknown>;
+            headers: Record<string, string>;
+        }> = [];
+        await page.route('https://token.place/api/v1/chat/completions', async (route) => {
+            const request = route.request();
+            tokenPlaceRequests.push({
+                url: request.url(),
+                body: JSON.parse(request.postData() || '{}'),
+                headers: request.headers(),
+            });
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    choices: [{ message: { content: 'token.place grounded reply' } }],
+                    contextSources: [
+                        { type: 'provider', label: 'provider source should not show' },
+                    ],
+                    usage: { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 },
+                    metadata: { request_id: 'tp-123', provider: 'token.place' },
+                }),
+            });
+        });
+        const legacyRequests: string[] = [];
+        await page.route(/\/api\/chat$|\/chat$/, async (route) => {
+            legacyRequests.push(route.request().url());
+            await route.abort();
+        });
+
+        await page.goto('/chat');
+        await waitForHydration(page);
+
+        const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="token-place"]');
+        await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+        await chatPanel.getByRole('textbox').fill('How do DSPACE routes work?');
+        await chatPanel.getByRole('button', { name: 'Send' }).click();
+
+        await expect(chatPanel.getByText('token.place grounded reply')).toBeVisible();
+        expect(tokenPlaceRequests).toHaveLength(1);
+        expect(legacyRequests).toEqual([]);
+        const [{ url, body, headers }] = tokenPlaceRequests;
+        expect(url).toBe('https://token.place/api/v1/chat/completions');
+        expect(headers.authorization).toBeUndefined();
+        expect(JSON.stringify(body)).not.toContain('apiKey');
+        expect(JSON.stringify(body)).not.toContain('openAI');
+        expect(body.messages.some((message) => message.role === 'system')).toBe(true);
+        expect(body.messages.at(-1)).toMatchObject({
+            role: 'user',
+            content: 'How do DSPACE routes work?',
+        });
+        expect(body.metadata).toEqual({ client: 'dspace', provider: 'token.place' });
+
+        const sources = chatPanel.getByTestId('sources-used');
+        await expect(sources).toBeVisible();
+        await expect(sources).toContainText(/docs|route|changelog/i);
+        await expect(sources).not.toContainText('provider source should not show');
+    });
+});

@@ -41,6 +41,10 @@ test.describe('Chat NPC persona switching', () => {
         const chatPanel = page.locator('[data-testid="chat-panel"][data-provider="token-place"]');
         await expect(chatPanel).toBeVisible();
         await expect(chatPanel).toHaveAttribute('data-hydrated', 'true');
+        await expect(page.locator('[data-testid="chat-panel"]')).toHaveCount(1);
+        await expect(page.locator('[data-provider="openai"]')).toHaveCount(0);
+        await expect(page.getByText(/OpenAI API Key/i)).toHaveCount(0);
+        await expect(page.getByText(/OpenAI.?API.?Key.?Settings/i)).toHaveCount(0);
 
         const personaSelect = chatPanel.locator('#chat-persona');
         const personaSummary = chatPanel.locator('.persona-summary');
