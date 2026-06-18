@@ -90,7 +90,7 @@ External links in the More menu:
 - Settings → Chat provider lets you keep token.place or opt in to OpenAI.
 - More → Discord opens https://discord.gg/A3UAfYvnxM.
 - More → Twitter opens https://twitter.com/dspacegame.
-- More → Github opens https://github.com/democratizedspace/dspace.
+- More → GitHub opens https://github.com/democratizedspace/dspace.
 - Quests page → Manage button opens /quests/manage.
 - Quests manage page → Create button opens /quests/create.
 - Inventory page → Manage button opens /inventory/manage.
