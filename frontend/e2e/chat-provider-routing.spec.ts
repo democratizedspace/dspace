@@ -106,22 +106,22 @@ test.describe('Chat provider routing', () => {
         expect(JSON.stringify(request.headers)).not.toMatch(/authorization|apiKey|sk-/i);
     });
 
-    test('staging token.place base URL can be used without hitting production', async ({
+    test('default runtime token.place base URL overrides stale saved staging URL', async ({
         page,
     }) => {
         await seedState(page, {
             settings: { chatProvider: 'token-place' },
             tokenPlace: { url: 'https://staging.token.place/api' },
         });
-        const requests = await routeTokenPlaceSuccess(page, 'https://staging.token.place');
-        await blockLiveChatProviders(page, ['https://staging.token.place/api/v1/chat/completions']);
+        const requests = await routeTokenPlaceSuccess(page);
+        await blockLiveChatProviders(page, ['https://token.place/api/v1/chat/completions']);
 
         const chatPanel = await openChat(page, 'token-place');
-        await sendFromPanel(chatPanel, 'Use staging token place');
+        await sendFromPanel(chatPanel, 'Use runtime token.place');
         await expect(chatPanel.getByText('token.place assistant reply')).toBeVisible();
 
         expect(requests).toHaveLength(1);
-        expect(requests[0].url).toBe('https://staging.token.place/api/v1/chat/completions');
+        expect(requests[0].url).toBe('https://token.place/api/v1/chat/completions');
         expect(requests[0].url).not.toContain('/api/api/v1/chat/completions');
     });
 
