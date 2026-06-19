@@ -364,3 +364,20 @@ Manual/staging checks for release QA and hardening:
 - [ ] token.place responses parse `choices[0].message.content`.
 - [ ] API v2, streaming, token.place npm package integration, token.place auth/API keys, and
       legacy token.place/backend `/api/chat` or `/chat` endpoints are absent.
+
+## Post-staging correction: deployment-time token.place routing
+
+The first staging smoke test exposed a routing gap in the original Vite-only plan: building
+`VITE_TOKEN_PLACE_URL` into the browser bundle is insufficient when a single immutable DSPACE image
+is promoted from staging to production. A staging deployment that reused a production-built bundle
+continued to call `https://token.place/api/v1/chat/completions`.
+
+DSPACE now treats SSR runtime configuration as authoritative deployment configuration for
+`/chat`. The server resolves public, non-secret `DSPACE_TOKEN_PLACE_URL` and
+`DSPACE_TOKEN_PLACE_CHAT_MODEL` values at request time, exposes the same resolved values from
+`/config.json`, and passes them as hydrated Chat props so the browser can still call token.place
+directly without an extra config fetch for each chat request. Existing `VITE_TOKEN_PLACE_URL` and
+`VITE_TOKEN_PLACE_CHAT_MODEL` names remain local/build compatibility fallbacks.
+
+This correction does not change token.place API v1, provider selection, zero-auth behavior,
+non-streaming requests, or the invariant that DSPACE must not send token.place credentials.

@@ -47,6 +47,11 @@
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
+    export let tokenPlace = undefined;
+
+    $: runtimeTokenPlaceUrl = tokenPlace?.url;
+    $: runtimeTokenPlaceModel = tokenPlace?.model;
+
     const message = writable('');
     const messageHistory = writable([]);
     const saveSnapshotHintStorageKey = 'dspace.chat.dismissSaveSnapshotHint';
@@ -217,6 +222,8 @@
                     : await TokenPlaceChatV2(historyForApi, {
                           persona: currentPersona,
                           promptPayload: debugPayload,
+                          runtimeUrl: runtimeTokenPlaceUrl,
+                          runtimeModel: runtimeTokenPlaceModel,
                       });
             providerUsage = aiResponse?.usage ?? null;
             providerMetadata = aiResponse?.metadata ?? null;
@@ -301,6 +308,8 @@
         return [
             `Selected provider: ${activeProvider}`,
             `Prompt version: ${promptVersionLabel}`,
+            runtimeTokenPlaceUrl ? `token.place URL: ${runtimeTokenPlaceUrl}` : null,
+            runtimeTokenPlaceModel ? `token.place model: ${runtimeTokenPlaceModel}` : null,
             `App build SHA: ${appGitShaDisplay}`,
             `App build SHA source: ${appGitShaSource}`,
             `Docs RAG SHA: ${docsRagGitSha}`,
@@ -635,6 +644,18 @@
                     <span>Selected provider</span>
                     <span class="debug-mono">{activeProvider}</span>
                 </div>
+                {#if runtimeTokenPlaceUrl}
+                    <div class="debug-meta-row" data-testid="debug-token-place-url-row">
+                        <span>token.place URL</span>
+                        <span class="debug-mono">{runtimeTokenPlaceUrl}</span>
+                    </div>
+                {/if}
+                {#if runtimeTokenPlaceModel}
+                    <div class="debug-meta-row" data-testid="debug-token-place-model-row">
+                        <span>token.place model</span>
+                        <span class="debug-mono">{runtimeTokenPlaceModel}</span>
+                    </div>
+                {/if}
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
                     <span>App build SHA</span>
                     <span class="debug-mono">{appGitShaDisplay}</span>

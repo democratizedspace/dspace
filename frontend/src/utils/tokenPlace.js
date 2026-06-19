@@ -5,10 +5,14 @@ import {
     createTokenPlaceHttpError,
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
+import {
+    DEFAULT_TOKEN_PLACE_CHAT_MODEL,
+    DEFAULT_TOKEN_PLACE_ORIGIN,
+    normalizeTokenPlaceBaseUrl,
+    resolveTokenPlaceRuntimeConfig,
+} from './tokenPlaceConfig.js';
 
-const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
-const DEFAULT_CHAT_MODEL = 'gpt-5-chat-latest';
 const METADATA_DENY_PATTERN =
     /(?:key|token|secret|credential|password|authorization|auth|inventory|save|state|player)/i;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
@@ -23,11 +27,6 @@ const readEnvValue = (key) => {
     return undefined;
 };
 
-const stripTrailingSlashes = (value) =>
-    String(value || '')
-        .trim()
-        .replace(/\/+$/g, '');
-
 const isPlainObject = (value) =>
     Boolean(value) &&
     typeof value === 'object' &&
@@ -38,15 +37,10 @@ export const resolveTokenPlaceBaseUrl = (options = {}) => {
     const candidate =
         options.url ||
         state?.tokenPlace?.url ||
+        options.runtimeUrl ||
         readEnvValue('VITE_TOKEN_PLACE_URL') ||
-        DEFAULT_ORIGIN;
-    let baseUrl = stripTrailingSlashes(candidate) || DEFAULT_ORIGIN;
-
-    baseUrl = baseUrl.replace(/\/api\/v1\/chat\/completions$/i, '');
-    baseUrl = baseUrl.replace(/\/api\/v1$/i, '');
-    baseUrl = baseUrl.replace(/\/api$/i, '');
-
-    return stripTrailingSlashes(baseUrl) || DEFAULT_ORIGIN;
+        DEFAULT_TOKEN_PLACE_ORIGIN;
+    return normalizeTokenPlaceBaseUrl(candidate);
 };
 
 export const buildTokenPlaceChatCompletionsUrl = (baseUrl) =>
@@ -54,8 +48,11 @@ export const buildTokenPlaceChatCompletionsUrl = (baseUrl) =>
 
 export const getTokenPlaceChatModel = (options = {}) =>
     String(
-        options.model || readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') || DEFAULT_CHAT_MODEL
-    ).trim() || DEFAULT_CHAT_MODEL;
+        options.model ||
+            options.runtimeModel ||
+            readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') ||
+            DEFAULT_TOKEN_PLACE_CHAT_MODEL
+    ).trim() || DEFAULT_TOKEN_PLACE_CHAT_MODEL;
 
 const sanitizeChatMessage = (message) => ({
     role: VALID_CHAT_ROLES.has(message?.role) ? message.role : 'user',
@@ -114,6 +111,8 @@ const parseErrorPayload = async (response) => {
     }
 };
 
+export { resolveTokenPlaceRuntimeConfig };
+
 export const TokenPlaceChatV2 = async (messages, options = {}) => {
     await ready;
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
@@ -127,7 +126,9 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
     };
 
     const baseUrl = resolveTokenPlaceBaseUrl(
-        options.url ? { url: options.url } : { state: promptPayload.gameState }
+        options.url
+            ? { url: options.url }
+            : { state: promptPayload.gameState, runtimeUrl: options.runtimeUrl }
     );
     const url = `${baseUrl}${CHAT_COMPLETIONS_PATH}`;
 
