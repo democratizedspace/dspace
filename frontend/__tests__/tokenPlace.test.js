@@ -106,7 +106,9 @@ describe('token.place API v1 client', () => {
         await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
             metadata: {
                 conversation_id: 'conv-42',
+                note: 'contains secret material',
                 apiKey: 'token-place-secret',
+                label: 'safe local correlation',
                 playerSave: { raw: true },
                 token: 'hidden',
             },
@@ -120,6 +122,7 @@ describe('token.place API v1 client', () => {
         expect(serialized).not.toContain('hidden');
         expect(body.metadata).toEqual({
             conversation_id: 'conv-42',
+            label: 'safe local correlation',
             client: 'dspace',
             provider: 'token.place',
         });

@@ -11,6 +11,8 @@ const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
 const DEFAULT_CHAT_MODEL = 'gpt-5-chat-latest';
 const METADATA_DENY_PATTERN =
     /(?:key|token|secret|credential|password|authorization|auth|inventory|save|state|player)/i;
+const METADATA_VALUE_DENY_PATTERN =
+    /(?:sk-[a-z0-9_-]+|token-place-secret|openai|api[_-]?key|secret|credential|password|authorization|bearer\s+)/i;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
 
 const readEnvValue = (key) => {
@@ -67,7 +69,10 @@ export const sanitizeTokenPlaceMessages = (messages = []) =>
     (Array.isArray(messages) ? messages : []).map(sanitizeChatMessage);
 
 const sanitizeMetadataValue = (value) => {
-    if (typeof value === 'string') return value.slice(0, 200);
+    if (typeof value === 'string') {
+        const trimmedValue = value.slice(0, 200);
+        return METADATA_VALUE_DENY_PATTERN.test(trimmedValue) ? undefined : trimmedValue;
+    }
     if (typeof value === 'number' || typeof value === 'boolean') return value;
     return undefined;
 };
