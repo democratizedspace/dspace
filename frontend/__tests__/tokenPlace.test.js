@@ -107,6 +107,11 @@ describe('token.place API v1 client', () => {
             metadata: {
                 conversation_id: 'conv-42',
                 apiKey: 'token-place-secret',
+                credential: 'token-place-credential',
+                authorization: 'Bearer token-place-auth',
+                playerInventory: ['secret item'],
+                rawSaveData: { inventory: ['hidden'] },
+                secret: 'hidden-secret',
                 playerSave: { raw: true },
                 token: 'hidden',
             },
@@ -117,6 +122,10 @@ describe('token.place API v1 client', () => {
         const serialized = JSON.stringify({ headers: init.headers, body });
         expect(serialized).not.toContain('sk-secret-openai-key');
         expect(serialized).not.toContain('token-place-secret');
+        expect(serialized).not.toContain('token-place-credential');
+        expect(serialized).not.toContain('token-place-auth');
+        expect(serialized).not.toContain('secret item');
+        expect(serialized).not.toContain('hidden-secret');
         expect(serialized).not.toContain('hidden');
         expect(body.metadata).toEqual({
             conversation_id: 'conv-42',
