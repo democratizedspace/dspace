@@ -48,6 +48,7 @@ describe('token.place API v1 client', () => {
         jest.resetAllMocks();
         delete process.env.VITE_TOKEN_PLACE_URL;
         delete process.env.VITE_TOKEN_PLACE_CHAT_MODEL;
+        delete process.env.VITE_TOKEN_PLACE_ENABLED;
     });
 
     test('fresh/default state posts to token.place API v1 chat completions', async () => {
@@ -55,6 +56,16 @@ describe('token.place API v1 client', () => {
         const { url, init } = getFetchCall();
         expect(url).toBe('https://token.place/api/v1/chat/completions');
         expect(init.method).toBe('POST');
+    });
+
+    test('legacy enabled flags do not disable default token.place chat', async () => {
+        process.env.VITE_TOKEN_PLACE_ENABLED = 'false';
+        loadGameState.mockReturnValue({ tokenPlace: { enabled: false } });
+
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
+
+        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(getFetchCall().url).toBe('https://token.place/api/v1/chat/completions');
     });
 
     test('VITE_TOKEN_PLACE_URL staging override works', async () => {
