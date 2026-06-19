@@ -84,7 +84,6 @@ const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
 const seedTokenPlaceDefaultState = async (page: Page) => {
     await page.addInitScript(() => {
         const state = {
-            tokenPlace: { enabled: false },
             quests: {},
             inventory: {},
             processes: {},

@@ -1,4 +1,4 @@
-import { loadGameState, ready } from './gameState/common.js';
+import { ready } from './gameState/common.js';
 import { buildChatPrompt, validateChatResponseText } from './openAI.js';
 import {
     createMalformedTokenPlaceResponseError,
@@ -34,12 +34,7 @@ const isPlainObject = (value) =>
     Object.getPrototypeOf(value) === Object.prototype;
 
 export const resolveTokenPlaceBaseUrl = (options = {}) => {
-    const state = options.state || loadGameState();
-    const candidate =
-        options.url ||
-        state?.tokenPlace?.url ||
-        readEnvValue('VITE_TOKEN_PLACE_URL') ||
-        DEFAULT_ORIGIN;
+    const candidate = options.url || readEnvValue('VITE_TOKEN_PLACE_URL') || DEFAULT_ORIGIN;
     let baseUrl = stripTrailingSlashes(candidate) || DEFAULT_ORIGIN;
 
     baseUrl = baseUrl.replace(/\/api\/v1\/chat\/completions$/i, '');
@@ -114,7 +109,7 @@ const parseErrorPayload = async (response) => {
     }
 };
 
-export const TokenPlaceChatV2 = async (messages, options = {}) => {
+export const requestTokenPlaceChatCompletion = async (messages, options = {}) => {
     await ready;
     const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
     const contextSources = Array.isArray(promptPayload.contextSources)
@@ -126,9 +121,7 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         metadata: buildTokenPlaceMetadata(options.metadata),
     };
 
-    const baseUrl = resolveTokenPlaceBaseUrl(
-        options.url ? { url: options.url } : { state: promptPayload.gameState }
-    );
+    const baseUrl = resolveTokenPlaceBaseUrl(options.url ? { url: options.url } : {});
     const url = `${baseUrl}${CHAT_COMPLETIONS_PATH}`;
 
     let response;
@@ -170,6 +163,6 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
 };
 
 export const tokenPlaceChat = async (messages, options = {}) => {
-    const result = await TokenPlaceChatV2(messages, options);
+    const result = await requestTokenPlaceChatCompletion(messages, options);
     return result.text;
 };

@@ -12,7 +12,7 @@ jest.mock('../src/utils/docsRag.js', () => ({
 
 const { loadGameState } = await import('../src/utils/gameState/common.js');
 const {
-    TokenPlaceChatV2,
+    requestTokenPlaceChatCompletion,
     buildTokenPlaceChatCompletionsUrl,
     buildTokenPlaceMetadata,
     extractTokenPlaceAssistantText,
@@ -69,11 +69,11 @@ describe('token.place API v1 client', () => {
         expect(getFetchCall().url).toBe('https://token.place/api/v1/chat/completions');
     });
 
-    test('state tokenPlace url compatibility override works', async () => {
+    test('saved token.place state does not override approved URL env var', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://env.token.place';
         loadGameState.mockReturnValue({ tokenPlace: { url: 'https://state.token.place/' } });
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(getFetchCall().url).toBe('https://state.token.place/api/v1/chat/completions');
+        expect(getFetchCall().url).toBe('https://env.token.place/api/v1/chat/completions');
     });
 
     test('legacy /api base normalizes without /api/api duplication', () => {
@@ -103,7 +103,7 @@ describe('token.place API v1 client', () => {
 
     test('request is zero-auth and excludes secrets from headers/body/metadata', async () => {
         loadGameState.mockReturnValue({ openAI: { apiKey: 'sk-secret-openai-key' } });
-        await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
+        await requestTokenPlaceChatCompletion([{ role: 'user', content: 'hello' }], {
             metadata: {
                 conversation_id: 'conv-42',
                 apiKey: 'token-place-secret',
@@ -126,7 +126,7 @@ describe('token.place API v1 client', () => {
     });
 
     test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
-        await TokenPlaceChatV2([
+        await requestTokenPlaceChatCompletion([
             {
                 role: 'developer',
                 content: 'hello',
@@ -180,7 +180,7 @@ describe('token.place API v1 client', () => {
             })
         );
         const dspaceSources = [{ title: 'DSPACE docs', url: '/docs/about' }];
-        const result = await TokenPlaceChatV2([], {
+        const result = await requestTokenPlaceChatCompletion([], {
             promptPayload: {
                 combinedMessages: [{ role: 'user', content: 'hello' }],
                 contextSources: dspaceSources,

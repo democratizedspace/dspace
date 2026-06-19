@@ -11,11 +11,11 @@ retrieval or RAG in the vector sense. The current system is a deterministic “c
 concatenates a subset of quests, items, processes, achievements, and live player state into the
 system prompt. That makes the assistant helpful, but it has three shortcomings:
 
-1) **Discoverability:** users cannot see *what sources* the assistant used, which makes it harder
+1. **Discoverability:** users cannot see _what sources_ the assistant used, which makes it harder
    to trust or debug answers.
-2) **Hallucination mitigation:** QA expects “don’t invent” guardrails and explicit uncertainty.
+2. **Hallucination mitigation:** QA expects “don’t invent” guardrails and explicit uncertainty.
    Today only the default dChat persona has that language.
-3) **Coverage drift:** QA policy expects `/docs`, routes, and release notes to be part of the
+3. **Coverage drift:** QA policy expects `/docs`, routes, and release notes to be part of the
    grounding context, but the current knowledge pack does not include them.
 
 This design doc tightens the spec to match reality, then proposes a small, repo-consistent
@@ -42,29 +42,32 @@ without introducing heavyweight infrastructure.
 ## Current Architecture (as-is)
 
 ### Chat UI + message flow
+
 - The `/chat` page hydrates the Svelte chat integrations via
   `frontend/src/pages/chat/index.astro` and `frontend/src/pages/chat/svelte/Integrations.svelte`.
 - Chat renders through the provider-aware panel in
   `frontend/src/pages/chat/svelte/ChatPanel.svelte`.
 - The panel calls `GPT5ChatV2` from `frontend/src/utils/openAI.js` only when OpenAI is selected
-  in Settings, and calls `TokenPlaceChatV2` from `frontend/src/utils/tokenPlace.js` for the
+  in Settings, and calls `requestTokenPlaceChatCompletion` from `frontend/src/utils/tokenPlace.js` for the
   default token.place path.
 
 ### Retrieval / “RAG” context (current)
+
 - The only retrieval mechanism is **string assembly** inside
   `frontend/src/utils/dchatKnowledge.js` via `buildDchatKnowledge(gameState)`.
 - Sources used today:
-  - Items catalog: `frontend/src/pages/inventory/json/items/index.js`
-  - Processes catalog: `frontend/src/generated/processes.json`
-  - Quests catalog: `frontend/src/pages/quests/json/**/*.json` via `import.meta.glob`
-  - Achievements: `frontend/src/utils/achievements.js`
-  - Live player state: `loadGameState()` in `frontend/src/utils/gameState/common.js`
+    - Items catalog: `frontend/src/pages/inventory/json/items/index.js`
+    - Processes catalog: `frontend/src/generated/processes.json`
+    - Quests catalog: `frontend/src/pages/quests/json/**/*.json` via `import.meta.glob`
+    - Achievements: `frontend/src/utils/achievements.js`
+    - Live player state: `loadGameState()` in `frontend/src/utils/gameState/common.js`
 - The summary is capped with hard limits (ex: `MAX_ITEMS`, `MAX_PROCESSES`, `MAX_QUESTS`) and
   truncated descriptions; there is **no chunking** and **no ranking** beyond sorting.
 - The summary is injected as a **system message** with the prefix
   `DSPACE knowledge base:` in `frontend/src/utils/openAI.js`.
 
 ### Docs pack provenance + environment wiring
+
 - The docs RAG pack includes explicit provenance metadata (`envName`, `docsGitSha`, `generatedAt`,
   optional `sourceRef`) to keep staging/prod from silently using stale docs packs.
 - `envName` is derived from `DSPACE_ENV` (or `VITE_DSPACE_ENV` / `NODE_ENV` as fallbacks).
@@ -74,6 +77,7 @@ without introducing heavyweight infrastructure.
   provenance without digging into artifacts.
 
 ### Prompting + response shape
+
 - Persona system prompts are defined in `frontend/src/data/npcPersonas.js` and passed into
   `GPT5Chat` as the system message. Only the **dChat persona** currently includes explicit
   “If you’re unsure, say you don’t know” language.
@@ -86,12 +90,14 @@ without introducing heavyweight infrastructure.
 - token.place chat builds a simple system + user message list and returns a string reply.
 
 ### Error handling + uncertainty
+
 - OpenAI errors are mapped to user-facing copy in `frontend/src/utils/openAI.js` and surfaced
   by `OpenAIChat.svelte`.
 - token.place errors are caught in the provider-aware Chat panel and summarized without leaking raw provider details.
 - There is **no UI affordance** to show what sources were used or how much context was present.
 
 ### Telemetry
+
 - Chat-related telemetry is limited to `console.error` in the client. There is no structured
   RAG logging or “context used” trace.
 
@@ -99,60 +105,61 @@ without introducing heavyweight infrastructure.
 
 ## Consistency with QA policy (docs/qa/v3.md)
 
-QA’s AI chat section is explicit about both *polite failure* and *grounded answers*.
+QA’s AI chat section is explicit about both _polite failure_ and _grounded answers_.
 Relevant excerpts:
 
 > Goal: reduce “confident but wrong” game answers before v3 launch. Focus on content grounding,
 > context coverage, and clear “I don’t know” behavior when the answer is not in context.
-This design satisfies it by making the knowledge summary explicit and adding deterministic sources
-in the chat UI, so uncertainty and coverage are visible to QA (file touchpoints:
-`frontend/src/utils/dchatKnowledge.js`, `frontend/src/utils/openAI.js`,
-`frontend/src/pages/chat/svelte/OpenAIChat.svelte`).
+> This design satisfies it by making the knowledge summary explicit and adding deterministic sources
+> in the chat UI, so uncertainty and coverage are visible to QA (file touchpoints:
+> `frontend/src/utils/dchatKnowledge.js`, `frontend/src/utils/openAI.js`,
+> `frontend/src/pages/chat/svelte/OpenAIChat.svelte`).
 
 > - [ ] RAG includes `/docs` markdown sources from `frontend/src/pages/docs/md/` (especially custom
 >       content, quests, processes, and inventory docs).
 > - [ ] RAG includes a route/map index (ex: `docs/ROUTES.md` and/or a generated sitemap) to avoid
 >       invented URLs.
-This design satisfies it by extending the knowledge summary with `/docs` titles + slugs and the
-route index (file touchpoints: `frontend/src/utils/dchatKnowledge.js`, `docs/ROUTES.md`,
-`frontend/src/pages/docs/json/sections.json`).
-DocsRag now layers deterministic forced-inclusion heuristics (routes, changelog, process
-semantics) on top of MiniSearch results to avoid lexical misses in the chat context packer
-(`frontend/src/utils/docsRag.js`).
+>       This design satisfies it by extending the knowledge summary with `/docs` titles + slugs and the
+>       route index (file touchpoints: `frontend/src/utils/dchatKnowledge.js`, `docs/ROUTES.md`,
+>       `frontend/src/pages/docs/json/sections.json`).
+>       DocsRag now layers deterministic forced-inclusion heuristics (routes, changelog, process
+>       semantics) on top of MiniSearch results to avoid lexical misses in the chat context packer
+>       (`frontend/src/utils/docsRag.js`).
 
 > - [ ] System prompt explicitly forbids inventing items, quests, processes, or routes that are not
 >       in context; require “check docs” or ask a clarifying question instead.
 > - [ ] System prompt includes an explicit “never invent game facts” rule, points to
 >       `docs/ROUTES.md` or asks for a save snapshot when unsure, and is versioned/synced between
 >       staging and prod.
-This design satisfies it by appending a shared “never invent” guardrail to every persona prompt
-so every provider uses the same uncertainty language (file touchpoints:
-`frontend/src/data/npcPersonas.js`, `frontend/src/utils/openAI.js`).
+>       This design satisfies it by appending a shared “never invent” guardrail to every persona prompt
+>       so every provider uses the same uncertainty language (file touchpoints:
+>       `frontend/src/data/npcPersonas.js`, `frontend/src/utils/openAI.js`).
 
 > - [ ] If context is missing, model responds with uncertainty + asks a clarifying question or
 >       suggests the exact doc page to consult.
-This design satisfies it by requiring the guardrail sentence to explicitly instruct “I don’t know”
-responses and by surfacing source lists so QA can confirm when context is missing (file
-touchpoints: `frontend/src/data/npcPersonas.js`, `frontend/src/pages/chat/svelte/Message.svelte`).
+>       This design satisfies it by requiring the guardrail sentence to explicitly instruct “I don’t know”
+>       responses and by surfacing source lists so QA can confirm when context is missing (file
+>       touchpoints: `frontend/src/data/npcPersonas.js`, `frontend/src/pages/chat/svelte/Message.svelte`).
 
 > - [ ] Quest graph diagnostics surface and export reports (Map + Diagnostics tabs)
-This design satisfies the *debug visibility* expectation by proposing a minimal, opt-in chat
-diagnostics hook that exposes context metadata when telemetry is enabled (file touchpoints:
-`frontend/src/utils/openAI.js`, `frontend/src/pages/chat/svelte/OpenAIChat.svelte`).
+>       This design satisfies the _debug visibility_ expectation by proposing a minimal, opt-in chat
+>       diagnostics hook that exposes context metadata when telemetry is enabled (file touchpoints:
+>       `frontend/src/utils/openAI.js`, `frontend/src/pages/chat/svelte/OpenAIChat.svelte`).
 
 > - [ ] E2E tests pass (Playwright or equivalent)
-This design satisfies it by adding a deterministic “Sources used” UI assertion to the existing
-Playwright suite (file touchpoints: `frontend/e2e/chat-rag-context.spec.ts`).
+>       This design satisfies it by adding a deterministic “Sources used” UI assertion to the existing
+>       Playwright suite (file touchpoints: `frontend/e2e/chat-rag-context.spec.ts`).
 
 Today’s implementation partially satisfies the “fail politely” rule via error mapping, but
 **does not satisfy** the RAG coverage and “don’t invent” guardrails for all personas. This
 spec aligns the design doc to QA by:
 
-1) Adding **docs + routes** to the knowledge summary.
-2) Standardizing the **uncertainty + “don’t invent”** language for every persona prompt.
-3) Surfacing **context sources** in the UI so QA can verify grounding.
+1. Adding **docs + routes** to the knowledge summary.
+2. Standardizing the **uncertainty + “don’t invent”** language for every persona prompt.
+3. Surfacing **context sources** in the UI so QA can verify grounding.
 
 ### If QA doc is outdated
+
 **What’s missing today:** QA policy does not spell out that v3 “RAG” is a **client-only,
 deterministic knowledge summary** nor that source visibility is expected via UI disclosures
 instead of server logs. It also doesn’t yet acknowledge the planned “Sources used” block or
@@ -176,10 +183,12 @@ subsection describes what to add, where it lives, and how QA can validate it. Th
 below map 1:1 to the QA 9.4.2 checklist and are additive to the staged design plan that follows.
 
 #### A) Custom content blind spot (PR-only answers)
+
 **Problem:** The model claims custom content is only possible via PRs or repo edits and omits the
 in-game editor, import/export, and backup workflows.
 
 **Fix:**
+
 - **Knowledge coverage:** add the custom content docs + routes to the knowledge summary so the
   model sees the editor, backup, and import/export flows in context. Source the docs index from
   `frontend/src/pages/docs/json/sections.json` and include `/docs` entries for custom content and
@@ -195,9 +204,11 @@ in-game editor, import/export, and backup workflows.
 backup/import/export workflows with a `/docs` reference, and should not claim PRs are required.
 
 #### B) Stale content drift (v2/v3 mismatch)
+
 **Problem:** The model describes deferred or removed features (e.g., token.place as active in v3).
 
 **Fix:**
+
 - **Knowledge coverage:** include the v3 changelog or release notes in the context summary, and
   ensure the doc index references the current `/docs/changelog` entry.
 - **Prompt guardrail:** add a sentence to all personas that the assistant must reference the v3
@@ -208,21 +219,25 @@ backup/import/export workflows with a `/docs` reference, and should not claim PR
 **QA validation:** prompt “Is token.place active?” should answer “not in v3” and cite the v3 docs.
 
 #### C) Non-reasoning model regression (guessing)
+
 **Problem:** The non-reasoning `/chat` configuration guesses instead of saying “I don’t know.”
 
 **Fix:**
+
 - **Shared guardrail:** make the “don’t invent / ask a clarifying question” sentence part of the
-  system prompt for *all* personas and providers so the non-reasoning model has the same rule.
+  system prompt for _all_ personas and providers so the non-reasoning model has the same rule.
 - **Regression probes:** add 2–3 scripted prompt checks that expect a clarifying question or a
   doc reference when context is missing, and run them against the non-reasoning config.
 
 **QA validation:** non-reasoning probes should respond with uncertainty + doc pointers, not guesses.
 
 #### D) Made-up game state (invented inventory/quests)
+
 **Problem:** The model claims it can see a user’s balances, inventory, or quest progress without a
 provided save.
 
 **Fix:**
+
 - **Guardrail:** explicitly forbid claiming access to player state unless a save snapshot or game
   state is provided. Require a clarification request when state is absent.
 - **Context labeling:** when `buildDchatKnowledge` includes game state, label it as “Snapshot:
@@ -232,9 +247,11 @@ provided save.
 **QA validation:** prompt “What’s in my inventory?” should refuse or request a save snapshot.
 
 #### E) Incorrect routes/UX (invented pages or menu paths)
+
 **Problem:** The model recommends routes or menus that don’t exist.
 
 **Fix:**
+
 - **Route index grounding:** include `docs/ROUTES.md` (or a generated route list) in the context
   summary and add `route` entries to the source list.
 - **Answering rule:** system prompt should instruct the assistant to reference `/docs` or
@@ -245,9 +262,11 @@ provided save.
 **QA validation:** prompt “What are the current game routes?” should cite `docs/ROUTES.md`.
 
 #### F) Incorrect data semantics (requires/consumes/creates mixups)
+
 **Problem:** The model swaps process semantics or misstates duration behavior.
 
 **Fix:**
+
 - **Docs grounding:** ensure the processes doc includes precise definitions of
   requires/consumes/creates and duration normalization; include it in the knowledge summary.
 - **Prompt reminder:** add a short line to the guardrail sentence: “If you mention process
@@ -257,9 +276,11 @@ provided save.
 **QA validation:** prompts about process recipes should match the doc semantics exactly.
 
 #### G) Overconfident precision (exact numbers without sources)
+
 **Problem:** The model gives exact counts, durations, or drop rates without grounding.
 
 **Fix:**
+
 - **Guardrail:** require explicit source backing when giving exact numbers; otherwise respond with
   ranges or uncertainty.
 - **Context limitation:** keep the knowledge summary trimmed to only known facts; avoid synthesizing
@@ -274,16 +295,17 @@ provided save.
 source list.
 
 Proposed return shape:
+
 ```ts
 {
-  summary: string;
-  sources: Array<{
-    type: 'item' | 'process' | 'quest' | 'achievement' | 'doc' | 'route' | 'state';
-    id: string;
-    label: string;
-    url?: string;
-    detail?: string;
-  }>;
+    summary: string;
+    sources: Array<{
+        type: 'item' | 'process' | 'quest' | 'achievement' | 'doc' | 'route' | 'state';
+        id: string;
+        label: string;
+        url?: string;
+        detail?: string;
+    }>;
 }
 ```
 
@@ -299,12 +321,14 @@ return shape) so callers like `GPT5Chat` can be updated incrementally.
 ### 2) Extend Context Coverage with `/docs` + routes
 
 **Docs grounding (lightweight):**
+
 - Use the existing docs index consumed by the live `/docs` page:
   `frontend/src/pages/docs/json/sections.json` (imported by
   `frontend/src/pages/docs/index.astro`).
 - Emit a short “Docs index” summary (titles + slugs) and add each doc to the `sources` list.
 
 **Routes grounding:**
+
 - Include the canonical route list from `docs/ROUTES.md` in the knowledge summary as a short
   section.
 - Add a `route` source entry for each route group to avoid invented URLs.
@@ -316,9 +340,10 @@ as a proposal (not an existing dependency).
 
 ### 3) Standardize “don’t invent” prompts across personas
 
-**Change:** add a shared guardrail sentence to *every* persona system prompt (not just dChat).
+**Change:** add a shared guardrail sentence to _every_ persona system prompt (not just dChat).
 
 Suggested sentence to append:
+
 > “Never invent quests, items, processes, routes, or player state. If you’re unsure, say you
 > don’t know and point to the relevant `/docs` page or ask a clarifying question.”
 
@@ -334,27 +359,28 @@ Suggested sentence to append:
 - Update `OpenAIChat.svelte` to attach `contextSources` to the assistant message object.
 - Render a collapsible “Sources used” block in `Message.svelte` (or a new subcomponent).
 
-**Why:** this gives QA and players visibility into *what context* the model saw without
+**Why:** this gives QA and players visibility into _what context_ the model saw without
 parsing the model response itself.
 
 ### 4.1) Sources + citations contract (single place)
 
 **Contract (proposed):**
+
 - `GPT5ChatV2` returns:
-  ```ts
-  {
-    text: string;
-    contextSources: Array<{ type: string; id: string; label: string; url?: string }>;
-  }
-  ```
+    ```ts
+    {
+        text: string;
+        contextSources: Array<{ type: string; id: string; label: string; url?: string }>;
+    }
+    ```
 - `OpenAIChat.svelte` stores the data on the assistant message as:
-  ```ts
-  {
-    role: 'assistant';
-    content: string;
-    contextSources?: Array<{ type: string; id: string; label: string; url?: string }>;
-  }
-  ```
+    ```ts
+    {
+      role: 'assistant';
+      content: string;
+      contextSources?: Array<{ type: string; id: string; label: string; url?: string }>;
+    }
+    ```
 - `Message.svelte` renders a collapsed disclosure labeled “Sources used” and lists sources in
   deterministic order (e.g., type then label) from the knowledge builder output. The list is
   **not** derived from the model response, and the UI does not accept LLM self-reported
@@ -365,6 +391,7 @@ parsing the model response itself.
 **Goal:** enable QA to inspect context without leaking secrets.
 
 Proposal (opt-in):
+
 - When `telemetry.enabled` is true in the runtime config endpoint (currently served at
   `/config.json`), store the last request’s `contextSources` + summary length in
   `window.__DSpaceChatDiagnostics` for QA.
@@ -377,17 +404,22 @@ Proposal (opt-in):
 ## Implementation Plan
 
 ### Stage 1 — Source registry + persona guardrails
+
 **Changes:**
+
 - Update `buildDchatKnowledge` to return `{ summary, sources }`.
 - Add shared “don’t invent” guardrails to all persona prompts.
 
 **Acceptance criteria:**
+
 - Chat requests still include a single system prompt + knowledge summary.
 - Source list includes items, quests, processes, achievements, and state snapshots.
 - Persona prompts in `npcPersonas.js` all include the explicit uncertainty language.
 
 ### Stage 2 — Docs + routes grounding
+
 **Changes:**
+
 - Add docs index + routes list to `buildDchatKnowledge` summary.
 - Add corresponding `sources` entries.
 - Generate build-time MiniSearch artifacts for docs chunks and routes under
@@ -396,18 +428,22 @@ Proposal (opt-in):
   small, URL-anchored docs excerpt block into the system prompt.
 
 **Acceptance criteria:**
+
 - Knowledge summary contains `/docs` titles + slugs and route index data.
 - QA probes about custom content, routes, and v3 release notes are answerable
   without invented URLs.
 
 ### Stage 3 — UI citations + diagnostics
+
 **Changes:**
+
 - Introduce `GPT5ChatV2` (or similar) response shape and update
   `OpenAIChat.svelte` message objects to use it.
 - Render “Sources used” in `Message.svelte` (collapsed by default).
 - Add `window.__DSpaceChatDiagnostics` when telemetry is enabled.
 
 **Acceptance criteria:**
+
 - Each assistant reply shows a deterministic list of sources used for that turn.
 - QA can inspect source lists in the UI and via diagnostics.
 
@@ -416,25 +452,28 @@ Proposal (opt-in):
 ## Testing Plan (repo-aligned)
 
 ### Unit tests
+
 - `frontend/__tests__/dchatKnowledge.test.js` (or new file):
-  - Ensures `buildDchatKnowledge` returns `summary` + `sources`.
-  - Verifies docs + routes entries appear when enabled.
+    - Ensures `buildDchatKnowledge` returns `summary` + `sources`.
+    - Verifies docs + routes entries appear when enabled.
 - Update `tests/gpt5ChatResponses.test.ts` (existing) to assert the new return shape and
   `contextSources` propagation.
 
 ### Simple eval harness plan (deterministic)
+
 - Extend `tests/gpt5ChatResponses.test.ts` with golden fixtures that assert:
-  - The generated prompt includes a knowledge summary and a shared “never invent” guardrail.
-  - `contextSources` propagates from `buildDchatKnowledge` through `GPT5ChatV2` to the returned
-    response object.
-  - When context is absent (mock empty summary + sources), the prompt contract includes the
-    “don’t know / ask clarifying question” instruction.
+    - The generated prompt includes a knowledge summary and a shared “never invent” guardrail.
+    - `contextSources` propagates from `buildDchatKnowledge` through `GPT5ChatV2` to the returned
+      response object.
+    - When context is absent (mock empty summary + sources), the prompt contract includes the
+      “don’t know / ask clarifying question” instruction.
 - Keep the harness purely unit-level: strict schema assertions and serialized fixtures only,
   no new services or infrastructure.
 
 ### E2E tests (Playwright)
+
 - Extend `frontend/e2e/chat-rag-context.spec.ts`:
-  - Verify that a “Sources used” block renders and contains item/quest/process IDs.
+    - Verify that a “Sources used” block renders and contains item/quest/process IDs.
 
 ---
 

@@ -133,10 +133,10 @@ test.describe('Settings route', () => {
                 const state = await readStoredGameState(page);
                 return {
                     chatProvider: state.settings?.chatProvider,
-                    tokenPlaceApiKey: state.tokenPlace?.apiKey ?? null,
+                    hasLegacyTokenPlaceState: Boolean(state.tokenPlace),
                 };
             })
-            .toEqual({ chatProvider: 'token-place', tokenPlaceApiKey: null });
+            .toEqual({ chatProvider: 'token-place', hasLegacyTokenPlaceState: false });
 
         await page.goto('/chat');
         await page.waitForLoadState('networkidle');

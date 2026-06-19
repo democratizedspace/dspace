@@ -9,7 +9,7 @@
         getOpenAIErrorSummary,
         GPT5ChatV2,
     } from '../../../utils/openAI.js';
-    import { TokenPlaceChatV2 } from '../../../utils/tokenPlace.js';
+    import { requestTokenPlaceChatCompletion } from '../../../utils/tokenPlace.js';
     import { getTokenPlaceErrorSummary } from '../../../utils/tokenPlaceErrors.js';
     import { writable } from 'svelte/store';
     import {
@@ -214,7 +214,7 @@
                           persona: currentPersona,
                           promptPayload: debugPayload,
                       })
-                    : await TokenPlaceChatV2(historyForApi, {
+                    : await requestTokenPlaceChatCompletion(historyForApi, {
                           persona: currentPersona,
                           promptPayload: debugPayload,
                       });
