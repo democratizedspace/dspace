@@ -47,6 +47,8 @@
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
+    export let tokenPlace = undefined;
+
     const message = writable('');
     const messageHistory = writable([]);
     const saveSnapshotHintStorageKey = 'dspace.chat.dismissSaveSnapshotHint';
@@ -217,6 +219,8 @@
                     : await TokenPlaceChatV2(historyForApi, {
                           persona: currentPersona,
                           promptPayload: debugPayload,
+                          runtimeUrl: tokenPlace?.url,
+                          runtimeModel: tokenPlace?.model,
                       });
             providerUsage = aiResponse?.usage ?? null;
             providerMetadata = aiResponse?.metadata ?? null;
@@ -300,6 +304,8 @@
     function getDebugInfoText() {
         return [
             `Selected provider: ${activeProvider}`,
+            tokenPlace?.url ? `token.place URL: ${tokenPlace.url}` : null,
+            tokenPlace?.model ? `token.place model: ${tokenPlace.model}` : null,
             `Prompt version: ${promptVersionLabel}`,
             `App build SHA: ${appGitShaDisplay}`,
             `App build SHA source: ${appGitShaSource}`,
@@ -635,6 +641,18 @@
                     <span>Selected provider</span>
                     <span class="debug-mono">{activeProvider}</span>
                 </div>
+                {#if tokenPlace?.url}
+                    <div class="debug-meta-row" data-testid="debug-token-place-url-row">
+                        <span>token.place URL</span>
+                        <span class="debug-mono">{tokenPlace.url}</span>
+                    </div>
+                {/if}
+                {#if tokenPlace?.model}
+                    <div class="debug-meta-row" data-testid="debug-token-place-model-row">
+                        <span>token.place model</span>
+                        <span class="debug-mono">{tokenPlace.model}</span>
+                    </div>
+                {/if}
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
                     <span>App build SHA</span>
                     <span class="debug-mono">{appGitShaDisplay}</span>

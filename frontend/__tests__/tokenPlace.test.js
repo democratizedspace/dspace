@@ -73,6 +73,43 @@ describe('token.place API v1 client', () => {
         expect(body.messages).toContainEqual({ role: 'user', content: 'hello' });
     });
 
+    test('runtime URL takes precedence over VITE_TOKEN_PLACE_URL and production default', async () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'https://env.token.place';
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], {
+            runtimeUrl: 'https://staging.token.place/api',
+        });
+        expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/chat/completions');
+    });
+
+    test('explicit URL overrides compatibility state and runtime URL', async () => {
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'https://state.token.place/' } });
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], {
+            url: 'https://explicit.token.place',
+            runtimeUrl: 'https://staging.token.place',
+        });
+        expect(getFetchCall().url).toBe('https://explicit.token.place/api/v1/chat/completions');
+    });
+
+    test('compatibility state URL overrides runtime URL intentionally', async () => {
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'https://state.token.place/' } });
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], {
+            runtimeUrl: 'https://staging.token.place',
+        });
+        expect(getFetchCall().url).toBe('https://state.token.place/api/v1/chat/completions');
+    });
+
+    test('runtime model overrides VITE model but not explicit model', async () => {
+        process.env.VITE_TOKEN_PLACE_CHAT_MODEL = 'vite-model';
+        expect(getTokenPlaceChatModel({ runtimeModel: 'runtime-model' })).toBe('runtime-model');
+        expect(
+            getTokenPlaceChatModel({ model: 'explicit-model', runtimeModel: 'runtime-model' })
+        ).toBe('explicit-model');
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], {
+            runtimeModel: 'runtime-model',
+        });
+        expect(getFetchCall().body.model).toBe('runtime-model');
+    });
+
     test('VITE_TOKEN_PLACE_URL staging override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://staging.token.place/';
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);

@@ -2,9 +2,12 @@
 import Page from '../../components/Page.astro';
 import TokenBadge from '../dchat/TokenBadge.svelte';
 import Integrations from './svelte/Integrations.svelte';
+import { resolveRuntimeTokenPlaceConfig } from '../../utils/tokenPlaceRuntime.js';
+
+const tokenPlace = resolveRuntimeTokenPlaceConfig();
 ---
 
 <Page title="Chat" message="Talk with the game NPCs" columns="1">
     <TokenBadge client:load />
-    <Integrations client:idle />
+    <Integrations tokenPlace={tokenPlace} client:idle />
 </Page>
