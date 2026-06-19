@@ -48,6 +48,7 @@ describe('token.place API v1 client', () => {
         jest.resetAllMocks();
         delete process.env.VITE_TOKEN_PLACE_URL;
         delete process.env.VITE_TOKEN_PLACE_CHAT_MODEL;
+        delete process.env.VITE_TOKEN_PLACE_ENABLED;
     });
 
     test('fresh/default state posts to token.place API v1 chat completions', async () => {
@@ -55,6 +56,21 @@ describe('token.place API v1 client', () => {
         const { url, init } = getFetchCall();
         expect(url).toBe('https://token.place/api/v1/chat/completions');
         expect(init.method).toBe('POST');
+    });
+
+    test('legacy enabled flags do not disable default token.place chat', async () => {
+        process.env.VITE_TOKEN_PLACE_ENABLED = 'false';
+        loadGameState.mockReturnValue({ tokenPlace: { enabled: false } });
+
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
+
+        expect(fetch).toHaveBeenCalledTimes(1);
+        const { url, init, body } = getFetchCall();
+        expect(url).toBe('https://token.place/api/v1/chat/completions');
+        expect(init.method).toBe('POST');
+        expect(init.credentials).toBe('omit');
+        expect(init.headers?.Authorization).toBeUndefined();
+        expect(body.messages).toContainEqual({ role: 'user', content: 'hello' });
     });
 
     test('VITE_TOKEN_PLACE_URL staging override works', async () => {
@@ -106,18 +122,26 @@ describe('token.place API v1 client', () => {
         await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
             metadata: {
                 conversation_id: 'conv-42',
-                apiKey: 'token-place-secret',
-                playerSave: { raw: true },
-                token: 'hidden',
+                credential: 'credential-canary-alpha',
+                authorization: 'authorization-canary-bravo',
+                playerInventory: 'player-inventory-canary-charlie',
+                rawSaveData: 'raw-save-data-canary-delta',
+                secret: 'secret-canary-echo',
             },
         });
         const { init, body } = getFetchCall();
         expect(init.headers.Authorization).toBeUndefined();
+        expect(Object.keys(init.headers ?? {}).some((key) => /^authorization$/i.test(key))).toBe(
+            false
+        );
         expect(init.credentials).toBe('omit');
         const serialized = JSON.stringify({ headers: init.headers, body });
         expect(serialized).not.toContain('sk-secret-openai-key');
-        expect(serialized).not.toContain('token-place-secret');
-        expect(serialized).not.toContain('hidden');
+        expect(serialized).not.toContain('credential-canary-alpha');
+        expect(serialized).not.toContain('authorization-canary-bravo');
+        expect(serialized).not.toContain('player-inventory-canary-charlie');
+        expect(serialized).not.toContain('raw-save-data-canary-delta');
+        expect(serialized).not.toContain('secret-canary-echo');
         expect(body.metadata).toEqual({
             conversation_id: 'conv-42',
             client: 'dspace',
