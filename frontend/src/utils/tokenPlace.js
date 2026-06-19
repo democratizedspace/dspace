@@ -37,8 +37,8 @@ export const resolveTokenPlaceBaseUrl = (options = {}) => {
     const state = options.state || loadGameState();
     const candidate =
         options.url ||
-        state?.tokenPlace?.url ||
         options.runtimeUrl ||
+        state?.tokenPlace?.url ||
         readEnvValue('VITE_TOKEN_PLACE_URL') ||
         DEFAULT_ORIGIN;
     let baseUrl = stripTrailingSlashes(candidate) || DEFAULT_ORIGIN;

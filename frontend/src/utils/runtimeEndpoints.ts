@@ -25,7 +25,10 @@ function parseTelemetryEnabled(flags: FeatureFlagParseResult): boolean {
 
 export function resolveRuntimeTokenPlaceConfig() {
     return {
-        url: resolveTokenPlaceBaseUrl({ url: process.env.DSPACE_TOKEN_PLACE_URL }),
+        url: resolveTokenPlaceBaseUrl({
+            url: process.env.DSPACE_TOKEN_PLACE_URL,
+            state: {},
+        }),
         model: getTokenPlaceChatModel({ model: process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL }),
     };
 }

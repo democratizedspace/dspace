@@ -46,11 +46,18 @@ after that package path is ready for DSPACE Chat.
 API v1 is non-streaming. Responses may appear after the full completion is ready rather than as a
 streaming token-by-token transcript.
 
-The default token.place origin is `https://token.place`. Deployment operators may override the
-origin and model with:
+The default token.place origin is `https://token.place`. Deployment operators should override the
+origin and model at runtime with public, non-secret environment variables:
 
-- `VITE_TOKEN_PLACE_URL`
-- `VITE_TOKEN_PLACE_CHAT_MODEL`
+- `DSPACE_TOKEN_PLACE_URL`
+- `DSPACE_TOKEN_PLACE_CHAT_MODEL`
 
-Staging should use `VITE_TOKEN_PLACE_URL=https://staging.token.place`. Production can omit the URL
-override or set `VITE_TOKEN_PLACE_URL=https://token.place` explicitly.
+The `/config.json` endpoint and the server-rendered `/chat` page both read these runtime values, so
+one immutable image can move between staging and production without rebuilding. Staging should use
+`DSPACE_TOKEN_PLACE_URL=https://staging.token.place`. Production can omit the URL override or set
+`DSPACE_TOKEN_PLACE_URL=https://token.place` explicitly.
+
+`VITE_TOKEN_PLACE_URL` and `VITE_TOKEN_PLACE_CHAT_MODEL` remain local-development and build-time
+compatibility fallbacks only. Runtime `DSPACE_TOKEN_PLACE_URL` takes precedence over legacy saved
+`state.tokenPlace.url` values so an old browser save cannot keep a staging deployment pointed at a
+production token.place origin.

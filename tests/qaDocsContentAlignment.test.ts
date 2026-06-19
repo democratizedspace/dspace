@@ -85,6 +85,8 @@ describe('token.place doc alignment', () => {
     expect(doc).toMatch(/\/api\/v1\/chat\/completions/);
     expect(doc).toMatch(/default provider/i);
     expect(doc).toMatch(/OpenAI/i);
+    expect(doc).toMatch(/DSPACE_TOKEN_PLACE_URL/i);
+    expect(doc).toMatch(/DSPACE_TOKEN_PLACE_CHAT_MODEL/i);
     expect(doc).toMatch(/VITE_TOKEN_PLACE_URL/i);
     expect(doc).toMatch(/VITE_TOKEN_PLACE_CHAT_MODEL/i);
   });

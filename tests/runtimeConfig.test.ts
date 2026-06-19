@@ -42,10 +42,20 @@ describe('runtime endpoints', () => {
 
     if (ORIGINAL_VERSION === undefined) {
       delete process.env.DSPACE_VERSION;
-      delete process.env.DSPACE_TOKEN_PLACE_URL;
-      delete process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
     } else {
       process.env.DSPACE_VERSION = ORIGINAL_VERSION;
+    }
+
+    if (ORIGINAL_TOKEN_PLACE_URL === undefined) {
+      delete process.env.DSPACE_TOKEN_PLACE_URL;
+    } else {
+      process.env.DSPACE_TOKEN_PLACE_URL = ORIGINAL_TOKEN_PLACE_URL;
+    }
+
+    if (ORIGINAL_TOKEN_PLACE_MODEL === undefined) {
+      delete process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
+    } else {
+      process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL = ORIGINAL_TOKEN_PLACE_MODEL;
     }
   });
 
