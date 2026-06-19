@@ -8,6 +8,8 @@ const ORIGINAL_FLAGS = process.env.DSPACE_FEATURE_FLAGS;
 const ORIGINAL_OFFLINE = process.env.DSPACE_OFFLINE_WORKER_ENABLED;
 const ORIGINAL_TELEMETRY = process.env.DSPACE_TELEMETRY_ENABLED;
 const ORIGINAL_VERSION = process.env.DSPACE_VERSION;
+const ORIGINAL_TOKEN_PLACE_URL = process.env.DSPACE_TOKEN_PLACE_URL;
+const ORIGINAL_TOKEN_PLACE_MODEL = process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
 
 describe('runtime endpoints', () => {
   beforeEach(() => {
@@ -15,6 +17,8 @@ describe('runtime endpoints', () => {
     delete process.env.DSPACE_OFFLINE_WORKER_ENABLED;
     delete process.env.DSPACE_TELEMETRY_ENABLED;
     delete process.env.DSPACE_VERSION;
+    delete process.env.DSPACE_TOKEN_PLACE_URL;
+    delete process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
   });
 
   afterEach(() => {
@@ -41,6 +45,41 @@ describe('runtime endpoints', () => {
     } else {
       process.env.DSPACE_VERSION = ORIGINAL_VERSION;
     }
+
+    if (ORIGINAL_TOKEN_PLACE_URL === undefined) {
+      delete process.env.DSPACE_TOKEN_PLACE_URL;
+    } else {
+      process.env.DSPACE_TOKEN_PLACE_URL = ORIGINAL_TOKEN_PLACE_URL;
+    }
+
+    if (ORIGINAL_TOKEN_PLACE_MODEL === undefined) {
+      delete process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
+    } else {
+      process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL = ORIGINAL_TOKEN_PLACE_MODEL;
+    }
+  });
+
+  it('exposes production token.place defaults when runtime env is absent', async () => {
+    const response = await getRuntimeConfig();
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.tokenPlace).toStrictEqual({
+      url: 'https://token.place',
+      model: 'gpt-5-chat-latest',
+    });
+  });
+
+  it('exposes normalized runtime token.place URL and model overrides', async () => {
+    process.env.DSPACE_TOKEN_PLACE_URL = 'https://staging.token.place/api/v1/';
+    process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL = 'staging-chat-model';
+
+    const response = await getRuntimeConfig();
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.tokenPlace).toStrictEqual({
+      url: 'https://staging.token.place',
+      model: 'staging-chat-model',
+    });
   });
 
   it('enables the offline worker by default', async () => {

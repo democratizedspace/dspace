@@ -157,19 +157,36 @@ Normalization rules:
   Those flags must not disable default v3.1 Chat. The client-layer phase can keep compatibility
   helpers for old tests if needed, but provider selection should not depend on
   `tokenPlace.enabled`.
-- The token.place origin/base URL must use the existing DSPACE compatibility environment variable
-  `VITE_TOKEN_PLACE_URL`, or the existing compatibility field `state.tokenPlace.url` when needed.
-  Default to `https://token.place`; DSPACE staging should configure
-  `VITE_TOKEN_PLACE_URL=https://staging.token.place`; production should omit the override or
-  configure `VITE_TOKEN_PLACE_URL=https://token.place`.
+- The token.place origin/base URL is authoritative from deployment runtime SSR configuration
+  (`DSPACE_TOKEN_PLACE_URL`) when `/chat` is rendered. The existing `VITE_TOKEN_PLACE_URL` and
+  legacy `state.tokenPlace.url` remain compatibility fallbacks for local/build and saved-state
+  override scenarios. Default to `https://token.place`; staging should configure
+  `DSPACE_TOKEN_PLACE_URL=https://staging.token.place`, and production should omit the override or
+  configure `DSPACE_TOKEN_PLACE_URL=https://token.place`.
 - Normalize token.place URL values before appending `/api/v1/chat/completions`: accept
   origin-style values such as `https://token.place`, strip trailing slashes, tolerate legacy
   `https://token.place/api` by normalizing it to the origin, and never produce
   `/api/api/v1/chat/completions`.
 - There must be no `tokenPlace.apiKey`, token.place credential form, or token.place
   `Authorization` header.
-- Recommended optional model override: `VITE_TOKEN_PLACE_CHAT_MODEL`, defaulting to
-  `gpt-5-chat-latest`. Do not make the model a user-facing key-management setting in v3.1.
+- Recommended optional deployment model override: `DSPACE_TOKEN_PLACE_CHAT_MODEL`, defaulting to
+  `gpt-5-chat-latest`. `VITE_TOKEN_PLACE_CHAT_MODEL` remains the local/build compatibility
+  fallback. Do not make the model a user-facing key-management setting in v3.1.
+
+## Post-staging runtime routing correction
+
+The first staging smoke test exposed build-time Vite routing as insufficient for immutable-image
+promotion: a DSPACE image built with the production `VITE_TOKEN_PLACE_URL` continued to call
+`https://token.place` when deployed to staging. Runtime SSR props are now the authoritative
+DSPACE deployment configuration for token.place URL/model. `/config.json` reports the same public
+origin/model, and `/chat` passes them into the hydrated provider-aware panel without an extra
+client-side config fetch.
+
+This correction does not change the token.place API v1 contract, provider selection semantics, or
+zero-auth invariants: DSPACE still makes direct browser HTTPS requests to
+`/api/v1/chat/completions`, defaults fresh users to token.place, keeps OpenAI as an optional
+Settings opt-in, sends no token.place credentials, sends no `Authorization` header, and uses
+`credentials: 'omit'`.
 
 ## Proposed UI and provider flow
 

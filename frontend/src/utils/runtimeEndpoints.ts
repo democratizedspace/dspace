@@ -1,5 +1,6 @@
 import type { FeatureFlagParseResult } from '@dspace/feature-flags';
 import { parseFeatureFlags, readBooleanOverride } from '@dspace/feature-flags';
+import { resolveTokenPlaceBaseUrl, getTokenPlaceChatModel } from './tokenPlace.js';
 import { logServerError } from './serverLogger';
 
 function parseOfflineWorkerEnabled(flags: FeatureFlagParseResult): boolean {
@@ -22,6 +23,16 @@ function parseTelemetryEnabled(flags: FeatureFlagParseResult): boolean {
     return flagOverride ?? false;
 }
 
+export function resolveRuntimeTokenPlaceConfig() {
+    return {
+        url: resolveTokenPlaceBaseUrl({
+            url: process.env.DSPACE_TOKEN_PLACE_URL,
+            state: {},
+        }),
+        model: getTokenPlaceChatModel({ model: process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL }),
+    };
+}
+
 function buildHeaders(): HeadersInit {
     return {
         'Content-Type': 'application/json; charset=utf-8',
@@ -34,6 +45,7 @@ export function buildRuntimeConfigResponse(): Response {
         const flags = parseFeatureFlags(process.env.DSPACE_FEATURE_FLAGS);
         const offlineWorkerEnabled = parseOfflineWorkerEnabled(flags);
         const telemetryEnabled = parseTelemetryEnabled(flags);
+        const tokenPlace = resolveRuntimeTokenPlaceConfig();
 
         const body = {
             offlineWorker: {
@@ -42,6 +54,7 @@ export function buildRuntimeConfigResponse(): Response {
             telemetry: {
                 enabled: telemetryEnabled,
             },
+            tokenPlace,
             featureFlags: flags.tokens,
         };
 

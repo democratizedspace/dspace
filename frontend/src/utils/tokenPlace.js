@@ -37,6 +37,7 @@ export const resolveTokenPlaceBaseUrl = (options = {}) => {
     const state = options.state || loadGameState();
     const candidate =
         options.url ||
+        options.runtimeUrl ||
         state?.tokenPlace?.url ||
         readEnvValue('VITE_TOKEN_PLACE_URL') ||
         DEFAULT_ORIGIN;
@@ -54,7 +55,10 @@ export const buildTokenPlaceChatCompletionsUrl = (baseUrl) =>
 
 export const getTokenPlaceChatModel = (options = {}) =>
     String(
-        options.model || readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') || DEFAULT_CHAT_MODEL
+        options.model ||
+            options.runtimeModel ||
+            readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') ||
+            DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
 const sanitizeChatMessage = (message) => ({
@@ -126,9 +130,11 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         metadata: buildTokenPlaceMetadata(options.metadata),
     };
 
-    const baseUrl = resolveTokenPlaceBaseUrl(
-        options.url ? { url: options.url } : { state: promptPayload.gameState }
-    );
+    const baseUrl = resolveTokenPlaceBaseUrl({
+        url: options.url,
+        state: promptPayload.gameState,
+        runtimeUrl: options.runtimeUrl,
+    });
     const url = `${baseUrl}${CHAT_COMPLETIONS_PATH}`;
 
     let response;
