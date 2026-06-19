@@ -65,7 +65,12 @@ describe('token.place API v1 client', () => {
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
 
         expect(fetch).toHaveBeenCalledTimes(1);
-        expect(getFetchCall().url).toBe('https://token.place/api/v1/chat/completions');
+        const { url, init, body } = getFetchCall();
+        expect(url).toBe('https://token.place/api/v1/chat/completions');
+        expect(init.method).toBe('POST');
+        expect(init.credentials).toBe('omit');
+        expect(init.headers?.Authorization).toBeUndefined();
+        expect(body.messages).toContainEqual({ role: 'user', content: 'hello' });
     });
 
     test('VITE_TOKEN_PLACE_URL staging override works', async () => {
