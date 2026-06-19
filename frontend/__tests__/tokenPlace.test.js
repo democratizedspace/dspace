@@ -73,6 +73,30 @@ describe('token.place API v1 client', () => {
         expect(body.messages).toContainEqual({ role: 'user', content: 'hello' });
     });
 
+    test('runtime staging URL override has precedence over VITE fallback', async () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'https://token.place';
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], {
+            runtimeUrl: 'https://staging.token.place/api',
+        });
+        expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/chat/completions');
+    });
+
+    test('explicit caller URL and persisted compatibility URL precedence beat runtime URL', async () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'https://env.token.place';
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'https://state.token.place/' } });
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], {
+            runtimeUrl: 'https://runtime.token.place',
+        });
+        expect(getFetchCall().url).toBe('https://state.token.place/api/v1/chat/completions');
+
+        fetch.mockClear();
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], {
+            url: 'https://explicit.token.place/api/v1',
+            runtimeUrl: 'https://runtime.token.place',
+        });
+        expect(getFetchCall().url).toBe('https://explicit.token.place/api/v1/chat/completions');
+    });
+
     test('VITE_TOKEN_PLACE_URL staging override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://staging.token.place/';
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
@@ -115,6 +139,30 @@ describe('token.place API v1 client', () => {
         expect(getTokenPlaceChatModel()).toBe('custom-model');
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
         expect(getFetchCall().body.model).toBe('custom-model');
+
+        fetch.mockClear();
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], {
+            runtimeModel: 'runtime-model',
+        });
+        expect(getFetchCall().body.model).toBe('runtime-model');
+
+        fetch.mockClear();
+        await tokenPlaceChat([{ role: 'user', content: 'hello' }], {
+            model: 'explicit-model',
+            runtimeModel: 'runtime-model',
+        });
+        expect(getFetchCall().body.model).toBe('explicit-model');
+    });
+
+    test('runtime deployment values are request options only and are not persisted', async () => {
+        await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
+            runtimeUrl: 'https://staging.token.place',
+            runtimeModel: 'runtime-model',
+        });
+        expect(loadGameState).toHaveBeenCalled();
+        expect(
+            JSON.stringify(loadGameState.mock.results.map((result) => result.value))
+        ).not.toContain('staging.token.place');
     });
 
     test('request is zero-auth and excludes secrets from headers/body/metadata', async () => {

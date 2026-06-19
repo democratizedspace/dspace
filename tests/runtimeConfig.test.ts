@@ -8,6 +8,8 @@ const ORIGINAL_FLAGS = process.env.DSPACE_FEATURE_FLAGS;
 const ORIGINAL_OFFLINE = process.env.DSPACE_OFFLINE_WORKER_ENABLED;
 const ORIGINAL_TELEMETRY = process.env.DSPACE_TELEMETRY_ENABLED;
 const ORIGINAL_VERSION = process.env.DSPACE_VERSION;
+const ORIGINAL_TOKEN_PLACE_URL = process.env.DSPACE_TOKEN_PLACE_URL;
+const ORIGINAL_TOKEN_PLACE_MODEL = process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
 
 describe('runtime endpoints', () => {
   beforeEach(() => {
@@ -15,6 +17,8 @@ describe('runtime endpoints', () => {
     delete process.env.DSPACE_OFFLINE_WORKER_ENABLED;
     delete process.env.DSPACE_TELEMETRY_ENABLED;
     delete process.env.DSPACE_VERSION;
+    delete process.env.DSPACE_TOKEN_PLACE_URL;
+    delete process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
   });
 
   afterEach(() => {
@@ -41,6 +45,43 @@ describe('runtime endpoints', () => {
     } else {
       process.env.DSPACE_VERSION = ORIGINAL_VERSION;
     }
+
+    if (ORIGINAL_TOKEN_PLACE_URL === undefined) {
+      delete process.env.DSPACE_TOKEN_PLACE_URL;
+    } else {
+      process.env.DSPACE_TOKEN_PLACE_URL = ORIGINAL_TOKEN_PLACE_URL;
+    }
+
+    if (ORIGINAL_TOKEN_PLACE_MODEL === undefined) {
+      delete process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL;
+    } else {
+      process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL = ORIGINAL_TOKEN_PLACE_MODEL;
+    }
+  });
+
+  it('reports default production token.place runtime config', async () => {
+    const response = await getRuntimeConfig();
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.tokenPlace).toEqual({
+      url: 'https://token.place',
+      model: 'gpt-5-chat-latest',
+    });
+  });
+
+  it('reports staging token.place runtime URL and strips legacy API suffixes', async () => {
+    process.env.DSPACE_TOKEN_PLACE_URL = 'https://staging.token.place/api/';
+    const response = await getRuntimeConfig();
+    const body = await response.json();
+    expect(body.tokenPlace?.url).toBe('https://staging.token.place');
+    expect(body.tokenPlace?.url).not.toContain('/api/api');
+  });
+
+  it('reports runtime token.place chat model override', async () => {
+    process.env.DSPACE_TOKEN_PLACE_CHAT_MODEL = 'staging-chat-model';
+    const response = await getRuntimeConfig();
+    const body = await response.json();
+    expect(body.tokenPlace?.model).toBe('staging-chat-model');
   });
 
   it('enables the offline worker by default', async () => {

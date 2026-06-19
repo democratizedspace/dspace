@@ -42,6 +42,29 @@ describe('Integrations chat entrypoint', () => {
         vi.clearAllMocks();
     });
 
+    it('passes token.place runtime config into the hydrated chat panel debug view', async () => {
+        mockRefs.baseState.settings = {
+            chatProvider: 'token-place',
+            showChatDebugPayload: true,
+        };
+        mockRefs.resetStore();
+
+        render(Integrations, {
+            props: {
+                tokenPlace: { url: 'https://staging.token.place', model: 'staging-model' },
+            },
+        });
+
+        await waitFor(() =>
+            expect(screen.getByTestId('debug-token-place-url-row')).toHaveTextContent(
+                'https://staging.token.place'
+            )
+        );
+        expect(screen.getByTestId('debug-token-place-model-row')).toHaveTextContent(
+            'staging-model'
+        );
+    });
+
     it('renders token.place chat by default without the deferred banner', async () => {
         render(Integrations);
 

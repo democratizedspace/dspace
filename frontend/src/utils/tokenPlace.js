@@ -6,9 +6,11 @@ import {
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
 
-const DEFAULT_ORIGIN = 'https://token.place';
+export const DEFAULT_TOKEN_PLACE_URL = 'https://token.place';
+const DEFAULT_ORIGIN = DEFAULT_TOKEN_PLACE_URL;
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
-const DEFAULT_CHAT_MODEL = 'gpt-5-chat-latest';
+export const DEFAULT_TOKEN_PLACE_CHAT_MODEL = 'gpt-5-chat-latest';
+const DEFAULT_CHAT_MODEL = DEFAULT_TOKEN_PLACE_CHAT_MODEL;
 const METADATA_DENY_PATTERN =
     /(?:key|token|secret|credential|password|authorization|auth|inventory|save|state|player)/i;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
@@ -23,7 +25,7 @@ const readEnvValue = (key) => {
     return undefined;
 };
 
-const stripTrailingSlashes = (value) =>
+export const stripTrailingSlashes = (value) =>
     String(value || '')
         .trim()
         .replace(/\/+$/g, '');
@@ -38,6 +40,7 @@ export const resolveTokenPlaceBaseUrl = (options = {}) => {
     const candidate =
         options.url ||
         state?.tokenPlace?.url ||
+        options.runtimeUrl ||
         readEnvValue('VITE_TOKEN_PLACE_URL') ||
         DEFAULT_ORIGIN;
     let baseUrl = stripTrailingSlashes(candidate) || DEFAULT_ORIGIN;
@@ -54,7 +57,10 @@ export const buildTokenPlaceChatCompletionsUrl = (baseUrl) =>
 
 export const getTokenPlaceChatModel = (options = {}) =>
     String(
-        options.model || readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') || DEFAULT_CHAT_MODEL
+        options.model ||
+            options.runtimeModel ||
+            readEnvValue('VITE_TOKEN_PLACE_CHAT_MODEL') ||
+            DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
 const sanitizeChatMessage = (message) => ({
@@ -126,9 +132,11 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         metadata: buildTokenPlaceMetadata(options.metadata),
     };
 
-    const baseUrl = resolveTokenPlaceBaseUrl(
-        options.url ? { url: options.url } : { state: promptPayload.gameState }
-    );
+    const baseUrl = resolveTokenPlaceBaseUrl({
+        state: promptPayload.gameState,
+        runtimeUrl: options.runtimeUrl,
+        url: options.url,
+    });
     const url = `${baseUrl}${CHAT_COMPLETIONS_PATH}`;
 
     let response;

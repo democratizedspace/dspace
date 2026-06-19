@@ -211,6 +211,21 @@ UI ownership changes:
   "token.place is deferred", "chat uses OpenAI" as a default-provider claim, or equivalent stale
   v3.0 wording.
 
+## Post-staging correction: runtime deployment routing
+
+The first staging smoke test exposed that build-time Vite routing was insufficient for
+immutable-image promotion: a staging DSPACE deployment could still call
+`https://token.place/api/v1/chat/completions` when `VITE_TOKEN_PLACE_URL` had been embedded during
+the image build. Deployment routing is now resolved by SSR runtime configuration instead.
+
+DSPACE reads public, non-secret `DSPACE_TOKEN_PLACE_URL` and
+`DSPACE_TOKEN_PLACE_CHAT_MODEL` server-side, normalizes the token.place origin with the existing
+`/api` and `/api/v1` suffix tolerance, exposes the resolved values in `/config.json`, and passes
+them as hydrated `/chat` props. The `VITE_TOKEN_PLACE_URL` and
+`VITE_TOKEN_PLACE_CHAT_MODEL` variables remain local/build compatibility fallbacks only. This
+correction does not change token.place API v1, provider selection, zero-auth behavior, direct
+browser HTTPS calls, or the no-proxy/no-credentials invariants.
+
 ## Proposed implementation sequence
 
 This sequence keeps each implementation PR reviewable:

@@ -47,6 +47,8 @@
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
+    export let tokenPlace = undefined;
+
     const message = writable('');
     const messageHistory = writable([]);
     const saveSnapshotHintStorageKey = 'dspace.chat.dismissSaveSnapshotHint';
@@ -100,6 +102,8 @@
     $: docsRagComparisonMessage = docsRagComparison.message;
     $: docsRagWarning = getDocsRagMismatchWarning(appGitShaForComparison, docsRagGitSha);
     $: activeProvider = currentSettings.chatProvider;
+    $: runtimeTokenPlaceUrl = tokenPlace?.url;
+    $: runtimeTokenPlaceModel = tokenPlace?.model;
     $: providerLabel =
         activeProvider === 'openai' ? 'OpenAI selected in Settings' : 'Powered by token.place';
     $: if (errorBanner?.type === 'missing-key' && activeProvider !== 'openai') {
@@ -217,6 +221,8 @@
                     : await TokenPlaceChatV2(historyForApi, {
                           persona: currentPersona,
                           promptPayload: debugPayload,
+                          runtimeUrl: runtimeTokenPlaceUrl,
+                          runtimeModel: runtimeTokenPlaceModel,
                       });
             providerUsage = aiResponse?.usage ?? null;
             providerMetadata = aiResponse?.metadata ?? null;
@@ -311,6 +317,12 @@
             `Docs pack sourceRef: ${docsRagSourceRef}`,
             `Docs RAG comparison: ${docsRagComparisonMessage}`,
             providerUsage ? `Provider usage: ${JSON.stringify(providerUsage)}` : null,
+            activeProvider === 'token-place' && runtimeTokenPlaceUrl
+                ? `token.place URL: ${runtimeTokenPlaceUrl}`
+                : null,
+            activeProvider === 'token-place' && runtimeTokenPlaceModel
+                ? `token.place model: ${runtimeTokenPlaceModel}`
+                : null,
             providerMetadata ? `Provider metadata: ${JSON.stringify(providerMetadata)}` : null,
         ]
             .filter(Boolean)
@@ -635,6 +647,20 @@
                     <span>Selected provider</span>
                     <span class="debug-mono">{activeProvider}</span>
                 </div>
+                {#if activeProvider === 'token-place'}
+                    <div class="debug-meta-row" data-testid="debug-token-place-url-row">
+                        <span>token.place URL</span>
+                        <span class="debug-mono"
+                            >{runtimeTokenPlaceUrl || 'build/default fallback'}</span
+                        >
+                    </div>
+                    <div class="debug-meta-row" data-testid="debug-token-place-model-row">
+                        <span>token.place model</span>
+                        <span class="debug-mono"
+                            >{runtimeTokenPlaceModel || 'build/default fallback'}</span
+                        >
+                    </div>
+                {/if}
                 <div class="debug-meta-row" data-testid="debug-app-sha-row">
                     <span>App build SHA</span>
                     <span class="debug-mono">{appGitShaDisplay}</span>
