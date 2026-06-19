@@ -122,18 +122,26 @@ describe('token.place API v1 client', () => {
         await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
             metadata: {
                 conversation_id: 'conv-42',
-                apiKey: 'token-place-secret',
-                playerSave: { raw: true },
-                token: 'hidden',
+                credential: 'credential-canary-alpha',
+                authorization: 'authorization-canary-bravo',
+                playerInventory: 'player-inventory-canary-charlie',
+                rawSaveData: 'raw-save-data-canary-delta',
+                secret: 'secret-canary-echo',
             },
         });
         const { init, body } = getFetchCall();
         expect(init.headers.Authorization).toBeUndefined();
+        expect(Object.keys(init.headers ?? {}).some((key) => /^authorization$/i.test(key))).toBe(
+            false
+        );
         expect(init.credentials).toBe('omit');
         const serialized = JSON.stringify({ headers: init.headers, body });
         expect(serialized).not.toContain('sk-secret-openai-key');
-        expect(serialized).not.toContain('token-place-secret');
-        expect(serialized).not.toContain('hidden');
+        expect(serialized).not.toContain('credential-canary-alpha');
+        expect(serialized).not.toContain('authorization-canary-bravo');
+        expect(serialized).not.toContain('player-inventory-canary-charlie');
+        expect(serialized).not.toContain('raw-save-data-canary-delta');
+        expect(serialized).not.toContain('secret-canary-echo');
         expect(body.metadata).toEqual({
             conversation_id: 'conv-42',
             client: 'dspace',
