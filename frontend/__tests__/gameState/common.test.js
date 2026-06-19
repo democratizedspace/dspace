@@ -157,18 +157,6 @@ describe('gameState - common utilities', () => {
         expect(typeof validated._meta?.lastUpdated).toBe('number');
     });
 
-    test('validateGameState preserves legacy token.place disablement while defaulting chat provider', () => {
-        const legacyState = {
-            tokenPlace: { enabled: false },
-            settings: {},
-        };
-
-        const validated = validateGameState(legacyState);
-
-        expect(validated.settings.chatProvider).toBe('token-place');
-        expect(validated.tokenPlace.enabled).toBe(false);
-    });
-
     test('rollbackGameState should restore previous state', async () => {
         const state = loadGameState();
         state.inventory['1'] = 1;

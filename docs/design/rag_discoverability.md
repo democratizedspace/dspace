@@ -44,11 +44,11 @@ without introducing heavyweight infrastructure.
 ### Chat UI + message flow
 - The `/chat` page hydrates the Svelte chat integrations via
   `frontend/src/pages/chat/index.astro` and `frontend/src/pages/chat/svelte/Integrations.svelte`.
-- OpenAI chat renders in `frontend/src/pages/chat/svelte/OpenAIChat.svelte` and calls
-  `GPT5Chat` from `frontend/src/utils/openAI.js` with the message history.
-- token.place chat (gated by feature flags) renders in
-  `frontend/src/pages/chat/svelte/TokenPlaceChat.svelte` and calls `tokenPlaceChat` from
-  `frontend/src/utils/tokenPlace.js`.
+- Chat renders through the provider-aware panel in
+  `frontend/src/pages/chat/svelte/ChatPanel.svelte`.
+- The panel calls `GPT5ChatV2` from `frontend/src/utils/openAI.js` only when OpenAI is selected
+  in Settings, and calls `TokenPlaceChatV2` from `frontend/src/utils/tokenPlace.js` for the
+  default token.place path.
 
 ### Retrieval / “RAG” context (current)
 - The only retrieval mechanism is **string assembly** inside
@@ -88,7 +88,7 @@ without introducing heavyweight infrastructure.
 ### Error handling + uncertainty
 - OpenAI errors are mapped to user-facing copy in `frontend/src/utils/openAI.js` and surfaced
   by `OpenAIChat.svelte`.
-- token.place errors are caught in `TokenPlaceChat.svelte` with a generic fallback message.
+- token.place errors are caught in the provider-aware Chat panel and summarized without leaking raw provider details.
 - There is **no UI affordance** to show what sources were used or how much context was present.
 
 ### Telemetry

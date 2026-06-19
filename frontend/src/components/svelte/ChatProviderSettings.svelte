@@ -108,7 +108,7 @@
             </div>
         {:else}
             <p class="token-place-note" data-testid="token-place-no-key-note">
-                token.place Chat is ready to use. There is no token.place API key field on this
+                token.place Chat is ready to use. There is no token.place credential field on this
                 device.
             </p>
         {/if}

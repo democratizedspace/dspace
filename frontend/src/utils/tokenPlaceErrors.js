@@ -83,18 +83,12 @@ export const getTokenPlaceErrorSummary = (error) => {
         };
     }
 
-    if (message.includes('token.place is disabled')) {
-        return {
-            type: 'disabled',
-            message: 'token.place is disabled. Enable it in settings or configure the integration.',
-        };
-    }
-
     if (
         type === 'network' ||
-        message.includes('failed to fetch') ||
-        message.includes('network') ||
-        message.includes('fetch')
+        (!type &&
+            (message.includes('failed to fetch') ||
+                message.includes('network') ||
+                message.includes('fetch')))
     ) {
         return {
             type: 'network',

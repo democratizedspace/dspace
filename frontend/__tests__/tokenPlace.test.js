@@ -14,9 +14,9 @@ const { loadGameState } = await import('../src/utils/gameState/common.js');
 const {
     TokenPlaceChatV2,
     buildTokenPlaceChatCompletionsUrl,
+    buildTokenPlaceMetadata,
     extractTokenPlaceAssistantText,
     getTokenPlaceChatModel,
-    isTokenPlaceEnabled,
     resolveTokenPlaceBaseUrl,
     tokenPlaceChat,
 } = await import('../src/utils/tokenPlace.js');
@@ -119,16 +119,16 @@ describe('token.place API v1 client', () => {
         expect(serialized).not.toContain('token-place-secret');
         expect(serialized).not.toContain('hidden');
         expect(body.metadata).toEqual({
+            conversation_id: 'conv-42',
             client: 'dspace',
             provider: 'token.place',
-            conversation_id: 'conv-42',
         });
     });
 
     test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
         await TokenPlaceChatV2([
             {
-                role: 'user',
+                role: 'developer',
                 content: 'hello',
                 id: 'ui-message-id',
                 timestamp: 123,
@@ -146,6 +146,20 @@ describe('token.place API v1 client', () => {
         expect(body.messages.at(-1)).not.toHaveProperty('avatar');
         expect(body.metadata).toEqual({ client: 'dspace', provider: 'token.place' });
         expect(body.stream).not.toBe(true);
+    });
+
+    test('safe metadata preserves trusted client and provider fields', () => {
+        expect(
+            buildTokenPlaceMetadata({
+                client: 'attacker',
+                provider: 'openai',
+                conversation_id: 'conv-42',
+            })
+        ).toEqual({
+            conversation_id: 'conv-42',
+            client: 'dspace',
+            provider: 'token.place',
+        });
     });
 
     test('parses assistant text and compatibility helper returns string', async () => {
@@ -309,17 +323,5 @@ describe('token.place API v1 client', () => {
         const serializedRequest = JSON.stringify(getFetchCall().body.messages);
         expect(serializedRequest).not.toMatch(/token\.place is deferred/i);
         expect(serializedRequest).not.toMatch(/chat uses OpenAI/i);
-    });
-});
-
-describe('isTokenPlaceEnabled', () => {
-    test('enables token.place for fresh or missing legacy state', () => {
-        expect(isTokenPlaceEnabled()).toBe(true);
-        expect(isTokenPlaceEnabled({ state: {} })).toBe(true);
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: undefined } })).toBe(true);
-    });
-
-    test('ignores legacy saved disabled flags', () => {
-        expect(isTokenPlaceEnabled({ state: { tokenPlace: { enabled: false } } })).toBe(true);
     });
 });
