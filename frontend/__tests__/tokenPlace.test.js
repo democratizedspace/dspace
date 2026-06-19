@@ -102,13 +102,13 @@ describe('token.place API v1 client', () => {
         expect(getFetchCall().url).toBe('https://state.token.place/api/v1/chat/completions');
     });
 
-    test('runtime url is used before saved state and VITE fallback', async () => {
+    test('saved state url is used before runtime and VITE fallback', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://token.place';
         loadGameState.mockReturnValue({ tokenPlace: { url: 'https://saved.token.place/' } });
         await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
             runtimeUrl: 'https://staging.token.place/api',
         });
-        expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/chat/completions');
+        expect(getFetchCall().url).toBe('https://saved.token.place/api/v1/chat/completions');
     });
 
     test('legacy /api base normalizes without /api/api duplication', () => {
