@@ -85,11 +85,29 @@ describe('token.place API v1 client', () => {
         expect(getFetchCall().url).toBe('https://token.place/api/v1/chat/completions');
     });
 
+    test('explicit url overrides state and runtime compatibility values', async () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'https://env.token.place';
+        loadGameState.mockReturnValue({ tokenPlace: { url: 'https://state.token.place/' } });
+        await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
+            url: 'https://explicit.token.place/api/v1',
+            runtimeUrl: 'https://runtime.token.place',
+        });
+        expect(getFetchCall().url).toBe('https://explicit.token.place/api/v1/chat/completions');
+    });
+
     test('state tokenPlace url compatibility override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://env.token.place';
         loadGameState.mockReturnValue({ tokenPlace: { url: 'https://state.token.place/' } });
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
         expect(getFetchCall().url).toBe('https://state.token.place/api/v1/chat/completions');
+    });
+
+    test('runtime url is used before VITE fallback and does not replace staging with production', async () => {
+        process.env.VITE_TOKEN_PLACE_URL = 'https://token.place';
+        await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
+            runtimeUrl: 'https://staging.token.place/api',
+        });
+        expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/chat/completions');
     });
 
     test('legacy /api base normalizes without /api/api duplication', () => {
@@ -113,6 +131,10 @@ describe('token.place API v1 client', () => {
         expect(getTokenPlaceChatModel()).toBe('gpt-5-chat-latest');
         process.env.VITE_TOKEN_PLACE_CHAT_MODEL = 'custom-model';
         expect(getTokenPlaceChatModel()).toBe('custom-model');
+        expect(getTokenPlaceChatModel({ runtimeModel: 'runtime-model' })).toBe('runtime-model');
+        expect(
+            getTokenPlaceChatModel({ model: 'explicit-model', runtimeModel: 'runtime-model' })
+        ).toBe('explicit-model');
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
         expect(getFetchCall().body.model).toBe('custom-model');
     });

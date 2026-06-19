@@ -47,6 +47,8 @@
     import Message from './Message.svelte';
     import Spinner from '../../../components/svelte/Spinner.svelte';
 
+    export let tokenPlace = null;
+
     const message = writable('');
     const messageHistory = writable([]);
     const saveSnapshotHintStorageKey = 'dspace.chat.dismissSaveSnapshotHint';
@@ -82,6 +84,8 @@
     let componentDestroyed = false;
     let providerUsage = null;
     let providerMetadata = null;
+    $: runtimeTokenPlaceUrl = tokenPlace?.url ?? null;
+    $: runtimeTokenPlaceModel = tokenPlace?.model ?? null;
     let playerStateSummary = {
         included: false,
         questsFinishedCount: 0,
@@ -217,6 +221,8 @@
                     : await TokenPlaceChatV2(historyForApi, {
                           persona: currentPersona,
                           promptPayload: debugPayload,
+                          runtimeUrl: runtimeTokenPlaceUrl,
+                          runtimeModel: runtimeTokenPlaceModel,
                       });
             providerUsage = aiResponse?.usage ?? null;
             providerMetadata = aiResponse?.metadata ?? null;
@@ -300,6 +306,12 @@
     function getDebugInfoText() {
         return [
             `Selected provider: ${activeProvider}`,
+            activeProvider === 'token-place' && runtimeTokenPlaceUrl
+                ? `token.place runtime URL: ${runtimeTokenPlaceUrl}`
+                : null,
+            activeProvider === 'token-place' && runtimeTokenPlaceModel
+                ? `token.place runtime model: ${runtimeTokenPlaceModel}`
+                : null,
             `Prompt version: ${promptVersionLabel}`,
             `App build SHA: ${appGitShaDisplay}`,
             `App build SHA source: ${appGitShaSource}`,

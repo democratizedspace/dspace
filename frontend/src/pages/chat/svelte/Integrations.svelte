@@ -1,9 +1,11 @@
 <script>
     import ChatPanel from './ChatPanel.svelte';
+
+    export let tokenPlace = null;
 </script>
 
 <div class="container">
-    <ChatPanel />
+    <ChatPanel {tokenPlace} />
 </div>
 
 <style>
