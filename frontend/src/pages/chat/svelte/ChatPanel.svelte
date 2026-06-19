@@ -84,10 +84,7 @@
     let componentDestroyed = false;
     let providerUsage = null;
     let providerMetadata = null;
-    const DEFAULT_TOKEN_PLACE_URL = 'https://token.place';
-
-    $: runtimeTokenPlaceUrl =
-        tokenPlace?.url && tokenPlace.url !== DEFAULT_TOKEN_PLACE_URL ? tokenPlace.url : null;
+    $: runtimeTokenPlaceUrl = tokenPlace?.url ?? null;
     $: runtimeTokenPlaceModel = tokenPlace?.model ?? null;
     let playerStateSummary = {
         included: false,

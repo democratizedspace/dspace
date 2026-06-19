@@ -105,6 +105,29 @@ describe('Integrations chat entrypoint', () => {
         expect(chatPanel).toBeInTheDocument();
     });
 
+    it('passes the default runtime token.place URL into ChatPanel requests', async () => {
+        render(Integrations, {
+            tokenPlace: { url: 'https://token.place', model: 'gpt-5-chat-latest' },
+        });
+
+        await waitFor(() => {
+            expect(
+                document.querySelector('[data-testid="chat-panel"][data-provider="token-place"]')
+            ).toBeInTheDocument();
+        });
+
+        await fireEvent.input(screen.getByRole('textbox'), {
+            target: { value: 'Use production token.place' },
+        });
+        await fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+
+        await waitFor(() => expect(mockTokenPlaceChatV2).toHaveBeenCalledTimes(1));
+        expect(mockTokenPlaceChatV2.mock.calls[0][1]).toMatchObject({
+            runtimeUrl: 'https://token.place',
+            runtimeModel: 'gpt-5-chat-latest',
+        });
+    });
+
     it('renders OpenAI chat for users who select OpenAI and have an existing OpenAI API key', async () => {
         mockRefs.baseState.openAI.apiKey = 'sk-test';
         mockRefs.baseState.settings = { chatProvider: 'openai' };
