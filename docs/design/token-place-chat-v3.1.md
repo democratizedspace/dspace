@@ -76,31 +76,31 @@ Implementation should use direct HTTPS `fetch` calls to token.place API v1:
 
 ```json
 {
-  "model": "gpt-5-chat-latest",
-  "messages": [
-    { "role": "system", "content": "..." },
-    { "role": "user", "content": "..." }
-  ]
+    "model": "llama-3.1-8b-instruct",
+    "messages": [
+        { "role": "system", "content": "..." },
+        { "role": "user", "content": "..." }
+    ]
 }
 ```
 
 - Response parsing: read `choices[0].message.content` from the OpenAI-compatible response.
 - Client return-shape contract:
-  - Keep `tokenPlaceChat(messages, options)` as a string-returning compatibility helper only if
-    existing callers/tests need it.
-  - Add or expose a richer helper that returns a stable object shaped exactly as
-    `{ text, contextSources, usage, metadata }`.
-  - `text` comes from `choices[0].message.content`.
-  - `contextSources` comes from DSPACE prompt/RAG context-source handling, not from token.place.
-  - `usage` comes from the token.place OpenAI-compatible response `usage` object when present.
-  - `metadata` comes from the token.place response `metadata` object when present.
+    - Keep `tokenPlaceChat(messages, options)` as a string-returning compatibility helper only if
+      existing callers/tests need it.
+    - Add or expose a richer helper that returns a stable object shaped exactly as
+      `{ text, contextSources, usage, metadata }`.
+    - `text` comes from `choices[0].message.content`.
+    - `contextSources` comes from DSPACE prompt/RAG context-source handling, not from token.place.
+    - `usage` comes from the token.place OpenAI-compatible response `usage` object when present.
+    - `metadata` comes from the token.place response `metadata` object when present.
 - API v1 is non-streaming. Do not send `stream: true`; if a future helper accepts options, force
   or omit `stream` rather than passing user-provided streaming options through.
 - API v1 rejects `stream: true` with a structured OpenAI-style error whose `param` is `stream`.
-- Prefer model `gpt-5-chat-latest` for DSPACE compatibility. token.place's public integration
-  test sends a DSPACE-style request with this model and asserts the same response model and a
-  non-empty `choices[0].message.content`; token.place's model aliases route
-  `gpt-5-chat-latest` to the canonical API v1 launch backend.
+- Prefer token.place API v1 model `llama-3.1-8b-instruct` for DSPACE compatibility. token.place's
+  public models endpoint advertises this model, and public integration tests should send a
+  DSPACE-style request with this model and assert the same response model and a non-empty
+  `choices[0].message.content`.
 - API v1 returns structured OpenAI-style errors as `{ error: { message, type, param?, code? } }`.
   The client should preserve status/type/code/message for UI summaries and tests.
 - API v1 validates `model` and `messages`; validation failures should stay classified as
@@ -110,16 +110,16 @@ Implementation should use direct HTTPS `fetch` calls to token.place API v1:
 - Rate limits and daily quotas may surface as HTTP 429 provider errors. Preserve response status
   even when parsing fails.
 - Metadata behavior is limited to the current API v1 JSON echo behavior:
-  - token.place echoes request `metadata` into the response only when request `metadata` is a
-    non-empty object.
-  - token.place `tests/integration/test_dspace_chat_alias.py` includes a metadata round-trip test
-    using `{ client: "dspace", conversation_id: "conv-42" }`.
-  - DSPACE may send safe, non-secret metadata for correlation, for example
-    `{ client: "dspace", provider: "token.place" }` plus a local conversation id if useful.
-  - Metadata must not contain OpenAI keys, token.place credentials, player inventory details, raw
-    save data, or any secret.
-  - Do not treat metadata as arbitrary telemetry, analytics, auth, or billing metadata beyond the
-    current request/response JSON echo behavior.
+    - token.place echoes request `metadata` into the response only when request `metadata` is a
+      non-empty object.
+    - token.place `tests/integration/test_dspace_chat_alias.py` includes a metadata round-trip test
+      using `{ client: "dspace", conversation_id: "conv-42" }`.
+    - DSPACE may send safe, non-secret metadata for correlation, for example
+      `{ client: "dspace", provider: "token.place" }` plus a local conversation id if useful.
+    - Metadata must not contain OpenAI keys, token.place credentials, player inventory details, raw
+      save data, or any secret.
+    - Do not treat metadata as arbitrary telemetry, analytics, auth, or billing metadata beyond the
+      current request/response JSON echo behavior.
 
 Forbidden integration targets:
 
@@ -139,9 +139,9 @@ Add one provider-selection field under persisted settings:
 type ChatProvider = 'token-place' | 'openai';
 
 settings: {
-  chatProvider: ChatProvider;
-  showChatDebugPayload: boolean;
-  showQuestGraphVisualizer: boolean;
+    chatProvider: ChatProvider;
+    showChatDebugPayload: boolean;
+    showQuestGraphVisualizer: boolean;
 }
 ```
 
@@ -170,7 +170,7 @@ Normalization rules:
 - There must be no `tokenPlace.apiKey`, token.place credential form, or token.place
   `Authorization` header.
 - Recommended optional deployment model override: `DSPACE_TOKEN_PLACE_CHAT_MODEL`, defaulting to
-  `gpt-5-chat-latest`. `VITE_TOKEN_PLACE_CHAT_MODEL` remains the local/build compatibility
+  `llama-3.1-8b-instruct`. `VITE_TOKEN_PLACE_CHAT_MODEL` remains the local/build compatibility
   fallback. Do not make the model a user-facing key-management setting in v3.1.
 
 ## Post-staging runtime routing correction
@@ -233,49 +233,49 @@ UI ownership changes:
 This sequence keeps each implementation PR reviewable:
 
 1. **Phase 1: token.place API v1 client layer**
-   - Replace legacy token.place/backend `/chat` fetch logic with a
-     `POST /api/v1/chat/completions` client.
-   - Build direct `fetch` requests with `Content-Type: application/json` only.
-   - Include `model` and OpenAI-compatible `messages`.
-   - Parse `choices[0].message.content`.
-   - Preserve structured errors, status, code, type, and param.
-   - Add unit tests for success parsing, malformed responses, network failure, HTTP errors,
-     content policy, rate limit, URL normalization, model default, abort signal, and absence of
-     Authorization/token.place API key headers.
-   - Cover the richer `{ text, contextSources, usage, metadata }` return shape, including API v1
-     `usage`/`metadata` passthrough and DSPACE-owned `contextSources`.
+    - Replace legacy token.place/backend `/chat` fetch logic with a
+      `POST /api/v1/chat/completions` client.
+    - Build direct `fetch` requests with `Content-Type: application/json` only.
+    - Include `model` and OpenAI-compatible `messages`.
+    - Parse `choices[0].message.content`.
+    - Preserve structured errors, status, code, type, and param.
+    - Add unit tests for success parsing, malformed responses, network failure, HTTP errors,
+      content policy, rate limit, URL normalization, model default, abort signal, and absence of
+      Authorization/token.place API key headers.
+    - Cover the richer `{ text, contextSources, usage, metadata }` return shape, including API v1
+      `usage`/`metadata` passthrough and DSPACE-owned `contextSources`.
 
 2. **Phase 2: Settings provider configuration**
-   - Add `settings.chatProvider` normalization/defaulting.
-   - Move OpenAI key management to `/settings` while continuing to store `openAI.apiKey`.
-   - Add a settings panel for provider selection: token.place default, OpenAI opt-in.
-   - Persist provider preference and key changes through existing game-state storage.
+    - Add `settings.chatProvider` normalization/defaulting.
+    - Move OpenAI key management to `/settings` while continuing to store `openAI.apiKey`.
+    - Add a settings panel for provider selection: token.place default, OpenAI opt-in.
+    - Persist provider preference and key changes through existing game-state storage.
 
 3. **Phase 3: Single NPC chat UI**
-   - Refactor the full NPC/persona/debug UI into one provider-aware chat panel.
-   - Default fresh users to token.place.
-   - Use OpenAI only when `settings.chatProvider === 'openai'`.
-   - Remove `OpenAIAPIKeySettings` from `/chat`.
-   - Retire or reduce `TokenPlaceChat.svelte` to a compatibility wrapper only if needed.
+    - Refactor the full NPC/persona/debug UI into one provider-aware chat panel.
+    - Default fresh users to token.place.
+    - Use OpenAI only when `settings.chatProvider === 'openai'`.
+    - Remove `OpenAIAPIKeySettings` from `/chat`.
+    - Retire or reduce `TokenPlaceChat.svelte` to a compatibility wrapper only if needed.
 
 4. **Phase 4: Unit and e2e coverage**
-   - Update OpenAI-by-default Playwright tests to select OpenAI in settings when testing OpenAI.
-   - Add fresh-user token.place default tests with fetch stubs.
-   - Add settings persistence and provider switching tests.
-   - Add error banner tests for token.place network/provider/content-policy/rate-limit failures.
+    - Update OpenAI-by-default Playwright tests to select OpenAI in settings when testing OpenAI.
+    - Add fresh-user token.place default tests with fetch stubs.
+    - Add settings persistence and provider switching tests.
+    - Add error banner tests for token.place network/provider/content-policy/rate-limit failures.
 
 5. **Phase 5: User-facing docs and release QA**
-   - Update Chat and Settings docs for token.place default and OpenAI opt-in.
-   - Create the `frontend/src/pages/docs/md/changelog/20260801.md` changelog entry for the v3.1
-     minor release (this is an explicit human-requested minor-release changelog entry, not a
-     general license for agents to create or update changelogs).
-   - Flesh out `docs/qa/v3.1.md` with staging/prod verification steps and expected results.
+    - Update Chat and Settings docs for token.place default and OpenAI opt-in.
+    - Create the `frontend/src/pages/docs/md/changelog/20260801.md` changelog entry for the v3.1
+      minor release (this is an explicit human-requested minor-release changelog entry, not a
+      general license for agents to create or update changelogs).
+    - Flesh out `docs/qa/v3.1.md` with staging/prod verification steps and expected results.
 
 6. **Phase 6: Cleanup and hardening**
-   - Audit legacy routes and stale flags.
-   - Remove dead token.place `/chat` assumptions.
-   - Verify staging/prod base URLs, model override, and no credential leakage.
-   - Record release-hardening notes and residual risks.
+    - Audit legacy routes and stale flags.
+    - Remove dead token.place `/chat` assumptions.
+    - Verify staging/prod base URLs, model override, and no credential leakage.
+    - Record release-hardening notes and residual risks.
 
 ## Risks and mitigations
 
@@ -319,7 +319,7 @@ Unit tests:
 - `normalizeSettings()` preserves `openai` and `token-place` and rejects invalid values back to
   `token-place`.
 - token.place client posts to `/api/v1/chat/completions` with `model` and `messages`.
-- token.place client defaults to `gpt-5-chat-latest`.
+- token.place client defaults to `llama-3.1-8b-instruct`.
 - token.place client parses `choices[0].message.content`.
 - token.place client rejects malformed responses with a provider parse error.
 - token.place client maps network failures, aborts, HTTP 429, provider 5xx, and
