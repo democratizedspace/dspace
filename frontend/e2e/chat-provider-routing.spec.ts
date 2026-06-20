@@ -13,7 +13,7 @@ const tokenPlacePayload = (content = 'token.place assistant reply') => ({
     id: 'chatcmpl-e2e-token-place',
     object: 'chat.completion',
     created: 1780000000,
-    model: 'gpt-5-chat-latest',
+    model: 'llama-3-8b-instruct',
     choices: [{ message: { role: 'assistant', content } }],
     usage: { prompt_tokens: 8, completion_tokens: 5, total_tokens: 13 },
     metadata: { client: 'dspace', provider: 'token.place' },

@@ -76,7 +76,7 @@ Implementation should use direct HTTPS `fetch` calls to token.place API v1:
 
 ```json
 {
-  "model": "gpt-5-chat-latest",
+  "model": "llama-3-8b-instruct",
   "messages": [
     { "role": "system", "content": "..." },
     { "role": "user", "content": "..." }
@@ -97,10 +97,10 @@ Implementation should use direct HTTPS `fetch` calls to token.place API v1:
 - API v1 is non-streaming. Do not send `stream: true`; if a future helper accepts options, force
   or omit `stream` rather than passing user-provided streaming options through.
 - API v1 rejects `stream: true` with a structured OpenAI-style error whose `param` is `stream`.
-- Prefer model `gpt-5-chat-latest` for DSPACE compatibility. token.place's public integration
+- Prefer model `llama-3-8b-instruct` for DSPACE compatibility. token.place's public integration
   test sends a DSPACE-style request with this model and asserts the same response model and a
   non-empty `choices[0].message.content`; token.place's model aliases route
-  `gpt-5-chat-latest` to the canonical API v1 launch backend.
+  `llama-3-8b-instruct` to the canonical API v1 launch backend.
 - API v1 returns structured OpenAI-style errors as `{ error: { message, type, param?, code? } }`.
   The client should preserve status/type/code/message for UI summaries and tests.
 - API v1 validates `model` and `messages`; validation failures should stay classified as
@@ -170,7 +170,7 @@ Normalization rules:
 - There must be no `tokenPlace.apiKey`, token.place credential form, or token.place
   `Authorization` header.
 - Recommended optional deployment model override: `DSPACE_TOKEN_PLACE_CHAT_MODEL`, defaulting to
-  `gpt-5-chat-latest`. `VITE_TOKEN_PLACE_CHAT_MODEL` remains the local/build compatibility
+  `llama-3-8b-instruct`. `VITE_TOKEN_PLACE_CHAT_MODEL` remains the local/build compatibility
   fallback. Do not make the model a user-facing key-management setting in v3.1.
 
 ## Post-staging runtime routing correction
@@ -319,7 +319,7 @@ Unit tests:
 - `normalizeSettings()` preserves `openai` and `token-place` and rejects invalid values back to
   `token-place`.
 - token.place client posts to `/api/v1/chat/completions` with `model` and `messages`.
-- token.place client defaults to `gpt-5-chat-latest`.
+- token.place client defaults to `llama-3-8b-instruct`.
 - token.place client parses `choices[0].message.content`.
 - token.place client rejects malformed responses with a provider parse error.
 - token.place client maps network failures, aborts, HTTP 429, provider 5xx, and

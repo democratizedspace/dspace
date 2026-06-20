@@ -8,7 +8,7 @@ import {
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
-const DEFAULT_CHAT_MODEL = 'gpt-5-chat-latest';
+const DEFAULT_CHAT_MODEL = 'llama-3-8b-instruct';
 const METADATA_DENY_PATTERN =
     /(?:key|token|secret|credential|password|authorization|auth|inventory|save|state|player)/i;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);

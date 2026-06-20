@@ -129,7 +129,7 @@ describe('token.place API v1 client', () => {
     });
 
     test('uses default model and model override', async () => {
-        expect(getTokenPlaceChatModel()).toBe('gpt-5-chat-latest');
+        expect(getTokenPlaceChatModel()).toBe('llama-3-8b-instruct');
         process.env.VITE_TOKEN_PLACE_CHAT_MODEL = 'custom-model';
         expect(getTokenPlaceChatModel()).toBe('custom-model');
         expect(getTokenPlaceChatModel({ runtimeModel: 'runtime-model' })).toBe('runtime-model');
@@ -184,7 +184,7 @@ describe('token.place API v1 client', () => {
             },
         ]);
         const { body } = getFetchCall();
-        expect(body.model).toBe('gpt-5-chat-latest');
+        expect(body.model).toBe('llama-3-8b-instruct');
         expect(body.messages[0].role).toBe('system');
         expect(body.messages.at(-1)).toEqual({ role: 'user', content: 'hello' });
         expect(body.messages.at(-1)).not.toHaveProperty('id');
