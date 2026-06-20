@@ -38,10 +38,18 @@ default.
 
 ## Implementation notes for operators
 
-DSPACE v3.1 uses direct HTTPS calls to token.place API v1 for now. It posts to
-`/api/v1/chat/completions` with OpenAI-compatible `messages` and `model` fields and reads the reply
-from `choices[0].message.content`. The integration will move to the token.place npm package only
-after that package path is ready for DSPACE Chat.
+DSPACE v3.1 uses token.place API v1 relay-blind E2EE routes. The browser generates or
+loads a DSPACE `/chat` client keypair, fetches a compute node with
+`GET /api/v1/relay/servers/next`, encrypts an API v1 chat request envelope with the compute node
+public key, dispatches ciphertext to `POST /api/v1/relay/requests`, polls
+`POST /api/v1/relay/responses/retrieve`, decrypts the response client-side, validates the response
+envelope, and then reads assistant text from `api_v1_response.choices[0].message.content`.
+
+Relay-owned token.place state/logs must not receive plaintext prompt messages, `PlayerState`, docs
+grounding, raw inventory, save data, OpenAI keys, token.place credentials, or other secrets. The
+default `/chat` flow does not send plaintext `{ model, messages }` to
+`POST /api/v1/chat/completions`, does not use API v2, does not stream, does not use the token.place
+npm package, and does not send token.place auth, API keys, or `Authorization` headers.
 
 API v1 is non-streaming. Responses may appear after the full completion is ready rather than as a
 streaming token-by-token transcript.
