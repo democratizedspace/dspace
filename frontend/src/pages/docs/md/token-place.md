@@ -47,7 +47,7 @@ API v1 is non-streaming. Responses may appear after the full completion is ready
 streaming token-by-token transcript.
 
 The default token.place origin is `https://token.place`. Deployment operators should override the
-origin and model at runtime with public, non-secret environment variables:
+origin and token.place API v1 chat model at runtime with public, non-secret environment variables. The default model is `llama-3.1-8b-instruct`:
 
 - `DSPACE_TOKEN_PLACE_URL`
 - `DSPACE_TOKEN_PLACE_CHAT_MODEL`
