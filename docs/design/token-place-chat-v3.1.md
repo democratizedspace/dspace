@@ -65,67 +65,109 @@ parallel token.place panel:
   `frontend/e2e/chat-persona-switching.spec.ts`. `frontend/e2e/token-place-chat-banners.spec.ts`
   covers the existing opt-in token.place panel and banners.
 
-## token.place API v1 contract
+## token.place API v1 relay E2EE contract
 
-Implementation should use direct HTTPS `fetch` calls to token.place API v1:
+DSPACE `/chat` should use token.place API v1 relay-blind E2EE routes. The browser owns the
+DSPACE `/chat` client private key, encrypts the chat request envelope for the selected compute
+node, sends only ciphertext to the token.place relay, retrieves an encrypted response, and
+decrypts that response client-side before displaying assistant text.
+
+Runtime origins remain the same:
 
 - Production origin: `https://token.place`
 - Staging origin: `https://staging.token.place`
-- Endpoint: `POST /api/v1/chat/completions`
-- Request body: OpenAI-compatible JSON with at least:
 
-```json
-{
-  "model": "llama-3.1-8b-instruct",
-  "messages": [
-    { "role": "system", "content": "..." },
-    { "role": "user", "content": "..." }
-  ]
-}
-```
+Required API v1 relay routes:
 
-- Response parsing: read `choices[0].message.content` from the OpenAI-compatible response.
-- Client return-shape contract:
-  - Keep `tokenPlaceChat(messages, options)` as a string-returning compatibility helper only if
-    existing callers/tests need it.
-  - Add or expose a richer helper that returns a stable object shaped exactly as
-    `{ text, contextSources, usage, metadata }`.
-  - `text` comes from `choices[0].message.content`.
-  - `contextSources` comes from DSPACE prompt/RAG context-source handling, not from token.place.
-  - `usage` comes from the token.place OpenAI-compatible response `usage` object when present.
-  - `metadata` comes from the token.place response `metadata` object when present.
-- API v1 is non-streaming. Do not send `stream: true`; if a future helper accepts options, force
-  or omit `stream` rather than passing user-provided streaming options through.
-- API v1 rejects `stream: true` with a structured OpenAI-style error whose `param` is `stream`.
-- Prefer model `llama-3.1-8b-instruct` for DSPACE compatibility. token.place's public integration
-  test sends a DSPACE-style request with this model and asserts the same response model and a
-  non-empty `choices[0].message.content`; token.place exposes
-  `llama-3.1-8b-instruct` from the API v1 models endpoint as the canonical launch model.
-- API v1 returns structured OpenAI-style errors as `{ error: { message, type, param?, code? } }`.
-  The client should preserve status/type/code/message for UI summaries and tests.
-- API v1 validates `model` and `messages`; validation failures should stay classified as
-  structured provider errors internally.
-- Content moderation can return `error.type = "content_policy_violation"` and
-  `error.code = "content_blocked"`.
-- Rate limits and daily quotas may surface as HTTP 429 provider errors. Preserve response status
-  even when parsing fails.
-- Metadata behavior is limited to the current API v1 JSON echo behavior:
-  - token.place echoes request `metadata` into the response only when request `metadata` is a
-    non-empty object.
-  - token.place `tests/integration/test_dspace_chat_alias.py` includes a metadata round-trip test
-    using `{ client: "dspace", conversation_id: "conv-42" }`.
-  - DSPACE may send safe, non-secret metadata for correlation, for example
-    `{ client: "dspace", provider: "token.place" }` plus a local conversation id if useful.
-  - Metadata must not contain OpenAI keys, token.place credentials, player inventory details, raw
-    save data, or any secret.
-  - Do not treat metadata as arbitrary telemetry, analytics, auth, or billing metadata beyond the
-    current request/response JSON echo behavior.
+- `GET /api/v1/relay/servers/next` to select a compute node and receive its
+  `server_public_key`.
+- `POST /api/v1/relay/requests` to dispatch the encrypted request envelope using a
+  ciphertext-only payload.
+- `POST /api/v1/relay/responses/retrieve` to poll for the encrypted response envelope using
+  `client_public_key` and `request_id`.
+- Optional timeout cleanup via `POST /api/v1/relay/requests/cancel` only if the route is
+  supported by the deployed token.place API v1 relay.
+
+Intended DSPACE `/chat` flow:
+
+1. Generate a browser client keypair for the DSPACE `/chat` request flow and keep the client
+   private key in browser-held state only.
+2. Fetch an available compute node with `GET /api/v1/relay/servers/next`.
+3. Normalize the returned `server_public_key` into the format required by the browser crypto
+   implementation.
+4. Build a plaintext envelope locally in the browser:
+
+    ```json
+    {
+        "protocol": "tokenplace_api_v1_relay_e2ee",
+        "version": 1,
+        "request_id": "<client-generated request id>",
+        "client_public_key": "<browser client public key>",
+        "api_v1_request": {
+            "model": "llama-3.1-8b-instruct",
+            "messages": [
+                { "role": "system", "content": "..." },
+                { "role": "user", "content": "..." }
+            ],
+            "options": {}
+        }
+    }
+    ```
+
+5. Encrypt that envelope with the selected compute node public key.
+6. Dispatch to `POST /api/v1/relay/requests` with a payload containing ciphertext plus only safe
+   routing metadata required by the relay, such as the selected server identifier/public key and
+   `request_id`. The payload must not contain plaintext `model`, `messages`, prompt text,
+   `PlayerState`, docs grounding, raw inventory, save data, OpenAI keys, token.place credentials,
+   or other secrets.
+7. Poll `POST /api/v1/relay/responses/retrieve` with `client_public_key` and `request_id`.
+8. Decrypt the returned encrypted response envelope with the browser client private key.
+9. Validate the decrypted response envelope before extracting content:
+    - `protocol` is exactly `tokenplace_api_v1_relay_e2ee`.
+    - `version` is `1`.
+    - `request_id` matches the pending browser request.
+    - `client_public_key` matches the browser-held public key for the request.
+10. Read assistant text from `api_v1_response.choices[0].message.content` after validation.
+
+Client return-shape contract:
+
+- Keep `tokenPlaceChat(messages, options)` as a string-returning compatibility helper only if
+  existing callers/tests need it.
+- Add or expose a richer helper that returns a stable object shaped exactly as
+  `{ text, contextSources, usage, metadata }`.
+- `text` comes from decrypted `api_v1_response.choices[0].message.content`.
+- `contextSources` comes from DSPACE prompt/RAG context-source handling, not from token.place.
+- `usage` comes from decrypted `api_v1_response.usage` when present.
+- `metadata` comes from decrypted `api_v1_response.metadata` when present.
+
+API v1 remains non-streaming. Do not send or request streaming; if a future helper accepts options,
+force or omit `stream` rather than passing user-provided streaming options through.
+
+Prefer model `llama-3.1-8b-instruct` for DSPACE compatibility. token.place's public integration
+test sends a DSPACE-style request with this model and asserts the same response model and a
+non-empty `choices[0].message.content`; token.place exposes `llama-3.1-8b-instruct` from the API
+v1 models endpoint as the canonical launch model.
+
+Structured API v1 errors, content moderation failures, rate limits, usage, and metadata should be
+handled only after decrypting the response envelope. Preserve status/type/code/message for UI
+summaries and tests when those fields are present in the decrypted response. DSPACE may include
+safe, non-secret metadata inside the encrypted `api_v1_request.options` envelope for correlation,
+for example `{ client: "dspace", provider: "token.place" }` plus a local conversation id if
+useful. Metadata must not contain OpenAI keys, token.place credentials, player inventory details,
+raw save data, or any secret.
+
+Security invariant: token.place relay-owned state, logs, diagnostics, request queues, and response
+queues must never receive plaintext DSPACE prompt messages, `PlayerState`, docs grounding, raw
+inventory, save data, OpenAI keys, token.place credentials, or other secrets. Relay-visible data
+should be limited to ciphertext and the minimal safe routing metadata needed to deliver work to a
+compute node and return the encrypted response to the browser.
 
 Forbidden integration targets:
 
+- No plaintext default DSPACE `/chat` request to `POST /api/v1/chat/completions`.
 - No legacy token.place/backend `/api/chat`.
 - No bare token.place/backend `/chat`.
-- No legacy `/sink`, `/source`, `/faucet`, `/retrieve`, or `/next_server` fallbacks.
+- No deprecated legacy `/next_server`, `/sink`, `/source`, `/faucet`, or `/retrieve` fallbacks.
 - No API v2 routes such as `/api/v2/chat/completions` or `/v2/chat/completions`.
 - No streaming/SSE code paths.
 - No token.place npm package integration.
@@ -139,9 +181,9 @@ Add one provider-selection field under persisted settings:
 type ChatProvider = 'token-place' | 'openai';
 
 settings: {
-  chatProvider: ChatProvider;
-  showChatDebugPayload: boolean;
-  showQuestGraphVisualizer: boolean;
+    chatProvider: ChatProvider;
+    showChatDebugPayload: boolean;
+    showQuestGraphVisualizer: boolean;
 }
 ```
 
@@ -163,10 +205,11 @@ Normalization rules:
   override scenarios. Default to `https://token.place`; staging should configure
   `DSPACE_TOKEN_PLACE_URL=https://staging.token.place`, and production should omit the override or
   configure `DSPACE_TOKEN_PLACE_URL=https://token.place`.
-- Normalize token.place URL values before appending `/api/v1/chat/completions`: accept
-  origin-style values such as `https://token.place`, strip trailing slashes, tolerate legacy
-  `https://token.place/api` by normalizing it to the origin, and never produce
-  `/api/api/v1/chat/completions`.
+- Normalize token.place URL values before appending API v1 relay paths such as
+  `/api/v1/relay/servers/next`, `/api/v1/relay/requests`, and
+  `/api/v1/relay/responses/retrieve`: accept origin-style values such as
+  `https://token.place`, strip trailing slashes, tolerate legacy `https://token.place/api` by
+  normalizing it to the origin, and never produce duplicate `/api/api/v1/...` path segments.
 - There must be no `tokenPlace.apiKey`, token.place credential form, or token.place
   `Authorization` header.
 - Recommended optional deployment model override: `DSPACE_TOKEN_PLACE_CHAT_MODEL`, defaulting to
@@ -183,9 +226,9 @@ origin/model, and `/chat` passes them into the hydrated provider-aware panel wit
 client-side config fetch.
 
 This correction does not change the token.place API v1 contract, provider selection semantics, or
-zero-auth invariants: DSPACE still makes direct browser HTTPS requests to
-`/api/v1/chat/completions`, defaults fresh users to token.place, keeps OpenAI as an optional
-Settings opt-in, sends no token.place credentials, sends no `Authorization` header, and uses
+zero-auth invariants: DSPACE still makes browser HTTPS requests to API v1 relay E2EE routes, defaults fresh users to
+token.place, keeps OpenAI as an optional Settings opt-in, sends no token.place credentials, sends
+no `Authorization` header, sends only ciphertext plus safe routing metadata to the relay, and uses
 `credentials: 'omit'`.
 
 ## Proposed UI and provider flow
@@ -214,7 +257,7 @@ UI ownership changes:
   docs-RAG metadata, source display, and player-state summary should continue to work regardless
   of provider.
 - Debug payload should show the actual message payload sent to the selected provider. For
-  token.place this should be the OpenAI-compatible `messages` array sent to API v1.
+  token.place this should show the local plaintext envelope before encryption for developer review, while network requests to the relay remain ciphertext-only.
 - token.place responses should pass through the same DSPACE response validation and source-link
   sanitization currently used for OpenAI responses.
 - Any reuse or extraction from `buildChatPrompt()` must first audit, update, or remove the current
@@ -233,49 +276,52 @@ UI ownership changes:
 This sequence keeps each implementation PR reviewable:
 
 1. **Phase 1: token.place API v1 client layer**
-   - Replace legacy token.place/backend `/chat` fetch logic with a
-     `POST /api/v1/chat/completions` client.
-   - Build direct `fetch` requests with `Content-Type: application/json` only.
-   - Include `model` and OpenAI-compatible `messages`.
-   - Parse `choices[0].message.content`.
-   - Preserve structured errors, status, code, type, and param.
-   - Add unit tests for success parsing, malformed responses, network failure, HTTP errors,
-     content policy, rate limit, URL normalization, model default, abort signal, and absence of
-     Authorization/token.place API key headers.
-   - Cover the richer `{ text, contextSources, usage, metadata }` return shape, including API v1
-     `usage`/`metadata` passthrough and DSPACE-owned `contextSources`.
+    - Replace legacy token.place/backend `/chat` fetch logic with the API v1 relay E2EE client.
+    - Generate/hold a browser client keypair, fetch a compute node from
+      `GET /api/v1/relay/servers/next`, normalize `server_public_key`, encrypt the
+      `tokenplace_api_v1_relay_e2ee` request envelope, and dispatch ciphertext to
+      `POST /api/v1/relay/requests`.
+    - Poll `POST /api/v1/relay/responses/retrieve` with `client_public_key` and `request_id`,
+      decrypt with the browser client private key, validate protocol/version/request id/client
+      public key, and parse `api_v1_response.choices[0].message.content`.
+    - Preserve structured errors, status, code, type, and param.
+    - Add unit tests for success parsing, malformed responses, network failure, HTTP errors,
+      content policy, rate limit, URL normalization, model default, abort signal, and absence of
+      Authorization/token.place API key headers.
+    - Cover the richer `{ text, contextSources, usage, metadata }` return shape, including API v1
+      `usage`/`metadata` passthrough and DSPACE-owned `contextSources`.
 
 2. **Phase 2: Settings provider configuration**
-   - Add `settings.chatProvider` normalization/defaulting.
-   - Move OpenAI key management to `/settings` while continuing to store `openAI.apiKey`.
-   - Add a settings panel for provider selection: token.place default, OpenAI opt-in.
-   - Persist provider preference and key changes through existing game-state storage.
+    - Add `settings.chatProvider` normalization/defaulting.
+    - Move OpenAI key management to `/settings` while continuing to store `openAI.apiKey`.
+    - Add a settings panel for provider selection: token.place default, OpenAI opt-in.
+    - Persist provider preference and key changes through existing game-state storage.
 
 3. **Phase 3: Single NPC chat UI**
-   - Refactor the full NPC/persona/debug UI into one provider-aware chat panel.
-   - Default fresh users to token.place.
-   - Use OpenAI only when `settings.chatProvider === 'openai'`.
-   - Remove `OpenAIAPIKeySettings` from `/chat`.
-   - Retire or reduce `TokenPlaceChat.svelte` to a compatibility wrapper only if needed.
+    - Refactor the full NPC/persona/debug UI into one provider-aware chat panel.
+    - Default fresh users to token.place.
+    - Use OpenAI only when `settings.chatProvider === 'openai'`.
+    - Remove `OpenAIAPIKeySettings` from `/chat`.
+    - Retire or reduce `TokenPlaceChat.svelte` to a compatibility wrapper only if needed.
 
 4. **Phase 4: Unit and e2e coverage**
-   - Update OpenAI-by-default Playwright tests to select OpenAI in settings when testing OpenAI.
-   - Add fresh-user token.place default tests with fetch stubs.
-   - Add settings persistence and provider switching tests.
-   - Add error banner tests for token.place network/provider/content-policy/rate-limit failures.
+    - Update OpenAI-by-default Playwright tests to select OpenAI in settings when testing OpenAI.
+    - Add fresh-user token.place default tests with fetch stubs.
+    - Add settings persistence and provider switching tests.
+    - Add error banner tests for token.place network/provider/content-policy/rate-limit failures.
 
 5. **Phase 5: User-facing docs and release QA**
-   - Update Chat and Settings docs for token.place default and OpenAI opt-in.
-   - Create the `frontend/src/pages/docs/md/changelog/20260801.md` changelog entry for the v3.1
-     minor release (this is an explicit human-requested minor-release changelog entry, not a
-     general license for agents to create or update changelogs).
-   - Flesh out `docs/qa/v3.1.md` with staging/prod verification steps and expected results.
+    - Update Chat and Settings docs for token.place default and OpenAI opt-in.
+    - Create the `frontend/src/pages/docs/md/changelog/20260801.md` changelog entry for the v3.1
+      minor release (this is an explicit human-requested minor-release changelog entry, not a
+      general license for agents to create or update changelogs).
+    - Flesh out `docs/qa/v3.1.md` with staging/prod verification steps and expected results.
 
 6. **Phase 6: Cleanup and hardening**
-   - Audit legacy routes and stale flags.
-   - Remove dead token.place `/chat` assumptions.
-   - Verify staging/prod base URLs, model override, and no credential leakage.
-   - Record release-hardening notes and residual risks.
+    - Audit legacy routes and stale flags.
+    - Remove dead token.place `/chat` assumptions.
+    - Verify staging/prod base URLs, model override, and no credential leakage.
+    - Record release-hardening notes and residual risks.
 
 ## Risks and mitigations
 
@@ -308,8 +354,8 @@ This sequence keeps each implementation PR reviewable:
   so old users are not accidentally blocked from the new default chat. Keep only URL compatibility
   if safe.
 - **Base URL confusion:** store origins, not endpoint paths. The client should tolerate legacy
-  `https://token.place/api` by normalizing to `https://token.place` before appending
-  `/api/v1/chat/completions`, or explicitly document accepted forms in tests.
+  `https://token.place/api` by normalizing to `https://token.place` before appending API v1 relay
+  route paths, or explicitly document accepted forms in tests.
 
 ## Test plan
 
@@ -318,9 +364,9 @@ Unit tests:
 - `normalizeSettings()` defaults missing `settings.chatProvider` to `token-place`.
 - `normalizeSettings()` preserves `openai` and `token-place` and rejects invalid values back to
   `token-place`.
-- token.place client posts to `/api/v1/chat/completions` with `model` and `messages`.
+- token.place client uses `GET /api/v1/relay/servers/next`, `POST /api/v1/relay/requests`, and `POST /api/v1/relay/responses/retrieve`.
 - token.place client defaults to `llama-3.1-8b-instruct`.
-- token.place client parses `choices[0].message.content`.
+- token.place client decrypts the response envelope and parses `api_v1_response.choices[0].message.content`.
 - token.place client rejects malformed responses with a provider parse error.
 - token.place client maps network failures, aborts, HTTP 429, provider 5xx, and
   `content_policy_violation` payloads.
@@ -354,7 +400,7 @@ Manual/staging checks for release QA and hardening:
 - Production `/chat` defaults to `https://token.place`.
 - Local/dev tests use fetch stubs or explicit local/test overrides, not live token.place calls in
   CI.
-- Browser devtools show `POST https://token.place/api/v1/chat/completions` in production, or the
+- Browser devtools show API v1 relay route calls (`GET /api/v1/relay/servers/next`, `POST /api/v1/relay/requests`, and `POST /api/v1/relay/responses/retrieve`) in production, or the
   staging equivalent, with no token.place `Authorization` header.
 - Browser devtools show a JSON body with `model`, `messages`, optional safe `metadata`, and
   `stream` absent or `false`, never `true`.
@@ -377,7 +423,7 @@ Manual/staging checks for release QA and hardening:
 - [ ] OpenAI opt-in is represented as `settings.chatProvider = 'openai'` plus `openAI.apiKey`.
 - [ ] `/chat` renders a single NPC chat UI.
 - [ ] `/settings` owns provider selection and OpenAI key management.
-- [ ] token.place requests use `POST /api/v1/chat/completions`.
+- [ ] token.place requests use API v1 relay E2EE route sequence and never the plaintext default `POST /api/v1/chat/completions`.
 - [ ] token.place responses parse `choices[0].message.content`.
 - [ ] API v2, streaming, token.place npm package integration, token.place auth/API keys, and
       legacy token.place/backend `/api/chat` or `/chat` endpoints are absent.
