@@ -36,15 +36,32 @@ If OpenAI is selected without a saved key, Chat should guide you back to Setting
 an empty-key request. Switch the provider back to token.place in Settings to return to the no-key
 default.
 
-## Implementation notes for operators
+## v3.1 / P8 relay E2EE implementation target
 
-DSPACE v3.1 uses direct HTTPS calls to token.place API v1 for now. It posts to
-`/api/v1/chat/completions` with OpenAI-compatible `messages` and `model` fields and reads the reply
-from `choices[0].message.content`. The integration will move to the token.place npm package only
-after that package path is ready for DSPACE Chat.
+The relay E2EE flow below is the v3.1 / P8 implementation target and the production/staging
+promotion gate for P8b. Until that client implementation lands, the shipped DSPACE Chat client is
+being corrected from its legacy plaintext token.place API v1 request path. Operators should not use
+the relay-route sequence below as evidence that today's shipped `/chat` client already dispatches
+relay-blind requests; use it as the required target for the P8b implementation PR and release
+sign-off.
 
-API v1 is non-streaming. Responses may appear after the full completion is ready rather than as a
-streaming token-by-token transcript.
+DSPACE v3.1 / P8 requires token.place API v1 relay E2EE routes for the default Chat path. The
+browser must generate a DSPACE `/chat` client keypair, fetch a compute node with
+`GET /api/v1/relay/servers/next`, build a `tokenplace_api_v1_relay_e2ee` envelope with
+`client_public_key`, encrypt that API v1 chat request envelope for the compute node, dispatch
+ciphertext with `POST /api/v1/relay/requests`, poll
+`POST /api/v1/relay/responses/retrieve`, then decrypt and validate the response client-side
+before reading `api_v1_response.choices[0].message.content`.
+
+The relay request payload must be ciphertext-only plus safe routing metadata. token.place
+relay-owned state and logs must not receive plaintext DSPACE prompt messages, player state, docs
+grounding, raw inventory, save data, OpenAI keys, token.place credentials, or other secrets. The
+default Chat path must not send plaintext `{ model, messages }` directly to
+`/api/v1/chat/completions`, use token.place API v2, stream responses, use the token.place npm
+package, send token.place auth/API keys, or fall back to deprecated legacy relay routes.
+
+API v1 remains non-streaming inside the encrypted envelope. Responses may appear after the full
+completion is ready rather than as a streaming token-by-token transcript.
 
 The default token.place origin is `https://token.place`, and the default token.place API v1
 Chat model is `llama-3.1-8b-instruct`. Deployment operators should override the origin and
