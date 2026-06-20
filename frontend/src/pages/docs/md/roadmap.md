@@ -4,7 +4,9 @@ slug: 'roadmap'
 ---
 
 This roadmap keeps legacy v3 milestone checklist phrasing for historical continuity and also calls out
-current shipped status where relevant.
+current shipped status where relevant. As of the active release-planning docs, repository metadata
+still identifies the current package/chart line as v3.0.1; v3.1.0 remains a release candidate until
+its QA gates, including [observability](https://github.com/democratizedspace/dspace/blob/main/docs/design/observability-v3.1.md), are complete.
 
 ## 2026
 
@@ -24,7 +26,9 @@ current shipped status where relevant.
 
 - [x] DSPACE v3 released
 - [x] OpenAI-backed NPC chat personas shipped in `/chat` for v3.0
-- [x] token.place became the default `/chat` provider in v3.1, with OpenAI optional in `/settings`
+- [ ] v3.1.0 release candidate: token.place becomes the default `/chat` provider with OpenAI
+      optional in `/settings`; promotion remains blocked on the v3.1 QA checklist and
+      observability gates
 - [x] Utility destinations shipped in the More menu (`/stats`, `/leaderboard`, `/titles`,
       `/toolbox`, `/settings`, `/gamesaves`, `/cloudsync`, `/contentbackup`)
 
