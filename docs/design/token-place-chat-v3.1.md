@@ -137,7 +137,7 @@ API v1 chat semantics inside the encrypted envelope:
   or omit `stream` rather than passing user-provided streaming options through.
 - Prefer model `llama-3.1-8b-instruct` for DSPACE compatibility. token.place's public integration
   test sends a DSPACE-style request with this model and asserts the same response model and a
-  non-empty `choices[0].message.content`; token.place exposes
+  non-empty `api_v1_response.choices[0].message.content`; token.place exposes
   `llama-3.1-8b-instruct` from the API v1 models endpoint as the canonical launch model.
 - API v1 returns structured OpenAI-style errors as `{ error: { message, type, param?, code? } }`
   inside the decrypted `api_v1_response`. The client should preserve status/type/code/message for

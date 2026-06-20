@@ -78,17 +78,50 @@ describe('authentication doc alignment', () => {
 });
 
 describe('token.place doc alignment', () => {
-  it('matches default endpoint and opt-in guidance', () => {
-    const doc = readDoc('../frontend/src/pages/docs/md/token-place.md');
+  it('guards relay E2EE route sequence, ciphertext-only invariant, and opt-in guidance', () => {
+    const publicDoc = readDoc('../frontend/src/pages/docs/md/token-place.md');
+    const designDoc = readDoc('../docs/design/token-place-chat-v3.1.md');
+    const qaDoc = readDoc('../docs/qa/v3.1.md');
+    const activeDocs = [
+      ['public token.place docs', publicDoc],
+      ['v3.1 design docs', designDoc],
+      ['v3.1 QA docs', qaDoc],
+    ] as const;
 
-    expect(doc).toMatch(/https:\/\/token\.place/);
-    expect(doc).toMatch(/\/api\/v1\/chat\/completions/);
-    expect(doc).toMatch(/default provider/i);
-    expect(doc).toMatch(/OpenAI/i);
-    expect(doc).toMatch(/DSPACE_TOKEN_PLACE_URL/i);
-    expect(doc).toMatch(/DSPACE_TOKEN_PLACE_CHAT_MODEL/i);
-    expect(doc).toMatch(/VITE_TOKEN_PLACE_URL/i);
-    expect(doc).toMatch(/VITE_TOKEN_PLACE_CHAT_MODEL/i);
+    const requiredRelayTerms = [
+      /\/api\/v1\/relay\/servers\/next/,
+      /\/api\/v1\/relay\/requests/,
+      /\/api\/v1\/relay\/responses\/retrieve/,
+      /tokenplace_api_v1_relay_e2ee/,
+      /ciphertext/i,
+      /client_public_key/,
+    ];
+
+    for (const [docName, doc] of activeDocs) {
+      for (const term of requiredRelayTerms) {
+        expect(doc, `${docName} should document ${term}`).toMatch(term);
+      }
+    }
+
+    const forbiddenPlaintextDefaultClaims = [
+      /DSPACE v3\.1 uses[\s\S]{0,160}\/api\/v1\/chat\/completions/i,
+      /default Chat path[\s\S]{0,160}(?:uses|must use|should use)[\s\S]{0,80}plaintext[\s\S]{0,80}\/api\/v1\/chat\/completions/i,
+      /\/api\/v1\/chat\/completions[\s\S]{0,160}default Chat path(?! must not)/i,
+    ];
+
+    for (const claim of forbiddenPlaintextDefaultClaims) {
+      expect(publicDoc).not.toMatch(claim);
+    }
+
+    expect(publicDoc).toMatch(/P8 implementation target/i);
+    expect(publicDoc).toMatch(/Until that client implementation lands/i);
+    expect(publicDoc).toMatch(/https:\/\/token\.place/);
+    expect(publicDoc).toMatch(/default provider/i);
+    expect(publicDoc).toMatch(/OpenAI/i);
+    expect(publicDoc).toMatch(/DSPACE_TOKEN_PLACE_URL/i);
+    expect(publicDoc).toMatch(/DSPACE_TOKEN_PLACE_CHAT_MODEL/i);
+    expect(publicDoc).toMatch(/VITE_TOKEN_PLACE_URL/i);
+    expect(publicDoc).toMatch(/VITE_TOKEN_PLACE_CHAT_MODEL/i);
   });
 });
 

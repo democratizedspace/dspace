@@ -36,13 +36,21 @@ If OpenAI is selected without a saved key, Chat should guide you back to Setting
 an empty-key request. Switch the provider back to token.place in Settings to return to the no-key
 default.
 
-## Implementation notes for operators
+## v3.1 / P8 relay E2EE implementation target
 
-DSPACE v3.1 uses token.place API v1 relay E2EE routes for the default Chat path. The
-browser generates a DSPACE `/chat` client keypair, fetches a compute node with
-`GET /api/v1/relay/servers/next`, encrypts an API v1 chat request envelope for that compute node,
-dispatches ciphertext with `POST /api/v1/relay/requests`, polls
-`POST /api/v1/relay/responses/retrieve`, then decrypts and validates the response client-side
+The relay E2EE flow below is the v3.1 / P8 implementation target and the production/staging
+promotion gate for P8b. Until that client implementation lands, the shipped DSPACE Chat client is
+being corrected from its legacy plaintext token.place API v1 request path. Operators should not use
+the relay-route sequence below as evidence that today's shipped `/chat` client already dispatches
+relay-blind requests; use it as the required target for the P8b implementation PR and release
+sign-off.
+
+DSPACE v3.1 / P8 requires token.place API v1 relay E2EE routes for the default Chat path. The
+browser must generate a DSPACE `/chat` client keypair, fetch a compute node with
+`GET /api/v1/relay/servers/next`, build a `tokenplace_api_v1_relay_e2ee` envelope with
+`client_public_key`, encrypt that API v1 chat request envelope for the compute node, dispatch
+ciphertext with `POST /api/v1/relay/requests`, poll
+`POST /api/v1/relay/responses/retrieve`, then decrypt and validate the response client-side
 before reading `api_v1_response.choices[0].message.content`.
 
 The relay request payload must be ciphertext-only plus safe routing metadata. token.place
