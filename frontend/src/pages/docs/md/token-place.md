@@ -46,8 +46,10 @@ after that package path is ready for DSPACE Chat.
 API v1 is non-streaming. Responses may appear after the full completion is ready rather than as a
 streaming token-by-token transcript.
 
-The default token.place origin is `https://token.place`. Deployment operators should override the
-origin and model at runtime with public, non-secret environment variables:
+The default token.place origin is `https://token.place`, and the default token.place API v1
+Chat model is `llama-3.1-8b-instruct`. Deployment operators should override the origin and
+model at runtime with public, non-secret environment variables when a token.place deployment
+requires a different API v1 model:
 
 - `DSPACE_TOKEN_PLACE_URL`
 - `DSPACE_TOKEN_PLACE_CHAT_MODEL`

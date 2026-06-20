@@ -65,7 +65,7 @@ describe('runtime endpoints', () => {
     const body = await response.json();
     expect(body.tokenPlace).toStrictEqual({
       url: 'https://token.place',
-      model: 'gpt-5-chat-latest',
+      model: 'llama-3.1-8b-instruct',
     });
   });
 
