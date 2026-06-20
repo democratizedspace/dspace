@@ -24,12 +24,16 @@ current shipped status where relevant.
 
 - [x] DSPACE v3 released
 - [x] OpenAI-backed NPC chat personas shipped in `/chat` for v3.0
-- [x] token.place became the default `/chat` provider in v3.1, with OpenAI optional in `/settings`
+- [ ] DSPACE v3.1.0 release candidate: token.place default `/chat` and observability release
+      gates are planned but not shipped until QA evidence, candidate SHA/tag, and promotion
+      approval are attached
 - [x] Utility destinations shipped in the More menu (`/stats`, `/leaderboard`, `/titles`,
       `/toolbox`, `/settings`, `/gamesaves`, `/cloudsync`, `/contentbackup`)
 
-See [v3 release state](/docs/v3-release-state) and the
-[April 2026 changelog](/changelog#20260401) for details.
+See [v3 release state](/docs/v3-release-state), the
+[April 2026 changelog](/changelog#20260401), and the
+[v3.1 observability release design](../../../../../docs/design/observability-v3.1.md) for active
+v3.1.0 gates.
 
 ## Historical milestones
 
