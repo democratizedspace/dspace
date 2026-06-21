@@ -297,7 +297,7 @@ describe('token.place API v1 client', () => {
             metadata: { conversation_id: 'conv-42' },
         });
         const { body } = getFetchCallByPath('/api/v1/relay/requests');
-        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKeyPem);
 
         expect(decrypted.api_v1_request).toEqual(
             expect.objectContaining({
@@ -315,7 +315,7 @@ describe('token.place API v1 client', () => {
         expect(decrypted.api_v1_request).not.toHaveProperty('metadata');
     });
 
-    test('decryption accepts chat_history as the response ciphertext', async () => {
+    test('decryption accepts token.place static chat-compatible CBC/PKCS1 relay responses', async () => {
         const encrypted = await encryptTokenPlaceEnvelope(
             { ok: true, source: 'chat_history' },
             relayServerKeys[0].publicKeyPem
@@ -323,12 +323,14 @@ describe('token.place API v1 client', () => {
         const decrypted = await decryptTokenPlaceEnvelope(
             {
                 chat_history: encrypted.ciphertext,
+                ciphertext: 'fallback-ciphertext-should-not-be-used',
                 cipherkey: encrypted.cipherkey,
                 iv: encrypted.iv,
             },
-            relayServerKeys[0].privateKey
+            relayServerKeys[0].privateKeyPem
         );
 
+        expect(Uint8Array.from(atob(encrypted.iv), (char) => char.charCodeAt(0))).toHaveLength(16);
         expect(decrypted).toEqual({ ok: true, source: 'chat_history' });
     });
 
@@ -337,7 +339,10 @@ describe('token.place API v1 client', () => {
             { ok: true, source: 'ciphertext' },
             relayServerKeys[0].publicKeyPem
         );
-        const decrypted = await decryptTokenPlaceEnvelope(encrypted, relayServerKeys[0].privateKey);
+        const decrypted = await decryptTokenPlaceEnvelope(
+            encrypted,
+            relayServerKeys[0].privateKeyPem
+        );
 
         expect(decrypted).toEqual({ ok: true, source: 'ciphertext' });
     });
@@ -353,7 +358,7 @@ describe('token.place API v1 client', () => {
         };
 
         await expect(
-            decryptTokenPlaceEnvelope(payload, relayServerKeys[0].privateKey)
+            decryptTokenPlaceEnvelope(payload, relayServerKeys[0].privateKeyPem)
         ).rejects.toThrow('Malformed encrypted token.place response: missing ciphertext field.');
     });
 
@@ -422,36 +427,6 @@ describe('token.place API v1 client', () => {
         );
 
         expect(decrypted).toEqual({ ok: true, mode: 'separate-gcm-tag' });
-    });
-
-    test('decryption accepts CBC payloads with raw wrapped AES keys', async () => {
-        const crypto = globalThis.crypto;
-        const rawAesKey = crypto.getRandomValues(new Uint8Array(32));
-        const iv = crypto.getRandomValues(new Uint8Array(16));
-        const aesKey = await crypto.subtle.importKey('raw', rawAesKey, { name: 'AES-CBC' }, false, [
-            'encrypt',
-        ]);
-        const ciphertext = await crypto.subtle.encrypt(
-            { name: 'AES-CBC', iv },
-            aesKey,
-            new TextEncoder().encode(JSON.stringify({ ok: true, key: 'raw' }))
-        );
-        const cipherkey = await crypto.subtle.encrypt(
-            { name: 'RSA-OAEP' },
-            relayServerKeys[0].publicKey,
-            rawAesKey
-        );
-
-        const decrypted = await decryptTokenPlaceEnvelope(
-            {
-                ciphertext: bytesToBase64(ciphertext),
-                cipherkey: bytesToBase64(cipherkey),
-                iv: bytesToBase64(iv),
-            },
-            relayServerKeys[0].privateKey
-        );
-
-        expect(decrypted).toEqual({ ok: true, key: 'raw' });
     });
 
     test('large encrypted envelopes do not overflow base64 conversion', async () => {

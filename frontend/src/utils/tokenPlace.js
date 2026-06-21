@@ -1,3 +1,4 @@
+import forge from 'node-forge';
 import { loadGameState, ready } from './gameState/common.js';
 import { buildChatPrompt, validateChatResponseText } from './openAI.js';
 import {
@@ -198,6 +199,19 @@ export const normalizeTokenPlacePublicKey = (value) => {
     return { pem: base64ToPem(raw), base64: bytesToBase64(textEncoder.encode(base64ToPem(raw))) };
 };
 
+const wrapTokenPlaceAesKey = (base64AesKey, publicKeyPem) => {
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+    const encrypted = publicKey.encrypt(base64AesKey, 'RSAES-PKCS1-V1_5');
+    return forge.util.encode64(encrypted);
+};
+
+const unwrapTokenPlaceAesKey = (cipherkey, privateKeyPem) => {
+    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+    const decoded = privateKey.decrypt(forge.util.decode64(cipherkey), 'RSAES-PKCS1-V1_5');
+    if (!decoded) throw new Error('Malformed encrypted token.place response.');
+    return textEncoder.encode(decoded);
+};
+
 const importRsaPublicKey = async (pem) =>
     getCrypto().subtle.importKey(
         'spki',
@@ -217,25 +231,18 @@ const importRsaPrivateKey = async (base64Pkcs8) =>
     );
 
 export const generateTokenPlaceClientKeypair = async () => {
-    const pair = await getCrypto().subtle.generateKey(
-        {
-            name: 'RSA-OAEP',
-            modulusLength: 2048,
-            publicExponent: new Uint8Array([1, 0, 1]),
-            hash: 'SHA-256',
-        },
-        true,
-        ['encrypt', 'decrypt']
+    const pair = forge.pki.rsa.generateKeyPair({ bits: 2048, workers: 0 });
+    const publicKeyPem = forge.pki.publicKeyToPem(pair.publicKey);
+    const privateKeyPem = forge.pki.privateKeyInfoToPem(
+        forge.pki.wrapRsaPrivateKey(forge.pki.privateKeyToAsn1(pair.privateKey))
     );
-    const spki = await getCrypto().subtle.exportKey('spki', pair.publicKey);
-    const pkcs8 = await getCrypto().subtle.exportKey('pkcs8', pair.privateKey);
-    const publicPem = base64ToPem(bytesToBase64(spki));
     return {
-        publicKey: pair.publicKey,
-        privateKey: pair.privateKey,
-        publicKeyPem: publicPem,
-        publicKeyBase64: bytesToBase64(textEncoder.encode(publicPem)),
-        privateKeyBase64: bytesToBase64(pkcs8),
+        publicKey: await importRsaPublicKey(publicKeyPem),
+        privateKey: await importRsaPrivateKey(pemToBase64(privateKeyPem)),
+        publicKeyPem,
+        publicKeyBase64: bytesToBase64(textEncoder.encode(publicKeyPem)),
+        privateKeyBase64: pemToBase64(privateKeyPem),
+        privateKeyPem,
     };
 };
 
@@ -245,18 +252,16 @@ export const encryptTokenPlaceEnvelope = async (envelope, serverPublicKeyPem) =>
         'encrypt',
     ]);
     const rawAesKey = await crypto.subtle.exportKey('raw', aesKey);
-    const encodedAesKey = textEncoder.encode(bytesToBase64(rawAesKey));
+    const encodedAesKey = bytesToBase64(rawAesKey);
     const iv = crypto.getRandomValues(new Uint8Array(16));
     const ciphertext = await crypto.subtle.encrypt(
         { name: 'AES-CBC', iv },
         aesKey,
         textEncoder.encode(JSON.stringify(envelope))
     );
-    const serverKey = await importRsaPublicKey(serverPublicKeyPem);
-    const cipherkey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, serverKey, encodedAesKey);
     return {
         ciphertext: bytesToBase64(ciphertext),
-        cipherkey: bytesToBase64(cipherkey),
+        cipherkey: wrapTokenPlaceAesKey(encodedAesKey, serverPublicKeyPem),
         iv: bytesToBase64(iv),
     };
 };
@@ -301,18 +306,18 @@ const decodeTokenPlaceCbcAesKey = (wrappedAesKey) => {
 };
 
 export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
-    const privateKey =
-        typeof clientPrivateKey === 'string'
-            ? await importRsaPrivateKey(clientPrivateKey)
-            : clientPrivateKey;
-    const wrappedAesKey = await getCrypto().subtle.decrypt(
-        { name: 'RSA-OAEP' },
-        privateKey,
-        base64ToBytes(payload.cipherkey)
-    );
     const usesGcm = String(payload.mode || '')
         .toLowerCase()
         .includes('gcm');
+    const wrappedAesKey = usesGcm
+        ? await getCrypto().subtle.decrypt(
+              { name: 'RSA-OAEP' },
+              typeof clientPrivateKey === 'string'
+                  ? await importRsaPrivateKey(clientPrivateKey)
+                  : clientPrivateKey,
+              base64ToBytes(payload.cipherkey)
+          )
+        : unwrapTokenPlaceAesKey(payload.cipherkey, clientPrivateKey);
     const rawAesKey = usesGcm ? wrappedAesKey : decodeTokenPlaceCbcAesKey(wrappedAesKey);
     const encryptedText = payload.chat_history || payload.ciphertext;
     if (!encryptedText) {
@@ -528,7 +533,7 @@ const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
     try {
         responseEnvelope = await decryptTokenPlaceEnvelope(
             encryptedResponse,
-            clientKeys.privateKey
+            clientKeys.privateKeyPem
         );
     } catch (error) {
         throw createMalformedTokenPlaceResponseError('Malformed encrypted token.place response.');

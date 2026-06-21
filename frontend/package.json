@@ -109,6 +109,7 @@
         "marked": "^4.3.0",
         "minisearch": "^7.2.0",
         "node-fetch": "^3.3.1",
+        "node-forge": "^1.4.0",
         "openai": "^5.16.0",
         "postcss": "^8.4.23",
         "pretty-date": "^0.2.0",
