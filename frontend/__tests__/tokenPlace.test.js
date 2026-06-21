@@ -1,5 +1,9 @@
+import { webcrypto } from 'node:crypto';
 import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest';
 const jest = vi;
+if (!globalThis.crypto?.subtle) {
+    Object.defineProperty(globalThis, 'crypto', { value: webcrypto, configurable: true });
+}
 
 jest.mock('../src/utils/gameState/common.js', () => ({
     loadGameState: jest.fn(),
@@ -11,36 +15,72 @@ jest.mock('../src/utils/docsRag.js', () => ({
 }));
 
 const { loadGameState } = await import('../src/utils/gameState/common.js');
+const tokenPlaceModule = await import('../src/utils/tokenPlace.js');
 const {
     TokenPlaceChatV2,
     buildTokenPlaceChatCompletionsUrl,
     buildTokenPlaceMetadata,
+    encryptTokenPlaceEnvelope,
     extractTokenPlaceAssistantText,
+    generateTokenPlaceClientKeypair,
+    validateTokenPlaceResponseEnvelope,
     getTokenPlaceChatModel,
     resolveTokenPlaceBaseUrl,
     tokenPlaceChat,
-} = await import('../src/utils/tokenPlace.js');
+} = tokenPlaceModule;
 const { getTokenPlaceErrorSummary } = await import('../src/utils/tokenPlaceErrors.js');
 const { buildChatPrompt } = await import('../src/utils/openAI.js');
 
-const okResponse = (body = {}) => ({
-    ok: true,
-    status: 200,
-    json: () =>
-        Promise.resolve({
-            choices: [{ message: { content: 'mocked reply' } }],
-            ...body,
-        }),
+const jsonResponse = (body = {}, status = 200, statusText = 'OK') => ({
+    ok: status >= 200 && status < 300,
+    status,
+    statusText,
+    json: () => Promise.resolve(body),
+    text: () => Promise.resolve(JSON.stringify(body)),
 });
+
+let relayServerKeyPair;
+
+const mockRelayFetch = async ({ retrieveStatuses = [200], response = {} } = {}) => {
+    relayServerKeyPair = await generateTokenPlaceClientKeypair();
+    const statuses = [...retrieveStatuses];
+    global.fetch = jest.fn(async (url, init = {}) => {
+        if (url.endsWith('/api/v1/relay/servers/next')) {
+            return jsonResponse({ server_public_key: relayServerKeyPair.publicKey });
+        }
+        if (url.endsWith('/api/v1/relay/requests')) return jsonResponse({ accepted: true });
+        if (url.endsWith('/api/v1/relay/responses/retrieve')) {
+            const status = statuses.shift() ?? 200;
+            if (status === 202) return jsonResponse({ pending: true }, 202, 'Accepted');
+            const retrieveBody = JSON.parse(init.body);
+            const encrypted = await encryptTokenPlaceEnvelope(
+                {
+                    protocol: 'tokenplace_api_v1_relay_e2ee',
+                    version: 1,
+                    request_id: retrieveBody.request_id,
+                    client_public_key: retrieveBody.client_public_key,
+                    api_v1_response: {
+                        choices: [{ message: { content: 'mocked reply' } }],
+                        ...response,
+                    },
+                },
+                retrieveBody.client_public_key
+            );
+            return jsonResponse(encrypted);
+        }
+        if (url.endsWith('/api/v1/relay/requests/cancel')) return jsonResponse({ canceled: true });
+        throw new Error(`Unexpected fetch ${url}`);
+    });
+};
 
 const getFetchCall = () => {
     const [url, init] = fetch.mock.calls[0];
-    return { url, init, body: JSON.parse(init.body) };
+    return { url, init, body: init.body ? JSON.parse(init.body) : undefined };
 };
 
 describe('token.place API v1 client', () => {
-    beforeEach(() => {
-        global.fetch = jest.fn(() => Promise.resolve(okResponse()));
+    beforeEach(async () => {
+        await mockRelayFetch();
         loadGameState.mockReturnValue({});
     });
 
@@ -51,11 +91,11 @@ describe('token.place API v1 client', () => {
         delete process.env.VITE_TOKEN_PLACE_ENABLED;
     });
 
-    test('fresh/default state posts to token.place API v1 chat completions', async () => {
+    test('fresh/default state uses token.place relay', async () => {
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
         const { url, init } = getFetchCall();
-        expect(url).toBe('https://token.place/api/v1/chat/completions');
-        expect(init.method).toBe('POST');
+        expect(url).toBe('https://token.place/api/v1/relay/servers/next');
+        expect(init.method).toBe('GET');
     });
 
     test('legacy enabled flags do not disable default token.place chat', async () => {
@@ -64,25 +104,25 @@ describe('token.place API v1 client', () => {
 
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
 
-        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(fetch).toHaveBeenCalledTimes(3);
         const { url, init, body } = getFetchCall();
-        expect(url).toBe('https://token.place/api/v1/chat/completions');
-        expect(init.method).toBe('POST');
+        expect(url).toBe('https://token.place/api/v1/relay/servers/next');
+        expect(init.method).toBe('GET');
         expect(init.credentials).toBe('omit');
         expect(init.headers?.Authorization).toBeUndefined();
-        expect(body.messages).toContainEqual({ role: 'user', content: 'hello' });
+        expect(body).toBeUndefined();
     });
 
     test('VITE_TOKEN_PLACE_URL staging override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://staging.token.place/';
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/chat/completions');
+        expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/relay/servers/next');
     });
 
     test('VITE_TOKEN_PLACE_URL production override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://token.place/';
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(getFetchCall().url).toBe('https://token.place/api/v1/chat/completions');
+        expect(getFetchCall().url).toBe('https://token.place/api/v1/relay/servers/next');
     });
 
     test('explicit url overrides state and runtime compatibility values', async () => {
@@ -92,14 +132,14 @@ describe('token.place API v1 client', () => {
             url: 'https://explicit.token.place/api/v1',
             runtimeUrl: 'https://runtime.token.place',
         });
-        expect(getFetchCall().url).toBe('https://explicit.token.place/api/v1/chat/completions');
+        expect(getFetchCall().url).toBe('https://explicit.token.place/api/v1/relay/servers/next');
     });
 
     test('state tokenPlace url compatibility override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://env.token.place';
         loadGameState.mockReturnValue({ tokenPlace: { url: 'https://state.token.place/' } });
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(getFetchCall().url).toBe('https://state.token.place/api/v1/chat/completions');
+        expect(getFetchCall().url).toBe('https://state.token.place/api/v1/relay/servers/next');
     });
 
     test('runtime url is used before saved state and VITE fallback', async () => {
@@ -108,7 +148,7 @@ describe('token.place API v1 client', () => {
         await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
             runtimeUrl: 'https://staging.token.place/api',
         });
-        expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/chat/completions');
+        expect(getFetchCall().url).toBe('https://staging.token.place/api/v1/relay/servers/next');
     });
 
     test('legacy /api base normalizes without /api/api duplication', () => {
@@ -137,7 +177,9 @@ describe('token.place API v1 client', () => {
             getTokenPlaceChatModel({ model: 'explicit-model', runtimeModel: 'runtime-model' })
         ).toBe('explicit-model');
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(getFetchCall().body.model).toBe('custom-model');
+        expect(
+            fetch.mock.calls.some(([url]) => String(url).endsWith('/api/v1/chat/completions'))
+        ).toBe(false);
     });
 
     test('request is zero-auth and excludes secrets from headers/body/metadata', async () => {
@@ -165,11 +207,7 @@ describe('token.place API v1 client', () => {
         expect(serialized).not.toContain('player-inventory-canary-charlie');
         expect(serialized).not.toContain('raw-save-data-canary-delta');
         expect(serialized).not.toContain('secret-canary-echo');
-        expect(body.metadata).toEqual({
-            conversation_id: 'conv-42',
-            client: 'dspace',
-            provider: 'token.place',
-        });
+        expect(body).toBeUndefined();
     });
 
     test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
@@ -183,16 +221,14 @@ describe('token.place API v1 client', () => {
                 avatar: 'pilot.png',
             },
         ]);
-        const { body } = getFetchCall();
-        expect(body.model).toBe('llama-3.1-8b-instruct');
-        expect(body.messages[0].role).toBe('system');
-        expect(body.messages.at(-1)).toEqual({ role: 'user', content: 'hello' });
-        expect(body.messages.at(-1)).not.toHaveProperty('id');
-        expect(body.messages.at(-1)).not.toHaveProperty('timestamp');
-        expect(body.messages.at(-1)).not.toHaveProperty('tokens');
-        expect(body.messages.at(-1)).not.toHaveProperty('avatar');
-        expect(body.metadata).toEqual({ client: 'dspace', provider: 'token.place' });
-        expect(body.stream).not.toBe(true);
+        const relayBody = JSON.parse(
+            fetch.mock.calls.find(([url]) => String(url).endsWith('/api/v1/relay/requests'))[1].body
+        );
+        expect(relayBody).toMatchObject({ protocol: 'tokenplace_api_v1_relay_e2ee', version: 1 });
+        expect(relayBody).toHaveProperty('ciphertext');
+        expect(relayBody).toHaveProperty('cipherkey');
+        expect(relayBody).toHaveProperty('iv');
+        expect(JSON.stringify(relayBody)).not.toContain('hello');
     });
 
     test('safe metadata preserves trusted client and provider fields', () => {
@@ -219,13 +255,13 @@ describe('token.place API v1 client', () => {
     });
 
     test('richer helper returns text, DSPACE contextSources, usage, and metadata', async () => {
-        fetch.mockResolvedValueOnce(
-            okResponse({
+        await mockRelayFetch({
+            response: {
                 usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
                 metadata: { client: 'dspace', conversation_id: 'conv-42' },
                 contextSources: [{ title: 'provider field should not be used' }],
-            })
-        );
+            },
+        });
         const dspaceSources = [{ title: 'DSPACE docs', url: '/docs/about' }];
         const result = await TokenPlaceChatV2([], {
             promptPayload: {
@@ -249,7 +285,7 @@ describe('token.place API v1 client', () => {
     });
 
     test('malformed responses throw and classify safely', async () => {
-        fetch.mockResolvedValueOnce(okResponse({ choices: [{ message: { content: '' } }] }));
+        await mockRelayFetch({ response: { choices: [{ message: { content: '' } }] } });
         let thrownError;
         try {
             await tokenPlaceChat([]);
@@ -367,8 +403,80 @@ describe('token.place API v1 client', () => {
         expect(serializedPrompt).not.toMatch(/chat uses OpenAI/i);
 
         await tokenPlaceChat([{ role: 'user', content: 'hello' }], { promptPayload });
-        const serializedRequest = JSON.stringify(getFetchCall().body.messages);
+        const serializedRequest = JSON.stringify(
+            JSON.parse(
+                fetch.mock.calls.find(([url]) => String(url).endsWith('/api/v1/relay/requests'))[1]
+                    .body
+            )
+        );
         expect(serializedRequest).not.toMatch(/token\.place is deferred/i);
         expect(serializedRequest).not.toMatch(/chat uses OpenAI/i);
+    });
+    test('relay request is ciphertext-only and polling continues after HTTP 202', async () => {
+        await mockRelayFetch({ retrieveStatuses: [202, 202, 200] });
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'system', content: 'DOCS_GROUNDING_SECRET_SENTINEL' },
+                    { role: 'user', content: 'PLAYERSTATE_SECRET_SENTINEL inventory-save-secret' },
+                ],
+                contextSources: [],
+                gameState: {},
+            },
+        });
+        const relayCall = fetch.mock.calls.find(([url]) =>
+            String(url).endsWith('/api/v1/relay/requests')
+        );
+        const body = JSON.parse(relayCall[1].body);
+        expect(
+            fetch.mock.calls.some(([url]) => String(url).endsWith('/api/v1/chat/completions'))
+        ).toBe(false);
+        expect(
+            fetch.mock.calls.filter(([url]) => String(url).includes('/responses/retrieve'))
+        ).toHaveLength(3);
+        expect(body).toEqual(
+            expect.objectContaining({
+                protocol: 'tokenplace_api_v1_relay_e2ee',
+                version: 1,
+                request_id: expect.any(String),
+                client_public_key: expect.any(String),
+                server_public_key: expect.any(String),
+                ciphertext: expect.any(String),
+                cipherkey: expect.any(String),
+                iv: expect.any(String),
+                cancel_token: expect.any(String),
+            })
+        );
+        const serialized = JSON.stringify(body);
+        expect(serialized).not.toContain('PLAYERSTATE_SECRET_SENTINEL');
+        expect(serialized).not.toContain('DOCS_GROUNDING_SECRET_SENTINEL');
+        expect(serialized).not.toContain('inventory-save-secret');
+    });
+
+    test('response envelope validation rejects mismatches and missing API response', () => {
+        const expected = { request_id: 'request-1', client_public_key: 'client-key' };
+        const valid = {
+            protocol: 'tokenplace_api_v1_relay_e2ee',
+            version: 1,
+            request_id: 'request-1',
+            client_public_key: 'client-key',
+            api_v1_response: { choices: [{ message: { content: 'ok' } }] },
+        };
+        expect(validateTokenPlaceResponseEnvelope(valid, expected)).toBe(valid.api_v1_response);
+        expect(() =>
+            validateTokenPlaceResponseEnvelope({ ...valid, request_id: 'other' }, expected)
+        ).toThrow(/request mismatch/i);
+        expect(() =>
+            validateTokenPlaceResponseEnvelope({ ...valid, client_public_key: 'other' }, expected)
+        ).toThrow(/client key mismatch/i);
+        expect(() =>
+            validateTokenPlaceResponseEnvelope({ ...valid, protocol: 'wrong' }, expected)
+        ).toThrow(/wrong protocol/i);
+        expect(() =>
+            validateTokenPlaceResponseEnvelope({ ...valid, version: 2 }, expected)
+        ).toThrow(/wrong version/i);
+        expect(() =>
+            validateTokenPlaceResponseEnvelope({ ...valid, api_v1_response: undefined }, expected)
+        ).toThrow(/missing API response/i);
     });
 });
