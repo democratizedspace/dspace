@@ -126,8 +126,35 @@ const parseErrorPayload = async (response) => {
     }
 };
 
-const bytesToBase64 = (bytes) => btoa(String.fromCharCode(...new Uint8Array(bytes)));
-const base64ToBytes = (value) => Uint8Array.from(atob(value), (char) => char.charCodeAt(0));
+const toUint8Array = (bytes) => {
+    if (bytes instanceof Uint8Array) return bytes;
+    if (bytes instanceof ArrayBuffer) return new Uint8Array(bytes);
+    if (ArrayBuffer.isView(bytes)) {
+        return new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    }
+    return new Uint8Array(bytes);
+};
+
+const bytesToBase64 = (bytes) => {
+    const array = toUint8Array(bytes);
+    if (typeof Buffer !== 'undefined') {
+        return Buffer.from(array).toString('base64');
+    }
+    let binary = '';
+    const chunkSize = 0x8000;
+    for (let i = 0; i < array.length; i += chunkSize) {
+        const chunk = array.subarray(i, i + chunkSize);
+        binary += String.fromCharCode.apply(null, chunk);
+    }
+    return btoa(binary);
+};
+
+const base64ToBytes = (value) => {
+    if (typeof Buffer !== 'undefined') {
+        return new Uint8Array(Buffer.from(String(value), 'base64'));
+    }
+    return Uint8Array.from(atob(value), (char) => char.charCodeAt(0));
+};
 const pemToBase64 = (pem) =>
     String(pem).replace(/-----BEGIN [^-]+-----|-----END [^-]+-----|\s+/g, '');
 const base64ToPem = (base64, label = 'PUBLIC KEY') => {
@@ -389,8 +416,9 @@ export const validateTokenPlaceResponseEnvelope = (envelope, expected) => {
 const buildApiV1Request = (promptPayload, options = {}) => ({
     model: getTokenPlaceChatModel(options),
     messages: sanitizeTokenPlaceMessages(promptPayload.combinedMessages),
-    options: {},
-    metadata: buildTokenPlaceMetadata(options.metadata),
+    options: {
+        metadata: buildTokenPlaceMetadata(options.metadata),
+    },
 });
 
 const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
@@ -406,7 +434,7 @@ const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
         api_v1_request: buildApiV1Request(promptPayload, options),
     };
     const encrypted = await encryptTokenPlaceEnvelope(envelope, server.serverPublicKeyPem);
-    await dispatchTokenPlaceRelayRequest(
+    const dispatched = await dispatchTokenPlaceRelayRequest(
         baseUrl,
         {
             server_public_key: server.server_public_key,
@@ -419,6 +447,9 @@ const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
         },
         options
     );
+    if (dispatched?.accepted === false) {
+        throw createMalformedTokenPlaceResponseError('token.place relay rejected the request.');
+    }
     const encryptedResponse = await pollTokenPlaceRelayResponse(
         baseUrl,
         { client_public_key: clientKeys.publicKeyBase64, request_id: requestId },
@@ -459,6 +490,11 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
             requestId: undefined,
             cancelToken: undefined,
         });
+        if (data?.terminalSelectedServerFailure) {
+            throw createMalformedTokenPlaceResponseError(
+                'No token.place compute node is available.'
+            );
+        }
     }
 
     const outputText = extractTokenPlaceAssistantText(data);

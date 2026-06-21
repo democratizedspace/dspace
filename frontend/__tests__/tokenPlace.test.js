@@ -13,6 +13,7 @@ jest.mock('../src/utils/docsRag.js', () => ({
 const { loadGameState } = await import('../src/utils/gameState/common.js');
 const {
     TokenPlaceChatV2,
+    decryptTokenPlaceEnvelope,
     encryptTokenPlaceEnvelope,
     generateTokenPlaceClientKeypair,
     validateTokenPlaceResponseEnvelope,
@@ -44,7 +45,11 @@ let relayReply = {
     choices: [{ message: { content: 'mocked reply' } }],
 };
 
-const makeRelayFetch = ({ retrieveStatuses = [200], serverFailureOnce = false } = {}) => {
+const makeRelayFetch = ({
+    retrieveStatuses = [200],
+    serverFailureOnce = false,
+    accepted = true,
+} = {}) => {
     let retrieveCount = 0;
     return jest.fn(async (url, init = {}) => {
         if (url.endsWith('/api/v1/relay/servers/next')) {
@@ -62,7 +67,7 @@ const makeRelayFetch = ({ retrieveStatuses = [200], serverFailureOnce = false } 
             };
         }
         if (url.endsWith('/api/v1/relay/requests')) {
-            return { ok: true, status: 200, json: () => Promise.resolve({ accepted: true }) };
+            return { ok: true, status: 200, json: () => Promise.resolve({ accepted }) };
         }
         if (url.endsWith('/api/v1/relay/responses/retrieve')) {
             const status = retrieveStatuses[Math.min(retrieveCount, retrieveStatuses.length - 1)];
@@ -276,6 +281,41 @@ describe('token.place API v1 client', () => {
         expect(JSON.stringify(body)).not.toContain('hello');
         expect(JSON.stringify(body)).not.toContain('model');
         expect(body.stream).not.toBe(true);
+    });
+
+    test('decrypted API v1 request nests metadata under options', async () => {
+        await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
+            metadata: { conversation_id: 'conv-42' },
+        });
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+
+        expect(decrypted.api_v1_request).toEqual(
+            expect.objectContaining({
+                model: 'llama-3.1-8b-instruct',
+                messages: expect.any(Array),
+                options: {
+                    metadata: {
+                        conversation_id: 'conv-42',
+                        client: 'dspace',
+                        provider: 'token.place',
+                    },
+                },
+            })
+        );
+        expect(decrypted.api_v1_request).not.toHaveProperty('metadata');
+    });
+
+    test('large encrypted envelopes do not overflow base64 conversion', async () => {
+        await expect(
+            TokenPlaceChatV2([], {
+                promptPayload: {
+                    combinedMessages: [{ role: 'system', content: 'x'.repeat(100_000) }],
+                    contextSources: [],
+                    gameState: {},
+                },
+            })
+        ).resolves.toMatchObject({ text: 'mocked reply' });
     });
 
     test('safe metadata preserves trusted client and provider fields', () => {
@@ -499,6 +539,18 @@ describe('token.place API v1 client', () => {
         ).toBe(true);
     });
 
+    test('relay accepted false fast-fails before polling', async () => {
+        global.fetch = makeRelayFetch({ accepted: false });
+
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).rejects.toMatchObject({
+            type: 'malformed',
+            message: 'token.place relay rejected the request.',
+        });
+        expect(
+            fetch.mock.calls.some(([url]) => url.endsWith('/api/v1/relay/responses/retrieve'))
+        ).toBe(false);
+    });
+
     test('decrypted envelope validation rejects unsafe/mismatched shapes', () => {
         const base = {
             protocol: 'tokenplace_api_v1_relay_e2ee',
@@ -575,6 +627,7 @@ describe('token.place API v1 client', () => {
         global.fetch = makeRelayFetch({ retrieveStatuses: [404, 404] });
         await expect(tokenPlaceChat([], { pollIntervalMs: 1 })).rejects.toMatchObject({
             type: 'malformed',
+            message: 'No token.place compute node is available.',
         });
     });
 
