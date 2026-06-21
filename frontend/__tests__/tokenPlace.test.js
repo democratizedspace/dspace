@@ -399,9 +399,9 @@ describe('token.place API v1 client', () => {
         ).rejects.toThrow('Malformed encrypted token.place response.');
     });
 
-    test('decryption accepts explicit GCM payloads with JSEncrypt-wrapped raw text keys', async () => {
+    test('decryption accepts explicit GCM payloads with PEM private keys', async () => {
         const crypto = globalThis.crypto;
-        const rawAesKey = new TextEncoder().encode('12345678901234567890123456789012');
+        const rawAesKey = crypto.getRandomValues(new Uint8Array(32));
         const iv = crypto.getRandomValues(new Uint8Array(12));
         const aesKey = await crypto.subtle.importKey('raw', rawAesKey, { name: 'AES-GCM' }, false, [
             'encrypt',
@@ -409,23 +409,25 @@ describe('token.place API v1 client', () => {
         const ciphertext = await crypto.subtle.encrypt(
             { name: 'AES-GCM', iv },
             aesKey,
-            new TextEncoder().encode(JSON.stringify({ ok: true, mode: 'jsencrypt-gcm' }))
+            new TextEncoder().encode(JSON.stringify({ ok: true, mode: 'pem-gcm' }))
         );
-        const rsa = new JSEncrypt();
-        rsa.setPublicKey(relayServerKeys[0].publicKeyPem);
-        const cipherkey = rsa.encrypt(new TextDecoder().decode(rawAesKey));
+        const cipherkey = await crypto.subtle.encrypt(
+            { name: 'RSA-OAEP' },
+            relayServerKeys[0].publicKeyCrypto,
+            rawAesKey
+        );
 
         const decrypted = await decryptTokenPlaceEnvelope(
             {
                 mode: 'AES-GCM',
                 ciphertext: bytesToBase64(ciphertext),
-                cipherkey,
+                cipherkey: bytesToBase64(cipherkey),
                 iv: bytesToBase64(iv),
             },
             relayServerKeys[0].privateKey
         );
 
-        expect(decrypted).toEqual({ ok: true, mode: 'jsencrypt-gcm' });
+        expect(decrypted).toEqual({ ok: true, mode: 'pem-gcm' });
     });
 
     test('decryption accepts explicit GCM payloads with embedded WebCrypto tags', async () => {
