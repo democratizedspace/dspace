@@ -433,6 +433,72 @@ describe('token.place API v1 client', () => {
         }
     });
 
+    test('decrypted content policy errors surface as structured provider errors', async () => {
+        relayReply = {
+            error: {
+                message: 'blocked by policy',
+                type: 'content_policy_violation',
+                code: 'content_blocked',
+                param: 'messages',
+            },
+        };
+
+        let thrownError;
+        try {
+            await tokenPlaceChat([{ role: 'user', content: 'blocked prompt' }]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({
+            type: 'content_policy',
+            status: 400,
+            code: 'content_blocked',
+            param: 'messages',
+            providerMessage: 'blocked by policy',
+        });
+        expect(thrownError.message).toBe('token.place API v1 request failed: blocked by policy');
+        expect(thrownError.message).not.toMatch(/missing assistant content/i);
+        expect(getTokenPlaceErrorSummary(thrownError).type).toBe('content_policy');
+    });
+
+    test('decrypted status-bearing API errors preserve status, code, and message', async () => {
+        relayReply = {
+            status_code: 429,
+            error: {
+                message: 'too many requests',
+                type: 'rate_limit',
+                code: 'rate_limit_exceeded',
+            },
+        };
+
+        let thrownError;
+        try {
+            await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
+        } catch (error) {
+            thrownError = error;
+        }
+
+        expect(thrownError).toMatchObject({
+            type: 'rate_limit',
+            status: 429,
+            code: 'rate_limit_exceeded',
+            providerMessage: 'too many requests',
+        });
+        expect(thrownError.message).toBe('token.place API v1 request failed: too many requests');
+        expect(thrownError.message).not.toMatch(/missing assistant content/i);
+        expect(getTokenPlaceErrorSummary(thrownError).type).toBe('rate_limit');
+    });
+
+    test('decrypted responses missing choices and error remain malformed', async () => {
+        relayReply = { usage: { prompt_tokens: 1 } };
+
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).rejects.toMatchObject({
+            type: 'malformed',
+            message: 'Malformed token.place response: missing assistant content.',
+        });
+    });
+
     test('network errors classify safely', async () => {
         fetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
         await expect(tokenPlaceChat([])).rejects.toMatchObject({ type: 'network' });

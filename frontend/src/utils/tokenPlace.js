@@ -114,6 +114,26 @@ export const extractTokenPlaceAssistantText = (response) => {
     return content;
 };
 
+const getStructuredApiErrorStatus = (apiResponse) => {
+    const candidates = [
+        apiResponse?.error?.status,
+        apiResponse?.error?.status_code,
+        apiResponse?.status,
+        apiResponse?.status_code,
+    ];
+    const status = candidates
+        .map((candidate) => Number(candidate))
+        .find((candidate) => Number.isInteger(candidate) && candidate >= 400 && candidate <= 599);
+    return status ?? 400;
+};
+
+const throwStructuredTokenPlaceApiError = (apiResponse) => {
+    if (!apiResponse?.error || typeof apiResponse.error !== 'object') return;
+    throw createTokenPlaceHttpError(getStructuredApiErrorStatus(apiResponse), {
+        error: apiResponse.error,
+    });
+};
+
 const parseErrorPayload = async (response) => {
     try {
         return await response.json();
@@ -497,6 +517,7 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         }
     }
 
+    throwStructuredTokenPlaceApiError(data);
     const outputText = extractTokenPlaceAssistantText(data);
     const { text } = validateChatResponseText(outputText, { contextSources });
 
