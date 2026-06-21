@@ -1,3 +1,5 @@
+import { webcrypto } from 'node:crypto';
+
 import { expect, test, type Page } from '@playwright/test';
 
 import { clearUserData, waitForHydration } from './test-helpers';
@@ -11,13 +13,41 @@ type TokenPlaceStubMode =
     | 'provider-error'
     | 'unexpected-http-error';
 
+const wrapPem = (base64Der: string) =>
+    `-----BEGIN PUBLIC KEY-----\n${base64Der.match(/.{1,64}/g)?.join('\n') || ''}\n-----END PUBLIC KEY-----`;
+
+const exportPublicKeyBase64Pem = async (publicKey: CryptoKey) => {
+    const der = await webcrypto.subtle.exportKey('spki', publicKey);
+    const pem = wrapPem(Buffer.from(der).toString('base64'));
+    return Buffer.from(pem).toString('base64');
+};
+
 const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
-    await page.route('https://token.place/api/v1/chat/completions', async (route) => {
+    const serverKeys = await webcrypto.subtle.generateKey(
+        {
+            name: 'RSA-OAEP',
+            hash: 'SHA-256',
+            modulusLength: 2048,
+            publicExponent: new Uint8Array([1, 0, 1]),
+        },
+        true,
+        ['encrypt', 'decrypt']
+    );
+    const serverPublicKey = await exportPublicKeyBase64Pem(serverKeys.publicKey);
+
+    await page.route('https://token.place/api/v1/relay/servers/next', async (route) => {
         if (mode === 'network-error') {
             await route.abort('failed');
             return;
         }
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ server_public_key: serverPublicKey }),
+        });
+    });
 
+    await page.route('https://token.place/api/v1/relay/requests', async (route) => {
         if (mode === 'content-policy') {
             await route.fulfill({
                 status: 400,
@@ -46,18 +76,7 @@ const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
             await route.fulfill({
                 status: 503,
                 contentType: 'application/json',
-                body: JSON.stringify({
-                    error: { message: 'Unavailable', type: 'server_error' },
-                }),
-            });
-            return;
-        }
-
-        if (mode === 'malformed') {
-            await route.fulfill({
-                status: 200,
-                contentType: 'application/json',
-                body: JSON.stringify({ choices: [{ message: { content: '' } }] }),
+                body: JSON.stringify({ error: { message: 'Unavailable', type: 'server_error' } }),
             });
             return;
         }
@@ -77,7 +96,18 @@ const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
                 contentType: 'application/json',
                 body: JSON.stringify({ error: { message: 'Unexpected token.place failure' } }),
             });
+            return;
         }
+
+        await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+
+    await page.route('https://token.place/api/v1/relay/responses/retrieve', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ ciphertext: 'bad', cipherkey: 'bad', iv: 'bad' }),
+        });
     });
 };
 

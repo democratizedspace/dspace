@@ -117,6 +117,13 @@ export const getTokenPlaceErrorSummary = (error) => {
         };
     }
 
+    if (type === 'timeout') {
+        return {
+            type: 'timeout',
+            message: 'token.place relay timed out waiting for desktop compute. Please try again.',
+        };
+    }
+
     if (type === 'validation' && param === 'stream') {
         return {
             type: 'validation',
