@@ -14,8 +14,6 @@ const RELAY_VERSION = 1;
 const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
 const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
-const METADATA_DENY_PATTERN =
-    /(?:key|token|secret|credential|password|authorization|auth|inventory|save|state|player)/i;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
 
 const getCrypto = () => globalThis.crypto;
@@ -36,11 +34,6 @@ const stripTrailingSlashes = (value) =>
     String(value || '')
         .trim()
         .replace(/\/+$/g, '');
-
-const isPlainObject = (value) =>
-    Boolean(value) &&
-    typeof value === 'object' &&
-    Object.getPrototypeOf(value) === Object.prototype;
 
 export const resolveTokenPlaceBaseUrl = (options = {}) => {
     const state = options.state || loadGameState();
@@ -78,32 +71,6 @@ const sanitizeChatMessage = (message) => ({
 
 export const sanitizeTokenPlaceMessages = (messages = []) =>
     (Array.isArray(messages) ? messages : []).map(sanitizeChatMessage);
-
-const sanitizeMetadataValue = (value) => {
-    if (typeof value === 'string') return value.slice(0, 200);
-    if (typeof value === 'number' || typeof value === 'boolean') return value;
-    return undefined;
-};
-
-export const buildTokenPlaceMetadata = (metadata = {}) => {
-    const safeMetadata = {};
-
-    if (isPlainObject(metadata)) {
-        Object.entries(metadata).forEach(([key, value]) => {
-            if (!key || METADATA_DENY_PATTERN.test(key)) return;
-            const safeValue = sanitizeMetadataValue(value);
-            if (safeValue !== undefined) {
-                safeMetadata[key] = safeValue;
-            }
-        });
-    }
-
-    return {
-        ...safeMetadata,
-        client: 'dspace',
-        provider: 'token.place',
-    };
-};
 
 export const extractTokenPlaceAssistantText = (response) => {
     const content = response?.choices?.[0]?.message?.content;

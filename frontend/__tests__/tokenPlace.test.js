@@ -18,7 +18,6 @@ const {
     generateTokenPlaceClientKeypair,
     validateTokenPlaceResponseEnvelope,
     buildTokenPlaceChatCompletionsUrl,
-    buildTokenPlaceMetadata,
     extractTokenPlaceAssistantText,
     getTokenPlaceChatModel,
     resolveTokenPlaceBaseUrl,
@@ -538,20 +537,6 @@ describe('token.place API v1 client', () => {
                 },
             })
         ).resolves.toMatchObject({ text: 'mocked reply' });
-    });
-
-    test('safe metadata preserves trusted client and provider fields', () => {
-        expect(
-            buildTokenPlaceMetadata({
-                client: 'attacker',
-                provider: 'openai',
-                conversation_id: 'conv-42',
-            })
-        ).toEqual({
-            conversation_id: 'conv-42',
-            client: 'dspace',
-            provider: 'token.place',
-        });
     });
 
     test('parses assistant text and compatibility helper returns string', async () => {
