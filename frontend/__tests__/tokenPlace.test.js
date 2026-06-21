@@ -37,8 +37,8 @@ const okResponse = (body = {}) => ({
         }),
 });
 
-const decodeBase64Text = (value) =>
-    new TextDecoder().decode(Uint8Array.from(atob(value), (char) => char.charCodeAt(0)));
+const decodeBase64Bytes = (value) => Uint8Array.from(atob(value), (char) => char.charCodeAt(0));
+const decodeBase64Text = (value) => new TextDecoder().decode(decodeBase64Bytes(value));
 
 let relayServerKeys;
 let relayReply = {
@@ -49,6 +49,7 @@ const makeRelayFetch = ({
     retrieveStatuses = [200],
     serverFailureOnce = false,
     accepted = true,
+    responseCiphertextField = 'chat_history',
 } = {}) => {
     let retrieveCount = 0;
     return jest.fn(async (url, init = {}) => {
@@ -87,7 +88,15 @@ const makeRelayFetch = ({
                 },
                 clientPublicPem
             );
-            return { ok: true, status: 200, json: () => Promise.resolve(encrypted) };
+            const responseBody =
+                responseCiphertextField === 'chat_history'
+                    ? {
+                          ...encrypted,
+                          chat_history: encrypted.ciphertext,
+                          ciphertext: encrypted.ciphertext,
+                      }
+                    : encrypted;
+            return { ok: true, status: 200, json: () => Promise.resolve(responseBody) };
         }
         if (url.endsWith('/api/v1/relay/requests/cancel')) {
             return { ok: true, status: 200, json: () => Promise.resolve({ canceled: true }) };
@@ -280,7 +289,22 @@ describe('token.place API v1 client', () => {
         );
         expect(JSON.stringify(body)).not.toContain('hello');
         expect(JSON.stringify(body)).not.toContain('model');
+        expect(decodeBase64Bytes(body.iv)).toHaveLength(16);
+        expect(body).not.toHaveProperty('mode');
+        expect(body).not.toHaveProperty('tag');
         expect(body.stream).not.toBe(true);
+    });
+
+    test('decrypt accepts chat_history ciphertext fallback and ciphertext without chat_history', async () => {
+        global.fetch = makeRelayFetch({ responseCiphertextField: 'chat_history' });
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
+            'mocked reply'
+        );
+
+        global.fetch = makeRelayFetch({ responseCiphertextField: 'ciphertext' });
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
+            'mocked reply'
+        );
     });
 
     test('decrypted API v1 request nests metadata under options', async () => {
@@ -563,6 +587,9 @@ describe('token.place API v1 client', () => {
         expect(serialized).not.toContain('PLAYERSTATE_SECRET_SENTINEL');
         expect(serialized).not.toContain('DOCS_GROUNDING_SECRET_SENTINEL');
         expect(serialized).not.toContain('INVENTORY_SAVE_SECRET_SENTINEL');
+        expect(serialized).not.toContain('PlayerState');
+        expect(serialized).not.toContain('inventory');
+        expect(serialized).not.toContain('save');
         expect(serialized).not.toContain('messages');
     });
 

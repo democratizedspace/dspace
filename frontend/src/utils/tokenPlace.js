@@ -20,6 +20,8 @@ const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
 const getCrypto = () => globalThis.crypto;
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
+const AES_CBC_IV_BYTES = 16;
+const AES_GCM_IV_BYTES = 12;
 
 const readEnvValue = (key) => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
@@ -241,18 +243,19 @@ export const generateTokenPlaceClientKeypair = async () => {
 
 export const encryptTokenPlaceEnvelope = async (envelope, serverPublicKeyPem) => {
     const crypto = getCrypto();
-    const aesKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, [
+    const aesKey = await crypto.subtle.generateKey({ name: 'AES-CBC', length: 256 }, true, [
         'encrypt',
     ]);
     const rawAesKey = await crypto.subtle.exportKey('raw', aesKey);
-    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const iv = crypto.getRandomValues(new Uint8Array(AES_CBC_IV_BYTES));
     const ciphertext = await crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv },
+        { name: 'AES-CBC', iv },
         aesKey,
         textEncoder.encode(JSON.stringify(envelope))
     );
     const serverKey = await importRsaPublicKey(serverPublicKeyPem);
-    const cipherkey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, serverKey, rawAesKey);
+    const wrappedKeyBytes = textEncoder.encode(bytesToBase64(rawAesKey));
+    const cipherkey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, serverKey, wrappedKeyBytes);
     return {
         ciphertext: bytesToBase64(ciphertext),
         cipherkey: bytesToBase64(cipherkey),
@@ -260,27 +263,51 @@ export const encryptTokenPlaceEnvelope = async (envelope, serverPublicKeyPem) =>
     };
 };
 
+const unwrapTokenPlaceAesKey = async (payload, privateKey) => {
+    const unwrapped = await getCrypto().subtle.decrypt(
+        { name: 'RSA-OAEP' },
+        privateKey,
+        base64ToBytes(payload.cipherkey)
+    );
+    const unwrappedText = textDecoder.decode(unwrapped);
+    return /^[A-Za-z0-9+/]+={0,2}$/.test(unwrappedText.trim())
+        ? base64ToBytes(unwrappedText)
+        : unwrapped;
+};
+
 export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
     const privateKey =
         typeof clientPrivateKey === 'string'
             ? await importRsaPrivateKey(clientPrivateKey)
             : clientPrivateKey;
-    const rawAesKey = await getCrypto().subtle.decrypt(
-        { name: 'RSA-OAEP' },
-        privateKey,
-        base64ToBytes(payload.cipherkey)
-    );
+    const ciphertext = payload.chat_history || payload.ciphertext;
+    const rawAesKey = await unwrapTokenPlaceAesKey(payload, privateKey);
+    const explicitGcm =
+        String(payload.mode || '')
+            .toLowerCase()
+            .includes('gcm') && payload.tag;
+    const algorithm = explicitGcm ? 'AES-GCM' : 'AES-CBC';
     const aesKey = await getCrypto().subtle.importKey(
         'raw',
         rawAesKey,
-        { name: 'AES-GCM' },
+        { name: algorithm },
         false,
         ['decrypt']
     );
+    const iv = base64ToBytes(payload.iv);
+    const encryptedBytes = base64ToBytes(ciphertext);
     const plaintext = await getCrypto().subtle.decrypt(
-        { name: 'AES-GCM', iv: base64ToBytes(payload.iv) },
+        explicitGcm
+            ? {
+                  name: 'AES-GCM',
+                  iv: iv.length ? iv : new Uint8Array(AES_GCM_IV_BYTES),
+                  tagLength: 128,
+              }
+            : { name: 'AES-CBC', iv: iv.length ? iv : new Uint8Array(AES_CBC_IV_BYTES) },
         aesKey,
-        base64ToBytes(payload.ciphertext)
+        explicitGcm
+            ? new Uint8Array([...encryptedBytes, ...base64ToBytes(payload.tag)])
+            : encryptedBytes
     );
     return JSON.parse(textDecoder.decode(plaintext));
 };
