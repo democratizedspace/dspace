@@ -73,13 +73,13 @@ async function encryptRelayEnvelope(
     envelope: Record<string, unknown>,
     clientPublicKeyBase64: string
 ) {
-    const aesKey = await webcrypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, [
+    const aesKey = await webcrypto.subtle.generateKey({ name: 'AES-CBC', length: 256 }, true, [
         'encrypt',
     ]);
     const rawAesKey = await webcrypto.subtle.exportKey('raw', aesKey);
-    const iv = webcrypto.getRandomValues(new Uint8Array(12));
+    const iv = webcrypto.getRandomValues(new Uint8Array(16));
     const ciphertext = await webcrypto.subtle.encrypt(
-        { name: 'AES-GCM', iv },
+        { name: 'AES-CBC', iv },
         aesKey,
         encoder.encode(JSON.stringify(envelope))
     );
@@ -91,9 +91,15 @@ async function encryptRelayEnvelope(
         true,
         ['encrypt']
     );
-    const cipherkey = await webcrypto.subtle.encrypt({ name: 'RSA-OAEP' }, publicKey, rawAesKey);
+    const cipherkey = await webcrypto.subtle.encrypt(
+        { name: 'RSA-OAEP' },
+        publicKey,
+        encoder.encode(bytesToBase64(rawAesKey))
+    );
+    const ciphertextBase64 = bytesToBase64(ciphertext);
     return {
-        ciphertext: bytesToBase64(ciphertext),
+        chat_history: ciphertextBase64,
+        ciphertext: ciphertextBase64,
         cipherkey: bytesToBase64(cipherkey),
         iv: bytesToBase64(iv),
     };

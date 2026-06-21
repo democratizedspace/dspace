@@ -37,8 +37,8 @@ const okResponse = (body = {}) => ({
         }),
 });
 
-const decodeBase64Text = (value) =>
-    new TextDecoder().decode(Uint8Array.from(atob(value), (char) => char.charCodeAt(0)));
+const base64ToBytes = (value) => Uint8Array.from(atob(value), (char) => char.charCodeAt(0));
+const decodeBase64Text = (value) => new TextDecoder().decode(base64ToBytes(value));
 
 let relayServerKeys;
 let relayReply = {
@@ -49,6 +49,7 @@ const makeRelayFetch = ({
     retrieveStatuses = [200],
     serverFailureOnce = false,
     accepted = true,
+    responseCiphertextField = 'ciphertext',
 } = {}) => {
     let retrieveCount = 0;
     return jest.fn(async (url, init = {}) => {
@@ -87,7 +88,15 @@ const makeRelayFetch = ({
                 },
                 clientPublicPem
             );
-            return { ok: true, status: 200, json: () => Promise.resolve(encrypted) };
+            const response =
+                responseCiphertextField === 'chat_history'
+                    ? { ...encrypted, chat_history: encrypted.ciphertext }
+                    : encrypted;
+            if (responseCiphertextField === 'chat_history_only') {
+                response.chat_history = response.ciphertext;
+                delete response.ciphertext;
+            }
+            return { ok: true, status: 200, json: () => Promise.resolve(response) };
         }
         if (url.endsWith('/api/v1/relay/requests/cancel')) {
             return { ok: true, status: 200, json: () => Promise.resolve({ canceled: true }) };
@@ -280,6 +289,9 @@ describe('token.place API v1 client', () => {
         );
         expect(JSON.stringify(body)).not.toContain('hello');
         expect(JSON.stringify(body)).not.toContain('model');
+        expect(base64ToBytes(body.iv)).toHaveLength(16);
+        expect(body).not.toHaveProperty('mode');
+        expect(body).not.toHaveProperty('tag');
         expect(body.stream).not.toBe(true);
     });
 
@@ -304,6 +316,22 @@ describe('token.place API v1 client', () => {
             })
         );
         expect(decrypted.api_v1_request).not.toHaveProperty('metadata');
+    });
+
+    test('decrypt accepts chat_history ciphertext when ciphertext is absent', async () => {
+        global.fetch = makeRelayFetch({ responseCiphertextField: 'chat_history_only' });
+
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
+            'mocked reply'
+        );
+    });
+
+    test('decrypt accepts ciphertext when chat_history is absent', async () => {
+        global.fetch = makeRelayFetch({ responseCiphertextField: 'ciphertext' });
+
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
+            'mocked reply'
+        );
     });
 
     test('large encrypted envelopes do not overflow base64 conversion', async () => {
