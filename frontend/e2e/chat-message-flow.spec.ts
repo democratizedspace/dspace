@@ -1,3 +1,5 @@
+import { webcrypto } from 'node:crypto';
+
 import { expect, test, type Page } from '@playwright/test';
 
 import { clearUserData, seedOpenAIChatState, waitForHydration } from './test-helpers';
@@ -11,6 +13,61 @@ const QUOTA_MESSAGE = /out of credits/i;
 const AUTH_MESSAGE = /api key/i;
 const PERMISSION_MESSAGE = /denied access/i;
 const SERVER_MESSAGE = /unavailable right now/i;
+
+const encoder = new TextEncoder();
+const bytesToBase64 = (bytes: ArrayBuffer | Uint8Array) =>
+    Buffer.from(bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes)).toString('base64');
+const base64ToBytes = (value: string) => Uint8Array.from(Buffer.from(value, 'base64'));
+const base64ToPem = (base64: string) =>
+    `-----BEGIN PUBLIC KEY-----\n${base64.match(/.{1,64}/g)?.join('\n') || ''}\n-----END PUBLIC KEY-----`;
+const pemToBase64 = (pem: string) =>
+    pem.replace(/-----BEGIN [^-]+-----|-----END [^-]+-----|\s+/g, '');
+
+async function generateRelayKeypair() {
+    const pair = await webcrypto.subtle.generateKey(
+        {
+            name: 'RSA-OAEP',
+            modulusLength: 2048,
+            publicExponent: new Uint8Array([1, 0, 1]),
+            hash: 'SHA-256',
+        },
+        true,
+        ['encrypt', 'decrypt']
+    );
+    const spki = await webcrypto.subtle.exportKey('spki', pair.publicKey);
+    const publicPem = base64ToPem(bytesToBase64(spki));
+    return { publicKeyBase64: bytesToBase64(encoder.encode(publicPem)) };
+}
+
+async function encryptRelayEnvelope(
+    envelope: Record<string, unknown>,
+    clientPublicKeyBase64: string
+) {
+    const aesKey = await webcrypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, [
+        'encrypt',
+    ]);
+    const rawAesKey = await webcrypto.subtle.exportKey('raw', aesKey);
+    const iv = webcrypto.getRandomValues(new Uint8Array(12));
+    const ciphertext = await webcrypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        aesKey,
+        encoder.encode(JSON.stringify(envelope))
+    );
+    const clientPublicPem = Buffer.from(clientPublicKeyBase64, 'base64').toString('utf8');
+    const publicKey = await webcrypto.subtle.importKey(
+        'spki',
+        base64ToBytes(pemToBase64(clientPublicPem)),
+        { name: 'RSA-OAEP', hash: 'SHA-256' },
+        true,
+        ['encrypt']
+    );
+    const cipherkey = await webcrypto.subtle.encrypt({ name: 'RSA-OAEP' }, publicKey, rawAesKey);
+    return {
+        ciphertext: bytesToBase64(ciphertext),
+        cipherkey: bytesToBase64(cipherkey),
+        iv: bytesToBase64(iv),
+    };
+}
 
 type StubMode =
     | 'success'
@@ -303,7 +360,22 @@ test.describe('Chat provider routing', () => {
             body: Record<string, unknown>;
             headers: Record<string, string>;
         }> = [];
-        await page.route('https://token.place/api/v1/chat/completions', async (route) => {
+        const legacyRequests: string[] = [];
+        const serverKey = await generateRelayKeypair();
+        await page.route('https://token.place/api/v1/relay/servers/next', async (route) => {
+            const request = route.request();
+            tokenPlaceRequests.push({
+                url: request.url(),
+                body: {},
+                headers: request.headers(),
+            });
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({ server_public_key: serverKey.publicKeyBase64 }),
+            });
+        });
+        await page.route('https://token.place/api/v1/relay/requests', async (route) => {
             const request = route.request();
             tokenPlaceRequests.push({
                 url: request.url(),
@@ -313,17 +385,44 @@ test.describe('Chat provider routing', () => {
             await route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify({
-                    choices: [{ message: { content: 'token.place grounded reply' } }],
-                    contextSources: [
-                        { type: 'provider', label: 'provider source should not show' },
-                    ],
-                    usage: { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 },
-                    metadata: { request_id: 'tp-123', provider: 'token.place' },
-                }),
+                body: JSON.stringify({ accepted: true }),
             });
         });
-        const legacyRequests: string[] = [];
+        await page.route('https://token.place/api/v1/relay/responses/retrieve', async (route) => {
+            const request = route.request();
+            const body = JSON.parse(request.postData() || '{}');
+            tokenPlaceRequests.push({
+                url: request.url(),
+                body,
+                headers: request.headers(),
+            });
+            const encrypted = await encryptRelayEnvelope(
+                {
+                    protocol: 'tokenplace_api_v1_relay_e2ee',
+                    version: 1,
+                    request_id: body.request_id,
+                    client_public_key: body.client_public_key,
+                    api_v1_response: {
+                        choices: [{ message: { content: 'token.place grounded reply' } }],
+                        contextSources: [
+                            { type: 'provider', label: 'provider source should not show' },
+                        ],
+                        usage: { prompt_tokens: 7, completion_tokens: 3, total_tokens: 10 },
+                        metadata: { request_id: 'tp-123', provider: 'token.place' },
+                    },
+                },
+                String(body.client_public_key)
+            );
+            await route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(encrypted),
+            });
+        });
+        await page.route('https://token.place/api/v1/chat/completions', async (route) => {
+            legacyRequests.push(route.request().url());
+            await route.abort();
+        });
         await page.route(/\/api\/chat$|\/chat$/, async (route) => {
             const request = route.request();
             if (request.isNavigationRequest()) {
@@ -343,19 +442,29 @@ test.describe('Chat provider routing', () => {
         await chatPanel.getByRole('button', { name: 'Send' }).click();
 
         await expect(chatPanel.getByText('token.place grounded reply')).toBeVisible();
-        expect(tokenPlaceRequests).toHaveLength(1);
+        expect(tokenPlaceRequests.map((request) => request.url)).toEqual([
+            'https://token.place/api/v1/relay/servers/next',
+            'https://token.place/api/v1/relay/requests',
+            'https://token.place/api/v1/relay/responses/retrieve',
+        ]);
         expect(legacyRequests).toEqual([]);
-        const [{ url, body, headers }] = tokenPlaceRequests;
-        expect(url).toBe('https://token.place/api/v1/chat/completions');
+        const { body, headers } = tokenPlaceRequests[1];
         expect(headers.authorization).toBeUndefined();
-        expect(JSON.stringify(body)).not.toContain('apiKey');
-        expect(JSON.stringify(body)).not.toContain('openAI');
-        expect(body.messages.some((message) => message.role === 'system')).toBe(true);
-        expect(body.messages.at(-1)).toMatchObject({
-            role: 'user',
-            content: 'How do DSPACE routes work?',
-        });
-        expect(body.metadata).toEqual({ client: 'dspace', provider: 'token.place' });
+        expect(body).toEqual(
+            expect.objectContaining({
+                protocol: 'tokenplace_api_v1_relay_e2ee',
+                version: 1,
+                client_public_key: expect.any(String),
+                ciphertext: expect.any(String),
+                cipherkey: expect.any(String),
+                iv: expect.any(String),
+                cancel_token: expect.any(String),
+            })
+        );
+        const serializedBody = JSON.stringify(body);
+        expect(serializedBody).not.toContain('apiKey');
+        expect(serializedBody).not.toContain('openAI');
+        expect(serializedBody).not.toContain('How do DSPACE routes work?');
 
         const sources = chatPanel.getByTestId('sources-used');
         await expect(sources).toBeVisible();
