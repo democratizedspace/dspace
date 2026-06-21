@@ -37,6 +37,8 @@ const okResponse = (body = {}) => ({
         }),
 });
 
+const bytesToBase64 = (bytes) => btoa(String.fromCharCode(...new Uint8Array(bytes)));
+
 const decodeBase64Text = (value) =>
     new TextDecoder().decode(Uint8Array.from(atob(value), (char) => char.charCodeAt(0)));
 
@@ -338,6 +340,103 @@ describe('token.place API v1 client', () => {
         const decrypted = await decryptTokenPlaceEnvelope(encrypted, relayServerKeys[0].privateKey);
 
         expect(decrypted).toEqual({ ok: true, source: 'ciphertext' });
+    });
+
+    test('decryption accepts explicit GCM payloads with embedded WebCrypto tags', async () => {
+        const crypto = globalThis.crypto;
+        const rawAesKey = crypto.getRandomValues(new Uint8Array(32));
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const aesKey = await crypto.subtle.importKey('raw', rawAesKey, { name: 'AES-GCM' }, false, [
+            'encrypt',
+        ]);
+        const ciphertext = await crypto.subtle.encrypt(
+            { name: 'AES-GCM', iv },
+            aesKey,
+            new TextEncoder().encode(JSON.stringify({ ok: true, mode: 'embedded-gcm-tag' }))
+        );
+        const cipherkey = await crypto.subtle.encrypt(
+            { name: 'RSA-OAEP' },
+            relayServerKeys[0].publicKey,
+            rawAesKey
+        );
+
+        const decrypted = await decryptTokenPlaceEnvelope(
+            {
+                mode: 'AES-GCM',
+                ciphertext: bytesToBase64(ciphertext),
+                cipherkey: bytesToBase64(cipherkey),
+                iv: bytesToBase64(iv),
+            },
+            relayServerKeys[0].privateKey
+        );
+
+        expect(decrypted).toEqual({ ok: true, mode: 'embedded-gcm-tag' });
+    });
+
+    test('decryption accepts explicit GCM payloads with separate tags', async () => {
+        const crypto = globalThis.crypto;
+        const rawAesKey = crypto.getRandomValues(new Uint8Array(32));
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const aesKey = await crypto.subtle.importKey('raw', rawAesKey, { name: 'AES-GCM' }, false, [
+            'encrypt',
+        ]);
+        const encrypted = new Uint8Array(
+            await crypto.subtle.encrypt(
+                { name: 'AES-GCM', iv },
+                aesKey,
+                new TextEncoder().encode(JSON.stringify({ ok: true, mode: 'separate-gcm-tag' }))
+            )
+        );
+        const ciphertext = encrypted.slice(0, -16);
+        const tag = encrypted.slice(-16);
+        const cipherkey = await crypto.subtle.encrypt(
+            { name: 'RSA-OAEP' },
+            relayServerKeys[0].publicKey,
+            rawAesKey
+        );
+
+        const decrypted = await decryptTokenPlaceEnvelope(
+            {
+                mode: 'aes-256-gcm',
+                ciphertext: bytesToBase64(ciphertext),
+                tag: bytesToBase64(tag),
+                cipherkey: bytesToBase64(cipherkey),
+                iv: bytesToBase64(iv),
+            },
+            relayServerKeys[0].privateKey
+        );
+
+        expect(decrypted).toEqual({ ok: true, mode: 'separate-gcm-tag' });
+    });
+
+    test('decryption accepts CBC payloads with raw wrapped AES keys', async () => {
+        const crypto = globalThis.crypto;
+        const rawAesKey = crypto.getRandomValues(new Uint8Array(32));
+        const iv = crypto.getRandomValues(new Uint8Array(16));
+        const aesKey = await crypto.subtle.importKey('raw', rawAesKey, { name: 'AES-CBC' }, false, [
+            'encrypt',
+        ]);
+        const ciphertext = await crypto.subtle.encrypt(
+            { name: 'AES-CBC', iv },
+            aesKey,
+            new TextEncoder().encode(JSON.stringify({ ok: true, key: 'raw' }))
+        );
+        const cipherkey = await crypto.subtle.encrypt(
+            { name: 'RSA-OAEP' },
+            relayServerKeys[0].publicKey,
+            rawAesKey
+        );
+
+        const decrypted = await decryptTokenPlaceEnvelope(
+            {
+                ciphertext: bytesToBase64(ciphertext),
+                cipherkey: bytesToBase64(cipherkey),
+                iv: bytesToBase64(iv),
+            },
+            relayServerKeys[0].privateKey
+        );
+
+        expect(decrypted).toEqual({ ok: true, key: 'raw' });
     });
 
     test('large encrypted envelopes do not overflow base64 conversion', async () => {

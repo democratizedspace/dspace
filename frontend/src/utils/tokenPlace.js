@@ -271,12 +271,33 @@ const decryptGcmTokenPlaceEnvelope = async (payload, rawAesKey) => {
     );
     const ciphertext = base64ToBytes(payload.ciphertext);
     const tag = payload.tag ? base64ToBytes(payload.tag) : new Uint8Array();
-    const encrypted = tag.length ? new Uint8Array([...ciphertext, ...tag]) : ciphertext;
+    let encrypted;
+    if (tag.length) {
+        encrypted = new Uint8Array(ciphertext.length + tag.length);
+        encrypted.set(ciphertext);
+        encrypted.set(tag, ciphertext.length);
+    } else {
+        encrypted = ciphertext;
+    }
     return getCrypto().subtle.decrypt(
         { name: 'AES-GCM', iv: base64ToBytes(payload.iv) },
         aesKey,
         encrypted
     );
+};
+
+const decodeTokenPlaceCbcAesKey = (wrappedAesKey) => {
+    const decodedKeyText = textDecoder.decode(wrappedAesKey);
+    try {
+        const decodedKey = base64ToBytes(decodedKeyText);
+        if ([16, 24, 32].includes(decodedKey.byteLength)) return decodedKey;
+    } catch {
+        // Fall through to the raw-key compatibility check below.
+    }
+    // Compatibility fallback: current token.place CBC payloads wrap the base64-encoded
+    // AES key, but early/internal payloads may have wrapped the raw 256-bit key bytes.
+    if (wrappedAesKey.byteLength === 32) return new Uint8Array(wrappedAesKey);
+    throw new Error('Malformed encrypted token.place response.');
 };
 
 export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
@@ -289,16 +310,17 @@ export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
         privateKey,
         base64ToBytes(payload.cipherkey)
     );
-    const usesGcm =
-        String(payload.mode || '')
-            .toLowerCase()
-            .includes('gcm') && payload.tag;
-    const rawAesKey = usesGcm ? wrappedAesKey : base64ToBytes(textDecoder.decode(wrappedAesKey));
+    const usesGcm = String(payload.mode || '')
+        .toLowerCase()
+        .includes('gcm');
+    const rawAesKey = usesGcm ? wrappedAesKey : decodeTokenPlaceCbcAesKey(wrappedAesKey);
     const encryptedText = payload.chat_history || payload.ciphertext;
 
     const plaintext = usesGcm
         ? await decryptGcmTokenPlaceEnvelope({ ...payload, ciphertext: encryptedText }, rawAesKey)
-        : await getCrypto().subtle.decrypt(
+        : // token.place's current relay wire format is AES-CBC without a MAC. Keep this
+          // compatibility path narrow and prefer/restore AEAD (AES-GCM) when the relay declares it.
+          await getCrypto().subtle.decrypt(
               { name: 'AES-CBC', iv: base64ToBytes(payload.iv) },
               await getCrypto().subtle.importKey('raw', rawAesKey, { name: 'AES-CBC' }, false, [
                   'decrypt',
