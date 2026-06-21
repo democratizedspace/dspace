@@ -87,7 +87,11 @@ const makeRelayFetch = ({
                 },
                 clientPublicPem
             );
-            return { ok: true, status: 200, json: () => Promise.resolve(encrypted) };
+            return {
+                ok: true,
+                status: 200,
+                json: () => Promise.resolve({ ...encrypted, chat_history: encrypted.ciphertext }),
+            };
         }
         if (url.endsWith('/api/v1/relay/requests/cancel')) {
             return { ok: true, status: 200, json: () => Promise.resolve({ canceled: true }) };
@@ -280,6 +284,9 @@ describe('token.place API v1 client', () => {
         );
         expect(JSON.stringify(body)).not.toContain('hello');
         expect(JSON.stringify(body)).not.toContain('model');
+        expect(Uint8Array.from(atob(body.iv), (char) => char.charCodeAt(0))).toHaveLength(16);
+        expect(body).not.toHaveProperty('mode');
+        expect(body).not.toHaveProperty('tag');
         expect(body.stream).not.toBe(true);
     });
 
@@ -304,6 +311,33 @@ describe('token.place API v1 client', () => {
             })
         );
         expect(decrypted.api_v1_request).not.toHaveProperty('metadata');
+    });
+
+    test('decryption accepts chat_history as the response ciphertext', async () => {
+        const encrypted = await encryptTokenPlaceEnvelope(
+            { ok: true, source: 'chat_history' },
+            relayServerKeys[0].publicKeyPem
+        );
+        const decrypted = await decryptTokenPlaceEnvelope(
+            {
+                chat_history: encrypted.ciphertext,
+                cipherkey: encrypted.cipherkey,
+                iv: encrypted.iv,
+            },
+            relayServerKeys[0].privateKey
+        );
+
+        expect(decrypted).toEqual({ ok: true, source: 'chat_history' });
+    });
+
+    test('decryption accepts ciphertext when chat_history is absent', async () => {
+        const encrypted = await encryptTokenPlaceEnvelope(
+            { ok: true, source: 'ciphertext' },
+            relayServerKeys[0].publicKeyPem
+        );
+        const decrypted = await decryptTokenPlaceEnvelope(encrypted, relayServerKeys[0].privateKey);
+
+        expect(decrypted).toEqual({ ok: true, source: 'ciphertext' });
     });
 
     test('large encrypted envelopes do not overflow base64 conversion', async () => {
