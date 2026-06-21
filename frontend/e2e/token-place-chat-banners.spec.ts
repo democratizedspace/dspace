@@ -1,3 +1,5 @@
+import { webcrypto } from 'node:crypto';
+
 import { expect, test, type Page } from '@playwright/test';
 
 import { clearUserData, waitForHydration } from './test-helpers';
@@ -11,73 +13,137 @@ type TokenPlaceStubMode =
     | 'provider-error'
     | 'unexpected-http-error';
 
+const encoder = new TextEncoder();
+const bytesToBase64 = (bytes: ArrayBuffer | Uint8Array) =>
+    Buffer.from(bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes)).toString('base64');
+const base64ToBytes = (value: string) => Uint8Array.from(Buffer.from(value, 'base64'));
+const base64ToPem = (base64: string) =>
+    `-----BEGIN PUBLIC KEY-----\n${base64.match(/.{1,64}/g)?.join('\n') || ''}\n-----END PUBLIC KEY-----`;
+const pemToBase64 = (pem: string) =>
+    pem.replace(/-----BEGIN [^-]+-----|-----END [^-]+-----|\s+/g, '');
+
+const relayErrorResponse = (mode: TokenPlaceStubMode) => {
+    if (mode === 'content-policy') {
+        return {
+            status: 400,
+            error: {
+                message: 'Content blocked',
+                type: 'content_policy_violation',
+                code: 'content_blocked',
+            },
+        };
+    }
+
+    if (mode === 'rate-limit') {
+        return { status: 429, error: { message: 'Slow down', type: 'rate_limit' } };
+    }
+
+    if (mode === 'server-error') {
+        return { status: 503, error: { message: 'Unavailable', type: 'server_error' } };
+    }
+
+    if (mode === 'provider-error') {
+        return { status: 400, error: { message: 'Provider down' } };
+    }
+
+    if (mode === 'unexpected-http-error') {
+        return { status: 418, error: { message: 'Unexpected token.place failure' } };
+    }
+
+    return { choices: [{ message: { role: 'assistant', content: '' } }] };
+};
+
+async function generateRelayKeypair() {
+    const pair = await webcrypto.subtle.generateKey(
+        {
+            name: 'RSA-OAEP',
+            modulusLength: 2048,
+            publicExponent: new Uint8Array([1, 0, 1]),
+            hash: 'SHA-256',
+        },
+        true,
+        ['encrypt', 'decrypt']
+    );
+    const spki = await webcrypto.subtle.exportKey('spki', pair.publicKey);
+    const publicPem = base64ToPem(bytesToBase64(spki));
+    return { publicKeyBase64: bytesToBase64(encoder.encode(publicPem)) };
+}
+
+async function encryptRelayEnvelope(
+    envelope: Record<string, unknown>,
+    clientPublicKeyBase64: string
+) {
+    const aesKey = await webcrypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, [
+        'encrypt',
+    ]);
+    const rawAesKey = await webcrypto.subtle.exportKey('raw', aesKey);
+    const iv = webcrypto.getRandomValues(new Uint8Array(12));
+    const ciphertext = await webcrypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        aesKey,
+        encoder.encode(JSON.stringify(envelope))
+    );
+    const clientPublicPem = Buffer.from(clientPublicKeyBase64, 'base64').toString('utf8');
+    const publicKey = await webcrypto.subtle.importKey(
+        'spki',
+        base64ToBytes(pemToBase64(clientPublicPem)),
+        { name: 'RSA-OAEP', hash: 'SHA-256' },
+        true,
+        ['encrypt']
+    );
+    const cipherkey = await webcrypto.subtle.encrypt({ name: 'RSA-OAEP' }, publicKey, rawAesKey);
+    return {
+        ciphertext: bytesToBase64(ciphertext),
+        cipherkey: bytesToBase64(cipherkey),
+        iv: bytesToBase64(iv),
+    };
+}
+
 const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
-    await page.route('https://token.place/api/v1/chat/completions', async (route) => {
+    const serverKey = await generateRelayKeypair();
+
+    await page.route('https://token.place/api/v1/relay/servers/next', async (route) => {
         if (mode === 'network-error') {
             await route.abort('failed');
             return;
         }
 
-        if (mode === 'content-policy') {
-            await route.fulfill({
-                status: 400,
-                contentType: 'application/json',
-                body: JSON.stringify({
-                    error: {
-                        message: 'Content blocked',
-                        type: 'content_policy_violation',
-                        code: 'content_blocked',
-                    },
-                }),
-            });
-            return;
-        }
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ server_public_key: serverKey.publicKeyBase64 }),
+        });
+    });
 
-        if (mode === 'rate-limit') {
-            await route.fulfill({
-                status: 429,
-                contentType: 'application/json',
-                body: JSON.stringify({ error: { message: 'Slow down', type: 'rate_limit' } }),
-            });
-            return;
-        }
+    await page.route('https://token.place/api/v1/relay/requests', async (route) => {
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ accepted: true }),
+        });
+    });
 
-        if (mode === 'server-error') {
-            await route.fulfill({
-                status: 503,
-                contentType: 'application/json',
-                body: JSON.stringify({
-                    error: { message: 'Unavailable', type: 'server_error' },
-                }),
-            });
-            return;
-        }
+    await page.route('https://token.place/api/v1/relay/responses/retrieve', async (route) => {
+        const body = JSON.parse(route.request().postData() || '{}');
+        const encrypted = await encryptRelayEnvelope(
+            {
+                protocol: 'tokenplace_api_v1_relay_e2ee',
+                version: 1,
+                request_id: body.request_id,
+                client_public_key: body.client_public_key,
+                api_v1_response: relayErrorResponse(mode),
+            },
+            body.client_public_key
+        );
+        await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(encrypted),
+        });
+    });
 
-        if (mode === 'malformed') {
-            await route.fulfill({
-                status: 200,
-                contentType: 'application/json',
-                body: JSON.stringify({ choices: [{ message: { content: '' } }] }),
-            });
-            return;
-        }
-
-        if (mode === 'provider-error') {
-            await route.fulfill({
-                status: 400,
-                contentType: 'application/json',
-                body: JSON.stringify({ error: { message: 'Provider down' } }),
-            });
-            return;
-        }
-
-        if (mode === 'unexpected-http-error') {
-            await route.fulfill({
-                status: 418,
-                contentType: 'application/json',
-                body: JSON.stringify({ error: { message: 'Unexpected token.place failure' } }),
-            });
-        }
+    await page.route('https://token.place/api/v1/chat/completions', async (route) => {
+        throw new Error(`Unexpected legacy token.place request: ${route.request().url()}`);
     });
 };
 
