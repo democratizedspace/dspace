@@ -294,27 +294,23 @@ describe('token.place API v1 client', () => {
         expect(body.stream).not.toBe(true);
     });
 
-    test('decrypted API v1 request nests metadata under options', async () => {
+    test('decrypted API v1 request sends empty options without metadata', async () => {
         await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
-            metadata: { conversation_id: 'conv-42' },
+            metadata: { conversation_id: 'conv-42-metadata-canary' },
         });
         const { body } = getFetchCallByPath('/api/v1/relay/requests');
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
 
+        expect(JSON.stringify(body)).not.toContain('conv-42-metadata-canary');
         expect(decrypted.api_v1_request).toEqual(
             expect.objectContaining({
                 model: 'llama-3.1-8b-instruct',
                 messages: expect.any(Array),
-                options: {
-                    metadata: {
-                        conversation_id: 'conv-42',
-                        client: 'dspace',
-                        provider: 'token.place',
-                    },
-                },
+                options: {},
             })
         );
         expect(decrypted.api_v1_request).not.toHaveProperty('metadata');
+        expect(decrypted.api_v1_request.options).not.toHaveProperty('metadata');
     });
 
     test('decryption accepts chat_history as the response ciphertext', async () => {
