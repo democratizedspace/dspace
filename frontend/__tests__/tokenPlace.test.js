@@ -1,4 +1,4 @@
-import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest';
+import { describe, expect, test, vi, beforeAll, beforeEach, afterEach } from 'vitest';
 const jest = vi;
 
 jest.mock('../src/utils/gameState/common.js', () => ({
@@ -41,6 +41,18 @@ const bytesToBase64 = (bytes) => btoa(String.fromCharCode(...new Uint8Array(byte
 
 const decodeBase64Text = (value) =>
     new TextDecoder().decode(Uint8Array.from(atob(value), (char) => char.charCodeAt(0)));
+
+const generateOaepKeypair = () =>
+    globalThis.crypto.subtle.generateKey(
+        {
+            name: 'RSA-OAEP',
+            modulusLength: 2048,
+            publicExponent: new Uint8Array([1, 0, 1]),
+            hash: 'SHA-256',
+        },
+        true,
+        ['encrypt', 'decrypt']
+    );
 
 let relayServerKeys;
 let relayReply = {
@@ -116,11 +128,14 @@ const getFetchCall = () => {
 };
 
 describe('token.place API v1 client', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         relayServerKeys = [
             await generateTokenPlaceClientKeypair(),
             await generateTokenPlaceClientKeypair(),
         ];
+    });
+
+    beforeEach(() => {
         relayReply = { choices: [{ message: { content: 'mocked reply' } }] };
         global.fetch = makeRelayFetch();
         loadGameState.mockReturnValue({});
@@ -286,9 +301,15 @@ describe('token.place API v1 client', () => {
         );
         expect(JSON.stringify(body)).not.toContain('hello');
         expect(JSON.stringify(body)).not.toContain('model');
+        expect(JSON.stringify(body)).not.toContain('PlayerState');
+        expect(JSON.stringify(body)).not.toContain('inventory');
+        expect(JSON.stringify(body)).not.toContain('save');
+        expect(JSON.stringify(body)).not.toContain('messages');
+        expect(decodeBase64Text(body.client_public_key)).toMatch(/-----BEGIN PUBLIC KEY-----/);
         expect(Uint8Array.from(atob(body.iv), (char) => char.charCodeAt(0))).toHaveLength(16);
         expect(body).not.toHaveProperty('mode');
         expect(body).not.toHaveProperty('tag');
+        expect(body).not.toHaveProperty('model');
         expect(body.stream).not.toBe(true);
     });
 
@@ -332,6 +353,37 @@ describe('token.place API v1 client', () => {
         expect(decrypted).toEqual({ ok: true, source: 'chat_history' });
     });
 
+    test('decryption accepts token.place static chat compatible CBC and PKCS#1 response shape', async () => {
+        const encrypted = await encryptTokenPlaceEnvelope(
+            {
+                protocol: 'tokenplace_api_v1_relay_e2ee',
+                version: 1,
+                request_id: 'fixture-request',
+                client_public_key: relayServerKeys[0].publicKeyBase64,
+                api_v1_response: {
+                    choices: [{ message: { content: 'desktop-compatible response' } }],
+                },
+            },
+            relayServerKeys[0].publicKeyPem
+        );
+        const payload = {
+            chat_history: encrypted.ciphertext,
+            ciphertext: encrypted.ciphertext,
+            cipherkey: encrypted.cipherkey,
+            iv: encrypted.iv,
+        };
+
+        expect(Uint8Array.from(atob(payload.iv), (char) => char.charCodeAt(0))).toHaveLength(16);
+        await expect(
+            decryptTokenPlaceEnvelope(payload, relayServerKeys[0].privateKey)
+        ).resolves.toMatchObject({
+            protocol: 'tokenplace_api_v1_relay_e2ee',
+            api_v1_response: {
+                choices: [{ message: { content: 'desktop-compatible response' } }],
+            },
+        });
+    });
+
     test('decryption accepts ciphertext when chat_history is absent', async () => {
         const encrypted = await encryptTokenPlaceEnvelope(
             { ok: true, source: 'ciphertext' },
@@ -359,6 +411,7 @@ describe('token.place API v1 client', () => {
 
     test('decryption accepts explicit GCM payloads with embedded WebCrypto tags', async () => {
         const crypto = globalThis.crypto;
+        const oaepKeys = await generateOaepKeypair();
         const rawAesKey = crypto.getRandomValues(new Uint8Array(32));
         const iv = crypto.getRandomValues(new Uint8Array(12));
         const aesKey = await crypto.subtle.importKey('raw', rawAesKey, { name: 'AES-GCM' }, false, [
@@ -371,7 +424,7 @@ describe('token.place API v1 client', () => {
         );
         const cipherkey = await crypto.subtle.encrypt(
             { name: 'RSA-OAEP' },
-            relayServerKeys[0].publicKey,
+            oaepKeys.publicKey,
             rawAesKey
         );
 
@@ -382,7 +435,7 @@ describe('token.place API v1 client', () => {
                 cipherkey: bytesToBase64(cipherkey),
                 iv: bytesToBase64(iv),
             },
-            relayServerKeys[0].privateKey
+            oaepKeys.privateKey
         );
 
         expect(decrypted).toEqual({ ok: true, mode: 'embedded-gcm-tag' });
@@ -390,6 +443,7 @@ describe('token.place API v1 client', () => {
 
     test('decryption accepts explicit GCM payloads with separate tags', async () => {
         const crypto = globalThis.crypto;
+        const oaepKeys = await generateOaepKeypair();
         const rawAesKey = crypto.getRandomValues(new Uint8Array(32));
         const iv = crypto.getRandomValues(new Uint8Array(12));
         const aesKey = await crypto.subtle.importKey('raw', rawAesKey, { name: 'AES-GCM' }, false, [
@@ -406,7 +460,7 @@ describe('token.place API v1 client', () => {
         const tag = encrypted.slice(-16);
         const cipherkey = await crypto.subtle.encrypt(
             { name: 'RSA-OAEP' },
-            relayServerKeys[0].publicKey,
+            oaepKeys.publicKey,
             rawAesKey
         );
 
@@ -418,7 +472,7 @@ describe('token.place API v1 client', () => {
                 cipherkey: bytesToBase64(cipherkey),
                 iv: bytesToBase64(iv),
             },
-            relayServerKeys[0].privateKey
+            oaepKeys.privateKey
         );
 
         expect(decrypted).toEqual({ ok: true, mode: 'separate-gcm-tag' });
@@ -436,16 +490,15 @@ describe('token.place API v1 client', () => {
             aesKey,
             new TextEncoder().encode(JSON.stringify({ ok: true, key: 'raw' }))
         );
-        const cipherkey = await crypto.subtle.encrypt(
-            { name: 'RSA-OAEP' },
-            relayServerKeys[0].publicKey,
-            rawAesKey
+        const cipherkey = relayServerKeys[0].publicKey.encrypt(
+            String.fromCharCode(...rawAesKey),
+            'RSAES-PKCS1-V1_5'
         );
 
         const decrypted = await decryptTokenPlaceEnvelope(
             {
                 ciphertext: bytesToBase64(ciphertext),
-                cipherkey: bytesToBase64(cipherkey),
+                cipherkey: btoa(cipherkey),
                 iv: bytesToBase64(iv),
             },
             relayServerKeys[0].privateKey
