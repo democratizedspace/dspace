@@ -260,7 +260,7 @@ describe('token.place API v1 client', () => {
         expect(body).not.toHaveProperty('metadata');
     });
 
-    test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
+    test('request body includes model, schema-safe messages, ciphertext-only payload, and no true stream', async () => {
         await TokenPlaceChatV2([
             {
                 role: 'developer',
@@ -294,26 +294,25 @@ describe('token.place API v1 client', () => {
         expect(body.stream).not.toBe(true);
     });
 
-    test('decrypted API v1 request nests metadata under options', async () => {
+    test('decrypted API v1 request keeps metadata out of generation options', async () => {
         await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
             metadata: { conversation_id: 'conv-42' },
         });
         const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const serializedBody = JSON.stringify(body);
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
 
+        expect(serializedBody).not.toContain('conversation_id');
+        expect(serializedBody).not.toContain('conv-42');
+        expect(serializedBody).not.toContain('metadata');
         expect(decrypted.api_v1_request).toEqual(
             expect.objectContaining({
                 model: 'llama-3.1-8b-instruct',
                 messages: expect.any(Array),
-                options: {
-                    metadata: {
-                        conversation_id: 'conv-42',
-                        client: 'dspace',
-                        provider: 'token.place',
-                    },
-                },
+                options: {},
             })
         );
+        expect(decrypted.api_v1_request.options).not.toHaveProperty('metadata');
         expect(decrypted.api_v1_request).not.toHaveProperty('metadata');
     });
 
