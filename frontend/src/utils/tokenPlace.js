@@ -526,9 +526,7 @@ export const validateTokenPlaceResponseEnvelope = (envelope, expected) => {
 const buildApiV1Request = (promptPayload, options = {}) => ({
     model: getTokenPlaceChatModel(options),
     messages: sanitizeTokenPlaceMessages(promptPayload.combinedMessages),
-    options: {
-        metadata: buildTokenPlaceMetadata(options.metadata),
-    },
+    options: {},
 });
 
 const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
