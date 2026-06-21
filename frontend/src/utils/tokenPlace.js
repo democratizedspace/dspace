@@ -1,3 +1,4 @@
+import { JSEncrypt } from 'jsencrypt';
 import { loadGameState, ready } from './gameState/common.js';
 import { buildChatPrompt, validateChatResponseText } from './openAI.js';
 import {
@@ -198,24 +199,6 @@ export const normalizeTokenPlacePublicKey = (value) => {
     return { pem: base64ToPem(raw), base64: bytesToBase64(textEncoder.encode(base64ToPem(raw))) };
 };
 
-const importRsaPublicKey = async (pem) =>
-    getCrypto().subtle.importKey(
-        'spki',
-        base64ToBytes(pemToBase64(pem)),
-        { name: 'RSA-OAEP', hash: 'SHA-256' },
-        true,
-        ['encrypt']
-    );
-
-const importRsaPrivateKey = async (base64Pkcs8) =>
-    getCrypto().subtle.importKey(
-        'pkcs8',
-        base64ToBytes(base64Pkcs8),
-        { name: 'RSA-OAEP', hash: 'SHA-256' },
-        true,
-        ['decrypt']
-    );
-
 export const generateTokenPlaceClientKeypair = async () => {
     const pair = await getCrypto().subtle.generateKey(
         {
@@ -230,13 +213,33 @@ export const generateTokenPlaceClientKeypair = async () => {
     const spki = await getCrypto().subtle.exportKey('spki', pair.publicKey);
     const pkcs8 = await getCrypto().subtle.exportKey('pkcs8', pair.privateKey);
     const publicPem = base64ToPem(bytesToBase64(spki));
+    const privatePem = base64ToPem(bytesToBase64(pkcs8), 'PRIVATE KEY');
     return {
-        publicKey: pair.publicKey,
-        privateKey: pair.privateKey,
+        publicKey: publicPem,
+        privateKey: privatePem,
+        publicKeyCrypto: pair.publicKey,
+        privateKeyCrypto: pair.privateKey,
         publicKeyPem: publicPem,
         publicKeyBase64: bytesToBase64(textEncoder.encode(publicPem)),
-        privateKeyBase64: bytesToBase64(pkcs8),
+        privateKeyPem: privatePem,
+        privateKeyBase64: bytesToBase64(textEncoder.encode(privatePem)),
     };
+};
+
+const encryptTokenPlaceCipherkey = (aesKeyBase64, publicKeyPem) => {
+    const rsa = new JSEncrypt();
+    rsa.setPublicKey(publicKeyPem);
+    const cipherkey = rsa.encrypt(aesKeyBase64);
+    if (!cipherkey) throw new Error('Unable to encrypt token.place cipher key.');
+    return cipherkey;
+};
+
+const decryptTokenPlaceCipherkey = (cipherkey, privateKeyPem) => {
+    const rsa = new JSEncrypt();
+    rsa.setPrivateKey(privateKeyPem);
+    const aesKeyBase64 = rsa.decrypt(cipherkey);
+    if (!aesKeyBase64) throw new Error('Malformed encrypted token.place response.');
+    return base64ToBytes(aesKeyBase64);
 };
 
 export const encryptTokenPlaceEnvelope = async (envelope, serverPublicKeyPem) => {
@@ -245,18 +248,16 @@ export const encryptTokenPlaceEnvelope = async (envelope, serverPublicKeyPem) =>
         'encrypt',
     ]);
     const rawAesKey = await crypto.subtle.exportKey('raw', aesKey);
-    const encodedAesKey = textEncoder.encode(bytesToBase64(rawAesKey));
+    const encodedAesKey = bytesToBase64(rawAesKey);
     const iv = crypto.getRandomValues(new Uint8Array(16));
     const ciphertext = await crypto.subtle.encrypt(
         { name: 'AES-CBC', iv },
         aesKey,
         textEncoder.encode(JSON.stringify(envelope))
     );
-    const serverKey = await importRsaPublicKey(serverPublicKeyPem);
-    const cipherkey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, serverKey, encodedAesKey);
     return {
         ciphertext: bytesToBase64(ciphertext),
-        cipherkey: bytesToBase64(cipherkey),
+        cipherkey: encryptTokenPlaceCipherkey(encodedAesKey, serverPublicKeyPem),
         iv: bytesToBase64(iv),
     };
 };
@@ -301,19 +302,20 @@ const decodeTokenPlaceCbcAesKey = (wrappedAesKey) => {
 };
 
 export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
-    const privateKey =
-        typeof clientPrivateKey === 'string'
-            ? await importRsaPrivateKey(clientPrivateKey)
-            : clientPrivateKey;
-    const wrappedAesKey = await getCrypto().subtle.decrypt(
-        { name: 'RSA-OAEP' },
-        privateKey,
-        base64ToBytes(payload.cipherkey)
-    );
     const usesGcm = String(payload.mode || '')
         .toLowerCase()
         .includes('gcm');
-    const rawAesKey = usesGcm ? wrappedAesKey : decodeTokenPlaceCbcAesKey(wrappedAesKey);
+    let rawAesKey;
+    if (typeof clientPrivateKey === 'string') {
+        rawAesKey = decryptTokenPlaceCipherkey(payload.cipherkey, clientPrivateKey);
+    } else {
+        const wrappedAesKey = await getCrypto().subtle.decrypt(
+            { name: 'RSA-OAEP' },
+            clientPrivateKey,
+            base64ToBytes(payload.cipherkey)
+        );
+        rawAesKey = usesGcm ? wrappedAesKey : decodeTokenPlaceCbcAesKey(wrappedAesKey);
+    }
     const encryptedText = payload.chat_history || payload.ciphertext;
     if (!encryptedText) {
         throw new Error('Malformed encrypted token.place response: missing ciphertext field.');

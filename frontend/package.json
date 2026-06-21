@@ -105,6 +105,7 @@
         "fake-indexeddb": "^6.1.0",
         "highlight.js": "^11.8.0",
         "jsdom": "^21.1.1",
+        "jsencrypt": "^3.5.4",
         "markdown-it": "^13.0.1",
         "marked": "^4.3.0",
         "minisearch": "^7.2.0",
