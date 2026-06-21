@@ -315,6 +315,9 @@ export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
         .includes('gcm');
     const rawAesKey = usesGcm ? wrappedAesKey : decodeTokenPlaceCbcAesKey(wrappedAesKey);
     const encryptedText = payload.chat_history || payload.ciphertext;
+    if (!encryptedText) {
+        throw new Error('Malformed encrypted token.place response: missing ciphertext field.');
+    }
 
     const plaintext = usesGcm
         ? await decryptGcmTokenPlaceEnvelope({ ...payload, ciphertext: encryptedText }, rawAesKey)

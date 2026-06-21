@@ -342,6 +342,21 @@ describe('token.place API v1 client', () => {
         expect(decrypted).toEqual({ ok: true, source: 'ciphertext' });
     });
 
+    test('decryption rejects responses missing chat_history and ciphertext fields', async () => {
+        const encrypted = await encryptTokenPlaceEnvelope(
+            { ok: true, source: 'missing-ciphertext-field' },
+            relayServerKeys[0].publicKeyPem
+        );
+        const payload = {
+            cipherkey: encrypted.cipherkey,
+            iv: encrypted.iv,
+        };
+
+        await expect(
+            decryptTokenPlaceEnvelope(payload, relayServerKeys[0].privateKey)
+        ).rejects.toThrow('Malformed encrypted token.place response: missing ciphertext field.');
+    });
+
     test('decryption accepts explicit GCM payloads with embedded WebCrypto tags', async () => {
         const crypto = globalThis.crypto;
         const rawAesKey = crypto.getRandomValues(new Uint8Array(32));
