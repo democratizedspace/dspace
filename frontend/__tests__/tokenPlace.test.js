@@ -257,10 +257,13 @@ describe('token.place API v1 client', () => {
         expect(serialized).not.toContain('player-inventory-canary-charlie');
         expect(serialized).not.toContain('raw-save-data-canary-delta');
         expect(serialized).not.toContain('secret-canary-echo');
+        expect(serialized).not.toContain('conv-42');
+        expect(serialized).not.toContain('conversation_id');
+        expect(serialized).not.toContain('metadata');
         expect(body).not.toHaveProperty('metadata');
     });
 
-    test('request body includes model, schema-safe messages, safe metadata, and no true stream', async () => {
+    test('relay request body stays ciphertext-only and does not request streaming', async () => {
         await TokenPlaceChatV2([
             {
                 role: 'developer',
@@ -294,7 +297,7 @@ describe('token.place API v1 client', () => {
         expect(body.stream).not.toBe(true);
     });
 
-    test('decrypted API v1 request nests metadata under options', async () => {
+    test('decrypted API v1 request uses empty options and excludes metadata', async () => {
         await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
             metadata: { conversation_id: 'conv-42' },
         });
@@ -305,16 +308,14 @@ describe('token.place API v1 client', () => {
             expect.objectContaining({
                 model: 'llama-3.1-8b-instruct',
                 messages: expect.any(Array),
-                options: {
-                    metadata: {
-                        conversation_id: 'conv-42',
-                        client: 'dspace',
-                        provider: 'token.place',
-                    },
-                },
+                options: {},
             })
         );
         expect(decrypted.api_v1_request).not.toHaveProperty('metadata');
+        expect(decrypted.api_v1_request.options).not.toHaveProperty('metadata');
+        expect(JSON.stringify(body)).not.toContain('conv-42');
+        expect(JSON.stringify(body)).not.toContain('conversation_id');
+        expect(JSON.stringify(body)).not.toContain('metadata');
     });
 
     test('decryption accepts chat_history as the response ciphertext', async () => {
