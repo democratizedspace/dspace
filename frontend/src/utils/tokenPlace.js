@@ -239,20 +239,27 @@ export const generateTokenPlaceClientKeypair = async () => {
     };
 };
 
+const isGcmRelayPayload = (payload) =>
+    String(payload?.mode || '').toLowerCase() === 'gcm' && typeof payload?.tag === 'string';
+
 export const encryptTokenPlaceEnvelope = async (envelope, serverPublicKeyPem) => {
     const crypto = getCrypto();
-    const aesKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, [
+    const aesKey = await crypto.subtle.generateKey({ name: 'AES-CBC', length: 256 }, true, [
         'encrypt',
     ]);
     const rawAesKey = await crypto.subtle.exportKey('raw', aesKey);
-    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const iv = crypto.getRandomValues(new Uint8Array(16));
     const ciphertext = await crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv },
+        { name: 'AES-CBC', iv },
         aesKey,
         textEncoder.encode(JSON.stringify(envelope))
     );
     const serverKey = await importRsaPublicKey(serverPublicKeyPem);
-    const cipherkey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, serverKey, rawAesKey);
+    const cipherkey = await crypto.subtle.encrypt(
+        { name: 'RSA-OAEP' },
+        serverKey,
+        textEncoder.encode(bytesToBase64(rawAesKey))
+    );
     return {
         ciphertext: bytesToBase64(ciphertext),
         cipherkey: bytesToBase64(cipherkey),
@@ -265,22 +272,29 @@ export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
         typeof clientPrivateKey === 'string'
             ? await importRsaPrivateKey(clientPrivateKey)
             : clientPrivateKey;
-    const rawAesKey = await getCrypto().subtle.decrypt(
+    const wrappedAesKey = await getCrypto().subtle.decrypt(
         { name: 'RSA-OAEP' },
         privateKey,
         base64ToBytes(payload.cipherkey)
     );
+    const rawAesKey = isGcmRelayPayload(payload)
+        ? wrappedAesKey
+        : base64ToBytes(textDecoder.decode(wrappedAesKey));
+    const algorithmName = isGcmRelayPayload(payload) ? 'AES-GCM' : 'AES-CBC';
     const aesKey = await getCrypto().subtle.importKey(
         'raw',
         rawAesKey,
-        { name: 'AES-GCM' },
+        { name: algorithmName },
         false,
         ['decrypt']
     );
+    const ciphertext = isGcmRelayPayload(payload)
+        ? new Uint8Array([...base64ToBytes(payload.ciphertext), ...base64ToBytes(payload.tag)])
+        : base64ToBytes(payload.chat_history || payload.ciphertext);
     const plaintext = await getCrypto().subtle.decrypt(
-        { name: 'AES-GCM', iv: base64ToBytes(payload.iv) },
+        { name: algorithmName, iv: base64ToBytes(payload.iv) },
         aesKey,
-        base64ToBytes(payload.ciphertext)
+        ciphertext
     );
     return JSON.parse(textDecoder.decode(plaintext));
 };

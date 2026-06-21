@@ -39,6 +39,7 @@ const okResponse = (body = {}) => ({
 
 const decodeBase64Text = (value) =>
     new TextDecoder().decode(Uint8Array.from(atob(value), (char) => char.charCodeAt(0)));
+const decodeBase64Bytes = (value) => Uint8Array.from(atob(value), (char) => char.charCodeAt(0));
 
 let relayServerKeys;
 let relayReply = {
@@ -87,6 +88,7 @@ const makeRelayFetch = ({
                 },
                 clientPublicPem
             );
+            encrypted.chat_history = encrypted.ciphertext;
             return { ok: true, status: 200, json: () => Promise.resolve(encrypted) };
         }
         if (url.endsWith('/api/v1/relay/requests/cancel')) {
@@ -278,9 +280,41 @@ describe('token.place API v1 client', () => {
                 cancel_token: expect.any(String),
             })
         );
+        expect(decodeBase64Bytes(body.iv)).toHaveLength(16);
+        expect(body).not.toHaveProperty('mode');
+        expect(body).not.toHaveProperty('tag');
         expect(JSON.stringify(body)).not.toContain('hello');
         expect(JSON.stringify(body)).not.toContain('model');
         expect(body.stream).not.toBe(true);
+    });
+
+    test('decrypt accepts token.place CBC response ciphertext from chat_history or ciphertext', async () => {
+        const envelope = {
+            protocol: 'tokenplace_api_v1_relay_e2ee',
+            version: 1,
+            request_id: 'request-cbc',
+            client_public_key: relayServerKeys[0].publicKeyBase64,
+            api_v1_response: { choices: [{ message: { content: 'cbc reply' } }] },
+        };
+        const encrypted = await encryptTokenPlaceEnvelope(
+            envelope,
+            relayServerKeys[0].publicKeyPem
+        );
+
+        await expect(
+            decryptTokenPlaceEnvelope(
+                { ...encrypted, chat_history: encrypted.ciphertext },
+                relayServerKeys[0].privateKey
+            )
+        ).resolves.toEqual(envelope);
+
+        const { chat_history: _chatHistory, ...ciphertextOnly } = {
+            ...encrypted,
+            chat_history: encrypted.ciphertext,
+        };
+        await expect(
+            decryptTokenPlaceEnvelope(ciphertextOnly, relayServerKeys[0].privateKey)
+        ).resolves.toEqual(envelope);
     });
 
     test('decrypted API v1 request nests metadata under options', async () => {
