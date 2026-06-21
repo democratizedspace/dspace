@@ -8,10 +8,18 @@ import {
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
+const RELAY_PROTOCOL = 'tokenplace_api_v1_relay_e2ee';
+const RELAY_VERSION = 1;
 const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
+const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
+const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const METADATA_DENY_PATTERN =
     /(?:key|token|secret|credential|password|authorization|auth|inventory|save|state|player)/i;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
+
+const getCrypto = () => globalThis.crypto;
+const textEncoder = new TextEncoder();
+const textDecoder = new TextDecoder();
 
 const readEnvValue = (key) => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
@@ -118,50 +126,339 @@ const parseErrorPayload = async (response) => {
     }
 };
 
-export const TokenPlaceChatV2 = async (messages, options = {}) => {
-    await ready;
-    const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
-    const contextSources = Array.isArray(promptPayload.contextSources)
-        ? promptPayload.contextSources
-        : [];
-    const requestBody = {
-        model: getTokenPlaceChatModel(options),
-        messages: sanitizeTokenPlaceMessages(promptPayload.combinedMessages),
-        metadata: buildTokenPlaceMetadata(options.metadata),
+const bytesToBase64 = (bytes) => btoa(String.fromCharCode(...new Uint8Array(bytes)));
+const base64ToBytes = (value) => Uint8Array.from(atob(value), (char) => char.charCodeAt(0));
+const pemToBase64 = (pem) =>
+    String(pem).replace(/-----BEGIN [^-]+-----|-----END [^-]+-----|\s+/g, '');
+const base64ToPem = (base64, label = 'PUBLIC KEY') => {
+    const lines = String(base64).match(/.{1,64}/g) || [];
+    return `-----BEGIN ${label}-----\n${lines.join('\n')}\n-----END ${label}-----`;
+};
+
+export const normalizeTokenPlacePublicKey = (value) => {
+    const raw = String(value || '').trim();
+    if (!raw)
+        throw createMalformedTokenPlaceResponseError(
+            'token.place relay server is missing a public key.'
+        );
+    if (/-----BEGIN [^-]+-----/.test(raw)) {
+        return { pem: raw, base64: bytesToBase64(textEncoder.encode(raw)) };
+    }
+    const decoded = textDecoder.decode(base64ToBytes(raw));
+    if (/-----BEGIN [^-]+-----/.test(decoded)) {
+        return { pem: decoded, base64: raw };
+    }
+    return { pem: base64ToPem(raw), base64: bytesToBase64(textEncoder.encode(base64ToPem(raw))) };
+};
+
+const importRsaPublicKey = async (pem) =>
+    getCrypto().subtle.importKey(
+        'spki',
+        base64ToBytes(pemToBase64(pem)),
+        { name: 'RSA-OAEP', hash: 'SHA-256' },
+        true,
+        ['encrypt']
+    );
+
+const importRsaPrivateKey = async (base64Pkcs8) =>
+    getCrypto().subtle.importKey(
+        'pkcs8',
+        base64ToBytes(base64Pkcs8),
+        { name: 'RSA-OAEP', hash: 'SHA-256' },
+        true,
+        ['decrypt']
+    );
+
+export const generateTokenPlaceClientKeypair = async () => {
+    const pair = await getCrypto().subtle.generateKey(
+        {
+            name: 'RSA-OAEP',
+            modulusLength: 2048,
+            publicExponent: new Uint8Array([1, 0, 1]),
+            hash: 'SHA-256',
+        },
+        true,
+        ['encrypt', 'decrypt']
+    );
+    const spki = await getCrypto().subtle.exportKey('spki', pair.publicKey);
+    const pkcs8 = await getCrypto().subtle.exportKey('pkcs8', pair.privateKey);
+    const publicPem = base64ToPem(bytesToBase64(spki));
+    return {
+        publicKey: pair.publicKey,
+        privateKey: pair.privateKey,
+        publicKeyPem: publicPem,
+        publicKeyBase64: bytesToBase64(textEncoder.encode(publicPem)),
+        privateKeyBase64: bytesToBase64(pkcs8),
     };
+};
 
-    const baseUrl = resolveTokenPlaceBaseUrl({
-        url: options.url,
-        state: promptPayload.gameState,
-        runtimeUrl: options.runtimeUrl,
-    });
-    const url = `${baseUrl}${CHAT_COMPLETIONS_PATH}`;
+export const encryptTokenPlaceEnvelope = async (envelope, serverPublicKeyPem) => {
+    const crypto = getCrypto();
+    const aesKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, [
+        'encrypt',
+    ]);
+    const rawAesKey = await crypto.subtle.exportKey('raw', aesKey);
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const ciphertext = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        aesKey,
+        textEncoder.encode(JSON.stringify(envelope))
+    );
+    const serverKey = await importRsaPublicKey(serverPublicKeyPem);
+    const cipherkey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, serverKey, rawAesKey);
+    return {
+        ciphertext: bytesToBase64(ciphertext),
+        cipherkey: bytesToBase64(cipherkey),
+        iv: bytesToBase64(iv),
+    };
+};
 
+export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
+    const privateKey =
+        typeof clientPrivateKey === 'string'
+            ? await importRsaPrivateKey(clientPrivateKey)
+            : clientPrivateKey;
+    const rawAesKey = await getCrypto().subtle.decrypt(
+        { name: 'RSA-OAEP' },
+        privateKey,
+        base64ToBytes(payload.cipherkey)
+    );
+    const aesKey = await getCrypto().subtle.importKey(
+        'raw',
+        rawAesKey,
+        { name: 'AES-GCM' },
+        false,
+        ['decrypt']
+    );
+    const plaintext = await getCrypto().subtle.decrypt(
+        { name: 'AES-GCM', iv: base64ToBytes(payload.iv) },
+        aesKey,
+        base64ToBytes(payload.ciphertext)
+    );
+    return JSON.parse(textDecoder.decode(plaintext));
+};
+
+const randomBase64Url = (bytes = 18) =>
+    bytesToBase64(getCrypto().getRandomValues(new Uint8Array(bytes)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/g, '');
+
+const fetchJson = async (url, init, unavailableMessage) => {
     let response;
     try {
-        response = await fetch(url, {
+        response = await fetch(url, { ...init, credentials: 'omit' });
+    } catch (error) {
+        throw createTokenPlaceNetworkError(error);
+    }
+    if (!response.ok) {
+        const payload = await parseErrorPayload(response);
+        const err = createTokenPlaceHttpError(
+            response.status,
+            payload,
+            response.statusText || unavailableMessage
+        );
+        if (response.status >= 500) err.message = unavailableMessage;
+        throw err;
+    }
+    try {
+        return await response.json();
+    } catch {
+        throw createMalformedTokenPlaceResponseError(
+            'Malformed token.place relay response: invalid JSON.'
+        );
+    }
+};
+
+export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
+    const data = await fetchJson(
+        `${baseUrl}/api/v1/relay/servers/next`,
+        { method: 'GET', signal: options.signal },
+        'token.place relay is unavailable.'
+    );
+    const rawKey = data?.server_public_key || data?.serverPublicKey || data?.public_key;
+    if (!rawKey)
+        throw createMalformedTokenPlaceResponseError('No token.place compute node is available.');
+    const normalized = normalizeTokenPlacePublicKey(rawKey);
+    return { ...data, server_public_key: normalized.base64, serverPublicKeyPem: normalized.pem };
+};
+
+export const dispatchTokenPlaceRelayRequest = async (baseUrl, body, options = {}) =>
+    fetchJson(
+        `${baseUrl}/api/v1/relay/requests`,
+        {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify(body),
+            signal: options.signal,
+        },
+        'token.place relay is unavailable.'
+    );
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const retrieveRelayResponse = async (baseUrl, body, options = {}) => {
+    let response;
+    try {
+        response = await fetch(`${baseUrl}/api/v1/relay/responses/retrieve`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
             signal: options.signal,
             credentials: 'omit',
         });
     } catch (error) {
         throw createTokenPlaceNetworkError(error);
     }
-
+    if (response.status === 202) return { ready: false };
+    if ([404, 410].includes(response.status)) return { terminalSelectedServerFailure: true };
     if (!response.ok) {
-        const errorPayload = await parseErrorPayload(response);
-        throw createTokenPlaceHttpError(response.status, errorPayload, response.statusText);
+        const payload = await parseErrorPayload(response);
+        if (response.status >= 500)
+            throw createTokenPlaceHttpError(
+                response.status,
+                payload,
+                'token.place relay is unavailable.'
+            );
+        throw createTokenPlaceHttpError(response.status, payload, response.statusText);
     }
-
-    let data;
     try {
-        data = await response.json();
-    } catch (error) {
+        return { ready: true, data: await response.json() };
+    } catch {
+        throw createMalformedTokenPlaceResponseError('Malformed encrypted token.place response.');
+    }
+};
+
+const cancelRelayRequest = async (baseUrl, cancelToken, options = {}) => {
+    if (!cancelToken) return;
+    try {
+        await fetch(`${baseUrl}/api/v1/relay/requests/cancel`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cancel_token: cancelToken }),
+            signal: options.signal,
+            credentials: 'omit',
+        });
+    } catch {
+        // Best-effort timeout cleanup only; preserve the user-facing timeout error.
+    }
+};
+
+export const pollTokenPlaceRelayResponse = async (baseUrl, body, options = {}) => {
+    const startedAt = Date.now();
+    const timeoutMs = options.timeoutMs ?? DEFAULT_RELAY_TIMEOUT_MS;
+    const intervalMs = options.pollIntervalMs ?? DEFAULT_RELAY_POLL_INTERVAL_MS;
+    while (Date.now() - startedAt < timeoutMs) {
+        const result = await retrieveRelayResponse(baseUrl, body, options);
+        if (result.ready) return result.data;
+        if (result.terminalSelectedServerFailure) return result;
+        await sleep(intervalMs);
+    }
+    await cancelRelayRequest(baseUrl, options.cancelToken, options);
+    throw createTokenPlaceHttpError(
+        408,
+        { message: 'Timed out waiting for token.place compute response.' },
+        'Timeout'
+    );
+};
+
+export const validateTokenPlaceResponseEnvelope = (envelope, expected) => {
+    if (envelope?.protocol !== RELAY_PROTOCOL)
         throw createMalformedTokenPlaceResponseError(
-            'Malformed token.place response: invalid JSON.'
+            'Malformed token.place response: wrong protocol.'
         );
+    if (envelope?.version !== RELAY_VERSION)
+        throw createMalformedTokenPlaceResponseError(
+            'Malformed token.place response: wrong version.'
+        );
+    if (envelope?.request_id !== expected.requestId)
+        throw createMalformedTokenPlaceResponseError(
+            'Malformed token.place response: mismatched request id.'
+        );
+    if (envelope?.client_public_key !== expected.clientPublicKey)
+        throw createMalformedTokenPlaceResponseError(
+            'Malformed token.place response: mismatched client key.'
+        );
+    if (!envelope?.api_v1_response)
+        throw createMalformedTokenPlaceResponseError(
+            'Malformed token.place response: missing API response.'
+        );
+    return envelope.api_v1_response;
+};
+
+const buildApiV1Request = (promptPayload, options = {}) => ({
+    model: getTokenPlaceChatModel(options),
+    messages: sanitizeTokenPlaceMessages(promptPayload.combinedMessages),
+    options: {},
+    metadata: buildTokenPlaceMetadata(options.metadata),
+});
+
+const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
+    const server = await selectTokenPlaceRelayServer(baseUrl, options);
+    const clientKeys = options.clientKeys || (await generateTokenPlaceClientKeypair());
+    const requestId = options.requestId || randomBase64Url();
+    const cancelToken = options.cancelToken || randomBase64Url();
+    const envelope = {
+        protocol: RELAY_PROTOCOL,
+        version: RELAY_VERSION,
+        request_id: requestId,
+        client_public_key: clientKeys.publicKeyBase64,
+        api_v1_request: buildApiV1Request(promptPayload, options),
+    };
+    const encrypted = await encryptTokenPlaceEnvelope(envelope, server.serverPublicKeyPem);
+    await dispatchTokenPlaceRelayRequest(
+        baseUrl,
+        {
+            server_public_key: server.server_public_key,
+            client_public_key: clientKeys.publicKeyBase64,
+            request_id: requestId,
+            protocol: RELAY_PROTOCOL,
+            version: RELAY_VERSION,
+            ...encrypted,
+            cancel_token: cancelToken,
+        },
+        options
+    );
+    const encryptedResponse = await pollTokenPlaceRelayResponse(
+        baseUrl,
+        { client_public_key: clientKeys.publicKeyBase64, request_id: requestId },
+        { ...options, cancelToken }
+    );
+    if (encryptedResponse?.terminalSelectedServerFailure) return encryptedResponse;
+    let responseEnvelope;
+    try {
+        responseEnvelope = await decryptTokenPlaceEnvelope(
+            encryptedResponse,
+            clientKeys.privateKey
+        );
+    } catch (error) {
+        throw createMalformedTokenPlaceResponseError('Malformed encrypted token.place response.');
+    }
+    return validateTokenPlaceResponseEnvelope(responseEnvelope, {
+        requestId,
+        clientPublicKey: clientKeys.publicKeyBase64,
+    });
+};
+
+export const TokenPlaceChatV2 = async (messages, options = {}) => {
+    await ready;
+    const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
+    const contextSources = Array.isArray(promptPayload.contextSources)
+        ? promptPayload.contextSources
+        : [];
+    const baseUrl = resolveTokenPlaceBaseUrl({
+        url: options.url,
+        state: promptPayload.gameState,
+        runtimeUrl: options.runtimeUrl,
+    });
+
+    let data = await runRelayAttempt(baseUrl, promptPayload, options);
+    if (data?.terminalSelectedServerFailure) {
+        data = await runRelayAttempt(baseUrl, promptPayload, {
+            ...options,
+            requestId: undefined,
+            cancelToken: undefined,
+        });
     }
 
     const outputText = extractTokenPlaceAssistantText(data);
