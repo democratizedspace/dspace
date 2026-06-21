@@ -234,12 +234,37 @@ const encryptTokenPlaceCipherkey = (aesKeyBase64, publicKeyPem) => {
     return cipherkey;
 };
 
-const decryptTokenPlaceCipherkey = (cipherkey, privateKeyPem) => {
+const isValidAesKeySize = (bytes) => [16, 24, 32].includes(bytes.byteLength);
+
+const decodeBase64AesKey = (value) => {
+    const normalized = String(value || '').trim();
+    if (!normalized) throw new Error('Malformed encrypted token.place response.');
+    if (!/^[A-Za-z0-9+/]+={0,2}$/.test(normalized) || normalized.length % 4 !== 0) {
+        throw new Error('Malformed encrypted token.place response.');
+    }
+    const decodedKey = base64ToBytes(normalized);
+    if (!isValidAesKeySize(decodedKey)) {
+        throw new Error('Malformed encrypted token.place response.');
+    }
+    return decodedKey;
+};
+
+const decryptTokenPlaceCipherkey = (cipherkey, privateKeyPem, { usesGcm = false } = {}) => {
     const rsa = new JSEncrypt();
     rsa.setPrivateKey(privateKeyPem);
-    const aesKeyBase64 = rsa.decrypt(cipherkey);
-    if (!aesKeyBase64) throw new Error('Malformed encrypted token.place response.');
-    return base64ToBytes(aesKeyBase64);
+    const decryptedKey = rsa.decrypt(cipherkey);
+    if (!decryptedKey) throw new Error('Malformed encrypted token.place response.');
+    if (usesGcm) {
+        const rawKey = textEncoder.encode(decryptedKey);
+        if (isValidAesKeySize(rawKey)) return rawKey;
+    }
+    try {
+        return decodeBase64AesKey(decryptedKey);
+    } catch (error) {
+        const rawKey = textEncoder.encode(decryptedKey);
+        if (!usesGcm && rawKey.byteLength === 32) return rawKey;
+        throw error;
+    }
 };
 
 export const encryptTokenPlaceEnvelope = async (envelope, serverPublicKeyPem) => {
@@ -291,7 +316,7 @@ const decodeTokenPlaceCbcAesKey = (wrappedAesKey) => {
     const decodedKeyText = textDecoder.decode(wrappedAesKey);
     try {
         const decodedKey = base64ToBytes(decodedKeyText);
-        if ([16, 24, 32].includes(decodedKey.byteLength)) return decodedKey;
+        if (isValidAesKeySize(decodedKey)) return decodedKey;
     } catch {
         // Fall through to the raw-key compatibility check below.
     }
@@ -307,7 +332,7 @@ export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
         .includes('gcm');
     let rawAesKey;
     if (typeof clientPrivateKey === 'string') {
-        rawAesKey = decryptTokenPlaceCipherkey(payload.cipherkey, clientPrivateKey);
+        rawAesKey = decryptTokenPlaceCipherkey(payload.cipherkey, clientPrivateKey, { usesGcm });
     } else {
         const wrappedAesKey = await getCrypto().subtle.decrypt(
             { name: 'RSA-OAEP' },

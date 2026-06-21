@@ -1,4 +1,4 @@
-import { webcrypto } from 'node:crypto';
+import { constants, publicEncrypt, webcrypto } from 'node:crypto';
 
 import { expect, test, type Page } from '@playwright/test';
 
@@ -14,11 +14,8 @@ type CapturedRequest = {
 const encoder = new TextEncoder();
 const bytesToBase64 = (bytes: ArrayBuffer | Uint8Array) =>
     Buffer.from(bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes)).toString('base64');
-const base64ToBytes = (value: string) => Uint8Array.from(Buffer.from(value, 'base64'));
 const base64ToPem = (base64: string) =>
     `-----BEGIN PUBLIC KEY-----\n${base64.match(/.{1,64}/g)?.join('\n') || ''}\n-----END PUBLIC KEY-----`;
-const pemToBase64 = (pem: string) =>
-    pem.replace(/-----BEGIN [^-]+-----|-----END [^-]+-----|\s+/g, '');
 
 async function generateRelayKeypair() {
     const pair = await webcrypto.subtle.generateKey(
@@ -47,23 +44,17 @@ async function encryptRelayEnvelope(envelope: Record<string, unknown>, publicPem
         aesKey,
         encoder.encode(JSON.stringify(envelope))
     );
-    const publicKey = await webcrypto.subtle.importKey(
-        'spki',
-        base64ToBytes(pemToBase64(publicPem)),
-        { name: 'RSA-OAEP', hash: 'SHA-256' },
-        true,
-        ['encrypt']
-    );
-    const cipherkey = await webcrypto.subtle.encrypt(
-        { name: 'RSA-OAEP' },
-        publicKey,
-        encoder.encode(bytesToBase64(rawAesKey))
+    const cipherkey = bytesToBase64(
+        publicEncrypt(
+            { key: publicPem, padding: constants.RSA_PKCS1_PADDING },
+            Buffer.from(bytesToBase64(rawAesKey), 'utf8')
+        )
     );
     const encodedCiphertext = bytesToBase64(ciphertext);
     return {
         chat_history: encodedCiphertext,
         ciphertext: encodedCiphertext,
-        cipherkey: bytesToBase64(cipherkey),
+        cipherkey,
         iv: bytesToBase64(iv),
     };
 }

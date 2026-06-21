@@ -24,6 +24,7 @@ const {
     resolveTokenPlaceBaseUrl,
     tokenPlaceChat,
 } = await import('../src/utils/tokenPlace.js');
+const { JSEncrypt } = await import('jsencrypt');
 const { getTokenPlaceErrorSummary } = await import('../src/utils/tokenPlaceErrors.js');
 const { buildChatPrompt } = await import('../src/utils/openAI.js');
 
@@ -379,6 +380,52 @@ describe('token.place API v1 client', () => {
         await expect(
             decryptTokenPlaceEnvelope(payload, relayServerKeys[0].privateKey)
         ).rejects.toThrow('Malformed encrypted token.place response: missing ciphertext field.');
+    });
+
+    test('decryption rejects JSEncrypt-wrapped AES keys with invalid decoded length', async () => {
+        const rsa = new JSEncrypt();
+        rsa.setPublicKey(relayServerKeys[0].publicKeyPem);
+        const cipherkey = rsa.encrypt(bytesToBase64(new Uint8Array(8)));
+
+        await expect(
+            decryptTokenPlaceEnvelope(
+                {
+                    ciphertext: bytesToBase64(new Uint8Array(16)),
+                    cipherkey,
+                    iv: bytesToBase64(new Uint8Array(16)),
+                },
+                relayServerKeys[0].privateKey
+            )
+        ).rejects.toThrow('Malformed encrypted token.place response.');
+    });
+
+    test('decryption accepts explicit GCM payloads with JSEncrypt-wrapped raw text keys', async () => {
+        const crypto = globalThis.crypto;
+        const rawAesKey = new TextEncoder().encode('12345678901234567890123456789012');
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const aesKey = await crypto.subtle.importKey('raw', rawAesKey, { name: 'AES-GCM' }, false, [
+            'encrypt',
+        ]);
+        const ciphertext = await crypto.subtle.encrypt(
+            { name: 'AES-GCM', iv },
+            aesKey,
+            new TextEncoder().encode(JSON.stringify({ ok: true, mode: 'jsencrypt-gcm' }))
+        );
+        const rsa = new JSEncrypt();
+        rsa.setPublicKey(relayServerKeys[0].publicKeyPem);
+        const cipherkey = rsa.encrypt(new TextDecoder().decode(rawAesKey));
+
+        const decrypted = await decryptTokenPlaceEnvelope(
+            {
+                mode: 'AES-GCM',
+                ciphertext: bytesToBase64(ciphertext),
+                cipherkey,
+                iv: bytesToBase64(iv),
+            },
+            relayServerKeys[0].privateKey
+        );
+
+        expect(decrypted).toEqual({ ok: true, mode: 'jsencrypt-gcm' });
     });
 
     test('decryption accepts explicit GCM payloads with embedded WebCrypto tags', async () => {
