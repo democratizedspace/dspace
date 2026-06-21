@@ -286,6 +286,7 @@ describe('token.place API v1 client', () => {
         );
         expect(JSON.stringify(body)).not.toContain('hello');
         expect(JSON.stringify(body)).not.toContain('model');
+        expect(decodeBase64Text(body.client_public_key)).toMatch(/-----BEGIN PUBLIC KEY-----/);
         expect(Uint8Array.from(atob(body.iv), (char) => char.charCodeAt(0))).toHaveLength(16);
         expect(body).not.toHaveProperty('mode');
         expect(body).not.toHaveProperty('tag');
@@ -330,6 +331,26 @@ describe('token.place API v1 client', () => {
         );
 
         expect(decrypted).toEqual({ ok: true, source: 'chat_history' });
+    });
+
+    test('decryption accepts token.place static chat compatible CBC/PKCS1 fixture shape', async () => {
+        const encrypted = await encryptTokenPlaceEnvelope(
+            { ok: true, source: 'token-place-static-chat-compatible' },
+            relayServerKeys[0].publicKeyPem
+        );
+
+        const decrypted = await decryptTokenPlaceEnvelope(
+            {
+                chat_history: encrypted.ciphertext,
+                ciphertext: encrypted.ciphertext,
+                cipherkey: encrypted.cipherkey,
+                iv: encrypted.iv,
+            },
+            relayServerKeys[0].privateKey
+        );
+
+        expect(Uint8Array.from(atob(encrypted.iv), (char) => char.charCodeAt(0))).toHaveLength(16);
+        expect(decrypted).toEqual({ ok: true, source: 'token-place-static-chat-compatible' });
     });
 
     test('decryption accepts ciphertext when chat_history is absent', async () => {

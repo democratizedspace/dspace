@@ -1,3 +1,4 @@
+import forge from 'node-forge';
 import { loadGameState, ready } from './gameState/common.js';
 import { buildChatPrompt, validateChatResponseText } from './openAI.js';
 import {
@@ -175,6 +176,17 @@ const base64ToBytes = (value) => {
     }
     return Uint8Array.from(atob(value), (char) => char.charCodeAt(0));
 };
+const bytesToBinary = (bytes) => {
+    const array = toUint8Array(bytes);
+    let binary = '';
+    const chunkSize = 0x8000;
+    for (let i = 0; i < array.length; i += chunkSize) {
+        const chunk = array.subarray(i, i + chunkSize);
+        binary += String.fromCharCode.apply(null, chunk);
+    }
+    return binary;
+};
+const binaryToBytes = (value) => Uint8Array.from(String(value), (char) => char.charCodeAt(0));
 const pemToBase64 = (pem) =>
     String(pem).replace(/-----BEGIN [^-]+-----|-----END [^-]+-----|\s+/g, '');
 const base64ToPem = (base64, label = 'PUBLIC KEY') => {
@@ -210,11 +222,25 @@ const importRsaPublicKey = async (pem) =>
 const importRsaPrivateKey = async (base64Pkcs8) =>
     getCrypto().subtle.importKey(
         'pkcs8',
-        base64ToBytes(base64Pkcs8),
+        base64ToBytes(pemToBase64(base64Pkcs8)),
         { name: 'RSA-OAEP', hash: 'SHA-256' },
         true,
         ['decrypt']
     );
+
+const encryptRsaPkcs1v15 = (publicKeyPem, plaintext) => {
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+    return bytesToBase64(binaryToBytes(publicKey.encrypt(plaintext, 'RSAES-PKCS1-V1_5')));
+};
+
+const decryptRsaPkcs1v15 = (privateKeyPem, ciphertextBase64) => {
+    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
+    const plaintext = privateKey.decrypt(
+        bytesToBinary(base64ToBytes(ciphertextBase64)),
+        'RSAES-PKCS1-V1_5'
+    );
+    return textEncoder.encode(plaintext);
+};
 
 export const generateTokenPlaceClientKeypair = async () => {
     const pair = await getCrypto().subtle.generateKey(
@@ -230,12 +256,13 @@ export const generateTokenPlaceClientKeypair = async () => {
     const spki = await getCrypto().subtle.exportKey('spki', pair.publicKey);
     const pkcs8 = await getCrypto().subtle.exportKey('pkcs8', pair.privateKey);
     const publicPem = base64ToPem(bytesToBase64(spki));
+    const privatePem = base64ToPem(bytesToBase64(pkcs8), 'PRIVATE KEY');
     return {
         publicKey: pair.publicKey,
-        privateKey: pair.privateKey,
+        privateKey: privatePem,
         publicKeyPem: publicPem,
         publicKeyBase64: bytesToBase64(textEncoder.encode(publicPem)),
-        privateKeyBase64: bytesToBase64(pkcs8),
+        privateKeyBase64: pemToBase64(privatePem),
     };
 };
 
@@ -245,18 +272,16 @@ export const encryptTokenPlaceEnvelope = async (envelope, serverPublicKeyPem) =>
         'encrypt',
     ]);
     const rawAesKey = await crypto.subtle.exportKey('raw', aesKey);
-    const encodedAesKey = textEncoder.encode(bytesToBase64(rawAesKey));
+    const encodedAesKey = bytesToBase64(rawAesKey);
     const iv = crypto.getRandomValues(new Uint8Array(16));
     const ciphertext = await crypto.subtle.encrypt(
         { name: 'AES-CBC', iv },
         aesKey,
         textEncoder.encode(JSON.stringify(envelope))
     );
-    const serverKey = await importRsaPublicKey(serverPublicKeyPem);
-    const cipherkey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, serverKey, encodedAesKey);
     return {
         ciphertext: bytesToBase64(ciphertext),
-        cipherkey: bytesToBase64(cipherkey),
+        cipherkey: encryptRsaPkcs1v15(serverPublicKeyPem, encodedAesKey),
         iv: bytesToBase64(iv),
     };
 };
@@ -301,18 +326,31 @@ const decodeTokenPlaceCbcAesKey = (wrappedAesKey) => {
 };
 
 export const decryptTokenPlaceEnvelope = async (payload, clientPrivateKey) => {
-    const privateKey =
-        typeof clientPrivateKey === 'string'
-            ? await importRsaPrivateKey(clientPrivateKey)
-            : clientPrivateKey;
-    const wrappedAesKey = await getCrypto().subtle.decrypt(
-        { name: 'RSA-OAEP' },
-        privateKey,
-        base64ToBytes(payload.cipherkey)
-    );
     const usesGcm = String(payload.mode || '')
         .toLowerCase()
         .includes('gcm');
+    let wrappedAesKey;
+    if (usesGcm) {
+        wrappedAesKey = await getCrypto().subtle.decrypt(
+            { name: 'RSA-OAEP' },
+            typeof clientPrivateKey === 'string'
+                ? await importRsaPrivateKey(clientPrivateKey)
+                : clientPrivateKey,
+            base64ToBytes(payload.cipherkey)
+        );
+    } else {
+        try {
+            wrappedAesKey = decryptRsaPkcs1v15(clientPrivateKey, payload.cipherkey);
+        } catch (error) {
+            wrappedAesKey = await getCrypto().subtle.decrypt(
+                { name: 'RSA-OAEP' },
+                typeof clientPrivateKey === 'string'
+                    ? await importRsaPrivateKey(clientPrivateKey)
+                    : clientPrivateKey,
+                base64ToBytes(payload.cipherkey)
+            );
+        }
+    }
     const rawAesKey = usesGcm ? wrappedAesKey : decodeTokenPlaceCbcAesKey(wrappedAesKey);
     const encryptedText = payload.chat_history || payload.ciphertext;
     if (!encryptedText) {
