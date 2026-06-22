@@ -15,6 +15,9 @@ const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
 const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
+export const TOKEN_PLACE_API_V1_MAX_MESSAGES = 64;
+export const TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS = 32_768;
+export const TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS = 131_072;
 
 const getCrypto = () => globalThis.crypto;
 const textEncoder = new TextEncoder();
@@ -63,14 +66,92 @@ export const getTokenPlaceChatModel = (options = {}) =>
             DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
-const sanitizeChatMessage = (message) => ({
-    role: VALID_CHAT_ROLES.has(message?.role) ? message.role : 'user',
-    content:
-        typeof message?.content === 'string' ? message.content : String(message?.content || ''),
-});
+const stringifyTokenPlaceContent = (content) => {
+    if (typeof content === 'string') return content;
+    if (content == null) return '';
+    if (Array.isArray(content)) {
+        return content
+            .map((part) => {
+                if (typeof part === 'string') return part;
+                if (typeof part?.text === 'string') return part.text;
+                if (typeof part?.content === 'string') return part.content;
+                try {
+                    return JSON.stringify(part);
+                } catch {
+                    return String(part || '');
+                }
+            })
+            .join('\n');
+    }
+    try {
+        return JSON.stringify(content);
+    } catch {
+        return String(content || '');
+    }
+};
 
-export const sanitizeTokenPlaceMessages = (messages = []) =>
-    (Array.isArray(messages) ? messages : []).map(sanitizeChatMessage);
+const chunkMessageContent = (content) => {
+    const chunks = [];
+    for (
+        let start = 0;
+        start < content.length;
+        start += TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS
+    ) {
+        chunks.push(content.slice(start, start + TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS));
+    }
+    return chunks;
+};
+
+export const sanitizeTokenPlaceMessages = (messages = []) => buildTokenPlaceApiV1Messages(messages);
+
+const getTokenPlaceMessagePriority = (message, index, latestUserIndex) => {
+    if (index === latestUserIndex) return 0;
+    if (message.role === 'system' && index === 0) return 1;
+    if (message.role === 'system' && /playerstate|player state/i.test(message.content)) return 2;
+    if (message.role === 'system') return 3;
+    return 4;
+};
+
+export const buildTokenPlaceApiV1Messages = (messages = []) => {
+    const normalized = (Array.isArray(messages) ? messages : [])
+        .map((message, index) => ({
+            role: VALID_CHAT_ROLES.has(message?.role) ? message.role : 'user',
+            content: stringifyTokenPlaceContent(message?.content).trim(),
+            index,
+        }))
+        .filter((message) => message.content);
+    const latestUserIndex = normalized.findLast((message) => message.role === 'user')?.index ?? -1;
+    const chunks = normalized.flatMap((message) =>
+        chunkMessageContent(message.content).map((content, chunkIndex) => ({
+            role: message.role,
+            content,
+            index: message.index,
+            chunkIndex,
+            priority: getTokenPlaceMessagePriority(message, message.index, latestUserIndex),
+        }))
+    );
+    const selected = [];
+    let totalChars = 0;
+    for (const chunk of [...chunks].sort(
+        (a, b) =>
+            a.priority - b.priority ||
+            (a.priority === 4 ? b.index - a.index : a.index - b.index) ||
+            a.chunkIndex - b.chunkIndex
+    )) {
+        if (selected.length >= TOKEN_PLACE_API_V1_MAX_MESSAGES) break;
+        const remaining = TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS - totalChars;
+        if (remaining <= 0) break;
+        // Older history/context chunks are lower priority; when only partial room remains,
+        // truncate that chunk instead of dropping the latest user intent already selected.
+        const content = chunk.content.slice(0, remaining);
+        if (!content.trim()) continue;
+        selected.push({ ...chunk, content });
+        totalChars += content.length;
+    }
+    return selected
+        .sort((a, b) => a.index - b.index || a.chunkIndex - b.chunkIndex)
+        .map(({ role, content }) => ({ role, content }));
+};
 
 export const extractTokenPlaceAssistantText = (response) => {
     const content = response?.choices?.[0]?.message?.content;
