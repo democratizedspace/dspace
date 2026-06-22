@@ -22,6 +22,9 @@ const {
     getTokenPlaceChatModel,
     resolveTokenPlaceBaseUrl,
     tokenPlaceChat,
+    TOKEN_PLACE_API_V1_MAX_MESSAGES,
+    TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS,
+    TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
 } = await import('../src/utils/tokenPlace.js');
 const { JSEncrypt } = await import('jsencrypt');
 const { getTokenPlaceErrorSummary } = await import('../src/utils/tokenPlaceErrors.js');
@@ -113,6 +116,32 @@ const getFetchCallByPath = (path) => getFetchCalls().find((call) => call.url.end
 const getFetchCall = () => {
     const [url, init] = fetch.mock.calls[0];
     return { url, init, body: init.body ? JSON.parse(init.body) : undefined };
+};
+const decryptDispatchedApiV1Request = async (serverKeyIndex = 0) => {
+    const { body } = getFetchCallByPath('/api/v1/relay/requests');
+    const decrypted = await decryptTokenPlaceEnvelope(
+        body,
+        relayServerKeys[serverKeyIndex].privateKey
+    );
+    return { body, decrypted, apiV1Request: decrypted.api_v1_request };
+};
+
+const expectValidTokenPlaceApiV1Messages = (messages) => {
+    expect(Array.isArray(messages)).toBe(true);
+    expect(messages.length).toBeGreaterThan(0);
+    expect(messages.length).toBeLessThanOrEqual(TOKEN_PLACE_API_V1_MAX_MESSAGES);
+    const totalContentChars = messages.reduce((sum, message) => sum + message.content.length, 0);
+    expect(totalContentChars).toBeLessThanOrEqual(TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS);
+    for (const message of messages) {
+        expect(['system', 'user', 'assistant']).toContain(message.role);
+        expect(Object.keys(message).sort()).toEqual(['content', 'role']);
+        expect(typeof message.content).toBe('string');
+        expect(message.content.trim()).toBe(message.content);
+        expect(message.content).not.toBe('');
+        expect(message.content.length).toBeLessThanOrEqual(
+            TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS
+        );
+    }
 };
 
 describe('token.place API v1 client', () => {
@@ -294,6 +323,73 @@ describe('token.place API v1 client', () => {
         expect(body).not.toHaveProperty('mode');
         expect(body).not.toHaveProperty('tag');
         expect(body.stream).not.toBe(true);
+    });
+
+    test('normal hi flow sends validator-safe API v1 messages and empty options', async () => {
+        await tokenPlaceChat([{ role: 'user', content: 'hi' }]);
+
+        const { apiV1Request } = await decryptDispatchedApiV1Request();
+
+        expect(apiV1Request.options).toEqual({});
+        expectValidTokenPlaceApiV1Messages(apiV1Request.messages);
+        expect(apiV1Request.messages).toContainEqual({ role: 'user', content: 'hi' });
+    });
+
+    test('large DSPACE prompt is adapted to token.place API v1 message limits before encryption', async () => {
+        const hugeKnowledge = `DSPACE knowledge base\nPlayerState: fuel=high\n${'DOCS_RAG_EXCERPT_ALPHA '.repeat(9_000)}`;
+        const latestPrompt = 'What should I build next? USER_PROMPT_SENTINEL';
+
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'system', content: 'DSPACE system policy' },
+                    { role: 'assistant', content: 'Older assistant context' },
+                    { role: 'system', content: hugeKnowledge },
+                    { role: 'user', content: latestPrompt },
+                ],
+                contextSources: [{ title: 'Local DSPACE docs', url: '/docs/about' }],
+                gameState: {},
+            },
+        });
+
+        const { body, apiV1Request } = await decryptDispatchedApiV1Request();
+
+        expect(apiV1Request.options).toEqual({});
+        expectValidTokenPlaceApiV1Messages(apiV1Request.messages);
+        expect(apiV1Request.messages).toContainEqual({ role: 'user', content: latestPrompt });
+        expect(
+            apiV1Request.messages.some((message) => message.content.includes('PlayerState'))
+        ).toBe(true);
+        expect(JSON.stringify(body)).not.toContain('messages');
+        expect(JSON.stringify(body)).not.toContain('model');
+        expect(JSON.stringify(body)).not.toContain('USER_PROMPT_SENTINEL');
+        expect(JSON.stringify(body)).not.toContain('DSPACE knowledge base');
+        expect(JSON.stringify(body)).not.toContain('PlayerState');
+        expect(JSON.stringify(body)).not.toContain('DOCS_RAG_EXCERPT_ALPHA');
+    });
+
+    test('blank and unsupported messages are removed or normalized before encryption', async () => {
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'tool', content: '   ' },
+                    { role: 'developer', content: [{ type: 'text', text: 'normalized text' }] },
+                    { role: 'assistant', content: { status: 'ok' }, extra: 'drop-me' },
+                    { role: 'user', content: null },
+                ],
+                contextSources: [],
+                gameState: {},
+            },
+        });
+
+        const { apiV1Request } = await decryptDispatchedApiV1Request();
+
+        expect(apiV1Request.options).toEqual({});
+        expectValidTokenPlaceApiV1Messages(apiV1Request.messages);
+        expect(apiV1Request.messages).toEqual([
+            { role: 'user', content: 'normalized text' },
+            { role: 'assistant', content: '{"status":"ok"}' },
+        ]);
     });
 
     test('decrypted API v1 request uses empty options and excludes metadata', async () => {
