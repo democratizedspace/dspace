@@ -323,12 +323,16 @@ DSPACE should produce a deterministic summary that never contains user content:
     "reservedOutputTokens": 1024,
     "chatTemplateOverheadTokens": 256,
     "safetyMarginTokens": 768,
-    "estimatedTotalContextTokens": 8148
+    "estimatedTotalContextTokens": 7892
   },
   "classification": {
     "selectedTier": "8k-fast",
+    "estimatedPromptTokens": 6100,
+    "reservedOutputTokens": 1024,
+    "safetyMarginTokens": 768,
+    "estimatedTotalContextUse": 7892,
     "overLimit": false,
-    "nextTier": "64k-full"
+    "reason": "fits"
   },
   "timingMs": {
     "promptBuild": 42,
@@ -435,8 +439,8 @@ DSPACE should set context-aware polling deadlines:
 
 | Tier | Suggested initial deadline | Notes |
 | --- | ---: | --- |
-| `8k-fast` | Shorter deadline | Small prompts should fail fast when the node is unavailable. |
-| `64k-full` | Longer deadline | Larger prefill and queue times are expected. |
+| `8k-fast` | 5,000 ms | Small prompts should fail fast when the node is unavailable. |
+| `64k-full` | 30,000 ms | Larger prefill and queue times are expected; tune from Phase 0 measurements. |
 
 Retry policy:
 
@@ -507,7 +511,7 @@ must not be committed when they are generated from real play sessions.
     "estimatedPromptTokens": 6100,
     "reservedOutputTokens": 1024,
     "safetyMarginTokens": 768,
-    "estimatedTotalContextUse": 8148,
+    "estimatedTotalContextUse": 7892,
     "overLimit": false
   },
   "timingMs": {
