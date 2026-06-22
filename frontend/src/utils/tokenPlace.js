@@ -15,6 +15,7 @@ const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
 const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
+const normalizeTokenPlaceRole = (role) => (VALID_CHAT_ROLES.has(role) ? role : 'user');
 export const TOKEN_PLACE_API_V1_MAX_MESSAGES = 64;
 export const TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS = 32_768;
 export const TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS = 131_072;
@@ -69,6 +70,15 @@ export const getTokenPlaceChatModel = (options = {}) =>
             DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
+const stringifyJsonOrString = (content) => {
+    try {
+        const serialized = JSON.stringify(content);
+        return typeof serialized === 'string' ? serialized : String(content);
+    } catch {
+        return String(content);
+    }
+};
+
 const stringifyTokenPlaceContent = (content) => {
     if (typeof content === 'string') return content;
     if (content == null) return '';
@@ -78,20 +88,12 @@ const stringifyTokenPlaceContent = (content) => {
                 if (typeof part === 'string') return part;
                 if (typeof part?.text === 'string') return part.text;
                 if (typeof part?.content === 'string') return part.content;
-                try {
-                    return JSON.stringify(part);
-                } catch {
-                    return '';
-                }
+                return stringifyJsonOrString(part);
             })
             .filter(Boolean)
             .join('\n');
     }
-    try {
-        return JSON.stringify(content);
-    } catch {
-        return String(content || '');
-    }
+    return stringifyJsonOrString(content);
 };
 
 const chunkText = (content, maxChars) => {
@@ -103,7 +105,7 @@ const chunkText = (content, maxChars) => {
 };
 
 const splitTokenPlaceMessage = (message, index) => {
-    const role = VALID_CHAT_ROLES.has(message?.role) ? message.role : 'user';
+    const role = normalizeTokenPlaceRole(message?.role);
     const content = stringifyTokenPlaceContent(message?.content).trim();
     if (!content) return [];
 
@@ -128,27 +130,35 @@ const splitTokenPlaceMessage = (message, index) => {
     );
 };
 
-const getTokenPlaceMessagePriority = (message, latestUserIndex) => {
-    if (message.originalIndex === latestUserIndex) return 0;
-    if (message.role === 'system') return 1;
-    if (message.role === 'user') return 2;
-    return 3;
+const getTokenPlaceMessagePriority = (message, latestUserIndex, requiredSystemMessage) => {
+    if (
+        requiredSystemMessage &&
+        message.originalIndex === requiredSystemMessage.originalIndex &&
+        message.chunkIndex === requiredSystemMessage.chunkIndex
+    ) {
+        return 0;
+    }
+    if (message.originalIndex === latestUserIndex) return 1;
+    if (message.role === 'system') return 2;
+    if (message.role === 'user') return 3;
+    return 4;
 };
 
 export const sanitizeTokenPlaceMessages = (messages = []) => {
     const sourceMessages = Array.isArray(messages) ? messages : [];
-    const latestUserIndex = sourceMessages.reduce(
-        (latest, message, index) => (message?.role === 'user' ? index : latest),
+    const candidates = sourceMessages.flatMap(splitTokenPlaceMessage);
+    const latestUserIndex = candidates.reduce(
+        (latest, message) => (message.role === 'user' ? message.originalIndex : latest),
         -1
     );
-    const candidates = sourceMessages.flatMap(splitTokenPlaceMessage);
+    const requiredSystemMessage = candidates.find((message) => message.role === 'system');
     const selected = [];
     let totalChars = 0;
 
     for (const candidate of [...candidates].sort((a, b) => {
         const priorityDelta =
-            getTokenPlaceMessagePriority(a, latestUserIndex) -
-            getTokenPlaceMessagePriority(b, latestUserIndex);
+            getTokenPlaceMessagePriority(a, latestUserIndex, requiredSystemMessage) -
+            getTokenPlaceMessagePriority(b, latestUserIndex, requiredSystemMessage);
         if (priorityDelta) return priorityDelta;
         if (a.role === 'system')
             return a.originalIndex - b.originalIndex || a.chunkIndex - b.chunkIndex;
