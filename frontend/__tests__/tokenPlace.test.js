@@ -916,13 +916,62 @@ ${ragExcerpt.repeat(4000)}`,
         ).resolves.toMatchObject({ text: 'mocked reply' });
     });
 
-    test('parses assistant text and compatibility helper returns string', async () => {
+    test('parses API v1 response.message assistant text', async () => {
+        relayReply = { message: { role: 'assistant', content: 'api v1 reply' } };
+
+        expect(
+            extractTokenPlaceAssistantText({
+                message: { role: 'assistant', content: 'api v1 reply' },
+            })
+        ).toBe('api v1 reply');
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
+            'api v1 reply'
+        );
+    });
+
+    test('parses OpenAI-compatible choices assistant text and compatibility helper returns string', async () => {
         expect(extractTokenPlaceAssistantText({ choices: [{ message: { content: 'hi' } }] })).toBe(
             'hi'
         );
         await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
             'mocked reply'
         );
+    });
+
+    test('response.message content deterministically takes precedence over choices content', () => {
+        expect(
+            extractTokenPlaceAssistantText({
+                message: { role: 'assistant', content: 'api v1 reply' },
+                choices: [{ message: { content: 'choices reply' } }],
+            })
+        ).toBe('api v1 reply');
+    });
+
+    test('empty missing and stub assistant content are malformed token.place responses', () => {
+        const malformedCases = [
+            {},
+            { message: {} },
+            { message: { content: '' } },
+            { message: { content: '   ' } },
+            { message: { content: 'stub' } },
+            { choices: [{ message: { content: '' } }] },
+            { choices: [{ message: { content: 'stub' } }] },
+        ];
+
+        for (const payload of malformedCases) {
+            expect(() => extractTokenPlaceAssistantText(payload)).toThrow(
+                'Malformed token.place response: missing assistant content.'
+            );
+        }
+    });
+
+    test('raw array full-history responses are rejected as unsupported legacy responses', () => {
+        expect(() =>
+            extractTokenPlaceAssistantText([
+                { role: 'user', content: 'hello' },
+                { role: 'assistant', content: 'legacy array reply' },
+            ])
+        ).toThrow('Malformed token.place response: missing assistant content.');
     });
 
     test('richer helper returns text, DSPACE contextSources, usage, and metadata', async () => {

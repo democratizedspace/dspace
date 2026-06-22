@@ -13,7 +13,7 @@ const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
 const RELAY_PROTOCOL = 'tokenplace_api_v1_relay_e2ee';
 const RELAY_VERSION = 1;
 const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
-const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
+const DEFAULT_RELAY_TIMEOUT_MS = 300_000;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
 const normalizeTokenPlaceRole = (role) => (VALID_CHAT_ROLES.has(role) ? role : 'user');
@@ -187,9 +187,17 @@ export const sanitizeTokenPlaceMessages = (messages = []) => {
     return shapedMessages.length ? shapedMessages : [{ ...TOKEN_PLACE_API_V1_FALLBACK_MESSAGE }];
 };
 
+const isValidTokenPlaceAssistantContent = (content) =>
+    typeof content === 'string' && content.trim() && content.trim().toLowerCase() !== 'stub';
+
 export const extractTokenPlaceAssistantText = (response) => {
-    const content = response?.choices?.[0]?.message?.content;
-    if (typeof content !== 'string' || !content.trim()) {
+    const messageContent =
+        response?.message && typeof response.message === 'object'
+            ? response.message.content
+            : undefined;
+    const choiceContent = response?.choices?.[0]?.message?.content;
+    const content = messageContent !== undefined ? messageContent : choiceContent;
+    if (!isValidTokenPlaceAssistantContent(content)) {
         throw createMalformedTokenPlaceResponseError(
             'Malformed token.place response: missing assistant content.'
         );
