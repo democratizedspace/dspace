@@ -951,6 +951,9 @@ ${ragExcerpt.repeat(4000)}`,
             { message: { content: 'stub' } },
             { message: {} },
             { choices: [{ message: { content: '' } }] },
+            { choices: [{ message: { content: '   ' } }] },
+            { choices: [{ message: { content: 'stub' } }] },
+            { usage: { prompt_tokens: 1 } },
             [{ role: 'assistant', content: 'legacy history reply' }],
         ];
 
