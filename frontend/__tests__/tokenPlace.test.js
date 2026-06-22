@@ -116,6 +116,28 @@ const getFetchCall = () => {
     return { url, init, body: init.body ? JSON.parse(init.body) : undefined };
 };
 
+const decryptFirstRelayRequest = async (serverKeyIndex = 0) => {
+    const { body } = getFetchCallByPath('/api/v1/relay/requests');
+    return decryptTokenPlaceEnvelope(body, relayServerKeys[serverKeyIndex].privateKey);
+};
+
+const expectValidApiV1Messages = (messages) => {
+    expect(messages.length).toBeLessThanOrEqual(64);
+    expect(
+        messages.every((message) => ['system', 'user', 'assistant'].includes(message.role))
+    ).toBe(true);
+    expect(
+        messages.every((message) => Object.keys(message).sort().join(',') === 'content,role')
+    ).toBe(true);
+    expect(
+        messages.every((message) => typeof message.content === 'string' && message.content.trim())
+    ).toBe(true);
+    expect(messages.every((message) => message.content.length <= 32_768)).toBe(true);
+    expect(
+        messages.reduce((total, message) => total + message.content.length, 0)
+    ).toBeLessThanOrEqual(131_072);
+};
+
 describe('token.place API v1 client', () => {
     beforeEach(async () => {
         relayServerKeys = [
@@ -491,6 +513,185 @@ describe('token.place API v1 client', () => {
         ]);
         expect(JSON.stringify(body)).not.toContain('assistant-only history');
         expect(JSON.stringify(body)).not.toContain('Hello.');
+    });
+
+    test('normal small hi flow sends valid API v1 messages with empty options', async () => {
+        await TokenPlaceChatV2([{ role: 'user', content: 'hi' }]);
+        const decrypted = await decryptFirstRelayRequest();
+
+        expect(decrypted.api_v1_request.options).toEqual({});
+        expect(decrypted.api_v1_request.messages).toEqual(
+            expect.arrayContaining([expect.objectContaining({ role: 'user', content: 'hi' })])
+        );
+        expectValidApiV1Messages(decrypted.api_v1_request.messages);
+    });
+
+    test('large DSPACE knowledge prompt is shaped to token.place API v1 message limits', async () => {
+        const userPrompt = 'USER_PROMPT_SECRET_SENTINEL';
+        const ragExcerpt = 'DSPACE knowledge base DOCS_RAG_SECRET_SENTINEL ';
+        const playerState = 'PlayerState PLAYER_STATE_SECRET_SENTINEL';
+        await TokenPlaceChatV2([{ role: 'user', content: userPrompt }], {
+            promptPayload: {
+                combinedMessages: [
+                    {
+                        role: 'system',
+                        content: `${playerState}
+${ragExcerpt.repeat(4000)}`,
+                    },
+                    { role: 'assistant', content: 'older assistant context' },
+                    { role: 'user', content: userPrompt },
+                ],
+                contextSources: [{ title: 'local only', url: '/docs/about' }],
+                gameState: {},
+            },
+        });
+
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const messages = decrypted.api_v1_request.messages;
+
+        expect(decrypted.api_v1_request.options).toEqual({});
+        expect(messages.some((message) => message.content.includes(userPrompt))).toBe(true);
+        expect(messages.filter((message) => message.role === 'system').length).toBeGreaterThan(1);
+        expectValidApiV1Messages(messages);
+
+        const serializedOuterBody = JSON.stringify(body);
+        expect(serializedOuterBody).not.toContain('messages');
+        expect(serializedOuterBody).not.toContain('model');
+        expect(serializedOuterBody).not.toContain(userPrompt);
+        expect(serializedOuterBody).not.toContain('DSPACE knowledge base');
+        expect(serializedOuterBody).not.toContain('PlayerState');
+        expect(serializedOuterBody).not.toContain('DOCS_RAG_SECRET_SENTINEL');
+    });
+
+    test('blank and invalid messages are normalized or removed before encryption', async () => {
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'developer', content: ' normalized developer prompt ', extra: true },
+                    { role: 'user', content: '   ' },
+                    { role: 'assistant', content: null },
+                    { role: 'assistant', content: [{ type: 'text', text: 'array text content' }] },
+                    { role: 'system', content: { kind: 'json-content', ok: true } },
+                ],
+                contextSources: [],
+                gameState: {},
+            },
+        });
+        const decrypted = await decryptFirstRelayRequest();
+        const messages = decrypted.api_v1_request.messages;
+
+        expect(messages).toEqual([
+            { role: 'user', content: 'normalized developer prompt' },
+            { role: 'assistant', content: 'array text content' },
+            { role: 'system', content: '{"kind":"json-content","ok":true}' },
+        ]);
+        expectValidApiV1Messages(messages);
+    });
+
+    test('all-empty or invalid messages fall back to a valid API v1 user message', async () => {
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'developer', content: '   ', ignored: 'metadata' },
+                    { role: 'assistant', content: null },
+                    { role: 'system', content: undefined },
+                    { role: 'tool', content: [] },
+                    { role: 'function', content: [{ type: 'text', text: '' }, { content: '' }] },
+                ],
+                contextSources: [],
+                gameState: {},
+            },
+        });
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const messages = decrypted.api_v1_request.messages;
+
+        expect(messages.length).toBeGreaterThan(0);
+        expect(
+            messages.every((message) => Object.keys(message).sort().join(',') === 'content,role')
+        ).toBe(true);
+        expect(
+            messages.every((message) => ['system', 'user', 'assistant'].includes(message.role))
+        ).toBe(true);
+        expect(messages.every((message) => message.content.trim())).toBe(true);
+        expect(decrypted.api_v1_request.options).toEqual({});
+        expectValidApiV1Messages(messages);
+
+        const serializedOuterBody = JSON.stringify(body);
+        expect(serializedOuterBody).not.toContain('messages');
+        expect(serializedOuterBody).not.toContain('model');
+        expect(serializedOuterBody).not.toContain('Please continue.');
+        expect(serializedOuterBody).not.toContain('metadata');
+    });
+
+    test('preserves primary system prompt when latest user input exceeds total budget', async () => {
+        const systemPrompt = 'DSPACE persona and safety guardrails must remain present.';
+        const hugeUserPrompt = 'OVERSIZED_USER_INPUT '.repeat(7000);
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'assistant', content: 'older assistant context' },
+                    { role: 'user', content: hugeUserPrompt },
+                ],
+                contextSources: [],
+                gameState: {},
+            },
+        });
+
+        const decrypted = await decryptFirstRelayRequest();
+        const messages = decrypted.api_v1_request.messages;
+
+        expect(messages).toContainEqual({ role: 'system', content: systemPrompt });
+        expect(messages.some((message) => message.role === 'user')).toBe(true);
+        expectValidApiV1Messages(messages);
+    });
+
+    test('latest non-blank normalized user message is preserved under budget pressure', async () => {
+        const developerPrompt = 'LATEST_NORMALIZED_DEVELOPER_PROMPT';
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'system', content: 'SYSTEM_CONTEXT '.repeat(9000) },
+                    { role: 'user', content: 'older user prompt' },
+                    { role: 'developer', content: developerPrompt },
+                    { role: 'user', content: '   ' },
+                ],
+                contextSources: [],
+                gameState: {},
+            },
+        });
+
+        const decrypted = await decryptFirstRelayRequest();
+        const messages = decrypted.api_v1_request.messages;
+
+        expect(messages).toEqual(
+            expect.arrayContaining([{ role: 'user', content: developerPrompt }])
+        );
+        expectValidApiV1Messages(messages);
+    });
+
+    test('non-JSON content normalizes to strings before trimming', async () => {
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'user', content: Symbol('token-place-symbol') },
+                    { role: 'assistant', content: () => 'function content' },
+                ],
+                contextSources: [],
+                gameState: {},
+            },
+        });
+
+        const decrypted = await decryptFirstRelayRequest();
+        const messages = decrypted.api_v1_request.messages;
+
+        expect(messages).toEqual([
+            { role: 'user', content: 'Symbol(token-place-symbol)' },
+            { role: 'assistant', content: expect.stringContaining('function content') },
+        ]);
+        expectValidApiV1Messages(messages);
     });
 
     test('decryption accepts chat_history as the response ciphertext', async () => {
