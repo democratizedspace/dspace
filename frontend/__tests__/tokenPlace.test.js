@@ -11,6 +11,7 @@ jest.mock('../src/utils/docsRag.js', () => ({
 }));
 
 const { loadGameState } = await import('../src/utils/gameState/common.js');
+const { searchDocsRag } = await import('../src/utils/docsRag.js');
 const {
     TokenPlaceChatV2,
     decryptTokenPlaceEnvelope,
@@ -294,6 +295,95 @@ describe('token.place API v1 client', () => {
         expect(body).not.toHaveProperty('mode');
         expect(body).not.toHaveProperty('tag');
         expect(body.stream).not.toBe(true);
+    });
+
+    test('default token.place mode uses the normal full dChat prompt path', async () => {
+        searchDocsRag.mockClear();
+        loadGameState.mockReturnValue({ settings: { tokenPlaceTokenLite: false } });
+
+        await TokenPlaceChatV2([{ role: 'user', content: 'normal prompt please' }]);
+
+        expect(searchDocsRag).toHaveBeenCalledTimes(1);
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const contents = decrypted.api_v1_request.messages.map((message) => message.content);
+        expect(contents.some((content) => content.includes('DSPACE'))).toBe(true);
+        expect(contents.some((content) => content.includes('normal prompt please'))).toBe(true);
+        expect(decrypted.api_v1_request.options).toEqual({});
+    });
+
+    test('token-lite mode sends only tiny system and latest user messages', async () => {
+        searchDocsRag.mockClear();
+        loadGameState.mockReturnValue({
+            settings: { tokenPlaceTokenLite: true },
+            inventory: { canary: 'PlayerState should not leak' },
+        });
+        const latest = 'latest tiny user text canary';
+
+        await TokenPlaceChatV2([
+            { role: 'user', content: 'older user history should not leak' },
+            { role: 'assistant', content: 'older assistant history should not leak' },
+            { role: 'user', content: latest },
+        ]);
+
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const outerBody = JSON.stringify(body);
+        expect(outerBody).not.toContain(latest);
+        expect(outerBody).not.toContain('messages');
+        expect(outerBody).not.toContain('model');
+        expect(outerBody).not.toContain('PlayerState');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const messages = decrypted.api_v1_request.messages;
+        expect(messages).toEqual([
+            {
+                role: 'system',
+                content:
+                    "You are dChat, a concise DSPACE assistant. Answer the user's message. If game-specific context is missing, say you do not know.",
+            },
+            { role: 'user', content: latest },
+        ]);
+        expect(decrypted.api_v1_request.options).toEqual({});
+        const serializedMessages = JSON.stringify(messages);
+        expect(serializedMessages).not.toContain('older user history should not leak');
+        expect(serializedMessages).not.toContain('older assistant history should not leak');
+        expect(serializedMessages).not.toContain('PlayerState');
+        expect(serializedMessages).not.toContain('DSPACE knowledge base');
+        expect(serializedMessages).not.toContain('DocsRAG');
+        expect(messages.reduce((total, message) => total + message.content.length, 0)).toBeLessThan(
+            300
+        );
+    });
+
+    test('token-lite override enables tiny prompt without saved setting', async () => {
+        searchDocsRag.mockClear();
+        loadGameState.mockReturnValue({ settings: { tokenPlaceTokenLite: false } });
+
+        await TokenPlaceChatV2([{ role: 'user', content: 'override canary' }], {
+            tokenPlaceTokenLite: true,
+        });
+
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        expect(decrypted.api_v1_request.messages).toHaveLength(2);
+        expect(decrypted.api_v1_request.messages[1]).toEqual({
+            role: 'user',
+            content: 'override canary',
+        });
+    });
+
+    test('token-lite mode rejects blank or non-user input before relay encryption', async () => {
+        loadGameState.mockReturnValue({ settings: { tokenPlaceTokenLite: true } });
+
+        await expect(
+            TokenPlaceChatV2([
+                { role: 'assistant', content: 'assistant only' },
+                { role: 'user', content: '   ' },
+            ])
+        ).rejects.toThrow('Token-lite mode requires a non-empty user message.');
+
+        expect(fetch).not.toHaveBeenCalled();
     });
 
     test('decrypted API v1 request uses empty options and excludes metadata', async () => {

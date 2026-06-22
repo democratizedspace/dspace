@@ -5,6 +5,7 @@ export const DEFAULT_SETTINGS = {
     chatProvider: DEFAULT_CHAT_PROVIDER,
     showChatDebugPayload: false,
     showQuestGraphVisualizer: false,
+    tokenPlaceTokenLite: false,
 };
 
 export const normalizeSettings = (settings = {}) => {
@@ -21,5 +22,6 @@ export const normalizeSettings = (settings = {}) => {
         chatProvider,
         showChatDebugPayload: Boolean(base.showChatDebugPayload),
         showQuestGraphVisualizer: Boolean(base.showQuestGraphVisualizer),
+        tokenPlaceTokenLite: Boolean(base.tokenPlaceTokenLite),
     };
 };
