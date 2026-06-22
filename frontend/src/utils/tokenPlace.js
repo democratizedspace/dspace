@@ -15,6 +15,10 @@ const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
 const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
+const TOKEN_PLACE_API_V1_MAX_MESSAGES = 64;
+const TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS = 32_768;
+const TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS = 131_072;
+const TOKEN_PLACE_API_V1_CHUNK_CONTENT_CHARS = 32_000;
 
 const getCrypto = () => globalThis.crypto;
 const textEncoder = new TextEncoder();
@@ -63,14 +67,98 @@ export const getTokenPlaceChatModel = (options = {}) =>
             DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
-const sanitizeChatMessage = (message) => ({
-    role: VALID_CHAT_ROLES.has(message?.role) ? message.role : 'user',
-    content:
-        typeof message?.content === 'string' ? message.content : String(message?.content || ''),
-});
+const toTokenPlaceMessageText = (content) => {
+    if (typeof content === 'string') return content;
+    if (content == null) return '';
+    if (Array.isArray(content)) {
+        return content
+            .map((part) => {
+                if (typeof part === 'string') return part;
+                if (typeof part?.text === 'string') return part.text;
+                if (typeof part?.content === 'string') return part.content;
+                return '';
+            })
+            .filter(Boolean)
+            .join('\n');
+    }
+    if (typeof content === 'object') {
+        if (typeof content.text === 'string') return content.text;
+        if (typeof content.content === 'string') return content.content;
+        try {
+            return JSON.stringify(content);
+        } catch {
+            return '';
+        }
+    }
+    return String(content);
+};
 
-export const sanitizeTokenPlaceMessages = (messages = []) =>
-    (Array.isArray(messages) ? messages : []).map(sanitizeChatMessage);
+const chunkTokenPlaceContent = (content) => {
+    const chunks = [];
+    for (let index = 0; index < content.length; index += TOKEN_PLACE_API_V1_CHUNK_CONTENT_CHARS) {
+        chunks.push(content.slice(index, index + TOKEN_PLACE_API_V1_CHUNK_CONTENT_CHARS));
+    }
+    return chunks;
+};
+
+const getTokenPlaceMessagePriority = (message, index, latestUserIndex) => {
+    if (index === latestUserIndex) return 0;
+    if (index === 0 && message.role === 'system') return 1;
+    if (message.role === 'system') return 2;
+    return 3;
+};
+
+export const sanitizeTokenPlaceMessages = (messages = []) => {
+    const normalized = (Array.isArray(messages) ? messages : [])
+        .map((message, index) => ({
+            index,
+            role: VALID_CHAT_ROLES.has(message?.role) ? message.role : 'user',
+            content: toTokenPlaceMessageText(message?.content).trim(),
+        }))
+        .filter((message) => message.content.length > 0);
+
+    let latestUserIndex;
+    for (const message of normalized) {
+        if (message.role === 'user') latestUserIndex = message.index;
+    }
+    const expanded = normalized.flatMap((message) => {
+        const chunks = chunkTokenPlaceContent(message.content);
+        return chunks.map((content, chunkIndex) => ({
+            role: message.role,
+            content,
+            originalIndex: message.index,
+            priority: getTokenPlaceMessagePriority(message, message.index, latestUserIndex),
+            chunkIndex,
+        }));
+    });
+
+    let totalChars = 0;
+    const selected = [];
+    for (const message of [...expanded].sort(
+        (left, right) =>
+            left.priority - right.priority ||
+            left.originalIndex - right.originalIndex ||
+            left.chunkIndex - right.chunkIndex
+    )) {
+        if (selected.length >= TOKEN_PLACE_API_V1_MAX_MESSAGES) break;
+        if (message.content.length > TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS) continue;
+        if (totalChars + message.content.length > TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS) {
+            continue;
+        }
+        selected.push(message);
+        totalChars += message.content.length;
+    }
+
+    // Keep the outbound prompt contract-valid under token.place API v1 limits. If the
+    // prompt is too large, lower-priority older history/context is omitted before the latest
+    // user message; oversized individual messages have already been deterministically chunked.
+    return selected
+        .sort(
+            (left, right) =>
+                left.originalIndex - right.originalIndex || left.chunkIndex - right.chunkIndex
+        )
+        .map(({ role, content }) => ({ role, content }));
+};
 
 export const extractTokenPlaceAssistantText = (response) => {
     const content = response?.choices?.[0]?.message?.content;
