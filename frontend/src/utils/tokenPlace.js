@@ -1,6 +1,7 @@
 import { JSEncrypt } from 'jsencrypt';
 import { loadGameState, ready } from './gameState/common.js';
 import { buildChatPrompt, validateChatResponseText } from './openAI.js';
+import { normalizeSettings } from './settingsDefaults.js';
 import {
     createMalformedTokenPlaceResponseError,
     createTokenPlaceHttpError,
@@ -15,6 +16,43 @@ const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
 const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
+
+const TOKEN_LITE_SYSTEM_MESSAGE =
+    "You are dChat, a concise DSPACE assistant. Answer the user's message. If game-specific context is missing, say you do not know.";
+const TOKEN_LITE_FALLBACK_USER_MESSAGE = 'Hello';
+
+const findLatestTokenPlaceUserMessage = (messages = []) => {
+    const normalizedMessages = Array.isArray(messages) ? messages : [];
+    const latestUserMessage = [...normalizedMessages]
+        .reverse()
+        .find((message) => message?.role === 'user' && String(message?.content || '').trim());
+    return String(latestUserMessage?.content || TOKEN_LITE_FALLBACK_USER_MESSAGE).trim();
+};
+
+export const buildTokenPlaceTokenLitePrompt = (messages = {}) => {
+    const latestUserContent = findLatestTokenPlaceUserMessage(messages);
+    const combinedMessages = [
+        { role: 'system', content: TOKEN_LITE_SYSTEM_MESSAGE },
+        { role: 'user', content: latestUserContent },
+    ];
+    return {
+        combinedMessages,
+        debugMessages: combinedMessages.map((message) => ({
+            role: message.role,
+            content: message.content,
+            kind: 'main',
+        })),
+        gameState: {},
+        contextSources: [],
+        playerStateSummary: {},
+    };
+};
+
+const isTokenPlaceTokenLiteEnabled = (options = {}) => {
+    if (typeof options.tokenPlaceTokenLite === 'boolean') return options.tokenPlaceTokenLite;
+    if (typeof options.tokenLite === 'boolean') return options.tokenLite;
+    return normalizeSettings(loadGameState()?.settings).tokenPlaceTokenLite;
+};
 
 const getCrypto = () => globalThis.crypto;
 const textEncoder = new TextEncoder();
@@ -548,7 +586,12 @@ const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
 
 export const TokenPlaceChatV2 = async (messages, options = {}) => {
     await ready;
-    const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
+    const tokenLiteEnabled = !options.promptPayload && isTokenPlaceTokenLiteEnabled(options);
+    const promptPayload =
+        options.promptPayload ||
+        (tokenLiteEnabled
+            ? buildTokenPlaceTokenLitePrompt(messages)
+            : await buildChatPrompt(messages, options));
     const contextSources = Array.isArray(promptPayload.contextSources)
         ? promptPayload.contextSources
         : [];
