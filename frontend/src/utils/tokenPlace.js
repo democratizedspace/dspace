@@ -187,9 +187,13 @@ export const sanitizeTokenPlaceMessages = (messages = []) => {
     return shapedMessages.length ? shapedMessages : [{ ...TOKEN_PLACE_API_V1_FALLBACK_MESSAGE }];
 };
 
+const isInvalidTokenPlaceAssistantContent = (content) =>
+    typeof content !== 'string' || !content.trim() || content.trim().toLowerCase() === 'stub';
+
 export const extractTokenPlaceAssistantText = (response) => {
-    const content = response?.choices?.[0]?.message?.content;
-    if (typeof content !== 'string' || !content.trim()) {
+    const message = response && typeof response.message === 'object' ? response.message : null;
+    const content = message ? message.content : response?.choices?.[0]?.message?.content;
+    if (isInvalidTokenPlaceAssistantContent(content)) {
         throw createMalformedTokenPlaceResponseError(
             'Malformed token.place response: missing assistant content.'
         );
