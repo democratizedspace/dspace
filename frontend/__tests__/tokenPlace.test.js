@@ -384,9 +384,72 @@ describe('token.place API v1 client', () => {
     });
 
     test('token-lite setting ignores prebuilt debug prompt payloads', async () => {
+        loadGameState.mockReturnValue({ settings: { tokenPlaceTokenLite: false } });
+
+        await TokenPlaceChatV2(
+            [
+                { role: 'user', content: 'older promptPayload bypass history canary' },
+                { role: 'assistant', content: 'assistant promptPayload bypass history canary' },
+                { role: 'user', content: 'latest token-lite user text' },
+            ],
+            {
+                tokenPlaceTokenLite: true,
+                promptPayload: {
+                    combinedMessages: [
+                        {
+                            role: 'system',
+                            content:
+                                'full debug payload system canary with DSPACE knowledge text and PlayerState',
+                        },
+                        {
+                            role: 'user',
+                            content:
+                                'full debug payload user canary with RAG/docs text and full history',
+                        },
+                    ],
+                    contextSources: [{ title: 'debug RAG/docs source canary', url: '/docs/about' }],
+                    gameState: { inventory: [{ id: 'debug-payload-inventory-canary' }] },
+                },
+            }
+        );
+
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const serializedDecrypted = JSON.stringify(decrypted);
+
+        expect(decrypted.api_v1_request.options).toEqual({});
+        expect(decrypted.api_v1_request.messages).toEqual([
+            {
+                role: 'system',
+                content:
+                    "You are dChat, a concise DSPACE assistant. Answer the user's message. If game-specific context is missing, say you do not know.",
+            },
+            { role: 'user', content: 'latest token-lite user text' },
+        ]);
+        expect(serializedDecrypted).not.toContain('full debug payload system canary');
+        expect(serializedDecrypted).not.toContain('full debug payload user canary');
+        expect(serializedDecrypted).not.toContain('debug-payload-inventory-canary');
+        expect(serializedDecrypted).not.toContain('older promptPayload bypass history canary');
+        expect(serializedDecrypted).not.toContain('assistant promptPayload bypass history canary');
+        expect(serializedDecrypted).not.toContain('PlayerState');
+        expect(serializedDecrypted).not.toContain('RAG/docs text');
+        expect(serializedDecrypted).not.toContain('DSPACE knowledge text');
+        expect(JSON.stringify(body)).not.toContain('latest token-lite user text');
+        expect(body).toEqual(
+            expect.objectContaining({
+                cipherkey: expect.any(String),
+                ciphertext: expect.any(String),
+                iv: expect.any(String),
+            })
+        );
+        expect(Object.keys(body)).not.toEqual(expect.arrayContaining(['messages', 'model']));
+    });
+
+    test('saved token-lite setting ignores prebuilt debug prompt payloads', async () => {
         loadGameState.mockReturnValue({ settings: { tokenPlaceTokenLite: true } });
 
-        await TokenPlaceChatV2([{ role: 'user', content: 'latest token-lite user text' }], {
+        await TokenPlaceChatV2([{ role: 'user', content: 'latest saved-setting user text' }], {
             promptPayload: {
                 combinedMessages: [
                     { role: 'system', content: 'full debug payload system canary' },
@@ -404,7 +467,7 @@ describe('token.place API v1 client', () => {
 
         expect(decrypted.api_v1_request.messages).toEqual([
             expect.objectContaining({ role: 'system' }),
-            { role: 'user', content: 'latest token-lite user text' },
+            { role: 'user', content: 'latest saved-setting user text' },
         ]);
         expect(serializedMessages).not.toContain('full debug payload system canary');
         expect(serializedMessages).not.toContain('full debug payload user canary');
