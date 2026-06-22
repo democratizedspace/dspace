@@ -43,6 +43,7 @@
         const current = loadGameState();
         const nextSettings = {
             ...normalizeSettings(current.settings),
+            chatProvider: selectedProvider,
             tokenPlaceTokenLite: enabled,
         };
         await saveGameState({

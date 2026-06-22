@@ -533,17 +533,17 @@ export const buildTokenPlaceTokenLitePrompt = (messages = [], state = loadGameSt
     };
 };
 
-const resolveTokenPlaceTokenLiteEnabled = (options = {}, state = loadGameState()) => {
+const resolveTokenPlaceTokenLiteEnabled = (options = {}, state) => {
     if (typeof options.tokenPlaceTokenLite === 'boolean') return options.tokenPlaceTokenLite;
     return normalizeSettings(state?.settings).tokenPlaceTokenLite;
 };
 
 const resolveTokenPlacePromptPayload = async (messages, options = {}) => {
-    if (options.promptPayload) return options.promptPayload;
     const state = loadGameState();
     if (resolveTokenPlaceTokenLiteEnabled(options, state)) {
         return buildTokenPlaceTokenLitePrompt(messages, state);
     }
+    if (options.promptPayload) return options.promptPayload;
     return buildChatPrompt(messages, options);
 };
 

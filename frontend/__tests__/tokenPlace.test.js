@@ -334,8 +334,7 @@ describe('token.place API v1 client', () => {
         expect(searchDocsRag).toHaveBeenCalledTimes(1);
         const { body } = getFetchCallByPath('/api/v1/relay/requests');
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
-        const serializedMessages = JSON.stringify(decrypted.api_v1_request.messages);
-        expect(serializedMessages).toContain('DSPACE');
+        // Verify full path produces more messages than token-lite's fixed [system, user] pair.
         expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
     });
 
@@ -381,8 +380,35 @@ describe('token.place API v1 client', () => {
         expect(serializedMessages).not.toContain('old user history should not appear');
         expect(serializedMessages).not.toContain('older assistant history should not appear');
         expect(JSON.stringify(body)).not.toContain('latest token-lite user text');
-        expect(JSON.stringify(body)).not.toContain('messages');
-        expect(JSON.stringify(body)).not.toContain('model');
+        expect(Object.keys(body)).not.toEqual(expect.arrayContaining(['messages', 'model']));
+    });
+
+    test('token-lite setting ignores prebuilt debug prompt payloads', async () => {
+        loadGameState.mockReturnValue({ settings: { tokenPlaceTokenLite: true } });
+
+        await TokenPlaceChatV2([{ role: 'user', content: 'latest token-lite user text' }], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'system', content: 'full debug payload system canary' },
+                    { role: 'user', content: 'full debug payload user canary' },
+                ],
+                contextSources: [{ title: 'debug source', url: '/docs/about' }],
+                gameState: { inventory: [{ id: 'debug-payload-inventory-canary' }] },
+            },
+        });
+
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const serializedMessages = JSON.stringify(decrypted.api_v1_request.messages);
+
+        expect(decrypted.api_v1_request.messages).toEqual([
+            expect.objectContaining({ role: 'system' }),
+            { role: 'user', content: 'latest token-lite user text' },
+        ]);
+        expect(serializedMessages).not.toContain('full debug payload system canary');
+        expect(serializedMessages).not.toContain('full debug payload user canary');
+        expect(JSON.stringify(decrypted)).not.toContain('debug-payload-inventory-canary');
     });
 
     test('token-lite blank or non-user inputs fall back before encryption', async () => {
