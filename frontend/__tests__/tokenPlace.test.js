@@ -916,13 +916,56 @@ ${ragExcerpt.repeat(4000)}`,
         ).resolves.toMatchObject({ text: 'mocked reply' });
     });
 
-    test('parses assistant text and compatibility helper returns string', async () => {
+    test('parses API v1 message assistant text and compatibility helper returns string', async () => {
+        expect(extractTokenPlaceAssistantText({ message: { content: 'api v1 reply' } })).toBe(
+            'api v1 reply'
+        );
+        relayReply = { message: { role: 'assistant', content: 'api v1 relay reply' } };
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
+            'api v1 relay reply'
+        );
+    });
+
+    test('parses OpenAI-compatible choices assistant text', () => {
         expect(extractTokenPlaceAssistantText({ choices: [{ message: { content: 'hi' } }] })).toBe(
             'hi'
         );
+    });
+
+    test('prefers API v1 message assistant text when both response shapes exist', () => {
+        expect(
+            extractTokenPlaceAssistantText({
+                message: { role: 'assistant', content: 'api v1 wins' },
+                choices: [{ message: { content: 'choices fallback' } }],
+            })
+        ).toBe('api v1 wins');
+    });
+
+    test('compatibility helper returns string', async () => {
         await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
             'mocked reply'
         );
+    });
+
+    test('empty, missing, stub, and legacy array assistant content are malformed', () => {
+        const invalidResponses = [
+            { message: { content: '' } },
+            { message: { content: '   ' } },
+            { message: { content: 'stub' } },
+            { choices: [{ message: { content: '' } }] },
+            { choices: [{ message: { content: 'stub' } }] },
+            { usage: { prompt_tokens: 1 } },
+            [
+                { role: 'user', content: 'hello' },
+                { role: 'assistant', content: 'legacy full-history reply' },
+            ],
+        ];
+
+        for (const response of invalidResponses) {
+            expect(() => extractTokenPlaceAssistantText(response)).toThrow(
+                'Malformed token.place response: missing assistant content.'
+            );
+        }
     });
 
     test('richer helper returns text, DSPACE contextSources, usage, and metadata', async () => {
