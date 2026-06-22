@@ -192,12 +192,11 @@ export const extractTokenPlaceAssistantText = (response) => {
         response?.message && typeof response.message === 'object'
             ? response.message.content
             : response?.choices?.[0]?.message?.content;
-    if (typeof content !== 'string' || !content.trim()) {
-        throw createMalformedTokenPlaceResponseError(
-            'Malformed token.place response: missing assistant content.'
-        );
-    }
-    if (content.trim().toLowerCase() === 'stub') {
+    if (
+        typeof content !== 'string' ||
+        !content.trim() ||
+        content.trim().toLowerCase() === 'stub'
+    ) {
         throw createMalformedTokenPlaceResponseError(
             'Malformed token.place response: missing assistant content.'
         );
