@@ -916,13 +916,64 @@ ${ragExcerpt.repeat(4000)}`,
         ).resolves.toMatchObject({ text: 'mocked reply' });
     });
 
-    test('parses assistant text and compatibility helper returns string', async () => {
+    test('parses API v1 response.message assistant text and compatibility helper returns string', async () => {
+        expect(extractTokenPlaceAssistantText({ message: { content: 'api v1 reply' } })).toBe(
+            'api v1 reply'
+        );
+        relayReply = { message: { role: 'assistant', content: 'api v1 relay reply' } };
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
+            'api v1 relay reply'
+        );
+    });
+
+    test('parses OpenAI-compatible choices assistant text', async () => {
         expect(extractTokenPlaceAssistantText({ choices: [{ message: { content: 'hi' } }] })).toBe(
             'hi'
         );
         await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).resolves.toBe(
             'mocked reply'
         );
+    });
+
+    test('prefers API v1 response.message over choices when both response shapes are present', () => {
+        expect(
+            extractTokenPlaceAssistantText({
+                message: { role: 'assistant', content: 'api v1 reply' },
+                choices: [{ message: { content: 'choices reply' } }],
+            })
+        ).toBe('api v1 reply');
+    });
+
+    test('rejects empty, missing, stub, and legacy raw-array assistant responses as malformed', () => {
+        const malformedResponses = [
+            { message: { content: '' } },
+            { message: { content: '   ' } },
+            { message: { content: 'stub' } },
+            { message: {} },
+            { choices: [{ message: { content: '' } }] },
+            [{ role: 'assistant', content: 'legacy history reply' }],
+        ];
+
+        for (const response of malformedResponses) {
+            expect(() => extractTokenPlaceAssistantText(response)).toThrow(
+                'Malformed token.place response: missing assistant content.'
+            );
+        }
+    });
+
+    test('structured API errors are not treated as missing assistant content', async () => {
+        relayReply = {
+            error: {
+                message: 'blocked',
+                type: 'content_policy_violation',
+                code: 'content_blocked',
+            },
+        };
+
+        await expect(tokenPlaceChat([{ role: 'user', content: 'hello' }])).rejects.toMatchObject({
+            type: 'content_policy',
+            status: 400,
+        });
     });
 
     test('richer helper returns text, DSPACE contextSources, usage, and metadata', async () => {
