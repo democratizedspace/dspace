@@ -413,6 +413,42 @@ ${ragExcerpt.repeat(4000)}`,
         expectValidApiV1Messages(messages);
     });
 
+    test('all-empty or invalid messages fall back to a valid API v1 user message', async () => {
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [
+                    { role: 'developer', content: '   ', ignored: 'metadata' },
+                    { role: 'assistant', content: null },
+                    { role: 'system', content: undefined },
+                    { role: 'tool', content: [] },
+                    { role: 'function', content: [{ type: 'text', text: '' }, { content: '' }] },
+                ],
+                contextSources: [],
+                gameState: {},
+            },
+        });
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const messages = decrypted.api_v1_request.messages;
+
+        expect(messages.length).toBeGreaterThan(0);
+        expect(
+            messages.every((message) => Object.keys(message).sort().join(',') === 'content,role')
+        ).toBe(true);
+        expect(
+            messages.every((message) => ['system', 'user', 'assistant'].includes(message.role))
+        ).toBe(true);
+        expect(messages.every((message) => message.content.trim())).toBe(true);
+        expect(decrypted.api_v1_request.options).toEqual({});
+        expectValidApiV1Messages(messages);
+
+        const serializedOuterBody = JSON.stringify(body);
+        expect(serializedOuterBody).not.toContain('messages');
+        expect(serializedOuterBody).not.toContain('model');
+        expect(serializedOuterBody).not.toContain('Please continue.');
+        expect(serializedOuterBody).not.toContain('metadata');
+    });
+
     test('preserves primary system prompt when latest user input exceeds total budget', async () => {
         const systemPrompt = 'DSPACE persona and safety guardrails must remain present.';
         const hugeUserPrompt = 'OVERSIZED_USER_INPUT '.repeat(7000);

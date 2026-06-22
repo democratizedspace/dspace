@@ -22,6 +22,10 @@ export const TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS = 131_072;
 const TOKEN_PLACE_API_V1_CHUNK_LABEL_CHARS = 96;
 const TOKEN_PLACE_API_V1_SYSTEM_CHUNK_CHARS =
     TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS - TOKEN_PLACE_API_V1_CHUNK_LABEL_CHARS;
+const TOKEN_PLACE_API_V1_FALLBACK_MESSAGE = {
+    role: 'user',
+    content: 'Please continue.',
+};
 
 const getCrypto = () => globalThis.crypto;
 const textEncoder = new TextEncoder();
@@ -172,9 +176,11 @@ export const sanitizeTokenPlaceMessages = (messages = []) => {
         totalChars += candidate.content.length;
     }
 
-    return selected
+    const shapedMessages = selected
         .sort((a, b) => a.originalIndex - b.originalIndex || a.chunkIndex - b.chunkIndex)
         .map(({ role, content }) => ({ role, content }));
+
+    return shapedMessages.length ? shapedMessages : [{ ...TOKEN_PLACE_API_V1_FALLBACK_MESSAGE }];
 };
 
 export const extractTokenPlaceAssistantText = (response) => {
