@@ -15,6 +15,12 @@ const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
 const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
+export const TOKEN_PLACE_API_V1_MAX_MESSAGES = 64;
+export const TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS = 32_768;
+export const TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS = 131_072;
+const TOKEN_PLACE_API_V1_CHUNK_LABEL_CHARS = 96;
+const TOKEN_PLACE_API_V1_SYSTEM_CHUNK_CHARS =
+    TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS - TOKEN_PLACE_API_V1_CHUNK_LABEL_CHARS;
 
 const getCrypto = () => globalThis.crypto;
 const textEncoder = new TextEncoder();
@@ -63,14 +69,103 @@ export const getTokenPlaceChatModel = (options = {}) =>
             DEFAULT_CHAT_MODEL
     ).trim() || DEFAULT_CHAT_MODEL;
 
-const sanitizeChatMessage = (message) => ({
-    role: VALID_CHAT_ROLES.has(message?.role) ? message.role : 'user',
-    content:
-        typeof message?.content === 'string' ? message.content : String(message?.content || ''),
-});
+const stringifyTokenPlaceContent = (content) => {
+    if (typeof content === 'string') return content;
+    if (content == null) return '';
+    if (Array.isArray(content)) {
+        return content
+            .map((part) => {
+                if (typeof part === 'string') return part;
+                if (typeof part?.text === 'string') return part.text;
+                if (typeof part?.content === 'string') return part.content;
+                try {
+                    return JSON.stringify(part);
+                } catch {
+                    return '';
+                }
+            })
+            .filter(Boolean)
+            .join('\n');
+    }
+    try {
+        return JSON.stringify(content);
+    } catch {
+        return String(content || '');
+    }
+};
 
-export const sanitizeTokenPlaceMessages = (messages = []) =>
-    (Array.isArray(messages) ? messages : []).map(sanitizeChatMessage);
+const chunkText = (content, maxChars) => {
+    const chunks = [];
+    for (let offset = 0; offset < content.length; offset += maxChars) {
+        chunks.push(content.slice(offset, offset + maxChars));
+    }
+    return chunks;
+};
+
+const splitTokenPlaceMessage = (message, index) => {
+    const role = VALID_CHAT_ROLES.has(message?.role) ? message.role : 'user';
+    const content = stringifyTokenPlaceContent(message?.content).trim();
+    if (!content) return [];
+
+    if (content.length <= TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS) {
+        return [{ role, content, originalIndex: index, chunkIndex: 0 }];
+    }
+
+    if (role === 'system') {
+        const chunks = chunkText(content, TOKEN_PLACE_API_V1_SYSTEM_CHUNK_CHARS);
+        return chunks.map((chunk, chunkIndex) => ({
+            role,
+            content: `[DSPACE context chunk ${chunkIndex + 1}/${chunks.length}]\n${chunk}`,
+            originalIndex: index,
+            chunkIndex,
+        }));
+    }
+
+    // Keep oversized conversation turns deterministic and valid. If later limits force trimming,
+    // the priority pass below preserves the latest user turn before older history/context.
+    return chunkText(content, TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS).map(
+        (chunk, chunkIndex) => ({ role, content: chunk, originalIndex: index, chunkIndex })
+    );
+};
+
+const getTokenPlaceMessagePriority = (message, latestUserIndex) => {
+    if (message.originalIndex === latestUserIndex) return 0;
+    if (message.role === 'system') return 1;
+    if (message.role === 'user') return 2;
+    return 3;
+};
+
+export const sanitizeTokenPlaceMessages = (messages = []) => {
+    const sourceMessages = Array.isArray(messages) ? messages : [];
+    const latestUserIndex = sourceMessages.reduce(
+        (latest, message, index) => (message?.role === 'user' ? index : latest),
+        -1
+    );
+    const candidates = sourceMessages.flatMap(splitTokenPlaceMessage);
+    const selected = [];
+    let totalChars = 0;
+
+    for (const candidate of [...candidates].sort((a, b) => {
+        const priorityDelta =
+            getTokenPlaceMessagePriority(a, latestUserIndex) -
+            getTokenPlaceMessagePriority(b, latestUserIndex);
+        if (priorityDelta) return priorityDelta;
+        if (a.role === 'system')
+            return a.originalIndex - b.originalIndex || a.chunkIndex - b.chunkIndex;
+        return b.originalIndex - a.originalIndex || a.chunkIndex - b.chunkIndex;
+    })) {
+        if (selected.length >= TOKEN_PLACE_API_V1_MAX_MESSAGES) break;
+        if (totalChars + candidate.content.length > TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS) {
+            continue;
+        }
+        selected.push(candidate);
+        totalChars += candidate.content.length;
+    }
+
+    return selected
+        .sort((a, b) => a.originalIndex - b.originalIndex || a.chunkIndex - b.chunkIndex)
+        .map(({ role, content }) => ({ role, content }));
+};
 
 export const extractTokenPlaceAssistantText = (response) => {
     const content = response?.choices?.[0]?.message?.content;
