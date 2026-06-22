@@ -11,6 +11,7 @@ jest.mock('../src/utils/docsRag.js', () => ({
 }));
 
 const { loadGameState } = await import('../src/utils/gameState/common.js');
+const { searchDocsRag } = await import('../src/utils/docsRag.js');
 const {
     TokenPlaceChatV2,
     decryptTokenPlaceEnvelope,
@@ -124,6 +125,7 @@ describe('token.place API v1 client', () => {
         relayReply = { choices: [{ message: { content: 'mocked reply' } }] };
         global.fetch = makeRelayFetch();
         loadGameState.mockReturnValue({});
+        searchDocsRag.mockResolvedValue({ excerptsText: '', sources: [] });
     });
 
     afterEach(() => {
@@ -315,6 +317,91 @@ describe('token.place API v1 client', () => {
         expect(JSON.stringify(body)).not.toContain('conv-42');
         expect(JSON.stringify(body)).not.toContain('conversation_id');
         expect(JSON.stringify(body)).not.toContain('metadata');
+    });
+
+    test('default token.place mode uses the full dChat prompt path', async () => {
+        loadGameState.mockReturnValue({
+            settings: { tokenPlaceTokenLite: false },
+            inventory: [{ id: 'solar-panel', quantity: 1 }],
+        });
+        searchDocsRag.mockResolvedValue({
+            excerptsText: 'RAG excerpt canary for normal mode.',
+            sources: [{ title: 'DSPACE docs', url: '/docs/about' }],
+        });
+
+        await TokenPlaceChatV2([{ role: 'user', content: 'What should I build next?' }]);
+
+        expect(searchDocsRag).toHaveBeenCalledTimes(1);
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const serializedMessages = JSON.stringify(decrypted.api_v1_request.messages);
+        expect(serializedMessages).toContain('DSPACE');
+        expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
+    });
+
+    test('token-lite setting sends a tiny decrypted API v1 message set', async () => {
+        loadGameState.mockReturnValue({
+            settings: { tokenPlaceTokenLite: true },
+            inventory: [{ id: 'player-state-canary', quantity: 99 }],
+        });
+        searchDocsRag.mockResolvedValue({
+            excerptsText: 'RAG excerpt should not appear.',
+            sources: [{ title: 'Should not appear', url: '/docs/solar' }],
+        });
+
+        await TokenPlaceChatV2([
+            { role: 'user', content: 'old user history should not appear' },
+            { role: 'assistant', content: 'older assistant history should not appear' },
+            { role: 'user', content: 'latest token-lite user text' },
+        ]);
+
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const messages = decrypted.api_v1_request.messages;
+        const serializedMessages = JSON.stringify(messages);
+
+        expect(decrypted.api_v1_request.options).toEqual({});
+        expect(messages).toEqual([
+            {
+                role: 'system',
+                content:
+                    "You are dChat, a concise DSPACE assistant. Answer the user's message. If game-specific context is missing, say you do not know.",
+            },
+            { role: 'user', content: 'latest token-lite user text' },
+        ]);
+        expect(messages).toHaveLength(2);
+        expect(messages.reduce((total, message) => total + message.content.length, 0)).toBeLessThan(
+            400
+        );
+        expect(serializedMessages).not.toContain('RAG excerpt should not appear');
+        expect(serializedMessages).not.toContain('DSPACE knowledge base');
+        expect(serializedMessages).not.toContain('PlayerState');
+        expect(serializedMessages).not.toContain('player-state-canary');
+        expect(serializedMessages).not.toContain('old user history should not appear');
+        expect(serializedMessages).not.toContain('older assistant history should not appear');
+        expect(JSON.stringify(body)).not.toContain('latest token-lite user text');
+        expect(JSON.stringify(body)).not.toContain('messages');
+        expect(JSON.stringify(body)).not.toContain('model');
+    });
+
+    test('token-lite blank or non-user inputs fall back before encryption', async () => {
+        loadGameState.mockReturnValue({ settings: { tokenPlaceTokenLite: true } });
+
+        await TokenPlaceChatV2([
+            { role: 'assistant', content: 'assistant-only history' },
+            { role: 'user', content: '   ' },
+        ]);
+
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        expect(decrypted.api_v1_request.messages).toEqual([
+            expect.objectContaining({ role: 'system' }),
+            { role: 'user', content: 'Hello.' },
+        ]);
+        expect(JSON.stringify(body)).not.toContain('assistant-only history');
+        expect(JSON.stringify(body)).not.toContain('Hello.');
     });
 
     test('decryption accepts chat_history as the response ciphertext', async () => {

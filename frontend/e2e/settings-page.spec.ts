@@ -60,6 +60,25 @@ test.describe('Settings route', () => {
             chatPanel.locator('input[name="chat-provider"][value="token-place"]')
         ).toBeChecked();
         await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+        await expect(page.getByTestId('token-place-token-lite-toggle')).not.toBeChecked();
+        await expect(page.getByTestId('token-place-token-lite-status')).toHaveText(
+            'Token-lite mode is disabled.'
+        );
+        await page.getByTestId('token-place-token-lite-toggle').check();
+        await expect(page.getByTestId('token-place-token-lite-toggle')).toBeChecked();
+        await expect
+            .poll(async () => {
+                const state = await readStoredGameState(page);
+                return state.settings?.tokenPlaceTokenLite;
+            })
+            .toBe(true);
+        await page.reload();
+        await page.waitForLoadState('networkidle');
+        await waitForHydration(page);
+        await expect(page.getByTestId('token-place-token-lite-toggle')).toBeChecked();
+        await expect(page.getByTestId('token-place-token-lite-status')).toHaveText(
+            'Token-lite mode is enabled.'
+        );
         await expect(
             chatPanel.locator('input:is([type="password"], [type="text"], :not([type]))')
         ).toHaveCount(0);
@@ -70,6 +89,7 @@ test.describe('Settings route', () => {
             chatPanel.locator('input[name="chat-provider"][value="openai"]')
         ).toBeChecked();
         await expect(page.getByLabel('OpenAI API key', { exact: true })).toBeVisible();
+        await expect(page.getByTestId('token-place-token-lite-toggle')).toHaveCount(0);
 
         await expect
             .poll(async () => {
@@ -124,6 +144,7 @@ test.describe('Settings route', () => {
             chatPanel.locator('input[name="chat-provider"][value="token-place"]')
         ).toBeChecked();
         await expect(page.getByTestId('token-place-no-key-note')).toBeVisible();
+        await expect(page.getByTestId('token-place-token-lite-toggle')).toBeChecked();
         await expect(page.getByLabel(/token\.place api key/i)).toHaveCount(0);
         await expect(
             chatPanel.locator('input:is([type="password"], [type="text"], :not([type]))')
