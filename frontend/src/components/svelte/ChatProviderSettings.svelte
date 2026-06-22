@@ -16,11 +16,14 @@
 
     let hydrated = false;
     let selectedProvider = DEFAULT_CHAT_PROVIDER;
+    let tokenPlaceTokenLite = false;
     let statusMessage = '';
     let unsubscribe;
 
     const syncFromState = (value) => {
-        selectedProvider = normalizeSettings(value?.settings).chatProvider;
+        const settings = normalizeSettings(value?.settings);
+        selectedProvider = settings.chatProvider;
+        tokenPlaceTokenLite = settings.tokenPlaceTokenLite;
     };
 
     onMount(async () => {
@@ -33,6 +36,23 @@
     onDestroy(() => {
         unsubscribe?.();
     });
+
+    async function persistTokenPlaceTokenLite(enabled) {
+        tokenPlaceTokenLite = enabled;
+        await ready;
+        const current = loadGameState();
+        const nextSettings = {
+            ...normalizeSettings(current.settings),
+            tokenPlaceTokenLite: enabled,
+        };
+        await saveGameState({
+            ...current,
+            settings: nextSettings,
+        });
+        statusMessage = enabled
+            ? 'Token-lite mode enabled for token.place Chat.'
+            : 'Token-lite mode disabled for token.place Chat.';
+    }
 
     async function persistProvider(provider) {
         selectedProvider = provider;
@@ -107,10 +127,31 @@
                 <OpenAIAPIKeySettings />
             </div>
         {:else}
-            <p class="token-place-note" data-testid="token-place-no-key-note">
-                token.place Chat is ready to use. There is no token.place credential field on this
-                device.
-            </p>
+            <div class="token-place-panel">
+                <p class="token-place-note" data-testid="token-place-no-key-note">
+                    token.place Chat is ready to use. There is no token.place credential field on
+                    this device.
+                </p>
+                <label class="provider-option token-lite-option">
+                    <input
+                        type="checkbox"
+                        data-testid="token-place-token-lite-toggle"
+                        checked={tokenPlaceTokenLite}
+                        on:change={(event) =>
+                            persistTokenPlaceTokenLite(event.currentTarget.checked)}
+                    />
+                    <span>
+                        <strong>Token-lite mode for token.place Chat</strong>
+                        <small>
+                            Debug mode: sends only a tiny system prompt plus your latest message.
+                            Skips RAG, player state, and chat history.
+                        </small>
+                    </span>
+                </label>
+                <p class="token-lite-status" data-testid="token-place-token-lite-status">
+                    Token-lite mode is {tokenPlaceTokenLite ? 'enabled' : 'disabled'}.
+                </p>
+            </div>
         {/if}
     {/if}
 </section>
@@ -130,7 +171,8 @@
 
     .heading,
     fieldset,
-    .openai-panel {
+    .openai-panel,
+    .token-place-panel {
         display: grid;
         gap: 0.75rem;
     }
@@ -174,7 +216,8 @@
         gap: 0.25rem;
     }
 
-    input[type='radio'] {
+    input[type='radio'],
+    input[type='checkbox'] {
         margin-top: 0.2rem;
     }
 
@@ -184,7 +227,8 @@
     }
 
     .status,
-    .token-place-note {
+    .token-place-note,
+    .token-lite-status {
         color: #86efac;
         font-weight: 600;
     }

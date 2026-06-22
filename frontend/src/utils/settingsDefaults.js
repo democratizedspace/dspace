@@ -4,6 +4,7 @@ export const CHAT_PROVIDER_VALUES = new Set([DEFAULT_CHAT_PROVIDER, 'openai']);
 export const DEFAULT_SETTINGS = {
     chatProvider: DEFAULT_CHAT_PROVIDER,
     showChatDebugPayload: false,
+    tokenPlaceTokenLite: false,
     showQuestGraphVisualizer: false,
 };
 
@@ -20,6 +21,7 @@ export const normalizeSettings = (settings = {}) => {
         ...base,
         chatProvider,
         showChatDebugPayload: Boolean(base.showChatDebugPayload),
+        tokenPlaceTokenLite: Boolean(base.tokenPlaceTokenLite),
         showQuestGraphVisualizer: Boolean(base.showQuestGraphVisualizer),
     };
 };

@@ -1,6 +1,7 @@
 import { JSEncrypt } from 'jsencrypt';
 import { loadGameState, ready } from './gameState/common.js';
 import { buildChatPrompt, validateChatResponseText } from './openAI.js';
+import { normalizeSettings } from './settingsDefaults.js';
 import {
     createMalformedTokenPlaceResponseError,
     createTokenPlaceHttpError,
@@ -15,6 +16,9 @@ const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
 const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 const VALID_CHAT_ROLES = new Set(['user', 'assistant', 'system']);
+const TOKEN_LITE_SYSTEM_MESSAGE =
+    "You are dChat, a concise DSPACE assistant. Answer the user's message. If game-specific context is missing, say you do not know.";
+const TOKEN_LITE_FALLBACK_USER_MESSAGE = 'Hello';
 
 const getCrypto = () => globalThis.crypto;
 const textEncoder = new TextEncoder();
@@ -466,6 +470,43 @@ export const pollTokenPlaceRelayResponse = async (baseUrl, body, options = {}) =
     );
 };
 
+const findLatestNonEmptyMessageByRole = (messages = [], role) =>
+    [...(Array.isArray(messages) ? messages : [])]
+        .reverse()
+        .find((message) => message?.role === role && String(message?.content || '').trim());
+
+const resolveTokenPlaceTokenLiteEnabled = (state, options = {}) => {
+    if (typeof options.tokenPlaceTokenLite === 'boolean') return options.tokenPlaceTokenLite;
+    return normalizeSettings(state?.settings).tokenPlaceTokenLite;
+};
+
+export const buildTokenPlaceTokenLitePrompt = (messages = [], options = {}) => {
+    const latestUser = findLatestNonEmptyMessageByRole(messages, 'user');
+    const latestUserContent =
+        String(latestUser?.content || '').trim() || TOKEN_LITE_FALLBACK_USER_MESSAGE;
+    const combinedMessages = [
+        { role: 'system', content: TOKEN_LITE_SYSTEM_MESSAGE },
+        { role: 'user', content: latestUserContent },
+    ];
+
+    return {
+        combinedMessages,
+        debugMessages: combinedMessages,
+        gameState: options.state || {},
+        contextSources: [],
+        playerStateSummary: '',
+    };
+};
+
+const buildTokenPlacePromptPayload = async (messages, options = {}) => {
+    if (options.promptPayload) return options.promptPayload;
+    const state = options.state || loadGameState();
+    if (resolveTokenPlaceTokenLiteEnabled(state, options)) {
+        return buildTokenPlaceTokenLitePrompt(messages, { ...options, state });
+    }
+    return buildChatPrompt(messages, { ...options, state });
+};
+
 export const validateTokenPlaceResponseEnvelope = (envelope, expected) => {
     if (envelope?.protocol !== RELAY_PROTOCOL)
         throw createMalformedTokenPlaceResponseError(
@@ -548,7 +589,7 @@ const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
 
 export const TokenPlaceChatV2 = async (messages, options = {}) => {
     await ready;
-    const promptPayload = options.promptPayload || (await buildChatPrompt(messages, options));
+    const promptPayload = await buildTokenPlacePromptPayload(messages, options);
     const contextSources = Array.isArray(promptPayload.contextSources)
         ? promptPayload.contextSources
         : [];
