@@ -80,3 +80,6 @@ frontend/package-lock.json
 
 # Backups
 backups/
+
+# Local benchmark reports
+artifacts/

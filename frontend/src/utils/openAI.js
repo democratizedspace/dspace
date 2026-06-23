@@ -6,6 +6,7 @@ import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
+import { buildPromptMetrics } from './promptMetrics.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -604,6 +605,7 @@ async function createChatResponse(openai, input) {
 }
 
 export const buildChatPrompt = async (messages, options = {}) => {
+    const promptBuildStartedAt = performance.now();
     await ready;
     const normalizedMessages = Array.isArray(messages) ? messages : [];
     const rawGameState = loadGameState();
@@ -652,9 +654,11 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const retrievalQuery = latestUserMessage
         ? buildRetrievalQuery(normalizedMessages, latestUserMessage)
         : '';
+    const docsRagStartedAt = performance.now();
     const docsRagPayload = latestUserMessage
         ? await searchDocsRag(retrievalQuery, docsRagRequestOptions)
         : { excerptsText: '', sources: [] };
+    const ragDurationMs = performance.now() - docsRagStartedAt;
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
             ? {
@@ -709,13 +713,50 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     const contextSources = mergeSources(knowledgePack.sources || [], docsRagPayload.sources || []);
 
-    return {
+    const promptPayload = {
         combinedMessages,
         debugMessages,
         gameState,
         contextSources,
         playerStateSummary: playerStateSnapshot.meta,
     };
+
+    if (options.includePromptMetrics) {
+        const indexOfMessage = (target) => (target ? combinedMessages.indexOf(target) : -1);
+        const systemMessageIndex = indexOfMessage(systemMessage);
+        const playerStateMessageIndex = indexOfMessage(playerStateMessage);
+        const knowledgeMessageIndex = indexOfMessage(knowledgeMessage);
+        const docsRagMessageIndex = indexOfMessage(docsRagMessage);
+        const latestUserMessageIndex = latestUserMessage
+            ? combinedMessages.lastIndexOf(latestUserMessage)
+            : -1;
+        const chatHistoryIndexes = combinedMessages
+            .map((message, index) => ({ message, index }))
+            .filter(
+                ({ message, index }) =>
+                    index !== latestUserMessageIndex &&
+                    normalizedMessages.includes(message) &&
+                    message.role !== 'system'
+            )
+            .map(({ index }) => index);
+        const ragIndexes = [knowledgeMessageIndex, docsRagMessageIndex].filter(
+            (index) => index !== -1
+        );
+
+        promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
+            promptBuildDurationMs: performance.now() - promptBuildStartedAt,
+            ragDurationMs,
+            componentMessageIndexes: {
+                systemInstructions: systemMessageIndex,
+                rag: ragIndexes,
+                playerState: playerStateMessageIndex,
+                chatHistory: chatHistoryIndexes,
+                latestUserMessage: latestUserMessageIndex,
+            },
+        });
+    }
+
+    return promptPayload;
 };
 
 export const GPT5Chat = async (messages, options = {}) => {
