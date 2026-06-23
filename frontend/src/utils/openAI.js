@@ -6,6 +6,7 @@ import { searchDocsRag } from './docsRag.js';
 import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
+import { buildPromptMetrics } from './promptMetrics.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -604,6 +605,7 @@ async function createChatResponse(openai, input) {
 }
 
 export const buildChatPrompt = async (messages, options = {}) => {
+    const promptBuildStartedAt = performance.now();
     await ready;
     const normalizedMessages = Array.isArray(messages) ? messages : [];
     const rawGameState = loadGameState();
@@ -652,9 +654,11 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const retrievalQuery = latestUserMessage
         ? buildRetrievalQuery(normalizedMessages, latestUserMessage)
         : '';
+    const docsRagStartedAt = performance.now();
     const docsRagPayload = latestUserMessage
         ? await searchDocsRag(retrievalQuery, docsRagRequestOptions)
         : { excerptsText: '', sources: [] };
+    const ragDurationMs = performance.now() - docsRagStartedAt;
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
             ? {
@@ -709,13 +713,39 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     const contextSources = mergeSources(knowledgePack.sources || [], docsRagPayload.sources || []);
 
-    return {
+    const promptPayload = {
         combinedMessages,
         debugMessages,
         gameState,
         contextSources,
         playerStateSummary: playerStateSnapshot.meta,
     };
+
+    if (options.includePromptMetrics) {
+        promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
+            promptBuildDurationMs: performance.now() - promptBuildStartedAt,
+            ragDurationMs,
+            components: {
+                systemInstructions: systemMessage.content,
+                rag: [
+                    knowledgeSummary ? `DSPACE knowledge base:\n${knowledgeSummary}` : '',
+                    docsRagPayload.excerptsText || '',
+                ],
+                playerState: playerStateMessage?.content || '',
+                chatHistory: normalizedMessages
+                    .slice(
+                        0,
+                        latestUserMessage
+                            ? normalizedMessages.lastIndexOf(latestUserMessage)
+                            : undefined
+                    )
+                    .map((message) => message.content || ''),
+                latestUserMessage: latestUserMessage?.content || '',
+            },
+        });
+    }
+
+    return promptPayload;
 };
 
 export const GPT5Chat = async (messages, options = {}) => {
