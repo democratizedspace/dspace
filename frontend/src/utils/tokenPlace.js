@@ -13,6 +13,12 @@ import {
     createTokenPlaceHttpError,
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
+export {
+    estimateTokenPlaceContext,
+    TOKEN_PLACE_CONTEXT_ESTIMATOR_VERSION,
+    TOKEN_PLACE_CONTEXT_TIER_PROFILES,
+    TOKEN_PLACE_DEFAULT_OUTPUT_TOKEN_RESERVATION,
+} from './tokenPlaceContextEstimator.js';
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
