@@ -101,14 +101,20 @@ describe('token.place context estimator', () => {
     });
 
     test('preserves boundary policy: 8K only when total estimate fits 8,192', () => {
-        const near8k = classifyContent(repeat('a', 22000), {
-            reservedOutputTokens: 1,
-            safetyMarginTokens: 0,
-        });
-        const above8k = classifyContent(repeat('a', 25000), {
-            reservedOutputTokens: 1,
-            safetyMarginTokens: 0,
-        });
+        const near8k = estimateTokenPlaceContextForSanitizedMessages(
+            [{ role: 'user', content: repeat('a', 22000) }],
+            {
+                reservedOutputTokens: 1,
+                safetyMarginTokens: 0,
+            }
+        );
+        const above8k = estimateTokenPlaceContextForSanitizedMessages(
+            [{ role: 'user', content: repeat('a', 25000) }],
+            {
+                reservedOutputTokens: 1,
+                safetyMarginTokens: 0,
+            }
+        );
         expect(near8k.estimatedTotalTokens).toBeLessThanOrEqual(8192);
         expect(near8k.selectedTier).toBe('8k-fast');
         expect(above8k.estimatedTotalTokens).toBeGreaterThan(8192);

@@ -78,7 +78,7 @@ route to `8k-fast`; full-fat prompts may require `64k-full`.
 
 ## Phase 0 estimator implementation
 
-P7 adds a deterministic browser-side estimator in
+The Phase 0 token.place context-tier work adds a deterministic browser-side estimator in
 `frontend/src/utils/tokenPlaceContextEstimator.js`. It is a conservative heuristic, not an exact
 Llama tokenizer:
 

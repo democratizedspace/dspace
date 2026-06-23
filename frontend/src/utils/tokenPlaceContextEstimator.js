@@ -1,5 +1,7 @@
 import { sanitizeTokenPlaceMessages } from './tokenPlaceMessages.js';
 
+// Bump this version string whenever any estimation constant or formula below changes so
+// callers, benchmarks, and tests can detect heuristic drift.
 export const TOKEN_PLACE_CONTEXT_ESTIMATOR_VERSION = 'dspace-token-context-estimator-v1';
 export const TOKEN_PLACE_CONTEXT_TIERS = Object.freeze({
     '8k-fast': Object.freeze({ id: '8k-fast', totalContextTokens: 8_192 }),
