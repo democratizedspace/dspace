@@ -319,11 +319,11 @@ DSPACE should produce a deterministic summary that never contains user content:
     }
   ],
   "estimate": {
-    "promptTokens": 6100,
+    "estimatedPromptTokens": 6100,
     "reservedOutputTokens": 1024,
     "chatTemplateOverheadTokens": 256,
     "safetyMarginTokens": 768,
-    "estimatedTotalContextTokens": 7892
+    "estimatedTotalContextUse": 7892
   },
   "classification": {
     "selectedTier": "8k-fast",
