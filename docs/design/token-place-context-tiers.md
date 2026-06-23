@@ -54,11 +54,11 @@ state, and chat history.
 
 Current DSPACE API v1 message shaping limits are:
 
-| Limit | Current value | Notes |
-| --- | ---: | --- |
-| Maximum API v1 messages | 64 | Sanitized before encryption. |
-| Maximum characters per message content | 32,768 | Long messages are chunked or excluded by current shaping. |
-| Maximum total message-content characters | 131,072 | Across all API v1 message `content` fields. |
+| Limit                                    | Current value | Notes                                                     |
+| ---------------------------------------- | ------------: | --------------------------------------------------------- |
+| Maximum API v1 messages                  |            64 | Sanitized before encryption.                              |
+| Maximum characters per message content   |        32,768 | Long messages are chunked or excluded by current shaping. |
+| Maximum total message-content characters |       131,072 | Across all API v1 message `content` fields.               |
 
 The 131,072-character ceiling is roughly 32K tokens under the common four-characters-per-token
 heuristic. That is only a rough browser-side estimate. It is not an exact tokenizer result, does not
@@ -68,10 +68,10 @@ may also exceed a 64K runtime after exact tokenization and output reservation.
 
 Initial token.place service profiles are expected to be:
 
-| Tier ID | Total context tokens | Intended use |
-| --- | ---: | --- |
-| `8k-fast` | 8,192 | Small, low-latency requests; token-lite should normally fit here. |
-| `64k-full` | 65,536 | Full-fat DSPACE prompts and RAG-heavy requests. |
+| Tier ID    | Total context tokens | Intended use                                                      |
+| ---------- | -------------------: | ----------------------------------------------------------------- |
+| `8k-fast`  |                8,192 | Small, low-latency requests; token-lite should normally fit here. |
+| `64k-full` |               65,536 | Full-fat DSPACE prompts and RAG-heavy requests.                   |
 
 DSPACE should prefer the smallest tier likely to satisfy the request. token-lite should normally
 route to `8k-fast`; full-fat prompts may require `64k-full`.
@@ -149,15 +149,15 @@ DSPACE should capture a deterministic prompt summary for token-lite and full-fat
 - UTF-8 byte count per component and total message content.
 - Conservative estimated tokens per component and total.
 - Component-level contribution, for example:
-  - base system instructions;
-  - persona or NPC instructions;
-  - docs-RAG excerpts;
-  - player state;
-  - chat history;
-  - latest user turn;
-  - chat-template overhead estimate;
-  - reserved output tokens;
-  - safety margin.
+    - base system instructions;
+    - persona or NPC instructions;
+    - docs-RAG excerpts;
+    - player state;
+    - chat history;
+    - latest user turn;
+    - chat-template overhead estimate;
+    - reserved output tokens;
+    - safety margin.
 - Prompt-build time.
 - RAG lookup time.
 - Encryption time.
@@ -168,14 +168,14 @@ DSPACE should capture a deterministic prompt summary for token-lite and full-fat
 
 Representative benchmark scenarios:
 
-| Scenario | Purpose |
-| --- | --- |
-| token-lite baseline | Confirms small prompt behavior and `8k-fast` fit. |
-| Minimal new-game state | Measures a fresh full-fat chat with little save data. |
-| Typical mid-game state | Represents common player state, inventory, quests, and docs-RAG. |
-| RAG-heavy state | Exercises large docs excerpts and source merging. |
-| Long chat history | Exercises accumulated user/assistant messages. |
-| Large player-state payload | Exercises save snapshots, inventory, completed quests, and process state. |
+| Scenario                          | Purpose                                                                                 |
+| --------------------------------- | --------------------------------------------------------------------------------------- |
+| token-lite baseline               | Confirms small prompt behavior and `8k-fast` fit.                                       |
+| Minimal new-game state            | Measures a fresh full-fat chat with little save data.                                   |
+| Typical mid-game state            | Represents common player state, inventory, quests, and docs-RAG.                        |
+| RAG-heavy state                   | Exercises large docs excerpts and source merging.                                       |
+| Long chat history                 | Exercises accumulated user/assistant messages.                                          |
+| Large player-state payload        | Exercises save snapshots, inventory, completed quests, and process state.               |
 | Near-DSPACE API character ceiling | Exercises current 64-message, 32,768-character, and 131,072-total-character boundaries. |
 
 Benchmark outputs should be local artifacts that are safe to inspect and easy to delete:
@@ -193,10 +193,10 @@ Goal: ship predictable tier routing with exactly one warmed runtime per operator
 
 Initial physical target mapping:
 
-| Hardware | Target tier | Notes |
-| --- | --- | --- |
-| Mac Mini M4 Pro with 24 GB unified memory | `8k-fast` | Small, fast requests and token-lite. |
-| Windows PC with RTX 4090 24 GB VRAM and 128 GB DDR5 | `64k-full` | Full-fat prompts and larger context. |
+| Hardware                                            | Target tier | Notes                                |
+| --------------------------------------------------- | ----------- | ------------------------------------ |
+| Mac Mini M4 Pro with 24 GB unified memory           | `8k-fast`   | Small, fast requests and token-lite. |
+| Windows PC with RTX 4090 24 GB VRAM and 128 GB DDR5 | `64k-full`  | Full-fat prompts and larger context. |
 
 Operational constraints:
 
@@ -295,52 +295,52 @@ DSPACE should produce a deterministic summary that never contains user content:
 
 ```json
 {
-  "schemaVersion": 1,
-  "client": "dspace",
-  "promptMode": "full-fat",
-  "model": "llama-3.1-8b-instruct",
-  "messageCount": 12,
-  "contentChars": 18420,
-  "contentUtf8Bytes": 19105,
-  "components": [
-    {
-      "id": "system",
-      "messageCount": 1,
-      "contentChars": 3200,
-      "contentUtf8Bytes": 3200,
-      "estimatedTokens": 900
+    "schemaVersion": 1,
+    "client": "dspace",
+    "promptMode": "full-fat",
+    "model": "llama-3.1-8b-instruct",
+    "messageCount": 12,
+    "contentChars": 18420,
+    "contentUtf8Bytes": 19105,
+    "components": [
+        {
+            "id": "system",
+            "messageCount": 1,
+            "contentChars": 3200,
+            "contentUtf8Bytes": 3200,
+            "estimatedTokens": 900
+        },
+        {
+            "id": "docs_rag",
+            "messageCount": 3,
+            "contentChars": 7200,
+            "contentUtf8Bytes": 7390,
+            "estimatedTokens": 2100
+        }
+    ],
+    "estimate": {
+        "estimatedPromptTokens": 6100,
+        "reservedOutputTokens": 1024,
+        "chatTemplateOverheadTokens": 256,
+        "safetyMarginTokens": 768,
+        "estimatedTotalContextUse": 7892
     },
-    {
-      "id": "docs_rag",
-      "messageCount": 3,
-      "contentChars": 7200,
-      "contentUtf8Bytes": 7390,
-      "estimatedTokens": 2100
+    "classification": {
+        "selectedTier": "8k-fast",
+        "estimatedPromptTokens": 6100,
+        "reservedOutputTokens": 1024,
+        "safetyMarginTokens": 768,
+        "estimatedTotalContextUse": 7892,
+        "overLimit": false,
+        "reason": "fits"
+    },
+    "timingMs": {
+        "promptBuild": 42,
+        "rag": 18,
+        "encryption": 0,
+        "queueRetrieval": 0,
+        "endToEnd": 0
     }
-  ],
-  "estimate": {
-    "estimatedPromptTokens": 6100,
-    "reservedOutputTokens": 1024,
-    "chatTemplateOverheadTokens": 256,
-    "safetyMarginTokens": 768,
-    "estimatedTotalContextUse": 7892
-  },
-  "classification": {
-    "selectedTier": "8k-fast",
-    "estimatedPromptTokens": 6100,
-    "reservedOutputTokens": 1024,
-    "safetyMarginTokens": 768,
-    "estimatedTotalContextUse": 7892,
-    "overLimit": false,
-    "reason": "fits"
-  },
-  "timingMs": {
-    "promptBuild": 42,
-    "rag": 18,
-    "encryption": 0,
-    "queueRetrieval": 0,
-    "endToEnd": 0
-  }
 }
 ```
 
@@ -369,13 +369,13 @@ estimatedTotalContextUse =
 
 Suggested initial assumptions:
 
-| Parameter | Initial value | Rationale |
-| --- | ---: | --- |
-| `charsPerTokenAssumption` | 4 | Common rough heuristic. |
-| `bytesPerTokenAssumption` | 4 | Helps account for non-ASCII UTF-8 expansion. |
-| `chatTemplateOverheadTokens` | `messageCount * 8 + 64` | Conservative placeholder until exact tokenizer fixtures exist. |
-| `reservedOutputTokens` | 1,024 for full-fat, 512 for token-lite | Prevents consuming the full context with prompt tokens. |
-| `safetyMarginTokens` | max(512, ceil(estimatedPromptTokens * 0.10)) | Buffers tokenizer mismatch and template overhead. |
+| Parameter                    |                                 Initial value | Rationale                                                      |
+| ---------------------------- | --------------------------------------------: | -------------------------------------------------------------- |
+| `charsPerTokenAssumption`    |                                             4 | Common rough heuristic.                                        |
+| `bytesPerTokenAssumption`    |                                             4 | Helps account for non-ASCII UTF-8 expansion.                   |
+| `chatTemplateOverheadTokens` |                       `messageCount * 8 + 64` | Conservative placeholder until exact tokenizer fixtures exist. |
+| `reservedOutputTokens`       |        1,024 for full-fat, 512 for token-lite | Prevents consuming the full context with prompt tokens.        |
+| `safetyMarginTokens`         | max(512, ceil(estimatedPromptTokens \* 0.10)) | Buffers tokenizer mismatch and template overhead.              |
 
 The exact constants should be calibrated against compute-side tokenizer measurements from Phase 0
 and Phase 3. DSPACE should treat estimates near a boundary as belonging to the larger tier.
@@ -400,13 +400,13 @@ type TierClassification = {
 
 ### Tier-selection decision table
 
-| Estimated total context use | Selected tier | DSPACE behavior |
-| ---: | --- | --- |
-| `<= 8,192` and not boundary-risky | `8k-fast` | Request an `8k-fast` node. |
-| `> 8,192` and `<= 65,536` | `64k-full` | Request a `64k-full` node. |
-| Boundary-risky near 8K after safety margin | `64k-full` | Prefer larger tier to avoid likely overflow. |
-| `> 65,536` | none | Surface a user-visible over-limit state before dispatch, unless a future truncation design exists. |
-| Invalid or empty prompt after shaping | none | Use existing validation/error handling; do not dispatch malformed API v1. |
+|                Estimated total context use | Selected tier | DSPACE behavior                                                                                    |
+| -----------------------------------------: | ------------- | -------------------------------------------------------------------------------------------------- |
+|          `<= 8,192` and not boundary-risky | `8k-fast`     | Request an `8k-fast` node.                                                                         |
+|                  `> 8,192` and `<= 65,536` | `64k-full`    | Request a `64k-full` node.                                                                         |
+| Boundary-risky near 8K after safety margin | `64k-full`    | Prefer larger tier to avoid likely overflow.                                                       |
+|                                 `> 65,536` | none          | Surface a user-visible over-limit state before dispatch, unless a future truncation design exists. |
+|      Invalid or empty prompt after shaping | none          | Use existing validation/error handling; do not dispatch malformed API v1.                          |
 
 ### Request routing and encrypted request contents
 
@@ -437,10 +437,10 @@ mismatch after decryption without exposing details to the relay.
 
 DSPACE should set context-aware polling deadlines:
 
-| Tier | Suggested initial deadline | Notes |
-| --- | ---: | --- |
-| `8k-fast` | 5,000 ms | Small prompts should fail fast when the node is unavailable. |
-| `64k-full` | 30,000 ms | Larger prefill and queue times are expected; tune from Phase 0 measurements. |
+| Tier       | Suggested initial deadline | Notes                                                                        |
+| ---------- | -------------------------: | ---------------------------------------------------------------------------- |
+| `8k-fast`  |                   5,000 ms | Small prompts should fail fast when the node is unavailable.                 |
+| `64k-full` |                  30,000 ms | Larger prefill and queue times are expected; tune from Phase 0 measurements. |
 
 Retry policy:
 
@@ -482,67 +482,67 @@ must not be committed when they are generated from real play sessions.
 
 ```json
 {
-  "schemaVersion": 1,
-  "generatedAt": "2026-06-22T00:00:00.000Z",
-  "scenario": "typical-mid-game",
-  "source": "synthetic-fixture",
-  "client": {
-    "name": "dspace",
-    "build": "local"
-  },
-  "request": {
-    "promptMode": "full-fat",
-    "model": "llama-3.1-8b-instruct",
-    "messageCount": 12,
-    "contentChars": 18420,
-    "contentUtf8Bytes": 19105,
-    "componentCounts": [
-      {
-        "id": "player_state",
-        "messageCount": 1,
-        "contentChars": 5200,
-        "contentUtf8Bytes": 5400,
-        "estimatedTokens": 1500
-      }
-    ]
-  },
-  "classification": {
-    "selectedTier": "8k-fast",
-    "estimatedPromptTokens": 6100,
-    "reservedOutputTokens": 1024,
-    "safetyMarginTokens": 768,
-    "estimatedTotalContextUse": 7892,
-    "overLimit": false
-  },
-  "timingMs": {
-    "promptBuild": 42,
-    "rag": 18,
-    "encryption": 7,
-    "queueRetrieval": 1200,
-    "endToEnd": 1850
-  },
-  "result": {
-    "status": "success",
-    "safeErrorCode": null,
-    "retryCount": 0
-  }
+    "schemaVersion": 1,
+    "generatedAt": "2026-06-22T00:00:00.000Z",
+    "scenario": "typical-mid-game",
+    "source": "synthetic-fixture",
+    "client": {
+        "name": "dspace",
+        "build": "local"
+    },
+    "request": {
+        "promptMode": "full-fat",
+        "model": "llama-3.1-8b-instruct",
+        "messageCount": 12,
+        "contentChars": 18420,
+        "contentUtf8Bytes": 19105,
+        "componentCounts": [
+            {
+                "id": "player_state",
+                "messageCount": 1,
+                "contentChars": 5200,
+                "contentUtf8Bytes": 5400,
+                "estimatedTokens": 1500
+            }
+        ]
+    },
+    "classification": {
+        "selectedTier": "8k-fast",
+        "estimatedPromptTokens": 6100,
+        "reservedOutputTokens": 1024,
+        "safetyMarginTokens": 768,
+        "estimatedTotalContextUse": 7892,
+        "overLimit": false
+    },
+    "timingMs": {
+        "promptBuild": 42,
+        "rag": 18,
+        "encryption": 7,
+        "queueRetrieval": 1200,
+        "endToEnd": 1850
+    },
+    "result": {
+        "status": "success",
+        "safeErrorCode": null,
+        "retryCount": 0
+    }
 }
 ```
 
 ## Failure-mode table
 
-| Failure mode | Where detected | DSPACE behavior | Retry? | User-facing result |
-| --- | --- | --- | --- | --- |
-| Browser estimate exceeds all tiers | DSPACE estimator | Do not dispatch. | No | Explain that the request is too large. |
-| No node for selected tier | Relay selection | Surface capacity/unavailable state. | No automatic tier retry unless smaller tier was selected and larger tier is explicitly eligible. | Ask user to retry later. |
-| Exact context overflow on `8k-fast` | Compute after decrypt/tokenize | Decrypt structured overflow response and escalate once to `64k-full`. | Yes, once | Show escalation/progress state. |
-| Exact context overflow on `64k-full` | Compute after decrypt/tokenize | Stop. Do not truncate silently. | No | Explain that the request exceeds available context. |
-| Policy/content error | Compute/API v1 response | Preserve safe structured error summary. | No | Show policy/provider message. |
-| Network or relay timeout | Fetch/polling | Abort or surface timeout. | No | Show retry-later message. |
-| Malformed encrypted response | DSPACE validation | Reject response. | No | Show provider response error. |
-| Decryption failure | DSPACE decrypt step | Reject response; do not log plaintext/ciphertext. | No | Show secure response error. |
-| Rate limit or quota | Decrypted API v1 response | Preserve status/type/code safely. | No | Show capacity/quota message. |
-| General provider failure | Decrypted API v1 response | Preserve safe summary. | No | Show provider failure message. |
+| Failure mode                         | Where detected                 | DSPACE behavior                                                       | Retry?                                                                                           | User-facing result                                  |
+| ------------------------------------ | ------------------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
+| Browser estimate exceeds all tiers   | DSPACE estimator               | Do not dispatch.                                                      | No                                                                                               | Explain that the request is too large.              |
+| No node for selected tier            | Relay selection                | Surface capacity/unavailable state.                                   | No automatic tier retry unless smaller tier was selected and larger tier is explicitly eligible. | Ask user to retry later.                            |
+| Exact context overflow on `8k-fast`  | Compute after decrypt/tokenize | Decrypt structured overflow response and escalate once to `64k-full`. | Yes, once                                                                                        | Show escalation/progress state.                     |
+| Exact context overflow on `64k-full` | Compute after decrypt/tokenize | Stop. Do not truncate silently.                                       | No                                                                                               | Explain that the request exceeds available context. |
+| Policy/content error                 | Compute/API v1 response        | Preserve safe structured error summary.                               | No                                                                                               | Show policy/provider message.                       |
+| Network or relay timeout             | Fetch/polling                  | Abort or surface timeout.                                             | No                                                                                               | Show retry-later message.                           |
+| Malformed encrypted response         | DSPACE validation              | Reject response.                                                      | No                                                                                               | Show provider response error.                       |
+| Decryption failure                   | DSPACE decrypt step            | Reject response; do not log plaintext/ciphertext.                     | No                                                                                               | Show secure response error.                         |
+| Rate limit or quota                  | Decrypted API v1 response      | Preserve status/type/code safely.                                     | No                                                                                               | Show capacity/quota message.                        |
+| General provider failure             | Decrypted API v1 response      | Preserve safe summary.                                                | No                                                                                               | Show provider failure message.                      |
 
 ## Acceptance and testing strategy
 
@@ -627,3 +627,41 @@ Long-term issue themes beyond the initial implementation:
 - Speculative decoding where it improves non-streaming end-to-end latency without reducing output
   quality.
 - API v2 streaming as a separate future design, not part of this API v1 context-tier plan.
+
+## Implemented DSPACE browser estimator (P7)
+
+DSPACE now includes a deterministic browser-side estimator for the complete sanitized API v1
+message payload. The estimator is intentionally conservative and privacy-preserving:
+
+- It first applies the existing API v1 message shaping/sanitization rules, then estimates only from
+  the resulting `{ role, content }` messages.
+- It counts UTF-8 bytes with `TextEncoder` and converts bytes to prompt tokens with a conservative
+  bytes-per-token heuristic. This avoids JavaScript UTF-16 string-length undercounting for Unicode.
+- It adds fixed chat-template overhead plus per-message overhead so multi-message prompts are not
+  treated as raw text only.
+- It reserves 512 output tokens by default, matching the Phase 0 benchmark budget used for current
+  token.place/DSPACE chat planning.
+- It adds a documented 10% safety margin with a 256-token floor.
+- It never sends text to a tokenizer service and does not expose prompt content in benchmark output.
+- It does not silently truncate for tier classification; over-limit payloads return an explicit
+  `overLimit: true` result.
+
+The named profiles are:
+
+| Tier ID    | Total context tokens | Selection rule                                                                            |
+| ---------- | -------------------: | ----------------------------------------------------------------------------------------- |
+| `8k-fast`  |                8,192 | Selected only when estimated prompt tokens plus output reservation and safety margin fit. |
+| `64k-full` |               65,536 | Selected when the same total exceeds 8K but fits 64K.                                     |
+| over-limit |                  n/a | Returned when the estimated total exceeds 64K.                                            |
+
+Estimator results include `estimatedPromptTokens`, `reservedOutputTokens`,
+`safetyMarginTokens`, `estimatedTotalTokens`, `selectedTier`, `overLimit`, and an
+`estimatorVersion`. These values are currently wired only into focused tests and the local Phase 0
+benchmark report. They are not yet used for relay routing, server selection, retries, encryption
+envelopes, or UI provider behavior.
+
+The benchmark report continues to use synthetic repository-owned fixtures. It now records estimator
+output for each scenario and includes exact-token calibration fields. If a future lightweight
+Llama 3.1 development-only tokenizer hook is added, the same report can populate exact prompt
+tokens and calibration error; until then the calibration fields explicitly state that exact-token
+data is unavailable. Heuristic estimates must not be described as exact tokenizer counts.

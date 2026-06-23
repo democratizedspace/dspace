@@ -1351,3 +1351,95 @@ ${ragExcerpt.repeat(4000)}`,
         expect(serializedRequest).not.toMatch(/chat uses OpenAI/i);
     });
 });
+
+const {
+    classifyTokenPlaceContextTier,
+    estimateTokenPlacePromptTokens,
+    TOKEN_PLACE_CONTEXT_ESTIMATOR_VERSION,
+    TOKEN_PLACE_CONTEXT_TIERS,
+    TOKEN_PLACE_DEFAULT_RESERVED_OUTPUT_TOKENS,
+} = await import('../src/utils/tokenPlaceContextEstimator.js');
+
+const message = (content, role = 'user') => ({ role, content });
+const repeated = (text, chars) => text.repeat(Math.ceil(chars / text.length)).slice(0, chars);
+const classify = (content, options) => classifyTokenPlaceContextTier([message(content)], options);
+
+describe('token.place context estimator', () => {
+    test('exports named 8K and 64K profile constants', () => {
+        expect(TOKEN_PLACE_CONTEXT_TIERS['8k-fast'].totalContextTokens).toBe(8_192);
+        expect(TOKEN_PLACE_CONTEXT_TIERS['64k-full'].totalContextTokens).toBe(65_536);
+    });
+
+    test('classifies ASCII prose into 8k-fast', () => {
+        const result = classify('A short DSPACE chat prompt about launch readiness.');
+        expect(result.selectedTier).toBe('8k-fast');
+        expect(result.overLimit).toBe(false);
+    });
+
+    test('counts UTF-8 bytes for Unicode conservatively', () => {
+        const ascii = estimateTokenPlacePromptTokens([message('x'.repeat(100))]);
+        const unicode = estimateTokenPlacePromptTokens([message('🚀'.repeat(100))]);
+        expect(unicode).toBeGreaterThan(ascii);
+    });
+
+    test('classifies JSON payloads deterministically', () => {
+        const content = JSON.stringify({ inventory: ['solar-panel'], quests: { active: true } });
+        expect(classify(content)).toMatchObject({ selectedTier: '8k-fast', overLimit: false });
+    });
+
+    test('classifies source code payloads', () => {
+        const content = repeated('function launch(step) { return step + 1; }\n', 12_000);
+        expect(classify(content).selectedTier).toBe('8k-fast');
+    });
+
+    test('classifies whitespace-heavy content using bytes rather than trimmed string length alone', () => {
+        const content = `start\n${' \n\t'.repeat(4000)}end`;
+        const result = classify(content);
+        expect(result.estimatedPromptTokens).toBeGreaterThan(4_000);
+        expect(result.selectedTier).toBe('8k-fast');
+    });
+
+    test('classifies RAG-heavy content into 64k-full when it exceeds 8K', () => {
+        const content = repeated(
+            'DSPACE docs RAG excerpt with process and inventory gates. ',
+            30_000
+        );
+        const result = classify(content);
+        expect(result.selectedTier).toBe('64k-full');
+        expect(result.estimatedTotalTokens).toBeGreaterThan(8_192);
+    });
+
+    test('classifies 131,072-character payloads without truncating in the estimator', () => {
+        const result = classify('a'.repeat(131_072));
+        expect(result.selectedTier).toBe('64k-full');
+        expect(result.overLimit).toBe(false);
+    });
+
+    test('honors output-token reservation', () => {
+        const payload = 'a'.repeat(21_000);
+        expect(classify(payload, { reservedOutputTokens: 0 }).selectedTier).toBe('8k-fast');
+        expect(classify(payload, { reservedOutputTokens: 4_000 }).selectedTier).toBe('64k-full');
+    });
+
+    test('returns deterministic estimator versioning', () => {
+        const first = classify('version check');
+        const second = classify('version check');
+        expect(first.estimatorVersion).toBe(TOKEN_PLACE_CONTEXT_ESTIMATOR_VERSION);
+        expect(second).toEqual(first);
+    });
+
+    test('returns explicit over-limit behavior', () => {
+        const result = classify('🚀'.repeat(180_000));
+        expect(result.selectedTier).toBeNull();
+        expect(result.overLimit).toBe(true);
+        expect(result.estimatedTotalTokens).toBeGreaterThan(
+            TOKEN_PLACE_CONTEXT_TIERS['64k-full'].totalContextTokens
+        );
+    });
+
+    test('defaults to current expected output budget', () => {
+        expect(classify('hello').reservedOutputTokens).toBe(
+            TOKEN_PLACE_DEFAULT_RESERVED_OUTPUT_TOKENS
+        );
+    });
+});
