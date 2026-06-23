@@ -97,9 +97,12 @@ describe('buildPromptMetrics', () => {
 
     const { buildChatPrompt } = await import('../frontend/src/utils/openAI.js');
     const userMessage = 'Where should I go next?';
-    const instrumented = await buildChatPrompt([{ role: 'user', content: userMessage }], {
-      includePromptMetrics: true,
-    });
+    const instrumented = await buildChatPrompt(
+      [{ role: 'user', content: userMessage }],
+      {
+        includePromptMetrics: true,
+      }
+    );
     const ragMessages = instrumented.combinedMessages.filter((message) =>
       message.content.includes('DSPACE knowledge base:')
     );
@@ -114,8 +117,53 @@ describe('buildPromptMetrics', () => {
     expect(instrumented.promptMetrics.componentTotals.rag.characters).toBe(
       ragMessages[0].content.length
     );
-    expect(JSON.stringify(instrumented.promptMetrics)).not.toContain(userMessage);
-    expect(JSON.stringify(instrumented.promptMetrics)).not.toContain(docsExcerpt);
+    expect(JSON.stringify(instrumented.promptMetrics)).not.toContain(
+      userMessage
+    );
+    expect(JSON.stringify(instrumented.promptMetrics)).not.toContain(
+      docsExcerpt
+    );
+  });
+
+  test('buildChatPrompt counts assistant messages after the latest user as chat history', async () => {
+    const { buildChatPrompt } = await import('../frontend/src/utils/openAI.js');
+    const latestUser = { role: 'user', content: 'latest repeated prompt' };
+    const trailingAssistant = {
+      role: 'assistant',
+      content: 'assistant after latest user',
+    };
+    const instrumented = await buildChatPrompt(
+      [
+        { role: 'user', content: 'earlier prompt' },
+        latestUser,
+        trailingAssistant,
+      ],
+      { includePromptMetrics: true }
+    );
+
+    const latestIndex = instrumented.combinedMessages.lastIndexOf(latestUser);
+    const assistantIndex =
+      instrumented.combinedMessages.indexOf(trailingAssistant);
+    const earlierIndex = instrumented.combinedMessages.findIndex(
+      (message) => message.content === 'earlier prompt'
+    );
+    const latestSummary = instrumented.promptMetrics.perMessage[latestIndex];
+    const assistantSummary =
+      instrumented.promptMetrics.perMessage[assistantIndex];
+    const earlierSummary = instrumented.promptMetrics.perMessage[earlierIndex];
+
+    expect(
+      instrumented.promptMetrics.componentTotals.latestUserMessage.characters
+    ).toBe(latestSummary.characters);
+    expect(
+      instrumented.promptMetrics.componentTotals.chatHistory.characters
+    ).toBe(earlierSummary.characters + assistantSummary.characters);
+    expect(JSON.stringify(instrumented.promptMetrics)).not.toContain(
+      latestUser.content
+    );
+    expect(JSON.stringify(instrumented.promptMetrics)).not.toContain(
+      trailingAssistant.content
+    );
   });
 
   test('buildChatPrompt leaves instrumentation disabled unless requested', async () => {

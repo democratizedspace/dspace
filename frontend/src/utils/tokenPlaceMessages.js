@@ -83,7 +83,7 @@ const getTokenPlaceMessagePriority = (message, latestUserIndex, requiredSystemMe
     return 4;
 };
 
-export const sanitizeTokenPlaceMessages = (messages = []) => {
+export const sanitizeTokenPlaceMessagesWithMetadata = (messages = []) => {
     const sourceMessages = Array.isArray(messages) ? messages : [];
     const candidates = sourceMessages.flatMap(splitTokenPlaceMessage);
     const latestUserIndex = candidates.reduce(
@@ -113,7 +113,20 @@ export const sanitizeTokenPlaceMessages = (messages = []) => {
 
     const shapedMessages = selected
         .sort((a, b) => a.originalIndex - b.originalIndex || a.chunkIndex - b.chunkIndex)
-        .map(({ role, content }) => ({ role, content }));
+        .map(({ role, content, originalIndex, chunkIndex }) => ({
+            role,
+            content,
+            originalIndex,
+            chunkIndex,
+        }));
 
-    return shapedMessages.length ? shapedMessages : [{ ...TOKEN_PLACE_API_V1_FALLBACK_MESSAGE }];
+    return shapedMessages.length
+        ? shapedMessages
+        : [{ ...TOKEN_PLACE_API_V1_FALLBACK_MESSAGE, originalIndex: -1, chunkIndex: 0 }];
 };
+
+export const sanitizeTokenPlaceMessages = (messages = []) =>
+    sanitizeTokenPlaceMessagesWithMetadata(messages).map(({ role, content }) => ({
+        role,
+        content,
+    }));

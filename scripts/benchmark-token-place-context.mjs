@@ -4,7 +4,7 @@ import path from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { buildPromptMetrics } from '../frontend/src/utils/promptMetrics.js';
 import {
-  sanitizeTokenPlaceMessages,
+  sanitizeTokenPlaceMessagesWithMetadata,
   TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
 } from '../frontend/src/utils/tokenPlaceMessages.js';
 
@@ -48,16 +48,21 @@ const scenario = (
     ...history,
     { role: 'user', content: latestContent },
   ];
+  const systemIndex = 0;
+  const ragIndex = ragContent ? 1 : -1;
+  const playerStateIndex = stateContent ? 1 + (ragContent ? 1 : 0) : -1;
+  const historyStartIndex = 1 + (ragContent ? 1 : 0) + (stateContent ? 1 : 0);
+  const latestUserMessageIndex = combinedMessages.length - 1;
   return {
     id,
     description,
     combinedMessages,
-    components: {
-      systemInstructions: systemContent,
-      rag: ragContent,
-      playerState: stateContent,
-      chatHistory: history.map((m) => m.content),
-      latestUserMessage: latestContent,
+    componentSourceIndexes: {
+      systemInstructions: systemIndex,
+      rag: ragIndex,
+      playerState: playerStateIndex,
+      chatHistory: history.map((_, index) => historyStartIndex + index),
+      latestUserMessage: latestUserMessageIndex,
     },
   };
 };
@@ -132,17 +137,71 @@ const tierReadiness = (metrics) => {
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 await mkdir(OUTPUT_DIR, { recursive: true });
 
+const indexesForShapedMessages = (shapedMessages, sourceIndexes) => {
+  const sourceIndexSet = new Set(
+    (Array.isArray(sourceIndexes) ? sourceIndexes : [sourceIndexes]).filter(
+      Number.isInteger
+    )
+  );
+  return shapedMessages
+    .map((message, index) =>
+      sourceIndexSet.has(message.originalIndex) ? index : null
+    )
+    .filter(Number.isInteger);
+};
+
+const componentIndexesForShapedMessages = (
+  shapedMessages,
+  componentSourceIndexes
+) =>
+  Object.fromEntries(
+    Object.entries(componentSourceIndexes).map(([name, sourceIndexes]) => [
+      name,
+      indexesForShapedMessages(shapedMessages, sourceIndexes),
+    ])
+  );
+
+const componentTotalsSum = (componentTotals, field) =>
+  Object.values(componentTotals).reduce((sum, total) => sum + total[field], 0);
+
 const results = scenarios.map((item) => {
   const startedAt = performance.now();
-  const tokenPlaceMessages = sanitizeTokenPlaceMessages(item.combinedMessages);
+  const shapedMessagesWithMetadata = sanitizeTokenPlaceMessagesWithMetadata(
+    item.combinedMessages
+  );
+  const tokenPlaceMessages = shapedMessagesWithMetadata.map(
+    ({ role, content }) => ({
+      role,
+      content,
+    })
+  );
   const metrics = buildPromptMetrics(
     { combinedMessages: tokenPlaceMessages },
     {
-      components: item.components,
+      componentMessageIndexes: componentIndexesForShapedMessages(
+        shapedMessagesWithMetadata,
+        item.componentSourceIndexes
+      ),
       promptBuildDurationMs: performance.now() - startedAt,
-      ragDurationMs: item.components.rag ? 0 : null,
+      ragDurationMs: item.componentSourceIndexes.rag === -1 ? null : 0,
     }
   );
+  if (
+    componentTotalsSum(metrics.componentTotals, 'characters') !==
+    metrics.totalCharacters
+  ) {
+    throw new Error(
+      `Component character totals do not sum to payload total for ${item.id}`
+    );
+  }
+  if (
+    componentTotalsSum(metrics.componentTotals, 'utf8Bytes') !==
+    metrics.totalUtf8Bytes
+  ) {
+    throw new Error(
+      `Component UTF-8 byte totals do not sum to payload total for ${item.id}`
+    );
+  }
   return {
     id: item.id,
     description: item.description,

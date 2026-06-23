@@ -727,20 +727,18 @@ export const buildChatPrompt = async (messages, options = {}) => {
         const playerStateMessageIndex = indexOfMessage(playerStateMessage);
         const knowledgeMessageIndex = indexOfMessage(knowledgeMessage);
         const docsRagMessageIndex = indexOfMessage(docsRagMessage);
-        const latestUserMessageIndex = indexOfMessage(latestUserMessage);
-        const chatHistoryIndexes =
-            latestUserMessageIndex === -1
-                ? []
-                : combinedMessages
-                      .map((message, index) => ({ message, index }))
-                      .filter(
-                          ({ message, index }) =>
-                              index > systemMessageIndex &&
-                              index < latestUserMessageIndex &&
-                              normalizedMessages.includes(message) &&
-                              message.role !== 'system'
-                      )
-                      .map(({ index }) => index);
+        const latestUserMessageIndex = latestUserMessage
+            ? combinedMessages.lastIndexOf(latestUserMessage)
+            : -1;
+        const chatHistoryIndexes = combinedMessages
+            .map((message, index) => ({ message, index }))
+            .filter(
+                ({ message, index }) =>
+                    index !== latestUserMessageIndex &&
+                    normalizedMessages.includes(message) &&
+                    message.role !== 'system'
+            )
+            .map(({ index }) => index);
         const ragIndexes = [knowledgeMessageIndex, docsRagMessageIndex].filter(
             (index) => index !== -1
         );
