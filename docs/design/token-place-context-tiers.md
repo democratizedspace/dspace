@@ -76,6 +76,39 @@ Initial token.place service profiles are expected to be:
 DSPACE should prefer the smallest tier likely to satisfy the request. token-lite should normally
 route to `8k-fast`; full-fat prompts may require `64k-full`.
 
+## Phase 0 estimator implementation
+
+P7 adds a deterministic browser-side estimator in
+`frontend/src/utils/tokenPlaceContextEstimator.js`. It is a conservative heuristic, not an exact
+Llama tokenizer:
+
+- It operates on the complete sanitized token.place API v1 message payload, after DSPACE's existing
+  message shaping has normalized roles, chunked long system messages, and enforced API v1 message
+  limits.
+- It counts UTF-8 bytes for message roles and content with `TextEncoder`; it does not rely on
+  JavaScript UTF-16 string length alone.
+- It estimates prompt tokens as `ceil(payloadUtf8Bytes / 3)` plus fixed chat-template overhead
+  (`16` tokens per chat plus `8` tokens per message). The byte divisor is intentionally more
+  conservative than the common four-characters-per-token rule and remains fully offline.
+- It reserves `512` output tokens by default, matching the current DSPACE/token.place expected
+  response budget used by the context benchmark.
+- It adds a documented safety margin of the larger of `256` tokens or `8%` of estimated prompt
+  tokens. Callers may override the output reservation or safety-margin tokens in tests and future
+  routing code.
+- It returns a structured result with estimated prompt tokens, reserved output tokens,
+  safety-margin tokens, estimated total tokens, selected tier, over-limit status, payload UTF-8
+  bytes, message count, per-message byte summaries, and the deterministic estimator version.
+
+Tier selection is pure and deterministic: select `8k-fast` only when prompt estimate plus output
+reservation plus safety margin fits `8,192`; otherwise select `64k-full` only when it fits `65,536`;
+otherwise return `selectedTier: null` and `overLimit: true`. The estimator never truncates and never
+sends prompt text to a server.
+
+The Phase 0 benchmark now includes estimator output for synthetic fixtures and a calibration section.
+When a lightweight development-only exact Llama 3.1 tokenizer hook is available, the benchmark can
+record prompt-token error; otherwise it reports calibration as unavailable and keeps production
+estimation explicitly heuristic.
+
 ## Current-state architecture
 
 ```mermaid
