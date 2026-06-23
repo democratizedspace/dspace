@@ -11,7 +11,8 @@ Those generated reports are local artifacts and should not be committed.
 
 ## Metrics
 
-- `messageCount` and `roleCounts`: API-style chat message counts by role.
+- `sourceMessageCount`: synthetic messages before token.place request shaping.
+- `tokenPlaceMessageCount`, `messageCount`, and `roleCounts`: API-style chat message counts after `sanitizeTokenPlaceMessages` applies token.place chunking and request caps.
 - `totalCharacters`: JavaScript UTF-16 string length across message content.
 - `totalUtf8Bytes`: UTF-8 byte length across message content.
 - `perMessage`: content-free size summaries for each message.
@@ -28,11 +29,14 @@ as benchmark-only data.
 ## Comparing 8K and 64K readiness
 
 Use the generated report to identify dominant context components and compare the heuristic token
-count with 8,192-token and 65,536-token tiers. A scenario that does not fit 8K but fits 64K is a
-candidate for full-fat routing in later phases.
+count with 8,192-token and 65,536-token tiers. The readiness flags reserve 640 tokens for
+chat-template overhead and assistant output before marking a tier as fitting. A scenario that does
+not fit 8K but fits 64K is a candidate for full-fat routing in later phases. The report also flags
+whether the token.place-shaped request remains under the 131,072-character request ceiling.
 
 ## Token caveat
 
 Character counts, byte counts, and whitespace are not exact model tokens. Tokenizers split text by
-model-specific rules and chat templates add overhead. The benchmark's heuristic token estimate is
-only a local planning signal until compute-side exact token admission is available.
+model-specific rules and chat templates add overhead. The benchmark's heuristic token estimate,
+reserved-token buffer, and token.place request shaping are only local planning signals until
+compute-side exact token admission is available.

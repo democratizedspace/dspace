@@ -3,9 +3,16 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { buildPromptMetrics } from '../frontend/src/utils/promptMetrics.js';
+import {
+  sanitizeTokenPlaceMessages,
+  TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
+} from '../frontend/src/utils/tokenPlaceMessages.js';
 
 const OUTPUT_DIR = 'artifacts/benchmarks/token-place-context';
-const CEILING = 131_072;
+const RESERVED_OUTPUT_TOKENS = 512;
+const CHAT_TEMPLATE_OVERHEAD_TOKENS = 128;
+const TOKEN_BUDGET_BUFFER =
+  RESERVED_OUTPUT_TOKENS + CHAT_TEMPLATE_OVERHEAD_TOKENS;
 const repeat = (label, length) =>
   label.repeat(Math.ceil(length / label.length)).slice(0, length);
 
@@ -98,7 +105,7 @@ const scenarios = [
   }),
   scenario(
     'near-token-place-ceiling',
-    'Synthetic payload near the 131,072-character request ceiling.',
+    `Synthetic payload near the ${TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS.toLocaleString('en-US')}-character request ceiling.`,
     {
       system: 2000,
       rag: 44000,
@@ -110,26 +117,37 @@ const scenarios = [
 ];
 
 const estimateTokens = (characters) => Math.ceil(characters / 4);
-const tierReadiness = (metrics) => ({
-  heuristicTokens: estimateTokens(metrics.totalCharacters),
-  fits8kHeuristic: estimateTokens(metrics.totalCharacters) <= 8192,
-  fits64kHeuristic: estimateTokens(metrics.totalCharacters) <= 65536,
-});
+const tierReadiness = (metrics) => {
+  const heuristicTokens = estimateTokens(metrics.totalCharacters);
+  return {
+    heuristicTokens,
+    reservedTokens: TOKEN_BUDGET_BUFFER,
+    fits8kHeuristic: heuristicTokens + TOKEN_BUDGET_BUFFER <= 8192,
+    fits64kHeuristic: heuristicTokens + TOKEN_BUDGET_BUFFER <= 65536,
+    fitsTokenPlaceCharCeiling:
+      metrics.totalCharacters <= TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
+  };
+};
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 await mkdir(OUTPUT_DIR, { recursive: true });
 
 const results = scenarios.map((item) => {
   const startedAt = performance.now();
-  const metrics = buildPromptMetrics(item, {
-    components: item.components,
-    promptBuildDurationMs: 0,
-    ragDurationMs: item.components.rag ? 0 : null,
-  });
-  metrics.promptBuildDurationMs = performance.now() - startedAt;
+  const tokenPlaceMessages = sanitizeTokenPlaceMessages(item.combinedMessages);
+  const metrics = buildPromptMetrics(
+    { combinedMessages: tokenPlaceMessages },
+    {
+      components: item.components,
+      promptBuildDurationMs: performance.now() - startedAt,
+      ragDurationMs: item.components.rag ? 0 : null,
+    }
+  );
   return {
     id: item.id,
     description: item.description,
+    sourceMessageCount: item.combinedMessages.length,
+    tokenPlaceMessageCount: tokenPlaceMessages.length,
     metrics,
     tierReadiness: tierReadiness(metrics),
     exactTokenizer: {
@@ -152,17 +170,17 @@ const markdown = [
   '',
   `Generated: ${json.generatedAt}`,
   '',
-  '| Scenario | Messages | Chars | UTF-8 bytes | Heuristic tokens | 8K | 64K | Dominant component |',
-  '| --- | ---: | ---: | ---: | ---: | --- | --- | --- |',
+  '| Scenario | Source messages | token.place messages | Chars | UTF-8 bytes | Heuristic tokens | Reserved tokens | 8K | 64K | Char ceiling | Dominant component |',
+  '| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- | --- | --- |',
   ...results.map((result) => {
     const entries = Object.entries(result.metrics.componentTotals);
     const [dominant] = entries.sort(
       (a, b) => b[1].characters - a[1].characters
     )[0];
-    return `| ${result.id} | ${result.metrics.messageCount} | ${result.metrics.totalCharacters} | ${result.metrics.totalUtf8Bytes} | ${result.tierReadiness.heuristicTokens} | ${result.tierReadiness.fits8kHeuristic ? 'yes' : 'no'} | ${result.tierReadiness.fits64kHeuristic ? 'yes' : 'no'} | ${dominant} |`;
+    return `| ${result.id} | ${result.sourceMessageCount} | ${result.tokenPlaceMessageCount} | ${result.metrics.totalCharacters} | ${result.metrics.totalUtf8Bytes} | ${result.tierReadiness.heuristicTokens} | ${result.tierReadiness.reservedTokens} | ${result.tierReadiness.fits8kHeuristic ? 'yes' : 'no'} | ${result.tierReadiness.fits64kHeuristic ? 'yes' : 'no'} | ${result.tierReadiness.fitsTokenPlaceCharCeiling ? 'yes' : 'no'} | ${dominant} |`;
   }),
   '',
-  'All values are content-free counts from synthetic fixtures. Token counts are four-characters-per-token heuristics, not exact model tokens.',
+  'All values are content-free counts from synthetic fixtures after token.place request shaping. Token counts are four-characters-per-token heuristics, not exact model tokens; tier fit reserves output and chat-template headroom.',
 ].join('\n');
 
 await writeFile(jsonPath, `${JSON.stringify(json, null, 2)}\n`);

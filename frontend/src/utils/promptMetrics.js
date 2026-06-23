@@ -1,10 +1,10 @@
-const utf8ByteLength = (value) => new TextEncoder().encode(String(value ?? '')).length;
+const textEncoder = new TextEncoder();
 
 const summarizeText = (value) => {
     const text = String(value ?? '');
     return {
         characters: text.length,
-        utf8Bytes: utf8ByteLength(text),
+        utf8Bytes: textEncoder.encode(text).length,
     };
 };
 

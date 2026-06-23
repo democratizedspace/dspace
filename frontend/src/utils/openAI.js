@@ -727,18 +727,10 @@ export const buildChatPrompt = async (messages, options = {}) => {
             ragDurationMs,
             components: {
                 systemInstructions: systemMessage.content,
-                rag: [
-                    knowledgeSummary ? `DSPACE knowledge base:\n${knowledgeSummary}` : '',
-                    docsRagPayload.excerptsText || '',
-                ],
+                rag: (knowledgeMessage || docsRagMessage)?.content || '',
                 playerState: playerStateMessage?.content || '',
                 chatHistory: normalizedMessages
-                    .slice(
-                        0,
-                        latestUserMessage
-                            ? normalizedMessages.lastIndexOf(latestUserMessage)
-                            : undefined
-                    )
+                    .filter((message) => message !== latestUserMessage && message.role !== 'system')
                     .map((message) => message.content || ''),
                 latestUserMessage: latestUserMessage?.content || '',
             },
