@@ -46,7 +46,8 @@
         "postinstall": "node scripts/postinstall.js",
         "playwright:install": "playwright install --with-deps chromium chromium-headless-shell",
         "perf:quests": "node scripts/setup-test-env.js && node scripts/run-quests-perf.mjs",
-        "perf:quests:slowcpu": "node scripts/setup-test-env.js && cross-env QUESTS_TTI_CPU_SLOWDOWN=4 node scripts/run-quests-perf.mjs"
+        "perf:quests:slowcpu": "node scripts/setup-test-env.js && cross-env QUESTS_TTI_CPU_SLOWDOWN=4 node scripts/run-quests-perf.mjs",
+        "benchmark:token-place-context": "node ../scripts/benchmark-token-place-context.mjs"
     },
     "devDependencies": {
         "@astrojs/svelte": "^6.0.0",
