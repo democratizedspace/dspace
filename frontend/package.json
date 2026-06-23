@@ -59,7 +59,7 @@
         "@playwright/test": "^1.51.0",
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/svelte": "^5.2.8",
-        "@typescript-eslint/eslint-plugin": "^8.39.0",
+        "@typescript-eslint/eslint-plugin": "^8.58.1",
         "@typescript-eslint/parser": "^8.39.0",
         "astro": "^4.16.19",
         "babel-jest": "^29.7.0",
