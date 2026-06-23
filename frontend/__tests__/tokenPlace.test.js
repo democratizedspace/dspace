@@ -19,6 +19,7 @@ const {
     generateTokenPlaceClientKeypair,
     validateTokenPlaceResponseEnvelope,
     buildTokenPlaceChatCompletionsUrl,
+    buildTokenPlaceTokenLitePrompt,
     extractTokenPlaceAssistantText,
     getTokenPlaceChatModel,
     resolveTokenPlaceBaseUrl,
@@ -155,6 +156,20 @@ describe('token.place API v1 client', () => {
         delete process.env.VITE_TOKEN_PLACE_URL;
         delete process.env.VITE_TOKEN_PLACE_CHAT_MODEL;
         delete process.env.VITE_TOKEN_PLACE_ENABLED;
+    });
+
+    test('token-lite instrumentation is opt-in and does not change messages', () => {
+        const messages = [{ role: 'user', content: 'hello' }];
+        const plain = buildTokenPlaceTokenLitePrompt(messages, {});
+        const instrumented = buildTokenPlaceTokenLitePrompt(
+            messages,
+            {},
+            { includePromptMetrics: true }
+        );
+        expect(plain.promptMetrics).toBeUndefined();
+        expect(instrumented.combinedMessages).toEqual(plain.combinedMessages);
+        expect(instrumented.debugMessages).toEqual(plain.debugMessages);
+        expect(JSON.stringify(instrumented.promptMetrics)).not.toContain('hello');
     });
 
     test('fresh/default state uses token.place relay E2EE routes', async () => {

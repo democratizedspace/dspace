@@ -1,6 +1,7 @@
 import { JSEncrypt } from 'jsencrypt';
 import { loadGameState, ready } from './gameState/common.js';
 import { buildChatPrompt, validateChatResponseText } from './openAI.js';
+import { collectPromptMetrics } from './promptMetrics.js';
 import { normalizeSettings } from './settingsDefaults.js';
 import {
     createMalformedTokenPlaceResponseError,
@@ -623,10 +624,14 @@ const findLatestTokenLiteUserMessage = (messages = []) => {
     return TOKEN_LITE_FALLBACK_USER_MESSAGE;
 };
 
-export const buildTokenPlaceTokenLitePrompt = (messages = [], state = loadGameState()) => {
+export const buildTokenPlaceTokenLitePrompt = (
+    messages = [],
+    state = loadGameState(),
+    options = {}
+) => {
     const latestUserMessage = findLatestTokenLiteUserMessage(messages);
     const tokenPlaceUrl = state?.tokenPlace?.url;
-    return {
+    const result = {
         combinedMessages: [
             { role: 'system', content: TOKEN_LITE_SYSTEM_MESSAGE },
             { role: 'user', content: latestUserMessage },
@@ -645,6 +650,14 @@ export const buildTokenPlaceTokenLitePrompt = (messages = [], state = loadGameSt
         contextSources: [],
         playerStateSummary: '',
     };
+    if (options.includePromptMetrics) {
+        result.promptMetrics = collectPromptMetrics(result, {
+            componentByMessageIndex: { 0: 'systemInstructions', 1: 'latestUserMessage' },
+            promptBuildMs: 0,
+            ragMs: null,
+        });
+    }
+    return result;
 };
 
 const resolveTokenPlaceTokenLiteEnabled = (options = {}, state) => {
@@ -655,7 +668,7 @@ const resolveTokenPlaceTokenLiteEnabled = (options = {}, state) => {
 const resolveTokenPlacePromptPayload = async (messages, options = {}) => {
     const state = loadGameState();
     if (resolveTokenPlaceTokenLiteEnabled(options, state)) {
-        return buildTokenPlaceTokenLitePrompt(messages, state);
+        return buildTokenPlaceTokenLitePrompt(messages, state, options);
     }
     if (options.promptPayload) return options.promptPayload;
     return buildChatPrompt(messages, options);

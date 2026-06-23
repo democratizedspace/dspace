@@ -124,6 +124,17 @@ describe('gpt-5 chat responses utility', () => {
         expect(result).toBe('mocked reply');
     });
 
+    test('buildChatPrompt instrumentation is opt-in and preserves payload shape', async () => {
+        const messages = [{ role: 'user', content: 'hello instrumentation' }];
+        const plain = await buildChatPrompt(messages);
+        const instrumented = await buildChatPrompt(messages, { includePromptMetrics: true });
+        expect(plain.promptMetrics).toBeUndefined();
+        expect(instrumented.combinedMessages).toEqual(plain.combinedMessages);
+        expect(instrumented.contextSources).toEqual(plain.contextSources);
+        expect(instrumented.playerStateSummary).toEqual(plain.playerStateSummary);
+        expect(JSON.stringify(instrumented.promptMetrics)).not.toContain('hello instrumentation');
+    });
+
     test('buildChatPrompt labels RAG content for debug', async () => {
         const { debugMessages } = await buildChatPrompt([]);
         const ragMessages = debugMessages.filter((message) => message.kind === 'rag');

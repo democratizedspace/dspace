@@ -57,7 +57,8 @@
     "lint:a11y": "cd frontend && npm run lint:a11y",
     "dev:legacy": "npm run dev",
     "playwright:install": "npm --prefix frontend run playwright:install",
-    "build:meta": "node scripts/write-build-meta.mjs"
+    "build:meta": "node scripts/write-build-meta.mjs",
+    "benchmark:token-place-context": "node scripts/benchmark-token-place-context.mjs"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
