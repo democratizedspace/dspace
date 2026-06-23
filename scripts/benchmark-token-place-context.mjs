@@ -4,15 +4,15 @@ import path from 'node:path';
 import { performance } from 'node:perf_hooks';
 import { buildPromptMetrics } from '../frontend/src/utils/promptMetrics.js';
 import {
+  classifyTokenPlaceContextTier,
+  TOKEN_PLACE_CONTEXT_ESTIMATOR_VERSION,
+} from '../frontend/src/utils/tokenPlaceContextEstimator.js';
+import {
   sanitizeTokenPlaceMessagesWithMetadata,
   TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
 } from '../frontend/src/utils/tokenPlaceMessages.js';
 
 const OUTPUT_DIR = 'artifacts/benchmarks/token-place-context';
-const RESERVED_OUTPUT_TOKENS = 512;
-const CHAT_TEMPLATE_OVERHEAD_TOKENS = 128;
-const TOKEN_BUDGET_BUFFER =
-  RESERVED_OUTPUT_TOKENS + CHAT_TEMPLATE_OVERHEAD_TOKENS;
 const repeat = (label, length) =>
   label.repeat(Math.ceil(length / label.length)).slice(0, length);
 
@@ -121,18 +121,13 @@ const scenarios = [
   ),
 ];
 
-const estimateTokens = (characters) => Math.ceil(characters / 4);
-const tierReadiness = (metrics) => {
-  const heuristicTokens = estimateTokens(metrics.totalCharacters);
-  return {
-    heuristicTokens,
-    reservedTokens: TOKEN_BUDGET_BUFFER,
-    fits8kHeuristic: heuristicTokens + TOKEN_BUDGET_BUFFER <= 8192,
-    fits64kHeuristic: heuristicTokens + TOKEN_BUDGET_BUFFER <= 65536,
-    fitsTokenPlaceCharCeiling:
-      metrics.totalCharacters <= TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
-  };
-};
+const exactTokenizer = () => ({
+  available: false,
+  exactPromptTokens: null,
+  calibrationErrorTokens: null,
+  calibrationErrorPercent: null,
+  note: 'No existing lightweight development-only Llama 3.1 tokenizer hook is configured for this benchmark.',
+});
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 await mkdir(OUTPUT_DIR, { recursive: true });
@@ -208,11 +203,12 @@ const results = scenarios.map((item) => {
     sourceMessageCount: item.combinedMessages.length,
     tokenPlaceMessageCount: tokenPlaceMessages.length,
     metrics,
-    tierReadiness: tierReadiness(metrics),
-    exactTokenizer: {
-      available: false,
-      note: 'No production-safe Llama 3.1 tokenizer hook is configured for this benchmark.',
+    contextEstimate: {
+      ...classifyTokenPlaceContextTier(tokenPlaceMessages),
+      fitsTokenPlaceCharCeiling:
+        metrics.totalCharacters <= TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
     },
+    exactTokenizer: exactTokenizer(),
   };
 });
 
@@ -229,17 +225,22 @@ const markdown = [
   '',
   `Generated: ${json.generatedAt}`,
   '',
-  '| Scenario | Source messages | token.place messages | Chars | UTF-8 bytes | Heuristic tokens | Reserved tokens | 8K | 64K | Char ceiling | Dominant component |',
-  '| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- | --- | --- |',
+  '| Scenario | Source messages | token.place messages | Chars | UTF-8 bytes | Est. prompt tokens | Output reserve | Safety margin | Est. total | Tier | Over limit | Char ceiling | Exact calibration | Dominant component |',
+  '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- | --- | --- | --- |',
   ...results.map((result) => {
     const entries = Object.entries(result.metrics.componentTotals);
     const [dominant] = entries.sort(
       (a, b) => b[1].characters - a[1].characters
     )[0];
-    return `| ${result.id} | ${result.sourceMessageCount} | ${result.tokenPlaceMessageCount} | ${result.metrics.totalCharacters} | ${result.metrics.totalUtf8Bytes} | ${result.tierReadiness.heuristicTokens} | ${result.tierReadiness.reservedTokens} | ${result.tierReadiness.fits8kHeuristic ? 'yes' : 'no'} | ${result.tierReadiness.fits64kHeuristic ? 'yes' : 'no'} | ${result.tierReadiness.fitsTokenPlaceCharCeiling ? 'yes' : 'no'} | ${dominant} |`;
+    const calibration = result.exactTokenizer.available
+      ? `${result.exactTokenizer.calibrationErrorTokens} tokens / ${result.exactTokenizer.calibrationErrorPercent}%`
+      : 'unavailable';
+    return `| ${result.id} | ${result.sourceMessageCount} | ${result.tokenPlaceMessageCount} | ${result.metrics.totalCharacters} | ${result.metrics.totalUtf8Bytes} | ${result.contextEstimate.estimatedPromptTokens} | ${result.contextEstimate.reservedOutputTokens} | ${result.contextEstimate.safetyMarginTokens} | ${result.contextEstimate.estimatedTotalTokens} | ${result.contextEstimate.selectedTier ?? 'over-limit'} | ${result.contextEstimate.overLimit ? 'yes' : 'no'} | ${result.contextEstimate.fitsTokenPlaceCharCeiling ? 'yes' : 'no'} | ${calibration} | ${dominant} |`;
   }),
   '',
-  'All values are content-free counts from synthetic fixtures after token.place request shaping. Token counts are four-characters-per-token heuristics, not exact model tokens; tier fit reserves output and chat-template headroom.',
+  `Estimator version: ${TOKEN_PLACE_CONTEXT_ESTIMATOR_VERSION}`,
+  '',
+  'All values are content-free counts from synthetic fixtures after token.place request shaping. Token estimates use a conservative offline UTF-8-byte heuristic plus chat-template overhead, output reservation, and safety margin; they are not exact model tokens. Exact Llama 3.1 calibration is reported only when an existing lightweight development tokenizer hook is available.',
 ].join('\n');
 
 await writeFile(jsonPath, `${JSON.stringify(json, null, 2)}\n`);
