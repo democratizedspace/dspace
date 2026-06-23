@@ -722,17 +722,38 @@ export const buildChatPrompt = async (messages, options = {}) => {
     };
 
     if (options.includePromptMetrics) {
+        const indexOfMessage = (target) => (target ? combinedMessages.indexOf(target) : -1);
+        const systemMessageIndex = indexOfMessage(systemMessage);
+        const playerStateMessageIndex = indexOfMessage(playerStateMessage);
+        const knowledgeMessageIndex = indexOfMessage(knowledgeMessage);
+        const docsRagMessageIndex = indexOfMessage(docsRagMessage);
+        const latestUserMessageIndex = indexOfMessage(latestUserMessage);
+        const chatHistoryIndexes =
+            latestUserMessageIndex === -1
+                ? []
+                : combinedMessages
+                      .map((message, index) => ({ message, index }))
+                      .filter(
+                          ({ message, index }) =>
+                              index > systemMessageIndex &&
+                              index < latestUserMessageIndex &&
+                              normalizedMessages.includes(message) &&
+                              message.role !== 'system'
+                      )
+                      .map(({ index }) => index);
+        const ragIndexes = [knowledgeMessageIndex, docsRagMessageIndex].filter(
+            (index) => index !== -1
+        );
+
         promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
             promptBuildDurationMs: performance.now() - promptBuildStartedAt,
             ragDurationMs,
-            components: {
-                systemInstructions: systemMessage.content,
-                rag: (knowledgeMessage || docsRagMessage)?.content || '',
-                playerState: playerStateMessage?.content || '',
-                chatHistory: normalizedMessages
-                    .filter((message) => message !== latestUserMessage && message.role !== 'system')
-                    .map((message) => message.content || ''),
-                latestUserMessage: latestUserMessage?.content || '',
+            componentMessageIndexes: {
+                systemInstructions: systemMessageIndex,
+                rag: ragIndexes,
+                playerState: playerStateMessageIndex,
+                chatHistory: chatHistoryIndexes,
+                latestUserMessage: latestUserMessageIndex,
             },
         });
     }

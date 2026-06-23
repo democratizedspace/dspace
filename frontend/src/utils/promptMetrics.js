@@ -21,6 +21,12 @@ const addSize = (target, size) => {
     target.utf8Bytes += size.utf8Bytes;
 };
 
+const normalizeIndexes = (value) => {
+    if (Array.isArray(value)) return value;
+    if (Number.isInteger(value)) return [value];
+    return [];
+};
+
 export const buildPromptMetrics = (promptPayload, metadata = {}) => {
     const messages = Array.isArray(promptPayload?.combinedMessages)
         ? promptPayload.combinedMessages
@@ -37,6 +43,14 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
     const totalCharacters = perMessage.reduce((sum, message) => sum + message.characters, 0);
     const totalUtf8Bytes = perMessage.reduce((sum, message) => sum + message.utf8Bytes, 0);
     const componentTotals = emptyComponentTotals();
+
+    for (const [name, value] of Object.entries(metadata.componentMessageIndexes || {})) {
+        if (!Object.prototype.hasOwnProperty.call(componentTotals, name)) continue;
+        for (const index of normalizeIndexes(value)) {
+            const messageSummary = perMessage[index];
+            if (messageSummary) addSize(componentTotals[name], messageSummary);
+        }
+    }
 
     for (const [name, value] of Object.entries(metadata.components || {})) {
         if (!Object.prototype.hasOwnProperty.call(componentTotals, name)) continue;
