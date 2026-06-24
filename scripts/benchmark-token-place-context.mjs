@@ -1,18 +1,21 @@
 #!/usr/bin/env node
+import { existsSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { performance } from 'node:perf_hooks';
 import { buildPromptMetrics } from '../frontend/src/utils/promptMetrics.js';
+import {
+  estimateTokenPlaceContextForSanitizedMessages,
+  TOKEN_PLACE_CONTEXT_TIERS,
+} from '../frontend/src/utils/tokenPlaceContextEstimator.js';
 import {
   sanitizeTokenPlaceMessagesWithMetadata,
   TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
 } from '../frontend/src/utils/tokenPlaceMessages.js';
 
 const OUTPUT_DIR = 'artifacts/benchmarks/token-place-context';
-const RESERVED_OUTPUT_TOKENS = 512;
-const CHAT_TEMPLATE_OVERHEAD_TOKENS = 128;
-const TOKEN_BUDGET_BUFFER =
-  RESERVED_OUTPUT_TOKENS + CHAT_TEMPLATE_OVERHEAD_TOKENS;
+const EXACT_TOKENIZER_MODULE_ENV = 'TOKEN_PLACE_CONTEXT_EXACT_TOKENIZER_MODULE';
 const repeat = (label, length) =>
   label.repeat(Math.ceil(length / label.length)).slice(0, length);
 
@@ -121,21 +124,51 @@ const scenarios = [
   ),
 ];
 
-const estimateTokens = (characters) => Math.ceil(characters / 4);
-const tierReadiness = (metrics) => {
-  const heuristicTokens = estimateTokens(metrics.totalCharacters);
+const loadExactTokenizer = async () => {
+  const modulePath = process.env[EXACT_TOKENIZER_MODULE_ENV];
+  if (!modulePath) return null;
+  const resolvedModulePath = path.resolve(modulePath);
+  if (!existsSync(resolvedModulePath)) return null;
+
+  const module = await import(pathToFileURL(resolvedModulePath).href);
+  const countPromptTokens = module.countPromptTokens ?? module.default;
+  return typeof countPromptTokens === 'function' ? countPromptTokens : null;
+};
+
+const countExactPromptTokens = async (tokenizer, messages) => {
+  if (typeof tokenizer !== 'function') return null;
+  const exactPromptTokens = await tokenizer(messages);
+  return Number.isFinite(exactPromptTokens) ? exactPromptTokens : null;
+};
+
+const calibrationFor = (estimate, exactPromptTokens, exactTokenizerConfigured) => {
+  if (!Number.isFinite(exactPromptTokens) || exactPromptTokens <= 0) {
+    return {
+      exactTokenizerAvailable: false,
+      exactPromptTokens: null,
+      promptTokenError: null,
+      promptTokenErrorPercent: null,
+      note: exactTokenizerConfigured
+        ? 'The configured exact tokenizer hook returned invalid or non-positive prompt-token data, so calibration is unavailable for this scenario.'
+        : `No lightweight development-only Llama 3.1 tokenizer hook is configured for this benchmark. Set ${EXACT_TOKENIZER_MODULE_ENV} to a module exporting countPromptTokens(messages) to enable calibration.`,
+    };
+  }
+  const promptTokenError = estimate.estimatedPromptTokens - exactPromptTokens;
   return {
-    heuristicTokens,
-    reservedTokens: TOKEN_BUDGET_BUFFER,
-    fits8kHeuristic: heuristicTokens + TOKEN_BUDGET_BUFFER <= 8192,
-    fits64kHeuristic: heuristicTokens + TOKEN_BUDGET_BUFFER <= 65536,
-    fitsTokenPlaceCharCeiling:
-      metrics.totalCharacters <= TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
+    exactTokenizerAvailable: true,
+    exactPromptTokens,
+    promptTokenError,
+    promptTokenErrorPercent:
+      exactPromptTokens > 0
+        ? Number(((promptTokenError / exactPromptTokens) * 100).toFixed(2))
+        : null,
   };
 };
 
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 await mkdir(OUTPUT_DIR, { recursive: true });
+const exactTokenizer = await loadExactTokenizer();
+const exactTokenizerConfigured = typeof exactTokenizer === 'function';
 
 const indexesForShapedMessages = (shapedMessages, sourceIndexes) => {
   const sourceIndexSet = new Set(
@@ -164,57 +197,69 @@ const componentIndexesForShapedMessages = (
 const componentTotalsSum = (componentTotals, field) =>
   Object.values(componentTotals).reduce((sum, total) => sum + total[field], 0);
 
-const results = scenarios.map((item) => {
-  const startedAt = performance.now();
-  const shapedMessagesWithMetadata = sanitizeTokenPlaceMessagesWithMetadata(
-    item.combinedMessages
-  );
-  const tokenPlaceMessages = shapedMessagesWithMetadata.map(
-    ({ role, content }) => ({
-      role,
-      content,
-    })
-  );
-  const metrics = buildPromptMetrics(
-    { combinedMessages: tokenPlaceMessages },
-    {
-      componentMessageIndexes: componentIndexesForShapedMessages(
-        shapedMessagesWithMetadata,
-        item.componentSourceIndexes
-      ),
-      promptBuildDurationMs: performance.now() - startedAt,
-      ragDurationMs: item.componentSourceIndexes.rag === -1 ? null : 0,
+const results = await Promise.all(
+  scenarios.map(async (item) => {
+    const startedAt = performance.now();
+    const shapedMessagesWithMetadata = sanitizeTokenPlaceMessagesWithMetadata(
+      item.combinedMessages
+    );
+    const tokenPlaceMessages = shapedMessagesWithMetadata.map(
+      ({ role, content }) => ({
+        role,
+        content,
+      })
+    );
+    const metrics = buildPromptMetrics(
+      { combinedMessages: tokenPlaceMessages },
+      {
+        componentMessageIndexes: componentIndexesForShapedMessages(
+          shapedMessagesWithMetadata,
+          item.componentSourceIndexes
+        ),
+        promptBuildDurationMs: performance.now() - startedAt,
+        ragDurationMs: item.componentSourceIndexes.rag === -1 ? null : 0,
+      }
+    );
+    if (
+      componentTotalsSum(metrics.componentTotals, 'characters') !==
+      metrics.totalCharacters
+    ) {
+      throw new Error(
+        `Component character totals do not sum to payload total for ${item.id}`
+      );
     }
-  );
-  if (
-    componentTotalsSum(metrics.componentTotals, 'characters') !==
-    metrics.totalCharacters
-  ) {
-    throw new Error(
-      `Component character totals do not sum to payload total for ${item.id}`
+    if (
+      componentTotalsSum(metrics.componentTotals, 'utf8Bytes') !==
+      metrics.totalUtf8Bytes
+    ) {
+      throw new Error(
+        `Component UTF-8 byte totals do not sum to payload total for ${item.id}`
+      );
+    }
+    const contextEstimate =
+      estimateTokenPlaceContextForSanitizedMessages(tokenPlaceMessages);
+    const charCeiling =
+      metrics.totalCharacters <= TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS;
+    const exactPromptTokens = await countExactPromptTokens(
+      exactTokenizer,
+      tokenPlaceMessages
     );
-  }
-  if (
-    componentTotalsSum(metrics.componentTotals, 'utf8Bytes') !==
-    metrics.totalUtf8Bytes
-  ) {
-    throw new Error(
-      `Component UTF-8 byte totals do not sum to payload total for ${item.id}`
-    );
-  }
-  return {
-    id: item.id,
-    description: item.description,
-    sourceMessageCount: item.combinedMessages.length,
-    tokenPlaceMessageCount: tokenPlaceMessages.length,
-    metrics,
-    tierReadiness: tierReadiness(metrics),
-    exactTokenizer: {
-      available: false,
-      note: 'No production-safe Llama 3.1 tokenizer hook is configured for this benchmark.',
-    },
-  };
-});
+    return {
+      id: item.id,
+      description: item.description,
+      sourceMessageCount: item.combinedMessages.length,
+      tokenPlaceMessageCount: tokenPlaceMessages.length,
+      metrics,
+      charCeiling,
+      contextEstimate,
+      calibration: calibrationFor(
+        contextEstimate,
+        exactPromptTokens,
+        exactTokenizerConfigured
+      ),
+    };
+  })
+);
 
 const jsonPath = path.join(OUTPUT_DIR, `${timestamp}.json`);
 const mdPath = path.join(OUTPUT_DIR, `${timestamp}.md`);
@@ -229,17 +274,19 @@ const markdown = [
   '',
   `Generated: ${json.generatedAt}`,
   '',
-  '| Scenario | Source messages | token.place messages | Chars | UTF-8 bytes | Heuristic tokens | Reserved tokens | 8K | 64K | Char ceiling | Dominant component |',
-  '| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | --- | --- | --- |',
+  '| Scenario | Source messages | token.place messages | Chars | Char ceiling | UTF-8 bytes | Est. prompt tokens | Reserved output | Safety margin | Est. total | Selected tier | Over limit | Calibration | Dominant component |',
+  '| --- | ---: | ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: | --- | --- | --- | --- |',
   ...results.map((result) => {
     const entries = Object.entries(result.metrics.componentTotals);
     const [dominant] = entries.sort(
       (a, b) => b[1].characters - a[1].characters
     )[0];
-    return `| ${result.id} | ${result.sourceMessageCount} | ${result.tokenPlaceMessageCount} | ${result.metrics.totalCharacters} | ${result.metrics.totalUtf8Bytes} | ${result.tierReadiness.heuristicTokens} | ${result.tierReadiness.reservedTokens} | ${result.tierReadiness.fits8kHeuristic ? 'yes' : 'no'} | ${result.tierReadiness.fits64kHeuristic ? 'yes' : 'no'} | ${result.tierReadiness.fitsTokenPlaceCharCeiling ? 'yes' : 'no'} | ${dominant} |`;
+    return `| ${result.id} | ${result.sourceMessageCount} | ${result.tokenPlaceMessageCount} | ${result.metrics.totalCharacters} | ${result.charCeiling ? 'yes' : 'no'} | ${result.metrics.totalUtf8Bytes} | ${result.contextEstimate.estimatedPromptTokens} | ${result.contextEstimate.reservedOutputTokens} | ${result.contextEstimate.safetyMarginTokens} | ${result.contextEstimate.estimatedTotalTokens} | ${result.contextEstimate.selectedTier || 'over-limit'} | ${result.contextEstimate.overLimit ? 'yes' : 'no'} | ${result.calibration.exactTokenizerAvailable ? `${result.calibration.promptTokenErrorPercent}%` : 'n/a'} | ${dominant} |`;
   }),
   '',
-  'All values are content-free counts from synthetic fixtures after token.place request shaping. Token counts are four-characters-per-token heuristics, not exact model tokens; tier fit reserves output and chat-template headroom.',
+  `Profiles: 8k-fast=${TOKEN_PLACE_CONTEXT_TIERS['8k-fast'].totalContextTokens} tokens; 64k-full=${TOKEN_PLACE_CONTEXT_TIERS['64k-full'].totalContextTokens} tokens.`,
+  '',
+  'All values are content-free counts from synthetic fixtures after token.place request shaping. Estimator values are deterministic conservative heuristics over UTF-8 bytes plus chat-template overhead, output reservation, and safety margin; they are not exact model tokens. Calibration error is reported only when an exact development tokenizer is available.',
 ].join('\n');
 
 await writeFile(jsonPath, `${JSON.stringify(json, null, 2)}\n`);

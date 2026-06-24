@@ -76,6 +76,42 @@ Initial token.place service profiles are expected to be:
 DSPACE should prefer the smallest tier likely to satisfy the request. token-lite should normally
 route to `8k-fast`; full-fat prompts may require `64k-full`.
 
+## Phase 0 estimator implementation
+
+The Phase 0 token.place context-tier work adds a deterministic browser-side estimator in
+`frontend/src/utils/tokenPlaceContextEstimator.js`. It is a conservative heuristic, not an exact
+Llama tokenizer:
+
+- It operates on the complete sanitized token.place API v1 message payload, after DSPACE's existing
+  message shaping has normalized roles, chunked long system messages, and enforced API v1 message
+  limits.
+- It counts UTF-8 bytes for a stable `JSON.stringify` serialization of the complete sanitized
+  `[{ role, content }]` API v1 payload with `TextEncoder`; it does not rely on JavaScript UTF-16
+  string length alone or sum only individual role/content bytes.
+- It estimates prompt tokens as `ceil(payloadUtf8Bytes / 3)` plus fixed chat-template overhead
+  (`16` tokens per chat plus `8` tokens per message). The byte divisor is intentionally more
+  conservative than the common four-characters-per-token rule and remains fully offline.
+- It reserves `512` output tokens by default, matching the current DSPACE/token.place expected
+  response budget used by the context benchmark.
+- It adds a documented safety margin of the larger of `256` tokens or `8%` of estimated prompt
+  tokens. Callers may override the output reservation or safety-margin tokens in tests and future
+  routing code.
+- It returns a structured result with estimated prompt tokens, reserved output tokens,
+  safety-margin tokens, estimated total tokens, selected tier, over-limit status, payload UTF-8
+  bytes, message count, per-message byte summaries, public-helper shaping metadata when applicable,
+  and the deterministic estimator version.
+
+Tier selection is pure and deterministic: select `8k-fast` only when prompt estimate plus output
+reservation plus safety margin fits `8,192`; otherwise select `64k-full` only when it fits `65,536`;
+otherwise return `selectedTier: null` and `overLimit: true`. The sanitized-payload estimator never
+truncates; the public helper reports shaping metadata when existing API v1 sanitization changes the
+payload before estimation. The estimator never sends prompt text to a server.
+
+The Phase 0 benchmark now includes estimator output for synthetic fixtures and a calibration section.
+When a lightweight development-only exact Llama 3.1 tokenizer hook is available, the benchmark can
+record prompt-token error; otherwise it reports calibration as unavailable and keeps production
+estimation explicitly heuristic.
+
 ## Current-state architecture
 
 ```mermaid
@@ -355,30 +391,31 @@ Rules:
 
 ### Browser-safe conservative token estimate
 
-DSPACE's browser estimate should be deterministic and conservative:
+DSPACE's browser estimate should be deterministic and conservative. The implemented Phase 0
+estimator in `frontend/src/utils/tokenPlaceContextEstimator.js` is the authoritative browser-safe
+policy and estimates the complete deterministic sanitized API v1 payload, not only raw content
+counters:
 
 ```text
-estimatedPromptTokens = max(
-  ceil(totalUtf8Bytes / bytesPerTokenAssumption),
-  ceil(totalContentChars / charsPerTokenAssumption)
-) + chatTemplateOverheadTokens
-
+payloadUtf8Bytes = utf8Bytes(JSON.stringify(sanitizedApiV1Messages))
+estimatedPromptTokens = ceil(payloadUtf8Bytes / 3) + 16 + messageCount * 8
 estimatedTotalContextUse =
   estimatedPromptTokens + reservedOutputTokens + safetyMarginTokens
 ```
 
-Suggested initial assumptions:
+Current Phase 0 constants:
 
-| Parameter | Initial value | Rationale |
+| Parameter | Phase 0 value | Rationale |
 | --- | ---: | --- |
-| `charsPerTokenAssumption` | 4 | Common rough heuristic. |
-| `bytesPerTokenAssumption` | 4 | Helps account for non-ASCII UTF-8 expansion. |
-| `chatTemplateOverheadTokens` | `messageCount * 8 + 64` | Conservative placeholder until exact tokenizer fixtures exist. |
-| `reservedOutputTokens` | 1,024 for full-fat, 512 for token-lite | Prevents consuming the full context with prompt tokens. |
-| `safetyMarginTokens` | max(512, ceil(estimatedPromptTokens * 0.10)) | Buffers tokenizer mismatch and template overhead. |
+| `bytesPerTokenAssumption` | 3 | Conservative UTF-8 payload heuristic over serialized `{ role, content }` messages. |
+| `chatTemplateOverheadTokens` | `16 + messageCount * 8` | Fixed chat plus per-message overhead for the browser-side heuristic. |
+| `reservedOutputTokens` | 512 | Matches the current benchmark response budget by default. |
+| `safetyMarginTokens` | max(256, ceil(estimatedPromptTokens * 0.08)) | Buffers tokenizer mismatch and template overhead. |
 
-The exact constants should be calibrated against compute-side tokenizer measurements from Phase 0
-and Phase 3. DSPACE should treat estimates near a boundary as belonging to the larger tier.
+Older planning drafts used separate character and byte heuristics plus larger placeholder margins;
+those values are superseded by the Phase 0 estimator implementation above. The exact constants
+should still be calibrated against compute-side tokenizer measurements from Phase 0 and Phase 3.
+DSPACE should treat estimates near a boundary as belonging to the larger tier.
 
 ### Tier classification result
 
