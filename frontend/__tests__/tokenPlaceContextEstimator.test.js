@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -130,17 +130,11 @@ describe('token.place context estimator', () => {
                 },
             });
             const benchmarkDir = path.join(workdir, 'artifacts/benchmarks/token-place-context');
-            const latestJson = (await import('node:fs/promises'))
-                .readdir(benchmarkDir)
-                .then((files) =>
-                    files
-                        .filter((file) => file.endsWith('.json'))
-                        .sort()
-                        .at(-1)
-                );
-            const report = JSON.parse(
-                await readFile(path.join(benchmarkDir, await latestJson), 'utf8')
-            );
+            const latestJson = (await readdir(benchmarkDir))
+                .filter((file) => file.endsWith('.json'))
+                .sort()
+                .at(-1);
+            const report = JSON.parse(await readFile(path.join(benchmarkDir, latestJson), 'utf8'));
 
             expect(report.scenarios.length).toBeGreaterThan(0);
             expect(report.scenarios[0].calibration).toMatchObject({
@@ -148,7 +142,13 @@ describe('token.place context estimator', () => {
                 exactPromptTokens: null,
                 promptTokenError: null,
                 promptTokenErrorPercent: null,
+                note: expect.stringContaining(
+                    'configured exact tokenizer hook returned invalid or non-positive'
+                ),
             });
+            expect(report.scenarios[0].calibration.note).not.toContain(
+                'No lightweight development-only Llama 3.1 tokenizer hook is configured'
+            );
         } finally {
             await rm(workdir, { recursive: true, force: true });
         }

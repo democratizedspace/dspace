@@ -391,30 +391,31 @@ Rules:
 
 ### Browser-safe conservative token estimate
 
-DSPACE's browser estimate should be deterministic and conservative:
+DSPACE's browser estimate should be deterministic and conservative. The implemented Phase 0
+estimator in `frontend/src/utils/tokenPlaceContextEstimator.js` is the authoritative browser-safe
+policy and estimates the complete deterministic sanitized API v1 payload, not only raw content
+counters:
 
 ```text
-estimatedPromptTokens = max(
-  ceil(totalUtf8Bytes / bytesPerTokenAssumption),
-  ceil(totalContentChars / charsPerTokenAssumption)
-) + chatTemplateOverheadTokens
-
+payloadUtf8Bytes = utf8Bytes(JSON.stringify(sanitizedApiV1Messages))
+estimatedPromptTokens = ceil(payloadUtf8Bytes / 3) + 16 + messageCount * 8
 estimatedTotalContextUse =
   estimatedPromptTokens + reservedOutputTokens + safetyMarginTokens
 ```
 
-Suggested initial assumptions:
+Current Phase 0 constants:
 
-| Parameter | Initial value | Rationale |
+| Parameter | Phase 0 value | Rationale |
 | --- | ---: | --- |
-| `charsPerTokenAssumption` | 4 | Common rough heuristic. |
-| `bytesPerTokenAssumption` | 4 | Helps account for non-ASCII UTF-8 expansion. |
-| `chatTemplateOverheadTokens` | `messageCount * 8 + 64` | Conservative placeholder until exact tokenizer fixtures exist. |
-| `reservedOutputTokens` | 1,024 for full-fat, 512 for token-lite | Prevents consuming the full context with prompt tokens. |
-| `safetyMarginTokens` | max(512, ceil(estimatedPromptTokens * 0.10)) | Buffers tokenizer mismatch and template overhead. |
+| `bytesPerTokenAssumption` | 3 | Conservative UTF-8 payload heuristic over serialized `{ role, content }` messages. |
+| `chatTemplateOverheadTokens` | `16 + messageCount * 8` | Fixed chat plus per-message overhead for the browser-side heuristic. |
+| `reservedOutputTokens` | 512 | Matches the current benchmark response budget by default. |
+| `safetyMarginTokens` | max(256, ceil(estimatedPromptTokens * 0.08)) | Buffers tokenizer mismatch and template overhead. |
 
-The exact constants should be calibrated against compute-side tokenizer measurements from Phase 0
-and Phase 3. DSPACE should treat estimates near a boundary as belonging to the larger tier.
+Older planning drafts used separate character and byte heuristics plus larger placeholder margins;
+those values are superseded by the Phase 0 estimator implementation above. The exact constants
+should still be calibrated against compute-side tokenizer measurements from Phase 0 and Phase 3.
+DSPACE should treat estimates near a boundary as belonging to the larger tier.
 
 ### Tier classification result
 

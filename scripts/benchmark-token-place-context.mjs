@@ -141,14 +141,16 @@ const countExactPromptTokens = async (tokenizer, messages) => {
   return Number.isFinite(exactPromptTokens) ? exactPromptTokens : null;
 };
 
-const calibrationFor = (estimate, exactPromptTokens) => {
+const calibrationFor = (estimate, exactPromptTokens, exactTokenizerConfigured) => {
   if (!Number.isFinite(exactPromptTokens) || exactPromptTokens <= 0) {
     return {
       exactTokenizerAvailable: false,
       exactPromptTokens: null,
       promptTokenError: null,
       promptTokenErrorPercent: null,
-      note: `No lightweight development-only Llama 3.1 tokenizer hook is configured for this benchmark. Set ${EXACT_TOKENIZER_MODULE_ENV} to a module exporting countPromptTokens(messages) to enable calibration.`,
+      note: exactTokenizerConfigured
+        ? 'The configured exact tokenizer hook returned invalid or non-positive prompt-token data, so calibration is unavailable for this scenario.'
+        : `No lightweight development-only Llama 3.1 tokenizer hook is configured for this benchmark. Set ${EXACT_TOKENIZER_MODULE_ENV} to a module exporting countPromptTokens(messages) to enable calibration.`,
     };
   }
   const promptTokenError = estimate.estimatedPromptTokens - exactPromptTokens;
@@ -166,6 +168,7 @@ const calibrationFor = (estimate, exactPromptTokens) => {
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 await mkdir(OUTPUT_DIR, { recursive: true });
 const exactTokenizer = await loadExactTokenizer();
+const exactTokenizerConfigured = typeof exactTokenizer === 'function';
 
 const indexesForShapedMessages = (shapedMessages, sourceIndexes) => {
   const sourceIndexSet = new Set(
@@ -249,7 +252,11 @@ const results = await Promise.all(
       metrics,
       charCeiling,
       contextEstimate,
-      calibration: calibrationFor(contextEstimate, exactPromptTokens),
+      calibration: calibrationFor(
+        contextEstimate,
+        exactPromptTokens,
+        exactTokenizerConfigured
+      ),
     };
   })
 );
