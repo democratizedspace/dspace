@@ -142,7 +142,7 @@ const countExactPromptTokens = async (tokenizer, messages) => {
 };
 
 const calibrationFor = (estimate, exactPromptTokens) => {
-  if (!Number.isFinite(exactPromptTokens)) {
+  if (!Number.isFinite(exactPromptTokens) || exactPromptTokens <= 0) {
     return {
       exactTokenizerAvailable: false,
       exactPromptTokens: null,

@@ -85,8 +85,9 @@ Llama tokenizer:
 - It operates on the complete sanitized token.place API v1 message payload, after DSPACE's existing
   message shaping has normalized roles, chunked long system messages, and enforced API v1 message
   limits.
-- It counts UTF-8 bytes for message roles and content with `TextEncoder`; it does not rely on
-  JavaScript UTF-16 string length alone.
+- It counts UTF-8 bytes for a stable `JSON.stringify` serialization of the complete sanitized
+  `[{ role, content }]` API v1 payload with `TextEncoder`; it does not rely on JavaScript UTF-16
+  string length alone or sum only individual role/content bytes.
 - It estimates prompt tokens as `ceil(payloadUtf8Bytes / 3)` plus fixed chat-template overhead
   (`16` tokens per chat plus `8` tokens per message). The byte divisor is intentionally more
   conservative than the common four-characters-per-token rule and remains fully offline.
@@ -97,12 +98,14 @@ Llama tokenizer:
   routing code.
 - It returns a structured result with estimated prompt tokens, reserved output tokens,
   safety-margin tokens, estimated total tokens, selected tier, over-limit status, payload UTF-8
-  bytes, message count, per-message byte summaries, and the deterministic estimator version.
+  bytes, message count, per-message byte summaries, public-helper shaping metadata when applicable,
+  and the deterministic estimator version.
 
 Tier selection is pure and deterministic: select `8k-fast` only when prompt estimate plus output
 reservation plus safety margin fits `8,192`; otherwise select `64k-full` only when it fits `65,536`;
-otherwise return `selectedTier: null` and `overLimit: true`. The estimator never truncates and never
-sends prompt text to a server.
+otherwise return `selectedTier: null` and `overLimit: true`. The sanitized-payload estimator never
+truncates; the public helper reports shaping metadata when existing API v1 sanitization changes the
+payload before estimation. The estimator never sends prompt text to a server.
 
 The Phase 0 benchmark now includes estimator output for synthetic fixtures and a calibration section.
 When a lightweight development-only exact Llama 3.1 tokenizer hook is available, the benchmark can

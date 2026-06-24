@@ -1,4 +1,4 @@
-import { sanitizeTokenPlaceMessages } from './tokenPlaceMessages.js';
+import { sanitizeTokenPlaceMessagesWithMetadata } from './tokenPlaceMessages.js';
 
 // Bump this version string whenever any estimation constant or formula below changes so
 // callers, benchmarks, and tests can detect heuristic drift.
@@ -18,6 +18,12 @@ export const TOKEN_PLACE_ESTIMATOR_SAFETY_MARGIN_RATIO = 0.08;
 const textEncoder = new TextEncoder();
 
 const utf8ByteLength = (value) => textEncoder.encode(String(value ?? '')).length;
+
+const toApiV1MessagePayload = (messages) =>
+    messages.map((message) => ({
+        role: typeof message?.role === 'string' ? message.role : 'user',
+        content: String(message?.content ?? ''),
+    }));
 
 const normalizeReservation = (value) => {
     const tokens = Number(value);
@@ -55,20 +61,23 @@ const selectTier = (estimatedTotalTokens) => {
 };
 
 export const estimateTokenPlaceContextForSanitizedMessages = (messages = [], options = {}) => {
-    const sanitizedMessages = Array.isArray(messages) ? messages : [];
+    const sanitizedMessages = toApiV1MessagePayload(Array.isArray(messages) ? messages : []);
+    const serializedPayload = JSON.stringify(sanitizedMessages);
+    const payloadUtf8Bytes = utf8ByteLength(serializedPayload);
     const perMessage = sanitizedMessages.map((message, index) => {
-        const role = typeof message?.role === 'string' ? message.role : 'user';
-        const contentUtf8Bytes = utf8ByteLength(message?.content);
+        const role = message.role;
+        const contentUtf8Bytes = utf8ByteLength(message.content);
         const roleUtf8Bytes = utf8ByteLength(role);
+        const serializedUtf8Bytes = utf8ByteLength(JSON.stringify(message));
         return {
             index,
             role,
             contentUtf8Bytes,
             roleUtf8Bytes,
             utf8Bytes: contentUtf8Bytes + roleUtf8Bytes,
+            serializedUtf8Bytes,
         };
     });
-    const payloadUtf8Bytes = perMessage.reduce((sum, message) => sum + message.utf8Bytes, 0);
     const promptTokens =
         estimateContentTokensFromBytes(payloadUtf8Bytes) +
         estimateChatTemplateOverhead(sanitizedMessages.length);
@@ -91,5 +100,50 @@ export const estimateTokenPlaceContextForSanitizedMessages = (messages = [], opt
     };
 };
 
-export const estimateTokenPlaceContext = (messages = [], options = {}) =>
-    estimateTokenPlaceContextForSanitizedMessages(sanitizeTokenPlaceMessages(messages), options);
+const summarizeShaping = (messages, sanitizedMessages) => {
+    const sourceMessages = Array.isArray(messages) ? messages : [];
+    const sourcePayload = toApiV1MessagePayload(sourceMessages);
+    const sanitizedPayload = toApiV1MessagePayload(sanitizedMessages);
+    const sourceContentChars = sourcePayload.reduce(
+        (sum, message) => sum + message.content.length,
+        0
+    );
+    const sanitizedContentChars = sanitizedPayload.reduce(
+        (sum, message) => sum + message.content.length,
+        0
+    );
+    const sourceIndexes = new Set(
+        sanitizedMessages
+            .map((message) => message.originalIndex)
+            .filter((index) => Number.isInteger(index) && index >= 0)
+    );
+    const chunkedSourceIndexes = new Set(
+        sanitizedMessages
+            .filter((message) => Number.isInteger(message.chunkIndex) && message.chunkIndex > 0)
+            .map((message) => message.originalIndex)
+    );
+    const changed = JSON.stringify(sourcePayload) !== JSON.stringify(sanitizedPayload);
+
+    return {
+        changed,
+        sourceMessageCount: sourceMessages.length,
+        sanitizedMessageCount: sanitizedPayload.length,
+        droppedMessageCount: Math.max(0, sourceMessages.length - sourceIndexes.size),
+        chunkedSourceMessageCount: chunkedSourceIndexes.size,
+        sourceContentChars,
+        sanitizedContentChars,
+        discardedContentChars: Math.max(0, sourceContentChars - sanitizedContentChars),
+    };
+};
+
+export const estimateTokenPlaceContext = (messages = [], options = {}) => {
+    const sanitizedMessagesWithMetadata = sanitizeTokenPlaceMessagesWithMetadata(messages);
+    const result = estimateTokenPlaceContextForSanitizedMessages(
+        sanitizedMessagesWithMetadata,
+        options
+    );
+    return {
+        ...result,
+        sanitizedPayload: summarizeShaping(messages, sanitizedMessagesWithMetadata),
+    };
+};

@@ -1,3 +1,9 @@
+import { execFile } from 'node:child_process';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 import { describe, expect, test } from 'vitest';
 import {
     DEFAULT_TOKEN_PLACE_OUTPUT_RESERVATION_TOKENS,
@@ -11,11 +17,31 @@ const classifyContent = (content, options = {}) =>
     estimateTokenPlaceContext([{ role: 'user', content }], options);
 
 const repeat = (chunk, chars) => chunk.repeat(Math.ceil(chars / chunk.length)).slice(0, chars);
+const utf8Bytes = (value) => new TextEncoder().encode(value).length;
+const execFileAsync = promisify(execFile);
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 describe('token.place context estimator', () => {
     test('exports named 8K and 64K profile constants', () => {
         expect(TOKEN_PLACE_CONTEXT_TIERS['8k-fast'].totalContextTokens).toBe(8192);
         expect(TOKEN_PLACE_CONTEXT_TIERS['64k-full'].totalContextTokens).toBe(65536);
+    });
+
+    test('counts the complete serialized API v1 payload bytes', () => {
+        const messages = [
+            { role: 'system', content: 'Use JSON: {"mode":"safe"}' },
+            { role: 'user', content: 'Line 1\nLine 2 🚀' },
+        ];
+        const result = estimateTokenPlaceContextForSanitizedMessages(messages);
+        const serializedPayload = JSON.stringify(messages);
+
+        expect(result.payloadUtf8Bytes).toBe(utf8Bytes(serializedPayload));
+        expect(result.payloadUtf8Bytes).toBeGreaterThan(
+            result.perMessage.reduce((sum, message) => sum + message.utf8Bytes, 0)
+        );
+        expect(result.perMessage.map((message) => message.serializedUtf8Bytes)).toEqual(
+            messages.map((message) => utf8Bytes(JSON.stringify(message)))
+        );
     });
 
     test('classifies ASCII prose into the fast tier', () => {
@@ -65,11 +91,67 @@ describe('token.place context estimator', () => {
         expect(result.estimatedTotalTokens).toBeGreaterThan(8192);
     });
 
-    test('classifies 131,072-character payloads without truncating in the estimator', () => {
-        const result = classifyContent(repeat('a', 131072));
+    test('surfaces public-helper shaping metadata instead of hiding discarded content', () => {
+        const oversizedMessages = [
+            { role: 'system', content: repeat('s', 90000) },
+            { role: 'assistant', content: repeat('a', 90000) },
+            { role: 'user', content: repeat('u', 90000) },
+        ];
+        const result = estimateTokenPlaceContext(oversizedMessages);
+
+        expect(result.sanitizedPayload.changed).toBe(true);
+        expect(result.sanitizedPayload.sourceMessageCount).toBe(3);
+        expect(result.sanitizedPayload.sanitizedMessageCount).toBeGreaterThan(0);
+        expect(result.sanitizedPayload.discardedContentChars).toBeGreaterThan(0);
+        expect(result.sanitizedPayload.chunkedSourceMessageCount).toBeGreaterThan(0);
+    });
+
+    test('classifies 131,072-character sanitized payloads without truncating in the estimator', () => {
+        const result = estimateTokenPlaceContextForSanitizedMessages([
+            { role: 'user', content: repeat('a', 131072) },
+        ]);
         expect(result.payloadUtf8Bytes).toBeGreaterThanOrEqual(131072);
         expect(result.selectedTier).toBe('64k-full');
         expect(result.overLimit).toBe(false);
+    });
+
+    test('benchmark calibration reports invalid exact-token data as unavailable', async () => {
+        const workdir = await mkdtemp(path.join(tmpdir(), 'token-place-context-benchmark-'));
+        const tokenizerModule = path.join(workdir, 'zero-tokenizer.mjs');
+        await writeFile(tokenizerModule, 'export const countPromptTokens = () => 0;\n');
+
+        try {
+            const scriptPath = path.join(repoRoot, 'scripts/benchmark-token-place-context.mjs');
+            await execFileAsync(process.execPath, [scriptPath], {
+                cwd: workdir,
+                env: {
+                    ...process.env,
+                    TOKEN_PLACE_CONTEXT_EXACT_TOKENIZER_MODULE: tokenizerModule,
+                },
+            });
+            const benchmarkDir = path.join(workdir, 'artifacts/benchmarks/token-place-context');
+            const latestJson = (await import('node:fs/promises'))
+                .readdir(benchmarkDir)
+                .then((files) =>
+                    files
+                        .filter((file) => file.endsWith('.json'))
+                        .sort()
+                        .at(-1)
+                );
+            const report = JSON.parse(
+                await readFile(path.join(benchmarkDir, await latestJson), 'utf8')
+            );
+
+            expect(report.scenarios.length).toBeGreaterThan(0);
+            expect(report.scenarios[0].calibration).toMatchObject({
+                exactTokenizerAvailable: false,
+                exactPromptTokens: null,
+                promptTokenError: null,
+                promptTokenErrorPercent: null,
+            });
+        } finally {
+            await rm(workdir, { recursive: true, force: true });
+        }
     });
 
     test('honors output-token reservation', () => {
