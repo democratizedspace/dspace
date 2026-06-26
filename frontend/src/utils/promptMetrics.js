@@ -73,5 +73,6 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
             metadata.ragDurationMs === undefined || metadata.ragDurationMs === null
                 ? null
                 : Number(metadata.ragDurationMs),
+        contextPlan: metadata.contextPlan || promptPayload?.contextPlan || null,
     };
 };
