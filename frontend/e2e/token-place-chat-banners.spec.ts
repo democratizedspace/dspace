@@ -99,16 +99,22 @@ async function encryptRelayEnvelope(
 const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
     const serverKey = await generateRelayKeypair();
 
-    await page.route('https://token.place/api/v1/relay/servers/next', async (route) => {
+    await page.route('https://token.place/api/v1/relay/servers/next**', async (route) => {
         if (mode === 'network-error') {
             await route.abort('failed');
             return;
         }
 
+        const requestedTier =
+            new URL(route.request().url()).searchParams.get('context_tier') || '8k-fast';
         await route.fulfill({
             status: 200,
             contentType: 'application/json',
-            body: JSON.stringify({ server_public_key: serverKey.publicKeyBase64 }),
+            body: JSON.stringify({
+                server_public_key: serverKey.publicKeyBase64,
+                context_tier: requestedTier,
+                selected_profile_id: `e2e-${requestedTier}`,
+            }),
         });
     });
 

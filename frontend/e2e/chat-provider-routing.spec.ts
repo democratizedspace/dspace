@@ -74,17 +74,23 @@ const tokenPlacePayload = (content = 'token.place assistant reply') => ({
 async function routeTokenPlaceSuccess(page: Page, origin = 'https://token.place') {
     const requests: CapturedRequest[] = [];
     const serverKey = await generateRelayKeypair();
-    await page.route(`${origin}/api/v1/relay/servers/next`, async (route) => {
+    await page.route(`${origin}/api/v1/relay/servers/next**`, async (route) => {
         requests.push({
             method: route.request().method(),
             url: route.request().url(),
             headers: route.request().headers(),
             body: {},
         });
+        const requestedTier =
+            new URL(route.request().url()).searchParams.get('context_tier') || '8k-fast';
         await route.fulfill({
             status: 200,
             contentType: 'application/json',
-            body: JSON.stringify({ server_public_key: serverKey.publicKeyBase64 }),
+            body: JSON.stringify({
+                server_public_key: serverKey.publicKeyBase64,
+                context_tier: requestedTier,
+                selected_profile_id: `e2e-${requestedTier}`,
+            }),
         });
     });
     await page.route(`${origin}/api/v1/relay/requests`, async (route) => {
@@ -181,11 +187,13 @@ test.describe('Chat provider routing', () => {
         await sendFromPanel(chatPanel, 'Route my fresh profile through token.place');
         await expect(chatPanel.getByText('token.place assistant reply')).toBeVisible();
 
-        expect(requests.map((request) => request.url)).toEqual([
+        const requestUrls = requests.map((request) => new URL(request.url));
+        expect(requestUrls.map((url) => `${url.origin}${url.pathname}`)).toEqual([
             'https://token.place/api/v1/relay/servers/next',
             'https://token.place/api/v1/relay/requests',
             'https://token.place/api/v1/relay/responses/retrieve',
         ]);
+        expect(requestUrls[0].searchParams.get('context_tier')).toMatch(/^(8k-fast|64k-full)$/);
         const request = requests[1];
         expect(request.method).toBe('POST');
         expect(request.headers.authorization).toBeUndefined();
@@ -223,7 +231,11 @@ test.describe('Chat provider routing', () => {
         await sendFromPanel(chatPanel, 'Use runtime token.place');
         await expect(chatPanel.getByText('token.place assistant reply')).toBeVisible();
 
-        expect(requests[0].url).toBe('https://token.place/api/v1/relay/servers/next');
+        const selectionUrl = new URL(requests[0].url);
+        expect(`${selectionUrl.origin}${selectionUrl.pathname}`).toBe(
+            'https://token.place/api/v1/relay/servers/next'
+        );
+        expect(selectionUrl.searchParams.get('context_tier')).toMatch(/^(8k-fast|64k-full)$/);
         expect(requests[0].url).not.toContain('/api/api/v1/relay');
     });
 

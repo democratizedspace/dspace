@@ -113,8 +113,7 @@ describe('token.place doc alignment', () => {
       expect(publicDoc).not.toMatch(claim);
     }
 
-    expect(publicDoc).toMatch(/P8 implementation target/i);
-    expect(publicDoc).toMatch(/Until that client implementation lands/i);
+    expect(publicDoc).toMatch(/relay E2EE implementation target/i);
     expect(publicDoc).toMatch(/https:\/\/token\.place/);
     expect(publicDoc).toMatch(/default provider/i);
     expect(publicDoc).toMatch(/OpenAI/i);
