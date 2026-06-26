@@ -1441,6 +1441,42 @@ ${ragExcerpt.repeat(4000)}`,
         expect(getFetchCallByPath('/api/v1/relay/requests')).toBeUndefined();
     });
 
+    test('validates selected context window metadata against exact tier budgets', async () => {
+        global.fetch = makeRelayFetch({
+            selectedTier: '8k-fast',
+            selectedWindowTokens: 8_191,
+        });
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello just under 8k window' }])
+        ).rejects.toMatchObject({ type: 'malformed' });
+        expect(getFetchCallByPath('/api/v1/relay/requests')).toBeUndefined();
+
+        global.fetch = makeRelayFetch({
+            selectedTier: '8k-fast',
+            selectedWindowTokens: 8_192,
+        });
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello exact 8k window' }])
+        ).resolves.toMatchObject({ text: 'mocked reply' });
+
+        global.fetch = makeRelayFetch({
+            selectedTier: '64k-full',
+            selectedWindowTokens: 65_535,
+        });
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'x'.repeat(25_000) }])
+        ).rejects.toMatchObject({ type: 'malformed' });
+        expect(getFetchCallByPath('/api/v1/relay/requests')).toBeUndefined();
+
+        global.fetch = makeRelayFetch({
+            selectedTier: '64k-full',
+            selectedWindowTokens: 65_536,
+        });
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'x'.repeat(25_000) }])
+        ).resolves.toMatchObject({ text: 'mocked reply' });
+    });
+
     test('retries one exact 8K overflow on 64K with unchanged message payload', async () => {
         let retrieveCount = 0;
         global.fetch = makeRelayFetch({

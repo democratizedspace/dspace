@@ -8,7 +8,10 @@ import {
     TOKEN_PLACE_API_V1_MAX_MESSAGE_CONTENT_CHARS,
     TOKEN_PLACE_API_V1_MAX_TOTAL_CONTENT_CHARS,
 } from './tokenPlaceMessages.js';
-import { estimateTokenPlaceContextForSanitizedMessages } from './tokenPlaceContextEstimator.js';
+import {
+    estimateTokenPlaceContextForSanitizedMessages,
+    TOKEN_PLACE_CONTEXT_TIERS,
+} from './tokenPlaceContextEstimator.js';
 import {
     createMalformedTokenPlaceResponseError,
     createTokenPlaceHttpError,
@@ -95,7 +98,12 @@ export const extractTokenPlaceAssistantText = (response) => {
 };
 
 const CONTEXT_TIER_ORDER = { '8k-fast': 1, '64k-full': 2 };
-const CONTEXT_TIER_MIN_WINDOW_TOKENS = { '8k-fast': 8_000, '64k-full': 64_000 };
+const CONTEXT_TIER_MIN_WINDOW_TOKENS = Object.fromEntries(
+    Object.entries(TOKEN_PLACE_CONTEXT_TIERS).map(([tier, config]) => [
+        tier,
+        config.totalContextTokens,
+    ])
+);
 
 const isValidContextTier = (tier) => Object.hasOwn(CONTEXT_TIER_ORDER, tier);
 
@@ -550,6 +558,8 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
     const normalized = normalizeTokenPlacePublicKey(rawKey);
     const selectedTier = getRelaySelectedContextTier(data);
     if (options.contextTier) {
+        // Missing selected tier metadata fails safely before dispatch rather than
+        // silently degrading to an unvalidated compute node.
         if (!selectedTier || !canSatisfyContextTier(selectedTier, options.contextTier)) {
             throw createMalformedTokenPlaceResponseError(
                 'token.place relay selected incompatible context tier metadata.'
