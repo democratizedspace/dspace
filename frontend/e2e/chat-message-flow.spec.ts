@@ -359,7 +359,7 @@ test.describe('Chat provider routing', () => {
         }> = [];
         const legacyRequests: string[] = [];
         const serverKey = await generateRelayKeypair();
-        await page.route('https://token.place/api/v1/relay/servers/next', async (route) => {
+        await page.route('https://token.place/api/v1/relay/servers/next**', async (route) => {
             const request = route.request();
             tokenPlaceRequests.push({
                 url: request.url(),
@@ -369,7 +369,11 @@ test.describe('Chat provider routing', () => {
             await route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify({ server_public_key: serverKey.publicKeyBase64 }),
+                body: JSON.stringify({
+                    server_public_key: serverKey.publicKeyBase64,
+                    context_tier: '8k-fast',
+                    selected_profile_id: 'e2e-8k',
+                }),
             });
         });
         await page.route('https://token.place/api/v1/relay/requests', async (route) => {
@@ -439,11 +443,13 @@ test.describe('Chat provider routing', () => {
         await chatPanel.getByRole('button', { name: 'Send' }).click();
 
         await expect(chatPanel.getByText('token.place grounded reply')).toBeVisible();
-        expect(tokenPlaceRequests.map((request) => request.url)).toEqual([
+        const tokenPlaceUrls = tokenPlaceRequests.map((request) => new URL(request.url));
+        expect(tokenPlaceUrls.map((url) => `${url.origin}${url.pathname}`)).toEqual([
             'https://token.place/api/v1/relay/servers/next',
             'https://token.place/api/v1/relay/requests',
             'https://token.place/api/v1/relay/responses/retrieve',
         ]);
+        expect(tokenPlaceUrls[0].searchParams.get('context_tier')).toBe('8k-fast');
         expect(legacyRequests).toEqual([]);
         const { body, headers } = tokenPlaceRequests[1];
         expect(headers.authorization).toBeUndefined();

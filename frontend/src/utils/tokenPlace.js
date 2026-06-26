@@ -99,9 +99,10 @@ const CONTEXT_TIER_ORDER = { '8k-fast': 1, '64k-full': 2 };
 const isValidContextTier = (tier) => Object.hasOwn(CONTEXT_TIER_ORDER, tier);
 
 const canSatisfyContextTier = (selectedTier, requestedTier) =>
-    isValidContextTier(selectedTier) &&
-    isValidContextTier(requestedTier) &&
-    CONTEXT_TIER_ORDER[selectedTier] >= CONTEXT_TIER_ORDER[requestedTier];
+    !selectedTier ||
+    (isValidContextTier(selectedTier) &&
+        isValidContextTier(requestedTier) &&
+        CONTEXT_TIER_ORDER[selectedTier] >= CONTEXT_TIER_ORDER[requestedTier]);
 
 const getStructuredApiErrorStatus = (apiResponse) => {
     const candidates = [
@@ -777,12 +778,25 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
 
     let data = attempt.apiResponse;
     if (shouldRetryContextOverflow(data, attempt.diagnostics)) {
-        const retry = await runRelayAttempt(baseUrl, sanitizedMessages, {
+        const retryAttemptOptions = {
             ...baseAttemptOptions,
             contextTier: '64k-full',
             requestId: undefined,
             cancelToken: undefined,
-        });
+        };
+        let retry = await runRelayAttempt(baseUrl, sanitizedMessages, retryAttemptOptions);
+        if (retry?.terminalSelectedServerFailure) {
+            retry = await runRelayAttempt(baseUrl, sanitizedMessages, {
+                ...retryAttemptOptions,
+                requestId: undefined,
+                cancelToken: undefined,
+            });
+            if (retry?.terminalSelectedServerFailure) {
+                throw createMalformedTokenPlaceResponseError(
+                    'No token.place compute node is available.'
+                );
+            }
+        }
         attempt = {
             ...retry,
             diagnostics: { ...retry.diagnostics, escalationRetry: true },
@@ -801,7 +815,7 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         metadata: {
             ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),
             tokenPlaceContext: {
-                requestedTier: contextEstimate.selectedTier,
+                requestedTier: attempt.diagnostics?.requestedTier || contextEstimate.selectedTier,
                 relaySelectedTier: attempt.diagnostics?.relaySelectedTier,
                 finalActiveTier: getApiErrorActiveTier(data),
                 spillover: Boolean(attempt.diagnostics?.spillover),

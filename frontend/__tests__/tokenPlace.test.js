@@ -1377,6 +1377,21 @@ ${ragExcerpt.repeat(4000)}`,
         );
     });
 
+    test('allows legacy relay selection responses without context tier echo', async () => {
+        global.fetch = makeRelayFetch({ selectedTier: undefined });
+
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello legacy relay' }])
+        ).resolves.toMatchObject({
+            metadata: {
+                tokenPlaceContext: {
+                    requestedTier: '8k-fast',
+                    spillover: false,
+                },
+            },
+        });
+    });
+
     test('accepts larger selected context tier as spillover and rejects smaller selected tier', async () => {
         global.fetch = makeRelayFetch({ selectedTier: '64k-full' });
         await expect(TokenPlaceChatV2([{ role: 'user', content: 'hello' }])).resolves.toMatchObject(
@@ -1436,6 +1451,48 @@ ${ragExcerpt.repeat(4000)}`,
         );
         expect(first.api_v1_request.messages).toEqual(second.api_v1_request.messages);
     });
+
+    test('reselects once when the 64K overflow retry selected server disconnects', async () => {
+        let retrieveCount = 0;
+        global.fetch = makeRelayFetch({
+            selectedTier: ({ selectionCount }) => (selectionCount === 1 ? '8k-fast' : '64k-full'),
+            retrieveStatuses: [200, 404, 200],
+            replyForRetrieve: () => {
+                retrieveCount += 1;
+                if (retrieveCount === 1) {
+                    return {
+                        error: {
+                            code: 'compute_node_context_window_exceeded',
+                            message: 'too large for active context',
+                            retryable: true,
+                            recommended_context_tier: '64k-full',
+                        },
+                    };
+                }
+                return { choices: [{ message: { content: 'retried after disconnect' } }] };
+            },
+        });
+
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello retry disconnect' }], {
+                pollIntervalMs: 1,
+            })
+        ).resolves.toMatchObject({
+            text: 'retried after disconnect',
+            metadata: {
+                tokenPlaceContext: {
+                    requestedTier: '64k-full',
+                    escalationRetry: true,
+                },
+            },
+        });
+
+        const selections = fetch.mock.calls
+            .filter(([url]) => urlPathEndsWith(url, '/api/v1/relay/servers/next'))
+            .map(([url]) => new URL(url).searchParams.get('context_tier'));
+        expect(selections).toEqual(['8k-fast', '64k-full', '64k-full']);
+    });
+
     test('shared prompt and token.place payload omit stale provider guidance', async () => {
         const promptPayload = await buildChatPrompt([{ role: 'user', content: 'hello' }]);
         const serializedPrompt = JSON.stringify({
