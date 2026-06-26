@@ -13,13 +13,16 @@ import {
     createTokenPlaceHttpError,
     createTokenPlaceNetworkError,
 } from './tokenPlaceErrors.js';
+import { estimateTokenPlaceContextForSanitizedMessages } from './tokenPlaceContextEstimator.js';
 
 const DEFAULT_ORIGIN = 'https://token.place';
 const CHAT_COMPLETIONS_PATH = '/api/v1/chat/completions';
 const RELAY_PROTOCOL = 'tokenplace_api_v1_relay_e2ee';
 const RELAY_VERSION = 1;
 const DEFAULT_CHAT_MODEL = 'llama-3.1-8b-instruct';
-const DEFAULT_RELAY_TIMEOUT_MS = 30_000;
+export const TOKEN_PLACE_FAST_TIER_TIMEOUT_MS = 30_000;
+export const TOKEN_PLACE_FULL_TIER_TIMEOUT_MS = 120_000;
+const DEFAULT_RELAY_TIMEOUT_MS = TOKEN_PLACE_FAST_TIER_TIMEOUT_MS;
 const DEFAULT_RELAY_POLL_INTERVAL_MS = 500;
 export {
     sanitizeTokenPlaceMessages,
@@ -383,9 +386,46 @@ const fetchJson = async (url, init, unavailableMessage) => {
     }
 };
 
+const CONTEXT_TIER_ORDER = Object.freeze({ '8k-fast': 0, '64k-full': 1 });
+const normalizeContextTier = (value) => {
+    const tier = String(value || '').trim();
+    return Object.prototype.hasOwnProperty.call(CONTEXT_TIER_ORDER, tier) ? tier : null;
+};
+const tierSatisfies = (selectedTier, requestedTier) =>
+    normalizeContextTier(selectedTier) !== null &&
+    normalizeContextTier(requestedTier) !== null &&
+    CONTEXT_TIER_ORDER[selectedTier] >= CONTEXT_TIER_ORDER[requestedTier];
+const getSelectedContextTier = (server) =>
+    normalizeContextTier(
+        server?.selected_context_tier ||
+            server?.selectedContextTier ||
+            server?.context_tier ||
+            server?.contextTier ||
+            server?.profile?.context_tier ||
+            server?.profile?.contextTier ||
+            server?.selected_profile?.context_tier ||
+            server?.selectedProfile?.contextTier
+    );
+const getSelectedProfileEcho = (server) =>
+    server?.selected_profile_id ||
+    server?.selectedProfileId ||
+    server?.profile_id ||
+    server?.profileId ||
+    server?.selected_profile?.id ||
+    server?.selectedProfile?.id ||
+    null;
+const buildServersNextUrl = (baseUrl, options = {}) => {
+    const url = new URL(`${baseUrl}/api/v1/relay/servers/next`);
+    if (options.model) url.searchParams.set('model', options.model);
+    if (options.contextTier) url.searchParams.set('context_tier', options.contextTier);
+    url.searchParams.set('client_supports_context_tiers', 'true');
+    return url.toString();
+};
+
 export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
+    const requestedTier = normalizeContextTier(options.contextTier);
     const data = await fetchJson(
-        `${baseUrl}/api/v1/relay/servers/next`,
+        buildServersNextUrl(baseUrl, options),
         { method: 'GET', signal: options.signal },
         'token.place relay is unavailable.'
     );
@@ -393,7 +433,20 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
     if (!rawKey)
         throw createMalformedTokenPlaceResponseError('No token.place compute node is available.');
     const normalized = normalizeTokenPlacePublicKey(rawKey);
-    return { ...data, server_public_key: normalized.base64, serverPublicKeyPem: normalized.pem };
+    const selectedTier = getSelectedContextTier(data) || requestedTier;
+    if (requestedTier && !tierSatisfies(selectedTier, requestedTier)) {
+        throw createMalformedTokenPlaceResponseError(
+            'token.place selected compute node cannot satisfy the requested context tier.'
+        );
+    }
+    return {
+        ...data,
+        server_public_key: normalized.base64,
+        serverPublicKeyPem: normalized.pem,
+        selectedContextTier: selectedTier,
+        selectedProfileEcho: getSelectedProfileEcho(data),
+        spillover: Boolean(requestedTier && selectedTier && selectedTier !== requestedTier),
+    };
 };
 
 export const dispatchTokenPlaceRelayRequest = async (baseUrl, body, options = {}) =>
@@ -552,13 +605,45 @@ const resolveTokenPlacePromptPayload = async (messages, options = {}) => {
     return buildChatPrompt(messages, options);
 };
 
-const buildApiV1Request = (promptPayload, options = {}) => ({
-    model: getTokenPlaceChatModel(options),
-    messages: sanitizeTokenPlaceMessages(promptPayload.combinedMessages),
-    options: {},
-});
+const buildApiV1Request = (sanitizedMessages, options = {}) => {
+    const request = {
+        model: getTokenPlaceChatModel(options),
+        messages: sanitizedMessages,
+        options: {},
+        routing: { context_tier: options.contextTier },
+    };
+    if (options.selectedProfileEcho)
+        request.routing.selected_profile_id = options.selectedProfileEcho;
+    return request;
+};
 
-const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
+const classifySanitizedTokenPlacePrompt = (sanitizedMessages, options = {}) => {
+    const estimate = estimateTokenPlaceContextForSanitizedMessages(sanitizedMessages, options);
+    if (estimate.overLimit) {
+        const error = createMalformedTokenPlaceResponseError(
+            'This chat prompt is over token.place’s 64K context budget. Please shorten the request or reduce context and try again.'
+        );
+        error.code = 'token_place_context_over_limit';
+        error.context = {
+            estimatedPromptTokens: estimate.estimatedPromptTokens,
+            reservedOutputTokens: estimate.reservedOutputTokens,
+            selectedTier: null,
+            estimatorVersion: estimate.estimatorVersion,
+        };
+        throw error;
+    }
+    return estimate;
+};
+
+const getTimeoutClassForTier = (tier) => (tier === '64k-full' ? '64k-full' : '8k-fast');
+const getTimeoutMsForTier = (tier, options = {}) => {
+    if (options.timeoutMs !== undefined) return options.timeoutMs;
+    return getTimeoutClassForTier(tier) === '64k-full'
+        ? TOKEN_PLACE_FULL_TIER_TIMEOUT_MS
+        : TOKEN_PLACE_FAST_TIER_TIMEOUT_MS;
+};
+
+const runRelayAttempt = async (baseUrl, sanitizedMessages, options = {}) => {
     const server = await selectTokenPlaceRelayServer(baseUrl, options);
     const clientKeys = options.clientKeys || (await generateTokenPlaceClientKeypair());
     const requestId = options.requestId || randomBase64Url();
@@ -568,7 +653,10 @@ const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
         version: RELAY_VERSION,
         request_id: requestId,
         client_public_key: clientKeys.publicKeyBase64,
-        api_v1_request: buildApiV1Request(promptPayload, options),
+        api_v1_request: buildApiV1Request(sanitizedMessages, {
+            ...options,
+            selectedProfileEcho: server.selectedProfileEcho,
+        }),
     };
     const encrypted = await encryptTokenPlaceEnvelope(envelope, server.serverPublicKeyPem);
     const dispatched = await dispatchTokenPlaceRelayRequest(
@@ -590,7 +678,14 @@ const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
     const encryptedResponse = await pollTokenPlaceRelayResponse(
         baseUrl,
         { client_public_key: clientKeys.publicKeyBase64, request_id: requestId },
-        { ...options, cancelToken }
+        {
+            ...options,
+            cancelToken,
+            timeoutMs: getTimeoutMsForTier(
+                server.selectedContextTier || options.contextTier,
+                options
+            ),
+        }
     );
     if (encryptedResponse?.terminalSelectedServerFailure) return encryptedResponse;
     let responseEnvelope;
@@ -602,10 +697,19 @@ const runRelayAttempt = async (baseUrl, promptPayload, options = {}) => {
     } catch (error) {
         throw createMalformedTokenPlaceResponseError('Malformed encrypted token.place response.');
     }
-    return validateTokenPlaceResponseEnvelope(responseEnvelope, {
+    const apiResponse = validateTokenPlaceResponseEnvelope(responseEnvelope, {
         requestId,
         clientPublicKey: clientKeys.publicKeyBase64,
     });
+    return {
+        apiResponse,
+        diagnostics: {
+            requestedTier: options.contextTier,
+            selectedTier: server.selectedContextTier,
+            spillover: server.spillover,
+            timeoutClass: getTimeoutClassForTier(server.selectedContextTier || options.contextTier),
+        },
+    };
 };
 
 export const TokenPlaceChatV2 = async (messages, options = {}) => {
@@ -620,18 +724,58 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         runtimeUrl: options.runtimeUrl,
     });
 
-    let data = await runRelayAttempt(baseUrl, promptPayload, options);
-    if (data?.terminalSelectedServerFailure) {
-        data = await runRelayAttempt(baseUrl, promptPayload, {
+    const sanitizedMessages = sanitizeTokenPlaceMessages(promptPayload.combinedMessages);
+    const estimate = classifySanitizedTokenPlacePrompt(sanitizedMessages, options);
+    const model = getTokenPlaceChatModel(options);
+    const runAttempt = (contextTier, attemptOptions = {}) =>
+        runRelayAttempt(baseUrl, sanitizedMessages, {
             ...options,
+            ...attemptOptions,
+            model,
+            contextTier,
+        });
+
+    let result = await runAttempt(estimate.selectedTier);
+    if (result?.terminalSelectedServerFailure) {
+        result = await runAttempt(estimate.selectedTier, {
             requestId: undefined,
             cancelToken: undefined,
         });
-        if (data?.terminalSelectedServerFailure) {
+        if (result?.terminalSelectedServerFailure) {
             throw createMalformedTokenPlaceResponseError(
                 'No token.place compute node is available.'
             );
         }
+    }
+
+    let data = result.apiResponse;
+    let diagnostics = {
+        ...result.diagnostics,
+        estimatedTier: estimate.selectedTier,
+        estimatorVersion: estimate.estimatorVersion,
+        estimatedPromptTokens: estimate.estimatedPromptTokens,
+        reservedOutputTokens: estimate.reservedOutputTokens,
+        escalationRetry: false,
+    };
+    if (
+        estimate.selectedTier === '8k-fast' &&
+        result.diagnostics?.selectedTier !== '64k-full' &&
+        data?.error?.code === 'compute_node_context_window_exceeded' &&
+        (data.error.retryable === true ||
+            data.error.recommended_context_tier === '64k-full' ||
+            data.error.recommended_tier === '64k-full')
+    ) {
+        const retryResult = await runAttempt('64k-full', {
+            requestId: undefined,
+            cancelToken: undefined,
+        });
+        data = retryResult.apiResponse;
+        diagnostics = {
+            ...diagnostics,
+            ...retryResult.diagnostics,
+            requestedTier: '64k-full',
+            escalationRetry: true,
+        };
     }
 
     throwStructuredTokenPlaceApiError(data);
@@ -642,7 +786,10 @@ export const TokenPlaceChatV2 = async (messages, options = {}) => {
         text,
         contextSources,
         usage: data?.usage,
-        metadata: data?.metadata,
+        metadata: {
+            ...(data?.metadata && typeof data.metadata === 'object' ? data.metadata : {}),
+            tokenPlaceContext: diagnostics,
+        },
     };
 };
 
