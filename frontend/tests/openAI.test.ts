@@ -24,8 +24,27 @@ vi.mock('../src/data/npcPersonas.js', () => ({
     npcPersonas: [
         {
             id: 'dchat',
+            name: 'dChat',
             systemPrompt: 'system prompt',
             welcomeMessage: 'hello',
+        },
+        {
+            id: 'sydney',
+            name: 'Sydney',
+            systemPrompt: 'You are Sydney, the 3D-printing mentor.',
+            welcomeMessage: 'Sydney here.',
+        },
+        {
+            id: 'nova',
+            name: 'Nova',
+            systemPrompt: 'You are Nova, the rocketry expert.',
+            welcomeMessage: 'Nova here.',
+        },
+        {
+            id: 'hydro',
+            name: 'Hydro',
+            systemPrompt: 'You are Hydro, the hydroponics steward.',
+            welcomeMessage: 'Hydro here.',
         },
     ],
 }));
@@ -211,16 +230,7 @@ describe('GPT5Chat', () => {
                 content: [
                     {
                         type: 'input_text',
-                        text: expect.stringContaining('PlayerState v'),
-                    },
-                ],
-            }),
-            expect.objectContaining({
-                role: 'system',
-                content: [
-                    {
-                        type: 'input_text',
-                        text: expect.stringContaining('DSPACE knowledge base:\nknowledge'),
+                        text: expect.stringContaining('Persona voice examples for dChat'),
                     },
                 ],
             }),
@@ -234,6 +244,8 @@ describe('GPT5Chat', () => {
                 ],
             },
         ]);
+        expect(JSON.stringify(payload.input)).not.toContain('PlayerState v');
+        expect(JSON.stringify(payload.input)).not.toContain('DSPACE knowledge base');
         expect(result).toBe('ok');
     });
 
@@ -477,6 +489,88 @@ describe('buildChatPrompt', () => {
         vi.mocked(searchDocsRag).mockClear();
     });
 
+    it('uses a persona-preserving minimal prompt for ungrounded greetings', async () => {
+        const payload = await buildChatPrompt([{ role: 'user', content: 'hi' }], {
+            includePromptMetrics: true,
+            persona: {
+                id: 'sydney',
+                name: 'Sydney',
+                systemPrompt: 'You are Sydney, the 3D-printing mentor.',
+                welcomeMessage: 'Sydney here.',
+            },
+        });
+        const promptText = payload.combinedMessages.map((message) => message.content).join('\n');
+
+        expect(payload.contextPlan.mode).toBe('minimal');
+        expect(payload.promptMetrics.contextPlan.mode).toBe('minimal');
+        expect(payload.contextSources).toEqual([]);
+        expect(promptText).toContain('You are Sydney');
+        expect(promptText).toContain('Persona voice examples for Sydney');
+        expect(promptText).toContain("I'm Sydney—FDM rigs are my playground.");
+        expect(promptText).not.toContain('You are dChat');
+        expect(promptText).not.toContain('PlayerState');
+        expect(promptText).not.toContain('DSPACE knowledge base');
+        expect(promptText).not.toContain('Docs grounding');
+        expect(promptText.length).toBeLessThan(3500);
+        expect(buildDchatKnowledgePack).not.toHaveBeenCalled();
+        expect(searchDocsRag).not.toHaveBeenCalled();
+    });
+
+    it('isolates selected persona voice samples in minimal prompts', async () => {
+        const payload = await buildChatPrompt([{ role: 'user', content: 'hello' }], {
+            includePromptMetrics: true,
+            persona: {
+                id: 'nova',
+                name: 'Nova',
+                systemPrompt: 'You are Nova, the rocketry expert.',
+                welcomeMessage: 'Nova here.',
+            },
+        });
+        const promptText = payload.combinedMessages.map((message) => message.content).join('\n');
+
+        expect(payload.contextPlan).toEqual(
+            expect.objectContaining({
+                mode: 'minimal',
+                selectedPersonaId: 'nova',
+                personaVoiceSampleCount: 3,
+            })
+        );
+        expect(payload.contextPlan.personaVoiceSampleCharCount).toBeLessThanOrEqual(650);
+        expect(promptText).toContain('Persona voice examples for Nova');
+        expect(promptText).toContain("Hey friend! I'm Nova!");
+        expect(promptText).not.toContain("I'm Sydney—FDM rigs are my playground.");
+        expect(promptText).not.toContain("Hey there! I'm Hydro");
+        expect(promptText).not.toContain('Greetings, adventurer!');
+        expect(payload.contextSources).toEqual([]);
+        expect(JSON.stringify(payload.promptMetrics.contextPlan)).not.toContain(
+            "Hey friend! I'm Nova!"
+        );
+    });
+
+    it('preserves persona and full grounding for grounded questions', async () => {
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'what quest do I have left?' }],
+            {
+                persona: {
+                    id: 'hydro',
+                    name: 'Hydro',
+                    systemPrompt: 'You are Hydro, the hydroponics steward.',
+                    welcomeMessage: 'Hydro here.',
+                },
+            }
+        );
+        const promptText = payload.combinedMessages.map((message) => message.content).join('\n');
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.reasonCodes).toEqual(
+            expect.arrayContaining(['player-state-progress', 'game-data'])
+        );
+        expect(promptText).toContain('You are Hydro');
+        expect(promptText).toContain('DSPACE knowledge base');
+        expect(buildDchatKnowledgePack).toHaveBeenCalled();
+        expect(searchDocsRag).toHaveBeenCalled();
+    });
+
     it('adds guardrails for save snapshots, clarifying questions, and anti-precision', async () => {
         const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
         const systemMessage = payload.debugMessages.find(
@@ -514,6 +608,15 @@ describe('buildChatPrompt', () => {
         ].join('\n');
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Check guardrails.' }], {
+            contextPlan: {
+                mode: 'full',
+                includePlayerState: true,
+                includeKnowledgePack: true,
+                includeDocsRag: true,
+                includePersonaVoiceSamples: false,
+                reasonCodes: ['test-forced-full'],
+                confidence: 'conservative',
+            },
             persona: {
                 id: 'custom',
                 systemPrompt,
@@ -543,6 +646,15 @@ describe('buildChatPrompt', () => {
         ].join('\n');
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Check guardrails.' }], {
+            contextPlan: {
+                mode: 'full',
+                includePlayerState: true,
+                includeKnowledgePack: true,
+                includeDocsRag: true,
+                includePersonaVoiceSamples: false,
+                reasonCodes: ['test-forced-full'],
+                confidence: 'conservative',
+            },
             persona: {
                 id: 'custom',
                 systemPrompt,
