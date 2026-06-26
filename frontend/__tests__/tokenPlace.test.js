@@ -54,7 +54,10 @@ const makeRelayFetch = ({
     retrieveStatuses = [200],
     serverFailureOnce = false,
     accepted = true,
+    omitSelectedTier = false,
     selectedTier = ({ url }) => new URL(url).searchParams.get('context_tier') || '8k-fast',
+    selectedWindowTokens,
+    selectedModelSupport,
     replyForRetrieve = null,
 } = {}) => {
     let retrieveCount = 0;
@@ -69,16 +72,24 @@ const makeRelayFetch = ({
                 ).length === 1
                     ? relayServerKeys[1]
                     : relayServerKeys[0];
+            const tier = omitSelectedTier
+                ? undefined
+                : typeof selectedTier === 'function'
+                  ? selectedTier({ url, selectionCount })
+                  : selectedTier;
             return {
                 ok: true,
                 status: 200,
                 json: () =>
                     Promise.resolve({
                         server_public_key: key.publicKeyBase64,
-                        context_tier:
-                            typeof selectedTier === 'function'
-                                ? selectedTier({ url, selectionCount })
-                                : selectedTier,
+                        ...(tier ? { context_tier: tier } : {}),
+                        ...(selectedWindowTokens
+                            ? { selected_context_window_tokens: selectedWindowTokens }
+                            : {}),
+                        ...(selectedModelSupport
+                            ? { selected_model_support: selectedModelSupport }
+                            : {}),
                         selected_profile_id: 'test-8k',
                     }),
             };
@@ -1335,7 +1346,10 @@ ${ragExcerpt.repeat(4000)}`,
                     ok: true,
                     status: 200,
                     json: () =>
-                        Promise.resolve({ server_public_key: relayServerKeys[0].publicKeyBase64 }),
+                        Promise.resolve({
+                            server_public_key: relayServerKeys[0].publicKeyBase64,
+                            context_tier: '8k-fast',
+                        }),
                 };
             }
             if (urlPathEndsWith(url, '/api/v1/relay/requests')) {
@@ -1377,22 +1391,16 @@ ${ragExcerpt.repeat(4000)}`,
         );
     });
 
-    test('allows legacy relay selection responses without context tier echo', async () => {
-        global.fetch = makeRelayFetch({ selectedTier: undefined });
+    test('missing selected tier metadata fails before dispatch', async () => {
+        global.fetch = makeRelayFetch({ omitSelectedTier: true });
 
         await expect(
-            TokenPlaceChatV2([{ role: 'user', content: 'hello legacy relay' }])
-        ).resolves.toMatchObject({
-            metadata: {
-                tokenPlaceContext: {
-                    requestedTier: '8k-fast',
-                    spillover: false,
-                },
-            },
-        });
+            TokenPlaceChatV2([{ role: 'user', content: 'hello missing relay tier' }])
+        ).rejects.toMatchObject({ type: 'malformed' });
+        expect(getFetchCallByPath('/api/v1/relay/requests')).toBeUndefined();
     });
 
-    test('accepts larger selected context tier as spillover and rejects smaller selected tier', async () => {
+    test('accepts larger selected context tier as spillover and rejects incompatible tiers', async () => {
         global.fetch = makeRelayFetch({ selectedTier: '64k-full' });
         await expect(TokenPlaceChatV2([{ role: 'user', content: 'hello' }])).resolves.toMatchObject(
             {
@@ -1404,6 +1412,33 @@ ${ragExcerpt.repeat(4000)}`,
         await expect(
             TokenPlaceChatV2([{ role: 'user', content: 'x'.repeat(25_000) }])
         ).rejects.toMatchObject({ type: 'malformed' });
+        expect(getFetchCallByPath('/api/v1/relay/requests')).toBeUndefined();
+
+        global.fetch = makeRelayFetch({ selectedTier: 'bogus-tier' });
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello invalid relay tier' }])
+        ).rejects.toMatchObject({ type: 'malformed' });
+        expect(getFetchCallByPath('/api/v1/relay/requests')).toBeUndefined();
+    });
+
+    test('rejects incoherent selected context window and model support metadata before dispatch', async () => {
+        global.fetch = makeRelayFetch({
+            selectedTier: '64k-full',
+            selectedWindowTokens: 8_000,
+        });
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello small relay window' }])
+        ).rejects.toMatchObject({ type: 'malformed' });
+        expect(getFetchCallByPath('/api/v1/relay/requests')).toBeUndefined();
+
+        global.fetch = makeRelayFetch({
+            selectedTier: '8k-fast',
+            selectedModelSupport: ['other-model'],
+        });
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello unsupported relay model' }])
+        ).rejects.toMatchObject({ type: 'malformed' });
+        expect(getFetchCallByPath('/api/v1/relay/requests')).toBeUndefined();
     });
 
     test('retries one exact 8K overflow on 64K with unchanged message payload', async () => {
@@ -1491,6 +1526,34 @@ ${ragExcerpt.repeat(4000)}`,
             .filter(([url]) => urlPathEndsWith(url, '/api/v1/relay/servers/next'))
             .map(([url]) => new URL(url).searchParams.get('context_tier'));
         expect(selections).toEqual(['8k-fast', '64k-full', '64k-full']);
+    });
+
+    test('does not retry 8K overflow when encrypted error reports active 64K tier', async () => {
+        global.fetch = makeRelayFetch({
+            selectedTier: '8k-fast',
+            replyForRetrieve: () => ({
+                error: {
+                    code: 'compute_node_context_window_exceeded',
+                    message: 'too large for active context',
+                    retryable: true,
+                    recommended_context_tier: '64k-full',
+                    active_context_tier: '64k-full',
+                },
+            }),
+        });
+
+        await expect(
+            TokenPlaceChatV2([{ role: 'user', content: 'hello no retry active 64k' }])
+        ).rejects.toMatchObject({ status: 400 });
+
+        const selections = fetch.mock.calls.filter(([url]) =>
+            urlPathEndsWith(url, '/api/v1/relay/servers/next')
+        );
+        const dispatches = fetch.mock.calls.filter(([url]) =>
+            urlPathEndsWith(url, '/api/v1/relay/requests')
+        );
+        expect(selections).toHaveLength(1);
+        expect(dispatches).toHaveLength(1);
     });
 
     test('shared prompt and token.place payload omit stale provider guidance', async () => {

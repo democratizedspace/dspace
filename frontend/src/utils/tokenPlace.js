@@ -95,14 +95,14 @@ export const extractTokenPlaceAssistantText = (response) => {
 };
 
 const CONTEXT_TIER_ORDER = { '8k-fast': 1, '64k-full': 2 };
+const CONTEXT_TIER_MIN_WINDOW_TOKENS = { '8k-fast': 8_000, '64k-full': 64_000 };
 
 const isValidContextTier = (tier) => Object.hasOwn(CONTEXT_TIER_ORDER, tier);
 
 const canSatisfyContextTier = (selectedTier, requestedTier) =>
-    !selectedTier ||
-    (isValidContextTier(selectedTier) &&
-        isValidContextTier(requestedTier) &&
-        CONTEXT_TIER_ORDER[selectedTier] >= CONTEXT_TIER_ORDER[requestedTier]);
+    isValidContextTier(selectedTier) &&
+    isValidContextTier(requestedTier) &&
+    CONTEXT_TIER_ORDER[selectedTier] >= CONTEXT_TIER_ORDER[requestedTier];
 
 const getStructuredApiErrorStatus = (apiResponse) => {
     const candidates = [
@@ -154,8 +154,14 @@ const getApiErrorActiveTier = (apiResponse) =>
     apiResponse?.error?.activeContextTier ||
     apiResponse?.error?.selected_context_tier ||
     apiResponse?.error?.selectedContextTier ||
+    apiResponse?.error?.context_tier ||
+    apiResponse?.error?.contextTier ||
     apiResponse?.error?.metadata?.active_context_tier ||
-    apiResponse?.error?.metadata?.selected_context_tier;
+    apiResponse?.error?.metadata?.activeContextTier ||
+    apiResponse?.error?.metadata?.selected_context_tier ||
+    apiResponse?.error?.metadata?.selectedContextTier ||
+    apiResponse?.error?.metadata?.context_tier ||
+    apiResponse?.error?.metadata?.contextTier;
 
 const shouldRetryContextOverflow = (apiResponse, attempt) => {
     const error = apiResponse?.error;
@@ -165,10 +171,13 @@ const shouldRetryContextOverflow = (apiResponse, attempt) => {
     const recommends64k =
         error.recommended_context_tier === '64k-full' ||
         error.recommendedContextTier === '64k-full' ||
-        error.metadata?.recommended_context_tier === '64k-full';
+        error.metadata?.recommended_context_tier === '64k-full' ||
+        error.metadata?.recommendedContextTier === '64k-full';
+    const activeTier = getApiErrorActiveTier(apiResponse);
     return (
         attempt?.requestedTier === '8k-fast' &&
         attempt?.relaySelectedTier !== '64k-full' &&
+        activeTier !== '64k-full' &&
         (error.retryable === true || recommends64k)
     );
 };
@@ -464,6 +473,67 @@ const getRelayProfileEcho = (data) =>
     data?.selectedProfile?.id ||
     data?.profile?.id;
 
+const getRelaySelectedContextWindowTokens = (data) => {
+    const value =
+        data?.selected_context_window_tokens ??
+        data?.selectedContextWindowTokens ??
+        data?.context_window_tokens ??
+        data?.contextWindowTokens ??
+        data?.profile?.selected_context_window_tokens ??
+        data?.profile?.selectedContextWindowTokens ??
+        data?.profile?.context_window_tokens ??
+        data?.profile?.contextWindowTokens ??
+        data?.selected_profile?.selected_context_window_tokens ??
+        data?.selected_profile?.context_window_tokens ??
+        data?.selectedProfile?.selectedContextWindowTokens ??
+        data?.selectedProfile?.contextWindowTokens;
+    const numeric = Number(value);
+    return Number.isFinite(numeric) && numeric > 0 ? numeric : undefined;
+};
+
+const getRelaySelectedModelSupport = (data) =>
+    data?.selected_model_support ??
+    data?.selectedModelSupport ??
+    data?.model_support ??
+    data?.modelSupport ??
+    data?.models ??
+    data?.profile?.selected_model_support ??
+    data?.profile?.selectedModelSupport ??
+    data?.profile?.model_support ??
+    data?.profile?.modelSupport ??
+    data?.profile?.models ??
+    data?.selected_profile?.selected_model_support ??
+    data?.selected_profile?.model_support ??
+    data?.selected_profile?.models ??
+    data?.selectedProfile?.selectedModelSupport ??
+    data?.selectedProfile?.modelSupport ??
+    data?.selectedProfile?.models;
+
+const relayModelSupportIncludes = (modelSupport, requestedModel) => {
+    if (!modelSupport || !requestedModel) return true;
+    if (Array.isArray(modelSupport)) return modelSupport.includes(requestedModel);
+    if (typeof modelSupport === 'string') return modelSupport === requestedModel;
+    if (typeof modelSupport === 'object') {
+        if (Array.isArray(modelSupport.models)) return modelSupport.models.includes(requestedModel);
+        if (Array.isArray(modelSupport.supported_models)) {
+            return modelSupport.supported_models.includes(requestedModel);
+        }
+        if (Array.isArray(modelSupport.supportedModels)) {
+            return modelSupport.supportedModels.includes(requestedModel);
+        }
+        if (typeof modelSupport[requestedModel] === 'boolean') return modelSupport[requestedModel];
+    }
+    return false;
+};
+
+const relayContextWindowSatisfiesTier = (windowTokens, selectedTier, requestedTier) => {
+    if (!windowTokens) return true;
+    return (
+        windowTokens >= CONTEXT_TIER_MIN_WINDOW_TOKENS[selectedTier] &&
+        windowTokens >= CONTEXT_TIER_MIN_WINDOW_TOKENS[requestedTier]
+    );
+};
+
 export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
     const params = new URLSearchParams();
     if (options.model) params.set('model', options.model);
@@ -480,9 +550,27 @@ export const selectTokenPlaceRelayServer = async (baseUrl, options = {}) => {
     const normalized = normalizeTokenPlacePublicKey(rawKey);
     const selectedTier = getRelaySelectedContextTier(data);
     if (options.contextTier) {
-        if (!canSatisfyContextTier(selectedTier, options.contextTier)) {
+        if (!selectedTier || !canSatisfyContextTier(selectedTier, options.contextTier)) {
             throw createMalformedTokenPlaceResponseError(
                 'token.place relay selected incompatible context tier metadata.'
+            );
+        }
+        const selectedWindowTokens = getRelaySelectedContextWindowTokens(data);
+        if (
+            !relayContextWindowSatisfiesTier(
+                selectedWindowTokens,
+                selectedTier,
+                options.contextTier
+            )
+        ) {
+            throw createMalformedTokenPlaceResponseError(
+                'token.place relay selected incompatible context window metadata.'
+            );
+        }
+        const selectedModelSupport = getRelaySelectedModelSupport(data);
+        if (!relayModelSupportIncludes(selectedModelSupport, options.model)) {
+            throw createMalformedTokenPlaceResponseError(
+                'token.place relay selected incompatible model metadata.'
             );
         }
     }
