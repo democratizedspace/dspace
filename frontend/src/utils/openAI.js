@@ -7,6 +7,8 @@ import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
 import { buildPromptMetrics } from './promptMetrics.js';
+import { planChatContext } from './chatContextPlanner.js';
+import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -608,6 +610,97 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const promptBuildStartedAt = performance.now();
     await ready;
     const normalizedMessages = Array.isArray(messages) ? messages : [];
+    const contextPlan = options.contextPlan || planChatContext(normalizedMessages, options);
+    const persona = options.persona || defaultPersona;
+    const fullSystemPrompt = applySystemPolicyVersion(
+        applyProviderRealityLine(
+            applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
+        )
+    );
+    const minimalSystemPrompt = applySystemPolicyVersion(
+        applyProviderRealityLine(persona?.systemPrompt || fallbackSystemPrompt)
+    );
+    const systemMessage = {
+        role: 'system',
+        content: `Prompt version: v3:${getPromptVersionSha()}
+${contextPlan.mode === 'minimal' ? minimalSystemPrompt : fullSystemPrompt}`,
+    };
+    const latestUserMessage = [...normalizedMessages]
+        .reverse()
+        .find((message) => message.role === 'user' && message.content?.trim());
+
+    if (contextPlan.mode === 'minimal') {
+        const rawGameState = loadGameState();
+        const hasGameState = rawGameState && typeof rawGameState === 'object';
+        const gameState = hasGameState ? rawGameState : {};
+        const voiceSamplePayload = contextPlan.includePersonaVoiceSamples
+            ? renderPersonaVoiceSamples(persona)
+            : { block: '', count: 0, characters: 0 };
+        const voiceSampleMessage = voiceSamplePayload.block
+            ? {
+                  role: 'system',
+                  content: voiceSamplePayload.block,
+              }
+            : null;
+        const minimalMessages = normalizedMessages
+            .filter((message) => message?.role !== 'system')
+            .slice(-4)
+            .reduceRight((selected, message) => {
+                const currentCharacters = selected.reduce(
+                    (sum, entry) => sum + String(entry.content || '').length,
+                    0
+                );
+                if (currentCharacters + String(message.content || '').length > 1000) {
+                    return selected;
+                }
+                return [message, ...selected];
+            }, []);
+        const combinedMessages = [
+            systemMessage,
+            ...(voiceSampleMessage ? [voiceSampleMessage] : []),
+            ...minimalMessages,
+        ];
+        const debugMessages = combinedMessages.map((message) => ({
+            role: message.role,
+            content: message.content,
+            kind: 'main',
+        }));
+        const promptPayload = {
+            combinedMessages,
+            debugMessages,
+            gameState,
+            contextSources: [],
+            playerStateSummary: { included: false, reason: 'context-plan-minimal' },
+            contextPlan: {
+                ...contextPlan,
+                selectedPersonaId: persona?.id || null,
+                selectedPersonaName: persona?.name || null,
+                personaVoiceSampleCount: voiceSamplePayload.count,
+                personaVoiceSampleCharacters: voiceSamplePayload.characters,
+            },
+        };
+
+        if (options.includePromptMetrics) {
+            const latestUserMessageIndex = latestUserMessage
+                ? combinedMessages.lastIndexOf(latestUserMessage)
+                : -1;
+            promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
+                promptBuildDurationMs: performance.now() - promptBuildStartedAt,
+                ragDurationMs: 0,
+                contextPlan: promptPayload.contextPlan,
+                componentMessageIndexes: {
+                    systemInstructions: 0,
+                    rag: [],
+                    playerState: -1,
+                    chatHistory: [],
+                    latestUserMessage: latestUserMessageIndex,
+                },
+            });
+        }
+
+        return promptPayload;
+    }
+
     const rawGameState = loadGameState();
     const hasGameState = rawGameState && typeof rawGameState === 'object';
     const gameState = hasGameState ? rawGameState : {};
@@ -619,23 +712,13 @@ export const buildChatPrompt = async (messages, options = {}) => {
           }
         : null;
 
-    const persona = options.persona || defaultPersona;
-    const systemPrompt = applySystemPolicyVersion(
-        applyProviderRealityLine(
-            applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
-        )
-    );
-    const systemMessage = {
-        role: 'system',
-        content: `Prompt version: v3:${getPromptVersionSha()}\n${systemPrompt}`,
-    };
-
     const knowledgePack = buildDchatKnowledgePack(gameState);
     const knowledgeSummary = knowledgePack.summary;
     const knowledgeMessage = knowledgeSummary
         ? {
               role: 'system',
-              content: `DSPACE knowledge base:\n${knowledgeSummary}`,
+              content: `DSPACE knowledge base:
+${knowledgeSummary}`,
           }
         : null;
     const docsRagRequestOptions = buildDocsRagOptions({
@@ -648,9 +731,6 @@ export const buildChatPrompt = async (messages, options = {}) => {
             ...normalizedMessages,
         ],
     });
-    const latestUserMessage = [...normalizedMessages]
-        .reverse()
-        .find((message) => message.role === 'user' && message.content?.trim());
     const retrievalQuery = latestUserMessage
         ? buildRetrievalQuery(normalizedMessages, latestUserMessage)
         : '';
@@ -668,7 +748,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
             : null;
 
     if (knowledgeMessage && docsRagPayload.excerptsText) {
-        knowledgeMessage.content = `${knowledgeMessage.content}\n\n${docsRagPayload.excerptsText}`;
+        knowledgeMessage.content = `${knowledgeMessage.content}
+
+${docsRagPayload.excerptsText}`;
     }
 
     const openingMessage = {
@@ -719,6 +801,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         gameState,
         contextSources,
         playerStateSummary: playerStateSnapshot.meta,
+        contextPlan,
     };
 
     if (options.includePromptMetrics) {
@@ -746,6 +829,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
             promptBuildDurationMs: performance.now() - promptBuildStartedAt,
             ragDurationMs,
+            contextPlan,
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,
                 rag: ragIndexes,
