@@ -55,11 +55,11 @@ const makeRelayFetch = ({
 } = {}) => {
     let retrieveCount = 0;
     return jest.fn(async (url, init = {}) => {
-        if (url.endsWith('/api/v1/relay/servers/next')) {
+        if (new URL(url).pathname.endsWith('/api/v1/relay/servers/next')) {
             const key =
                 serverFailureOnce &&
                 fetch.mock.calls.filter(([calledUrl]) =>
-                    calledUrl.endsWith('/api/v1/relay/servers/next')
+                    new URL(calledUrl).pathname.endsWith('/api/v1/relay/servers/next')
                 ).length === 1
                     ? relayServerKeys[1]
                     : relayServerKeys[0];
@@ -109,7 +109,8 @@ const getFetchCalls = () =>
         init,
         body: init.body ? JSON.parse(init.body) : undefined,
     }));
-const getFetchCallByPath = (path) => getFetchCalls().find((call) => call.url.endsWith(path));
+const getFetchCallByPath = (path) =>
+    getFetchCalls().find((call) => new URL(call.url).pathname.endsWith(path));
 
 const getFetchCall = () => {
     const [url, init] = fetch.mock.calls[0];
@@ -183,17 +184,19 @@ describe('token.place API v1 client', () => {
     test('VITE_TOKEN_PLACE_URL staging override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://staging.token.place/';
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(getFetchCallByPath('/api/v1/relay/servers/next').url).toBe(
-            'https://staging.token.place/api/v1/relay/servers/next'
-        );
+        expect(
+            new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).origin +
+                new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).pathname
+        ).toBe('https://staging.token.place/api/v1/relay/servers/next');
     });
 
     test('VITE_TOKEN_PLACE_URL production override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://token.place/';
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(getFetchCallByPath('/api/v1/relay/servers/next').url).toBe(
-            'https://token.place/api/v1/relay/servers/next'
-        );
+        expect(
+            new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).origin +
+                new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).pathname
+        ).toBe('https://token.place/api/v1/relay/servers/next');
     });
 
     test('explicit url overrides state and runtime compatibility values', async () => {
@@ -203,18 +206,20 @@ describe('token.place API v1 client', () => {
             url: 'https://explicit.token.place/api/v1',
             runtimeUrl: 'https://runtime.token.place',
         });
-        expect(getFetchCallByPath('/api/v1/relay/servers/next').url).toBe(
-            'https://explicit.token.place/api/v1/relay/servers/next'
-        );
+        expect(
+            new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).origin +
+                new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).pathname
+        ).toBe('https://explicit.token.place/api/v1/relay/servers/next');
     });
 
     test('state tokenPlace url compatibility override works', async () => {
         process.env.VITE_TOKEN_PLACE_URL = 'https://env.token.place';
         loadGameState.mockReturnValue({ tokenPlace: { url: 'https://state.token.place/' } });
         await tokenPlaceChat([{ role: 'user', content: 'hello' }]);
-        expect(getFetchCallByPath('/api/v1/relay/servers/next').url).toBe(
-            'https://state.token.place/api/v1/relay/servers/next'
-        );
+        expect(
+            new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).origin +
+                new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).pathname
+        ).toBe('https://state.token.place/api/v1/relay/servers/next');
     });
 
     test('runtime url is used before saved state and VITE fallback', async () => {
@@ -223,9 +228,10 @@ describe('token.place API v1 client', () => {
         await TokenPlaceChatV2([{ role: 'user', content: 'hello' }], {
             runtimeUrl: 'https://staging.token.place/api',
         });
-        expect(getFetchCallByPath('/api/v1/relay/servers/next').url).toBe(
-            'https://staging.token.place/api/v1/relay/servers/next'
-        );
+        expect(
+            new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).origin +
+                new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).pathname
+        ).toBe('https://staging.token.place/api/v1/relay/servers/next');
     });
 
     test('legacy /api base normalizes without /api/api duplication', () => {
@@ -694,6 +700,178 @@ ${ragExcerpt.repeat(4000)}`,
         expectValidApiV1Messages(messages);
     });
 
+    test('server selection receives model and estimated context tier and encrypted routing echoes tier', async () => {
+        await TokenPlaceChatV2([{ role: 'user', content: 'hello tier routing' }], {
+            model: 'tier-test-model',
+        });
+
+        const selectionUrl = new URL(getFetchCallByPath('/api/v1/relay/servers/next').url);
+        expect(selectionUrl.searchParams.get('model')).toBe('tier-test-model');
+        expect(selectionUrl.searchParams.get('context_tier')).toBe('8k-fast');
+        expect(selectionUrl.searchParams.get('client_context_tiers')).toBe('1');
+
+        const decrypted = await decryptFirstRelayRequest();
+        expect(decrypted.api_v1_request.routing).toEqual({ context_tier: '8k-fast' });
+        expect(JSON.stringify(getFetchCallByPath('/api/v1/relay/requests').body)).not.toContain(
+            'hello tier routing'
+        );
+    });
+
+    test('large full-fat prompt selects 64k-full and over-64k prompt fails locally', async () => {
+        await TokenPlaceChatV2([], {
+            promptPayload: {
+                combinedMessages: [{ role: 'user', content: 'large context '.repeat(2500) }],
+                contextSources: [],
+                gameState: {},
+            },
+        });
+        expect(
+            new URL(getFetchCallByPath('/api/v1/relay/servers/next').url).searchParams.get(
+                'context_tier'
+            )
+        ).toBe('64k-full');
+
+        fetch.mockClear();
+        await expect(
+            TokenPlaceChatV2([], {
+                promptPayload: {
+                    combinedMessages: [{ role: 'user', content: '🚀'.repeat(70_000) }],
+                    contextSources: [],
+                    gameState: {},
+                },
+            })
+        ).rejects.toMatchObject({ code: 'token_place_context_over_limit' });
+        expect(fetch).not.toHaveBeenCalled();
+    });
+
+    test('accepts larger selected tier as spillover and rejects smaller selected tier', async () => {
+        global.fetch = makeRelayFetch();
+        global.fetch.mockImplementation(async (url, init = {}) => {
+            if (new URL(url).pathname.endsWith('/api/v1/relay/servers/next')) {
+                return {
+                    ok: true,
+                    status: 200,
+                    json: () =>
+                        Promise.resolve({
+                            server_public_key: relayServerKeys[0].publicKeyBase64,
+                            selected_context_tier: '64k-full',
+                            selected_profile_id: 'profile-64k',
+                        }),
+                };
+            }
+            return makeRelayFetch()(url, init);
+        });
+
+        const result = await TokenPlaceChatV2([{ role: 'user', content: 'small spillover' }]);
+        expect(result.metadata.tokenPlaceContext.spillover).toBe(true);
+        expect(result.metadata.tokenPlaceContext.selectedTier).toBe('64k-full');
+        const decrypted = await decryptFirstRelayRequest();
+        expect(decrypted.api_v1_request.routing).toEqual({
+            context_tier: '8k-fast',
+            selected_profile_id: 'profile-64k',
+        });
+
+        global.fetch = jest.fn(async (url) => {
+            if (new URL(url).pathname.endsWith('/api/v1/relay/servers/next')) {
+                return {
+                    ok: true,
+                    status: 200,
+                    json: () =>
+                        Promise.resolve({
+                            server_public_key: relayServerKeys[0].publicKeyBase64,
+                            selected_context_tier: '8k-fast',
+                        }),
+                };
+            }
+            throw new Error(`Unexpected URL ${url}`);
+        });
+        await expect(
+            TokenPlaceChatV2([], {
+                promptPayload: {
+                    combinedMessages: [{ role: 'user', content: 'large context '.repeat(2500) }],
+                    contextSources: [],
+                    gameState: {},
+                },
+            })
+        ).rejects.toThrow(/insufficient context tier/i);
+    });
+
+    test('8k exact overflow retries once on 64k with unchanged messages and fresh request', async () => {
+        const seen = [];
+        global.fetch = jest.fn(async (url, init = {}) => {
+            const pathname = new URL(url).pathname;
+            if (pathname.endsWith('/api/v1/relay/servers/next')) {
+                const requestedTier = new URL(url).searchParams.get('context_tier');
+                const key = requestedTier === '64k-full' ? relayServerKeys[1] : relayServerKeys[0];
+                return {
+                    ok: true,
+                    status: 200,
+                    json: () =>
+                        Promise.resolve({
+                            server_public_key: key.publicKeyBase64,
+                            selected_context_tier: requestedTier,
+                        }),
+                };
+            }
+            if (pathname.endsWith('/api/v1/relay/requests')) {
+                const body = JSON.parse(init.body);
+                const privateKey =
+                    seen.length === 0
+                        ? relayServerKeys[0].privateKey
+                        : relayServerKeys[1].privateKey;
+                const decrypted = await decryptTokenPlaceEnvelope(body, privateKey);
+                seen.push({
+                    body,
+                    messages: decrypted.api_v1_request.messages,
+                    routing: decrypted.api_v1_request.routing,
+                });
+                return { ok: true, status: 200, json: () => Promise.resolve({ accepted: true }) };
+            }
+            if (pathname.endsWith('/api/v1/relay/responses/retrieve')) {
+                const body = JSON.parse(init.body);
+                const isRetry = seen.length > 1;
+                const clientPublicPem = decodeBase64Text(body.client_public_key);
+                const encrypted = await encryptTokenPlaceEnvelope(
+                    {
+                        protocol: 'tokenplace_api_v1_relay_e2ee',
+                        version: 1,
+                        request_id: body.request_id,
+                        client_public_key: body.client_public_key,
+                        api_v1_response: isRetry
+                            ? { choices: [{ message: { content: 'retry reply' } }] }
+                            : {
+                                  error: {
+                                      code: 'compute_node_context_window_exceeded',
+                                      message: 'too large for 8k',
+                                      retryable: true,
+                                      recommended_context_tier: '64k-full',
+                                  },
+                              },
+                    },
+                    clientPublicPem
+                );
+                return {
+                    ok: true,
+                    status: 200,
+                    json: () =>
+                        Promise.resolve({ ...encrypted, chat_history: encrypted.ciphertext }),
+                };
+            }
+            throw new Error(`Unexpected URL ${url}`);
+        });
+
+        const result = await TokenPlaceChatV2([{ role: 'user', content: 'retry same payload' }]);
+        expect(result.text).toBe('retry reply');
+        expect(seen).toHaveLength(2);
+        expect(seen[0].messages).toEqual(seen[1].messages);
+        expect(seen[0].routing.context_tier).toBe('8k-fast');
+        expect(seen[1].routing.context_tier).toBe('64k-full');
+        expect(seen[0].body.request_id).not.toBe(seen[1].body.request_id);
+        expect(seen[0].body.cancel_token).not.toBe(seen[1].body.cancel_token);
+        expect(seen[0].body.server_public_key).not.toBe(seen[1].body.server_public_key);
+        expect(result.metadata.tokenPlaceContext.escalatedRetry).toBe(true);
+    });
+
     test('decryption accepts chat_history as the response ciphertext', async () => {
         const encrypted = await encryptTokenPlaceEnvelope(
             { ok: true, source: 'chat_history' },
@@ -998,7 +1176,14 @@ ${ragExcerpt.repeat(4000)}`,
             text: 'mocked reply',
             contextSources: dspaceSources,
             usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
-            metadata: { client: 'dspace', conversation_id: 'conv-42' },
+            metadata: expect.objectContaining({
+                client: 'dspace',
+                conversation_id: 'conv-42',
+                tokenPlaceContext: expect.objectContaining({
+                    requestedTier: '8k-fast',
+                    estimatorVersion: 'dspace-token-context-estimator-v1',
+                }),
+            }),
         });
     });
 
@@ -1221,7 +1406,7 @@ ${ragExcerpt.repeat(4000)}`,
             tokenPlaceChat([{ role: 'user', content: 'hello' }], { pollIntervalMs: 1 })
         ).resolves.toBe('mocked reply');
         const serverSelections = fetch.mock.calls.filter(([url]) =>
-            url.endsWith('/api/v1/relay/servers/next')
+            new URL(url).pathname.endsWith('/api/v1/relay/servers/next')
         );
         const dispatches = fetch.mock.calls.filter(([url]) =>
             url.endsWith('/api/v1/relay/requests')
@@ -1285,7 +1470,7 @@ ${ragExcerpt.repeat(4000)}`,
 
     test('no available compute node, relay unavailable, malformed encrypted response, and disconnected server classify safely', async () => {
         global.fetch = jest.fn(async (url) => {
-            if (url.endsWith('/api/v1/relay/servers/next')) {
+            if (new URL(url).pathname.endsWith('/api/v1/relay/servers/next')) {
                 return { ok: true, status: 200, json: () => Promise.resolve({}) };
             }
             throw new Error(`Unexpected URL ${url}`);
@@ -1293,7 +1478,7 @@ ${ragExcerpt.repeat(4000)}`,
         await expect(tokenPlaceChat([])).rejects.toMatchObject({ type: 'malformed' });
 
         global.fetch = jest.fn(async (url) => {
-            if (url.endsWith('/api/v1/relay/servers/next')) {
+            if (new URL(url).pathname.endsWith('/api/v1/relay/servers/next')) {
                 return {
                     ok: false,
                     status: 503,
@@ -1306,7 +1491,7 @@ ${ragExcerpt.repeat(4000)}`,
         await expect(tokenPlaceChat([])).rejects.toMatchObject({ status: 503 });
 
         global.fetch = jest.fn(async (url, init = {}) => {
-            if (url.endsWith('/api/v1/relay/servers/next')) {
+            if (new URL(url).pathname.endsWith('/api/v1/relay/servers/next')) {
                 return {
                     ok: true,
                     status: 200,
