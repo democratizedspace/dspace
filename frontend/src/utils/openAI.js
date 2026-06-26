@@ -7,6 +7,8 @@ import { npcPersonas } from '../data/npcPersonas.js';
 import OpenAI from 'openai';
 import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
 import { buildPromptMetrics } from './promptMetrics.js';
+import { planChatContext } from './chatContextPlanner.js';
+import { renderNpcVoiceSamples } from './npcDialogueSamples.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -118,6 +120,7 @@ const docsRagOptions = {
     maxExcerptChars: 8500,
 };
 const docsRagPromptBudgetChars = 80000;
+const minimalChatTailCharLimit = 1200;
 
 const readEnvValue = (key) => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
@@ -604,6 +607,45 @@ async function createChatResponse(openai, input) {
     }
 }
 
+const buildMinimalChatTail = (messages) => {
+    const selected = [];
+    let remaining = minimalChatTailCharLimit;
+
+    for (const message of [...messages].reverse()) {
+        if (!['user', 'assistant'].includes(message?.role)) {
+            continue;
+        }
+        const content = `${message.content || ''}`.trim();
+        if (!content || remaining <= 0) {
+            continue;
+        }
+        const clipped =
+            content.length > remaining ? content.slice(content.length - remaining) : content;
+        selected.unshift({ role: message.role, content: clipped });
+        remaining -= clipped.length;
+    }
+
+    return selected;
+};
+
+const buildContextPlanMetadata = (
+    contextPlan,
+    persona,
+    voiceSamples = { count: 0, charCount: 0 }
+) => ({
+    mode: contextPlan.mode,
+    reasonCodes: contextPlan.reasonCodes,
+    confidence: contextPlan.confidence,
+    includePlayerState: contextPlan.includePlayerState,
+    includeKnowledgePack: contextPlan.includeKnowledgePack,
+    includeDocsRag: contextPlan.includeDocsRag,
+    includePersonaVoiceSamples: contextPlan.includePersonaVoiceSamples,
+    selectedPersonaId: persona?.id || null,
+    selectedPersonaName: persona?.name || null,
+    personaVoiceSampleCount: voiceSamples.count || 0,
+    personaVoiceSampleCharCount: voiceSamples.charCount || 0,
+});
+
 export const buildChatPrompt = async (messages, options = {}) => {
     const promptBuildStartedAt = performance.now();
     await ready;
@@ -611,6 +653,83 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const rawGameState = loadGameState();
     const hasGameState = rawGameState && typeof rawGameState === 'object';
     const gameState = hasGameState ? rawGameState : {};
+    const persona = options.persona || defaultPersona;
+    const contextPlan = options.contextPlan || planChatContext(normalizedMessages, options);
+    const personaSystemPrompt = persona?.systemPrompt || fallbackSystemPrompt;
+    const minimalSystemPrompt = applySystemPolicyVersion(
+        applyProviderRealityLine(personaSystemPrompt)
+    );
+    const fullSystemPrompt = applySystemPolicyVersion(
+        applyProviderRealityLine(applySystemGuardrail(personaSystemPrompt))
+    );
+    const systemMessage = {
+        role: 'system',
+        content: `Prompt version: v3:${getPromptVersionSha()}
+${minimalSystemPrompt}`,
+    };
+
+    if (contextPlan.mode === 'minimal') {
+        const voiceSamples = renderNpcVoiceSamples(persona);
+        const voiceSampleMessage = voiceSamples.text
+            ? {
+                  role: 'system',
+                  content: voiceSamples.text,
+              }
+            : null;
+        const combinedMessages = [
+            systemMessage,
+            ...(voiceSampleMessage ? [voiceSampleMessage] : []),
+            ...buildMinimalChatTail(normalizedMessages),
+        ];
+        const debugMessages = combinedMessages.map((message) => ({
+            role: message.role,
+            content: message.content,
+            kind: 'main',
+        }));
+        const minimalPlayerStateSummary = { included: false, reason: 'context-plan-minimal' };
+        const promptPayload = {
+            combinedMessages,
+            debugMessages,
+            gameState,
+            contextSources: [],
+            playerStateSummary: minimalPlayerStateSummary,
+            contextPlan: buildContextPlanMetadata(contextPlan, persona, voiceSamples),
+        };
+
+        if (options.includePromptMetrics) {
+            const latestUserMessage = [...combinedMessages]
+                .reverse()
+                .find((message) => message.role === 'user' && message.content?.trim());
+            const latestUserMessageIndex = latestUserMessage
+                ? combinedMessages.lastIndexOf(latestUserMessage)
+                : -1;
+            promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
+                promptBuildDurationMs: performance.now() - promptBuildStartedAt,
+                ragDurationMs: 0,
+                componentMessageIndexes: {
+                    systemInstructions: 0,
+                    rag: [],
+                    playerState: -1,
+                    chatHistory: combinedMessages
+                        .map((message, index) => ({ message, index }))
+                        .filter(
+                            ({ message, index }) =>
+                                index !== latestUserMessageIndex && message.role !== 'system'
+                        )
+                        .map(({ index }) => index),
+                    latestUserMessage: latestUserMessageIndex,
+                },
+                contextPlan: promptPayload.contextPlan,
+            });
+            promptPayload.promptMetrics.contextPlan = promptPayload.contextPlan;
+        }
+
+        return promptPayload;
+    }
+
+    systemMessage.content = `Prompt version: v3:${getPromptVersionSha()}
+${fullSystemPrompt}`;
+
     const playerStateSnapshot = buildPlayerStateSnapshot(hasGameState ? rawGameState : null);
     const playerStateMessage = playerStateSnapshot.block
         ? {
@@ -618,17 +737,6 @@ export const buildChatPrompt = async (messages, options = {}) => {
               content: playerStateSnapshot.block,
           }
         : null;
-
-    const persona = options.persona || defaultPersona;
-    const systemPrompt = applySystemPolicyVersion(
-        applyProviderRealityLine(
-            applySystemGuardrail(persona?.systemPrompt || fallbackSystemPrompt)
-        )
-    );
-    const systemMessage = {
-        role: 'system',
-        content: `Prompt version: v3:${getPromptVersionSha()}\n${systemPrompt}`,
-    };
 
     const knowledgePack = buildDchatKnowledgePack(gameState);
     const knowledgeSummary = knowledgePack.summary;
@@ -719,6 +827,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         gameState,
         contextSources,
         playerStateSummary: playerStateSnapshot.meta,
+        contextPlan: buildContextPlanMetadata(contextPlan, persona),
     };
 
     if (options.includePromptMetrics) {
@@ -754,6 +863,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
                 latestUserMessage: latestUserMessageIndex,
             },
         });
+        promptPayload.promptMetrics.contextPlan = promptPayload.contextPlan;
     }
 
     return promptPayload;
