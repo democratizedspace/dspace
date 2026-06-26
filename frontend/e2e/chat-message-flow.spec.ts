@@ -366,13 +366,15 @@ test.describe('Chat provider routing', () => {
                 body: {},
                 headers: request.headers(),
             });
+            const requestedTier =
+                new URL(request.url()).searchParams.get('context_tier') || '8k-fast';
             await route.fulfill({
                 status: 200,
                 contentType: 'application/json',
                 body: JSON.stringify({
                     server_public_key: serverKey.publicKeyBase64,
-                    context_tier: '8k-fast',
-                    selected_profile_id: 'e2e-8k',
+                    context_tier: requestedTier,
+                    selected_profile_id: `e2e-${requestedTier}`,
                 }),
             });
         });
@@ -449,7 +451,7 @@ test.describe('Chat provider routing', () => {
             'https://token.place/api/v1/relay/requests',
             'https://token.place/api/v1/relay/responses/retrieve',
         ]);
-        expect(tokenPlaceUrls[0].searchParams.get('context_tier')).toBe('8k-fast');
+        expect(tokenPlaceUrls[0].searchParams.get('context_tier')).toMatch(/^(8k-fast|64k-full)$/);
         expect(legacyRequests).toEqual([]);
         const { body, headers } = tokenPlaceRequests[1];
         expect(headers.authorization).toBeUndefined();

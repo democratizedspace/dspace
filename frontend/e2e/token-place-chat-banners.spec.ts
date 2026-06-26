@@ -105,13 +105,15 @@ const installTokenPlaceStub = async (page: Page, mode: TokenPlaceStubMode) => {
             return;
         }
 
+        const requestedTier =
+            new URL(route.request().url()).searchParams.get('context_tier') || '8k-fast';
         await route.fulfill({
             status: 200,
             contentType: 'application/json',
             body: JSON.stringify({
                 server_public_key: serverKey.publicKeyBase64,
-                context_tier: '8k-fast',
-                selected_profile_id: 'e2e-8k',
+                context_tier: requestedTier,
+                selected_profile_id: `e2e-${requestedTier}`,
             }),
         });
     });
