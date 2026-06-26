@@ -36,9 +36,9 @@ If OpenAI is selected without a saved key, Chat should guide you back to Setting
 an empty-key request. Switch the provider back to token.place in Settings to return to the no-key
 default.
 
-## v3.1 / P8 relay E2EE implementation target
+## v3.1 / P8 implementation target: relay E2EE
 
-DSPACE v3.1 uses token.place API v1 relay E2EE routes for the default Chat path. The browser
+Until that client implementation lands, P8 QA treats the relay E2EE route sequence and ciphertext-only invariant as the implementation target. DSPACE v3.1 uses token.place API v1 relay E2EE routes for the default Chat path. The browser
 generates a DSPACE `/chat` client keypair, estimates the sanitized API v1 message payload locally,
 requests the selected context tier with `GET /api/v1/relay/servers/next?model=...&context_tier=...`,
 builds a `tokenplace_api_v1_relay_e2ee` envelope with `client_public_key`, encrypts that API v1
