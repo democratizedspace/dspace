@@ -38,20 +38,38 @@ default.
 
 ## v3.1 / P8 relay E2EE implementation target
 
-The relay E2EE flow below is the v3.1 / P8 implementation target and the production/staging
-promotion gate for P8b. Until that client implementation lands, the shipped DSPACE Chat client is
-being corrected from its legacy plaintext token.place API v1 request path. Operators should not use
-the relay-route sequence below as evidence that today's shipped `/chat` client already dispatches
-relay-blind requests; use it as the required target for the P8b implementation PR and release
-sign-off.
+DSPACE v3.1 uses token.place API v1 relay E2EE routes for the default Chat path. The browser
+generates a DSPACE `/chat` client keypair, estimates the sanitized API v1 message payload locally,
+requests the selected context tier with `GET /api/v1/relay/servers/next?model=...&context_tier=...`,
+builds a `tokenplace_api_v1_relay_e2ee` envelope with `client_public_key`, encrypts that API v1
+chat request envelope for the compute node, dispatches ciphertext with
+`POST /api/v1/relay/requests`, polls `POST /api/v1/relay/responses/retrieve`, then decrypts and
+validates the response client-side before reading `api_v1_response.message.content` or
+`api_v1_response.choices[0].message.content`.
 
-DSPACE v3.1 / P8 requires token.place API v1 relay E2EE routes for the default Chat path. The
-browser must generate a DSPACE `/chat` client keypair, fetch a compute node with
-`GET /api/v1/relay/servers/next`, build a `tokenplace_api_v1_relay_e2ee` envelope with
-`client_public_key`, encrypt that API v1 chat request envelope for the compute node, dispatch
-ciphertext with `POST /api/v1/relay/requests`, poll
-`POST /api/v1/relay/responses/retrieve`, then decrypt and validate the response client-side
-before reading `api_v1_response.choices[0].message.content`.
+## Context tiers and bounded retry
+
+DSPACE estimates the complete sanitized token.place API v1 messages in the browser before relay
+selection. The estimator chooses `8k-fast` when the prompt estimate plus output reservation and
+safety margin fits 8,192 tokens, chooses `64k-full` when it needs the larger 65,536-token tier, and
+fails locally with a context-budget message when the request is estimated above 64K. The estimate is
+only a routing hint; the compute node remains authoritative.
+
+The encrypted API v1 request includes `routing.context_tier` with the requested tier. The
+relay-visible request remains ciphertext-only plus the existing public routing envelope and does not
+include exact token counts, prompt text, docs/RAG snippets, player state, private keys, ciphertext in
+logs, or decrypted content. DSPACE validates the relay-selected node metadata, accepts controlled
+spillover from an `8k-fast` request to a `64k-full` node, and records safe diagnostics such as
+requested tier, selected tier, spillover, estimator version, token estimates, timeout class, and safe
+error code.
+
+If an `8k-fast` attempt lands on an 8K node and the encrypted compute response reports
+`compute_node_context_window_exceeded` as retryable or recommends `64k-full`, DSPACE retries exactly
+once on `64k-full`. The retry reuses the unchanged sanitized message payload, reselects a fresh
+64K-capable node, re-encrypts for the new public key, and uses a new request ID and cancel token.
+DSPACE does not retry 64K overflows, request-too-large errors, invalid requests, malformed responses,
+policy errors, model unsupported errors, provider errors, or network errors beyond existing safe
+behavior.
 
 The relay request payload must be ciphertext-only plus safe routing metadata. token.place
 relay-owned state and logs must not receive plaintext DSPACE prompt messages, player state, docs
