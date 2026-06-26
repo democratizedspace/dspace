@@ -73,5 +73,28 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
             metadata.ragDurationMs === undefined || metadata.ragDurationMs === null
                 ? null
                 : Number(metadata.ragDurationMs),
+        ...(metadata.contextPlan
+            ? {
+                  contextPlan: {
+                      mode: metadata.contextPlan.mode,
+                      reasonCodes: Array.isArray(metadata.contextPlan.reasonCodes)
+                          ? metadata.contextPlan.reasonCodes
+                          : [],
+                      includePlayerState: Boolean(metadata.contextPlan.includePlayerState),
+                      includeKnowledgePack: Boolean(metadata.contextPlan.includeKnowledgePack),
+                      includeDocsRag: Boolean(metadata.contextPlan.includeDocsRag),
+                      includePersonaVoiceSamples: Boolean(
+                          metadata.contextPlan.includePersonaVoiceSamples
+                      ),
+                      confidence: metadata.contextPlan.confidence,
+                      selectedPersonaId: metadata.contextPlan.selectedPersonaId || null,
+                      selectedPersonaName: metadata.contextPlan.selectedPersonaName || null,
+                      voiceSampleCount: Number(metadata.contextPlan.voiceSampleCount || 0),
+                      voiceSampleCharacters: Number(
+                          metadata.contextPlan.voiceSampleCharacters || 0
+                      ),
+                  },
+              }
+            : {}),
     };
 };
