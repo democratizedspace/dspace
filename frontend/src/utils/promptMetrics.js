@@ -73,6 +73,23 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
             metadata.ragDurationMs === undefined || metadata.ragDurationMs === null
                 ? null
                 : Number(metadata.ragDurationMs),
+        docsRag: metadata.contextPlan
+            ? (() => {
+                  const status =
+                      metadata.contextPlan.docsRagStatus ||
+                      (metadata.contextPlan.mode === 'minimal' ? 'not-applicable' : 'skipped');
+                  return {
+                      includeDocsRag:
+                          status === 'included' ||
+                          (status !== 'skipped' && Boolean(metadata.contextPlan.includeDocsRag)),
+                      status,
+                      reasonCodes: Array.isArray(metadata.contextPlan.docsRagReasonCodes)
+                          ? metadata.contextPlan.docsRagReasonCodes
+                          : [],
+                      durationMs: status === 'included' ? Number(metadata.ragDurationMs || 0) : 0,
+                  };
+              })()
+            : null,
         contextPlan: metadata.contextPlan || null,
     };
 };

@@ -774,24 +774,48 @@ export const buildChatPrompt = async (messages, options = {}) => {
               content: `DSPACE knowledge base:\n${knowledgeSummary}`,
           }
         : null;
-    const docsRagRequestOptions = buildDocsRagOptions({
-        promptBudgetChars: options.docsRagBudgetChars,
-        options: options.docsRagOptions,
-        baseMessages: [
-            systemMessage,
-            ...(playerStateMessage ? [playerStateMessage] : []),
-            ...(knowledgeMessage ? [knowledgeMessage] : []),
-            ...normalizedMessages,
-        ],
-    });
+    const shouldIncludeDocsRag = Boolean(
+        latestUserMessage && (contextPlan.includeDocsRag || options.forceDocsRag)
+    );
+    const docsRagRequestOptions = shouldIncludeDocsRag
+        ? buildDocsRagOptions({
+              promptBudgetChars: options.docsRagBudgetChars,
+              options: options.docsRagOptions,
+              baseMessages: [
+                  systemMessage,
+                  ...(playerStateMessage ? [playerStateMessage] : []),
+                  ...(knowledgeMessage ? [knowledgeMessage] : []),
+                  ...normalizedMessages,
+              ],
+          })
+        : null;
     const retrievalQuery = latestUserMessage
         ? buildRetrievalQuery(normalizedMessages, latestUserMessage)
         : '';
-    const docsRagStartedAt = performance.now();
-    const docsRagPayload = latestUserMessage
+    const docsRagStartedAt = shouldIncludeDocsRag ? performance.now() : 0;
+    const docsRagPayload = shouldIncludeDocsRag
         ? await searchDocsRag(retrievalQuery, docsRagRequestOptions)
         : { excerptsText: '', sources: [] };
-    const ragDurationMs = performance.now() - docsRagStartedAt;
+    const ragDurationMs = shouldIncludeDocsRag ? performance.now() - docsRagStartedAt : 0;
+    const docsRagStatus = shouldIncludeDocsRag
+        ? 'included'
+        : latestUserMessage
+          ? 'skipped'
+          : 'not-applicable';
+    const contextPlanDocsRagReasonCodes = Array.isArray(contextPlan.docsRagReasonCodes)
+        ? contextPlan.docsRagReasonCodes
+        : [];
+    const docsRagReasonCodes = options.forceDocsRag
+        ? [...new Set([...contextPlanDocsRagReasonCodes, 'docs-rag-forced'])]
+        : contextPlanDocsRagReasonCodes.length
+          ? contextPlanDocsRagReasonCodes
+          : [shouldIncludeDocsRag ? 'docs-rag-included' : 'docs-rag-not-needed'];
+    const contextPlanMetadata = {
+        ...contextPlan,
+        includeDocsRag: shouldIncludeDocsRag,
+        docsRagStatus,
+        docsRagReasonCodes,
+    };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
             ? {
@@ -852,7 +876,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         gameState,
         contextSources,
         playerStateSummary: playerStateSnapshot.meta,
-        contextPlan,
+        contextPlan: contextPlanMetadata,
     };
 
     if (options.includePromptMetrics) {
@@ -880,7 +904,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
             promptBuildDurationMs: performance.now() - promptBuildStartedAt,
             ragDurationMs,
-            contextPlan,
+            contextPlan: contextPlanMetadata,
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,
                 rag: ragIndexes,
