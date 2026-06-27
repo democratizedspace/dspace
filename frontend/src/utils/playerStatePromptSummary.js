@@ -163,6 +163,7 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
             meta: {
                 included: false,
                 mode: 'none',
+                playerStatePromptMode: 'none',
                 questsFinishedCount: 0,
                 completedQuestCount: questStats.completedQuestCount,
                 totalOfficialQuestCount: questStats.totalOfficialQuestCount,
@@ -191,6 +192,7 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
             meta: {
                 included: true,
                 mode: 'raw',
+                playerStatePromptMode: 'raw',
                 questsFinishedCount: Object.values(gameState.quests || {}).filter(
                     (quest) => quest?.finished
                 ).length,
@@ -282,6 +284,7 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
         meta: {
             included: true,
             mode: 'compact',
+            playerStatePromptMode: 'compact',
             questsFinishedCount: Object.values(gameState.quests || {}).filter(
                 (quest) => quest?.finished
             ).length,
