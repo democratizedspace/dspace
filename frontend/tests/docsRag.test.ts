@@ -294,4 +294,55 @@ describe('docs RAG search', () => {
             )
         ).toBe(false);
     });
+    it('keeps gamesave docs grounding under compact chat budgets with route sources', async () => {
+        const compactBudget = { maxResults: 6, maxChars: 8000, maxExcerptChars: 1200 };
+        const { excerptsText, sources } = await searchDocsRag(
+            'where do I import a gamesave?',
+            compactBudget
+        );
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(compactBudget.maxChars);
+        expect(sources.length).toBeGreaterThan(0);
+        expect(
+            sources.some((entry) =>
+                /gamesaves|backup|routes/i.test(`${entry.label || ''} ${entry.url || ''}`)
+            )
+        ).toBe(true);
+    });
+
+    it('keeps custom content docs grounding under compact chat budgets with useful sources', async () => {
+        const compactBudget = { maxResults: 6, maxChars: 8000, maxExcerptChars: 1200 };
+        const { excerptsText, sources } = await searchDocsRag(
+            'How do I add custom content to DSPACE?',
+            compactBudget
+        );
+
+        const sourceText = sources
+            .map((entry) => `${entry.label || ''} ${entry.url || ''}`)
+            .join(' ');
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(compactBudget.maxChars);
+        expect(`${excerptsText} ${sourceText}`).toMatch(
+            /custom content|quest submission|content bundle/i
+        );
+    });
+
+    it('keeps changelog version docs grounding bounded under compact chat budgets', async () => {
+        const compactBudget = { maxResults: 6, maxChars: 8000, maxExcerptChars: 1200 };
+        const { excerptsText, sources } = await searchDocsRag(
+            'what changed in v3.1 chat?',
+            compactBudget
+        );
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(compactBudget.maxChars);
+        expect(
+            sources.some(
+                (entry) =>
+                    entry.type === 'changelog' ||
+                    /v3|changelog|token.place/i.test(`${entry.label || ''} ${entry.url || ''}`)
+            )
+        ).toBe(true);
+    });
 });

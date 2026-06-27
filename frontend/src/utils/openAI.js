@@ -114,12 +114,12 @@ const vagueFollowupPattern =
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
 const MAX_PLAYER_STATE_ITEMS = 50;
-const docsRagOptions = {
-    maxResults: 50,
-    maxChars: 50000,
-    maxExcerptChars: 8500,
-};
-const docsRagPromptBudgetChars = 80000;
+export const CHAT_DOCS_RAG_DEFAULT_OPTIONS = Object.freeze({
+    maxResults: 6,
+    maxChars: 8000,
+    maxExcerptChars: 1200,
+});
+export const CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS = 16000;
 
 const readEnvValue = (key) => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
@@ -409,8 +409,8 @@ const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
     const budget =
         typeof promptBudgetChars === 'number' && Number.isFinite(promptBudgetChars)
             ? Math.max(0, promptBudgetChars)
-            : docsRagPromptBudgetChars;
-    const baseOptions = { ...docsRagOptions, ...(options || {}) };
+            : CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS;
+    const baseOptions = { ...CHAT_DOCS_RAG_DEFAULT_OPTIONS, ...(options || {}) };
     const remainingBudget = Math.max(0, budget - countPromptChars(baseMessages));
 
     return {
@@ -815,6 +815,26 @@ export const buildChatPrompt = async (messages, options = {}) => {
         includeDocsRag: shouldIncludeDocsRag,
         docsRagStatus,
         docsRagReasonCodes,
+        docsRagMetrics: {
+            status: docsRagStatus,
+            resultCount: Array.isArray(docsRagPayload.sourcesMeta?.results)
+                ? docsRagPayload.sourcesMeta.results.length
+                : Array.isArray(docsRagPayload.sources)
+                  ? docsRagPayload.sources.length
+                  : 0,
+            renderedChars: String(docsRagPayload.excerptsText || '').length,
+            budget: docsRagRequestOptions
+                ? {
+                      maxResults: docsRagRequestOptions.maxResults,
+                      maxChars: docsRagRequestOptions.maxChars,
+                      maxExcerptChars: docsRagRequestOptions.maxExcerptChars,
+                  }
+                : {
+                      maxResults: 0,
+                      maxChars: 0,
+                      maxExcerptChars: 0,
+                  },
+        },
     };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
