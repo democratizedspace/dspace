@@ -211,16 +211,7 @@ describe('GPT5Chat', () => {
                 content: [
                     {
                         type: 'input_text',
-                        text: expect.stringContaining('PlayerState v'),
-                    },
-                ],
-            }),
-            expect.objectContaining({
-                role: 'system',
-                content: [
-                    {
-                        type: 'input_text',
-                        text: expect.stringContaining('DSPACE knowledge base:\nknowledge'),
+                        text: expect.stringMatching(/Persona voice examples for dChat/i),
                     },
                 ],
             }),
@@ -234,6 +225,8 @@ describe('GPT5Chat', () => {
                 ],
             },
         ]);
+        expect(JSON.stringify(payload.input)).not.toContain('PlayerState v');
+        expect(JSON.stringify(payload.input)).not.toContain('DSPACE knowledge base');
         expect(result).toBe('ok');
     });
 

@@ -105,7 +105,7 @@ describe('gpt-5 chat responses integration', () => {
     fetchMock.mockResolvedValueOnce(jsonResponse('ok'));
 
     const { GPT5Chat: gpt5Chat } = await import('../frontend/src/utils/openAI.js');
-    const result = await gpt5Chat([{ role: 'user', content: 'Hello there' }]);
+    const result = await gpt5Chat([{ role: 'user', content: 'What quest should I do next?' }]);
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0];
@@ -131,7 +131,7 @@ describe('gpt-5 chat responses integration', () => {
       content: [
         {
           type: 'input_text',
-          text: 'Hello there',
+          text: 'What quest should I do next?',
         },
       ],
     });

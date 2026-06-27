@@ -81,7 +81,7 @@ const installChatStub = async (page: Page, mode: StubMode) => {
     await page.addInitScript(
         ({ reply, stubMode }) => {
             const createResponse = async () => {
-                await new Promise((resolve) => setTimeout(resolve, 150));
+                await new Promise((resolve) => setTimeout(resolve, 750));
 
                 if (stubMode === 'network-error') {
                     const error = new TypeError('');
