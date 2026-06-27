@@ -16,6 +16,61 @@ const makeState = (inventory = {}) => ({
 });
 
 describe('buildPlayerStatePromptSummary', () => {
+    it('keeps questsFinishedCount in compact and missing-state metadata for debug consumers', () => {
+        const compact = buildPlayerStatePromptSummary(makeState());
+        const missing = buildPlayerStatePromptSummary(null);
+
+        expect(compact.meta.questsFinishedCount).toBe(3);
+        expect(missing.meta.questsFinishedCount).toBe(0);
+    });
+
+    it('excludes elapsed completed processes from active process counts', () => {
+        const result = buildPlayerStatePromptSummary({
+            ...makeState(),
+            processes: {
+                elapsed: {
+                    startedAt: Date.now() - 2_000,
+                    duration: 1_000,
+                    finished: false,
+                    pausedAt: null,
+                    elapsedBeforePause: 0,
+                    pauseModelVersion: 2,
+                },
+                running: {
+                    startedAt: Date.now(),
+                    duration: 60_000,
+                    finished: false,
+                    pausedAt: null,
+                    elapsedBeforePause: 0,
+                    pauseModelVersion: 2,
+                },
+            },
+        });
+
+        expect(result.block).toContain('Active processes: 1 total');
+        expect(result.slices.activeProcesses).toEqual([
+            expect.objectContaining({ id: 'running', status: 'running' }),
+        ]);
+        expect(result.meta.activeProcessIncludedCount).toBe(1);
+    });
+
+    it('keeps broad inventory samples independent from query relevance slots', () => {
+        const inventory = {
+            [GREEN_PLA_ID]: 42,
+            'item-1': 1,
+            'item-2': 2,
+        };
+        const result = buildPlayerStatePromptSummary(makeState(inventory), {
+            latestUserMessage: 'what items do I have with green PLA?',
+            inventoryRelevantCap: 1,
+            inventorySampleCap: 2,
+        });
+
+        expect(result.slices.relevantInventory).toHaveLength(3);
+        expect(result.slices.relevantInventory[0].id).toBe(GREEN_PLA_ID);
+        expect(result.meta.inventoryIncludedCount).toBe(3);
+    });
+
     it('summarizes many finished quests with counts instead of a full questsFinished array', () => {
         const result = buildPlayerStatePromptSummary(makeState());
 

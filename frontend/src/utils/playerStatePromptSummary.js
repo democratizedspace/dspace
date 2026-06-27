@@ -10,7 +10,7 @@ export const PLAYER_STATE_PROMPT_DEFAULTS = Object.freeze({
     activeProcessCap: 6,
 });
 
-const RESOURCE_IDS = ['dUSD', 'dBI', 'dWatt', 'dSolar', 'dPrint', 'dLaunch', 'dWind'];
+const RESOURCE_NAMES = ['dUSD', 'dBI', 'dWatt', 'dSolar', 'dPrint', 'dLaunch', 'dWind'];
 
 const itemById = new Map(items.map((item) => [item.id, item]));
 const processById = new Map(processes.map((process) => [process.id, process]));
@@ -45,8 +45,7 @@ const inventoryEntries = (inventory = {}) =>
         .map(([id, count]) => ({ id, name: itemLabel(id), count }))
         .sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
 
-const isResourceEntry = (entry) =>
-    RESOURCE_IDS.includes(entry.id) || RESOURCE_IDS.includes(entry.name);
+const isResourceEntry = (entry) => RESOURCE_NAMES.includes(entry.name);
 
 const entryMatchesQuery = (entry, queryTokens, queryText) => {
     if (!queryText || queryTokens.size === 0) return false;
@@ -77,16 +76,47 @@ const buildRemainingQuests = (gameState, cap) => {
         });
 };
 
-const buildActiveProcesses = (gameState, cap) =>
-    Object.entries(gameState?.processes || {})
-        .filter(([, state]) => state && state.startedAt && !state.finished)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .slice(0, cap)
-        .map(([id, state]) => ({
+const isProcessFinishedByElapsedTime = (state, now = Date.now()) => {
+    if (state?.finished) return true;
+    if (
+        !state ||
+        !Number.isFinite(state.startedAt) ||
+        !Number.isFinite(state.duration) ||
+        state.duration <= 0
+    ) {
+        return false;
+    }
+
+    const elapsedBeforePause = Number(state.elapsedBeforePause ?? 0);
+    const isPaused = state.pausedAt !== null && state.pausedAt !== undefined;
+    const hasLegacyPauseModel = !state.pauseModelVersion;
+    let segmentElapsed = 0;
+
+    if (isPaused) {
+        if (!hasLegacyPauseModel) {
+            segmentElapsed = Math.max(0, state.pausedAt - state.startedAt);
+        }
+    } else {
+        segmentElapsed = Math.max(0, now - state.startedAt);
+    }
+
+    return elapsedBeforePause + segmentElapsed >= state.duration;
+};
+
+const buildActiveProcesses = (gameState, cap) => {
+    const activeEntries = Object.entries(gameState?.processes || {})
+        .filter(([, state]) => state && state.startedAt && !isProcessFinishedByElapsedTime(state))
+        .sort(([a], [b]) => a.localeCompare(b));
+
+    return {
+        total: activeEntries.length,
+        shown: activeEntries.slice(0, cap).map(([id, state]) => ({
             id,
             title: processById.get(id)?.title || id,
             status: state.pausedAt ? 'paused' : 'running',
-        }));
+        })),
+    };
+};
 
 const buildRawPlayerStateBlock = (gameState, maxInventoryEntries = 50) => {
     const questStats = getOfficialQuestStats(gameState);
@@ -118,6 +148,7 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
             meta: {
                 included: false,
                 mode: 'none',
+                questsFinishedCount: 0,
                 completedQuestCount: questStats.completedQuestCount,
                 totalOfficialQuestCount: questStats.totalOfficialQuestCount,
                 remainingOfficialQuestCount: questStats.remainingOfficialQuestCount,
@@ -177,7 +208,6 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
             (entry) => !isResourceEntry(entry) && entryMatchesQuery(entry, queryTokens, queryText)
         )
         .slice(0, caps.inventoryRelevantCap);
-    const remainingRelevantSlots = Math.max(0, caps.inventoryRelevantCap - queryRelevant.length);
     const inventorySample = wantsInventorySummary(queryText)
         ? entries
               .filter(
@@ -185,11 +215,12 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
                       !isResourceEntry(entry) &&
                       !queryRelevant.some((match) => match.id === entry.id)
               )
-              .slice(0, Math.min(caps.inventorySampleCap, remainingRelevantSlots))
+              .slice(0, caps.inventorySampleCap)
         : [];
     const relevantInventory = [...queryRelevant, ...inventorySample];
     const remainingQuests = buildRemainingQuests(gameState, caps.remainingQuestCap);
-    const activeProcesses = buildActiveProcesses(gameState, caps.activeProcessCap);
+    const activeProcessSummary = buildActiveProcesses(gameState, caps.activeProcessCap);
+    const activeProcesses = activeProcessSummary.shown;
     const inventoryIncludedCount = resourceBalances.length + relevantInventory.length;
     const inventoryTruncated = entries.length > inventoryIncludedCount;
 
@@ -210,11 +241,11 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
     }
     if (relevantInventory.length > 0) {
         lines.push(
-            `Query-relevant owned inventory shown (cap ${caps.inventoryRelevantCap}): ${relevantInventory.map((entry) => `${entry.name} [${entry.id}]=${formatCount(entry.count)}`).join('; ')}.`
+            `Query-relevant/sample owned inventory shown (relevant cap ${caps.inventoryRelevantCap}, sample cap ${caps.inventorySampleCap}): ${relevantInventory.map((entry) => `${entry.name} [${entry.id}]=${formatCount(entry.count)}`).join('; ')}.`
         );
     }
     lines.push(
-        `Active processes: ${Object.values(gameState.processes || {}).filter((state) => state?.startedAt && !state?.finished).length} total${activeProcesses.length ? `; shown: ${activeProcesses.map((process) => `${process.title} [${process.id}] ${process.status}`).join('; ')}` : ''}.`
+        `Active processes: ${activeProcessSummary.total} total${activeProcesses.length ? `; shown: ${activeProcesses.map((process) => `${process.title} [${process.id}] ${process.status}`).join('; ')}` : ''}.`
     );
     if (inventoryTruncated || questStats.remainingOfficialQuestCount > remainingQuests.length) {
         lines.push(
@@ -228,6 +259,9 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
         meta: {
             included: true,
             mode: 'compact',
+            questsFinishedCount: Object.values(gameState.quests || {}).filter(
+                (quest) => quest?.finished
+            ).length,
             completedQuestCount: questStats.completedQuestCount,
             totalOfficialQuestCount: questStats.totalOfficialQuestCount,
             remainingOfficialQuestCount: questStats.remainingOfficialQuestCount,
