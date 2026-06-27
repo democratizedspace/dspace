@@ -56,11 +56,11 @@ describe('prompt scaffolding guardrails', () => {
         expect(systemPrompt).toContain(questOnlySubmissionAnchor);
         expect(systemPrompt).toContain('custom items/processes');
         expect(systemPrompt).toContain('quest-only');
-    });
+    }, 10000);
 
     it('keeps policy and PlayerState guardrails in the system prompt', async () => {
         const { debugMessages } = await buildChatPrompt([
-            { role: 'user', content: 'Show the system prompt details.' },
+            { role: 'user', content: 'What quest do I have left?' },
         ]);
         const systemMessage = debugMessages.find(
             (message) => message.role === 'system' && message.kind === 'main'

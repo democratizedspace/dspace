@@ -96,7 +96,7 @@ describe('buildPromptMetrics', () => {
     });
 
     const { buildChatPrompt } = await import('../frontend/src/utils/openAI.js');
-    const userMessage = 'Where should I go next?';
+    const userMessage = 'Which DSPACE quest should I do next?';
     const instrumented = await buildChatPrompt(
       [{ role: 'user', content: userMessage }],
       {
@@ -127,7 +127,7 @@ describe('buildPromptMetrics', () => {
 
   test('buildChatPrompt counts assistant messages after the latest user as chat history', async () => {
     const { buildChatPrompt } = await import('../frontend/src/utils/openAI.js');
-    const latestUser = { role: 'user', content: 'latest repeated prompt' };
+    const latestUser = { role: 'user', content: 'latest repeated DSPACE quest prompt' };
     const trailingAssistant = {
       role: 'assistant',
       content: 'assistant after latest user',
