@@ -7,6 +7,7 @@ export const PLAYER_STATE_PROMPT_DEFAULTS = Object.freeze({
     remainingQuestCap: 12,
     inventoryRelevantCap: 8,
     inventorySampleCap: 8,
+    notableBalanceCap: 8,
     activeProcessCap: 6,
 });
 
@@ -217,7 +218,8 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
     const queryText = normalizeText(options.latestUserMessage || options.query || '');
     const queryTokens = tokenSet(queryText);
     const entries = inventoryEntries(gameState.inventory);
-    const resourceBalances = entries.filter(isResourceEntry);
+    const allResourceBalances = entries.filter(isResourceEntry);
+    const resourceBalances = allResourceBalances.slice(0, caps.notableBalanceCap);
     const queryRelevant = entries
         .filter(
             (entry) => !isResourceEntry(entry) && entryMatchesQuery(entry, queryTokens, queryText)
