@@ -36,6 +36,7 @@ import {
     buildChatPrompt,
     CHAT_DOCS_RAG_DEFAULTS,
     CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS,
+    CHAT_DOCS_RAG_MIN_GROUNDING_CHARS,
     getOpenAIErrorSummary,
     GPT5Chat,
     GPT5ChatV2,
@@ -885,6 +886,21 @@ Docs grounding (gitSha: test):
         const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
 
         expect(options.maxChars).toBe(0);
+    });
+
+    it('reserves default docs grounding for long route-intent chats', async () => {
+        const longHistory = 'Earlier chat context. '.repeat(700);
+        const messages = [
+            { role: 'user', content: longHistory },
+            { role: 'assistant', content: longHistory },
+            { role: 'user', content: 'Where is /gamesaves?' },
+        ];
+
+        await buildChatPrompt(messages);
+
+        const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
+
+        expect(options.maxChars).toBeGreaterThanOrEqual(CHAT_DOCS_RAG_MIN_GROUNDING_CHARS);
     });
 });
 

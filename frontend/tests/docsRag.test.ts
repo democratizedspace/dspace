@@ -5,6 +5,50 @@ import { rankDocsResults, searchDocsRag } from '../src/utils/docsRag.js';
 vi.setConfig({ testTimeout: 120000, hookTimeout: 120000 });
 
 describe('docs RAG search', () => {
+    it('returns safe budget metadata for empty queries', async () => {
+        const { excerptsText, sources, sourcesMeta } = await searchDocsRag('', {
+            maxResults: 2,
+            maxChars: 123,
+            maxExcerptChars: 45,
+            routeMaxExcerptChars: 67,
+        });
+
+        expect(excerptsText).toBe('');
+        expect(sources).toEqual([]);
+        expect(sourcesMeta).toEqual(
+            expect.objectContaining({
+                budget: {
+                    maxResults: 2,
+                    maxChars: 123,
+                    maxExcerptChars: 45,
+                    routeMaxExcerptChars: 67,
+                },
+                renderedChars: 0,
+                results: [],
+            })
+        );
+    });
+
+    it('returns safe budget metadata when the render budget is too small', async () => {
+        const { excerptsText, sources, sourcesMeta } = await searchDocsRag('Where is /gamesaves?', {
+            maxResults: 2,
+            maxChars: 1,
+            maxExcerptChars: 45,
+            routeMaxExcerptChars: 67,
+        });
+
+        expect(excerptsText).toBe('');
+        expect(sources).toEqual([]);
+        expect(sourcesMeta.budget).toEqual({
+            maxResults: 2,
+            maxChars: 1,
+            maxExcerptChars: 45,
+            routeMaxExcerptChars: 67,
+        });
+        expect(sourcesMeta.renderedChars).toBe(0);
+        expect(sourcesMeta.results).toEqual([]);
+    });
+
     it('returns docs excerpts with canonical /docs URLs', async () => {
         const { excerptsText } = await searchDocsRag('custom content import export backup', {
             maxResults: 6,

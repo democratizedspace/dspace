@@ -121,6 +121,7 @@ export const CHAT_DOCS_RAG_DEFAULTS = Object.freeze({
     routeMaxExcerptChars: 1800,
 });
 export const CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS = 12000;
+export const CHAT_DOCS_RAG_MIN_GROUNDING_CHARS = 3000;
 
 const readEnvValue = (key) => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
@@ -407,16 +408,20 @@ export const getPlayerStateSummary = (gameState = loadGameState()) => {
 };
 
 const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
-    const budget =
-        typeof promptBudgetChars === 'number' && Number.isFinite(promptBudgetChars)
-            ? Math.max(0, promptBudgetChars)
-            : CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS;
+    const hasExplicitPromptBudget =
+        typeof promptBudgetChars === 'number' && Number.isFinite(promptBudgetChars);
+    const budget = hasExplicitPromptBudget
+        ? Math.max(0, promptBudgetChars)
+        : CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS;
     const baseOptions = { ...CHAT_DOCS_RAG_DEFAULTS, ...(options || {}) };
     const remainingBudget = Math.max(0, budget - countPromptChars(baseMessages));
+    const docsBudget = hasExplicitPromptBudget
+        ? remainingBudget
+        : Math.max(remainingBudget, CHAT_DOCS_RAG_MIN_GROUNDING_CHARS);
 
     return {
         ...baseOptions,
-        maxChars: Math.min(baseOptions.maxChars, remainingBudget),
+        maxChars: Math.min(baseOptions.maxChars, docsBudget),
     };
 };
 
@@ -817,6 +822,8 @@ export const buildChatPrompt = async (messages, options = {}) => {
         docsRagStatus,
         docsRagReasonCodes,
         docsRagResultCount: docsRagPayload.sourcesMeta?.results?.length || 0,
+        // Read the rendered text directly so empty/early-return payloads remain accurate even if
+        // external searchDocsRag metadata consumers evolve independently.
         docsRagRenderedChars: docsRagPayload.excerptsText?.length || 0,
         docsRagBudget: docsRagRequestOptions
             ? {
