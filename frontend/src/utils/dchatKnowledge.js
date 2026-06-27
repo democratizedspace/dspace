@@ -2,6 +2,7 @@ import items from '../pages/inventory/json/items/index.js';
 import processes from '../generated/processes.json' assert { type: 'json' };
 import { evaluateAchievements } from './achievements.js';
 import { mergeSources } from './contextSources.js';
+import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
 
 const MAX_ITEMS = 25;
 const MAX_PROCESSES = 20;
@@ -112,19 +113,25 @@ function prioritizeQuests(allQuests) {
     return prioritized.concat(remaining);
 }
 
-function formatInventory(inventory = {}) {
+function formatInventory(inventory = {}, options = {}) {
     if (!inventory || typeof inventory !== 'object') {
         return [];
     }
 
+    const maxEntries = Number.isInteger(options.maxEntries) ? options.maxEntries : 8;
     return Object.entries(inventory)
         .filter(([, count]) => typeof count === 'number' && count > 0)
         .map(([id, count]) => {
             const item = items.find((entry) => entry.id === id);
             const name = item ? item.name : id;
-            return `${name} (x${Number.isInteger(count) ? count : count.toFixed(2)})`;
+            return {
+                id,
+                label: `${name} (x${Number.isInteger(count) ? count : count.toFixed(2)})`,
+            };
         })
-        .sort();
+        .sort((a, b) => a.label.localeCompare(b.label))
+        .slice(0, maxEntries)
+        .map((entry) => entry.label);
 }
 
 function summarizeItems() {
@@ -288,15 +295,37 @@ function summarizeProcessProgress(gameState = {}) {
         .sort((a, b) => a.localeCompare(b));
 }
 
-export function buildDchatKnowledgePack(gameState = {}) {
+export function buildDchatKnowledgePack(gameState = {}, options = {}) {
     const knowledgeSections = [];
     const sources = [];
     const stateDetails = [];
 
-    const inventorySummary = formatInventory(gameState.inventory);
-    if (inventorySummary.length > 0) {
+    const compactState =
+        options.playerStateSummary ||
+        buildPlayerStatePromptSummary(gameState, {
+            latestUserMessage: options.latestUserMessage || '',
+        });
+    const stateSlices = compactState.slices || {};
+    const inventoryHighlights = [
+        ...(stateSlices.notableResources || []),
+        ...(stateSlices.relevantInventory || []),
+        ...(stateSlices.sampleInventory || []),
+    ]
+        .slice(0, 8)
+        .map(
+            (entry) =>
+                `${entry.name || entry.id} (x${Number.isInteger(entry.count) ? entry.count : entry.count.toFixed(2)})`
+        );
+    if (inventoryHighlights.length === 0 && compactState.meta?.inventoryTotalCount > 0) {
+        stateDetails.push('inventory summary');
+    }
+
+    if (inventoryHighlights.length > 0) {
+        const omittedNote = compactState.meta?.inventoryTruncated
+            ? '; additional owned inventory omitted from prompt'
+            : '';
         knowledgeSections.push(
-            `${dchatKnowledgeScaffolding.inventoryHighlights}: ${inventorySummary.join('; ')}`
+            `${dchatKnowledgeScaffolding.inventoryHighlights}: ${inventoryHighlights.join('; ')}${omittedNote}`
         );
         stateDetails.push('inventory');
     }

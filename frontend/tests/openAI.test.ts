@@ -557,7 +557,7 @@ describe('buildChatPrompt', () => {
         expect(content).toContain('/docs/routes');
     });
 
-    it('injects PlayerState with finished quests and inventory entries', async () => {
+    it('injects compact PlayerState without raw finished quest or inventory dumps', async () => {
         vi.mocked(loadGameState).mockReturnValueOnce({
             openAI: {},
             versionNumberString: '3',
@@ -575,39 +575,29 @@ describe('buildChatPrompt', () => {
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
         const playerStateMessage = payload.debugMessages.find((message) =>
-            message.content?.includes('PlayerState v3')
+            message.content?.includes('PlayerState v3 compact')
         );
         const content = playerStateMessage?.content ?? '';
         const statsMatch = content.match(
             /PlayerStateStats: completedOfficialQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
         );
-        const jsonStart = content.indexOf('{');
-        const jsonBody = jsonStart >= 0 ? content.slice(jsonStart) : '';
-        const snapshot = jsonBody ? JSON.parse(jsonBody) : null;
 
-        expect(snapshot?.versionNumberString).toBe('3');
+        expect(playerStateMessage).toBeTruthy();
         expect(statsMatch).not.toBeNull();
-        expect(snapshot?.questsFinished).toEqual(
-            expect.arrayContaining(['welcome/howtodoquests', '3dprinter/start'])
-        );
-        expect(snapshot?.questsFinished).not.toEqual(
-            expect.arrayContaining(['welcome/intro-inventory'])
-        );
-        expect(snapshot?.inventory).toEqual(
-            expect.arrayContaining([
-                { id: 'item-alpha', count: 12 },
-                { id: 'item-gamma', count: 5.5 },
-            ])
-        );
+        expect(content).toContain('This compact PlayerState summary is authoritative');
+        expect(content).toContain('Official quests: completed');
+        expect(content).toContain('Inventory: 2 owned entries.');
+        expect(content).not.toContain('questsFinished');
+        expect(content).not.toContain('"item-alpha"');
         expect(payload.playerStateSummary).toEqual(
             expect.objectContaining({
                 included: true,
-                questsFinishedCount: 2,
+                playerStatePromptMode: 'compact',
                 completedQuestCount: Number(statsMatch?.[1]),
                 totalOfficialQuestCount: Number(statsMatch?.[2]),
                 remainingOfficialQuestCount: Number(statsMatch?.[3]),
-                inventoryIncludedCount: 2,
-                inventoryTruncated: false,
+                inventoryIncludedCount: 0,
+                inventoryTruncated: true,
             })
         );
         // '3dprinter/start' is intentionally non-canonical (real ID is '3dprinting/start').
