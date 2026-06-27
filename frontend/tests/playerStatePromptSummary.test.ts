@@ -18,10 +18,14 @@ const makeState = (inventory = {}) => ({
 describe('buildPlayerStatePromptSummary', () => {
     it('keeps questsFinishedCount in compact and missing-state metadata for debug consumers', () => {
         const compact = buildPlayerStatePromptSummary(makeState());
+        const raw = buildPlayerStatePromptSummary(makeState(), { playerStatePromptMode: 'raw' });
         const missing = buildPlayerStatePromptSummary(null);
 
         expect(compact.meta.questsFinishedCount).toBe(3);
+        expect(raw.meta.questsFinishedCount).toBe(3);
         expect(missing.meta.questsFinishedCount).toBe(0);
+        expect(compact.block).not.toContain('questsFinished');
+        expect(raw.block).toContain('questsFinished');
     });
 
     it('excludes elapsed completed processes from active process counts', () => {

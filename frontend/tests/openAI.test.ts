@@ -590,6 +590,7 @@ describe('buildChatPrompt', () => {
             expect.objectContaining({
                 included: true,
                 mode: 'compact',
+                questsFinishedCount: 2,
                 completedQuestCount: 1,
                 inventoryIncludedCount: 1,
                 inventoryTruncated: true,
@@ -639,6 +640,45 @@ describe('buildChatPrompt', () => {
         expect(searchDocsRag).not.toHaveBeenCalled();
         expect(payload.contextSources.every((source) => source.type !== 'doc')).toBe(true);
         expect(payload.promptMetrics.docsRag.status).toBe('skipped');
+    });
+
+    it('exposes only safe PlayerState summary fields in prompt metrics', async () => {
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {
+                'welcome/howtodoquests': { finished: true },
+                'custom/non-official': { finished: true },
+            },
+            inventory: {
+                'd3590107-25ff-4de5-af3a-46e2497bfc52': 12,
+                'secret-item-id': 99,
+            },
+        });
+
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'do I have enough green PLA?' }],
+            { includePromptMetrics: true }
+        );
+        const summary = payload.promptMetrics.playerStateSummary;
+
+        expect(summary).toEqual({
+            mode: 'compact',
+            playerStatePromptMode: 'compact',
+            completedQuestCount: 1,
+            totalOfficialQuestCount: expect.any(Number),
+            remainingOfficialQuestCount: expect.any(Number),
+            remainingQuestIncludedCount: expect.any(Number),
+            inventoryTotalCount: 2,
+            inventoryIncludedCount: 1,
+            inventoryTruncated: true,
+            activeProcessIncludedCount: 0,
+            blockCharCount: expect.any(Number),
+            questsFinishedCount: 2,
+        });
+        expect(JSON.stringify(summary)).not.toContain('secret-item-id');
+        expect(JSON.stringify(summary)).not.toContain('green PLA filament');
+        expect(JSON.stringify(summary)).not.toContain('welcome/howtodoquests');
     });
 
     it('reports forced docs RAG consistently in plan metadata and prompt metrics', async () => {

@@ -27,6 +27,37 @@ const normalizeIndexes = (value) => {
     return [];
 };
 
+const numberOrZero = (value) => (Number.isFinite(value) ? Number(value) : 0);
+
+const sanitizePlayerStateSummary = (summary) => {
+    if (!summary || typeof summary !== 'object') return null;
+
+    const safeSummary = {
+        mode: typeof summary.mode === 'string' ? summary.mode : 'unknown',
+        playerStatePromptMode:
+            typeof summary.playerStatePromptMode === 'string'
+                ? summary.playerStatePromptMode
+                : typeof summary.mode === 'string'
+                  ? summary.mode
+                  : 'unknown',
+        completedQuestCount: numberOrZero(summary.completedQuestCount),
+        totalOfficialQuestCount: numberOrZero(summary.totalOfficialQuestCount),
+        remainingOfficialQuestCount: numberOrZero(summary.remainingOfficialQuestCount),
+        remainingQuestIncludedCount: numberOrZero(summary.remainingQuestIncludedCount),
+        inventoryTotalCount: numberOrZero(summary.inventoryTotalCount),
+        inventoryIncludedCount: numberOrZero(summary.inventoryIncludedCount),
+        inventoryTruncated: Boolean(summary.inventoryTruncated),
+        activeProcessIncludedCount: numberOrZero(summary.activeProcessIncludedCount),
+        blockCharCount: numberOrZero(summary.blockCharCount),
+    };
+
+    if (Number.isFinite(summary.questsFinishedCount)) {
+        safeSummary.questsFinishedCount = Number(summary.questsFinishedCount);
+    }
+
+    return safeSummary;
+};
+
 export const buildPromptMetrics = (promptPayload, metadata = {}) => {
     const messages = Array.isArray(promptPayload?.combinedMessages)
         ? promptPayload.combinedMessages
@@ -102,6 +133,6 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
               })()
             : null,
         contextPlan: metadata.contextPlan || null,
-        playerStateSummary: metadata.playerStateSummary || null,
+        playerStateSummary: sanitizePlayerStateSummary(metadata.playerStateSummary),
     };
 };
