@@ -118,7 +118,7 @@ const docsRagIntentChecks = [
     {
         reasonCode: 'changelog-version-docs',
         pattern:
-            /\b(?:changelog|release notes?|token\.place integration|version|v\d+(?:\.\d+)?|drift|deprecated|current release state)\b/i,
+            /\b(?:changelog|release notes?|token\.place integration|v\d+(?:\.\d+)?|drift|deprecated|current release state)\b|\bversion\b(?=.*\b(?:changelog|release|docs?|integration)\b)/i,
     },
     {
         reasonCode: 'changelog-version-docs',
@@ -195,10 +195,10 @@ export const hasStrongEntityHit = (text) => {
     );
 };
 
-export const hasGroundingSignal = (text) => {
+export const hasGroundingSignal = (text, docsRagReasonCodes = detectDocsRagIntent(text)) => {
     const reasonCodes = regexHits(text, groundingChecks);
     if (resourcePattern.test(text)) reasonCodes.push('resource-token');
-    if (!detectDocsRagIntent(text).includes('docs-rag-not-needed')) {
+    if (!docsRagReasonCodes.includes('docs-rag-not-needed')) {
         reasonCodes.push('docs-rag-intent');
     }
     if (hasStrongEntityHit(text)) reasonCodes.push('entity-hit');
@@ -210,7 +210,8 @@ export const planChatContext = (messages, options = {}) => {
     const latest = latestUserContent(messages);
     if (!latest.trim()) return fullPlan(['no-latest-user-message']);
 
-    const reasonCodes = hasGroundingSignal(latest);
+    const docsRagReasonCodes = detectDocsRagIntent(latest);
+    const reasonCodes = hasGroundingSignal(latest, docsRagReasonCodes);
 
-    return reasonCodes.length ? fullPlan(reasonCodes, detectDocsRagIntent(latest)) : minimalPlan();
+    return reasonCodes.length ? fullPlan(reasonCodes, docsRagReasonCodes) : minimalPlan();
 };

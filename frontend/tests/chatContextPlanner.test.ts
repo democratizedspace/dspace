@@ -36,6 +36,7 @@ describe('planChatContext', () => {
         'what about the second option?',
         'Benchy',
         'dSolar',
+        'what version of the solar tracker blueprint do I have?',
     ])('uses full mode without docs RAG for player-state turns: %s', (content) => {
         const plan = planFor(content);
         expect(plan.mode).toBe('full');

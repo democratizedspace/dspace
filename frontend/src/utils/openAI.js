@@ -802,12 +802,19 @@ export const buildChatPrompt = async (messages, options = {}) => {
         : latestUserMessage
           ? 'skipped'
           : 'not-applicable';
+    const contextPlanDocsRagReasonCodes = Array.isArray(contextPlan.docsRagReasonCodes)
+        ? contextPlan.docsRagReasonCodes
+        : [];
+    const docsRagReasonCodes = options.forceDocsRag
+        ? [...new Set([...contextPlanDocsRagReasonCodes, 'docs-rag-forced'])]
+        : contextPlanDocsRagReasonCodes.length
+          ? contextPlanDocsRagReasonCodes
+          : [shouldIncludeDocsRag ? 'docs-rag-included' : 'docs-rag-not-needed'];
     const contextPlanMetadata = {
         ...contextPlan,
+        includeDocsRag: shouldIncludeDocsRag,
         docsRagStatus,
-        docsRagReasonCodes: contextPlan.docsRagReasonCodes || [
-            shouldIncludeDocsRag ? 'docs-rag-included' : 'docs-rag-not-needed',
-        ],
+        docsRagReasonCodes,
     };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText

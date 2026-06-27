@@ -664,6 +664,29 @@ describe('buildChatPrompt', () => {
         expect(payload.promptMetrics.docsRag.status).toBe('skipped');
     });
 
+    it('reports forced docs RAG consistently in plan metadata and prompt metrics', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: `---
+Docs grounding (gitSha: test):
+- [doc] Forced docs
+---`,
+            sources: [{ type: 'doc', id: 'forced', label: 'Forced docs', url: '/docs/forced#top' }],
+            sourcesMeta: { results: [] },
+        });
+
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'what quest do I have left?' }],
+            { forceDocsRag: true, includePromptMetrics: true }
+        );
+
+        expect(searchDocsRag).toHaveBeenCalled();
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(payload.contextPlan.docsRagStatus).toBe('included');
+        expect(payload.contextPlan.docsRagReasonCodes).toContain('docs-rag-forced');
+        expect(payload.promptMetrics.docsRag.includeDocsRag).toBe(true);
+        expect(payload.promptMetrics.docsRag.status).toBe('included');
+    });
+
     it('includes docs RAG for gamesave route prompts', async () => {
         vi.mocked(searchDocsRag).mockResolvedValueOnce({
             excerptsText: `---\nDocs grounding (gitSha: test):\n- [route] Backups — /docs/backups#top\n  import saves\n---`,
