@@ -17,13 +17,11 @@ beforeEach(async () => {
 });
 
 describe('buildDchatKnowledgePack', () => {
-    it('returns summary and sources for non-empty catalogs', () => {
+    it('does not include broad static catalogs by default', () => {
         const pack = buildDchatKnowledgePack({});
 
-        expect(pack.summary).toContain('Items:');
-        expect(pack.sources.length).toBeGreaterThan(0);
-        expect(pack.sources.some((entry) => entry.type === 'item')).toBe(true);
-        expect(pack.sources.some((entry) => entry.type === 'state')).toBe(false);
+        expect(pack.summary).toBe('');
+        expect(pack.sources).toEqual([]);
     });
 
     it('adds a state source when game state context is used', () => {
@@ -51,12 +49,12 @@ describe('buildDchatKnowledgePack', () => {
 
         mockEvaluateAchievements.mockReturnValue([...unlocked, ...inProgress]);
 
-        const pack = buildDchatKnowledgePack({});
+        const pack = buildDchatKnowledgePack(
+            {},
+            { latestUserMessage: 'achievement progress unlocked rewards' }
+        );
         const achievementSources = pack.sources.filter((entry) => entry.type === 'achievement');
-        const expectedIds = [
-            ...unlocked.map((entry) => entry.id),
-            ...inProgress.slice(0, 2).map((entry) => entry.id),
-        ];
+        const expectedIds = inProgress.slice(0, 4).map((entry) => entry.id);
         const sortedAchievementIds = [...achievementSources]
             .sort((a, b) => {
                 const labelCompare = a.label.localeCompare(b.label);
@@ -67,12 +65,12 @@ describe('buildDchatKnowledgePack', () => {
             })
             .map((entry) => entry.id);
 
-        expect(achievementSources.length).toBe(6);
+        expect(achievementSources.length).toBe(4);
         expect(achievementSources.map((entry) => entry.id)).toEqual(sortedAchievementIds);
         expect(new Set(achievementSources.map((entry) => entry.id))).toEqual(new Set(expectedIds));
     });
 
-    it('bounds live-state inventory highlights instead of dumping all owned inventory', () => {
+    it('bounds live-state relevant inventory instead of dumping all owned inventory', () => {
         const inventory = Object.fromEntries(
             Array.from({ length: 150 }, (_, index) => [`raw-owned-${index}`, index + 1])
         );
@@ -82,14 +80,14 @@ describe('buildDchatKnowledgePack', () => {
         );
         const highlights = pack.summary
             .split('\n\n')
-            .find((section) => section.startsWith('Inventory highlights:'));
+            .find((section) => section.startsWith('Relevant inventory:'));
 
-        expect(highlights).toContain('compact bounded live-state highlights');
+        expect(highlights).toContain('Omitted inventory entries are omitted, not absent');
         expect((highlights?.match(/raw-owned-/g) || []).length).toBeLessThanOrEqual(8);
         expect((pack.summary.match(/raw-owned-/g) || []).length).toBeLessThanOrEqual(8);
     });
 
-    it('does not add arbitrary live inventory highlights for unrelated progress questions', () => {
+    it('does not add arbitrary live relevant inventory for unrelated progress questions', () => {
         const pack = buildDchatKnowledgePack(
             { inventory: { '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6': 2 } },
             { latestUserMessage: 'How am I progressing?' }
@@ -97,12 +95,12 @@ describe('buildDchatKnowledgePack', () => {
 
         const highlights = pack.summary
             .split('\n\n')
-            .find((section) => section.startsWith('Inventory highlights:'));
+            .find((section) => section.startsWith('Relevant inventory:'));
 
         expect(highlights).toBeUndefined();
     });
 
-    it('keeps resource balances in compact highlights for unrelated progress questions', () => {
+    it('does not add unrelated resource balances for broad progress questions', () => {
         const pack = buildDchatKnowledgePack(
             { inventory: { '5247a603-294a-4a34-a884-1ae20969b2a1': 25 } },
             { latestUserMessage: 'How am I progressing?' }
@@ -110,10 +108,9 @@ describe('buildDchatKnowledgePack', () => {
 
         const highlights = pack.summary
             .split('\n\n')
-            .find((section) => section.startsWith('Inventory highlights:'));
+            .find((section) => section.startsWith('Relevant inventory:'));
 
-        expect(highlights).toContain('compact bounded live-state highlights');
-        expect(highlights).toContain('dUSD (x25)');
+        expect(highlights).toBeUndefined();
     });
 
     it('keeps query-relevant live inventory in compact highlights', () => {
@@ -122,7 +119,7 @@ describe('buildDchatKnowledgePack', () => {
             { latestUserMessage: 'do I have enough green PLA?' }
         );
 
-        expect(pack.summary).toContain('Inventory highlights: compact bounded');
+        expect(pack.summary).toContain('Relevant inventory:');
         expect(pack.summary).toContain('green PLA filament');
         expect(pack.summary).toContain('x13');
     });
