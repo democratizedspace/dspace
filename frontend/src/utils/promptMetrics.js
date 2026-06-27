@@ -78,6 +78,7 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
                   const status =
                       metadata.contextPlan.docsRagStatus ||
                       (metadata.contextPlan.mode === 'minimal' ? 'not-applicable' : 'skipped');
+                  const docsRag = metadata.docsRag || {};
                   return {
                       includeDocsRag:
                           status === 'included' ||
@@ -87,6 +88,15 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
                           ? metadata.contextPlan.docsRagReasonCodes
                           : [],
                       durationMs: status === 'included' ? Number(metadata.ragDurationMs || 0) : 0,
+                      resultCount: Number(docsRag.resultCount || 0),
+                      renderedCharCount: Number(docsRag.renderedCharCount || 0),
+                      budget: docsRag.budget
+                          ? {
+                                maxResults: docsRag.budget.maxResults,
+                                maxChars: docsRag.budget.maxChars,
+                                maxExcerptChars: docsRag.budget.maxExcerptChars,
+                            }
+                          : null,
                   };
               })()
             : null,

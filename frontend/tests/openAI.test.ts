@@ -34,6 +34,8 @@ import {
     defaultOpenAIErrorMessage,
     describeOpenAIError,
     buildChatPrompt,
+    CHAT_DOCS_RAG_DEFAULTS,
+    CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS,
     getOpenAIErrorSummary,
     GPT5Chat,
     GPT5ChatV2,
@@ -686,6 +688,11 @@ Docs grounding (gitSha: test):
         expect(payload.contextPlan.docsRagReasonCodes).not.toEqual(['docs-rag-not-needed']);
         expect(payload.promptMetrics.docsRag.includeDocsRag).toBe(true);
         expect(payload.promptMetrics.docsRag.status).toBe('included');
+        expect(payload.promptMetrics.docsRag.budget).toEqual(
+            expect.objectContaining(CHAT_DOCS_RAG_DEFAULTS)
+        );
+        expect(payload.promptMetrics.docsRag.renderedCharCount).toBeGreaterThan(0);
+        expect(JSON.stringify(payload.promptMetrics.docsRag)).not.toContain('Forced docs');
     });
 
     it('includes docs RAG for gamesave route prompts', async () => {
@@ -828,18 +835,40 @@ Docs grounding (gitSha: test):
         expect(retrievalQuery).toBe(latestMessage);
     });
 
-    it('passes expanded docs RAG options to searchDocsRag', async () => {
+    it('passes compact named docs RAG defaults to searchDocsRag', async () => {
         const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
 
         await buildChatPrompt(messages, { docsRagBudgetChars: 1000000 });
 
         const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
 
+        expect(CHAT_DOCS_RAG_DEFAULTS).toEqual({
+            maxResults: 6,
+            maxChars: 8000,
+            maxExcerptChars: 1200,
+        });
+        expect(CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS).toBe(12000);
+        expect(options).toEqual(expect.objectContaining(CHAT_DOCS_RAG_DEFAULTS));
+        expect(options.maxResults).toBeLessThan(50);
+        expect(options.maxChars).toBeLessThan(50000);
+        expect(options.maxExcerptChars).toBeLessThan(8500);
+    });
+
+    it('preserves explicit docs RAG option overrides', async () => {
+        const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
+
+        await buildChatPrompt(messages, {
+            docsRagBudgetChars: 1000000,
+            docsRagOptions: { maxResults: 12, maxChars: 16000, maxExcerptChars: 2000 },
+        });
+
+        const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
+
         expect(options).toEqual(
             expect.objectContaining({
-                maxResults: 50,
-                maxChars: 50000,
-                maxExcerptChars: 8500,
+                maxResults: 12,
+                maxChars: 16000,
+                maxExcerptChars: 2000,
             })
         );
     });

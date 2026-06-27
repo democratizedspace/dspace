@@ -114,12 +114,12 @@ const vagueFollowupPattern =
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
 const MAX_PLAYER_STATE_ITEMS = 50;
-const docsRagOptions = {
-    maxResults: 50,
-    maxChars: 50000,
-    maxExcerptChars: 8500,
-};
-const docsRagPromptBudgetChars = 80000;
+export const CHAT_DOCS_RAG_DEFAULTS = Object.freeze({
+    maxResults: 6,
+    maxChars: 8000,
+    maxExcerptChars: 1200,
+});
+export const CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS = 12000;
 
 const readEnvValue = (key) => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
@@ -409,8 +409,8 @@ const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
     const budget =
         typeof promptBudgetChars === 'number' && Number.isFinite(promptBudgetChars)
             ? Math.max(0, promptBudgetChars)
-            : docsRagPromptBudgetChars;
-    const baseOptions = { ...docsRagOptions, ...(options || {}) };
+            : CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS;
+    const baseOptions = { ...CHAT_DOCS_RAG_DEFAULTS, ...(options || {}) };
     const remainingBudget = Math.max(0, budget - countPromptChars(baseMessages));
 
     return {
@@ -810,6 +810,24 @@ export const buildChatPrompt = async (messages, options = {}) => {
         : contextPlanDocsRagReasonCodes.length
           ? contextPlanDocsRagReasonCodes
           : [shouldIncludeDocsRag ? 'docs-rag-included' : 'docs-rag-not-needed'];
+    const docsRagRenderedCharCount = String(docsRagPayload.excerptsText || '').length;
+    const docsRagResultCount = Array.isArray(docsRagPayload.sourcesMeta?.results)
+        ? docsRagPayload.sourcesMeta.results.length
+        : Array.isArray(docsRagPayload.sources)
+          ? docsRagPayload.sources.length
+          : 0;
+    const docsRagMetrics = {
+        status: docsRagStatus,
+        resultCount: shouldIncludeDocsRag ? docsRagResultCount : 0,
+        renderedCharCount: shouldIncludeDocsRag ? docsRagRenderedCharCount : 0,
+        budget: docsRagRequestOptions
+            ? {
+                  maxResults: docsRagRequestOptions.maxResults,
+                  maxChars: docsRagRequestOptions.maxChars,
+                  maxExcerptChars: docsRagRequestOptions.maxExcerptChars,
+              }
+            : null,
+    };
     const contextPlanMetadata = {
         ...contextPlan,
         includeDocsRag: shouldIncludeDocsRag,
@@ -905,6 +923,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
             promptBuildDurationMs: performance.now() - promptBuildStartedAt,
             ragDurationMs,
             contextPlan: contextPlanMetadata,
+            docsRag: docsRagMetrics,
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,
                 rag: ragIndexes,
