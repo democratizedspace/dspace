@@ -102,5 +102,6 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
               })()
             : null,
         contextPlan: metadata.contextPlan || null,
+        playerStateSummary: metadata.playerStateSummary || null,
     };
 };
