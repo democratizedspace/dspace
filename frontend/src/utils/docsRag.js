@@ -617,7 +617,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
 
         for (const chunk of orderedSelected) {
             const routeExcerptChars = wantsRouteChunk
-                ? Math.max(maxExcerptChars, 2500)
+                ? Math.min(Math.max(maxExcerptChars, 2000), 2500)
                 : maxExcerptChars;
             const chunkMaxExcerptChars =
                 chunk.kind === 'route' && wantsRouteChunk ? routeExcerptChars : maxExcerptChars;

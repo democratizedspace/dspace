@@ -114,12 +114,12 @@ const vagueFollowupPattern =
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
 const MAX_PLAYER_STATE_ITEMS = 50;
-const docsRagOptions = {
-    maxResults: 50,
-    maxChars: 50000,
-    maxExcerptChars: 8500,
-};
-const docsRagPromptBudgetChars = 80000;
+export const CHAT_DOCS_RAG_OPTIONS = Object.freeze({
+    maxResults: 6,
+    maxChars: 8000,
+    maxExcerptChars: 1200,
+});
+export const CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS = 12000;
 
 const readEnvValue = (key) => {
     if (typeof import.meta !== 'undefined' && import.meta.env?.[key]) {
@@ -406,16 +406,24 @@ export const getPlayerStateSummary = (gameState = loadGameState()) => {
 };
 
 const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
+    const baseOptions = { ...CHAT_DOCS_RAG_OPTIONS, ...(options || {}) };
+    const explicitMaxChars =
+        typeof options?.maxChars === 'number' && Number.isFinite(options.maxChars)
+            ? Math.max(0, options.maxChars)
+            : null;
+    const basePromptChars = countPromptChars(baseMessages);
     const budget =
         typeof promptBudgetChars === 'number' && Number.isFinite(promptBudgetChars)
             ? Math.max(0, promptBudgetChars)
-            : docsRagPromptBudgetChars;
-    const baseOptions = { ...docsRagOptions, ...(options || {}) };
-    const remainingBudget = Math.max(0, budget - countPromptChars(baseMessages));
+            : explicitMaxChars !== null
+              ? basePromptChars + explicitMaxChars
+              : CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS;
+    const remainingBudget = Math.max(0, budget - basePromptChars);
 
     return {
         ...baseOptions,
         maxChars: Math.min(baseOptions.maxChars, remainingBudget),
+        promptBudgetChars: budget,
     };
 };
 
@@ -815,6 +823,20 @@ export const buildChatPrompt = async (messages, options = {}) => {
         includeDocsRag: shouldIncludeDocsRag,
         docsRagStatus,
         docsRagReasonCodes,
+        docsRagResultCount: Array.isArray(docsRagPayload.sourcesMeta?.results)
+            ? docsRagPayload.sourcesMeta.results.length
+            : Array.isArray(docsRagPayload.sources)
+              ? docsRagPayload.sources.length
+              : 0,
+        docsRagRenderedChars: String(docsRagPayload.excerptsText || '').length,
+        docsRagBudget: docsRagRequestOptions
+            ? {
+                  maxResults: docsRagRequestOptions.maxResults,
+                  maxChars: docsRagRequestOptions.maxChars,
+                  maxExcerptChars: docsRagRequestOptions.maxExcerptChars,
+                  promptBudgetChars: docsRagRequestOptions.promptBudgetChars,
+              }
+            : null,
     };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
