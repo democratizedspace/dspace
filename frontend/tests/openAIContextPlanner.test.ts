@@ -143,6 +143,73 @@ describe('buildChatPrompt context planning', () => {
         expect(prompt).toContain('Use the PlayerState block when present.');
         expect(prompt).toContain('If PlayerState is missing');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
+        expect(payload.contextPlan.includeDocsRag).toBe(false);
+        expect(payload.contextPlan.docsRagStatus).toBe('skipped');
+        expect(prompt).not.toContain('Docs grounding');
+        expect(searchDocsRag).not.toHaveBeenCalled();
+    });
+
+    it('skips docs RAG for full player-state-only questions', async () => {
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'what quest do I have left?' }],
+            {
+                includePromptMetrics: true,
+            }
+        );
+        const prompt = joinedPrompt(payload);
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(false);
+        expect(payload.contextPlan.docsRagStatus).toBe('skipped');
+        expect(prompt).toContain('PlayerState');
+        expect(prompt).toContain('DSPACE knowledge base');
+        expect(prompt).not.toContain('Docs grounding');
+        expect(payload.contextSources).toEqual([]);
+        expect(payload.promptMetrics.contextPlan.includeDocsRag).toBe(false);
+        expect(payload.promptMetrics.contextPlan.docsRagStatus).toBe('skipped');
+        expect(searchDocsRag).not.toHaveBeenCalled();
+    });
+
+    it('includes docs RAG for gamesave route questions', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: 'Docs grounding: /gamesaves import details',
+            sources: [{ type: 'doc', id: '/docs/backups', label: 'Backups', url: '/docs/backups' }],
+        });
+        const payload = await buildChatPrompt([
+            { role: 'user', content: 'where do I import a gamesave?' },
+        ]);
+        const prompt = joinedPrompt(payload);
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(payload.contextPlan.docsRagStatus).toBe('included');
         expect(searchDocsRag).toHaveBeenCalled();
+        expect(prompt).toContain('Docs grounding');
+        expect(payload.contextSources.some((source) => source.url === '/docs/backups')).toBe(true);
+    });
+
+    it('includes docs RAG for custom content questions', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: 'Docs grounding: custom content bundle and quest submission guidance',
+            sources: [
+                {
+                    type: 'doc',
+                    id: '/docs/quest-submission',
+                    label: 'Quest Submission',
+                    url: '/docs/quest-submission',
+                },
+            ],
+        });
+        const payload = await buildChatPrompt([
+            { role: 'user', content: 'How do I add custom content to DSPACE?' },
+        ]);
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(payload.contextPlan.docsRagStatus).toBe('included');
+        expect(searchDocsRag).toHaveBeenCalled();
+        expect(
+            payload.contextSources.some((source) => source.url === '/docs/quest-submission')
+        ).toBe(true);
     });
 });
