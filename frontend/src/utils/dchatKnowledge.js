@@ -305,15 +305,6 @@ export function buildDchatKnowledgePack(gameState = {}, options = {}) {
         ...(stateSummary.slices?.resourceBalances || []),
         ...(stateSummary.slices?.relevantInventory || []),
     ];
-    if (compactInventoryEntries.length === 0 && gameState?.inventory) {
-        const fallbackSummary = buildPlayerStatePromptSummary(gameState, {
-            latestUserMessage: `${options.latestUserMessage || ''} inventory items`,
-        });
-        compactInventoryEntries.push(
-            ...(fallbackSummary.slices?.resourceBalances || []),
-            ...(fallbackSummary.slices?.relevantInventory || [])
-        );
-    }
     const compactInventorySummary = compactInventoryEntries
         .slice(0, 10)
         .map(
