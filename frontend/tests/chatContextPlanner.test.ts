@@ -59,6 +59,9 @@ describe('planChatContext', () => {
         '/gamesaves',
         'where are content bundles documented?',
         'what does this process create?',
+        'What can I back up or export?',
+        'Explain requires vs consumes vs creates and duration semantics',
+        'what do processes consume?',
         'custom item for a DSPACE quest',
     ])('uses full mode with docs RAG for docs-like turns: %s', (content) => {
         const plan = planFor(content);

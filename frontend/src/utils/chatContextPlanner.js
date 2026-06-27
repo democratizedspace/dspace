@@ -108,7 +108,7 @@ const docsRagIntentChecks = [
     {
         reasonCode: 'docs-navigation',
         pattern:
-            /\b(?:docs?|documentation|where do i|how do i get to|settings|gamesaves?|import(?: a)? save|export(?: a)? save|backup|content backup)\b/i,
+            /\b(?:docs?|documentation|where do i|how do i get to|settings|gamesaves?|import(?: a)? save|export(?: a)? save|back up|backup|content backup)\b/i,
     },
     {
         reasonCode: 'custom-content-docs',
@@ -127,7 +127,7 @@ const docsRagIntentChecks = [
     {
         reasonCode: 'mechanics-docs',
         pattern:
-            /\bprocess(?:es)?\b(?=.*\b(?:consumes?|creates?|requires?|requirements?|duration)\b)|\b(?:consumes?|creates?|requires?|duration)\b(?=.*\bprocess(?:es)?\b)/i,
+            /\bprocess(?:es)?\b(?=.*\b(?:consumes?|creates?|requires?|requirements?|duration)\b)|\b(?:consumes?|creates?|requires?|duration)\b(?=.*\bprocess(?:es)?\b)|\brequires?\b(?=.*\bconsumes?\b)(?=.*\bcreates?\b)(?=.*\bduration\b)/i,
     },
     {
         reasonCode: 'mechanics-docs',

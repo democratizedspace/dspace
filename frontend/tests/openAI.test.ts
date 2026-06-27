@@ -683,6 +683,7 @@ Docs grounding (gitSha: test):
         expect(payload.contextPlan.includeDocsRag).toBe(true);
         expect(payload.contextPlan.docsRagStatus).toBe('included');
         expect(payload.contextPlan.docsRagReasonCodes).toContain('docs-rag-forced');
+        expect(payload.contextPlan.docsRagReasonCodes).not.toEqual(['docs-rag-not-needed']);
         expect(payload.promptMetrics.docsRag.includeDocsRag).toBe(true);
         expect(payload.promptMetrics.docsRag.status).toBe('included');
     });
