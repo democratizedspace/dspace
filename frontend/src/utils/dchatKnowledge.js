@@ -2,6 +2,7 @@ import items from '../pages/inventory/json/items/index.js';
 import processes from '../generated/processes.json' assert { type: 'json' };
 import { evaluateAchievements } from './achievements.js';
 import { mergeSources } from './contextSources.js';
+import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
 
 const MAX_ITEMS = 25;
 const MAX_PROCESSES = 20;
@@ -9,6 +10,7 @@ const MAX_QUESTS = 25;
 const MAX_QUEST_STATUS_ENTRIES = 12;
 const MAX_PROCESS_STATUS_ENTRIES = 8;
 const MAX_ACHIEVEMENT_ENTRIES = 6;
+const MAX_STATE_INVENTORY_HIGHLIGHTS = 8;
 const PRIORITY_QUEST_IDS = [
     'welcome/howtodoquests',
     'welcome/intro-inventory',
@@ -288,17 +290,31 @@ function summarizeProcessProgress(gameState = {}) {
         .sort((a, b) => a.localeCompare(b));
 }
 
-export function buildDchatKnowledgePack(gameState = {}) {
+export function buildDchatKnowledgePack(gameState = {}, options = {}) {
     const knowledgeSections = [];
     const sources = [];
     const stateDetails = [];
 
-    const inventorySummary = formatInventory(gameState.inventory);
-    if (inventorySummary.length > 0) {
-        knowledgeSections.push(
-            `${dchatKnowledgeScaffolding.inventoryHighlights}: ${inventorySummary.join('; ')}`
+    const stateSummary =
+        options.playerStateSummary ||
+        buildPlayerStatePromptSummary(gameState, {
+            latestUserMessage: options.latestUserMessage || '',
+            includeInventorySample: true,
+        });
+    const compactInventoryEntries = (stateSummary.slices?.inventory?.included || [])
+        .slice(0, MAX_STATE_INVENTORY_HIGHLIGHTS)
+        .map(
+            (entry) =>
+                `${entry.name} (x${Number.isInteger(entry.count) ? entry.count : Number(entry.count).toFixed(2)})`
         );
-        stateDetails.push('inventory');
+    if (compactInventoryEntries.length > 0) {
+        const omittedNote = stateSummary.meta?.inventoryTruncated
+            ? `; additional owned inventory omitted (${stateSummary.meta.inventoryTotalCount} total item types)`
+            : '';
+        knowledgeSections.push(
+            `${dchatKnowledgeScaffolding.inventoryHighlights}: ${compactInventoryEntries.join('; ')}${omittedNote}`
+        );
+        stateDetails.push('compact inventory');
     }
 
     const itemEntries = getItemsForKnowledge();
