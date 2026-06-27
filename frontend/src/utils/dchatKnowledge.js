@@ -3,6 +3,7 @@ import processes from '../generated/processes.json' assert { type: 'json' };
 import { evaluateAchievements } from './achievements.js';
 import { mergeSources } from './contextSources.js';
 import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
+import { buildFocusedGameDataContext } from './gameDataRetrieval.js';
 
 const MAX_ITEMS = 25;
 const MAX_PROCESSES = 20;
@@ -318,58 +319,16 @@ export function buildDchatKnowledgePack(gameState = {}, options = {}) {
         stateDetails.push('inventory highlights');
     }
 
-    const itemEntries = getItemsForKnowledge();
-    if (itemEntries.length > 0) {
-        knowledgeSections.push(
-            `${dchatKnowledgeScaffolding.items}: ${itemEntries
-                .map((item) => `${item.name}: ${truncate(item.description || '')}`)
-                .join(' | ')}`
-        );
-        sources.push(
-            ...itemEntries.map((item) => ({
-                type: 'item',
-                id: item.id,
-                label: item.name,
-                url: `/inventory/item/${item.id}`,
-                detail: truncate(item.description || ''),
-            }))
-        );
-    }
-
-    const questEntries = getQuestsForKnowledge();
-    if (questEntries.length > 0) {
-        knowledgeSections.push(
-            `${dchatKnowledgeScaffolding.quests}: ${questEntries
-                .map((quest) => {
-                    const parts = [`${quest.title} [${quest.id}]`];
-                    if (quest.description) {
-                        parts.push(quest.description);
-                    }
-                    if (quest.requiresQuests.length > 0) {
-                        parts.push(
-                            `${dchatKnowledgeScaffolding.prereqs}: ${quest.requiresQuests.join(
-                                ', '
-                            )}`
-                        );
-                    }
-                    if (quest.rewards.length > 0) {
-                        parts.push(
-                            `${dchatKnowledgeScaffolding.rewards}: ${quest.rewards.join(', ')}`
-                        );
-                    }
-                    return parts.join(' — ');
-                })
-                .join(' || ')}`
-        );
-        sources.push(
-            ...questEntries.map((quest) => ({
-                type: 'quest',
-                id: quest.id,
-                label: quest.title || quest.id,
-                url: `/quests/${quest.id}`,
-                detail: quest.description || '',
-            }))
-        );
+    const focusedGameData = buildFocusedGameDataContext({
+        query: options.latestUserMessage || '',
+        messages: options.messages || [],
+        gameState,
+        playerStateSummary: stateSummary,
+        options: options.focusedGameDataOptions,
+    });
+    if (focusedGameData.block) {
+        knowledgeSections.push(focusedGameData.block);
+        sources.push(...focusedGameData.sources);
     }
 
     const questProgressSummary = summarizeQuestProgress(gameState);
@@ -380,8 +339,7 @@ export function buildDchatKnowledgePack(gameState = {}, options = {}) {
         stateDetails.push('quest progress');
     }
 
-    const { unlockedEntries, progressEntries, unlockedSlice, inProgressSlice } =
-        getAchievementEntries(gameState);
+    const { unlockedEntries, progressEntries } = getAchievementEntries(gameState);
     if (unlockedEntries.length > 0 || progressEntries.length > 0) {
         const sections = [];
         if (unlockedEntries.length > 0) {
@@ -397,39 +355,6 @@ export function buildDchatKnowledgePack(gameState = {}, options = {}) {
             `${dchatKnowledgeScaffolding.achievements}: ${sections.join(' | ')}`
         );
         stateDetails.push('achievements');
-        sources.push(
-            ...unlockedSlice.map((achievement) => ({
-                type: 'achievement',
-                id: achievement.id,
-                label: achievement.title,
-            })),
-            ...inProgressSlice.map((achievement) => ({
-                type: 'achievement',
-                id: achievement.id,
-                label: achievement.title,
-                detail: achievement.progress?.displayValue || '',
-            }))
-        );
-    }
-
-    const processEntries = getProcessesForKnowledge();
-    if (processEntries.length > 0) {
-        knowledgeSections.push(
-            `${dchatKnowledgeScaffolding.processes}: ${processEntries
-                .map((process) => {
-                    const duration = process.duration ? ` (duration ${process.duration})` : '';
-                    return `${process.title}${duration}`;
-                })
-                .join(' | ')}`
-        );
-        sources.push(
-            ...processEntries.map((process) => ({
-                type: 'process',
-                id: process.id,
-                label: process.title,
-                url: `/processes/${process.id}`,
-            }))
-        );
     }
 
     const processProgressSummary = summarizeProcessProgress(gameState);
@@ -452,6 +377,7 @@ export function buildDchatKnowledgePack(gameState = {}, options = {}) {
     return {
         summary: knowledgeSections.join('\n\n'),
         sources: mergeSources(sources),
+        focusedGameData: focusedGameData.meta,
     };
 }
 

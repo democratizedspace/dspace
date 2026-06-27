@@ -709,6 +709,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     const knowledgePack = buildDchatKnowledgePack(gameState, {
         latestUserMessage: latestUserMessage?.content || '',
+        messages: normalizedMessages,
         playerStateSummary: playerStateSnapshot,
     });
     const knowledgeSummary = knowledgePack.summary;
@@ -771,6 +772,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
                   routeMaxExcerptChars: docsRagRequestOptions.routeMaxExcerptChars,
               }
             : null,
+        focusedGameData: knowledgePack.focusedGameData || null,
     };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
