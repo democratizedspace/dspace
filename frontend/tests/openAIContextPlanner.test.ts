@@ -44,7 +44,11 @@ describe('buildChatPrompt context planning', () => {
         expect(prompt).not.toContain('DSPACE knowledge base');
         expect(prompt).not.toContain('Docs grounding');
         expect(prompt).not.toContain('inventory highlights');
-        expect(prompt.length).toBeLessThan(3500);
+        expect(prompt).toContain('Never invent game facts or player state.');
+        expect(prompt).toContain('Only give exact counts/durations/rates');
+        expect(prompt).not.toContain('Use the PlayerState block when present.');
+        expect(prompt).not.toContain('If PlayerState is missing');
+        expect(prompt.length).toBeLessThan(5000);
         expect(payload.promptMetrics.contextPlan.mode).toBe('minimal');
         expect(buildDchatKnowledgePack).not.toHaveBeenCalled();
         expect(searchDocsRag).not.toHaveBeenCalled();
@@ -75,6 +79,9 @@ describe('buildChatPrompt context planning', () => {
         expect(JSON.stringify(payload.promptMetrics.contextPlan)).not.toContain(
             npcDialogueSamples.sydney[0]
         );
+        expect(prompt).toContain('Never invent game facts or player state.');
+        expect(prompt).not.toContain('Use the PlayerState block when present.');
+        expect(prompt).not.toContain('If PlayerState is missing');
         expect(payload.promptMetrics.contextPlan.personaVoiceSampleCharacters).toBeLessThanOrEqual(
             PERSONA_VOICE_SAMPLE_CHAR_LIMIT
         );
@@ -95,6 +102,28 @@ describe('buildChatPrompt context planning', () => {
         expect(prompt).not.toContain(npcDialogueSamples.sydney[0]);
         expect(prompt).not.toContain(npcDialogueSamples.hydro[0]);
         expect(prompt).not.toContain(npcDialogueSamples.dchat[0]);
+        expect(prompt).toContain('Never invent game facts or player state.');
+        expect(prompt).not.toContain('Use the PlayerState block when present.');
+        expect(prompt).not.toContain('If PlayerState is missing');
+        expect(payload.contextSources).toEqual([]);
+    });
+
+    it('preserves Hydro persona and includes minimal-safe guardrails in minimal mode', async () => {
+        const payload = await buildChatPrompt([{ role: 'user', content: 'hi' }], {
+            persona: persona('hydro'),
+        });
+        const prompt = joinedPrompt(payload);
+
+        expect(payload.contextPlan.mode).toBe('minimal');
+        expect(prompt).toContain('You are Hydro');
+        expect(prompt).toContain('hydroponics steward');
+        expect(prompt).toContain('Persona voice examples for Hydro');
+        expect(prompt).toContain(npcDialogueSamples.hydro[0]);
+        expect(prompt).toContain('Never invent game facts or player state.');
+        expect(prompt).not.toContain('Use the PlayerState block when present.');
+        expect(prompt).not.toContain('If PlayerState is missing');
+        expect(prompt).not.toContain('PlayerState');
+        expect(prompt).not.toContain('DSPACE knowledge base');
         expect(payload.contextSources).toEqual([]);
     });
 
@@ -111,6 +140,8 @@ describe('buildChatPrompt context planning', () => {
         expect(prompt).toContain('hydroponics steward');
         expect(prompt).toContain('PlayerState');
         expect(prompt).toContain('DSPACE knowledge base');
+        expect(prompt).toContain('Use the PlayerState block when present.');
+        expect(prompt).toContain('If PlayerState is missing');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
         expect(searchDocsRag).toHaveBeenCalled();
     });

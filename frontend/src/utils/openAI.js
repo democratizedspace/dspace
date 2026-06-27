@@ -260,10 +260,10 @@ const applyProviderRealityLine = (prompt) => {
     return `${providerRealityLine}\n\n${basePrompt}`;
 };
 
-const applySystemGuardrail = (prompt) => {
-    if (!prompt) return sharedSystemGuardrail;
+const applySystemGuardrail = (prompt, rules = guardrailRules) => {
+    if (!prompt) return rules.map((rule) => rule.line).join('\n');
     const normalizedPrompt = prompt.toLowerCase();
-    const missingRules = guardrailRules.filter((rule) => !rule.pattern.test(normalizedPrompt));
+    const missingRules = rules.filter((rule) => !rule.pattern.test(normalizedPrompt));
     if (missingRules.length === 0) return prompt;
     const missingGuardrail = missingRules.map((rule) => rule.line).join('\n');
     return `${prompt}\n\n${missingGuardrail}`;
@@ -274,6 +274,25 @@ const applySystemPolicyVersion = (prompt) => {
     if (prompt.includes(SYSTEM_POLICY_VERSION_LINE)) return prompt;
     return `${SYSTEM_POLICY_VERSION_LINE}\n${prompt}`;
 };
+
+const minimalSafeGuardrailRules = guardrailRules.filter(
+    (rule) =>
+        ![
+            'Use the PlayerState block when present.',
+            'If PlayerState is missing, ask for a save snapshot via /gamesaves and cite /docs/routes and /docs/backups.',
+        ].includes(rule.line)
+);
+
+const applyMinimalSafeSystemGuardrail = (prompt) =>
+    applySystemGuardrail(prompt, minimalSafeGuardrailRules);
+
+const buildMinimalSystemPrompt = (basePersonaPrompt) =>
+    applySystemPolicyVersion(
+        applyProviderRealityLine(applyMinimalSafeSystemGuardrail(basePersonaPrompt))
+    );
+
+const buildFullSystemPrompt = (basePersonaPrompt) =>
+    applySystemPolicyVersion(applyProviderRealityLine(applySystemGuardrail(basePersonaPrompt)));
 
 const toNumericStatus = (status) => {
     if (typeof status === 'string') {
@@ -640,18 +659,13 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     const persona = options.persona || defaultPersona;
     const basePersonaPrompt = persona?.systemPrompt || fallbackSystemPrompt;
-    const fullSystemPrompt = applySystemPolicyVersion(
-        applyProviderRealityLine(applySystemGuardrail(basePersonaPrompt))
-    );
     const latestUserMessage = [...normalizedMessages]
         .reverse()
-        .find((message) => message.role === 'user' && message.content?.trim());
+        .find((message) => message.role === 'user' && String(message.content || '').trim());
     const contextPlan = options.contextPlan || planChatContext(normalizedMessages, options);
 
     if (contextPlan.mode === 'minimal') {
-        const minimalSystemPrompt = applySystemPolicyVersion(
-            applyProviderRealityLine(basePersonaPrompt)
-        );
+        const minimalSystemPrompt = buildMinimalSystemPrompt(basePersonaPrompt);
         const systemMessage = {
             role: 'system',
             content: `Prompt version: v3:${getPromptVersionSha()}\n${minimalSystemPrompt}`,
@@ -739,6 +753,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         return promptPayload;
     }
 
+    const fullSystemPrompt = buildFullSystemPrompt(basePersonaPrompt);
     const systemMessage = {
         role: 'system',
         content: `Prompt version: v3:${getPromptVersionSha()}\n${fullSystemPrompt}`,

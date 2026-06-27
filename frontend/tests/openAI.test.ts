@@ -211,7 +211,7 @@ describe('GPT5Chat', () => {
                 content: [
                     {
                         type: 'input_text',
-                        text: expect.stringContaining('Persona voice examples for dchat'),
+                        text: expect.stringMatching(/Persona voice examples for dChat/i),
                     },
                 ],
             }),

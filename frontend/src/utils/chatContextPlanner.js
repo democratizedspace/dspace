@@ -22,11 +22,32 @@ const minimalPlan = () => ({
     confidence: 'high',
 });
 
-const latestUserContent = (messages) =>
+const stringifyContent = (content) => {
+    if (typeof content === 'string') return content;
+    if (content === null || content === undefined) return '';
+    if (Array.isArray(content)) {
+        return content
+            .map((entry) => {
+                if (typeof entry === 'string') return entry;
+                if (entry && typeof entry === 'object') {
+                    return stringifyContent(entry.text ?? entry.content ?? entry.value ?? '');
+                }
+                return stringifyContent(entry);
+            })
+            .filter(Boolean)
+            .join(' ');
+    }
+    if (typeof content === 'object') {
+        return stringifyContent(content.text ?? content.content ?? content.value ?? '');
+    }
+    return String(content);
+};
+
+export const latestUserContent = (messages) =>
     [...(Array.isArray(messages) ? messages : [])]
         .reverse()
-        .find((message) => message?.role === 'user' && String(message.content || '').trim())
-        ?.content || '';
+        .map((message) => (message?.role === 'user' ? stringifyContent(message.content) : ''))
+        .find((content) => content.trim()) || '';
 
 const regexHits = (text, checks) =>
     checks.filter(({ pattern }) => pattern.test(text)).map(({ reasonCode }) => reasonCode);
@@ -40,7 +61,22 @@ const groundingChecks = [
     {
         reasonCode: 'game-data',
         pattern:
-            /\b(token\.place|quests?|items?|process(?:es)?|achievements?|rewards?|requirements?|requires?|consumes?|creates?|duration|recipes?|gates?)\b/i,
+            /\b(token\.place|quests?|achievements?|rewards?|requirements?|gates?|unlocks?|balances?)\b/i,
+    },
+    {
+        reasonCode: 'process-data',
+        pattern:
+            /\bprocess(?:es)?\b(?=.*\b(consumes?|creates?|duration|requires?|requirements?|quest|inventory|dspace|custom|crafting|materials)\b)|\b(consumes?|duration)\b/i,
+    },
+    {
+        reasonCode: 'item-data',
+        pattern:
+            /\bitems?\b(?=.*\b(inventory|quest|dspace|custom|requirements?|rewards?|gates?)\b)/i,
+    },
+    {
+        reasonCode: 'custom-content',
+        pattern:
+            /\b(custom content|custom quests?|custom items?|custom processes?|quest submission|content bundles?|custom content bundles?|content backup|add custom content to dspace)\b/i,
     },
     {
         reasonCode: 'docs-navigation',
@@ -54,7 +90,7 @@ const groundingChecks = [
     },
 ];
 
-const resourcePattern = /\bd(?:USD|BI|Watt|Solar|Print|Launch|Fuel|Oxygen|Water|Food)\b/;
+const resourcePattern = /\bd(?:USD|BI|Watt|Solar|Print|Launch|Fuel|Oxygen|Water|Food)\b/i;
 
 const normalize = (value) =>
     String(value || '')
@@ -88,15 +124,27 @@ const strongEntityTerms = (() => {
     return [...terms].sort((a, b) => b.length - a.length);
 })();
 
-const hasStrongEntityHit = (text) => {
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const strongEntityMatchers = strongEntityTerms.map((term) =>
+    term.includes('/')
+        ? (text) => text.includes(term)
+        : new RegExp(`(^|\\s)${escapeRegExp(term)}(\\s|$)`)
+);
+
+export const hasStrongEntityHit = (text) => {
     const normalizedText = normalize(text);
     if (!normalizedText) return false;
-    return strongEntityTerms.some((term) => {
-        if (term.includes('/')) return normalizedText.includes(term);
-        return new RegExp(`(^|\\s)${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\s|$)`).test(
-            normalizedText
-        );
-    });
+    return strongEntityMatchers.some((matcher) =>
+        typeof matcher === 'function' ? matcher(normalizedText) : matcher.test(normalizedText)
+    );
+};
+
+export const hasGroundingSignal = (text) => {
+    const reasonCodes = regexHits(text, groundingChecks);
+    if (resourcePattern.test(text)) reasonCodes.push('resource-token');
+    if (hasStrongEntityHit(text)) reasonCodes.push('entity-hit');
+    return reasonCodes;
 };
 
 export const planChatContext = (messages, options = {}) => {
@@ -104,9 +152,7 @@ export const planChatContext = (messages, options = {}) => {
     const latest = latestUserContent(messages);
     if (!latest.trim()) return fullPlan(['no-latest-user-message']);
 
-    const reasonCodes = regexHits(latest, groundingChecks);
-    if (resourcePattern.test(latest)) reasonCodes.push('resource-token');
-    if (hasStrongEntityHit(latest)) reasonCodes.push('entity-hit');
+    const reasonCodes = hasGroundingSignal(latest);
 
     return reasonCodes.length ? fullPlan(reasonCodes) : minimalPlan();
 };
