@@ -33,13 +33,10 @@ const sanitizePlayerStateSummary = (summary) => {
     if (!summary || typeof summary !== 'object') return null;
 
     const safeSummary = {
-        mode: typeof summary.mode === 'string' ? summary.mode : 'unknown',
         playerStatePromptMode:
             typeof summary.playerStatePromptMode === 'string'
                 ? summary.playerStatePromptMode
-                : typeof summary.mode === 'string'
-                  ? summary.mode
-                  : 'unknown',
+                : 'unknown',
         completedQuestCount: numberOrZero(summary.completedQuestCount),
         totalOfficialQuestCount: numberOrZero(summary.totalOfficialQuestCount),
         remainingOfficialQuestCount: numberOrZero(summary.remainingOfficialQuestCount),

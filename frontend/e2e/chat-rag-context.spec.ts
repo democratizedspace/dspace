@@ -70,7 +70,9 @@ test.describe('chat RAG context', () => {
             'Hydroponics caretaker focused on nutrient balance.'
         );
 
-        await chatPanel.getByRole('textbox').fill('How am I progressing?');
+        await chatPanel
+            .getByRole('textbox')
+            .fill('How is my white PLA filament inventory and quest progress?');
         await chatPanel.getByRole('button', { name: 'Send' }).click();
 
         const payloadHandle = await page.waitForFunction(() => {

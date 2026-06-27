@@ -89,15 +89,31 @@ describe('buildDchatKnowledgePack', () => {
         expect((pack.summary.match(/raw-owned-/g) || []).length).toBeLessThanOrEqual(8);
     });
 
-    it('keeps bounded live inventory highlights for broad progress questions', () => {
+    it('does not add arbitrary live inventory highlights for unrelated progress questions', () => {
         const pack = buildDchatKnowledgePack(
             { inventory: { '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6': 2 } },
             { latestUserMessage: 'How am I progressing?' }
         );
 
-        expect(pack.summary).toContain('Inventory highlights: compact bounded');
-        expect(pack.summary).toContain('white PLA filament');
-        expect(pack.summary).toContain('x2');
+        const highlights = pack.summary
+            .split('\n\n')
+            .find((section) => section.startsWith('Inventory highlights:'));
+
+        expect(highlights).toBeUndefined();
+    });
+
+    it('keeps resource balances in compact highlights for unrelated progress questions', () => {
+        const pack = buildDchatKnowledgePack(
+            { inventory: { '5247a603-294a-4a34-a884-1ae20969b2a1': 25 } },
+            { latestUserMessage: 'How am I progressing?' }
+        );
+
+        const highlights = pack.summary
+            .split('\n\n')
+            .find((section) => section.startsWith('Inventory highlights:'));
+
+        expect(highlights).toContain('compact bounded live-state highlights');
+        expect(highlights).toContain('dUSD (x25)');
     });
 
     it('keeps query-relevant live inventory in compact highlights', () => {
