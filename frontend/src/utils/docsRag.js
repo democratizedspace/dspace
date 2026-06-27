@@ -386,7 +386,7 @@ const dropLowestRanked = (selected, predicate = () => true) => {
             lowestIndex = index;
             continue;
         }
-        if (compareResultsByRank(selected[index], selected[lowestIndex]) < 0) {
+        if (compareResultsByRank(selected[index], selected[lowestIndex]) > 0) {
             lowestIndex = index;
         }
     }

@@ -859,7 +859,25 @@ Docs grounding (gitSha: test):
         expect(options).toEqual(expect.objectContaining(CHAT_DOCS_RAG_DEFAULTS));
     });
 
-    it('preserves explicit docs RAG option overrides', async () => {
+    it('preserves explicit docs RAG option overrides without a prompt budget override', async () => {
+        const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
+
+        await buildChatPrompt(messages, {
+            docsRagOptions: { maxResults: 12, maxChars: 22000, maxExcerptChars: 3200 },
+        });
+
+        const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
+
+        expect(options).toEqual(
+            expect.objectContaining({
+                maxResults: 12,
+                maxChars: 22000,
+                maxExcerptChars: 3200,
+            })
+        );
+    });
+
+    it('preserves explicit docs RAG option overrides with a prompt budget override', async () => {
         const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
 
         await buildChatPrompt(messages, {
@@ -888,7 +906,18 @@ Docs grounding (gitSha: test):
         expect(options.maxChars).toBe(0);
     });
 
-    it('reserves default docs grounding for long route-intent chats', async () => {
+    it('reserves bounded docs grounding for long route-intent full chats', async () => {
+        vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({ summary: '', sources: [] });
+        const docsText = `---
+Docs grounding (gitSha: test):
+- [doc] Backups — /docs/backups#top
+  gamesave import steps
+---`;
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: docsText,
+            sources: [{ type: 'doc', id: 'backups', label: 'Backups', url: '/docs/backups#top' }],
+            sourcesMeta: { results: [{ id: 'backups' }], renderedChars: docsText.length },
+        });
         const longHistory = 'Earlier chat context. '.repeat(700);
         const messages = [
             { role: 'user', content: longHistory },
@@ -896,11 +925,19 @@ Docs grounding (gitSha: test):
             { role: 'user', content: 'Where is /gamesaves?' },
         ];
 
-        await buildChatPrompt(messages);
+        const payload = await buildChatPrompt(messages);
+        const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
 
-        const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
-
-        expect(options.maxChars).toBeGreaterThanOrEqual(CHAT_DOCS_RAG_MIN_GROUNDING_CHARS);
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(prompt).toContain('Docs grounding');
+        expect(payload.contextSources.some((source) => source.type === 'doc')).toBe(true);
+        expect(payload.contextPlan.docsRagRenderedChars).toBeLessThanOrEqual(
+            payload.contextPlan.docsRagBudget.maxChars
+        );
+        expect(payload.contextPlan.docsRagBudget.maxChars).toBeGreaterThanOrEqual(
+            CHAT_DOCS_RAG_MIN_GROUNDING_CHARS
+        );
     });
 });
 

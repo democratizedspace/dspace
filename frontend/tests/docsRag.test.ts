@@ -339,6 +339,31 @@ describe('docs RAG search', () => {
         ).toBe(false);
     });
 
+    it('keeps the best matching non-forced docs chunk when forced chunks are included', async () => {
+        const { sources } = await searchDocsRag(
+            'How do I add custom content while checking /docs/routes and changelog notes?',
+            {
+                maxResults: 6,
+                maxChars: 8000,
+                maxExcerptChars: 1200,
+                routeMaxExcerptChars: 1800,
+            }
+        );
+
+        expect(sources.length).toBeLessThanOrEqual(6);
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+        expect(sources.some((entry) => entry.type === 'changelog')).toBe(true);
+        expect(
+            sources.some((entry) =>
+                /custom content|quest submission|content bundle/i.test(
+                    `${entry.label} ${entry.url}`
+                )
+            )
+        ).toBe(true);
+    });
+
     it('keeps gamesave docs grounding within compact chat budgets', async () => {
         const maxChars = 8000;
         const { excerptsText, sources } = await searchDocsRag('where do I import a gamesave?', {

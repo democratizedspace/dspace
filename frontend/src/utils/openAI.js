@@ -413,15 +413,23 @@ const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
     const budget = hasExplicitPromptBudget
         ? Math.max(0, promptBudgetChars)
         : CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS;
-    const baseOptions = { ...CHAT_DOCS_RAG_DEFAULTS, ...(options || {}) };
+    const explicitOptions = options || {};
+    const baseOptions = { ...CHAT_DOCS_RAG_DEFAULTS, ...explicitOptions };
     const remainingBudget = Math.max(0, budget - countPromptChars(baseMessages));
     const docsBudget = hasExplicitPromptBudget
         ? remainingBudget
         : Math.max(remainingBudget, CHAT_DOCS_RAG_MIN_GROUNDING_CHARS);
+    const hasExplicitMaxChars =
+        Object.prototype.hasOwnProperty.call(explicitOptions, 'maxChars') &&
+        typeof explicitOptions.maxChars === 'number' &&
+        Number.isFinite(explicitOptions.maxChars);
 
     return {
         ...baseOptions,
-        maxChars: Math.min(baseOptions.maxChars, docsBudget),
+        maxChars:
+            hasExplicitMaxChars && !hasExplicitPromptBudget
+                ? Math.max(0, baseOptions.maxChars)
+                : Math.min(baseOptions.maxChars, docsBudget),
     };
 };
 
