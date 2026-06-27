@@ -709,6 +709,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
 
     const knowledgePack = buildDchatKnowledgePack(gameState, {
         latestUserMessage: latestUserMessage?.content || '',
+        messages: normalizedMessages,
         playerStateSummary: playerStateSnapshot,
     });
     const knowledgeSummary = knowledgePack.summary;
@@ -763,6 +764,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         // Read the rendered text directly so empty/early-return payloads remain accurate even if
         // external searchDocsRag metadata consumers evolve independently.
         docsRagRenderedChars: docsRagPayload.excerptsText?.length || 0,
+        focusedGameData: knowledgePack.focusedGameData || null,
         docsRagBudget: docsRagRequestOptions
             ? {
                   maxResults: docsRagRequestOptions.maxResults,

@@ -1,4 +1,4 @@
-const { buildDchatKnowledge } = require('../src/utils/dchatKnowledge.js');
+const { buildDchatKnowledge, buildDchatKnowledgePack } = require('../src/utils/dchatKnowledge.js');
 
 describe('buildDchatKnowledge', () => {
     test('includes inventory when available', () => {
@@ -8,15 +8,17 @@ describe('buildDchatKnowledge', () => {
             },
         };
 
-        const knowledge = buildDchatKnowledge(gameState);
+        const knowledge = buildDchatKnowledge(gameState, {
+            latestUserMessage: 'what is my inventory?',
+        });
         expect(knowledge).toContain('Inventory highlights');
         expect(knowledge).toContain('white PLA filament');
     });
 
-    test('includes quests and processes summary', () => {
+    test('does not include broad quests and processes summary by default', () => {
         const knowledge = buildDchatKnowledge({});
-        expect(knowledge).toContain('Quests:');
-        expect(knowledge).toContain('Processes:');
+        expect(knowledge).not.toContain('Quests:');
+        expect(knowledge).not.toContain('Processes:');
     });
 
     test('summarizes quest progress and process state', () => {
@@ -42,9 +44,18 @@ describe('buildDchatKnowledge', () => {
         expect(knowledge).toMatch(/Buy 1 kWh of electricity from a wall outlet/);
     });
 
-    test('includes essential tutorial quests', () => {
-        const knowledge = buildDchatKnowledge({});
-        expect(knowledge).toContain('How to do quests');
+    test('includes focused selected entities', () => {
+        const pack = buildDchatKnowledgePack(
+            {},
+            { latestUserMessage: 'what rewards does How to do quests give?' }
+        );
+        expect(pack.summary).toContain('Relevant quests:');
+        expect(pack.summary).toContain('How to do quests');
+        expect(
+            pack.sources.every(
+                (entry) => entry.type !== 'quest' || entry.label.includes('How to do quests')
+            )
+        ).toBe(true);
     });
 
     test('summarizes achievements progress', () => {

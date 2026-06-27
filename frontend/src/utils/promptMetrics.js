@@ -29,6 +29,41 @@ const normalizeIndexes = (value) => {
 
 const numberOrZero = (value) => (Number.isFinite(value) ? Number(value) : 0);
 
+const sanitizeFocusedGameData = (focused) => {
+    if (!focused || typeof focused !== 'object') return null;
+    return {
+        included: Boolean(focused.included),
+        reasonCodes: Array.isArray(focused.reasonCodes) ? focused.reasonCodes.slice(0, 12) : [],
+        selectedItemCount: numberOrZero(focused.selectedItemCount),
+        selectedQuestCount: numberOrZero(focused.selectedQuestCount),
+        selectedProcessCount: numberOrZero(focused.selectedProcessCount),
+        selectedAchievementCount: numberOrZero(focused.selectedAchievementCount),
+        selectedInventoryCount: numberOrZero(focused.selectedInventoryCount),
+        selectedItemIds: Array.isArray(focused.selectedItemIds)
+            ? focused.selectedItemIds.slice(0, 12)
+            : [],
+        selectedQuestIds: Array.isArray(focused.selectedQuestIds)
+            ? focused.selectedQuestIds.slice(0, 12)
+            : [],
+        selectedProcessIds: Array.isArray(focused.selectedProcessIds)
+            ? focused.selectedProcessIds.slice(0, 12)
+            : [],
+        renderedChars: numberOrZero(focused.renderedChars),
+        caps: focused.caps
+            ? {
+                  maxItems: focused.caps.maxItems,
+                  maxQuests: focused.caps.maxQuests,
+                  maxProcesses: focused.caps.maxProcesses,
+                  maxAchievements: focused.caps.maxAchievements,
+                  maxTotalChars: focused.caps.maxTotalChars,
+                  maxEntityChars: focused.caps.maxEntityChars,
+                  maxSources: focused.caps.maxSources,
+              }
+            : null,
+        truncated: Boolean(focused.truncated),
+    };
+};
+
 const sanitizePlayerStateSummary = (summary) => {
     if (!summary || typeof summary !== 'object') return null;
 
@@ -101,6 +136,7 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
             metadata.ragDurationMs === undefined || metadata.ragDurationMs === null
                 ? null
                 : Number(metadata.ragDurationMs),
+        focusedGameData: sanitizeFocusedGameData(metadata.contextPlan?.focusedGameData),
         docsRag: metadata.contextPlan
             ? (() => {
                   const status =

@@ -17,13 +17,15 @@ beforeEach(async () => {
 });
 
 describe('buildDchatKnowledgePack', () => {
-    it('returns summary and sources for non-empty catalogs', () => {
+    it('does not include broad catalog filler without a focused query', () => {
         const pack = buildDchatKnowledgePack({});
 
-        expect(pack.summary).toContain('Items:');
-        expect(pack.sources.length).toBeGreaterThan(0);
-        expect(pack.sources.some((entry) => entry.type === 'item')).toBe(true);
+        expect(pack.summary).not.toContain('Items:');
+        expect(pack.summary).not.toContain('Quests:');
+        expect(pack.summary).not.toContain('Processes:');
+        expect(pack.sources.some((entry) => entry.type === 'item')).toBe(false);
         expect(pack.sources.some((entry) => entry.type === 'state')).toBe(false);
+        expect(pack.focusedGameData?.included).toBe(false);
     });
 
     it('adds a state source when game state context is used', () => {
@@ -51,12 +53,9 @@ describe('buildDchatKnowledgePack', () => {
 
         mockEvaluateAchievements.mockReturnValue([...unlocked, ...inProgress]);
 
-        const pack = buildDchatKnowledgePack({});
+        const pack = buildDchatKnowledgePack({}, { latestUserMessage: 'achievement progress' });
         const achievementSources = pack.sources.filter((entry) => entry.type === 'achievement');
-        const expectedIds = [
-            ...unlocked.map((entry) => entry.id),
-            ...inProgress.slice(0, 2).map((entry) => entry.id),
-        ];
+        const expectedIds = inProgress.slice(0, 4).map((entry) => entry.id);
         const sortedAchievementIds = [...achievementSources]
             .sort((a, b) => {
                 const labelCompare = a.label.localeCompare(b.label);
@@ -67,7 +66,7 @@ describe('buildDchatKnowledgePack', () => {
             })
             .map((entry) => entry.id);
 
-        expect(achievementSources.length).toBe(6);
+        expect(achievementSources.length).toBe(4);
         expect(achievementSources.map((entry) => entry.id)).toEqual(sortedAchievementIds);
         expect(new Set(achievementSources.map((entry) => entry.id))).toEqual(new Set(expectedIds));
     });
