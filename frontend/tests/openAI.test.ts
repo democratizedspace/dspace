@@ -589,7 +589,7 @@ describe('buildChatPrompt', () => {
         expect(payload.playerStateSummary).toEqual(
             expect.objectContaining({
                 included: true,
-                mode: 'compact',
+                playerStatePromptMode: 'compact',
                 questsFinishedCount: 2,
                 completedQuestCount: 1,
                 inventoryIncludedCount: 1,
@@ -663,7 +663,6 @@ describe('buildChatPrompt', () => {
         const summary = payload.promptMetrics.playerStateSummary;
 
         expect(summary).toEqual({
-            mode: 'compact',
             playerStatePromptMode: 'compact',
             completedQuestCount: 1,
             totalOfficialQuestCount: expect.any(Number),

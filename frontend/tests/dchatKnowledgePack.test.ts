@@ -102,6 +102,20 @@ describe('buildDchatKnowledgePack', () => {
         expect(highlights).toBeUndefined();
     });
 
+    it('keeps resource balances in compact highlights for unrelated progress questions', () => {
+        const pack = buildDchatKnowledgePack(
+            { inventory: { '5247a603-294a-4a34-a884-1ae20969b2a1': 25 } },
+            { latestUserMessage: 'How am I progressing?' }
+        );
+
+        const highlights = pack.summary
+            .split('\n\n')
+            .find((section) => section.startsWith('Inventory highlights:'));
+
+        expect(highlights).toContain('compact bounded live-state highlights');
+        expect(highlights).toContain('dUSD (x25)');
+    });
+
     it('keeps query-relevant live inventory in compact highlights', () => {
         const pack = buildDchatKnowledgePack(
             { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 13 } },
