@@ -557,7 +557,7 @@ describe('buildChatPrompt', () => {
         expect(content).toContain('/docs/routes');
     });
 
-    it('injects PlayerState with finished quests and inventory entries', async () => {
+    it('injects compact PlayerState with quest counts and query-relevant inventory', async () => {
         vi.mocked(loadGameState).mockReturnValueOnce({
             openAI: {},
             versionNumberString: '3',
@@ -567,58 +567,33 @@ describe('buildChatPrompt', () => {
                 '3dprinter/start': { finished: true },
             },
             inventory: {
-                'item-alpha': 12,
+                'd3590107-25ff-4de5-af3a-46e2497bfc52': 12,
                 'item-beta': 0,
                 'item-gamma': 5.5,
             },
         });
 
-        const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
+        const payload = await buildChatPrompt([
+            { role: 'user', content: 'do I have enough green PLA?' },
+        ]);
         const playerStateMessage = payload.debugMessages.find((message) =>
-            message.content?.includes('PlayerState v3')
+            message.content?.includes('PlayerStateCompact v3')
         );
         const content = playerStateMessage?.content ?? '';
-        const statsMatch = content.match(
-            /PlayerStateStats: completedOfficialQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
-        );
-        const jsonStart = content.indexOf('{');
-        const jsonBody = jsonStart >= 0 ? content.slice(jsonStart) : '';
-        const snapshot = jsonBody ? JSON.parse(jsonBody) : null;
 
-        expect(snapshot?.versionNumberString).toBe('3');
-        expect(statsMatch).not.toBeNull();
-        expect(snapshot?.questsFinished).toEqual(
-            expect.arrayContaining(['welcome/howtodoquests', '3dprinter/start'])
-        );
-        expect(snapshot?.questsFinished).not.toEqual(
-            expect.arrayContaining(['welcome/intro-inventory'])
-        );
-        expect(snapshot?.inventory).toEqual(
-            expect.arrayContaining([
-                { id: 'item-alpha', count: 12 },
-                { id: 'item-gamma', count: 5.5 },
-            ])
-        );
+        expect(content).toContain('Official quests: completed');
+        expect(content).toContain('green PLA filament');
+        expect(content).toContain('=12');
+        expect(content).not.toContain('questsFinished');
+        expect(content).not.toContain('item-gamma');
         expect(payload.playerStateSummary).toEqual(
             expect.objectContaining({
                 included: true,
-                questsFinishedCount: 2,
-                completedQuestCount: Number(statsMatch?.[1]),
-                totalOfficialQuestCount: Number(statsMatch?.[2]),
-                remainingOfficialQuestCount: Number(statsMatch?.[3]),
-                inventoryIncludedCount: 2,
-                inventoryTruncated: false,
+                mode: 'compact',
+                completedQuestCount: 1,
+                inventoryIncludedCount: 1,
+                inventoryTruncated: true,
             })
-        );
-        // '3dprinter/start' is intentionally non-canonical (real ID is '3dprinting/start').
-        // This verifies only official quest IDs count toward completedQuestCount.
-        expect(payload.playerStateSummary.completedQuestCount).toBe(1);
-        expect(payload.playerStateSummary.remainingOfficialQuestCount).toBe(
-            Math.max(
-                payload.playerStateSummary.totalOfficialQuestCount -
-                    payload.playerStateSummary.completedQuestCount,
-                0
-            )
         );
     });
 
@@ -635,17 +610,16 @@ describe('buildChatPrompt', () => {
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Quest totals?' }]);
         const playerStateMessage = payload.debugMessages.find((message) =>
-            message.content?.includes('PlayerStateStats:')
+            message.content?.includes('PlayerStateCompact')
         );
         const content = playerStateMessage?.content ?? '';
-        const statsMatch = content.match(
-            /PlayerStateStats: completedOfficialQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
-        );
 
-        expect(statsMatch).not.toBeNull();
-        expect(Number(statsMatch?.[1])).toBe(1);
-        expect(Number(statsMatch?.[2])).toBeGreaterThan(1);
-        expect(Number(statsMatch?.[3])).toBe(Number(statsMatch?.[2]) - Number(statsMatch?.[1]));
+        expect(content).toContain('Official quests: completed 1/');
+        expect(payload.playerStateSummary.completedQuestCount).toBe(1);
+        expect(payload.playerStateSummary.totalOfficialQuestCount).toBeGreaterThan(1);
+        expect(payload.playerStateSummary.remainingOfficialQuestCount).toBe(
+            payload.playerStateSummary.totalOfficialQuestCount - 1
+        );
     });
 
     it('skips docs RAG for player-state-only full prompts', async () => {

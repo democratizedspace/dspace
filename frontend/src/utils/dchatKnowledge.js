@@ -2,6 +2,7 @@ import items from '../pages/inventory/json/items/index.js';
 import processes from '../generated/processes.json' assert { type: 'json' };
 import { evaluateAchievements } from './achievements.js';
 import { mergeSources } from './contextSources.js';
+import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
 
 const MAX_ITEMS = 25;
 const MAX_PROCESSES = 20;
@@ -112,13 +113,15 @@ function prioritizeQuests(allQuests) {
     return prioritized.concat(remaining);
 }
 
-function formatInventory(inventory = {}) {
+function formatInventory(inventory = {}, options = {}) {
     if (!inventory || typeof inventory !== 'object') {
         return [];
     }
 
+    const maxEntries = Number.isInteger(options.maxEntries) ? options.maxEntries : 8;
     return Object.entries(inventory)
         .filter(([, count]) => typeof count === 'number' && count > 0)
+        .slice(0, maxEntries)
         .map(([id, count]) => {
             const item = items.find((entry) => entry.id === id);
             const name = item ? item.name : id;
@@ -288,17 +291,30 @@ function summarizeProcessProgress(gameState = {}) {
         .sort((a, b) => a.localeCompare(b));
 }
 
-export function buildDchatKnowledgePack(gameState = {}) {
+export function buildDchatKnowledgePack(gameState = {}, options = {}) {
     const knowledgeSections = [];
     const sources = [];
     const stateDetails = [];
 
-    const inventorySummary = formatInventory(gameState.inventory);
-    if (inventorySummary.length > 0) {
-        knowledgeSections.push(
-            `${dchatKnowledgeScaffolding.inventoryHighlights}: ${inventorySummary.join('; ')}`
+    const stateSummary =
+        options.playerStateSummary ||
+        buildPlayerStatePromptSummary(gameState, {
+            latestUserMessage: options.latestUserMessage || '',
+        });
+    const compactInventorySummary = [
+        ...(stateSummary.slices?.resourceBalances || []),
+        ...(stateSummary.slices?.relevantInventory || []),
+    ]
+        .slice(0, 10)
+        .map(
+            (entry) =>
+                `${entry.name || entry.id} (x${Number.isInteger(entry.count) ? entry.count : entry.count.toFixed(2)})`
         );
-        stateDetails.push('inventory');
+    if (compactInventorySummary.length > 0) {
+        knowledgeSections.push(
+            `${dchatKnowledgeScaffolding.inventoryHighlights}: compact bounded live-state highlights; ${compactInventorySummary.join('; ')}`
+        );
+        stateDetails.push('inventory highlights');
     }
 
     const itemEntries = getItemsForKnowledge();
