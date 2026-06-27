@@ -374,23 +374,44 @@ describe('token.place API v1 client', () => {
         expect(JSON.stringify(body)).not.toContain('metadata');
     });
 
-    test('default token.place mode uses the full dChat prompt path', async () => {
+    test('default token.place mode uses the docs-skipped full dChat prompt path for player-state questions', async () => {
         loadGameState.mockReturnValue({
             settings: { tokenPlaceTokenLite: false },
             inventory: [{ id: 'solar-panel', quantity: 1 }],
         });
         searchDocsRag.mockResolvedValue({
-            excerptsText: 'RAG excerpt canary for normal mode.',
+            excerptsText: 'RAG excerpt should be skipped for player-state-only normal mode.',
             sources: [{ title: 'DSPACE docs', url: '/docs/about' }],
         });
 
         await TokenPlaceChatV2([{ role: 'user', content: 'What should I build next?' }]);
 
-        expect(searchDocsRag).toHaveBeenCalledTimes(1);
+        expect(searchDocsRag).not.toHaveBeenCalled();
         const { body } = getFetchCallByPath('/api/v1/relay/requests');
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
         // Verify full path produces more messages than token-lite's fixed [system, user] pair.
         expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
+    });
+
+    test('default token.place mode includes docs RAG for route and docs questions', async () => {
+        loadGameState.mockReturnValue({
+            settings: { tokenPlaceTokenLite: false },
+            inventory: [{ id: 'solar-panel', quantity: 1 }],
+        });
+        searchDocsRag.mockResolvedValue({
+            excerptsText: 'RAG excerpt canary for gamesaves route.',
+            sources: [{ title: 'Backups', url: '/docs/backups' }],
+        });
+
+        await TokenPlaceChatV2([{ role: 'user', content: 'Where do I import a gamesave?' }]);
+
+        expect(searchDocsRag).toHaveBeenCalledTimes(1);
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        const promptText = decrypted.api_v1_request.messages
+            .map((message) => message.content)
+            .join('\\n');
+        expect(promptText).toContain('RAG excerpt canary for gamesaves route.');
     });
 
     test('token-lite setting sends a tiny decrypted API v1 message set', async () => {

@@ -73,6 +73,10 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
             metadata.ragDurationMs === undefined || metadata.ragDurationMs === null
                 ? null
                 : Number(metadata.ragDurationMs),
+        docsRagStatus: metadata.docsRagStatus || 'not-applicable',
+        docsRagReasonCodes: Array.isArray(metadata.docsRagReasonCodes)
+            ? [...new Set(metadata.docsRagReasonCodes)]
+            : [],
         contextPlan: metadata.contextPlan || null,
     };
 };

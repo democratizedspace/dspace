@@ -699,7 +699,7 @@ describe('buildChatPrompt', () => {
             },
         ];
 
-        await buildChatPrompt(messages);
+        await buildChatPrompt(messages, { forceDocsRag: true });
 
         const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
 
@@ -735,7 +735,7 @@ describe('buildChatPrompt', () => {
             },
         ];
 
-        await buildChatPrompt(messages);
+        await buildChatPrompt(messages, { forceDocsRag: true });
 
         const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
 
@@ -769,7 +769,7 @@ describe('buildChatPrompt', () => {
     it('passes expanded docs RAG options to searchDocsRag', async () => {
         const messages = [{ role: 'user', content: 'Tell me about quests.' }];
 
-        await buildChatPrompt(messages, { docsRagBudgetChars: 1000000 });
+        await buildChatPrompt(messages, { docsRagBudgetChars: 1000000, forceDocsRag: true });
 
         const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
 

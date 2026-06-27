@@ -2,13 +2,16 @@ import items from '../pages/inventory/json/items';
 import processes from '../generated/processes.json';
 import quests from '../generated/quests/listManifest.json';
 
-const fullPlan = (reasonCodes) => ({
+const fullPlan = (reasonCodes, docsRagReasonCodes = []) => ({
     mode: 'full',
     includePlayerState: true,
     includeKnowledgePack: true,
-    includeDocsRag: true,
+    includeDocsRag: docsRagReasonCodes.length > 0,
     includePersonaVoiceSamples: false,
-    reasonCodes: [...new Set(reasonCodes)],
+    reasonCodes: [...new Set([...reasonCodes, ...docsRagReasonCodes])],
+    docsRagReasonCodes: docsRagReasonCodes.length
+        ? [...new Set(docsRagReasonCodes)]
+        : ['docs-rag-not-needed'],
     confidence: 'conservative',
 });
 
@@ -19,6 +22,7 @@ const minimalPlan = () => ({
     includeDocsRag: false,
     includePersonaVoiceSamples: true,
     reasonCodes: ['no-grounding-signals'],
+    docsRagReasonCodes: ['not-applicable'],
     confidence: 'high',
 });
 
@@ -51,6 +55,36 @@ export const latestUserContent = (messages) =>
 
 const regexHits = (text, checks) =>
     checks.filter(({ pattern }) => pattern.test(text)).map(({ reasonCode }) => reasonCode);
+
+const docsRagIntentChecks = [
+    {
+        reasonCode: 'route-docs',
+        pattern:
+            /(?:\/docs|\/quests|\/inventory|\/processes|\/settings|\/gamesaves|\broutes?\b|\bpages?\b|\bsettings\b|\bwhere do i\b|\bhow do i get to\b)/i,
+    },
+    {
+        reasonCode: 'docs-navigation',
+        pattern:
+            /\b(docs?|documentation|gamesaves?|import save|export save|backup|content backup)\b/i,
+    },
+    {
+        reasonCode: 'custom-content-docs',
+        pattern:
+            /\b(custom content|custom quests?|custom items?|custom processes?|quest submission|content bundles?|custom content bundles?|content editor|add custom content to dspace)\b/i,
+    },
+    {
+        reasonCode: 'changelog-version-docs',
+        pattern:
+            /\b(changelog|release notes|token\.place(?: integration docs)?|versions?|v\d+(?:\.\d+)?|v2|v3|drift|deprecated|current release state)\b/i,
+    },
+    {
+        reasonCode: 'mechanics-docs',
+        pattern:
+            /\bprocess(?:es)?\b(?=.*\b(consumes?|creates?|duration|requires?|requirements?)\b)|\bquest(?:s)?\b(?=.*\b(requirements?|rewards?|gates?|dialogue options?|schema|authoring)\b)|\b(rewards?|gates?|dialogue options?|schema|authoring)\b/i,
+    },
+];
+
+export const hasDocsRagIntent = (text) => regexHits(text, docsRagIntentChecks);
 
 const groundingChecks = [
     {
@@ -153,6 +187,8 @@ export const planChatContext = (messages, options = {}) => {
     if (!latest.trim()) return fullPlan(['no-latest-user-message']);
 
     const reasonCodes = hasGroundingSignal(latest);
+    const docsRagReasonCodes = hasDocsRagIntent(latest);
+    const fullReasonCodes = reasonCodes.length ? reasonCodes : docsRagReasonCodes;
 
-    return reasonCodes.length ? fullPlan(reasonCodes) : minimalPlan();
+    return fullReasonCodes.length ? fullPlan(fullReasonCodes, docsRagReasonCodes) : minimalPlan();
 };
