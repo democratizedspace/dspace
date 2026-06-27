@@ -28,6 +28,7 @@ describe('planChatContext', () => {
     it.each([
         'what should I do next?',
         'what quest do I have left?',
+        'How am I progressing?',
         'do I have enough green PLA?',
         'can I afford a solar tracker?',
         'where do I import a gamesave?',

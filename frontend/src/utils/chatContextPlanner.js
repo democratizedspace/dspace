@@ -56,7 +56,7 @@ const groundingChecks = [
     {
         reasonCode: 'player-state-progress',
         pattern:
-            /\b(status|guardrails?|inventory|do i have|can i afford|enough|missing|remaining|left|what next|what should i do|what should i build|unlock(?:s|ed)?|rewards?|completed quests?|active process(?:es)?|running process(?:es)?|balances?|resources?)\b/i,
+            /\b(status|progress(?:ing)?|guardrails?|inventory|do i have|can i afford|enough|missing|remaining|left|what next|what should i do|what should i build|unlock(?:s|ed)?|rewards?|completed quests?|active process(?:es)?|running process(?:es)?|balances?|resources?)\b/i,
     },
     {
         reasonCode: 'game-data',
