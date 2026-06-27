@@ -710,6 +710,8 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const knowledgePack = buildDchatKnowledgePack(gameState, {
         latestUserMessage: latestUserMessage?.content || '',
         playerStateSummary: playerStateSnapshot,
+        messages: normalizedMessages,
+        focusedGameDataOptions: options.focusedGameDataOptions,
     });
     const knowledgeSummary = knowledgePack.summary;
     const knowledgeMessage = knowledgeSummary
@@ -763,6 +765,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         // Read the rendered text directly so empty/early-return payloads remain accurate even if
         // external searchDocsRag metadata consumers evolve independently.
         docsRagRenderedChars: docsRagPayload.excerptsText?.length || 0,
+        focusedGameData: knowledgePack.focusedGameData || null,
         docsRagBudget: docsRagRequestOptions
             ? {
                   maxResults: docsRagRequestOptions.maxResults,
@@ -833,6 +836,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         contextSources,
         playerStateSummary: playerStateSnapshot.meta,
         contextPlan: contextPlanMetadata,
+        focusedGameData: knowledgePack.focusedGameData || null,
     };
 
     if (options.includePromptMetrics) {
@@ -862,6 +866,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
             ragDurationMs,
             contextPlan: contextPlanMetadata,
             playerStateSummary: playerStateSnapshot.meta,
+            focusedGameData: knowledgePack.focusedGameData || null,
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,
                 rag: ragIndexes,

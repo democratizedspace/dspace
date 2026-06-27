@@ -55,6 +55,47 @@ const sanitizePlayerStateSummary = (summary) => {
     return safeSummary;
 };
 
+const sanitizeFocusedGameData = (meta) => {
+    if (!meta || typeof meta !== 'object') return null;
+    const budget = meta.budget && typeof meta.budget === 'object' ? meta.budget : {};
+    return {
+        included: Boolean(meta.included),
+        selectedItemCount: numberOrZero(meta.selectedItemCount),
+        selectedQuestCount: numberOrZero(meta.selectedQuestCount),
+        selectedProcessCount: numberOrZero(meta.selectedProcessCount),
+        selectedAchievementCount: numberOrZero(meta.selectedAchievementCount),
+        selectedItemIds: Array.isArray(meta.selectedItemIds)
+            ? meta.selectedItemIds.map(String).slice(0, 20)
+            : [],
+        selectedQuestIds: Array.isArray(meta.selectedQuestIds)
+            ? meta.selectedQuestIds.map(String).slice(0, 20)
+            : [],
+        selectedProcessIds: Array.isArray(meta.selectedProcessIds)
+            ? meta.selectedProcessIds.map(String).slice(0, 20)
+            : [],
+        selectedAchievementIds: Array.isArray(meta.selectedAchievementIds)
+            ? meta.selectedAchievementIds.map(String).slice(0, 20)
+            : [],
+        renderedChars: numberOrZero(meta.renderedChars),
+        budget: {
+            maxItems: numberOrZero(budget.maxItems),
+            maxQuests: numberOrZero(budget.maxQuests),
+            maxProcesses: numberOrZero(budget.maxProcesses),
+            maxAchievements: numberOrZero(budget.maxAchievements),
+            maxSources: numberOrZero(budget.maxSources),
+            maxEntityChars: numberOrZero(budget.maxEntityChars),
+            maxTotalChars: numberOrZero(budget.maxTotalChars),
+        },
+        reasonCodes: Array.isArray(meta.reasonCodes)
+            ? meta.reasonCodes.map(String).slice(0, 20)
+            : [],
+        truncated: {
+            total: Boolean(meta.truncated?.total),
+            sources: Boolean(meta.truncated?.sources),
+        },
+    };
+};
+
 export const buildPromptMetrics = (promptPayload, metadata = {}) => {
     const messages = Array.isArray(promptPayload?.combinedMessages)
         ? promptPayload.combinedMessages
@@ -130,6 +171,9 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
               })()
             : null,
         contextPlan: metadata.contextPlan || null,
+        focusedGameData: sanitizeFocusedGameData(
+            metadata.focusedGameData || promptPayload?.focusedGameData
+        ),
         playerStateSummary: sanitizePlayerStateSummary(metadata.playerStateSummary),
     };
 };
