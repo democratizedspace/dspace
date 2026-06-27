@@ -5,6 +5,50 @@ import { rankDocsResults, searchDocsRag } from '../src/utils/docsRag.js';
 vi.setConfig({ testTimeout: 120000, hookTimeout: 120000 });
 
 describe('docs RAG search', () => {
+    it('returns safe budget metadata for empty queries', async () => {
+        const { excerptsText, sources, sourcesMeta } = await searchDocsRag('', {
+            maxResults: 2,
+            maxChars: 123,
+            maxExcerptChars: 45,
+            routeMaxExcerptChars: 67,
+        });
+
+        expect(excerptsText).toBe('');
+        expect(sources).toEqual([]);
+        expect(sourcesMeta).toEqual(
+            expect.objectContaining({
+                budget: {
+                    maxResults: 2,
+                    maxChars: 123,
+                    maxExcerptChars: 45,
+                    routeMaxExcerptChars: 67,
+                },
+                renderedChars: 0,
+                results: [],
+            })
+        );
+    });
+
+    it('returns safe budget metadata when the render budget is too small', async () => {
+        const { excerptsText, sources, sourcesMeta } = await searchDocsRag('Where is /gamesaves?', {
+            maxResults: 2,
+            maxChars: 1,
+            maxExcerptChars: 45,
+            routeMaxExcerptChars: 67,
+        });
+
+        expect(excerptsText).toBe('');
+        expect(sources).toEqual([]);
+        expect(sourcesMeta.budget).toEqual({
+            maxResults: 2,
+            maxChars: 1,
+            maxExcerptChars: 45,
+            routeMaxExcerptChars: 67,
+        });
+        expect(sourcesMeta.renderedChars).toBe(0);
+        expect(sourcesMeta.results).toEqual([]);
+    });
+
     it('returns docs excerpts with canonical /docs URLs', async () => {
         const { excerptsText } = await searchDocsRag('custom content import export backup', {
             maxResults: 6,
@@ -293,5 +337,84 @@ describe('docs RAG search', () => {
                 (entry) => entry.type === 'changelog' && /\/changelog#2023/.test(entry.url || '')
             )
         ).toBe(false);
+    });
+
+    it('keeps the best matching non-forced docs chunk when forced chunks are included', async () => {
+        const { sources } = await searchDocsRag(
+            'How do I add custom content while checking /docs/routes and changelog notes?',
+            {
+                maxResults: 6,
+                maxChars: 8000,
+                maxExcerptChars: 1200,
+                routeMaxExcerptChars: 1800,
+            }
+        );
+
+        expect(sources.length).toBeLessThanOrEqual(6);
+        expect(
+            sources.some((entry) => entry.type === 'route' && entry.url === '/docs/routes#top')
+        ).toBe(true);
+        expect(sources.some((entry) => entry.type === 'changelog')).toBe(true);
+        expect(
+            sources.some((entry) =>
+                /custom content|quest submission|content bundle/i.test(
+                    `${entry.label} ${entry.url}`
+                )
+            )
+        ).toBe(true);
+    });
+
+    it('keeps gamesave docs grounding within compact chat budgets', async () => {
+        const maxChars = 8000;
+        const { excerptsText, sources } = await searchDocsRag('where do I import a gamesave?', {
+            maxResults: 6,
+            maxChars,
+            maxExcerptChars: 1200,
+            routeMaxExcerptChars: 1800,
+        });
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(maxChars);
+        expect(sources.length).toBeGreaterThan(0);
+        expect(
+            sources.some((entry) => /gamesaves|backups|routes/i.test(`${entry.label} ${entry.url}`))
+        ).toBe(true);
+    });
+
+    it('keeps custom content docs grounding within compact chat budgets', async () => {
+        const maxChars = 8000;
+        const { excerptsText, sources } = await searchDocsRag(
+            'How do I add custom content to DSPACE?',
+            {
+                maxResults: 6,
+                maxChars,
+                maxExcerptChars: 1200,
+                routeMaxExcerptChars: 1800,
+            }
+        );
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(maxChars);
+        expect(`${excerptsText} ${sources.map((entry) => entry.label).join(' ')}`).toMatch(
+            /custom content|quest submission|content bundle/i
+        );
+    });
+
+    it('keeps changelog/version docs grounding within compact chat budgets', async () => {
+        const maxChars = 8000;
+        const { excerptsText, sources } = await searchDocsRag('what changed in v3.1 chat?', {
+            maxResults: 6,
+            maxChars,
+            maxExcerptChars: 1200,
+            routeMaxExcerptChars: 1800,
+        });
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(maxChars);
+        expect(
+            sources.some(
+                (entry) => entry.type === 'changelog' || /version|chat|changelog/i.test(entry.label)
+            )
+        ).toBe(true);
     });
 });

@@ -34,6 +34,9 @@ import {
     defaultOpenAIErrorMessage,
     describeOpenAIError,
     buildChatPrompt,
+    CHAT_DOCS_RAG_DEFAULTS,
+    CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS,
+    CHAT_DOCS_RAG_MIN_GROUNDING_CHARS,
     getOpenAIErrorSummary,
     GPT5Chat,
     GPT5ChatV2,
@@ -671,7 +674,7 @@ Docs grounding (gitSha: test):
 - [doc] Forced docs
 ---`,
             sources: [{ type: 'doc', id: 'forced', label: 'Forced docs', url: '/docs/forced#top' }],
-            sourcesMeta: { results: [] },
+            sourcesMeta: { results: [{ id: 'forced' }] },
         });
 
         const payload = await buildChatPrompt(
@@ -686,6 +689,12 @@ Docs grounding (gitSha: test):
         expect(payload.contextPlan.docsRagReasonCodes).not.toEqual(['docs-rag-not-needed']);
         expect(payload.promptMetrics.docsRag.includeDocsRag).toBe(true);
         expect(payload.promptMetrics.docsRag.status).toBe('included');
+        expect(payload.promptMetrics.docsRag.resultCount).toBe(1);
+        expect(payload.promptMetrics.docsRag.renderedChars).toBeGreaterThan(0);
+        expect(payload.promptMetrics.docsRag.budget).toEqual(
+            expect.objectContaining(CHAT_DOCS_RAG_DEFAULTS)
+        );
+        expect(JSON.stringify(payload.promptMetrics.docsRag)).not.toContain('Forced docs');
     });
 
     it('includes docs RAG for gamesave route prompts', async () => {
@@ -828,18 +837,61 @@ Docs grounding (gitSha: test):
         expect(retrievalQuery).toBe(latestMessage);
     });
 
-    it('passes expanded docs RAG options to searchDocsRag', async () => {
+    it('uses compact named default docs RAG options for chat prompts', async () => {
         const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
 
         await buildChatPrompt(messages, { docsRagBudgetChars: 1000000 });
 
         const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
 
+        expect(CHAT_DOCS_RAG_DEFAULTS).toEqual(
+            expect.objectContaining({
+                maxResults: expect.any(Number),
+                maxChars: expect.any(Number),
+                maxExcerptChars: expect.any(Number),
+                routeMaxExcerptChars: expect.any(Number),
+            })
+        );
+        expect(CHAT_DOCS_RAG_DEFAULTS.maxResults).toBeLessThan(50);
+        expect(CHAT_DOCS_RAG_DEFAULTS.maxChars).toBeLessThan(50000);
+        expect(CHAT_DOCS_RAG_DEFAULTS.maxExcerptChars).toBeLessThan(8500);
+        expect(CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS).toBeLessThan(80000);
+        expect(options).toEqual(expect.objectContaining(CHAT_DOCS_RAG_DEFAULTS));
+    });
+
+    it('preserves explicit docs RAG option overrides without a prompt budget override', async () => {
+        const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
+
+        await buildChatPrompt(messages, {
+            docsRagOptions: { maxResults: 12, maxChars: 22000, maxExcerptChars: 3200 },
+        });
+
+        const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
+
         expect(options).toEqual(
             expect.objectContaining({
-                maxResults: 50,
-                maxChars: 50000,
-                maxExcerptChars: 8500,
+                maxResults: 12,
+                maxChars: 22000,
+                maxExcerptChars: 3200,
+            })
+        );
+    });
+
+    it('preserves explicit docs RAG option overrides with a prompt budget override', async () => {
+        const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
+
+        await buildChatPrompt(messages, {
+            docsRagBudgetChars: 1000000,
+            docsRagOptions: { maxResults: 12, maxChars: 22000, maxExcerptChars: 3200 },
+        });
+
+        const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
+
+        expect(options).toEqual(
+            expect.objectContaining({
+                maxResults: 12,
+                maxChars: 22000,
+                maxExcerptChars: 3200,
             })
         );
     });
@@ -852,6 +904,40 @@ Docs grounding (gitSha: test):
         const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
 
         expect(options.maxChars).toBe(0);
+    });
+
+    it('reserves bounded docs grounding for long route-intent full chats', async () => {
+        vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({ summary: '', sources: [] });
+        const docsText = `---
+Docs grounding (gitSha: test):
+- [doc] Backups — /docs/backups#top
+  gamesave import steps
+---`;
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: docsText,
+            sources: [{ type: 'doc', id: 'backups', label: 'Backups', url: '/docs/backups#top' }],
+            sourcesMeta: { results: [{ id: 'backups' }], renderedChars: docsText.length },
+        });
+        const longHistory = 'Earlier chat context. '.repeat(700);
+        const messages = [
+            { role: 'user', content: longHistory },
+            { role: 'assistant', content: longHistory },
+            { role: 'user', content: 'Where is /gamesaves?' },
+        ];
+
+        const payload = await buildChatPrompt(messages);
+        const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(prompt).toContain('Docs grounding');
+        expect(payload.contextSources.some((source) => source.type === 'doc')).toBe(true);
+        expect(payload.contextPlan.docsRagRenderedChars).toBeLessThanOrEqual(
+            payload.contextPlan.docsRagBudget.maxChars
+        );
+        expect(payload.contextPlan.docsRagBudget.maxChars).toBeGreaterThanOrEqual(
+            CHAT_DOCS_RAG_MIN_GROUNDING_CHARS
+        );
     });
 });
 

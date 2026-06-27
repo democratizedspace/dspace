@@ -3,6 +3,7 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const DEFAULT_ROUTE_MAX_EXCERPT_CHARS = 1800;
 const ROUTES_INTENT =
     /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link|sitemap|site[-\s]?map)\b/i;
 const CHANGELOG_INTENT =
@@ -385,7 +386,7 @@ const dropLowestRanked = (selected, predicate = () => true) => {
             lowestIndex = index;
             continue;
         }
-        if (compareResultsByRank(selected[index], selected[lowestIndex]) < 0) {
+        if (compareResultsByRank(selected[index], selected[lowestIndex]) > 0) {
             lowestIndex = index;
         }
     }
@@ -443,11 +444,49 @@ export const mapDocsResultsToSources = (results = []) => {
         .filter(Boolean);
 };
 
+const buildEmptySourcesMeta = ({
+    maxResults,
+    maxChars,
+    maxExcerptChars,
+    routeMaxExcerptChars,
+    meta = null,
+}) => {
+    const docsGitSha = meta?.docsGitSha || meta?.gitSha || 'unknown';
+
+    return {
+        gitSha: docsGitSha,
+        docsGitSha,
+        generatedAt: meta?.generatedAt || 'unknown',
+        envName: meta?.envName || 'unknown',
+        sourceRef: meta?.sourceRef || null,
+        budget: {
+            maxResults,
+            maxChars,
+            maxExcerptChars,
+            routeMaxExcerptChars,
+        },
+        renderedChars: 0,
+        results: [],
+    };
+};
+
 export const searchDocsRag = async (queryText, options = {}) => {
+    const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
+    const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
+    const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
+    const routeMaxExcerptChars = options.routeMaxExcerptChars ?? DEFAULT_ROUTE_MAX_EXCERPT_CHARS;
+    const emptySourcesMeta = (loadedMeta = null) =>
+        buildEmptySourcesMeta({
+            maxResults,
+            maxChars,
+            maxExcerptChars,
+            routeMaxExcerptChars,
+            meta: loadedMeta,
+        });
     const query = String(queryText || '').trim();
 
     if (!query) {
-        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
+        return { excerptsText: '', sources: [], sourcesMeta: emptySourcesMeta() };
     }
 
     let miniSearch;
@@ -458,13 +497,10 @@ export const searchDocsRag = async (queryText, options = {}) => {
         ({ miniSearch, chunkMap, meta } = await loadDocsRag());
     } catch (error) {
         console.error('Failed to load docs RAG data:', error);
-        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
+        return { excerptsText: '', sources: [], sourcesMeta: emptySourcesMeta() };
     }
     const rawResults = miniSearch.search(query, SEARCH_OPTIONS);
     const results = rankDocsResults({ results: rawResults, chunkMap, query, meta });
-    const maxResults = options.maxResults ?? DEFAULT_MAX_RESULTS;
-    const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
-    const maxExcerptChars = options.maxExcerptChars ?? DEFAULT_MAX_EXCERPT_CHARS;
 
     const selected = [];
     for (const result of results) {
@@ -582,7 +618,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     selected.sort(compareResultsByRank);
 
     if (!selected.length) {
-        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
+        return { excerptsText: '', sources: [], sourcesMeta: emptySourcesMeta(meta) };
     }
 
     const docsGitSha = meta?.docsGitSha || meta?.gitSha || 'unknown';
@@ -597,7 +633,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     const footer = '---';
     const minBlockLength = header.length + footer.length;
     if (minBlockLength > maxChars) {
-        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
+        return { excerptsText: '', sources: [], sourcesMeta: emptySourcesMeta(meta) };
     }
 
     const buildExcerpts = (currentSelected) => {
@@ -617,7 +653,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
 
         for (const chunk of orderedSelected) {
             const routeExcerptChars = wantsRouteChunk
-                ? Math.max(maxExcerptChars, 2500)
+                ? Math.max(maxExcerptChars, routeMaxExcerptChars)
                 : maxExcerptChars;
             const chunkMaxExcerptChars =
                 chunk.kind === 'route' && wantsRouteChunk ? routeExcerptChars : maxExcerptChars;
@@ -715,7 +751,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
     }
 
     if (!included.length) {
-        return { excerptsText: '', sources: [], sourcesMeta: { results: [] } };
+        return { excerptsText: '', sources: [], sourcesMeta: emptySourcesMeta(meta) };
     }
 
     output += footer;
@@ -726,6 +762,13 @@ export const searchDocsRag = async (queryText, options = {}) => {
         generatedAt,
         envName,
         sourceRef: meta?.sourceRef || null,
+        budget: {
+            maxResults,
+            maxChars,
+            maxExcerptChars,
+            routeMaxExcerptChars,
+        },
+        renderedChars: output.length,
         results: included.map((chunk) => ({
             id: chunk.id,
             slug: chunk.slug,
