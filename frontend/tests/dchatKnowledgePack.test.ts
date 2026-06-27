@@ -28,9 +28,10 @@ describe('buildDchatKnowledgePack', () => {
 
     it('adds a state source when game state context is used', () => {
         const sampleItemId = items[0]?.id;
-        const pack = buildDchatKnowledgePack({
-            inventory: sampleItemId ? { [sampleItemId]: 1 } : {},
-        });
+        const pack = buildDchatKnowledgePack(
+            { inventory: sampleItemId ? { [sampleItemId]: 1 } : {} },
+            { latestUserMessage: 'what is my inventory?' }
+        );
 
         expect(pack.sources.some((entry) => entry.type === 'state')).toBe(true);
     });
@@ -69,5 +70,44 @@ describe('buildDchatKnowledgePack', () => {
         expect(achievementSources.length).toBe(6);
         expect(achievementSources.map((entry) => entry.id)).toEqual(sortedAchievementIds);
         expect(new Set(achievementSources.map((entry) => entry.id))).toEqual(new Set(expectedIds));
+    });
+
+    it('bounds live-state inventory highlights instead of dumping all owned inventory', () => {
+        const inventory = Object.fromEntries(
+            Array.from({ length: 150 }, (_, index) => [`raw-owned-${index}`, index + 1])
+        );
+        const pack = buildDchatKnowledgePack(
+            { inventory },
+            { latestUserMessage: 'what is my inventory?' }
+        );
+        const highlights = pack.summary
+            .split('\n\n')
+            .find((section) => section.startsWith('Inventory highlights:'));
+
+        expect(highlights).toContain('compact bounded live-state highlights');
+        expect((highlights?.match(/raw-owned-/g) || []).length).toBeLessThanOrEqual(8);
+        expect((pack.summary.match(/raw-owned-/g) || []).length).toBeLessThanOrEqual(8);
+    });
+
+    it('keeps bounded live inventory highlights for broad progress questions', () => {
+        const pack = buildDchatKnowledgePack(
+            { inventory: { '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6': 2 } },
+            { latestUserMessage: 'How am I progressing?' }
+        );
+
+        expect(pack.summary).toContain('Inventory highlights: compact bounded');
+        expect(pack.summary).toContain('white PLA filament');
+        expect(pack.summary).toContain('x2');
+    });
+
+    it('keeps query-relevant live inventory in compact highlights', () => {
+        const pack = buildDchatKnowledgePack(
+            { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 13 } },
+            { latestUserMessage: 'do I have enough green PLA?' }
+        );
+
+        expect(pack.summary).toContain('Inventory highlights: compact bounded');
+        expect(pack.summary).toContain('green PLA filament');
+        expect(pack.summary).toContain('x13');
     });
 });

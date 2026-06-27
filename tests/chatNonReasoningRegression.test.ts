@@ -147,20 +147,18 @@ describe('chat non-reasoning regression probes', () => {
             const playerStateMessage = messages.find(
                 (message) =>
                     message.role === 'system' &&
-                    message.content?.[0]?.text?.includes('PlayerState v3')
+                    message.content?.[0]?.text?.includes('PlayerStateCompact v3')
             );
             const text = playerStateMessage?.content?.[0]?.text ?? '';
-            const jsonStart = text.indexOf('{');
-            const snapshot = JSON.parse(text.slice(jsonStart));
+            expect(text).toContain('Completed quests shown');
+            expect(text).not.toContain('questsFinished');
             return {
-                output_text: `Completed quests: ${snapshot.questsFinished.join(', ')}`,
+                output_text: `Completed quests: ${text}`,
             };
         });
 
         const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
-        const reply = await GPT5Chat([
-            { role: 'user', content: 'What quests have I completed?' },
-        ]);
+        const reply = await GPT5Chat([{ role: 'user', content: 'What quests have I completed?' }]);
 
         expect(reply).toContain('welcome/howtodoquests');
         expect(reply).toContain('3dprinter/start');
@@ -188,9 +186,7 @@ describe('chat non-reasoning regression probes', () => {
         });
 
         const { GPT5Chat } = await import('../frontend/src/utils/openAI.js');
-        const reply = await GPT5Chat([
-            { role: 'user', content: 'What quests have I completed?' },
-        ]);
+        const reply = await GPT5Chat([{ role: 'user', content: 'What quests have I completed?' }]);
 
         expect(reply).toMatch(/\/gamesaves/);
         expect(reply).toMatch(/\/docs\/backups|\/docs\/routes/);

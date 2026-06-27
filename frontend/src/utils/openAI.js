@@ -1,5 +1,4 @@
 import { loadGameState, ready } from './gameState/common.js';
-import { getOfficialQuestStats } from './gameState/questStats.js';
 import { buildDchatKnowledgePack } from './dchatKnowledge.js';
 import { mergeSources } from './contextSources.js';
 import { searchDocsRag } from './docsRag.js';
@@ -9,6 +8,7 @@ import { getPromptVersionLabel, getPromptVersionSha } from './buildInfo.js';
 import { buildPromptMetrics } from './promptMetrics.js';
 import { planChatContext } from './chatContextPlanner.js';
 import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
+import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -113,7 +113,6 @@ const vagueFollowupPattern =
     /^\s*(what about|and then|that step|the second step|next step|step 2)\b/i;
 const retrievalContextLimit = 800;
 const retrievalQueryLimit = 1000;
-const MAX_PLAYER_STATE_ITEMS = 50;
 export const CHAT_DOCS_RAG_DEFAULTS = Object.freeze({
     maxResults: 6,
     maxChars: 8000,
@@ -317,94 +316,17 @@ const countPromptChars = (messages) => {
     return messages.reduce((total, message) => total + (message?.content?.length || 0), 0);
 };
 
-const normalizeVersionNumberString = (value) => {
-    if (typeof value === 'string' && value.trim()) {
-        return value.trim();
-    }
-    if (typeof value === 'number' && Number.isFinite(value)) {
-        return String(value);
-    }
-    return '3';
-};
-
-const buildPlayerStateSnapshot = (gameState, options = {}) => {
-    const { maxInventoryEntries = MAX_PLAYER_STATE_ITEMS } = options;
-    if (!gameState || typeof gameState !== 'object') {
-        const questStats = getOfficialQuestStats(null);
-        return {
-            block: null,
-            meta: {
-                included: false,
-                questsFinishedCount: 0,
-                completedQuestCount: questStats.completedQuestCount,
-                totalOfficialQuestCount: questStats.totalOfficialQuestCount,
-                remainingOfficialQuestCount: questStats.remainingOfficialQuestCount,
-                inventoryIncludedCount: 0,
-                inventoryTotalCount: 0,
-                inventoryTruncated: false,
-            },
-        };
-    }
-
-    const questsFinished = Object.entries(gameState.quests || {})
-        .filter(([, questState]) => questState?.finished)
-        .map(([questId]) => questId)
-        .sort((a, b) => a.localeCompare(b));
-
-    const inventoryEntries = Object.entries(gameState.inventory || {})
-        .filter(([, count]) => typeof count === 'number' && Number.isFinite(count) && count > 0)
-        .map(([id, count]) => ({ id, count }))
-        .sort((a, b) => {
-            if (b.count !== a.count) {
-                return b.count - a.count;
-            }
-            return a.id.localeCompare(b.id);
-        });
-
-    const totalItems = inventoryEntries.length;
-    const truncated = totalItems > maxInventoryEntries;
-    const includedInventory = truncated
-        ? inventoryEntries.slice(0, maxInventoryEntries)
-        : inventoryEntries;
-
-    const versionNumberString = normalizeVersionNumberString(gameState.versionNumberString);
-    const questStats = getOfficialQuestStats(gameState);
-    const snapshot = {
-        versionNumberString,
-        questsFinished,
-        inventory: includedInventory,
-    };
-
-    if (truncated) {
-        snapshot.truncated = true;
-        snapshot.totalItems = totalItems;
-    }
-
-    const statsBlock = `PlayerStateStats: completedOfficialQuests=${questStats.completedQuestCount}, totalOfficialQuests=${questStats.totalOfficialQuestCount}, remainingOfficialQuests=${questStats.remainingOfficialQuestCount}`;
-    const block = `${statsBlock}\nPlayerState v${versionNumberString} (authoritative; do not infer beyond this):\n${JSON.stringify(
-        snapshot,
-        null,
-        2
-    )}`;
-
-    return {
-        block,
-        meta: {
-            included: true,
-            questsFinishedCount: questsFinished.length,
-            completedQuestCount: questStats.completedQuestCount,
-            totalOfficialQuestCount: questStats.totalOfficialQuestCount,
-            remainingOfficialQuestCount: questStats.remainingOfficialQuestCount,
-            inventoryIncludedCount: includedInventory.length,
-            inventoryTotalCount: totalItems,
-            inventoryTruncated: truncated,
-        },
-    };
-};
-
 export const getPlayerStateSummary = (gameState = loadGameState()) => {
     const hasGameState = gameState && typeof gameState === 'object';
-    return buildPlayerStateSnapshot(hasGameState ? gameState : null).meta;
+    const meta = buildPlayerStatePromptSummary(hasGameState ? gameState : null).meta;
+    return {
+        ...meta,
+        // Backward-compatible debug UI semantics: this field historically meant
+        // owned inventory entries in the loaded PlayerState, not the compact
+        // prompt's bounded inventory slice. Prompt metrics continue to use the
+        // compact summary metadata directly.
+        inventoryIncludedCount: meta.inventoryTotalCount,
+    };
 };
 
 const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {
@@ -751,6 +673,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
                 promptBuildDurationMs: performance.now() - promptBuildStartedAt,
                 ragDurationMs: 0,
                 contextPlan: contextPlanMetadata,
+                playerStateSummary: promptPayload.playerStateSummary,
                 componentMessageIndexes: {
                     systemInstructions: [
                         combinedMessages.indexOf(systemMessage),
@@ -772,7 +695,11 @@ export const buildChatPrompt = async (messages, options = {}) => {
         role: 'system',
         content: `Prompt version: v3:${getPromptVersionSha()}\n${fullSystemPrompt}`,
     };
-    const playerStateSnapshot = buildPlayerStateSnapshot(hasGameState ? rawGameState : null);
+    const playerStateSnapshot = buildPlayerStatePromptSummary(hasGameState ? rawGameState : null, {
+        playerStatePromptMode: options.playerStatePromptMode,
+        includeRawPlayerState: options.includeRawPlayerState,
+        latestUserMessage: latestUserMessage?.content || '',
+    });
     const playerStateMessage = playerStateSnapshot.block
         ? {
               role: 'system',
@@ -780,7 +707,10 @@ export const buildChatPrompt = async (messages, options = {}) => {
           }
         : null;
 
-    const knowledgePack = buildDchatKnowledgePack(gameState);
+    const knowledgePack = buildDchatKnowledgePack(gameState, {
+        latestUserMessage: latestUserMessage?.content || '',
+        playerStateSummary: playerStateSnapshot,
+    });
     const knowledgeSummary = knowledgePack.summary;
     const knowledgeMessage = knowledgeSummary
         ? {
@@ -931,6 +861,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
             promptBuildDurationMs: performance.now() - promptBuildStartedAt,
             ragDurationMs,
             contextPlan: contextPlanMetadata,
+            playerStateSummary: playerStateSnapshot.meta,
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,
                 rag: ragIndexes,
