@@ -318,7 +318,15 @@ const countPromptChars = (messages) => {
 
 export const getPlayerStateSummary = (gameState = loadGameState()) => {
     const hasGameState = gameState && typeof gameState === 'object';
-    return buildPlayerStatePromptSummary(hasGameState ? gameState : null).meta;
+    const meta = buildPlayerStatePromptSummary(hasGameState ? gameState : null).meta;
+    return {
+        ...meta,
+        // Backward-compatible debug UI semantics: this field historically meant
+        // owned inventory entries in the loaded PlayerState, not the compact
+        // prompt's bounded inventory slice. Prompt metrics continue to use the
+        // compact summary metadata directly.
+        inventoryIncludedCount: meta.inventoryTotalCount,
+    };
 };
 
 const buildDocsRagOptions = ({ promptBudgetChars, options, baseMessages }) => {

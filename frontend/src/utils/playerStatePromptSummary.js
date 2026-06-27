@@ -65,6 +65,21 @@ const entryMatchesQuery = (entry, queryTokens, queryText) => {
 const wantsInventorySummary = (queryText) =>
     /\binventory\b|\bitems?\b|\bwhat do i have\b/i.test(queryText);
 
+const wantsCompletedQuestSummary = (queryText) =>
+    /\b(completed|finished|done)\b.*\bquests?\b|\bquests?\b.*\b(completed|finished|done)\b/i.test(
+        queryText
+    );
+
+const buildCompletedQuests = (gameState, cap) =>
+    Object.entries(gameState?.quests || {})
+        .filter(([, questState]) => questState?.finished)
+        .map(([questId]) => {
+            const quest = getBuiltInQuest(questId);
+            return { id: questId, title: quest?.title || questId };
+        })
+        .sort((a, b) => a.id.localeCompare(b.id))
+        .slice(0, cap);
+
 const buildRemainingQuests = (gameState, cap) => {
     const officialQuestIds = listBuiltInQuestIds().sort((a, b) => a.localeCompare(b));
     return officialQuestIds
@@ -218,6 +233,9 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
               .slice(0, caps.inventorySampleCap)
         : [];
     const relevantInventory = [...queryRelevant, ...inventorySample];
+    const completedQuests = wantsCompletedQuestSummary(queryText)
+        ? buildCompletedQuests(gameState, caps.remainingQuestCap)
+        : [];
     const remainingQuests = buildRemainingQuests(gameState, caps.remainingQuestCap);
     const activeProcessSummary = buildActiveProcesses(gameState, caps.activeProcessCap);
     const activeProcesses = activeProcessSummary.shown;
@@ -228,6 +246,11 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
         `PlayerStateCompact v${normalizeVersionNumberString(gameState.versionNumberString)} (authoritative for fields shown).`,
         `Official quests: completed ${questStats.completedQuestCount}/${questStats.totalOfficialQuestCount}; remaining ${questStats.remainingOfficialQuestCount}.`,
     ];
+    if (completedQuests.length > 0) {
+        lines.push(
+            `Completed quests shown (cap ${caps.remainingQuestCap}): ${completedQuests.map((quest) => `${quest.id} — ${quest.title}`).join(' | ')}.`
+        );
+    }
     if (remainingQuests.length > 0) {
         lines.push(
             `Remaining official quests shown (cap ${caps.remainingQuestCap}): ${remainingQuests.map((quest) => `${quest.id} — ${quest.title}`).join(' | ')}.`
