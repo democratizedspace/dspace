@@ -35,6 +35,25 @@ describe('buildDchatKnowledgePack', () => {
         expect(pack.sources.some((entry) => entry.type === 'state')).toBe(true);
     });
 
+    it('bounds compact inventory highlights instead of dumping hundreds of entries', () => {
+        const greenPlaId = 'd3590107-25ff-4de5-af3a-46e2497bfc52';
+        const inventory = Object.fromEntries(
+            Array.from({ length: 120 }, (_, index) => [`uuid-owned-${index}`, index + 1])
+        );
+        const pack = buildDchatKnowledgePack(
+            { inventory: { ...inventory, [greenPlaId]: 12 } },
+            { latestUserMessage: 'do I have enough green PLA?' }
+        );
+        const highlights = pack.summary
+            .split('\n\n')
+            .find((section) => section.startsWith('Inventory highlights:'));
+
+        expect(highlights).toContain('green PLA filament');
+        expect(highlights).toContain('inventory omitted beyond compact cap');
+        expect(highlights).not.toContain('uuid-owned-119');
+        expect((highlights?.match(/uuid-owned-/g) || []).length).toBeLessThan(10);
+    });
+
     it('caps achievement sources to the configured limit', () => {
         const unlocked = Array.from({ length: 4 }, (_, index) => ({
             id: `unlocked-${index + 1}`,

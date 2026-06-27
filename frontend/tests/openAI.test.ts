@@ -557,7 +557,7 @@ describe('buildChatPrompt', () => {
         expect(content).toContain('/docs/routes');
     });
 
-    it('injects PlayerState with finished quests and inventory entries', async () => {
+    it('injects compact PlayerState without raw finished quest or inventory dumps', async () => {
         vi.mocked(loadGameState).mockReturnValueOnce({
             openAI: {},
             versionNumberString: '3',
@@ -575,50 +575,24 @@ describe('buildChatPrompt', () => {
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Status?' }]);
         const playerStateMessage = payload.debugMessages.find((message) =>
-            message.content?.includes('PlayerState v3')
+            message.content?.includes('PlayerState compact summary v3')
         );
         const content = playerStateMessage?.content ?? '';
-        const statsMatch = content.match(
-            /PlayerStateStats: completedOfficialQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
-        );
-        const jsonStart = content.indexOf('{');
-        const jsonBody = jsonStart >= 0 ? content.slice(jsonStart) : '';
-        const snapshot = jsonBody ? JSON.parse(jsonBody) : null;
 
-        expect(snapshot?.versionNumberString).toBe('3');
-        expect(statsMatch).not.toBeNull();
-        expect(snapshot?.questsFinished).toEqual(
-            expect.arrayContaining(['welcome/howtodoquests', '3dprinter/start'])
-        );
-        expect(snapshot?.questsFinished).not.toEqual(
-            expect.arrayContaining(['welcome/intro-inventory'])
-        );
-        expect(snapshot?.inventory).toEqual(
-            expect.arrayContaining([
-                { id: 'item-alpha', count: 12 },
-                { id: 'item-gamma', count: 5.5 },
-            ])
-        );
+        expect(content).toContain('Official quests: completed');
+        expect(content).toContain('remaining');
+        expect(content).not.toContain('questsFinished');
+        expect(content).not.toContain('item-alpha');
+        expect(content).toContain('Omitted inventory/quest details are not evidence');
         expect(payload.playerStateSummary).toEqual(
             expect.objectContaining({
                 included: true,
-                questsFinishedCount: 2,
-                completedQuestCount: Number(statsMatch?.[1]),
-                totalOfficialQuestCount: Number(statsMatch?.[2]),
-                remainingOfficialQuestCount: Number(statsMatch?.[3]),
-                inventoryIncludedCount: 2,
-                inventoryTruncated: false,
+                playerStatePromptMode: 'compact',
+                completedQuestCount: 1,
+                inventoryTotalCount: 2,
+                inventoryIncludedCount: 0,
+                inventoryTruncated: true,
             })
-        );
-        // '3dprinter/start' is intentionally non-canonical (real ID is '3dprinting/start').
-        // This verifies only official quest IDs count toward completedQuestCount.
-        expect(payload.playerStateSummary.completedQuestCount).toBe(1);
-        expect(payload.playerStateSummary.remainingOfficialQuestCount).toBe(
-            Math.max(
-                payload.playerStateSummary.totalOfficialQuestCount -
-                    payload.playerStateSummary.completedQuestCount,
-                0
-            )
         );
     });
 
@@ -635,17 +609,15 @@ describe('buildChatPrompt', () => {
 
         const payload = await buildChatPrompt([{ role: 'user', content: 'Quest totals?' }]);
         const playerStateMessage = payload.debugMessages.find((message) =>
-            message.content?.includes('PlayerStateStats:')
+            message.content?.includes('PlayerState compact summary')
         );
         const content = playerStateMessage?.content ?? '';
-        const statsMatch = content.match(
-            /PlayerStateStats: completedOfficialQuests=(\d+), totalOfficialQuests=(\d+), remainingOfficialQuests=(\d+)/
+        expect(content).toContain('Official quests: completed 1/');
+        expect(payload.playerStateSummary.completedQuestCount).toBe(1);
+        expect(payload.playerStateSummary.totalOfficialQuestCount).toBeGreaterThan(1);
+        expect(payload.playerStateSummary.remainingOfficialQuestCount).toBe(
+            payload.playerStateSummary.totalOfficialQuestCount - 1
         );
-
-        expect(statsMatch).not.toBeNull();
-        expect(Number(statsMatch?.[1])).toBe(1);
-        expect(Number(statsMatch?.[2])).toBeGreaterThan(1);
-        expect(Number(statsMatch?.[3])).toBe(Number(statsMatch?.[2]) - Number(statsMatch?.[1]));
     });
 
     it('skips docs RAG for player-state-only full prompts', async () => {
@@ -665,6 +637,30 @@ describe('buildChatPrompt', () => {
         expect(searchDocsRag).not.toHaveBeenCalled();
         expect(payload.contextSources.every((source) => source.type !== 'doc')).toBe(true);
         expect(payload.promptMetrics.docsRag.status).toBe('skipped');
+    });
+
+    it('includes query-relevant owned green PLA without dumping full inventory', async () => {
+        const greenPlaId = 'd3590107-25ff-4de5-af3a-46e2497bfc52';
+        const fillerInventory = Object.fromEntries(
+            Array.from({ length: 40 }, (_, index) => [`uuid-filler-${index}`, index + 1])
+        );
+        vi.mocked(loadGameState).mockReturnValueOnce({
+            openAI: {},
+            versionNumberString: '3',
+            quests: {},
+            inventory: { ...fillerInventory, [greenPlaId]: 30 },
+        });
+
+        const payload = await buildChatPrompt([
+            { role: 'user', content: 'do I have enough green PLA?' },
+        ]);
+        const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(prompt).toContain('green PLA filament');
+        expect(prompt).toContain('30');
+        expect(prompt).not.toContain('uuid-filler-39');
+        expect(payload.playerStateSummary.playerStatePromptMode).toBe('compact');
     });
 
     it('reports forced docs RAG consistently in plan metadata and prompt metrics', async () => {
