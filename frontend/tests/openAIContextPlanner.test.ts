@@ -127,6 +127,81 @@ describe('buildChatPrompt context planning', () => {
         expect(payload.contextSources).toEqual([]);
     });
 
+    it('skips docs RAG for player-state-only full prompt', async () => {
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'what quest do I have left?' }],
+            {
+                includePromptMetrics: true,
+            }
+        );
+        const prompt = joinedPrompt(payload);
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(false);
+        expect(payload.contextPlan.docsRagStatus).toBe('skipped');
+        expect(prompt).toContain('PlayerState');
+        expect(prompt).toContain('DSPACE knowledge base');
+        expect(prompt).not.toContain('Docs grounding');
+        expect(payload.contextSources.filter((source) => source.type === 'doc')).toEqual([]);
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        expect(payload.promptMetrics.contextPlan.includeDocsRag).toBe(false);
+        expect(payload.promptMetrics.contextPlan.docsRagStatus).toBe('skipped');
+    });
+
+    it('includes docs RAG for gamesave navigation full prompt', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: 'Docs grounding: /gamesaves import instructions',
+            sources: [{ type: 'doc', id: 'backups', label: 'Backups', url: '/docs/backups' }],
+        });
+
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'where do I import a gamesave?' }],
+            {
+                includePromptMetrics: true,
+            }
+        );
+        const prompt = joinedPrompt(payload);
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(payload.contextPlan.docsRagStatus).toBe('included');
+        expect(searchDocsRag).toHaveBeenCalled();
+        expect(prompt).toContain('Docs grounding');
+        expect(payload.contextSources.some((source) => source.type === 'doc')).toBe(true);
+        expect(payload.promptMetrics.contextPlan.docsRagStatus).toBe('included');
+    });
+
+    it('includes docs RAG for custom content full prompt', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: 'Docs grounding: custom content bundle and quest submission guidance',
+            sources: [
+                {
+                    type: 'doc',
+                    id: 'quest-submission',
+                    label: 'Quest Submission',
+                    url: '/docs/quest-submission',
+                },
+                {
+                    type: 'doc',
+                    id: 'custom-content-bundles',
+                    label: 'Custom Content Bundles',
+                    url: '/docs/custom-content-bundles',
+                },
+            ],
+        });
+
+        const payload = await buildChatPrompt([
+            { role: 'user', content: 'How do I add custom content to DSPACE?' },
+        ]);
+        const prompt = joinedPrompt(payload);
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(searchDocsRag).toHaveBeenCalled();
+        expect(prompt).toContain('Docs grounding');
+        expect(JSON.stringify(payload.contextSources)).toMatch(/custom-content|quest-submission/i);
+    });
+
     it('preserves Hydro persona and full grounding when planner selects full', async () => {
         const payload = await buildChatPrompt(
             [{ role: 'user', content: 'what quest do I have left?' }],
@@ -143,6 +218,9 @@ describe('buildChatPrompt context planning', () => {
         expect(prompt).toContain('Use the PlayerState block when present.');
         expect(prompt).toContain('If PlayerState is missing');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
-        expect(searchDocsRag).toHaveBeenCalled();
+        expect(payload.contextPlan.includeDocsRag).toBe(false);
+        expect(payload.contextPlan.docsRagStatus).toBe('skipped');
+        expect(prompt).not.toContain('Docs grounding');
+        expect(searchDocsRag).not.toHaveBeenCalled();
     });
 });
