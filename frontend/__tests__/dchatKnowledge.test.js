@@ -13,10 +13,10 @@ describe('buildDchatKnowledge', () => {
         expect(knowledge).toContain('white PLA filament');
     });
 
-    test('includes quests and processes summary', () => {
+    test('does not include broad quests and processes summary by default', () => {
         const knowledge = buildDchatKnowledge({});
-        expect(knowledge).toContain('Quests:');
-        expect(knowledge).toContain('Processes:');
+        expect(knowledge).not.toContain('Quests:');
+        expect(knowledge).not.toContain('Processes:');
     });
 
     test('summarizes quest progress and process state', () => {
@@ -42,9 +42,9 @@ describe('buildDchatKnowledge', () => {
         expect(knowledge).toMatch(/Buy 1 kWh of electricity from a wall outlet/);
     });
 
-    test('includes essential tutorial quests', () => {
+    test('does not include tutorial quest filler without a relevant query', () => {
         const knowledge = buildDchatKnowledge({});
-        expect(knowledge).toContain('How to do quests');
+        expect(knowledge).not.toContain('How to do quests');
     });
 
     test('summarizes achievements progress', () => {
