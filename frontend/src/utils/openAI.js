@@ -787,11 +787,28 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const retrievalQuery = latestUserMessage
         ? buildRetrievalQuery(normalizedMessages, latestUserMessage)
         : '';
-    const docsRagStartedAt = performance.now();
-    const docsRagPayload = latestUserMessage
+    const forceDocsRag = options.forceDocsRag === true || options.docsRagOptions?.force === true;
+    const shouldIncludeDocsRag = Boolean(
+        latestUserMessage && (contextPlan.includeDocsRag || forceDocsRag)
+    );
+    const docsRagStatus = shouldIncludeDocsRag
+        ? 'included'
+        : latestUserMessage
+          ? 'skipped'
+          : 'not-applicable';
+    const docsRagStartedAt = shouldIncludeDocsRag ? performance.now() : 0;
+    const docsRagPayload = shouldIncludeDocsRag
         ? await searchDocsRag(retrievalQuery, docsRagRequestOptions)
         : { excerptsText: '', sources: [] };
-    const ragDurationMs = performance.now() - docsRagStartedAt;
+    const ragDurationMs = shouldIncludeDocsRag ? performance.now() - docsRagStartedAt : 0;
+    const contextPlanMetadata = {
+        ...contextPlan,
+        includeDocsRag: Boolean(contextPlan.includeDocsRag || forceDocsRag),
+        docsRagStatus,
+        docsRagReasonCodes: (contextPlan.reasonCodes || []).filter((reasonCode) =>
+            /docs|rag|route/.test(reasonCode)
+        ),
+    };
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
             ? {
@@ -852,7 +869,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         gameState,
         contextSources,
         playerStateSummary: playerStateSnapshot.meta,
-        contextPlan,
+        contextPlan: contextPlanMetadata,
     };
 
     if (options.includePromptMetrics) {
@@ -880,7 +897,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
             promptBuildDurationMs: performance.now() - promptBuildStartedAt,
             ragDurationMs,
-            contextPlan,
+            contextPlan: contextPlanMetadata,
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,
                 rag: ragIndexes,

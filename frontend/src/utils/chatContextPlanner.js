@@ -2,11 +2,11 @@ import items from '../pages/inventory/json/items';
 import processes from '../generated/processes.json';
 import quests from '../generated/quests/listManifest.json';
 
-const fullPlan = (reasonCodes) => ({
+const fullPlan = (reasonCodes, includeDocsRag = true) => ({
     mode: 'full',
     includePlayerState: true,
     includeKnowledgePack: true,
-    includeDocsRag: true,
+    includeDocsRag,
     includePersonaVoiceSamples: false,
     reasonCodes: [...new Set(reasonCodes)],
     confidence: 'conservative',
@@ -52,6 +52,36 @@ export const latestUserContent = (messages) =>
 const regexHits = (text, checks) =>
     checks.filter(({ pattern }) => pattern.test(text)).map(({ reasonCode }) => reasonCode);
 
+const docsRagIntentChecks = [
+    {
+        reasonCode: 'docs-navigation',
+        pattern:
+            /(?:\/docs|\bdocs?\b|\broutes?\b|\bpages?\b|\bwhere do i\b|\bhow do i get to\b|\bsettings\b|\/settings|\/quests|\/inventory|\/processes)/i,
+    },
+    {
+        reasonCode: 'route-docs',
+        pattern:
+            /(?:\/gamesaves|\bgamesaves?\b|\bimport save\b|\bexport save\b|\bbackup\b|\bcontent backup\b)/i,
+    },
+    {
+        reasonCode: 'custom-content-docs',
+        pattern:
+            /\b(custom content|custom quests?|custom items?|custom processes?|quest submission|content bundles?|custom content bundles?|content editor|add custom content to dspace|submit a custom quest)\b/i,
+    },
+    {
+        reasonCode: 'changelog-version-docs',
+        pattern:
+            /\b(token\.place integration docs|token\.place|tokenplace|changelog|release notes?|versions?|v[23](?:\.\d+)?|drift|deprecated|current release state|what changed)\b/i,
+    },
+    {
+        reasonCode: 'mechanics-docs',
+        pattern:
+            /\bprocess\b(?=.*\b(consumes?|creates?|requires?|duration)\b)|\bquest\b(?=.*\b(requirements?|rewards?|gates?|dialogue options?|authoring|schema|how-to)\b)|\brewards?\b(?=.*\bgive\b)|\bschema\b|\bauthoring guidance\b/i,
+    },
+];
+
+export const getDocsRagIntentReasonCodes = (text) => regexHits(text, docsRagIntentChecks);
+
 const groundingChecks = [
     {
         reasonCode: 'player-state-progress',
@@ -61,7 +91,7 @@ const groundingChecks = [
     {
         reasonCode: 'game-data',
         pattern:
-            /\b(token\.place|quests?|achievements?|rewards?|requirements?|gates?|unlocks?|balances?)\b/i,
+            /\b(token\.place|quests?|achievements?|rewards?|requirements?|gates?|unlocks?|balances?|v[23](?:\.\d+)?)\b/i,
     },
     {
         reasonCode: 'process-data',
@@ -154,5 +184,11 @@ export const planChatContext = (messages, options = {}) => {
 
     const reasonCodes = hasGroundingSignal(latest);
 
-    return reasonCodes.length ? fullPlan(reasonCodes) : minimalPlan();
+    if (!reasonCodes.length) return minimalPlan();
+
+    const docsReasonCodes = getDocsRagIntentReasonCodes(latest);
+    const includeDocsRag = docsReasonCodes.length > 0;
+    const docsDecisionReasonCodes = includeDocsRag ? docsReasonCodes : ['docs-rag-not-needed'];
+
+    return fullPlan([...reasonCodes, ...docsDecisionReasonCodes], includeDocsRag);
 };

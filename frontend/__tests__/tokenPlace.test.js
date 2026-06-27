@@ -374,7 +374,7 @@ describe('token.place API v1 client', () => {
         expect(JSON.stringify(body)).not.toContain('metadata');
     });
 
-    test('default token.place mode uses the full dChat prompt path', async () => {
+    test('default token.place mode uses the full dChat prompt path without docs for player-state-only questions', async () => {
         loadGameState.mockReturnValue({
             settings: { tokenPlaceTokenLite: false },
             inventory: [{ id: 'solar-panel', quantity: 1 }],
@@ -386,11 +386,29 @@ describe('token.place API v1 client', () => {
 
         await TokenPlaceChatV2([{ role: 'user', content: 'What should I build next?' }]);
 
-        expect(searchDocsRag).toHaveBeenCalledTimes(1);
+        expect(searchDocsRag).not.toHaveBeenCalled();
         const { body } = getFetchCallByPath('/api/v1/relay/requests');
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
         // Verify full path produces more messages than token-lite's fixed [system, user] pair.
         expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
+    });
+
+    test('default token.place mode includes docs RAG for route questions', async () => {
+        loadGameState.mockReturnValue({
+            settings: { tokenPlaceTokenLite: false },
+            inventory: [{ id: 'solar-panel', quantity: 1 }],
+        });
+        searchDocsRag.mockResolvedValue({
+            excerptsText: 'Docs grounding: gamesave import route.',
+            sources: [{ type: 'doc', id: '/docs/backups', label: 'Backups', url: '/docs/backups' }],
+        });
+
+        await TokenPlaceChatV2([{ role: 'user', content: 'where do I import a gamesave?' }]);
+
+        expect(searchDocsRag).toHaveBeenCalledTimes(1);
+        const { body } = getFetchCallByPath('/api/v1/relay/requests');
+        const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
+        expect(JSON.stringify(decrypted.api_v1_request.messages)).toContain('Docs grounding');
     });
 
     test('token-lite setting sends a tiny decrypted API v1 message set', async () => {
