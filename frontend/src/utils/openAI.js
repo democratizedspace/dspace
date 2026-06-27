@@ -736,6 +736,8 @@ export const buildChatPrompt = async (messages, options = {}) => {
             promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
                 promptBuildDurationMs: performance.now() - promptBuildStartedAt,
                 ragDurationMs: 0,
+                docsRagStatus: 'not-applicable',
+                docsRagReasonCodes: contextPlanMetadata.docsRagReasonCodes || [],
                 contextPlan: contextPlanMetadata,
                 componentMessageIndexes: {
                     systemInstructions: [
@@ -774,24 +776,34 @@ export const buildChatPrompt = async (messages, options = {}) => {
               content: `DSPACE knowledge base:\n${knowledgeSummary}`,
           }
         : null;
-    const docsRagRequestOptions = buildDocsRagOptions({
-        promptBudgetChars: options.docsRagBudgetChars,
-        options: options.docsRagOptions,
-        baseMessages: [
-            systemMessage,
-            ...(playerStateMessage ? [playerStateMessage] : []),
-            ...(knowledgeMessage ? [knowledgeMessage] : []),
-            ...normalizedMessages,
-        ],
-    });
+    const shouldIncludeDocsRag = Boolean(
+        latestUserMessage && (contextPlan.includeDocsRag || options.forceDocsRag)
+    );
+    const docsRagRequestOptions = shouldIncludeDocsRag
+        ? buildDocsRagOptions({
+              promptBudgetChars: options.docsRagBudgetChars,
+              options: options.docsRagOptions,
+              baseMessages: [
+                  systemMessage,
+                  ...(playerStateMessage ? [playerStateMessage] : []),
+                  ...(knowledgeMessage ? [knowledgeMessage] : []),
+                  ...normalizedMessages,
+              ],
+          })
+        : null;
     const retrievalQuery = latestUserMessage
         ? buildRetrievalQuery(normalizedMessages, latestUserMessage)
         : '';
-    const docsRagStartedAt = performance.now();
-    const docsRagPayload = latestUserMessage
+    const docsRagStartedAt = shouldIncludeDocsRag ? performance.now() : 0;
+    const docsRagPayload = shouldIncludeDocsRag
         ? await searchDocsRag(retrievalQuery, docsRagRequestOptions)
         : { excerptsText: '', sources: [] };
-    const ragDurationMs = performance.now() - docsRagStartedAt;
+    const ragDurationMs = shouldIncludeDocsRag ? performance.now() - docsRagStartedAt : 0;
+    const docsRagStatus = shouldIncludeDocsRag
+        ? 'included'
+        : latestUserMessage && contextPlan.mode === 'full'
+          ? 'skipped'
+          : 'not-applicable';
     const docsRagMessage =
         !knowledgeMessage && docsRagPayload.excerptsText
             ? {
@@ -880,6 +892,8 @@ export const buildChatPrompt = async (messages, options = {}) => {
         promptPayload.promptMetrics = buildPromptMetrics(promptPayload, {
             promptBuildDurationMs: performance.now() - promptBuildStartedAt,
             ragDurationMs,
+            docsRagStatus,
+            docsRagReasonCodes: contextPlan.docsRagReasonCodes || [],
             contextPlan,
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,

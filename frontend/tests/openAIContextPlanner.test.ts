@@ -32,6 +32,55 @@ describe('buildChatPrompt context planning', () => {
         vi.mocked(searchDocsRag).mockClear();
     });
 
+    it('includes docs RAG for gamesave import navigation', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: 'Docs grounding',
+            sources: [{ type: 'doc', id: 'backups', label: 'Backups', url: '/docs/backups' }],
+        });
+
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'where do I import a gamesave?' }],
+            { includePromptMetrics: true }
+        );
+        const prompt = joinedPrompt(payload);
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(searchDocsRag).toHaveBeenCalled();
+        expect(prompt).toContain('Docs grounding');
+        expect(payload.contextSources.some((source) => source.url === '/docs/backups')).toBe(true);
+        expect(payload.promptMetrics.docsRagStatus).toBe('included');
+    });
+
+    it('includes docs RAG for custom content guidance', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: 'Docs grounding custom content bundles quest submission',
+            sources: [
+                {
+                    type: 'doc',
+                    id: 'quest-submission',
+                    label: 'Quest submission',
+                    url: '/docs/quest-submission',
+                },
+            ],
+        });
+
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'How do I add custom content to DSPACE?' }],
+            { includePromptMetrics: true }
+        );
+        const prompt = joinedPrompt(payload);
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(searchDocsRag).toHaveBeenCalled();
+        expect(prompt).toContain('Docs grounding custom content bundles quest submission');
+        expect(
+            payload.contextSources.some((source) => source.url === '/docs/quest-submission')
+        ).toBe(true);
+        expect(payload.promptMetrics.docsRagStatus).toBe('included');
+    });
+
     it('builds a small minimal prompt for hi without full grounding', async () => {
         const payload = await buildChatPrompt([{ role: 'user', content: 'hi' }], {
             includePromptMetrics: true,
@@ -143,6 +192,10 @@ describe('buildChatPrompt context planning', () => {
         expect(prompt).toContain('Use the PlayerState block when present.');
         expect(prompt).toContain('If PlayerState is missing');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
-        expect(searchDocsRag).toHaveBeenCalled();
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        expect(prompt).not.toContain('Docs grounding');
+        expect(payload.contextSources).toEqual([]);
+        expect(payload.contextPlan.includeDocsRag).toBe(false);
+        expect(payload.promptMetrics.docsRagStatus).toBe('skipped');
     });
 });
