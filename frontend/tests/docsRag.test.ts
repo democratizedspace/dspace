@@ -294,4 +294,58 @@ describe('docs RAG search', () => {
             )
         ).toBe(false);
     });
+
+    it('keeps gamesave docs grounding within compact chat budgets', async () => {
+        const maxChars = 8000;
+        const { excerptsText, sources } = await searchDocsRag('where do I import a gamesave?', {
+            maxResults: 6,
+            maxChars,
+            maxExcerptChars: 1200,
+            routeMaxExcerptChars: 1800,
+        });
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(maxChars);
+        expect(sources.length).toBeGreaterThan(0);
+        expect(
+            sources.some((entry) => /gamesaves|backups|routes/i.test(`${entry.label} ${entry.url}`))
+        ).toBe(true);
+    });
+
+    it('keeps custom content docs grounding within compact chat budgets', async () => {
+        const maxChars = 8000;
+        const { excerptsText, sources } = await searchDocsRag(
+            'How do I add custom content to DSPACE?',
+            {
+                maxResults: 6,
+                maxChars,
+                maxExcerptChars: 1200,
+                routeMaxExcerptChars: 1800,
+            }
+        );
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(maxChars);
+        expect(`${excerptsText} ${sources.map((entry) => entry.label).join(' ')}`).toMatch(
+            /custom content|quest submission|content bundle/i
+        );
+    });
+
+    it('keeps changelog/version docs grounding within compact chat budgets', async () => {
+        const maxChars = 8000;
+        const { excerptsText, sources } = await searchDocsRag('what changed in v3.1 chat?', {
+            maxResults: 6,
+            maxChars,
+            maxExcerptChars: 1200,
+            routeMaxExcerptChars: 1800,
+        });
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(maxChars);
+        expect(
+            sources.some(
+                (entry) => entry.type === 'changelog' || /version|chat|changelog/i.test(entry.label)
+            )
+        ).toBe(true);
+    });
 });
