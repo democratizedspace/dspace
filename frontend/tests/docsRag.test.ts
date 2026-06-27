@@ -294,4 +294,45 @@ describe('docs RAG search', () => {
             )
         ).toBe(false);
     });
+    it('keeps gamesave route grounding under the compact chat budget', async () => {
+        const compactBudget = { maxResults: 6, maxChars: 8000, maxExcerptChars: 1200 };
+        const { excerptsText, sources } = await searchDocsRag(
+            'where do I import a gamesave?',
+            compactBudget
+        );
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(compactBudget.maxChars);
+        expect(sources.length).toBeGreaterThan(0);
+        expect(
+            sources.some((entry) => /gamesaves|backup|route/i.test(`${entry.label} ${entry.url}`))
+        ).toBe(true);
+    });
+
+    it('keeps custom-content grounding useful under the compact chat budget', async () => {
+        const compactBudget = { maxResults: 6, maxChars: 8000, maxExcerptChars: 1200 };
+        const { excerptsText, sources } = await searchDocsRag(
+            'How do I add custom content to DSPACE?',
+            compactBudget
+        );
+        const sourceText = sources.map((entry) => `${entry.label} ${entry.url}`).join(' ');
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(compactBudget.maxChars);
+        expect(`${excerptsText} ${sourceText}`).toMatch(
+            /custom content|quest submission|content bundle/i
+        );
+    });
+
+    it('keeps changelog version grounding under the compact chat budget', async () => {
+        const compactBudget = { maxResults: 6, maxChars: 8000, maxExcerptChars: 1200 };
+        const { excerptsText, sourcesMeta } = await searchDocsRag(
+            'what changed in v3.1 chat?',
+            compactBudget
+        );
+
+        expect(excerptsText).toContain('Docs grounding');
+        expect(excerptsText.length).toBeLessThanOrEqual(compactBudget.maxChars);
+        expect(sourcesMeta.results.some((entry) => entry.kind === 'changelog')).toBe(true);
+    });
 });

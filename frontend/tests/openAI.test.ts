@@ -34,6 +34,8 @@ import {
     defaultOpenAIErrorMessage,
     describeOpenAIError,
     buildChatPrompt,
+    CHAT_DOCS_RAG_OPTIONS,
+    CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS,
     getOpenAIErrorSummary,
     GPT5Chat,
     GPT5ChatV2,
@@ -692,12 +694,15 @@ Docs grounding (gitSha: test):
         vi.mocked(searchDocsRag).mockResolvedValueOnce({
             excerptsText: `---\nDocs grounding (gitSha: test):\n- [route] Backups — /docs/backups#top\n  import saves\n---`,
             sources: [{ type: 'doc', id: 'backups', label: 'Backups', url: '/docs/backups#top' }],
-            sourcesMeta: { results: [] },
+            sourcesMeta: {
+                results: [{ id: 'backups', kind: 'doc', title: 'Backups', slug: '/docs/backups' }],
+            },
         });
 
-        const payload = await buildChatPrompt([
-            { role: 'user', content: 'where do I import a gamesave?' },
-        ]);
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'where do I import a gamesave?' }],
+            { includePromptMetrics: true }
+        );
         const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
 
         expect(payload.contextPlan.mode).toBe('full');
@@ -705,6 +710,11 @@ Docs grounding (gitSha: test):
         expect(searchDocsRag).toHaveBeenCalled();
         expect(prompt).toContain('Docs grounding');
         expect(payload.contextSources.some((source) => source.type === 'doc')).toBe(true);
+        expect(payload.promptMetrics.docsRag.resultCount).toBe(1);
+        expect(payload.promptMetrics.docsRag.renderedChars).toBeLessThanOrEqual(
+            payload.promptMetrics.docsRag.budget.maxChars
+        );
+        expect(JSON.stringify(payload.promptMetrics.docsRag)).not.toContain('import saves');
     });
 
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {
@@ -828,18 +838,39 @@ Docs grounding (gitSha: test):
         expect(retrievalQuery).toBe(latestMessage);
     });
 
-    it('passes expanded docs RAG options to searchDocsRag', async () => {
+    it('passes compact named docs RAG options to searchDocsRag by default', async () => {
         const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
 
         await buildChatPrompt(messages, { docsRagBudgetChars: 1000000 });
 
         const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
 
+        expect(CHAT_DOCS_RAG_OPTIONS).toEqual({
+            maxResults: 6,
+            maxChars: 8000,
+            maxExcerptChars: 1200,
+        });
+        expect(CHAT_DOCS_RAG_PROMPT_BUDGET_CHARS).toBe(12000);
+        expect(options).toEqual(expect.objectContaining(CHAT_DOCS_RAG_OPTIONS));
+        expect(options.maxResults).toBeLessThan(50);
+        expect(options.maxChars).toBeLessThan(50000);
+        expect(options.maxExcerptChars).toBeLessThan(8500);
+    });
+
+    it('preserves explicit docs RAG option overrides', async () => {
+        const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
+
+        await buildChatPrompt(messages, {
+            docsRagOptions: { maxResults: 12, maxChars: 20000, maxExcerptChars: 3000 },
+        });
+
+        const [, options] = vi.mocked(searchDocsRag).mock.calls[0];
+
         expect(options).toEqual(
             expect.objectContaining({
-                maxResults: 50,
-                maxChars: 50000,
-                maxExcerptChars: 8500,
+                maxResults: 12,
+                maxChars: 20000,
+                maxExcerptChars: 3000,
             })
         );
     });
