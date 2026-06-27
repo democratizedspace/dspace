@@ -3,6 +3,7 @@ import MiniSearch from 'minisearch';
 const DEFAULT_MAX_RESULTS = 5;
 const DEFAULT_MAX_CHARS = 5000;
 const DEFAULT_MAX_EXCERPT_CHARS = 850;
+const ROUTE_DETAIL_MAX_EXCERPT_CHARS = 1800;
 const ROUTES_INTENT =
     /\b(route|routes|url|urls|path|page|menu|navigate|navigation|where is|link|sitemap|site[-\s]?map)\b/i;
 const CHANGELOG_INTENT =
@@ -617,7 +618,7 @@ export const searchDocsRag = async (queryText, options = {}) => {
 
         for (const chunk of orderedSelected) {
             const routeExcerptChars = wantsRouteChunk
-                ? Math.max(maxExcerptChars, 2500)
+                ? Math.min(Math.max(maxExcerptChars, ROUTE_DETAIL_MAX_EXCERPT_CHARS), maxChars)
                 : maxExcerptChars;
             const chunkMaxExcerptChars =
                 chunk.kind === 'route' && wantsRouteChunk ? routeExcerptChars : maxExcerptChars;
