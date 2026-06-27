@@ -7,6 +7,7 @@ export const PLAYER_STATE_PROMPT_DEFAULTS = Object.freeze({
     remainingQuestCap: 12,
     inventoryRelevantCap: 8,
     inventorySampleCap: 8,
+    notableBalanceCap: 8,
     activeProcessCap: 6,
 });
 
@@ -217,7 +218,7 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
     const queryText = normalizeText(options.latestUserMessage || options.query || '');
     const queryTokens = tokenSet(queryText);
     const entries = inventoryEntries(gameState.inventory);
-    const resourceBalances = entries.filter(isResourceEntry);
+    const resourceBalances = entries.filter(isResourceEntry).slice(0, caps.notableBalanceCap);
     const queryRelevant = entries
         .filter(
             (entry) => !isResourceEntry(entry) && entryMatchesQuery(entry, queryTokens, queryText)
@@ -259,7 +260,7 @@ export const buildPlayerStatePromptSummary = (gameState, options = {}) => {
     lines.push(`Inventory: ${entries.length} owned item/resource types total.`);
     if (resourceBalances.length > 0) {
         lines.push(
-            `Notable balances: ${resourceBalances.map((entry) => `${entry.name}=${formatCount(entry.count)}`).join(', ')}.`
+            `Notable balances (cap ${caps.notableBalanceCap}): ${resourceBalances.map((entry) => `${entry.name}=${formatCount(entry.count)}`).join(', ')}.`
         );
     }
     if (relevantInventory.length > 0) {

@@ -3,6 +3,8 @@ import { buildPlayerStatePromptSummary } from '../src/utils/playerStatePromptSum
 
 const GREEN_PLA_ID = 'd3590107-25ff-4de5-af3a-46e2497bfc52';
 const DSOLAR_ID = 'b02ecff5-1f7d-4247-a09d-7d6cd6bb218a';
+const DUSD_ID = '5247a603-294a-4a34-a884-1ae20969b2a1';
+const DBI_ID = '016d4758-d114-4e04-9e6a-853db93a2eee';
 
 const makeState = (inventory = {}) => ({
     versionNumberString: '3',
@@ -131,6 +133,28 @@ describe('buildPlayerStatePromptSummary', () => {
 
         expect(result.block).toContain('dSolar=7');
         expect(result.meta.inventoryIncludedCount).toBe(1);
+    });
+
+    it('bounds notable resource balances with a named cap', () => {
+        const result = buildPlayerStatePromptSummary(
+            makeState({
+                [DSOLAR_ID]: 7,
+                [DUSD_ID]: 20,
+                [DBI_ID]: 3,
+            }),
+            { notableBalanceCap: 2 }
+        );
+
+        expect(result.slices.resourceBalances).toHaveLength(2);
+        expect(result.slices.resourceBalances.map((entry) => entry.name)).toEqual([
+            'dBI',
+            'dSolar',
+        ]);
+        expect(result.meta.inventoryTotalCount).toBe(3);
+        expect(result.meta.inventoryIncludedCount).toBe(2);
+        expect(result.meta.inventoryTruncated).toBe(true);
+        expect(result.block).toContain('Notable balances (cap 2): dBI=3, dSolar=7.');
+        expect(result.block).not.toContain('dUSD=20');
     });
 
     it('shows a bounded inventory sample for broad inventory questions', () => {
