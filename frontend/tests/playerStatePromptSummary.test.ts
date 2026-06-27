@@ -22,8 +22,11 @@ describe('buildPlayerStatePromptSummary', () => {
         const missing = buildPlayerStatePromptSummary(null);
 
         expect(compact.meta.questsFinishedCount).toBe(3);
+        expect(compact.meta.playerStatePromptMode).toBe('compact');
         expect(raw.meta.questsFinishedCount).toBe(3);
+        expect(raw.meta.playerStatePromptMode).toBe('raw');
         expect(missing.meta.questsFinishedCount).toBe(0);
+        expect(missing.meta.playerStatePromptMode).toBe('none');
         expect(compact.block).not.toContain('questsFinished');
         expect(raw.block).toContain('questsFinished');
     });
