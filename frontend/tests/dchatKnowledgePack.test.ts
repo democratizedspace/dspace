@@ -89,6 +89,17 @@ describe('buildDchatKnowledgePack', () => {
         expect((pack.summary.match(/raw-owned-/g) || []).length).toBeLessThanOrEqual(8);
     });
 
+    it('keeps bounded live inventory highlights for broad progress questions', () => {
+        const pack = buildDchatKnowledgePack(
+            { inventory: { '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6': 2 } },
+            { latestUserMessage: 'How am I progressing?' }
+        );
+
+        expect(pack.summary).toContain('Inventory highlights: compact bounded');
+        expect(pack.summary).toContain('white PLA filament');
+        expect(pack.summary).toContain('x2');
+    });
+
     it('keeps query-relevant live inventory in compact highlights', () => {
         const pack = buildDchatKnowledgePack(
             { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 13 } },
