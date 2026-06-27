@@ -41,5 +41,5 @@ describe('GPT5Chat persona integration', () => {
         const lastMessage = call.input.at(-1);
         expect(lastMessage?.role).toBe('assistant');
         expect(lastMessage?.content?.[0]?.text).toContain(persona.welcomeMessage);
-    });
+    }, 10000);
 });

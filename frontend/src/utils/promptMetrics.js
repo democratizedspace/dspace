@@ -73,6 +73,33 @@ export const buildPromptMetrics = (promptPayload, metadata = {}) => {
             metadata.ragDurationMs === undefined || metadata.ragDurationMs === null
                 ? null
                 : Number(metadata.ragDurationMs),
+        playerStateSummary: metadata.playerStateSummary
+            ? {
+                  playerStatePromptMode:
+                      metadata.playerStateSummary.playerStatePromptMode || 'none',
+                  completedQuestCount: Number(metadata.playerStateSummary.completedQuestCount || 0),
+                  totalOfficialQuestCount: Number(
+                      metadata.playerStateSummary.totalOfficialQuestCount || 0
+                  ),
+                  remainingOfficialQuestCount: Number(
+                      metadata.playerStateSummary.remainingOfficialQuestCount || 0
+                  ),
+                  remainingQuestIncludedCount: Number(
+                      metadata.playerStateSummary.remainingQuestIncludedCount || 0
+                  ),
+                  inventoryTotalCount: Number(metadata.playerStateSummary.inventoryTotalCount || 0),
+                  inventoryIncludedCount: Number(
+                      metadata.playerStateSummary.inventoryIncludedCount || 0
+                  ),
+                  inventoryTruncated: Boolean(metadata.playerStateSummary.inventoryTruncated),
+                  activeProcessIncludedCount: Number(
+                      metadata.playerStateSummary.activeProcessIncludedCount || 0
+                  ),
+                  compactStateBlockChars: Number(
+                      metadata.playerStateSummary.compactStateBlockChars || 0
+                  ),
+              }
+            : null,
         docsRag: metadata.contextPlan
             ? (() => {
                   const status =
