@@ -2,15 +2,24 @@ import items from '../pages/inventory/json/items';
 import processes from '../generated/processes.json';
 import quests from '../generated/quests/listManifest.json';
 
-const fullPlan = (reasonCodes) => ({
-    mode: 'full',
-    includePlayerState: true,
-    includeKnowledgePack: true,
-    includeDocsRag: true,
-    includePersonaVoiceSamples: false,
-    reasonCodes: [...new Set(reasonCodes)],
-    confidence: 'conservative',
-});
+const fullPlan = (reasonCodes, docsRagReasonCodes = []) => {
+    const uniqueDocsReasonCodes = [...new Set(docsRagReasonCodes)];
+
+    return {
+        mode: 'full',
+        includePlayerState: true,
+        includeKnowledgePack: true,
+        includeDocsRag: uniqueDocsReasonCodes.some(
+            (reasonCode) => reasonCode !== 'docs-rag-not-needed'
+        ),
+        includePersonaVoiceSamples: false,
+        reasonCodes: [...new Set(reasonCodes)],
+        docsRagReasonCodes: uniqueDocsReasonCodes.length
+            ? uniqueDocsReasonCodes
+            : ['docs-rag-not-needed'],
+        confidence: 'conservative',
+    };
+};
 
 const minimalPlan = () => ({
     mode: 'minimal',
@@ -90,6 +99,52 @@ const groundingChecks = [
     },
 ];
 
+const docsRagIntentChecks = [
+    {
+        reasonCode: 'route-docs',
+        pattern:
+            /(?:\/docs|\/quests|\/inventory|\/processes|\/settings|\/gamesaves|\broutes?\b|\bpages?\b)/i,
+    },
+    {
+        reasonCode: 'docs-navigation',
+        pattern:
+            /\b(?:docs?|documentation|where do i|how do i get to|settings|gamesaves?|import(?: a)? save|export(?: a)? save|backup|content backup)\b/i,
+    },
+    {
+        reasonCode: 'custom-content-docs',
+        pattern:
+            /\b(?:custom content|custom quests?|custom items?|custom processes?|quest submission|submit a custom quest|content bundles?|content editor|add custom content to dspace)\b/i,
+    },
+    {
+        reasonCode: 'changelog-version-docs',
+        pattern:
+            /\b(?:changelog|release notes?|token\.place integration|version|v\d+(?:\.\d+)?|drift|deprecated|current release state)\b/i,
+    },
+    {
+        reasonCode: 'changelog-version-docs',
+        pattern: /\btoken\.place\b(?=.*\b(?:active|current|release|version|docs?|integration)\b)/i,
+    },
+    {
+        reasonCode: 'mechanics-docs',
+        pattern:
+            /\bprocess(?:es)?\b(?=.*\b(?:consumes?|creates?|requires?|requirements?|duration)\b)|\b(?:consumes?|creates?|requires?|duration)\b(?=.*\bprocess(?:es)?\b)/i,
+    },
+    {
+        reasonCode: 'mechanics-docs',
+        pattern:
+            /\bquest(?:s)?\b(?=.*\b(?:requirements?|rewards?|gates?|dialogue options?|schema|authoring|how-to)\b)|\b(?:requirements?|rewards?|gates?|dialogue options?)\b(?=.*\b(?:quest|give|grant|preflight check)\b)/i,
+    },
+    {
+        reasonCode: 'mechanics-docs',
+        pattern: /\b(?:schema|authoring|how-to authoring)\b/i,
+    },
+];
+
+export const detectDocsRagIntent = (text) => {
+    const reasonCodes = regexHits(text, docsRagIntentChecks);
+    return reasonCodes.length ? [...new Set(reasonCodes)] : ['docs-rag-not-needed'];
+};
+
 const resourcePattern = /\bd(?:USD|BI|Watt|Solar|Print|Launch|Fuel|Oxygen|Water|Food)\b/i;
 
 const normalize = (value) =>
@@ -143,6 +198,9 @@ export const hasStrongEntityHit = (text) => {
 export const hasGroundingSignal = (text) => {
     const reasonCodes = regexHits(text, groundingChecks);
     if (resourcePattern.test(text)) reasonCodes.push('resource-token');
+    if (!detectDocsRagIntent(text).includes('docs-rag-not-needed')) {
+        reasonCodes.push('docs-rag-intent');
+    }
     if (hasStrongEntityHit(text)) reasonCodes.push('entity-hit');
     return reasonCodes;
 };
@@ -154,5 +212,5 @@ export const planChatContext = (messages, options = {}) => {
 
     const reasonCodes = hasGroundingSignal(latest);
 
-    return reasonCodes.length ? fullPlan(reasonCodes) : minimalPlan();
+    return reasonCodes.length ? fullPlan(reasonCodes, detectDocsRagIntent(latest)) : minimalPlan();
 };

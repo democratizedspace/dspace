@@ -645,6 +645,44 @@ describe('buildChatPrompt', () => {
         expect(Number(statsMatch?.[3])).toBe(Number(statsMatch?.[2]) - Number(statsMatch?.[1]));
     });
 
+    it('skips docs RAG for player-state-only full prompts', async () => {
+        const payload = await buildChatPrompt(
+            [{ role: 'user', content: 'what quest do I have left?' }],
+            {
+                includePromptMetrics: true,
+            }
+        );
+        const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(false);
+        expect(prompt).toContain('PlayerState');
+        expect(prompt).toContain('DSPACE knowledge base');
+        expect(prompt).not.toContain('Docs grounding');
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        expect(payload.contextSources.every((source) => source.type !== 'doc')).toBe(true);
+        expect(payload.promptMetrics.docsRag.status).toBe('skipped');
+    });
+
+    it('includes docs RAG for gamesave route prompts', async () => {
+        vi.mocked(searchDocsRag).mockResolvedValueOnce({
+            excerptsText: `---\nDocs grounding (gitSha: test):\n- [route] Backups — /docs/backups#top\n  import saves\n---`,
+            sources: [{ type: 'doc', id: 'backups', label: 'Backups', url: '/docs/backups#top' }],
+            sourcesMeta: { results: [] },
+        });
+
+        const payload = await buildChatPrompt([
+            { role: 'user', content: 'where do I import a gamesave?' },
+        ]);
+        const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(true);
+        expect(searchDocsRag).toHaveBeenCalled();
+        expect(prompt).toContain('Docs grounding');
+        expect(payload.contextSources.some((source) => source.type === 'doc')).toBe(true);
+    });
+
     it('does not duplicate docs excerpts when knowledge summary exists', async () => {
         vi.mocked(buildDchatKnowledgePack).mockReturnValueOnce({
             summary: 'Summary entry',
@@ -699,7 +737,7 @@ describe('buildChatPrompt', () => {
             },
         ];
 
-        await buildChatPrompt(messages);
+        await buildChatPrompt(messages, { forceDocsRag: true });
 
         const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
 
@@ -735,7 +773,7 @@ describe('buildChatPrompt', () => {
             },
         ];
 
-        await buildChatPrompt(messages);
+        await buildChatPrompt(messages, { forceDocsRag: true });
 
         const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
 
@@ -759,7 +797,7 @@ describe('buildChatPrompt', () => {
             },
         ];
 
-        await buildChatPrompt(messages);
+        await buildChatPrompt(messages, { forceDocsRag: true });
 
         const retrievalQuery = vi.mocked(searchDocsRag).mock.calls[0][0];
 
@@ -767,7 +805,7 @@ describe('buildChatPrompt', () => {
     });
 
     it('passes expanded docs RAG options to searchDocsRag', async () => {
-        const messages = [{ role: 'user', content: 'Tell me about quests.' }];
+        const messages = [{ role: 'user', content: 'Where is /docs/routes?' }];
 
         await buildChatPrompt(messages, { docsRagBudgetChars: 1000000 });
 

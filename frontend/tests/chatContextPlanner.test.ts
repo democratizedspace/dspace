@@ -26,30 +26,46 @@ describe('planChatContext', () => {
     });
 
     it.each([
-        'what should I do next?',
         'what quest do I have left?',
-        'How am I progressing?',
+        'what should I do next?',
         'do I have enough green PLA?',
         'can I afford a solar tracker?',
-        'where do I import a gamesave?',
-        'How do I add custom content to DSPACE?',
-        'how do I submit a custom quest?',
-        'where are content bundles documented?',
-        'how do I get to settings?',
-        'what does this process consume?',
-        'what rewards does preflight check give?',
+        'what is my inventory?',
+        'how many quests have I completed?',
+        'How am I progressing?',
         'what about the second option?',
         'Benchy',
         'dSolar',
+    ])('uses full mode without docs RAG for player-state turns: %s', (content) => {
+        const plan = planFor(content);
+        expect(plan.mode).toBe('full');
+        expect(plan.includePlayerState).toBe(true);
+        expect(plan.includeKnowledgePack).toBe(true);
+        expect(plan.includeDocsRag).toBe(false);
+        expect(plan.docsRagReasonCodes).toContain('docs-rag-not-needed');
+        expect(plan.reasonCodes.length).toBeGreaterThan(0);
+    });
+
+    it.each([
+        'where do I import a gamesave?',
+        'how do I get to settings?',
+        'How do I add custom content to DSPACE?',
+        'how do I submit a custom quest?',
+        'where is the content backup page?',
+        'what changed in v3.1 chat?',
+        'what does this process consume?',
+        'what rewards does preflight check give?',
         '/gamesaves',
+        'where are content bundles documented?',
         'what does this process create?',
         'custom item for a DSPACE quest',
-    ])('uses full mode for grounded or ambiguous turn: %s', (content) => {
+    ])('uses full mode with docs RAG for docs-like turns: %s', (content) => {
         const plan = planFor(content);
         expect(plan.mode).toBe('full');
         expect(plan.includePlayerState).toBe(true);
         expect(plan.includeKnowledgePack).toBe(true);
         expect(plan.includeDocsRag).toBe(true);
+        expect(plan.docsRagReasonCodes).not.toContain('docs-rag-not-needed');
         expect(plan.reasonCodes.length).toBeGreaterThan(0);
     });
 });

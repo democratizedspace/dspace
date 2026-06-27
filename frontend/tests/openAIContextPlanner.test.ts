@@ -136,6 +136,8 @@ describe('buildChatPrompt context planning', () => {
 
         expect(payload.contextPlan.mode).toBe('full');
         expect(payload.contextPlan.reasonCodes).toContain('player-state-progress');
+        expect(payload.contextPlan.includeDocsRag).toBe(false);
+        expect(payload.promptMetrics.docsRag.status).toBe('skipped');
         expect(prompt).toContain('You are Hydro');
         expect(prompt).toContain('hydroponics steward');
         expect(prompt).toContain('PlayerState');
@@ -143,6 +145,30 @@ describe('buildChatPrompt context planning', () => {
         expect(prompt).toContain('Use the PlayerState block when present.');
         expect(prompt).toContain('If PlayerState is missing');
         expect(buildDchatKnowledgePack).toHaveBeenCalled();
-        expect(searchDocsRag).toHaveBeenCalled();
+        expect(searchDocsRag).not.toHaveBeenCalled();
+    });
+
+    it('includes docs RAG for route and custom-content full prompts', async () => {
+        const routePayload = await buildChatPrompt(
+            [{ role: 'user', content: 'where do I import a gamesave?' }],
+            { includePromptMetrics: true }
+        );
+
+        expect(routePayload.contextPlan.mode).toBe('full');
+        expect(routePayload.contextPlan.includeDocsRag).toBe(true);
+        expect(routePayload.promptMetrics.docsRag.status).toBe('included');
+        expect(searchDocsRag).toHaveBeenCalledTimes(1);
+
+        vi.mocked(searchDocsRag).mockClear();
+
+        const customPayload = await buildChatPrompt(
+            [{ role: 'user', content: 'How do I add custom content to DSPACE?' }],
+            { includePromptMetrics: true }
+        );
+
+        expect(customPayload.contextPlan.mode).toBe('full');
+        expect(customPayload.contextPlan.includeDocsRag).toBe(true);
+        expect(customPayload.contextPlan.docsRagReasonCodes).toContain('custom-content-docs');
+        expect(searchDocsRag).toHaveBeenCalledTimes(1);
     });
 });
