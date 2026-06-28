@@ -12,6 +12,12 @@ describe('buildFocusedGameDataContext', () => {
         expect(tokensFor('dSolar, dWatt, dPrint and dLaunch')).toEqual(
             expect.arrayContaining(['solar', 'watt', 'print', 'launch'])
         );
+        expect(tokensFor('dusd dbi dwatt dsolar dprint dlaunch dwind')).toEqual(
+            expect.arrayContaining(['usd', 'bi', 'watt', 'solar', 'print', 'launch', 'wind'])
+        );
+        expect(tokensFor('D-USD D BI D-WATT D SOLAR D-PRINT DLAUNCH D-WIND')).toEqual(
+            expect.arrayContaining(['usd', 'bi', 'watt', 'solar', 'print', 'launch', 'wind'])
+        );
         expect(tokensFor('BENCHIES')).toContain('benchy');
     });
 
@@ -24,6 +30,8 @@ describe('buildFocusedGameDataContext', () => {
         expect(expandAliases('what quests are in the rocketry category?')).not.toContain(
             'model rocket'
         );
+        expect(expandAliases('show me the workbench')).not.toContain('benchy calibration model');
+        expect(expandAliases('show me a bench')).not.toContain('benchy calibration model');
     });
 
     it('keeps verb tokens intact when singularizing plurals', () => {
@@ -108,7 +116,7 @@ describe('buildFocusedGameDataContext', () => {
             gameState: { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 13 } },
         });
 
-        expect(result.block).toContain('Relevant inventory:');
+        expect(result.block).toContain('Relevant owned inventory:');
         expect(result.block).toContain('green PLA filament');
         expect(result.sources.some((source) => source.type === 'item')).toBe(true);
         expect(result.meta.selectedInventoryIds).toContain('d3590107-25ff-4de5-af3a-46e2497bfc52');
@@ -125,7 +133,7 @@ describe('buildFocusedGameDataContext', () => {
             },
         });
 
-        expect(result.block).toContain('Relevant inventory:');
+        expect(result.block).toContain('Relevant owned inventory:');
         expect(result.block).toContain('white PLA filament');
         expect(result.meta.selectedInventoryCount).toBe(2);
         expect(result.meta.selectedInventoryIds).toContain('58580f6f-f3be-4be0-80b9-f6f8bf0b05a6');
@@ -213,6 +221,38 @@ describe('buildFocusedGameDataContext', () => {
         expect(result.block).toContain('Relevant processes:');
         expect(result.block).toContain('3dprint-rocket');
         expect(result.meta.reasonCodes).toContain('followup-entity-carryover');
+    });
+
+    it('includes owned inventory selected through process requirements', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'Can I make 3dprint-rocket?',
+            gameState: { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 42 } },
+            options: { maxProcesses: 2, maxItems: 6, maxTotalChars: 9000 },
+        });
+
+        expect(result.block).toContain('Relevant owned inventory:');
+        expect(result.block).toContain(
+            'green PLA filament [d3590107-25ff-4de5-af3a-46e2497bfc52]=42'
+        );
+        expect(result.meta.selectedInventoryIds).toContain('d3590107-25ff-4de5-af3a-46e2497bfc52');
+    });
+
+    it('uses prior entity context for make/build/that/those follow-ups', () => {
+        for (const query of [
+            'can I make that?',
+            'can I build that?',
+            'what about 10 of those?',
+            'what does that consume?',
+        ]) {
+            const result = buildFocusedGameDataContext({
+                query,
+                messages: [{ role: 'user', content: 'Tell me about 3D print a Benchy' }],
+                options: { maxProcesses: 3, maxItems: 5, maxTotalChars: 9000 },
+            });
+
+            expect(result.meta.reasonCodes).toContain('followup-entity-carryover');
+            expect(result.meta.selectedProcessIds).toContain('3dprint-benchy');
+        }
     });
 
     it('returns achievement state for direct achievement requests without unrelated filler', () => {

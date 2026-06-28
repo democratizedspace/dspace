@@ -642,6 +642,27 @@ describe('buildChatPrompt', () => {
         expect(payload.promptMetrics.docsRag.status).toBe('skipped');
     });
 
+    it.each([
+        ['build question', 'Can I make 3dprint-rocket?'],
+        ['material question', 'do I have enough green PLA?'],
+        ['quest question', 'what quest gives the NEMA 17 stepper motor pair?'],
+        ['player-state question', 'what quest do I have left?'],
+    ])('skips docs RAG for focused game-data %s', async (_label, content) => {
+        vi.mocked(searchDocsRag).mockClear();
+
+        const payload = await buildChatPrompt([{ role: 'user', content }], {
+            includePromptMetrics: true,
+        });
+        const prompt = payload.combinedMessages.map((message) => message.content).join('\n');
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(payload.contextPlan.includeDocsRag).toBe(false);
+        expect(prompt).not.toContain('Docs grounding');
+        expect(searchDocsRag).not.toHaveBeenCalled();
+        expect(payload.contextSources.every((source) => source.type !== 'doc')).toBe(true);
+        expect(payload.promptMetrics.docsRag.status).toBe('skipped');
+    });
+
     it('preserves transcript order when inserting answer-focus before a non-final user turn', async () => {
         const latest = { role: 'user', content: 'what quest do I have left?' };
         const assistantReply = {

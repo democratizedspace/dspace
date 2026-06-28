@@ -82,7 +82,7 @@ describe('buildDchatKnowledgePack', () => {
         );
 
         expect(pack.summary).toContain('Inventory highlights: compact bounded');
-        expect(pack.summary).toContain('Relevant inventory:');
+        expect(pack.summary).toContain('Relevant owned inventory:');
         expect(pack.summary).not.toContain('Relevant achievements:');
         expect(pack.summary).not.toContain('Relevant quests:');
         expect(pack.summary).not.toContain('Relevant processes:');

@@ -85,6 +85,8 @@ const SMALL_ALIASES = new Map([
     ['green pla', ['green pla filament']],
 ]);
 
+const escapeRegExp = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 const normalize = (value) =>
     String(value || '')
         .replace(/([a-z])([A-Z])/g, '$1 $2')
@@ -107,10 +109,11 @@ const expandAliases = (value) => {
     for (const resource of RESOURCE_ALIASES) {
         const normalized = normalize(resource);
         const compact = normalized.replace(/\s+/g, '');
-        if (new RegExp(`\\b(?:${normalized}|${compact})\\b`).test(base)) aliases.push(resource);
+        if (new RegExp(`\\b(?:${escapeRegExp(normalized)}|${escapeRegExp(compact)})\\b`).test(base))
+            aliases.push(resource);
     }
     for (const [needle, expansions] of SMALL_ALIASES.entries()) {
-        if (new RegExp(`\\b${needle}\\b`).test(base)) aliases.push(...expansions);
+        if (new RegExp(`\\b${escapeRegExp(needle)}\\b`).test(base)) aliases.push(...expansions);
     }
     return normalize([base, ...aliases].join(' '));
 };
@@ -156,6 +159,9 @@ const questRecords = () =>
             rewards: Array.isArray(quest.rewards) ? quest.rewards : [],
             rewardItems: Array.isArray(quest.rewardItems) ? quest.rewardItems : [],
             grantsItems: Array.isArray(quest.grantsItems) ? quest.grantsItems : [],
+            requiresItems: Array.isArray(quest.requiresItems) ? quest.requiresItems : [],
+            requiredItems: Array.isArray(quest.requiredItems) ? quest.requiredItems : [],
+            prerequisites: Array.isArray(quest.prerequisites) ? quest.prerequisites : [],
             nodes: Array.isArray(quest.nodes) ? quest.nodes : [],
             dialogue: Array.isArray(quest.dialogue) ? quest.dialogue : [],
         }));
@@ -185,15 +191,30 @@ const itemEntryText = (entries = []) =>
 const itemIdsFromEntries = (entries = []) =>
     entries.map((entry) => entry?.id).filter((id) => typeof id === 'string' && id.length > 0);
 
-const questRewardItemEntries = (quest) => [
-    ...(quest?.rewards || []),
-    ...(quest?.rewardItems || []),
-    ...(quest?.grantsItems || []),
-    ...[...(quest?.nodes || []), ...(quest?.dialogue || [])].flatMap((node) => [
-        ...(node?.grantsItems || []),
-        ...(node?.options || []).flatMap((option) => option?.grantsItems || []),
-    ]),
-];
+const collectQuestItemEntries = (quest, keys) => {
+    const entries = [];
+    const seenObjects = new Set();
+    const visit = (value) => {
+        if (!value || typeof value !== 'object' || seenObjects.has(value)) return;
+        seenObjects.add(value);
+        if (Array.isArray(value)) {
+            value.forEach(visit);
+            return;
+        }
+        for (const key of keys) {
+            if (Array.isArray(value[key])) entries.push(...value[key]);
+        }
+        Object.values(value).forEach(visit);
+    };
+    visit(quest);
+    return entries;
+};
+
+const questRewardItemEntries = (quest) =>
+    collectQuestItemEntries(quest, ['rewards', 'rewardItems', 'grantsItems']);
+
+const questRequiredItemEntries = (quest) =>
+    collectQuestItemEntries(quest, ['requiresItems', 'requiredItems', 'prerequisites']);
 
 const processItemIds = (process) =>
     new Set([
@@ -225,6 +246,7 @@ const questText = (quest) =>
         stringifyFields(quest.rewardItems),
         stringifyFields(quest.grantsItems),
         itemEntryText(questRewardItemEntries(quest)),
+        itemEntryText(questRequiredItemEntries(quest)),
         stringifyFields(quest.nodes),
         stringifyFields(quest.dialogue),
     ].join(' ');
@@ -256,7 +278,7 @@ const isVagueProcessQuery = (text) =>
         text
     );
 const isVagueEntityFollowup = (text) =>
-    /\b(what rewards? does (it|that|this) give|what does (it|that|this) give|what about (it|that|this|that))\b/i.test(
+    /\b(what rewards? does (it|that|this|those) give|what does (it|that|this|those) give|what about (?:\d+\s+)?(?:of\s+)?(it|that|this|those)|can i (make|build) (it|that|this|those)|what does (it|that|this|those) consume)\b/i.test(
         text
     );
 const wantsRemainingQuests = (text) =>
@@ -348,7 +370,9 @@ export function buildFocusedGameDataContext({
         RESOURCE_ALIASES.some((resource) => {
             const normalized = normalize(resource);
             const compact = normalized.replace(/\s+/g, '');
-            return new RegExp(`\\b(?:${normalized}|${compact})\\b`).test(queryText);
+            return new RegExp(
+                `\\b(?:${escapeRegExp(normalized)}|${escapeRegExp(compact)})\\b`
+            ).test(queryText);
         })
     )
         reasonCodes.push('resource-token-hit');
@@ -375,7 +399,14 @@ export function buildFocusedGameDataContext({
 
     const allQuestRecords = questRecords();
     const processItemIdCache = new Map(
-        processes.map((process) => [process.id, processItemIds(process)])
+        processes.map((process) => [
+            process.id,
+            {
+                all: processItemIds(process),
+                creates: new Set(itemIdsFromEntries(process.createItems)),
+                consumes: new Set(itemIdsFromEntries(process.consumeItems)),
+            },
+        ])
     );
 
     let selectedQuests = selectScored(
@@ -435,9 +466,9 @@ export function buildFocusedGameDataContext({
     for (const item of selectedItems.slice(0, caps.maxItems)) {
         for (const process of processes) {
             const relatedIds = processItemIdCache.get(process.id);
-            if (!relatedIds.has(item.id)) continue;
-            const creates = itemIdsFromEntries(process.createItems).includes(item.id);
-            const consumes = itemIdsFromEntries(process.consumeItems).includes(item.id);
+            if (!relatedIds?.all.has(item.id)) continue;
+            const creates = relatedIds.creates.has(item.id);
+            const consumes = relatedIds.consumes.has(item.id);
             const reason = creates
                 ? 'process-creates-match'
                 : consumes
@@ -449,7 +480,7 @@ export function buildFocusedGameDataContext({
         }
     }
     for (const process of selectedProcesses.slice(0, caps.maxProcesses)) {
-        for (const id of processItemIdCache.get(process.id) || [])
+        for (const id of processItemIdCache.get(process.id)?.all || [])
             addItem(id, 'process-item-relationship');
     }
     for (const quest of selectedQuests.slice(0, caps.maxQuests)) {
@@ -458,16 +489,28 @@ export function buildFocusedGameDataContext({
         for (const reward of questRewardItemEntries(quest)) {
             if (reward?.id) addItem(reward.id, 'quest-reward-match');
         }
+        for (const required of questRequiredItemEntries(quest)) {
+            if (required?.id) addItem(required.id, 'quest-requires-match');
+        }
     }
     for (const item of selectedItems.slice(0, caps.maxItems)) {
         for (const quest of allQuestRecords) {
             if (questRewardItemEntries(quest).some((reward) => reward?.id === item.id)) {
-                if (selectedQuests.length >= caps.maxQuests && rewardIntent) {
+                if (
+                    selectedQuests.length >= caps.maxQuests &&
+                    selectedQuests.length > 0 &&
+                    rewardIntent
+                ) {
                     selectedQuests[selectedQuests.length - 1] = quest;
                     reasonCodes.push('quest-reward-match');
                 }
                 addReasonForSelected(selectedQuests, quest.id, 'quest-reward-match');
                 addQuest(quest, 'quest-reward-match');
+            } else if (
+                questRequiredItemEntries(quest).some((required) => required?.id === item.id)
+            ) {
+                addReasonForSelected(selectedQuests, quest.id, 'quest-requires-match');
+                addQuest(quest, 'quest-requires-match');
             }
         }
     }
@@ -532,13 +575,13 @@ export function buildFocusedGameDataContext({
         reasonCodes.push('owned-inventory-hit');
         appendLine(
             lines,
-            `Relevant inventory: owned ${inventoryEntries.map((e) => `${e.name} [${e.id}]=${formatCount(e.count)}`).join('; ')}`,
+            `Relevant owned inventory: ${inventoryEntries.map((e) => `${e.name} [${e.id}]=${formatCount(e.count)}`).join('; ')}`,
             caps.maxTotalChars
         );
         sources.push({
             type: 'state',
             id: 'focused-inventory',
-            label: 'Relevant inventory',
+            label: 'Relevant owned inventory',
             detail: `${inventoryEntries.length} bounded owned entries`,
         });
     }
@@ -615,7 +658,7 @@ export function buildFocusedGameDataContext({
         }
         for (const quest of selectedQuests) {
             relationships.push(
-                `${quest.id}: prereqs ${(quest.requiresQuests || []).join(', ') || 'none listed'}; rewards ${formatQuestRewards(quest.rewards) || formatItemList(questRewardItemEntries(quest)) || 'none listed'}`
+                `${quest.id}: prereqs ${(quest.requiresQuests || []).join(', ') || 'none listed'}; requires ${formatItemList(questRequiredItemEntries(quest)) || 'none listed'}; rewards ${formatQuestRewards(quest.rewards) || formatItemList(questRewardItemEntries(quest)) || 'none listed'}`
             );
         }
         appendLine(
