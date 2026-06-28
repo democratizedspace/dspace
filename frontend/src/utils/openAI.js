@@ -9,6 +9,7 @@ import { buildPromptMetrics } from './promptMetrics.js';
 import { planChatContext } from './chatContextPlanner.js';
 import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
 import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
+import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -786,6 +787,10 @@ export const buildChatPrompt = async (messages, options = {}) => {
         knowledgeMessage.content = `${knowledgeMessage.content}\n\n${docsRagPayload.excerptsText}`;
     }
 
+    const answerFocusMessage = latestUserMessage
+        ? buildAnswerFocusMessage({ latestUserMessage, contextPlan: contextPlanMetadata, options })
+        : null;
+
     const openingMessage = {
         role: 'assistant',
         content: persona?.welcomeMessage || fallbackWelcomeMessage,
@@ -816,7 +821,19 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (docsRagMessage && !knowledgeMessage) {
             combinedMessages.push(docsRagMessage);
         }
-        combinedMessages = [...combinedMessages, ...normalizedMessages];
+        const latestUserSourceIndex = latestUserMessage
+            ? normalizedMessages.lastIndexOf(latestUserMessage)
+            : -1;
+        const priorMessages = normalizedMessages.filter(
+            (_message, index) => index !== latestUserSourceIndex
+        );
+        combinedMessages = [...combinedMessages, ...priorMessages];
+        if (answerFocusMessage) {
+            combinedMessages.push(answerFocusMessage);
+        }
+        if (latestUserMessage) {
+            combinedMessages.push(latestUserMessage);
+        }
     }
 
     const ragMessages = new Set([knowledgeMessage, docsRagMessage].filter(Boolean));
@@ -843,6 +860,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         const playerStateMessageIndex = indexOfMessage(playerStateMessage);
         const knowledgeMessageIndex = indexOfMessage(knowledgeMessage);
         const docsRagMessageIndex = indexOfMessage(docsRagMessage);
+        const answerFocusMessageIndex = indexOfMessage(answerFocusMessage);
         const latestUserMessageIndex = latestUserMessage
             ? combinedMessages.lastIndexOf(latestUserMessage)
             : -1;
@@ -864,6 +882,12 @@ export const buildChatPrompt = async (messages, options = {}) => {
             ragDurationMs,
             contextPlan: contextPlanMetadata,
             playerStateSummary: playerStateSnapshot.meta,
+            answerFocus: {
+                included: Boolean(answerFocusMessage),
+                characterCount: answerFocusMessage?.content?.length || 0,
+                placementIndex: answerFocusMessageIndex,
+                latestUserMessageIndex,
+            },
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,
                 rag: ragIndexes,
