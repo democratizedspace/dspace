@@ -1,6 +1,3 @@
-export const ANSWER_FOCUS_MAX_CHARS = 700;
-export const ANSWER_FOCUS_LATEST_REQUEST_PREVIEW_MAX_CHARS = 200;
-
 const ANSWER_FOCUS_TEXT = [
     'Answer the final user message directly.',
     'Use PlayerState, focused game data, and docs grounding only when relevant.',
@@ -17,6 +14,6 @@ export const buildAnswerFocusMessage = ({ latestUserMessage, contextPlan } = {})
 
     return {
         role: 'system',
-        content: ANSWER_FOCUS_TEXT.slice(0, ANSWER_FOCUS_MAX_CHARS),
+        content: ANSWER_FOCUS_TEXT,
     };
 };

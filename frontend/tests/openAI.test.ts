@@ -642,6 +642,35 @@ describe('buildChatPrompt', () => {
         expect(payload.promptMetrics.docsRag.status).toBe('skipped');
     });
 
+    it('preserves transcript order when inserting answer-focus before a non-final user turn', async () => {
+        const latest = { role: 'user', content: 'what quest do I have left?' };
+        const assistantReply = {
+            role: 'assistant',
+            content: 'You have the orbital intro quest left.',
+        };
+        const payload = await buildChatPrompt([latest, assistantReply], {
+            includePromptMetrics: true,
+        });
+        const messages = payload.combinedMessages;
+        const latestIndex = messages.lastIndexOf(latest);
+        const assistantIndex = messages.lastIndexOf(assistantReply);
+        const focusIndex = messages.findIndex((message) =>
+            message.content?.includes('Answer the final user message directly.')
+        );
+
+        expect(payload.contextPlan.mode).toBe('full');
+        expect(focusIndex).toBe(latestIndex - 1);
+        expect(assistantIndex).toBe(latestIndex + 1);
+        expect(messages[latestIndex]).toBe(latest);
+        expect(messages[assistantIndex]).toBe(assistantReply);
+        expect(payload.promptMetrics.answerFocus).toEqual({
+            included: true,
+            characterCount: messages[focusIndex].content.length,
+            placementIndex: focusIndex,
+            latestUserMessageIndex: latestIndex,
+        });
+    });
+
     it('adds answer-focus before the latest user message for player-state full prompts', async () => {
         const latest = { role: 'user', content: 'what quest do I have left?' };
         const payload = await buildChatPrompt([latest], { includePromptMetrics: true });

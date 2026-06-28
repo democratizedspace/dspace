@@ -798,10 +798,6 @@ export const buildChatPrompt = async (messages, options = {}) => {
     const latestUserMessageSourceIndex = latestUserMessage
         ? normalizedMessages.lastIndexOf(latestUserMessage)
         : -1;
-    const priorMessages =
-        latestUserMessageSourceIndex === -1
-            ? normalizedMessages
-            : normalizedMessages.filter((_, index) => index !== latestUserMessageSourceIndex);
 
     let combinedMessages = [...normalizedMessages];
 
@@ -831,12 +827,15 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (docsRagMessage && !knowledgeMessage) {
             combinedMessages.push(docsRagMessage);
         }
-        combinedMessages = [...combinedMessages, ...priorMessages];
-        if (answerFocusMessage) {
-            combinedMessages.push(answerFocusMessage);
-        }
-        if (latestUserMessage) {
-            combinedMessages.push(latestUserMessage);
+        if (answerFocusMessage && latestUserMessageSourceIndex !== -1) {
+            combinedMessages = [
+                ...combinedMessages,
+                ...normalizedMessages.slice(0, latestUserMessageSourceIndex),
+                answerFocusMessage,
+                ...normalizedMessages.slice(latestUserMessageSourceIndex),
+            ];
+        } else {
+            combinedMessages = [...combinedMessages, ...normalizedMessages];
         }
     }
 
