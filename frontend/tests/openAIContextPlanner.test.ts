@@ -43,6 +43,7 @@ describe('buildChatPrompt context planning', () => {
         expect(prompt).not.toContain('PlayerState');
         expect(prompt).not.toContain('DSPACE knowledge base');
         expect(prompt).not.toContain('Docs grounding');
+        expect(prompt).not.toContain('Answer the final user message directly.');
         expect(prompt).not.toContain('inventory highlights');
         expect(prompt).toContain('Never invent game facts or player state.');
         expect(prompt).toContain('Only give exact counts/durations/rates');
@@ -50,6 +51,12 @@ describe('buildChatPrompt context planning', () => {
         expect(prompt).not.toContain('If PlayerState is missing');
         expect(prompt.length).toBeLessThan(5000);
         expect(payload.promptMetrics.contextPlan.mode).toBe('minimal');
+        expect(payload.promptMetrics.answerFocus).toEqual({
+            included: false,
+            characterCount: 0,
+            placementIndex: -1,
+            latestUserMessageIndex: -1,
+        });
         expect(buildDchatKnowledgePack).not.toHaveBeenCalled();
         expect(searchDocsRag).not.toHaveBeenCalled();
     });

@@ -391,6 +391,15 @@ describe('token.place API v1 client', () => {
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
         // Verify full path produces more messages than token-lite's fixed [system, user] pair.
         expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
+        expect(
+            decrypted.api_v1_request.messages.some((message) =>
+                message.content.includes('Answer the final user message directly.')
+            )
+        ).toBe(true);
+        expect(decrypted.api_v1_request.messages.at(-1)).toEqual({
+            role: 'user',
+            content: 'What should I build next?',
+        });
     });
 
     test('default token.place mode includes docs RAG for route questions', async () => {
@@ -410,6 +419,17 @@ describe('token.place API v1 client', () => {
         const decrypted = await decryptTokenPlaceEnvelope(body, relayServerKeys[0].privateKey);
         const serializedMessages = JSON.stringify(decrypted.api_v1_request.messages);
         expect(serializedMessages).toContain('Docs grounding canary for gamesaves.');
+        const docsIndex = decrypted.api_v1_request.messages.findIndex((message) =>
+            message.content.includes('Docs grounding canary for gamesaves.')
+        );
+        const focusIndex = decrypted.api_v1_request.messages.findIndex((message) =>
+            message.content.includes('Answer the final user message directly.')
+        );
+        expect(focusIndex).toBeGreaterThan(docsIndex);
+        expect(decrypted.api_v1_request.messages.at(-1)).toEqual({
+            role: 'user',
+            content: 'where do I import a gamesave?',
+        });
         expect(decrypted.api_v1_request.messages.length).toBeGreaterThan(2);
     });
 
@@ -450,6 +470,7 @@ describe('token.place API v1 client', () => {
         );
         expect(serializedMessages).not.toContain('RAG excerpt should not appear');
         expect(serializedMessages).not.toContain('DSPACE knowledge base');
+        expect(serializedMessages).not.toContain('Answer the final user message directly.');
         expect(serializedMessages).not.toContain('PlayerState');
         expect(serializedMessages).not.toContain('player-state-canary');
         expect(serializedMessages).not.toContain('old user history should not appear');

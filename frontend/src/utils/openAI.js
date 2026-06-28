@@ -9,6 +9,7 @@ import { buildPromptMetrics } from './promptMetrics.js';
 import { planChatContext } from './chatContextPlanner.js';
 import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
 import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
+import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -790,6 +791,16 @@ export const buildChatPrompt = async (messages, options = {}) => {
         role: 'assistant',
         content: persona?.welcomeMessage || fallbackWelcomeMessage,
     };
+    const answerFocusMessage = buildAnswerFocusMessage({
+        latestUserMessage,
+        contextPlan: contextPlanMetadata,
+        promptPayloadMeta: {
+            hasPlayerState: Boolean(playerStateMessage),
+            hasKnowledge: Boolean(knowledgeMessage),
+            hasDocsRag: Boolean(docsRagPayload.excerptsText),
+        },
+        options,
+    });
 
     let combinedMessages = [...normalizedMessages];
 
@@ -804,6 +815,9 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (docsRagMessage && !knowledgeMessage) {
             combinedMessages.push(docsRagMessage);
         }
+        if (answerFocusMessage) {
+            combinedMessages.push(answerFocusMessage);
+        }
         combinedMessages.push(openingMessage);
     } else {
         combinedMessages = [systemMessage];
@@ -816,7 +830,19 @@ export const buildChatPrompt = async (messages, options = {}) => {
         if (docsRagMessage && !knowledgeMessage) {
             combinedMessages.push(docsRagMessage);
         }
-        combinedMessages = [...combinedMessages, ...normalizedMessages];
+        const latestUserMessageIndex = latestUserMessage
+            ? normalizedMessages.lastIndexOf(latestUserMessage)
+            : -1;
+        if (answerFocusMessage && latestUserMessageIndex !== -1) {
+            combinedMessages = [
+                ...combinedMessages,
+                ...normalizedMessages.slice(0, latestUserMessageIndex),
+                answerFocusMessage,
+                ...normalizedMessages.slice(latestUserMessageIndex),
+            ];
+        } else {
+            combinedMessages = [...combinedMessages, ...normalizedMessages];
+        }
     }
 
     const ragMessages = new Set([knowledgeMessage, docsRagMessage].filter(Boolean));
@@ -843,6 +869,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         const playerStateMessageIndex = indexOfMessage(playerStateMessage);
         const knowledgeMessageIndex = indexOfMessage(knowledgeMessage);
         const docsRagMessageIndex = indexOfMessage(docsRagMessage);
+        const answerFocusMessageIndex = indexOfMessage(answerFocusMessage);
         const latestUserMessageIndex = latestUserMessage
             ? combinedMessages.lastIndexOf(latestUserMessage)
             : -1;
@@ -864,6 +891,12 @@ export const buildChatPrompt = async (messages, options = {}) => {
             ragDurationMs,
             contextPlan: contextPlanMetadata,
             playerStateSummary: playerStateSnapshot.meta,
+            answerFocus: {
+                included: Boolean(answerFocusMessage),
+                characterCount: answerFocusMessage?.content?.length || 0,
+                placementIndex: answerFocusMessageIndex,
+                latestUserMessageIndex,
+            },
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,
                 rag: ragIndexes,
