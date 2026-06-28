@@ -82,6 +82,29 @@ describe('buildFocusedGameDataContext', () => {
         expect(result.sources.some((source) => source.type === 'quest')).toBe(true);
     });
 
+    it('uses prior quest context for vague reward follow-ups', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'what rewards does it give?',
+            messages: [{ role: 'user', content: 'Tell me about Preflight Checklist' }],
+        });
+
+        expect(result.block).toContain('Relevant quests:');
+        expect(result.meta.selectedQuestIds).toContain('rocketry/preflight-check');
+        expect(result.block).toMatch(/Rewards:|Reward items:/);
+        expect(result.block).not.toContain('Relevant processes:');
+    });
+
+    it('asks for clarification instead of dumping processes for ambiguous process follow-ups', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'what does this process consume?',
+        });
+
+        expect(result.block).toContain('no unambiguous process recovered from recent chat');
+        expect(result.block).not.toMatch(/\|\||Requires:/);
+        expect(result.meta.selectedProcessCount).toBe(0);
+        expect(result.meta.reasonCodes).toContain('ambiguous-process-followup');
+    });
+
     it('uses prior process context for vague consume follow-ups', () => {
         const result = buildFocusedGameDataContext({
             query: 'what does it consume?',
@@ -148,7 +171,7 @@ describe('buildFocusedGameDataContext', () => {
                         selectedProcessCount: '3',
                         selectedAchievementCount: '1',
                         selectedInventoryCount: '4',
-                        selectedItemIds: [1],
+                        selectedItemIds: Array.from({ length: 20 }, (_, index) => index),
                         selectedQuestIds: ['quest'],
                         selectedProcessIds: ['process'],
                         selectedAchievementIds: [{ id: 'achievement' }],
@@ -164,6 +187,7 @@ describe('buildFocusedGameDataContext', () => {
         expect(metrics.focusedGameData).toMatchObject({
             reasonCodes: ['[object Object]'],
             selectedItemCount: 2,
+            selectedItemIds: Array.from({ length: 12 }, (_, index) => String(index)),
             selectedQuestCount: 0,
             selectedProcessCount: 3,
             selectedAchievementIds: ['[object Object]'],

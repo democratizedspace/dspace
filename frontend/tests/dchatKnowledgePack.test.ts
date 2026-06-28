@@ -71,6 +71,24 @@ describe('buildDchatKnowledgePack', () => {
         expect(new Set(achievementSources.map((entry) => entry.id))).toEqual(new Set(expectedIds));
     });
 
+    it('keeps inventory requests on compact inventory state without achievement or catalog filler', () => {
+        mockEvaluateAchievements.mockReturnValue([
+            { id: 'first-steps', title: 'First Steps', unlocked: true },
+        ]);
+
+        const pack = buildDchatKnowledgePack(
+            { inventory: { '58580f6f-f3be-4be0-80b9-f6f8bf0b05a6': 3 } },
+            { latestUserMessage: 'what is my inventory?' }
+        );
+
+        expect(pack.summary).toContain('Inventory highlights: compact bounded');
+        expect(pack.summary).toContain('Relevant inventory:');
+        expect(pack.summary).not.toContain('Relevant achievements:');
+        expect(pack.summary).not.toContain('Relevant quests:');
+        expect(pack.summary).not.toContain('Relevant processes:');
+        expect(pack.focusedGameData?.selectedAchievementCount).toBe(0);
+    });
+
     it('bounds live-state inventory highlights instead of dumping all owned inventory', () => {
         const inventory = Object.fromEntries(
             Array.from({ length: 150 }, (_, index) => [`raw-owned-${index}`, index + 1])

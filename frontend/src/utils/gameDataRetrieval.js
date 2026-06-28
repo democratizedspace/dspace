@@ -195,7 +195,11 @@ const recentContextText = (messages = [], count) =>
         .join(' ');
 
 const isVagueProcessQuery = (text) =>
-    /\b(what does (it|that|this) consume|what does (it|that|this) create|what about that)\b/i.test(
+    /\b(what does (it|that|this)( process)? consume|what does (it|that|this)( process)? create)\b/i.test(
+        text
+    );
+const isVagueEntityFollowup = (text) =>
+    /\b(what rewards? does (it|that|this) give|what does (it|that|this) give|what about (it|that|this|that))\b/i.test(
         text
     );
 const wantsRemainingQuests = (text) =>
@@ -242,7 +246,10 @@ export function buildFocusedGameDataContext({
     const caps = { ...FOCUSED_GAME_DATA_DEFAULTS, ...options };
     const latest = String(query || '');
     const recent = recentContextText(messages, caps.recentMessageCount);
-    const queryText = normalize(`${latest} ${isVagueProcessQuery(latest) ? recent : ''}`);
+    const vagueFollowup = isVagueProcessQuery(latest) || isVagueEntityFollowup(latest);
+    const rewardFollowup =
+        isVagueEntityFollowup(latest) && /\b(rewards?|give|gives)\b/i.test(latest);
+    const queryText = normalize(`${latest} ${vagueFollowup ? recent : ''}`);
     const queryTokens = [...new Set(tokensFor(queryText))];
     const reasonCodes = [];
 
@@ -252,7 +259,8 @@ export function buildFocusedGameDataContext({
         queryTokens.length === 0 &&
         !wantsRemainingQuests(latest) &&
         !wantsInventory(latest) &&
-        !achievementIntent
+        !achievementIntent &&
+        !vagueFollowup
     ) {
         return {
             block: '',
@@ -277,13 +285,13 @@ export function buildFocusedGameDataContext({
         };
     }
 
-    if (isVagueProcessQuery(latest)) reasonCodes.push('recent-context-expanded');
+    if (vagueFollowup) reasonCodes.push('recent-context-expanded');
     if (wantsRemainingQuests(latest)) reasonCodes.push('remaining-quest-state');
     if (wantsInventory(latest)) reasonCodes.push('inventory-summary-request');
     if (achievementIntent) reasonCodes.push('achievement-state-request');
 
     const inventoryOnlyQuery = wantsInventory(latest) && queryTokens.length === 0;
-    const selectedItems = inventoryOnlyQuery
+    let selectedItems = inventoryOnlyQuery
         ? []
         : selectScored(items, itemText, queryTokens, queryText, caps.maxItems);
     let selectedProcesses = selectScored(
@@ -317,6 +325,10 @@ export function buildFocusedGameDataContext({
         }
         selectedQuests = selectedQuests.slice(0, caps.maxQuests);
     }
+    if (rewardFollowup && selectedQuests.length > 0) {
+        selectedItems = [];
+        selectedProcesses = [];
+    }
 
     const achievements = evaluateAchievements(gameState || {});
     const achievementStateEntries = achievements.filter(
@@ -326,7 +338,7 @@ export function buildFocusedGameDataContext({
         achievementIntent && (queryTokens.length === 0 || /\bunlocked\b/i.test(latest));
     const selectedAchievements = shouldReturnAchievementState
         ? achievementStateEntries.slice(0, caps.maxAchievements)
-        : queryTokens.length > 0
+        : achievementIntent && queryTokens.length > 0
           ? selectScored(
                 achievements,
                 (a) =>
