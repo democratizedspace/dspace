@@ -80,6 +80,19 @@ describe('buildFocusedGameDataContext', () => {
         expect(result.block).toContain('NEMA 17 stepper motor pair');
     });
 
+    it('retains reward-matching quests without duplicate eviction under tiny quest caps', () => {
+        const result = buildFocusedGameDataContext({
+            query: 'what quest gives the NEMA 17 stepper motor pair?',
+            options: { maxQuests: 1, maxItems: 6, maxTotalChars: 9000 },
+        });
+
+        expect(result.meta.selectedQuestIds).toEqual(['energy/solar-tracker']);
+        expect(new Set(result.meta.selectedQuestIds).size).toBe(
+            result.meta.selectedQuestIds.length
+        );
+        expect(result.meta.reasonCodes).toContain('quest-reward-match');
+    });
+
     it('only emits traversal reason codes for entities kept within caps', () => {
         const result = buildFocusedGameDataContext({
             query: 'what process makes a Benchy?',

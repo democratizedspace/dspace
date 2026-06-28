@@ -384,6 +384,7 @@ export function buildFocusedGameDataContext({
     let selectedItems = inventoryOnlyQuery
         ? []
         : selectScored(items, itemText, queryTokens, queryText, caps.maxItems);
+    const directlySelectedItemIds = new Set(selectedItems.map((item) => item.id));
     let selectedProcesses =
         questIntent || rewardIntent
             ? []
@@ -453,30 +454,46 @@ export function buildFocusedGameDataContext({
         }
     };
     const addQuest = (quest, reason) => {
+        if (!quest || selectedQuests.some((entry) => entry.id === quest.id)) return false;
+        if (selectedQuests.length >= caps.maxQuests) return false;
+        selectedQuests.push(quest);
+        reasonCodes.push(reason);
+        return true;
+    };
+    let rewardQuestReplaced = false;
+    const replaceLastQuestForRewardIntent = (quest, reason) => {
         if (
-            quest &&
-            selectedQuests.length < caps.maxQuests &&
-            !selectedQuests.some((entry) => entry.id === quest.id)
-        ) {
-            selectedQuests.push(quest);
-            reasonCodes.push(reason);
-        }
+            !quest ||
+            !rewardIntent ||
+            !questIntent ||
+            rewardQuestReplaced ||
+            caps.maxQuests <= 0 ||
+            selectedQuests.length === 0
+        )
+            return false;
+        if (selectedQuests.some((entry) => entry.id === quest.id)) return false;
+        selectedQuests[selectedQuests.length - 1] = quest;
+        rewardQuestReplaced = true;
+        reasonCodes.push(reason);
+        return true;
     };
 
-    for (const item of selectedItems.slice(0, caps.maxItems)) {
-        for (const process of processes) {
-            const relatedIds = processItemIdCache.get(process.id);
-            if (!relatedIds?.all.has(item.id)) continue;
-            const creates = relatedIds.creates.has(item.id);
-            const consumes = relatedIds.consumes.has(item.id);
-            const reason = creates
-                ? 'process-creates-match'
-                : consumes
-                  ? 'process-consumes-match'
-                  : 'process-requires-match';
-            addReasonForSelected(selectedProcesses, process.id, reason);
-            addProcess(process, reason);
-            if (selectedProcesses.length >= caps.maxProcesses) break;
+    if (!rewardIntent && !questIntent) {
+        for (const item of selectedItems.slice(0, caps.maxItems)) {
+            for (const process of processes) {
+                const relatedIds = processItemIdCache.get(process.id);
+                if (!relatedIds?.all.has(item.id)) continue;
+                const creates = relatedIds.creates.has(item.id);
+                const consumes = relatedIds.consumes.has(item.id);
+                const reason = creates
+                    ? 'process-creates-match'
+                    : consumes
+                      ? 'process-consumes-match'
+                      : 'process-requires-match';
+                addReasonForSelected(selectedProcesses, process.id, reason);
+                addProcess(process, reason);
+                if (selectedProcesses.length >= caps.maxProcesses) break;
+            }
         }
     }
     for (const process of selectedProcesses.slice(0, caps.maxProcesses)) {
@@ -496,16 +513,16 @@ export function buildFocusedGameDataContext({
     for (const item of selectedItems.slice(0, caps.maxItems)) {
         for (const quest of allQuestRecords) {
             if (questRewardItemEntries(quest).some((reward) => reward?.id === item.id)) {
-                if (
-                    selectedQuests.length >= caps.maxQuests &&
-                    selectedQuests.length > 0 &&
-                    rewardIntent
-                ) {
-                    selectedQuests[selectedQuests.length - 1] = quest;
-                    reasonCodes.push('quest-reward-match');
-                }
-                addReasonForSelected(selectedQuests, quest.id, 'quest-reward-match');
-                addQuest(quest, 'quest-reward-match');
+                const added = addQuest(quest, 'quest-reward-match');
+                const directlyNamedItem =
+                    queryText.includes(normalize(item.name)) ||
+                    queryText.includes(normalize(item.id));
+                const replaced =
+                    added || !directlySelectedItemIds.has(item.id) || !directlyNamedItem
+                        ? false
+                        : replaceLastQuestForRewardIntent(quest, 'quest-reward-match');
+                if (!added && !replaced)
+                    addReasonForSelected(selectedQuests, quest.id, 'quest-reward-match');
             } else if (
                 questRequiredItemEntries(quest).some((required) => required?.id === item.id)
             ) {
