@@ -9,6 +9,7 @@ import { buildPromptMetrics } from './promptMetrics.js';
 import { planChatContext } from './chatContextPlanner.js';
 import { renderPersonaVoiceSamples } from './npcDialogueSamples.js';
 import { buildPlayerStatePromptSummary } from './playerStatePromptSummary.js';
+import { buildAnswerFocusMessage } from './chatAnswerFocus.js';
 
 const resolveOpenAIClient = () => {
     if (
@@ -674,6 +675,12 @@ export const buildChatPrompt = async (messages, options = {}) => {
                 ragDurationMs: 0,
                 contextPlan: contextPlanMetadata,
                 playerStateSummary: promptPayload.playerStateSummary,
+                answerFocus: {
+                    included: false,
+                    characterCount: 0,
+                    placementIndex: -1,
+                    latestUserMessageIndex,
+                },
                 componentMessageIndexes: {
                     systemInstructions: [
                         combinedMessages.indexOf(systemMessage),
@@ -791,32 +798,40 @@ export const buildChatPrompt = async (messages, options = {}) => {
         content: persona?.welcomeMessage || fallbackWelcomeMessage,
     };
 
+    const answerFocusMessage = buildAnswerFocusMessage({
+        latestUserMessage,
+        contextPlan: contextPlanMetadata,
+    });
+    const contextMessages = [
+        systemMessage,
+        ...(playerStateMessage ? [playerStateMessage] : []),
+        ...(knowledgeMessage ? [knowledgeMessage] : []),
+        ...(docsRagMessage && !knowledgeMessage ? [docsRagMessage] : []),
+    ];
     let combinedMessages = [...normalizedMessages];
 
     if (combinedMessages.length === 0) {
-        combinedMessages = [systemMessage];
-        if (playerStateMessage) {
-            combinedMessages.push(playerStateMessage);
-        }
-        if (knowledgeMessage) {
-            combinedMessages.push(knowledgeMessage);
-        }
-        if (docsRagMessage && !knowledgeMessage) {
-            combinedMessages.push(docsRagMessage);
+        combinedMessages = [...contextMessages];
+        if (answerFocusMessage) {
+            combinedMessages.push(answerFocusMessage);
         }
         combinedMessages.push(openingMessage);
     } else {
-        combinedMessages = [systemMessage];
-        if (playerStateMessage) {
-            combinedMessages.push(playerStateMessage);
+        const latestUserMessageIndex = latestUserMessage
+            ? normalizedMessages.lastIndexOf(latestUserMessage)
+            : -1;
+        const messagesBeforeLatest =
+            latestUserMessageIndex === -1
+                ? normalizedMessages
+                : normalizedMessages.slice(0, latestUserMessageIndex);
+        const messagesFromLatest =
+            latestUserMessageIndex === -1 ? [] : normalizedMessages.slice(latestUserMessageIndex);
+
+        combinedMessages = [...contextMessages, ...messagesBeforeLatest];
+        if (answerFocusMessage) {
+            combinedMessages.push(answerFocusMessage);
         }
-        if (knowledgeMessage) {
-            combinedMessages.push(knowledgeMessage);
-        }
-        if (docsRagMessage && !knowledgeMessage) {
-            combinedMessages.push(docsRagMessage);
-        }
-        combinedMessages = [...combinedMessages, ...normalizedMessages];
+        combinedMessages.push(...messagesFromLatest);
     }
 
     const ragMessages = new Set([knowledgeMessage, docsRagMessage].filter(Boolean));
@@ -846,6 +861,7 @@ export const buildChatPrompt = async (messages, options = {}) => {
         const latestUserMessageIndex = latestUserMessage
             ? combinedMessages.lastIndexOf(latestUserMessage)
             : -1;
+        const answerFocusMessageIndex = indexOfMessage(answerFocusMessage);
         const chatHistoryIndexes = combinedMessages
             .map((message, index) => ({ message, index }))
             .filter(
@@ -864,6 +880,12 @@ export const buildChatPrompt = async (messages, options = {}) => {
             ragDurationMs,
             contextPlan: contextPlanMetadata,
             playerStateSummary: playerStateSnapshot.meta,
+            answerFocus: {
+                included: Boolean(answerFocusMessage),
+                characterCount: answerFocusMessage?.content?.length || 0,
+                placementIndex: answerFocusMessageIndex,
+                latestUserMessageIndex,
+            },
             componentMessageIndexes: {
                 systemInstructions: systemMessageIndex,
                 rag: ragIndexes,
