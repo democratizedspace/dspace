@@ -1,15 +1,30 @@
 import { describe, expect, it } from 'vitest';
 import { buildPromptMetrics } from '../src/utils/promptMetrics.js';
-import { buildFocusedGameDataContext } from '../src/utils/gameDataRetrieval.js';
+import { buildFocusedGameDataContext, __testables } from '../src/utils/gameDataRetrieval.js';
 
 describe('buildFocusedGameDataContext', () => {
+    it('normalizes resource aliases, punctuation, and plurals for entity matching', () => {
+        const { normalize, tokensFor, compactAliases } = __testables();
+
+        expect(normalize('dSolar/dWatt + dPrint')).toContain('d solar d watt d print');
+        expect(tokensFor('BENCHIES')).toContain('benchy');
+        expect(compactAliases('green-PLA rockets and benchies')).toContain('green PLA filament');
+
+        const result = buildFocusedGameDataContext({
+            query: 'Do D-Solar and dWatt tokens matter?',
+        });
+
+        expect(result.block).toMatch(/dSolar|dWatt/);
+        expect(result.meta.reasonCodes).toContain('resource-token-hit');
+    });
+
     it('selects green PLA item and owned state', () => {
         const result = buildFocusedGameDataContext({
             query: 'do I have enough green PLA?',
             gameState: { inventory: { 'd3590107-25ff-4de5-af3a-46e2497bfc52': 13 } },
         });
 
-        expect(result.block).toContain('Relevant inventory:');
+        expect(result.block).toContain('Relevant owned inventory:');
         expect(result.block).toContain('green PLA filament');
         expect(result.sources.some((source) => source.type === 'item')).toBe(true);
         expect(result.meta.selectedInventoryIds).toContain('d3590107-25ff-4de5-af3a-46e2497bfc52');
@@ -26,7 +41,7 @@ describe('buildFocusedGameDataContext', () => {
             },
         });
 
-        expect(result.block).toContain('Relevant inventory:');
+        expect(result.block).toContain('Relevant owned inventory:');
         expect(result.block).toContain('white PLA filament');
         expect(result.meta.selectedInventoryCount).toBe(2);
         expect(result.meta.selectedInventoryIds).toContain('58580f6f-f3be-4be0-80b9-f6f8bf0b05a6');
